@@ -1,4 +1,28 @@
 {
-  "record": { "task_gid": "fixture-task", "data": { "followers": ["fixture-user"] } },
-  "expect": { "method": "POST", "path": "/tasks/fixture-task/removeFollowers", "body": { "data": { "followers": ["fixture-user"] } } }
+  "record": {
+    "task_gid": "fixture-task",
+    "data": {
+      "followers": [
+        "fixture-user"
+      ]
+    },
+    "opt_fields": [
+      "actual_time_minutes",
+      "approval_status"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tasks/fixture-task/removeFollowers",
+    "body": {
+      "data": {
+        "followers": [
+          "fixture-user"
+        ]
+      }
+    },
+    "query": {
+      "opt_fields": "actual_time_minutes,approval_status"
+    }
+  }
 }

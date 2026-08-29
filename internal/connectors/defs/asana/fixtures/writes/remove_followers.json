@@ -1,4 +1,28 @@
 {
-  "record": { "goal_gid": "fixture-goal", "data": { "followers": ["fixture-user"] } },
-  "expect": { "method": "POST", "path": "/goals/fixture-goal/removeFollowers", "body": { "data": { "followers": ["fixture-user"] } } }
+  "record": {
+    "goal_gid": "fixture-goal",
+    "data": {
+      "followers": [
+        "fixture-user"
+      ]
+    },
+    "opt_fields": [
+      "current_status_update",
+      "current_status_update.resource_subtype"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/goals/fixture-goal/removeFollowers",
+    "body": {
+      "data": {
+        "followers": [
+          "fixture-user"
+        ]
+      }
+    },
+    "query": {
+      "opt_fields": "current_status_update,current_status_update.resource_subtype"
+    }
+  }
 }

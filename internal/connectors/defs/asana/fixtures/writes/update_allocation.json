@@ -1,4 +1,26 @@
 {
-  "record": { "allocation_gid": "fixture-allocation", "data": { "start_date": "2026-01-02" } },
-  "expect": { "method": "PUT", "path": "/allocations/fixture-allocation", "body": { "data": { "start_date": "2026-01-02" } } }
+  "record": {
+    "allocation_gid": "fixture-allocation",
+    "data": {
+      "start_date": "2026-01-02"
+    },
+    "opt_fields": [
+      "assignee",
+      "assignee.name"
+    ],
+    "opt_pretty": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/allocations/fixture-allocation",
+    "body": {
+      "data": {
+        "start_date": "2026-01-02"
+      }
+    },
+    "query": {
+      "opt_fields": "assignee,assignee.name",
+      "opt_pretty": "true"
+    }
+  }
 }

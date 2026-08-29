@@ -1,4 +1,24 @@
 {
-  "record": { "data": { "access_level": "editor", "member": "fixture-member", "parent": "fixture-parent" } },
-  "expect": { "method": "POST", "path": "/memberships", "body": { "data": { "access_level": "editor", "member": "fixture-member", "parent": "fixture-parent" } } }
+  "record": {
+    "data": {
+      "access_level": "editor",
+      "member": "fixture-member",
+      "parent": "fixture-parent"
+    },
+    "opt_pretty": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/memberships",
+    "body": {
+      "data": {
+        "access_level": "editor",
+        "member": "fixture-member",
+        "parent": "fixture-parent"
+      }
+    },
+    "query": {
+      "opt_pretty": "true"
+    }
+  }
 }

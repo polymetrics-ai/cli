@@ -1,4 +1,24 @@
 {
-  "record": { "portfolio_gid": "fixture-portfolio", "data": { "members": "fixture-user" } },
-  "expect": { "method": "POST", "path": "/portfolios/fixture-portfolio/removeMembers", "body": { "data": { "members": "fixture-user" } } }
+  "record": {
+    "portfolio_gid": "fixture-portfolio",
+    "data": {
+      "members": "fixture-user"
+    },
+    "opt_fields": [
+      "archived",
+      "color"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/portfolios/fixture-portfolio/removeMembers",
+    "body": {
+      "data": {
+        "members": "fixture-user"
+      }
+    },
+    "query": {
+      "opt_fields": "archived,color"
+    }
+  }
 }

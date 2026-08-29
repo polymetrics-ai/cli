@@ -1,4 +1,29 @@
 {
-  "record": { "data": { "end_date": "2026-01-07", "start_date": "2026-01-01", "user": "fixture-user", "workspace": "fixture-workspace" } },
-  "expect": { "method": "POST", "path": "/timesheet_approval_statuses", "body": { "data": { "end_date": "2026-01-07", "start_date": "2026-01-01", "user": "fixture-user", "workspace": "fixture-workspace" } } }
+  "record": {
+    "data": {
+      "end_date": "2026-01-07",
+      "start_date": "2026-01-01",
+      "user": "fixture-user",
+      "workspace": "fixture-workspace"
+    },
+    "opt_fields": [
+      "approval_status",
+      "created_at"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/timesheet_approval_statuses",
+    "body": {
+      "data": {
+        "end_date": "2026-01-07",
+        "start_date": "2026-01-01",
+        "user": "fixture-user",
+        "workspace": "fixture-workspace"
+      }
+    },
+    "query": {
+      "opt_fields": "approval_status,created_at"
+    }
+  }
 }

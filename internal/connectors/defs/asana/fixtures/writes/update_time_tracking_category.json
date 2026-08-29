@@ -1,4 +1,26 @@
 {
-  "record": { "time_tracking_category_gid": "fixture-category", "data": { "name": "Updated fixture category" } },
-  "expect": { "method": "PUT", "path": "/time_tracking_categories/fixture-category", "body": { "data": { "name": "Updated fixture category" } } }
+  "record": {
+    "time_tracking_category_gid": "fixture-category",
+    "data": {
+      "name": "Updated fixture category"
+    },
+    "opt_fields": [
+      "color",
+      "is_archived"
+    ],
+    "opt_pretty": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/time_tracking_categories/fixture-category",
+    "body": {
+      "data": {
+        "name": "Updated fixture category"
+      }
+    },
+    "query": {
+      "opt_fields": "color,is_archived",
+      "opt_pretty": "true"
+    }
+  }
 }

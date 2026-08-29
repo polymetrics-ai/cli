@@ -5032,11 +5032,46 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "assignee",
+                "assignee.name",
+                "created_by",
+                "created_by.name",
+                "effort",
+                "effort.type",
+                "effort.value",
+                "end_date",
+                "parent",
+                "parent.name",
+                "resource_subtype",
+                "start_date"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "create_allocation",
@@ -5059,11 +5094,46 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "assignee",
+                "assignee.name",
+                "created_by",
+                "created_by.name",
+                "effort",
+                "effort.type",
+                "effort.value",
+                "end_date",
+                "parent",
+                "parent.name",
+                "resource_subtype",
+                "start_date"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "create_budget",
@@ -5086,11 +5156,20 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "update_budget",
@@ -5121,11 +5200,51 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "actual",
+                "actual.billable_status_filter",
+                "actual.units",
+                "actual.value",
+                "budget_type",
+                "estimate",
+                "estimate.billable_status_filter",
+                "estimate.enabled",
+                "estimate.source",
+                "estimate.units",
+                "estimate.value",
+                "parent",
+                "parent.name",
+                "total",
+                "total.enabled",
+                "total.units",
+                "total.value"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "remove_supporting_relationship",
@@ -5356,7 +5475,7 @@
       ],
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -5440,11 +5559,20 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "update_membership",
@@ -5542,7 +5670,7 @@
       },
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -5813,7 +5941,7 @@
       ],
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -6057,7 +6185,7 @@
       ],
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -6249,7 +6377,7 @@
       ],
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -6332,7 +6460,7 @@
       },
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -6410,7 +6538,7 @@
       ],
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -6444,11 +6572,70 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "base_role_type",
+                "creation_time",
+                "description",
+                "is_standard_role",
+                "modified_at",
+                "name",
+                "permissions",
+                "permissions.allowed_guest_invites",
+                "permissions.assign_roles",
+                "permissions.create_and_edit_ai_automations",
+                "permissions.create_and_edit_ai_teammates",
+                "permissions.create_app_authorization",
+                "permissions.create_global_custom_fields",
+                "permissions.create_goal",
+                "permissions.create_pat_authorization",
+                "permissions.create_portfolio",
+                "permissions.create_project",
+                "permissions.create_read_only_link",
+                "permissions.create_team",
+                "permissions.download_mobile_attachments",
+                "permissions.export_project_data",
+                "permissions.import_data",
+                "permissions.manage_roles",
+                "permissions.proactive_ai",
+                "permissions.share_goal_with_domain",
+                "permissions.share_portfolios_with_org",
+                "permissions.share_teams_with_org",
+                "permissions.standard_ai",
+                "permissions.task_deletion_policy",
+                "permissions.upload_attachments",
+                "permissions.view_public_teams",
+                "permissions.view_shared_with_org_portfolios",
+                "permissions.view_shared_with_org_projects",
+                "permissions.view_shared_with_org_tasks",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "update_role",
@@ -6479,11 +6666,70 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "base_role_type",
+                "creation_time",
+                "description",
+                "is_standard_role",
+                "modified_at",
+                "name",
+                "permissions",
+                "permissions.allowed_guest_invites",
+                "permissions.assign_roles",
+                "permissions.create_and_edit_ai_automations",
+                "permissions.create_and_edit_ai_teammates",
+                "permissions.create_app_authorization",
+                "permissions.create_global_custom_fields",
+                "permissions.create_goal",
+                "permissions.create_pat_authorization",
+                "permissions.create_portfolio",
+                "permissions.create_project",
+                "permissions.create_read_only_link",
+                "permissions.create_team",
+                "permissions.download_mobile_attachments",
+                "permissions.export_project_data",
+                "permissions.import_data",
+                "permissions.manage_roles",
+                "permissions.proactive_ai",
+                "permissions.share_goal_with_domain",
+                "permissions.share_portfolios_with_org",
+                "permissions.share_teams_with_org",
+                "permissions.standard_ai",
+                "permissions.task_deletion_policy",
+                "permissions.upload_attachments",
+                "permissions.view_public_teams",
+                "permissions.view_shared_with_org_portfolios",
+                "permissions.view_shared_with_org_projects",
+                "permissions.view_shared_with_org_tasks",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "remove_dependencies_for_task",
@@ -6860,7 +7106,7 @@
       ],
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -6951,11 +7197,37 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "color",
+                "is_archived",
+                "name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "create_time_tracking_category",
@@ -6978,11 +7250,37 @@
             "type": "object",
             "maxProperties": 256,
             "additionalProperties": true
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "color",
+                "is_archived",
+                "name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
           }
         }
       },
       "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     },
     {
       "name": "update_timesheet_approval_status",
@@ -7055,7 +7353,7 @@
       ],
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -7136,7 +7434,7 @@
       },
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -7200,7 +7498,7 @@
       },
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {
@@ -7272,7 +7570,7 @@
       ],
       "query": {
         "opt_fields": {
-          "template": "{{ record.opt_fields }}",
+          "template": "{{ record.opt_fields | join:, }}",
           "omit_when_absent": true
         },
         "opt_pretty": {

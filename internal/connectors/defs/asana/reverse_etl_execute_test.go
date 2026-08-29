@@ -11,6 +11,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -80,6 +81,22 @@ type asanaLockedOperation struct {
 	Method string `json:"method"`
 	Path   string `json:"path"`
 	Source struct {
+		PathParameters []struct {
+			Ref string `json:"$ref"`
+		} `json:"path_parameters"`
+		Parameters []struct {
+			Name    string `json:"name"`
+			In      string `json:"in"`
+			Style   string `json:"style"`
+			Explode *bool  `json:"explode"`
+			Schema  struct {
+				Type  string `json:"type"`
+				Items struct {
+					Type string   `json:"type"`
+					Enum []string `json:"enum"`
+				} `json:"items"`
+			} `json:"schema"`
+		} `json:"parameters"`
 		RequestBody *struct {
 			Required bool `json:"required"`
 		} `json:"requestBody"`
@@ -363,6 +380,212 @@ func TestSourceLockedDeferredOperationsAreMaterialized(t *testing.T) {
 		})
 	}
 
+}
+
+func TestWriteQueryCellsMatchPinnedFormEncoding(t *testing.T) {
+	type queryCell struct {
+		action          string
+		sourceOperation string
+		optFields       []string
+		optPretty       bool
+	}
+	cells := []queryCell{
+		{action: "remove_followers", sourceOperation: "asana.rest.removeFollowers", optFields: []string{"current_status_update", "current_status_update.resource_subtype"}},
+		{action: "create_organization_export", sourceOperation: "asana.rest.createOrganizationExport", optFields: []string{"created_at", "download_url"}},
+		{action: "remove_members_for_portfolio", sourceOperation: "asana.rest.removeMembersForPortfolio", optFields: []string{"archived", "color"}},
+		{action: "remove_followers_for_project", sourceOperation: "asana.rest.removeFollowersForProject", optFields: []string{"archived", "color"}},
+		{action: "remove_members_for_project", sourceOperation: "asana.rest.removeMembersForProject", optFields: []string{"archived", "color"}},
+		{action: "create_rate", sourceOperation: "asana.rest.createRate", optFields: []string{"created_by", "created_by.name"}},
+		{action: "remove_follower_for_task", sourceOperation: "asana.rest.removeFollowerForTask", optFields: []string{"actual_time_minutes", "approval_status"}},
+		{action: "create_timesheet_approval_status", sourceOperation: "asana.rest.createTimesheetApprovalStatus", optFields: []string{"approval_status", "created_at"}},
+		{action: "create_webhook", sourceOperation: "asana.rest.createWebhook", optFields: []string{"active", "created_at"}},
+		{action: "update_rate", sourceOperation: "asana.rest.updateRate", optFields: []string{"created_by", "created_by.name"}},
+		{action: "update_timesheet_approval_status", sourceOperation: "asana.rest.updateTimesheetApprovalStatus", optFields: []string{"approval_status", "created_at"}},
+		{action: "update_webhook", sourceOperation: "asana.rest.updateWebhook", optFields: []string{"active", "created_at"}},
+		{action: "create_allocation", sourceOperation: "asana.rest.createAllocation", optFields: []string{"assignee", "assignee.name"}, optPretty: true},
+		{action: "create_role", sourceOperation: "asana.rest.createRole", optFields: []string{"base_role_type", "creation_time"}, optPretty: true},
+		{action: "create_time_tracking_category", sourceOperation: "asana.rest.createTimeTrackingCategory", optFields: []string{"color", "is_archived"}, optPretty: true},
+		{action: "update_allocation", sourceOperation: "asana.rest.updateAllocation", optFields: []string{"assignee", "assignee.name"}, optPretty: true},
+		{action: "update_budget", sourceOperation: "asana.rest.updateBudget", optFields: []string{"actual", "actual.billable_status_filter"}, optPretty: true},
+		{action: "update_role", sourceOperation: "asana.rest.updateRole", optFields: []string{"base_role_type", "creation_time"}, optPretty: true},
+		{action: "update_time_tracking_category", sourceOperation: "asana.rest.updateTimeTrackingCategory", optFields: []string{"color", "is_archived"}, optPretty: true},
+		{action: "create_budget", sourceOperation: "asana.rest.createBudget", optPretty: true},
+		{action: "create_membership", sourceOperation: "asana.rest.createMembership", optPretty: true},
+	}
+
+	bundle := loadBundle(t)
+	lock := loadOperationSourceLock(t)
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+	commands := make(map[string]engine.CLICommand)
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Write != "" {
+			commands[command.Write] = command
+		}
+	}
+	locked := make(map[string]asanaLockedOperation, len(lock.REST.Operations))
+	for _, operation := range lock.REST.Operations {
+		locked[operation.ID] = operation
+	}
+
+	cellCount := 0
+	for _, cell := range cells {
+		t.Run(cell.action, func(t *testing.T) {
+			action, ok := actions[cell.action]
+			if !ok {
+				t.Fatalf("write action is absent")
+			}
+			command, ok := commands[cell.action]
+			if !ok {
+				t.Fatalf("write command is absent")
+			}
+			operation, ok := locked[cell.sourceOperation]
+			if !ok {
+				t.Fatalf("source operation %q is absent", cell.sourceOperation)
+			}
+			var schema struct {
+				Properties map[string]struct {
+					Type  string `json:"type"`
+					Items struct {
+						Type string   `json:"type"`
+						Enum []string `json:"enum"`
+					} `json:"items"`
+				} `json:"properties"`
+			}
+			if err := json.Unmarshal(action.RecordSchema, &schema); err != nil {
+				t.Fatalf("decode record schema: %v", err)
+			}
+			if len(cell.optFields) > 0 {
+				cellCount++
+				var sourceParameterFound bool
+				for _, parameter := range operation.Source.Parameters {
+					if parameter.Name != "opt_fields" {
+						continue
+					}
+					sourceParameterFound = true
+					if parameter.In != "query" || parameter.Style != "form" || parameter.Explode == nil || *parameter.Explode || parameter.Schema.Type != "array" || parameter.Schema.Items.Type != "string" {
+						t.Fatalf("source opt_fields = %+v, want query array style=form explode=false", parameter)
+					}
+					for _, want := range cell.optFields {
+						if !slices.Contains(parameter.Schema.Items.Enum, want) {
+							t.Errorf("source opt_fields enum lacks fixture value %q", want)
+						}
+					}
+				}
+				if !sourceParameterFound {
+					t.Fatal("source operation has no opt_fields parameter")
+				}
+				if got := action.Query["opt_fields"].Template; got != "{{ record.opt_fields | join:, }}" {
+					t.Errorf("opt_fields query template = %q, want source form/explode=false comma join", got)
+				}
+				property := schema.Properties["opt_fields"]
+				if property.Type != "array" || property.Items.Type != "string" {
+					t.Errorf("opt_fields record schema = %+v, want string array", property)
+				}
+				if !commandHasFlag(command, "opt-fields", "json", "record.opt_fields") {
+					t.Errorf("command flags do not expose typed opt_fields: %+v", command.Flags)
+				}
+			}
+			if cell.optPretty {
+				cellCount++
+				var prettySource bool
+				for _, parameter := range operation.Source.PathParameters {
+					prettySource = prettySource || parameter.Ref == "#/components/parameters/pretty"
+				}
+				if !prettySource {
+					t.Fatal("source operation has no shared opt_pretty parameter")
+				}
+				if got := action.Query["opt_pretty"].Template; got != "{{ record.opt_pretty }}" {
+					t.Errorf("opt_pretty query template = %q, want scalar source mapping", got)
+				}
+				if schema.Properties["opt_pretty"].Type != "boolean" {
+					t.Errorf("opt_pretty record schema = %+v, want boolean", schema.Properties["opt_pretty"])
+				}
+				if !commandHasFlag(command, "opt-pretty", "boolean", "record.opt_pretty") {
+					t.Errorf("command flags do not expose typed opt_pretty: %+v", command.Flags)
+				}
+			}
+		})
+	}
+	if cellCount != 28 {
+		t.Fatalf("query cells = %d, want exact reviewed set of 28", cellCount)
+	}
+}
+
+func commandHasFlag(command engine.CLICommand, name, flagType, mapsTo string) bool {
+	for _, flag := range command.Flags {
+		if flag.Name == name && flag.Type == flagType && flag.MapsTo == mapsTo {
+			return true
+		}
+	}
+	return false
+}
+
+func TestWriteOptFieldsValidationRejectsInvalidShapesAndAllowsAbsence(t *testing.T) {
+	bundle := loadBundle(t)
+	capture := newCaptureServer()
+	defer capture.Close()
+
+	base := connectors.Record{
+		"data": map[string]any{"parent": "fixture-project", "resource": "fixture-user", "rate": json.Number("42")},
+	}
+	tests := []struct {
+		name      string
+		optFields any
+		present   bool
+		wantError bool
+	}{
+		{name: "absent", present: false},
+		{name: "valid source enum", present: true, optFields: []any{"created_by", "created_by.name"}},
+		{name: "scalar", present: true, optFields: "created_by", wantError: true},
+		{name: "mixed array", present: true, optFields: []any{"created_by", json.Number("7")}, wantError: true},
+		{name: "undocumented field", present: true, optFields: []any{"not_a_source_field"}, wantError: true},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			record := connectors.Record{"data": base["data"]}
+			if test.present {
+				record["opt_fields"] = test.optFields
+			}
+			preview, err := engine.DryRunWrite(context.Background(), bundle, connectors.WriteRequest{
+				Action: "create_rate", Config: runtimeConfig(capture.URL),
+			}, []connectors.Record{record}, engine.HooksFor(bundle.Name))
+			if test.wantError {
+				if err == nil {
+					t.Fatalf("DryRunWrite = nil error with preview %+v, want schema refusal", preview)
+				}
+				return
+			}
+			if err != nil || preview.RecordsStaged != 1 {
+				t.Fatalf("DryRunWrite = preview %+v error %v, want one valid staged record", preview, err)
+			}
+		})
+	}
+	if capture.Count() != 0 {
+		t.Fatalf("query validation made %d provider requests, want zero", capture.Count())
+	}
+}
+
+func assertFixtureQuery(t *testing.T, raw string, want map[string]string) {
+	t.Helper()
+	if strings.Contains(strings.ToUpper(raw), "%252C") {
+		t.Fatalf("raw query %q double-encodes the source comma delimiter", raw)
+	}
+	got, err := url.ParseQuery(raw)
+	if err != nil {
+		t.Fatalf("parse captured query %q: %v", raw, err)
+	}
+	if len(got) != len(want) {
+		t.Fatalf("query = %v, want exact fields %v", got, want)
+	}
+	for name, value := range want {
+		values, ok := got[name]
+		if !ok || len(values) != 1 || values[0] != value {
+			t.Errorf("query[%q] = %v, want one value %q", name, values, value)
+		}
+	}
 }
 
 func TestGetMembershipExecutesItsSourceLockedPathBinding(t *testing.T) {
@@ -777,6 +1000,7 @@ func TestDirectWriteActionsExecute(t *testing.T) {
 			if got.Path != fixture.Expect.Path {
 				t.Fatalf("path = %q, want %q", got.Path, fixture.Expect.Path)
 			}
+			assertFixtureQuery(t, got.Query, fixture.Expect.Query)
 			for key, want := range fixture.Expect.Body {
 				val, ok := got.Body[key]
 				if !ok {
@@ -895,6 +1119,7 @@ func TestBulkReverseETLActionsPlanPreviewApproveAndRun(t *testing.T) {
 			if got.Path != fixture.Expect.Path {
 				t.Fatalf("path = %q, want %q", got.Path, fixture.Expect.Path)
 			}
+			assertFixtureQuery(t, got.Query, fixture.Expect.Query)
 		})
 	}
 }
@@ -1189,9 +1414,10 @@ func lookupMapPath(record map[string]any, parts []string) (any, bool) {
 type writeFixture struct {
 	Record map[string]any `json:"record"`
 	Expect struct {
-		Method string         `json:"method"`
-		Path   string         `json:"path"`
-		Body   map[string]any `json:"body,omitempty"`
+		Method string            `json:"method"`
+		Path   string            `json:"path"`
+		Body   map[string]any    `json:"body,omitempty"`
+		Query  map[string]string `json:"query,omitempty"`
 	} `json:"expect"`
 }
 
@@ -1213,9 +1439,10 @@ func loadWriteFixture(t *testing.T, action engine.WriteAction) writeFixture {
 			t.Fatalf("derive no-body fixture path for %q: %v", action.Name, interpolateErr)
 		}
 		return writeFixture{Record: record, Expect: struct {
-			Method string         `json:"method"`
-			Path   string         `json:"path"`
-			Body   map[string]any `json:"body,omitempty"`
+			Method string            `json:"method"`
+			Path   string            `json:"path"`
+			Body   map[string]any    `json:"body,omitempty"`
+			Query  map[string]string `json:"query,omitempty"`
 		}{Method: action.Method, Path: path}}
 	}
 	if err != nil {
@@ -1237,9 +1464,10 @@ func bulkWriteFixture(t *testing.T, action engine.WriteAction) writeFixture {
 		return writeFixture{
 			Record: map[string]any{"parent": "fixture-task", "file_path": "asana-bulk-attachment.txt"},
 			Expect: struct {
-				Method string         `json:"method"`
-				Path   string         `json:"path"`
-				Body   map[string]any `json:"body,omitempty"`
+				Method string            `json:"method"`
+				Path   string            `json:"path"`
+				Body   map[string]any    `json:"body,omitempty"`
+				Query  map[string]string `json:"query,omitempty"`
 			}{Method: http.MethodPost, Path: "/attachments"},
 		}
 	case "create_external_attachment":
@@ -1249,9 +1477,10 @@ func bulkWriteFixture(t *testing.T, action engine.WriteAction) writeFixture {
 				"url": "https://example.test/source", "name": "Source reference",
 			},
 			Expect: struct {
-				Method string         `json:"method"`
-				Path   string         `json:"path"`
-				Body   map[string]any `json:"body,omitempty"`
+				Method string            `json:"method"`
+				Path   string            `json:"path"`
+				Body   map[string]any    `json:"body,omitempty"`
+				Query  map[string]string `json:"query,omitempty"`
 			}{Method: http.MethodPost, Path: "/attachments"},
 		}
 	default:

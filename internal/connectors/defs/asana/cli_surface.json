@@ -729,6 +729,17 @@
           "maps_to": "record.data",
           "max_bytes": 1048576,
           "required": true
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -830,6 +841,17 @@
           "maps_to": "record.data",
           "max_bytes": 1048576,
           "required": true
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -1234,6 +1256,11 @@
           "maps_to": "record.data",
           "max_bytes": 1048576,
           "required": true
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -1302,6 +1329,17 @@
           "maps_to": "record.data",
           "max_bytes": 1048576,
           "required": true
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -3205,6 +3243,11 @@
           "type": "json",
           "maps_to": "record.data",
           "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -6474,6 +6517,17 @@
           "maps_to": "record.data",
           "max_bytes": 1048576,
           "required": true
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -6542,6 +6596,17 @@
           "maps_to": "record.role_gid",
           "required": true,
           "max_bytes": 32768
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -9710,6 +9775,17 @@
           "maps_to": "record.time_tracking_category_gid",
           "required": true,
           "max_bytes": 32768
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
@@ -9848,6 +9924,17 @@
           "maps_to": "record.data",
           "max_bytes": 1048576,
           "required": true
+        },
+        {
+          "name": "opt-fields",
+          "type": "json",
+          "maps_to": "record.opt_fields",
+          "max_bytes": 1048576
+        },
+        {
+          "name": "opt-pretty",
+          "type": "boolean",
+          "maps_to": "record.opt_pretty"
         }
       ],
       "api_surface": [
