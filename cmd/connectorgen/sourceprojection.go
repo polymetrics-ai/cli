@@ -76,9 +76,10 @@ func (s sourceProjectionStats) Changed() bool {
 // sourceProjectionMaterializeDirectReadSurfaceEndpoints replaces only a
 // legacy blocked API record once its exact canonical command has already been
 // materialized. Source metadata by itself cannot promote a route; the command
-// must be implemented, source-bound, and name the same method/path. Stream
-// coverage remains stream-owned.
-func sourceProjectionMaterializeDirectReadSurfaceEndpoints(surface, cli *orderedObject, result sourceImportResult) int {
+// must be implemented, source-bound, and name the same method/path. When an
+// endpoint already has a valid stream owner, that ETL ownership stays alongside
+// the materialized direct-read binding.
+func sourceProjectionMaterializeDirectReadSurfaceEndpoints(surface, cli, streams *orderedObject, result sourceImportResult) int {
 	byEndpoint := map[string]sourceOperationDescriptor{}
 	for _, source := range result.Operations {
 		if source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || sourceProjectionReadHasBlockingGap(source) {
@@ -106,9 +107,9 @@ func sourceProjectionMaterializeDirectReadSurfaceEndpoints(surface, cli *ordered
 		if len(paths) == 0 {
 			continue
 		}
-		coverage := directReadCoverage(paths)
 		current, hasCoverage := endpoint.get("covered_by")
-		if hasCoverage && orderedSemanticEqual(current, coverage) {
+		coverage, coverageChanged := sourceProjectionMergeDirectReadSurfaceCoverage(current, streams, source, paths)
+		if hasCoverage && !coverageChanged {
 			if endpoint.remove("operation") {
 				changed++
 			}
@@ -119,6 +120,37 @@ func sourceProjectionMaterializeDirectReadSurfaceEndpoints(surface, cli *ordered
 		changed++
 	}
 	return changed
+}
+
+// sourceProjectionMergeDirectReadSurfaceCoverage keeps a declared stream
+// owner only when it still names the exact source endpoint. The generated
+// direct-read owner then complements it; a stale direct_read(s) member is
+// reconciled rather than accumulated. Invalid or absent stream ownership is
+// not preserved as a claim of ETL coverage.
+func sourceProjectionMergeDirectReadSurfaceCoverage(current any, streams *orderedObject, source sourceOperationDescriptor, paths []string) (*orderedObject, bool) {
+	direct := directReadCoverage(paths)
+	coverage, ok := current.(*orderedObject)
+	if !ok || !sourceProjectionExistingStreamCoverageValid(coverage, streams, source) {
+		return direct, !orderedSemanticEqual(current, direct)
+	}
+	merged, ok := orderedFromAny(coverage).(*orderedObject)
+	if !ok {
+		return direct, !orderedSemanticEqual(current, direct)
+	}
+	merged.remove("direct_read")
+	merged.remove("direct_reads")
+	for _, key := range direct.keys {
+		merged.set(key, direct.values[key])
+	}
+	return merged, !orderedSemanticEqual(current, merged)
+}
+
+func sourceProjectionExistingStreamCoverageValid(coverage, streams *orderedObject, source sourceOperationDescriptor) bool {
+	stream := stringField(coverage, "stream")
+	if stream == "" || stream != strings.TrimSpace(stream) || strings.ContainsAny(stream, "\r\n") {
+		return false
+	}
+	return sourceProjectionDeclaredStreamEndpointMatches(streams, stream, source.Method, source.Path)
 }
 
 func sourceProjectionImplementedDirectReadCommandPaths(cli *orderedObject, endpoint, sourceID string) []string {
@@ -489,7 +521,7 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 		}
 	}
 	if materializeReads && api.root != nil {
-		stats.Surface += sourceProjectionMaterializeDirectReadSurfaceEndpoints(api.root, cli.root, result)
+		stats.Surface += sourceProjectionMaterializeDirectReadSurfaceEndpoints(api.root, cli.root, streams.root, result)
 	}
 	if stats.Missing > 0 {
 		return stats, fmt.Errorf("%d source operation(s) have no complete executable action", stats.Missing)
@@ -1308,9 +1340,6 @@ func sourceProjectionMaterializeStreamRead(operation, command, streams *orderedO
 		return stats, nil
 	}
 	commandChanged := command.remove("operation")
-	if setOrderedIfDifferent(command, "intent", "etl") {
-		commandChanged = true
-	}
 	if setOrderedIfDifferent(command, "availability", "implemented") {
 		commandChanged = true
 	}

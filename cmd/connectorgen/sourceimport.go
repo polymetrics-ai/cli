@@ -274,13 +274,14 @@ type sourceImportREST struct {
 	// These fields are internal projections of the separately decoded legacy
 	// cited-only contract. They must not widen ordinary v1/v2 byte-backed wire
 	// decoding.
-	SourceKind         string                          `json:"-"`
-	OperationCounts    map[string]int                  `json:"-"`
-	Supplements        []sourceImportRESTSupplement    `json:"-"`
-	Retrieval          string                          `json:"-"`
-	OpenAPIVersions    []string                        `json:"-"`
-	CoverageConfidence *sourceImportCoverageConfidence `json:"-"`
-	SourceDocuments    []sourceImportRESTDocument      `json:"-"`
+	SourceKind           string                            `json:"-"`
+	OperationCounts      map[string]int                    `json:"-"`
+	Supplements          []sourceImportRESTSupplement      `json:"-"`
+	Retrieval            string                            `json:"-"`
+	OpenAPIVersions      []string                          `json:"-"`
+	CoverageConfidence   *sourceImportCoverageConfidence   `json:"-"`
+	SourceDocuments      []sourceImportRESTDocument        `json:"-"`
+	EventSchemaInventory *sourceImportEventSchemaInventory `json:"-"`
 }
 
 // sourceImportRESTSupplement is a closed citation for an operation inventory
@@ -406,6 +407,20 @@ type sourceImportCoverageConfidence struct {
 	Basis string `json:"basis"`
 }
 
+// sourceImportEventSchemaInventory is a closed, source-owned selector for the
+// small component-schema set an event transport needs. It intentionally keeps
+// provider schema bytes in the retained OpenAPI document rather than copying
+// opaque component fragments into the source lock.
+type sourceImportEventSchemaInventory struct {
+	SourceDocument string                            `json:"source_document"`
+	Schemas        []sourceImportEventSchemaSelector `json:"schemas"`
+}
+
+type sourceImportEventSchemaSelector struct {
+	Name           string `json:"name"`
+	SourceLocation string `json:"source_location"`
+}
+
 type sourceGraphQLTypeRef struct {
 	Kind    string                `json:"kind"`
 	Name    string                `json:"name,omitempty"`
@@ -504,10 +519,11 @@ type sourceImportLockLegacyReference struct {
 }
 
 type sourceImportRESTV3 struct {
-	Retrieval          string                          `json:"retrieval"`
-	OpenAPIVersions    []string                        `json:"openapi"`
-	CoverageConfidence *sourceImportCoverageConfidence `json:"coverage_confidence,omitempty"`
-	SourceDocuments    []sourceImportRESTDocument      `json:"source_documents"`
+	Retrieval            string                            `json:"retrieval"`
+	OpenAPIVersions      []string                          `json:"openapi"`
+	CoverageConfidence   *sourceImportCoverageConfidence   `json:"coverage_confidence,omitempty"`
+	SourceDocuments      []sourceImportRESTDocument        `json:"source_documents"`
+	EventSchemaInventory *sourceImportEventSchemaInventory `json:"event_schema_inventory,omitempty"`
 }
 
 type sourceImportLockV3 struct {
@@ -562,10 +578,11 @@ func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
 			Connector:     v3.Connector,
 			CapturedAt:    v3.CapturedAt,
 			Rest: sourceImportREST{
-				Retrieval:          v3.Rest.Retrieval,
-				OpenAPIVersions:    v3.Rest.OpenAPIVersions,
-				CoverageConfidence: v3.Rest.CoverageConfidence,
-				SourceDocuments:    v3.Rest.SourceDocuments,
+				Retrieval:            v3.Rest.Retrieval,
+				OpenAPIVersions:      v3.Rest.OpenAPIVersions,
+				CoverageConfidence:   v3.Rest.CoverageConfidence,
+				SourceDocuments:      v3.Rest.SourceDocuments,
+				EventSchemaInventory: v3.Rest.EventSchemaInventory,
 			},
 			GraphQL: v3.GraphQL,
 			Counts:  v3.Counts,
@@ -1337,10 +1354,108 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 			return fmt.Errorf("source lock has invalid v3 REST coverage confidence: %w", err)
 		}
 	}
+	if err := validateSourceImportV3EventSchemaInventory(lock); err != nil {
+		return err
+	}
 	if lock.Counts.REST != restCount || lock.Counts.Total != restCount+len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) {
 		return fmt.Errorf("source lock v3 counts do not match document inventories")
 	}
 	return validateSourceImportGraphQLInventory(lock)
+}
+
+func validateSourceImportV3EventSchemaInventory(lock sourceImportLock) error {
+	inventory := lock.Rest.EventSchemaInventory
+	if inventory == nil {
+		return nil
+	}
+	if !sourceImportDocumentID(inventory.SourceDocument) {
+		return fmt.Errorf("source lock v3 event schema inventory has invalid source document %q", inventory.SourceDocument)
+	}
+	var document *sourceImportRESTDocument
+	for index := range lock.Rest.SourceDocuments {
+		if lock.Rest.SourceDocuments[index].ID == inventory.SourceDocument {
+			document = &lock.Rest.SourceDocuments[index]
+			break
+		}
+	}
+	if document == nil {
+		return fmt.Errorf("source lock v3 event schema inventory references unknown source document %q", inventory.SourceDocument)
+	}
+	if document.sourceKind() != sourceImportDocumentKindOpenAPI {
+		return fmt.Errorf("source lock v3 event schema inventory source document %q is not an OpenAPI or Swagger document", inventory.SourceDocument)
+	}
+	if len(inventory.Schemas) == 0 {
+		return fmt.Errorf("source lock v3 event schema inventory has no schema selectors")
+	}
+	seenNames := make(map[string]bool, len(inventory.Schemas))
+	previousName := ""
+	for _, selector := range inventory.Schemas {
+		if !sourceImportEventSchemaName(selector.Name) {
+			return fmt.Errorf("source lock v3 event schema inventory has invalid schema name %q", selector.Name)
+		}
+		if seenNames[selector.Name] {
+			return fmt.Errorf("source lock v3 event schema inventory duplicates schema name %q", selector.Name)
+		}
+		if previousName != "" && previousName > selector.Name {
+			return fmt.Errorf("source lock v3 event schema inventory schema selectors are not sorted")
+		}
+		if selector.SourceLocation != sourceImportEventSchemaLocation(selector.Name) {
+			return fmt.Errorf("source lock v3 event schema inventory schema %q has non-canonical schema source location %q", selector.Name, selector.SourceLocation)
+		}
+		seenNames[selector.Name] = true
+		previousName = selector.Name
+	}
+	return nil
+}
+
+func sourceImportEventSchemaName(value string) bool {
+	if !sourceImportReferenceText(value, 1024) {
+		return false
+	}
+	for index, character := range value {
+		if (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z') || character == '_' {
+			continue
+		}
+		if index > 0 && ((character >= '0' && character <= '9') || character == '-' || character == '.') {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func sourceImportEventSchemaLocation(name string) string {
+	return `components.schemas["` + name + `"]`
+}
+
+// validateSourceImportV3EventSchemaResolution makes the selector useful at
+// import time. Structural admission above proves it can select only a declared
+// source document and a canonical components.schemas member; this check proves
+// that exact named component exists and is a source schema object in the
+// retained bytes.
+func validateSourceImportV3EventSchemaResolution(lock sourceImportLock, document sourceImportRESTDocument, source map[string]any) error {
+	inventory := lock.Rest.EventSchemaInventory
+	if inventory == nil || inventory.SourceDocument != document.ID {
+		return nil
+	}
+	components, ok := source["components"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("source lock v3 event schema inventory source document %q does not resolve components.schemas", document.ID)
+	}
+	schemas, ok := components["schemas"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("source lock v3 event schema inventory source document %q does not resolve components.schemas", document.ID)
+	}
+	for _, selector := range inventory.Schemas {
+		schema, ok := schemas[selector.Name]
+		if !ok {
+			return fmt.Errorf("source lock v3 event schema inventory selector %q at %q does not resolve to an object schema in document %q", selector.Name, selector.SourceLocation, document.ID)
+		}
+		if _, ok := schema.(map[string]any); !ok {
+			return fmt.Errorf("source lock v3 event schema inventory selector %q at %q does not resolve to an object schema in document %q", selector.Name, selector.SourceLocation, document.ID)
+		}
+	}
+	return nil
 }
 
 func validateSourceImportSourceReferenceDocument(document sourceImportRESTDocument) error {
@@ -1942,6 +2057,9 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 		}
 		if err := validateSourceImportArtifactForm(document.Artifact, form); err != nil {
 			return sourceImportResult{}, fmt.Errorf("validate source document %q form: %w", document.ID, err)
+		}
+		if err := validateSourceImportV3EventSchemaResolution(lock, document, doc); err != nil {
+			return sourceImportResult{}, err
 		}
 		resolver := sourceReferenceResolver{root: doc, limits: limits, form: form}
 		documentContext := sourceImportDocumentContext{Lock: lock, Artifact: document.Artifact, Document: &document}

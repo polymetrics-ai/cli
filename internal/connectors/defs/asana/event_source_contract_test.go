@@ -7,9 +7,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
+
+	"gopkg.in/yaml.v3"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
@@ -29,11 +32,13 @@ type asanaEventSourceContract struct {
 		Conformance   connectors.ConformanceEvidenceReference `json:"conformance"`
 	} `json:"definition_binding"`
 	SourceLock struct {
-		Path          string `json:"path"`
-		FileSHA256    string `json:"file_sha256"`
-		SchemaVersion int    `json:"schema_version"`
-		Connector     string `json:"connector"`
-		RESTSHA256    string `json:"rest_sha256"`
+		Path               string `json:"path"`
+		FileSHA256         string `json:"file_sha256"`
+		SchemaVersion      int    `json:"schema_version"`
+		Connector          string `json:"connector"`
+		RESTDocumentID     string `json:"rest_document_id"`
+		RESTDocumentSHA256 string `json:"rest_document_sha256"`
+		RESTDocumentBytes  int64  `json:"rest_document_bytes"`
 	} `json:"source_lock"`
 	Provider struct {
 		EligibleStream string `json:"eligible_stream"`
@@ -89,13 +94,51 @@ type asanaEventSourceContract struct {
 	} `json:"provider_contract"`
 }
 
-type asanaEventContractSourceLock struct {
+type asanaEventContractV3SourceLock struct {
 	SchemaVersion int    `json:"schema_version"`
 	Connector     string `json:"connector"`
 	REST          struct {
-		SHA256     string                              `json:"sha256"`
-		Operations []asanaEventContractLockedOperation `json:"operations"`
+		SourceDocuments      []asanaEventContractV3SourceDocument `json:"source_documents"`
+		EventSchemaInventory *asanaEventContractSchemaInventory   `json:"event_schema_inventory"`
 	} `json:"rest"`
+	Counts struct {
+		REST int `json:"rest"`
+	} `json:"counts"`
+}
+
+type asanaEventContractV3SourceDocument struct {
+	ID         string                              `json:"id"`
+	Artifact   asanaEventContractSourceArtifact    `json:"artifact"`
+	Operations []asanaEventContractLockedOperation `json:"operations"`
+}
+
+type asanaEventContractSourceArtifact struct {
+	SourceURL string `json:"source_url"`
+	SHA256    string `json:"sha256"`
+	Bytes     int64  `json:"bytes"`
+}
+
+type asanaEventContractSchemaInventory struct {
+	SourceDocument string                             `json:"source_document"`
+	Schemas        []asanaEventContractSchemaSelector `json:"schemas"`
+}
+
+type asanaEventContractSchemaSelector struct {
+	Name           string `json:"name"`
+	SourceLocation string `json:"source_location"`
+}
+
+// asanaEventContractSourceLock is an in-memory, source-derived projection
+// used by the contract assertions below. The v3 source lock retains only
+// identities and closed component selectors; provider schema bytes stay in the
+// SHA-pinned artifact and are loaded here solely for test proof.
+type asanaEventContractSourceLock struct {
+	SchemaVersion int
+	Connector     string
+	REST          struct {
+		SHA256     string
+		Operations []asanaEventContractLockedOperation
+	}
 	SourceContract struct {
 		Components struct {
 			Parameters map[string]asanaEventContractParameter `json:"parameters"`
@@ -105,17 +148,19 @@ type asanaEventContractSourceLock struct {
 }
 
 type asanaEventContractLockedOperation struct {
-	ID              string `json:"id"`
-	Method          string `json:"method"`
-	Path            string `json:"path"`
-	SourceLocation  string `json:"source_location"`
-	SourceOperation struct {
-		Description    string                        `json:"description"`
-		Parameters     []asanaEventContractParameter `json:"parameters"`
-		PathParameters []asanaEventContractParameter `json:"path_parameters"`
-		Responses      map[string]json.RawMessage    `json:"responses"`
-		Security       []map[string][]string         `json:"security"`
-	} `json:"source_operation"`
+	ID              string                            `json:"id"`
+	Method          string                            `json:"method"`
+	Path            string                            `json:"path"`
+	SourceLocation  string                            `json:"source_location"`
+	SourceOperation asanaEventContractSourceOperation `json:"source_operation"`
+}
+
+type asanaEventContractSourceOperation struct {
+	Description    string                        `json:"description"`
+	Parameters     []asanaEventContractParameter `json:"parameters"`
+	PathParameters []asanaEventContractParameter `json:"path_parameters"`
+	Responses      map[string]json.RawMessage    `json:"responses"`
+	Security       []map[string][]string         `json:"security"`
 }
 
 type asanaEventContractParameter struct {
@@ -172,21 +217,7 @@ func TestAsanaEventSourceContractIsSchemaValidAndSourceLocked(t *testing.T) {
 	}
 	assertAsanaEventDefinitionProjection(t, bundle, contract)
 
-	lockRaw, err := os.ReadFile(contract.SourceLock.Path)
-	if err != nil {
-		t.Fatalf("read event contract source lock %q: %v", contract.SourceLock.Path, err)
-	}
-	lockDigest := sha256.Sum256(lockRaw)
-	if got := hex.EncodeToString(lockDigest[:]); got != contract.SourceLock.FileSHA256 {
-		t.Fatalf("source-lock file SHA-256 = %s, want contract %s", got, contract.SourceLock.FileSHA256)
-	}
-	var lock asanaEventContractSourceLock
-	if err := json.Unmarshal(lockRaw, &lock); err != nil {
-		t.Fatalf("decode event contract source lock: %v", err)
-	}
-	if lock.SchemaVersion != contract.SourceLock.SchemaVersion || lock.Connector != contract.SourceLock.Connector || lock.REST.SHA256 != contract.SourceLock.RESTSHA256 {
-		t.Fatalf("source-lock identity = schema %d connector %q REST %q, contract = %+v", lock.SchemaVersion, lock.Connector, lock.REST.SHA256, contract.SourceLock)
-	}
+	lock := loadAsanaEventContractSourceProjection(t, contract)
 
 	eventOperation := findAsanaEventContractOperation(t, lock.REST.Operations, contract.Provider.EventScope.OperationID)
 	assertAsanaEventOperationContract(t, lock, eventOperation, contract)
@@ -217,14 +248,7 @@ func TestAsanaEventSourceContractProjectsEventParentRelationship(t *testing.T) {
 		t.Fatalf("event parent projection = gid %q resource type %q", contract.Provider.EventRecord.ParentGIDPointer, contract.Provider.EventRecord.ParentResourceTypePointer)
 	}
 
-	lockRaw, err := os.ReadFile(contract.SourceLock.Path)
-	if err != nil {
-		t.Fatalf("read event contract source lock %q: %v", contract.SourceLock.Path, err)
-	}
-	var lock asanaEventContractSourceLock
-	if err := json.Unmarshal(lockRaw, &lock); err != nil {
-		t.Fatalf("decode event contract source lock: %v", err)
-	}
+	lock := loadAsanaEventContractSourceProjection(t, contract)
 	record := contract.Provider.EventRecord
 	raw, ok := lock.SourceContract.Components.Schemas[record.Schema]
 	if !ok {
@@ -299,6 +323,199 @@ func TestAsanaEventSourceContractSchemaRejectsRuntimeHooksAndOpenExecutorIDs(t *
 			}
 		})
 	}
+}
+
+func loadAsanaEventContractSourceProjection(t *testing.T, contract asanaEventSourceContract) asanaEventContractSourceLock {
+	t.Helper()
+	lockRaw, err := os.ReadFile(contract.SourceLock.Path)
+	if err != nil {
+		t.Fatalf("read event contract source lock %q: %v", contract.SourceLock.Path, err)
+	}
+	lockDigest := sha256.Sum256(lockRaw)
+	if got := hex.EncodeToString(lockDigest[:]); got != contract.SourceLock.FileSHA256 {
+		t.Fatalf("source-lock file SHA-256 = %s, want contract %s", got, contract.SourceLock.FileSHA256)
+	}
+	var lock asanaEventContractV3SourceLock
+	if err := json.Unmarshal(lockRaw, &lock); err != nil {
+		t.Fatalf("decode event contract v3 source lock: %v", err)
+	}
+	if lock.SchemaVersion != contract.SourceLock.SchemaVersion || lock.Connector != contract.SourceLock.Connector {
+		t.Fatalf("source-lock identity = schema %d connector %q, contract = %+v", lock.SchemaVersion, lock.Connector, contract.SourceLock)
+	}
+	if len(lock.REST.SourceDocuments) != 1 || lock.Counts.REST != 249 {
+		t.Fatalf("v3 source-lock documents/count = %d/%d, want one document and 249 operations", len(lock.REST.SourceDocuments), lock.Counts.REST)
+	}
+	document := lock.REST.SourceDocuments[0]
+	if document.ID != contract.SourceLock.RESTDocumentID || document.Artifact.SHA256 != contract.SourceLock.RESTDocumentSHA256 || document.Artifact.Bytes != contract.SourceLock.RESTDocumentBytes || len(document.Operations) != lock.Counts.REST {
+		t.Fatalf("source-lock document = id=%q sha256=%q bytes=%d operations=%d, contract = %+v", document.ID, document.Artifact.SHA256, document.Artifact.Bytes, len(document.Operations), contract.SourceLock)
+	}
+	if document.Artifact.SourceURL == "" || strings.ContainsAny(document.Artifact.SourceURL, "\r\n") {
+		t.Fatalf("v3 source document has invalid source URL %q", document.Artifact.SourceURL)
+	}
+	if lock.REST.EventSchemaInventory == nil || lock.REST.EventSchemaInventory.SourceDocument != document.ID {
+		t.Fatalf("v3 event-schema inventory = %+v, want source document %q", lock.REST.EventSchemaInventory, document.ID)
+	}
+	wantSelectors := []asanaEventContractSchemaSelector{
+		{Name: "AsanaNamedResource", SourceLocation: `components.schemas["AsanaNamedResource"]`},
+		{Name: "EventResponse", SourceLocation: `components.schemas["EventResponse"]`},
+		{Name: "NextPage", SourceLocation: `components.schemas["NextPage"]`},
+		{Name: "TaskCompact", SourceLocation: `components.schemas["TaskCompact"]`},
+		{Name: "TaskResponse", SourceLocation: `components.schemas["TaskResponse"]`},
+	}
+	if got := lock.REST.EventSchemaInventory.Schemas; !reflect.DeepEqual(got, wantSelectors) {
+		t.Fatalf("v3 event-schema selectors = %+v, want %+v", got, wantSelectors)
+	}
+
+	source := loadAsanaEventContractSourceArtifact(t, document.Artifact)
+	return projectAsanaEventContractSourceLock(t, lock, document, source)
+}
+
+func loadAsanaEventContractSourceArtifact(t *testing.T, artifact asanaEventContractSourceArtifact) map[string]any {
+	t.Helper()
+	path := filepath.Join("sources", "artifacts", artifact.SHA256+".artifact")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read retained event source artifact %q: %v", path, err)
+	}
+	digest := sha256.Sum256(raw)
+	if got := hex.EncodeToString(digest[:]); got != artifact.SHA256 || int64(len(raw)) != artifact.Bytes {
+		t.Fatalf("retained event source artifact identity = sha256=%s bytes=%d, want sha256=%s bytes=%d", got, len(raw), artifact.SHA256, artifact.Bytes)
+	}
+	var yamlDocument any
+	if err := yaml.Unmarshal(raw, &yamlDocument); err != nil {
+		t.Fatalf("decode retained event source artifact YAML: %v", err)
+	}
+	normalizedYAML, err := normalizeAsanaEventContractYAML(yamlDocument)
+	if err != nil {
+		t.Fatalf("normalize retained event source artifact YAML: %v", err)
+	}
+	normalized, err := json.Marshal(normalizedYAML)
+	if err != nil {
+		t.Fatalf("normalize retained event source artifact YAML: %v", err)
+	}
+	var document map[string]any
+	if err := json.Unmarshal(normalized, &document); err != nil {
+		t.Fatalf("decode normalized retained event source artifact: %v", err)
+	}
+	return document
+}
+
+func normalizeAsanaEventContractYAML(value any) (any, error) {
+	switch value := value.(type) {
+	case map[string]any:
+		result := make(map[string]any, len(value))
+		for key, entry := range value {
+			normalized, err := normalizeAsanaEventContractYAML(entry)
+			if err != nil {
+				return nil, err
+			}
+			result[key] = normalized
+		}
+		return result, nil
+	case map[any]any:
+		result := make(map[string]any, len(value))
+		for key, entry := range value {
+			switch key.(type) {
+			case string, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
+				// OpenAPI status-code keys are commonly numeric in YAML. JSON's
+				// equivalent object key is their canonical text form.
+			default:
+				return nil, fmt.Errorf("unsupported YAML mapping key %T", key)
+			}
+			normalized, err := normalizeAsanaEventContractYAML(entry)
+			if err != nil {
+				return nil, err
+			}
+			result[fmt.Sprint(key)] = normalized
+		}
+		return result, nil
+	case []any:
+		result := make([]any, len(value))
+		for index, entry := range value {
+			normalized, err := normalizeAsanaEventContractYAML(entry)
+			if err != nil {
+				return nil, err
+			}
+			result[index] = normalized
+		}
+		return result, nil
+	default:
+		return value, nil
+	}
+}
+
+func projectAsanaEventContractSourceLock(t *testing.T, v3 asanaEventContractV3SourceLock, document asanaEventContractV3SourceDocument, source map[string]any) asanaEventContractSourceLock {
+	t.Helper()
+	projection := asanaEventContractSourceLock{SchemaVersion: v3.SchemaVersion, Connector: v3.Connector}
+	projection.REST.SHA256 = document.Artifact.SHA256
+	components := asanaEventContractObjectAt(t, source, "components")
+	projection.SourceContract.Components.Parameters = asanaEventContractParameterMap(t, components["parameters"], "components.parameters")
+	projection.SourceContract.Components.Schemas = asanaEventContractRawMessages(t, components["schemas"], "components.schemas")
+	projection.REST.Operations = make([]asanaEventContractLockedOperation, 0, len(document.Operations))
+	paths := asanaEventContractObjectAt(t, source, "paths")
+	for _, identity := range document.Operations {
+		pathItem := asanaEventContractObjectAt(t, paths, identity.Path)
+		rawOperation := asanaEventContractObjectAt(t, pathItem, strings.ToLower(identity.Method))
+		operationRaw, err := json.Marshal(rawOperation)
+		if err != nil {
+			t.Fatalf("encode retained source operation %q: %v", identity.ID, err)
+		}
+		operation := identity
+		if err := json.Unmarshal(operationRaw, &operation.SourceOperation); err != nil {
+			t.Fatalf("decode retained source operation %q: %v", identity.ID, err)
+		}
+		operation.SourceOperation.PathParameters = asanaEventContractParameters(t, pathItem["parameters"], identity.ID+" path parameters")
+		projection.REST.Operations = append(projection.REST.Operations, operation)
+	}
+	return projection
+}
+
+func asanaEventContractRawMessages(t *testing.T, value any, label string) map[string]json.RawMessage {
+	t.Helper()
+	object := asanaEventContractObject(t, value, label)
+	result := make(map[string]json.RawMessage, len(object))
+	for name, entry := range object {
+		raw, err := json.Marshal(entry)
+		if err != nil {
+			t.Fatalf("encode %s.%s: %v", label, name, err)
+		}
+		result[name] = raw
+	}
+	return result
+}
+
+func asanaEventContractParameterMap(t *testing.T, value any, label string) map[string]asanaEventContractParameter {
+	t.Helper()
+	object := asanaEventContractObject(t, value, label)
+	result := make(map[string]asanaEventContractParameter, len(object))
+	for name, entry := range object {
+		raw, err := json.Marshal(entry)
+		if err != nil {
+			t.Fatalf("encode %s.%s: %v", label, name, err)
+		}
+		var parameter asanaEventContractParameter
+		if err := json.Unmarshal(raw, &parameter); err != nil {
+			t.Fatalf("decode %s.%s: %v", label, name, err)
+		}
+		result[name] = parameter
+	}
+	return result
+}
+
+func asanaEventContractParameters(t *testing.T, value any, label string) []asanaEventContractParameter {
+	t.Helper()
+	if value == nil {
+		return nil
+	}
+	raw, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("encode %s: %v", label, err)
+	}
+	var parameters []asanaEventContractParameter
+	if err := json.Unmarshal(raw, &parameters); err != nil {
+		t.Fatalf("decode %s: %v", label, err)
+	}
+	return parameters
 }
 
 func assertAsanaEventDefinitionProjection(t *testing.T, bundle engine.Bundle, contract asanaEventSourceContract) {

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestParseSourceImportLockAcceptsAsanaSourceOperationEnrichment(t *testing.T) {
+func TestParseSourceImportLockAcceptsAsanaV3DocumentOwnedInventory(t *testing.T) {
 	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "asana", "sources", "asana-operation-source-lock.json"))
 	if err != nil {
 		t.Fatalf("read retained Asana source lock: %v", err)
@@ -19,10 +19,14 @@ func TestParseSourceImportLockAcceptsAsanaSourceOperationEnrichment(t *testing.T
 
 	lock, err := parseSourceImportLock(raw, "asana")
 	if err != nil {
-		t.Fatalf("parse retained Asana source lock with source operation enrichment: %v", err)
+		t.Fatalf("parse retained Asana v3 source lock: %v", err)
 	}
-	if got, want := len(lock.Rest.Operations), 249; got != want {
-		t.Fatalf("retained Asana REST operations = %d, want %d", got, want)
+	if lock.SchemaVersion != 3 || len(lock.Rest.SourceDocuments) != 1 || len(lock.Rest.SourceDocuments[0].Operations) != 249 {
+		t.Fatalf("retained Asana v3 inventory = schema %d documents=%d operations=%d, want schema 3/one document/249 operations", lock.SchemaVersion, len(lock.Rest.SourceDocuments), len(lock.Rest.SourceDocuments[0].Operations))
+	}
+	inventory := lock.Rest.EventSchemaInventory
+	if inventory == nil || inventory.SourceDocument != "asana-openapi" || len(inventory.Schemas) != 5 {
+		t.Fatalf("retained Asana v3 event-schema inventory = %+v, want five selectors for asana-openapi", inventory)
 	}
 }
 

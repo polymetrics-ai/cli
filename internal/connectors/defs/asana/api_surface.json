@@ -236,7 +236,8 @@
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/custom_fields",
       "covered_by": {
-        "stream": "custom_fields"
+        "stream": "custom_fields",
+        "direct_read": "custom-fields list"
       }
     },
     {
@@ -705,7 +706,8 @@
       "method": "GET",
       "path": "/projects/{project_gid}/project_statuses",
       "covered_by": {
-        "stream": "project_statuses"
+        "stream": "project_statuses",
+        "direct_read": "project-statuses list"
       }
     },
     {
@@ -754,7 +756,8 @@
       "method": "GET",
       "path": "/projects",
       "covered_by": {
-        "stream": "projects"
+        "stream": "projects",
+        "direct_read": "projects list"
       }
     },
     {
@@ -999,7 +1002,8 @@
       "method": "GET",
       "path": "/projects/{project_gid}/sections",
       "covered_by": {
-        "stream": "sections"
+        "stream": "sections",
+        "direct_read": "sections list"
       }
     },
     {
@@ -1076,7 +1080,8 @@
       "method": "GET",
       "path": "/tasks/{task_gid}/stories",
       "covered_by": {
-        "stream": "stories"
+        "stream": "stories",
+        "direct_read": "stories list"
       }
     },
     {
@@ -1104,7 +1109,8 @@
       "method": "GET",
       "path": "/tags",
       "covered_by": {
-        "stream": "tags"
+        "stream": "tags",
+        "direct_read": "tags list"
       }
     },
     {
@@ -1188,7 +1194,8 @@
       "method": "GET",
       "path": "/tasks",
       "covered_by": {
-        "stream": "tasks"
+        "stream": "tasks",
+        "direct_read": "tasks list"
       }
     },
     {
@@ -1384,7 +1391,8 @@
       "method": "GET",
       "path": "/team_memberships",
       "covered_by": {
-        "stream": "team_memberships"
+        "stream": "team_memberships",
+        "direct_read": "team-memberships list"
       }
     },
     {
@@ -1426,7 +1434,8 @@
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/teams",
       "covered_by": {
-        "stream": "teams"
+        "stream": "teams",
+        "direct_read": "teams list"
       }
     },
     {
@@ -1601,7 +1610,8 @@
       "method": "GET",
       "path": "/users",
       "covered_by": {
-        "stream": "users"
+        "stream": "users",
+        "direct_read": "users list"
       }
     },
     {
@@ -1706,14 +1716,16 @@
       "method": "GET",
       "path": "/workspaces/{workspace_gid}/workspace_memberships",
       "covered_by": {
-        "stream": "workspace_memberships"
+        "stream": "workspace_memberships",
+        "direct_read": "workspace-memberships list"
       }
     },
     {
       "method": "GET",
       "path": "/workspaces",
       "covered_by": {
-        "stream": "workspaces"
+        "stream": "workspaces",
+        "direct_read": "workspaces list"
       }
     },
     {

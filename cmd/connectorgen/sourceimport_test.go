@@ -1374,14 +1374,15 @@ func TestSourceImportRetainedAsanaPreservesLockedRESTOperationIDs(t *testing.T) 
 
 	t.Run("rejects mismatched locked provider identity before ID propagation", func(t *testing.T) {
 		mismatched := lock
-		mismatched.Rest.Operations = append([]sourceImportRESTOperation(nil), lock.Rest.Operations...)
-		for index := range mismatched.Rest.Operations {
-			if mismatched.Rest.Operations[index].ID == "asana.rest.getSectionsForProject" {
-				mismatched.Rest.Operations[index].OperationID = "wrongSectionsOperation"
+		mismatched.Rest.SourceDocuments = append([]sourceImportRESTDocument(nil), lock.Rest.SourceDocuments...)
+		mismatched.Rest.SourceDocuments[0].Operations = append([]sourceImportRESTOperation(nil), lock.Rest.SourceDocuments[0].Operations...)
+		for index := range mismatched.Rest.SourceDocuments[0].Operations {
+			if mismatched.Rest.SourceDocuments[0].Operations[index].ID == "asana.rest.getSectionsForProject" {
+				mismatched.Rest.SourceDocuments[0].Operations[index].OperationID = "wrongSectionsOperation"
 				break
 			}
 		}
-		if _, err := importSourceLockResult(context.Background(), mismatched, fetcher, defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "disagrees with source lock REST inventory") {
+		if _, err := importSourceLockResult(context.Background(), mismatched, fetcher, defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "disagrees with source document \"asana-openapi\" inventory") {
 			t.Fatalf("mismatched locked provider identity error = %v, want locked/provider refusal", err)
 		}
 	})

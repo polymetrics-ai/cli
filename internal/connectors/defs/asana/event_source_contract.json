@@ -14,10 +14,12 @@
   },
   "source_lock": {
     "path": "sources/asana-operation-source-lock.json",
-    "file_sha256": "9a0b0ca33fceb15e9091e4fa11d3934bef41c5c2066f7d2db0e6ac5f3542103d",
-    "schema_version": 2,
+    "file_sha256": "af9c24a7d64a923af3a6b508b69d0cef3c413058545356d6c5aff73e108d2e72",
+    "schema_version": 3,
     "connector": "asana",
-    "rest_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56"
+    "rest_document_id": "asana-openapi",
+    "rest_document_sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+    "rest_document_bytes": 3066750
   },
   "provider_contract": {
     "eligible_stream": "tasks",

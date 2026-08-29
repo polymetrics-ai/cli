@@ -564,8 +564,9 @@ func TestSourceProjectionSourceReferenceIgnoresRetentionButPreservesClosedGap(t 
 // getAccessRequests (paths["/access_requests"].get), getAgent
 // (paths["/agents/{agent_gid}"].get), and getWorkspaces
 // (paths["/workspaces"].get).  They exercise a zero-input bounded read, a
-// source-owned path input, and an already-proven paginated stream without
-// assigning stream semantics to the first two.
+// source-owned path input, and an already-proven paginated stream. A stream
+// binding adds ETL evidence, but it does not replace a command's user-facing
+// direct-read intent.
 func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *testing.T) {
 	bundleDir := t.TempDir()
 	operationsPath := filepath.Join(bundleDir, "operations.json")
@@ -585,7 +586,7 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
   "commands": [
     {"path":"access-requests get-access-requests","summary":"Get access requests","intent":"direct_read","availability":"implemented","operation":"get_access_requests","notes":"Blocked until a historical certification lane completes.","api_surface":[{"method":"GET","path":"/access_requests"}]},
     {"path":"agents get-agent","summary":"Get an agent","intent":"direct_read","availability":"implemented","operation":"get_agent","flags":[{"name":"agent-gid","type":"string","maps_to":"query.agent_gid"}],"api_surface":[{"method":"GET","path":"/agents/{agent_gid}"}]},
-    {"path":"workspaces get-workspaces","summary":"Get workspaces","intent":"etl","availability":"implemented","stream":"workspaces","api_surface":[{"method":"GET","path":"/workspaces"}]},
+    {"path":"workspaces get-workspaces","summary":"Get workspaces","intent":"direct_read","availability":"implemented","stream":"workspaces","api_surface":[{"method":"GET","path":"/workspaces"}]},
     {"path":"pending get-pending","summary":"Planned fixed-target Alpha read: Get pending.","intent":"etl","availability":"planned","operation":"get_pending","api_surface":[{"method":"GET","path":"/pending"}]}
   ]
 }`)
@@ -599,7 +600,7 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
   "endpoints":[
     {"method":"GET","path":"/access_requests"},
     {"method":"GET","path":"/agents/{agent_gid}"},
-    {"method":"GET","path":"/workspaces"},
+    {"method":"GET","path":"/workspaces","covered_by":{"stream":"workspaces"}},
     {"method":"GET","path":"/pending"}
   ]
 }`)
@@ -691,11 +692,90 @@ func TestSourceProjectionMaterializesSourceBoundGETReadsWithoutInventingETL(t *t
 	if len(agent.Flags) != 1 || agent.Flags[0].MapsTo != "path.agent_gid" || !agent.Flags[0].Required {
 		t.Fatalf("agent path contract = %+v, want required path.agent_gid", agent.Flags)
 	}
-	if command := commands["workspaces get-workspaces"]; command.Intent != "etl" || command.Availability != "implemented" || command.Stream != "workspaces" || command.Operation != "" || command.SourceOperation != "asana.rest.getWorkspaces" {
-		t.Fatalf("workspace command = %+v, want preserved source-backed ETL stream", command)
+	if command := commands["workspaces get-workspaces"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.Stream != "workspaces" || command.Operation != "" || command.SourceOperation != "asana.rest.getWorkspaces" {
+		t.Fatalf("workspace command = %+v, want preserved source-backed direct read with ETL stream binding", command)
+	}
+	var surface struct {
+		Endpoints []struct {
+			Path      string         `json:"path"`
+			CoveredBy map[string]any `json:"covered_by"`
+		} `json:"endpoints"`
+	}
+	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "api_surface.json"))), &surface); err != nil {
+		t.Fatalf("decode projected API surface: %v", err)
+	}
+	foundWorkspaceEndpoint := false
+	for _, endpoint := range surface.Endpoints {
+		if endpoint.Path != "/workspaces" {
+			continue
+		}
+		foundWorkspaceEndpoint = true
+		if want := map[string]any{"stream": "workspaces", "direct_read": "workspaces get-workspaces"}; !reflect.DeepEqual(endpoint.CoveredBy, want) {
+			t.Fatalf("workspace endpoint coverage = %#v, want both stream and direct-read lanes", endpoint.CoveredBy)
+		}
+		break
+	}
+	if !foundWorkspaceEndpoint {
+		t.Fatal("workspace endpoint is absent from projected API surface")
 	}
 	if command := commands["pending get-pending"]; command.Intent != "direct_read" || command.Availability != "implemented" || command.Operation != "get_pending" || command.SourceOperation != "asana.rest.getPending" || command.Summary != "Get pending." {
 		t.Fatalf("complete planned operation = %+v, want materialized bounded direct read", command)
+	}
+}
+
+func TestSourceProjectionMergeDirectReadSurfaceCoveragePreservesOnlyValidStream(t *testing.T) {
+	var streams orderedJSON
+	if err := json.Unmarshal([]byte(`{"streams":[{"name":"widgets","path":"/widgets"}]}`), &streams); err != nil {
+		t.Fatalf("decode streams fixture: %v", err)
+	}
+	source := sourceOperationDescriptor{Method: "GET", Path: "/widgets"}
+	for _, tc := range []struct {
+		name        string
+		current     string
+		want        string
+		wantChanged bool
+	}{
+		{
+			name:        "valid stream becomes dual lane coverage",
+			current:     `{"stream":"widgets"}`,
+			want:        `{"stream":"widgets","direct_read":"widgets list"}`,
+			wantChanged: true,
+		},
+		{
+			name:        "already dual lane coverage is stable",
+			current:     `{"stream":"widgets","direct_read":"widgets list"}`,
+			want:        `{"stream":"widgets","direct_read":"widgets list"}`,
+			wantChanged: false,
+		},
+		{
+			name:        "no stream coverage reconciles direct read only",
+			current:     `{"direct_read":"stale widgets command"}`,
+			want:        `{"direct_read":"widgets list"}`,
+			wantChanged: true,
+		},
+		{
+			name:        "malformed stream is not retained",
+			current:     "{\"stream\":\"widgets\\n\",\"direct_read\":\"stale widgets command\"}",
+			want:        `{"direct_read":"widgets list"}`,
+			wantChanged: true,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var current, want orderedJSON
+			if err := json.Unmarshal([]byte(tc.current), &current); err != nil {
+				t.Fatalf("decode current coverage: %v", err)
+			}
+			if err := json.Unmarshal([]byte(tc.want), &want); err != nil {
+				t.Fatalf("decode wanted coverage: %v", err)
+			}
+			got, changed := sourceProjectionMergeDirectReadSurfaceCoverage(current.root, streams.root, source, []string{"widgets list"})
+			if changed != tc.wantChanged {
+				t.Fatalf("coverage changed = %t, want %t", changed, tc.wantChanged)
+			}
+			if !orderedSemanticEqual(got, want.root) {
+				t.Fatalf("coverage = %#v, want %s", got, tc.want)
+			}
+		})
 	}
 }
 

@@ -71,9 +71,16 @@ type asanaOperationSourceLock struct {
 	SchemaVersion int    `json:"schema_version"`
 	Connector     string `json:"connector"`
 	REST          struct {
-		SHA256     string                 `json:"sha256"`
-		Operations []asanaLockedOperation `json:"operations"`
+		SourceDocuments []asanaOperationSourceDocument `json:"source_documents"`
 	} `json:"rest"`
+}
+
+type asanaOperationSourceDocument struct {
+	ID       string `json:"id"`
+	Artifact struct {
+		SHA256 string `json:"sha256"`
+	} `json:"artifact"`
+	Operations []asanaLockedOperation `json:"operations"`
 }
 
 type asanaLockedOperation struct {
@@ -133,6 +140,18 @@ func loadOperationSourceLock(t *testing.T) asanaOperationSourceLock {
 		t.Fatalf("decode Asana operation source lock: %v", err)
 	}
 	return lock
+}
+
+func asanaSourceLockRESTDocument(t *testing.T, lock asanaOperationSourceLock) asanaOperationSourceDocument {
+	t.Helper()
+	if len(lock.REST.SourceDocuments) != 1 {
+		t.Fatalf("Asana v3 source documents = %d, want one", len(lock.REST.SourceDocuments))
+	}
+	document := lock.REST.SourceDocuments[0]
+	if document.ID != "asana-openapi" || document.Artifact.SHA256 != asanaSourceOpenAPISHA256 || len(document.Operations) != 249 {
+		t.Fatalf("Asana v3 source document = id=%q sha256=%q operations=%d, want asana-openapi/%q/249", document.ID, document.Artifact.SHA256, len(document.Operations), asanaSourceOpenAPISHA256)
+	}
+	return document
 }
 
 func TestSourceBoundReadControlsMaterializeEveryCompleteReadLane(t *testing.T) {
@@ -197,17 +216,14 @@ func TestSourceBoundReadControlsMaterializeEveryCompleteReadLane(t *testing.T) {
 func TestExecutableCommandsAreAccountedForByPinnedSourceLock(t *testing.T) {
 	bundle := loadBundle(t)
 	lock := loadOperationSourceLock(t)
-	if lock.SchemaVersion != 2 || lock.Connector != bundleName || lock.REST.SHA256 != asanaSourceOpenAPISHA256 {
-		t.Fatalf("source lock identity = schema %d connector %q REST sha256 %q, want pinned Asana v2 lock %q",
-			lock.SchemaVersion, lock.Connector, lock.REST.SHA256, asanaSourceOpenAPISHA256)
-	}
-	if len(lock.REST.Operations) != 249 {
-		t.Fatalf("source lock REST operations = %d, want 249", len(lock.REST.Operations))
+	document := asanaSourceLockRESTDocument(t, lock)
+	if lock.SchemaVersion != 3 || lock.Connector != bundleName {
+		t.Fatalf("source lock identity = schema %d connector %q, want pinned Asana v3 lock", lock.SchemaVersion, lock.Connector)
 	}
 
-	lockedByID := make(map[string]asanaLockedOperation, len(lock.REST.Operations))
-	lockedEndpoints := make(map[string]struct{}, len(lock.REST.Operations))
-	for _, operation := range lock.REST.Operations {
+	lockedByID := make(map[string]asanaLockedOperation, len(document.Operations))
+	lockedEndpoints := make(map[string]struct{}, len(document.Operations))
+	for _, operation := range document.Operations {
 		if _, duplicate := lockedByID[operation.ID]; duplicate {
 			t.Fatalf("source lock repeats operation id %q", operation.ID)
 		}
@@ -781,6 +797,7 @@ func TestGetMembershipExecutesItsSourceLockedPathBinding(t *testing.T) {
 func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
 	bundle := loadBundle(t)
 	lock := loadOperationSourceLock(t)
+	document := asanaSourceLockRESTDocument(t, lock)
 
 	endpointKey := func(method, path string) string {
 		return strings.ToUpper(method) + " " + path
@@ -803,7 +820,7 @@ func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
 
 	states := map[string]int{}
 	commandRows := 0
-	for _, operation := range lock.REST.Operations {
+	for _, operation := range document.Operations {
 		key := endpointKey(operation.Method, operation.Path)
 		endpoint, ok := apiByEndpoint[key]
 		if !ok {
@@ -826,6 +843,11 @@ func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
 			return false
 		}
 		switch {
+		case endpoint.CoveredBy != nil && endpoint.CoveredBy.DirectRead != "" && endpoint.CoveredBy.Stream != "":
+			states["implemented_direct_read_etl"]++
+			if !hasCommand("direct_read", "implemented") {
+				t.Errorf("source operation %q is direct-read and stream covered but has no implemented direct_read command", operation.ID)
+			}
 		case endpoint.CoveredBy != nil && endpoint.CoveredBy.DirectRead != "":
 			states["implemented_direct_read"]++
 			if !hasCommand("direct_read", "implemented") {
@@ -852,7 +874,7 @@ func TestEveryLockedOperationHasOneAccountedCommandLane(t *testing.T) {
 
 	wantStates := map[string]int{
 		"implemented_direct_read":              107,
-		"implemented_stream_read_etl":          12,
+		"implemented_direct_read_etl":          12,
 		"implemented_direct_write_reverse_etl": 130,
 	}
 	if !reflect.DeepEqual(states, wantStates) {

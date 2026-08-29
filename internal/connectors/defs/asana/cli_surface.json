@@ -1036,41 +1036,44 @@
       "source_url": "https://developers.asana.com/reference/createattachmentforobject",
       "flags": [
         {
-          "name": "parent",
+          "name": "connect-to-app",
+          "summary": "Optional OAuth-only external attachment setting.",
+          "type": "boolean",
+          "maps_to": "record.connect_to_app"
+        },
+        {
+          "name": "name",
+          "summary": "Required name of the external resource.",
           "type": "string",
+          "maps_to": "record.name",
+          "required": true,
+          "max_bytes": 32768
+        },
+        {
+          "name": "parent",
           "summary": "Required identifier of the parent task, project, or project brief.",
+          "type": "string",
           "maps_to": "record.parent",
-          "required": true
+          "required": true,
+          "max_bytes": 32768
         },
         {
           "name": "resource-subtype",
+          "summary": "Required `external` subtype for the URL attachment variant.",
           "type": "enum",
           "values": [
             "external"
           ],
-          "summary": "Required `external` subtype for the URL attachment variant.",
           "maps_to": "record.resource_subtype",
           "required": true
         },
         {
           "name": "url",
-          "type": "string",
           "summary": "Required URL of the external resource.",
-          "maps_to": "record.url",
-          "required": true
-        },
-        {
-          "name": "name",
           "type": "string",
-          "summary": "Required name of the external resource.",
-          "maps_to": "record.name",
-          "required": true
-        },
-        {
-          "name": "connect-to-app",
-          "type": "boolean",
-          "summary": "Optional OAuth-only external attachment setting.",
-          "maps_to": "record.connect_to_app"
+          "maps_to": "record.url",
+          "required": true,
+          "max_bytes": 32768
         }
       ],
       "api_surface": [

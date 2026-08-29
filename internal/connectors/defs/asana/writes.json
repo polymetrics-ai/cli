@@ -4072,38 +4072,37 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "additionalProperties": false,
         "required": [
+          "name",
           "parent",
           "resource_subtype",
-          "url",
-          "name"
+          "url"
         ],
         "properties": {
+          "connect_to_app": {
+            "type": "boolean"
+          },
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
           "parent": {
-            "type": "string",
-            "description": "Required identifier of the parent task, project, or project brief."
+            "maxLength": 8192,
+            "type": "string"
           },
           "resource_subtype": {
-            "type": "string",
             "enum": [
               "external"
             ],
-            "description": "Asana requires `external` for a URL attachment."
+            "maxLength": 8192,
+            "type": "string"
           },
           "url": {
-            "type": "string",
-            "description": "URL of the external resource."
-          },
-          "name": {
-            "type": "string",
-            "description": "Name of the external resource."
-          },
-          "connect_to_app": {
-            "type": "boolean",
-            "description": "Optional OAuth-only external attachment setting."
+            "maxLength": 8192,
+            "type": "string"
           }
-        },
-        "additionalProperties": false
+        }
       },
       "risk": "creates an external Asana attachment; requires reverse ETL plan -> preview -> explicit approval -> execute",
       "redact_fields": [

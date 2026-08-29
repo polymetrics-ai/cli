@@ -63,7 +63,7 @@
     },
     "source_lock": {
       "type": "object",
-      "required": ["path", "file_sha256", "schema_version", "connector", "rest_sha256"],
+      "required": ["path", "file_sha256", "schema_version", "connector", "rest_document_id", "rest_document_sha256", "rest_document_bytes"],
       "additionalProperties": false,
       "properties": {
         "path": {
@@ -76,15 +76,23 @@
         },
         "schema_version": {
           "type": "integer",
-          "enum": [2]
+          "enum": [3]
         },
         "connector": {
           "type": "string",
           "enum": ["asana"]
         },
-        "rest_sha256": {
+        "rest_document_id": {
+          "type": "string",
+          "enum": ["asana-openapi"]
+        },
+        "rest_document_sha256": {
           "type": "string",
           "pattern": "^[0-9a-f]{64}$"
+        },
+        "rest_document_bytes": {
+          "type": "integer",
+          "enum": [3066750]
         }
       }
     },
