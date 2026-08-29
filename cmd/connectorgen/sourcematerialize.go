@@ -219,7 +219,7 @@ func runSourceMaterializeWithFetcher(args []string, stdout, stderr io.Writer, fe
 		logf(stdout, "connectorgen source-materialize: %s verified (%d source operations)\n", opts.Connector, len(result.Operations))
 		return 0
 	}
-	if err := sourceMaterializePublish(bundleDir, opts.Connector, outputs); err != nil {
+	if err := sourceMaterializePublish(bundleDir, opts.Connector, outputs, stderr); err != nil {
 		logln(stderr, "connectorgen source-materialize:", err)
 		return 1
 	}
@@ -238,8 +238,8 @@ func parseSourceMaterializeOptions(args []string) (sourceMaterializeOptions, err
 			}
 			opts.Check = true
 		case "--defs":
-			if defsSet || i+1 >= len(args) || strings.HasPrefix(args[i+1], "-") {
-				return sourceMaterializeOptions{}, fmt.Errorf("--defs requires one value and may be specified only once")
+			if defsSet || i+1 >= len(args) || strings.HasPrefix(args[i+1], "-") || strings.TrimSpace(args[i+1]) == "" {
+				return sourceMaterializeOptions{}, fmt.Errorf("--defs requires one non-empty value and may be specified only once")
 			}
 			i++
 			opts.DefsDir = args[i]
@@ -488,14 +488,14 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 		if source.Source.DocumentID != row.Citation.DocumentID || source.Source.Location != row.Citation.Location {
 			return nil, fmt.Errorf("source lock v4 materialization citation for %q does not match the retained source descriptor", row.SourceID)
 		}
-		if err := sourceMaterializeValidateInputBindings(source, row); err != nil {
-			return nil, err
-		}
 		foundationRow := sourceMaterializeFoundationRow{SourceID: row.SourceID, State: row.State, Citation: row.Citation, Reason: row.Reason}
 		switch row.State {
 		case "materialized":
 			if row.Binding == nil {
 				return nil, fmt.Errorf("source operation %q is materialized without a binding", row.SourceID)
+			}
+			if err := sourceMaterializeValidateInputBindings(source, row); err != nil {
+				return nil, err
 			}
 			binding := *row.Binding
 			if seenBindings[binding.ID] {
@@ -540,7 +540,7 @@ func sourceMaterializeOutputs(lock sourceImportLock, result sourceImportResult) 
 		{RelativePath: "streams.json", Bytes: sourceMaterializeJSON(streams)},
 		{RelativePath: "writes.json", Bytes: sourceMaterializeJSON(map[string]any{"actions": writes})},
 		{RelativePath: "operations.json", Bytes: sourceMaterializeJSON(map[string]any{"operations": operations})},
-		{RelativePath: "api_surface.json", Bytes: sourceMaterializeJSON(map[string]any{"api": plan.Metadata.DisplayName + " source-lock API", "docs": plan.Metadata.DocsURL, "scope": "Generated only from source lock v4 explicit materialization bindings.", "endpoints": endpoints})},
+		{RelativePath: "api_surface.json", Bytes: sourceMaterializeJSON(map[string]any{"operation_ledger_version": 1, "api": plan.Metadata.DisplayName + " source-lock API", "docs": plan.Metadata.DocsURL, "scope": "Generated only from source lock v4 explicit materialization bindings.", "endpoints": endpoints})},
 		{RelativePath: "cli_surface.json", Bytes: sourceMaterializeJSON(map[string]any{"tagline": plan.Metadata.Description, "usage": lock.Connector + " <command>", "commands": commands})},
 		{RelativePath: "docs.md", Bytes: sourceMaterializeDocs(lock.Connector, plan, foundation)},
 		{RelativePath: filepath.ToSlash(filepath.Join("sources", lock.Connector+"-operation-descriptor.json")), Bytes: descriptor},
@@ -691,11 +691,8 @@ func sourceMaterializeWrite(source sourceOperationDescriptor, row sourceMaterial
 	if !ok || schema["type"] != "object" {
 		return nil, nil, fmt.Errorf("source operation %q JSON request body must be an object", source.SourceID)
 	}
-	if additional, exists := schema["additionalProperties"]; exists && additional != false {
-		return nil, nil, fmt.Errorf("source operation %q JSON request body must close additionalProperties", source.SourceID)
-	}
-	if _, exists := schema["additionalProperties"]; !exists {
-		schema = sourceMaterializeClosedSchema(schema)
+	if additional, exists := schema["additionalProperties"]; !exists || additional != false {
+		return nil, nil, fmt.Errorf("source operation %q JSON request body does not declare additionalProperties: false; runtime cannot faithfully materialize an open provider object, so mark it blocked or unsupported with an explicit reason", source.SourceID)
 	}
 	if err := sourceMaterializeValidateBodyInputs(source, row); err != nil {
 		return nil, nil, err
@@ -863,15 +860,6 @@ func sourceMaterializeCitationURL(source sourceOperationDescriptor) string {
 	return source.Source.URL
 }
 
-func sourceMaterializeClosedSchema(schema map[string]any) map[string]any {
-	copy := make(map[string]any, len(schema)+1)
-	for key, value := range schema {
-		copy[key] = value
-	}
-	copy["additionalProperties"] = false
-	return copy
-}
-
 func sourceMaterializeJSON(value any) []byte {
 	raw, err := json.MarshalIndent(value, "", "  ")
 	if err != nil {
@@ -942,10 +930,26 @@ type sourceMaterializePublishOps struct {
 	Rename    func(oldPath, newPath string) error
 	Remove    func(path string) error
 	RemoveAll func(path string) error
+	Warn      func(message string)
 }
 
-func sourceMaterializeDefaultPublishOps() sourceMaterializePublishOps {
-	return sourceMaterializePublishOps{Rename: os.Rename, Remove: os.Remove, RemoveAll: os.RemoveAll}
+func sourceMaterializeDefaultPublishOps(warnings io.Writer) sourceMaterializePublishOps {
+	return sourceMaterializePublishOps{
+		Rename:    os.Rename,
+		Remove:    os.Remove,
+		RemoveAll: os.RemoveAll,
+		Warn: func(message string) {
+			if warnings != nil {
+				logln(warnings, "connectorgen source-materialize:", message)
+			}
+		},
+	}
+}
+
+func sourceMaterializePublishWarning(ops sourceMaterializePublishOps, format string, args ...any) {
+	if ops.Warn != nil {
+		ops.Warn(fmt.Sprintf(format, args...))
+	}
 }
 
 // sourceMaterializePublish installs a fully validated staged bundle through a
@@ -954,8 +958,8 @@ func sourceMaterializeDefaultPublishOps() sourceMaterializePublishOps {
 // rollback-protected publish, not a crash-atomic directory swap: an install
 // rename error restores the prior bundle. If the rollback rename itself fails,
 // both recovery paths are retained and named in the error for manual repair.
-func sourceMaterializePublish(bundleDir, connector string, outputs []sourceMaterializeOutput) error {
-	return sourceMaterializePublishWithOps(bundleDir, connector, outputs, sourceMaterializeDefaultPublishOps())
+func sourceMaterializePublish(bundleDir, connector string, outputs []sourceMaterializeOutput, warnings io.Writer) error {
+	return sourceMaterializePublishWithOps(bundleDir, connector, outputs, sourceMaterializeDefaultPublishOps(warnings))
 }
 
 func sourceMaterializePublishWithOps(bundleDir, connector string, outputs []sourceMaterializeOutput, ops sourceMaterializePublishOps) (err error) {
@@ -965,9 +969,19 @@ func sourceMaterializePublishWithOps(bundleDir, connector string, outputs []sour
 		return fmt.Errorf("create staging directory: %w", err)
 	}
 	preserveRecoveryArtifacts := false
+	rolledBack := false
 	defer func() {
 		if !preserveRecoveryArtifacts {
-			_ = ops.RemoveAll(stageRoot)
+			if cleanupErr := ops.RemoveAll(stageRoot); cleanupErr != nil {
+				phase := "after successful installation"
+				if err != nil {
+					phase = "after failed publish"
+					if rolledBack {
+						phase = "after successful rollback"
+					}
+				}
+				sourceMaterializePublishWarning(ops, "warning: staging cleanup %q %s failed: %v", stageRoot, phase, cleanupErr)
+			}
 		}
 	}()
 	stageBundle := filepath.Join(stageRoot, connector)
@@ -1001,12 +1015,15 @@ func sourceMaterializePublishWithOps(bundleDir, connector string, outputs []sour
 			preserveRecoveryArtifacts = true
 			return fmt.Errorf("publish staged bundle: %w; rollback failed: %v; previous bundle retained at %q and staged bundle retained at %q for manual recovery", err, restoreErr, backup, stageBundle)
 		}
+		rolledBack = true
 		return fmt.Errorf("publish staged bundle: %w", err)
 	}
 	// The live bundle is installed at this point. Backup cleanup is best effort:
 	// returning it as an error would falsely claim that a successful publish
 	// failed, while the hidden sibling backup remains recoverable for cleanup.
-	_ = ops.RemoveAll(backup)
+	if cleanupErr := ops.RemoveAll(backup); cleanupErr != nil {
+		sourceMaterializePublishWarning(ops, "warning: backup cleanup %q after successful installation failed: %v", backup, cleanupErr)
+	}
 	return nil
 }
 

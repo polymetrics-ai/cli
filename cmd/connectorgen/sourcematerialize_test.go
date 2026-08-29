@@ -101,6 +101,25 @@ func TestValidate_OperationalContractRejectsMismatchedBundleTarget(t *testing.T)
 	}
 }
 
+func TestValidate_OperationalContractRejectsExplicitEmptyValues(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "empty profile and connector", args: []string{"validate", "cmd/connectorgen/testdata/valid/goodconn", "--require-operational-contract", "", "--connector", ""}},
+		{name: "whitespace profile", args: []string{"validate", "cmd/connectorgen/testdata/valid/goodconn", "--connector", "goodconn", "--require-operational-contract", " \t "}},
+		{name: "empty connector", args: []string{"validate", "cmd/connectorgen/testdata/valid/goodconn", "--connector", "", "--require-operational-contract", "write"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stdout, stderr := new(bytes.Buffer), new(bytes.Buffer)
+			if code := run(tt.args, stdout, stderr); code != 2 || !strings.Contains(stderr.String(), "non-empty value") || stdout.Len() != 0 {
+				t.Fatalf("explicit empty value = %d stdout=%q stderr=%q, want closed usage error", code, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
 func TestValidate_OperationalContractRejectsNonAPIIntegration(t *testing.T) {
 	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
 	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), new(bytes.Buffer), fetcher); code != 0 {
@@ -139,13 +158,120 @@ func TestSourceMaterialize_AtomicNoWriteOnLateFailure(t *testing.T) {
 	// loader/check suite used by production. Invalid staged metadata therefore
 	// reaches a genuinely late failure, after every staged write but before the
 	// bundle-directory rename.
-	err := sourceMaterializePublish(bundleDir, "alpha", []sourceMaterializeOutput{{RelativePath: "metadata.json", Bytes: []byte(`{}`)}})
+	err := sourceMaterializePublish(bundleDir, "alpha", []sourceMaterializeOutput{{RelativePath: "metadata.json", Bytes: []byte(`{}`)}}, new(bytes.Buffer))
 	if err == nil || !strings.Contains(err.Error(), "load staged bundle") {
 		t.Fatalf("late staged failure = %v, want staged loader failure", err)
 	}
 	got, err := os.ReadFile(filepath.Join(bundleDir, "metadata.json"))
 	if err != nil || !bytes.Equal(got, sentinel) {
 		t.Fatalf("atomic failure changed original metadata: got=%q err=%v", got, err)
+	}
+}
+
+func TestSourceMaterialize_RejectsExplicitEmptyDefsWithoutWrite(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "empty separate value", args: []string{"source-materialize", "alpha", "--defs", "", "--check"}},
+		{name: "whitespace separate value", args: []string{"source-materialize", "alpha", "--defs", " \t ", "--check"}},
+		{name: "empty equals value", args: []string{"source-materialize", "alpha", "--defs=", "--check"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
+			stderr := new(bytes.Buffer)
+			if code := runSourceMaterializeWithFetcher(tt.args, new(bytes.Buffer), stderr, fetcher); code != 2 || !strings.Contains(stderr.String(), "non-empty value") {
+				t.Fatalf("empty --defs = %d/%q, want closed usage error", code, stderr.String())
+			}
+			if _, err := os.Stat(filepath.Join(defsRoot, "alpha", "metadata.json")); !os.IsNotExist(err) {
+				t.Fatalf("rejected --defs wrote metadata: %v", err)
+			}
+		})
+	}
+}
+
+func TestSourceMaterializeWrite_RejectsOpenProviderObjectWithoutSynthesis(t *testing.T) {
+	source := sourceOperationDescriptor{
+		SourceID: "alpha.rest.post.open-widget",
+		Protocol: "rest",
+		Method:   "POST",
+		Path:     "/widgets",
+		Request: sourceRequestDescriptor{
+			MediaType: "application/json",
+			Body: &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+				"type":       "object",
+				"properties": map[string]any{"title": map[string]any{"type": "string"}},
+			}},
+		},
+		Responses: []sourceResponseDescriptor{{Status: "201"}},
+	}
+	row := sourceMaterializationOperation{SourceID: source.SourceID, Inputs: []sourceMaterializationInputBinding{{Source: "body.title", Target: "record.title"}}}
+	binding := sourceMaterializationOperationBind{Kind: "write", ID: "create_widget", RequestMedia: "application/json", WriteKind: "create", MutationClass: "create", Approval: "none", Risk: "high", SuccessStatuses: []string{"201"}}
+	if _, _, err := sourceMaterializeWrite(source, row, binding); err == nil || !strings.Contains(err.Error(), "mark it blocked") {
+		t.Fatalf("open provider object error = %v, want actionable blocked mapping", err)
+	}
+}
+
+func TestSourceMaterialize_HappyAccountsForOpenProviderWriteAsBlocked(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{OpenWriteBody: true, BlockOpenWrite: true})
+	stdout, stderr := new(bytes.Buffer), new(bytes.Buffer)
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, stdout, stderr, fetcher); code != 0 {
+		t.Fatalf("blocked open-write materialization = %d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+
+	var report struct {
+		Operations []sourceMaterializeFoundationRow `json:"operations"`
+	}
+	reportBytes, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "missing-foundation.json"))
+	if err != nil {
+		t.Fatalf("read missing-foundation report: %v", err)
+	}
+	if err := json.Unmarshal(reportBytes, &report); err != nil {
+		t.Fatalf("decode missing-foundation report: %v", err)
+	}
+	var blocked *sourceMaterializeFoundationRow
+	for i := range report.Operations {
+		if report.Operations[i].SourceID == "alpha.rest.post.shared" {
+			blocked = &report.Operations[i]
+			break
+		}
+	}
+	if blocked == nil || blocked.State != "blocked" || !strings.Contains(blocked.Reason, "open provider object") {
+		t.Fatalf("open write accounting = %#v, want blocked row with runtime reason", blocked)
+	}
+	apiSurface, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "api_surface.json"))
+	if err != nil {
+		t.Fatalf("read API surface: %v", err)
+	}
+	if !bytes.Contains(apiSurface, []byte(`"status": "blocked"`)) || !bytes.Contains(apiSurface, []byte("open provider object")) {
+		t.Fatalf("blocked API surface = %s", apiSurface)
+	}
+	writes, err := os.ReadFile(filepath.Join(defsRoot, "alpha", "writes.json"))
+	if err != nil {
+		t.Fatalf("read writes: %v", err)
+	}
+	if bytes.Contains(writes, []byte("create_widget")) {
+		t.Fatalf("blocked write was emitted as executable: %s", writes)
+	}
+}
+
+func TestSourceMaterialize_EdgeRejectsSymlinkedBundleTarget(t *testing.T) {
+	defsRoot, _, fetcher := sourceMaterializeFixture(t, sourceMaterializeFixtureOptions{})
+	alphaDir := filepath.Join(defsRoot, "alpha")
+	betaDir := filepath.Join(defsRoot, "beta")
+	if err := os.Rename(alphaDir, betaDir); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink("beta", alphaDir); err != nil {
+		t.Skipf("symlink support unavailable: %v", err)
+	}
+	stderr := new(bytes.Buffer)
+	if code := runSourceMaterializeWithFetcher([]string{"source-materialize", "alpha", "--defs", defsRoot}, new(bytes.Buffer), stderr, fetcher); code == 0 || !strings.Contains(stderr.String(), "bundle must not be a symlink") {
+		t.Fatalf("symlinked bundle = %d/%q, want fail-closed bundle identity error", code, stderr.String())
+	}
+	if _, err := os.Stat(filepath.Join(betaDir, "metadata.json")); !os.IsNotExist(err) {
+		t.Fatalf("symlinked target received generated output: %v", err)
 	}
 }
 
@@ -179,6 +305,7 @@ func TestSourceMaterializePublish_RollsBackInstallRenameFailure(t *testing.T) {
 
 func TestSourceMaterializePublish_CleanupFailureDoesNotFailInstalledBundle(t *testing.T) {
 	bundleDir := sourceMaterializeGeneratedBundle(t)
+	warnings := new(bytes.Buffer)
 	err := sourceMaterializePublishWithOps(bundleDir, "alpha", nil, sourceMaterializePublishOps{
 		Rename: os.Rename,
 		Remove: os.Remove,
@@ -188,12 +315,96 @@ func TestSourceMaterializePublish_CleanupFailureDoesNotFailInstalledBundle(t *te
 			}
 			return os.RemoveAll(path)
 		},
+		Warn: func(message string) { logln(warnings, message) },
 	})
 	if err != nil {
 		t.Fatalf("successful install reported cleanup failure: %v", err)
 	}
 	if _, err := os.Stat(filepath.Join(bundleDir, "metadata.json")); err != nil {
 		t.Fatalf("successful install removed live bundle: %v", err)
+	}
+	if !strings.Contains(warnings.String(), "backup cleanup") || !strings.Contains(warnings.String(), "injected backup cleanup failure") {
+		t.Fatalf("backup cleanup warning = %q", warnings.String())
+	}
+}
+
+func TestSourceMaterializePublish_StageCleanupFailureWarnsButDoesNotFailInstalledBundle(t *testing.T) {
+	bundleDir := sourceMaterializeGeneratedBundle(t)
+	warnings := new(bytes.Buffer)
+	err := sourceMaterializePublishWithOps(bundleDir, "alpha", nil, sourceMaterializePublishOps{
+		Rename: os.Rename,
+		Remove: os.Remove,
+		RemoveAll: func(path string) error {
+			base := filepath.Base(path)
+			if strings.Contains(base, "-source-materialize-") && !strings.Contains(base, "-source-materialize-backup-") {
+				return errors.New("injected stage cleanup failure")
+			}
+			return os.RemoveAll(path)
+		},
+		Warn: func(message string) { logln(warnings, message) },
+	})
+	if err != nil {
+		t.Fatalf("successful install reported stage cleanup failure: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(bundleDir, "metadata.json")); err != nil {
+		t.Fatalf("successful install removed live bundle: %v", err)
+	}
+	if !strings.Contains(warnings.String(), "staging cleanup") || !strings.Contains(warnings.String(), "injected stage cleanup failure") {
+		t.Fatalf("stage cleanup warning = %q", warnings.String())
+	}
+}
+
+func TestSourceMaterializePublish_PrePublishCleanupFailurePreservesPrimaryErrorAndWarns(t *testing.T) {
+	bundleDir := sourceMaterializeGeneratedBundle(t)
+	warnings := new(bytes.Buffer)
+	err := sourceMaterializePublishWithOps(bundleDir, "alpha", []sourceMaterializeOutput{{RelativePath: "metadata.json", Bytes: []byte(`{}`)}}, sourceMaterializePublishOps{
+		Rename: os.Rename,
+		Remove: os.Remove,
+		RemoveAll: func(path string) error {
+			if strings.Contains(filepath.Base(path), "-source-materialize-") {
+				return errors.New("injected pre-publish cleanup failure")
+			}
+			return os.RemoveAll(path)
+		},
+		Warn: func(message string) { logln(warnings, message) },
+	})
+	if err == nil || !strings.Contains(err.Error(), "load staged bundle") {
+		t.Fatalf("pre-publish primary error = %v", err)
+	}
+	if !strings.Contains(warnings.String(), "after failed publish") || !strings.Contains(warnings.String(), "injected pre-publish cleanup failure") {
+		t.Fatalf("pre-publish cleanup warning = %q", warnings.String())
+	}
+}
+
+func TestSourceMaterializePublish_RollbackCleanupFailurePreservesPrimaryErrorAndWarns(t *testing.T) {
+	bundleDir := sourceMaterializeGeneratedBundle(t)
+	warnings := new(bytes.Buffer)
+	renames := 0
+	err := sourceMaterializePublishWithOps(bundleDir, "alpha", nil, sourceMaterializePublishOps{
+		Rename: func(oldPath, newPath string) error {
+			renames++
+			if renames == 2 {
+				return errors.New("injected staged-install rename failure")
+			}
+			return os.Rename(oldPath, newPath)
+		},
+		Remove: os.Remove,
+		RemoveAll: func(path string) error {
+			if strings.Contains(filepath.Base(path), "-source-materialize-") {
+				return errors.New("injected rollback cleanup failure")
+			}
+			return os.RemoveAll(path)
+		},
+		Warn: func(message string) { logln(warnings, message) },
+	})
+	if err == nil || !strings.Contains(err.Error(), "publish staged bundle") {
+		t.Fatalf("rollback primary error = %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(bundleDir, "metadata.json")); err != nil {
+		t.Fatalf("successful rollback did not restore live bundle: %v", err)
+	}
+	if !strings.Contains(warnings.String(), "after successful rollback") || !strings.Contains(warnings.String(), "injected rollback cleanup failure") {
+		t.Fatalf("rollback cleanup warning = %q", warnings.String())
 	}
 }
 
@@ -265,6 +476,8 @@ type sourceMaterializeFixtureOptions struct {
 	MissingBodyBinding          bool
 	WrongRequestMedia           bool
 	MultipleMedia               bool
+	OpenWriteBody               bool
+	BlockOpenWrite              bool
 	OutputSymlink               bool
 }
 
@@ -277,6 +490,9 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 	}
 	getRaw := []byte(`{"openapi":"3.0.3","info":{"title":"alpha","version":"1"},"paths":{"/widgets":{"get":{"operationId":"listWidgets","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"type":"object","additionalProperties":false,"properties":{"items":{"type":"array","items":{"type":"string"}}}}}}}}}}}}`)
 	postSchema := map[string]any{"type": "object", "additionalProperties": false, "required": []any{"title"}, "properties": map[string]any{"title": map[string]any{"type": "string", "maxLength": 64}}}
+	if options.OpenWriteBody {
+		delete(postSchema, "additionalProperties")
+	}
 	postContent := map[string]any{"application/json": map[string]any{"schema": postSchema}}
 	if options.MultipleMedia {
 		postContent["application/xml"] = map[string]any{"schema": postSchema}
@@ -324,6 +540,13 @@ func sourceMaterializeFixture(t *testing.T, options sourceMaterializeFixtureOpti
 	}
 	if options.MissingBodyBinding {
 		plan["operations"].([]any)[1].(map[string]any)["inputs"] = []any{}
+	}
+	if options.BlockOpenWrite {
+		postOperation := plan["operations"].([]any)[1].(map[string]any)
+		postOperation["state"] = "blocked"
+		postOperation["reason"] = "Runtime cannot faithfully materialize an open provider object; blocked pending explicit typed body support."
+		delete(postOperation, "binding")
+		delete(postOperation, "inputs")
 	}
 	if options.WrongRequestMedia {
 		plan["operations"].([]any)[1].(map[string]any)["binding"].(map[string]any)["request_media"] = "application/xml"

@@ -9953,12 +9953,22 @@ func sourceImportConnectorSourcesDir(defsDir, connector string) (string, error) 
 		return "", fmt.Errorf("resolve connector definitions directory: %w", err)
 	}
 	bundleDir := filepath.Join(absDefsDir, connector)
+	bundleInfo, err := os.Lstat(bundleDir)
+	if err != nil {
+		return "", fmt.Errorf("inspect connector bundle directory: %w", err)
+	}
+	if !bundleInfo.IsDir() || bundleInfo.Mode()&os.ModeSymlink != 0 {
+		return "", fmt.Errorf("connector bundle must not be a symlink and must be a directory")
+	}
 	resolvedBundleDir, err := filepath.EvalSymlinks(bundleDir)
 	if err != nil {
 		return "", fmt.Errorf("resolve connector bundle directory: %w", err)
 	}
 	if !sourceImportPathWithin(resolvedDefsDir, resolvedBundleDir) {
 		return "", fmt.Errorf("connector bundle is outside definitions directory")
+	}
+	if filepath.Base(resolvedBundleDir) != connector {
+		return "", fmt.Errorf("resolved connector bundle identity %q does not match requested connector %q", filepath.Base(resolvedBundleDir), connector)
 	}
 	sourcesDir := filepath.Join(bundleDir, "sources")
 	sourcesInfo, err := os.Lstat(sourcesDir)

@@ -165,7 +165,9 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 	dir := ""
 	asJSON := false
 	connector := ""
+	connectorSet := false
 	profile := ""
+	profileSet := false
 	for index := 1; index < len(args); index++ {
 		a := args[index]
 		switch a {
@@ -177,18 +179,25 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 				return 2
 			}
 			index++
+			value := args[index]
+			if strings.TrimSpace(value) == "" {
+				logf(stderr, "connectorgen validate: %s requires a non-empty value\n", a)
+				return 2
+			}
 			if a == "--connector" {
-				if connector != "" {
+				if connectorSet {
 					logln(stderr, "connectorgen validate: --connector may be specified only once")
 					return 2
 				}
-				connector = args[index]
+				connector = value
+				connectorSet = true
 			} else {
-				if profile != "" {
+				if profileSet {
 					logln(stderr, "connectorgen validate: --require-operational-contract may be specified only once")
 					return 2
 				}
-				profile = args[index]
+				profile = value
+				profileSet = true
 			}
 		default:
 			if strings.HasPrefix(a, "-") {
@@ -202,11 +211,11 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 			dir = a
 		}
 	}
-	if profile != "" && connector == "" {
+	if profileSet && !connectorSet {
 		logln(stderr, "connectorgen validate: --require-operational-contract requires --connector")
 		return 2
 	}
-	if connector != "" && !namePattern.MatchString(connector) {
+	if connectorSet && !namePattern.MatchString(connector) {
 		logf(stderr, "connectorgen validate: invalid connector name %q\n", connector)
 		return 2
 	}
@@ -220,7 +229,7 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
-	if connector != "" {
+	if connectorSet {
 		if isBundleDir(dir) {
 			if filepath.Base(filepath.Clean(dir)) != connector {
 				logln(stderr, "connectorgen validate:", sourceMaterializeBundleTargetMismatchError{Connector: connector, Target: filepath.Base(filepath.Clean(dir))})
@@ -235,7 +244,7 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
 	}
-	if profile != "" {
+	if profileSet {
 		findings, gateErr := validateOperationalContractPath(dir, connector, profile)
 		if gateErr != nil {
 			logln(stderr, "connectorgen validate:", gateErr)
