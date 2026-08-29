@@ -94,3 +94,21 @@ This checkpoint has **no zero-blocker or merge-ready verdict**. It records a rev
 | Normal generated-skill/transcript sweep sees existing Asana drift. | External scope-separated blocker; Asana files remain untouched per captain instructions `035.msg`–`036.msg`. |
 
 **Pre-commit verdict:** zero GitLab-slice code blockers found. This is **not** a zero-blocker/global-green or merge-ready verdict; the exact code SHA and then the final evidence-only SHA still require re-review, and both external baseline blockers remain visible.
+
+## GitLab exact-SHA Codex-only re-review
+
+- Exact code candidate: `bd7e97cc6801987a731c13ad5492f9014c42e062`.
+- Reviewed parent: `56cd817d616a423a3f4b84fc9ce2fd0216bf5929`.
+- Review route: captain-approved Codex-only fresh re-review. The captain explicitly ruled out a Claude dependency for this delivery; no separate reviewer role was spawned.
+- Scope: the 33-file GitLab-only implementation slice described by the pre-commit audit. The exact file list contains GitLab definitions and generated surface, GitLab-only derived discovery/ledger rows, generic source-projection code and tests, Atlas evidence, and the required GSD/TDD evidence. It contains no Asana artifact or unrelated connector definition.
+
+### Exact-SHA evidence
+
+- `git merge-base --is-ancestor 56cd817d616a423a3f4b84fc9ce2fd0216bf5929 bd7e97cc6801987a731c13ad5492f9014c42e062` passed.
+- `git diff --check`, `git show --check`, file-status review, and clean-worktree review against that exact code SHA passed.
+- The reviewed code is supported by the focused source-import/projection/surface-sync tests, the GitLab CLI preflight and credential-boundary tests, selected source-import/surface-sync/declaration-validation commands, `go vet ./cmd/connectorgen`, `make docs-check`, agent-contract validation, and the serialized 287.043-second `./cmd/connectorgen` suite recorded above.
+- `operation-evidence --connector gitlab` still reconciles 1,752 identities with 733 executable lane rows (582 direct-read, 4 ETL, 147 reverse-ETL), 1,019 named-foundation blocked rows, no unnamed gap, and no evidence defect.
+
+### Verdict and residual blockers
+
+No GitLab-slice blocker was found in the fresh exact-code-SHA review. The only follow-up change is this review record; it does not modify production or generated behavior. This is still **not merge-ready and not globally green**: the unchanged ordinary-parallel source-materialization fixture panic, existing Asana generated-output drift, and pre-existing global Bitbucket descriptor absence remain externally recorded blockers, and the other nine Batch-1 connectors are not yet delivered.
