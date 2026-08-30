@@ -29,9 +29,10 @@
     }
   },
   "mapping_policy": {
-    "direct_read": "Locked GET verb only; source candidate, not runtime proof.",
-    "mutation": "Locked POST, PUT, PATCH, or DELETE verb only; direct-write and reverse-ETL cells remain independently visible.",
-    "binary_upload": "Selected retained application/octet-stream request-body media only.",
+    "direct_read": "Locked bounded read semantics: GET, explicit GET-equivalence, or source-declared read/query with a retained successful response; source candidate, not runtime proof.",
+    "mutation": "Locked POST, PUT, PATCH, or DELETE semantics excluding source-declared reads; direct-write and reverse-ETL cells remain independently visible.",
+    "binary_download": "Retained successful response media with a binary schema only.",
+    "binary_upload": "Retained binary request schema or explicit binary-payload Content-Type documentation only.",
     "etl": "GET plus required pagination response wrapper plus retained limit+(since|until|cursor|from) or page+per_page controls.",
     "sync_transport": "Vercel webhook registration with source-required url and events; inbound receiver is a recorded shared foundation gap only."
   },
@@ -2853,14 +2854,26 @@
           "state": "not_declared"
         },
         "operation_semantics": {
-          "state": "head_verb_candidate"
+          "state": "source_get_equivalent_read_candidate"
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained source description explicitly says this bounded HEAD request is equivalent to GET without a response body; Track A claims no executable direct-read proof.",
+          "mapping": {
+            "source_fact": {
+              "method": "HEAD",
+              "classification": "source_get_equivalent_read_candidate"
+            },
+            "definition_backlink": {
+              "kind": "api_surface_crosswalk",
+              "path": "sources/vercel-operation-crosswalk.json",
+              "source_id": "vercel.rest.artifactExists"
+            },
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -2933,31 +2946,31 @@
           "state": "not_declared"
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate"
+          "state": "source_declared_read_candidate"
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked mutation verb is a direct-write candidate only; Track A claims no executable write contract.",
+          "reason": "The retained POST summary and description both declare a query and the retained 200 response defines the bounded read result; Track A claims no executable direct-read proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "source_declared_read_candidate"
             },
             "definition_backlink": {
               "kind": "api_surface_crosswalk",
               "path": "sources/vercel-operation-crosswalk.json",
               "source_id": "vercel.rest.artifactQuery"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained source declares this POST as a query read, not a provider mutation."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -2975,22 +2988,9 @@
           "reason": "This retained source operation does not meet the Track A selected paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked mutation verb is a reverse-ETL direction candidate only; Track A claims no DuckDB plan or execution proof.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "api_surface_crosswalk",
-              "path": "sources/vercel-operation-crosswalk.json",
-              "source_id": "vercel.rest.artifactQuery"
-            },
-            "required_flow": "DuckDB warehouse row → typed destination plan → preview → approval → bounded provider request",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained source declares this POST as a query read, not a DuckDB-to-provider mutation direction."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -30857,7 +30857,9 @@
           "success_response_media_types": [
             "application/octet-stream"
           ],
-          "binary_signals": []
+          "binary_signals": [
+            "success_response_media:application/octet-stream"
+          ]
         },
         "pagination": {
           "state": "not_declared",
@@ -30867,36 +30869,47 @@
           "state": "not_declared"
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate"
+          "state": "source_declared_read_candidate"
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked mutation verb is a direct-write candidate only; Track A claims no executable write contract.",
+          "reason": "The retained POST summary declares a file read and its retained 200 response supplies the bounded provider result; Track A claims no executable direct-read proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "source_declared_read_candidate"
             },
             "definition_backlink": {
               "kind": "api_surface_crosswalk",
               "path": "sources/vercel-operation-crosswalk.json",
               "source_id": "vercel.rest.readSessionFile"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
         },
-        "binary_download": {
+        "direct_write": {
           "applicability": "not_applicable",
           "disposition": "not_applicable",
-          "reason": "No locked successful response supplies selected binary-download media evidence."
+          "reason": "The retained source declares this POST as a file read, not a provider mutation."
+        },
+        "binary_download": {
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained 200 response declares application/octet-stream with a binary schema; Track A claims no executable binary-download proof.",
+          "mapping": {
+            "source_binary_signals": [
+              "success_response_media:application/octet-stream"
+            ],
+            "definition_backlink": {
+              "kind": "future_binary_download_projection_required",
+              "path": "operations.json",
+              "source_id": "vercel.rest.readSessionFile"
+            },
+            "runtime_claim": "source mapped only; no binary-download runtime proof claimed"
+          }
         },
         "binary_upload": {
           "applicability": "not_applicable",
@@ -30909,22 +30922,9 @@
           "reason": "This retained source operation does not meet the Track A selected paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked mutation verb is a reverse-ETL direction candidate only; Track A claims no DuckDB plan or execution proof.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "api_surface_crosswalk",
-              "path": "sources/vercel-operation-crosswalk.json",
-              "source_id": "vercel.rest.readSessionFile"
-            },
-            "required_flow": "DuckDB warehouse row → typed destination plan → preview → approval → bounded provider request",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained source declares this POST as a file read, not a DuckDB-to-provider mutation direction."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -31065,11 +31065,15 @@
           }
         },
         "media": {
-          "request_media_types": [],
+          "request_media_types": [
+            "application/gzip"
+          ],
           "success_response_media_types": [
             "application/json"
           ],
-          "binary_signals": []
+          "binary_signals": [
+            "description_content_type:application/gzip"
+          ]
         },
         "pagination": {
           "state": "not_declared",
@@ -31086,7 +31090,7 @@
         "direct_read": {
           "applicability": "not_applicable",
           "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
+          "reason": "The retained source describes a state-changing gzipped-tarball upload, not a bounded direct-read request."
         },
         "direct_write": {
           "applicability": "applicable",
@@ -31111,9 +31115,20 @@
           "reason": "No locked successful response supplies selected binary-download media evidence."
         },
         "binary_upload": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked application/octet-stream request body supplies the selected binary-upload evidence."
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained provider description requires a gzipped tarball with Content-Type application/gzip; Track A claims no executable binary-upload proof.",
+          "mapping": {
+            "source_binary_signals": [
+              "description_content_type:application/gzip"
+            ],
+            "definition_backlink": {
+              "kind": "future_binary_upload_projection_required",
+              "path": "writes.json",
+              "source_id": "vercel.rest.writeSessionFiles"
+            },
+            "runtime_claim": "source mapped only; no binary-upload runtime proof claimed"
+          }
         },
         "etl": {
           "applicability": "not_applicable",
@@ -41085,27 +41100,28 @@
     "source_rows_with_all_lanes": 400,
     "lane_counts": {
       "direct_read": {
-        "mapped_unproven": 159,
-        "not_applicable": 241
+        "mapped_unproven": 162,
+        "not_applicable": 238
       },
       "direct_write": {
-        "not_applicable": 163,
-        "mapped_unproven": 237
+        "not_applicable": 165,
+        "mapped_unproven": 235
       },
       "binary_download": {
-        "not_applicable": 400
+        "not_applicable": 399,
+        "mapped_unproven": 1
       },
       "binary_upload": {
-        "not_applicable": 397,
-        "mapped_unproven": 3
+        "not_applicable": 396,
+        "mapped_unproven": 4
       },
       "etl": {
         "not_applicable": 378,
         "mapped_unproven": 22
       },
       "reverse_etl": {
-        "not_applicable": 163,
-        "mapped_unproven": 237
+        "not_applicable": 165,
+        "mapped_unproven": 235
       },
       "sync_transport": {
         "not_applicable": 399,

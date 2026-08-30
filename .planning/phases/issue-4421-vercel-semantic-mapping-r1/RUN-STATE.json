@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "issue": 4421,
+  "phase": "issue-4421-vercel-semantic-mapping-r1",
+  "base_sha": "e4b8a4da8795c30ea4e6fd948bd98cd116b8d043",
+  "working_branch": "fix/4421-vercel-semantic-repair-r1",
+  "state": "scoped_verification_green_global_suite_red_out_of_scope",
+  "delivery": "push repair branch and comment proof on issue; fresh independent review required",
+  "scope": [
+    "internal/connectors/defs/vercel/source_lane_matrix_test.go",
+    "internal/connectors/defs/vercel/sources/vercel-source-lane-matrix.json",
+    ".planning/phases/issue-4421-vercel-semantic-mapping-r1"
+  ],
+  "out_of_scope": [
+    "source lock",
+    "crosswalk",
+    "Atlas",
+    "shared mapping controls",
+    "runtime",
+    "transport",
+    "certification",
+    "PR and merge"
+  ],
+  "gsd_execution": "inline_manual_fallback_no_pi_runtime_or_role_spawning",
+  "verification": {
+    "focused_vercel": "passed",
+    "race_vercel": "passed",
+    "vet_vercel": "passed",
+    "json": "passed",
+    "agentcontract": "passed",
+    "full_repository": "failed outside repair scope; see VERIFICATION.md"
+  }
+}

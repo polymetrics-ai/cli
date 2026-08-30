@@ -3,6 +3,7 @@ package vercel
 import (
 	"encoding/json"
 	"fmt"
+	"mime"
 	"os"
 	"reflect"
 	"slices"
@@ -29,19 +30,13 @@ var vercelLanes = []string{
 }
 
 var vercelExpectedCounts = map[string]map[string]int{
-	"direct_read":     {"mapped_unproven": 159, "not_applicable": 241},
-	"direct_write":    {"mapped_unproven": 237, "not_applicable": 163},
-	"binary_download": {"not_applicable": 400},
-	"binary_upload":   {"mapped_unproven": 3, "not_applicable": 397},
+	"direct_read":     {"mapped_unproven": 162, "not_applicable": 238},
+	"direct_write":    {"mapped_unproven": 235, "not_applicable": 165},
+	"binary_download": {"mapped_unproven": 1, "not_applicable": 399},
+	"binary_upload":   {"mapped_unproven": 4, "not_applicable": 396},
 	"etl":             {"mapped_unproven": 22, "not_applicable": 378},
-	"reverse_etl":     {"mapped_unproven": 237, "not_applicable": 163},
+	"reverse_etl":     {"mapped_unproven": 235, "not_applicable": 165},
 	"sync_transport":  {"missing_foundation": 1, "not_applicable": 399},
-}
-
-var vercelUploadIDs = map[string]struct{}{
-	"vercel.rest.uploadArtifact":      {},
-	"vercel.rest.uploadProjectAvatar": {},
-	"vercel.rest.uploadFile":          {},
 }
 
 var vercelLegacyETLStreams = map[string]map[string]string{
@@ -109,6 +104,202 @@ func TestVercelSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 			t.Fatalf("invalid-disposition validation error = %v, want lane direct_read", err)
 		}
 	})
+}
+
+func TestVercelSourceLaneMatrixUsesRetainedSourceSemanticsBeyondHTTPVerb(t *testing.T) {
+	matrix := loadVercelObject(t, vercelSourceLaneMatrixPath)
+	lock := loadVercelObject(t, vercelSourceLockPath)
+	locked := make(map[string]map[string]any)
+	for _, operation := range mustMapSlice(objectAt(lock, "rest")["operations"]) {
+		locked[stringAt(operation, "id")] = operation
+	}
+
+	cases := []struct {
+		name               string
+		sourceID           string
+		lane               string
+		wantApplicability  string
+		wantDisposition    string
+		wantOperationState string
+	}{
+		{
+			name:               "HEAD equivalent-to-GET existence check is a direct read",
+			sourceID:           "vercel.rest.artifactExists",
+			lane:               "direct_read",
+			wantApplicability:  "applicable",
+			wantDisposition:    "mapped_unproven",
+			wantOperationState: "source_get_equivalent_read_candidate",
+		},
+		{
+			name:               "POST query is a direct read",
+			sourceID:           "vercel.rest.artifactQuery",
+			lane:               "direct_read",
+			wantApplicability:  "applicable",
+			wantDisposition:    "mapped_unproven",
+			wantOperationState: "source_declared_read_candidate",
+		},
+		{
+			name:               "POST file read is a direct read",
+			sourceID:           "vercel.rest.readSessionFile",
+			lane:               "direct_read",
+			wantApplicability:  "applicable",
+			wantDisposition:    "mapped_unproven",
+			wantOperationState: "source_declared_read_candidate",
+		},
+		{
+			name:              "POST file read is a source-cited binary download",
+			sourceID:          "vercel.rest.readSessionFile",
+			lane:              "binary_download",
+			wantApplicability: "applicable",
+			wantDisposition:   "mapped_unproven",
+		},
+		{
+			name:              "documented gzip tarball write is a source-cited binary upload",
+			sourceID:          "vercel.rest.writeSessionFiles",
+			lane:              "binary_upload",
+			wantApplicability: "applicable",
+			wantDisposition:   "mapped_unproven",
+		},
+		{
+			name:              "ordinary mutation POST stays out of direct read",
+			sourceID:          "vercel.rest.createAccessGroup",
+			lane:              "direct_read",
+			wantApplicability: "not_applicable",
+			wantDisposition:   "not_applicable",
+		},
+		{
+			name:              "ordinary mutation POST remains direct write",
+			sourceID:          "vercel.rest.createAccessGroup",
+			lane:              "direct_write",
+			wantApplicability: "applicable",
+			wantDisposition:   "mapped_unproven",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			operation := locked[tc.sourceID]
+			if operation == nil {
+				t.Fatalf("source lock operation %q is absent", tc.sourceID)
+			}
+			gotApplicability, gotDisposition := vercelExpectedLane(operation, tc.lane)
+			if gotApplicability != tc.wantApplicability || gotDisposition != tc.wantDisposition {
+				t.Fatalf("semantic lane %s %s = (%s, %s), want (%s, %s)", tc.sourceID, tc.lane, gotApplicability, gotDisposition, tc.wantApplicability, tc.wantDisposition)
+			}
+
+			row := vercelMatrixRow(t, matrix, tc.sourceID)
+			cell := mustVercelObject(t, mustVercelObject(t, row["lanes"])[tc.lane])
+			if stringAt(cell, "applicability") != tc.wantApplicability || stringAt(cell, "disposition") != tc.wantDisposition {
+				t.Fatalf("matrix lane %s %s = (%s, %s), want (%s, %s)", tc.sourceID, tc.lane, stringAt(cell, "applicability"), stringAt(cell, "disposition"), tc.wantApplicability, tc.wantDisposition)
+			}
+			if tc.wantOperationState != "" {
+				gotState := stringAt(mustVercelObject(t, objectAt(row, "source_facts")["operation_semantics"]), "state")
+				if gotState != tc.wantOperationState {
+					t.Fatalf("operation semantics %s = %q, want %q", tc.sourceID, gotState, tc.wantOperationState)
+				}
+			}
+		})
+	}
+}
+
+func TestVercelSourceSemanticLaneEvidenceRejectsIncompleteOrContradictoryFacts(t *testing.T) {
+	lock := loadVercelObject(t, vercelSourceLockPath)
+	locked := make(map[string]map[string]any)
+	for _, operation := range mustMapSlice(objectAt(lock, "rest")["operations"]) {
+		locked[stringAt(operation, "id")] = operation
+	}
+
+	cases := []struct {
+		name                string
+		sourceID            string
+		mutate              func(map[string]any)
+		wantDirectRead      string
+		wantDirectWrite     string
+		wantDownloadSignals []string
+		wantUploadSignals   []string
+	}{
+		{
+			name:     "query POST without successful response is not a direct read",
+			sourceID: "vercel.rest.artifactQuery",
+			mutate: func(operation map[string]any) {
+				objectAt(operation, "source_operation")["responses"] = map[string]any{}
+			},
+			wantDirectRead:  "not_applicable",
+			wantDirectWrite: "applicable",
+		},
+		{
+			name:     "query wording contradicted by creation wording stays mutation",
+			sourceID: "vercel.rest.artifactQuery",
+			mutate: func(operation map[string]any) {
+				objectAt(operation, "source_operation")["description"] = "Query information and create an artifact."
+			},
+			wantDirectRead:  "not_applicable",
+			wantDirectWrite: "applicable",
+		},
+		{
+			name:     "binary schema under JSON response media is not binary download evidence",
+			sourceID: "vercel.rest.readSessionFile",
+			mutate: func(operation map[string]any) {
+				response := objectAt(objectAt(objectAt(operation, "source_operation"), "responses"), "200")
+				response["content"] = map[string]any{
+					"application/json": map[string]any{
+						"schema": map[string]any{"type": "string", "format": "binary"},
+					},
+				}
+			},
+			wantDownloadSignals: []string{},
+		},
+		{
+			name:     "binary response media without binary schema is not binary download evidence",
+			sourceID: "vercel.rest.readSessionFile",
+			mutate: func(operation map[string]any) {
+				response := objectAt(objectAt(objectAt(operation, "source_operation"), "responses"), "200")
+				response["content"] = map[string]any{
+					"application/octet-stream": map[string]any{
+						"schema": map[string]any{"type": "string"},
+					},
+				}
+			},
+			wantDownloadSignals: []string{},
+		},
+		{
+			name:     "gzip content type without binary payload documentation is not binary upload evidence",
+			sourceID: "vercel.rest.writeSessionFiles",
+			mutate: func(operation map[string]any) {
+				objectAt(operation, "source_operation")["description"] = "The Content-Type header must be application/gzip."
+			},
+			wantUploadSignals: []string{},
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			operation := cloneVercelObject(t, locked[tc.sourceID])
+			tc.mutate(operation)
+			if tc.wantDirectRead != "" {
+				got, _ := vercelExpectedLane(operation, "direct_read")
+				if got != tc.wantDirectRead {
+					t.Fatalf("direct-read applicability = %q, want %q", got, tc.wantDirectRead)
+				}
+			}
+			if tc.wantDirectWrite != "" {
+				got, _ := vercelExpectedLane(operation, "direct_write")
+				if got != tc.wantDirectWrite {
+					t.Fatalf("direct-write applicability = %q, want %q", got, tc.wantDirectWrite)
+				}
+			}
+			if tc.wantDownloadSignals != nil {
+				if got := vercelBinaryDownloadSignals(operation); !slices.Equal(got, tc.wantDownloadSignals) {
+					t.Fatalf("binary-download signals = %v, want %v", got, tc.wantDownloadSignals)
+				}
+			}
+			if tc.wantUploadSignals != nil {
+				if got := vercelBinaryUploadSignals(operation); !slices.Equal(got, tc.wantUploadSignals) {
+					t.Fatalf("binary-upload signals = %v, want %v", got, tc.wantUploadSignals)
+				}
+			}
+		})
+	}
 }
 
 func validateVercelSourceLaneMatrix(matrix, lock, crosswalk, streams map[string]any) error {
@@ -349,21 +540,26 @@ func validateVercelLaneMapping(lane string, mapping, operation map[string]any) e
 	case "direct_read":
 		sourceFact := objectAt(mapping, "source_fact")
 		backlink := objectAt(mapping, "definition_backlink")
-		if stringAt(sourceFact, "method") != "GET" || stringAt(sourceFact, "classification") != "read_verb_candidate" || stringAt(backlink, "kind") != "api_surface_crosswalk" || stringAt(backlink, "path") != vercelCrosswalkPath || stringAt(backlink, "source_id") != id || strings.TrimSpace(stringAt(mapping, "runtime_claim")) == "" {
+		if stringAt(sourceFact, "method") != stringAt(operation, "method") || stringAt(sourceFact, "classification") != vercelReadSemanticState(operation) || stringAt(backlink, "kind") != "api_surface_crosswalk" || stringAt(backlink, "path") != vercelCrosswalkPath || stringAt(backlink, "source_id") != id || strings.TrimSpace(stringAt(mapping, "runtime_claim")) == "" {
 			return fmt.Errorf("direct-read source mapping drift")
 		}
 	case "direct_write", "reverse_etl":
 		sourceFact := objectAt(mapping, "source_fact")
 		backlink := objectAt(mapping, "definition_backlink")
-		if stringAt(sourceFact, "method") != stringAt(operation, "method") || stringAt(sourceFact, "classification") != "mutation_verb_candidate" || stringAt(backlink, "kind") != "api_surface_crosswalk" || stringAt(backlink, "path") != vercelCrosswalkPath || stringAt(backlink, "source_id") != id || strings.TrimSpace(stringAt(mapping, "runtime_claim")) == "" {
+		if !vercelIsMutationCandidate(operation) || stringAt(sourceFact, "method") != stringAt(operation, "method") || stringAt(sourceFact, "classification") != "mutation_verb_candidate" || stringAt(backlink, "kind") != "api_surface_crosswalk" || stringAt(backlink, "path") != vercelCrosswalkPath || stringAt(backlink, "source_id") != id || strings.TrimSpace(stringAt(mapping, "runtime_claim")) == "" {
 			return fmt.Errorf("mutation source mapping drift")
 		}
 		if lane == "reverse_etl" && strings.TrimSpace(stringAt(mapping, "required_flow")) == "" {
 			return fmt.Errorf("reverse-ETL required flow is absent")
 		}
+	case "binary_download":
+		backlink := objectAt(mapping, "definition_backlink")
+		if !slices.Equal(stringSlice(mapping["source_binary_signals"]), vercelBinaryDownloadSignals(operation)) || stringAt(backlink, "kind") != "future_binary_download_projection_required" || stringAt(backlink, "path") != "operations.json" || stringAt(backlink, "source_id") != id || strings.TrimSpace(stringAt(mapping, "runtime_claim")) == "" {
+			return fmt.Errorf("binary-download source mapping drift")
+		}
 	case "binary_upload":
 		backlink := objectAt(mapping, "definition_backlink")
-		if !slices.Equal(stringSlice(mapping["source_binary_signals"]), []string{"request_body_media:application/octet-stream"}) || stringAt(backlink, "kind") != "future_binary_upload_projection_required" || stringAt(backlink, "path") != "writes.json" || stringAt(backlink, "source_id") != id || strings.TrimSpace(stringAt(mapping, "runtime_claim")) == "" {
+		if !slices.Equal(stringSlice(mapping["source_binary_signals"]), vercelBinaryUploadSignals(operation)) || stringAt(backlink, "kind") != "future_binary_upload_projection_required" || stringAt(backlink, "path") != "writes.json" || stringAt(backlink, "source_id") != id || strings.TrimSpace(stringAt(mapping, "runtime_claim")) == "" {
 			return fmt.Errorf("binary source mapping drift")
 		}
 	case "etl":
@@ -392,15 +588,16 @@ func validateVercelLaneMapping(lane string, mapping, operation map[string]any) e
 }
 
 func vercelExpectedLane(operation map[string]any, lane string) (string, string) {
-	method := stringAt(operation, "method")
 	applicable := false
 	switch lane {
 	case "direct_read":
-		applicable = method == "GET"
+		applicable = vercelReadSemanticState(operation) != ""
 	case "direct_write", "reverse_etl":
-		applicable = vercelIsMutationVerb(method)
+		applicable = vercelIsMutationCandidate(operation)
+	case "binary_download":
+		applicable = len(vercelBinaryDownloadSignals(operation)) > 0
 	case "binary_upload":
-		_, applicable = vercelUploadIDs[stringAt(operation, "id")]
+		applicable = len(vercelBinaryUploadSignals(operation)) > 0
 	case "etl":
 		applicable = vercelIsETLCandidate(operation)
 	case "sync_transport":
@@ -416,10 +613,9 @@ func vercelExpectedLane(operation map[string]any, lane string) (string, string) 
 }
 
 func vercelExpectedSourceFacts(operation map[string]any) map[string]any {
-	method := stringAt(operation, "method")
 	facts := map[string]any{
 		"protocol":     stringAt(operation, "protocol"),
-		"method":       method,
+		"method":       stringAt(operation, "method"),
 		"path":         stringAt(operation, "path"),
 		"operation_id": stringAt(operation, "operation_id"),
 		"deprecated":   operation["deprecated"],
@@ -447,7 +643,7 @@ func vercelExpectedSourceFacts(operation map[string]any) map[string]any {
 			"state": vercelEventCursorState(operation),
 		},
 		"operation_semantics": map[string]any{
-			"state": vercelOperationSemantics(method),
+			"state": vercelOperationSemantics(operation),
 		},
 	}
 	return facts
@@ -455,6 +651,10 @@ func vercelExpectedSourceFacts(operation map[string]any) map[string]any {
 
 func vercelIsMutationVerb(method string) bool {
 	return method == "POST" || method == "PUT" || method == "PATCH" || method == "DELETE"
+}
+
+func vercelIsMutationCandidate(operation map[string]any) bool {
+	return vercelIsMutationVerb(stringAt(operation, "method")) && vercelReadSemanticState(operation) == ""
 }
 
 func vercelIsETLCandidate(operation map[string]any) bool {
@@ -525,15 +725,15 @@ func vercelParameterNames(operation map[string]any, location string) []string {
 
 func vercelRequestMedia(operation map[string]any) []string {
 	source := objectAt(operation, "source_operation")
+	values := make([]string, 0)
 	requestBody, ok := source["requestBody"].(map[string]any)
-	if !ok {
-		return []string{}
+	if ok {
+		if content, contentOK := requestBody["content"].(map[string]any); contentOK {
+			values = append(values, vercelSortedKeys(content)...)
+		}
 	}
-	content, ok := requestBody["content"].(map[string]any)
-	if !ok {
-		return []string{}
-	}
-	return vercelSortedKeys(content)
+	values = append(values, vercelDescriptionContentTypeMedia(stringAt(source, "description"))...)
+	return vercelSortedUnique(values)
 }
 
 func vercelSuccessMedia(operation map[string]any) []string {
@@ -551,10 +751,119 @@ func vercelSuccessMedia(operation map[string]any) []string {
 }
 
 func vercelBinarySignals(operation map[string]any) []string {
-	if _, ok := vercelUploadIDs[stringAt(operation, "id")]; ok {
-		return []string{"request_body_media:application/octet-stream"}
+	values := append([]string{}, vercelBinaryDownloadSignals(operation)...)
+	values = append(values, vercelBinaryUploadSignals(operation)...)
+	return vercelSortedUnique(values)
+}
+
+func vercelBinaryDownloadSignals(operation map[string]any) []string {
+	source := objectAt(operation, "source_operation")
+	values := make([]string, 0)
+	for status, response := range objectAt(source, "responses") {
+		if !strings.HasPrefix(status, "2") {
+			continue
+		}
+		content, ok := mustVercelObjectFrom(response)["content"].(map[string]any)
+		if !ok {
+			continue
+		}
+		for media, mediaContract := range content {
+			if vercelMediaSupportsBinary(media) && vercelJSONHasBinaryFormat(mediaContract) {
+				values = append(values, "success_response_media:"+media)
+			}
+		}
 	}
-	return []string{}
+	return vercelSortedUnique(values)
+}
+
+func vercelBinaryUploadSignals(operation map[string]any) []string {
+	source := objectAt(operation, "source_operation")
+	values := make([]string, 0)
+	if requestBody, ok := source["requestBody"].(map[string]any); ok {
+		if content, ok := requestBody["content"].(map[string]any); ok {
+			for media, mediaContract := range content {
+				if vercelMediaSupportsBinary(media) && vercelJSONHasBinaryFormat(mediaContract) {
+					values = append(values, "request_body_media:"+media)
+				}
+			}
+		}
+	}
+	description := stringAt(source, "description")
+	if vercelDescriptionDeclaresBinaryPayload(description) {
+		for _, media := range vercelDescriptionContentTypeMedia(description) {
+			if vercelMediaSupportsBinary(media) {
+				values = append(values, "description_content_type:"+media)
+			}
+		}
+	}
+	return vercelSortedUnique(values)
+}
+
+func vercelDescriptionContentTypeMedia(description string) []string {
+	description = strings.ToLower(description)
+	values := make([]string, 0)
+	for start := 0; start < len(description); {
+		markerOffset := strings.Index(description[start:], "content-type")
+		if markerOffset < 0 {
+			break
+		}
+		markerEnd := start + markerOffset + len("content-type")
+		mediaOffset := strings.Index(description[markerEnd:], "application/")
+		if mediaOffset < 0 {
+			start = markerEnd
+			continue
+		}
+		mediaStart := markerEnd + mediaOffset
+		mediaEnd := mediaStart
+		for mediaEnd < len(description) && vercelMediaTypeTokenByte(description[mediaEnd]) {
+			mediaEnd++
+		}
+		media, _, err := mime.ParseMediaType(description[mediaStart:mediaEnd])
+		if err == nil {
+			values = append(values, media)
+		}
+		start = mediaEnd
+	}
+	return vercelSortedUnique(values)
+}
+
+func vercelMediaTypeTokenByte(value byte) bool {
+	return value >= 'a' && value <= 'z' || value >= '0' && value <= '9' || value == '/' || value == '.' || value == '+' || value == '-'
+}
+
+func vercelMediaSupportsBinary(media string) bool {
+	media, _, err := mime.ParseMediaType(media)
+	if err != nil {
+		return false
+	}
+	media = strings.ToLower(media)
+	return !strings.HasSuffix(media, "/json") && !strings.Contains(media, "+json") && !strings.HasSuffix(media, "/xml") && !strings.Contains(media, "+xml") && media != "application/x-www-form-urlencoded"
+}
+
+func vercelDescriptionDeclaresBinaryPayload(description string) bool {
+	description = strings.ToLower(description)
+	return strings.Contains(description, "binary") || strings.Contains(description, "tarball")
+}
+
+func vercelJSONHasBinaryFormat(value any) bool {
+	switch typed := value.(type) {
+	case []any:
+		for _, child := range typed {
+			if vercelJSONHasBinaryFormat(child) {
+				return true
+			}
+		}
+	case map[string]any:
+		if strings.EqualFold(stringAt(typed, "format"), "binary") {
+			return true
+		}
+		for _, child := range typed {
+			if vercelJSONHasBinaryFormat(child) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func vercelPagingQueryParameters(operation map[string]any) []string {
@@ -594,10 +903,62 @@ func vercelEventCursorState(operation map[string]any) string {
 	}
 }
 
-func vercelOperationSemantics(method string) string {
-	switch {
-	case method == "GET":
+func vercelReadSemanticState(operation map[string]any) string {
+	if stringAt(operation, "method") == "GET" {
 		return "read_verb_candidate"
+	}
+	if !vercelHasSuccessfulResponse(operation) {
+		return ""
+	}
+	source := objectAt(operation, "source_operation")
+	description := stringAt(source, "description")
+	if vercelDescriptionDeclaresGETEquivalence(description) {
+		return "source_get_equivalent_read_candidate"
+	}
+	if vercelSummaryDeclaresRead(stringAt(source, "summary")) && !vercelDescriptionDeclaresMutation(description) {
+		return "source_declared_read_candidate"
+	}
+	return ""
+}
+
+func vercelHasSuccessfulResponse(operation map[string]any) bool {
+	for status := range objectAt(objectAt(operation, "source_operation"), "responses") {
+		if strings.HasPrefix(status, "2") {
+			return true
+		}
+	}
+	return false
+}
+
+func vercelDescriptionDeclaresGETEquivalence(description string) bool {
+	description = strings.ReplaceAll(strings.ToLower(description), "`", "")
+	return strings.Contains(description, "equivalent to a get request")
+}
+
+func vercelSummaryDeclaresRead(summary string) bool {
+	words := strings.Fields(strings.ToLower(summary))
+	if len(words) == 0 {
+		return false
+	}
+	return words[0] == "read" || words[0] == "query"
+}
+
+func vercelDescriptionDeclaresMutation(description string) bool {
+	description = strings.ToLower(description)
+	for _, term := range []string{"create", "update", "delete", "write", "upload", "remove", "execute", "purchase"} {
+		if strings.Contains(description, term) {
+			return true
+		}
+	}
+	return false
+}
+
+func vercelOperationSemantics(operation map[string]any) string {
+	if state := vercelReadSemanticState(operation); state != "" {
+		return state
+	}
+	method := stringAt(operation, "method")
+	switch {
 	case vercelIsMutationVerb(method):
 		return "mutation_verb_candidate"
 	case method == "HEAD":

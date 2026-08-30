@@ -1,0 +1,7 @@
+Frozen target red run:
+
+semantic lane vercel.rest.artifactExists direct_read = (not_applicable, not_applicable), want (applicable, mapped_unproven)
+semantic lane vercel.rest.artifactQuery direct_read = (not_applicable, not_applicable), want (applicable, mapped_unproven)
+semantic lane vercel.rest.readSessionFile direct_read = (not_applicable, not_applicable), want (applicable, mapped_unproven)
+semantic lane vercel.rest.readSessionFile binary_download = (not_applicable, not_applicable), want (applicable, mapped_unproven)
+semantic lane vercel.rest.writeSessionFiles binary_upload = (not_applicable, not_applicable), want (applicable, mapped_unproven)
