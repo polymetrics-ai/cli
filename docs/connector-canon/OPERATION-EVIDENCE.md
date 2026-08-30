@@ -44,6 +44,29 @@ implemented. A source row with no current command therefore remains visible
 with its citation and gap instead of being omitted. A scoped report must not be
 used to replace the global fixed-100 contract.
 
+## Source-operation multi-lane mapping admission
+
+`connectorgen source-operation-mapping <manifest> --check` validates a
+separate authoring-only manifest before it is linked from an artifact. Each
+source-lock operation has one cited source row and explicit facts for
+pagination, scope/path variables, media, and event/cursor evidence. Its zero
+or more lane cells use one of `implemented`, `mapped_unproven`,
+`missing_foundation`, or source-evidenced `not_applicable`; a pageable source
+row must explicitly include an `etl` cell.
+
+The manifest can list multiple source locks for one connector. A supplemental
+source row remains independently visible with its own source ID and citation.
+When two cited source rows intentionally describe one canonical operation, the
+supplemental row points `canonical_operation_id` at a self-canonical source row
+with the same locked protocol, method, and path. This preserves the source-row
+denominator while reporting the canonical-operation denominator without
+inferring equivalence from a route alone. Artifact links name only an existing
+source-operation/lane cell; they cannot create source IDs.
+
+The checker reads source locks through the mapping-only parser. It does not
+retain or fetch provider bytes, change connector definitions, alter a runtime
+executor, or act as certification evidence.
+
 `make verify` runs `connectorgen-operation-evidence`, equivalent to:
 
 ```bash

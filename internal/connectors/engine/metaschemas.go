@@ -52,6 +52,9 @@ var declarationAdmissionSourcesSchemaJSON string
 //go:embed schema/declaration_admission_inventory.schema.json
 var declarationAdmissionInventorySchemaJSON string
 
+//go:embed schema/source_operation_mapping.schema.json
+var sourceOperationMappingSchemaJSON string
+
 //go:embed schema/certification.schema.json
 var certificationSchemaJSON string
 
