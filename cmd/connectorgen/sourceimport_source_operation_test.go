@@ -82,6 +82,209 @@ func TestParseSourceImportLockRetainsBatchOneLegacyProviderFacts(t *testing.T) {
 	}
 }
 
+// TestBatchOneSourceOperationFactsRemainStrictlyAdmittedAndReconciled keeps
+// the v2 provider fragments intentionally opaque while proving that the
+// enclosing lock remains a closed, source-addressable mapping input. These
+// are real immutable Batch R1 locks rather than hand-reduced provider samples.
+func TestBatchOneSourceOperationFactsRemainStrictlyAdmittedAndReconciled(t *testing.T) {
+	tests := []struct {
+		connector   string
+		wantREST    int
+		operationID string
+		wantSummary string
+	}{
+		{
+			connector:   "sentry",
+			wantREST:    223,
+			operationID: "sentry.rest.listOrganizations",
+			wantSummary: "List Your Organizations",
+		},
+		{
+			connector:   "dockerhub",
+			wantREST:    54,
+			operationID: "dockerhub.rest.PostUsersLogin",
+			wantSummary: "Create an authentication token",
+		},
+		{
+			connector:   "notion",
+			wantREST:    49,
+			operationID: "notion.rest.get-self",
+			wantSummary: "Retrieve your token's bot user",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.connector, func(t *testing.T) {
+			lockPath := filepath.Join("..", "..", "internal", "connectors", "defs", test.connector, "sources", test.connector+"-operation-source-lock.json")
+			raw, err := os.ReadFile(lockPath)
+			if err != nil {
+				t.Fatalf("read Batch R1 source lock: %v", err)
+			}
+			lock, err := parseSourceImportLock(raw, test.connector)
+			if err != nil {
+				t.Fatalf("parse Batch R1 v2 source lock: %v", err)
+			}
+			if lock.SchemaVersion != 2 || len(lock.Rest.Operations) != test.wantREST {
+				t.Fatalf("source lock inventory = schema %d operations %d, want schema 2 and %d operations", lock.SchemaVersion, len(lock.Rest.Operations), test.wantREST)
+			}
+
+			var selected sourceImportRESTOperation
+			for _, operation := range lock.Rest.Operations {
+				if operation.SourceOperation == nil || len(operation.SourceOperation.Raw) == 0 {
+					t.Fatalf("source operation %q lost its documented provider fragment", operation.ID)
+				}
+				if _, err := sourceImportProviderObject(operation.SourceOperation.Raw, "source_operation"); err != nil {
+					t.Fatalf("source operation %q provider fragment is not retained as an object: %v", operation.ID, err)
+				}
+				if operation.ID == test.operationID {
+					selected = operation
+				}
+			}
+			if selected.ID == "" {
+				t.Fatalf("source lock does not retain selected operation %q", test.operationID)
+			}
+			fragment := sourceImportProviderObjectForTest(t, selected.SourceOperation.Raw, "retained source operation")
+			var summary string
+			if err := json.Unmarshal(fragment["summary"], &summary); err != nil {
+				t.Fatalf("decode retained provider summary: %v", err)
+			}
+			if summary != test.wantSummary {
+				t.Fatalf("retained provider summary = %q, want %q", summary, test.wantSummary)
+			}
+
+			reviewed, err := parseDeclarationAdmissionSourceLock(raw, test.connector)
+			if err != nil {
+				t.Fatalf("reconcile source lock into declaration admission: %v", err)
+			}
+			operation, found := reviewed.Operations[selected.ID]
+			if !found {
+				t.Fatalf("declaration admission lost source operation %q", selected.ID)
+			}
+			if operation.SourceURL != lock.Rest.SourceURL || operation.Location != selected.SourceLocation || operation.Path != selected.Path || operation.Method != selected.Method {
+				t.Fatalf("reconciled source identity = %#v, want URL=%q location=%q path=%q method=%q", operation, lock.Rest.SourceURL, selected.SourceLocation, selected.Path, selected.Method)
+			}
+		})
+	}
+}
+
+// TestBatchOneGitLabPathBridgeAndSourceOperationStayClosed exercises the two
+// documented Batch R1 dialect facts together. The source-operation evidence
+// must still reassemble a canonical provider document, while path_bridge maps
+// only source routes that satisfy its closed prefix rule.
+func TestBatchOneGitLabPathBridgeAndSourceOperationStayClosed(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "gitlab", "sources", "gitlab-operation-source-lock.json"))
+	if err != nil {
+		t.Fatalf("read GitLab source lock: %v", err)
+	}
+	lock, err := parseSourceImportLock(raw, "gitlab")
+	if err != nil {
+		t.Fatalf("parse GitLab source lock: %v", err)
+	}
+	if lock.Rest.PathBridge == nil || lock.Rest.PathBridge.SourcePrefix != "/api/v4" || lock.Rest.PathBridge.ConnectorPrefix != "" {
+		t.Fatalf("GitLab path bridge = %#v, want source prefix /api/v4 and empty connector prefix", lock.Rest.PathBridge)
+	}
+
+	canonical, _, err := sourceImportCanonicalEvidenceDocument(lock)
+	if err != nil {
+		t.Fatalf("reassemble GitLab canonical source document: %v", err)
+	}
+	paths, ok := canonical["paths"].(map[string]any)
+	if !ok {
+		t.Fatalf("canonical GitLab paths = %#v, want object", canonical["paths"])
+	}
+	pathItem, ok := paths["/api/v4/projects"].(map[string]any)
+	if !ok {
+		t.Fatalf("canonical GitLab projects path = %#v, want object", paths["/api/v4/projects"])
+	}
+	canonicalOperation, ok := pathItem["get"].(map[string]any)
+	if !ok {
+		t.Fatalf("canonical GitLab projects operation = %#v, want GET object", pathItem["get"])
+	}
+	if summary, ok := canonicalOperation["summary"].(string); !ok || summary == "" {
+		t.Fatalf("canonical GitLab projects operation lost retained provider summary: %#v", canonicalOperation["summary"])
+	}
+
+	reviewed, err := parseDeclarationAdmissionSourceLock(raw, "gitlab")
+	if err != nil {
+		t.Fatalf("reconcile GitLab source lock into declaration admission: %v", err)
+	}
+	project, found := reviewed.Operations["getApiV4Projects"]
+	if !found {
+		t.Fatal("declaration admission lost GitLab getApiV4Projects")
+	}
+	if project.Path != "/api/v4/projects" || project.MappingPath != "/projects" {
+		t.Fatalf("GitLab project path reconciliation = source %q mapping %q, want /api/v4/projects -> /projects", project.Path, project.MappingPath)
+	}
+	if err := sourceOperationMappingValidateExactCitation(sourceOperationMappingSourceCitation{SourceURL: project.SourceURL, Location: project.Location}, project); err != nil {
+		t.Fatalf("exact source citation was rejected after bridge reconciliation: %v", err)
+	}
+	if err := sourceOperationMappingValidateExactCitation(sourceOperationMappingSourceCitation{}, project); err == nil {
+		t.Fatal("missing source citation passed after bridge reconciliation")
+	}
+
+	t.Run("rejects invalid bridge before import", func(t *testing.T) {
+		invalid := lock
+		invalid.Rest.PathBridge = &sourceImportPathBridge{SourcePrefix: "api/v4", ConnectorPrefix: ""}
+		fetched := false
+		_, err := importSourceLockResult(context.Background(), invalid, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) {
+			fetched = true
+			return nil, nil
+		}), defaultSourceImportLimits())
+		if err == nil || !strings.Contains(err.Error(), "invalid source_prefix") {
+			t.Fatalf("invalid path bridge error = %v, want source_prefix rejection", err)
+		}
+		if fetched {
+			t.Fatal("invalid path bridge reached a provider fetch")
+		}
+	})
+
+	for _, test := range []struct {
+		name   string
+		mutate func(map[string]any)
+		want   string
+	}{
+		{
+			name: "rejects unrelated rest typo",
+			mutate: func(document map[string]any) {
+				document["rest"].(map[string]any)["source_operaton"] = map[string]any{}
+			},
+			want: `unknown field "source_operaton"`,
+		},
+		{
+			name: "rejects path bridge typo",
+			mutate: func(document map[string]any) {
+				document["rest"].(map[string]any)["path_bridge"].(map[string]any)["connector_preffix"] = ""
+			},
+			want: `unknown field "connector_preffix"`,
+		},
+		{
+			name: "rejects non-object source operation",
+			mutate: func(document map[string]any) {
+				document["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"] = []any{}
+			},
+			want: "source_operation must be an object",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			var document map[string]any
+			if err := json.Unmarshal(raw, &document); err != nil {
+				t.Fatalf("decode GitLab source lock: %v", err)
+			}
+			test.mutate(document)
+			mutated, err := json.Marshal(document)
+			if err != nil {
+				t.Fatalf("encode mutated GitLab source lock: %v", err)
+			}
+			if _, err := parseSourceImportLock(mutated, "gitlab"); err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("source-import dialect error = %v, want %s", err, test.want)
+			}
+			if _, err := parseDeclarationAdmissionSourceLock(mutated, "gitlab"); err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("declaration-admission dialect error = %v, want %s", err, test.want)
+			}
+		})
+	}
+}
+
 func TestParseSourceImportLockRetainsSingularMediaExamples(t *testing.T) {
 	tests := []struct {
 		name        string

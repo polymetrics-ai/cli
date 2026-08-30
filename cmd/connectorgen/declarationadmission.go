@@ -386,7 +386,7 @@ type declarationAdmissionRESTOperationWire struct {
 	SourceURL       string                                                    `json:"source_url,omitempty"`
 	CitationURL     string                                                    `json:"citation_url,omitempty"`
 	CitationBinding *declarationAdmissionRenderedReferenceCitationBindingWire `json:"citation_binding,omitempty"`
-	SourceOperation json.RawMessage                                           `json:"source_operation,omitempty"`
+	SourceOperation *sourceImportOperationEnrichment                          `json:"source_operation,omitempty"`
 }
 
 // declarationAdmissionRenderedReferenceCitationBindingWire retains only the
@@ -485,14 +485,17 @@ type declarationAdmissionMappingV3LockWire struct {
 }
 
 type declarationAdmissionMappingRESTOperationIdentityWire struct {
-	ID              string          `json:"id"`
-	Protocol        string          `json:"protocol"`
-	Method          string          `json:"method"`
-	Path            string          `json:"path"`
-	OperationID     string          `json:"operation_id"`
-	Deprecated      json.RawMessage `json:"deprecated"`
-	SourceLocation  string          `json:"source_location"`
-	SourceOperation json.RawMessage `json:"source_operation,omitempty"`
+	ID             string          `json:"id"`
+	Protocol       string          `json:"protocol"`
+	Method         string          `json:"method"`
+	Path           string          `json:"path"`
+	OperationID    string          `json:"operation_id"`
+	Deprecated     json.RawMessage `json:"deprecated"`
+	SourceLocation string          `json:"source_location"`
+	// SourceOperation is provider grammar retained only as source evidence.
+	// Reuse the importer's object-only enrichment so mapping admission cannot
+	// accept a malformed scalar or array that source import would reject.
+	SourceOperation *sourceImportOperationEnrichment `json:"source_operation,omitempty"`
 }
 
 type declarationAdmissionMappingLegacyOrdinaryRESTOperationWire struct {
