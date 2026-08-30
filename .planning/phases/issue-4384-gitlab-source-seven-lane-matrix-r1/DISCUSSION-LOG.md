@@ -1,0 +1,10 @@
+# Discussion log — GitLab Track A
+
+- The task contract requires a source-first seven-lane matrix for every GitLab row, including DELETE mutations and crosswalk-only entries.
+- `origin/main@813f457a` lacks GitLab retained source files. The parent authorized copying only the immutable source evidence from `fm/cli-top100-declaration-batch-r1@dc481bac`; no generated definitions, documentation, runtime code, or shared Foundation Atlas content may be copied.
+- GSD lifecycle prompts for discuss, plan with TDD, execute, verify, and code review were generated. This runner cannot use the Pi role-spawning workflow and the team policy forbids extra delegation, so the required lifecycle is executed inline and recorded here and in the plan/TDD/verification artifacts.
+- The Foundation Atlas is consulted from the Batch snapshot because the `origin/main` snapshot does not contain the Atlas. A missing-foundation label is allowed only after that lookup; an importer limitation alone is not one.
+- The source lock yields 1,752 primary rows and its two retained rendered references add the raw repository-file download and generic-package upload rows, making the Track A denominator 1,754. The retained crosswalk has three current-lock-absent Product Analytics identities; those remain `not_source_row` boundary evidence.
+- Explicit source pagination yields 253 GET rows with `page` + `per_page` and two GET rows with `page_token` (255 ETL candidates). This is source mapping evidence only; it does not promote a stream to executable ETL.
+- Three exact `/hooks` registrations have required `url` plus event selectors and are recorded as the inbound GitLab webhook source-executor gap. Six Jira/Squash integration/service URL-plus-event-field operations are retained in their direct-write cells but are not inferred to be GitLab hook transport.
+- The source-import check on the `origin/main` foundation fails before projection with `parse source lock: json: unknown field "path_bridge"`. This confirms a mapping-control incompatibility; it is captured as a restriction and left untouched for the shared mapping-control owner.
