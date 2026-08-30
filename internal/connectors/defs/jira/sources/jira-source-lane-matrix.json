@@ -19,10 +19,10 @@
   },
   "mapping_policy": {
     "source_authority": "Only sources/jira-operation-source-lock.json supplies provider facts for this matrix.",
-    "direct_read": "Every retained GET operation is a read-verb candidate. The verb is an accounting fact, not runtime proof.",
-    "direct_write_and_reverse_etl": "Every retained POST, PUT, or DELETE operation is a mutation-verb candidate. This is separate source accounting for direct write and reverse ETL from DuckDB, not a semantic or executable claim.",
+    "direct_read": "A source operation is a direct-read candidate when its retained provider semantics document a bounded read. GET remains a source fact, and the cited POST read inventory covers provider searches, evaluations, validations, previews, and bulk fetches; neither method alone is runtime proof.",
+    "direct_write_and_reverse_etl": "Every retained provider mutation, including DELETE, is mapped independently to direct_write and reverse_etl. Source-cited POST reads are excluded from those mutation lanes; this is source accounting only, not executable runtime proof.",
     "binary": "Binary candidates require the exact locked media and, for wildcard avatar uploads, the cited locked image text; no general media-type inference is used.",
-    "etl": "Only a retained GET operation with a query parameter exactly named maxResults is in the 95-row paging cohort. Existing streams.json rows are backlinks only; 92 remaining rows require future source-preserving projection before ETL through DuckDB can be proven.",
+    "etl": "A source-read operation is an ETL candidate only when retained provider facts document continuation: offset, cursor, response nextPage/link, or cited request-body continuation. maxResults alone is a limit annotation, not an ETL admission. Existing streams.json rows remain backlinks only; all remaining candidates require source-preserving typed stream projection before ETL through DuckDB can be proven.",
     "sync_transport": "Only registerDynamicWebhooks documents a destination url and selected webhooks[].events. Its inbound receiver and DuckDB-mediated registered source remain a typed missing foundation."
   },
   "source_lock": {
@@ -45,8 +45,8 @@
     "reason": "The current Jira crosswalk is exact 617-to-617 method/path reconciliation. It is a backlink audit, not provider-fact authority."
   },
   "legacy_etl_reconciliation": {
-    "source_paging_candidate_criterion": "GET operation with retained query parameter maxResults",
-    "source_paging_candidates": 95,
+    "source_paging_candidate_criterion": "source-read operation with retained continuation evidence",
+    "source_paging_candidates": 103,
     "legacy_stream_backlinks": [
       {
         "source_id": "jira.rest.searchForIssuesUsingJql",
@@ -64,7 +64,7 @@
         "path": "/rest/api/3/users/search"
       }
     ],
-    "remaining_paging_candidates": 92,
+    "remaining_paging_candidates": 100,
     "execution_boundary": "The three legacy streams are not promoted to implemented. The wider source paging cohort stays mapped_unproven pending independently proven projection, execution, and certification."
   },
   "foundation_atlas": {
@@ -306,39 +306,39 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "max_results_query_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents query offset continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -351,22 +351,29 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
-        },
-        "reverse_etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
+          "reason": "The retained provider source documents query offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "criterion": "documented source continuation",
+              "classification": "query_offset"
             },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.getCustomFieldsConfigurations"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
           }
+        },
+        "reverse_etl": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -2145,12 +2152,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "endingBefore",
             "startingAfter"
           ],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents query cursor continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -2190,9 +2197,24 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained provider source documents query cursor continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "mapping": {
+            "source_fact": {
+              "method": "GET",
+              "criterion": "documented source continuation",
+              "classification": "query_cursor"
+            },
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.getBulkEditableFields"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
+          }
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -2427,12 +2449,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "endingBefore",
             "startingAfter"
           ],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents query cursor continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -2472,9 +2494,24 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained provider source documents query cursor continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "mapping": {
+            "source_fact": {
+              "method": "GET",
+              "criterion": "documented source continuation",
+              "classification": "query_cursor"
+            },
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.getAvailableTransitions"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
+          }
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -2898,27 +2935,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -2936,17 +2973,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -3083,27 +3112,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -3121,17 +3150,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -8076,27 +8097,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -8114,17 +8135,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -8173,27 +8186,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -8211,17 +8224,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -8261,36 +8266,36 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_body_cursor_candidate",
           "paging_query_parameters": [],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents body cursor continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -8303,22 +8308,29 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
-        },
-        "reverse_etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
+          "reason": "The retained provider source documents body cursor continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "criterion": "documented source continuation",
+              "classification": "body_cursor"
             },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.evaluateJSISJiraExpression"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
           }
+        },
+        "reverse_etl": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -9777,39 +9789,39 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "max_results_query_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents query offset continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -9822,22 +9834,29 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
-        },
-        "reverse_etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
+          "reason": "The retained provider source documents query offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "criterion": "documented source continuation",
+              "classification": "query_offset"
             },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.getCustomFieldContextsForProjectsAndIssueTypes"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
           }
+        },
+        "reverse_etl": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -16523,11 +16542,11 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "max_results_limit_only",
           "paging_query_parameters": [
             "maxResults"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained maxResults field limits a picker response, but the locked provider text declares no continuation input; it is not an ETL source candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -16567,22 +16586,9 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
-          "mapping": {
-            "source_fact": {
-              "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
-            },
-            "definition_backlink": {
-              "kind": "future_stream_projection_required",
-              "path": "streams.json",
-              "source_id": "jira.rest.findGroups"
-            },
-            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained maxResults field limits a picker response, but the locked provider text declares no continuation input; it is not an ETL source candidate."
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -16634,11 +16640,11 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "max_results_limit_only",
           "paging_query_parameters": [
             "maxResults"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained maxResults field limits picker lists, but the locked provider text declares no continuation input; it is not an ETL source candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -16678,22 +16684,9 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
-          "mapping": {
-            "source_fact": {
-              "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
-            },
-            "definition_backlink": {
-              "kind": "future_stream_projection_required",
-              "path": "streams.json",
-              "source_id": "jira.rest.findUsersAndGroups"
-            },
-            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained maxResults field limits picker lists, but the locked provider text declares no continuation input; it is not an ETL source candidate."
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -17212,27 +17205,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -17250,17 +17243,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -18349,27 +18334,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -18387,17 +18372,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -19046,27 +19023,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -19084,17 +19061,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -28348,27 +28317,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -28386,17 +28355,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -28738,27 +28699,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -28776,17 +28737,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -28833,27 +28786,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -28871,17 +28824,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -28930,27 +28875,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -28968,17 +28913,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -29025,27 +28962,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -29063,17 +29000,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -29120,27 +29049,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -29158,17 +29087,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -30998,27 +30919,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -31036,17 +30957,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -31093,27 +31006,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -31131,17 +31044,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -34517,36 +34422,36 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_body_offset_candidate",
           "paging_query_parameters": [],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents body offset continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -34559,22 +34464,29 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
-        },
-        "reverse_etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
+          "reason": "The retained provider source documents body offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "criterion": "documented source continuation",
+              "classification": "body_offset"
             },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.suggestedPrioritiesForMappings"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
           }
+        },
+        "reverse_etl": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -42868,12 +42780,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResult",
             "startAt"
           ],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents query offset continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -42913,9 +42825,24 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained provider source documents query offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "mapping": {
+            "source_fact": {
+              "method": "GET",
+              "criterion": "documented source continuation",
+              "classification": "query_offset"
+            },
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.getBulkScreenTabs"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
+          }
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -44600,36 +44527,36 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_body_offset_candidate",
           "paging_query_parameters": [],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents body offset continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -44642,22 +44569,29 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
-        },
-        "reverse_etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
+          "reason": "The retained provider source documents body offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "criterion": "documented source continuation",
+              "classification": "body_offset"
             },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.searchForIssuesUsingJqlPost"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
           }
+        },
+        "reverse_etl": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -44704,27 +44638,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -44742,17 +44676,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -44910,27 +44836,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -44948,17 +44874,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -49133,11 +49051,11 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "max_results_limit_only",
           "paging_query_parameters": [
             "maxResults"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained maxResults field limits a picker response and directs callers to another endpoint for complete users; it is not an ETL source candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -49177,22 +49095,9 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
-          "mapping": {
-            "source_fact": {
-              "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
-            },
-            "definition_backlink": {
-              "kind": "future_stream_projection_required",
-              "path": "streams.json",
-              "source_id": "jira.rest.findUsersForPicker"
-            },
-            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained maxResults field limits a picker response and directs callers to another endpoint for complete users; it is not an ETL source candidate."
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -49828,12 +49733,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResult",
             "startAt"
           ],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents query offset continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -49873,9 +49778,24 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained provider source documents query offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "mapping": {
+            "source_fact": {
+              "method": "GET",
+              "criterion": "documented source continuation",
+              "classification": "query_offset"
+            },
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.findUserKeysByQuery"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
+          }
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -51978,27 +51898,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -52016,17 +51936,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -52075,27 +51987,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -52113,17 +52025,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -52991,27 +52895,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -53029,17 +52933,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -53270,27 +53166,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -53308,17 +53204,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -53450,27 +53338,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -53488,17 +53376,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -53750,27 +53630,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -53788,17 +53668,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -54319,27 +54191,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -54357,17 +54229,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -54509,27 +54373,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -54547,17 +54411,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -57149,11 +57005,11 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_response_next_page_candidate",
           "paging_query_parameters": [
             "since"
           ],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents response next page continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -57193,9 +57049,24 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained provider source documents response next page continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "mapping": {
+            "source_fact": {
+              "method": "GET",
+              "criterion": "documented source continuation",
+              "classification": "response_next_page"
+            },
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.getIdsOfWorklogsDeletedSince"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
+          }
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -57249,27 +57120,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -57287,17 +57158,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -57336,11 +57199,11 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "not_max_results_candidate",
+          "state": "documented_response_next_page_candidate",
           "paging_query_parameters": [
             "since"
           ],
-          "reason": "Track A does not classify this retained operation into the maxResults GET paging cohort."
+          "reason": "The retained provider source documents response next page continuation for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -57380,9 +57243,24 @@
           "reason": "No locked request media plus source text satisfies the selected binary-upload evidence rule."
         },
         "etl": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
+          "applicability": "applicable",
+          "disposition": "mapped_unproven",
+          "reason": "The retained provider source documents response next page continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "mapping": {
+            "source_fact": {
+              "method": "GET",
+              "criterion": "documented source continuation",
+              "classification": "response_next_page"
+            },
+            "definition_backlink": {
+              "kind": "future_stream_projection_required",
+              "path": "streams.json",
+              "stream": "",
+              "stream_path": "",
+              "source_id": "jira.rest.getIdsOfWorklogsModifiedSince"
+            },
+            "runtime_claim": "source mapped only; no ETL runtime proof claimed"
+          }
         },
         "reverse_etl": {
           "applicability": "not_applicable",
@@ -58262,27 +58140,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -58300,17 +58178,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -58990,27 +58860,27 @@
           "reason": "No selected event or cursor source fact is declared for this operation."
         },
         "operation_semantics": {
-          "state": "mutation_verb_candidate",
-          "reason": "HTTP verb is retained for source accounting only; it does not prove provider action semantics or executable runtime behavior."
+          "state": "documented_read_semantics",
+          "reason": "The retained provider summary and description explicitly describe evaluation, validation, search, preview, or bulk-fetch read behavior; POST is request transport, not a write classification."
         }
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "No locked GET verb establishes this source operation as a direct-read candidate."
-        },
-        "direct_write": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is one of the retained mutation-verb candidates; Track A maps source evidence only and claims no direct-write runtime.",
+          "reason": "The retained provider text documents a bounded read even though this request uses POST; Track A maps source evidence only and claims no direct-read runtime.",
           "mapping": {
             "source_fact": {
               "method": "POST",
-              "classification": "mutation_verb_candidate"
+              "classification": "documented_read_semantics"
             },
-            "runtime_claim": "source mapped only; no direct-write runtime proof claimed"
+            "runtime_claim": "source mapped only; no direct-read runtime proof claimed"
           }
+        },
+        "direct_write": {
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a direct-write candidate."
         },
         "binary_download": {
           "applicability": "not_applicable",
@@ -59028,17 +58898,9 @@
           "reason": "No locked GET source fact combines the retained maxResults query parameter with the Track A paging-candidate criterion."
         },
         "reverse_etl": {
-          "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The locked POST verb is retained independently as a reverse-ETL direction candidate; no provider-write execution is claimed.",
-          "mapping": {
-            "source_fact": {
-              "method": "POST",
-              "classification": "mutation_verb_candidate"
-            },
-            "required_flow": "warehouse plan, preview, approval, and execute",
-            "runtime_claim": "source mapped only; no reverse-ETL runtime proof claimed"
-          }
+          "applicability": "not_applicable",
+          "disposition": "not_applicable",
+          "reason": "The retained provider text documents a read result, not a provider mutation, so this POST is not a reverse-ETL action."
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -59053,12 +58915,12 @@
     "source_rows_with_all_lanes": 617,
     "lane_counts": {
       "direct_read": {
-        "mapped_unproven": 276,
-        "not_applicable": 341
+        "mapped_unproven": 309,
+        "not_applicable": 308
       },
       "direct_write": {
-        "not_applicable": 276,
-        "mapped_unproven": 341
+        "mapped_unproven": 308,
+        "not_applicable": 309
       },
       "binary_download": {
         "not_applicable": 614,
@@ -59069,12 +58931,12 @@
         "mapped_unproven": 4
       },
       "etl": {
-        "not_applicable": 522,
-        "mapped_unproven": 95
+        "mapped_unproven": 103,
+        "not_applicable": 514
       },
       "reverse_etl": {
-        "not_applicable": 276,
-        "mapped_unproven": 341
+        "mapped_unproven": 308,
+        "not_applicable": 309
       },
       "sync_transport": {
         "not_applicable": 616,

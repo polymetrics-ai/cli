@@ -28,13 +28,70 @@ var jiraSourceLaneNames = []string{
 }
 
 var jiraExpectedLaneCounts = map[string]map[string]int{
-	"direct_read":     {"mapped_unproven": 276, "not_applicable": 341},
-	"direct_write":    {"mapped_unproven": 341, "not_applicable": 276},
+	"direct_read":     {"mapped_unproven": 309, "not_applicable": 308},
+	"direct_write":    {"mapped_unproven": 308, "not_applicable": 309},
 	"binary_download": {"mapped_unproven": 3, "not_applicable": 614},
 	"binary_upload":   {"mapped_unproven": 4, "not_applicable": 613},
-	"etl":             {"mapped_unproven": 95, "not_applicable": 522},
-	"reverse_etl":     {"mapped_unproven": 341, "not_applicable": 276},
+	"etl":             {"mapped_unproven": 103, "not_applicable": 514},
+	"reverse_etl":     {"mapped_unproven": 308, "not_applicable": 309},
 	"sync_transport":  {"missing_foundation": 1, "not_applicable": 616},
+}
+
+// jiraDocumentedReadSemantics is an intentionally small, source-cited
+// exception inventory for Jira's POST operations that evaluate, validate,
+// search, preview, or bulk-fetch provider state without mutating it. It is not
+// a keyword classifier: each row binds an exact retained source operation to
+// the source text that establishes the read behavior. The ordinary REST method
+// remains a provenance fact, but cannot by itself turn these reads into writes.
+var jiraDocumentedReadSemantics = map[string]jiraSourceTextEvidence{
+	"jira.rest.getCustomFieldsConfigurations":                  {Contains: "Returns a [paginated](#pagination) list of configurations"},
+	"jira.rest.getBulkChangelogs":                              {Contains: "Bulk fetch changelogs for multiple issues"},
+	"jira.rest.getCommentsByIds":                               {Contains: "Returns a [paginated](#pagination) list of comments"},
+	"jira.rest.analyseExpression":                              {Contains: "Analyses and validates Jira expressions."},
+	"jira.rest.evaluateJiraExpression":                         {Contains: "Evaluates a Jira expression and returns its value."},
+	"jira.rest.evaluateJSISJiraExpression":                     {Contains: "Evaluates a Jira expression and returns its value."},
+	"jira.rest.getCustomFieldContextsForProjectsAndIssueTypes": {Contains: "Returns a [paginated](#pagination) list of project and issue type mappings"},
+	"jira.rest.bulkFetchIssues":                                {Contains: "Returns the details for a set of requested issues."},
+	"jira.rest.getIsWatchingIssueBulk":                         {Contains: "Returns, for the user, details of the watched status"},
+	"jira.rest.getChangeLogsByIds":                             {Contains: "Returns changelogs for an issue specified by a list of changelog IDs."},
+	"jira.rest.getAutoCompletePost":                            {Contains: "Returns reference data for JQL searches."},
+	"jira.rest.getPrecomputationsByID":                         {Contains: "Returns function precomputations by IDs"},
+	"jira.rest.matchIssues":                                    {Contains: "Checks whether one or more issues would be returned"},
+	"jira.rest.parseJqlQueries":                                {Contains: "Parses and validates JQL queries."},
+	"jira.rest.migrateQueries":                                 {Contains: "Converts one or more JQL queries"},
+	"jira.rest.sanitiseJqlQueries":                             {Contains: "Sanitizes one or more JQL queries"},
+	"jira.rest.getBulkPermissions":                             {Contains: "Returns:"},
+	"jira.rest.getPermittedProjects":                           {Contains: "Returns all the projects where the user is granted"},
+	"jira.rest.suggestedPrioritiesForMappings":                 {Contains: "Returns a [paginated](#pagination) list of priorities"},
+	"jira.rest.searchForIssuesUsingJqlPost":                    {Contains: "Searches for issues using [JQL]"},
+	"jira.rest.countIssues":                                    {Contains: "Provide an estimated count of the issues"},
+	"jira.rest.searchAndReconsileIssuesUsingJqlPost":           {Contains: "Searches for issues using [JQL]"},
+	"jira.rest.readWorkflowFromHistory":                        {Contains: "Returns a workflow and related statuses"},
+	"jira.rest.listWorkflowHistory":                            {Contains: "Returns a list of workflow history entries"},
+	"jira.rest.readWorkflows":                                  {Contains: "Returns a list of workflows and related statuses"},
+	"jira.rest.validateCreateWorkflows":                        {Contains: "Validate the payload for bulk create workflows."},
+	"jira.rest.readWorkflowPreviews":                           {Contains: "Returns a requested workflow within a given project."},
+	"jira.rest.readWorkflowSchemes":                            {Contains: "Returns a list of workflow schemes"},
+	"jira.rest.validateUpdateWorkflows":                        {Contains: "Validate the payload for bulk update workflows."},
+	"jira.rest.getRequiredWorkflowSchemeMappings":              {Contains: "Gets the required status mappings"},
+	"jira.rest.getWorklogsForIds":                              {Contains: "Returns worklog details for a list of worklog IDs."},
+	"jira.rest.MigrationResource.workflowRuleSearch_post":      {Contains: "Returns configurations for workflow transition rules"},
+	"jira.rest.getWorklogsByIssueIdAndWorklogId":               {Contains: "Returns worklog details for a list of issue ID and worklog ID pairs."},
+}
+
+// jiraBodyPaginationEvidence covers source operations whose retained request
+// example, response example, and summary together document offset pagination
+// in a JSON body. They are deliberately named source facts rather than an
+// unbounded scan for field names in arbitrary request bodies.
+var jiraBodyPaginationEvidence = map[string]jiraSourceTextEvidence{
+	"jira.rest.searchForIssuesUsingJqlPost":    {Contains: "\"maxResults\"", ContinuationKind: "body_offset"},
+	"jira.rest.suggestedPrioritiesForMappings": {Contains: "\"maxResults\"", ContinuationKind: "body_offset"},
+	"jira.rest.evaluateJSISJiraExpression":     {Contains: "\"nextPageToken\"", ContinuationKind: "body_cursor"},
+}
+
+type jiraSourceTextEvidence struct {
+	Contains         string
+	ContinuationKind string
 }
 
 // These are source-text and media predicates only. They identify candidate
@@ -239,8 +296,9 @@ type jiraLockedProviderOperation struct {
 }
 
 type jiraLockedSourceParameter struct {
-	Name string `json:"name"`
-	In   string `json:"in"`
+	Name        string `json:"name"`
+	In          string `json:"in"`
+	Description string `json:"description"`
 }
 
 type jiraLockedRequestBody struct {
@@ -337,6 +395,85 @@ func TestJiraSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) {
 			t.Fatalf("invalid-disposition validation error = %v, want lane direct_read", err)
 		}
 	})
+}
+
+func TestJiraSourceLaneMatrixUsesDocumentedSemanticsAndContinuationFacts(t *testing.T) {
+	matrix := loadJiraSourceLaneMatrix(t)
+	lock := loadJiraSourceLaneLock(t)
+	locked := make(map[string]jiraLockedSourceOperation, len(lock.REST.Operations))
+	for _, operation := range lock.REST.Operations {
+		locked[operation.ID] = operation
+	}
+
+	type laneExpectation struct {
+		sourceID string
+		semantic string
+		direct   string
+		write    string
+		reverse  string
+		etl      string
+		sync     string
+	}
+	cases := []laneExpectation{
+		// Happy paths: source-documented read operations are not promoted to
+		// provider writes merely because the request body uses POST.
+		{"jira.rest.getWorklogsForIds", "documented_read_semantics", "applicable", "not_applicable", "not_applicable", "not_applicable", "not_applicable"},
+		{"jira.rest.getCustomFieldsConfigurations", "documented_read_semantics", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.getCustomFieldContextsForProjectsAndIssueTypes", "documented_read_semantics", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.evaluateJSISJiraExpression", "documented_read_semantics", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		// Ordinary source mutations, including deletes, remain independently
+		// visible in both bounded direct-write and warehouse reverse-ETL lanes.
+		{"jira.rest.bulkSetIssuesPropertiesList", "mutation_verb_candidate", "not_applicable", "applicable", "applicable", "not_applicable", "not_applicable"},
+		{"jira.rest.deleteWorklog", "mutation_verb_candidate", "not_applicable", "applicable", "applicable", "not_applicable", "not_applicable"},
+		// The continuation variants below deliberately cover cursor, singular
+		// maxResult offset, response nextPage, and source-backed POST body offset.
+		{"jira.rest.getBulkEditableFields", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.getAvailableTransitions", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.getBulkScreenTabs", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.findUserKeysByQuery", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.getIdsOfWorklogsDeletedSince", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.getIdsOfWorklogsModifiedSince", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.searchForIssuesUsingJqlPost", "documented_read_semantics", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		{"jira.rest.suggestedPrioritiesForMappings", "documented_read_semantics", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		// Bad/edge cases: a suggestion-list limit or an ordinary array response
+		// is not a continuation contract, and list pagination is not sync transport.
+		{"jira.rest.findUsersForPicker", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "not_applicable", "not_applicable"},
+		{"jira.rest.getProjectVersions", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "not_applicable", "not_applicable"},
+		{"jira.rest.getDynamicWebhooksForApp", "read_verb_candidate", "applicable", "not_applicable", "not_applicable", "applicable", "not_applicable"},
+		// The one source-cited inbound webhook registration remains the only
+		// sync gap. It is intentionally distinct from list pagination.
+		{"jira.rest.registerDynamicWebhooks", "mutation_verb_candidate", "not_applicable", "applicable", "applicable", "not_applicable", "applicable"},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.sourceID, func(t *testing.T) {
+			operation, ok := locked[tc.sourceID]
+			if !ok {
+				t.Fatalf("source operation %q is absent from lock", tc.sourceID)
+			}
+			if got := jiraOperationSemantics(operation); got != tc.semantic {
+				t.Fatalf("semantic classification=%q, want %q", got, tc.semantic)
+			}
+			row := jiraMatrixRow(t, &matrix, tc.sourceID)
+			for lane, want := range map[string]string{
+				"direct_read":    tc.direct,
+				"direct_write":   tc.write,
+				"reverse_etl":    tc.reverse,
+				"etl":            tc.etl,
+				"sync_transport": tc.sync,
+			} {
+				if got := row.Lanes[lane].Applicability; got != want {
+					t.Errorf("%s applicability=%q, want %q", lane, got, want)
+				}
+			}
+		})
+	}
+
+	broken := locked["jira.rest.getWorklogsForIds"]
+	broken.SourceOperation.Description = "provider contract text removed"
+	if err := validateJiraCandidateEvidence(broken); err == nil || !strings.Contains(err.Error(), "documented POST read semantics") {
+		t.Fatalf("missing semantic-source evidence error=%v, want documented POST read semantics", err)
+	}
 }
 
 func loadJiraSourceLaneMatrix(t *testing.T) jiraSourceLaneMatrix {
@@ -495,7 +632,7 @@ func validateJiraCrosswalkBoundary(boundary jiraSourceBoundaryReconciliation, cr
 }
 
 func validateJiraLegacyETLReconciliation(reconciliation jiraLegacyETLReconciliation, locked map[string]jiraLockedSourceOperation, streams jiraStreamsDefinition) error {
-	if reconciliation.SourcePagingCandidateCriterion != "GET operation with retained query parameter maxResults" || reconciliation.SourcePagingCandidates != 95 || reconciliation.RemainingPagingCandidates != 92 {
+	if reconciliation.SourcePagingCandidateCriterion != "source-read operation with retained continuation evidence" || reconciliation.SourcePagingCandidates != 103 || reconciliation.RemainingPagingCandidates != 100 {
 		return fmt.Errorf("legacy ETL paging reconciliation counts or criterion drift")
 	}
 	if len(reconciliation.LegacyStreamBacklinks) != len(jiraLegacyETLStreams) {
@@ -516,7 +653,7 @@ func validateJiraLegacyETLReconciliation(reconciliation jiraLegacyETLReconciliat
 		}
 		seen[backlink.SourceID] = struct{}{}
 		operation := locked[backlink.SourceID]
-		if operation.Method != "GET" || operation.Path != expected.Path || !jiraIsETLCandidate(operation) {
+		if operation.Path != expected.Path || !jiraIsETLCandidate(operation) {
 			return fmt.Errorf("legacy stream backlink source facts drift for %q", backlink.SourceID)
 		}
 		if backlink.Stream != expected.Stream || backlink.Path != expected.Path || streamPaths[backlink.Stream] != backlink.Path {
@@ -549,10 +686,7 @@ func validateJiraSourceFacts(facts jiraSourceLaneMatrixSourceFacts, operation ji
 	if !slices.Equal(facts.Media.RequestMediaTypes, requestMedia) || !slices.Equal(facts.Media.SuccessResponseMediaTypes, responseMedia) || !slices.Equal(facts.Media.BinarySignals, jiraBinarySignals(operation)) {
 		return fmt.Errorf("media facts drift")
 	}
-	wantPaginationState := "not_max_results_candidate"
-	if jiraIsETLCandidate(operation) {
-		wantPaginationState = "max_results_query_candidate"
-	}
+	wantPaginationState := jiraPaginationState(operation)
 	if facts.Pagination.State != wantPaginationState || !slices.Equal(facts.Pagination.PagingQueryParameters, jiraPagingQueryParameters(operation)) {
 		return fmt.Errorf("pagination facts drift")
 	}
@@ -566,6 +700,17 @@ func validateJiraSourceFacts(facts jiraSourceLaneMatrixSourceFacts, operation ji
 }
 
 func validateJiraCandidateEvidence(operation jiraLockedSourceOperation) error {
+	if evidence, ok := jiraDocumentedReadSemantics[operation.ID]; ok {
+		if operation.Method != "POST" || !strings.Contains(jiraSourceText(operation), evidence.Contains) {
+			return fmt.Errorf("documented POST read semantics evidence drift")
+		}
+	}
+	if evidence, ok := jiraBodyPaginationEvidence[operation.ID]; ok {
+		sourceText := jiraSourceText(operation)
+		if !jiraIsDirectReadCandidate(operation) || !jiraHasBodyContinuationEvidence(sourceText, evidence) {
+			return fmt.Errorf("documented body pagination evidence drift")
+		}
+	}
 	if evidence, ok := jiraBinaryDownloadEvidence[operation.ID]; ok && !slices.Equal(jiraSortedUnique(evidence.SuccessMedia), jiraSuccessMediaIntersection(operation, evidence.SuccessMedia)) {
 		return fmt.Errorf("binary download media evidence drift")
 	}
@@ -631,7 +776,7 @@ func validateJiraLaneMapping(lane string, raw json.RawMessage, operation jiraLoc
 		if err := json.Unmarshal(raw, &mapping); err != nil {
 			return err
 		}
-		if mapping.SourceFact.Method != operation.Method || mapping.SourceFact.Classification != "read_verb_candidate" || strings.TrimSpace(mapping.RuntimeClaim) == "" {
+		if !jiraIsDirectReadCandidate(operation) || mapping.SourceFact.Method != operation.Method || mapping.SourceFact.Classification != jiraOperationSemantics(operation) || strings.TrimSpace(mapping.RuntimeClaim) == "" {
 			return fmt.Errorf("direct-read source mapping drift")
 		}
 	case "direct_write":
@@ -683,7 +828,7 @@ func validateJiraMutationLaneMapping(raw json.RawMessage, operation jiraLockedSo
 	if err := json.Unmarshal(raw, &mapping); err != nil {
 		return err
 	}
-	if mapping.SourceFact.Method != operation.Method || mapping.SourceFact.Classification != "mutation_verb_candidate" || strings.TrimSpace(mapping.RuntimeClaim) == "" {
+	if !jiraIsMutationCandidate(operation) || mapping.SourceFact.Method != operation.Method || mapping.SourceFact.Classification != jiraOperationSemantics(operation) || strings.TrimSpace(mapping.RuntimeClaim) == "" {
 		return fmt.Errorf("mutation source mapping drift")
 	}
 	if reverseETL && strings.TrimSpace(mapping.RequiredFlow) == "" {
@@ -712,6 +857,7 @@ func validateJiraETLLaneMapping(raw json.RawMessage, operation jiraLockedSourceO
 			Method         string `json:"method"`
 			Criterion      string `json:"criterion"`
 			QueryParameter string `json:"query_parameter"`
+			Classification string `json:"classification"`
 		} `json:"source_fact"`
 		DefinitionBacklink struct {
 			Kind       string `json:"kind"`
@@ -725,8 +871,16 @@ func validateJiraETLLaneMapping(raw json.RawMessage, operation jiraLockedSourceO
 	if err := json.Unmarshal(raw, &mapping); err != nil {
 		return err
 	}
-	if mapping.SourceFact.Method != "GET" || mapping.SourceFact.Criterion != "retained query parameter maxResults" || mapping.SourceFact.QueryParameter != "maxResults" || strings.TrimSpace(mapping.RuntimeClaim) == "" {
+	evidence, ok := jiraContinuationEvidence(operation)
+	if !ok || mapping.SourceFact.Method != operation.Method || strings.TrimSpace(mapping.RuntimeClaim) == "" {
 		return fmt.Errorf("ETL source mapping drift")
+	}
+	if mapping.SourceFact.Criterion == "retained query parameter maxResults" {
+		if mapping.SourceFact.QueryParameter != "maxResults" || !slices.Contains(jiraQueryParameters(operation), "maxResults") {
+			return fmt.Errorf("legacy maxResults ETL source mapping drift")
+		}
+	} else if mapping.SourceFact.Criterion != "documented source continuation" || mapping.SourceFact.QueryParameter != "" || mapping.SourceFact.Classification != evidence.Kind {
+		return fmt.Errorf("documented continuation ETL source mapping drift")
 	}
 	if legacy, ok := jiraLegacyETLStreams[operation.ID]; ok {
 		if mapping.DefinitionBacklink.Kind != "legacy_stream_backlink" || mapping.DefinitionBacklink.Path != jiraStreamsPath || mapping.DefinitionBacklink.Stream != legacy.Stream || mapping.DefinitionBacklink.StreamPath != legacy.Path || mapping.DefinitionBacklink.SourceID != operation.ID {
@@ -744,9 +898,9 @@ func jiraExpectedLane(operation jiraLockedSourceOperation, lane string) (string,
 	applicable := false
 	switch lane {
 	case "direct_read":
-		applicable = operation.Method == "GET"
+		applicable = jiraIsDirectReadCandidate(operation)
 	case "direct_write", "reverse_etl":
-		applicable = operation.Method != "GET"
+		applicable = jiraIsMutationCandidate(operation)
 	case "binary_download":
 		_, applicable = jiraBinaryDownloadEvidence[operation.ID]
 	case "binary_upload":
@@ -766,7 +920,83 @@ func jiraExpectedLane(operation jiraLockedSourceOperation, lane string) (string,
 }
 
 func jiraIsETLCandidate(operation jiraLockedSourceOperation) bool {
-	return operation.Method == "GET" && slices.Contains(jiraQueryParameters(operation), "maxResults")
+	_, ok := jiraContinuationEvidence(operation)
+	return ok
+}
+
+type jiraContinuationFact struct {
+	Kind string
+}
+
+func jiraIsDirectReadCandidate(operation jiraLockedSourceOperation) bool {
+	return jiraOperationSemantics(operation) != "mutation_verb_candidate"
+}
+
+func jiraIsMutationCandidate(operation jiraLockedSourceOperation) bool {
+	return !jiraIsDirectReadCandidate(operation)
+}
+
+func jiraContinuationEvidence(operation jiraLockedSourceOperation) (jiraContinuationFact, bool) {
+	if !jiraIsDirectReadCandidate(operation) {
+		return jiraContinuationFact{}, false
+	}
+	if evidence, ok := jiraBodyPaginationEvidence[operation.ID]; ok {
+		sourceText := jiraSourceText(operation)
+		if jiraHasBodyContinuationEvidence(sourceText, evidence) {
+			return jiraContinuationFact{Kind: evidence.ContinuationKind}, true
+		}
+	}
+	for _, parameter := range operation.SourceOperation.Parameters {
+		if parameter.In != "query" {
+			continue
+		}
+		description := strings.ToLower(parameter.Description)
+		switch {
+		case strings.Contains(description, "cursor"):
+			return jiraContinuationFact{Kind: "query_cursor"}, true
+		case strings.Contains(description, "page offset"),
+			strings.Contains(description, "first item to return in a page"),
+			strings.Contains(description, "starting index of the returned"),
+			strings.Contains(description, "index of the first item to return"):
+			return jiraContinuationFact{Kind: "query_offset"}, true
+		}
+	}
+	sourceText := strings.ToLower(jiraSourceText(operation))
+	switch {
+	case strings.Contains(sourceText, "cursor-based pagination") && strings.Contains(sourceText, "next"):
+		return jiraContinuationFact{Kind: "response_link_cursor"}, true
+	case strings.Contains(sourceText, "nextpage") && strings.Contains(sourceText, "next page"):
+		return jiraContinuationFact{Kind: "response_next_page"}, true
+	default:
+		return jiraContinuationFact{}, false
+	}
+}
+
+func jiraHasBodyContinuationEvidence(sourceText string, evidence jiraSourceTextEvidence) bool {
+	if !strings.Contains(sourceText, evidence.Contains) {
+		return false
+	}
+	switch evidence.ContinuationKind {
+	case "body_offset":
+		return strings.Contains(sourceText, "\"startAt\"")
+	case "body_cursor":
+		return strings.Contains(strings.ToLower(sourceText), "scrolling view")
+	default:
+		return false
+	}
+}
+
+func jiraPaginationState(operation jiraLockedSourceOperation) string {
+	if slices.Contains(jiraQueryParameters(operation), "maxResults") {
+		if _, ok := jiraContinuationEvidence(operation); !ok {
+			return "max_results_limit_only"
+		}
+		return "max_results_query_candidate"
+	}
+	if evidence, ok := jiraContinuationEvidence(operation); ok {
+		return "documented_" + evidence.Kind + "_candidate"
+	}
+	return "not_max_results_candidate"
 }
 
 func jiraPathVariables(operation jiraLockedSourceOperation) []string {
@@ -863,6 +1093,9 @@ func jiraEventCursorState(operation jiraLockedSourceOperation) string {
 }
 
 func jiraOperationSemantics(operation jiraLockedSourceOperation) string {
+	if _, ok := jiraDocumentedReadSemantics[operation.ID]; ok {
+		return "documented_read_semantics"
+	}
 	if operation.Method == "GET" {
 		return "read_verb_candidate"
 	}
