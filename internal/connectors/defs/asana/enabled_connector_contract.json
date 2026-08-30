@@ -13,7 +13,7 @@
       "state": "implemented",
       "reason": "All 119 locked GET operations have bounded implemented direct-read commands.",
       "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "paths GET operations"}],
-      "artifacts": ["streams.json", "operations.json", "api_surface.json", "cli_surface.json", "sources/asana-operation-source-lock.json"],
+      "artifacts": ["streams.json", "operations.json", "api_surface.json", "cli_surface.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
       "source": {"partition": true, "methods": ["GET"], "coverage": "complete", "expected": 119, "implemented": 119, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
     },
     {
@@ -21,7 +21,7 @@
       "state": "implemented",
       "reason": "The 130 locked DELETE, POST, and PUT operations have bounded implemented one-record direct-write commands; the separate attachment upload remains an explicit binary overlay.",
       "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "paths DELETE, POST, and PUT operations"}],
-      "artifacts": ["writes.json", "cli_surface.json", "api_surface.json", "sources/asana-operation-source-lock.json"],
+      "artifacts": ["writes.json", "cli_surface.json", "api_surface.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
       "source": {"partition": true, "methods": ["DELETE", "POST", "PUT"], "coverage": "complete", "expected": 130, "implemented": 130, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
     },
     {
@@ -29,7 +29,7 @@
       "state": "unsupported_with_provider_evidence",
       "reason": "The retained Asana OpenAPI operation inventory declares no binary response operation; the attachment GET is metadata-only, so binary download is not applicable to this locked provider surface.",
       "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "paths[\"/attachments/{attachment_gid}\"].get and retained GET response media inventory"}],
-      "artifacts": ["cli_surface.json", "sources/asana-operation-source-lock.json"],
+      "artifacts": ["cli_surface.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
       "source": {"partition": false, "coverage": "not_applicable", "expected": 0, "implemented": 0, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
     },
     {
@@ -37,25 +37,25 @@
       "state": "implemented",
       "reason": "The locked attachment create operation has one bounded implemented binary-upload command.",
       "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "paths[\"/attachments\"].post"}],
-      "artifacts": ["writes.json", "cli_surface.json", "sources/asana-operation-source-lock.json"],
+      "artifacts": ["writes.json", "cli_surface.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
       "source": {"partition": false, "operation_ids": ["asana.rest.createAttachmentForObject"], "coverage": "complete", "expected": 1, "implemented": 1, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
     },
     {
       "name": "etl",
       "state": "implemented",
-      "reason": "The existing twelve declarative stream routes execute provider-to-DuckDB ETL. Their exact source-operation selector cells have not yet been retained in streams.json, so the source mapping remains explicitly partial rather than a missing execution foundation.",
-      "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "paths GET operations used by streams.json"}],
-      "artifacts": ["streams.json", "cli_surface.json", "sources/asana-operation-source-lock.json"],
-      "source": {"partition": false, "coverage": "partial", "expected": 12, "implemented": 0, "unmapped_mapping": 12, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "reason": "The descriptor declares 64 pageable/extractable collection candidates. Twelve have existing source-bound declarative stream routes; the remaining 52 stay visible as mapped-unproven cells in the source-to-seven-lane matrix rather than being omitted or promoted.",
+      "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "descriptor pagination facts for locked GET operations"}],
+      "artifacts": ["streams.json", "cli_surface.json", "sources/asana-operation-descriptor.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
+      "source": {"partition": false, "coverage": "partial", "expected": 64, "implemented": 12, "unmapped_mapping": 52, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
       "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app.RunETL", "proof": "internal/app/transport_composition_test.go: TestOpenRegistersDefinitionOwnedProductionTransports"}]
     },
     {
       "name": "reverse_etl",
       "state": "implemented",
-      "reason": "The existing bounded write actions execute through the DuckDB plan, preview, approval, and execute lifecycle. Their 130 source operation identities are not retained as reverse-ETL selector cells, so the source mapping remains explicitly partial rather than a missing execution foundation.",
+      "reason": "The existing bounded write actions execute through the DuckDB plan, preview, approval, and execute lifecycle. The source-to-seven-lane matrix now retains all 130 exact source-operation selector cells, including the two attachment action variants for one source operation.",
       "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "paths DELETE, POST, and PUT operations"}],
-      "artifacts": ["writes.json", "cli_surface.json", "sources/asana-operation-source-lock.json"],
-      "source": {"partition": false, "coverage": "partial", "expected": 130, "implemented": 0, "unmapped_mapping": 130, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "artifacts": ["writes.json", "cli_surface.json", "api_surface.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
+      "source": {"partition": false, "coverage": "complete", "expected": 130, "implemented": 130, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
       "transport": {
         "modes": ["full_append"],
         "runtime_delivery": {"idempotency": "at_least_once", "ordering": "unordered", "deletes": "not_available"},
@@ -69,7 +69,7 @@
       "state": "implemented",
       "reason": "The event-token source transport is source-cited for its event, hydration, and snapshot operations and executes the declared tasks-to-DuckDB route.",
       "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "paths[\"/events\"].get, paths[\"/tasks/{task_gid}\"].get, and paths[\"/tasks\"].get"}],
-      "artifacts": ["sync_transport.json", "event_source_contract.json", "sources/asana-operation-source-lock.json"],
+      "artifacts": ["sync_transport.json", "event_source_contract.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
       "source": {"partition": false, "operation_ids": ["asana.rest.getEvents", "asana.rest.getTask", "asana.rest.getTasks"], "coverage": "complete", "expected": 3, "implemented": 3, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
       "transport": {
         "modes": ["incremental_append", "incremental_upsert", "incremental_dedupe"],
