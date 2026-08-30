@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"sort"
 	"strings"
@@ -11,9 +12,11 @@ import (
 )
 
 const (
-	dockerHubMatrixPath     = "sources/dockerhub-source-lane-matrix.json"
-	dockerHubSourceLockPath = "sources/dockerhub-operation-source-lock.json"
-	dockerHubCrosswalkPath  = "sources/dockerhub-operation-crosswalk.json"
+	dockerHubMatrixPath          = "sources/dockerhub-source-lane-matrix.json"
+	dockerHubSourceLockPath      = "sources/dockerhub-operation-source-lock.json"
+	dockerHubCrosswalkPath       = "sources/dockerhub-operation-crosswalk.json"
+	dockerHubDispositionPath     = "sources/dockerhub-declaration-disposition.json"
+	dockerHubReverseETLAuditPath = "sources/dockerhub-reverse-etl-action-audit.json"
 )
 
 var dockerHubLaneOrder = []string{
@@ -81,6 +84,80 @@ type dockerHubCrosswalkRecord struct {
 	SourceLocation string                     `json:"source_location"`
 	Request        dockerHubCrosswalkRequest  `json:"request"`
 	Response       dockerHubCrosswalkResponse `json:"response"`
+}
+
+// dockerHubDisposition is deliberately a mapping-truth record. It does not
+// declare runtime reachability: that belongs to the actual definition artifacts
+// and their separate execution proof.
+type dockerHubDisposition struct {
+	SchemaVersion              int                             `json:"schema_version"`
+	Connector                  string                          `json:"connector"`
+	SourceBasis                dockerHubDispositionSourceBasis `json:"source_basis"`
+	Mapping                    dockerHubDispositionMapping     `json:"mapping"`
+	SharedExecutorCapabilities []dockerHubExecutorCapability   `json:"shared_executor_capabilities"`
+	Notes                      []string                        `json:"notes"`
+}
+
+type dockerHubDispositionSourceBasis struct {
+	SourceLock           string `json:"source_lock"`
+	Crosswalk            string `json:"crosswalk"`
+	SourceLaneMatrix     string `json:"source_lane_matrix"`
+	SourceOperationCount int    `json:"source_operation_count"`
+}
+
+type dockerHubDispositionMapping struct {
+	State            string                                    `json:"state"`
+	LaneCells        map[string]dockerHubDispositionLaneCounts `json:"lane_cells"`
+	RuntimeArtifacts map[string]dockerHubRuntimeArtifact       `json:"runtime_artifacts"`
+}
+
+type dockerHubDispositionLaneCounts struct {
+	MappedUnproven int `json:"mapped_unproven"`
+	NotApplicable  int `json:"not_applicable"`
+}
+
+type dockerHubRuntimeArtifact struct {
+	Path        string `json:"path"`
+	Present     bool   `json:"present"`
+	RecordCount int    `json:"record_count"`
+	Role        string `json:"role"`
+}
+
+type dockerHubExecutorCapability struct {
+	Kind     string `json:"kind"`
+	State    string `json:"state"`
+	Evidence string `json:"evidence"`
+}
+
+// dockerHubReverseETLAudit lists source-backed candidates only. A candidate is
+// never an invented write action or destination transport declaration.
+type dockerHubReverseETLAudit struct {
+	SchemaVersion    int                             `json:"schema_version"`
+	Connector        string                          `json:"connector"`
+	Purpose          string                          `json:"purpose"`
+	SourceLock       string                          `json:"source_lock"`
+	SourceLaneMatrix string                          `json:"source_lane_matrix"`
+	Summary          dockerHubReverseETLAuditSummary `json:"summary"`
+	WriteOperations  []dockerHubReverseETLCandidate  `json:"write_operations"`
+}
+
+type dockerHubReverseETLAuditSummary struct {
+	SourceMutationOperations    int `json:"source_mutation_operations"`
+	SourceDeleteOperations      int `json:"source_delete_operations"`
+	MappedDirectWriteCells      int `json:"mapped_direct_write_cells"`
+	MappedReverseETLCells       int `json:"mapped_reverse_etl_cells"`
+	DeclaredWriteActions        int `json:"declared_write_actions"`
+	DeclaredDestinationBindings int `json:"declared_destination_bindings"`
+	ExecutableReverseETLActions int `json:"executable_reverse_etl_actions"`
+}
+
+type dockerHubReverseETLCandidate struct {
+	SourceID       string   `json:"source_id"`
+	Method         string   `json:"method"`
+	Path           string   `json:"path"`
+	SourceURL      string   `json:"source_url"`
+	SourceLocation string   `json:"source_location"`
+	Lanes          []string `json:"lanes"`
 }
 
 type dockerHubCrosswalkRequest struct {
@@ -199,10 +276,12 @@ type dockerHubSourceInfo struct {
 }
 
 type dockerHubArtifactRecords struct {
-	APIRoutes      map[string]struct{}
-	Streams        map[string]dockerHubStreamRecord
-	Commands       map[string]dockerHubCommandRecord
-	OperationCount int
+	APIRoutes                    map[string]struct{}
+	Streams                      map[string]dockerHubStreamRecord
+	Commands                     map[string]dockerHubCommandRecord
+	OperationCount               int
+	WritesArtifactPresent        bool
+	SyncTransportArtifactPresent bool
 }
 
 type dockerHubAPISurfaceDocument struct {
@@ -240,7 +319,14 @@ type dockerHubRoute struct {
 
 func TestDockerHubSourceLaneMatrixContract(t *testing.T) {
 	matrix, lock, crosswalk := readDockerHubMatrixInputs(t)
-	if err := validateDockerHubSourceLaneMatrix(matrix, lock, crosswalk, readDockerHubArtifactRecords(t)); err != nil {
+	artifacts := readDockerHubArtifactRecords(t)
+	if err := validateDockerHubSourceLaneMatrix(matrix, lock, crosswalk, artifacts); err != nil {
+		t.Fatal(err)
+	}
+	if err := validateDockerHubDisposition(readDockerHubDisposition(t), matrix, lock, crosswalk, artifacts); err != nil {
+		t.Fatal(err)
+	}
+	if err := validateDockerHubReverseETLAudit(readDockerHubReverseETLAudit(t), matrix, lock, crosswalk, artifacts); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -359,8 +445,147 @@ func TestDockerHubSourceLaneMatrixPreservesRetainedSurface(t *testing.T) {
 	if !dockerHubContainsString(export.Facts.Media.Response, "text/csv") {
 		t.Fatal("member export source media does not retain text/csv")
 	}
-	if cell := dockerHubMatrixCellByLane(t, export, "binary_download"); cell.State != "not_applicable" {
-		t.Fatalf("text/csv member export binary_download state = %q, want source-evidenced not_applicable", cell.State)
+	if cell := dockerHubMatrixCellByLane(t, export, "binary_download"); cell.State != "mapped_unproven" || cell.Reason != "dockerhub.source.binary_download.text_export_response_media.v1" {
+		t.Fatalf("text/csv member export binary_download = %s/%s, want source-evidenced mapped_unproven/text_export", cell.State, cell.Reason)
+	}
+
+	for _, sourceID := range []string{
+		"dockerhub.rest.CheckRepository",
+		"dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags",
+		"dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+	} {
+		head := dockerHubMatrixOperationByID(t, matrix, sourceID)
+		if head.Method != "HEAD" {
+			t.Fatalf("source operation %s method = %q, want HEAD", sourceID, head.Method)
+		}
+		if cell := dockerHubMatrixCellByLane(t, head, "direct_read"); cell.State != "mapped_unproven" || cell.Reason != "dockerhub.source.direct_read.documented_head_status.v1" {
+			t.Fatalf("HEAD source operation %s direct_read = %s/%s, want source-evidenced mapped_unproven/documented_head_status", sourceID, cell.State, cell.Reason)
+		}
+	}
+}
+
+func TestDockerHubSourceLaneMatrixRejectsArtifactBacklinkToUnmappedLane(t *testing.T) {
+	matrix, lock, crosswalk := readDockerHubMatrixInputs(t)
+	sources, err := dockerHubSourceInfos(lock, crosswalk)
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation := dockerHubMatrixOperationByID(t, matrix, "dockerhub.rest.CheckRepository")
+	dockerHubMatrixCellByLane(t, operation, "direct_read").State = "not_applicable"
+	if err := dockerHubValidateArtifactLinks(matrix, readDockerHubArtifactRecords(t), dockerHubMatrixByID(matrix), sources); err == nil || !strings.Contains(err.Error(), "does not point to a mapped lane") {
+		t.Fatalf("artifact backlink validation error = %v, want mapped-lane rejection", err)
+	}
+}
+
+func TestDockerHubDispositionRejectsStaleRuntimeClaims(t *testing.T) {
+	matrix, lock, crosswalk := readDockerHubMatrixInputs(t)
+	artifacts := readDockerHubArtifactRecords(t)
+	tests := []struct {
+		name string
+		edit func(*dockerHubDisposition)
+		want string
+	}{
+		{
+			name: "invented operation declarations",
+			edit: func(disposition *dockerHubDisposition) {
+				disposition.Mapping.RuntimeArtifacts["operations"] = dockerHubRuntimeArtifact{
+					Path: "operations.json", Present: true, RecordCount: 45, Role: "declared_operations",
+				}
+			},
+			want: "runtime artifact operations",
+		},
+		{
+			name: "invented write actions",
+			edit: func(disposition *dockerHubDisposition) {
+				disposition.Mapping.RuntimeArtifacts["writes"] = dockerHubRuntimeArtifact{
+					Path: "writes.json", Present: true, RecordCount: 20, Role: "declared_write_actions",
+				}
+			},
+			want: "runtime artifact writes",
+		},
+		{
+			name: "invented sync transport",
+			edit: func(disposition *dockerHubDisposition) {
+				disposition.Mapping.RuntimeArtifacts["sync_transport"] = dockerHubRuntimeArtifact{
+					Path: "sync_transport.json", Present: true, RecordCount: 4, Role: "declared_sync_transport",
+				}
+			},
+			want: "runtime artifact sync_transport",
+		},
+		{
+			name: "misreports existing status capability as a foundation gap",
+			edit: func(disposition *dockerHubDisposition) {
+				for index := range disposition.SharedExecutorCapabilities {
+					if disposition.SharedExecutorCapabilities[index].Kind == "rest_status" {
+						disposition.SharedExecutorCapabilities[index].State = "missing_foundation"
+					}
+				}
+			},
+			want: "shared executor capability rest_status",
+		},
+		{
+			name: "misreports existing text export capability as a foundation gap",
+			edit: func(disposition *dockerHubDisposition) {
+				for index := range disposition.SharedExecutorCapabilities {
+					if disposition.SharedExecutorCapabilities[index].Kind == "text_export" {
+						disposition.SharedExecutorCapabilities[index].State = "missing_foundation"
+					}
+				}
+			},
+			want: "shared executor capability text_export",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			disposition := readDockerHubDisposition(t)
+			test.edit(disposition)
+			err := validateDockerHubDisposition(disposition, matrix, lock, crosswalk, artifacts)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("disposition validation error = %v, want substring %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestDockerHubReverseETLAuditRejectsSourceOrLaneDrift(t *testing.T) {
+	matrix, lock, crosswalk := readDockerHubMatrixInputs(t)
+	artifacts := readDockerHubArtifactRecords(t)
+	tests := []struct {
+		name string
+		edit func(*dockerHubReverseETLAudit)
+		want string
+	}{
+		{
+			name: "source path mismatch",
+			edit: func(audit *dockerHubReverseETLAudit) {
+				audit.WriteOperations[0].Path = "/not-the-pinned-source-path"
+			},
+			want: "does not preserve locked source facts",
+		},
+		{
+			name: "non reverse etl backlink",
+			edit: func(audit *dockerHubReverseETLAudit) {
+				audit.WriteOperations[0].Lanes = []string{"direct_read"}
+			},
+			want: "does not preserve mapped direct-write/reverse-etl lanes",
+		},
+		{
+			name: "invented executable action",
+			edit: func(audit *dockerHubReverseETLAudit) {
+				audit.Summary.ExecutableReverseETLActions = 1
+			},
+			want: "execution counts",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			audit := readDockerHubReverseETLAudit(t)
+			test.edit(audit)
+			err := validateDockerHubReverseETLAudit(audit, matrix, lock, crosswalk, artifacts)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("reverse-ETL audit validation error = %v, want substring %q", err, test.want)
+			}
+		})
 	}
 }
 
@@ -375,6 +600,20 @@ func readDockerHubMatrixInputs(t *testing.T) (*dockerHubMatrix, *dockerHubLock, 
 	return matrix, lock, crosswalk
 }
 
+func readDockerHubDisposition(t *testing.T) *dockerHubDisposition {
+	t.Helper()
+	disposition := new(dockerHubDisposition)
+	readDockerHubStrictJSON(t, dockerHubDispositionPath, disposition)
+	return disposition
+}
+
+func readDockerHubReverseETLAudit(t *testing.T) *dockerHubReverseETLAudit {
+	t.Helper()
+	audit := new(dockerHubReverseETLAudit)
+	readDockerHubStrictJSON(t, dockerHubReverseETLAuditPath, audit)
+	return audit
+}
+
 func readDockerHubJSON(t *testing.T, path string, target any) {
 	t.Helper()
 	bytes, err := os.ReadFile(path)
@@ -383,6 +622,25 @@ func readDockerHubJSON(t *testing.T, path string, target any) {
 	}
 	if err := json.Unmarshal(bytes, target); err != nil {
 		t.Fatalf("decode %s: %v", path, err)
+	}
+}
+
+func readDockerHubStrictJSON(t *testing.T, path string, target any) {
+	t.Helper()
+	file, err := os.Open(path)
+	if err != nil {
+		t.Fatalf("open %s: %v", path, err)
+	}
+	defer file.Close()
+
+	decoder := json.NewDecoder(file)
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(target); err != nil {
+		t.Fatalf("strict decode %s: %v", path, err)
+	}
+	var extra any
+	if err := decoder.Decode(&extra); !errors.Is(err, io.EOF) {
+		t.Fatalf("strict decode %s has trailing JSON: %v", path, err)
 	}
 }
 
@@ -445,6 +703,213 @@ func validateDockerHubSourceLaneMatrix(matrix *dockerHubMatrix, lock *dockerHubL
 		return err
 	}
 	return dockerHubValidateArtifactLinks(matrix, artifacts, matrixByID, sources)
+}
+
+func validateDockerHubDisposition(disposition *dockerHubDisposition, matrix *dockerHubMatrix, lock *dockerHubLock, crosswalk *dockerHubCrosswalk, artifacts dockerHubArtifactRecords) error {
+	if disposition.SchemaVersion != 1 {
+		return fmt.Errorf("disposition schema_version = %d, want 1", disposition.SchemaVersion)
+	}
+	if disposition.Connector != "dockerhub" {
+		return fmt.Errorf("disposition connector = %q, want dockerhub", disposition.Connector)
+	}
+	if disposition.SourceBasis.SourceLock != dockerHubSourceLockPath ||
+		disposition.SourceBasis.Crosswalk != dockerHubCrosswalkPath ||
+		disposition.SourceBasis.SourceLaneMatrix != dockerHubMatrixPath {
+		return errors.New("disposition does not name the exact Docker Hub source artifacts")
+	}
+	sources, err := dockerHubSourceInfos(lock, crosswalk)
+	if err != nil {
+		return err
+	}
+	if disposition.SourceBasis.SourceOperationCount != len(sources) || disposition.SourceBasis.SourceOperationCount != len(matrix.Operations) {
+		return fmt.Errorf("disposition source operation count = %d, want %d", disposition.SourceBasis.SourceOperationCount, len(sources))
+	}
+	if disposition.Mapping.State != "source_mapped_runtime_unasserted" {
+		return fmt.Errorf("disposition mapping state = %q, want source_mapped_runtime_unasserted", disposition.Mapping.State)
+	}
+
+	cells := dockerHubMatrixCellCounts(matrix)
+	if len(disposition.Mapping.LaneCells) != len(dockerHubLaneOrder) {
+		return fmt.Errorf("disposition lane cell count = %d, want %d", len(disposition.Mapping.LaneCells), len(dockerHubLaneOrder))
+	}
+	for _, lane := range dockerHubLaneOrder {
+		counts, exists := disposition.Mapping.LaneCells[lane]
+		if !exists {
+			return fmt.Errorf("disposition has no %s lane count", lane)
+		}
+		if counts.MappedUnproven != cells[lane]["mapped_unproven"] || counts.NotApplicable != cells[lane]["not_applicable"] {
+			return fmt.Errorf("disposition %s lane counts = mapped:%d not_applicable:%d, want mapped:%d not_applicable:%d", lane, counts.MappedUnproven, counts.NotApplicable, cells[lane]["mapped_unproven"], cells[lane]["not_applicable"])
+		}
+	}
+	if err := dockerHubValidateRuntimeArtifactSnapshot(disposition.Mapping.RuntimeArtifacts, artifacts); err != nil {
+		return err
+	}
+	if err := dockerHubValidateSharedExecutorCapabilities(disposition.SharedExecutorCapabilities); err != nil {
+		return err
+	}
+	if len(disposition.Notes) == 0 {
+		return errors.New("disposition must explain that source mapping is not runtime reachability")
+	}
+	return nil
+}
+
+func dockerHubValidateRuntimeArtifactSnapshot(snapshot map[string]dockerHubRuntimeArtifact, records dockerHubArtifactRecords) error {
+	expected := map[string]dockerHubRuntimeArtifact{
+		"api_surface": {
+			Path:        "api_surface.json",
+			Present:     true,
+			RecordCount: len(records.APIRoutes),
+			Role:        "source_inventory_not_execution_proof",
+		},
+		"streams": {
+			Path:        "streams.json",
+			Present:     true,
+			RecordCount: len(records.Streams),
+			Role:        "source_stream_declarations_not_execution_proof",
+		},
+		"operations": {
+			Path:        "operations.json",
+			Present:     true,
+			RecordCount: records.OperationCount,
+			Role:        "declared_operation_definitions",
+		},
+		"cli_surface": {
+			Path:        "cli_surface.json",
+			Present:     true,
+			RecordCount: len(records.Commands),
+			Role:        "declared_cli_surface_not_execution_proof",
+		},
+		"writes": {
+			Path:        "writes.json",
+			Present:     records.WritesArtifactPresent,
+			RecordCount: 0,
+			Role:        "no_declared_write_actions",
+		},
+		"sync_transport": {
+			Path:        "sync_transport.json",
+			Present:     records.SyncTransportArtifactPresent,
+			RecordCount: 0,
+			Role:        "no_declared_sync_transport",
+		},
+	}
+	if len(snapshot) != len(expected) {
+		return fmt.Errorf("runtime artifact snapshot count = %d, want %d", len(snapshot), len(expected))
+	}
+	for name, want := range expected {
+		got, exists := snapshot[name]
+		if !exists {
+			return fmt.Errorf("runtime artifact %s is absent from the disposition", name)
+		}
+		if got != want {
+			return fmt.Errorf("runtime artifact %s = %+v, want %+v", name, got, want)
+		}
+	}
+	return nil
+}
+
+func dockerHubValidateSharedExecutorCapabilities(capabilities []dockerHubExecutorCapability) error {
+	expected := map[string]struct{}{
+		"rest_status": {},
+		"text_export": {},
+	}
+	if len(capabilities) != len(expected) {
+		return fmt.Errorf("shared executor capability count = %d, want %d", len(capabilities), len(expected))
+	}
+	byKind := make(map[string]dockerHubExecutorCapability, len(capabilities))
+	for _, capability := range capabilities {
+		if _, duplicate := byKind[capability.Kind]; duplicate {
+			return fmt.Errorf("duplicate shared executor capability %q", capability.Kind)
+		}
+		byKind[capability.Kind] = capability
+	}
+	engineKinds, err := os.ReadFile("../../engine/operation_kind.go")
+	if err != nil {
+		return fmt.Errorf("read shared operation kinds: %w", err)
+	}
+	for kind := range expected {
+		capability, exists := byKind[kind]
+		if !exists || capability.State != "present" || strings.TrimSpace(capability.Evidence) == "" {
+			return fmt.Errorf("shared executor capability %s = %+v, want present evidence", kind, capability)
+		}
+		if !strings.Contains(string(engineKinds), fmt.Sprintf("%q", kind)) {
+			return fmt.Errorf("shared executor capability %s is not registered by the engine", kind)
+		}
+	}
+	return nil
+}
+
+func validateDockerHubReverseETLAudit(audit *dockerHubReverseETLAudit, matrix *dockerHubMatrix, lock *dockerHubLock, crosswalk *dockerHubCrosswalk, artifacts dockerHubArtifactRecords) error {
+	if audit.SchemaVersion != 1 {
+		return fmt.Errorf("reverse-ETL audit schema_version = %d, want 1", audit.SchemaVersion)
+	}
+	if audit.Connector != "dockerhub" {
+		return fmt.Errorf("reverse-ETL audit connector = %q, want dockerhub", audit.Connector)
+	}
+	if audit.Purpose != "Source-backed direct-write and reverse-ETL mapping candidates only; this is not a runtime action inventory." {
+		return fmt.Errorf("reverse-ETL audit purpose = %q, want source-mapping-only purpose", audit.Purpose)
+	}
+	if audit.SourceLock != dockerHubSourceLockPath || audit.SourceLaneMatrix != dockerHubMatrixPath {
+		return errors.New("reverse-ETL audit does not name the exact source lock and lane matrix")
+	}
+	if artifacts.WritesArtifactPresent || artifacts.SyncTransportArtifactPresent {
+		return errors.New("reverse-ETL audit must be updated when Docker Hub declares write or sync transport artifacts")
+	}
+
+	sources, err := dockerHubSourceInfos(lock, crosswalk)
+	if err != nil {
+		return err
+	}
+	matrixByID := dockerHubMatrixByID(matrix)
+	expectedCandidates := make(map[string]dockerHubSourceInfo)
+	deleteCount := 0
+	for sourceID, source := range sources {
+		if !dockerHubIsMutation(source.Lock.Method) {
+			continue
+		}
+		expectedCandidates[sourceID] = source
+		if source.Lock.Method == "DELETE" {
+			deleteCount++
+		}
+		operation := matrixByID[sourceID]
+		if operation == nil || dockerHubMappedCellByLane(operation, "direct_write") == nil || dockerHubMappedCellByLane(operation, "reverse_etl") == nil {
+			return fmt.Errorf("source mutation %s is missing mapped direct-write/reverse-etl lanes", sourceID)
+		}
+	}
+	if audit.Summary.SourceMutationOperations != len(expectedCandidates) ||
+		audit.Summary.SourceDeleteOperations != deleteCount ||
+		audit.Summary.MappedDirectWriteCells != len(expectedCandidates) ||
+		audit.Summary.MappedReverseETLCells != len(expectedCandidates) {
+		return fmt.Errorf("reverse-ETL audit source mapping counts = %+v, want mutation:%d delete:%d direct_write:%d reverse_etl:%d", audit.Summary, len(expectedCandidates), deleteCount, len(expectedCandidates), len(expectedCandidates))
+	}
+	if audit.Summary.DeclaredWriteActions != 0 || audit.Summary.DeclaredDestinationBindings != 0 || audit.Summary.ExecutableReverseETLActions != 0 {
+		return fmt.Errorf("reverse-ETL audit execution counts = actions:%d destination_bindings:%d executable:%d, want zero while definition artifacts are absent", audit.Summary.DeclaredWriteActions, audit.Summary.DeclaredDestinationBindings, audit.Summary.ExecutableReverseETLActions)
+	}
+
+	seen := make(map[string]struct{}, len(audit.WriteOperations))
+	for _, candidate := range audit.WriteOperations {
+		if _, duplicate := seen[candidate.SourceID]; duplicate {
+			return fmt.Errorf("reverse-ETL audit duplicates source candidate %q", candidate.SourceID)
+		}
+		seen[candidate.SourceID] = struct{}{}
+		source, exists := expectedCandidates[candidate.SourceID]
+		if !exists {
+			return fmt.Errorf("reverse-ETL audit source candidate %q is not a locked mutation", candidate.SourceID)
+		}
+		if candidate.Method != source.Lock.Method || candidate.Path != source.Lock.Path || candidate.SourceURL != source.SourceURL || candidate.SourceLocation != source.Lock.SourceLocation {
+			return fmt.Errorf("reverse-ETL audit source candidate %s does not preserve locked source facts", candidate.SourceID)
+		}
+		if !dockerHubEqualStrings(candidate.Lanes, []string{"direct_write", "reverse_etl"}) {
+			return fmt.Errorf("reverse-ETL audit source candidate %s does not preserve mapped direct-write/reverse-etl lanes", candidate.SourceID)
+		}
+		operation := matrixByID[candidate.SourceID]
+		if operation == nil || dockerHubMappedCellByLane(operation, "direct_write") == nil || dockerHubMappedCellByLane(operation, "reverse_etl") == nil {
+			return fmt.Errorf("reverse-ETL audit source candidate %s is not backed by mapped direct-write/reverse-etl cells", candidate.SourceID)
+		}
+	}
+	if len(seen) != len(expectedCandidates) {
+		return fmt.Errorf("reverse-ETL audit candidate count = %d, want %d", len(seen), len(expectedCandidates))
+	}
+	return nil
 }
 
 func dockerHubSourceInfos(lock *dockerHubLock, crosswalk *dockerHubCrosswalk) (map[string]dockerHubSourceInfo, error) {
@@ -790,14 +1255,15 @@ func dockerHubJSONPointer(root map[string]any, reference string) (any, bool) {
 
 func dockerHubExpectedCells(source dockerHubSourceInfo, sourceContract map[string]any) map[string]dockerHubExpectedCell {
 	isMutation := dockerHubIsMutation(source.Lock.Method)
-	isRead := source.Lock.Method == "GET"
 	isBinaryDownload := dockerHubHasBinaryDownload(source)
 	isBinaryUpload := dockerHubHasBinaryUpload(source)
 	requiresETL := dockerHubRequiresETL(source, sourceContract)
 
 	expected := make(map[string]dockerHubExpectedCell, len(dockerHubLaneOrder))
-	if isRead {
+	if source.Lock.Method == "GET" {
 		expected["direct_read"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.direct_read.documented_get_response.v1"}
+	} else if source.Lock.Method == "HEAD" {
+		expected["direct_read"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.direct_read.documented_head_status.v1"}
 	} else {
 		expected["direct_read"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.direct_read.non_get_not_applicable.v1"}
 	}
@@ -809,7 +1275,11 @@ func dockerHubExpectedCells(source dockerHubSourceInfo, sourceContract map[strin
 		expected["reverse_etl"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.reverse_etl.non_mutation_not_applicable.v1"}
 	}
 	if isBinaryDownload {
-		expected["binary_download"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.binary_download.binary_response_media.v1"}
+		reason := "dockerhub.source.binary_download.binary_response_media.v1"
+		if _, responseMedia := dockerHubSourceMedia(source); dockerHubHasTextExportMedia(responseMedia) {
+			reason = "dockerhub.source.binary_download.text_export_response_media.v1"
+		}
+		expected["binary_download"] = dockerHubExpectedCell{"mapped_unproven", reason}
 	} else {
 		expected["binary_download"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.binary_download.no_binary_response_media.v1"}
 	}
@@ -852,7 +1322,7 @@ func dockerHubRequiresETL(source dockerHubSourceInfo, sourceContract map[string]
 
 func dockerHubHasBinaryDownload(source dockerHubSourceInfo) bool {
 	_, responseMedia := dockerHubSourceMedia(source)
-	return dockerHubHasBinaryMedia(responseMedia, false)
+	return dockerHubHasBinaryMedia(responseMedia, false) || dockerHubHasTextExportMedia(responseMedia)
 }
 
 func dockerHubHasBinaryUpload(source dockerHubSourceInfo) bool {
@@ -872,6 +1342,16 @@ func dockerHubHasBinaryMedia(media []string, includeMultipart bool) bool {
 			}
 		}
 		if strings.HasPrefix(contentType, "image/") || strings.HasPrefix(contentType, "audio/") || strings.HasPrefix(contentType, "video/") {
+			return true
+		}
+	}
+	return false
+}
+
+func dockerHubHasTextExportMedia(media []string) bool {
+	for _, contentType := range media {
+		contentType = strings.ToLower(strings.TrimSpace(strings.Split(contentType, ";")[0]))
+		if contentType == "text/csv" {
 			return true
 		}
 	}
@@ -926,9 +1406,9 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 
 	cells := dockerHubMatrixCellCounts(matrix)
 	wantMapped := map[string]int{
-		"direct_read":     24,
+		"direct_read":     27,
 		"direct_write":    27,
-		"binary_download": 0,
+		"binary_download": 1,
 		"binary_upload":   0,
 		"etl":             10,
 		"reverse_etl":     27,
@@ -948,8 +1428,8 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		mappedTotal += cells[lane]["mapped_unproven"]
 		notApplicableTotal += cells[lane]["not_applicable"]
 	}
-	if mappedTotal != 98 || notApplicableTotal != 280 || mappedTotal+notApplicableTotal != 378 {
-		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 98/280/378", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
+	if mappedTotal != 102 || notApplicableTotal != 276 || mappedTotal+notApplicableTotal != 378 {
+		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 102/276/378", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
 	}
 	return nil
 }
@@ -979,10 +1459,12 @@ func readDockerHubArtifactRecords(t *testing.T) dockerHubArtifactRecords {
 	readDockerHubJSON(t, "cli_surface.json", &cli)
 
 	records := dockerHubArtifactRecords{
-		APIRoutes:      make(map[string]struct{}, len(api.Endpoints)),
-		Streams:        make(map[string]dockerHubStreamRecord, len(streams.Streams)),
-		Commands:       make(map[string]dockerHubCommandRecord, len(cli.Commands)),
-		OperationCount: len(operations.Operations),
+		APIRoutes:                    make(map[string]struct{}, len(api.Endpoints)),
+		Streams:                      make(map[string]dockerHubStreamRecord, len(streams.Streams)),
+		Commands:                     make(map[string]dockerHubCommandRecord, len(cli.Commands)),
+		OperationCount:               len(operations.Operations),
+		WritesArtifactPresent:        dockerHubFilePresent(t, "writes.json"),
+		SyncTransportArtifactPresent: dockerHubFilePresent(t, "sync_transport.json"),
 	}
 	for _, endpoint := range api.Endpoints {
 		record := dockerHubRouteRecord(endpoint.Method, endpoint.Path)
@@ -1004,6 +1486,19 @@ func readDockerHubArtifactRecords(t *testing.T) dockerHubArtifactRecords {
 		records.Commands[command.Path] = command
 	}
 	return records
+}
+
+func dockerHubFilePresent(t *testing.T, path string) bool {
+	t.Helper()
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if errors.Is(err, os.ErrNotExist) {
+		return false
+	}
+	t.Fatalf("stat %s: %v", path, err)
+	return false
 }
 
 func dockerHubValidateArtifactLinks(matrix *dockerHubMatrix, records dockerHubArtifactRecords, matrixByID map[string]*dockerHubMatrixOperation, sources map[string]dockerHubSourceInfo) error {
@@ -1071,6 +1566,9 @@ func dockerHubValidateAPISurfaceLinks(artifact *dockerHubMatrixArtifact, records
 		if !dockerHubEqualStrings(link.Lanes, []string{lane}) || dockerHubMatrixCellByLaneNoTest(operation, lane) == nil {
 			return fmt.Errorf("artifact api_surface.json link %q references nonexistent cell %q", link.Record, lane)
 		}
+		if err := dockerHubValidateArtifactMappedLane("api_surface.json", link.Record, operation, lane); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -1127,6 +1625,9 @@ func dockerHubValidateStreamLinks(artifact *dockerHubMatrixArtifact, records doc
 			if dockerHubMatrixCellByLaneNoTest(operation, lane) == nil {
 				return fmt.Errorf("artifact streams.json link %q references nonexistent cell %q", link.Record, lane)
 			}
+			if err := dockerHubValidateArtifactMappedLane("streams.json", link.Record, operation, lane); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -1143,11 +1644,29 @@ func dockerHubValidateOperationLinks(artifact *dockerHubMatrixArtifact, records 
 }
 
 func dockerHubValidateCommandLinks(artifact *dockerHubMatrixArtifact, records dockerHubArtifactRecords, matrixByID map[string]*dockerHubMatrixOperation) error {
-	sourceByStream := map[string]string{
-		"repositories":      "dockerhub.rest.listNamespaceRepositories",
-		"tags":              "dockerhub.rest.ListRepositoryTags",
-		"repository_detail": "dockerhub.rest.GetRepository",
-		"tag_detail":        "dockerhub.rest.GetRepositoryTag",
+	// A CLI command's pre-existing intent is not the source operation's lane
+	// classification. The two detail commands currently carry intent "etl",
+	// but their source-backed GET identities are one-resource direct reads.
+	sourceByStream := map[string]struct {
+		SourceID string
+		Lanes    []string
+	}{
+		"repositories": {
+			SourceID: "dockerhub.rest.listNamespaceRepositories",
+			Lanes:    []string{"etl"},
+		},
+		"tags": {
+			SourceID: "dockerhub.rest.ListRepositoryTags",
+			Lanes:    []string{"etl"},
+		},
+		"repository_detail": {
+			SourceID: "dockerhub.rest.GetRepository",
+			Lanes:    []string{"direct_read"},
+		},
+		"tag_detail": {
+			SourceID: "dockerhub.rest.GetRepositoryTag",
+			Lanes:    []string{"direct_read"},
+		},
 	}
 	if artifact == nil {
 		return errors.New("matrix is missing cli_surface.json artifact")
@@ -1165,16 +1684,36 @@ func dockerHubValidateCommandLinks(artifact *dockerHubMatrixArtifact, records do
 			return fmt.Errorf("artifact cli_surface.json link duplicates command %q", link.Record)
 		}
 		seen[link.Record] = struct{}{}
-		if command.Intent != "etl" || link.SourceID != sourceByStream[command.Stream] {
+		want, exists := sourceByStream[command.Stream]
+		if !exists || command.Intent != "etl" || link.SourceID != want.SourceID {
 			return fmt.Errorf("artifact cli_surface.json link %q does not preserve its source-backed stream route", link.Record)
 		}
 		operation := matrixByID[link.SourceID]
 		if operation == nil {
 			return fmt.Errorf("artifact cli_surface.json link %q references nonexistent source cell owner", link.Record)
 		}
-		if !dockerHubEqualStrings(link.Lanes, []string{"etl"}) || dockerHubMatrixCellByLaneNoTest(operation, "etl") == nil {
-			return fmt.Errorf("artifact cli_surface.json link %q references nonexistent cell %q", link.Record, "etl")
+		if !dockerHubEqualStrings(link.Lanes, want.Lanes) {
+			return fmt.Errorf("artifact cli_surface.json link %q does not preserve its source-backed lane", link.Record)
 		}
+		for _, lane := range link.Lanes {
+			if dockerHubMatrixCellByLaneNoTest(operation, lane) == nil {
+				return fmt.Errorf("artifact cli_surface.json link %q references nonexistent cell %q", link.Record, lane)
+			}
+			if err := dockerHubValidateArtifactMappedLane("cli_surface.json", link.Record, operation, lane); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func dockerHubValidateArtifactMappedLane(artifactPath, record string, operation *dockerHubMatrixOperation, lane string) error {
+	cell := dockerHubMatrixCellByLaneNoTest(operation, lane)
+	if cell == nil {
+		return fmt.Errorf("artifact %s link %q references nonexistent cell %q", artifactPath, record, lane)
+	}
+	if cell.State != "mapped_unproven" {
+		return fmt.Errorf("artifact %s link %q lane %q does not point to a mapped lane: state=%q", artifactPath, record, lane, cell.State)
 	}
 	return nil
 }
@@ -1201,6 +1740,14 @@ func dockerHubMatrixOperationByID(t *testing.T, matrix *dockerHubMatrix, sourceI
 	return nil
 }
 
+func dockerHubMatrixByID(matrix *dockerHubMatrix) map[string]*dockerHubMatrixOperation {
+	byID := make(map[string]*dockerHubMatrixOperation, len(matrix.Operations))
+	for index := range matrix.Operations {
+		byID[matrix.Operations[index].SourceID] = &matrix.Operations[index]
+	}
+	return byID
+}
+
 func dockerHubMatrixCellByLane(t *testing.T, operation *dockerHubMatrixOperation, lane string) *dockerHubMatrixCell {
 	t.Helper()
 	cell := dockerHubMatrixCellByLaneNoTest(operation, lane)
@@ -1217,6 +1764,14 @@ func dockerHubMatrixCellByLaneNoTest(operation *dockerHubMatrixOperation, lane s
 		}
 	}
 	return nil
+}
+
+func dockerHubMappedCellByLane(operation *dockerHubMatrixOperation, lane string) *dockerHubMatrixCell {
+	cell := dockerHubMatrixCellByLaneNoTest(operation, lane)
+	if cell == nil || cell.State != "mapped_unproven" {
+		return nil
+	}
+	return cell
 }
 
 func dockerHubRouteRecord(method, path string) string {

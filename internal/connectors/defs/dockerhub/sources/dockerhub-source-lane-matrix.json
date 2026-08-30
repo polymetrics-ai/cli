@@ -376,8 +376,8 @@
       "cells": [
         {
           "lane": "direct_read",
-          "state": "not_applicable",
-          "reason": "dockerhub.source.direct_read.non_get_not_applicable.v1",
+          "state": "mapped_unproven",
+          "reason": "dockerhub.source.direct_read.documented_head_status.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3038,8 +3038,8 @@
         },
         {
           "lane": "binary_download",
-          "state": "not_applicable",
-          "reason": "dockerhub.source.binary_download.no_binary_response_media.v1",
+          "state": "mapped_unproven",
+          "reason": "dockerhub.source.binary_download.text_export_response_media.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3812,8 +3812,8 @@
       "cells": [
         {
           "lane": "direct_read",
-          "state": "not_applicable",
-          "reason": "dockerhub.source.direct_read.non_get_not_applicable.v1",
+          "state": "mapped_unproven",
+          "reason": "dockerhub.source.direct_read.documented_head_status.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3915,8 +3915,8 @@
       "cells": [
         {
           "lane": "direct_read",
-          "state": "not_applicable",
-          "reason": "dockerhub.source.direct_read.non_get_not_applicable.v1",
+          "state": "mapped_unproven",
+          "reason": "dockerhub.source.direct_read.documented_head_status.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -5921,14 +5921,14 @@
           "record": "repository detail list",
           "source_id": "dockerhub.rest.GetRepository",
           "lanes": [
-            "etl"
+            "direct_read"
           ]
         },
         {
           "record": "tag detail list",
           "source_id": "dockerhub.rest.GetRepositoryTag",
           "lanes": [
-            "etl"
+            "direct_read"
           ]
         },
         {
