@@ -34,11 +34,11 @@ The crosswalk has 331 method/path identities. Its 34 identities absent from the 
 
 | Lane | Source-only applicability rule | Expected cells |
 | --- | --- | --- |
-| direct_read | 160 locked `GET` rows plus the exact provider summaries `List commits with include/exclude` and `List commits for revision using include/exclude` on two `POST` rows | 162 `mapped_unproven`, 135 `not_applicable` |
-| direct_write | Every source mutation candidate: 49 `DELETE`, 44 `PUT`, and 42 `POST` rows after those two exact documented list-read exceptions | 135 `mapped_unproven`, 162 `not_applicable` |
+| direct_read | The locked provider operation summary begins with a source-semantic bounded-read action (`get`, `list`, `search`, `compare`, `retrieve`, or `check`). HTTP method and operation ID are retained facts but never classify the lane. | 162 `mapped_unproven`, 135 `not_applicable` |
+| direct_write | The locked provider operation summary begins with a source-semantic mutation action (`delete`, `update`, `create`, `add`, `remove`, `unapprove`, `approve`, `watch`, `set`, `upload`, `stop`, `run`, `resolve`, `request`, `reopen`, `merge`, `fork`, `decline`, or `bulk`). | 135 `mapped_unproven`, 162 `not_applicable` |
 | binary_download | 13 exact retained source rows whose locked summary/response text cites raw diff/patch/log/file/download/GPG material | 13 `mapped_unproven`, 284 `not_applicable` |
 | binary_upload | Two exact retained `POST` source rows that explicitly say upload a download artifact or upload a file | 2 `mapped_unproven`, 295 `not_applicable` |
-| etl | Only a locked successful response that references `#/components/schemas/paginated_*`; GET alone is insufficient | 70 `mapped_unproven`, 227 `not_applicable` |
+| etl | Only a locked successful response that resolves to a source-contract schema with both string `next` and array `values`; request page/cursor controls are retained as source evidence. A read method or list summary alone is insufficient. | 73 `mapped_unproven`, 224 `not_applicable` |
 | reverse_etl | The same 135 source mutation candidates, evaluated independently from direct write | 135 `mapped_unproven`, 162 `not_applicable` |
 | sync_transport | Four source-backed repository/workspace webhook create/update rows whose locked text describes delivery of selected events | 4 `missing_foundation`, 293 `not_applicable` |
 
@@ -63,3 +63,48 @@ The current Atlas was consulted before mapping:
 `scripts/gsd doctor` succeeded. Every canonical command was resolved through `scripts/gsd sources`: `discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review`. Generated prompts for all five were inspected and executed inline. This isolated task has no compatible role-spawn runtime and the active agent contract prohibits spawning roles, so the documented inline/manual fallback is used without weakening the red-green-refactor, verification, or review gates.
 
 Required skills loaded for the focused Go validator: `golang-how-to`, `golang-error-handling`, `golang-security`, `golang-structs-interfaces`, `golang-design-patterns`, `golang-safety`, and `golang-testing`; connector procedure and Foundation Atlas guidance were also applied. CLI help/manual/website parity is not applicable because Track A adds no command, flag, runtime surface, generated manual, or website artifact.
+
+---
+
+## Semantic-source repair addendum — 2026-08-31
+
+### Task Delivery Header
+
+- Issue: Refs #4381 — Bitbucket — source-to-seven-lane matrix.
+- Base branch: `feat/4381-bitbucket-track-a-matrix-r1` at `d1de8a9dc45ed9f4feab3e92e6b6aa8fd0b2231b`.
+- Merges into: `feat/4381-bitbucket-track-a-matrix-r1 → fm/cli-top100-declaration-batch-r1 → main`.
+- Delivery: A committed, locally verified, pushed semantic-repair branch with a completion/re-review comment on #4381. It remains unintegrated and no merge is authorized.
+- Working branch: `fix/4381-bitbucket-semantic-lane-r1`.
+- Task: Repair only the Bitbucket Track A matrix and its connector-local validator so direct-read/direct-write/reverse-ETL classification comes from the locked provider operation semantics rather than an HTTP-method rule, and ETL classification comes from source request/response continuation facts rather than a response-schema-name prefix. Preserve every source row, every documented mutation/delete, the existing binary evidence, source-boundary reconciliation, and the existing webhook sync gap.
+- Verification: Add red/green/edge tests for a semantic non-GET read, mutation exclusion from direct read, schema-name-independent pagination, missing continuation, and source-row/count/backlink coverage; run focused and package tests, race and vet checks, JSON/agent-contract/diff checks, and record any pre-existing broader-gate result without altering it.
+
+### Evidence Table
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A non-GET documented list read is directly readable without an HTTP-method allow-list | live | The real locked POST `List commits…` row is classified from its source summary as a read and the focused validator accepts the corresponding cell. |
+| A documented mutation/delete stays independently mapped for direct write and reverse ETL | live | The real locked create/delete rows are classified from their source summaries as mutations, rejected as direct reads, and require both write cells. |
+| Search-result ETL is classified from request/response continuation facts, not schema spelling | live | Each retained `search_result_page` operation has source-documented page/pagelen query facts and a resolved response schema with `next` and `values`; deleting that continuation evidence makes the focused validator fail. |
+| A non-continuable response is not promoted to ETL | live | A synthetic source contract with `values` but no `next` is rejected by the pagination helper. |
+| Matrix backlinks and deterministic counts cover the revised denominator | live | The focused validator recomputes all source-lane eligibility from the real 297-row lock and rejects an altered search ETL cell or backlink/count drift. |
+| No runtime/certification/foundation behavior changes | live | `git diff --name-only` is restricted to this phase evidence, Bitbucket matrix, and its package-local test; no provider I/O or credential is used. |
+
+### Decision and Atlas disposition
+
+- CodeGraph discovery: no `.codegraph/` directory exists in the frozen target worktree, so the connector-local validator and retained source files were inspected directly.
+- The provider source lock already retains both operation nodes and the `source_contract.components.schemas` needed for source-semantic classification. This repair is a connector-local mapping correction, not an importer or runtime-foundation change.
+- Atlas consulted: `source.retention-import.v1` and `source.projection-admission.v1` are **reuse** context only; `runtime.direct-execution.v1`, `warehouse.stage-etl.v1`, and `warehouse.reverse-etl.v1` are not selected or claimed executable by Track A.
+- `transport.sync-contract.v1` remains **actual gap** context for the four existing Bitbucket webhook subscription cells. Pagination never implies sync transport and this repair does not change those cells.
+- No new Foundation Atlas entry, source lock, crosswalk, runtime engine, transport, certification, or generated artifact may change in this slice.
+
+### Red–Green–Refactor execution
+
+1. **Red:** Add focused assertions against the real lock for POST list-read semantics and the three search-result continuation contracts; assert a synthetic `values`-only response cannot qualify. Expect the current prefix-based ETL helper to miss the three search operations.
+2. **Green:** Resolve successful response `$ref`s structurally within the retained `source_contract` and classify `next` plus array `values` as continuation evidence. Derive semantic read/mutation classification from the locked operation summary rather than HTTP method/operation ID. Update only the affected matrix evidence and counts.
+3. **Refactor:** Keep the helper bounded, deterministic, and source-only; reject unknown summary actions rather than silently calling them reads or writes. Rerun focused, package, race, vet, JSON, agent-contract, and diff checks.
+
+### GSD and skill trace
+
+`scripts/gsd doctor`, all five `scripts/gsd sources` lookups, and `go run ./cmd/agentcontractgen check` passed. Generated prompts for `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` were inspected. This isolated worker has no compatible Pi GSD execution runtime and may not spawn a role, so the documented inline/manual fallback is used and recorded here.
+
+Required skills loaded: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, the shared `go-engineering` guidance, and `connector-lane-build-order`. CLI help/manual/website parity remains not applicable because no command, flag, generated help, manual, or website artifact changes.

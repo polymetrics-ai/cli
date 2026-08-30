@@ -8,3 +8,13 @@
 | Refactor | Reviewed names, error messages, deterministic ordering, and changed path scope; no runtime or generator refactor is permitted. | passed |
 
 The negative cases are deliberate validation failures asserted by the focused unit test. They do not make a provider request, use credentials, or alter runtime behavior.
+
+## Semantic-source repair — 2026-08-31
+
+| Stage | Intended evidence | Status |
+| --- | --- | --- |
+| Red | `go test -timeout 20m ./internal/connectors/defs/bitbucket -run '^TestBitbucketSourceLaneMatrixSemanticSourceRules$' -count=1` failed because the old `paginated_` prefix selector returned no pagination refs for `searchTeam`, `searchAccount`, and `searchWorkspace`. | observed |
+| Red | The same test then failed with source-semantic direct/write/reverse-ETL backlink drift for the existing method-based cells and an ETL count of 70 rather than the source-contract-derived 73. | observed |
+| Green | The validator resolves successful-response schema refs against the immutable source contract and requires string `next` plus array `values`; it classifies direct read and mutations from the provider-summary action, then the matrix backs every applicable cell to that exact action/summary. | passed locally |
+| Edge | A real POST list read remains a direct read, a real create remains a mutation, a real noncontinuable list remains non-ETL, a synthetic `values`-only response is non-ETL, and an ETL candidate remains non-sync absent webhook evidence. | passed locally |
+| Refactor | Removed fixed POST-operation and `paginated_` selectors. The classifier is bounded and deterministic; an unknown provider-summary action fails validation rather than silently changing lane membership. | passed locally |

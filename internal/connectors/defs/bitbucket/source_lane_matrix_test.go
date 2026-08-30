@@ -26,13 +26,6 @@ var bitbucketSourceLaneNames = []string{
 	"sync_transport",
 }
 
-// These two POST operations are source-documented list reads. They are kept
-// separate from mutations so HTTP method alone never decides a Track A lane.
-var bitbucketPostReadEvidence = map[string]string{
-	"bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commits":            "List commits with include/exclude",
-	"bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commits/{revision}": "List commits for revision using include/exclude",
-}
-
 // The source lock documents the exact binary response candidates below. The
 // signal text is retained only to check that the mapping remains source-backed;
 // it is not a runtime media allowance or executable command declaration.
@@ -147,14 +140,17 @@ type bitbucketSourceLaneMatrixSourceFacts struct {
 		BinarySignals             []string `json:"binary_signals"`
 	} `json:"media"`
 	Pagination struct {
-		State              string   `json:"state"`
-		ResponseSchemaRefs []string `json:"response_schema_refs"`
+		State                  string   `json:"state"`
+		ResponseSchemaRefs     []string `json:"response_schema_refs"`
+		RequestQueryParameters []string `json:"request_query_parameters"`
+		ContinuationFields     []string `json:"continuation_fields"`
 	} `json:"pagination"`
 	EventCursor struct {
 		State string `json:"state"`
 	} `json:"event_cursor"`
 	OperationSemantics struct {
-		State string `json:"state"`
+		State         string `json:"state"`
+		SummaryAction string `json:"summary_action"`
 	} `json:"operation_semantics"`
 }
 
@@ -177,6 +173,13 @@ type bitbucketSourceLaneLock struct {
 		Bytes      int                              `json:"bytes"`
 		Operations []bitbucketLockedSourceOperation `json:"operations"`
 	} `json:"rest"`
+	SourceContract bitbucketLockedSourceContract `json:"source_contract"`
+}
+
+type bitbucketLockedSourceContract struct {
+	Components struct {
+		Schemas map[string]json.RawMessage `json:"schemas"`
+	} `json:"components"`
 }
 
 type bitbucketLockedSourceOperation struct {
@@ -200,8 +203,9 @@ type bitbucketLockedProviderOperation struct {
 }
 
 type bitbucketLockedSourceParameter struct {
-	Name string `json:"name"`
-	In   string `json:"in"`
+	Name        string `json:"name"`
+	In          string `json:"in"`
+	Description string `json:"description"`
 }
 
 type bitbucketLockedRequestBody struct {
@@ -214,6 +218,12 @@ type bitbucketLockedResponse struct {
 
 type bitbucketLockedResponseMedia struct {
 	Schema json.RawMessage `json:"schema"`
+}
+
+type bitbucketPaginationEvidence struct {
+	ResponseSchemaRefs     []string
+	RequestQueryParameters []string
+	ContinuationFields     []string
 }
 
 type bitbucketSourceLaneCrosswalk struct {
@@ -258,6 +268,146 @@ func TestBitbucketSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.
 			t.Fatalf("crosswalk-boundary validation error = %v, want crosswalk-only identities", err)
 		}
 	})
+}
+
+func TestBitbucketSourceLaneMatrixSemanticSourceRules(t *testing.T) {
+	lock := loadBitbucketSourceLaneLock(t)
+
+	t.Run("documented POST list read is not a mutation", func(t *testing.T) {
+		operation := findBitbucketLockedOperation(t, lock, "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commits")
+		if operation.Method != "POST" {
+			t.Fatalf("operation method = %q, want POST test fixture", operation.Method)
+		}
+		if !bitbucketIsDirectReadCandidate(operation) {
+			t.Fatal("documented POST list read was not classified as a direct-read candidate")
+		}
+		if bitbucketIsMutationCandidate(operation) {
+			t.Fatal("documented POST list read was incorrectly classified as a mutation candidate")
+		}
+	})
+
+	t.Run("documented mutation remains a write and reverse-ETL candidate", func(t *testing.T) {
+		operation := findBitbucketLockedOperation(t, lock, "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}")
+		if operation.SourceOperation.Summary != "Create a repository" {
+			t.Fatalf("operation summary = %q, want Create a repository test fixture", operation.SourceOperation.Summary)
+		}
+		if bitbucketIsDirectReadCandidate(operation) {
+			t.Fatal("documented create was incorrectly classified as a direct-read candidate")
+		}
+		if !bitbucketIsMutationCandidate(operation) {
+			t.Fatal("documented create was not classified as a mutation candidate")
+		}
+	})
+
+	t.Run("response schema spelling cannot hide documented search pagination", func(t *testing.T) {
+		for _, sourceID := range []string{"searchTeam", "searchAccount", "searchWorkspace"} {
+			operation := findBitbucketLockedOperation(t, lock, sourceID)
+			pagination := bitbucketPaginationEvidenceForOperation(lock, operation)
+			refs := pagination.ResponseSchemaRefs
+			if !slices.Contains(refs, "#/components/schemas/search_result_page") {
+				t.Errorf("%s pagination refs = %v, want source-backed search_result_page", sourceID, refs)
+			}
+			if !slices.Equal(pagination.RequestQueryParameters, []string{"page", "pagelen"}) ||
+				!slices.Equal(pagination.ContinuationFields, []string{"next", "values"}) {
+				t.Errorf("%s pagination evidence = %#v, want page/pagelen plus next/values", sourceID, pagination)
+			}
+		}
+	})
+
+	t.Run("values without a continuation link is not ETL", func(t *testing.T) {
+		broken := bitbucketSourceLaneLock{}
+		broken.SourceContract.Components.Schemas = map[string]json.RawMessage{
+			"ordinary_collection": json.RawMessage(`{"type":"object","properties":{"values":{"type":"array"}}}`),
+		}
+		operation := bitbucketLockedSourceOperation{
+			SourceOperation: bitbucketLockedProviderOperation{
+				Responses: map[string]bitbucketLockedResponse{
+					"200": {
+						Content: map[string]bitbucketLockedResponseMedia{
+							"application/json": {Schema: json.RawMessage(`{"$ref":"#/components/schemas/ordinary_collection"}`)},
+						},
+					},
+				},
+			},
+		}
+		if pagination := bitbucketPaginationEvidenceForOperation(broken, operation); len(pagination.ResponseSchemaRefs) != 0 {
+			t.Fatalf("noncontinuable collection pagination refs = %v, want none", pagination.ResponseSchemaRefs)
+		}
+	})
+
+	t.Run("noncontinuable list stays direct-only", func(t *testing.T) {
+		operation := findBitbucketLockedOperation(t, lock, "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads")
+		if operation.SourceOperation.Summary != "List download artifacts" {
+			t.Fatalf("operation summary = %q, want noncontinuable-list fixture", operation.SourceOperation.Summary)
+		}
+		if !bitbucketIsDirectReadCandidate(operation) {
+			t.Fatal("documented list was not classified as a direct-read candidate")
+		}
+		if pagination := bitbucketPaginationEvidenceForOperation(lock, operation); len(pagination.ResponseSchemaRefs) != 0 {
+			t.Fatalf("noncontinuable list pagination refs = %v, want none", pagination.ResponseSchemaRefs)
+		}
+	})
+
+	t.Run("matrix has source-semantic backlinks and coverage totals", func(t *testing.T) {
+		matrix := loadBitbucketSourceLaneMatrix(t)
+		rows := make(map[string]bitbucketSourceLaneMatrixRow, len(matrix.SourceOperations))
+		for _, row := range matrix.SourceOperations {
+			rows[row.SourceID] = row
+		}
+
+		gotDirectRead := 0
+		gotMutations := 0
+		gotETL := 0
+		for _, operation := range lock.REST.Operations {
+			row, ok := rows[operation.ID]
+			if !ok {
+				t.Fatalf("matrix row missing for %s", operation.ID)
+			}
+			if bitbucketIsDirectReadCandidate(operation) {
+				gotDirectRead++
+				if err := validateBitbucketLaneMapping("direct_read", row.Lanes["direct_read"].Mapping, operation, lock); err != nil {
+					t.Errorf("direct-read backlink %s: %v", operation.ID, err)
+				}
+			}
+			if bitbucketIsMutationCandidate(operation) {
+				gotMutations++
+				for _, lane := range []string{"direct_write", "reverse_etl"} {
+					if err := validateBitbucketLaneMapping(lane, row.Lanes[lane].Mapping, operation, lock); err != nil {
+						t.Errorf("%s backlink %s: %v", lane, operation.ID, err)
+					}
+				}
+			}
+			if len(bitbucketPaginationEvidenceForOperation(lock, operation).ResponseSchemaRefs) > 0 {
+				gotETL++
+				if err := validateBitbucketLaneMapping("etl", row.Lanes["etl"].Mapping, operation, lock); err != nil {
+					t.Errorf("ETL backlink %s: %v", operation.ID, err)
+				}
+			}
+		}
+		if gotDirectRead != 162 || gotMutations != 135 || gotETL != 73 {
+			t.Fatalf("source semantic counts direct_read=%d mutations=%d etl=%d, want 162/135/73", gotDirectRead, gotMutations, gotETL)
+		}
+		for _, lane := range []string{"direct_read", "direct_write", "reverse_etl", "etl"} {
+			if mapped := matrix.Summary.LaneCounts[lane]["mapped_unproven"]; mapped != map[string]int{"direct_read": 162, "direct_write": 135, "reverse_etl": 135, "etl": 73}[lane] {
+				t.Errorf("summary %s mapped_unproven=%d, want source-semantic total", lane, mapped)
+			}
+		}
+		searchTeam := rows["searchTeam"]
+		if searchTeam.Lanes["etl"].Disposition != "mapped_unproven" || searchTeam.Lanes["sync_transport"].Disposition != "not_applicable" {
+			t.Errorf("searchTeam ETL/sync dispositions = %q/%q, want mapped_unproven/not_applicable", searchTeam.Lanes["etl"].Disposition, searchTeam.Lanes["sync_transport"].Disposition)
+		}
+	})
+}
+
+func findBitbucketLockedOperation(t *testing.T, lock bitbucketSourceLaneLock, sourceID string) bitbucketLockedSourceOperation {
+	t.Helper()
+	for _, operation := range lock.REST.Operations {
+		if operation.ID == sourceID {
+			return operation
+		}
+	}
+	t.Fatalf("source operation %q not present in locked Bitbucket source", sourceID)
+	return bitbucketLockedSourceOperation{}
 }
 
 func loadBitbucketSourceLaneMatrix(t *testing.T) bitbucketSourceLaneMatrix {
@@ -330,7 +480,7 @@ func validateBitbucketSourceLaneMatrix(matrix bitbucketSourceLaneMatrix, lock bi
 		if !ok {
 			return fmt.Errorf("matrix source ID %q is absent from the source lock", row.SourceID)
 		}
-		if err := validateBitbucketSourceFacts(row.SourceFacts, operation); err != nil {
+		if err := validateBitbucketSourceFacts(row.SourceFacts, operation, lock); err != nil {
 			return fmt.Errorf("source facts %q: %w", row.SourceID, err)
 		}
 		for _, lane := range bitbucketSourceLaneNames {
@@ -338,7 +488,7 @@ func validateBitbucketSourceLaneMatrix(matrix bitbucketSourceLaneMatrix, lock bi
 			if !ok {
 				return fmt.Errorf("missing lane cell: %s %s", row.SourceID, lane)
 			}
-			if err := validateBitbucketLaneCell(row.SourceID, lane, cell, operation); err != nil {
+			if err := validateBitbucketLaneCell(row.SourceID, lane, cell, operation, lock); err != nil {
 				return err
 			}
 			if counts[lane] == nil {
@@ -430,7 +580,7 @@ func validateBitbucketCrosswalkBoundary(boundary bitbucketSourceBoundaryReconcil
 	return nil
 }
 
-func validateBitbucketSourceFacts(facts bitbucketSourceLaneMatrixSourceFacts, operation bitbucketLockedSourceOperation) error {
+func validateBitbucketSourceFacts(facts bitbucketSourceLaneMatrixSourceFacts, operation bitbucketLockedSourceOperation, lock bitbucketSourceLaneLock) error {
 	if facts.Protocol != operation.Protocol || facts.Method != operation.Method || facts.Path != operation.Path || facts.OperationID != operation.OperationID || facts.Citation.SourceLocation != operation.SourceLocation || !equalOptionalBool(facts.Deprecated, operation.Deprecated) {
 		return fmt.Errorf("identity or citation drift")
 	}
@@ -441,16 +591,24 @@ func validateBitbucketSourceFacts(facts bitbucketSourceLaneMatrixSourceFacts, op
 	if !slices.Equal(facts.Media.RequestMediaTypes, requestMedia) || !slices.Equal(facts.Media.SuccessResponseMediaTypes, responseMedia) || !slices.Equal(facts.Media.BinarySignals, bitbucketBinarySignals(operation)) {
 		return fmt.Errorf("media facts drift")
 	}
-	paginationRefs := bitbucketPaginatedResponseRefs(operation)
+	pagination := bitbucketPaginationEvidenceForOperation(lock, operation)
 	wantPagination := "not_declared"
-	if len(paginationRefs) > 0 {
+	if len(pagination.ResponseSchemaRefs) > 0 {
 		wantPagination = "declared"
 	}
-	if facts.Pagination.State != wantPagination || !slices.Equal(facts.Pagination.ResponseSchemaRefs, paginationRefs) {
+	if facts.Pagination.State != wantPagination ||
+		!slices.Equal(facts.Pagination.ResponseSchemaRefs, pagination.ResponseSchemaRefs) ||
+		!slices.Equal(facts.Pagination.RequestQueryParameters, pagination.RequestQueryParameters) ||
+		!slices.Equal(facts.Pagination.ContinuationFields, pagination.ContinuationFields) {
 		return fmt.Errorf("pagination facts drift")
 	}
-	if facts.EventCursor.State != bitbucketEventCursorState(operation) || facts.OperationSemantics.State != bitbucketOperationSemantics(operation) {
+	if facts.EventCursor.State != bitbucketEventCursorState(operation) ||
+		facts.OperationSemantics.State != bitbucketOperationSemantics(operation) ||
+		facts.OperationSemantics.SummaryAction != bitbucketSummaryAction(operation) {
 		return fmt.Errorf("event/cursor or operation semantics facts drift")
+	}
+	if facts.OperationSemantics.State == "not_classified" {
+		return fmt.Errorf("source summary action %q has no declared semantic classification", facts.OperationSemantics.SummaryAction)
 	}
 	if err := validateBitbucketCandidateEvidence(operation); err != nil {
 		return err
@@ -461,7 +619,6 @@ func validateBitbucketSourceFacts(facts bitbucketSourceLaneMatrixSourceFacts, op
 func validateBitbucketCandidateEvidence(operation bitbucketLockedSourceOperation) error {
 	sourceText := operation.SourceOperation.Summary + "\n" + operation.SourceOperation.Description
 	for _, evidence := range []map[string]string{
-		bitbucketPostReadEvidence,
 		bitbucketBinaryDownloadEvidence,
 		bitbucketBinaryUploadEvidence,
 		bitbucketWebhookDeliveryEvidence,
@@ -473,8 +630,8 @@ func validateBitbucketCandidateEvidence(operation bitbucketLockedSourceOperation
 	return nil
 }
 
-func validateBitbucketLaneCell(sourceID, lane string, cell bitbucketSourceLaneMatrixCell, operation bitbucketLockedSourceOperation) error {
-	wantApplicable, wantDisposition := bitbucketExpectedLane(operation, lane)
+func validateBitbucketLaneCell(sourceID, lane string, cell bitbucketSourceLaneMatrixCell, operation bitbucketLockedSourceOperation, lock bitbucketSourceLaneLock) error {
+	wantApplicable, wantDisposition := bitbucketExpectedLane(operation, lock, lane)
 	if cell.Applicability != wantApplicable || cell.Disposition != wantDisposition {
 		return fmt.Errorf("lane %s %s applicability=%q disposition=%q, want applicability=%q disposition=%q", sourceID, lane, cell.Applicability, cell.Disposition, wantApplicable, wantDisposition)
 	}
@@ -498,42 +655,48 @@ func validateBitbucketLaneCell(sourceID, lane string, cell bitbucketSourceLaneMa
 			return fmt.Errorf("non-sync missing-foundation lane: %s %s", sourceID, lane)
 		}
 	}
-	if err := validateBitbucketLaneMapping(lane, cell.Mapping, operation); err != nil {
+	if err := validateBitbucketLaneMapping(lane, cell.Mapping, operation, lock); err != nil {
 		return fmt.Errorf("mapping evidence %s %s: %w", sourceID, lane, err)
 	}
 	return nil
 }
 
-func validateBitbucketLaneMapping(lane string, raw json.RawMessage, operation bitbucketLockedSourceOperation) error {
+func validateBitbucketLaneMapping(lane string, raw json.RawMessage, operation bitbucketLockedSourceOperation, lock bitbucketSourceLaneLock) error {
 	switch lane {
 	case "direct_read":
 		var mapping struct {
 			SourceFact struct {
-				Method          string `json:"method"`
-				Classification  string `json:"classification"`
-				SummaryContains string `json:"summary_contains"`
+				SemanticAction string `json:"semantic_action"`
+				Classification string `json:"classification"`
+				SourceSummary  string `json:"source_summary"`
 			} `json:"source_fact"`
 			RuntimeClaim string `json:"runtime_claim"`
 		}
 		if err := json.Unmarshal(raw, &mapping); err != nil {
 			return err
 		}
-		wantSummary := bitbucketPostReadEvidence[operation.ID]
-		if mapping.SourceFact.Method != operation.Method || mapping.SourceFact.Classification != "read_candidate" || mapping.SourceFact.SummaryContains != wantSummary || strings.TrimSpace(mapping.RuntimeClaim) == "" {
+		if mapping.SourceFact.SemanticAction != bitbucketSummaryAction(operation) ||
+			mapping.SourceFact.Classification != "read_candidate" ||
+			mapping.SourceFact.SourceSummary != operation.SourceOperation.Summary ||
+			strings.TrimSpace(mapping.RuntimeClaim) == "" {
 			return fmt.Errorf("direct-read source mapping drift")
 		}
 	case "direct_write":
 		var mapping struct {
 			SourceFact struct {
-				Method         string `json:"method"`
+				SemanticAction string `json:"semantic_action"`
 				Classification string `json:"classification"`
+				SourceSummary  string `json:"source_summary"`
 			} `json:"source_fact"`
 			RuntimeClaim string `json:"runtime_claim"`
 		}
 		if err := json.Unmarshal(raw, &mapping); err != nil {
 			return err
 		}
-		if mapping.SourceFact.Method != operation.Method || mapping.SourceFact.Classification != "mutation_candidate" || strings.TrimSpace(mapping.RuntimeClaim) == "" {
+		if mapping.SourceFact.SemanticAction != bitbucketSummaryAction(operation) ||
+			mapping.SourceFact.Classification != "mutation_candidate" ||
+			mapping.SourceFact.SourceSummary != operation.SourceOperation.Summary ||
+			strings.TrimSpace(mapping.RuntimeClaim) == "" {
 			return fmt.Errorf("direct-write source mapping drift")
 		}
 	case "binary_download":
@@ -542,21 +705,29 @@ func validateBitbucketLaneMapping(lane string, raw json.RawMessage, operation bi
 		return validateBitbucketBinaryLaneMapping(raw, bitbucketBinaryUploadEvidence[operation.ID])
 	case "etl":
 		var mapping struct {
-			PaginationState    string   `json:"pagination_state"`
-			ResponseSchemaRefs []string `json:"response_schema_refs"`
-			RuntimeClaim       string   `json:"runtime_claim"`
+			PaginationState        string   `json:"pagination_state"`
+			ResponseSchemaRefs     []string `json:"response_schema_refs"`
+			RequestQueryParameters []string `json:"request_query_parameters"`
+			ContinuationFields     []string `json:"continuation_fields"`
+			RuntimeClaim           string   `json:"runtime_claim"`
 		}
 		if err := json.Unmarshal(raw, &mapping); err != nil {
 			return err
 		}
-		if mapping.PaginationState != "declared" || !slices.Equal(mapping.ResponseSchemaRefs, bitbucketPaginatedResponseRefs(operation)) || strings.TrimSpace(mapping.RuntimeClaim) == "" {
+		pagination := bitbucketPaginationEvidenceForOperation(lock, operation)
+		if mapping.PaginationState != "declared" ||
+			!slices.Equal(mapping.ResponseSchemaRefs, pagination.ResponseSchemaRefs) ||
+			!slices.Equal(mapping.RequestQueryParameters, pagination.RequestQueryParameters) ||
+			!slices.Equal(mapping.ContinuationFields, pagination.ContinuationFields) ||
+			strings.TrimSpace(mapping.RuntimeClaim) == "" {
 			return fmt.Errorf("ETL source mapping drift")
 		}
 	case "reverse_etl":
 		var mapping struct {
 			SourceFact struct {
-				Method         string `json:"method"`
+				SemanticAction string `json:"semantic_action"`
 				Classification string `json:"classification"`
+				SourceSummary  string `json:"source_summary"`
 			} `json:"source_fact"`
 			RequiredFlow string `json:"required_flow"`
 			RuntimeClaim string `json:"runtime_claim"`
@@ -564,7 +735,11 @@ func validateBitbucketLaneMapping(lane string, raw json.RawMessage, operation bi
 		if err := json.Unmarshal(raw, &mapping); err != nil {
 			return err
 		}
-		if mapping.SourceFact.Method != operation.Method || mapping.SourceFact.Classification != "mutation_candidate" || strings.TrimSpace(mapping.RequiredFlow) == "" || strings.TrimSpace(mapping.RuntimeClaim) == "" {
+		if mapping.SourceFact.SemanticAction != bitbucketSummaryAction(operation) ||
+			mapping.SourceFact.Classification != "mutation_candidate" ||
+			mapping.SourceFact.SourceSummary != operation.SourceOperation.Summary ||
+			strings.TrimSpace(mapping.RequiredFlow) == "" ||
+			strings.TrimSpace(mapping.RuntimeClaim) == "" {
 			return fmt.Errorf("reverse-ETL source mapping drift")
 		}
 	case "sync_transport":
@@ -603,7 +778,7 @@ func validateBitbucketBinaryLaneMapping(raw json.RawMessage, wantSignal string) 
 	return nil
 }
 
-func bitbucketExpectedLane(operation bitbucketLockedSourceOperation, lane string) (string, string) {
+func bitbucketExpectedLane(operation bitbucketLockedSourceOperation, lock bitbucketSourceLaneLock, lane string) (string, string) {
 	applicable := false
 	switch lane {
 	case "direct_read":
@@ -615,7 +790,7 @@ func bitbucketExpectedLane(operation bitbucketLockedSourceOperation, lane string
 	case "binary_upload":
 		_, applicable = bitbucketBinaryUploadEvidence[operation.ID]
 	case "etl":
-		applicable = len(bitbucketPaginatedResponseRefs(operation)) > 0
+		applicable = len(bitbucketPaginationEvidenceForOperation(lock, operation).ResponseSchemaRefs) > 0
 	case "sync_transport":
 		_, applicable = bitbucketWebhookDeliveryEvidence[operation.ID]
 	}
@@ -629,18 +804,11 @@ func bitbucketExpectedLane(operation bitbucketLockedSourceOperation, lane string
 }
 
 func bitbucketIsDirectReadCandidate(operation bitbucketLockedSourceOperation) bool {
-	if operation.Method == "GET" {
-		return true
-	}
-	evidence, ok := bitbucketPostReadEvidence[operation.ID]
-	return ok && strings.Contains(operation.SourceOperation.Summary, evidence)
+	return bitbucketOperationSemantics(operation) == "read_candidate"
 }
 
 func bitbucketIsMutationCandidate(operation bitbucketLockedSourceOperation) bool {
-	if operation.Method == "DELETE" || operation.Method == "PUT" {
-		return true
-	}
-	return operation.Method == "POST" && !bitbucketIsDirectReadCandidate(operation)
+	return bitbucketOperationSemantics(operation) == "mutation_candidate"
 }
 
 func bitbucketPathVariables(operation bitbucketLockedSourceOperation) []string {
@@ -697,7 +865,36 @@ func bitbucketBinarySignals(operation bitbucketLockedSourceOperation) []string {
 	return []string{}
 }
 
-func bitbucketPaginatedResponseRefs(operation bitbucketLockedSourceOperation) []string {
+// bitbucketPaginationEvidenceForOperation identifies pagination from the
+// retained provider contract rather than from a generated schema name. A
+// successful response must resolve to an object with both a string next link
+// and an array of values; request-side page controls are retained as evidence,
+// but are not required because the next link itself can be a valid continuation
+// contract.
+func bitbucketPaginationEvidenceForOperation(lock bitbucketSourceLaneLock, operation bitbucketLockedSourceOperation) bitbucketPaginationEvidence {
+	refs := bitbucketSuccessfulResponseSchemaRefs(operation)
+	paginated := make([]string, 0, len(refs))
+	for _, ref := range refs {
+		if bitbucketSourceSchemaHasContinuation(lock, ref) {
+			paginated = append(paginated, ref)
+		}
+	}
+	paginated = bitbucketSortedUnique(paginated)
+	if len(paginated) == 0 {
+		return bitbucketPaginationEvidence{
+			ResponseSchemaRefs:     []string{},
+			RequestQueryParameters: []string{},
+			ContinuationFields:     []string{},
+		}
+	}
+	return bitbucketPaginationEvidence{
+		ResponseSchemaRefs:     paginated,
+		RequestQueryParameters: bitbucketPaginationQueryParameters(operation),
+		ContinuationFields:     []string{"next", "values"},
+	}
+}
+
+func bitbucketSuccessfulResponseSchemaRefs(operation bitbucketLockedSourceOperation) []string {
 	refs := make([]string, 0)
 	for status, result := range operation.SourceOperation.Responses {
 		if !strings.HasPrefix(status, "2") {
@@ -707,13 +904,63 @@ func bitbucketPaginatedResponseRefs(operation bitbucketLockedSourceOperation) []
 			refs = append(refs, bitbucketJSONReferences(media.Schema)...)
 		}
 	}
-	paginated := make([]string, 0, len(refs))
-	for _, ref := range refs {
-		if strings.HasPrefix(ref, "#/components/schemas/paginated_") {
-			paginated = append(paginated, ref)
+	return bitbucketSortedUnique(refs)
+}
+
+func bitbucketSourceSchemaHasContinuation(lock bitbucketSourceLaneLock, ref string) bool {
+	schema, ok := bitbucketSourceSchema(lock, ref)
+	if !ok {
+		return false
+	}
+	var contract struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(schema, &contract); err != nil {
+		return false
+	}
+	return bitbucketSchemaPropertyHasType(contract.Properties["next"], "string") &&
+		bitbucketSchemaPropertyHasType(contract.Properties["values"], "array")
+}
+
+func bitbucketSourceSchema(lock bitbucketSourceLaneLock, ref string) (json.RawMessage, bool) {
+	const prefix = "#/components/schemas/"
+	if !strings.HasPrefix(ref, prefix) {
+		return nil, false
+	}
+	name := strings.TrimPrefix(ref, prefix)
+	if name == "" || strings.Contains(name, "/") {
+		return nil, false
+	}
+	name = strings.ReplaceAll(strings.ReplaceAll(name, "~1", "/"), "~0", "~")
+	schema, ok := lock.SourceContract.Components.Schemas[name]
+	return schema, ok
+}
+
+func bitbucketSchemaPropertyHasType(raw json.RawMessage, want string) bool {
+	if len(raw) == 0 {
+		return false
+	}
+	var property struct {
+		Type string `json:"type"`
+	}
+	if err := json.Unmarshal(raw, &property); err != nil {
+		return false
+	}
+	return property.Type == want
+}
+
+func bitbucketPaginationQueryParameters(operation bitbucketLockedSourceOperation) []string {
+	values := make([]string, 0)
+	for _, parameter := range operation.SourceOperation.Parameters {
+		if parameter.In != "query" || parameter.Name == "" {
+			continue
+		}
+		fact := strings.ToLower(parameter.Name + " " + parameter.Description)
+		if strings.Contains(fact, "page") || strings.Contains(fact, "cursor") || strings.Contains(fact, "offset") || strings.Contains(fact, "continuation") {
+			values = append(values, parameter.Name)
 		}
 	}
-	return bitbucketSortedUnique(paginated)
+	return bitbucketSortedUnique(values)
 }
 
 func bitbucketJSONReferences(raw json.RawMessage) []string {
@@ -756,13 +1003,25 @@ func bitbucketEventCursorState(operation bitbucketLockedSourceOperation) string 
 }
 
 func bitbucketOperationSemantics(operation bitbucketLockedSourceOperation) string {
-	if bitbucketIsDirectReadCandidate(operation) {
+	switch bitbucketSummaryAction(operation) {
+	case "get", "list", "search", "compare", "retrieve", "check":
 		return "read_candidate"
-	}
-	if bitbucketIsMutationCandidate(operation) {
+	case "delete", "update", "create", "add", "remove", "unapprove", "approve", "watch", "set", "upload", "stop", "run", "resolve", "request", "reopen", "merge", "fork", "decline", "bulk":
 		return "mutation_candidate"
+	default:
+		return "not_classified"
 	}
-	return "not_classified"
+}
+
+// bitbucketSummaryAction is an intentionally small source-language classifier.
+// It consumes only the provider's operation summary and makes an unknown verb
+// explicit so a new source operation cannot silently become a read or write.
+func bitbucketSummaryAction(operation bitbucketLockedSourceOperation) string {
+	words := strings.Fields(strings.ToLower(strings.TrimSpace(operation.SourceOperation.Summary)))
+	if len(words) == 0 {
+		return ""
+	}
+	return strings.Trim(words[0], ".,:;")
 }
 
 func bitbucketMethodPathKey(method, path string) string {
