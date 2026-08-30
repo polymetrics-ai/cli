@@ -84,14 +84,15 @@ var jiraDocumentedReadSemantics = map[string]jiraSourceTextEvidence{
 // in a JSON body. They are deliberately named source facts rather than an
 // unbounded scan for field names in arbitrary request bodies.
 var jiraBodyPaginationEvidence = map[string]jiraSourceTextEvidence{
-	"jira.rest.searchForIssuesUsingJqlPost":    {Contains: "\"maxResults\"", ContinuationKind: "body_offset"},
-	"jira.rest.suggestedPrioritiesForMappings": {Contains: "\"maxResults\"", ContinuationKind: "body_offset"},
-	"jira.rest.evaluateJSISJiraExpression":     {Contains: "\"nextPageToken\"", ContinuationKind: "body_cursor"},
+	"jira.rest.searchForIssuesUsingJqlPost":    {Contains: "\"maxResults\"", ContinuationKind: "body_offset", ContinuationField: "body.startAt"},
+	"jira.rest.suggestedPrioritiesForMappings": {Contains: "\"maxResults\"", ContinuationKind: "body_offset", ContinuationField: "body.startAt"},
+	"jira.rest.evaluateJSISJiraExpression":     {Contains: "\"nextPageToken\"", ContinuationKind: "body_cursor", ContinuationField: "body.nextPageToken"},
 }
 
 type jiraSourceTextEvidence struct {
-	Contains         string
-	ContinuationKind string
+	Contains          string
+	ContinuationKind  string
+	ContinuationField string
 }
 
 // These are source-text and media predicates only. They identify candidate
@@ -476,6 +477,88 @@ func TestJiraSourceLaneMatrixUsesDocumentedSemanticsAndContinuationFacts(t *test
 	}
 }
 
+func TestJiraETLRequiresDocumentedContinuationRatherThanMaxResults(t *testing.T) {
+	matrix := loadJiraSourceLaneMatrix(t)
+	lock := loadJiraSourceLaneLock(t)
+	crosswalk := loadJiraSourceLaneCrosswalk(t)
+	streams := loadJiraStreamsDefinition(t)
+	locked := make(map[string]jiraLockedSourceOperation, len(lock.REST.Operations))
+	for _, operation := range lock.REST.Operations {
+		locked[operation.ID] = operation
+	}
+
+	t.Run("every ETL cell records the exact retained continuation", func(t *testing.T) {
+		count := 0
+		for _, row := range matrix.SourceOperations {
+			if row.Lanes["etl"].Applicability != "applicable" {
+				continue
+			}
+			operation := locked[row.SourceID]
+			evidence, ok := jiraContinuationEvidence(operation)
+			if !ok {
+				t.Fatalf("ETL source %s lacks documented continuation evidence", row.SourceID)
+			}
+			var mapping struct {
+				SourceFact struct {
+					Criterion         string `json:"criterion"`
+					ContinuationKind  string `json:"continuation_kind"`
+					ContinuationField string `json:"continuation_field"`
+				} `json:"source_fact"`
+			}
+			if err := json.Unmarshal(row.Lanes["etl"].Mapping, &mapping); err != nil {
+				t.Fatal(err)
+			}
+			if mapping.SourceFact.Criterion != "documented source continuation" ||
+				mapping.SourceFact.ContinuationKind != evidence.Kind ||
+				mapping.SourceFact.ContinuationField != evidence.Field {
+				t.Fatalf("ETL source %s continuation mapping = %+v, want %s/%s", row.SourceID, mapping.SourceFact, evidence.Kind, evidence.Field)
+			}
+			if strings.Contains(string(row.Lanes["etl"].Mapping), "retained query parameter maxResults") {
+				t.Fatalf("ETL source %s retains the forbidden maxResults-only criterion", row.SourceID)
+			}
+			count++
+		}
+		if count != 103 {
+			t.Fatalf("documented continuation ETL cell count = %d, want 103", count)
+		}
+	})
+
+	t.Run("maxResults without documented continuation stays out of ETL", func(t *testing.T) {
+		operation := locked["jira.rest.findUsersForPicker"]
+		if !slices.Contains(jiraQueryParameters(operation), "maxResults") {
+			t.Fatal("test source no longer retains maxResults")
+		}
+		if evidence, ok := jiraContinuationEvidence(operation); ok || jiraIsETLCandidate(operation) {
+			t.Fatalf("maxResults-only source became an ETL candidate: %+v", evidence)
+		}
+		row := jiraMatrixRow(t, &matrix, operation.ID)
+		if row.Lanes["etl"].Applicability != "not_applicable" || row.Lanes["etl"].Disposition != "not_applicable" {
+			t.Fatalf("maxResults-only ETL cell = %+v, want not_applicable", row.Lanes["etl"])
+		}
+	})
+
+	t.Run("rejects legacy criterion and maxResults field substitution", func(t *testing.T) {
+		broken := cloneJiraSourceLaneMatrix(t, matrix)
+		row := jiraMatrixRow(t, &broken, "jira.rest.getAllUsers")
+		var mapping map[string]any
+		if err := json.Unmarshal(row.Lanes["etl"].Mapping, &mapping); err != nil {
+			t.Fatal(err)
+		}
+		sourceFact := mapping["source_fact"].(map[string]any)
+		sourceFact["criterion"] = "retained query parameter maxResults"
+		sourceFact["continuation_field"] = "query.maxResults"
+		row.Lanes["etl"] = jiraSourceLaneMatrixCell{
+			Applicability: row.Lanes["etl"].Applicability,
+			Disposition:   row.Lanes["etl"].Disposition,
+			Reason:        row.Lanes["etl"].Reason,
+			Mapping:       mustJiraJSON(t, mapping),
+		}
+		if err := validateJiraSourceLaneMatrix(broken, lock, crosswalk, streams); err == nil || !strings.Contains(err.Error(), "documented continuation ETL source mapping drift") {
+			t.Fatalf("legacy maxResults criterion error = %v, want documented continuation rejection", err)
+		}
+	})
+}
+
 func loadJiraSourceLaneMatrix(t *testing.T) jiraSourceLaneMatrix {
 	t.Helper()
 	return loadJiraJSON[jiraSourceLaneMatrix](t, jiraSourceLaneMatrixPath)
@@ -854,10 +937,12 @@ func validateJiraBinaryLaneMapping(raw json.RawMessage, wantSignals []string) er
 func validateJiraETLLaneMapping(raw json.RawMessage, operation jiraLockedSourceOperation) error {
 	var mapping struct {
 		SourceFact struct {
-			Method         string `json:"method"`
-			Criterion      string `json:"criterion"`
-			QueryParameter string `json:"query_parameter"`
-			Classification string `json:"classification"`
+			Method               string `json:"method"`
+			Criterion            string `json:"criterion"`
+			ContinuationKind     string `json:"continuation_kind"`
+			ContinuationField    string `json:"continuation_field"`
+			LegacyQueryParameter string `json:"query_parameter"`
+			LegacyClassification string `json:"classification"`
 		} `json:"source_fact"`
 		DefinitionBacklink struct {
 			Kind       string `json:"kind"`
@@ -875,11 +960,11 @@ func validateJiraETLLaneMapping(raw json.RawMessage, operation jiraLockedSourceO
 	if !ok || mapping.SourceFact.Method != operation.Method || strings.TrimSpace(mapping.RuntimeClaim) == "" {
 		return fmt.Errorf("ETL source mapping drift")
 	}
-	if mapping.SourceFact.Criterion == "retained query parameter maxResults" {
-		if mapping.SourceFact.QueryParameter != "maxResults" || !slices.Contains(jiraQueryParameters(operation), "maxResults") {
-			return fmt.Errorf("legacy maxResults ETL source mapping drift")
-		}
-	} else if mapping.SourceFact.Criterion != "documented source continuation" || mapping.SourceFact.QueryParameter != "" || mapping.SourceFact.Classification != evidence.Kind {
+	if mapping.SourceFact.Criterion != "documented source continuation" ||
+		mapping.SourceFact.ContinuationKind != evidence.Kind ||
+		mapping.SourceFact.ContinuationField != evidence.Field ||
+		mapping.SourceFact.LegacyQueryParameter != "" ||
+		mapping.SourceFact.LegacyClassification != "" {
 		return fmt.Errorf("documented continuation ETL source mapping drift")
 	}
 	if legacy, ok := jiraLegacyETLStreams[operation.ID]; ok {
@@ -925,7 +1010,8 @@ func jiraIsETLCandidate(operation jiraLockedSourceOperation) bool {
 }
 
 type jiraContinuationFact struct {
-	Kind string
+	Kind  string
+	Field string
 }
 
 func jiraIsDirectReadCandidate(operation jiraLockedSourceOperation) bool {
@@ -943,7 +1029,7 @@ func jiraContinuationEvidence(operation jiraLockedSourceOperation) (jiraContinua
 	if evidence, ok := jiraBodyPaginationEvidence[operation.ID]; ok {
 		sourceText := jiraSourceText(operation)
 		if jiraHasBodyContinuationEvidence(sourceText, evidence) {
-			return jiraContinuationFact{Kind: evidence.ContinuationKind}, true
+			return jiraContinuationFact{Kind: evidence.ContinuationKind, Field: evidence.ContinuationField}, true
 		}
 	}
 	for _, parameter := range operation.SourceOperation.Parameters {
@@ -953,20 +1039,20 @@ func jiraContinuationEvidence(operation jiraLockedSourceOperation) (jiraContinua
 		description := strings.ToLower(parameter.Description)
 		switch {
 		case strings.Contains(description, "cursor"):
-			return jiraContinuationFact{Kind: "query_cursor"}, true
+			return jiraContinuationFact{Kind: "query_cursor", Field: "query." + parameter.Name}, true
 		case strings.Contains(description, "page offset"),
 			strings.Contains(description, "first item to return in a page"),
 			strings.Contains(description, "starting index of the returned"),
 			strings.Contains(description, "index of the first item to return"):
-			return jiraContinuationFact{Kind: "query_offset"}, true
+			return jiraContinuationFact{Kind: "query_offset", Field: "query." + parameter.Name}, true
 		}
 	}
 	sourceText := strings.ToLower(jiraSourceText(operation))
 	switch {
 	case strings.Contains(sourceText, "cursor-based pagination") && strings.Contains(sourceText, "next"):
-		return jiraContinuationFact{Kind: "response_link_cursor"}, true
+		return jiraContinuationFact{Kind: "response_link_cursor", Field: "response.next"}, true
 	case strings.Contains(sourceText, "nextpage") && strings.Contains(sourceText, "next page"):
-		return jiraContinuationFact{Kind: "response_next_page"}, true
+		return jiraContinuationFact{Kind: "response_next_page", Field: "response.nextPageToken"}, true
 	default:
 		return jiraContinuationFact{}, false
 	}
@@ -987,14 +1073,11 @@ func jiraHasBodyContinuationEvidence(sourceText string, evidence jiraSourceTextE
 }
 
 func jiraPaginationState(operation jiraLockedSourceOperation) string {
-	if slices.Contains(jiraQueryParameters(operation), "maxResults") {
-		if _, ok := jiraContinuationEvidence(operation); !ok {
-			return "max_results_limit_only"
-		}
-		return "max_results_query_candidate"
-	}
 	if evidence, ok := jiraContinuationEvidence(operation); ok {
 		return "documented_" + evidence.Kind + "_candidate"
+	}
+	if slices.Contains(jiraQueryParameters(operation), "maxResults") {
+		return "max_results_limit_only"
 	}
 	return "not_max_results_candidate"
 }

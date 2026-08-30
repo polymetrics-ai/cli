@@ -306,12 +306,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained provider source documents query offset continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -353,12 +353,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents query offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
               "criterion": "documented source continuation",
-              "classification": "query_offset"
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -517,12 +518,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -564,12 +565,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -2157,7 +2159,7 @@
             "endingBefore",
             "startingAfter"
           ],
-          "reason": "The retained provider source documents query cursor continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents query cursor continuation via query.endingBefore for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -2199,12 +2201,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents query cursor continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents query cursor continuation via query.endingBefore for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
               "criterion": "documented source continuation",
-              "classification": "query_cursor"
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.endingBefore"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -2454,7 +2457,7 @@
             "endingBefore",
             "startingAfter"
           ],
-          "reason": "The retained provider source documents query cursor continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents query cursor continuation via query.endingBefore for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -2496,12 +2499,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents query cursor continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents query cursor continuation via query.endingBefore for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
               "criterion": "documented source continuation",
-              "classification": "query_cursor"
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.endingBefore"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -3561,12 +3565,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -3608,12 +3612,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -4128,12 +4133,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -4175,12 +4180,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -4708,12 +4714,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -4755,12 +4761,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -5286,12 +5293,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -5333,12 +5340,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -5481,12 +5489,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -5528,12 +5536,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -6203,12 +6212,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -6250,12 +6259,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -6593,12 +6603,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -6640,12 +6650,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -8268,7 +8279,7 @@
         "pagination": {
           "state": "documented_body_cursor_candidate",
           "paging_query_parameters": [],
-          "reason": "The retained provider source documents body cursor continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents body cursor continuation via body.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -8310,12 +8321,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents body cursor continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents body cursor continuation via body.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
               "criterion": "documented source continuation",
-              "classification": "body_cursor"
+              "continuation_kind": "body_cursor",
+              "continuation_field": "body.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -8745,12 +8757,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -8792,12 +8804,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -8853,12 +8866,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -8900,12 +8913,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -9056,12 +9070,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -9103,12 +9117,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -9165,12 +9180,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -9212,12 +9227,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -9369,12 +9385,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -9416,12 +9432,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -9574,12 +9591,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -9621,12 +9638,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -9681,12 +9699,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -9728,12 +9746,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -9789,12 +9808,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained provider source documents query offset continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -9836,12 +9855,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents query offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
               "criterion": "documented source continuation",
-              "classification": "query_offset"
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -9898,12 +9918,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -9945,12 +9965,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -10397,12 +10418,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -10444,12 +10465,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -11186,12 +11208,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -11233,12 +11255,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -11293,12 +11316,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -11340,12 +11363,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -11399,12 +11423,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -11446,12 +11470,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -11603,12 +11628,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -11650,12 +11675,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -11710,12 +11736,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -11757,12 +11783,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -12481,12 +12508,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -12528,12 +12555,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -12874,12 +12902,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -12921,12 +12949,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -13076,12 +13105,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -13123,12 +13152,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -13276,12 +13306,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -13323,12 +13353,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -13381,12 +13412,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -13428,12 +13459,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -14430,12 +14462,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -14477,12 +14509,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -16132,12 +16165,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -16179,12 +16212,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -16239,12 +16273,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -16286,12 +16320,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -17377,12 +17412,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -17424,12 +17459,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -17484,12 +17520,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -17531,12 +17567,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -18909,12 +18946,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -18956,12 +18993,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -19106,12 +19144,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -19153,12 +19191,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -21558,12 +21597,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -21605,12 +21644,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -23539,12 +23579,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -23586,12 +23626,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -23742,12 +23783,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -23789,12 +23830,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -23848,12 +23890,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -23895,12 +23937,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -24047,12 +24090,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -24094,12 +24137,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -24339,12 +24383,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -24386,12 +24430,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -26140,12 +26185,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -26187,12 +26232,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -26340,12 +26386,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -26387,12 +26433,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -26445,12 +26492,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -26492,12 +26539,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -27130,12 +27178,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -27177,12 +27225,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -27330,12 +27379,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -27377,12 +27426,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -27435,12 +27485,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -27482,12 +27532,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -28120,12 +28171,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -28167,12 +28218,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -28488,12 +28540,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -28535,12 +28587,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -29128,12 +29181,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -29175,12 +29228,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -30047,12 +30101,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -30094,12 +30148,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -30248,12 +30303,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -30295,12 +30350,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -31924,11 +31980,11 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.cursor for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -31970,12 +32026,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.cursor for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.cursor"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -32506,11 +32563,11 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.cursor for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -32552,12 +32609,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.cursor for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.cursor"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -33837,12 +33895,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -33884,12 +33942,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -34224,12 +34283,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -34271,12 +34330,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -34424,7 +34484,7 @@
         "pagination": {
           "state": "documented_body_offset_candidate",
           "paging_query_parameters": [],
-          "reason": "The retained provider source documents body offset continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents body offset continuation via body.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -34466,12 +34526,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents body offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents body offset continuation via body.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
               "criterion": "documented source continuation",
-              "classification": "body_offset"
+              "continuation_kind": "body_offset",
+              "continuation_field": "body.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -34528,12 +34589,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -34575,12 +34636,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -34826,12 +34888,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -34873,12 +34935,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -34934,12 +34997,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -34981,12 +35044,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -35787,12 +35851,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -35834,12 +35898,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults and is linked to existing stream projects; that backlink is accounting only, not ETL runtime proof.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "legacy_stream_backlink",
@@ -37376,12 +37441,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -37423,12 +37488,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -38964,12 +39030,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -39011,12 +39077,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -40339,12 +40406,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -40386,12 +40453,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -41258,12 +41326,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -41305,12 +41373,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -42484,12 +42553,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -42531,12 +42600,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -42785,7 +42855,7 @@
             "maxResult",
             "startAt"
           ],
-          "reason": "The retained provider source documents query offset continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -42827,12 +42897,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents query offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
               "criterion": "documented source continuation",
-              "classification": "query_offset"
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -44026,12 +44097,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -44073,12 +44144,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -44422,12 +44494,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -44469,12 +44541,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults and is linked to existing stream issues; that backlink is accounting only, not ETL runtime proof.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "legacy_stream_backlink",
@@ -44529,7 +44602,7 @@
         "pagination": {
           "state": "documented_body_offset_candidate",
           "paging_query_parameters": [],
-          "reason": "The retained provider source documents body offset continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents body offset continuation via body.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -44571,12 +44644,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents body offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents body offset continuation via body.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "POST",
               "criterion": "documented source continuation",
-              "classification": "body_offset"
+              "continuation_kind": "body_offset",
+              "continuation_field": "body.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -44724,12 +44798,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_response_next_page_candidate",
           "paging_query_parameters": [
             "maxResults",
             "nextPageToken"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents response next page continuation via response.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -44771,12 +44845,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents response next page continuation via response.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "response_next_page",
+              "continuation_field": "response.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -46074,12 +46149,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -46121,12 +46196,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -46181,12 +46257,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults",
             "nextPageToken"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -46228,12 +46304,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -46287,12 +46364,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults",
             "nextPageToken"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -46334,12 +46411,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -46393,12 +46471,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults",
             "nextPageToken"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -46440,12 +46518,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -46680,12 +46759,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -46727,12 +46806,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -47961,12 +48041,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -48008,12 +48088,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -48076,12 +48157,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -48123,12 +48204,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -48183,12 +48265,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -48230,12 +48312,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -48289,12 +48372,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -48336,12 +48419,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -48942,12 +49026,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -48989,12 +49073,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -49523,12 +49608,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -49570,12 +49655,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -49628,12 +49714,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -49675,12 +49761,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -49738,7 +49825,7 @@
             "maxResult",
             "startAt"
           ],
-          "reason": "The retained provider source documents query offset continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -49780,12 +49867,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents query offset continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
               "criterion": "documented source continuation",
-              "classification": "query_offset"
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -49844,12 +49932,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -49891,12 +49979,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -49949,12 +50038,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -49996,12 +50085,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -50054,12 +50144,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -50101,12 +50191,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults and is linked to existing stream users; that backlink is accounting only, not ETL runtime proof.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "legacy_stream_backlink",
@@ -51469,12 +51560,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "webhook_registration_catalog",
@@ -51516,12 +51607,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -51691,12 +51783,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_response_link_cursor_candidate",
           "paging_query_parameters": [
             "after",
             "maxResults"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents response link cursor continuation via response.next for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "webhook_failed_delivery_cursor",
@@ -51738,12 +51830,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents response link cursor continuation via response.next for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "response_link_cursor",
+              "continuation_field": "response.next"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -52072,12 +52165,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -52119,12 +52212,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -52371,12 +52465,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -52418,12 +52512,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -52571,12 +52666,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults",
             "nextPageToken"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -52618,12 +52713,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -52677,12 +52773,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults",
             "nextPageToken"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -52724,12 +52820,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -52783,12 +52880,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults",
             "nextPageToken"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -52830,12 +52927,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -53423,12 +53521,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -53470,12 +53568,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -53709,12 +53808,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_offset_candidate",
           "paging_query_parameters": [
             "maxResults",
             "startAt"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -53756,12 +53855,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query offset continuation via query.startAt for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_offset",
+              "continuation_field": "query.startAt"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -56902,12 +57002,12 @@
           "binary_signals": []
         },
         "pagination": {
-          "state": "max_results_query_candidate",
+          "state": "documented_query_cursor_candidate",
           "paging_query_parameters": [
             "maxResults",
             "nextPageToken"
           ],
-          "reason": "The retained GET operation exposes maxResults; this is a source paging candidate, not a runtime admission."
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -56949,12 +57049,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The locked GET operation has maxResults; it requires a source-preserving future streams.json projection before any runtime claim.",
+          "reason": "The retained provider source documents query cursor continuation via query.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
-              "criterion": "retained query parameter maxResults",
-              "query_parameter": "maxResults"
+              "criterion": "documented source continuation",
+              "continuation_kind": "query_cursor",
+              "continuation_field": "query.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -57009,7 +57110,7 @@
           "paging_query_parameters": [
             "since"
           ],
-          "reason": "The retained provider source documents response next page continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents response next page continuation via response.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -57051,12 +57152,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents response next page continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents response next page continuation via response.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
               "criterion": "documented source continuation",
-              "classification": "response_next_page"
+              "continuation_kind": "response_next_page",
+              "continuation_field": "response.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
@@ -57203,7 +57305,7 @@
           "paging_query_parameters": [
             "since"
           ],
-          "reason": "The retained provider source documents response next page continuation for this source read; Track A records a source-only ETL candidate."
+          "reason": "The retained provider source documents response next page continuation via response.nextPageToken for this source read; Track A records a source-only ETL candidate."
         },
         "event_cursor": {
           "state": "not_declared",
@@ -57245,12 +57347,13 @@
         "etl": {
           "applicability": "applicable",
           "disposition": "mapped_unproven",
-          "reason": "The retained provider source documents response next page continuation for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
+          "reason": "The retained provider source documents response next page continuation via response.nextPageToken for this read; Track A maps ETL source evidence only pending typed stream projection and DuckDB execution proof.",
           "mapping": {
             "source_fact": {
               "method": "GET",
               "criterion": "documented source continuation",
-              "classification": "response_next_page"
+              "continuation_kind": "response_next_page",
+              "continuation_field": "response.nextPageToken"
             },
             "definition_backlink": {
               "kind": "future_stream_projection_required",
