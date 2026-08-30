@@ -1630,8 +1630,8 @@ type CertificationWriteWaveBlockedAction struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, pollingWatermark, syncTransport, enabledConnectorContract, spec, streams, writes, apiSurface, compositeProviderPathIdentity, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, sourceOperationMapping, certification, rateLimits *Schema
-	err                                                                                                                                                                                                                                                                                                            error
+	metadata, changefeed, pollingWatermark, syncTransport, enabledConnectorContract, spec, streams, writes, apiSurface, compositeProviderPathIdentity, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, sourceOperationMapping, sourceOperationMappingCohort, certification, rateLimits *Schema
+	err                                                                                                                                                                                                                                                                                                                                          error
 }{}
 
 func init() {
@@ -1662,6 +1662,7 @@ func init() {
 	metaSchemas.declarationAdmissionSources = compileMeta(declarationAdmissionSourcesSchemaJSON)
 	metaSchemas.declarationAdmissionInventory = compileMeta(declarationAdmissionInventorySchemaJSON)
 	metaSchemas.sourceOperationMapping = compileMeta(sourceOperationMappingSchemaJSON)
+	metaSchemas.sourceOperationMappingCohort = compileMeta(sourceOperationMappingCohortSchemaJSON)
 	metaSchemas.certification = compileMeta(certificationSchemaJSON)
 	metaSchemas.rateLimits = compileMeta(rateLimitsSchemaJSON)
 }
@@ -1716,6 +1717,20 @@ func ValidateSourceOperationMappingManifest(raw []byte) error {
 		return fmt.Errorf("source-operation-mapping meta-schema failed to compile: %w", metaSchemas.err)
 	}
 	if err := metaSchemas.sourceOperationMapping.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ValidateSourceOperationMappingCohort validates the tracked source-lock
+// denominator anchor used by the authoring-only Batch R1 mapping check. It
+// contains lock and matrix-input references, never connector lane rows or
+// runtime behavior.
+func ValidateSourceOperationMappingCohort(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("source-operation-mapping cohort meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.sourceOperationMappingCohort.Validate(mustDecodeAny(raw)); err != nil {
 		return err
 	}
 	return nil

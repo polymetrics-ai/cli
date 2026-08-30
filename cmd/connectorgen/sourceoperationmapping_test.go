@@ -129,10 +129,18 @@ func TestSourceOperationMappingCheckPreservesSupplementalSourceLineageWithoutInf
 		"citation":               binaryCitation,
 		"facts": map[string]any{
 			"pagination":     map[string]any{"kind": "cursor", "citation": binaryCitation},
+			"record_shape":   map[string]any{"kind": "collection", "citation": binaryCitation},
 			"scope":          map[string]any{"values": []any{"workspace"}, "citation": binaryCitation},
 			"path_variables": map[string]any{"values": []any{}, "citation": binaryCitation},
 			"media":          map[string]any{"request": []any{}, "response": []any{"application/octet-stream"}, "citation": binaryCitation},
-			"event_cursor":   map[string]any{"kind": "cursor", "citation": binaryCitation},
+			"event_cursor":   map[string]any{"kind": "none", "citation": binaryCitation},
+			"mutation":       map[string]any{"kind": "not_mutation", "citation": binaryCitation},
+			"applicability": map[string]any{
+				"etl":             map[string]any{"kind": "applicable", "citation": binaryCitation},
+				"binary_download": map[string]any{"kind": "applicable", "citation": binaryCitation},
+				"binary_upload":   map[string]any{"kind": "not_applicable", "citation": binaryCitation},
+				"sync_transport":  map[string]any{"kind": "not_applicable", "citation": binaryCitation},
+			},
 		},
 		"cells": []any{
 			map[string]any{"lane": "binary_download", "state": "mapped_unproven"},
@@ -178,6 +186,275 @@ func TestSourceOperationMappingCanonicalIdentityRetainsGraphQLRootField(t *testi
 	}
 }
 
+func TestBatch1SourceOperationMappingCohortCheckAcceptsTrackedDenominator(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	manifest := filepath.Join(root, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json")
+	report, err := sourceOperationMappingCohortPathCheck(root, manifest)
+	if err != nil {
+		t.Fatalf("check Batch R1 source-operation cohort: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("Batch R1 cohort findings = %+v, want none", report.Findings)
+	}
+	if report.ConnectorsChecked != 10 || report.SourceOperations != 4341 {
+		t.Fatalf("Batch R1 cohort denominator = connectors:%d source_operations:%d, want 10/4341", report.ConnectorsChecked, report.SourceOperations)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"source-operation-mapping-cohort", manifest, "--check"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("cohort CLI exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	if got := stdout.String(); !strings.Contains(got, "10 connector(s), 4341 source operation(s), 0 finding(s)") {
+		t.Fatalf("cohort CLI output = %q, want tracked denominator summary", got)
+	}
+}
+
+func TestBatch1SourceOperationMappingCohortCheckRejectsDigestCountAndMembershipDefects(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	tests := []struct {
+		name   string
+		mutate func(map[string]any)
+		want   string
+	}{
+		{
+			name: "source lock digest mismatch",
+			mutate: func(document map[string]any) {
+				document["source_locks"].([]any)[0].(map[string]any)["sha256"] = strings.Repeat("0", 64)
+			},
+			want: "source lock SHA-256",
+		},
+		{
+			name: "source ID digest mismatch",
+			mutate: func(document map[string]any) {
+				document["source_locks"].([]any)[0].(map[string]any)["source_ids_sha256"] = strings.Repeat("0", 64)
+			},
+			want: "source ID SHA-256",
+		},
+		{
+			name: "aggregate source ID digest mismatch",
+			mutate: func(document map[string]any) {
+				document["source_operations_sha256"] = strings.Repeat("0", 64)
+			},
+			want: "does not match tracked cohort",
+		},
+		{
+			name: "source operation count mismatch",
+			mutate: func(document map[string]any) {
+				document["source_locks"].([]any)[0].(map[string]any)["source_operation_count"] = float64(1)
+			},
+			want: "source operation count",
+		},
+		{
+			name: "missing fixed connector",
+			mutate: func(document map[string]any) {
+				document["source_locks"].([]any)[0].(map[string]any)["connector"] = "not-batch1"
+			},
+			want: "exact Batch R1 connector membership",
+		},
+		{
+			name: "expected connector list mismatch",
+			mutate: func(document map[string]any) {
+				document["expected_connectors"].([]any)[0] = "not-batch1"
+			},
+			want: "expected_connectors does not retain exact Batch R1 connector membership",
+		},
+		{
+			name: "source lock path traversal",
+			mutate: func(document map[string]any) {
+				document["source_locks"].([]any)[0].(map[string]any)["path"] = "../outside-operation-source-lock.json"
+			},
+			want: "source lock path",
+		},
+		{
+			name: "matrix input path traversal",
+			mutate: func(document map[string]any) {
+				document["source_locks"].([]any)[0].(map[string]any)["matrix_path"] = "../outside-source-lane-matrix.json"
+			},
+			want: "connector-local matrix input",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			manifest := sourceOperationMappingCohortFixture(t, root)
+			document := sourceOperationMappingReadJSON(t, manifest)
+			test.mutate(document)
+			sourceOperationMappingWriteJSON(t, manifest, document)
+
+			report, err := sourceOperationMappingCohortPathCheck(root, manifest)
+			if err != nil {
+				t.Fatalf("check cohort: %v", err)
+			}
+			if len(report.Findings) == 0 {
+				t.Fatalf("cohort defect passed")
+			}
+			if got := sourceOperationMappingFindingsText(report.Findings); !strings.Contains(got, test.want) {
+				t.Fatalf("cohort findings = %q, want %q", got, test.want)
+			}
+		})
+	}
+}
+
+func TestSourceOperationMappingCheckRequiresSourceBackedMutationWriteCells(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(map[string]any)
+		want   string
+	}{
+		{
+			name: "REST mutation missing direct write",
+			mutate: func(document map[string]any) {
+				sourceOperationMappingRemoveCell(document["operations"].([]any)[1].(map[string]any), "direct_write")
+			},
+			want: "mutation source operation \"fixture.rest.post.custom\" has no explicit direct_write disposition",
+		},
+		{
+			name: "REST mutation missing reverse ETL",
+			mutate: func(document map[string]any) {
+				sourceOperationMappingRemoveCell(document["operations"].([]any)[1].(map[string]any), "reverse_etl")
+			},
+			want: "mutation source operation \"fixture.rest.post.custom\" has no explicit reverse_etl disposition",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			manifest := sourceOperationMappingFixture(t)
+			document := sourceOperationMappingReadJSON(t, manifest)
+			test.mutate(document)
+			sourceOperationMappingWriteJSON(t, manifest, document)
+			sourceOperationMappingAssertRejected(t, manifest, test.want)
+		})
+	}
+}
+
+func TestSourceOperationMappingCheckRequiresWriteCellsForLockedDelete(t *testing.T) {
+	manifest := sourceOperationMappingFixture(t)
+	root := filepath.Dir(manifest)
+	lockPath := filepath.Join(root, "fixture", "sources", "fixture-operation-source-lock.json")
+	lock := sourceOperationMappingReadJSON(t, lockPath)
+	rest := lock["rest"].(map[string]any)
+	rest["operation_counts"] = map[string]any{"GET": 1, "DELETE": 1}
+	rest["operations"].([]any)[1].(map[string]any)["method"] = "DELETE"
+	sourceOperationMappingWriteJSON(t, lockPath, lock)
+
+	document := sourceOperationMappingReadJSON(t, manifest)
+	sourceOperationMappingRemoveCell(document["operations"].([]any)[1].(map[string]any), "direct_write")
+	sourceOperationMappingWriteJSON(t, manifest, document)
+	sourceOperationMappingAssertRejected(t, manifest, "mutation source operation \"fixture.rest.post.custom\" has no explicit direct_write disposition")
+}
+
+func TestSourceOperationMappingCheckRetainsSourceCitedNonMutatingPOSTBoundary(t *testing.T) {
+	manifest := sourceOperationMappingFixture(t)
+	document := sourceOperationMappingReadJSON(t, manifest)
+	operation := document["operations"].([]any)[1].(map[string]any)
+	operation["facts"].(map[string]any)["mutation"].(map[string]any)["kind"] = "not_mutation"
+	sourceOperationMappingRemoveCell(operation, "direct_write")
+	sourceOperationMappingRemoveCell(operation, "reverse_etl")
+	artifact := document["artifacts"].([]any)[0].(map[string]any)
+	links := artifact["cells"].([]any)
+	artifact["cells"] = []any{links[0]}
+	sourceOperationMappingWriteJSON(t, manifest, document)
+
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"source-operation-mapping", manifest, "--check"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("source-cited non-mutating POST exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestSourceOperationMappingCheckRequiresGraphQLMutationWriteCells(t *testing.T) {
+	for _, lane := range []string{"direct_write", "reverse_etl"} {
+		t.Run(lane, func(t *testing.T) {
+			manifest := sourceOperationMappingGraphQLMutationFixture(t)
+			document := sourceOperationMappingReadJSON(t, manifest)
+			operation := document["operations"].([]any)[0].(map[string]any)
+			sourceOperationMappingRemoveCell(operation, lane)
+			sourceOperationMappingWriteJSON(t, manifest, document)
+			sourceOperationMappingAssertRejected(t, manifest, "mutation source operation \"fixture.graphql.mutation.setWidget\" has no explicit "+lane+" disposition")
+		})
+	}
+}
+
+func TestSourceOperationMappingCheckRejectsGraphQLMutationFactMismatch(t *testing.T) {
+	manifest := sourceOperationMappingGraphQLMutationFixture(t)
+	document := sourceOperationMappingReadJSON(t, manifest)
+	document["operations"].([]any)[0].(map[string]any)["facts"].(map[string]any)["mutation"].(map[string]any)["kind"] = "not_mutation"
+	sourceOperationMappingWriteJSON(t, manifest, document)
+	sourceOperationMappingAssertRejected(t, manifest, "mutation fact contradicts locked GraphQL root Mutation.setWidget identity")
+}
+
+func TestSourceOperationMappingCheckRejectsUncitedAndContradictoryApplicabilityFacts(t *testing.T) {
+	tests := []struct {
+		name   string
+		mutate func(map[string]any)
+		want   string
+	}{
+		{
+			name: "missing record shape",
+			mutate: func(document map[string]any) {
+				delete(document["operations"].([]any)[0].(map[string]any)["facts"].(map[string]any), "record_shape")
+			},
+			want: "record_shape",
+		},
+		{
+			name: "fact cites another source node",
+			mutate: func(document map[string]any) {
+				document["operations"].([]any)[0].(map[string]any)["facts"].(map[string]any)["record_shape"].(map[string]any)["citation"].(map[string]any)["location"] = "custom reference > endpoint"
+			},
+			want: "record_shape fact citation: location",
+		},
+		{
+			name: "ETL applicability cites another source node",
+			mutate: func(document map[string]any) {
+				document["operations"].([]any)[0].(map[string]any)["facts"].(map[string]any)["applicability"].(map[string]any)["etl"].(map[string]any)["citation"].(map[string]any)["location"] = "custom reference > endpoint"
+			},
+			want: "etl applicability fact citation: location",
+		},
+		{
+			name: "ETL applicability contradicts pagination and record shape",
+			mutate: func(document map[string]any) {
+				document["operations"].([]any)[0].(map[string]any)["facts"].(map[string]any)["applicability"].(map[string]any)["etl"].(map[string]any)["kind"] = "not_applicable"
+			},
+			want: "etl applicability contradicts collection pagination evidence",
+		},
+		{
+			name: "binary download applicability contradicts response media",
+			mutate: func(document map[string]any) {
+				facts := document["operations"].([]any)[0].(map[string]any)["facts"].(map[string]any)
+				facts["media"].(map[string]any)["response"] = []any{"application/octet-stream"}
+			},
+			want: "binary_download applicability contradicts response media evidence",
+		},
+		{
+			name: "binary upload applicability contradicts request media",
+			mutate: func(document map[string]any) {
+				facts := document["operations"].([]any)[1].(map[string]any)["facts"].(map[string]any)
+				facts["media"].(map[string]any)["request"] = []any{"application/octet-stream"}
+			},
+			want: "binary_upload applicability contradicts request media evidence",
+		},
+		{
+			name: "sync applicability contradicts event evidence",
+			mutate: func(document map[string]any) {
+				document["operations"].([]any)[0].(map[string]any)["facts"].(map[string]any)["applicability"].(map[string]any)["sync_transport"].(map[string]any)["kind"] = "not_applicable"
+			},
+			want: "sync_transport applicability contradicts event/cursor evidence",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			manifest := sourceOperationMappingFixture(t)
+			document := sourceOperationMappingReadJSON(t, manifest)
+			test.mutate(document)
+			sourceOperationMappingWriteJSON(t, manifest, document)
+			sourceOperationMappingAssertRejected(t, manifest, test.want)
+		})
+	}
+}
+
 func sourceOperationMappingFixture(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
@@ -203,10 +480,18 @@ func sourceOperationMappingFixture(t *testing.T) string {
 				"citation":               primaryCitation,
 				"facts": map[string]any{
 					"pagination":     map[string]any{"kind": "cursor", "citation": primaryCitation},
+					"record_shape":   map[string]any{"kind": "collection", "citation": primaryCitation},
 					"scope":          map[string]any{"values": []any{"workspace"}, "citation": primaryCitation},
 					"path_variables": map[string]any{"values": []any{}, "citation": primaryCitation},
 					"media":          map[string]any{"request": []any{}, "response": []any{"application/json"}, "citation": primaryCitation},
 					"event_cursor":   map[string]any{"kind": "cursor", "citation": primaryCitation},
+					"mutation":       map[string]any{"kind": "not_mutation", "citation": primaryCitation},
+					"applicability": map[string]any{
+						"etl":             map[string]any{"kind": "applicable", "citation": primaryCitation},
+						"binary_download": map[string]any{"kind": "not_applicable", "citation": primaryCitation},
+						"binary_upload":   map[string]any{"kind": "not_applicable", "citation": primaryCitation},
+						"sync_transport":  map[string]any{"kind": "applicable", "citation": primaryCitation},
+					},
 				},
 				"cells": []any{
 					map[string]any{"lane": "direct_read", "state": "mapped_unproven"},
@@ -221,10 +506,18 @@ func sourceOperationMappingFixture(t *testing.T) string {
 				"citation":               customCitation,
 				"facts": map[string]any{
 					"pagination":     map[string]any{"kind": "none", "citation": customCitation},
+					"record_shape":   map[string]any{"kind": "record", "citation": customCitation},
 					"scope":          map[string]any{"values": []any{"workspace"}, "citation": customCitation},
 					"path_variables": map[string]any{"values": []any{}, "citation": customCitation},
 					"media":          map[string]any{"request": []any{"application/json"}, "response": []any{"application/json"}, "citation": customCitation},
 					"event_cursor":   map[string]any{"kind": "none", "citation": customCitation},
+					"mutation":       map[string]any{"kind": "mutation", "citation": customCitation},
+					"applicability": map[string]any{
+						"etl":             map[string]any{"kind": "not_applicable", "citation": customCitation},
+						"binary_download": map[string]any{"kind": "not_applicable", "citation": customCitation},
+						"binary_upload":   map[string]any{"kind": "not_applicable", "citation": customCitation},
+						"sync_transport":  map[string]any{"kind": "not_applicable", "citation": customCitation},
+					},
 				},
 				"cells": []any{
 					map[string]any{"lane": "direct_write", "state": "implemented"},
@@ -277,4 +570,116 @@ func sourceOperationMappingWriteJSON(t *testing.T, path string, document any) {
 	if err := os.WriteFile(path, append(raw, '\n'), 0o644); err != nil {
 		t.Fatalf("write %s: %v", path, err)
 	}
+}
+
+func sourceOperationMappingCohortFixture(t *testing.T, root string) string {
+	t.Helper()
+	raw, err := os.ReadFile(filepath.Join(root, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json"))
+	if err != nil {
+		t.Fatalf("read Batch R1 cohort: %v", err)
+	}
+	path := filepath.Join(t.TempDir(), "batch1-source-operation-mapping-cohort.json")
+	if err := os.WriteFile(path, raw, 0o644); err != nil {
+		t.Fatalf("write cohort fixture: %v", err)
+	}
+	return path
+}
+
+func sourceOperationMappingFindingsText(findings []Finding) string {
+	parts := make([]string, 0, len(findings))
+	for _, finding := range findings {
+		parts = append(parts, finding.Connector+": "+finding.Message)
+	}
+	return strings.Join(parts, "\n")
+}
+
+func sourceOperationMappingRemoveCell(operation map[string]any, lane string) {
+	cells := operation["cells"].([]any)
+	filtered := make([]any, 0, len(cells))
+	for _, rawCell := range cells {
+		if rawCell.(map[string]any)["lane"] == lane {
+			continue
+		}
+		filtered = append(filtered, rawCell)
+	}
+	operation["cells"] = filtered
+}
+
+func sourceOperationMappingAssertRejected(t *testing.T, manifest, want string) {
+	t.Helper()
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"source-operation-mapping", manifest, "--check"}, &stdout, &stderr); code == 0 {
+		t.Fatalf("mapping defect passed: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+	if got := stdout.String() + stderr.String(); !strings.Contains(got, want) {
+		t.Fatalf("mapping diagnostic = %q, want %q", got, want)
+	}
+}
+
+func sourceOperationMappingGraphQLMutationFixture(t *testing.T) string {
+	t.Helper()
+	root := t.TempDir()
+	lockPath := filepath.Join(root, "fixture", "sources", "fixture-operation-source-lock.json")
+	if err := os.MkdirAll(filepath.Dir(lockPath), 0o755); err != nil {
+		t.Fatalf("create GraphQL fixture source directory: %v", err)
+	}
+	lock := map[string]any{
+		"schema_version": 2,
+		"connector":      "fixture",
+		"rest": map[string]any{
+			"source_url": "https://docs.polymetrics.invalid/fixture/openapi",
+			"sha256":     "retention-is-ignored-by-mapping-admission",
+			"bytes":      -1,
+			"openapi":    "3.0.0",
+			"operations": []any{},
+		},
+		"graphql": map[string]any{
+			"source_url":      "https://docs.polymetrics.invalid/fixture/graphql",
+			"sha256":          "retention-is-ignored-by-mapping-admission",
+			"bytes":           -1,
+			"query_fields":    []any{},
+			"mutation_fields": []any{map[string]any{"root": "Mutation", "name": "setWidget", "line": 1, "signature": "setWidget(id: ID!): Widget"}},
+			"type_system":     map[string]any{},
+		},
+		"counts": map[string]any{"rest": 0, "graphql_query": 0, "graphql_mutation": 1, "total": 1},
+	}
+	sourceOperationMappingWriteJSON(t, lockPath, lock)
+
+	citation := sourceOperationMappingCitation("https://docs.polymetrics.invalid/fixture/graphql", `graphql.mutation_fields["setWidget"]@line:1`)
+	document := map[string]any{
+		"schema_version": 1,
+		"source_locks": []any{map[string]any{
+			"connector": "fixture",
+			"path":      "fixture/sources/fixture-operation-source-lock.json",
+		}},
+		"operations": []any{map[string]any{
+			"connector":              "fixture",
+			"source_operation_id":    "fixture.graphql.mutation.setWidget",
+			"canonical_operation_id": "fixture.graphql.mutation.setWidget",
+			"citation":               citation,
+			"facts": map[string]any{
+				"pagination":     map[string]any{"kind": "none", "citation": citation},
+				"record_shape":   map[string]any{"kind": "record", "citation": citation},
+				"scope":          map[string]any{"values": []any{}, "citation": citation},
+				"path_variables": map[string]any{"values": []any{}, "citation": citation},
+				"media":          map[string]any{"request": []any{"application/json"}, "response": []any{"application/json"}, "citation": citation},
+				"event_cursor":   map[string]any{"kind": "none", "citation": citation},
+				"mutation":       map[string]any{"kind": "mutation", "citation": citation},
+				"applicability": map[string]any{
+					"etl":             map[string]any{"kind": "not_applicable", "citation": citation},
+					"binary_download": map[string]any{"kind": "not_applicable", "citation": citation},
+					"binary_upload":   map[string]any{"kind": "not_applicable", "citation": citation},
+					"sync_transport":  map[string]any{"kind": "not_applicable", "citation": citation},
+				},
+			},
+			"cells": []any{
+				map[string]any{"lane": "direct_write", "state": "mapped_unproven"},
+				map[string]any{"lane": "reverse_etl", "state": "mapped_unproven"},
+			},
+		}},
+		"artifacts": []any{},
+	}
+	manifest := filepath.Join(root, "source-operation-mapping.json")
+	sourceOperationMappingWriteJSON(t, manifest, document)
+	return manifest
 }

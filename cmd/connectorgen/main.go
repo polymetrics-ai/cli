@@ -84,6 +84,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runDeclarationAdmission(args, stdout, stderr)
 	case "source-operation-mapping":
 		return runSourceOperationMapping(args, stdout, stderr)
+	case "source-operation-mapping-cohort":
+		return runSourceOperationMappingCohort(args, stdout, stderr)
 	case "params-import":
 		return runParamsImport(args, stdout, stderr)
 	case "source-import":
@@ -144,6 +146,7 @@ func usage() string {
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
 	connectorgen declaration-admission [dir] [--json]  (default dir: internal/connectors/defs)
 	connectorgen source-operation-mapping <manifest> --check
+	connectorgen source-operation-mapping-cohort <manifest> --check
 	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
 	connectorgen source-materialize <connector> [--defs <dir>] [--check]
 	connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>
