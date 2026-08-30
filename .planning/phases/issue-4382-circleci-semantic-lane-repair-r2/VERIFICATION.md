@@ -1,6 +1,6 @@
 # Verification — CircleCI semantic lane repair R2
 
-Status: local verification and scoped commit complete; remote push pending.
+Status: local verification complete and the scoped repair is pushed to `origin/fix/4382-circleci-semantic-repair-r2`.
 
 Executed commands:
 
