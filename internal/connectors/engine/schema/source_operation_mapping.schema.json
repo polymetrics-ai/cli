@@ -45,7 +45,7 @@
           },
           "facts": {
             "type": "object",
-            "required": ["pagination", "scope", "path_variables", "media", "event_cursor"],
+            "required": ["pagination", "record_shape", "scope", "path_variables", "media", "event_cursor", "mutation", "applicability"],
             "additionalProperties": false,
             "properties": {
               "pagination": {
@@ -54,6 +54,23 @@
                 "additionalProperties": false,
                 "properties": {
                   "kind": { "type": "string", "enum": ["none", "page_number", "offset_limit", "cursor", "next_url", "link_header", "start_index", "other"] },
+                  "citation": {
+                    "type": "object",
+                    "required": ["source_url", "location"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "source_url": { "type": "string", "minLength": 1, "maxLength": 4096 },
+                      "location": { "type": "string", "minLength": 1, "maxLength": 4096 }
+                    }
+                  }
+                }
+              },
+              "record_shape": {
+                "type": "object",
+                "required": ["kind", "citation"],
+                "additionalProperties": false,
+                "properties": {
+                  "kind": { "type": "string", "enum": ["none", "record", "collection", "binary", "other"] },
                   "citation": {
                     "type": "object",
                     "required": ["source_url", "location"],
@@ -130,6 +147,98 @@
                     "properties": {
                       "source_url": { "type": "string", "minLength": 1, "maxLength": 4096 },
                       "location": { "type": "string", "minLength": 1, "maxLength": 4096 }
+                    }
+                  }
+                }
+              },
+              "mutation": {
+                "type": "object",
+                "required": ["kind", "citation"],
+                "additionalProperties": false,
+                "properties": {
+                  "kind": { "type": "string", "enum": ["mutation", "not_mutation"] },
+                  "citation": {
+                    "type": "object",
+                    "required": ["source_url", "location"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "source_url": { "type": "string", "minLength": 1, "maxLength": 4096 },
+                      "location": { "type": "string", "minLength": 1, "maxLength": 4096 }
+                    }
+                  }
+                }
+              },
+              "applicability": {
+                "type": "object",
+                "required": ["etl", "binary_download", "binary_upload", "sync_transport"],
+                "additionalProperties": false,
+                "properties": {
+                  "etl": {
+                    "type": "object",
+                    "required": ["kind", "citation"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": { "type": "string", "enum": ["applicable", "not_applicable"] },
+                      "citation": {
+                        "type": "object",
+                        "required": ["source_url", "location"],
+                        "additionalProperties": false,
+                        "properties": {
+                          "source_url": { "type": "string", "minLength": 1, "maxLength": 4096 },
+                          "location": { "type": "string", "minLength": 1, "maxLength": 4096 }
+                        }
+                      }
+                    }
+                  },
+                  "binary_download": {
+                    "type": "object",
+                    "required": ["kind", "citation"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": { "type": "string", "enum": ["applicable", "not_applicable"] },
+                      "citation": {
+                        "type": "object",
+                        "required": ["source_url", "location"],
+                        "additionalProperties": false,
+                        "properties": {
+                          "source_url": { "type": "string", "minLength": 1, "maxLength": 4096 },
+                          "location": { "type": "string", "minLength": 1, "maxLength": 4096 }
+                        }
+                      }
+                    }
+                  },
+                  "binary_upload": {
+                    "type": "object",
+                    "required": ["kind", "citation"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": { "type": "string", "enum": ["applicable", "not_applicable"] },
+                      "citation": {
+                        "type": "object",
+                        "required": ["source_url", "location"],
+                        "additionalProperties": false,
+                        "properties": {
+                          "source_url": { "type": "string", "minLength": 1, "maxLength": 4096 },
+                          "location": { "type": "string", "minLength": 1, "maxLength": 4096 }
+                        }
+                      }
+                    }
+                  },
+                  "sync_transport": {
+                    "type": "object",
+                    "required": ["kind", "citation"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": { "type": "string", "enum": ["applicable", "not_applicable"] },
+                      "citation": {
+                        "type": "object",
+                        "required": ["source_url", "location"],
+                        "additionalProperties": false,
+                        "properties": {
+                          "source_url": { "type": "string", "minLength": 1, "maxLength": 4096 },
+                          "location": { "type": "string", "minLength": 1, "maxLength": 4096 }
+                        }
+                      }
                     }
                   }
                 }

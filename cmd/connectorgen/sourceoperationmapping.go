@@ -44,11 +44,14 @@ type sourceOperationMappingSourceCitation struct {
 }
 
 type sourceOperationMappingFacts struct {
-	Pagination    sourceOperationMappingEnumeratedFact `json:"pagination"`
-	Scope         sourceOperationMappingValuesFact     `json:"scope"`
-	PathVariables sourceOperationMappingValuesFact     `json:"path_variables"`
-	Media         sourceOperationMappingMediaFact      `json:"media"`
-	EventCursor   sourceOperationMappingEnumeratedFact `json:"event_cursor"`
+	Pagination    sourceOperationMappingEnumeratedFact     `json:"pagination"`
+	RecordShape   sourceOperationMappingEnumeratedFact     `json:"record_shape"`
+	Scope         sourceOperationMappingValuesFact         `json:"scope"`
+	PathVariables sourceOperationMappingValuesFact         `json:"path_variables"`
+	Media         sourceOperationMappingMediaFact          `json:"media"`
+	EventCursor   sourceOperationMappingEnumeratedFact     `json:"event_cursor"`
+	Mutation      sourceOperationMappingEnumeratedFact     `json:"mutation"`
+	Applicability sourceOperationMappingApplicabilityFacts `json:"applicability"`
 }
 
 type sourceOperationMappingEnumeratedFact struct {
@@ -65,6 +68,17 @@ type sourceOperationMappingMediaFact struct {
 	Request  []string                             `json:"request"`
 	Response []string                             `json:"response"`
 	Citation sourceOperationMappingSourceCitation `json:"citation"`
+}
+
+// sourceOperationMappingApplicabilityFacts is a strict cited sidecar for
+// lane candidate facts. Each fact is bound to the exact locked operation node,
+// so its source location cannot be borrowed from another operation in the same
+// provider document. It is mapping evidence only, never runtime admission.
+type sourceOperationMappingApplicabilityFacts struct {
+	ETL            sourceOperationMappingEnumeratedFact `json:"etl"`
+	BinaryDownload sourceOperationMappingEnumeratedFact `json:"binary_download"`
+	BinaryUpload   sourceOperationMappingEnumeratedFact `json:"binary_upload"`
+	SyncTransport  sourceOperationMappingEnumeratedFact `json:"sync_transport"`
 }
 
 type sourceOperationMappingLaneCell struct {
@@ -269,7 +283,7 @@ func sourceOperationMappingPathCheck(manifestPath string) (sourceOperationMappin
 		}
 
 		seenLanes := make(map[string]struct{}, len(operation.Cells))
-		hasETL := false
+		cellsByLane := make(map[string]sourceOperationMappingLaneCell, len(operation.Cells))
 		for _, cell := range operation.Cells {
 			report.Cells++
 			if _, duplicate := seenLanes[cell.Lane]; duplicate {
@@ -277,16 +291,17 @@ func sourceOperationMappingPathCheck(manifestPath string) (sourceOperationMappin
 				continue
 			}
 			seenLanes[cell.Lane] = struct{}{}
-			if cell.Lane == "etl" {
-				hasETL = true
-			}
+			cellsByLane[cell.Lane] = cell
 			for _, message := range sourceOperationMappingCellFindings(operation, cell, locked.Operation) {
 				add(operation.Connector, message)
 			}
 			declaredCells[sourceOperationMappingCellKey(operation.SourceOperationID, cell.Lane)] = struct{}{}
 		}
-		if operation.Facts.Pagination.Kind != "none" && !hasETL {
-			add(operation.Connector, fmt.Sprintf("pageable source operation %q has no explicit etl disposition", operation.SourceOperationID))
+		for _, message := range sourceOperationMappingApplicabilityFindings(operation, locked.Operation, cellsByLane) {
+			add(operation.Connector, message)
+		}
+		for _, message := range sourceOperationMappingMutationFindings(operation, locked.Operation, cellsByLane) {
+			add(operation.Connector, message)
 		}
 	}
 	report.CanonicalOperations = sourceOperationMappingCanonicalOperationCount(resolvedOperations, add)
@@ -438,15 +453,21 @@ func sourceOperationMappingValidateExactCitation(citation sourceOperationMapping
 func sourceOperationMappingFactFindings(operation sourceOperationMappingOperation, locked declarationAdmissionReviewedOperation) []string {
 	findings := []string{}
 	addCitation := func(name string, citation sourceOperationMappingSourceCitation) {
-		if err := sourceOperationMappingValidateCitation(citation, locked.SourceURL); err != nil {
+		if err := sourceOperationMappingValidateExactCitation(citation, locked); err != nil {
 			findings = append(findings, fmt.Sprintf("source operation %q %s fact citation: %v", operation.SourceOperationID, name, err))
 		}
 	}
 	addCitation("pagination", operation.Facts.Pagination.Citation)
+	addCitation("record_shape", operation.Facts.RecordShape.Citation)
 	addCitation("scope", operation.Facts.Scope.Citation)
 	addCitation("path_variables", operation.Facts.PathVariables.Citation)
 	addCitation("media", operation.Facts.Media.Citation)
 	addCitation("event_cursor", operation.Facts.EventCursor.Citation)
+	addCitation("mutation", operation.Facts.Mutation.Citation)
+	addCitation("etl applicability", operation.Facts.Applicability.ETL.Citation)
+	addCitation("binary_download applicability", operation.Facts.Applicability.BinaryDownload.Citation)
+	addCitation("binary_upload applicability", operation.Facts.Applicability.BinaryUpload.Citation)
+	addCitation("sync_transport applicability", operation.Facts.Applicability.SyncTransport.Citation)
 	for _, group := range []struct {
 		name   string
 		values []string
@@ -461,6 +482,111 @@ func sourceOperationMappingFactFindings(operation sourceOperationMappingOperatio
 		}
 	}
 	return findings
+}
+
+func sourceOperationMappingApplicabilityFindings(operation sourceOperationMappingOperation, locked declarationAdmissionReviewedOperation, cells map[string]sourceOperationMappingLaneCell) []string {
+	findings := []string{}
+	add := func(format string, args ...any) {
+		findings = append(findings, fmt.Sprintf(format, args...))
+	}
+	records := operation.Facts.RecordShape.Kind == "collection"
+	pageable := operation.Facts.Pagination.Kind != "none"
+	evented := operation.Facts.EventCursor.Kind != "none"
+
+	check := func(lane string, fact sourceOperationMappingEnumeratedFact, sourceCandidate bool, contradiction string) {
+		if sourceCandidate && fact.Kind != "applicable" {
+			add("source operation %q %s applicability contradicts %s", operation.SourceOperationID, lane, contradiction)
+		}
+		if fact.Kind == "applicable" && !sourceCandidate {
+			add("source operation %q %s applicability is not supported by %s", operation.SourceOperationID, lane, contradiction)
+		}
+		cell, found := cells[lane]
+		if fact.Kind == "applicable" {
+			if !found {
+				if lane == "etl" && pageable {
+					add("pageable source operation %q has no explicit etl disposition", operation.SourceOperationID)
+					return
+				}
+				add("source operation %q has no explicit %s disposition", operation.SourceOperationID, lane)
+				return
+			}
+			if cell.State == "not_applicable" {
+				add("source operation %q %s cell contradicts source-applicable evidence", operation.SourceOperationID, lane)
+			}
+			return
+		}
+		if found && cell.State != "not_applicable" {
+			add("source operation %q %s cell contradicts source-not-applicable evidence", operation.SourceOperationID, lane)
+		}
+	}
+
+	check("etl", operation.Facts.Applicability.ETL, records && pageable, "collection pagination evidence")
+	check("binary_download", operation.Facts.Applicability.BinaryDownload, sourceOperationMappingBinaryMedia(operation.Facts.Media.Response), "response media evidence")
+	check("binary_upload", operation.Facts.Applicability.BinaryUpload, sourceOperationMappingBinaryMedia(operation.Facts.Media.Request), "request media evidence")
+	check("sync_transport", operation.Facts.Applicability.SyncTransport, records && evented, "event/cursor evidence")
+	return findings
+}
+
+func sourceOperationMappingMutationFindings(operation sourceOperationMappingOperation, locked declarationAdmissionReviewedOperation, cells map[string]sourceOperationMappingLaneCell) []string {
+	findings := []string{}
+	add := func(format string, args ...any) {
+		findings = append(findings, fmt.Sprintf(format, args...))
+	}
+	mustBeMutation := false
+	mustNotBeMutation := false
+	switch locked.Protocol {
+	case "graphql":
+		if strings.HasPrefix(locked.ProviderOperationID, "Mutation.") {
+			mustBeMutation = true
+		} else {
+			mustNotBeMutation = true
+		}
+	case "rest":
+		switch strings.ToUpper(locked.Method) {
+		case "PUT", "PATCH", "DELETE":
+			mustBeMutation = true
+		case "GET", "HEAD":
+			mustNotBeMutation = true
+		}
+	}
+	if mustBeMutation && operation.Facts.Mutation.Kind != "mutation" {
+		add("source operation %q mutation fact contradicts locked %s identity", operation.SourceOperationID, sourceOperationMappingMutationIdentity(locked))
+	}
+	if mustNotBeMutation && operation.Facts.Mutation.Kind != "not_mutation" {
+		add("source operation %q mutation fact contradicts locked %s identity", operation.SourceOperationID, sourceOperationMappingMutationIdentity(locked))
+	}
+	if operation.Facts.Mutation.Kind != "mutation" {
+		return findings
+	}
+	for _, lane := range []string{"direct_write", "reverse_etl"} {
+		cell, found := cells[lane]
+		if !found {
+			add("mutation source operation %q has no explicit %s disposition", operation.SourceOperationID, lane)
+			continue
+		}
+		if cell.State == "not_applicable" {
+			add("mutation source operation %q %s disposition contradicts source mutation evidence", operation.SourceOperationID, lane)
+		}
+	}
+	return findings
+}
+
+func sourceOperationMappingMutationIdentity(operation declarationAdmissionReviewedOperation) string {
+	if operation.Protocol == "graphql" {
+		return "GraphQL root " + operation.ProviderOperationID
+	}
+	return "REST method " + strings.ToUpper(operation.Method)
+}
+
+func sourceOperationMappingBinaryMedia(media []string) bool {
+	for _, value := range media {
+		lower := strings.ToLower(value)
+		if lower == "application/pdf" || lower == "application/octet-stream" || lower == "application/zip" ||
+			strings.HasPrefix(lower, "image/") || strings.HasPrefix(lower, "audio/") || strings.HasPrefix(lower, "video/") {
+			return true
+		}
+	}
+	return false
 }
 
 func sourceOperationMappingCellFindings(operation sourceOperationMappingOperation, cell sourceOperationMappingLaneCell, locked declarationAdmissionReviewedOperation) []string {
@@ -500,7 +626,7 @@ func sourceOperationMappingCellFindings(operation sourceOperationMappingOperatio
 		}
 		if cell.Reason.Citation == nil {
 			add("source operation %q %s not_applicable cell requires a source citation", operation.SourceOperationID, cell.Lane)
-		} else if err := sourceOperationMappingValidateCitation(*cell.Reason.Citation, locked.SourceURL); err != nil {
+		} else if err := sourceOperationMappingValidateExactCitation(*cell.Reason.Citation, locked); err != nil {
 			add("source operation %q %s not_applicable cell source citation: %v", operation.SourceOperationID, cell.Lane, err)
 		}
 	}
