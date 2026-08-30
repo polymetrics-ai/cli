@@ -982,10 +982,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/insights/{project-slug}/workflows\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/insights/{project-slug}/workflows\"].get"
+            }
           }
         }
       ]
@@ -1136,10 +1143,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/insights/{project-slug}/workflows/{workflow-name}\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/insights/{project-slug}/workflows/{workflow-name}\"].get"
+            }
           }
         }
       ]
@@ -1290,10 +1304,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/insights/{project-slug}/workflows/{workflow-name}/jobs\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/insights/{project-slug}/workflows/{workflow-name}/jobs\"].get"
+            }
           }
         }
       ]
@@ -3338,10 +3359,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/pipeline\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/pipeline\"].get"
+            }
           }
         }
       ]
@@ -3963,10 +3991,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/pipeline/{pipeline-id}/workflow\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/pipeline/{pipeline-id}/workflow\"].get"
+            }
           }
         }
       ]
@@ -6009,10 +6044,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/project/{project-slug}/pipeline\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/project/{project-slug}/pipeline\"].get"
+            }
           }
         }
       ]
@@ -6158,10 +6200,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/project/{project-slug}/pipeline/mine\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/project/{project-slug}/pipeline/mine\"].get"
+            }
           }
         }
       ]
@@ -6625,10 +6674,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/project/{project-slug}/schedule\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/project/{project-slug}/schedule\"].get"
+            }
           }
         }
       ]
@@ -7713,10 +7769,17 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
+          "state": "not_applicable",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/workflow/{id}/job\"].get"
+          },
+          "source_evidence": {
+            "kind": "circleci.source.event.no_transport_contract.v1",
+            "citation": {
+              "source_url": "https://circleci.com/api/v2/openapi.json",
+              "location": "paths[\"/workflow/{id}/job\"].get"
+            }
           }
         }
       ]
@@ -10500,10 +10563,10 @@
       },
       "facts": {
         "pagination": {
-          "kind": "not_documented",
-          "request_parameter": "",
-          "response_field": "",
-          "continuation_kind": "",
+          "kind": "cursor",
+          "request_parameter": "page-token",
+          "response_field": "next_page_token",
+          "continuation_kind": "query_parameter",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/context\"].get"
@@ -10613,17 +10676,10 @@
         },
         {
           "lane": "etl",
-          "state": "not_applicable",
+          "state": "mapped_unproven",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/context\"].get"
-          },
-          "source_evidence": {
-            "kind": "circleci.source.pagination.no_operation_continuation.v1",
-            "citation": {
-              "source_url": "https://circleci.com/api/v2/openapi.json",
-              "location": "paths[\"/context\"].get"
-            }
           }
         },
         {
@@ -10988,10 +11044,10 @@
       },
       "facts": {
         "pagination": {
-          "kind": "not_documented",
-          "request_parameter": "",
-          "response_field": "",
-          "continuation_kind": "",
+          "kind": "cursor",
+          "request_parameter": "page-token",
+          "response_field": "next_page_token",
+          "continuation_kind": "query_parameter",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/context/{context_id}/environment-variable\"].get"
@@ -11098,17 +11154,10 @@
         },
         {
           "lane": "etl",
-          "state": "not_applicable",
+          "state": "mapped_unproven",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/context/{context_id}/environment-variable\"].get"
-          },
-          "source_evidence": {
-            "kind": "circleci.source.pagination.no_operation_continuation.v1",
-            "citation": {
-              "source_url": "https://circleci.com/api/v2/openapi.json",
-              "location": "paths[\"/context/{context_id}/environment-variable\"].get"
-            }
           }
         },
         {
@@ -11472,7 +11521,7 @@
       },
       "facts": {
         "pagination": {
-          "kind": "not_documented",
+          "kind": "response_token_without_operation_continuation",
           "request_parameter": "",
           "response_field": "",
           "continuation_kind": "",
@@ -12267,10 +12316,10 @@
       },
       "facts": {
         "pagination": {
-          "kind": "not_documented",
-          "request_parameter": "",
-          "response_field": "",
-          "continuation_kind": "",
+          "kind": "cursor",
+          "request_parameter": "page-token",
+          "response_field": "next_page_token",
+          "continuation_kind": "query_parameter",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/organizations/{org_id}/groups\"].get"
@@ -12378,17 +12427,10 @@
         },
         {
           "lane": "etl",
-          "state": "not_applicable",
+          "state": "mapped_unproven",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/organizations/{org_id}/groups\"].get"
-          },
-          "source_evidence": {
-            "kind": "circleci.source.pagination.no_operation_continuation.v1",
-            "citation": {
-              "source_url": "https://circleci.com/api/v2/openapi.json",
-              "location": "paths[\"/organizations/{org_id}/groups\"].get"
-            }
           }
         },
         {
@@ -15169,10 +15211,10 @@
       },
       "facts": {
         "pagination": {
-          "kind": "not_documented",
-          "request_parameter": "",
-          "response_field": "",
-          "continuation_kind": "",
+          "kind": "cursor",
+          "request_parameter": "page-token",
+          "response_field": "next_page_token",
+          "continuation_kind": "query_parameter",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/deploy/environments\"].get"
@@ -15280,17 +15322,10 @@
         },
         {
           "lane": "etl",
-          "state": "not_applicable",
+          "state": "mapped_unproven",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/deploy/environments\"].get"
-          },
-          "source_evidence": {
-            "kind": "circleci.source.pagination.no_operation_continuation.v1",
-            "citation": {
-              "source_url": "https://circleci.com/api/v2/openapi.json",
-              "location": "paths[\"/deploy/environments\"].get"
-            }
           }
         },
         {
@@ -15499,10 +15534,10 @@
       },
       "facts": {
         "pagination": {
-          "kind": "not_documented",
-          "request_parameter": "",
-          "response_field": "",
-          "continuation_kind": "",
+          "kind": "cursor",
+          "request_parameter": "page-token",
+          "response_field": "next_page_token",
+          "continuation_kind": "query_parameter",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/deploy/components\"].get"
@@ -15612,17 +15647,10 @@
         },
         {
           "lane": "etl",
-          "state": "not_applicable",
+          "state": "mapped_unproven",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/deploy/components\"].get"
-          },
-          "source_evidence": {
-            "kind": "circleci.source.pagination.no_operation_continuation.v1",
-            "citation": {
-              "source_url": "https://circleci.com/api/v2/openapi.json",
-              "location": "paths[\"/deploy/components\"].get"
-            }
           }
         },
         {
@@ -15831,7 +15859,7 @@
       },
       "facts": {
         "pagination": {
-          "kind": "not_documented",
+          "kind": "response_token_without_operation_continuation",
           "request_parameter": "",
           "response_field": "",
           "continuation_kind": "",
@@ -15997,7 +16025,7 @@
       },
       "facts": {
         "pagination": {
-          "kind": "not_documented",
+          "kind": "response_token_without_operation_continuation",
           "request_parameter": "",
           "response_field": "",
           "continuation_kind": "",
@@ -16193,7 +16221,7 @@
           }
         },
         "event_cursor": {
-          "kind": "not_documented",
+          "kind": "webhook_subscription_registration",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/webhook\"].post"
@@ -16297,13 +16325,13 @@
         },
         {
           "lane": "sync_transport",
-          "state": "not_applicable",
+          "state": "missing_foundation",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/webhook\"].post"
           },
           "source_evidence": {
-            "kind": "circleci.source.pagination.no_operation_continuation.v1",
+            "kind": "circleci.source.event.webhook_registration.v1",
             "citation": {
               "source_url": "https://circleci.com/api/v2/openapi.json",
               "location": "paths[\"/webhook\"].post"
@@ -16521,7 +16549,7 @@
           }
         },
         "event_cursor": {
-          "kind": "not_documented",
+          "kind": "webhook_subscription_registration",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/webhook/{webhook_id}\"].put"
@@ -16625,13 +16653,13 @@
         },
         {
           "lane": "sync_transport",
-          "state": "not_applicable",
+          "state": "missing_foundation",
           "citation": {
             "source_url": "https://circleci.com/api/v2/openapi.json",
             "location": "paths[\"/webhook/{webhook_id}\"].put"
           },
           "source_evidence": {
-            "kind": "circleci.source.pagination.no_operation_continuation.v1",
+            "kind": "circleci.source.event.webhook_registration.v1",
             "citation": {
               "source_url": "https://circleci.com/api/v2/openapi.json",
               "location": "paths[\"/webhook/{webhook_id}\"].put"

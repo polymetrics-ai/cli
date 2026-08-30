@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	circleCISourceLockPath   = "sources/circleci-operation-source-lock.json"
-	circleCISourceMatrixPath = "sources/circleci-source-lane-matrix.json"
+	circleCISourceLockPath                  = "sources/circleci-operation-source-lock.json"
+	circleCISourceMatrixPath                = "sources/circleci-source-lane-matrix.json"
+	circleCIWebhookRegistrationEvidenceKind = "circleci.source.event.webhook_registration.v1"
 )
 
 var circleCILanes = []string{
@@ -27,15 +28,20 @@ var circleCILanes = []string{
 }
 
 var circleCIPagingOperationIDs = map[string]string{
-	"circleci.rest.getProjectWorkflowMetrics":    "query_parameter",
-	"circleci.rest.getProjectWorkflowRuns":       "query_parameter",
-	"circleci.rest.getProjectWorkflowJobMetrics": "query_parameter",
-	"circleci.rest.listPipelines":                "query_parameter",
-	"circleci.rest.listWorkflowsByPipelineId":    "query_parameter",
-	"circleci.rest.listPipelinesForProject":      "query_parameter",
-	"circleci.rest.listMyPipelines":              "query_parameter",
-	"circleci.rest.listSchedulesForProject":      "query_parameter",
-	"circleci.rest.listWorkflowJobs":             "openapi_link",
+	"circleci.rest.listContexts":                        "query_parameter",
+	"circleci.rest.listEnvironmentVariablesFromContext": "query_parameter",
+	"circleci.rest.getOrganizationGroups":               "query_parameter",
+	"circleci.rest.listEnvironments":                    "query_parameter",
+	"circleci.rest.listComponents":                      "query_parameter",
+	"circleci.rest.getProjectWorkflowMetrics":           "query_parameter",
+	"circleci.rest.getProjectWorkflowRuns":              "query_parameter",
+	"circleci.rest.getProjectWorkflowJobMetrics":        "query_parameter",
+	"circleci.rest.listPipelines":                       "query_parameter",
+	"circleci.rest.listWorkflowsByPipelineId":           "query_parameter",
+	"circleci.rest.listPipelinesForProject":             "query_parameter",
+	"circleci.rest.listMyPipelines":                     "query_parameter",
+	"circleci.rest.listSchedulesForProject":             "query_parameter",
+	"circleci.rest.listWorkflowJobs":                    "openapi_link",
 }
 
 var circleCIMutationOperationIDs = map[string]struct{}{
@@ -225,6 +231,7 @@ type circleCIArtifactNamedRecord struct {
 }
 
 type circleCIOperationDocument struct {
+	Description string                             `json:"description"`
 	Summary     string                             `json:"summary"`
 	Parameters  []circleCIOpenAPIParameter         `json:"parameters"`
 	RequestBody *circleCIOpenAPIRequestBody        `json:"requestBody"`
@@ -242,6 +249,7 @@ type circleCIOpenAPIRequestBody struct {
 }
 
 type circleCIOpenAPIResponse struct {
+	Ref     string                            `json:"$ref"`
 	Content map[string]circleCIOpenAPIContent `json:"content"`
 	Links   map[string]circleCIOpenAPILink    `json:"links"`
 }
@@ -257,13 +265,18 @@ type circleCIOpenAPILink struct {
 type circleCIOpenAPIContract struct {
 	Components struct {
 		Parameters map[string]circleCIOpenAPIParameter `json:"parameters"`
+		Responses  map[string]circleCIOpenAPIResponse  `json:"responses"`
 		Schemas    map[string]circleCIOpenAPISchema    `json:"schemas"`
 	} `json:"components"`
 }
 
 type circleCIOpenAPISchema struct {
+	Ref        string                     `json:"$ref"`
 	Required   []string                   `json:"required"`
 	Properties map[string]json.RawMessage `json:"properties"`
+	AllOf      []json.RawMessage          `json:"allOf"`
+	AnyOf      []json.RawMessage          `json:"anyOf"`
+	OneOf      []json.RawMessage          `json:"oneOf"`
 }
 
 func TestCircleCISourceLaneMatrixReconcilesPinnedSourceLock(t *testing.T) {
@@ -278,6 +291,7 @@ func TestCircleCISourceLaneMatrixReconcilesPinnedSourceLock(t *testing.T) {
 	}
 	cellCount := 0
 	mappedUnproven := 0
+	missingFoundation := 0
 	notApplicable := 0
 	for _, operation := range matrix.Operations {
 		cellCount += len(operation.Cells)
@@ -285,6 +299,8 @@ func TestCircleCISourceLaneMatrixReconcilesPinnedSourceLock(t *testing.T) {
 			switch cell.State {
 			case "mapped_unproven":
 				mappedUnproven++
+			case "missing_foundation":
+				missingFoundation++
 			case "not_applicable":
 				notApplicable++
 			}
@@ -293,11 +309,296 @@ func TestCircleCISourceLaneMatrixReconcilesPinnedSourceLock(t *testing.T) {
 	if got, want := cellCount, 777; got != want {
 		t.Fatalf("matrix cell count = %d, want %d", got, want)
 	}
-	if got, want := mappedUnproven, 179; got != want {
+	if got, want := mappedUnproven, 175; got != want {
 		t.Fatalf("mapped_unproven cells = %d, want %d", got, want)
 	}
-	if got, want := notApplicable, 598; got != want {
+	if got, want := missingFoundation, 2; got != want {
+		t.Fatalf("missing_foundation cells = %d, want %d", got, want)
+	}
+	if got, want := notApplicable, 600; got != want {
 		t.Fatalf("not_applicable cells = %d, want %d", got, want)
+	}
+}
+
+func TestCircleCISourceWebhookRegistrationIsTheOnlySyncCandidate(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	matrix := loadCircleCISourceLaneMatrix(t)
+
+	registrations := map[string]string{
+		"circleci.rest.createWebhook": "Create an outbound webhook",
+		"circleci.rest.updateWebhook": "Update an outbound webhook",
+	}
+	for sourceID, summary := range registrations {
+		source := findCircleCISourceOperation(t, lock, sourceID)
+		document, err := circleCIOperationDocumentFor(source)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if document.Summary != summary || document.RequestBody == nil || len(circleCIRequestSchemaReferences(document)) == 0 {
+			t.Fatalf("%s does not retain a source-backed outbound-webhook registration contract", sourceID)
+		}
+		cell := findCircleCIMatrixCell(t, findCircleCIMatrixOperation(t, &matrix, sourceID), "sync_transport")
+		if cell.State != "missing_foundation" || cell.SourceEvidence == nil || cell.SourceEvidence.Kind != circleCIWebhookRegistrationEvidenceKind {
+			t.Fatalf("%s sync cell = %+v, want source-backed missing foundation", sourceID, cell)
+		}
+	}
+
+	for _, sourceID := range []string{
+		"circleci.rest.getWebhooks",
+		"circleci.rest.getWebhookById",
+		"circleci.rest.deleteWebhook",
+		"circleci.rest.listPipelines",
+	} {
+		cell := findCircleCIMatrixCell(t, findCircleCIMatrixOperation(t, &matrix, sourceID), "sync_transport")
+		if cell.State != "not_applicable" {
+			t.Fatalf("non-registration %s sync cell = %q, want not_applicable", sourceID, cell.State)
+		}
+	}
+}
+
+func TestCircleCIWebhookRegistrationRequiresDeliverySemantics(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	contract, err := circleCIParameterContract(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	registration := findCircleCISourceOperation(t, lock, "circleci.rest.createWebhook")
+	document, err := circleCIOperationDocumentFor(registration)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, err := circleCIWebhookRegistrationEvidence(contract, registration, document); err != nil || !got {
+		t.Fatalf("documented webhook registration evidence = %t, %v; want true, nil", got, err)
+	}
+
+	noDeliveryDescription := document
+	noDeliveryDescription.Description = "Creates a generic callback configuration."
+	noDeliveryDescription.Summary = "Create a callback"
+	if got, err := circleCIWebhookRegistrationEvidence(contract, registration, noDeliveryDescription); err != nil || got {
+		t.Fatalf("non-webhook mutation registration evidence = %t, %v; want false, nil", got, err)
+	}
+
+	deregistration := findCircleCISourceOperation(t, lock, "circleci.rest.deleteWebhook")
+	deregisterDocument, err := circleCIOperationDocumentFor(deregistration)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, err := circleCIWebhookRegistrationEvidence(contract, deregistration, deregisterDocument); err != nil || got {
+		t.Fatalf("webhook deletion registration evidence = %t, %v; want false, nil", got, err)
+	}
+}
+
+func TestCircleCISourcePagingEvidenceUsesSourceSemanticsNotHTTPMethod(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	contract, err := circleCIParameterContract(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	read := findCircleCISourceOperation(t, lock, "circleci.rest.listContexts")
+	read.ID = "circleci.rest.syntheticSearchContexts"
+	read.OperationID = "searchContexts"
+	read.Method = "POST"
+	readDocument, err := circleCIOperationDocumentFor(read)
+	if err != nil {
+		t.Fatal(err)
+	}
+	readDocument.Summary = "Search contexts"
+	read.SourceOperation = marshalCircleCIOperationDocument(t, readDocument)
+
+	mutation := findCircleCISourceOperation(t, lock, "circleci.rest.listContexts")
+	mutation.ID = "circleci.rest.syntheticDeleteContexts"
+	mutation.OperationID = "deleteContext"
+	mutation.Method = "GET"
+	mutationDocument, err := circleCIOperationDocumentFor(mutation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mutationDocument.Summary = "Delete a context"
+	mutation.SourceOperation = marshalCircleCIOperationDocument(t, mutationDocument)
+
+	lock.REST.Operations = []circleCISourceOperation{read, mutation}
+	evidence, err := circleCISourcePagingEvidence(lock, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, exists := evidence[read.ID]; !exists {
+		t.Fatalf("semantic POST read %s did not retain source-backed pagination evidence", read.ID)
+	}
+	if _, exists := evidence[mutation.ID]; exists {
+		t.Fatalf("semantic mutation %s was incorrectly promoted by its GET method", mutation.ID)
+	}
+}
+
+func TestCircleCISourcePagingEvidenceResolvesReferencedResponseSchemas(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	contract, err := circleCIParameterContract(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	evidence, err := circleCISourcePagingEvidence(lock, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, sourceID := range []string{
+		"circleci.rest.listContexts",
+		"circleci.rest.listEnvironmentVariablesFromContext",
+		"circleci.rest.getOrganizationGroups",
+		"circleci.rest.listEnvironments",
+		"circleci.rest.listComponents",
+	} {
+		fact, exists := evidence[sourceID]
+		if !exists {
+			t.Fatalf("referenced response schema pagination was not retained for %s", sourceID)
+		}
+		if fact.Kind != "cursor" || fact.RequestParameter != "page-token" || fact.ResponseField != "next_page_token" {
+			t.Fatalf("referenced response schema pagination fact for %s = %+v", sourceID, fact)
+		}
+	}
+}
+
+func TestCircleCISourcePagingEvidenceRejectsRequestOnlyAndInlineFalsePositives(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	contract, err := circleCIParameterContract(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	requestOnly := findCircleCISourceOperation(t, lock, "circleci.rest.listContexts")
+	requestOnly.ID = "circleci.rest.syntheticRequestOnlyCursor"
+	requestOnlyDocument, err := circleCIOperationDocumentFor(requestOnly)
+	if err != nil {
+		t.Fatal(err)
+	}
+	requestOnlyDocument.Responses = map[string]circleCIOpenAPIResponse{
+		"200": {Content: map[string]circleCIOpenAPIContent{
+			"application/json": {Schema: json.RawMessage(`{"type":"array"}`)},
+		}},
+	}
+	requestOnly.SourceOperation = marshalCircleCIOperationDocument(t, requestOnlyDocument)
+
+	limitOnly := requestOnly
+	limitOnly.ID = "circleci.rest.syntheticLimitOnlyCollection"
+	limitOnlyDocument := requestOnlyDocument
+	limitOnlyDocument.Parameters = []circleCIOpenAPIParameter{{In: "query", Name: "limit"}}
+	limitOnlyDocument.Responses = map[string]circleCIOpenAPIResponse{
+		"200": {Content: map[string]circleCIOpenAPIContent{
+			"application/json": {Schema: json.RawMessage(`{"type":"object","properties":{"items":{"type":"array"}}}`)},
+		}},
+	}
+	limitOnly.SourceOperation = marshalCircleCIOperationDocument(t, limitOnlyDocument)
+
+	wrongTokenType := requestOnly
+	wrongTokenType.ID = "circleci.rest.syntheticNonStringCursor"
+	wrongTokenDocument := requestOnlyDocument
+	wrongTokenDocument.Responses = map[string]circleCIOpenAPIResponse{
+		"200": {Content: map[string]circleCIOpenAPIContent{
+			"application/json": {Schema: json.RawMessage(`{"type":"object","properties":{"next_page_token":{"type":"array"},"items":{"type":"array"}}}`)},
+		}},
+	}
+	wrongTokenType.SourceOperation = marshalCircleCIOperationDocument(t, wrongTokenDocument)
+
+	lock.REST.Operations = []circleCISourceOperation{requestOnly, limitOnly, wrongTokenType}
+	evidence, err := circleCISourcePagingEvidence(lock, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(evidence) != 0 {
+		t.Fatalf("request-only cursor, non-string token, or inline limit/array incorrectly became ETL evidence: %+v", evidence)
+	}
+}
+
+func TestCircleCISourceResponseTokensWithoutContinuationAreReconciled(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	contract, err := circleCIParameterContract(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := []string{}
+	for _, source := range lock.REST.Operations {
+		document, err := circleCIOperationDocumentFor(source)
+		if err != nil {
+			t.Fatal(err)
+		}
+		hasResponseToken, err := circleCIResponseHasNextPageToken(contract, document)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !hasResponseToken {
+			continue
+		}
+		_, queryParameters, _, err := circleCIScopeFor(contract, source, document)
+		if err != nil {
+			t.Fatal(err)
+		}
+		hasLink, err := circleCIHasNextPageLink(contract, document)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !containsString(queryParameters, "page-token") && !hasLink {
+			got = append(got, source.ID)
+		}
+	}
+
+	want := []string{
+		"circleci.rest.getContextRestrictions",
+		"circleci.rest.getJobTimeseries",
+		"circleci.rest.getWebhooks",
+		"circleci.rest.listCheckoutKeys",
+		"circleci.rest.listComponentVersions",
+		"circleci.rest.listEnvVars",
+	}
+	if !equalStringSets(got, want) {
+		t.Fatalf("response token without operation continuation = %v, want %v", uniqueSorted(got), want)
+	}
+}
+
+func TestCircleCISourceLaneMatrixPaginationFactsReconcileAllSourceRows(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	matrix := loadCircleCISourceLaneMatrix(t)
+	contract, err := circleCIParameterContract(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pagingByID, err := circleCISourcePagingEvidence(lock, contract)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	actualByID := make(map[string]circleCIMatrixOperation, len(matrix.Operations))
+	for _, operation := range matrix.Operations {
+		actualByID[operation.SourceOperationID] = operation
+	}
+	mismatches := []string{}
+	for _, source := range lock.REST.Operations {
+		operation, exists := actualByID[source.ID]
+		if !exists {
+			continue
+		}
+		expectedKind := "not_documented"
+		if _, exists := pagingByID[source.ID]; exists {
+			expectedKind = "cursor"
+		} else {
+			document, err := circleCIOperationDocumentFor(source)
+			if err != nil {
+				t.Fatal(err)
+			}
+			hasResponseToken, err := circleCIResponseHasNextPageToken(contract, document)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if hasResponseToken {
+				expectedKind = "response_token_without_operation_continuation"
+			}
+		}
+		if operation.Facts.Pagination.Kind != expectedKind {
+			mismatches = append(mismatches, fmt.Sprintf("%s=%s want=%s", source.ID, operation.Facts.Pagination.Kind, expectedKind))
+		}
+	}
+	if len(mismatches) != 0 {
+		t.Fatalf("pagination fact reconciliation mismatches: %s", strings.Join(mismatches, "; "))
 	}
 }
 
@@ -339,6 +640,34 @@ func TestCircleCISourceLaneMatrixRejectsMissingPagingETLDisposition(t *testing.T
 	err := validateCircleCISourceLaneMatrix(lock, matrix)
 	if err == nil || !strings.Contains(err.Error(), "paging source operation") {
 		t.Fatalf("missing paging ETL disposition error = %v, want paging rejection", err)
+	}
+}
+
+func TestCircleCISourceLaneMatrixRejectsPagingAsSyncTransport(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	matrix := cloneCircleCISourceLaneMatrix(t, loadCircleCISourceLaneMatrix(t))
+	operation := findCircleCIMatrixOperation(t, &matrix, "circleci.rest.listPipelines")
+	cell := findCircleCIMatrixCell(t, operation, "sync_transport")
+	cell.State = "mapped_unproven"
+	cell.SourceEvidence = nil
+
+	err := validateCircleCISourceLaneMatrix(lock, matrix)
+	if err == nil || !strings.Contains(err.Error(), "sync transport") {
+		t.Fatalf("paging-to-sync error = %v, want source-backed sync rejection", err)
+	}
+}
+
+func TestCircleCISourceLaneMatrixRejectsWebhookRegistrationWithoutNamedGap(t *testing.T) {
+	lock := loadCircleCISourceLock(t)
+	matrix := cloneCircleCISourceLaneMatrix(t, loadCircleCISourceLaneMatrix(t))
+	operation := findCircleCIMatrixOperation(t, &matrix, "circleci.rest.createWebhook")
+	cell := findCircleCIMatrixCell(t, operation, "sync_transport")
+	cell.State = "mapped_unproven"
+	cell.SourceEvidence = nil
+
+	err := validateCircleCISourceLaneMatrix(lock, matrix)
+	if err == nil || !strings.Contains(err.Error(), "requires a named sync missing-foundation cell") {
+		t.Fatalf("webhook-sync gap error = %v, want named missing-foundation error", err)
 	}
 }
 
@@ -458,7 +787,15 @@ func validateCircleCISourceLaneMatrix(lock circleCISourceLock, matrix circleCISo
 			return fmt.Errorf("duplicate source operation ID in lock: %s", source.ID)
 		}
 		sourceByID[source.ID] = source
-		if source.Method != "GET" {
+		document, err := circleCIOperationDocumentFor(source)
+		if err != nil {
+			return err
+		}
+		semantics, err := circleCIClassifySourceOperation(source, document)
+		if err != nil {
+			return err
+		}
+		if semantics == circleCISourceMutation {
 			mutationCount++
 			if _, known := circleCIMutationOperationIDs[source.ID]; !known {
 				return fmt.Errorf("mutation source row is not explicitly dispositioned: %s", source.ID)
@@ -530,6 +867,18 @@ func validateCircleCIMatrixOperation(lock circleCISourceLock, contract circleCIO
 	if err := validateCircleCIMatrixFacts(lock, contract, source, operation.Facts, paging); err != nil {
 		return nil, fmt.Errorf("matrix row %s facts: %w", source.ID, err)
 	}
+	document, err := circleCIOperationDocumentFor(source)
+	if err != nil {
+		return nil, err
+	}
+	semantics, err := circleCIClassifySourceOperation(source, document)
+	if err != nil {
+		return nil, err
+	}
+	webhookRegistration, err := circleCIWebhookRegistrationEvidence(contract, source, document)
+	if err != nil {
+		return nil, err
+	}
 
 	cells := make(map[string]circleCIMatrixCell, len(operation.Cells))
 	for _, cell := range operation.Cells {
@@ -558,8 +907,16 @@ func validateCircleCIMatrixOperation(lock circleCISourceLock, contract circleCIO
 		if cell.State == "mapped_unproven" && cell.SourceEvidence != nil {
 			return nil, fmt.Errorf("matrix row %s lane %s has source evidence attached to mapped_unproven", source.ID, cell.Lane)
 		}
-		if cell.State == "implemented" || cell.State == "missing_foundation" {
+		if cell.State == "implemented" {
 			return nil, fmt.Errorf("matrix row %s lane %s claims runtime state %q in source-only Track A", source.ID, cell.Lane, cell.State)
+		}
+		if cell.State == "missing_foundation" {
+			if cell.Lane != "sync_transport" || !webhookRegistration {
+				return nil, fmt.Errorf("matrix row %s lane %s claims an unsupported missing foundation", source.ID, cell.Lane)
+			}
+			if cell.SourceEvidence == nil || cell.SourceEvidence.Kind != circleCIWebhookRegistrationEvidenceKind {
+				return nil, fmt.Errorf("matrix row %s sync transport lacks source-backed webhook-registration evidence", source.ID)
+			}
 		}
 		cells[cell.Lane] = cell
 	}
@@ -567,7 +924,7 @@ func validateCircleCIMatrixOperation(lock circleCISourceLock, contract circleCIO
 		return nil, fmt.Errorf("matrix row %s does not contain exactly one of every lane", source.ID)
 	}
 
-	if source.Method == "GET" {
+	if semantics == circleCISourceBoundedRead {
 		if err := requireCircleCICellState(source.ID, cells, "direct_read", "mapped_unproven"); err != nil {
 			return nil, err
 		}
@@ -594,17 +951,20 @@ func validateCircleCIMatrixOperation(lock circleCISourceLock, contract circleCIO
 		}
 	}
 	if paging.Kind == "cursor" {
-		for _, lane := range []string{"etl", "sync_transport"} {
-			if err := requireCircleCICellState(source.ID, cells, lane, "mapped_unproven"); err != nil {
-				return nil, fmt.Errorf("paging source operation %s requires explicit %s mapped_unproven: %w", source.ID, lane, err)
-			}
+		if err := requireCircleCICellState(source.ID, cells, "etl", "mapped_unproven"); err != nil {
+			return nil, fmt.Errorf("paging source operation %s requires explicit etl mapped_unproven: %w", source.ID, err)
 		}
 	} else {
-		for _, lane := range []string{"etl", "sync_transport"} {
-			if err := requireCircleCICellState(source.ID, cells, lane, "not_applicable"); err != nil {
-				return nil, err
-			}
+		if err := requireCircleCICellState(source.ID, cells, "etl", "not_applicable"); err != nil {
+			return nil, err
 		}
+	}
+	if webhookRegistration {
+		if err := requireCircleCICellState(source.ID, cells, "sync_transport", "missing_foundation"); err != nil {
+			return nil, fmt.Errorf("source webhook registration %s requires a named sync missing-foundation cell: %w", source.ID, err)
+		}
+	} else if err := requireCircleCICellState(source.ID, cells, "sync_transport", "not_applicable"); err != nil {
+		return nil, fmt.Errorf("source operation %s has no cited event/webhook registration contract; sync transport must remain not_applicable: %w", source.ID, err)
 	}
 	return cells, nil
 }
@@ -633,10 +993,22 @@ func validateCircleCIMatrixFacts(lock circleCISourceLock, contract circleCIOpenA
 	if circleCIHasBinaryMedia(requestMedia) || circleCIHasBinaryMedia(responseMedia) {
 		return fmt.Errorf("binary media is present in the retained source operation but both binary lanes are not_applicable")
 	}
-	if facts.EventCursor.Kind != "not_documented" {
-		return fmt.Errorf("event/cursor fact must remain not_documented for this retained operation")
+	eventCursorKind, err := circleCIEventCursorKind(contract, source, document)
+	if err != nil {
+		return err
 	}
-	if facts.Write.Kind != map[bool]string{true: "read", false: "mutation"}[source.Method == "GET"] || facts.Write.Summary != document.Summary || facts.Write.RequestBodyPresent != (document.RequestBody != nil) {
+	if facts.EventCursor.Kind != eventCursorKind {
+		return fmt.Errorf("event/cursor fact = %q, want %q from retained source webhook semantics", facts.EventCursor.Kind, eventCursorKind)
+	}
+	semantics, err := circleCIClassifySourceOperation(source, document)
+	if err != nil {
+		return err
+	}
+	expectedWriteKind := "read"
+	if semantics == circleCISourceMutation {
+		expectedWriteKind = "mutation"
+	}
+	if facts.Write.Kind != expectedWriteKind || facts.Write.Summary != document.Summary || facts.Write.RequestBodyPresent != (document.RequestBody != nil) {
 		return fmt.Errorf("write/read source facts do not match retained operation")
 	}
 	if paging.Kind == "cursor" {
@@ -645,7 +1017,11 @@ func validateCircleCIMatrixFacts(lock circleCISourceLock, contract circleCIOpenA
 		}
 	} else {
 		expectedKind := "not_documented"
-		if circleCIResponseHasNextPageToken(document) {
+		hasNextPageToken, err := circleCIResponseHasNextPageToken(contract, document)
+		if err != nil {
+			return err
+		}
+		if hasNextPageToken {
 			expectedKind = "response_token_without_operation_continuation"
 		}
 		if facts.Pagination.Kind != expectedKind || facts.Pagination.RequestParameter != "" || facts.Pagination.ResponseField != "" || facts.Pagination.ContinuationKind != "" {
@@ -883,28 +1259,171 @@ func circleCIHasBinaryMedia(mediaTypes []string) bool {
 	return false
 }
 
+type circleCISourceOperationSemantics string
+
+const (
+	circleCISourceBoundedRead circleCISourceOperationSemantics = "bounded_read"
+	circleCISourceMutation    circleCISourceOperationSemantics = "mutation"
+)
+
+var circleCIMutationVerbs = map[string]struct{}{
+	"add":      {},
+	"approve":  {},
+	"cancel":   {},
+	"continue": {},
+	"create":   {},
+	"creates":  {},
+	"delete":   {},
+	"make":     {},
+	"makes":    {},
+	"patch":    {},
+	"remove":   {},
+	"rerun":    {},
+	"rollback": {},
+	"set":      {},
+	"trigger":  {},
+	"update":   {},
+}
+
+// circleCIClassifySourceOperation uses the provider-published operation identity
+// and description. HTTP method is transport metadata, not the lane decision.
+func circleCIClassifySourceOperation(source circleCISourceOperation, document circleCIOperationDocument) (circleCISourceOperationSemantics, error) {
+	if strings.TrimSpace(source.OperationID) == "" && strings.TrimSpace(document.Summary) == "" {
+		return "", fmt.Errorf("source operation %s has no provider operation semantics", source.ID)
+	}
+	if circleCIHasMutationVerb(document.Summary) || circleCIHasMutationVerb(source.OperationID) {
+		return circleCISourceMutation, nil
+	}
+	return circleCISourceBoundedRead, nil
+}
+
+func circleCIHasMutationVerb(value string) bool {
+	value = strings.TrimSpace(value)
+	for _, prefix := range []string{"[recommended]", "🧪"} {
+		if strings.HasPrefix(strings.ToLower(value), prefix) {
+			value = strings.TrimSpace(value[len(prefix):])
+		}
+	}
+	lowerValue := strings.ToLower(value)
+	for verb := range circleCIMutationVerbs {
+		if lowerValue == verb || strings.HasPrefix(lowerValue, verb+" ") || strings.HasPrefix(lowerValue, verb+"_") || strings.HasPrefix(lowerValue, verb+"-") || strings.HasPrefix(lowerValue, verb+"/") || strings.HasPrefix(lowerValue, verb+"(") || strings.HasPrefix(lowerValue, verb+"[") || strings.HasPrefix(lowerValue, verb+"{") {
+			return true
+		}
+		if strings.HasPrefix(lowerValue, verb) && len(value) > len(verb) {
+			next := value[len(verb)]
+			if next >= 'A' && next <= 'Z' {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// circleCIWebhookRegistrationEvidence requires the retained provider contract
+// to say both that this is an outbound webhook mutation and that its typed
+// request carries the event delivery configuration. A resource named webhook,
+// a list endpoint, or ordinary pagination cannot satisfy this predicate.
+func circleCIWebhookRegistrationEvidence(contract circleCIOpenAPIContract, source circleCISourceOperation, document circleCIOperationDocument) (bool, error) {
+	semantics, err := circleCIClassifySourceOperation(source, document)
+	if err != nil {
+		return false, err
+	}
+	if semantics != circleCISourceMutation || document.RequestBody == nil {
+		return false, nil
+	}
+	sourceText := strings.ToLower(document.Summary + "\n" + document.Description)
+	if !strings.Contains(sourceText, "outbound webhook") {
+		return false, nil
+	}
+	requestSchemaRefs := circleCIRequestSchemaReferences(document)
+	if len(requestSchemaRefs) == 0 {
+		return false, nil
+	}
+	for _, requirement := range []struct {
+		property string
+		wantType string
+	}{
+		{property: "events", wantType: "array"},
+		{property: "url", wantType: "string"},
+		{property: "signing-secret", wantType: "string"},
+	} {
+		hasProperty, err := circleCIRequestSchemasHaveTypedProperty(contract, requestSchemaRefs, requirement.property, requirement.wantType)
+		if err != nil {
+			return false, err
+		}
+		if !hasProperty {
+			return false, nil
+		}
+	}
+	return true, nil
+}
+
+func circleCIRequestSchemasHaveTypedProperty(contract circleCIOpenAPIContract, refs []string, property, wantType string) (bool, error) {
+	for _, ref := range refs {
+		raw, err := json.Marshal(struct {
+			Ref string `json:"$ref"`
+		}{Ref: ref})
+		if err != nil {
+			return false, err
+		}
+		hasProperty, err := circleCISchemaHasTypedProperty(contract, raw, property, wantType, map[string]struct{}{})
+		if err != nil {
+			return false, err
+		}
+		if hasProperty {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func circleCIEventCursorKind(contract circleCIOpenAPIContract, source circleCISourceOperation, document circleCIOperationDocument) (string, error) {
+	webhookRegistration, err := circleCIWebhookRegistrationEvidence(contract, source, document)
+	if err != nil {
+		return "", err
+	}
+	if webhookRegistration {
+		return "webhook_subscription_registration", nil
+	}
+	return "not_documented", nil
+}
+
 func circleCISourcePagingEvidence(lock circleCISourceLock, contract circleCIOpenAPIContract) (map[string]circleCIPaginationFact, error) {
 	results := make(map[string]circleCIPaginationFact)
 	for _, source := range lock.REST.Operations {
-		if source.Method != "GET" {
-			continue
-		}
 		document, err := circleCIOperationDocumentFor(source)
 		if err != nil {
 			return nil, err
+		}
+		semantics, err := circleCIClassifySourceOperation(source, document)
+		if err != nil {
+			return nil, err
+		}
+		if semantics != circleCISourceBoundedRead {
+			continue
 		}
 		_, queryParameters, _, err := circleCIScopeFor(contract, source, document)
 		if err != nil {
 			return nil, err
 		}
-		if !circleCIResponseHasNextPageToken(document) {
+		hasNextPageToken, err := circleCIResponseHasNextPageToken(contract, document)
+		if err != nil {
+			return nil, err
+		}
+		if !hasNextPageToken {
 			continue
 		}
 		continuationKind := ""
 		if containsString(queryParameters, "page-token") {
 			continuationKind = "query_parameter"
-		} else if circleCIHasNextPageLink(document) {
-			continuationKind = "openapi_link"
+		} else {
+			hasNextPageLink, err := circleCIHasNextPageLink(contract, document)
+			if err != nil {
+				return nil, err
+			}
+			if hasNextPageLink {
+				continuationKind = "openapi_link"
+			}
 		}
 		if continuationKind != "" {
 			results[source.ID] = circleCIPaginationFact{
@@ -922,37 +1441,153 @@ func circleCISourcePagingEvidence(lock circleCISourceLock, contract circleCIOpen
 	return results, nil
 }
 
-func circleCIResponseHasNextPageToken(document circleCIOperationDocument) bool {
-	for _, response := range document.Responses {
-		for _, content := range response.Content {
-			if circleCISchemaHasProperty(content.Schema, "next_page_token") {
-				return true
+func circleCIResponseHasNextPageToken(contract circleCIOpenAPIContract, document circleCIOperationDocument) (bool, error) {
+	for statusCode, response := range document.Responses {
+		if !circleCIIsSuccessResponseStatus(statusCode) {
+			continue
+		}
+		resolved, err := circleCIResolveResponse(contract, response, map[string]struct{}{})
+		if err != nil {
+			return false, err
+		}
+		for _, content := range resolved.Content {
+			hasProperty, err := circleCISchemaHasTypedProperty(contract, content.Schema, "next_page_token", "string", map[string]struct{}{})
+			if err != nil {
+				return false, err
+			}
+			if hasProperty {
+				return true, nil
 			}
 		}
 	}
-	return false
+	return false, nil
 }
 
-func circleCISchemaHasProperty(raw json.RawMessage, property string) bool {
-	var schema struct {
-		Properties map[string]json.RawMessage `json:"properties"`
-	}
-	if err := json.Unmarshal(raw, &schema); err != nil {
-		return false
-	}
-	_, exists := schema.Properties[property]
-	return exists
-}
-
-func circleCIHasNextPageLink(document circleCIOperationDocument) bool {
-	for _, response := range document.Responses {
-		for _, link := range response.Links {
+func circleCIHasNextPageLink(contract circleCIOpenAPIContract, document circleCIOperationDocument) (bool, error) {
+	for statusCode, response := range document.Responses {
+		if !circleCIIsSuccessResponseStatus(statusCode) {
+			continue
+		}
+		resolved, err := circleCIResolveResponse(contract, response, map[string]struct{}{})
+		if err != nil {
+			return false, err
+		}
+		for _, link := range resolved.Links {
 			if link.Parameters["page-token"] == "$response.body#/next_page_token" {
-				return true
+				return true, nil
 			}
 		}
 	}
-	return false
+	return false, nil
+}
+
+func circleCIResolveResponse(contract circleCIOpenAPIContract, response circleCIOpenAPIResponse, seen map[string]struct{}) (circleCIOpenAPIResponse, error) {
+	if response.Ref == "" {
+		return response, nil
+	}
+	const prefix = "#/components/responses/"
+	if !strings.HasPrefix(response.Ref, prefix) {
+		return circleCIOpenAPIResponse{}, fmt.Errorf("unsupported response reference %q", response.Ref)
+	}
+	if _, exists := seen[response.Ref]; exists {
+		return circleCIOpenAPIResponse{}, fmt.Errorf("cyclic response reference %q", response.Ref)
+	}
+	seen[response.Ref] = struct{}{}
+	resolved, exists := contract.Components.Responses[strings.TrimPrefix(response.Ref, prefix)]
+	if !exists {
+		return circleCIOpenAPIResponse{}, fmt.Errorf("response reference %q not found", response.Ref)
+	}
+	return circleCIResolveResponse(contract, resolved, seen)
+}
+
+func circleCISchemaHasProperty(contract circleCIOpenAPIContract, raw json.RawMessage, property string, seen map[string]struct{}) (bool, error) {
+	var schema circleCIOpenAPISchema
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		return false, fmt.Errorf("decode response schema: %w", err)
+	}
+	return circleCIParsedSchemaHasProperty(contract, schema, property, seen)
+}
+
+func circleCISchemaHasTypedProperty(contract circleCIOpenAPIContract, raw json.RawMessage, property, wantType string, seen map[string]struct{}) (bool, error) {
+	var schema circleCIOpenAPISchema
+	if err := json.Unmarshal(raw, &schema); err != nil {
+		return false, fmt.Errorf("decode response schema: %w", err)
+	}
+	return circleCIParsedSchemaHasTypedProperty(contract, schema, property, wantType, seen)
+}
+
+func circleCIParsedSchemaHasProperty(contract circleCIOpenAPIContract, schema circleCIOpenAPISchema, property string, seen map[string]struct{}) (bool, error) {
+	if _, exists := schema.Properties[property]; exists {
+		return true, nil
+	}
+	if schema.Ref != "" {
+		const prefix = "#/components/schemas/"
+		if !strings.HasPrefix(schema.Ref, prefix) {
+			return false, fmt.Errorf("unsupported response schema reference %q", schema.Ref)
+		}
+		if _, exists := seen[schema.Ref]; exists {
+			return false, fmt.Errorf("cyclic response schema reference %q", schema.Ref)
+		}
+		seen[schema.Ref] = struct{}{}
+		resolved, exists := contract.Components.Schemas[strings.TrimPrefix(schema.Ref, prefix)]
+		if !exists {
+			return false, fmt.Errorf("response schema reference %q not found", schema.Ref)
+		}
+		return circleCIParsedSchemaHasProperty(contract, resolved, property, seen)
+	}
+	for _, branch := range append(append(schema.AllOf, schema.AnyOf...), schema.OneOf...) {
+		hasProperty, err := circleCISchemaHasProperty(contract, branch, property, seen)
+		if err != nil {
+			return false, err
+		}
+		if hasProperty {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func circleCIParsedSchemaHasTypedProperty(contract circleCIOpenAPIContract, schema circleCIOpenAPISchema, property, wantType string, seen map[string]struct{}) (bool, error) {
+	if raw, exists := schema.Properties[property]; exists {
+		var value struct {
+			Type string `json:"type"`
+		}
+		if err := json.Unmarshal(raw, &value); err != nil {
+			return false, fmt.Errorf("decode response schema property %q: %w", property, err)
+		}
+		if value.Type == wantType {
+			return true, nil
+		}
+	}
+	if schema.Ref != "" {
+		const prefix = "#/components/schemas/"
+		if !strings.HasPrefix(schema.Ref, prefix) {
+			return false, fmt.Errorf("unsupported response schema reference %q", schema.Ref)
+		}
+		if _, exists := seen[schema.Ref]; exists {
+			return false, fmt.Errorf("cyclic response schema reference %q", schema.Ref)
+		}
+		seen[schema.Ref] = struct{}{}
+		resolved, exists := contract.Components.Schemas[strings.TrimPrefix(schema.Ref, prefix)]
+		if !exists {
+			return false, fmt.Errorf("response schema reference %q not found", schema.Ref)
+		}
+		return circleCIParsedSchemaHasTypedProperty(contract, resolved, property, wantType, seen)
+	}
+	for _, branch := range append(append(schema.AllOf, schema.AnyOf...), schema.OneOf...) {
+		hasProperty, err := circleCISchemaHasTypedProperty(contract, branch, property, wantType, seen)
+		if err != nil {
+			return false, err
+		}
+		if hasProperty {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
+func circleCIIsSuccessResponseStatus(statusCode string) bool {
+	return len(statusCode) == 3 && statusCode[0] == '2'
 }
 
 func requireCircleCICellState(sourceID string, cells map[string]circleCIMatrixCell, lane, state string) error {
@@ -972,6 +1607,26 @@ func validateCircleCICitation(lock circleCISourceLock, source circleCISourceOper
 		return fmt.Errorf("citation = %q at %q, want %q at %q", citation.SourceURL, citation.Location, lock.REST.SourceURL, source.SourceLocation)
 	}
 	return nil
+}
+
+func findCircleCISourceOperation(t *testing.T, lock circleCISourceLock, sourceID string) circleCISourceOperation {
+	t.Helper()
+	for _, source := range lock.REST.Operations {
+		if source.ID == sourceID {
+			return source
+		}
+	}
+	t.Fatalf("source operation %s not found", sourceID)
+	return circleCISourceOperation{}
+}
+
+func marshalCircleCIOperationDocument(t *testing.T, document circleCIOperationDocument) json.RawMessage {
+	t.Helper()
+	raw, err := json.Marshal(document)
+	if err != nil {
+		t.Fatalf("marshal operation document: %v", err)
+	}
+	return raw
 }
 
 func findCircleCIMatrixOperation(t *testing.T, matrix *circleCISourceLaneMatrix, sourceID string) *circleCIMatrixOperation {
