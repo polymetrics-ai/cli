@@ -14,6 +14,9 @@ const (
 	bitbucketSourceLaneMatrixPath = "sources/bitbucket-source-lane-matrix.json"
 	bitbucketSourceLockPath       = "sources/bitbucket-operation-source-lock.json"
 	bitbucketCrosswalkPath        = "sources/bitbucket-operation-crosswalk.json"
+	bitbucketDirectReadPolicy     = "Provider-summary bounded-read action semantics classify direct-read candidates; HTTP method and source ID are retained facts, not lane selectors."
+	bitbucketWriteReversePolicy   = "Provider-summary mutation action semantics classify direct-write and reverse-ETL candidates independently; HTTP method and source ID are retained facts, not lane selectors."
+	bitbucketETLPolicy            = "Only a successful response schema resolved from the retained source contract with string next and array values declares continuation; request page or cursor controls are source evidence, while schema names and HTTP method are not selectors."
 )
 
 var bitbucketSourceLaneNames = []string{
@@ -67,13 +70,23 @@ var bitbucketWebhookCatalogIDs = map[string]struct{}{
 }
 
 type bitbucketSourceLaneMatrix struct {
-	SchemaVersion                int                                   `json:"schema_version"`
-	Connector                    string                                `json:"connector"`
-	Lanes                        []string                              `json:"lanes"`
-	SourceLock                   bitbucketSourceLaneMatrixSourceLock   `json:"source_lock"`
-	SourceBoundaryReconciliation bitbucketSourceBoundaryReconciliation `json:"source_boundary_reconciliation"`
-	SourceOperations             []bitbucketSourceLaneMatrixRow        `json:"source_operations"`
-	Summary                      bitbucketSourceLaneMatrixSummary      `json:"summary"`
+	SchemaVersion                int                                    `json:"schema_version"`
+	Connector                    string                                 `json:"connector"`
+	Lanes                        []string                               `json:"lanes"`
+	SourceLock                   bitbucketSourceLaneMatrixSourceLock    `json:"source_lock"`
+	MappingPolicy                bitbucketSourceLaneMatrixMappingPolicy `json:"mapping_policy"`
+	SourceBoundaryReconciliation bitbucketSourceBoundaryReconciliation  `json:"source_boundary_reconciliation"`
+	SourceOperations             []bitbucketSourceLaneMatrixRow         `json:"source_operations"`
+	Summary                      bitbucketSourceLaneMatrixSummary       `json:"summary"`
+}
+
+type bitbucketSourceLaneMatrixMappingPolicy struct {
+	SourceAuthority          string `json:"source_authority"`
+	DirectRead               string `json:"direct_read"`
+	DirectWriteAndReverseETL string `json:"direct_write_and_reverse_etl"`
+	Binary                   string `json:"binary"`
+	ETL                      string `json:"etl"`
+	SyncTransport            string `json:"sync_transport"`
 }
 
 type bitbucketSourceLaneMatrixSourceLock struct {
@@ -268,6 +281,38 @@ func TestBitbucketSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.
 			t.Fatalf("crosswalk-boundary validation error = %v, want crosswalk-only identities", err)
 		}
 	})
+
+	for _, test := range []struct {
+		name   string
+		mutate func(*bitbucketSourceLaneMatrix)
+	}{
+		{
+			name: "HTTP method direct-read selector",
+			mutate: func(matrix *bitbucketSourceLaneMatrix) {
+				matrix.MappingPolicy.DirectRead = "GET operations are direct-read candidates."
+			},
+		},
+		{
+			name: "HTTP method write selector",
+			mutate: func(matrix *bitbucketSourceLaneMatrix) {
+				matrix.MappingPolicy.DirectWriteAndReverseETL = "DELETE, PUT, and POST operations are direct-write and reverse-ETL candidates."
+			},
+		},
+		{
+			name: "schema-name ETL selector",
+			mutate: func(matrix *bitbucketSourceLaneMatrix) {
+				matrix.MappingPolicy.ETL = "Successful GET responses with paginated_ schema names are ETL candidates."
+			},
+		},
+	} {
+		t.Run("rejects "+test.name+" policy drift", func(t *testing.T) {
+			broken := cloneBitbucketSourceLaneMatrix(matrix)
+			test.mutate(&broken)
+			if err := validateBitbucketSourceLaneMatrix(broken, lock, crosswalk); err == nil || !strings.Contains(err.Error(), "mapping policy") {
+				t.Fatalf("mapping-policy validation error = %v, want mapping policy", err)
+			}
+		})
+	}
 }
 
 func TestBitbucketSourceLaneMatrixSemanticSourceRules(t *testing.T) {
@@ -448,6 +493,9 @@ func validateBitbucketSourceLaneMatrix(matrix bitbucketSourceLaneMatrix, lock bi
 	if err := validateBitbucketMatrixLockBinding(matrix.SourceLock, lock); err != nil {
 		return err
 	}
+	if err := validateBitbucketMappingPolicy(matrix.MappingPolicy); err != nil {
+		return err
+	}
 
 	locked := make(map[string]bitbucketLockedSourceOperation, len(lock.REST.Operations))
 	lockedMethodPaths := make(map[string]struct{}, len(lock.REST.Operations))
@@ -520,6 +568,18 @@ func validateBitbucketMatrixLockBinding(binding bitbucketSourceLaneMatrixSourceL
 	}
 	if binding.SourceDocument.SourceURL != lock.REST.SourceURL || binding.SourceDocument.SHA256 != lock.REST.SHA256 || binding.SourceDocument.Bytes != lock.REST.Bytes || binding.SourceDocument.OperationCount != lock.Counts.Total {
 		return fmt.Errorf("source lock document binding drift")
+	}
+	return nil
+}
+
+func validateBitbucketMappingPolicy(policy bitbucketSourceLaneMatrixMappingPolicy) error {
+	if strings.TrimSpace(policy.SourceAuthority) == "" || strings.TrimSpace(policy.Binary) == "" || strings.TrimSpace(policy.SyncTransport) == "" {
+		return fmt.Errorf("mapping policy lacks retained source facts")
+	}
+	if policy.DirectRead != bitbucketDirectReadPolicy ||
+		policy.DirectWriteAndReverseETL != bitbucketWriteReversePolicy ||
+		policy.ETL != bitbucketETLPolicy {
+		return fmt.Errorf("mapping policy does not match source-semantic lane rules")
 	}
 	return nil
 }

@@ -19,10 +19,10 @@
   },
   "mapping_policy": {
     "source_authority": "Only sources/bitbucket-operation-source-lock.json supplies provider facts for this matrix.",
-    "direct_read": "GET operations plus the two retained POST operations whose locked summaries explicitly document list reads.",
-    "direct_write_and_reverse_etl": "DELETE and PUT operations plus retained POST operations not classified as documented list reads.",
+    "direct_read": "Provider-summary bounded-read action semantics classify direct-read candidates; HTTP method and source ID are retained facts, not lane selectors.",
+    "direct_write_and_reverse_etl": "Provider-summary mutation action semantics classify direct-write and reverse-ETL candidates independently; HTTP method and source ID are retained facts, not lane selectors.",
     "binary": "Only retained source IDs with the cited locked binary signal are candidates.",
-    "etl": "Only successful responses whose locked schema references include #/components/schemas/paginated_.",
+    "etl": "Only a successful response schema resolved from the retained source contract with string next and array values declares continuation; request page or cursor controls are source evidence, while schema names and HTTP method are not selectors.",
     "sync_transport": "Only the four retained webhook-subscription source IDs are candidates; all remain missing_foundation pending inbound receiver capability."
   },
   "source_lock": {

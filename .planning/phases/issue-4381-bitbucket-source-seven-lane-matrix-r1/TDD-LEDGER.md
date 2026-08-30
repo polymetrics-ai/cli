@@ -18,3 +18,11 @@ The negative cases are deliberate validation failures asserted by the focused un
 | Green | The validator resolves successful-response schema refs against the immutable source contract and requires string `next` plus array `values`; it classifies direct read and mutations from the provider-summary action, then the matrix backs every applicable cell to that exact action/summary. | passed locally |
 | Edge | A real POST list read remains a direct read, a real create remains a mutation, a real noncontinuable list remains non-ETL, a synthetic `values`-only response is non-ETL, and an ETL candidate remains non-sync absent webhook evidence. | passed locally |
 | Refactor | Removed fixed POST-operation and `paginated_` selectors. The classifier is bounded and deterministic; an unknown provider-summary action fails validation rather than silently changing lane membership. | passed locally |
+
+## Mapping-policy contract repair — 2026-08-31
+
+| Stage | Intended evidence | Status |
+| --- | --- | --- |
+| Red | The matrix decoder began validating its `mapping_policy`; the existing method/schema-name wording failed `TestBitbucketSourceLaneMatrixRetainsEveryLockedOperationAndLane` with `mapping policy does not match source-semantic lane rules`. | observed |
+| Green | Policy text now names provider-summary action semantics for direct/read-versus-mutation decisions and retained-source structural `next` + `values` continuation for ETL. No lane cell, count, source lock, or runtime claim changed. | passed locally |
+| Edge | Table-driven mutations of each direct-read, write/reverse-ETL, and ETL policy field fail with a named mapping-policy error. | passed locally |

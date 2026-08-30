@@ -28,3 +28,10 @@ No credentialed provider check, reverse-ETL execution, generator write mode, sha
 - [x] `GOFLAGS='-p=3' go test -timeout 30m ./...` — started as an additional broad check, remained CPU-active in unrelated `connectorgen`, application, CLI, and boundary packages after 20 minutes, then was deliberately interrupted to release the shared machine. This is neither a Bitbucket failure nor a substitute for the passed complete Bitbucket package test; it remains a follow-up CI check rather than a scoped merge blocker.
 
 No credential, provider request, generator write mode, reverse-ETL execution, runtime/transport/certification change, PR creation, or merge occurred in this repair.
+
+## Mapping-policy contract repair — 2026-08-31
+
+- [x] Red: `go test -timeout 20m ./internal/connectors/defs/bitbucket -run '^TestBitbucketSourceLaneMatrixRetainsEveryLockedOperationAndLane$' -count=1` failed against the stale policy with `mapping policy does not match source-semantic lane rules`.
+- [x] Green: focused matrix tests and race variant passed after changing only the three policy fields and decoder/validator assertion.
+- [x] `go vet ./internal/connectors/defs/bitbucket`, `jq empty internal/connectors/defs/bitbucket/sources/bitbucket-source-lane-matrix.json`, and `git diff --check` passed.
+- [x] Preservation: matrix source-operation rows, lane cells, counts, source lock binding, crosswalk reconciliation, binary facts, webhook facts, and runtime/certification claims were not changed.

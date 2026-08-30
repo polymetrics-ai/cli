@@ -96,6 +96,7 @@ Required skills loaded for the focused Go validator: `golang-how-to`, `golang-er
 - Atlas consulted: `source.retention-import.v1` and `source.projection-admission.v1` are **reuse** context only; `runtime.direct-execution.v1`, `warehouse.stage-etl.v1`, and `warehouse.reverse-etl.v1` are not selected or claimed executable by Track A.
 - `transport.sync-contract.v1` remains **actual gap** context for the four existing Bitbucket webhook subscription cells. Pagination never implies sync transport and this repair does not change those cells.
 - No new Foundation Atlas entry, source lock, crosswalk, runtime engine, transport, certification, or generated artifact may change in this slice.
+- The matrix-level `mapping_policy` is an executable contract: its direct-read, direct-write/reverse-ETL, and ETL text must match these semantic/structural selectors, and connector-local tests reject stale method or schema-name wording.
 
 ### Red–Green–Refactor execution
 
