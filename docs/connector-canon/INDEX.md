@@ -9,15 +9,18 @@ this index or a later captain ruling, the current canon wins.
 
 ## Read in this order
 
-1. [Implementation procedure](IMPLEMENTATION-PROCEDURE.md) — the required
+1. [Connector terminology and lane contract](connector-terminology.md) — the
+   single owner of connector vocabulary, the seven lanes, source-to-mapping
+   boundaries, completion states, and no-miss rules.
+2. [Implementation procedure](IMPLEMENTATION-PROCEDURE.md) — the required
    end-to-end path and its Foundation Check.
-2. [Remote reproducibility](REMOTE-REPRODUCIBILITY.md) — what a clean machine
+3. [Remote reproducibility](REMOTE-REPRODUCIBILITY.md) — what a clean machine
    can prove without provider access, and what it cannot.
-3. [Operation evidence](OPERATION-EVIDENCE.md) — generated source-operation
+4. [Operation evidence](OPERATION-EVIDENCE.md) — generated source-operation
    accounting and the fixed-100 executable regression gate.
-4. [Source-declaration admission](DECLARATION-ADMISSION.md) — the distinct,
+5. [Source-declaration admission](DECLARATION-ADMISSION.md) — the distinct,
    provider-I/O-free completeness certificate for cited declaration rows.
-5. The mechanical authoring references:
+6. The mechanical authoring references:
    [migration conventions](../migration/conventions.md),
    [architecture v2 design](../architecture/connector-architecture-v2-design.md),
    and [`AGENTS.md`](../../AGENTS.md).
