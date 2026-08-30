@@ -665,11 +665,12 @@ DESCRIPTION
 
 DECLARATIVE TYPED DESTINATION ACTION
   --destination-action persists one exact eligible writes.json action for a
-  declarative_typed_destination stream. It is accepted only for that closed
-  destination adapter and is validated against the destination descriptor,
-  source binding, mode, acknowledgement, and evidence before catalog or
-  provider I/O. It is not an ETL run flag: a plan and run resolve only this
-  saved identity, so an invocation cannot substitute another action.
+  declarative_typed_destination or declarative_single_attempt_destination
+  stream. It is accepted only for that closed destination adapter and is
+  validated against the destination descriptor, source binding, mode,
+  acknowledgement, and evidence before catalog or provider I/O. It is not an
+  ETL run flag: a plan and run resolve only this saved identity, so an
+  invocation cannot substitute another action.
 
 TARGET COPY CAPACITY
   --target-copy-workers records the bounded target connection capacity for an
@@ -903,9 +904,10 @@ CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
 
 DECLARATIVE TYPED DESTINATION TRANSPORT
   declarative-typed-destination runs only a sync_transport.json destination
-  that declares the exact declarative_typed_destination adapter. The saved
-  stream's destination_action selects one named, eligible writes.json action.
-  This is necessary when one connector exposes multiple
+  that declares declarative_typed_destination (retry-safe) or
+  declarative_single_attempt_destination (one request with no automatic
+  replay). The saved stream's destination_action selects one named, eligible
+  writes.json action. This is necessary when one connector exposes multiple
   record-driven destination actions for the same sync mode; no action is
   inferred from declaration order.
 

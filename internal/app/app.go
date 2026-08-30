@@ -1138,10 +1138,10 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 			return Connection{}, modeErr
 		}
 		destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
-		if stream.DestinationAction != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+		if stream.DestinationAction != "" && (!declared || !isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor)) {
 			return Connection{}, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", name, destination.Name())
 		}
-		if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
+		if declared && isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor) {
 			if a.transports == nil {
 				return Connection{}, fmt.Errorf("declarative typed destination transport registry is unavailable")
 			}
@@ -1489,10 +1489,10 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return a.failRun(runID, err)
 	}
 	destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
-	if stream.DestinationAction != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+	if stream.DestinationAction != "" && (!declared || !isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor)) {
 		return a.failRun(runID, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", req.Stream, destination.Name()))
 	}
-	if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
+	if declared && isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor) {
 		if a.transports == nil {
 			return a.failRun(runID, fmt.Errorf("declarative typed destination transport registry is unavailable"))
 		}

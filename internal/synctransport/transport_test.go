@@ -900,6 +900,9 @@ func TestTransportPreflight_EnforcesDeliveryGuaranteeCompatibility(t *testing.T)
 		{name: "replayable destination idempotency", mode: synccontract.ModeIncrementalUpsert, strategy: connectors.ApplyStrategyMerge, mutate: func(pair *testTransportPair) {
 			pair.destination.descriptor.Destination.Delivery.Idempotency = connectors.DeliveryIdempotencyAtLeastOnce
 		}},
+		{name: "single-attempt destination outside full append", mode: synccontract.ModeIncrementalUpsert, strategy: connectors.ApplyStrategyMerge, mutate: func(pair *testTransportPair) {
+			pair.destination.descriptor.Destination.Delivery.Idempotency = connectors.DeliveryIdempotencySingleAttempt
+		}},
 		{name: "dedupe ordering", mode: synccontract.ModeIncrementalDedupe, strategy: connectors.ApplyStrategyDedupe, mutate: func(pair *testTransportPair) {
 			pair.destination.descriptor.Destination.Delivery.Ordering = connectors.DeliveryOrderingUnordered
 		}},
@@ -921,6 +924,26 @@ func TestTransportPreflight_EnforcesDeliveryGuaranteeCompatibility(t *testing.T)
 				t.Fatal("incompatible declared delivery guarantees passed preflight")
 			}
 		})
+	}
+}
+
+func TestTransportPreflight_AdmitsSingleAttemptOnlyForFullAppend(t *testing.T) {
+	pair := newTestTransportPair("api", "api")
+	pair.source.descriptor.Source.Modes = []synccontract.Mode{synccontract.ModeFullAppend}
+	pair.destination.descriptor.Destination.Modes = []synccontract.Mode{synccontract.ModeFullAppend}
+	pair.destination.descriptor.Destination.EligibleActions = []string{"apply"}
+	pair.destination.descriptor.Destination.ApplyStrategies = []connectors.DestinationApplyStrategy{{
+		Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply",
+	}}
+	pair.destination.descriptor.Destination.Delivery.Idempotency = connectors.DeliveryIdempotencySingleAttempt
+
+	registry := NewRegistry(pair.verifier)
+	registerTransportPair(t, registry, pair)
+	if _, err := registry.Preflight(PreflightRequest{
+		Source: pair.source, Destination: pair.destination, Stream: "records",
+		Mode: synccontract.ModeFullAppend, DestinationAction: "apply",
+	}); err != nil {
+		t.Fatalf("single-attempt full-append preflight: %v", err)
 	}
 }
 

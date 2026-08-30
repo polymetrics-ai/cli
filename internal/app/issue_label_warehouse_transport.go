@@ -20,17 +20,18 @@ import (
 )
 
 const (
-	declarativeStreamSourceExecutorID          = "declarative_stream_source"
-	declarativeTypedDestinationExecutorID      = "declarative_typed_destination"
-	issueLabelDestinationExecutorID            = "issue_label_destination"
-	issueLabelTransportSourceIssueConfig       = "transport_source_issue_number"
-	issueLabelTransportTargetIssueConfig       = "transport_target_issue_number"
-	issueLabelTransportLabelConfig             = "transport_label"
-	issueLabelTransportSetReplaceConsentConfig = "transport_allow_set_replace"
-	issueLabelTransportKeyedConsentConfig      = "transport_allow_keyed"
-	issueLabelTransportMaxReadPages            = 1
-	issueCollectionTransportMaxRecords         = 1000
-	declarativeTransportMaxPagesConfig         = "max_pages"
+	declarativeStreamSourceExecutorID             = "declarative_stream_source"
+	declarativeTypedDestinationExecutorID         = "declarative_typed_destination"
+	declarativeSingleAttemptDestinationExecutorID = "declarative_single_attempt_destination"
+	issueLabelDestinationExecutorID               = "issue_label_destination"
+	issueLabelTransportSourceIssueConfig          = "transport_source_issue_number"
+	issueLabelTransportTargetIssueConfig          = "transport_target_issue_number"
+	issueLabelTransportLabelConfig                = "transport_label"
+	issueLabelTransportSetReplaceConsentConfig    = "transport_allow_set_replace"
+	issueLabelTransportKeyedConsentConfig         = "transport_allow_keyed"
+	issueLabelTransportMaxReadPages               = 1
+	issueCollectionTransportMaxRecords            = 1000
+	declarativeTransportMaxPagesConfig            = "max_pages"
 )
 
 var (
@@ -41,6 +42,10 @@ var (
 	declarativeTypedDestinationReference = connectors.TransportExecutorReference{
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     declarativeTypedDestinationExecutorID,
+	}
+	declarativeSingleAttemptDestinationReference = connectors.TransportExecutorReference{
+		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
+		ID:     declarativeSingleAttemptDestinationExecutorID,
 	}
 	issueLabelDestinationReference = connectors.TransportExecutorReference{
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
@@ -73,6 +78,15 @@ var declarativeDestinationAdapters = []struct {
 				return nil, err
 			}
 			return &declarativeTypedDestinationExecutor{}, nil
+		},
+	},
+	{
+		reference: declarativeSingleAttemptDestinationReference,
+		build: func(_ *App, connector connectors.Connector) (synctransport.DestinationExecutor, error) {
+			if _, err := declarativeSingleAttemptDestinationContractFor(connector); err != nil {
+				return nil, err
+			}
+			return &declarativeSingleAttemptDestinationExecutor{}, nil
 		},
 	},
 }
@@ -1182,12 +1196,65 @@ func (c declarativeTypedDestinationContract) idempotencyHeader(action string) (s
 // eligibility; this adds the exact writes.json record-property proof for the
 // selected action without accepting a caller-provided request shape.
 func validateDeclarativeTypedDestinationSelection(source, destination connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy) error {
-	contract, err := declarativeTypedDestinationContractFor(destination)
-	if err != nil {
-		return err
+	descriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
+	if !declared {
+		return fmt.Errorf("destination connector %q has no declarative destination declaration", destination.Name())
 	}
-	_, err = contract.plan(source, stream, mode, strategy)
-	return err
+	switch descriptor.Executor {
+	case declarativeTypedDestinationReference:
+		contract, err := declarativeTypedDestinationContractFor(destination)
+		if err != nil {
+			return err
+		}
+		_, err = contract.plan(source, stream, mode, strategy)
+		return err
+	case declarativeSingleAttemptDestinationReference:
+		contract, err := declarativeSingleAttemptDestinationContractFor(destination)
+		if err != nil {
+			return err
+		}
+		_, err = contract.plan(source, stream, mode, strategy)
+		return err
+	default:
+		return fmt.Errorf("destination connector %q does not select a declarative definition-owned destination", destination.Name())
+	}
+}
+
+func isDeclarativeDefinitionOwnedDestination(reference connectors.TransportExecutorReference) bool {
+	return reference == declarativeTypedDestinationReference || reference == declarativeSingleAttemptDestinationReference
+}
+
+func isDeclarativeSingleAttemptDestination(reference connectors.TransportExecutorReference) bool {
+	return reference == declarativeSingleAttemptDestinationReference
+}
+
+func declarativeDefinitionOwnedDestinationEffectiveBatchSize(source, destination connectors.Connector, stream string, mode synccontract.Mode, strategy connectors.DestinationApplyStrategy, requested int) (int, error) {
+	descriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
+	if !declared {
+		return 0, fmt.Errorf("destination connector %q has no declarative destination declaration", destination.Name())
+	}
+	switch descriptor.Executor {
+	case declarativeTypedDestinationReference:
+		return declarativeTypedDestinationEffectiveBatchSize(source, destination, stream, mode, strategy, requested)
+	case declarativeSingleAttemptDestinationReference:
+		if requested < 1 {
+			return 0, fmt.Errorf("declarative single-attempt requested batch size must be positive")
+		}
+		contract, err := declarativeSingleAttemptDestinationContractFor(destination)
+		if err != nil {
+			return 0, err
+		}
+		binding, err := contract.plan(source, stream, mode, strategy)
+		if err != nil {
+			return 0, err
+		}
+		if binding.Batch.MaxRecords < requested {
+			return binding.Batch.MaxRecords, nil
+		}
+		return requested, nil
+	default:
+		return 0, fmt.Errorf("destination connector %q does not select a declarative definition-owned destination", destination.Name())
+	}
 }
 
 // declarativeTypedDestinationEffectiveBatchSize clamps the source page to the

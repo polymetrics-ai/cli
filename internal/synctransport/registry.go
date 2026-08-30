@@ -268,6 +268,12 @@ func validateDeliveryCompatibility(mode synccontract.Mode, strategy connectors.A
 	if source.Idempotency == connectors.DeliveryIdempotencyNone {
 		return fmt.Errorf("transport sync mode %q cannot replay a source declaring no idempotency", mode)
 	}
+	if destination.Idempotency == connectors.DeliveryIdempotencySingleAttempt {
+		if mode != synccontract.ModeFullAppend || strategy != connectors.ApplyStrategyAppend {
+			return fmt.Errorf("transport sync mode %q requires keyed destination idempotency; single_attempt supports only full_append", mode)
+		}
+		return nil
+	}
 	if destination.Idempotency != connectors.DeliveryIdempotencyKeyed {
 		return fmt.Errorf("transport sync mode %q requires keyed destination idempotency", mode)
 	}

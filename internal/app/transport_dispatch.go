@@ -287,8 +287,8 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 	_, requiresManagedTargetApproval := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
 	_, requiresDefinitionOwnedApproval := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination)
-	if requiresDefinitionOwnedApproval && resolved.Destination.TransportExecutorReference() == declarativeTypedDestinationReference {
-		batchSize, err = declarativeTypedDestinationEffectiveBatchSize(source, destination, streamName, mode.ContractMode, resolved.ApplyStrategy, batchSize)
+	if requiresDefinitionOwnedApproval && isDeclarativeDefinitionOwnedDestination(resolved.Destination.TransportExecutorReference()) {
+		batchSize, err = declarativeDefinitionOwnedDestinationEffectiveBatchSize(source, destination, streamName, mode.ContractMode, resolved.ApplyStrategy, batchSize)
 		if err != nil {
 			return emptyResult, err
 		}
@@ -526,6 +526,11 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, transportRequest)
 	if err != nil {
 		err = sanitizeRuntimeError(err, sourceRuntime, destRuntime)
+		if requiresDefinitionOwnedApproval && isDeclarativeSingleAttemptDestination(resolved.Destination.TransportExecutorReference()) {
+			if revokeErr := a.revokeDeclarativeSingleAttemptDestinationAuthorization(approval.PlanID); revokeErr != nil {
+				err = errors.Join(err, fmt.Errorf("revoke declarative single-attempt authorization after failed delivery: %w", revokeErr))
+			}
+		}
 	}
 	transportMeasurement := transportPhaseMeasurement(transportResult)
 	if persistedEmptyPublication != nil {

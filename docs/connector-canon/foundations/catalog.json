@@ -1418,7 +1418,7 @@
       "layer": "provider_extensions",
       "status": "available",
       "kind": "extension_seam",
-      "summary": "Provides bounded hook, native-connector, and definition-factory seams for provider-specific authentication, request, record, protocol, and transport behavior without cloning the generic engines.",
+      "summary": "Provides bounded hook, native-connector, and definition-factory seams for provider-specific authentication, request, record, protocol, and transport behavior without cloning the generic engines. Includes a definition-selected single_attempt destination seam: one declaration-bound request per record, automatic retries disabled, bounded response capture, and no provider replay or generic writer.",
       "owner": {
         "primary_package": "polymetrics.ai/internal/connectors/engine",
         "supporting_packages": [
@@ -1430,6 +1430,7 @@
           "internal/connectors/engine/hooks.go",
           "internal/connectors/hooks/hookset/hookset_gen.go",
           "internal/connectors/native/nativeset/nativeset_gen.go",
+          "internal/app/declarative_single_attempt_destination.go",
           "internal/synctransport/definition_composition.go"
         ],
         "symbols": [
@@ -1448,6 +1449,10 @@
           {
             "file": "internal/connectors/engine/hooks.go",
             "name": "PreparedWriteHook"
+          },
+          {
+            "file": "internal/app/declarative_single_attempt_destination.go",
+            "name": "declarativeSingleAttemptDestinationContractFor"
           },
           {
             "file": "internal/synctransport/definition_composition.go",
@@ -1566,7 +1571,7 @@
       "layer": "sync_contract_transport",
       "status": "available",
       "kind": "generic",
-      "summary": "Defines the closed sync-mode, checkpoint, tombstone, delivery, and executor-reference contracts and orchestrates definition-selected sources through a durable warehouse stage into definition-selected destinations.",
+      "summary": "Defines the closed sync-mode, checkpoint, tombstone, delivery, and executor-reference contracts and orchestrates definition-selected sources through a durable warehouse stage into definition-selected destinations. single_attempt is a constrained full_append/append delivery class: declaration-bound input fields, one request per record, automatic retries disabled, response-captured durable acknowledgement, and no automatic replay; retry_safe remains a separate keyed/read-back class.",
       "owner": {
         "primary_package": "polymetrics.ai/internal/synctransport",
         "supporting_packages": [
@@ -1576,6 +1581,7 @@
         ],
         "files": [
           "internal/app/transport_composition.go",
+          "internal/app/declarative_single_attempt_destination.go",
           "internal/connectors/sync_transport.go",
           "internal/synccontract/commit.go",
           "internal/synccontract/mode.go",
@@ -1598,6 +1604,10 @@
           {
             "file": "internal/connectors/sync_transport.go",
             "name": "SyncTransportDescriptor"
+          },
+          {
+            "file": "internal/app/declarative_single_attempt_destination.go",
+            "name": "declarativeSingleAttemptDestinationExecutor"
           },
           {
             "file": "internal/synctransport/definition_composition.go",

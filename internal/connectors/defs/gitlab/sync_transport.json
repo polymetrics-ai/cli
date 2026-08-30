@@ -16,5 +16,50 @@
       "suite": "declarative_stream_transport",
       "run_id": "all_executable_streams_v1"
     }
+  },
+  "destination_transport": {
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_single_attempt_destination"
+    },
+    "eligible_actions": ["source_write_44454c455445202f67726f7570732f7b69647d"],
+    "modes": ["full_append"],
+    "delivery": {
+      "idempotency": "single_attempt",
+      "ordering": "unordered",
+      "deletes": "not_available"
+    },
+    "conformance": {
+      "suite": "gitlab_single_attempt_destination",
+      "run_id": "local_fake_server_v1"
+    },
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {
+        "mode": "full_append",
+        "strategy": "append",
+        "action": "source_write_44454c455445202f67726f7570732f7b69647d"
+      }
+    ],
+    "source_bindings": [
+      {
+        "action": "source_write_44454c455445202f67726f7570732f7b69647d",
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "eligible_streams": ["groups"],
+        "batch": {
+          "disposition": "per_record",
+          "max_records": 1
+        },
+        "record_mapping": {
+          "kind": "input_fields",
+          "inputs": [
+            {"input": "id", "field": "path"}
+          ]
+        }
+      }
+    ]
   }
 }

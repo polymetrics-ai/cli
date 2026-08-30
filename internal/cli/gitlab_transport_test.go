@@ -14,11 +14,13 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/synctransport"
 )
 
 // TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB is a local
@@ -121,21 +123,176 @@ func TestGitLabSourceTransportFixtureStopsOnDeclaredNonSuccess(t *testing.T) {
 	}
 }
 
+// TestGitLabManagedDestinationDuckDBLifecycle is the fake-server contract for
+// GitLab's declaration-owned single-attempt destination. It first materializes
+// one group through the real DuckDB stage, then verifies the closed
+// plan/preview/approval route emits exactly one destination request. Before
+// this contract was admitted, CreateConnection refused GitLab as a destination
+// before either source or target request reached the double; the retained error
+// branch makes that regression explicit. No test adapter is installed and no
+// production admission path is bypassed.
+func TestGitLabManagedDestinationDuckDBLifecycle(t *testing.T) {
+	for _, testCase := range []struct {
+		name           string
+		deleteStatus   int
+		ambiguousWrite bool
+		wantSuccess    bool
+	}{
+		{name: "acknowledged 202 checkpoints one DuckDB record", deleteStatus: http.StatusAccepted, wantSuccess: true},
+		{name: "provider 4xx has no automatic retry", deleteStatus: http.StatusBadRequest},
+		{name: "provider 5xx has no automatic retry", deleteStatus: http.StatusInternalServerError},
+		{name: "timeout ambiguity has no automatic replay", ambiguousWrite: true},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			fixture := newGitLabTransportFixture(t, false)
+			fixture.setSourceGroups([]gitLabTransportGroup{{ID: 1, Path: "group-one"}})
+			fixture.deleteStatus = testCase.deleteStatus
+			fixture.blockDeleteUntilCancelled = testCase.ambiguousWrite
+			root := fixture.setupProject(t)
+
+			// Materialize the provider row first. The managed route below must
+			// independently stage its selected source page through the same
+			// DuckDB boundary before it can address GitLab as a destination.
+			runCLI(t, []string{
+				"etl", "run", "--connection", "gitlab_groups_to_warehouse", "--stream", fixture.stream,
+				"--root", root, "--json",
+			})
+			fixture.assertSourceReads(t, 1)
+			fixture.assertDeletes(t, nil)
+			fixture.clearCapturedRequests()
+
+			application, err := app.Open(root)
+			if err != nil {
+				t.Fatalf("open GitLab DuckDB project: %v", err)
+			}
+			connection, err := application.CreateConnection(context.Background(), app.CreateConnectionRequest{
+				Name:        "gitlab_groups_to_gitlab",
+				Source:      app.EndpointConfig{Connector: "gitlab", Credential: "gitlab-local"},
+				Destination: app.EndpointConfig{Connector: "gitlab", Credential: "gitlab-local"},
+				Streams: map[string]app.StreamConfig{fixture.stream: {
+					SyncMode: "full_append", DestinationAction: fixture.deleteAction,
+				}},
+			})
+			if err != nil {
+				fixture.assertNoCapturedRequests(t)
+				if !strings.Contains(err.Error(), "not a declarative typed destination") {
+					t.Fatalf("GitLab managed destination preflight = %v, want the current closed destination-admission refusal before HTTP", err)
+				}
+				t.Fatalf("RED: GitLab managed destination is refused before plan/preview/approval and before HTTP (0 captured requests): %v; add only a source-backed production destination contract before making this lifecycle green", err)
+			}
+
+			plan, err := application.PlanDeclarativeTypedDestinationTransport(context.Background(), connection.Name, fixture.stream)
+			if err != nil {
+				t.Fatalf("plan GitLab managed destination: %v", err)
+			}
+			previewed, _, err := application.PreviewDeclarativeTypedDestinationTransport(context.Background(), plan.ID)
+			if err != nil {
+				t.Fatalf("preview GitLab managed destination: %v", err)
+			}
+
+			runContext := context.Background()
+			cancel := func() {}
+			if testCase.ambiguousWrite {
+				runContext, cancel = context.WithCancel(context.Background())
+			}
+			defer cancel()
+			type runResult struct {
+				run app.Run
+				err error
+			}
+			completed := make(chan runResult, 1)
+			go func() {
+				run, runErr := application.RunETL(runContext, app.RunETLRequest{
+					Connection: connection.Name,
+					Stream:     fixture.stream,
+					BatchSize:  1,
+					DestinationApproval: synctransport.DestinationApproval{
+						PlanID: plan.ID, ApprovalToken: previewed.ApprovalToken,
+						Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+					},
+				})
+				completed <- runResult{run: run, err: runErr}
+			}()
+			if testCase.ambiguousWrite {
+				select {
+				case <-fixture.deleteStarted:
+					cancel()
+				case <-time.After(2 * time.Second):
+					t.Fatal("GitLab timeout fixture never observed its one destination request")
+				}
+			}
+			result := <-completed
+
+			fixture.assertSourceReads(t, 1)
+			fixture.assertDeleteRequests(t, []gitLabTransportRequest{{Method: fixture.deleteMethod, Path: "/groups/group-one", Body: ""}})
+			if testCase.wantSuccess {
+				if result.err != nil {
+					t.Fatalf("acknowledged GitLab managed destination run: %v", result.err)
+				}
+				if result.run.Status != "completed" || result.run.RecordsRead != 1 || result.run.RecordsLoaded != 1 || len(result.run.Checkpoint) == 0 {
+					t.Fatalf("acknowledged GitLab managed destination run = %#v, want one staged/applied record and an acknowledged checkpoint", result.run)
+				}
+				return
+			}
+			if result.err == nil {
+				t.Fatalf("GitLab destination %q unexpectedly completed after one terminal/ambiguous request: %#v", testCase.name, result.run)
+			}
+			if len(result.run.Checkpoint) != 0 {
+				t.Fatalf("GitLab destination %q checkpoint = %#v, want no advancement after terminal or ambiguous delivery", testCase.name, result.run.Checkpoint)
+			}
+
+			// The consumed single-attempt authorization is revoked after any
+			// failed destination delivery. A later scheduler/user retry of the
+			// same saved plan must stop before a source or GitLab request; another
+			// provider attempt requires a new plan and approval.
+			fixture.clearCapturedRequests()
+			_, retryErr := application.RunETL(context.Background(), app.RunETLRequest{
+				Connection: connection.Name,
+				Stream:     fixture.stream,
+				BatchSize:  1,
+				DestinationApproval: synctransport.DestinationApproval{
+					PlanID: plan.ID, Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive},
+				},
+			})
+			if retryErr == nil || !strings.Contains(retryErr.Error(), "revoked") {
+				t.Fatalf("GitLab destination %q replay error = %v, want revoked single-attempt authorization before I/O", testCase.name, retryErr)
+			}
+			fixture.assertNoCapturedRequests(t)
+		})
+	}
+}
+
 type gitLabTransportFixture struct {
-	t                  *testing.T
-	stream             string
-	sourceOperation    string
-	sourceMethod       string
-	sourcePath         string
-	deleteAction       string
-	deleteMethod       string
-	deletePathTemplate string
-	token              string
-	badRead            bool
-	server             *httptest.Server
-	mu                 sync.Mutex
-	readPaths          []string
-	deletedGroupIDs    []string
+	t                         *testing.T
+	stream                    string
+	sourceOperation           string
+	sourceMethod              string
+	sourcePath                string
+	deleteAction              string
+	deleteMethod              string
+	deletePathTemplate        string
+	token                     string
+	badRead                   bool
+	sourcePages               [][]gitLabTransportGroup
+	deleteStatus              int
+	blockDeleteUntilCancelled bool
+	deleteStarted             chan struct{}
+	server                    *httptest.Server
+	mu                        sync.Mutex
+	readPaths                 []string
+	deletedGroupIDs           []string
+	deleteRequests            []gitLabTransportRequest
+}
+
+type gitLabTransportGroup struct {
+	ID   int    `json:"id"`
+	Path string `json:"path"`
+}
+
+type gitLabTransportRequest struct {
+	Method string
+	Path   string
+	Body   string
 }
 
 func newGitLabTransportFixture(t *testing.T, badRead bool) *gitLabTransportFixture {
@@ -151,7 +308,15 @@ func newGitLabTransportFixture(t *testing.T, badRead bool) *gitLabTransportFixtu
 		t.Fatal("GitLab enabled connector contract is absent")
 	}
 
-	fixture := &gitLabTransportFixture{t: t, stream: "groups", token: "gitlab-local-test-token", badRead: badRead}
+	fixture := &gitLabTransportFixture{
+		t: t, stream: "groups", token: "gitlab-local-test-token", badRead: badRead,
+		sourcePages: [][]gitLabTransportGroup{
+			{{ID: 1, Path: "group-one"}},
+			{{ID: 2, Path: "group-two"}},
+		},
+		deleteStatus:  http.StatusAccepted,
+		deleteStarted: make(chan struct{}, 1),
+	}
 	for _, lane := range bundle.EnabledContract.Lanes {
 		if lane.Name != "sync_transport" || lane.State != connectors.EnabledLaneImplemented || lane.Transport == nil {
 			continue
@@ -266,8 +431,12 @@ func (f *gitLabTransportFixture) serveSourcePage(w http.ResponseWriter, r *http.
 		f.failf("groups per_page = %q, want declared stream value 50", got)
 	}
 	page := r.URL.Query().Get("page")
-	if page != "" && page != "2" {
-		f.failf("groups page = %q, want source first page or cited next page 2", page)
+	pageIndex := 0
+	if page != "" {
+		if page != "2" {
+			f.failf("groups page = %q, want source first page or cited next page 2", page)
+		}
+		pageIndex = 1
 	}
 	f.mu.Lock()
 	f.readPaths = append(f.readPaths, r.URL.RequestURI())
@@ -279,12 +448,17 @@ func (f *gitLabTransportFixture) serveSourcePage(w http.ResponseWriter, r *http.
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	if page == "" {
-		w.Header().Set("Link", fmt.Sprintf("<http://%s%s?page=2&per_page=50>; rel=\"next\"", r.Host, f.sourcePath))
-		_, _ = w.Write([]byte(`[{"id":1,"path":"group-one"}]`))
+	if pageIndex >= len(f.sourcePages) {
+		f.failf("groups page index = %d, want a configured source fixture page", pageIndex)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
-	_, _ = w.Write([]byte(`[{"id":2,"path":"group-two"}]`))
+	if pageIndex+1 < len(f.sourcePages) {
+		w.Header().Set("Link", fmt.Sprintf("<http://%s%s?page=2&per_page=50>; rel=\"next\"", r.Host, f.sourcePath))
+	}
+	if err := json.NewEncoder(w).Encode(f.sourcePages[pageIndex]); err != nil {
+		f.failf("encode groups source fixture page: %v", err)
+	}
 }
 
 func (f *gitLabTransportFixture) serveDelete(w http.ResponseWriter, r *http.Request) {
@@ -301,8 +475,40 @@ func (f *gitLabTransportFixture) serveDelete(w http.ResponseWriter, r *http.Requ
 	}
 	f.mu.Lock()
 	f.deletedGroupIDs = append(f.deletedGroupIDs, groupID)
+	f.deleteRequests = append(f.deleteRequests, gitLabTransportRequest{Method: r.Method, Path: r.URL.Path, Body: string(raw)})
 	f.mu.Unlock()
-	w.WriteHeader(http.StatusAccepted)
+	if f.blockDeleteUntilCancelled {
+		select {
+		case f.deleteStarted <- struct{}{}:
+		default:
+		}
+		<-r.Context().Done()
+		return
+	}
+	w.WriteHeader(f.deleteStatus)
+}
+
+func (f *gitLabTransportFixture) setSourceGroups(groups []gitLabTransportGroup) {
+	f.sourcePages = [][]gitLabTransportGroup{append([]gitLabTransportGroup(nil), groups...)}
+}
+
+func (f *gitLabTransportFixture) clearCapturedRequests() {
+	f.mu.Lock()
+	f.readPaths = nil
+	f.deletedGroupIDs = nil
+	f.deleteRequests = nil
+	f.mu.Unlock()
+}
+
+func (f *gitLabTransportFixture) assertNoCapturedRequests(t *testing.T) {
+	t.Helper()
+	f.mu.Lock()
+	reads := append([]string(nil), f.readPaths...)
+	writes := append([]gitLabTransportRequest(nil), f.deleteRequests...)
+	f.mu.Unlock()
+	if len(reads) != 0 || len(writes) != 0 {
+		t.Fatalf("GitLab destination admission reached HTTP reads=%v writes=%v, want no provider request before preflight accepts", reads, writes)
+	}
 }
 
 func (f *gitLabTransportFixture) assertSourceReads(t *testing.T, want int) {
@@ -328,6 +534,21 @@ func (f *gitLabTransportFixture) assertDeletes(t *testing.T, want []string) {
 	sort.Strings(want)
 	if strings.Join(got, ",") != strings.Join(want, ",") {
 		t.Fatalf("GitLab delete group ids = %v, want %v", got, want)
+	}
+}
+
+func (f *gitLabTransportFixture) assertDeleteRequests(t *testing.T, want []gitLabTransportRequest) {
+	t.Helper()
+	f.mu.Lock()
+	got := append([]gitLabTransportRequest(nil), f.deleteRequests...)
+	f.mu.Unlock()
+	if len(got) != len(want) {
+		t.Fatalf("GitLab destination request count = %d (%#v), want %d (%#v)", len(got), got, len(want), want)
+	}
+	for index := range want {
+		if got[index] != want[index] {
+			t.Fatalf("GitLab destination request %d = %#v, want %#v", index, got[index], want[index])
+		}
 	}
 }
 

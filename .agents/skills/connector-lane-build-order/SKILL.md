@@ -337,6 +337,15 @@ failure. It is then explicitly **single-attempt**, not retry-safe. An ambiguous
 result must not be automatically replayed; recovery requires operator review or
 a source-backed reconciliation/read-back strategy.
 
+Use the closed `declarative_single_attempt_destination` adapter only when the
+destination descriptor declares `delivery.idempotency: "single_attempt"`, an
+exact `full_append`/`append` input-fields binding, bounded per-record delivery,
+and durable-warehouse acknowledgement. It must force retries off even when the
+underlying documented action is otherwise retryable, and it must remain distinct
+from `declarative_typed_destination`, whose retry-safe keyed/read-back contract
+is stricter. Do not broaden this adapter into a generic HTTP writer or provider
+replay path.
+
 Use `batchable: false` only when one warehouse row cannot deterministically map
 to one bounded request or the bulk runtime cannot execute that action. Do not
 use it merely because provider idempotency, a read-back endpoint, or scheduled

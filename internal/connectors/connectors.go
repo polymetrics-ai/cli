@@ -1017,6 +1017,10 @@ type WriteRequest struct {
 	Table     string
 	Action    string
 	Overwrite bool
+	// DisableRetries is an internal closed-transport execution policy. It can
+	// only further restrict an already declaration-owned write action; it
+	// never permits a caller-selected route, body, or retry policy.
+	DisableRetries bool
 	// DeliveryOccurrence is an internal, durable-workset identity supplied by
 	// checkpointed destinations. It is never a provider parameter or a
 	// caller-selected idempotency key; the engine hashes it with the sealed

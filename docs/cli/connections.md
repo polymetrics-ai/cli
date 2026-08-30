@@ -12,11 +12,12 @@ DESCRIPTION
 
 DECLARATIVE TYPED DESTINATION ACTION
   --destination-action persists one exact eligible writes.json action for a
-  declarative_typed_destination stream. It is accepted only for that closed
-  destination adapter and is validated against the destination descriptor,
-  source binding, mode, acknowledgement, and evidence before catalog or
-  provider I/O. It is not an ETL run flag: a plan and run resolve only this
-  saved identity, so an invocation cannot substitute another action.
+  declarative_typed_destination or declarative_single_attempt_destination
+  stream. It is accepted only for that closed destination adapter and is
+  validated against the destination descriptor, source binding, mode,
+  acknowledgement, and evidence before catalog or provider I/O. It is not an
+  ETL run flag: a plan and run resolve only this saved identity, so an
+  invocation cannot substitute another action.
 
 TARGET COPY CAPACITY
   --target-copy-workers records the bounded target connection capacity for an

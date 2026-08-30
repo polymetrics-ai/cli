@@ -43,7 +43,7 @@ type declarativeTypedDestinationBinding struct {
 	TombstoneIdempotencyKeyHeader   string                                  `json:"tombstone_idempotency_key_header,omitempty"`
 	TombstoneSourceMapping          *connectors.TombstoneRecordMapping      `json:"tombstone_source_mapping,omitempty"`
 	TombstoneBatch                  *connectors.DestinationBatch            `json:"tombstone_batch,omitempty"`
-	ReadBackSHA256                  string                                  `json:"read_back_sha256"`
+	ReadBackSHA256                  string                                  `json:"read_back_sha256,omitempty"`
 	CredentialRevision              string                                  `json:"credential_revision"`
 	ConfigurationDigest             string                                  `json:"configuration_digest"`
 	ApprovalScope                   string                                  `json:"approval_scope"`
@@ -59,7 +59,6 @@ type preparedDeclarativeTypedDestinationTransport struct {
 	credential  CredentialMeta
 	runtime     connectors.RuntimeConfig
 	resolved    synctransport.ResolvedTransport
-	contract    declarativeTypedDestinationContract
 	binding     declarativeTypedDestinationBinding
 	target      connectors.WriteApprovalTarget
 }
@@ -198,20 +197,10 @@ func (a *App) authorizeDeclarativeTypedDestinationTransport(ctx context.Context,
 	if err != nil {
 		return synctransport.DestinationApproval{}, err
 	}
-	return synctransport.DestinationApproval{
+	result := synctransport.DestinationApproval{
 		PlanID: plan.ID, Evidence: evidence, Target: prepared.target, PreviewDigest: preview.Digest, ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
 		TombstoneActionDefinitionSHA256: prepared.binding.TombstoneActionDefinitionSHA256,
 		PhysicalActions:                 declarativeTypedDestinationPhysicalActions(prepared.binding),
-		IdempotencyProof: synctransport.DestinationIdempotencyProof{
-			Executor:               prepared.binding.DestinationExecutor,
-			ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
-			EffectiveHeader:        prepared.binding.IdempotencyKeyHeader,
-		},
-		TombstoneIdempotencyProof: synctransport.DestinationIdempotencyProof{
-			Executor:               prepared.binding.DestinationExecutor,
-			ActionDefinitionSHA256: prepared.binding.TombstoneActionDefinitionSHA256,
-			EffectiveHeader:        prepared.binding.TombstoneIdempotencyKeyHeader,
-		},
 		AuthorizeNextUnit: func(unitCtx context.Context) error {
 			if unitCtx == nil {
 				return fmt.Errorf("declarative typed destination authorization context is required")
@@ -234,7 +223,20 @@ func (a *App) authorizeDeclarativeTypedDestinationTransport(ctx context.Context,
 			}
 			return durableAuthorizationEvidence(scope)
 		},
-	}, nil
+	}
+	if prepared.binding.DestinationExecutor == declarativeTypedDestinationReference {
+		result.IdempotencyProof = synctransport.DestinationIdempotencyProof{
+			Executor:               prepared.binding.DestinationExecutor,
+			ActionDefinitionSHA256: prepared.binding.ActionDefinitionSHA256,
+			EffectiveHeader:        prepared.binding.IdempotencyKeyHeader,
+		}
+		result.TombstoneIdempotencyProof = synctransport.DestinationIdempotencyProof{
+			Executor:               prepared.binding.DestinationExecutor,
+			ActionDefinitionSHA256: prepared.binding.TombstoneActionDefinitionSHA256,
+			EffectiveHeader:        prepared.binding.TombstoneIdempotencyKeyHeader,
+		}
+	}
+	return result, nil
 }
 
 // declarativeTypedDestinationAuthorizationScope is the revocable, payload-free
@@ -246,11 +248,13 @@ func (a *App) declarativeTypedDestinationAuthorizationScope(prepared preparedDec
 	fieldMappings := map[string]string{
 		"transport_binding_sha256": plan.TransportBindingSHA256,
 		"action_definition_sha256": prepared.binding.ActionDefinitionSHA256,
-		"idempotency_key_header":   prepared.binding.IdempotencyKeyHeader,
 		"source_connector":         prepared.binding.Source,
 		"source_executor":          string(prepared.binding.SourceExecutor.Family) + ":" + prepared.binding.SourceExecutor.ID,
 		"destination_executor":     string(prepared.binding.DestinationExecutor.Family) + ":" + prepared.binding.DestinationExecutor.ID,
 		"apply_strategy":           string(prepared.binding.Strategy),
+	}
+	if prepared.binding.IdempotencyKeyHeader != "" {
+		fieldMappings["idempotency_key_header"] = prepared.binding.IdempotencyKeyHeader
 	}
 	for _, input := range prepared.binding.SourceMapping.Inputs {
 		fieldMappings["input/"+input.Input] = input.Field
@@ -259,7 +263,9 @@ func (a *App) declarativeTypedDestinationAuthorizationScope(prepared preparedDec
 	enabledOperations := []string{string(prepared.binding.Mode), prepared.resolved.ApplyStrategy.Action, string(prepared.binding.Strategy)}
 	if prepared.binding.TombstoneSourceMapping != nil {
 		fieldMappings["tombstone_action_definition_sha256"] = prepared.binding.TombstoneActionDefinitionSHA256
-		fieldMappings["tombstone_idempotency_key_header"] = prepared.binding.TombstoneIdempotencyKeyHeader
+		if prepared.binding.TombstoneIdempotencyKeyHeader != "" {
+			fieldMappings["tombstone_idempotency_key_header"] = prepared.binding.TombstoneIdempotencyKeyHeader
+		}
 		for _, input := range prepared.binding.TombstoneSourceMapping.Inputs {
 			fieldMappings["tombstone_input/"+input.Input] = input.Field
 		}
@@ -311,60 +317,96 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 	if err != nil {
 		return preparedDeclarativeTypedDestinationTransport{}, err
 	}
-	if _, ok := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination); !ok || resolved.Destination.TransportExecutorReference() != declarativeTypedDestinationReference {
+	if _, ok := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination); !ok || !isDeclarativeDefinitionOwnedDestination(resolved.Destination.TransportExecutorReference()) {
 		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("connection %q does not select the declarative typed destination adapter", conn.Name)
 	}
-	contract, err := declarativeTypedDestinationContractFor(destination)
-	if err != nil {
-		return preparedDeclarativeTypedDestinationTransport{}, err
-	}
-	binding, err := contract.plan(source, streamName, mode.ContractMode, resolved.ApplyStrategy)
-	if err != nil {
-		return preparedDeclarativeTypedDestinationTransport{}, err
-	}
-	action, found := contract.actions[resolved.ApplyStrategy.Action]
-	if !found {
-		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("declarative typed destination action %q is unavailable", resolved.ApplyStrategy.Action)
-	}
-	actionDefinitionSHA256, err := contract.actionDefinitionDigest(action.Name)
-	if err != nil {
-		return preparedDeclarativeTypedDestinationTransport{}, err
-	}
-	idempotencyKeyHeader, err := contract.idempotencyHeader(action.Name)
-	if err != nil {
-		return preparedDeclarativeTypedDestinationTransport{}, err
-	}
-	var tombstoneBinding *connectors.DestinationSourceBinding
-	var tombstoneActionDefinitionSHA256, tombstoneIdempotencyKeyHeader string
-	if resolved.ApplyStrategy.TombstoneAction != "" {
-		resolvedTombstoneBinding, bindingErr := contract.tombstoneBinding(source, streamName, mode.ContractMode, resolved.ApplyStrategy)
+	var (
+		binding                         connectors.DestinationSourceBinding
+		action                          connectors.WriteActionInfo
+		actionDefinitionSHA256          string
+		idempotencyKeyHeader            string
+		tombstoneBinding                *connectors.DestinationSourceBinding
+		tombstoneActionDefinitionSHA256 string
+		tombstoneIdempotencyKeyHeader   string
+		readBackSHA256                  string
+	)
+	switch resolved.Destination.TransportExecutorReference() {
+	case declarativeTypedDestinationReference:
+		contract, contractErr := declarativeTypedDestinationContractFor(destination)
+		if contractErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, contractErr
+		}
+		resolvedBinding, bindingErr := contract.plan(source, streamName, mode.ContractMode, resolved.ApplyStrategy)
 		if bindingErr != nil {
 			return preparedDeclarativeTypedDestinationTransport{}, bindingErr
 		}
-		tombstoneBinding = &resolvedTombstoneBinding
-		tombstoneActionDefinitionSHA256, err = contract.actionDefinitionDigest(resolved.ApplyStrategy.TombstoneAction)
-		if err != nil {
-			return preparedDeclarativeTypedDestinationTransport{}, err
+		binding = resolvedBinding
+		var found bool
+		action, found = contract.actions[resolved.ApplyStrategy.Action]
+		if !found {
+			return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("declarative typed destination action %q is unavailable", resolved.ApplyStrategy.Action)
 		}
-		tombstoneIdempotencyKeyHeader, err = contract.idempotencyHeader(resolved.ApplyStrategy.TombstoneAction)
-		if err != nil {
-			return preparedDeclarativeTypedDestinationTransport{}, err
+		var digestErr error
+		actionDefinitionSHA256, digestErr = contract.actionDefinitionDigest(action.Name)
+		if digestErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, digestErr
 		}
-	}
-	readBack, err := contract.readBackPolicy(resolved.ApplyStrategy)
-	if err != nil {
-		return preparedDeclarativeTypedDestinationTransport{}, err
-	}
-	tombstoneReadBack, err := contract.tombstoneReadBackPolicy(resolved.ApplyStrategy)
-	if err != nil {
-		return preparedDeclarativeTypedDestinationTransport{}, err
-	}
-	readBackSHA256, err := hashJSON(struct {
-		ReadBack          connectors.DestinationReadBackPolicy           `json:"read_back"`
-		TombstoneReadBack *connectors.DestinationTombstoneReadBackPolicy `json:"tombstone_read_back,omitempty"`
-	}{ReadBack: readBack, TombstoneReadBack: tombstoneReadBack})
-	if err != nil {
-		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("hash declarative typed destination read-back declaration: %w", err)
+		idempotencyKeyHeader, digestErr = contract.idempotencyHeader(action.Name)
+		if digestErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, digestErr
+		}
+		if resolved.ApplyStrategy.TombstoneAction != "" {
+			resolvedTombstoneBinding, bindingErr := contract.tombstoneBinding(source, streamName, mode.ContractMode, resolved.ApplyStrategy)
+			if bindingErr != nil {
+				return preparedDeclarativeTypedDestinationTransport{}, bindingErr
+			}
+			tombstoneBinding = &resolvedTombstoneBinding
+			tombstoneActionDefinitionSHA256, digestErr = contract.actionDefinitionDigest(resolved.ApplyStrategy.TombstoneAction)
+			if digestErr != nil {
+				return preparedDeclarativeTypedDestinationTransport{}, digestErr
+			}
+			tombstoneIdempotencyKeyHeader, digestErr = contract.idempotencyHeader(resolved.ApplyStrategy.TombstoneAction)
+			if digestErr != nil {
+				return preparedDeclarativeTypedDestinationTransport{}, digestErr
+			}
+		}
+		readBack, readBackErr := contract.readBackPolicy(resolved.ApplyStrategy)
+		if readBackErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, readBackErr
+		}
+		tombstoneReadBack, readBackErr := contract.tombstoneReadBackPolicy(resolved.ApplyStrategy)
+		if readBackErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, readBackErr
+		}
+		readBackSHA256, readBackErr = hashJSON(struct {
+			ReadBack          connectors.DestinationReadBackPolicy           `json:"read_back"`
+			TombstoneReadBack *connectors.DestinationTombstoneReadBackPolicy `json:"tombstone_read_back,omitempty"`
+		}{ReadBack: readBack, TombstoneReadBack: tombstoneReadBack})
+		if readBackErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("hash declarative typed destination read-back declaration: %w", readBackErr)
+		}
+	case declarativeSingleAttemptDestinationReference:
+		contract, contractErr := declarativeSingleAttemptDestinationContractFor(destination)
+		if contractErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, contractErr
+		}
+		resolvedBinding, bindingErr := contract.plan(source, streamName, mode.ContractMode, resolved.ApplyStrategy)
+		if bindingErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, bindingErr
+		}
+		binding = resolvedBinding
+		var found bool
+		action, found = contract.actions[resolved.ApplyStrategy.Action]
+		if !found {
+			return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("declarative single-attempt action %q is unavailable", resolved.ApplyStrategy.Action)
+		}
+		var digestErr error
+		actionDefinitionSHA256, digestErr = contract.actionDefinitionDigest(action.Name)
+		if digestErr != nil {
+			return preparedDeclarativeTypedDestinationTransport{}, digestErr
+		}
+	default:
+		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("connection %q does not select a declarative definition-owned destination", conn.Name)
 	}
 	declaration := declarativeTypedDestinationBinding{
 		Domain: declarativeTypedDestinationBindingDomain, ConnectionID: conn.ID, Stream: streamName, StreamID: stream.StreamID, Mode: mode.ContractMode,
@@ -387,7 +429,7 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 		return preparedDeclarativeTypedDestinationTransport{}, err
 	}
 	target := connectors.WriteApprovalTarget{Connector: destination.Name(), Operation: action.Name, Method: action.Method, MutationClass: "transport", TargetDigest: bindingSHA256, CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest, Batchable: a.actionIsBatchable(destination.Name(), action.Name), Scope: runtime.WriteApprovalScope, Confirmation: connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}}
-	return preparedDeclarativeTypedDestinationTransport{connection: conn, stream: stream, mode: mode, source: source, sourceRun: sourceRuntime, destination: destination, credential: credential, runtime: runtime, resolved: resolved, contract: contract, binding: declaration, target: target}, nil
+	return preparedDeclarativeTypedDestinationTransport{connection: conn, stream: stream, mode: mode, source: source, sourceRun: sourceRuntime, destination: destination, credential: credential, runtime: runtime, resolved: resolved, binding: declaration, target: target}, nil
 }
 
 func (a *App) validateDeclarativeTypedDestinationPlan(plan ReversePlan, prepared preparedDeclarativeTypedDestinationTransport) error {
@@ -477,4 +519,20 @@ func (a *App) markDeclarativeTypedDestinationPlanExecuted(planID string) error {
 	}
 	a.state = updated
 	return nil
+}
+
+// revokeDeclarativeSingleAttemptDestinationAuthorization closes the standing
+// grant after a one-shot destination route reaches execution and returns any
+// terminal or ambiguous error. A fresh plan and approval are required before
+// an operator can make another provider attempt; retry-safe destinations keep
+// their existing declaration-backed authorization behavior.
+func (a *App) revokeDeclarativeSingleAttemptDestinationAuthorization(planID string) error {
+	plan, err := a.GetReversePlan(planID)
+	if err != nil {
+		return err
+	}
+	if strings.TrimSpace(plan.AuthorizationReference) == "" {
+		return fmt.Errorf("declarative single-attempt plan %q has no consumed authorization", planID)
+	}
+	return a.RevokeAuthorization(plan.AuthorizationReference)
 }

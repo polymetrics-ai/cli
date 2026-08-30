@@ -52,7 +52,11 @@ type DeliveryIdempotency string
 const (
 	DeliveryIdempotencyKeyed       DeliveryIdempotency = "keyed"
 	DeliveryIdempotencyAtLeastOnce DeliveryIdempotency = "at_least_once"
-	DeliveryIdempotencyNone        DeliveryIdempotency = "none"
+	// DeliveryIdempotencySingleAttempt declares a destination that consumes a
+	// bounded workset once and must not automatically replay an ambiguous
+	// provider write. It is intentionally not provider idempotency evidence.
+	DeliveryIdempotencySingleAttempt DeliveryIdempotency = "single_attempt"
+	DeliveryIdempotencyNone          DeliveryIdempotency = "none"
 )
 
 type DeliveryOrdering string
@@ -565,7 +569,7 @@ func ValidateTransportExecutorFamily(integrationType string, executor TransportE
 
 func (d DeliveryGuarantees) Validate() error {
 	switch d.Idempotency {
-	case DeliveryIdempotencyKeyed, DeliveryIdempotencyAtLeastOnce, DeliveryIdempotencyNone:
+	case DeliveryIdempotencyKeyed, DeliveryIdempotencyAtLeastOnce, DeliveryIdempotencySingleAttempt, DeliveryIdempotencyNone:
 	default:
 		return fmt.Errorf("unsupported transport idempotency guarantee %q", d.Idempotency)
 	}
@@ -611,6 +615,9 @@ func (d SourceTransportDescriptor) Validate() error {
 	}
 	if err := d.Delivery.Validate(); err != nil {
 		return err
+	}
+	if d.Delivery.Idempotency == DeliveryIdempotencySingleAttempt {
+		return fmt.Errorf("source transport cannot declare single_attempt delivery")
 	}
 	return d.Conformance.Validate()
 }

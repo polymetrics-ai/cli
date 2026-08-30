@@ -453,7 +453,7 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: errors.New("prepared request no longer matches its approved execution plan")}
 			}
 			idempotencyKey := writeIdempotencyKey(b.Name, step.action, previewDigest, req.DeliveryOccurrence, requestIndex)
-			response, err := executeWriteRecordWithResponse(ctx, b, step.action, pinned, recordIndex, cfg, rt, idempotencyKey)
+			response, err := executeWriteRecordWithResponse(ctx, b, step.action, pinned, recordIndex, cfg, rt, idempotencyKey, req.DisableRetries)
 			responses[stepIndex] = response
 			requestIndex++
 			var responseErr error
@@ -588,7 +588,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 // executeWriteRecordWithResponse is the private result-preserving form used
 // by the named-action executor. The exported connector surface remains the
 // closed WriteAction contract; no caller can provide a route, verb, or body.
-func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime, idempotencyKey string) (*connsdk.Response, error) {
+func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime, idempotencyKey string, disableRetries ...bool) (*connsdk.Response, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
 
 	path, err := InterpolatePath(action.Path, vars)
@@ -614,7 +614,7 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	if err != nil {
 		return nil, err
 	}
-	requester, err := writeRequester(requesterForAction, action, idempotencyKey)
+	requester, err := writeRequester(requesterForAction, action, idempotencyKey, len(disableRetries) != 0 && disableRetries[0])
 	if err != nil {
 		return nil, err
 	}
@@ -803,7 +803,7 @@ func writeProviderHeaders(headers map[string][]string) map[string]connectors.Wri
 
 // writeRequester clones the shared requester and permits mutation replay only
 // when the action carries provider-scoped idempotency evidence.
-func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey string) (*connsdk.Requester, error) {
+func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey string, disableRetries bool) (*connsdk.Requester, error) {
 	if base == nil {
 		return nil, fmt.Errorf("engine: write action %q: requester is nil", action.Name)
 	}
@@ -815,6 +815,9 @@ func writeRequester(base *connsdk.Requester, action WriteAction, idempotencyKey 
 			continue
 		}
 		requester.DefaultHeaders[name] = value
+	}
+	if disableRetries {
+		requester.DisableRetries = true
 	}
 	if header == "" {
 		if action.Kind != "delete" || action.Delete == nil || !action.Delete.Idempotent {

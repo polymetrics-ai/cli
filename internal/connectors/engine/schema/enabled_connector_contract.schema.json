@@ -70,7 +70,7 @@
                 "type": "object", "additionalProperties": false,
                 "required": ["idempotency", "ordering", "deletes"],
                 "properties": {
-                  "idempotency": {"type": "string", "enum": ["keyed", "at_least_once", "none"]},
+                  "idempotency": {"type": "string", "enum": ["keyed", "at_least_once", "single_attempt", "none"]},
                   "ordering": {"type": "string", "enum": ["source_ordered", "window_coalesced", "unordered"]},
                   "deletes": {"type": "string", "enum": ["tombstone", "not_available"]}
                 }

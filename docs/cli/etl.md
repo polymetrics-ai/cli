@@ -129,9 +129,10 @@ CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
 
 DECLARATIVE TYPED DESTINATION TRANSPORT
   declarative-typed-destination runs only a sync_transport.json destination
-  that declares the exact declarative_typed_destination adapter. The saved
-  stream's destination_action selects one named, eligible writes.json action.
-  This is necessary when one connector exposes multiple
+  that declares declarative_typed_destination (retry-safe) or
+  declarative_single_attempt_destination (one request with no automatic
+  replay). The saved stream's destination_action selects one named, eligible
+  writes.json action. This is necessary when one connector exposes multiple
   record-driven destination actions for the same sync mode; no action is
   inferred from declaration order.
 

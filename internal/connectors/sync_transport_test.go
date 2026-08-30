@@ -48,6 +48,23 @@ func TestSyncTransportDescriptorResolvesDeclaredApplyStrategy(t *testing.T) {
 	}
 }
 
+func TestSourceTransportDescriptorRejectsSingleAttemptDelivery(t *testing.T) {
+	descriptor := SourceTransportDescriptor{
+		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeAPI, ID: "fake_api_source"},
+		EligibleStreams: []string{"records"},
+		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
+		Delivery: DeliveryGuarantees{
+			Idempotency: DeliveryIdempotencySingleAttempt,
+			Ordering:    DeliveryOrderingUnordered,
+			Deletes:     DeliveryDeletesUnavailable,
+		},
+		Conformance: closedTestConformanceReference(),
+	}
+	if err := descriptor.Validate(); err == nil || !strings.Contains(err.Error(), "source transport cannot declare single_attempt") {
+		t.Fatalf("single-attempt source delivery error = %v, want source-role refusal", err)
+	}
+}
+
 func TestDestinationTransportDescriptorSelectsPersistedActionWithinMode(t *testing.T) {
 	descriptor := DestinationTransportDescriptor{
 		Executor:        TransportExecutorReference{Family: TransportExecutorFamilyDeclarativeAPI, ID: "declarative_typed_destination"},

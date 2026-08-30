@@ -65,6 +65,31 @@ func TestDeclarativeWriteRetryPolicy(t *testing.T) {
 		}
 	})
 
+	t.Run("single-attempt policy suppresses an idempotent delete retry", func(t *testing.T) {
+		var attempts int
+		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+			attempts++
+			http.Error(w, "ambiguous", http.StatusInternalServerError)
+		}))
+		defer srv.Close()
+
+		action := WriteAction{
+			Name: "delete_widget", Kind: "delete", Method: http.MethodDelete, Path: "/widgets/fixture",
+			Delete: &DeleteSpec{Idempotent: true},
+		}
+		_, err := executeWriteRecordWithResponse(context.Background(), newWriteTestBundle(srv, action), action,
+			connectors.Record{}, 0, connectors.RuntimeConfig{}, &Runtime{Requester: &connsdk.Requester{
+				BaseURL: srv.URL,
+				Sleep:   func(context.Context, time.Duration) error { return nil },
+			}}, "", true)
+		if err == nil {
+			t.Fatal("single-attempt delete succeeded after an ambiguous mutation response")
+		}
+		if attempts != 1 {
+			t.Fatalf("single-attempt delete attempts = %d, want 1", attempts)
+		}
+	})
+
 	t.Run("unmarked delete remains single attempt", func(t *testing.T) {
 		var attempts int
 		srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
