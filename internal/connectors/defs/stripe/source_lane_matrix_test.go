@@ -45,6 +45,11 @@ type stripePaginationFact struct {
 	ResponseFields  []string
 }
 
+type stripeWebhookRegistrationFact struct {
+	Kind                  string
+	RequiredRequestFields []string
+}
+
 type stripeArtifactRecords struct {
 	API     map[string]struct{}
 	Streams map[string]struct{}
@@ -143,6 +148,307 @@ func TestStripeSourceLaneMatrixPreservesBinaryAndDeleteSurface(t *testing.T) {
 	}
 	if got := counts["reverse_etl"]["mapped_unproven"]; got != 326 {
 		t.Fatalf("reverse_etl mapped_unproven cells = %d, want 326", got)
+	}
+	if got := counts["sync_transport"]["mapped_unproven"]; got != 0 {
+		t.Fatalf("sync_transport mapped_unproven cells = %d, want 0", got)
+	}
+	if got := counts["sync_transport"]["missing_foundation"]; got != 1 {
+		t.Fatalf("sync_transport missing_foundation cells = %d, want 1", got)
+	}
+}
+
+func TestStripeSourceLaneMatrixSeparatesPageableETLFromWebhookSync(t *testing.T) {
+	matrix, lock := readStripeMatrixAndLock(t)
+	sourceByID := stripeSourceOperationsByID(t, lock)
+
+	pageableRead := sourceByID["stripe.rest.GetCustomers"]
+	if pagination := stripeSourcePagination(pageableRead); pagination.Kind != "id_cursor" {
+		t.Fatalf("customers pagination = %#v, want id_cursor", pagination)
+	}
+	if registration := stripeSourceWebhookRegistration(pageableRead); registration.Kind != "not_documented" {
+		t.Fatalf("customers webhook registration = %#v, want not_documented", registration)
+	}
+
+	webhookRegistration := sourceByID["stripe.rest.PostWebhookEndpoints"]
+	if registration := stripeSourceWebhookRegistration(webhookRegistration); registration.Kind != "webhook_registration" ||
+		!stripeEqualStrings(registration.RequiredRequestFields, []string{"enabled_events", "url"}) {
+		t.Fatalf("webhook registration facts = %#v, want webhook_registration with enabled_events/url", registration)
+	}
+
+	byID := stripeMatrixOperationsByID(t, matrix)
+	if got := stripeStringField(t, stripeMatrixCellByLane(t, byID[pageableRead.ID], "etl"), "state"); got != "mapped_unproven" {
+		t.Fatalf("pageable read ETL state = %q, want mapped_unproven", got)
+	}
+	if got := stripeStringField(t, stripeMatrixCellByLane(t, byID[pageableRead.ID], "sync_transport"), "state"); got != "not_applicable" {
+		t.Fatalf("pageable read sync state = %q, want not_applicable", got)
+	}
+	if got := stripeStringField(t, stripeMatrixCellByLane(t, byID[webhookRegistration.ID], "sync_transport"), "state"); got != "missing_foundation" {
+		t.Fatalf("webhook registration sync state = %q, want missing_foundation", got)
+	}
+
+	stripeMatrixCellByLane(t, byID[pageableRead.ID], "sync_transport")["state"] = "mapped_unproven"
+	stripeMatrixCellByLane(t, byID[pageableRead.ID], "sync_transport")["reason"] = "stripe.source.sync_transport.documented_pagination.v1"
+	assertStripeMatrixValidationError(t, matrix, lock, "source operation "+pageableRead.ID)
+}
+
+func TestStripeWebhookRegistrationRequiresProviderSemanticContract(t *testing.T) {
+	tests := []struct {
+		name       string
+		source     stripeSourceInfo
+		want       string
+		wantFields []string
+	}{
+		{
+			name: "documented webhook registration",
+			source: stripeSourceInfo{
+				Method:    "POST",
+				Operation: stripeWebhookRequestOperation("Create a webhook endpoint", "A webhook endpoint must have a url and a list of enabled_events.", "url", "enabled_events"),
+			},
+			want:       "webhook_registration",
+			wantFields: []string{"enabled_events", "url"},
+		},
+		{
+			name: "pageable read is not a webhook registration",
+			source: stripeSourceInfo{
+				Method:    "GET",
+				Operation: stripeWebhookRequestOperation("List all customers", "Returns a list of customers.", "url", "enabled_events"),
+			},
+			want: "not_documented",
+		},
+		{
+			name: "URL without event selector is not a webhook registration",
+			source: stripeSourceInfo{
+				Method:    "POST",
+				Operation: stripeWebhookRequestOperation("Create a webhook endpoint", "A webhook endpoint must have a url.", "url"),
+			},
+			want: "not_documented",
+		},
+		{
+			name: "event fields without webhook semantics are not a registration",
+			source: stripeSourceInfo{
+				Method:    "POST",
+				Operation: stripeWebhookRequestOperation("Create an outbound request", "Create a request with a URL and selected events.", "url", "enabled_events"),
+			},
+			want: "not_documented",
+		},
+		{
+			name: "fields split across media schemas are not one request contract",
+			source: stripeSourceInfo{
+				Method: "POST",
+				Operation: map[string]any{
+					"summary":     "Create a webhook endpoint",
+					"description": "A webhook endpoint can receive events.",
+					"requestBody": map[string]any{
+						"content": map[string]any{
+							"application/json":                  map[string]any{"schema": map[string]any{"required": []any{"url"}}},
+							"application/x-www-form-urlencoded": map[string]any{"schema": map[string]any{"required": []any{"enabled_events"}}},
+						},
+					},
+				},
+			},
+			want: "not_documented",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := stripeSourceWebhookRegistration(test.source)
+			if got.Kind != test.want || !stripeEqualStrings(got.RequiredRequestFields, test.wantFields) {
+				t.Fatalf("webhook registration = %#v, want kind=%q fields=%v", got, test.want, test.wantFields)
+			}
+		})
+	}
+}
+
+func TestStripeSourcePaginationRequiresProviderContinuation(t *testing.T) {
+	tests := []struct {
+		name   string
+		source stripeSourceInfo
+		want   string
+	}{
+		{
+			name: "cursor response plus starting-after is extractable",
+			source: stripeSourceInfo{
+				Method:    "GET",
+				Operation: stripeListResponseOperation([]string{"starting_after"}, false),
+			},
+			want: "id_cursor",
+		},
+		{
+			name: "page token response plus page is extractable",
+			source: stripeSourceInfo{
+				Method:    "GET",
+				Operation: stripeListResponseOperation([]string{"page"}, true),
+			},
+			want: "page_token",
+		},
+		{
+			name: "list shape without request continuation is not ETL",
+			source: stripeSourceInfo{
+				Method:    "GET",
+				Operation: stripeListResponseOperation(nil, false),
+			},
+			want: "response_list_without_operation_continuation",
+		},
+		{
+			name: "POST list shape is not an ETL read",
+			source: stripeSourceInfo{
+				Method:    "POST",
+				Operation: stripeListResponseOperation([]string{"starting_after"}, false),
+			},
+			want: "not_documented",
+		},
+		{
+			name: "string has-more marker is not a continuation contract",
+			source: stripeSourceInfo{
+				Method: "GET",
+				Operation: map[string]any{
+					"parameters": []any{map[string]any{"in": "query", "name": "starting_after"}},
+					"responses": map[string]any{
+						"200": map[string]any{
+							"content": map[string]any{
+								"application/json": map[string]any{
+									"schema": map[string]any{
+										"properties": map[string]any{
+											"data":     map[string]any{"type": "array"},
+											"has_more": map[string]any{"type": "string"},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: "not_documented",
+		},
+		{
+			name: "malformed provider marker is not a continuation contract",
+			source: stripeSourceInfo{
+				Method: "GET",
+				Operation: map[string]any{
+					"parameters": []any{map[string]any{"in": "query", "name": "starting_after"}},
+					"responses": map[string]any{
+						"200": map[string]any{
+							"content": map[string]any{
+								"application/json": map[string]any{
+									"schema": map[string]any{
+										"properties": map[string]any{
+											"data":     map[string]any{"type": "array"},
+											"has_more": "unknown",
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			want: "not_documented",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := stripeSourcePagination(test.source); got.Kind != test.want {
+				t.Fatalf("pagination = %#v, want kind=%q", got, test.want)
+			}
+		})
+	}
+}
+
+func stripeWebhookRequestOperation(summary, description string, required ...string) map[string]any {
+	fields := make([]any, len(required))
+	for index, field := range required {
+		fields[index] = field
+	}
+	return map[string]any{
+		"summary":     summary,
+		"description": description,
+		"requestBody": map[string]any{
+			"content": map[string]any{
+				"application/x-www-form-urlencoded": map[string]any{
+					"schema": map[string]any{
+						"required": fields,
+					},
+				},
+			},
+		},
+	}
+}
+
+func stripeListResponseOperation(queryParameters []string, nextPage bool) map[string]any {
+	parameters := make([]any, len(queryParameters))
+	for index, parameter := range queryParameters {
+		parameters[index] = map[string]any{"in": "query", "name": parameter}
+	}
+	properties := map[string]any{
+		"data":     map[string]any{"type": "array"},
+		"has_more": map[string]any{"type": "boolean"},
+	}
+	if nextPage {
+		properties["next_page"] = map[string]any{"type": "string"}
+	}
+	return map[string]any{
+		"parameters": parameters,
+		"responses": map[string]any{
+			"200": map[string]any{
+				"content": map[string]any{
+					"application/json": map[string]any{
+						"schema": map[string]any{
+							"properties": properties,
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func TestStripeSourceLaneMatrixDirectAndBinaryCellsFollowLockedFacts(t *testing.T) {
+	matrix, lock := readStripeMatrixAndLock(t)
+	byID := stripeMatrixOperationsByID(t, matrix)
+	for _, test := range []struct {
+		name   string
+		source string
+		lanes  map[string]string
+	}{
+		{
+			name:   "bounded GET read",
+			source: "stripe.rest.GetBalance",
+			lanes:  map[string]string{"direct_read": "mapped_unproven", "direct_write": "not_applicable", "reverse_etl": "not_applicable"},
+		},
+		{
+			name:   "provider mutation is direct-write and reverse-ETL",
+			source: "stripe.rest.DeleteCustomersCustomer",
+			lanes:  map[string]string{"direct_read": "not_applicable", "direct_write": "mapped_unproven", "reverse_etl": "mapped_unproven"},
+		},
+		{
+			name:   "PDF response is binary download",
+			source: "stripe.rest.GetQuotesQuotePdf",
+			lanes:  map[string]string{"binary_download": "mapped_unproven", "binary_upload": "not_applicable"},
+		},
+		{
+			name:   "multipart request is binary upload",
+			source: "stripe.rest.PostFiles",
+			lanes:  map[string]string{"binary_download": "not_applicable", "binary_upload": "mapped_unproven", "direct_write": "mapped_unproven", "reverse_etl": "mapped_unproven"},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			operation := byID[test.source]
+			if operation == nil {
+				t.Fatalf("matrix operation %q is absent", test.source)
+			}
+			for lane, want := range test.lanes {
+				if got := stripeStringField(t, stripeMatrixCellByLane(t, operation, lane), "state"); got != want {
+					t.Errorf("%s state = %q, want %q", lane, got, want)
+				}
+			}
+		})
+	}
+
+	if err := validateStripeSourceLaneMatrix(matrix, lock, readStripeArtifactRecords(t)); err != nil {
+		t.Fatal(err)
 	}
 }
 
@@ -276,8 +582,11 @@ func stripeValidateOperation(operation map[string]any, source stripeSourceInfo) 
 			return fmt.Errorf("source operation %s has uncited %s cell", source.ID, lane)
 		}
 		state := stripeStringField(nil, cell, "state")
-		if state != "mapped_unproven" && state != "not_applicable" {
+		if state != "mapped_unproven" && state != "missing_foundation" && state != "not_applicable" {
 			return fmt.Errorf("source operation %s has unsupported mapping-only state %q", source.ID, state)
+		}
+		if state == "missing_foundation" && lane != "sync_transport" {
+			return fmt.Errorf("source operation %s has non-sync missing-foundation cell %q", source.ID, lane)
 		}
 	}
 	for _, lane := range stripeLaneOrder {
@@ -326,7 +635,9 @@ func stripeValidateFacts(facts map[string]any, source stripeSourceInfo) error {
 
 	eventCursor := stripeObjectField(nil, facts, "event_cursor")
 	callbacks := stripeObjectFieldOrEmpty(source.Operation, "callbacks")
-	if len(callbacks) != 0 || stripeStringField(nil, eventCursor, "kind") != "not_documented" ||
+	registration := stripeSourceWebhookRegistration(source)
+	if len(callbacks) != 0 || stripeStringField(nil, eventCursor, "kind") != registration.Kind ||
+		!stripeEqualStrings(stripeStringArrayFieldOrEmpty(eventCursor, "required_request_fields"), registration.RequiredRequestFields) ||
 		stripeNumberField(eventCursor, "documented_callbacks") != 0 ||
 		stripeStringField(nil, eventCursor, "source_location") != source.SourceLocation {
 		return fmt.Errorf("source operation %s does not preserve its event/cursor evidence", source.ID)
@@ -337,6 +648,7 @@ func stripeValidateFacts(facts map[string]any, source stripeSourceInfo) error {
 func stripeExpectedCells(source stripeSourceInfo) map[string][2]string {
 	pagination := stripeSourcePagination(source)
 	isPaging := pagination.Kind == "id_cursor" || pagination.Kind == "page_token"
+	webhookRegistration := stripeSourceWebhookRegistration(source)
 	isPDF := stripeSourceHasResponseMedia(source, "application/pdf")
 	isMultipart := stripeSourceHasRequestMedia(source, "multipart/form-data")
 	isMutation := stripeIsMutation(source.Method)
@@ -363,13 +675,15 @@ func stripeExpectedCells(source stripeSourceInfo) map[string][2]string {
 	}
 	if isPaging {
 		expected["etl"] = [2]string{"mapped_unproven", "stripe.source.etl.documented_pagination.v1"}
-		expected["sync_transport"] = [2]string{"mapped_unproven", "stripe.source.sync_transport.documented_pagination.v1"}
 	} else if pagination.Kind == "response_list_without_operation_continuation" {
 		expected["etl"] = [2]string{"not_applicable", "stripe.source.etl.response_list_without_operation_continuation.v1"}
-		expected["sync_transport"] = [2]string{"not_applicable", "stripe.source.sync_transport.response_list_without_operation_continuation.v1"}
 	} else {
 		expected["etl"] = [2]string{"not_applicable", "stripe.source.etl.no_documented_pagination.v1"}
-		expected["sync_transport"] = [2]string{"not_applicable", "stripe.source.sync_transport.no_documented_pagination.v1"}
+	}
+	if webhookRegistration.Kind == "webhook_registration" {
+		expected["sync_transport"] = [2]string{"missing_foundation", "stripe.foundation.inbound_webhook_receiver.v1"}
+	} else {
+		expected["sync_transport"] = [2]string{"not_applicable", "stripe.source.sync_transport.no_documented_webhook_registration.v1"}
 	}
 	return expected
 }
@@ -379,10 +693,11 @@ func stripeValidateCountReconciliation(matrix, lock map[string]any, sourceByID m
 		return fmt.Errorf("retained source count reconciliation = matrix:%d lock:%d, want 589", len(stripeArrayField(nil, matrix, "operations")), len(sourceByID))
 	}
 
-	var getCount, mutationCount, deleteCount, pagingCount, cursorCount, pageTokenCount, listWithoutContinuationCount, pdfCount, multipartCount int
+	var getCount, mutationCount, deleteCount, pagingCount, cursorCount, pageTokenCount, listWithoutContinuationCount, pdfCount, multipartCount, webhookRegistrationCount int
 	listWithoutContinuation := make(map[string]struct{})
 	pdfIDs := make(map[string]struct{})
 	multipartIDs := make(map[string]struct{})
+	webhookRegistrationIDs := make(map[string]struct{})
 	for _, source := range sourceByID {
 		if source.Method == "GET" {
 			getCount++
@@ -412,16 +727,21 @@ func stripeValidateCountReconciliation(matrix, lock map[string]any, sourceByID m
 			multipartCount++
 			multipartIDs[source.ID] = struct{}{}
 		}
+		if stripeSourceWebhookRegistration(source).Kind == "webhook_registration" {
+			webhookRegistrationCount++
+			webhookRegistrationIDs[source.ID] = struct{}{}
+		}
 	}
-	if getCount != 263 || mutationCount != 326 || deleteCount != 32 || pagingCount != 128 || cursorCount != 121 || pageTokenCount != 7 || listWithoutContinuationCount != 2 || pdfCount != 1 || multipartCount != 1 {
-		return fmt.Errorf("source fact counts = GET:%d mutation:%d delete:%d paging:%d cursor:%d page_token:%d list_without_continuation:%d pdf:%d multipart:%d", getCount, mutationCount, deleteCount, pagingCount, cursorCount, pageTokenCount, listWithoutContinuationCount, pdfCount, multipartCount)
+	if getCount != 263 || mutationCount != 326 || deleteCount != 32 || pagingCount != 128 || cursorCount != 121 || pageTokenCount != 7 || listWithoutContinuationCount != 2 || pdfCount != 1 || multipartCount != 1 || webhookRegistrationCount != 1 {
+		return fmt.Errorf("source fact counts = GET:%d mutation:%d delete:%d paging:%d cursor:%d page_token:%d list_without_continuation:%d pdf:%d multipart:%d webhook_registration:%d", getCount, mutationCount, deleteCount, pagingCount, cursorCount, pageTokenCount, listWithoutContinuationCount, pdfCount, multipartCount, webhookRegistrationCount)
 	}
 	if !stripeEqualStringSet(listWithoutContinuation, map[string]struct{}{
 		"stripe.rest.GetAccountsAccountCapabilities": {},
 		"stripe.rest.GetReportingReportTypes":        {},
 	}) || !stripeEqualStringSet(pdfIDs, map[string]struct{}{"stripe.rest.GetQuotesQuotePdf": {}}) ||
-		!stripeEqualStringSet(multipartIDs, map[string]struct{}{"stripe.rest.PostFiles": {}}) {
-		return errors.New("Stripe source facts no longer match the cited paging or binary operation set")
+		!stripeEqualStringSet(multipartIDs, map[string]struct{}{"stripe.rest.PostFiles": {}}) ||
+		!stripeEqualStringSet(webhookRegistrationIDs, map[string]struct{}{"stripe.rest.PostWebhookEndpoints": {}}) {
+		return errors.New("Stripe source facts no longer match the cited paging, binary, or webhook registration operation set")
 	}
 
 	cells := stripeMatrixCellCounts(matrix)
@@ -432,24 +752,37 @@ func stripeValidateCountReconciliation(matrix, lock map[string]any, sourceByID m
 		"binary_upload":   1,
 		"etl":             128,
 		"reverse_etl":     326,
-		"sync_transport":  128,
+		"sync_transport":  0,
 	}
-	mappedTotal, notApplicableTotal := 0, 0
+	wantMissingFoundation := map[string]int{
+		"direct_read":     0,
+		"direct_write":    0,
+		"binary_download": 0,
+		"binary_upload":   0,
+		"etl":             0,
+		"reverse_etl":     0,
+		"sync_transport":  1,
+	}
+	mappedTotal, missingFoundationTotal, notApplicableTotal := 0, 0, 0
 	for _, lane := range stripeLaneOrder {
 		if cells[lane]["mapped_unproven"] != wantMapped[lane] {
 			return fmt.Errorf("%s mapped_unproven count = %d, want %d", lane, cells[lane]["mapped_unproven"], wantMapped[lane])
 		}
-		if cells[lane]["not_applicable"] != 589-wantMapped[lane] {
-			return fmt.Errorf("%s not_applicable count = %d, want %d", lane, cells[lane]["not_applicable"], 589-wantMapped[lane])
+		if cells[lane]["missing_foundation"] != wantMissingFoundation[lane] {
+			return fmt.Errorf("%s missing_foundation count = %d, want %d", lane, cells[lane]["missing_foundation"], wantMissingFoundation[lane])
 		}
-		if cells[lane]["implemented"] != 0 || cells[lane]["missing_foundation"] != 0 {
-			return fmt.Errorf("%s contains an execution or foundation state", lane)
+		if cells[lane]["not_applicable"] != 589-wantMapped[lane]-wantMissingFoundation[lane] {
+			return fmt.Errorf("%s not_applicable count = %d, want %d", lane, cells[lane]["not_applicable"], 589-wantMapped[lane]-wantMissingFoundation[lane])
+		}
+		if cells[lane]["implemented"] != 0 {
+			return fmt.Errorf("%s contains an execution state", lane)
 		}
 		mappedTotal += cells[lane]["mapped_unproven"]
+		missingFoundationTotal += cells[lane]["missing_foundation"]
 		notApplicableTotal += cells[lane]["not_applicable"]
 	}
-	if mappedTotal != 1173 || notApplicableTotal != 2950 || mappedTotal+notApplicableTotal != 4123 {
-		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 1173/2950/4123", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
+	if mappedTotal != 1045 || missingFoundationTotal != 1 || notApplicableTotal != 3077 || mappedTotal+missingFoundationTotal+notApplicableTotal != 4123 {
+		return fmt.Errorf("matrix cell totals = mapped:%d missing_foundation:%d not_applicable:%d total:%d, want 1045/1/3077/4123", mappedTotal, missingFoundationTotal, notApplicableTotal, mappedTotal+missingFoundationTotal+notApplicableTotal)
 	}
 	return nil
 }
@@ -476,7 +809,7 @@ func stripeValidateArtifactLinks(matrix map[string]any, records stripeArtifactRe
 		"invoices":      "stripe.rest.GetInvoices",
 		"subscriptions": "stripe.rest.GetSubscriptions",
 		"products":      "stripe.rest.GetProducts",
-	}, []string{"direct_read", "etl", "sync_transport"}); err != nil {
+	}, []string{"direct_read", "etl"}); err != nil {
 		return err
 	}
 	return stripeValidateNamedArtifactLinks("writes.json", byPath["writes.json"], records.Writes, matrixByID, map[string]string{
@@ -572,6 +905,20 @@ func stripeSourceOperationsByID(t *testing.T, lock map[string]any) map[string]st
 	return operations
 }
 
+func stripeMatrixOperationsByID(t *testing.T, matrix map[string]any) map[string]map[string]any {
+	t.Helper()
+	operations := make(map[string]map[string]any, len(stripeArrayField(t, matrix, "operations")))
+	for _, rawOperation := range stripeArrayField(t, matrix, "operations") {
+		operation := stripeObjectValue(t, rawOperation, "matrix operation")
+		sourceID := stripeStringField(t, operation, "source_id")
+		if _, duplicate := operations[sourceID]; duplicate {
+			t.Fatalf("duplicate matrix source id %q", sourceID)
+		}
+		operations[sourceID] = operation
+	}
+	return operations
+}
+
 func stripeSourceOperationsByIDNoTest(lock map[string]any) (map[string]stripeSourceInfo, error) {
 	rest := stripeObjectField(nil, lock, "rest")
 	result := make(map[string]stripeSourceInfo)
@@ -648,6 +995,53 @@ func stripeSourcePagination(source stripeSourceInfo) stripePaginationFact {
 	return stripePaginationFact{Kind: "not_documented", QueryParameters: []string{}, ResponseFields: []string{}}
 }
 
+func stripeSourceWebhookRegistration(source stripeSourceInfo) stripeWebhookRegistrationFact {
+	if source.Method != "POST" {
+		return stripeWebhookRegistrationFact{Kind: "not_documented", RequiredRequestFields: []string{}}
+	}
+	if !strings.Contains(stripeSourceText(source), "webhook endpoint") ||
+		!stripeSourceRequestSchemaRequiresFields(source, "enabled_events", "url") {
+		return stripeWebhookRegistrationFact{Kind: "not_documented", RequiredRequestFields: []string{}}
+	}
+	return stripeWebhookRegistrationFact{Kind: "webhook_registration", RequiredRequestFields: []string{"enabled_events", "url"}}
+}
+
+func stripeSourceRequestSchemaRequiresFields(source stripeSourceInfo, want ...string) bool {
+	requestBody := stripeObjectFieldOrEmpty(source.Operation, "requestBody")
+	for _, rawMedia := range stripeObjectFieldOrEmpty(requestBody, "content") {
+		media := stripeObjectValue(nil, rawMedia, "source request media")
+		schema := stripeObjectFieldOrEmpty(media, "schema")
+		fields := make(map[string]struct{})
+		for _, rawField := range stripeArrayFieldOrEmpty(schema, "required") {
+			field, ok := rawField.(string)
+			if ok && field != "" {
+				fields[field] = struct{}{}
+			}
+		}
+		matches := true
+		for _, field := range want {
+			if _, ok := fields[field]; !ok {
+				matches = false
+				break
+			}
+		}
+		if matches {
+			return true
+		}
+	}
+	return false
+}
+
+func stripeSourceText(source stripeSourceInfo) string {
+	var parts []string
+	for _, field := range []string{"summary", "description"} {
+		if value, ok := source.Operation[field].(string); ok {
+			parts = append(parts, value)
+		}
+	}
+	return strings.ToLower(strings.Join(parts, "\n"))
+}
+
 func stripeSourceListResponseFacts(source stripeSourceInfo) (bool, bool, bool) {
 	var dataArray, hasMore, nextPage bool
 	for _, rawResponse := range stripeObjectFieldOrEmpty(source.Operation, "responses") {
@@ -660,17 +1054,28 @@ func stripeSourceListResponseFacts(source stripeSourceInfo) (bool, bool, bool) {
 		schema := stripeObjectFieldOrEmpty(stripeObjectValue(nil, jsonMedia, "JSON media"), "schema")
 		properties := stripeObjectFieldOrEmpty(schema, "properties")
 		data, exists := properties["data"]
-		if exists && stripeStringField(nil, stripeObjectValue(nil, data, "response data"), "type") == "array" {
+		if exists && stripeSchemaType(data) == "array" {
 			dataArray = true
 		}
-		if _, exists := properties["has_more"]; exists {
+		if hasMoreField, exists := properties["has_more"]; exists &&
+			stripeSchemaType(hasMoreField) == "boolean" {
 			hasMore = true
 		}
-		if _, exists := properties["next_page"]; exists {
+		if nextPageField, exists := properties["next_page"]; exists &&
+			stripeSchemaType(nextPageField) == "string" {
 			nextPage = true
 		}
 	}
 	return dataArray, hasMore, nextPage
+}
+
+func stripeSchemaType(value any) string {
+	schema, ok := value.(map[string]any)
+	if !ok {
+		return ""
+	}
+	kind, _ := schema["type"].(string)
+	return kind
 }
 
 func stripeSourceHasResponseMedia(source stripeSourceInfo, want string) bool {
@@ -841,6 +1246,19 @@ func stripeStringArrayField(t *testing.T, object map[string]any, name string) []
 				t.Fatalf("JSON field %q has non-string entry %T", name, value)
 			}
 			panic(fmt.Sprintf("JSON field %q has non-string entry %T", name, value))
+		}
+		result = append(result, text)
+	}
+	return result
+}
+
+func stripeStringArrayFieldOrEmpty(object map[string]any, name string) []string {
+	values := stripeArrayFieldOrEmpty(object, name)
+	result := make([]string, 0, len(values))
+	for _, value := range values {
+		text, ok := value.(string)
+		if !ok {
+			return nil
 		}
 		result = append(result, text)
 	}
