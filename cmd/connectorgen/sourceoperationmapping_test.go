@@ -454,6 +454,16 @@ func TestSourceOperationMappingCheckRejectsUncitedOrContradictoryBinaryMedia(t *
 			media: "application/*",
 			want:  "binary_upload applicability is not supported by request media evidence",
 		},
+		{
+			name:  "wildcard suffix media type is not binary evidence",
+			media: "application/*+xml",
+			want:  "binary_upload applicability is not supported by request media evidence",
+		},
+		{
+			name:  "wildcard top-level media type is not binary evidence",
+			media: "*/pdf",
+			want:  "binary_upload applicability is not supported by request media evidence",
+		},
 	}
 
 	for _, test := range tests {
@@ -470,6 +480,26 @@ func TestSourceOperationMappingCheckRejectsUncitedOrContradictoryBinaryMedia(t *
 			}
 			sourceOperationMappingWriteJSON(t, manifest, document)
 			sourceOperationMappingAssertRejected(t, manifest, test.want)
+		})
+	}
+}
+
+func TestSourceOperationMappingCheckRejectsWildcardBinaryDownloadMedia(t *testing.T) {
+	for _, media := range []string{"application/*+xml", "*/pdf"} {
+		t.Run(media, func(t *testing.T) {
+			manifest := sourceOperationMappingFixture(t)
+			document := sourceOperationMappingReadJSON(t, manifest)
+			operation := document["operations"].([]any)[0].(map[string]any)
+			facts := operation["facts"].(map[string]any)
+			facts["media"].(map[string]any)["response"] = []any{media}
+			facts["applicability"].(map[string]any)["binary_download"].(map[string]any)["kind"] = "applicable"
+			operation["cells"] = append(operation["cells"].([]any), map[string]any{
+				"lane":  "binary_download",
+				"state": "mapped_unproven",
+			})
+			sourceOperationMappingWriteJSON(t, manifest, document)
+
+			sourceOperationMappingAssertRejected(t, manifest, "binary_download applicability is not supported by response media evidence")
 		})
 	}
 }

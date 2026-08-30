@@ -597,7 +597,7 @@ func sourceOperationMappingBinaryMedia(media []string) bool {
 func sourceOperationMappingConcreteMediaType(mediaType string) bool {
 	mediaType = strings.ToLower(strings.TrimSpace(mediaType))
 	topLevel, subType, found := strings.Cut(mediaType, "/")
-	return found && topLevel != "" && subType != "" && topLevel != "*" && subType != "*"
+	return found && topLevel != "" && subType != "" && !strings.Contains(topLevel, "*") && !strings.Contains(subType, "*")
 }
 
 func sourceOperationMappingJSONMediaType(mediaType string) bool {
