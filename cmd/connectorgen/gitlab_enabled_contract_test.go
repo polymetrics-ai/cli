@@ -37,7 +37,7 @@ func TestGitLabEnabledContractReconcilesSourceLock(t *testing.T) {
 
 	want := map[string]string{
 		"direct_read":     "implemented",
-		"direct_write":    "deferred_foundation",
+		"direct_write":    "implemented",
 		"binary_download": "deferred_foundation",
 		"binary_upload":   "deferred_foundation",
 		"etl":             "implemented",
@@ -162,11 +162,150 @@ func TestGitLabEnabledContractReconcilesSourceLock(t *testing.T) {
 	}
 }
 
-// TestGitLabDeprecatedSourceOperationsRemainFoundationBlocked proves that a
-// provider deprecation notice is retained as source evidence, never used as
-// an admission-policy exclusion. The actual request/approval foundation gap
-// must remain discoverable on every cited operation.
-func TestGitLabDeprecatedSourceOperationsRemainFoundationBlocked(t *testing.T) {
+// TestGitLabP5GeneratedNamedJSONValueFlagsRemainSourceBound proves that the
+// narrow P5 closed-root action path retains the declared bare-string policy
+// for an explicitly named JSON value. The allowance applies to the named
+// source field only; it is not a generic JSON request-body flag.
+func TestGitLabP5GeneratedNamedJSONValueFlagsRemainSourceBound(t *testing.T) {
+	const defsRoot = "../../internal/connectors/defs"
+	bundle, err := engine.Load(os.DirFS(defsRoot), "gitlab")
+	if err != nil {
+		t.Fatalf("load GitLab bundle: %v", err)
+	}
+	descriptorRaw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources", "gitlab-operation-descriptor.json"))
+	if err != nil {
+		t.Fatalf("read GitLab source descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+		t.Fatalf("decode GitLab source descriptor: %v", err)
+	}
+	writesRaw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "writes.json"))
+	if err != nil {
+		t.Fatalf("read GitLab writes: %v", err)
+	}
+	var writes orderedJSON
+	if err := json.Unmarshal(writesRaw, &writes); err != nil {
+		t.Fatalf("decode GitLab writes: %v", err)
+	}
+
+	wantBareString := map[string]string{
+		"postApiV4ChatCompletions":                        "resource_id",
+		"postApiV4FeaturesName":                           "value",
+		"postApiV4GroupsIdMembers":                        "user_id",
+		"postApiV4Mcp":                                    "id",
+		"postApiV4ProjectsIdMembers":                      "user_id",
+		"putApiV4AdminActiveContextCodeEnabledNamespaces": "namespace_id",
+	}
+	operations := map[string]sourceOperationDescriptor{}
+	for _, operation := range descriptor.Operations {
+		operations[operation.SourceID] = operation
+	}
+	for sourceID, field := range wantBareString {
+		source, found := operations[sourceID]
+		if !found {
+			t.Fatalf("GitLab P5 source %q is missing", sourceID)
+		}
+		action := sourceProjectionActionForEndpoint(writes.root, source.Method, sourceProjectionDeclaredPath(source))
+		if action == nil || !sourceProjectionGeneratedJSONBodyMutationAction(action, source) {
+			t.Fatalf("GitLab P5 source %q action = %#v, want its exact generated closed-root action", sourceID, action)
+		}
+		contract, err := sourceContractForAction(source, action)
+		if err != nil {
+			t.Fatalf("GitLab P5 source %q contract: %v", sourceID, err)
+		}
+		if !contract.BareStringFields[field] {
+			t.Fatalf("GitLab P5 source %q field %q did not retain declared string arm", sourceID, field)
+		}
+		var loadedAction *engine.WriteAction
+		for index := range bundle.Writes {
+			if bundle.Writes[index].Name == stringField(action, "name") {
+				loadedAction = &bundle.Writes[index]
+				break
+			}
+		}
+		if loadedAction == nil {
+			t.Fatalf("GitLab P5 source %q action %q was not loaded", sourceID, stringField(action, "name"))
+		}
+		for _, intent := range []string{"reverse_etl", "direct_write"} {
+			var command engine.CLICommand
+			for _, candidate := range bundle.CLISurface.Commands {
+				if candidate.Intent == intent && candidate.Write == loadedAction.Name {
+					command = candidate
+					break
+				}
+			}
+			if reason := sourceActionCoverageReason(*loadedAction, command, source); reason != "" {
+				t.Fatalf("GitLab P5 source %q field %q %s binding = %s", sourceID, field, intent, reason)
+			}
+		}
+	}
+}
+
+// TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred pins the current
+// Atlas gap: the provider's JSON-Schema regex is preserved in the source
+// descriptor, while both command lanes give a discoverable typed outcome
+// until a captain-approved engine dialect extension exists.
+func TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred(t *testing.T) {
+	const (
+		defsRoot = "../../internal/connectors/defs"
+		sourceID = "postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection"
+	)
+	bundle, err := engine.Load(os.DirFS(defsRoot), "gitlab")
+	if err != nil {
+		t.Fatalf("load GitLab bundle: %v", err)
+	}
+	descriptorRaw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources", "gitlab-operation-descriptor.json"))
+	if err != nil {
+		t.Fatalf("read GitLab source descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
+		t.Fatalf("decode GitLab source descriptor: %v", err)
+	}
+	var source sourceOperationDescriptor
+	for _, operation := range descriptor.Operations {
+		if operation.SourceID == sourceID {
+			source = operation
+			break
+		}
+	}
+	if source.SourceID == "" {
+		t.Fatalf("GitLab source descriptor omits %q", sourceID)
+	}
+	matchedGap := false
+	for _, gap := range source.Runtime.Gaps {
+		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body property origin" && strings.Contains(gap.Reason, "engine JSON-Schema regex compiler") {
+			matchedGap = true
+			break
+		}
+	}
+	if !source.Runtime.MergeBlocked || !matchedGap {
+		t.Fatalf("GitLab surrogate-regex source runtime = %+v, want exact retained schema gap", source.Runtime)
+	}
+	for _, intent := range []string{"reverse_etl", "direct_write"} {
+		matched := false
+		for _, command := range bundle.CLISurface.Commands {
+			if command.SourceOperation != sourceID || command.Intent != intent {
+				continue
+			}
+			matched = true
+			if command.Availability != "partial" || !strings.Contains(command.Notes, "missing_foundation=cli-request-schema-foundation-r1") {
+				t.Fatalf("GitLab surrogate-regex %s command = %+v, want source-cited partial outcome", intent, command)
+			}
+		}
+		if !matched {
+			t.Fatalf("GitLab surrogate-regex source has no %s command", intent)
+		}
+	}
+}
+
+// TestGitLabDeprecatedSourceOperationsRemainMappedWithoutAdmissionExclusion
+// proves that a provider deprecation notice is retained as source evidence,
+// never used as an admission-policy exclusion. A cited operation is either
+// visible as a blocked API-surface outcome with its named foundation or as the
+// paired direct-write/reverse-ETL command that now executes it.
+func TestGitLabDeprecatedSourceOperationsRemainMappedWithoutAdmissionExclusion(t *testing.T) {
 	const defsRoot = "../../internal/connectors/defs"
 	lockRaw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources/gitlab-operation-source-lock.json"))
 	if err != nil {
@@ -261,8 +400,30 @@ func TestGitLabDeprecatedSourceOperationsRemainFoundationBlocked(t *testing.T) {
 			}
 		}
 	}
-	if len(found) != len(deprecated) {
-		t.Fatalf("deprecated GitLab source operations represented by api_surface = %d/%d; missing=%v", len(found), len(deprecated), gitLabMissingOperationIDs(deprecated, found))
+	implemented := map[string]map[string]bool{}
+	for _, command := range bundle.CLISurface.Commands {
+		if _, isDeprecated := deprecated[command.SourceOperation]; !isDeprecated {
+			continue
+		}
+		if command.Intent != "direct_write" && command.Intent != "reverse_etl" {
+			continue
+		}
+		if command.Availability != "implemented" {
+			t.Fatalf("deprecated GitLab source operation %s %s command = %+v, want implemented or a blocked API-surface outcome", command.SourceOperation, command.Intent, command)
+		}
+		if implemented[command.SourceOperation] == nil {
+			implemented[command.SourceOperation] = map[string]bool{}
+		}
+		implemented[command.SourceOperation][command.Intent] = true
+	}
+	for operationID := range deprecated {
+		if found[operationID] {
+			continue
+		}
+		if implemented[operationID]["direct_write"] && implemented[operationID]["reverse_etl"] {
+			continue
+		}
+		t.Fatalf("deprecated GitLab source operation %s is neither a blocked API-surface outcome nor paired executable command", operationID)
 	}
 }
 

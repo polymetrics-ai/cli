@@ -75,6 +75,7 @@ type EnabledContractSourceCoverage struct {
 	Coverage           string   `json:"coverage"`
 	Expected           int      `json:"expected"`
 	Implemented        int      `json:"implemented"`
+	UnmappedMapping    int      `json:"unmapped_mapping"`
 	DeferredFoundation int      `json:"deferred_foundation"`
 	Unsupported        int      `json:"unsupported_with_provider_evidence"`
 }
@@ -257,12 +258,17 @@ func (t EnabledContractTransport) Validate() error {
 	seenStreams := map[string]bool{}
 	seenOperations := map[string]bool{}
 	for _, stream := range t.Streams {
-		if !enabledContractIdentifier(stream.Stream) || !enabledContractIdentifier(stream.SourceOperation) || seenStreams[stream.Stream] || seenOperations[stream.SourceOperation] {
-			return fmt.Errorf("transport stream evidence has an invalid or duplicate stream/source operation")
+		if !enabledContractIdentifier(stream.Stream) || seenStreams[stream.Stream] {
+			return fmt.Errorf("transport stream evidence has an invalid or duplicate stream")
 		}
 		seenStreams[stream.Stream] = true
-		seenOperations[stream.SourceOperation] = true
-		if stream.CursorEvidence != "not_declared" || stream.DeleteEvidence != "not_declared" || stream.OrderEvidence != "not_declared" {
+		if stream.SourceOperation != "" {
+			if !enabledContractSourceOperationIdentifier(stream.SourceOperation) || seenOperations[stream.SourceOperation] {
+				return fmt.Errorf("transport stream evidence has an invalid or duplicate source operation")
+			}
+			seenOperations[stream.SourceOperation] = true
+		}
+		if !enabledContractTransportEvidence(stream.CursorEvidence) || !enabledContractTransportEvidence(stream.DeleteEvidence) || !enabledContractTransportEvidence(stream.OrderEvidence) {
 			return fmt.Errorf("transport stream %q must preserve the closed evidence vocabulary", stream.Stream)
 		}
 	}
@@ -276,9 +282,13 @@ func (t EnabledContractTransport) Validate() error {
 	return nil
 }
 
+func enabledContractTransportEvidence(value string) bool {
+	return value == "not_declared" || value == "source_cited"
+}
+
 func enabledTransportMode(mode string) bool {
 	switch mode {
-	case "full_overwrite", "full_append", "incremental_upsert", "incremental_dedupe", "incremental_dedupe_history":
+	case "full_overwrite", "full_append", "incremental_append", "incremental_upsert", "incremental_dedupe", "incremental_dedupe_history":
 		return true
 	default:
 		return false
@@ -286,11 +296,11 @@ func enabledTransportMode(mode string) bool {
 }
 
 func (s EnabledContractSourceCoverage) Validate() error {
-	if s.Expected < 0 || s.Implemented < 0 || s.DeferredFoundation < 0 || s.Unsupported < 0 {
+	if s.Expected < 0 || s.Implemented < 0 || s.UnmappedMapping < 0 || s.DeferredFoundation < 0 || s.Unsupported < 0 {
 		return fmt.Errorf("source coverage counts must be non-negative")
 	}
-	if s.Expected != s.Implemented+s.DeferredFoundation+s.Unsupported {
-		return fmt.Errorf("source coverage expected=%d does not equal implemented+deferred+unsupported=%d", s.Expected, s.Implemented+s.DeferredFoundation+s.Unsupported)
+	if s.Expected != s.Implemented+s.UnmappedMapping+s.DeferredFoundation+s.Unsupported {
+		return fmt.Errorf("source coverage expected=%d does not equal implemented+unmapped+deferred+unsupported=%d", s.Expected, s.Implemented+s.UnmappedMapping+s.DeferredFoundation+s.Unsupported)
 	}
 	wantCoverage := EnabledCoveragePartial
 	if s.Expected == 0 {
@@ -311,7 +321,7 @@ func (s EnabledContractSourceCoverage) Validate() error {
 	}
 	seenIDs := map[string]bool{}
 	for _, id := range s.OperationIDs {
-		if !enabledContractIdentifier(id) || seenIDs[id] {
+		if !enabledContractSourceOperationIdentifier(id) || seenIDs[id] {
 			return fmt.Errorf("source coverage operation IDs must be non-empty, safe, and unique")
 		}
 		seenIDs[id] = true
@@ -360,7 +370,7 @@ func (c EnabledConnectorContract) ReconcileSourceOperations(operations []Enabled
 	}
 	seenIDs := make(map[string]bool, len(operations))
 	for _, operation := range operations {
-		if !enabledContractIdentifier(operation.ID) || seenIDs[operation.ID] {
+		if !enabledContractSourceOperationIdentifier(operation.ID) || seenIDs[operation.ID] {
 			return fmt.Errorf("source operation identity %q is invalid or duplicated", operation.ID)
 		}
 		seenIDs[operation.ID] = true
@@ -420,7 +430,7 @@ func (c EnabledConnectorContract) ReconcileSupplementalSourceOperations(sourceLo
 	}
 	seen := map[string]bool{}
 	for _, operation := range operations {
-		if !enabledContractIdentifier(operation.ID) || seen[operation.ID] {
+		if !enabledContractSourceOperationIdentifier(operation.ID) || seen[operation.ID] {
 			return fmt.Errorf("supplemental source operation identity %q is invalid or duplicated", operation.ID)
 		}
 		seen[operation.ID] = true
@@ -475,6 +485,15 @@ func enabledContractIdentifier(value string) bool {
 		return false
 	}
 	return true
+}
+
+// enabledContractSourceOperationIdentifier validates retained provider source
+// identities. Unlike connector names and artifact paths, provider operation
+// IDs can legitimately contain a slash (for example GitHub's generated REST
+// operation IDs); they are evidence keys only and never filesystem targets.
+func enabledContractSourceOperationIdentifier(value string) bool {
+	value = strings.TrimSpace(value)
+	return value != "" && len(value) <= 256 && !strings.ContainsAny(value, "\\\x00\r\n\t ")
 }
 
 // LaneNames returns the normalized closed vocabulary for inspection callers.

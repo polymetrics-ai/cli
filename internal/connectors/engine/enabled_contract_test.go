@@ -9,7 +9,7 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
-func TestEnabledContractActivationRejectsInventedTransportFacts(t *testing.T) {
+func TestEnabledContractActivationRejectsMismatchedTransportFacts(t *testing.T) {
 	bundle, err := Load(os.DirFS("../defs"), "gitlab")
 	if err != nil {
 		t.Fatalf("load GitLab enabled contract: %v", err)
@@ -24,36 +24,39 @@ func TestEnabledContractActivationRejectsInventedTransportFacts(t *testing.T) {
 		want   string
 	}{
 		{
-			name: "keyed idempotency",
+			name: "idempotency",
 			mutate: func(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor) {
 				contractLane(contract, "sync_transport").Transport.RuntimeDelivery.Idempotency = connectors.DeliveryIdempotencyKeyed
-				transport.Source.Delivery.Idempotency = connectors.DeliveryIdempotencyKeyed
 			},
-			want: "at_least_once/unordered/not_available",
+			want: "delivery policy does not match",
 		},
 		{
-			name: "source ordering",
+			name: "ordering",
 			mutate: func(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor) {
 				contractLane(contract, "sync_transport").Transport.RuntimeDelivery.Ordering = connectors.DeliveryOrderingSource
-				transport.Source.Delivery.Ordering = connectors.DeliveryOrderingSource
 			},
-			want: "at_least_once/unordered/not_available",
+			want: "delivery policy does not match",
 		},
 		{
-			name: "tombstones",
+			name: "delete handling",
 			mutate: func(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor) {
 				contractLane(contract, "sync_transport").Transport.RuntimeDelivery.Deletes = connectors.DeliveryDeletesTombstone
-				transport.Source.Delivery.Deletes = connectors.DeliveryDeletesTombstone
 			},
-			want: "at_least_once/unordered/not_available",
+			want: "delivery policy does not match",
 		},
 		{
-			name: "incremental cursor mode",
+			name: "mode",
 			mutate: func(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor) {
 				contractLane(contract, "sync_transport").Transport.Modes = append(contractLane(contract, "sync_transport").Transport.Modes, string(synccontract.ModeIncrementalDedupe))
-				transport.Source.Modes = append(transport.Source.Modes, synccontract.ModeIncrementalDedupe)
 			},
-			want: "requires source-cited cursor evidence",
+			want: "modes do not match",
+		},
+		{
+			name: "eligible stream",
+			mutate: func(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor) {
+				contractLane(contract, "sync_transport").Transport.Streams[0].Stream = "not-a-loaded-stream"
+			},
+			want: "eligible streams do not match",
 		},
 		{
 			name: "partial source coverage claimed complete",
@@ -83,9 +86,9 @@ func TestGitLabGuideRendersPartialSourceCoverage(t *testing.T) {
 	manual := connectors.RenderConnectorManual(New(bundle, nil))
 	for _, want := range []string{
 		"ENABLED CONNECTOR CONTRACT",
-		"direct_read: implemented (source coverage: partial 582/749; deferred=167; unsupported=0)",
-		"reverse_etl: implemented (source coverage: partial 147/1003; deferred=856; unsupported=0)",
-		"etl: implemented (source coverage: complete 4/4; deferred=0; unsupported=0)",
+		"direct_read: implemented (source coverage: partial 582/749; unmapped=0; deferred=167; unsupported=0)",
+		"reverse_etl: implemented (source coverage: partial 381/1003; unmapped=0; deferred=622; unsupported=0)",
+		"etl: implemented (source coverage: complete 4/4; unmapped=0; deferred=0; unsupported=0)",
 	} {
 		if !strings.Contains(manual, want) {
 			t.Fatalf("GitLab manual does not disclose source coverage %q:\n%s", want, manual)

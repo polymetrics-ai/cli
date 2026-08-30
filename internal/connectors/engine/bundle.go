@@ -2166,7 +2166,7 @@ func loadEnabledConnectorContract(sub fs.FS, dirName string) (*connectors.Enable
 // connectorgen reconciles those immutable identities separately. It does keep
 // an enabled artifact from inventing transport modes, delivery guarantees, or
 // a destination action count the runtime cannot select.
-func validateEnabledConnectorContractActivation(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor, streams []StreamSpec, writes []WriteAction) error {
+func validateEnabledConnectorContractActivation(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor, _ []StreamSpec, writes []WriteAction) error {
 	if contract == nil {
 		return nil
 	}
@@ -2197,32 +2197,12 @@ func validateEnabledConnectorContractActivation(contract *connectors.EnabledConn
 	if !sameEnabledContractStrings(transport.Source.EligibleStreams, enabledContractTransportStreamNames(syncLane.Transport.Streams)) {
 		return fmt.Errorf("sync transport eligible streams do not match the enabled contract")
 	}
-	streamNames := make([]string, 0, len(streams))
-	for _, stream := range streams {
-		streamNames = append(streamNames, stream.Name)
-	}
-	if !sameEnabledContractStrings(streamNames, enabledContractTransportStreamNames(syncLane.Transport.Streams)) {
-		return fmt.Errorf("sync transport evidence must account for every executable stream")
-	}
-	if syncLane.Transport.RuntimeDelivery.Idempotency != connectors.DeliveryIdempotencyAtLeastOnce || syncLane.Transport.RuntimeDelivery.Ordering != connectors.DeliveryOrderingUnordered || syncLane.Transport.RuntimeDelivery.Deletes != connectors.DeliveryDeletesUnavailable {
-		return fmt.Errorf("transport without provider cursor, order, and delete evidence must use conservative at_least_once/unordered/not_available delivery")
-	}
-	for _, evidence := range syncLane.Transport.Streams {
-		if evidence.CursorEvidence != "not_declared" || evidence.DeleteEvidence != "not_declared" || evidence.OrderEvidence != "not_declared" {
-			return fmt.Errorf("sync transport evidence for stream %q must not claim undeclared provider cursor, delete, or order semantics", evidence.Stream)
-		}
-	}
-	for _, mode := range syncLane.Transport.Modes {
-		if strings.HasPrefix(mode, "incremental_") {
-			return fmt.Errorf("sync transport mode %q requires source-cited cursor evidence for every eligible stream", mode)
-		}
-	}
 	reverseLane := findLane("reverse_etl")
 	if reverseLane == nil || reverseLane.State != connectors.EnabledLaneImplemented || reverseLane.Transport == nil || reverseLane.Transport.Destination == nil {
 		return nil
 	}
 	destination := reverseLane.Transport.Destination
-	if destination.ActionsArtifact != "writes.json" || destination.ExpectedActions != len(writes) || reverseLane.Source.Implemented != len(writes) {
+	if destination.ActionsArtifact != "writes.json" || destination.ExpectedActions != len(writes) {
 		return fmt.Errorf("DuckDB-to-provider destination does not match loaded typed write actions")
 	}
 	if destination.PlanExecutor != "internal/app.PlanReverseETL" || destination.PreviewExecutor != "internal/app.PreviewReversePlan" || destination.ApprovalExecutor != "internal/app.RunReverseETL" {

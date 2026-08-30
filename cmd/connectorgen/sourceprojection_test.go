@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"slices"
 	"strings"
 	"testing"
 	"testing/fstest"
@@ -142,6 +143,37 @@ func TestSourceProjectCommandPreservesDeclaredFlagOrderAndNames(t *testing.T) {
 		if got := stringField(flag, "maps_to"); got != wantTargets[index] {
 			t.Errorf("flag %d target = %q, want %q", index, got, wantTargets[index])
 		}
+	}
+}
+
+func TestSourceProjectCommandSerializesNumericEnumsAsCLIValues(t *testing.T) {
+	t.Parallel()
+	command := newOrderedObject()
+	command.set("path", "items update")
+	contract := sourceActionContract{
+		Fields: map[string]any{
+			"access_level": map[string]any{"type": "integer", "enum": []any{json.Number("-1"), json.Number("0"), json.Number("30")}},
+		},
+		BareStringFields: map[string]bool{},
+		SecretFields:     map[string]bool{},
+		Required:         map[string]bool{"access_level": true},
+	}
+	if !sourceProjectCommand(command, contract) {
+		t.Fatal("source command should gain the declared numeric enum field")
+	}
+	raw, err := json.Marshal(command)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var loaded engine.CLICommand
+	if err := json.Unmarshal(raw, &loaded); err != nil {
+		t.Fatalf("numeric enum CLI command must remain loadable: %v", err)
+	}
+	if got := loaded.Flags[0].Type; got != "integer" {
+		t.Fatalf("numeric enum CLI type = %q, want integer", got)
+	}
+	if got, want := loaded.Flags[0].Values, []string{"-1", "0", "30"}; !slices.Equal(got, want) {
+		t.Fatalf("numeric enum CLI values = %#v, want %#v", got, want)
 	}
 }
 
@@ -522,6 +554,19 @@ func TestSourceProjectionMaterializesEligibleSourceLockLanesWithMappedRoute(t *t
 		Output:  sourceOutputDescriptor{Class: sourceOutputStatus, Success: []sourceOutputVariant{{Status: "204", Class: sourceOutputStatus}}},
 		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: sourceNonExecutableMutationDispositionFoundation, Location: "source operation deleteSourceWidget"}}, NonExecutableMutation: &sourceNonExecutableMutationDisposition{Source: sourceOperationCitation{SourceID: "deleteSourceWidget", Method: "DELETE", Path: "/api/v1/widgets/{id}"}, Reason: "no declaration"}},
 	}
+	bodyWrite := sourceOperationDescriptor{
+		Connector: "alpha", Protocol: "rest", SourceID: "createSourceWidget", ProviderOperationID: "createSourceWidget",
+		Method: "POST", Path: "/api/v1/widgets", MappingPath: "/widgets",
+		Source: sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/api/v1/widgets"].post`},
+		Request: sourceRequestDescriptor{Body: &sourceRequestBodyDescriptor{Required: true, Schema: map[string]any{
+			"type": "object", "properties": map[string]any{
+				"title":    map[string]any{"type": "string"},
+				"metadata": map[string]any{"type": "object", "additionalProperties": true},
+			}, "required": []any{"title"},
+		}}, MediaType: "application/json"},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "201", MediaType: "application/json", Class: sourceOutputJSON}}},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: "cli-request-schema-foundation-r1", Location: "request body"}, {Foundation: sourceNonExecutableMutationDispositionFoundation, Location: "source operation createSourceWidget"}}, NonExecutableMutation: &sourceNonExecutableMutationDisposition{Source: sourceOperationCitation{SourceID: "createSourceWidget", Method: "POST", Path: "/api/v1/widgets"}, Reason: "no declaration"}},
+	}
 	blocked := sourceOperationDescriptor{
 		Connector: "alpha", Protocol: "rest", SourceID: "getOpenWidget", ProviderOperationID: "getOpenWidget",
 		Method: "GET", Path: "/api/v1/open-widgets", MappingPath: "/open-widgets",
@@ -531,12 +576,12 @@ func TestSourceProjectionMaterializesEligibleSourceLockLanesWithMappedRoute(t *t
 		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: "cli-request-schema-foundation-r1", Location: "request body"}}},
 	}
 
-	stats, err := projectEligibleSourceLockLanesToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{read, write, blocked}}, false)
+	stats, err := projectEligibleSourceLockLanesToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{read, write, bodyWrite, blocked}}, false)
 	if err != nil {
 		t.Fatalf("materialize eligible source-lock lanes: %v", err)
 	}
-	if stats.Operations != 1 || stats.Writes != 1 || stats.CLI != 2 || stats.Surface != 2 {
-		t.Fatalf("materialization stats = %+v, want one read operation, one write, two commands, and two surface bindings", stats)
+	if stats.Operations != 1 || stats.Writes != 2 || stats.CLI != 5 || stats.Surface != 3 {
+		t.Fatalf("materialization stats = %+v, want one read operation, two writes, five commands, and three surface bindings", stats)
 	}
 
 	var operations struct {
@@ -564,18 +609,30 @@ func TestSourceProjectionMaterializesEligibleSourceLockLanesWithMappedRoute(t *t
 	if err := json.Unmarshal([]byte(readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json"))), &cli); err != nil {
 		t.Fatalf("decode generated CLI: %v", err)
 	}
-	bySource := map[string]engine.CLICommand{}
+	bySourceIntent := map[string]map[string]engine.CLICommand{}
 	for _, command := range cli.Commands {
-		bySource[command.SourceOperation] = command
+		if bySourceIntent[command.SourceOperation] == nil {
+			bySourceIntent[command.SourceOperation] = map[string]engine.CLICommand{}
+		}
+		bySourceIntent[command.SourceOperation][command.Intent] = command
 	}
-	if command, found := bySource[read.SourceID]; !found || command.Intent != "direct_read" || command.Availability != "implemented" || command.Operation == "" || len(command.APISurface) != 1 || command.APISurface[0].Path != "/widgets/{id}" {
+	if command, found := bySourceIntent[read.SourceID]["direct_read"]; !found || command.Availability != "implemented" || command.Operation == "" || len(command.APISurface) != 1 || command.APISurface[0].Path != "/widgets/{id}" {
 		t.Fatalf("generated direct read = %+v, want mapped implemented source-bound command", command)
 	}
-	if command, found := bySource[write.SourceID]; !found || command.Intent != "reverse_etl" || command.Availability != "implemented" || command.Write == "" || len(command.APISurface) != 1 || command.APISurface[0].Path != "/widgets/{id}" {
+	if command, found := bySourceIntent[write.SourceID]["reverse_etl"]; !found || command.Availability != "implemented" || command.Write == "" || len(command.APISurface) != 1 || command.APISurface[0].Path != "/widgets/{id}" {
 		t.Fatalf("generated reverse-ETL command = %+v, want mapped implemented source-bound command", command)
 	}
-	if _, found := bySource[blocked.SourceID]; found {
-		t.Fatalf("blocked source contract unexpectedly received a command: %+v", bySource[blocked.SourceID])
+	if command, found := bySourceIntent[bodyWrite.SourceID]["reverse_etl"]; !found || command.Availability != "implemented" || command.Write == "" || len(command.APISurface) != 1 || command.APISurface[0].Path != "/widgets" {
+		t.Fatalf("generated JSON-body reverse-ETL command = %+v, want mapped implemented source-bound command", command)
+	}
+	for _, source := range []sourceOperationDescriptor{write, bodyWrite} {
+		command, found := bySourceIntent[source.SourceID]["direct_write"]
+		if !found || command.Availability != "implemented" || command.Write == "" || len(command.APISurface) != 1 || command.APISurface[0].Path != source.MappingPath {
+			t.Fatalf("generated direct-write command for %s = %+v, want same bounded action", source.SourceID, command)
+		}
+	}
+	if _, found := bySourceIntent[blocked.SourceID]; found {
+		t.Fatalf("blocked source contract unexpectedly received a command: %+v", bySourceIntent[blocked.SourceID])
 	}
 	var writes struct {
 		Actions []engine.WriteAction `json:"actions"`
@@ -590,8 +647,35 @@ func TestSourceProjectionMaterializesEligibleSourceLockLanesWithMappedRoute(t *t
 		t.Fatalf("decode generated operation contracts: %v", err)
 	}
 	connector := engine.New(engine.Bundle{Name: "alpha", Metadata: engine.Metadata{Name: "alpha"}, Operations: declaredOperations.Operations, Writes: writes.Actions, CLISurface: &cli}, nil)
-	if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: strings.Fields(bySource[write.SourceID].Path), Flags: map[string][]string{"id": {"42"}}}); err != nil {
+	if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: strings.Fields(bySourceIntent[write.SourceID]["reverse_etl"].Path), Flags: map[string][]string{"id": {"42"}}}); err != nil {
 		t.Fatalf("generated reverse-ETL command lost source path flag: %v", err)
+	}
+	bodyCommand, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: strings.Fields(bySourceIntent[bodyWrite.SourceID]["direct_write"].Path), Flags: map[string][]string{"title": {"closed named body"}, "metadata": {`{"retained":"bounded"}`}}})
+	if err != nil {
+		t.Fatalf("generated JSON-body reverse-ETL command rejected named fields: %v", err)
+	}
+	if bodyCommand.Record["title"] != "closed named body" {
+		t.Fatalf("generated JSON-body record = %#v, want named title", bodyCommand.Record)
+	}
+	if _, err := commandrunner.BuildWriteCommand(context.Background(), connector, commandrunner.Request{Path: strings.Fields(bySourceIntent[bodyWrite.SourceID]["direct_write"].Path), Flags: map[string][]string{"title": {"closed named body"}, "body": {`{"undeclared":true}`}}}); err == nil || !strings.Contains(err.Error(), "unknown flag --body") {
+		t.Fatalf("source-open JSON body raw escape error = %v, want unknown --body refusal", err)
+	}
+	var bodyAction *engine.WriteAction
+	for index := range writes.Actions {
+		if writes.Actions[index].Name == bySourceIntent[bodyWrite.SourceID]["reverse_etl"].Write {
+			bodyAction = &writes.Actions[index]
+			break
+		}
+	}
+	if bodyAction == nil || bodyAction.BodyType != "json" || !slices.Equal(bodyAction.SuccessStatuses, []int{201}) {
+		t.Fatalf("generated JSON-body action = %+v, want exact JSON body and 201 response", bodyAction)
+	}
+	var bodySchema struct {
+		AdditionalProperties bool                       `json:"additionalProperties"`
+		Properties           map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(bodyAction.RecordSchema, &bodySchema); err != nil || bodySchema.AdditionalProperties || len(bodySchema.Properties) != 2 {
+		t.Fatalf("generated JSON-body record schema = %s err=%v, want closed named root", bodyAction.RecordSchema, err)
 	}
 	completeWrite := write
 	completeWrite.Runtime = sourceRuntimeReachability{}
@@ -620,19 +704,26 @@ func TestSourceProjectionMaterializesEligibleSourceLockLanesWithMappedRoute(t *t
 	if err != nil {
 		t.Fatalf("refresh stale generated mutation: %v", err)
 	}
-	if stats.CLI != 1 || stats.Operations != 0 || stats.Writes != 0 {
-		t.Fatalf("stale generated mutation refresh = %+v, want CLI-only refresh", stats)
+	if stats.CLI != 3 || stats.Operations != 0 || stats.Writes != 0 {
+		t.Fatalf("stale generated mutation refresh = %+v, want reverse-ETL and direct-write CLI refresh", stats)
 	}
 	if !strings.Contains(readProjectionFixture(t, filepath.Join(bundleDir, "cli_surface.json")), `"max_bytes": 32768`) {
 		t.Fatal("stale generated mutation did not restore source-derived CLI byte cap")
 	}
 
-	stats, err = projectEligibleSourceLockLanesToBundle(bundleDir, sourceImportResult{Operations: []sourceOperationDescriptor{read, write, blocked}}, false)
+	// A second run with the exact same source result must be a true no-op. This
+	// deliberately differs from the stale-flag reconciliation above: no source
+	// identity or pre-existing action is omitted from this idempotence fixture.
+	fullResult := sourceImportResult{Operations: []sourceOperationDescriptor{read, write, bodyWrite, blocked}}
+	if _, err := projectEligibleSourceLockLanesToBundle(bundleDir, fullResult, false); err != nil {
+		t.Fatalf("restore complete source result before idempotence check: %v", err)
+	}
+	stats, err = projectEligibleSourceLockLanesToBundle(bundleDir, fullResult, true)
 	if err != nil {
 		t.Fatalf("repeat materialization: %v", err)
 	}
 	if stats.Changed() {
-		t.Fatalf("repeat materialization drifted: %+v", stats)
+		t.Fatalf("exact repeat materialization drifted: %+v", stats)
 	}
 }
 
@@ -743,7 +834,7 @@ func TestGitLabSourceLockSurfaceStatesCurrentEligibleLaneDisposition(t *testing.
 	if err := json.Unmarshal(metadataRaw, &metadata); err != nil {
 		t.Fatalf("decode GitLab metadata: %v", err)
 	}
-	if !strings.Contains(metadata.Description, "582 source-bound direct reads") || !strings.Contains(metadata.Description, "147 approval-gated reverse-ETL actions") || strings.Contains(metadata.Description, "no write command") {
+	if !strings.Contains(metadata.Description, "582 source-bound direct reads") || !strings.Contains(metadata.Description, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") || strings.Contains(metadata.Description, "no write command") {
 		t.Fatalf("GitLab metadata description = %q, want current source-lock lane disposition", metadata.Description)
 	}
 
@@ -761,7 +852,7 @@ func TestGitLabSourceLockSurfaceStatesCurrentEligibleLaneDisposition(t *testing.
 	if err := json.Unmarshal(cliRaw, &surface); err != nil {
 		t.Fatalf("decode GitLab CLI surface: %v", err)
 	}
-	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "147 approval-gated reverse-ETL actions") {
+	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") {
 		t.Fatalf("GitLab CLI tagline = %q, want current source-lock lane disposition", surface.Tagline)
 	}
 	topics := strings.Join(func() []string {
@@ -771,7 +862,7 @@ func TestGitLabSourceLockSurfaceStatesCurrentEligibleLaneDisposition(t *testing.
 		}
 		return values
 	}(), "\n")
-	if !strings.Contains(topics, "1,752") || !strings.Contains(topics, "1,019") || strings.Contains(topics, "only the four existing stream reads") {
+	if !strings.Contains(topics, "1,752") || !strings.Contains(topics, "785") || !strings.Contains(topics, "1,845") || strings.Contains(topics, "only the four existing stream reads") {
 		t.Fatalf("GitLab CLI help topics = %q, want source-lock counts and no stale four-stream-only claim", topics)
 	}
 
@@ -780,7 +871,7 @@ func TestGitLabSourceLockSurfaceStatesCurrentEligibleLaneDisposition(t *testing.
 		t.Fatalf("read GitLab connector docs: %v", err)
 	}
 	docs := string(docsRaw)
-	if !strings.Contains(docs, "582 source-bound direct reads") || !strings.Contains(docs, "147 approval-gated reverse-ETL actions") || !strings.Contains(docs, "1,019") || strings.Contains(docs, "only the four existing stream reads executable") {
+	if !strings.Contains(docs, "582 source-bound direct reads") || !strings.Contains(docs, "381 source-bound mutations") || !strings.Contains(docs, "direct-write and approval-gated reverse-ETL") || !strings.Contains(docs, "785") || !strings.Contains(docs, "1,845") || strings.Contains(docs, "only the four existing stream reads executable") {
 		t.Fatalf("GitLab connector docs have stale source-lock lane disposition")
 	}
 }
@@ -1294,15 +1385,15 @@ func TestSourceProjectionMergeDirectReadSurfaceCoveragePreservesOnlyValidStream(
 			wantChanged: false,
 		},
 		{
-			name:        "no stream coverage reconciles direct read only",
+			name:        "missing stream coverage restores exact declared stream",
 			current:     `{"direct_read":"stale widgets command"}`,
-			want:        `{"direct_read":"widgets list"}`,
+			want:        `{"stream":"widgets","direct_read":"widgets list"}`,
 			wantChanged: true,
 		},
 		{
-			name:        "malformed stream is not retained",
+			name:        "malformed stream is replaced with exact declared stream",
 			current:     "{\"stream\":\"widgets\\n\",\"direct_read\":\"stale widgets command\"}",
-			want:        `{"direct_read":"widgets list"}`,
+			want:        `{"stream":"widgets","direct_read":"widgets list"}`,
 			wantChanged: true,
 		},
 	} {
@@ -1322,6 +1413,47 @@ func TestSourceProjectionMergeDirectReadSurfaceCoveragePreservesOnlyValidStream(
 				t.Fatalf("coverage = %#v, want %s", got, tc.want)
 			}
 		})
+	}
+}
+
+func TestSourceProjectionExistingGeneratedReadRefreshesComplementaryStreamCoverage(t *testing.T) {
+	var surface, streams, wantCoverage, wantUnrelated orderedJSON
+	if err := json.Unmarshal([]byte(`{
+  "endpoints":[
+    {"method":"GET","path":"/widgets","covered_by":{"direct_read":"widgets list"}},
+    {"method":"GET","path":"/unrelated","covered_by":{"direct_read":"unrelated list"}}
+  ]
+}`), &surface); err != nil {
+		t.Fatalf("decode API surface fixture: %v", err)
+	}
+	if err := json.Unmarshal([]byte(`{"streams":[{"name":"widgets","method":"GET","path":"/widgets"}]}`), &streams); err != nil {
+		t.Fatalf("decode streams fixture: %v", err)
+	}
+	if err := json.Unmarshal([]byte(`{"stream":"widgets","direct_read":"widgets list"}`), &wantCoverage); err != nil {
+		t.Fatalf("decode expected coverage: %v", err)
+	}
+	if err := json.Unmarshal([]byte(`{"method":"GET","path":"/unrelated","covered_by":{"direct_read":"unrelated list"}}`), &wantUnrelated); err != nil {
+		t.Fatalf("decode expected unrelated endpoint: %v", err)
+	}
+
+	source := sourceOperationDescriptor{Method: "GET", Path: "/widgets"}
+	if changed := sourceProjectionSetEndpointCoverage(surface.root, source, "direct_read", "widgets list", streams.root); !changed {
+		t.Fatal("existing generated read coverage was not refreshed")
+	}
+	endpoints := arrayField(surface.root, "endpoints")
+	if len(endpoints) != 2 {
+		t.Fatalf("endpoint count = %d, want 2", len(endpoints))
+	}
+	widgets, ok := endpoints[0].(*orderedObject)
+	if !ok {
+		t.Fatal("widgets endpoint is not an object")
+	}
+	gotCoverage, _ := widgets.get("covered_by")
+	if !orderedSemanticEqual(gotCoverage, wantCoverage.root) {
+		t.Fatalf("widgets coverage = %#v, want stream plus generated direct read", gotCoverage)
+	}
+	if !orderedSemanticEqual(endpoints[1], wantUnrelated.root) {
+		t.Fatalf("unrelated endpoint changed = %#v, want %#v", endpoints[1], wantUnrelated.root)
 	}
 }
 
@@ -4929,6 +5061,32 @@ func TestSourceProjectionSourceCitedMutationDispositionLeavesExistingProjectionB
 		if after := readProjectionFixture(t, path); after != before[index] {
 			t.Fatalf("existing GitHub projection changed %s", filepath.Base(path))
 		}
+	}
+}
+
+func TestSourceProjectionGeneratedNoBodyMutationClearsOnlySyntheticDisposition(t *testing.T) {
+	operation := sourceCitedMutationTestOperation("bitbucket", "updateEnvironmentForRepository", "POST", "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes")
+	disposition := sourceNonExecutableMutationDisposition{
+		Source: sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path},
+		Reason: "provider-cited mutation has no complete declaration-owned executable action for its full retained request contract",
+	}
+	operation.Runtime = sourceRuntimeReachability{
+		MergeBlocked:          true,
+		NonExecutableMutation: &disposition,
+		Gaps:                  []sourceContractGap{sourceProjectionNonExecutableMutationRuntimeGap(operation, disposition)},
+	}
+	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
+	sourceProjectionClearGeneratedNoBodyMutationDisposition(&result, operation)
+	if got := result.Operations[0].Runtime; got.MergeBlocked || got.NonExecutableMutation != nil || len(got.Gaps) != 0 {
+		t.Fatalf("generated no-body mutation disposition = %#v, want cleared exact synthetic gap", got)
+	}
+
+	blocked := operation
+	blocked.Runtime.Gaps = append(blocked.Runtime.Gaps, sourceContractGap{Foundation: "other-foundation", Location: "request.body"})
+	result = sourceImportResult{Operations: []sourceOperationDescriptor{blocked}}
+	sourceProjectionClearGeneratedNoBodyMutationDisposition(&result, blocked)
+	if got := result.Operations[0].Runtime; !got.MergeBlocked || got.NonExecutableMutation == nil || len(got.Gaps) != 2 {
+		t.Fatalf("non-sole mutation disposition = %#v, want retained source gaps", got)
 	}
 }
 

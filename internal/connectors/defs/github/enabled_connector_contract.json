@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "connector": "github",
+  "source_lock": {
+    "path": "sources/github-operation-source-lock.json",
+    "sha256": "80850db290cde4eb487e0efb587cf27f305e77b6bef96933ed8a09b5169d5b1d",
+    "bytes": 12920264,
+    "canonical_evidence": true
+  },
+  "lanes": [
+    {
+      "name": "direct_read",
+      "state": "implemented",
+      "reason": "596 locked REST GET endpoints have exact bounded direct-read command bindings; 40 retained GET identities remain explicitly unmapped source coverage.",
+      "citations": [{"url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json", "location": "paths GET operations"}],
+      "artifacts": ["streams.json", "operations.json", "api_surface.json", "cli_surface.json", "sources/github-operation-source-lock.json"],
+      "source": {"partition": true, "methods": ["GET"], "coverage": "partial", "expected": 636, "implemented": 596, "unmapped_mapping": 40, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
+    },
+    {
+      "name": "direct_write",
+      "state": "implemented",
+      "reason": "The existing 287 bounded direct-write commands execute against closed write actions. None has yet retained an exact source-operation selector against the 584-operation REST mutation denominator, so source accounting remains explicitly partial rather than a missing execution foundation.",
+      "citations": [{"url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json", "location": "paths DELETE, PATCH, POST, and PUT operations"}],
+      "artifacts": ["writes.json", "operations.json", "cli_surface.json", "sources/github-operation-source-lock.json"],
+      "source": {"partition": true, "methods": ["DELETE", "PATCH", "POST", "PUT"], "coverage": "partial", "expected": 584, "implemented": 0, "unmapped_mapping": 584, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
+    },
+    {
+      "name": "binary_download",
+      "state": "implemented",
+      "reason": "Thirteen retained REST operations have bounded implemented binary-download command bindings.",
+      "citations": [{"url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json", "location": "binary response endpoints selected by cli_surface.json"}],
+      "artifacts": ["operations.json", "cli_surface.json", "sources/github-operation-source-lock.json"],
+      "source": {"partition": false, "operation_ids": ["github.rest.actions/download-artifact", "github.rest.actions/download-job-logs-for-workflow-run", "github.rest.actions/download-workflow-run-attempt-logs", "github.rest.actions/download-workflow-run-logs", "github.rest.dependency-graph/export-sbom", "github.rest.dependency-graph/fetch-sbom-report", "github.rest.dependency-graph/generate-sbom-report", "github.rest.migrations/download-archive-for-org", "github.rest.migrations/get-archive-for-authenticated-user", "github.rest.pulls/get", "github.rest.repos/download-tarball-archive", "github.rest.repos/download-zipball-archive", "github.rest.repos/get-release-asset"], "coverage": "complete", "expected": 13, "implemented": 13, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
+    },
+    {
+      "name": "binary_upload",
+      "state": "implemented",
+      "reason": "The retained release-asset upload operation has one bounded implemented binary-upload command binding.",
+      "citations": [{"url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json", "location": "paths[\"/repos/{owner}/{repo}/releases/{release_id}/assets\"].post"}],
+      "artifacts": ["writes.json", "cli_surface.json", "sources/github-operation-source-lock.json"],
+      "source": {"partition": false, "operation_ids": ["github.rest.repos/upload-release-asset"], "coverage": "complete", "expected": 1, "implemented": 1, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0}
+    },
+    {
+      "name": "etl",
+      "state": "implemented",
+      "reason": "The existing 37 declarative stream routes execute provider-to-DuckDB ETL through the registered source transport. Their operation-source selectors are not retained in the stream declarations, so all 37 mapping cells remain explicitly partial rather than a missing execution foundation.",
+      "citations": [{"url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json", "location": "paths GET operations used by streams.json"}],
+      "artifacts": ["streams.json", "sync_transport.json", "cli_surface.json", "sources/github-operation-source-lock.json"],
+      "source": {"partition": false, "coverage": "partial", "expected": 37, "implemented": 0, "unmapped_mapping": 37, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app.RunETL", "proof": "internal/app/github_sync_modes_test.go: TestGithubPullRequestsETLSupportsLegacyExecutableModes"}]
+    },
+    {
+      "name": "reverse_etl",
+      "state": "implemented",
+      "reason": "The existing 606 typed write actions execute through the DuckDB plan, preview, approval, and execute lifecycle. Their 584 retained REST mutation identities are not yet source-operation-bound in the reverse-ETL lane, so source accounting remains explicitly partial rather than a missing execution foundation.",
+      "citations": [{"url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json", "location": "paths DELETE, PATCH, POST, and PUT operations"}],
+      "artifacts": ["writes.json", "cli_surface.json", "sync_transport.json", "sources/github-operation-source-lock.json"],
+      "source": {"partition": false, "coverage": "partial", "expected": 584, "implemented": 0, "unmapped_mapping": 584, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "transport": {
+        "modes": ["full_overwrite", "full_append", "incremental_upsert"],
+        "runtime_delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
+        "streams": [{"stream": "issues", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"}],
+        "destination": {"kind": "reverse_plan_preview_approval", "actions_artifact": "writes.json", "expected_actions": 606, "plan_executor": "internal/app.PlanReverseETL", "preview_executor": "internal/app.PreviewReversePlan", "approval_executor": "internal/app.RunReverseETL"}
+      },
+      "warehouse_flows": [{"direction": "duckdb_to_provider", "runtime": "internal/app.PlanReverseETL -> internal/app.PreviewReversePlan -> internal/app.RunReverseETL", "proof": "internal/app/reverse_confirmation_test.go: TestRunReverseETLRequiresPreviewThenAllowsExecution"}]
+    },
+    {
+      "name": "sync_transport",
+      "state": "implemented",
+      "reason": "sync_transport.json declares all 37 executable source stream routes and their runtime delivery policy. The declaration has not yet retained exact source-operation selectors for those streams, so source accounting remains explicitly partial rather than a missing execution foundation.",
+      "citations": [{"url": "https://raw.githubusercontent.com/github/rest-api-description/b26c240ded1c8b79cb0fb09dee4a21239061fa23/descriptions/api.github.com/api.github.com.json", "location": "locked REST operation inventory"}],
+      "artifacts": ["sync_transport.json", "streams.json", "writes.json", "sources/github-operation-source-lock.json"],
+      "source": {"partition": false, "coverage": "partial", "expected": 37, "implemented": 0, "unmapped_mapping": 37, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "transport": {
+        "modes": ["full_overwrite", "full_append", "incremental_upsert", "incremental_dedupe", "incremental_dedupe_history"],
+        "runtime_delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "tombstone"},
+        "streams": [
+          {"stream": "repository", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "issues", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "pull_requests", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "branches", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "commits", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "tags", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "releases", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "labels", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "milestones", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "issue_comments", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "pull_request_review_comments", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "collaborators", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "contributors", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "stargazers", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "subscribers", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "workflows", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "workflow_runs", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "workflow_artifacts", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "deployments", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "commit_comments", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "deploy_keys", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "webhooks", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "environments", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "forks", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "invitations", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "issue_events", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "code_scanning_alerts", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "dependabot_alerts", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "secret_scanning_alerts", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "security_advisories", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "repo_rulesets", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "autolinks", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "languages", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "projects", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "project_items", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "discussions", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "discussion", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"}
+        ]
+      },
+      "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app.RunETL", "proof": "internal/app/transport_composition_test.go: TestOpenRegistersDefinitionOwnedProductionTransports"}]
+    }
+  ]
+}

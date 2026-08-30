@@ -78,6 +78,22 @@ for every declared source lock, supplemental retained artifact, hash, and byte
 identity. The installed runtime validates only embedded executable definitions
 and their closed bindings; it must not require repository-only source files.
 
+## Mandatory final full-lane completion check
+
+Before calling a full-lane cohort enabled or complete, prove that the source
+lock denominator is accounted for and that all seven lane declarations exist:
+`direct_read`, `direct_write`, `binary_download`, `binary_upload`, `etl`,
+`reverse_etl`, and `sync_transport`. Direct read/write and binary lanes must
+execute only their bounded provider request; ETL and reverse ETL must prove the
+saved provider ↔ DuckDB transport, never an API-to-API shortcut. A zero,
+deferred, or provider-evidenced unsupported lane must retain its named reason
+and provider citation. Run `connectorgen validate`'s data-driven enabled-
+contract final check, which reports each lane as `PRESENT`, `PARTIAL`,
+`COMPLETE`, or `MISSING`, then run credential-boundary and local `httptest`
+proof. A missing artifact or unreconciled denominator blocks enable/complete
+status. This gate never changes source-mapping membership or lets certification
+decide a lane.
+
 A local fake-server conformance test may prove the definition-selected request
 method, path, query, headers, body, status handling, warehouse stage/reopen,
 and plan → preview → approval → execute boundary. It does not prove undocumented
@@ -131,14 +147,13 @@ under the Atlas README's procedure. Keep provider-specific execution behind a
 closed connector-definition reference; shared owners must not branch on
 connector name.
 
-For a possible shared runtime gap, first add only an Atlas `investigating`
-entry with the owner symbols, closed contract mismatch, affected source rows,
-and proof-test plan. Re-check existing foundations and declared extension seams
-before asking the captain for approval. While it is investigating, retain every
-affected operation as a typed source-cited gap and continue materializing
-unaffected existing-runtime lanes. Do not call the candidate planned or
-available, add a connector-specific hook, or implement an engine/CLI path until
-the captain explicitly approves that named foundation.
+For an actual shared runtime gap, add an Atlas `planned` entry with the owner
+symbols, closed contract mismatch, affected source rows, and proof-test plan,
+then obtain the captain's approval before implementation. For an uncertain
+candidate, use `investigating` instead. In either state, retain every affected
+operation as a typed source-cited gap and continue materializing unaffected
+existing-runtime lanes. Do not add a connector-specific hook or implement an
+engine/CLI path until the captain explicitly approves that named foundation.
 
 ## 3. Declare only source-backed operations
 

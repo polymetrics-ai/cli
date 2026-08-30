@@ -3298,7 +3298,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "order_by",
@@ -4429,7 +4438,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "order_by",
@@ -4736,7 +4754,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "search",
@@ -5641,7 +5668,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "order_by",
@@ -5762,7 +5798,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "order_by",
@@ -6837,7 +6882,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "order_by",
@@ -8509,7 +8563,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           }
         ]
       },
@@ -11053,7 +11116,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "order_by",
@@ -11278,7 +11350,16 @@
           {
             "name": "shared_min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "shared_visible_only",
@@ -11587,7 +11668,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "search",
@@ -24312,7 +24402,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "order_by",
@@ -24522,7 +24621,16 @@
           {
             "name": "min_access_level",
             "in": "query",
-            "type": "enum"
+            "type": "integer",
+            "values": [
+              "10",
+              "15",
+              "20",
+              "25",
+              "30",
+              "40",
+              "50"
+            ]
           },
           {
             "name": "order_by",

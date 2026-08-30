@@ -84,7 +84,7 @@ func guideWithEnabledConnectorContract(guide ConnectorGuide, connector Connector
 	lanes := append([]EnabledConnectorLane(nil), contract.Lanes...)
 	sort.Slice(lanes, func(i, j int) bool { return lanes[i].Name < lanes[j].Name })
 	for _, lane := range lanes {
-		lines = append(lines, fmt.Sprintf("%s: %s (source coverage: %s %d/%d; deferred=%d; unsupported=%d) — %s", lane.Name, lane.State, lane.Source.Coverage, lane.Source.Implemented, lane.Source.Expected, lane.Source.DeferredFoundation, lane.Source.Unsupported, lane.Reason))
+		lines = append(lines, fmt.Sprintf("%s: %s (source coverage: %s %d/%d; unmapped=%d; deferred=%d; unsupported=%d) — %s", lane.Name, lane.State, lane.Source.Coverage, lane.Source.Implemented, lane.Source.Expected, lane.Source.UnmappedMapping, lane.Source.DeferredFoundation, lane.Source.Unsupported, lane.Reason))
 	}
 	return appendGuideSection(guide, GuideSection{Title: "Enabled Connector Contract", Lines: lines})
 }

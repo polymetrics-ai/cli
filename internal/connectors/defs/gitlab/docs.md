@@ -1,12 +1,15 @@
 # Overview
 
-Runs GitLab REST API v4 through 582 source-bound direct reads, four ETL streams, and 147 approval-gated reverse-ETL actions.
+Runs GitLab REST API v4 through 582 source-bound direct reads, four ETL streams,
+and 381 source-bound mutations through direct-write and approval-gated reverse-ETL
+commands.
 
 Readable streams: `projects`, `groups`, `users`, `issues`.
 
 The source-lock ledger retains 1,752 cited GitLab REST identities. This slice makes 582 direct reads,
-four existing stream reads, and 147 closed reverse-ETL actions executable. The remaining 1,019 source
-identities stay discoverable with cited named-foundation outcomes; no source identity is silently omitted.
+four ETL-only stream reads, and 381 mutations executable through one-request direct-write and
+approval-gated reverse-ETL command pairs. The remaining 785 source identities stay discoverable with
+cited named-foundation outcomes; no source identity is silently omitted.
 
 Service API documentation: https://docs.gitlab.com/ee/api/rest/.
 
@@ -55,8 +58,10 @@ Default pagination: follows RFC 5988 Link headers with rel=next.
 
 ## Write actions & risks
 
-GitLab has 147 source-bound reverse-ETL actions with closed no-body scalar-path contracts.
-`capabilities.write=true` reflects those actions only; it does not promote any other provider mutation.
+GitLab retains 382 source-bound write actions. 381 have executable direct-write and reverse-ETL command
+pairs; one action remains a typed partial outcome because its retained JSON-Schema regex is not accepted
+by the current closed engine compiler. `capabilities.write=true` does not promote any other provider
+mutation.
 
 Read behavior: external GitLab API reads use the declared direct-read or ETL contract. Every materialized
 write requires plan, preview, explicit approval, and execute. Output is not redacted by this connector.
@@ -66,8 +71,10 @@ write requires plan, preview, explicit approval, and execute. Output is not reda
 - Batch defaults: read_page_size=50.
 - Source-lock denominator: 1,752 cited REST identities from GitLab OpenAPI 3.0.0 `info.version`
   `19.3.0-pre`, retrieved 2026-08-05.
-- Runtime-enabled source rows: 733 — 582 direct reads, 4 ETL streams, and 147 reverse-ETL actions.
-- Blocked source rows: 1,019, each with one or more named foundations. The 2,306 `source_contract`
+- Source mapping: 1,746 mapped identities and 6 blocked identities with no canonical runtime mapping;
+  the latter retain exact citations and named gaps rather than disappearing.
+- Runtime-enabled source rows: 967 — 582 direct reads, 4 ETL-only stream reads, and 381 mutations.
+- Blocked source rows: 785, each with one or more named foundations. The 1,845 `source_contract`
   gap entries overlap by row and are not a source denominator.
 - `api_surface.json`, `cli_surface.json`, and the operation-evidence artifact expose the command or
   typed cited outcome for each source identity.

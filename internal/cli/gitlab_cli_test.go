@@ -25,7 +25,7 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 	}
 
 	manifest := connectors.ManifestOf(connector)
-	if !manifest.Metadata.Capabilities.Read || !manifest.Metadata.Capabilities.Write || len(manifest.WriteActions) != 147 {
+	if !manifest.Metadata.Capabilities.Read || !manifest.Metadata.Capabilities.Write || len(manifest.WriteActions) != 382 {
 		t.Fatalf("GitLab executable capabilities = %+v with %d write actions, want source-locked read/write lanes", manifest.Metadata.Capabilities, len(manifest.WriteActions))
 	}
 
@@ -46,7 +46,7 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 	}
 
 	surface := provider.CommandSurface()
-	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "147 approval-gated reverse-ETL actions") {
+	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") {
 		t.Fatalf("GitLab command tagline = %q, want current source-locked lanes", surface.Tagline)
 	}
 	writeActions := make(map[string]struct{}, len(manifest.WriteActions))
@@ -73,20 +73,27 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 			if command.Availability != "implemented" || command.Operation == "" || command.SourceOperation == "" || len(command.APISurface) != 1 {
 				t.Fatalf("GitLab direct-read command %q = %+v, want source-bound implemented command", command.Path, command)
 			}
-		case "reverse_etl":
-			counts["reverse_etl"]++
-			if command.Availability != "implemented" || command.Write == "" || command.SourceOperation == "" || len(command.APISurface) != 1 || !strings.Contains(command.Approval, "plan, preview, approval, execute") {
-				t.Fatalf("GitLab reverse-ETL command %q = %+v, want source-bound approval-gated action", command.Path, command)
+		case "direct_write", "reverse_etl":
+			counts[command.Intent]++
+			if command.Availability == "implemented" {
+				counts[command.Intent+"_implemented"]++
+			} else if command.Availability == "partial" {
+				counts[command.Intent+"_partial"]++
+			} else {
+				t.Fatalf("GitLab %s command %q availability = %q, want implemented or partial", command.Intent, command.Path, command.Availability)
+			}
+			if command.Write == "" || command.SourceOperation == "" || len(command.APISurface) != 1 || !strings.Contains(command.Approval, "plan, preview, approval, execute") {
+				t.Fatalf("GitLab %s command %q = %+v, want source-bound approval-gated action", command.Intent, command.Path, command)
 			}
 			if _, found := writeActions[command.Write]; !found {
-				t.Fatalf("GitLab reverse-ETL command %q references unknown write %q", command.Path, command.Write)
+				t.Fatalf("GitLab %s command %q references unknown write %q", command.Intent, command.Path, command.Write)
 			}
 		default:
 			t.Fatalf("unexpected GitLab command intent %q for %q", command.Intent, command.Path)
 		}
 	}
-	if counts["direct_read"] != 582 || counts["etl"] != len(want) || counts["reverse_etl"] != len(manifest.WriteActions) {
-		t.Fatalf("GitLab command lane counts = %+v, want 582 direct reads, %d ETL streams, and %d reverse-ETL actions", counts, len(want), len(manifest.WriteActions))
+	if counts["direct_read"] != 582 || counts["etl"] != len(want) || counts["direct_write"] != len(manifest.WriteActions) || counts["reverse_etl"] != len(manifest.WriteActions) || counts["direct_write_implemented"] != 381 || counts["direct_write_partial"] != 1 || counts["reverse_etl_implemented"] != 381 || counts["reverse_etl_partial"] != 1 {
+		t.Fatalf("GitLab command lane counts = %+v, want 582 direct reads, %d ETL streams, and direct-write/reverse-ETL 381 implemented + 1 partial actions", counts, len(want))
 	}
 }
 
@@ -217,8 +224,8 @@ func TestGitLabSourceLockedCommandsPassRuntimePreflight(t *testing.T) {
 		}
 		counts[command.Intent]++
 	}
-	if counts["direct_read"] != 582 || counts["etl"] != 4 || counts["reverse_etl"] != 147 {
-		t.Fatalf("runtime-preflight lane counts = %+v, want direct_read=582 etl=4 reverse_etl=147", counts)
+	if counts["direct_read"] != 582 || counts["etl"] != 4 || counts["direct_write"] != 381 || counts["reverse_etl"] != 381 {
+		t.Fatalf("runtime-preflight lane counts = %+v, want direct_read=582 etl=4 direct_write=381 reverse_etl=381", counts)
 	}
 }
 

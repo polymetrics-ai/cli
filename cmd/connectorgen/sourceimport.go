@@ -8251,6 +8251,9 @@ func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm,
 		if err := sourceProjectionSchemaGap(request.Body.Schema, form, limits); err != nil {
 			gaps = append(gaps, sourceContractGapFor("cli-request-schema-foundation-r1", "request body", err.Error()))
 		}
+		if gap := sourceProjectionP5NamedBodyEngineGap(request); gap != nil {
+			gaps = append(gaps, *gap)
+		}
 	}
 	for _, media := range request.Media {
 		if err := sourceProjectionSchemaGap(media.Schema, form, limits); err != nil {
@@ -8348,6 +8351,82 @@ func sourceProjectionSchemaGap(schema any, form sourceDocumentForm, limits sourc
 	// blockers such as unions and dynamic objects without error-string matching.
 	_, projectionErr := sourceProjectionSchema(schema)
 	return projectionErr
+}
+
+// sourceProjectionP5NamedBodyEngineGap keeps a source-open body visible when
+// its closed-root P5 projection would reach a JSON-Schema feature the existing
+// engine cannot compile. It is an importer classification only: the source
+// pattern is retained verbatim, no regex is rewritten or relaxed, and no new
+// runtime schema behavior is implied.
+func sourceProjectionP5NamedBodyEngineGap(request sourceRequestDescriptor) *sourceContractGap {
+	if request.Body == nil || !sourceJSONMediaType(sourceNormalizedMediaType(request.MediaType)) {
+		return nil
+	}
+	body, ok := request.Body.Schema.(map[string]any)
+	if !ok || sourceSchemaType(body) != "object" || body["additionalProperties"] == false {
+		return nil
+	}
+	if _, hasUnion := body["oneOf"]; hasUnion {
+		return nil
+	}
+	if _, hasUnion := body["anyOf"]; hasUnion {
+		return nil
+	}
+	for _, name := range sortedSourceMapKeys(sourceProjectionObjectProperties(body)) {
+		property := sourceProjectionObjectProperties(body)[name]
+		if sourceProjectionSchemaReadOnly(property) {
+			continue
+		}
+		projected, err := sourceProjectionSchema(property)
+		if err != nil {
+			projected, err = sourceProjectionBoundedNamedJSONSchema(property)
+		}
+		if err != nil {
+			continue
+		}
+		raw, err := json.Marshal(map[string]any{
+			"type":                 "object",
+			"additionalProperties": false,
+			"properties":           map[string]any{name: projected},
+		})
+		if err != nil {
+			return &sourceContractGap{Foundation: "cli-request-schema-foundation-r1", Location: "request body property " + name, Reason: "engine JSON-Schema projection could not encode named source field: " + err.Error()}
+		}
+		if _, err := engine.CompileSchema(raw); err != nil {
+			reason := "engine JSON-Schema compiler cannot compile closed named source field: " + err.Error()
+			if sourceProjectionSchemaContainsPattern(property) {
+				reason = "engine JSON-Schema regex compiler cannot compile source pattern: " + err.Error()
+			}
+			return &sourceContractGap{Foundation: "cli-request-schema-foundation-r1", Location: "request body property " + name, Reason: reason}
+		}
+	}
+	return nil
+}
+
+func sourceProjectionSchemaContainsPattern(raw any) bool {
+	schema, ok := raw.(map[string]any)
+	if !ok {
+		return false
+	}
+	if _, hasPattern := schema["pattern"]; hasPattern {
+		return true
+	}
+	for _, child := range sourceProjectionObjectProperties(schema) {
+		if sourceProjectionSchemaContainsPattern(child) {
+			return true
+		}
+	}
+	if items, exists := schema["items"]; exists && sourceProjectionSchemaContainsPattern(items) {
+		return true
+	}
+	for _, arms := range []any{schema["allOf"], schema["oneOf"], schema["anyOf"]} {
+		for _, arm := range sourceAnySlice(arms) {
+			if sourceProjectionSchemaContainsPattern(arm) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func sourceServerLayerHasFixedOrigin(layer sourceServerLayer) bool {

@@ -5,11 +5,32 @@ import (
 	"fmt"
 	"io/fs"
 	"path"
+	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
 )
+
+// enabledContractFinalLaneStatus is the machine-readable final-build outcome
+// for one of the fixed source-lock lanes. It reports declaration completeness;
+// it does not admit an operation or change a provider-backed source outcome.
+type enabledContractFinalLaneStatus string
+
+const (
+	enabledContractFinalLanePresent  enabledContractFinalLaneStatus = "PRESENT"
+	enabledContractFinalLanePartial  enabledContractFinalLaneStatus = "PARTIAL"
+	enabledContractFinalLaneComplete enabledContractFinalLaneStatus = "COMPLETE"
+	enabledContractFinalLaneMissing  enabledContractFinalLaneStatus = "MISSING"
+)
+
+type enabledContractFinalLaneResult struct {
+	Name            string                               `json:"name"`
+	Status          enabledContractFinalLaneStatus       `json:"status"`
+	Reason          string                               `json:"reason"`
+	Citations       []connectors.EnabledContractCitation `json:"citations"`
+	UnmappedMapping int                                  `json:"unmapped_mapping"`
+}
 
 // checkEnabledConnectorContract is the authoring-side source-lock bridge for
 // the optional enabled connector contract. The engine validates the closed
@@ -21,20 +42,23 @@ func checkEnabledConnectorContract(fsys fs.FS, bundle engine.Bundle) []Finding {
 		return nil
 	}
 
+	if err := contract.Validate(); err != nil {
+		return []Finding{enabledContractFinding(bundle.Name, "enabled_connector_contract.json", err)}
+	}
+
 	findings := make([]Finding, 0)
-	for _, lane := range contract.Lanes {
-		for _, artifact := range lane.Artifacts {
-			if _, err := fs.Stat(fsys, path.Join(bundle.Name, artifact)); err != nil {
-				findings = append(findings, enabledContractFinding(bundle.Name, artifact, fmt.Errorf("lane %q artifact is unavailable: %w", lane.Name, err)))
-			}
+	for _, result := range enabledContractFinalLaneResults(fsys, bundle) {
+		if result.Status != enabledContractFinalLaneMissing {
+			continue
 		}
+		findings = append(findings, enabledContractFinding(bundle.Name, "enabled_connector_contract.json", fmt.Errorf("lane %q: %s", result.Name, result.Reason)))
 	}
 	primary, err := loadEnabledContractSourceLock(fsys, bundle.Name, contract.SourceLock.Path)
 	if err != nil {
 		return append(findings, enabledContractFinding(bundle.Name, contract.SourceLock.Path, err))
 	}
-	if primary.SchemaVersion < 3 && (primary.Rest.SHA256 != contract.SourceLock.SHA256 || primary.Rest.Bytes != contract.SourceLock.Bytes) {
-		return append(findings, enabledContractFinding(bundle.Name, contract.SourceLock.Path, fmt.Errorf("primary source lock identity does not match enabled_connector_contract.json")))
+	if err := checkEnabledContractPrimarySourceEvidence(fsys, bundle.Name, primary, contract.SourceLock); err != nil {
+		findings = append(findings, enabledContractFinding(bundle.Name, contract.SourceLock.Path, err))
 	}
 	if err := contract.ReconcileSourceOperations(enabledContractSourceOperations(primary)); err != nil {
 		findings = append(findings, enabledContractFinding(bundle.Name, contract.SourceLock.Path, err))
@@ -55,6 +79,74 @@ func checkEnabledConnectorContract(fsys fs.FS, bundle engine.Bundle) []Finding {
 		}
 	}
 	return findings
+}
+
+func checkEnabledContractPrimarySourceEvidence(fsys fs.FS, connector string, lock sourceImportLock, evidence connectors.EnabledContractSourceLock) error {
+	if lock.SchemaVersion < 3 {
+		if lock.Rest.SHA256 != evidence.SHA256 || lock.Rest.Bytes != evidence.Bytes {
+			return fmt.Errorf("primary source lock identity does not match enabled_connector_contract.json")
+		}
+		return nil
+	}
+	if err := checkEnabledContractRetainedDocuments(fsys, connector, lock); err != nil {
+		return err
+	}
+	for _, document := range lock.Rest.SourceDocuments {
+		if document.isUnavailable() || document.isSourceReference() {
+			continue
+		}
+		artifact := document.Artifact
+		if artifact.SHA256 == evidence.SHA256 && artifact.Bytes == evidence.Bytes {
+			return nil
+		}
+	}
+	return fmt.Errorf("primary source lock identity does not match enabled_connector_contract.json")
+}
+
+// enabledContractFinalLaneResults projects the already-validated contract into
+// final-build outcomes. Every exact lane remains visible: a zero-source lane
+// is PRESENT, partial source accounting is PARTIAL, all-accounted source
+// coverage is COMPLETE, and an unavailable declared artifact is MISSING.
+// Contract validation owns the fixed lane vocabulary, cited reasons, and
+// source coverage arithmetic; this view deliberately adds no new policy.
+func enabledContractFinalLaneResults(fsys fs.FS, bundle engine.Bundle) []enabledContractFinalLaneResult {
+	contract := bundle.EnabledContract
+	if contract == nil {
+		return nil
+	}
+	lanes := append([]connectors.EnabledConnectorLane(nil), contract.Lanes...)
+	sort.Slice(lanes, func(left, right int) bool { return lanes[left].Name < lanes[right].Name })
+	results := make([]enabledContractFinalLaneResult, 0, len(lanes))
+	for _, lane := range lanes {
+		result := enabledContractFinalLaneResult{
+			Name:            lane.Name,
+			Reason:          lane.Reason,
+			Citations:       append([]connectors.EnabledContractCitation(nil), lane.Citations...),
+			UnmappedMapping: lane.Source.UnmappedMapping,
+		}
+		missing := make([]string, 0)
+		for _, artifact := range lane.Artifacts {
+			if _, err := fs.Stat(fsys, path.Join(bundle.Name, artifact)); err != nil {
+				missing = append(missing, fmt.Sprintf("artifact is unavailable: %q: %v", artifact, err))
+			}
+		}
+		if len(missing) > 0 {
+			result.Status = enabledContractFinalLaneMissing
+			result.Reason = strings.Join(missing, "; ")
+			results = append(results, result)
+			continue
+		}
+		switch lane.Source.Coverage {
+		case connectors.EnabledCoverageComplete:
+			result.Status = enabledContractFinalLaneComplete
+		case connectors.EnabledCoveragePartial:
+			result.Status = enabledContractFinalLanePartial
+		default:
+			result.Status = enabledContractFinalLanePresent
+		}
+		results = append(results, result)
+	}
+	return results
 }
 
 func enabledContractFinding(connector, file string, err error) Finding {

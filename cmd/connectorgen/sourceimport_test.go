@@ -248,6 +248,28 @@ func TestSourceRequestSchemaDispositionSeparatesPolicyBoundsFromMalformedInput(t
 	}
 }
 
+func TestSourceRequestGapsRetainsEngineIncompatibleP5Pattern(t *testing.T) {
+	t.Parallel()
+	request := sourceRequestDescriptor{
+		MediaType: "application/json",
+		Body: &sourceRequestBodyDescriptor{Schema: map[string]any{
+			"type": "object", "properties": map[string]any{
+				"origin": map[string]any{
+					"type": "string", "nullable": true,
+					"pattern": `^(?:[\uD800-\uDBFF][\uDC00-\uDFFF]|[^\n\uD800-\uDFFF]){1,255}$`,
+				},
+			},
+		}},
+	}
+	gaps := sourceRequestGaps(request, sourceDocumentForm{Family: "openapi", Version: "3.0.3"}, defaultSourceImportLimits(), http.MethodPost)
+	for _, gap := range gaps {
+		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body property origin" && strings.Contains(gap.Reason, "engine JSON-Schema regex") {
+			return
+		}
+	}
+	t.Fatalf("request gaps = %+v, want retained engine-incompatible P5 pattern disposition", gaps)
+}
+
 func TestSourceParameterExecutionEnvelopeUsesTighterProviderDerivedByteCap(t *testing.T) {
 	limits := defaultSourceImportLimits()
 	limits.UseExecutionEnvelopes = true

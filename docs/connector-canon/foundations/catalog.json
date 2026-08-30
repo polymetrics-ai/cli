@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 8,
+  "catalog_revision": 9,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -275,7 +275,7 @@
       "layer": "source_projection_admission",
       "status": "available",
       "kind": "generic",
-      "summary": "Projects canonical source operations into connector definitions and global operation ledgers, derives command bindings and flags, and accounts every source operation through declaration admission without treating projection as execution proof. Enabled-connector contracts add a source-lock denominator with exact lane selectors, retained supplemental evidence, and derived complete/partial/not-applicable coverage so an implemented subset is never presented as provider-surface parity. The existing closed-name admission seam retains source parameter spelling in the descriptor and blocks an unsafe provider spelling rather than creating an ad-hoc alias or raw transport escape.",
+      "summary": "Projects canonical source operations into connector definitions and global operation ledgers, derives command bindings and flags, and accounts every source operation through declaration admission without treating projection as execution proof. Enabled-connector contracts add a source-lock denominator with exact lane selectors, retained supplemental evidence, and derived complete/partial/not-applicable coverage so an implemented subset is never presented as provider-surface parity. Unmapped mapping is a distinct visible coverage bucket, not a deferred runtime foundation, and may leave a runtime lane implemented with PARTIAL source coverage. A schema-v3 primary contract binds any exact retained provider document in its closed source lock, not a single-document assumption. The existing closed-name admission seam retains source parameter spelling in the descriptor and blocks an unsafe provider spelling rather than creating an ad-hoc alias or raw transport escape. A source-open JSON body may project a documented named field only as a closed root with that field's bounded source shape; a runtime compiler mismatch remains a cited partial command outcome, never a raw-body fallback.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [
@@ -394,7 +394,7 @@
         "source_forms": [
           "canonical locked source-operation descriptors"
         ],
-        "request_response_shapes": [
+      "request_response_shapes": [
           "API and CLI endpoint bindings",
           "derived command parameters and maps_to bindings",
           "direction-aware closed request schemas that exclude source read-only fields",
@@ -406,7 +406,9 @@
           "runtime operation endpoint ledger rows",
           "source-selected runtime endpoint-ledger refreshes that retain unselected connector rows",
           "source-backed deferred and unsupported dispositions",
-          "source-lock denominator lane contracts with derived complete, partial, and not-applicable coverage"
+          "source-lock denominator lane contracts with derived complete, partial, and not-applicable coverage plus a distinct unmapped_mapping bucket",
+        "schema-v3 primary source-lock evidence bound to any exact retained provider document",
+        "source-open JSON body projected only as a closed root containing a documented bounded named field"
         ],
         "sync_modes": [],
         "guarantees": [
@@ -419,7 +421,10 @@
           "a source-selected endpoint-ledger refresh changes only that connector's runtime row and retains unselected rows",
           "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, v3 envelope, and closed event-schema-selector structure",
           "unavailable retained-source, certification-subject, or generated-surface evidence remains a per-source typed foundation gap and cannot suppress a source identity or fabricate an executable lane",
-          "source deprecation and destructive classification remain source facts; they cannot become a declaration-admission exclusion or erase the named actual foundation gap"
+      "unmapped_mapping records a source-preserving mapping deficit without relabeling it as a runtime foundation or demoting an otherwise implemented runtime lane",
+      "schema-v3 enabled-contract primary evidence matches an exact retained provider document by immutable digest and byte count while allowing multiple retained documents",
+      "source deprecation and destructive classification remain source facts; they cannot become a declaration-admission exclusion or erase the named actual foundation gap",
+      "a closed named P5 JSON projection retains its raw source schema and makes every command for that endpoint partial when the existing engine cannot compile its exact bounded schema"
         ]
       },
       "selection": {
@@ -449,14 +454,15 @@
         ],
         "notes": "Source identities and declaration bindings select projections; a selected surface sync preserves every unselected runtime endpoint-ledger row. Generated availability remains subject to real runtime preflight."
       },
-      "constraints": [
+    "constraints": [
         "Projection must not invent a stream, write action, request field, response policy, or lane absent from the source-backed contract.",
         "A generated direct-read parameter name must satisfy the existing closed engine identifier rule. The source descriptor retains an unsafe provider spelling and the operation remains a cited typed blocked disposition until a separately approved reversible provider-parameter alias foundation exists; projection must not silently omit it.",
         "OpenAPI request projection excludes readOnly properties recursively, including resolved allOf arms, and removes excluded names from required.",
         "Array query encoding must retain the source-declared style, explode behavior, and delimiter; generic value stringification is not source projection.",
         "A required requestBody with one data envelope makes that record field required; an optional requestBody remains optional.",
         "A declared batch is projectable only when a closed v3 batch_action_inventory resolves against retained provider bytes and the definition keeps a typed action allow-list; optional outer query fields remain source-projected while caller-authored subrequest HTTP stays forbidden.",
-        "An enabled-contract lane derives complete, partial, or not-applicable coverage from its source denominator; a partially implemented lane must retain its remaining source identities as named deferred or provider-evidenced outcomes and cannot be reported as full provider-surface parity.",
+        "An enabled-contract lane derives complete, partial, or not-applicable coverage from its source denominator. unmapped_mapping is a distinct source-preserving mapping deficit and may make an implemented lane PARTIAL; actual runtime gaps remain named deferred or provider-evidenced outcomes, and neither form can be reported as full provider-surface parity.",
+        "A schema-v3 enabled-contract primary source lock may retain several documents. Its evidence digest and byte count must bind one exact retained provider document; validation must not require a single-document lock.",
         "A provider-documented deprecated or destructive operation remains in the source denominator. Its API-surface row must retain source evidence and a named request, approval, response, or other actual foundation gap rather than classifying deprecation or destructive nature as an exclusion.",
         "Aliases and multiple lane bindings must not inflate the provider-operation count.",
         "A projected implemented label is incomplete until the selected runtime path passes preflight.",
@@ -465,7 +471,9 @@
         "Schema-version and document-kind selection is presence-aware and closed: foreign, empty, or null variant fields cannot select another wire shape through Go zero values.",
         "A v3 event_schema_inventory is a closed source-selector envelope. Mapping projection ignores it only after rejecting unknown inventory or selector members; source-import alone resolves its canonical selectors against retained provider bytes.",
         "A v3 batch_action_inventory is likewise a closed source-selector envelope. Mapping admission rejects unknown members, source-import resolves its operation/schema/tag facts, and projection preserves only a matching declared_batch definition.",
-        "Strict retained-byte and digest validation remains owned by source-import rather than declaration projection."
+      "Strict retained-byte and digest validation remains owned by source-import rather than declaration projection.",
+      "P5 source-open JSON projection may expose only documented named fields through a closed root; it must not admit arbitrary properties, a generic raw JSON flag, or a connector-specific escape.",
+      "If engine.CompileSchema rejects a closed named P5 field, the source row and provider pattern remain retained and every endpoint-bound write command becomes a source-cited partial outcome until an approved execution foundation exists."
       ],
       "non_goals": [
         "Executing provider requests or saved syncs.",
@@ -479,9 +487,18 @@
             "internal/connectors/defs/asana/cli_surface.json",
             "internal/connectors/defs/asana/operations.json",
             "internal/connectors/defs/asana/streams.json",
-            "internal/connectors/defs/asana/writes.json"
+            "internal/connectors/defs/asana/writes.json",
+            "internal/connectors/defs/asana/enabled_connector_contract.json"
           ],
           "notes": "The projected definitions bind source operations into the available command and saved-connection surfaces."
+        },
+        {
+          "name": "GitHub enabled source-lock lane contract",
+          "files": [
+            "internal/connectors/defs/github/enabled_connector_contract.json",
+            "internal/connectors/defs/github/sources/github-operation-source-lock.json"
+          ],
+          "notes": "The contract keeps source mapping incompleteness visible separately from actual runtime-foundation and provider-evidence outcomes."
         },
         {
           "name": "Global runtime operation accounting",
@@ -660,6 +677,31 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
           "name": "TestGitLabDeprecatedSourceOperationsRemainFoundationBlocked"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/enabledcontract_final_test.go",
+          "name": "TestEnabledContractFinalLaneResults"
+        },
+    {
+      "package": "./cmd/connectorgen",
+      "file": "cmd/connectorgen/enabledcontract_final_test.go",
+      "name": "TestEnabledConnectorContractBindsAnyRetainedPrimaryV3Document"
+    },
+    {
+      "package": "./cmd/connectorgen",
+      "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
+      "name": "TestGitLabP5GeneratedNamedJSONValueFlagsRemainSourceBound"
+    },
+    {
+      "package": "./cmd/connectorgen",
+      "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
+      "name": "TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred"
+    },
+    {
+      "package": "./cmd/connectorgen",
+      "file": "cmd/connectorgen/sourceimport_test.go",
+      "name": "TestSourceRequestGapsRetainsEngineIncompatibleP5Pattern"
         }
       ],
       "known_gap_refs": [
@@ -668,10 +710,15 @@
           "reference": "cmd/connectorgen/sourceprojection.go#sourceOperationExecutionFoundation",
           "notes": "Projection retains an explicit execution gap instead of manufacturing a runnable binding."
         },
-        {
-          "id": "source-cited-partial-mutation-coverage-foundation-r1",
-          "reference": "cmd/connectorgen/sourceprojection.go#sourcePartialMutationCoverageFoundation",
-          "notes": "Partial mutation coverage remains visible until every source-backed action is accounted truthfully."
+    {
+      "id": "source-cited-partial-mutation-coverage-foundation-r1",
+      "reference": "cmd/connectorgen/sourceprojection.go#sourcePartialMutationCoverageFoundation",
+      "notes": "Partial mutation coverage remains visible until every source-backed action is accounted truthfully."
+    },
+    {
+      "id": "cli-request-schema-surrogate-regex-foundation-r1",
+      "reference": "docs/connector-canon/foundations/catalog.json#runtime.json-schema-surrogate-regex.v1",
+      "notes": "A source JSON-Schema pattern rejected by the current engine remains source-bound and partial; the planned execution candidate is not a runtime capability."
         }
       ],
       "update_conditions": [
@@ -679,6 +726,124 @@
         "Enabled-contract source denominator, lane coverage state, source-lock reconciliation, or deprecation-admission behavior changes.",
         "A global admission or endpoint-ledger artifact changes shape or ownership.",
         "Surface derivation, runtime-preflight handoff, or proof tests change."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.json-schema-surrogate-regex.v1",
+      "layer": "direct_execution",
+      "status": "planned",
+      "kind": "generic",
+      "summary": "Planned closed JSON-Schema regex dialect support for source patterns using Unicode surrogate-pair \\uXXXX escapes that Go's current regexp compiler rejects. It is a candidate execution foundation only; source projection retains the provider pattern and exposes a typed partial outcome until captain approval and proof.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/cmd/connectorgen"
+        ],
+        "files": [
+          "internal/connectors/engine/schema.go",
+          "cmd/connectorgen/sourceimport.go",
+          "cmd/connectorgen/sourceprojection.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/schema.go",
+            "name": "compileNode"
+          },
+          {
+            "file": "cmd/connectorgen/sourceimport.go",
+            "name": "sourceProjectionP5NamedBodyEngineGap"
+          },
+          {
+            "file": "cmd/connectorgen/sourceprojection.go",
+            "name": "sourceProjectionAnnotateMutationFoundationGaps"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "direct_write",
+          "reverse_etl"
+        ],
+        "protocols": [
+          "HTTP/REST"
+        ],
+        "source_forms": [
+          "canonical locked source-operation descriptors"
+        ],
+        "request_response_shapes": [
+          "closed JSON request root with one documented bounded named string field carrying a JSON-Schema surrogate-pair Unicode escape regex"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the provider source pattern is retained byte-for-byte in the descriptor",
+          "a supported dialect translation, if approved, is closed, deterministic, and proven semantically equivalent for the admitted pattern subset",
+          "an unsupported pattern stays a cited partial command outcome before provider I/O"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field",
+          "authoring_command",
+          "verification_command"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/sources/<connector>-operation-descriptor.json",
+          "internal/connectors/defs/<connector>/writes.json",
+          "internal/connectors/defs/<connector>/cli_surface.json"
+        ],
+        "selectors": [
+          "source-import --materialize-eligible-lanes",
+          "closed write action record_schema pattern",
+          "CLI command source_operation and partial availability"
+        ],
+        "notes": "Planned only: no runtime parser, regex rewriter, or execution promotion exists under this record. The importer keeps the exact source gap until a captain-approved implementation satisfies its proof contract."
+      },
+      "constraints": [
+        "Do not strip, weaken, broaden, or silently rewrite a provider regex.",
+        "Do not accept an uncompiled source regex or add a generic raw request body escape.",
+        "Do not branch on connector name; support must be selected from a closed source schema form and exact dialect rule.",
+        "Every endpoint-bound direct-write and reverse-ETL command remains partial while the pattern is rejected."
+      ],
+      "non_goals": [
+        "Generic regex-dialect guessing or arbitrary regular-expression execution.",
+        "Changing source-lock membership, source bytes, or the documented provider pattern.",
+        "Promoting a command merely because its closed root and other fields are representable."
+      ],
+      "consumer_examples": [
+        {
+          "name": "GitLab AI-detection vulnerability flag",
+          "files": [
+            "internal/connectors/defs/gitlab/sources/gitlab-operation-descriptor.json",
+            "internal/connectors/defs/gitlab/writes.json",
+            "internal/connectors/defs/gitlab/cli_surface.json"
+          ],
+          "notes": "The source row retains its origin pattern; both write lanes are discoverably partial instead of disappearing or routing through raw JSON."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/sourceimport_test.go",
+          "name": "TestSourceRequestGapsRetainsEngineIncompatibleP5Pattern"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
+          "name": "TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "cli-request-schema-surrogate-regex-foundation-r1",
+          "reference": "cmd/connectorgen/sourceimport.go#sourceProjectionP5NamedBodyEngineGap",
+          "notes": "The current Go regexp compiler rejects the retained \\uXXXX escape form, so this planned candidate is a source-cited execution gap rather than an available foundation."
+        }
+      ],
+      "update_conditions": [
+        "Captain approval, the exact supported JSON-Schema dialect subset, or semantic-equivalence proof changes.",
+        "The engine compiler seam, source-gap classifier, or command partial outcome changes.",
+        "A second provider pattern requires a broader contract than the closed surrogate-pair subset."
       ],
       "supersedes": []
     },
