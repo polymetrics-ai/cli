@@ -1,12 +1,78 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "connector": "asana",
-  "purpose": "Companion mapping ledger for the Asana connector. This file makes source-backed runtime gaps visible; it is not an engine loader input and cannot block a mapped command by itself.",
+  "purpose": "Source-matrix companion ledger for explicit mapping and source-evidence limitations. It preserves the prior seven foundation records and their states while adding exact source IDs and lane cells. It is not a loader input, runtime selector, or second provider-operation denominator.",
   "source_lock": {
     "path": "sources/asana-operation-source-lock.json",
     "source_url": "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml",
-    "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56"
+    "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+    "bytes": 3066750
   },
+  "source_matrix": {
+    "path": "sources/asana-source-lane-matrix.json",
+    "source_operation_count": 249,
+    "lanes": [
+      "direct_read",
+      "direct_write",
+      "binary_download",
+      "binary_upload",
+      "etl",
+      "reverse_etl",
+      "sync_transport"
+    ]
+  },
+  "atlas_lookups": [
+    {
+      "id": "source.retention-import.v1",
+      "classification": "reuse",
+      "owner": "cmd/connectorgen/sourceimport.go retained source-lock import; sourceimport_source_operation_test.go"
+    },
+    {
+      "id": "source.projection-admission.v1",
+      "classification": "reuse",
+      "owner": "cmd/connectorgen/sourceprojection.go source-preserving admission; sourceprojection_test.go"
+    },
+    {
+      "id": "runtime.direct-execution.v1",
+      "classification": "reuse",
+      "owner": "internal/connectors/engine and internal/connectors/commandrunner declared direct execution"
+    },
+    {
+      "id": "warehouse.stage-etl.v1",
+      "classification": "reuse",
+      "owner": "internal/app local warehouse destination transport"
+    },
+    {
+      "id": "warehouse.reverse-etl.v1",
+      "classification": "reuse",
+      "owner": "internal/app reverse-ETL approval and warehouse source"
+    },
+    {
+      "id": "transport.sync-contract.v1",
+      "classification": "reuse",
+      "owner": "internal/synccontract and internal/synctransport declared transport composition"
+    },
+    {
+      "id": "asana.event-token-source.v1",
+      "classification": "reuse",
+      "owner": "internal/app closed Asana event-token source selected by event_source_contract.json and sync_transport.json"
+    }
+  ],
+  "non_binding_files": [
+    {
+      "path": "event_source_contract.json",
+      "schema": "event_source_contract.schema.json",
+      "role": "closed source-lock evidence projection bound to sync_transport.json's registered executor; tests and certification consume its facts, but it contains no executable lifecycle or runtime policy"
+    },
+    {
+      "path": "certification.json",
+      "role": "optional live-evidence configuration; it does not decide whether a source-backed operation is mapped or executable"
+    },
+    {
+      "path": "sources/asana-operation-source-lock.json",
+      "role": "immutable source provenance for mapping; it is not the runtime executor"
+    }
+  ],
   "runtime_definition_files": [
     {
       "path": "metadata.json",
@@ -134,7 +200,87 @@
         "the 12 bounded stream-backed interactive direct reads",
         "saved full-refresh ETL for all 12 streams",
         "project-scoped tasks event-token incremental ETL"
-      ]
+      ],
+      "matrix_projection": {
+        "source_ids": [
+          "asana.rest.getCustomFieldsForWorkspace",
+          "asana.rest.getProjects",
+          "asana.rest.getProjectStatusesForProject",
+          "asana.rest.getSectionsForProject",
+          "asana.rest.getStoriesForTask",
+          "asana.rest.getTags",
+          "asana.rest.getTasks",
+          "asana.rest.getTeamMemberships",
+          "asana.rest.getTeamsForWorkspace",
+          "asana.rest.getUsers",
+          "asana.rest.getWorkspaceMembershipsForWorkspace",
+          "asana.rest.getWorkspaces"
+        ],
+        "lane_cells": [
+          {
+            "source_id": "asana.rest.getCustomFieldsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjects",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectStatusesForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getSectionsForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getStoriesForTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTags",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasks",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamMemberships",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUsers",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaces",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          }
+        ],
+        "typed_reason": "interactive_stream_request_budget_bound",
+        "atlas_lookup": "runtime.direct-execution.v1"
+      }
     },
     {
       "id": "asana_incremental_event_scope_coverage",
@@ -145,7 +291,136 @@
       "does_not_block": [
         "full-refresh overwrite and append for all 12 streams",
         "project-scoped tasks incremental append/upsert/dedupe"
-      ]
+      ],
+      "matrix_projection": {
+        "source_ids": [
+          "asana.rest.getCustomFieldsForWorkspace",
+          "asana.rest.getProjects",
+          "asana.rest.getProjectStatusesForProject",
+          "asana.rest.getSectionsForProject",
+          "asana.rest.getStoriesForTask",
+          "asana.rest.getTags",
+          "asana.rest.getTeamMemberships",
+          "asana.rest.getTeamsForWorkspace",
+          "asana.rest.getUsers",
+          "asana.rest.getWorkspaceMembershipsForWorkspace",
+          "asana.rest.getWorkspaces"
+        ],
+        "lane_cells": [
+          {
+            "source_id": "asana.rest.getCustomFieldsForWorkspace",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjects",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectStatusesForProject",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getSectionsForProject",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getStoriesForTask",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTags",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamMemberships",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamsForWorkspace",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUsers",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaces",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldsForWorkspace",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getProjects",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getProjectStatusesForProject",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getSectionsForProject",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getStoriesForTask",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getTags",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getTeamMemberships",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getTeamsForWorkspace",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getUsers",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaces",
+            "lane": "sync_transport",
+            "disposition": "not_applicable"
+          }
+        ],
+        "typed_reason": "source_event_scope_or_order_not_cited",
+        "atlas_lookup": "asana.event-token-source.v1"
+      }
     },
     {
       "id": "asana_attachment_direct_write_multipart",
@@ -162,7 +437,21 @@
         "source mapping",
         "the equivalent direct-write and reverse-ETL attachment write actions",
         "direct-read and ETL lanes"
-      ]
+      ],
+      "matrix_projection": {
+        "source_ids": [
+          "asana.rest.createAttachmentForObject"
+        ],
+        "lane_cells": [
+          {
+            "source_id": "asana.rest.createAttachmentForObject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          }
+        ],
+        "typed_reason": "legacy_operation_multipart_variants_not_declared",
+        "atlas_lookup": "runtime.direct-execution.v1"
+      }
     },
     {
       "id": "asana_attachment_binary_upload_media_policy",
@@ -178,7 +467,21 @@
       "does_not_block": [
         "source mapping",
         "the declared direct-write/reverse-ETL multipart file action"
-      ]
+      ],
+      "matrix_projection": {
+        "source_ids": [
+          "asana.rest.createAttachmentForObject"
+        ],
+        "lane_cells": [
+          {
+            "source_id": "asana.rest.createAttachmentForObject",
+            "lane": "binary_upload",
+            "disposition": "implemented"
+          }
+        ],
+        "typed_reason": "source_cited_provider_unrestricted_binary_media",
+        "atlas_lookup": "runtime.direct-execution.v1"
+      }
     },
     {
       "id": "asana_action_scoped_request_schema_projection",
@@ -189,13 +492,1470 @@
         "all 131 declared write actions",
         "source lock provenance",
         "ETL and direct-read mappings"
-      ]
+      ],
+      "matrix_projection": {
+        "source_ids": [
+          "asana.rest.addCustomFieldSettingForGoal",
+          "asana.rest.addCustomFieldSettingForPortfolio",
+          "asana.rest.addCustomFieldSettingForProject",
+          "asana.rest.addDependenciesForTask",
+          "asana.rest.addDependentsForTask",
+          "asana.rest.addFollowers",
+          "asana.rest.addFollowersForProject",
+          "asana.rest.addFollowersForTask",
+          "asana.rest.addItemForPortfolio",
+          "asana.rest.addMembersForPortfolio",
+          "asana.rest.addMembersForProject",
+          "asana.rest.addProjectForTask",
+          "asana.rest.addSupportingRelationship",
+          "asana.rest.addTagForTask",
+          "asana.rest.addTaskForSection",
+          "asana.rest.addUserForTeam",
+          "asana.rest.addUserForWorkspace",
+          "asana.rest.approveAccessRequest",
+          "asana.rest.createAccessRequest",
+          "asana.rest.createAllocation",
+          "asana.rest.createAttachmentForObject",
+          "asana.rest.createBatchRequest",
+          "asana.rest.createBudget",
+          "asana.rest.createCustomField",
+          "asana.rest.createEnumOptionForCustomField",
+          "asana.rest.createGoal",
+          "asana.rest.createGoalMetric",
+          "asana.rest.createGraphExport",
+          "asana.rest.createMembership",
+          "asana.rest.createOooEntry",
+          "asana.rest.createOrganizationExport",
+          "asana.rest.createPortfolio",
+          "asana.rest.createProject",
+          "asana.rest.createProjectBrief",
+          "asana.rest.createProjectForTeam",
+          "asana.rest.createProjectForWorkspace",
+          "asana.rest.createProjectStatusForProject",
+          "asana.rest.createRate",
+          "asana.rest.createResourceExport",
+          "asana.rest.createRole",
+          "asana.rest.createSectionForProject",
+          "asana.rest.createStatusForObject",
+          "asana.rest.createStoryForGoal",
+          "asana.rest.createStoryForTask",
+          "asana.rest.createSubtaskForTask",
+          "asana.rest.createTag",
+          "asana.rest.createTagForWorkspace",
+          "asana.rest.createTask",
+          "asana.rest.createTeam",
+          "asana.rest.createTimesheetApprovalStatus",
+          "asana.rest.createTimeTrackingCategory",
+          "asana.rest.createTimeTrackingEntry",
+          "asana.rest.createWebhook",
+          "asana.rest.deleteAllocation",
+          "asana.rest.deleteAttachment",
+          "asana.rest.deleteBudget",
+          "asana.rest.deleteCustomField",
+          "asana.rest.deleteGoal",
+          "asana.rest.deleteMembership",
+          "asana.rest.deleteOooEntry",
+          "asana.rest.deletePortfolio",
+          "asana.rest.deleteProject",
+          "asana.rest.deleteProjectBrief",
+          "asana.rest.deleteProjectStatus",
+          "asana.rest.deleteProjectTemplate",
+          "asana.rest.deleteRate",
+          "asana.rest.deleteRole",
+          "asana.rest.deleteSection",
+          "asana.rest.deleteStatus",
+          "asana.rest.deleteStory",
+          "asana.rest.deleteTag",
+          "asana.rest.deleteTask",
+          "asana.rest.deleteTaskTemplate",
+          "asana.rest.deleteTimeTrackingCategory",
+          "asana.rest.deleteTimeTrackingEntry",
+          "asana.rest.deleteWebhook",
+          "asana.rest.duplicatePortfolio",
+          "asana.rest.duplicateProject",
+          "asana.rest.duplicateTask",
+          "asana.rest.insertEnumOptionForCustomField",
+          "asana.rest.insertSectionForProject",
+          "asana.rest.instantiateProject",
+          "asana.rest.instantiateTask",
+          "asana.rest.projectSaveAsTemplate",
+          "asana.rest.rejectAccessRequest",
+          "asana.rest.removeCustomFieldSettingForGoal",
+          "asana.rest.removeCustomFieldSettingForPortfolio",
+          "asana.rest.removeCustomFieldSettingForProject",
+          "asana.rest.removeDependenciesForTask",
+          "asana.rest.removeDependentsForTask",
+          "asana.rest.removeFollowerForTask",
+          "asana.rest.removeFollowers",
+          "asana.rest.removeFollowersForProject",
+          "asana.rest.removeItemForPortfolio",
+          "asana.rest.removeMembersForPortfolio",
+          "asana.rest.removeMembersForProject",
+          "asana.rest.removeProjectForTask",
+          "asana.rest.removeSupportingRelationship",
+          "asana.rest.removeTagForTask",
+          "asana.rest.removeUserForTeam",
+          "asana.rest.removeUserForWorkspace",
+          "asana.rest.setParentForTask",
+          "asana.rest.triggerRule",
+          "asana.rest.updateAllocation",
+          "asana.rest.updateBudget",
+          "asana.rest.updateCustomField",
+          "asana.rest.updateEnumOption",
+          "asana.rest.updateGoal",
+          "asana.rest.updateGoalMetric",
+          "asana.rest.updateGoalRelationship",
+          "asana.rest.updateMembership",
+          "asana.rest.updateOooEntry",
+          "asana.rest.updatePortfolio",
+          "asana.rest.updateProject",
+          "asana.rest.updateProjectBrief",
+          "asana.rest.updateProjectPortfolioSetting",
+          "asana.rest.updateRate",
+          "asana.rest.updateRole",
+          "asana.rest.updateSection",
+          "asana.rest.updateStory",
+          "asana.rest.updateTag",
+          "asana.rest.updateTask",
+          "asana.rest.updateTeam",
+          "asana.rest.updateTimesheetApprovalStatus",
+          "asana.rest.updateTimeTrackingCategory",
+          "asana.rest.updateTimeTrackingEntry",
+          "asana.rest.updateUser",
+          "asana.rest.updateUserForWorkspace",
+          "asana.rest.updateWebhook",
+          "asana.rest.updateWorkspace"
+        ],
+        "lane_cells": [
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addDependenciesForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addDependenciesForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addDependentsForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addDependentsForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowers",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowers",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowersForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowersForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowersForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowersForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addItemForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addItemForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addMembersForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addMembersForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addMembersForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addMembersForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addProjectForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addProjectForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addSupportingRelationship",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addSupportingRelationship",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addTagForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addTagForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addTaskForSection",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addTaskForSection",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addUserForTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addUserForTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addUserForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addUserForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.approveAccessRequest",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.approveAccessRequest",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAccessRequest",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAccessRequest",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAllocation",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAllocation",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAttachmentForObject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAttachmentForObject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createBatchRequest",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createBatchRequest",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createBudget",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createBudget",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createEnumOptionForCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createEnumOptionForCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGoalMetric",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGoalMetric",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGraphExport",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGraphExport",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createMembership",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createMembership",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createOooEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createOooEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createOrganizationExport",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createOrganizationExport",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectBrief",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectBrief",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectForTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectForTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectStatusForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectStatusForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createRate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createRate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createResourceExport",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createResourceExport",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createRole",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createRole",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createSectionForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createSectionForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStatusForObject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStatusForObject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStoryForGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStoryForGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStoryForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStoryForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createSubtaskForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createSubtaskForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTag",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTag",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTagForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTagForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimesheetApprovalStatus",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimesheetApprovalStatus",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimeTrackingCategory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimeTrackingCategory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimeTrackingEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimeTrackingEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createWebhook",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createWebhook",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteAllocation",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteAllocation",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteAttachment",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteAttachment",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteBudget",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteBudget",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteMembership",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteMembership",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteOooEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteOooEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deletePortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deletePortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectBrief",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectBrief",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectStatus",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectStatus",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectTemplate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectTemplate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteRate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteRate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteRole",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteRole",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteSection",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteSection",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteStatus",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteStatus",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteStory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteStory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTag",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTag",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTaskTemplate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTaskTemplate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTimeTrackingCategory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTimeTrackingCategory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTimeTrackingEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTimeTrackingEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteWebhook",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteWebhook",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicatePortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicatePortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicateProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicateProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicateTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicateTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.insertEnumOptionForCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.insertEnumOptionForCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.insertSectionForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.insertSectionForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.instantiateProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.instantiateProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.instantiateTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.instantiateTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.projectSaveAsTemplate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.projectSaveAsTemplate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.rejectAccessRequest",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.rejectAccessRequest",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeDependenciesForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeDependenciesForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeDependentsForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeDependentsForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowerForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowerForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowers",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowers",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowersForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowersForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeItemForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeItemForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeMembersForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeMembersForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeMembersForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeMembersForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeProjectForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeProjectForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeSupportingRelationship",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeSupportingRelationship",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeTagForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeTagForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeUserForTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeUserForTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeUserForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeUserForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.setParentForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.setParentForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.triggerRule",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.triggerRule",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateAllocation",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateAllocation",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateBudget",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateBudget",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateEnumOption",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateEnumOption",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoalMetric",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoalMetric",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoalRelationship",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoalRelationship",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateMembership",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateMembership",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateOooEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateOooEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updatePortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updatePortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProjectBrief",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProjectBrief",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProjectPortfolioSetting",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProjectPortfolioSetting",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateRate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateRate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateRole",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateRole",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateSection",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateSection",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateStory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateStory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTag",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTag",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimesheetApprovalStatus",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimesheetApprovalStatus",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimeTrackingCategory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimeTrackingCategory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimeTrackingEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimeTrackingEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateUser",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateUser",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateUserForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateUserForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateWebhook",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateWebhook",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          }
+        ],
+        "typed_reason": "closed_action_request_schema_projection",
+        "atlas_lookup": "runtime.direct-execution.v1"
+      }
     },
     {
       "id": "legacy_asana_openapi_reference_sibling_rows",
       "state": "resolved_runtime_mapping_with_authoring_gap",
       "affected_lane": "reverse_etl_and_direct_write",
-      "reason": "createMembership is executable through its source-bound named write action. The retained descriptor still records the OpenAPI 3.0 response-schema reference sibling as an authoring/import diagnostic; it does not alter the action request or runtime route."
+      "reason": "createMembership is executable through its source-bound named write action. The retained descriptor still records the OpenAPI 3.0 response-schema reference sibling as an authoring/import diagnostic; it does not alter the action request or runtime route.",
+      "matrix_projection": {
+        "source_ids": [
+          "asana.rest.createMembership"
+        ],
+        "lane_cells": [
+          {
+            "source_id": "asana.rest.createMembership",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createMembership",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          }
+        ],
+        "typed_reason": "openapi_reference_sibling_authoring_diagnostic",
+        "atlas_lookup": "source.retention-import.v1"
+      }
     },
     {
       "id": "asana_enriched_source_lock_projection_parser",
@@ -210,22 +1970,2825 @@
         "source-lock mapping or projection",
         "runtime lane admission",
         "certification evidence"
-      ]
+      ],
+      "matrix_projection": {
+        "source_ids": [
+          "asana.rest.addCustomFieldSettingForGoal",
+          "asana.rest.addCustomFieldSettingForPortfolio",
+          "asana.rest.addCustomFieldSettingForProject",
+          "asana.rest.addDependenciesForTask",
+          "asana.rest.addDependentsForTask",
+          "asana.rest.addFollowers",
+          "asana.rest.addFollowersForProject",
+          "asana.rest.addFollowersForTask",
+          "asana.rest.addItemForPortfolio",
+          "asana.rest.addMembersForPortfolio",
+          "asana.rest.addMembersForProject",
+          "asana.rest.addProjectForTask",
+          "asana.rest.addSupportingRelationship",
+          "asana.rest.addTagForTask",
+          "asana.rest.addTaskForSection",
+          "asana.rest.addUserForTeam",
+          "asana.rest.addUserForWorkspace",
+          "asana.rest.approveAccessRequest",
+          "asana.rest.createAccessRequest",
+          "asana.rest.createAllocation",
+          "asana.rest.createAttachmentForObject",
+          "asana.rest.createBatchRequest",
+          "asana.rest.createBudget",
+          "asana.rest.createCustomField",
+          "asana.rest.createEnumOptionForCustomField",
+          "asana.rest.createGoal",
+          "asana.rest.createGoalMetric",
+          "asana.rest.createGraphExport",
+          "asana.rest.createMembership",
+          "asana.rest.createOooEntry",
+          "asana.rest.createOrganizationExport",
+          "asana.rest.createPortfolio",
+          "asana.rest.createProject",
+          "asana.rest.createProjectBrief",
+          "asana.rest.createProjectForTeam",
+          "asana.rest.createProjectForWorkspace",
+          "asana.rest.createProjectStatusForProject",
+          "asana.rest.createRate",
+          "asana.rest.createResourceExport",
+          "asana.rest.createRole",
+          "asana.rest.createSectionForProject",
+          "asana.rest.createStatusForObject",
+          "asana.rest.createStoryForGoal",
+          "asana.rest.createStoryForTask",
+          "asana.rest.createSubtaskForTask",
+          "asana.rest.createTag",
+          "asana.rest.createTagForWorkspace",
+          "asana.rest.createTask",
+          "asana.rest.createTeam",
+          "asana.rest.createTimesheetApprovalStatus",
+          "asana.rest.createTimeTrackingCategory",
+          "asana.rest.createTimeTrackingEntry",
+          "asana.rest.createWebhook",
+          "asana.rest.deleteAllocation",
+          "asana.rest.deleteAttachment",
+          "asana.rest.deleteBudget",
+          "asana.rest.deleteCustomField",
+          "asana.rest.deleteGoal",
+          "asana.rest.deleteMembership",
+          "asana.rest.deleteOooEntry",
+          "asana.rest.deletePortfolio",
+          "asana.rest.deleteProject",
+          "asana.rest.deleteProjectBrief",
+          "asana.rest.deleteProjectStatus",
+          "asana.rest.deleteProjectTemplate",
+          "asana.rest.deleteRate",
+          "asana.rest.deleteRole",
+          "asana.rest.deleteSection",
+          "asana.rest.deleteStatus",
+          "asana.rest.deleteStory",
+          "asana.rest.deleteTag",
+          "asana.rest.deleteTask",
+          "asana.rest.deleteTaskTemplate",
+          "asana.rest.deleteTimeTrackingCategory",
+          "asana.rest.deleteTimeTrackingEntry",
+          "asana.rest.deleteWebhook",
+          "asana.rest.duplicatePortfolio",
+          "asana.rest.duplicateProject",
+          "asana.rest.duplicateTask",
+          "asana.rest.getAccessRequests",
+          "asana.rest.getAgent",
+          "asana.rest.getAgentsForWorkspace",
+          "asana.rest.getAiStudioRuns",
+          "asana.rest.getAiStudioSeats",
+          "asana.rest.getAllocation",
+          "asana.rest.getAllocations",
+          "asana.rest.getAttachment",
+          "asana.rest.getAttachmentsForObject",
+          "asana.rest.getAuditLogEvents",
+          "asana.rest.getBudget",
+          "asana.rest.getBudgets",
+          "asana.rest.getCustomField",
+          "asana.rest.getCustomFieldSettingsForGoal",
+          "asana.rest.getCustomFieldSettingsForPortfolio",
+          "asana.rest.getCustomFieldSettingsForProject",
+          "asana.rest.getCustomFieldSettingsForTeam",
+          "asana.rest.getCustomFieldsForWorkspace",
+          "asana.rest.getCustomType",
+          "asana.rest.getCustomTypes",
+          "asana.rest.getDependenciesForTask",
+          "asana.rest.getDependentsForTask",
+          "asana.rest.getEvents",
+          "asana.rest.getFavoritesForUser",
+          "asana.rest.getGoal",
+          "asana.rest.getGoalRelationship",
+          "asana.rest.getGoalRelationships",
+          "asana.rest.getGoals",
+          "asana.rest.getItemsForPortfolio",
+          "asana.rest.getJob",
+          "asana.rest.getMembership",
+          "asana.rest.getMemberships",
+          "asana.rest.getOooEntries",
+          "asana.rest.getOooEntry",
+          "asana.rest.getOrganizationExport",
+          "asana.rest.getParentGoalsForGoal",
+          "asana.rest.getPortfolio",
+          "asana.rest.getPortfolioMembership",
+          "asana.rest.getPortfolioMemberships",
+          "asana.rest.getPortfolioMembershipsForPortfolio",
+          "asana.rest.getPortfolios",
+          "asana.rest.getProject",
+          "asana.rest.getProjectBrief",
+          "asana.rest.getProjectMembership",
+          "asana.rest.getProjectMembershipsForProject",
+          "asana.rest.getProjectPortfolioSetting",
+          "asana.rest.getProjectPortfolioSettingsForPortfolio",
+          "asana.rest.getProjectPortfolioSettingsForProject",
+          "asana.rest.getProjects",
+          "asana.rest.getProjectsForTask",
+          "asana.rest.getProjectsForTeam",
+          "asana.rest.getProjectsForWorkspace",
+          "asana.rest.getProjectStatus",
+          "asana.rest.getProjectStatusesForProject",
+          "asana.rest.getProjectTemplate",
+          "asana.rest.getProjectTemplates",
+          "asana.rest.getProjectTemplatesForTeam",
+          "asana.rest.getRate",
+          "asana.rest.getRates",
+          "asana.rest.getReactionsOnObject",
+          "asana.rest.getRole",
+          "asana.rest.getRoles",
+          "asana.rest.getSection",
+          "asana.rest.getSectionsForProject",
+          "asana.rest.getStatus",
+          "asana.rest.getStatusesForObject",
+          "asana.rest.getStoriesForGoal",
+          "asana.rest.getStoriesForTask",
+          "asana.rest.getStory",
+          "asana.rest.getSubtasksForTask",
+          "asana.rest.getTag",
+          "asana.rest.getTags",
+          "asana.rest.getTagsForTask",
+          "asana.rest.getTagsForWorkspace",
+          "asana.rest.getTask",
+          "asana.rest.getTaskCountsForProject",
+          "asana.rest.getTaskForCustomID",
+          "asana.rest.getTasks",
+          "asana.rest.getTasksForProject",
+          "asana.rest.getTasksForSection",
+          "asana.rest.getTasksForTag",
+          "asana.rest.getTasksForUserTaskList",
+          "asana.rest.getTaskTemplate",
+          "asana.rest.getTaskTemplates",
+          "asana.rest.getTeam",
+          "asana.rest.getTeamMembership",
+          "asana.rest.getTeamMemberships",
+          "asana.rest.getTeamMembershipsForTeam",
+          "asana.rest.getTeamMembershipsForUser",
+          "asana.rest.getTeamsForUser",
+          "asana.rest.getTeamsForWorkspace",
+          "asana.rest.getTimePeriod",
+          "asana.rest.getTimePeriods",
+          "asana.rest.getTimesheetApprovalStatus",
+          "asana.rest.getTimesheetApprovalStatuses",
+          "asana.rest.getTimeTrackingCategories",
+          "asana.rest.getTimeTrackingCategory",
+          "asana.rest.getTimeTrackingEntries",
+          "asana.rest.getTimeTrackingEntriesForTask",
+          "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+          "asana.rest.getTimeTrackingEntry",
+          "asana.rest.getUser",
+          "asana.rest.getUserForWorkspace",
+          "asana.rest.getUsers",
+          "asana.rest.getUsersForTeam",
+          "asana.rest.getUsersForWorkspace",
+          "asana.rest.getUserTaskList",
+          "asana.rest.getUserTaskListForUser",
+          "asana.rest.getWebhook",
+          "asana.rest.getWebhooks",
+          "asana.rest.getWorkspace",
+          "asana.rest.getWorkspaceEvents",
+          "asana.rest.getWorkspaceMembership",
+          "asana.rest.getWorkspaceMembershipsForUser",
+          "asana.rest.getWorkspaceMembershipsForWorkspace",
+          "asana.rest.getWorkspaces",
+          "asana.rest.insertEnumOptionForCustomField",
+          "asana.rest.insertSectionForProject",
+          "asana.rest.instantiateProject",
+          "asana.rest.instantiateTask",
+          "asana.rest.projectSaveAsTemplate",
+          "asana.rest.rejectAccessRequest",
+          "asana.rest.removeCustomFieldSettingForGoal",
+          "asana.rest.removeCustomFieldSettingForPortfolio",
+          "asana.rest.removeCustomFieldSettingForProject",
+          "asana.rest.removeDependenciesForTask",
+          "asana.rest.removeDependentsForTask",
+          "asana.rest.removeFollowerForTask",
+          "asana.rest.removeFollowers",
+          "asana.rest.removeFollowersForProject",
+          "asana.rest.removeItemForPortfolio",
+          "asana.rest.removeMembersForPortfolio",
+          "asana.rest.removeMembersForProject",
+          "asana.rest.removeProjectForTask",
+          "asana.rest.removeSupportingRelationship",
+          "asana.rest.removeTagForTask",
+          "asana.rest.removeUserForTeam",
+          "asana.rest.removeUserForWorkspace",
+          "asana.rest.searchProjectsForWorkspace",
+          "asana.rest.searchTasksForWorkspace",
+          "asana.rest.setParentForTask",
+          "asana.rest.triggerRule",
+          "asana.rest.typeaheadForWorkspace",
+          "asana.rest.updateAllocation",
+          "asana.rest.updateBudget",
+          "asana.rest.updateCustomField",
+          "asana.rest.updateEnumOption",
+          "asana.rest.updateGoal",
+          "asana.rest.updateGoalMetric",
+          "asana.rest.updateGoalRelationship",
+          "asana.rest.updateMembership",
+          "asana.rest.updateOooEntry",
+          "asana.rest.updatePortfolio",
+          "asana.rest.updateProject",
+          "asana.rest.updateProjectBrief",
+          "asana.rest.updateProjectPortfolioSetting",
+          "asana.rest.updateRate",
+          "asana.rest.updateRole",
+          "asana.rest.updateSection",
+          "asana.rest.updateStory",
+          "asana.rest.updateTag",
+          "asana.rest.updateTask",
+          "asana.rest.updateTeam",
+          "asana.rest.updateTimesheetApprovalStatus",
+          "asana.rest.updateTimeTrackingCategory",
+          "asana.rest.updateTimeTrackingEntry",
+          "asana.rest.updateUser",
+          "asana.rest.updateUserForWorkspace",
+          "asana.rest.updateWebhook",
+          "asana.rest.updateWorkspace"
+        ],
+        "lane_cells": [
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addCustomFieldSettingForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addDependenciesForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addDependenciesForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addDependentsForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addDependentsForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowers",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowers",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowersForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowersForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowersForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addFollowersForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addItemForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addItemForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addMembersForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addMembersForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addMembersForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addMembersForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addProjectForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addProjectForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addSupportingRelationship",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addSupportingRelationship",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addTagForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addTagForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addTaskForSection",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addTaskForSection",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addUserForTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addUserForTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addUserForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.addUserForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.approveAccessRequest",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.approveAccessRequest",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAccessRequest",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAccessRequest",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAllocation",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAllocation",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAttachmentForObject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAttachmentForObject",
+            "lane": "binary_upload",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createAttachmentForObject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createBatchRequest",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createBatchRequest",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createBudget",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createBudget",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createEnumOptionForCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createEnumOptionForCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGoalMetric",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGoalMetric",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGraphExport",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createGraphExport",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createMembership",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createMembership",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createOooEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createOooEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createOrganizationExport",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createOrganizationExport",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectBrief",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectBrief",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectForTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectForTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectStatusForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createProjectStatusForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createRate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createRate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createResourceExport",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createResourceExport",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createRole",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createRole",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createSectionForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createSectionForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStatusForObject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStatusForObject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStoryForGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStoryForGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStoryForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createStoryForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createSubtaskForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createSubtaskForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTag",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTag",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTagForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTagForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimesheetApprovalStatus",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimesheetApprovalStatus",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimeTrackingCategory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimeTrackingCategory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimeTrackingEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createTimeTrackingEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createWebhook",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.createWebhook",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteAllocation",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteAllocation",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteAttachment",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteAttachment",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteBudget",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteBudget",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteMembership",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteMembership",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteOooEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteOooEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deletePortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deletePortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectBrief",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectBrief",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectStatus",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectStatus",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectTemplate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteProjectTemplate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteRate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteRate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteRole",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteRole",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteSection",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteSection",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteStatus",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteStatus",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteStory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteStory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTag",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTag",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTaskTemplate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTaskTemplate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTimeTrackingCategory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTimeTrackingCategory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTimeTrackingEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteTimeTrackingEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteWebhook",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.deleteWebhook",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicatePortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicatePortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicateProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicateProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicateTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.duplicateTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAccessRequests",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAgent",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAgentsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAgentsForWorkspace",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getAiStudioRuns",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAiStudioRuns",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getAiStudioSeats",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAiStudioSeats",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getAllocation",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAllocations",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAllocations",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getAttachment",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAttachmentsForObject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAttachmentsForObject",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getAuditLogEvents",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getAuditLogEvents",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getBudget",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getBudgets",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomField",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldSettingsForGoal",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldSettingsForGoal",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldSettingsForPortfolio",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldSettingsForPortfolio",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldSettingsForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldSettingsForProject",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldSettingsForTeam",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomFieldsForWorkspace",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomType",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomTypes",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getCustomTypes",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getDependenciesForTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getDependenciesForTask",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getDependentsForTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getDependentsForTask",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getEvents",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getEvents",
+            "lane": "sync_transport",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getFavoritesForUser",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getFavoritesForUser",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getGoal",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getGoalRelationship",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getGoalRelationships",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getGoalRelationships",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getGoals",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getGoals",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getItemsForPortfolio",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getItemsForPortfolio",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getJob",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getMembership",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getMemberships",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getMemberships",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getOooEntries",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getOooEntries",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getOooEntry",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getOrganizationExport",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getParentGoalsForGoal",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getPortfolio",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getPortfolioMembership",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getPortfolioMemberships",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getPortfolioMemberships",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getPortfolioMembershipsForPortfolio",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getPortfolioMembershipsForPortfolio",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getPortfolios",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getPortfolios",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectBrief",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectMembership",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectMembershipsForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectMembershipsForProject",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getProjectPortfolioSetting",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectPortfolioSettingsForPortfolio",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectPortfolioSettingsForPortfolio",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getProjectPortfolioSettingsForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectPortfolioSettingsForProject",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getProjects",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjects",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectsForTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectsForTask",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getProjectsForTeam",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectsForTeam",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getProjectsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectsForWorkspace",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getProjectStatus",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectStatusesForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectStatusesForProject",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectTemplate",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectTemplates",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectTemplates",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getProjectTemplatesForTeam",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getProjectTemplatesForTeam",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getRate",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getRates",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getRates",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getReactionsOnObject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getReactionsOnObject",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getRole",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getRoles",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getRoles",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getSection",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getSectionsForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getSectionsForProject",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getStatus",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getStatusesForObject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getStatusesForObject",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getStoriesForGoal",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getStoriesForGoal",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getStoriesForTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getStoriesForTask",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getStory",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getSubtasksForTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getSubtasksForTask",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTag",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTags",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTags",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTagsForTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTagsForTask",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTagsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTagsForWorkspace",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTask",
+            "lane": "sync_transport",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTaskCountsForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTaskForCustomID",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasks",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasks",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasks",
+            "lane": "sync_transport",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasksForProject",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasksForProject",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTasksForSection",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasksForSection",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTasksForTag",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasksForTag",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTasksForUserTaskList",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTasksForUserTaskList",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTaskTemplate",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTaskTemplates",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeam",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamMembership",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamMemberships",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamMemberships",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamMembershipsForTeam",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamMembershipsForTeam",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTeamMembershipsForUser",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamMembershipsForUser",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTeamsForUser",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamsForUser",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTeamsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTeamsForWorkspace",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimePeriod",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimePeriods",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimePeriods",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTimesheetApprovalStatus",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimesheetApprovalStatuses",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimesheetApprovalStatuses",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingCategories",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingCategories",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingCategory",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingEntries",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingEntries",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingEntriesForTask",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingEntriesForTask",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getTimeTrackingEntry",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUser",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUserForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUsers",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUsers",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUsersForTeam",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUsersForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUserTaskList",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getUserTaskListForUser",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWebhook",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWebhooks",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWebhooks",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceEvents",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceMembership",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceMembershipsForUser",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceMembershipsForUser",
+            "lane": "etl",
+            "disposition": "mapped_unproven"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaces",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.getWorkspaces",
+            "lane": "etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.insertEnumOptionForCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.insertEnumOptionForCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.insertSectionForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.insertSectionForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.instantiateProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.instantiateProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.instantiateTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.instantiateTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.projectSaveAsTemplate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.projectSaveAsTemplate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.rejectAccessRequest",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.rejectAccessRequest",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeCustomFieldSettingForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeDependenciesForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeDependenciesForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeDependentsForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeDependentsForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowerForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowerForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowers",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowers",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowersForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeFollowersForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeItemForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeItemForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeMembersForPortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeMembersForPortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeMembersForProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeMembersForProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeProjectForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeProjectForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeSupportingRelationship",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeSupportingRelationship",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeTagForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeTagForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeUserForTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeUserForTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeUserForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.removeUserForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.searchProjectsForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.searchTasksForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.setParentForTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.setParentForTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.triggerRule",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.triggerRule",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.typeaheadForWorkspace",
+            "lane": "direct_read",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateAllocation",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateAllocation",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateBudget",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateBudget",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateCustomField",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateCustomField",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateEnumOption",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateEnumOption",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoal",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoal",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoalMetric",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoalMetric",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoalRelationship",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateGoalRelationship",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateMembership",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateMembership",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateOooEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateOooEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updatePortfolio",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updatePortfolio",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProject",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProject",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProjectBrief",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProjectBrief",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProjectPortfolioSetting",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateProjectPortfolioSetting",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateRate",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateRate",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateRole",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateRole",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateSection",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateSection",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateStory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateStory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTag",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTag",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTask",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTask",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTeam",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTeam",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimesheetApprovalStatus",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimesheetApprovalStatus",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimeTrackingCategory",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimeTrackingCategory",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimeTrackingEntry",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateTimeTrackingEntry",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateUser",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateUser",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateUserForWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateUserForWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateWebhook",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateWebhook",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateWorkspace",
+            "lane": "direct_write",
+            "disposition": "implemented"
+          },
+          {
+            "source_id": "asana.rest.updateWorkspace",
+            "lane": "reverse_etl",
+            "disposition": "implemented"
+          }
+        ],
+        "typed_reason": "strict_source_lock_projection_parser",
+        "atlas_lookup": "source.retention-import.v1"
+      }
     }
   ],
-  "non_binding_files": [
+  "gaps": [
     {
-      "path": "event_source_contract.json",
-      "schema": "event_source_contract.schema.json",
-      "role": "closed source-lock evidence projection bound to sync_transport.json's registered executor; tests and certification consume its facts, but it contains no executable lifecycle or runtime policy"
-    },
-    {
-      "path": "certification.json",
-      "role": "optional live-evidence configuration; it does not decide whether a source-backed operation is mapped or executable"
-    },
-    {
-      "path": "sources/asana-operation-source-lock.json",
-      "role": "immutable source provenance for mapping; it is not the runtime executor"
+      "id": "asana_etl_mapped_unproven_scope_fanout_projection",
+      "lane": "etl",
+      "disposition": "mapped_unproven",
+      "typed_reason": "missing_source_backed_stream_scope_or_fanout",
+      "atlas_lookup": "source.projection-admission.v1",
+      "reason": "Each cell has retained descriptor pagination evidence, but no selected streams.json route with a source-backed scope or fanout plus exact schema/API projection. These are mapping deficits, not executable ETL streams and not a request for shared runtime code.",
+      "source_ids": [
+        "asana.rest.getAgentsForWorkspace",
+        "asana.rest.getAiStudioRuns",
+        "asana.rest.getAiStudioSeats",
+        "asana.rest.getAllocations",
+        "asana.rest.getAttachmentsForObject",
+        "asana.rest.getAuditLogEvents",
+        "asana.rest.getCustomFieldSettingsForGoal",
+        "asana.rest.getCustomFieldSettingsForPortfolio",
+        "asana.rest.getCustomFieldSettingsForProject",
+        "asana.rest.getCustomTypes",
+        "asana.rest.getDependenciesForTask",
+        "asana.rest.getDependentsForTask",
+        "asana.rest.getFavoritesForUser",
+        "asana.rest.getGoalRelationships",
+        "asana.rest.getGoals",
+        "asana.rest.getItemsForPortfolio",
+        "asana.rest.getMemberships",
+        "asana.rest.getOooEntries",
+        "asana.rest.getPortfolioMemberships",
+        "asana.rest.getPortfolioMembershipsForPortfolio",
+        "asana.rest.getPortfolios",
+        "asana.rest.getProjectMembershipsForProject",
+        "asana.rest.getProjectPortfolioSettingsForPortfolio",
+        "asana.rest.getProjectPortfolioSettingsForProject",
+        "asana.rest.getProjectsForTask",
+        "asana.rest.getProjectsForTeam",
+        "asana.rest.getProjectsForWorkspace",
+        "asana.rest.getProjectTemplates",
+        "asana.rest.getProjectTemplatesForTeam",
+        "asana.rest.getRates",
+        "asana.rest.getReactionsOnObject",
+        "asana.rest.getRoles",
+        "asana.rest.getStatusesForObject",
+        "asana.rest.getStoriesForGoal",
+        "asana.rest.getSubtasksForTask",
+        "asana.rest.getTagsForTask",
+        "asana.rest.getTagsForWorkspace",
+        "asana.rest.getTasksForProject",
+        "asana.rest.getTasksForSection",
+        "asana.rest.getTasksForTag",
+        "asana.rest.getTasksForUserTaskList",
+        "asana.rest.getTeamMembershipsForTeam",
+        "asana.rest.getTeamMembershipsForUser",
+        "asana.rest.getTeamsForUser",
+        "asana.rest.getTimePeriods",
+        "asana.rest.getTimesheetApprovalStatuses",
+        "asana.rest.getTimeTrackingCategories",
+        "asana.rest.getTimeTrackingEntries",
+        "asana.rest.getTimeTrackingEntriesForTask",
+        "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+        "asana.rest.getWebhooks",
+        "asana.rest.getWorkspaceMembershipsForUser"
+      ],
+      "lane_cells": [
+        {
+          "source_id": "asana.rest.getAgentsForWorkspace",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getAiStudioRuns",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getAiStudioSeats",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getAllocations",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getAttachmentsForObject",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getAuditLogEvents",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getCustomFieldSettingsForGoal",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getCustomFieldSettingsForPortfolio",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getCustomFieldSettingsForProject",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getCustomTypes",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getDependenciesForTask",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getDependentsForTask",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getFavoritesForUser",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getGoalRelationships",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getGoals",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getItemsForPortfolio",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getMemberships",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getOooEntries",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getPortfolioMemberships",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getPortfolioMembershipsForPortfolio",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getPortfolios",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getProjectMembershipsForProject",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getProjectPortfolioSettingsForPortfolio",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getProjectPortfolioSettingsForProject",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getProjectsForTask",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getProjectsForTeam",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getProjectsForWorkspace",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getProjectTemplates",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getProjectTemplatesForTeam",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getRates",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getReactionsOnObject",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getRoles",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getStatusesForObject",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getStoriesForGoal",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getSubtasksForTask",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTagsForTask",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTagsForWorkspace",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTasksForProject",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTasksForSection",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTasksForTag",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTasksForUserTaskList",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTeamMembershipsForTeam",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTeamMembershipsForUser",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTeamsForUser",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTimePeriods",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTimesheetApprovalStatuses",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTimeTrackingCategories",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTimeTrackingEntries",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTimeTrackingEntriesForTask",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getWebhooks",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        },
+        {
+          "source_id": "asana.rest.getWorkspaceMembershipsForUser",
+          "lane": "etl",
+          "disposition": "mapped_unproven"
+        }
+      ]
     }
   ]
 }

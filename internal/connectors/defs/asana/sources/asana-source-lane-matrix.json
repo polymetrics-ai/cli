@@ -10678,7 +10678,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/custom_fields.json",
               "api_surface.json"
             ]
           }
@@ -14020,7 +14020,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/projects.json",
               "api_surface.json"
             ]
           }
@@ -14602,7 +14602,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/project_statuses.json",
               "api_surface.json"
             ]
           }
@@ -15698,7 +15698,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/sections.json",
               "api_surface.json"
             ]
           }
@@ -16159,7 +16159,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/stories.json",
               "api_surface.json"
             ]
           }
@@ -16582,7 +16582,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/tags.json",
               "api_surface.json"
             ]
           }
@@ -17246,7 +17246,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/tasks.json",
               "api_surface.json"
             ]
           }
@@ -18230,7 +18230,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/team_memberships.json",
               "api_surface.json"
             ]
           }
@@ -18703,7 +18703,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/teams.json",
               "api_surface.json"
             ]
           }
@@ -20107,7 +20107,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/users.json",
               "api_surface.json"
             ]
           }
@@ -21223,7 +21223,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/workspace_memberships.json",
               "api_surface.json"
             ]
           }
@@ -21337,7 +21337,7 @@
             },
             "artifacts": [
               "streams.json",
-              "schemas/",
+              "schemas/workspaces.json",
               "api_surface.json"
             ]
           }

@@ -1,6 +1,6 @@
 # Overview
 
-Asana reads source-bound operations through the Asana v1 REST API and executes typed one-record direct writes through plan -> preview -> approval -> execute. Saved connections use the same 12 streams for warehouse-backed ETL, and `pm reverse` uses the same write actions for warehouse-table reverse ETL. The pinned OpenAPI ledger accounts for all 249 provider operations, and every row now has an executable source-bound route. `POST /batch` is available only through the closed declared-action selector; it is not a raw HTTP escape hatch.
+Asana reads source-bound operations through the Asana v1 REST API and executes typed one-record direct writes through plan -> preview -> approval -> execute. Saved connections use 12 existing declarative streams for warehouse-backed ETL, and `pm reverse` uses the same write actions for warehouse-table reverse ETL. The pinned OpenAPI ledger accounts for all 249 provider operations in `sources/asana-source-lane-matrix.json`; direct-route implementation does not promote a pageable source operation to an executable ETL stream. `POST /batch` is available only through the closed declared-action selector; it is not a raw HTTP escape hatch.
 
 Official source inventory:
 
@@ -11,17 +11,30 @@ Official source inventory:
 - Declared interactive lanes: `direct_read=119` (107 bounded operation-backed + 12 stream-backed commands with a shared one-provider-request budget), `direct_write=131` across all 130 mutation endpoints (129 one-to-one actions + 2 attachment request variants sharing `POST /attachments`)
 - Additional command rows: one implemented `binary_upload` alias and one planned legacy attachment operation alias; neither adds a provider operation
 
+The source matrix is the sole identity denominator. Its explicit seven-lane dispositions are:
+
+| Lane | Source disposition |
+| --- | --- |
+| Direct read | 119 implemented; 130 not applicable |
+| Direct write | 130 implemented; 119 not applicable |
+| Binary download | 0 applicable; 249 source-evidenced not applicable |
+| Binary upload | 1 implemented attachment operation; 248 not applicable |
+| ETL through DuckDB | 64 candidates: 12 implemented stream/schema/API projections and 52 `mapped_unproven` descriptor-only cells; 185 not applicable |
+| Reverse ETL from DuckDB | 130 implemented; 119 not applicable |
+| Sync transport through DuckDB | 3 implemented task event/hydration/snapshot cells; 246 not applicable |
+
 ## Source-operation lane matrix
 
-The connector-local `TestEveryLockedOperationHasOneAccountedCommandLane` constructs this matrix from the immutable 249-operation source lock, `api_surface.json`, and `cli_surface.json`. It counts provider operations once; command aliases are accounted separately.
+`TestAsanaSourceLaneMatrixRetainsEveryLockedOperationAndLane` retains the immutable 249-operation source denominator. `TestAsanaSourceLaneArtifactsProjectTheTrackAMatrix` verifies that applicable cells resolve to existing definition artifacts and that an artifact or backlink cannot be removed silently. Command aliases are accounted separately from provider identities.
 
-| Locked provider operations | Current lane/accounting | Actual execution status |
+| Source group or overlay | Current lane/accounting | Actual execution status |
 | ---: | --- | --- |
 | 107 | operation-backed `direct_read` | implemented bounded operation read, including `GET /memberships/{membership_gid}` |
 | 12 | stream-backed `direct_read` plus saved ETL | the interactive command has one aggregate provider-request/page budget; saved full-refresh ETL remains exhaustive |
+| 52 ETL overlay cells | descriptor-pagination ETL candidates | `mapped_unproven`: retained in the matrix and gap ledger, with no selected stream/schema/API route and no executable-stream claim |
 | 130 | 131 `direct_write` actions plus warehouse-table reverse ETL | every mutation endpoint is executable; `POST /attachments` has two closed request variants and `POST /batch` has one closed declared-action adapter |
 
-The rows total 249. They project to 252 CLI command rows because `asana.rest.createAttachmentForObject` has four command representations: two implemented direct writes (`attachments upload-attachment-file` and `attachments create-external-attachment`), one planned legacy operation alias, and one implemented `binary_upload` alias. The planned legacy alias is an accounting/compatibility row, not an unmapped provider operation. The provider documents arbitrary full file contents rather than a finite media allow-list, so the file action carries a closed `provider_unrestricted` policy instead of fabricated MIME types. The binary alias uses the same 100 MB cap, project-root confinement, payload digest, preview, and approval binding. No locked Asana operation supplies a binary response contract, so no `binary_download` command is invented.
+The first, second, and fourth rows are the mutually exclusive direct-route partition (107 + 12 + 130 = 249). The ETL overlay intersects the GET rows and therefore does not add a second denominator. The source rows project to 252 CLI command rows because `asana.rest.createAttachmentForObject` has four command representations: two implemented direct writes (`attachments upload-attachment-file` and `attachments create-external-attachment`), one planned legacy operation alias, and one implemented `binary_upload` alias. The planned legacy alias is an accounting/compatibility row, not an unmapped provider operation. The provider documents arbitrary full file contents rather than a finite media allow-list, so the file action carries a closed `provider_unrestricted` policy instead of fabricated MIME types. The binary alias uses the same 100 MB cap, project-root confinement, payload digest, preview, and approval binding. No locked Asana operation supplies a binary response contract, so no `binary_download` command is invented.
 
 Readable streams currently executable by the declarative engine: `custom_fields`, `project_statuses`, `projects`, `sections`, `stories`, `tags`, `tasks`, `team_memberships`, `teams`, `users`, `workspace_memberships`, `workspaces`.
 
@@ -53,7 +66,7 @@ Connection checks call GET `/users/me`. That identity alias is documented by Asa
 
 Default pagination follows Asana's `next_page.uri` response field with same-host guarding. Source-bound direct reads use the declared closed pagination contract only: callers navigate with `--page` or `--page-cursor`; raw provider controls such as `offset` and `limit` are not command flags.
 
-Implemented streams remain intentionally bounded and fixture-backed:
+Implemented streams remain intentionally bounded and fixture-backed. They are the only source-backed ETL stream projections; descriptor pagination alone does not admit the other 52 candidate cells:
 
 - `workspaces`: GET `/workspaces`; records path `data`; first-stream fixture-backed.
 
@@ -92,8 +105,8 @@ Sixty-nine actions retain historical source-partial disposition metadata where t
 - Static source availability is computed from pinned declarations: no credential or live-provider account is required to determine whether a declared operation has its complete shared foundation.
 - `api_surface.json` uses `operation_ledger_version: 1`: non-executable operation rows are the source of truth for the remaining foundation gaps.
 - `/batch` is executable only as the closed `create_batch_request` action. A record supplies 1..10 named, explicitly allow-listed existing actions; the engine derives every subrequest method/path/body, rejects unsupported/nested/query-bearing actions before provider I/O, preserves preview/approval, and fails closed on partial or malformed provider results. Callers never supply raw HTTP fields.
-- Provider-route coverage is 12 bounded stream reads + 107 bounded operation reads + all 130 mutation endpoints. Interactive presentation declares 119 direct reads and 131 direct writes; the attachment operation has two source-backed request variants. All 249 locked provider rows therefore have an executable `covered_by` route.
-- Full-refresh overwrite/append remains available for all 12 saved ETL streams. Provider-token incremental append/upsert/dedupe is admitted only for project-scoped `tasks`, using Asana Events tokens, complete `has_more` windows, durable checkpoint acknowledgement, stable `gid` coalescing/hydration, and `deleted` tombstones. The other 11 stream scopes and ordered history/change capture remain unproven and are not admitted as incremental modes.
+- Provider-route coverage is 12 bounded stream reads + 107 bounded operation reads + all 130 mutation endpoints. Interactive presentation declares 119 direct reads and 131 direct writes; the attachment operation has two source-backed request variants. Those direct routes account for all 249 locked provider rows, but they do not alter the separate 64-cell ETL denominator or make mapped-unproven rows executable streams.
+- Full-refresh overwrite/append remains available for the 12 selected saved ETL streams. The other 52 descriptor-pagination candidates remain `mapped_unproven` because no exact source-backed scope/fanout and stream/schema/API projection has been selected. Provider-token incremental append/upsert/dedupe is admitted only for project-scoped `tasks`, using Asana Events tokens, complete `has_more` windows, durable checkpoint acknowledgement, stable `gid` coalescing/hydration, and `deleted` tombstones. The other 11 selected-stream scopes and ordered history/change capture remain unproven and are not admitted as incremental modes.
 - Saved bulk multipart upload currently resolves a warehouse row's `file_path` relative to the app-owned `.polymetrics` runtime directory, while the one-record direct-write route resolves it relative to the public project root. The all-action reverse-ETL proof exercises the current bounded behavior; changing the shared bulk runtime root requires a deliberate App-level policy correction.
 - Every promoted write's record schema is derived from the pinned OpenAPI source above, never inferred from response shapes. Envelope and resource levels are closed with `additionalProperties: false`; deeply nested provider-defined regions (for example `custom_fields` on `create_task`) stay `type: object` with `additionalProperties: true`, which is the bundle's bounded-but-not-exhaustive convention.
 - Provider search/typeahead and audit/webhook operations are bounded direct commands, not evidence that every stream supports incremental ETL. The source-backed Asana attachment action is the sole binary-upload route; no binary-download route is claimed.

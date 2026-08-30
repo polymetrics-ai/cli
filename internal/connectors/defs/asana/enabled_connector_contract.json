@@ -45,7 +45,7 @@
       "state": "implemented",
       "reason": "The descriptor declares 64 pageable/extractable collection candidates. Twelve have existing source-bound declarative stream routes; the remaining 52 stay visible as mapped-unproven cells in the source-to-seven-lane matrix rather than being omitted or promoted.",
       "citations": [{"url": "https://github.com/Asana/openapi/blob/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml", "location": "descriptor pagination facts for locked GET operations"}],
-      "artifacts": ["streams.json", "cli_surface.json", "sources/asana-operation-descriptor.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
+      "artifacts": ["streams.json", "schemas/custom_fields.json", "schemas/project_statuses.json", "schemas/projects.json", "schemas/sections.json", "schemas/stories.json", "schemas/tags.json", "schemas/tasks.json", "schemas/team_memberships.json", "schemas/teams.json", "schemas/users.json", "schemas/workspace_memberships.json", "schemas/workspaces.json", "api_surface.json", "cli_surface.json", "sources/asana-operation-descriptor.json", "sources/asana-operation-source-lock.json", "sources/asana-source-lane-matrix.json"],
       "source": {"partition": false, "coverage": "partial", "expected": 64, "implemented": 12, "unmapped_mapping": 52, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
       "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app.RunETL", "proof": "internal/app/transport_composition_test.go: TestOpenRegistersDefinitionOwnedProductionTransports"}]
     },
