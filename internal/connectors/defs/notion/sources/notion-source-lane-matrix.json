@@ -2054,9 +2054,21 @@
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "Locked POST source row is not a GET direct-read candidate."
+          "applicability": "source_candidate",
+          "disposition": "mapped_unproven",
+          "reason": "Locked source-documented semantic POST provider read has one request and retained JSON page-response facts; source-backed direct-read candidate only.",
+          "mapping": {
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate"
+            },
+            "definition_backlink": {
+              "kind": "source_lock",
+              "path": "sources/notion-operation-source-lock.json",
+              "source_id": "notion.rest.post-database-query"
+            },
+            "mapping_restriction": "",
+            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -2680,9 +2692,21 @@
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "Locked POST source row is not a GET direct-read candidate."
+          "applicability": "source_candidate",
+          "disposition": "mapped_unproven",
+          "reason": "Locked source-documented semantic POST provider read has one request and retained JSON page-response facts; source-backed direct-read candidate only.",
+          "mapping": {
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate"
+            },
+            "definition_backlink": {
+              "kind": "source_lock",
+              "path": "sources/notion-operation-source-lock.json",
+              "source_id": "notion.rest.post-search"
+            },
+            "mapping_restriction": "",
+            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -4911,9 +4935,21 @@
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "Locked POST source row is not a GET direct-read candidate."
+          "applicability": "source_candidate",
+          "disposition": "mapped_unproven",
+          "reason": "Locked source-documented semantic POST provider read has one request and a retained limit-bounded JSON response; source-backed direct-read candidate only.",
+          "mapping": {
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate"
+            },
+            "definition_backlink": {
+              "kind": "source_lock",
+              "path": "sources/notion-operation-source-lock.json",
+              "source_id": "notion.rest.query-meeting-notes"
+            },
+            "mapping_restriction": "",
+            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -5214,9 +5250,21 @@
       },
       "lanes": {
         "direct_read": {
-          "applicability": "not_applicable",
-          "disposition": "not_applicable",
-          "reason": "Locked POST source row is not a GET direct-read candidate."
+          "applicability": "source_candidate",
+          "disposition": "mapped_unproven",
+          "reason": "Locked source-documented semantic POST provider read has one token request and retained active-status JSON response facts; source-backed direct-read candidate only.",
+          "mapping": {
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate"
+            },
+            "definition_backlink": {
+              "kind": "source_lock",
+              "path": "sources/notion-operation-source-lock.json",
+              "source_id": "notion.rest.introspect-token"
+            },
+            "mapping_restriction": "",
+            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -5257,8 +5305,8 @@
     "total_lane_cells": 343,
     "lane_counts": {
       "direct_read": {
-        "mapped_unproven": 20,
-        "not_applicable": 29
+        "mapped_unproven": 24,
+        "not_applicable": 25
       },
       "direct_write": {
         "not_applicable": 24,

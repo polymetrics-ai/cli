@@ -27,7 +27,11 @@ var notionLaneNames = []string{
 
 // These are manually source-reviewed classifications, not output from a
 // connector generator. The test proves every ID remains in the frozen lock.
-var notionDirectReadIDs = stringSet(
+// A direct read is a single bounded provider read. GET is common but not a
+// prerequisite: a source-documented POST query or introspection response can
+// also be a bounded direct read when the retained contract proves its read
+// semantics and response shape.
+var notionGETDirectReadIDs = stringSet(
 	"notion.rest.get-self",
 	"notion.rest.get-user",
 	"notion.rest.get-users",
@@ -56,6 +60,17 @@ var notionSemanticReadNonGETIDs = stringSet(
 	"notion.rest.query-meeting-notes",
 	"notion.rest.introspect-token",
 )
+
+func notionDirectReadCandidate(sourceID string) bool {
+	return notionGETDirectReadIDs[sourceID] || notionSemanticReadNonGETIDs[sourceID]
+}
+
+func notionDirectReadClassification(sourceID string) string {
+	if notionSemanticReadNonGETIDs[sourceID] {
+		return "source_semantic_post_read_candidate"
+	}
+	return "locked_get_source_candidate"
+}
 
 var notionMutationIDs = stringSet(
 	"notion.rest.post-page",
@@ -150,6 +165,67 @@ func TestNotionSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 		cell["disposition"] = "implemented"
 		if err := validateNotionMatrix(broken, lock, crosswalk); err == nil || !strings.Contains(err.Error(), "implemented disposition") {
 			t.Fatalf("promotion error = %v, want implemented disposition", err)
+		}
+	})
+
+	t.Run("accepts source-documented bounded semantic POST reads", func(t *testing.T) {
+		for _, sourceID := range []string{
+			"notion.rest.post-database-query",
+			"notion.rest.post-search",
+			"notion.rest.query-meeting-notes",
+			"notion.rest.introspect-token",
+		} {
+			t.Run(sourceID, func(t *testing.T) {
+				row := notionMatrixRow(t, matrix, sourceID)
+				cell := object(object(row["lanes"])["direct_read"])
+				if stringValue(cell["applicability"]) != "source_candidate" ||
+					stringValue(cell["disposition"]) != "mapped_unproven" ||
+					stringValue(object(object(cell["mapping"])["source_fact"])["classification"]) != "source_semantic_post_read_candidate" {
+					t.Fatalf("semantic POST direct-read cell %s = %#v, want source-backed mapped_unproven", sourceID, cell)
+				}
+			})
+		}
+	})
+
+	t.Run("rejects mutation POST direct-read mapping without source read facts", func(t *testing.T) {
+		broken := cloneNotionJSON(t, matrix)
+		row := notionMatrixRow(t, broken, "notion.rest.post-page")
+		cell := object(object(row["lanes"])["direct_read"])
+		cell["applicability"] = "source_candidate"
+		cell["disposition"] = "mapped_unproven"
+		cell["reason"] = "Incorrectly treating a mutation as a direct read."
+		cell["mapping"] = map[string]any{
+			"source_fact": map[string]any{"classification": "source_semantic_post_read_candidate"},
+			"definition_backlink": map[string]any{
+				"kind":      "source_lock",
+				"path":      notionSourceLockPath,
+				"source_id": "notion.rest.post-page",
+			},
+			"mapping_restriction": "",
+			"runtime_claim":       "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
+		}
+		if err := validateNotionMatrix(broken, lock, crosswalk); err == nil || !strings.Contains(err.Error(), "must be explicit not_applicable") {
+			t.Fatalf("mutation POST direct-read error = %v, want explicit not_applicable", err)
+		}
+	})
+
+	t.Run("rejects semantic POST direct read without its retained response fact", func(t *testing.T) {
+		brokenLock := cloneNotionJSON(t, lock)
+		operation := notionLockOperation(t, brokenLock, "notion.rest.post-search")
+		delete(object(object(operation["source_operation"])["responses"]), "200")
+		if err := validateNotionMatrix(matrix, brokenLock, crosswalk); err == nil || !strings.Contains(err.Error(), "requires a 200 application/json response") {
+			t.Fatalf("semantic POST response error = %v, want retained response fact", err)
+		}
+	})
+
+	t.Run("preserves meeting-notes as both a direct read and restricted ETL candidate", func(t *testing.T) {
+		row := notionMatrixRow(t, matrix, "notion.rest.query-meeting-notes")
+		directRead := object(object(row["lanes"])["direct_read"])
+		etl := object(object(row["lanes"])["etl"])
+		if stringValue(directRead["disposition"]) != "mapped_unproven" ||
+			stringValue(etl["disposition"]) != "mapped_unproven" ||
+			stringValue(object(etl["mapping"])["mapping_restriction"]) != "source declares a bounded collection and has_more but no retained cursor, offset, or continuation request input" {
+			t.Fatalf("meeting-notes lanes direct_read=%#v etl=%#v, want direct read plus restricted ETL", directRead, etl)
 		}
 	})
 
@@ -258,7 +334,7 @@ func validateNotionMatrix(matrix, lock, crosswalk map[string]any) error {
 		return fmt.Errorf("matrix summary rows/cells is not 49 x 7")
 	}
 	wantCounts := map[string]map[string]int{
-		"direct_read":     {"mapped_unproven": 20, "not_applicable": 29},
+		"direct_read":     {"mapped_unproven": 24, "not_applicable": 25},
 		"direct_write":    {"mapped_unproven": 25, "not_applicable": 24},
 		"binary_download": {"not_applicable": 49},
 		"binary_upload":   {"mapped_unproven": 1, "not_applicable": 48},
@@ -436,16 +512,24 @@ func validateNotionBoundary(boundary, lock, crosswalk map[string]any, lockedByID
 }
 
 func validateNotionCohorts(locked map[string]map[string]any) error {
-	if len(notionDirectReadIDs) != 20 || len(notionSemanticReadNonGETIDs) != 4 || len(notionMutationIDs) != 25 || len(notionETLIDs) != 12 || len(notionBinaryUploadIDs) != 1 {
+	if len(notionGETDirectReadIDs) != 20 || len(notionSemanticReadNonGETIDs) != 4 || len(notionMutationIDs) != 25 || len(notionETLIDs) != 12 || len(notionBinaryUploadIDs) != 1 {
 		return fmt.Errorf("manual cohort cardinality changed")
 	}
 	for id, operation := range locked {
 		method := stringValue(operation["method"])
-		if method == "GET" != notionDirectReadIDs[id] {
-			return fmt.Errorf("GET/direct-read source policy mismatch for %s", id)
+		if method == "GET" && !notionGETDirectReadIDs[id] {
+			return fmt.Errorf("GET source %s is missing direct-read classification", id)
+		}
+		if notionGETDirectReadIDs[id] && method != "GET" {
+			return fmt.Errorf("GET direct-read source %s has method %s", id, method)
 		}
 		if method != "GET" && !notionSemanticReadNonGETIDs[id] && !notionMutationIDs[id] {
 			return fmt.Errorf("non-GET source %s is not classified", id)
+		}
+		if notionSemanticReadNonGETIDs[id] {
+			if err := validateNotionSemanticPOSTReadEvidence(id, operation); err != nil {
+				return err
+			}
 		}
 	}
 	wantSemanticSummary := map[string]string{
@@ -504,7 +588,7 @@ func validateNotionFacts(sourceID string, facts, locked, rest map[string]any) er
 	}
 	semantics := object(facts["operation_semantics"])
 	wantSemantics := "mutation_candidate"
-	if notionDirectReadIDs[sourceID] {
+	if notionGETDirectReadIDs[sourceID] {
 		wantSemantics = "read_get_candidate"
 	} else if notionSemanticReadNonGETIDs[sourceID] {
 		wantSemantics = "semantic_read_non_get"
@@ -517,6 +601,61 @@ func validateNotionFacts(sourceID string, facts, locked, rest map[string]any) er
 		return fmt.Errorf("source %s event facts mismatch", sourceID)
 	}
 	return validateNotionPagination(sourceID, object(facts["pagination"]), sourceOperation)
+}
+
+func validateNotionSemanticPOSTReadEvidence(sourceID string, locked map[string]any) error {
+	if stringValue(locked["method"]) != "POST" {
+		return fmt.Errorf("semantic POST read %s has method %q", sourceID, stringValue(locked["method"]))
+	}
+	operation := object(locked["source_operation"])
+	requestSchema := object(object(object(operation["requestBody"])["content"])["application/json"])
+	requestSchema = object(requestSchema["schema"])
+	responseSchema := object(object(object(object(operation["responses"])["200"])["content"])["application/json"])
+	responseSchema = object(responseSchema["schema"])
+	if len(requestSchema) == 0 {
+		return fmt.Errorf("semantic POST read %s requires a documented application/json request", sourceID)
+	}
+	if len(responseSchema) == 0 {
+		return fmt.Errorf("semantic POST read %s requires a 200 application/json response", sourceID)
+	}
+	switch sourceID {
+	case "notion.rest.post-database-query", "notion.rest.post-search":
+		if !notionSchemaHasProperties(requestSchema, "start_cursor", "page_size") ||
+			!notionSchemaHasProperties(responseSchema, "results", "next_cursor", "has_more") {
+			return fmt.Errorf("semantic POST read %s lacks retained one-page request/response facts", sourceID)
+		}
+	case "notion.rest.query-meeting-notes":
+		limit := object(object(requestSchema["properties"])["limit"])
+		if intValue(limit["maximum"]) != 50 || !notionSchemaHasProperties(responseSchema, "results", "has_more") {
+			return fmt.Errorf("semantic POST read %s lacks retained bounded meeting-notes response facts", sourceID)
+		}
+	case "notion.rest.introspect-token":
+		if !notionSchemaRequires(requestSchema, "token") || !notionSchemaRequires(responseSchema, "active") {
+			return fmt.Errorf("semantic POST read %s lacks retained token/request response facts", sourceID)
+		}
+	default:
+		return fmt.Errorf("semantic POST read %s is not an explicitly reviewed source candidate", sourceID)
+	}
+	return nil
+}
+
+func notionSchemaHasProperties(schema map[string]any, names ...string) bool {
+	properties := object(schema["properties"])
+	for _, name := range names {
+		if _, ok := properties[name]; !ok {
+			return false
+		}
+	}
+	return true
+}
+
+func notionSchemaRequires(schema map[string]any, name string) bool {
+	for _, required := range stringsValue(schema["required"]) {
+		if required == name {
+			return true
+		}
+	}
+	return false
 }
 
 func validateNotionPagination(sourceID string, pagination, sourceOperation map[string]any) error {
@@ -567,7 +706,7 @@ func validateNotionCell(sourceID, lane string, cell map[string]any) error {
 	classification := ""
 	switch lane {
 	case "direct_read":
-		expected, classification = notionDirectReadIDs[sourceID], "locked_get_source_candidate"
+		expected, classification = notionDirectReadCandidate(sourceID), notionDirectReadClassification(sourceID)
 	case "direct_write", "reverse_etl":
 		expected, classification = notionMutationIDs[sourceID], "source_semantic_mutation_candidate"
 	case "binary_upload":
@@ -659,6 +798,28 @@ func loadNotionJSON(t *testing.T, path string) map[string]any {
 		t.Fatalf("decode %s: %v", path, err)
 	}
 	return value
+}
+
+func notionMatrixRow(t *testing.T, matrix map[string]any, sourceID string) map[string]any {
+	t.Helper()
+	for _, row := range objectArray(matrix["source_operations"]) {
+		if stringValue(row["source_id"]) == sourceID {
+			return row
+		}
+	}
+	t.Fatalf("matrix source row %q not found", sourceID)
+	return nil
+}
+
+func notionLockOperation(t *testing.T, lock map[string]any, sourceID string) map[string]any {
+	t.Helper()
+	for _, operation := range objectArray(object(lock["rest"])["operations"]) {
+		if stringValue(operation["id"]) == sourceID {
+			return operation
+		}
+	}
+	t.Fatalf("lock source operation %q not found", sourceID)
+	return nil
 }
 
 func cloneNotionJSON(t *testing.T, value map[string]any) map[string]any {

@@ -7,6 +7,14 @@
 | Edge | Mutate an in-memory matrix copy in subtests. | Missing source row/cell/backlink, invalid lane disposition, boundary drop, and mapping-control restriction drop each fail. |
 | Refactor | Normalize source facts and summary only after the assertions pass. | No change to source membership or lane dispositions. |
 
+## Independent-review repair: semantic POST direct reads
+
+| Stage | Evidence | Expected result |
+| --- | --- | --- |
+| Red | Tighten the connector-local reconciliation test so all four retained semantic POST reads must be `direct_read` `source_candidate` / `mapped_unproven`, while the matrix still marks them not-applicable because of their method. | The focused test fails at `notion.rest.post-database-query` with `lane direct_read must be mapped_unproven`. |
+| Green | Map `post-database-query`, `post-search`, `query-meeting-notes`, and `introspect-token` as semantic POST direct reads, with the immutable source-lock backlink and source-fact classification. | The focused reconciliation test passes with 24 mapped-unproven direct-read cells and 25 not-applicable cells. |
+| Edge | Mutate an in-memory `post-page` direct-read cell, remove the retained `200 application/json` response from `post-search`, and assert the meeting-notes direct-read plus restricted-ETL dual classification. | Mutation POST promotion and missing source response facts fail; the meeting-notes ETL continuation restriction remains required. |
+
 No live provider, credential, runtime, or certification test is in scope.
 
 ## Check-only mapping restrictions
