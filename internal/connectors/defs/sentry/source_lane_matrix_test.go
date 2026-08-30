@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 	"testing"
+	"unicode"
 )
 
 const (
@@ -36,10 +37,26 @@ type sentrySourceInfo struct {
 	Operation      map[string]any
 }
 
-type sentryPaginationFact struct {
+type sentryActionFact struct {
 	Kind            string
-	QueryParameters []string
-	Description     string
+	EvidenceField   string
+	Headline        string
+	SuccessStatuses []string
+}
+
+type sentryContinuationFact struct {
+	Kind        string
+	Parameter   string
+	Description string
+}
+
+type sentryEventTransportFact struct {
+	Kind                string
+	CallbackField       string
+	EventSelectorField  string
+	Headline            string
+	RequiredFields      []string
+	DocumentedCallbacks int
 }
 
 type sentryExtractabilityFact struct {
@@ -100,7 +117,15 @@ func TestSentrySourceLaneMatrixRejectsMissingSourceFact(t *testing.T) {
 	assertSentryMatrixValidationError(t, matrix, lock, "does not preserve exact scope/path evidence")
 }
 
-func TestSentrySourceLaneMatrixRejectsMissingPagingOrExtractableETLDisposition(t *testing.T) {
+func TestSentrySourceLaneMatrixRejectsMissingSemanticActionFact(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	operation := sentryObjectValue(t, sentryArrayField(t, matrix, "operations")[0], "matrix operation")
+	delete(sentryObjectField(t, operation, "facts"), "action")
+
+	assertSentryMatrixValidationError(t, matrix, lock, "semantic action/response evidence")
+}
+
+func TestSentrySourceLaneMatrixRejectsMissingDocumentedContinuationETLDisposition(t *testing.T) {
 	matrix, lock := readSentryMatrixAndLock(t)
 	sources := sentrySourceOperationsByID(t, lock)
 	for _, rawOperation := range sentryArrayField(t, matrix, "operations") {
@@ -110,24 +135,91 @@ func TestSentrySourceLaneMatrixRejectsMissingPagingOrExtractableETLDisposition(t
 			continue
 		}
 		sentryMatrixCellByLane(t, operation, "etl")["state"] = "not_applicable"
-		assertSentryMatrixValidationError(t, matrix, lock, "pageable or extractable source operation")
+		assertSentryMatrixValidationError(t, matrix, lock, "documented continuation source operation")
 		return
 	}
-	t.Fatal("matrix has no pageable or extractable source operation")
+	t.Fatal("matrix has no documented continuation source operation")
 }
 
 func TestSentrySourceLaneMatrixRejectsMissingMutationReverseETLDisposition(t *testing.T) {
 	matrix, lock := readSentryMatrixAndLock(t)
+	sources := sentrySourceOperationsByID(t, lock)
 	for _, rawOperation := range sentryArrayField(t, matrix, "operations") {
 		operation := sentryObjectValue(t, rawOperation, "matrix operation")
-		if !sentryIsMutation(sentryStringField(t, operation, "method")) {
+		source := sources[sentryStringField(t, operation, "source_id")]
+		if sentrySourceAction(source).Kind != "mutation" {
 			continue
 		}
 		sentryMatrixCellByLane(t, operation, "reverse_etl")["state"] = "not_applicable"
-		assertSentryMatrixValidationError(t, matrix, lock, "mutation source operation")
+		assertSentryMatrixValidationError(t, matrix, lock, "semantic mutation source operation")
 		return
 	}
-	t.Fatal("matrix has no mutation source operation")
+	t.Fatal("matrix has no semantic mutation source operation")
+}
+
+func TestSentrySourceLaneMatrixRejectsArrayOrPageSizeOnlyETLDisposition(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	sources := sentrySourceOperationsByID(t, lock)
+	for _, rawOperation := range sentryArrayField(t, matrix, "operations") {
+		operation := sentryObjectValue(t, rawOperation, "matrix operation")
+		source := sources[sentryStringField(t, operation, "source_id")]
+		if sentrySourceAction(source).Kind != "read" || sentryRequiresETL(source) ||
+			(sentrySourceExtractability(source).Kind != "json_array_response" && !sentrySourceHasPageSizeOnlyControl(source)) {
+			continue
+		}
+		sentryMatrixCellByLane(t, operation, "etl")["state"] = "mapped_unproven"
+		assertSentryMatrixValidationError(t, matrix, lock, "etl cell")
+		return
+	}
+	t.Fatal("matrix has no array-only or page-size-only read")
+}
+
+func TestSentrySourceLaneMatrixRejectsPageSizeOnlyETLDisposition(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	sources := sentrySourceOperationsByID(t, lock)
+	for _, rawOperation := range sentryArrayField(t, matrix, "operations") {
+		operation := sentryObjectValue(t, rawOperation, "matrix operation")
+		source := sources[sentryStringField(t, operation, "source_id")]
+		if sentrySourceAction(source).Kind != "read" || sentryRequiresETL(source) || !sentrySourceHasPageSizeOnlyControl(source) {
+			continue
+		}
+		sentryMatrixCellByLane(t, operation, "etl")["state"] = "mapped_unproven"
+		assertSentryMatrixValidationError(t, matrix, lock, "etl cell")
+		return
+	}
+	t.Fatal("matrix has no page-size-only read")
+}
+
+func TestSentrySourceLaneMatrixRejectsPaginationAsSyncTransport(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	sources := sentrySourceOperationsByID(t, lock)
+	for _, rawOperation := range sentryArrayField(t, matrix, "operations") {
+		operation := sentryObjectValue(t, rawOperation, "matrix operation")
+		source := sources[sentryStringField(t, operation, "source_id")]
+		if !sentryRequiresETL(source) || sentryRequiresSyncTransport(source) {
+			continue
+		}
+		sentryMatrixCellByLane(t, operation, "sync_transport")["state"] = "mapped_unproven"
+		assertSentryMatrixValidationError(t, matrix, lock, "sync_transport cell")
+		return
+	}
+	t.Fatal("matrix has no continuation read without a webhook registration contract")
+}
+
+func TestSentrySourceLaneMatrixRejectsMissingWebhookRegistrationSyncTransport(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	sources := sentrySourceOperationsByID(t, lock)
+	for _, rawOperation := range sentryArrayField(t, matrix, "operations") {
+		operation := sentryObjectValue(t, rawOperation, "matrix operation")
+		source := sources[sentryStringField(t, operation, "source_id")]
+		if !sentryRequiresSyncTransport(source) {
+			continue
+		}
+		sentryMatrixCellByLane(t, operation, "sync_transport")["state"] = "not_applicable"
+		assertSentryMatrixValidationError(t, matrix, lock, "webhook registration source operation")
+		return
+	}
+	t.Fatal("matrix has no source-backed webhook registration contract")
 }
 
 func TestSentrySourceLaneMatrixRejectsSourceCountMismatch(t *testing.T) {
@@ -144,11 +236,11 @@ func TestSentrySourceLaneMatrixPreservesPagingBinaryAndDeleteSurface(t *testing.
 	}
 
 	counts := sentryMatrixCellCounts(matrix)
-	if got := counts["etl"]["mapped_unproven"]; got != 61 {
-		t.Fatalf("etl mapped_unproven cells = %d, want 61", got)
+	if got := counts["etl"]["mapped_unproven"]; got != 45 {
+		t.Fatalf("etl mapped_unproven cells = %d, want 45", got)
 	}
-	if got := counts["sync_transport"]["mapped_unproven"]; got != 61 {
-		t.Fatalf("sync_transport mapped_unproven cells = %d, want 61", got)
+	if got := counts["sync_transport"]["mapped_unproven"]; got != 1 {
+		t.Fatalf("sync_transport mapped_unproven cells = %d, want 1", got)
 	}
 	if got := counts["binary_upload"]["mapped_unproven"]; got != 2 {
 		t.Fatalf("binary_upload mapped_unproven cells = %d, want 2", got)
@@ -158,6 +250,134 @@ func TestSentrySourceLaneMatrixPreservesPagingBinaryAndDeleteSurface(t *testing.
 	}
 	if got := counts["reverse_etl"]["mapped_unproven"]; got != 103 {
 		t.Fatalf("reverse_etl mapped_unproven cells = %d, want 103", got)
+	}
+}
+
+func TestSentrySemanticLanePredicatesUseSourceContracts(t *testing.T) {
+	tests := []struct {
+		name   string
+		source sentrySourceInfo
+		want   map[string][2]string
+	}{
+		{
+			name: "semantic read is not selected by HTTP method",
+			source: sentryTestSource("POST", "Query records", map[string]any{
+				"responses": map[string]any{"200": sentryTestJSONResponse("object")},
+			}),
+			want: map[string][2]string{
+				"direct_read":  {"mapped_unproven", "sentry.source.direct_read.semantic_read_success_response.v2"},
+				"direct_write": {"not_applicable", "sentry.source.direct_write.semantic_read_not_applicable.v2"},
+				"reverse_etl":  {"not_applicable", "sentry.source.reverse_etl.semantic_read_not_applicable.v2"},
+			},
+		},
+		{
+			name: "semantic mutation is not selected by HTTP method",
+			source: sentryTestSource("GET", "Delete record", map[string]any{
+				"responses": map[string]any{"204": map[string]any{"description": "Deleted"}},
+			}),
+			want: map[string][2]string{
+				"direct_read":  {"not_applicable", "sentry.source.direct_read.semantic_mutation_not_applicable.v2"},
+				"direct_write": {"mapped_unproven", "sentry.source.direct_write.semantic_mutation_success_response.v2"},
+				"reverse_etl":  {"mapped_unproven", "sentry.source.reverse_etl.semantic_mutation_success_response.v2"},
+			},
+		},
+		{
+			name: "ETL requires source-described continuation independent of parameter or schema names",
+			source: sentryTestSource("POST", "Query records", map[string]any{
+				"parameters": []any{map[string]any{
+					"name": "page_token", "in": "query", "description": "Use this token to retrieve the next page of results.", "schema": map[string]any{"type": "string"},
+				}},
+				"responses": map[string]any{"200": sentryTestJSONResponse("object")},
+			}),
+			want: map[string][2]string{
+				"etl": {"mapped_unproven", "sentry.source.etl.documented_continuation_read.v2"},
+			},
+		},
+		{
+			name: "JSON array and page size alone are not continuation",
+			source: sentryTestSource("GET", "List records", map[string]any{
+				"parameters": []any{map[string]any{
+					"name": "limit", "in": "query", "description": "Maximum records per page.", "schema": map[string]any{"type": "integer"},
+				}},
+				"responses": map[string]any{"200": sentryTestJSONResponse("array")},
+			}),
+			want: map[string][2]string{
+				"etl": {"not_applicable", "sentry.source.etl.no_documented_continuation_read.v2"},
+			},
+		},
+		{
+			name: "webhook registration is sync but a collection list is not",
+			source: sentryTestSource("POST", "Register event webhook", map[string]any{
+				"requestBody": map[string]any{"content": map[string]any{"application/json": map[string]any{"schema": map[string]any{
+					"type":     "object",
+					"required": []any{"callback_endpoint", "event_types"},
+					"properties": map[string]any{
+						"callback_endpoint": map[string]any{"type": "string", "description": "Webhook callback URL."},
+						"event_types":       map[string]any{"type": "array", "description": "Events to subscribe to."},
+					},
+				}}}},
+				"responses": map[string]any{"201": sentryTestJSONResponse("object")},
+			}),
+			want: map[string][2]string{
+				"sync_transport": {"mapped_unproven", "sentry.source.sync_transport.webhook_registration_contract.v2"},
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got, err := sentryExpectedCells(test.source)
+			if err != nil {
+				t.Fatalf("sentryExpectedCells() error = %v", err)
+			}
+			for lane, want := range test.want {
+				if got[lane] != want {
+					t.Fatalf("%s = %v, want %v", lane, got[lane], want)
+				}
+			}
+		})
+	}
+}
+
+func TestSentryWebhookRegistrationRequiresRequiredCallbackAndEventFields(t *testing.T) {
+	source := sentryTestSource("POST", "Register event webhook", map[string]any{
+		"requestBody": map[string]any{"content": map[string]any{"application/json": map[string]any{"schema": map[string]any{
+			"type": "object",
+			"properties": map[string]any{
+				"callback_endpoint": map[string]any{"type": "string", "description": "Webhook callback URL."},
+				"event_types":       map[string]any{"type": "array", "description": "Events to subscribe to."},
+			},
+		}}}},
+		"responses": map[string]any{"201": sentryTestJSONResponse("object")},
+	})
+
+	got, err := sentryExpectedCells(source)
+	if err != nil {
+		t.Fatalf("sentryExpectedCells() error = %v", err)
+	}
+	if want := [2]string{"not_applicable", "sentry.source.sync_transport.no_webhook_registration_contract.v2"}; got["sync_transport"] != want {
+		t.Fatalf("sync_transport = %v, want %v", got["sync_transport"], want)
+	}
+}
+
+func sentryTestSource(method, headline string, operation map[string]any) sentrySourceInfo {
+	operation["summary"] = headline
+	return sentrySourceInfo{
+		ID:             "sentry.rest.test",
+		Method:         method,
+		OperationID:    headline,
+		SourceLocation: "paths.test",
+		SourceURL:      "https://example.invalid/sentry",
+		Operation:      operation,
+	}
+}
+
+func sentryTestJSONResponse(schemaType string) map[string]any {
+	return map[string]any{
+		"description": "Success",
+		"content": map[string]any{
+			"application/json": map[string]any{"schema": map[string]any{"type": schemaType}},
+		},
 	}
 }
 
@@ -262,7 +482,10 @@ func sentryValidateOperation(operation map[string]any, source sentrySourceInfo) 
 		return err
 	}
 
-	expected := sentryExpectedCells(source)
+	expected, err := sentryExpectedCells(source)
+	if err != nil {
+		return err
+	}
 	cells := sentryArrayField(nil, operation, "cells")
 	if len(cells) != len(sentryLaneOrder) {
 		return fmt.Errorf("source operation %s has %d cells, want %d", source.ID, len(cells), len(sentryLaneOrder))
@@ -282,10 +505,13 @@ func sentryValidateOperation(operation map[string]any, source sentrySourceInfo) 
 		state, reason := sentryStringField(nil, cell, "state"), sentryStringField(nil, cell, "reason")
 		if state != want[0] || reason != want[1] {
 			if lane == "etl" && sentryRequiresETL(source) {
-				return fmt.Errorf("pageable or extractable source operation %s has %s cell = %s/%s, want %s/%s", source.ID, lane, state, reason, want[0], want[1])
+				return fmt.Errorf("documented continuation source operation %s has %s cell = %s/%s, want %s/%s", source.ID, lane, state, reason, want[0], want[1])
 			}
-			if lane == "reverse_etl" && sentryIsMutation(source.Method) {
-				return fmt.Errorf("mutation source operation %s has %s cell = %s/%s, want %s/%s", source.ID, lane, state, reason, want[0], want[1])
+			if lane == "reverse_etl" && sentrySourceAction(source).Kind == "mutation" {
+				return fmt.Errorf("semantic mutation source operation %s has %s cell = %s/%s, want %s/%s", source.ID, lane, state, reason, want[0], want[1])
+			}
+			if lane == "sync_transport" && sentryRequiresSyncTransport(source) {
+				return fmt.Errorf("webhook registration source operation %s has %s cell = %s/%s, want %s/%s", source.ID, lane, state, reason, want[0], want[1])
 			}
 			return fmt.Errorf("source operation %s has %s cell = %s/%s, want %s/%s", source.ID, lane, state, reason, want[0], want[1])
 		}
@@ -308,23 +534,26 @@ func sentryValidateOperation(operation map[string]any, source sentrySourceInfo) 
 }
 
 func sentryValidateFacts(facts map[string]any, source sentrySourceInfo) error {
-	classification := "mutation"
-	if source.Method == "GET" {
-		classification = "read"
-	} else if !sentryIsMutation(source.Method) {
-		return fmt.Errorf("source operation %s uses unsupported retained method %q", source.ID, source.Method)
+	action := sentrySourceAction(source)
+	if action.Kind == "unknown" {
+		return fmt.Errorf("source operation %s has no summary/action evidence", source.ID)
 	}
-	if sentryStringField(nil, facts, "classification") != classification {
-		return fmt.Errorf("source operation %s classification = %q, want %q", source.ID, sentryStringField(nil, facts, "classification"), classification)
+	gotAction := sentryObjectFieldOrEmpty(facts, "action")
+	if sentryStringFieldOrEmpty(gotAction, "kind") != action.Kind ||
+		sentryStringFieldOrEmpty(gotAction, "evidence_field") != action.EvidenceField ||
+		sentryStringFieldOrEmpty(gotAction, "headline") != action.Headline ||
+		!sentryEqualStrings(sentryStringArrayFieldOrEmpty(gotAction, "success_statuses"), action.SuccessStatuses) ||
+		sentryStringFieldOrEmpty(gotAction, "source_location") != source.SourceLocation {
+		return fmt.Errorf("source operation %s does not preserve exact semantic action/response evidence", source.ID)
 	}
 
-	pagination := sentrySourcePagination(source)
-	gotPagination := sentryObjectField(nil, facts, "pagination")
-	if sentryStringField(nil, gotPagination, "kind") != pagination.Kind ||
-		!sentryEqualStrings(sentryStringArrayField(nil, gotPagination, "query_parameters"), pagination.QueryParameters) ||
-		sentryStringField(nil, gotPagination, "description") != pagination.Description ||
-		sentryStringField(nil, gotPagination, "source_location") != source.SourceLocation {
-		return fmt.Errorf("source operation %s does not preserve exact pagination evidence", source.ID)
+	continuation := sentrySourceContinuation(source)
+	gotContinuation := sentryObjectFieldOrEmpty(facts, "continuation")
+	if sentryStringFieldOrEmpty(gotContinuation, "kind") != continuation.Kind ||
+		sentryStringFieldOrEmpty(gotContinuation, "parameter") != continuation.Parameter ||
+		sentryStringFieldOrEmpty(gotContinuation, "description") != continuation.Description ||
+		sentryStringFieldOrEmpty(gotContinuation, "source_location") != source.SourceLocation {
+		return fmt.Errorf("source operation %s does not preserve exact continuation evidence", source.ID)
 	}
 
 	pathParameters, requiredPath, queryParameters, requiredQuery := sentrySourceScope(source)
@@ -345,18 +574,16 @@ func sentryValidateFacts(facts map[string]any, source sentrySourceInfo) error {
 		return fmt.Errorf("source operation %s does not preserve exact media evidence", source.ID)
 	}
 
-	eventCursor := sentryObjectField(nil, facts, "event_cursor")
-	callbackCount := len(sentryObjectFieldOrEmpty(source.Operation, "callbacks"))
-	eventKind, parameter, description := "not_documented", "", ""
-	if pagination.Kind == "cursor" {
-		eventKind, parameter, description = "cursor_parameter", "cursor", pagination.Description
-	}
-	if sentryStringField(nil, eventCursor, "kind") != eventKind ||
-		sentryStringField(nil, eventCursor, "parameter") != parameter ||
-		sentryStringField(nil, eventCursor, "description") != description ||
-		sentryNumberField(eventCursor, "documented_callbacks") != callbackCount ||
-		sentryStringField(nil, eventCursor, "source_location") != source.SourceLocation {
-		return fmt.Errorf("source operation %s does not preserve its event/cursor evidence", source.ID)
+	eventTransport := sentrySourceEventTransport(source)
+	gotEventTransport := sentryObjectFieldOrEmpty(facts, "event_transport")
+	if sentryStringFieldOrEmpty(gotEventTransport, "kind") != eventTransport.Kind ||
+		sentryStringFieldOrEmpty(gotEventTransport, "callback_field") != eventTransport.CallbackField ||
+		sentryStringFieldOrEmpty(gotEventTransport, "event_selector_field") != eventTransport.EventSelectorField ||
+		sentryStringFieldOrEmpty(gotEventTransport, "headline") != eventTransport.Headline ||
+		!sentryEqualStrings(sentryStringArrayFieldOrEmpty(gotEventTransport, "required_fields"), eventTransport.RequiredFields) ||
+		sentryNumberFieldOrZero(gotEventTransport, "documented_callbacks") != eventTransport.DocumentedCallbacks ||
+		sentryStringFieldOrEmpty(gotEventTransport, "source_location") != source.SourceLocation {
+		return fmt.Errorf("source operation %s does not preserve its webhook/event-registration evidence", source.ID)
 	}
 
 	extractability := sentrySourceExtractability(source)
@@ -369,21 +596,35 @@ func sentryValidateFacts(facts map[string]any, source sentrySourceInfo) error {
 	return nil
 }
 
-func sentryExpectedCells(source sentrySourceInfo) map[string][2]string {
-	isMutation := sentryIsMutation(source.Method)
+func sentryExpectedCells(source sentrySourceInfo) (map[string][2]string, error) {
+	action := sentrySourceAction(source)
+	if action.Kind == "unknown" {
+		return nil, fmt.Errorf("source operation %s has no summary/action evidence", source.ID)
+	}
+	hasSuccessResponse := len(action.SuccessStatuses) > 0
 	isBinaryResponse := sentrySourceHasBinaryResponse(source)
 	isMultipart := sentrySourceHasRequestMedia(source, "multipart/form-data")
 	requiresETL := sentryRequiresETL(source)
+	requiresSyncTransport := sentryRequiresSyncTransport(source)
 
 	expected := map[string][2]string{}
-	if source.Method == "GET" {
-		expected["direct_read"] = [2]string{"mapped_unproven", "sentry.source.direct_read.documented_get_response.v1"}
-		expected["direct_write"] = [2]string{"not_applicable", "sentry.source.direct_write.get_not_applicable.v1"}
-		expected["reverse_etl"] = [2]string{"not_applicable", "sentry.source.reverse_etl.get_not_applicable.v1"}
-	} else if isMutation {
-		expected["direct_read"] = [2]string{"not_applicable", "sentry.source.direct_read.mutation_verb_not_applicable.v1"}
-		expected["direct_write"] = [2]string{"mapped_unproven", "sentry.source.direct_write.mutation_verb.v1"}
-		expected["reverse_etl"] = [2]string{"mapped_unproven", "sentry.source.reverse_etl.mutation_verb.v1"}
+	if action.Kind == "read" {
+		if hasSuccessResponse {
+			expected["direct_read"] = [2]string{"mapped_unproven", "sentry.source.direct_read.semantic_read_success_response.v2"}
+		} else {
+			expected["direct_read"] = [2]string{"not_applicable", "sentry.source.direct_read.no_documented_success_response.v2"}
+		}
+		expected["direct_write"] = [2]string{"not_applicable", "sentry.source.direct_write.semantic_read_not_applicable.v2"}
+		expected["reverse_etl"] = [2]string{"not_applicable", "sentry.source.reverse_etl.semantic_read_not_applicable.v2"}
+	} else {
+		expected["direct_read"] = [2]string{"not_applicable", "sentry.source.direct_read.semantic_mutation_not_applicable.v2"}
+		if hasSuccessResponse {
+			expected["direct_write"] = [2]string{"mapped_unproven", "sentry.source.direct_write.semantic_mutation_success_response.v2"}
+			expected["reverse_etl"] = [2]string{"mapped_unproven", "sentry.source.reverse_etl.semantic_mutation_success_response.v2"}
+		} else {
+			expected["direct_write"] = [2]string{"not_applicable", "sentry.source.direct_write.no_documented_success_response.v2"}
+			expected["reverse_etl"] = [2]string{"not_applicable", "sentry.source.reverse_etl.no_documented_success_response.v2"}
+		}
 	}
 	if isBinaryResponse {
 		expected["binary_download"] = [2]string{"mapped_unproven", "sentry.source.binary_download.binary_response_media.v1"}
@@ -396,13 +637,16 @@ func sentryExpectedCells(source sentrySourceInfo) map[string][2]string {
 		expected["binary_upload"] = [2]string{"not_applicable", "sentry.source.binary_upload.no_multipart_request_media.v1"}
 	}
 	if requiresETL {
-		expected["etl"] = [2]string{"mapped_unproven", "sentry.source.etl.pageable_or_extractable_collection_read.v1"}
-		expected["sync_transport"] = [2]string{"mapped_unproven", "sentry.source.sync_transport.pageable_or_extractable_collection_read.v1"}
+		expected["etl"] = [2]string{"mapped_unproven", "sentry.source.etl.documented_continuation_read.v2"}
 	} else {
-		expected["etl"] = [2]string{"not_applicable", "sentry.source.etl.no_pageable_or_extractable_collection_read.v1"}
-		expected["sync_transport"] = [2]string{"not_applicable", "sentry.source.sync_transport.no_pageable_or_extractable_collection_read.v1"}
+		expected["etl"] = [2]string{"not_applicable", "sentry.source.etl.no_documented_continuation_read.v2"}
 	}
-	return expected
+	if requiresSyncTransport {
+		expected["sync_transport"] = [2]string{"mapped_unproven", "sentry.source.sync_transport.webhook_registration_contract.v2"}
+	} else {
+		expected["sync_transport"] = [2]string{"not_applicable", "sentry.source.sync_transport.no_webhook_registration_contract.v2"}
+	}
+	return expected, nil
 }
 
 func sentryValidateCountReconciliation(matrix, lock map[string]any, sources map[string]sentrySourceInfo) error {
@@ -410,38 +654,42 @@ func sentryValidateCountReconciliation(matrix, lock map[string]any, sources map[
 		return fmt.Errorf("retained source count reconciliation = matrix:%d lock:%d, want 223", len(sentryArrayField(nil, matrix, "operations")), len(sources))
 	}
 
-	var getCount, mutationCount, deleteCount, cursorCount, pageSizeOnlyCount, collectionReadCount, etlCount, multipartCount, callbackCount int
+	var semanticReadCount, mutationCount, deleteCount, continuationCount, pageSizeOnlyCount, collectionReadCount, etlCount, syncTransportCount, multipartCount, documentedCallbackCount int
 	multipartIDs := make(map[string]struct{})
 	for _, source := range sources {
-		if source.Method == "GET" {
-			getCount++
+		action := sentrySourceAction(source)
+		if action.Kind == "read" {
+			semanticReadCount++
 		}
-		if sentryIsMutation(source.Method) {
+		if action.Kind == "mutation" {
 			mutationCount++
 		}
 		if source.Method == "DELETE" {
 			deleteCount++
 		}
-		switch sentrySourcePagination(source).Kind {
-		case "cursor":
-			cursorCount++
-		case "page_size_only":
+		if sentrySourceContinuation(source).Kind != "not_documented" {
+			continuationCount++
+		}
+		if sentrySourceHasPageSizeOnlyControl(source) {
 			pageSizeOnlyCount++
 		}
-		if source.Method == "GET" && sentrySourceExtractability(source).Kind == "json_array_response" {
+		if action.Kind == "read" && sentrySourceExtractability(source).Kind == "json_array_response" {
 			collectionReadCount++
 		}
 		if sentryRequiresETL(source) {
 			etlCount++
 		}
+		if sentryRequiresSyncTransport(source) {
+			syncTransportCount++
+		}
+		documentedCallbackCount += sentrySourceEventTransport(source).DocumentedCallbacks
 		if sentrySourceHasRequestMedia(source, "multipart/form-data") {
 			multipartCount++
 			multipartIDs[source.ID] = struct{}{}
 		}
-		callbackCount += len(sentryObjectFieldOrEmpty(source.Operation, "callbacks"))
 	}
-	if getCount != 120 || mutationCount != 103 || deleteCount != 35 || cursorCount != 43 || pageSizeOnlyCount != 1 || collectionReadCount != 54 || etlCount != 61 || multipartCount != 2 || callbackCount != 0 {
-		return fmt.Errorf("source fact counts = GET:%d mutation:%d delete:%d cursor:%d page_size_only:%d collection_read:%d etl:%d multipart:%d callbacks:%d", getCount, mutationCount, deleteCount, cursorCount, pageSizeOnlyCount, collectionReadCount, etlCount, multipartCount, callbackCount)
+	if semanticReadCount != 120 || mutationCount != 103 || deleteCount != 35 || continuationCount != 45 || pageSizeOnlyCount != 1 || collectionReadCount != 54 || etlCount != 45 || syncTransportCount != 1 || multipartCount != 2 || documentedCallbackCount != 0 {
+		return fmt.Errorf("source fact counts = semantic_read:%d mutation:%d delete:%d continuation:%d page_size_only:%d collection_read:%d etl:%d sync_transport:%d multipart:%d documented_callbacks:%d", semanticReadCount, mutationCount, deleteCount, continuationCount, pageSizeOnlyCount, collectionReadCount, etlCount, syncTransportCount, multipartCount, documentedCallbackCount)
 	}
 	if !sentryEqualStringSet(multipartIDs, map[string]struct{}{
 		"sentry.rest.uploadOrganizationReleaseFile": {},
@@ -456,9 +704,9 @@ func sentryValidateCountReconciliation(matrix, lock map[string]any, sources map[
 		"direct_write":    103,
 		"binary_download": 0,
 		"binary_upload":   2,
-		"etl":             61,
+		"etl":             45,
 		"reverse_etl":     103,
-		"sync_transport":  61,
+		"sync_transport":  1,
 	}
 	mappedTotal, notApplicableTotal := 0, 0
 	for _, lane := range sentryLaneOrder {
@@ -474,8 +722,8 @@ func sentryValidateCountReconciliation(matrix, lock map[string]any, sources map[
 		mappedTotal += cells[lane]["mapped_unproven"]
 		notApplicableTotal += cells[lane]["not_applicable"]
 	}
-	if mappedTotal != 450 || notApplicableTotal != 1111 || mappedTotal+notApplicableTotal != 1561 {
-		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 450/1111/1561", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
+	if mappedTotal != 374 || notApplicableTotal != 1187 || mappedTotal+notApplicableTotal != 1561 {
+		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 374/1187/1561", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
 	}
 	return nil
 }
@@ -493,7 +741,7 @@ func sentryValidateArtifactLinks(matrix map[string]any, records sentryArtifactRe
 	if len(byPath) != 4 {
 		return fmt.Errorf("matrix artifact count = %d, want 4", len(byPath))
 	}
-	if err := sentryValidateAPISurfaceLinks(byPath["api_surface.json"], records, matrixByID); err != nil {
+	if err := sentryValidateAPISurfaceLinks(byPath["api_surface.json"], records, matrixByID, sources); err != nil {
 		return err
 	}
 	if err := sentryValidateStreamLinks(byPath["streams.json"], records, matrixByID); err != nil {
@@ -508,7 +756,7 @@ func sentryValidateArtifactLinks(matrix map[string]any, records sentryArtifactRe
 	return sentryValidateBacklinkGaps(matrix, records, sources)
 }
 
-func sentryValidateAPISurfaceLinks(artifact map[string]any, records sentryArtifactRecords, matrixByID map[string]map[string]any) error {
+func sentryValidateAPISurfaceLinks(artifact map[string]any, records sentryArtifactRecords, matrixByID map[string]map[string]any, sources map[string]sentrySourceInfo) error {
 	if artifact == nil {
 		return errors.New("matrix is missing api_surface.json artifact")
 	}
@@ -536,8 +784,12 @@ func sentryValidateAPISurfaceLinks(artifact map[string]any, records sentryArtifa
 		if record != sentryStringField(nil, operation, "method")+" "+sentryStringField(nil, operation, "path") {
 			return fmt.Errorf("artifact api_surface.json link %q does not preserve source route", record)
 		}
+		source, exists := sources[sourceID]
+		if !exists {
+			return fmt.Errorf("artifact api_surface.json link %q references nonexistent source %q", record, sourceID)
+		}
 		lane := "direct_write"
-		if sentryStringField(nil, operation, "method") == "GET" {
+		if sentrySourceAction(source).Kind == "read" {
 			lane = "direct_read"
 		}
 		if !sentryEqualStrings(sentryStringArrayField(nil, link, "lanes"), []string{lane}) || sentryMatrixCellByLaneNoTest(operation, lane) == nil {
@@ -590,12 +842,12 @@ func sentryValidateStreamLinks(artifact map[string]any, records sentryArtifactRe
 		if records.SurfaceByStream[record] != "GET "+sentryStringField(nil, operation, "path") {
 			return fmt.Errorf("artifact streams.json link %q does not retain the exact api-surface route", record)
 		}
-		for _, lane := range []string{"direct_read", "etl", "sync_transport"} {
+		for _, lane := range []string{"direct_read", "etl"} {
 			if sentryMatrixCellByLaneNoTest(operation, lane) == nil {
 				return fmt.Errorf("artifact streams.json link %q references nonexistent cell %q", record, lane)
 			}
 		}
-		if !sentryEqualStrings(sentryStringArrayField(nil, link, "lanes"), []string{"direct_read", "etl", "sync_transport"}) {
+		if !sentryEqualStrings(sentryStringArrayField(nil, link, "lanes"), []string{"direct_read", "etl"}) {
 			return fmt.Errorf("artifact streams.json link %q has incorrect lanes", record)
 		}
 	}
@@ -758,43 +1010,165 @@ func sentrySourceScope(source sentrySourceInfo) ([]string, []string, []string, [
 	return sentrySortedSet(path), sentrySortedSet(requiredPath), sentrySortedSet(query), sentrySortedSet(requiredQuery)
 }
 
-func sentrySourcePagination(source sentrySourceInfo) sentryPaginationFact {
-	if source.Method != "GET" {
-		return sentryPaginationFact{Kind: "not_documented", QueryParameters: []string{}, Description: ""}
+func sentrySourceAction(source sentrySourceInfo) sentryActionFact {
+	evidenceField, headline := sentrySourceActionHeadline(source)
+	tokens := sentrySemanticTokens(headline)
+	for _, token := range tokens {
+		if sentryContainsString(sentryMutationActionTerms, token) {
+			return sentryActionFact{
+				Kind:            "mutation",
+				EvidenceField:   evidenceField,
+				Headline:        headline,
+				SuccessStatuses: sentrySourceSuccessStatuses(source),
+			}
+		}
+		if sentryContainsString(sentryReadActionTerms, token) {
+			return sentryActionFact{
+				Kind:            "read",
+				EvidenceField:   evidenceField,
+				Headline:        headline,
+				SuccessStatuses: sentrySourceSuccessStatuses(source),
+			}
+		}
 	}
-	var cursorDescription string
-	parameters := map[string]struct{}{}
+	return sentryActionFact{
+		Kind:            "unknown",
+		EvidenceField:   evidenceField,
+		Headline:        headline,
+		SuccessStatuses: sentrySourceSuccessStatuses(source),
+	}
+}
+
+var sentryReadActionTerms = []string{
+	"fetch",
+	"get",
+	"list",
+	"query",
+	"resolve",
+	"retrieve",
+}
+
+var sentryMutationActionTerms = []string{
+	"add",
+	"create",
+	"delete",
+	"disable",
+	"edit",
+	"enable",
+	"link",
+	"mutate",
+	"provision",
+	"register",
+	"remove",
+	"start",
+	"submit",
+	"unlink",
+	"update",
+	"upload",
+}
+
+func sentrySourceActionHeadline(source sentrySourceInfo) (string, string) {
+	if summary := strings.TrimSpace(sentryStringFieldOrEmpty(source.Operation, "summary")); summary != "" {
+		return "summary", summary
+	}
+	return "operation_id", strings.TrimSpace(source.OperationID)
+}
+
+func sentrySemanticTokens(value string) []string {
+	return strings.FieldsFunc(strings.ToLower(value), func(r rune) bool {
+		return !unicode.IsLetter(r) && !unicode.IsDigit(r)
+	})
+}
+
+func sentrySourceSuccessStatuses(source sentrySourceInfo) []string {
+	statuses := make(map[string]struct{})
+	for status := range sentryObjectFieldOrEmpty(source.Operation, "responses") {
+		if strings.HasPrefix(status, "2") {
+			statuses[status] = struct{}{}
+		}
+	}
+	return sentrySortedSet(statuses)
+}
+
+func sentrySourceContinuation(source sentrySourceInfo) sentryContinuationFact {
 	for _, rawParameter := range sentryArrayFieldOrEmpty(source.Operation, "parameters") {
 		parameter := sentryObjectValue(nil, rawParameter, "source parameter")
 		if sentryStringField(nil, parameter, "in") != "query" {
 			continue
 		}
-		name := sentryStringField(nil, parameter, "name")
-		if name != "cursor" && name != "per_page" {
+		description := sentryStringFieldOrEmpty(parameter, "description")
+		if !sentryDescribesContinuation(description) {
 			continue
 		}
-		parameters[name] = struct{}{}
-		if name == "cursor" {
-			cursorDescription = sentryStringField(nil, parameter, "description")
+		return sentryContinuationFact{
+			Kind:        "query_parameter",
+			Parameter:   sentryStringField(nil, parameter, "name"),
+			Description: description,
 		}
 	}
-	if _, exists := parameters["cursor"]; exists {
-		return sentryPaginationFact{Kind: "cursor", QueryParameters: sentrySortedSet(parameters), Description: cursorDescription}
-	}
-	if _, exists := parameters["per_page"]; exists {
-		return sentryPaginationFact{Kind: "page_size_only", QueryParameters: []string{"per_page"}, Description: sentryParameterDescription(source, "per_page")}
-	}
-	return sentryPaginationFact{Kind: "not_documented", QueryParameters: []string{}, Description: ""}
+	return sentryContinuationFact{Kind: "not_documented"}
 }
 
-func sentryParameterDescription(source sentrySourceInfo, name string) string {
+func sentryDescribesContinuation(description string) bool {
+	text := strings.ToLower(description)
+	if strings.Contains(text, "paginate") || strings.Contains(text, "pagination") {
+		return true
+	}
+	return strings.Contains(text, "next") && (strings.Contains(text, "page") || strings.Contains(text, "result"))
+}
+
+func sentrySourceHasPageSizeOnlyControl(source sentrySourceInfo) bool {
+	if sentrySourceContinuation(source).Kind != "not_documented" {
+		return false
+	}
 	for _, rawParameter := range sentryArrayFieldOrEmpty(source.Operation, "parameters") {
 		parameter := sentryObjectValue(nil, rawParameter, "source parameter")
-		if sentryStringField(nil, parameter, "in") == "query" && sentryStringField(nil, parameter, "name") == name {
-			return sentryStringField(nil, parameter, "description")
+		if sentryStringField(nil, parameter, "in") != "query" {
+			continue
+		}
+		name, text := strings.ToLower(sentryStringFieldOrEmpty(parameter, "name")), strings.ToLower(sentryStringFieldOrEmpty(parameter, "description"))
+		if name == "per_page" || strings.Contains(text, "per page") || strings.Contains(text, "page size") {
+			return true
 		}
 	}
-	return ""
+	return false
+}
+
+func sentrySourceEventTransport(source sentrySourceInfo) sentryEventTransportFact {
+	action := sentrySourceAction(source)
+	callbackCount := len(sentryObjectFieldOrEmpty(source.Operation, "callbacks"))
+	if action.Kind != "mutation" || !sentryContainsString(sentrySemanticTokens(action.Headline), "register") {
+		return sentryEventTransportFact{Kind: "not_documented", RequiredFields: []string{}, DocumentedCallbacks: callbackCount}
+	}
+	for _, rawMedia := range sentryObjectFieldOrEmpty(sentryObjectFieldOrEmpty(source.Operation, "requestBody"), "content") {
+		media := sentryObjectValue(nil, rawMedia, "request media")
+		schema := sentryObjectFieldOrEmpty(media, "schema")
+		properties := sentryObjectFieldOrEmpty(schema, "properties")
+		requiredFields := sentryStringArrayFieldOrEmpty(schema, "required")
+		sort.Strings(requiredFields)
+		callbackField, eventSelectorField := "", ""
+		for name, rawProperty := range properties {
+			property := sentryObjectValue(nil, rawProperty, "request property")
+			description := strings.ToLower(sentryStringFieldOrEmpty(property, "description"))
+			switch {
+			case sentryStringFieldOrEmpty(property, "type") == "string" && (strings.Contains(description, "webhook") || strings.Contains(description, "callback")):
+				callbackField = name
+			case sentryStringFieldOrEmpty(property, "type") == "array" && strings.Contains(description, "event") && (strings.Contains(description, "subscribe") || strings.Contains(description, "select")):
+				eventSelectorField = name
+			}
+		}
+		if callbackField != "" && eventSelectorField != "" && sentryContains(requiredFields, callbackField) && sentryContains(requiredFields, eventSelectorField) {
+			return sentryEventTransportFact{
+				Kind:                "webhook_registration",
+				CallbackField:       callbackField,
+				EventSelectorField:  eventSelectorField,
+				Headline:            action.Headline,
+				RequiredFields:      sentrySortedSet(map[string]struct{}{callbackField: {}, eventSelectorField: {}}),
+				DocumentedCallbacks: callbackCount,
+			}
+		}
+	}
+	return sentryEventTransportFact{Kind: "not_documented", RequiredFields: []string{}, DocumentedCallbacks: callbackCount}
 }
 
 func sentrySourceExtractability(source sentrySourceInfo) sentryExtractabilityFact {
@@ -850,14 +1224,11 @@ func sentrySourceHasBinaryResponse(source sentrySourceInfo) bool {
 }
 
 func sentryRequiresETL(source sentrySourceInfo) bool {
-	if source.Method != "GET" {
-		return false
-	}
-	return sentrySourcePagination(source).Kind != "not_documented" || sentrySourceExtractability(source).Kind == "json_array_response"
+	return sentrySourceAction(source).Kind == "read" && sentrySourceContinuation(source).Kind != "not_documented"
 }
 
-func sentryIsMutation(method string) bool {
-	return method == "POST" || method == "PUT" || method == "PATCH" || method == "DELETE"
+func sentryRequiresSyncTransport(source sentrySourceInfo) bool {
+	return sentrySourceEventTransport(source).Kind == "webhook_registration"
 }
 
 func sentryMatrixCellByLane(t *testing.T, operation map[string]any, lane string) map[string]any {
@@ -1042,6 +1413,19 @@ func sentryStringArrayField(t *testing.T, object map[string]any, name string) []
 	return result
 }
 
+func sentryStringArrayFieldOrEmpty(object map[string]any, name string) []string {
+	values := sentryArrayFieldOrEmpty(object, name)
+	result := make([]string, 0, len(values))
+	for _, value := range values {
+		text, ok := value.(string)
+		if !ok {
+			return []string{}
+		}
+		result = append(result, text)
+	}
+	return result
+}
+
 func sentryStringField(t *testing.T, object map[string]any, name string) string {
 	sentryMarkHelper(t)
 	value, exists := object[name]
@@ -1094,6 +1478,18 @@ func sentryNumberField(object map[string]any, name string) int {
 	return int(number)
 }
 
+func sentryNumberFieldOrZero(object map[string]any, name string) int {
+	value, exists := object[name]
+	if !exists || value == nil {
+		return 0
+	}
+	number, ok := value.(float64)
+	if !ok || number != float64(int(number)) {
+		return 0
+	}
+	return int(number)
+}
+
 func sentrySortedSet(values map[string]struct{}) []string {
 	result := make([]string, 0, len(values))
 	for value := range values {
@@ -1115,6 +1511,15 @@ func sentrySortedMapKeys(values map[string]sentrySourceInfo) []string {
 func sentryContains(values []string, want string) bool {
 	index := sort.SearchStrings(values, want)
 	return index < len(values) && values[index] == want
+}
+
+func sentryContainsString(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
 }
 
 func sentryEqualStrings(got, want []string) bool {

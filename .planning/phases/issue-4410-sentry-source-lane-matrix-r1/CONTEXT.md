@@ -6,7 +6,7 @@
 - Base branch: `origin/main` at `813f457a925f7ee3fe3bea101a43e445992c8552`.
 - Merges into: `main`.
 - Delivery: Scoped branch committed, pushed, and evidenced in #4410; no pull request or merge is opened by this task.
-- Working branch: `fix/4410-sentry-track-a-r1`.
+- Original working branch: `fix/4410-sentry-track-a-r1`; semantic-repair branch: `fix/4410-sentry-semantic-lane-r1`.
 - Task: Restore only absent connector-local retained Sentry source artifacts after byte/digest verification against Batch R1 parent `dc481bac`, then create a source-row × seven-lane mapping matrix with a local reconciliation test. Preserve every source ID and make no runtime, executor, certification, credential, or shared-control change.
 - Verification: Exact parent-byte verification, source-row/cell/count reconciliation, red/green/edge Go tests, JSON validation, formatting, scoped source/map checks, and an issue completion proof with every source ID.
 
@@ -16,7 +16,7 @@
 | --- | --- | --- |
 | Every retained source ID stays represented exactly once | live | The local test decodes the lock and matrix, rejects hidden or duplicate IDs, and reconciles their counts. |
 | Every row has seven cited lane cells and source facts | live | The local test recomputes source facts and expected mapping dispositions from the retained lock. |
-| Pageable reads and writes cannot be replaced by direct cells | live | In-memory adversarial cases reject a missing ETL/sync cell for a pageable row and a missing reverse-ETL cell for a write. |
+| Continuation ETL, webhook sync, and writes cannot be replaced by direct cells | live | In-memory adversarial cases reject missing documented-continuation ETL, pagination promoted to sync, missing webhook-registration sync, and missing reverse-ETL for a semantic mutation. |
 | Retained source artifacts preserve Batch R1 bytes | live | SHA-256 checks compare each copied artifact to the exact Batch R1 parent bytes. |
 | No runtime capability is claimed or changed | live | Matrix state validation permits source-only states for this Track A slice and changed-path review excludes shared/runtime paths. |
 

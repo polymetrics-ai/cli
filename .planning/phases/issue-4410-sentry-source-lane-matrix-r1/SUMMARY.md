@@ -4,7 +4,8 @@
 
 - Restored the four missing, byte-verified Sentry connector-local source artifacts from Batch R1 parent `dc481bac`.
 - Added a 223-row, seven-lane, source-cited matrix with 1,561 cells.
-- Preserved 120 source GET candidates, 103 provider writes including all 35 DELETE operations, 43 cursor facts, 54 JSON-array read facts, 61 ETL/sync candidates, two multipart upload candidates, and no invented binary download or event/callback semantics.
+- Preserved 120 semantic direct-read candidates, 103 provider mutations including all 35 DELETE operations, 45 provider-described continuation facts (43 cursor plus two SCIM `startIndex` facts), 54 JSON-array read facts, two multipart upload candidates, and no invented binary-download semantics.
+- Corrected SE-R1-001: ETL is now 45 semantic-read operations with documented continuation; 17 JSON-array reads without continuation and the page-size-only session aggregate remain non-ETL. `sync_transport` is exactly one source-backed webhook-registration candidate (`Register a New Service Hook`, callback URL plus event selector), not a pagination mirror.
 - Bound current artifacts without making them source authorities: 220 exact API-surface links, three stream links, and existing Seer Models operation/CLI links with closed #4365 constrained to an artifact backlink only. Three source-only and two artifact-only records remain explicit source-information gaps.
 
 ## Verification result
