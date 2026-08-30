@@ -36,12 +36,12 @@ var gitLabLanes = []string{
 }
 
 var gitLabExpectedCounts = map[string]map[string]int{
-	"direct_read":     {"mapped_unproven": 747, "not_applicable": 1007},
-	"direct_write":    {"mapped_unproven": 1004, "not_applicable": 750},
+	"direct_read":     {"mapped_unproven": 763, "not_applicable": 991},
+	"direct_write":    {"mapped_unproven": 991, "not_applicable": 763},
 	"binary_download": {"mapped_unproven": 1, "not_applicable": 1753},
 	"binary_upload":   {"mapped_unproven": 46, "not_applicable": 1708},
-	"etl":             {"mapped_unproven": 255, "not_applicable": 1499},
-	"reverse_etl":     {"mapped_unproven": 1004, "not_applicable": 750},
+	"etl":             {"mapped_unproven": 2, "not_applicable": 1752},
+	"reverse_etl":     {"mapped_unproven": 991, "not_applicable": 763},
 	"sync_transport":  {"missing_foundation": 3, "not_applicable": 1751},
 }
 
@@ -124,6 +124,113 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 		mustGitLabObject(t, mustGitLabObject(t, row["lanes"])["direct_read"])["disposition"] = "implemented"
 		if err := validateGitLabSourceLaneMatrix(broken, lock, binaryLock, crosswalk, descriptor, retainedArtifacts, streams); err == nil || !strings.Contains(err.Error(), "lane cells") {
 			t.Fatalf("executable-promotion validation error = %v, want lane cells", err)
+		}
+	})
+
+	t.Run("retains source-semantic HEAD and POST direct reads", func(t *testing.T) {
+		var headRows, postRows int
+		for _, raw := range mustGitLabArray(t, matrix["source_operations"]) {
+			row := mustGitLabObject(t, raw)
+			semantics := gitLabFactsOperationSemantics(objectAt(row, "source_facts"))
+			state := stringAt(semantics, "state")
+			if state != "source_semantic_head_read" && state != "source_semantic_post_read" {
+				continue
+			}
+			cell := objectAt(objectAt(row, "lanes"), "direct_read")
+			if stringAt(cell, "applicability") != "source_candidate" || stringAt(cell, "disposition") != "mapped_unproven" {
+				t.Fatalf("semantic read %s direct-read cell=%#v, want source-backed mapped_unproven", stringAt(row, "source_id"), cell)
+			}
+			backlink := objectAt(objectAt(cell, "mapping"), "definition_backlink")
+			if stringAt(backlink, "kind") != "source_lock" || stringAt(backlink, "path") != gitLabSourceLockPath || stringAt(backlink, "source_id") != stringAt(row, "source_id") {
+				t.Fatalf("semantic read %s source backlink=%#v, want exact retained source-lock binding", stringAt(row, "source_id"), backlink)
+			}
+			classification := stringAt(objectAt(objectAt(cell, "mapping"), "source_fact"), "classification")
+			switch state {
+			case "source_semantic_head_read":
+				headRows++
+				if classification != "source_semantic_head_read_candidate" {
+					t.Fatalf("HEAD semantic read %s classification=%q", stringAt(row, "source_id"), classification)
+				}
+			case "source_semantic_post_read":
+				postRows++
+				if classification != "source_semantic_post_read_candidate" {
+					t.Fatalf("POST semantic read %s classification=%q", stringAt(row, "source_id"), classification)
+				}
+			}
+		}
+		if headRows == 0 || postRows == 0 {
+			t.Fatalf("semantic read coverage head=%d post=%d, want both source-backed kinds", headRows, postRows)
+		}
+	})
+
+	t.Run("rejects a mutation POST misclassified as a direct read", func(t *testing.T) {
+		broken := cloneGitLabObject(t, matrix)
+		var selected map[string]any
+		for _, raw := range mustGitLabArray(t, broken["source_operations"]) {
+			row := mustGitLabObject(t, raw)
+			facts := objectAt(row, "source_facts")
+			if stringAt(facts, "method") == "POST" && stringAt(gitLabFactsOperationSemantics(facts), "state") != "source_semantic_post_read" {
+				selected = row
+				break
+			}
+		}
+		if selected == nil {
+			t.Fatal("no retained mutation POST source row")
+		}
+		lanes := objectAt(selected, "lanes")
+		lanes["direct_read"] = gitLabMappedCell("incorrect read promotion", "source_semantic_post_read_candidate", map[string]any{"kind": "source_lock", "path": gitLabSourceLockPath, "source_id": stringAt(selected, "source_id")})
+		if err := validateGitLabSourceLaneMatrix(broken, lock, binaryLock, crosswalk, descriptor, retainedArtifacts, streams); err == nil || !strings.Contains(err.Error(), "lane cells") {
+			t.Fatalf("mutation POST direct-read promotion error = %v, want lane cells", err)
+		}
+	})
+
+	t.Run("rejects a semantic POST read misclassified as a mutation", func(t *testing.T) {
+		broken := cloneGitLabObject(t, matrix)
+		var selected map[string]any
+		for _, raw := range mustGitLabArray(t, broken["source_operations"]) {
+			row := mustGitLabObject(t, raw)
+			if stringAt(gitLabFactsOperationSemantics(objectAt(row, "source_facts")), "state") == "source_semantic_post_read" {
+				selected = row
+				break
+			}
+		}
+		if selected == nil {
+			t.Fatal("no source-semantic POST read retained")
+		}
+		lanes := objectAt(selected, "lanes")
+		lanes["direct_write"] = gitLabMappedCell("incorrect mutation promotion", "mutation_verb_candidate", map[string]any{"kind": "source_lock", "path": gitLabSourceLockPath, "source_id": stringAt(selected, "source_id")})
+		lanes["reverse_etl"] = cloneGitLabMap(objectAt(lanes, "direct_write"))
+		if err := validateGitLabSourceLaneMatrix(broken, lock, binaryLock, crosswalk, descriptor, retainedArtifacts, streams); err == nil || !strings.Contains(err.Error(), "lane cells") {
+			t.Fatalf("semantic POST mutation promotion error = %v, want lane cells", err)
+		}
+	})
+
+	t.Run("requires a retained request-to-response continuation pair for ETL", func(t *testing.T) {
+		var paired, unpaired, pagePerPageWithoutContinuation int
+		for _, raw := range mustGitLabArray(t, matrix["source_operations"]) {
+			row := mustGitLabObject(t, raw)
+			pagination := objectAt(objectAt(row, "source_facts"), "pagination")
+			state := gitLabPaginationState(pagination)
+			etl := objectAt(objectAt(row, "lanes"), "etl")
+			switch state {
+			case "request_response_continuation_candidate":
+				paired++
+				if stringAt(etl, "disposition") != "mapped_unproven" {
+					t.Fatalf("paired continuation %s ETL=%#v, want mapped_unproven", stringAt(row, "source_id"), etl)
+				}
+			case "request_controls_without_response_continuation":
+				unpaired++
+				if stringAt(etl, "disposition") != "not_applicable" || !strings.Contains(stringAt(etl, "reason"), "no retained response continuation") {
+					t.Fatalf("unpaired continuation %s ETL=%#v, want explicit non-candidate", stringAt(row, "source_id"), etl)
+				}
+				controls := stringSlice(pagination["request_controls"])
+				if containsGitLabString(controls, "page") && containsGitLabString(controls, "per_page") {
+					pagePerPageWithoutContinuation++
+				}
+			}
+		}
+		if paired == 0 || unpaired == 0 || pagePerPageWithoutContinuation == 0 {
+			t.Fatalf("continuation coverage paired=%d unpaired=%d page_per_page_without_response=%d, want all source states", paired, unpaired, pagePerPageWithoutContinuation)
 		}
 	})
 }
@@ -387,17 +494,19 @@ func validateGitLabFoundationAtlas(matrix map[string]any) error {
 }
 
 func validateGitLabPaginationReconciliation(matrix map[string]any, primary, descriptors map[string]map[string]any) error {
-	kinds := make(map[string]int)
+	states := make(map[string]int)
 	for operationID, operation := range primary {
-		facts := gitLabPaginationFacts(operation, descriptors[operationID])
-		kinds[stringAt(facts, "kind")]++
+		states[gitLabPaginationState(gitLabPaginationFacts(operation, descriptors[operationID]))]++
 	}
-	if kinds["page_per_page"] != 253 || kinds["page_token"] != 2 || kinds["page_per_page"]+kinds["page_token"] != 255 {
-		return fmt.Errorf("source pagination candidate accounting=%v, want page_per_page=253 page_token=2", kinds)
+	if states["request_response_continuation_candidate"] == 0 || states["request_controls_without_response_continuation"] == 0 {
+		return fmt.Errorf("source pagination evidence accounting=%v, want both retained continuation and retained incomplete-control states", states)
 	}
 	reconciliation := objectAt(matrix, "source_paging_reconciliation")
-	if stringAt(reconciliation, "criterion") != "GET with explicit source query controls page+per_page or page_token" || numberAt(reconciliation, "page_per_page_candidates") != 253 || numberAt(reconciliation, "page_token_candidates") != 2 || numberAt(reconciliation, "total_candidates") != 255 {
-		return fmt.Errorf("matrix source pagination reconciliation drift")
+	if stringAt(reconciliation, "criterion") != "Retained request continuation control paired with retained successful-response continuation evidence; method and operation name alone never establish ETL." ||
+		numberAt(reconciliation, "request_response_continuation_candidates") != states["request_response_continuation_candidate"] ||
+		numberAt(reconciliation, "request_controls_without_response_continuation") != states["request_controls_without_response_continuation"] ||
+		numberAt(reconciliation, "total_retained_pagination_facts") != states["request_response_continuation_candidate"]+states["request_controls_without_response_continuation"] {
+		return fmt.Errorf("matrix source pagination reconciliation drift: computed states=%v", states)
 	}
 	return nil
 }
@@ -410,7 +519,7 @@ func validateGitLabLegacyStreamBacklinks(matrix map[string]any, primary, descrip
 	for id, want := range gitLabLegacyStreams {
 		op := primary[strings.TrimPrefix(id, "gitlab.rest.")]
 		desc := descriptors[strings.TrimPrefix(id, "gitlab.rest.")]
-		if op == nil || desc == nil || stringAt(gitLabPaginationFacts(op, desc), "kind") == "not_documented" {
+		if op == nil || desc == nil || gitLabPaginationState(gitLabPaginationFacts(op, desc)) == "not_documented_by_locked_operation" {
 			return fmt.Errorf("legacy stream source lookup drift %q", id)
 		}
 		if stringAt(op, "method") != "GET" || streamPaths[want["stream"]] != want["path"] {
@@ -423,7 +532,7 @@ func validateGitLabLegacyStreamBacklinks(matrix map[string]any, primary, descrip
 func expectedGitLabPrimaryFacts(operation, descriptor, rest map[string]any) map[string]any {
 	id := stringAt(operation, "id")
 	params := mapSliceOrEmpty(objectAt(operation, "source_operation")["parameters"])
-	return map[string]any{
+	facts := map[string]any{
 		"source_kind":    "primary_openapi",
 		"source_lock":    gitLabSourceLockPath,
 		"source_id":      "gitlab.rest." + id,
@@ -455,6 +564,14 @@ func expectedGitLabPrimaryFacts(operation, descriptor, rest map[string]any) map[
 		"mapping_restriction_record_ids": gitLabRestrictionIDs("gitlab.rest." + id),
 		"crosswalk_state":                "primary_crosswalk_exact",
 	}
+	// The source facts already retain method, summary, citation, and response
+	// media. Store an explicit semantic record only where it changes the
+	// historical verb-based classification, avoiding noise for ordinary GETs.
+	semantics := gitLabOperationSemantics(operation)
+	if state := stringAt(semantics, "state"); state == "source_semantic_head_read" || state == "source_semantic_post_read" {
+		facts["operation_semantics"] = semantics
+	}
+	return facts
 }
 
 func expectedGitLabSupplementalFacts(operation map[string]any) map[string]any {
@@ -492,16 +609,22 @@ func expectedGitLabSupplementalFacts(operation map[string]any) map[string]any {
 }
 
 func expectedGitLabLanes(id string, facts map[string]any) map[string]any {
-	method := stringAt(facts, "method")
+	method := strings.ToUpper(stringAt(facts, "method"))
 	lockPath := stringAt(facts, "source_lock")
 	backlink := map[string]any{"kind": "source_lock", "path": lockPath, "source_id": id}
 	lanes := make(map[string]any, len(gitLabLanes))
-	if method == "GET" {
+	semantics := gitLabFactsOperationSemantics(facts)
+	switch stringAt(semantics, "state") {
+	case "source_safe_get_read":
 		lanes["direct_read"] = gitLabMappedCell("Locked GET source row; source-backed direct-read candidate only.", "read_verb_candidate", backlink)
-	} else {
+	case "source_semantic_head_read":
+		lanes["direct_read"] = gitLabMappedCell("Locked HEAD source row has a retained successful metadata response; source-backed bounded direct-read candidate only.", "source_semantic_head_read_candidate", backlink)
+	case "source_semantic_post_read":
+		lanes["direct_read"] = gitLabMappedCell("Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only.", "source_semantic_post_read_candidate", backlink)
+	default:
 		lanes["direct_read"] = gitLabNotApplicableCell("Locked method " + method + " is not a GET direct-read candidate.")
 	}
-	if gitLabIsMutation(method) {
+	if gitLabMutationCandidate(method, semantics) {
 		cell := gitLabMappedCell("Locked "+method+" source row; source-backed mutation candidate only.", "mutation_verb_candidate", backlink)
 		lanes["direct_write"] = cell
 		lanes["reverse_etl"] = cloneGitLabMap(cell)
@@ -525,12 +648,14 @@ func expectedGitLabLanes(id string, facts map[string]any) map[string]any {
 	}
 
 	pagination := objectAt(facts, "pagination")
-	if kind := stringAt(pagination, "kind"); kind != "not_documented" {
+	if gitLabPaginationState(pagination) == "request_response_continuation_candidate" && gitLabDirectReadCandidate(semantics) {
 		mapping := backlink
 		if stream, ok := gitLabLegacyStreams[id]; ok {
 			mapping = map[string]any{"kind": "existing_stream", "path": gitLabStreamsPath, "stream": stream["stream"], "stream_path": stream["path"]}
 		}
-		lanes["etl"] = gitLabMappedCell("Source declares explicit pagination controls: "+strings.Join(stringSlice(pagination["controls"]), ", ")+".", "pageable_extractable_collection_candidate", mapping)
+		lanes["etl"] = gitLabMappedCell("Source retains a request-to-response continuation pair: "+strings.Join(stringSlice(pagination["request_controls"]), ", ")+" -> "+strings.Join(stringSlice(pagination["response_controls"]), ", ")+".", "source_request_response_continuation_candidate", mapping)
+	} else if gitLabPaginationState(pagination) == "request_controls_without_response_continuation" {
+		lanes["etl"] = gitLabNotApplicableCell("Source retains pagination-shaped request controls but no retained response continuation; do not claim an ETL candidate.")
 	} else {
 		lanes["etl"] = gitLabNotApplicableCell("No explicit source pagination controls match the Track A extraction criterion.")
 	}
@@ -608,28 +733,308 @@ func expectedGitLabMappingRestrictions(lock, descriptor map[string]any, primary 
 	return result
 }
 
+// gitLabOperationSemantics derives lane eligibility from the retained provider
+// operation, rather than assuming every POST mutates or every GET is the only
+// possible read. It intentionally uses source text and successful-response
+// evidence, never an operation-ID allow-list.
+func gitLabOperationSemantics(operation map[string]any) map[string]any {
+	sourceOperation := objectAt(operation, "source_operation")
+	method := strings.ToUpper(stringAt(operation, "method"))
+	summary := stringAt(sourceOperation, "summary")
+	description := stringAt(sourceOperation, "description")
+	successStatuses := gitLabSuccessResponseStatuses(sourceOperation)
+	state := "not_a_documented_bounded_read"
+	switch {
+	case method == "GET" && len(successStatuses) > 0:
+		state = "source_safe_get_read"
+	case method == "HEAD" && len(successStatuses) > 0:
+		state = "source_semantic_head_read"
+	case method == "POST" && len(successStatuses) > 0 && gitLabSemanticPostReadSummary(summary, description):
+		state = "source_semantic_post_read"
+	}
+	return map[string]any{
+		"state":                     state,
+		"source_summary":            summary,
+		"success_response_statuses": stringsToAny(successStatuses),
+	}
+}
+
+func gitLabSemanticPostReadSummary(summary, description string) bool {
+	words := strings.Fields(strings.ToLower(strings.TrimSpace(summary)))
+	if len(words) == 0 {
+		return false
+	}
+	switch words[0] {
+	case "get", "retrieve", "list", "search", "searches", "query":
+		return true
+	case "execute":
+		text := strings.ToLower(summary + " " + description)
+		return strings.Contains(text, "query") || strings.Contains(text, "graphql")
+	default:
+		return false
+	}
+}
+
+func gitLabSuccessResponseStatuses(sourceOperation map[string]any) []string {
+	responses, _ := sourceOperation["responses"].(map[string]any)
+	statuses := make([]string, 0, len(responses))
+	for status := range responses {
+		if strings.HasPrefix(status, "2") || strings.HasPrefix(status, "3") {
+			statuses = append(statuses, status)
+		}
+	}
+	sort.Strings(statuses)
+	return statuses
+}
+
+// gitLabPaginationFacts records the request and response continuation facts
+// separately. A pagination-shaped request is not enough to claim ETL: a
+// retained source must also tell us how the next request is obtained.
 func gitLabPaginationFacts(operation, descriptor map[string]any) map[string]any {
-	if stringAt(operation, "method") != "GET" {
+	sourceOperation := objectAt(operation, "source_operation")
+	requestControls := gitLabPaginationRequestControls(sourceOperation, descriptor)
+	responseControls := gitLabPaginationResponseControls(sourceOperation, descriptor)
+	if len(requestControls) == 0 {
 		return map[string]any{"kind": "not_documented", "controls": []any{}}
 	}
-	query := mustMapSlice(objectAt(descriptor, "request")["query"])
-	names := make(map[string]struct{}, len(query))
-	for _, parameter := range query {
-		names[stringAt(parameter, "name")] = struct{}{}
+	facts := map[string]any{
+		"state":             "not_documented_by_locked_operation",
+		"request_controls":  stringsToAny(requestControls),
+		"response_controls": stringsToAny(responseControls),
 	}
-	if _, page := names["page"]; page {
-		if _, perPage := names["per_page"]; perPage {
-			return map[string]any{"kind": "page_per_page", "controls": []any{"page", "per_page"}}
+	if continuation, ok := gitLabContinuationPair(requestControls, responseControls); ok {
+		facts["state"] = "request_response_continuation_candidate"
+		facts["continuation"] = continuation
+		return facts
+	}
+	if len(requestControls) > 0 {
+		facts["state"] = "request_controls_without_response_continuation"
+	}
+	return facts
+}
+
+func gitLabPaginationState(facts map[string]any) string {
+	if state := stringAt(facts, "state"); state != "" {
+		return state
+	}
+	if stringAt(facts, "kind") == "not_documented" {
+		return "not_documented_by_locked_operation"
+	}
+	return "invalid_pagination_fact"
+}
+
+func gitLabPaginationRequestControls(sourceOperation, descriptor map[string]any) []string {
+	controls := make(map[string]string)
+	for _, parameter := range mapSliceOrEmpty(sourceOperation["parameters"]) {
+		if stringAt(parameter, "in") != "query" {
+			continue
+		}
+		gitLabAddPaginationInput(controls, stringAt(parameter, "name"), stringAt(parameter, "description"))
+	}
+	if body, ok := sourceOperation["requestBody"].(map[string]any); ok {
+		content, _ := body["content"].(map[string]any)
+		for _, content := range content {
+			contentMap, ok := content.(map[string]any)
+			if !ok {
+				continue
+			}
+			if schema, ok := contentMap["schema"].(map[string]any); ok {
+				gitLabCollectPaginationInputs(schema, controls)
+			}
 		}
 	}
-	if _, pageToken := names["page_token"]; pageToken {
-		controls := []any{"page_token"}
-		if _, maxResults := names["max_results"]; maxResults {
-			controls = append(controls, "max_results")
-		}
-		return map[string]any{"kind": "page_token", "controls": controls}
+	request := objectAt(descriptor, "request")
+	for _, parameter := range mapSliceOrEmpty(request["query"]) {
+		gitLabAddPaginationInput(controls, stringAt(parameter, "name"), stringAt(parameter, "description"))
 	}
-	return map[string]any{"kind": "not_documented", "controls": []any{}}
+	if body, ok := request["body"].(map[string]any); ok {
+		if schema, ok := body["schema"].(map[string]any); ok {
+			gitLabCollectPaginationInputs(schema, controls)
+		}
+	}
+	return gitLabSortedPaginationControlNames(controls)
+}
+
+func gitLabCollectPaginationInputs(schema map[string]any, controls map[string]string) {
+	properties, _ := schema["properties"].(map[string]any)
+	for name, raw := range properties {
+		property, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		gitLabAddPaginationInput(controls, name, stringAt(property, "description"))
+		gitLabCollectPaginationInputs(property, controls)
+	}
+	if items, ok := schema["items"].(map[string]any); ok {
+		gitLabCollectPaginationInputs(items, controls)
+	}
+	for _, key := range []string{"allOf", "anyOf", "oneOf"} {
+		for _, raw := range mapSliceOrEmpty(schema[key]) {
+			gitLabCollectPaginationInputs(raw, controls)
+		}
+	}
+}
+
+func gitLabAddPaginationInput(controls map[string]string, name, _ string) {
+	canonical := gitLabPaginationCanonicalName(name)
+	if canonical == "" {
+		return
+	}
+	// A retained provider parameter named page, cursor, after, or offset is
+	// itself request-side pagination evidence. Descriptions are frequently
+	// omitted or inconsistent across OpenAPI sources, so they must not hide a
+	// candidate; a matching successful-response continuation is still required
+	// before the operation receives an ETL lane.
+	controls[canonical] = name
+}
+
+func gitLabPaginationResponseControls(sourceOperation, descriptor map[string]any) []string {
+	controls := make(map[string]string)
+	for status, raw := range objectAt(sourceOperation, "responses") {
+		if !strings.HasPrefix(status, "2") {
+			continue
+		}
+		response, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		if headers, ok := response["headers"].(map[string]any); ok {
+			for name, value := range headers {
+				header, _ := value.(map[string]any)
+				gitLabAddPaginationResponse(controls, name, stringAt(header, "description"))
+			}
+		}
+		content, _ := response["content"].(map[string]any)
+		for _, rawContent := range content {
+			contentMap, ok := rawContent.(map[string]any)
+			if !ok {
+				continue
+			}
+			if schema, ok := contentMap["schema"].(map[string]any); ok {
+				gitLabCollectPaginationResponses(schema, controls)
+			}
+		}
+	}
+	for _, response := range mapSliceOrEmpty(descriptor["responses"]) {
+		if !strings.HasPrefix(stringAt(response, "status"), "2") {
+			continue
+		}
+		declaration, _ := response["declaration"].(map[string]any)
+		content, _ := declaration["content"].(map[string]any)
+		for _, rawContent := range content {
+			contentMap, ok := rawContent.(map[string]any)
+			if !ok {
+				continue
+			}
+			if schema, ok := contentMap["schema"].(map[string]any); ok {
+				gitLabCollectPaginationResponses(schema, controls)
+			}
+		}
+	}
+	return gitLabSortedPaginationControlNames(controls)
+}
+
+func gitLabCollectPaginationResponses(schema map[string]any, controls map[string]string) {
+	properties, _ := schema["properties"].(map[string]any)
+	for name, raw := range properties {
+		property, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		gitLabAddPaginationResponse(controls, name, stringAt(property, "description"))
+		gitLabCollectPaginationResponses(property, controls)
+	}
+	if items, ok := schema["items"].(map[string]any); ok {
+		gitLabCollectPaginationResponses(items, controls)
+	}
+	for _, key := range []string{"allOf", "anyOf", "oneOf"} {
+		for _, raw := range mapSliceOrEmpty(schema[key]) {
+			gitLabCollectPaginationResponses(raw, controls)
+		}
+	}
+}
+
+func gitLabAddPaginationResponse(controls map[string]string, name, description string) {
+	canonical := gitLabPaginationCanonicalName(name)
+	if canonical == "" {
+		return
+	}
+	text := strings.ToLower(name + " " + description)
+	switch canonical {
+	case "nextpagetoken", "nextpage", "nextcursor", "endcursor", "hasnextpage", "hasmore", "nextoffset":
+		controls[canonical] = name
+	default:
+		if strings.Contains(text, "next") || strings.Contains(text, "cursor") || strings.Contains(text, "pagination") {
+			controls[canonical] = name
+		}
+	}
+}
+
+func gitLabPaginationCanonicalName(name string) string {
+	normalized := strings.NewReplacer("_", "", "-", "", " ", "").Replace(strings.ToLower(name))
+	switch normalized {
+	case "page", "perpage", "pagetoken", "after", "cursor", "startcursor", "offset", "nextpagetoken", "nextpage", "nextcursor", "endcursor", "hasnextpage", "hasmore", "nextoffset":
+		return normalized
+	default:
+		return ""
+	}
+}
+
+func gitLabSortedPaginationControlNames(controls map[string]string) []string {
+	values := make([]string, 0, len(controls))
+	for _, name := range controls {
+		values = append(values, name)
+	}
+	sort.Strings(values)
+	return values
+}
+
+func gitLabContinuationPair(requestControls, responseControls []string) (map[string]any, bool) {
+	request := gitLabPaginationControlIndex(requestControls)
+	response := gitLabPaginationControlIndex(responseControls)
+	switch {
+	case request["after"] != "" && response["endcursor"] != "" && response["hasnextpage"] != "":
+		return map[string]any{"request": request["after"], "response": response["endcursor"], "has_more": response["hasnextpage"]}, true
+	case request["pagetoken"] != "" && response["nextpagetoken"] != "":
+		return map[string]any{"request": request["pagetoken"], "response": response["nextpagetoken"]}, true
+	case request["cursor"] != "" && response["nextcursor"] != "":
+		return map[string]any{"request": request["cursor"], "response": response["nextcursor"]}, true
+	case request["startcursor"] != "" && response["nextcursor"] != "":
+		return map[string]any{"request": request["startcursor"], "response": response["nextcursor"]}, true
+	case request["page"] != "" && request["perpage"] != "" && response["nextpage"] != "":
+		return map[string]any{"request": request["page"], "response": response["nextpage"], "page_size": request["perpage"]}, true
+	case request["offset"] != "" && response["nextoffset"] != "":
+		return map[string]any{"request": request["offset"], "response": response["nextoffset"]}, true
+	default:
+		return nil, false
+	}
+}
+
+func gitLabPaginationControlIndex(controls []string) map[string]string {
+	index := make(map[string]string, len(controls))
+	for _, control := range controls {
+		index[gitLabPaginationCanonicalName(control)] = control
+	}
+	return index
+}
+
+func gitLabDirectReadCandidate(semantics map[string]any) bool {
+	switch stringAt(semantics, "state") {
+	case "source_safe_get_read", "source_semantic_head_read", "source_semantic_post_read":
+		return true
+	default:
+		return false
+	}
+}
+
+func gitLabFactsOperationSemantics(facts map[string]any) map[string]any {
+	if semantics, ok := facts["operation_semantics"].(map[string]any); ok {
+		return semantics
+	}
+	if strings.ToUpper(stringAt(facts, "method")) == "GET" {
+		return map[string]any{"state": "source_safe_get_read"}
+	}
+	return map[string]any{"state": "not_a_documented_bounded_read"}
 }
 
 func gitLabBinaryRequestFields(descriptor map[string]any) []any {
@@ -795,6 +1200,10 @@ func gitLabIsMutation(method string) bool {
 	return method == "POST" || method == "PUT" || method == "PATCH" || method == "DELETE"
 }
 
+func gitLabMutationCandidate(method string, semantics map[string]any) bool {
+	return gitLabIsMutation(method) && stringAt(semantics, "state") != "source_semantic_post_read"
+}
+
 func gitLabMatrixRow(t *testing.T, matrix map[string]any, sourceID string) map[string]any {
 	t.Helper()
 	for _, row := range mustGitLabArray(t, matrix["source_operations"]) {
@@ -942,6 +1351,15 @@ func stringSliceOrEmpty(value any) []string {
 		return []string{}
 	}
 	return stringSlice(value)
+}
+
+func containsGitLabString(values []string, want string) bool {
+	for _, value := range values {
+		if value == want {
+			return true
+		}
+	}
+	return false
 }
 
 func stringsToAny(values []string) []any {
