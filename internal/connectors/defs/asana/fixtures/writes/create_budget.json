@@ -1,0 +1,30 @@
+{
+  "record": {
+    "data": {
+      "budget_type": "cost",
+      "parent": "fixture-project",
+      "total": {
+        "enabled": true,
+        "value": 100
+      }
+    },
+    "opt_pretty": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/budgets",
+    "body": {
+      "data": {
+        "budget_type": "cost",
+        "parent": "fixture-project",
+        "total": {
+          "enabled": true,
+          "value": 100
+        }
+      }
+    },
+    "query": {
+      "opt_pretty": "true"
+    }
+  }
+}

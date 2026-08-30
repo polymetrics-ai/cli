@@ -5,9 +5,12 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 const githubIssuesSourceID = "github.rest.issues/list-for-repo"
@@ -17,12 +20,358 @@ var dockerHubSCIMWriteSourceIDs = []string{
 	"dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
 }
 
+func TestOperationEvidenceConnectorFilterIsBounded(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	output := filepath.Join(root, "batch1-operation-evidence.json")
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"operation-evidence", root, "--connector", "asana", "--output", output}, &stdout, &stderr); code != 0 {
+		t.Fatalf("selected operation-evidence exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	raw, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatalf("read selected operation evidence: %v", err)
+	}
+	var artifact operationEvidenceArtifact
+	if err := json.Unmarshal(raw, &artifact); err != nil {
+		t.Fatalf("decode selected operation evidence: %v", err)
+	}
+	if len(artifact.Rows) != 249 {
+		t.Fatalf("selected operation-evidence rows = %d, want Asana's 249 source identities", len(artifact.Rows))
+	}
+	for _, row := range artifact.Rows {
+		if row.Connector != "asana" {
+			t.Fatalf("selected operation-evidence contains unrelated connector %q", row.Connector)
+		}
+	}
+
+	for _, test := range []struct {
+		args    []string
+		wantErr string
+	}{
+		{args: []string{"operation-evidence", root, "--connector", "asana"}, wantErr: "--connector requires an explicit --output path"},
+		{args: []string{"operation-evidence", root, "--connector", "asana", "--connector", "asana", "--output", output}, wantErr: `--connector "asana" may be specified only once`},
+		{args: []string{"operation-evidence", root, "--connector", "missing", "--output", output}, wantErr: "selected connector(s) have no connector-owned source lock: missing"},
+		{args: []string{"operation-evidence", root, "--connector", "asana", "--connector", "missing", "--output", output}, wantErr: "selected connector(s) have no connector-owned source lock: missing"},
+	} {
+		stdout.Reset()
+		stderr.Reset()
+		if code := run(test.args, &stdout, &stderr); code == 0 || !strings.Contains(stderr.String(), test.wantErr) {
+			t.Fatalf("invalid selected operation-evidence args %q = code %d stderr=%q, want %q", test.args, code, stderr.String(), test.wantErr)
+		}
+	}
+}
+
+func TestOperationEvidenceGitLabSourceLockBridge(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	output := filepath.Join(t.TempDir(), "gitlab-operation-evidence.json")
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"operation-evidence", root, "--connector", "gitlab", "--output", output}, &stdout, &stderr); code != 0 {
+		t.Fatalf("GitLab operation-evidence exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	raw, err := os.ReadFile(output)
+	if err != nil {
+		t.Fatalf("read GitLab operation evidence: %v", err)
+	}
+	var artifact operationEvidenceArtifact
+	if err := json.Unmarshal(raw, &artifact); err != nil {
+		t.Fatalf("decode GitLab operation evidence: %v", err)
+	}
+	if artifact.GeneratedCommand != "go run ./cmd/connectorgen operation-evidence --connector gitlab" {
+		t.Fatalf("GitLab generated command = %q", artifact.GeneratedCommand)
+	}
+	if len(artifact.Rows) != 1752 {
+		t.Fatalf("GitLab operation-evidence rows = %d, want 1752 locked source identities", len(artifact.Rows))
+	}
+	seen := make(map[string]bool, len(artifact.Rows))
+	runtimeEnabled := 0
+	providerParameterAliasGaps := 0
+	for _, row := range artifact.Rows {
+		if row.Connector != "gitlab" {
+			t.Fatalf("GitLab operation-evidence contains unrelated connector %q", row.Connector)
+		}
+		if row.SourceID == "" || seen[row.SourceID] {
+			t.Fatalf("GitLab source identity = %q, want one unique non-empty identity", row.SourceID)
+		}
+		seen[row.SourceID] = true
+		if row.Source.Lock != "sources/gitlab-operation-source-lock.json" || row.Source.URL == "" || row.Source.SHA256 == "" || row.Source.Bytes <= 0 || row.Source.Location == "" {
+			t.Fatalf("GitLab source trace for %q = %+v, want complete locked citation", row.SourceID, row.Source)
+		}
+		if row.Runtime.Enabled {
+			runtimeEnabled++
+		}
+		for _, gap := range row.Gaps {
+			if gap.Foundation != sourceProviderParameterAliasFoundation {
+				continue
+			}
+			providerParameterAliasGaps++
+			if gap.Kind != operationEvidenceGapSourceContract || gap.Phase != "request" || !strings.HasPrefix(gap.Location, "query parameter ") || !strings.Contains(gap.Evidence, "reversible CLI-to-provider parameter alias") {
+				t.Fatalf("GitLab source identity %q alias gap = %+v, want retained typed source-contract gap", row.SourceID, gap)
+			}
+			if row.Runtime.Enabled {
+				t.Fatalf("GitLab source identity %q alias gap was incorrectly executable: %+v", row.SourceID, row)
+			}
+		}
+		if len(row.CLI.Paths) == 0 && !slices.ContainsFunc(row.Gaps, func(gap operationEvidenceGap) bool {
+			return gap.Kind == operationEvidenceGapCLICommand
+		}) {
+			t.Fatalf("GitLab source identity %q has no CLI command and no explicit CLI gap", row.SourceID)
+		}
+	}
+	if runtimeEnabled != 733 {
+		t.Fatalf("GitLab runtime-enabled source identities = %d, want 733 source-backed lane rows", runtimeEnabled)
+	}
+	if providerParameterAliasGaps != 15 {
+		t.Fatalf("GitLab provider-parameter-alias source gaps = %d, want 15 retained candidate rows", providerParameterAliasGaps)
+	}
+}
+
+func TestOperationEvidenceRetainsV2AndV3RowsWhenSourceImportEvidenceIsUnavailable(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	defsDir := filepath.Join(root, "internal", "connectors", "defs")
+	for _, connector := range []string{"github", "asana"} {
+		manifest := filepath.Join(defsDir, connector, "sources", connector+sourceImportRetainedArtifactManifest)
+		if err := os.Remove(manifest); err != nil {
+			t.Fatalf("remove %s retained-artifact manifest: %v", connector, err)
+		}
+		var stdout, stderr bytes.Buffer
+		output := filepath.Join(t.TempDir(), connector+"-operation-descriptor.json")
+		if code := run([]string{"source-import", connector, "--defs", defsDir, "--out", output}, &stdout, &stderr); code == 0 {
+			t.Fatalf("source-import %s succeeded without required retained evidence", connector)
+		}
+	}
+
+	artifact, _, _ := runOperationEvidenceForTest(t, root, "")
+	for _, sourceID := range []string{githubIssuesSourceID, "asana.rest.getAccessRequests"} {
+		row, found := artifact.row(sourceID)
+		if !found {
+			t.Fatalf("source identity %q was omitted after source-import evidence failure", sourceID)
+		}
+		if !operationEvidenceRowHasFoundationGap(row, "source.retention-import.v1") {
+			t.Fatalf("source identity %q gaps = %+v, want source-retention named gap", sourceID, row.Gaps)
+		}
+		if row.Runtime.Enabled {
+			t.Fatalf("source identity %q remained runtime-enabled without retained source evidence: %+v", sourceID, row)
+		}
+		for class, value := range row.Classifications {
+			if value.Enabled {
+				t.Fatalf("source identity %q classification %q remained enabled without retained source evidence: %+v", sourceID, class, value)
+			}
+		}
+	}
+}
+
+func TestOperationEvidenceRetainsRowsWhenCertificationAndWebsiteArtifactsAreUnavailable(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	for _, path := range []string{
+		filepath.Join(root, filepath.FromSlash(certificationSubjectArtifactPath)),
+		filepath.Join(root, "website", "data", "connectors.generated.json"),
+	} {
+		if err := os.Remove(path); err != nil {
+			t.Fatalf("remove required evidence artifact %s: %v", path, err)
+		}
+	}
+
+	artifact, _, _ := runOperationEvidenceForTest(t, root, "")
+	for _, sourceID := range []string{githubIssuesSourceID, "asana.rest.getAccessRequests"} {
+		row, found := artifact.row(sourceID)
+		if !found {
+			t.Fatalf("source identity %q was omitted after certification/website evidence failure", sourceID)
+		}
+		for _, foundation := range []string{"verification.conformance-certification.v1", "source.projection-admission.v1"} {
+			if !operationEvidenceRowHasFoundationGap(row, foundation) {
+				t.Fatalf("source identity %q gaps = %+v, want %s named gap", sourceID, row.Gaps, foundation)
+			}
+		}
+	}
+}
+
+func operationEvidenceRowHasFoundationGap(row operationEvidenceRow, foundation string) bool {
+	return slices.ContainsFunc(row.Gaps, func(gap operationEvidenceGap) bool {
+		return gap.Foundation == foundation
+	})
+}
+
 func TestOperationEvidenceClassForCommandUsesIntentNotOperationName(t *testing.T) {
 	if got := operationEvidenceClassForCommand("binary_upload", "releases_upload_asset"); got != operationEvidenceClassBinaryUpload {
 		t.Fatalf("binary_upload classification = %q, want %q", got, operationEvidenceClassBinaryUpload)
 	}
 	if got := operationEvidenceClassForCommand("direct_write", "releases_upload_asset"); got != operationEvidenceClassDirectWrite {
 		t.Fatalf("direct_write classification = %q, want %q; an operation name must not promote an ordinary write", got, operationEvidenceClassDirectWrite)
+	}
+}
+
+func TestOperationEvidenceClassifyKeepsImplementedStreamBoundDirectReadsInBothLanes(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		command    engine.CLICommand
+		wantETL    operationEvidenceClassification
+		wantDirect operationEvidenceClassification
+	}{
+		{
+			name: "implemented stream-bound direct read",
+			command: engine.CLICommand{
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Stream:       "custom_fields",
+			},
+			wantETL:    operationEvidenceClassification{Declared: true, Enabled: true},
+			wantDirect: operationEvidenceClassification{Declared: true, Enabled: true},
+		},
+		{
+			name: "implemented direct read without stream is not ETL",
+			command: engine.CLICommand{
+				Intent:       "direct_read",
+				Availability: "implemented",
+			},
+			wantETL:    operationEvidenceClassification{},
+			wantDirect: operationEvidenceClassification{Declared: true, Enabled: true},
+		},
+		{
+			name: "non-direct read stream binding is not implicit ETL",
+			command: engine.CLICommand{
+				Intent:       "binary_download",
+				Availability: "implemented",
+				Stream:       "attachment_bytes",
+			},
+			wantETL:    operationEvidenceClassification{},
+			wantDirect: operationEvidenceClassification{},
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			row := operationEvidenceRow{Classifications: operationEvidenceEmptyClassifications()}
+			operationEvidenceClassify(&row, operationEvidenceTargets{}, []engine.CLICommand{tc.command}, "")
+			if got := row.Classifications[operationEvidenceClassETL]; got != tc.wantETL {
+				t.Fatalf("ETL classification = %+v, want %+v", got, tc.wantETL)
+			}
+			if got := row.Classifications[operationEvidenceClassDirectRead]; got != tc.wantDirect {
+				t.Fatalf("direct-read classification = %+v, want %+v", got, tc.wantDirect)
+			}
+		})
+	}
+}
+
+func TestOperationEvidenceClassifyKeepsImplementedWriteBoundDirectWritesInBothLanes(t *testing.T) {
+	for _, tc := range []struct {
+		name        string
+		command     engine.CLICommand
+		wantReverse operationEvidenceClassification
+		wantDirect  operationEvidenceClassification
+	}{
+		{
+			name: "implemented write-bound direct write",
+			command: engine.CLICommand{
+				Intent:       "direct_write",
+				Availability: "implemented",
+				Write:        "add_custom_field_setting_for_goal",
+			},
+			wantReverse: operationEvidenceClassification{Declared: true, Enabled: true},
+			wantDirect:  operationEvidenceClassification{Declared: true, Enabled: true},
+		},
+		{
+			name: "implemented direct write without write binding is not reverse ETL",
+			command: engine.CLICommand{
+				Intent:       "direct_write",
+				Availability: "implemented",
+			},
+			wantReverse: operationEvidenceClassification{},
+			wantDirect:  operationEvidenceClassification{Declared: true, Enabled: true},
+		},
+		{
+			name: "reverse ETL write binding is not implicit direct write",
+			command: engine.CLICommand{
+				Intent:       "reverse_etl",
+				Availability: "implemented",
+				Write:        "upload_attachment_file",
+			},
+			wantReverse: operationEvidenceClassification{Declared: true, Enabled: true},
+			wantDirect:  operationEvidenceClassification{},
+		},
+	} {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			row := operationEvidenceRow{Classifications: operationEvidenceEmptyClassifications()}
+			operationEvidenceClassify(&row, operationEvidenceTargets{}, []engine.CLICommand{tc.command}, "")
+			if got := row.Classifications[operationEvidenceClassReverseETL]; got != tc.wantReverse {
+				t.Fatalf("reverse-ETL classification = %+v, want %+v", got, tc.wantReverse)
+			}
+			if got := row.Classifications[operationEvidenceClassDirectWrite]; got != tc.wantDirect {
+				t.Fatalf("direct-write classification = %+v, want %+v", got, tc.wantDirect)
+			}
+		})
+	}
+}
+
+func TestOperationEvidencePreservesSavedAndInteractiveLanes(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	artifact, _, stderr := runOperationEvidenceForTest(t, root, "")
+	if stderr != "" {
+		t.Fatalf("operation-evidence wrote diagnostics on complete invocation: %s", stderr)
+	}
+
+	tests := []struct {
+		name          string
+		sourceID      string
+		enabledLanes  []string
+		disabledLanes []string
+	}{
+		{
+			name:         "stream-backed direct read",
+			sourceID:     "asana.rest.getCustomFieldsForWorkspace",
+			enabledLanes: []string{operationEvidenceClassETL, operationEvidenceClassDirectRead},
+		},
+		{
+			name:         "action-backed direct write",
+			sourceID:     "asana.rest.addCustomFieldSettingForGoal",
+			enabledLanes: []string{operationEvidenceClassReverseETL, operationEvidenceClassDirectWrite},
+		},
+		{
+			name:          "operation-backed direct read",
+			sourceID:      "asana.rest.getAccessRequests",
+			enabledLanes:  []string{operationEvidenceClassDirectRead},
+			disabledLanes: []string{operationEvidenceClassETL, operationEvidenceClassReverseETL},
+		},
+		{
+			name:         "closed batch direct write and reverse ETL",
+			sourceID:     "asana.rest.createBatchRequest",
+			enabledLanes: []string{operationEvidenceClassReverseETL, operationEvidenceClassDirectWrite},
+			disabledLanes: []string{
+				operationEvidenceClassETL,
+				operationEvidenceClassDirectRead,
+				operationEvidenceClassBinaryDownload,
+				operationEvidenceClassBinaryUpload,
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			row, found := artifact.row(test.sourceID)
+			if !found {
+				t.Fatalf("operation evidence omitted source row %q", test.sourceID)
+			}
+			for _, lane := range test.enabledLanes {
+				classification := row.Classifications[lane]
+				if !classification.Declared || !classification.Enabled {
+					t.Fatalf("%s classification = %+v, want declared and enabled; runtime targets = %v, CLI paths = %v", lane, classification, row.Runtime.Targets, row.CLI.Paths)
+				}
+			}
+			for _, lane := range test.disabledLanes {
+				if classification := row.Classifications[lane]; classification.Enabled {
+					t.Fatalf("%s classification = %+v, want disabled; runtime targets = %v, CLI paths = %v", lane, classification, row.Runtime.Targets, row.CLI.Paths)
+				}
+			}
+			if test.sourceID == "asana.rest.createBatchRequest" {
+				if row.Canonical.Method != "POST" || row.Canonical.Path != "/batch" || row.Source.URL == "" || row.Source.Location == "" {
+					t.Fatalf("batch source evidence = canonical %+v source %+v, want locked POST /batch citation", row.Canonical, row.Source)
+				}
+				if !slices.Contains(row.Runtime.Targets, "write:create_batch_request") || !slices.Contains(row.CLI.Paths, "batch-api create-batch-request") {
+					t.Fatalf("batch execution evidence = targets %v paths %v, want closed declared action and command", row.Runtime.Targets, row.CLI.Paths)
+				}
+			}
+		})
 	}
 }
 
@@ -129,6 +478,134 @@ func TestOperationEvidenceFixed100UsesRuntimePreflightForDockerHubSCIMWrites(t *
 			t.Fatalf("would-be fixed cohort selected preflight-rejected Docker Hub SCIM row %q", row.SourceID)
 		}
 	}
+}
+
+func TestOperationEvidenceUsesStrictV3DocumentOperationInventory(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	baseline, _, stderr := runOperationEvidenceForTest(t, root, "")
+	if stderr != "" {
+		t.Fatalf("baseline operation-evidence diagnostics = %s", stderr)
+	}
+	operationEvidenceRewriteGitHubLockAsV3(t, root)
+	actual, _, stderr := runOperationEvidenceForTest(t, root, "")
+	if stderr != "" {
+		t.Fatalf("v3 operation-evidence diagnostics = %s", stderr)
+	}
+	if actual.rowCount() != baseline.rowCount() {
+		t.Fatalf("v3 document-owned operation inventory row count = %d, want legacy baseline %d", actual.rowCount(), baseline.rowCount())
+	}
+	for _, want := range baseline.Rows {
+		got, found := actual.row(want.SourceID)
+		if !found {
+			t.Fatalf("v3 operation-evidence omitted source row %q", want.SourceID)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("v3 operation-evidence row %q changed:\n got %#v\nwant %#v", want.SourceID, got, want)
+		}
+	}
+	declared, found := actual.row(githubIssuesSourceID)
+	if !found || !declared.Runtime.Enabled {
+		t.Fatalf("v3 declared source row = %#v, want enabled %q", declared, githubIssuesSourceID)
+	}
+	for _, class := range operationEvidenceClasses {
+		if _, found := declared.Classifications[class]; !found {
+			t.Fatalf("v3 declared row lost classification lane %q: %#v", class, declared.Classifications)
+		}
+	}
+	var deferred operationEvidenceRow
+	for _, row := range baseline.Rows {
+		if len(row.Gaps) != 0 || len(row.Foundations) != 0 {
+			deferred = row
+			break
+		}
+	}
+	if deferred.SourceID == "" {
+		t.Fatal("baseline fixture has no deferred source row")
+	}
+	if got, found := actual.row(deferred.SourceID); !found || !reflect.DeepEqual(got, deferred) {
+		t.Fatalf("v3 deferred source row %q = %#v, want %#v", deferred.SourceID, got, deferred)
+	}
+	if _, found := actual.row("github.graphql.mutation.createIpAllowListEntry"); !found {
+		t.Fatal("v3 REST document inventory dropped GraphQL evidence rows")
+	}
+}
+
+func TestOperationEvidenceRejectsV3InventoryStateClaimingAbsence(t *testing.T) {
+	root := operationEvidenceWorkspace(t)
+	operationEvidenceRewriteGitHubLockAsV3(t, root)
+	path := filepath.Join(root, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json")
+	var documentOperations int
+	mutateOperationEvidenceJSON(t, path, func(lock map[string]any) {
+		rest := lock["rest"].(map[string]any)
+		documentOperations = len(rest["source_documents"].([]any)[0].(map[string]any)["operations"].([]any))
+		lock["state"] = "dynamic"
+		lock["dynamic"] = map[string]any{
+			"reason": "contradictory-fixture-state",
+			"detail": "A document-owned operation inventory exists and must not be projected as absence.",
+		}
+	})
+	if documentOperations != 1220 {
+		t.Fatalf("v3 fixture document operations = %d, want 1220 REST operations", documentOperations)
+	}
+	input, err := readOperationEvidenceSourceLock(path, "github")
+	if err == nil {
+		if input.Absence != nil {
+			t.Fatalf("v3 source document inventory with %d REST operations was classified as absence: %+v", documentOperations, input.Absence)
+		}
+		t.Fatal("contradictory v3 state unexpectedly projected without strict source-import rejection")
+	}
+	if !strings.Contains(err.Error(), "source-import schema") {
+		t.Fatalf("v3 contradictory state error = %v, want strict source-import schema rejection", err)
+	}
+}
+
+func TestOperationEvidenceRejectsDuplicateV3InventoryBeforeAbsenceProjection(t *testing.T) {
+	t.Parallel()
+	const populated = `[{"id":"retained-document"}]`
+	for _, tc := range []struct {
+		name  string
+		first string
+		last  string
+	}{
+		{name: "populated then empty", first: populated, last: `[]`},
+		{name: "empty then populated", first: `[]`, last: populated},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "github-operation-source-lock.json")
+			raw := []byte(`{"schema_version":3,"connector":"github","state":"dynamic","dynamic":{"reason":"duplicate-fixture","detail":"duplicate source_documents must not become provider absence"},"rest":{"source_documents":` + tc.first + `,"source_documents":` + tc.last + `}}`)
+			if err := os.WriteFile(path, raw, 0o644); err != nil {
+				t.Fatalf("write duplicate v3 source lock: %v", err)
+			}
+			input, err := readOperationEvidenceSourceLock(path, "github")
+			if err == nil || input.Absence != nil || !strings.Contains(err.Error(), "duplicate JSON object member at /rest/source_documents") {
+				t.Fatalf("duplicate v3 source lock input=%+v err=%v, want duplicate rejection before absence projection", input, err)
+			}
+		})
+	}
+}
+
+func TestOperationEvidenceReadsAsanaVersion3DocumentOwnedLock(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	input, err := readOperationEvidenceSourceLock(filepath.Join(root, "internal", "connectors", "defs", "asana", "sources", "asana-operation-source-lock.json"), "asana")
+	if err != nil {
+		t.Fatalf("read Asana version-3 source lock: %v", err)
+	}
+	if len(input.Operations) != 249 {
+		t.Fatalf("Asana source operations = %d, want 249", len(input.Operations))
+	}
+	for _, operation := range input.Operations {
+		if operation.ID != "asana.rest.getAccessRequests" {
+			continue
+		}
+		if operation.Method != "GET" || operation.Path != "/access_requests" || operation.Trace.URL != "https://raw.githubusercontent.com/Asana/openapi/56796a67a3c093eedf55fd9682357957a2ebfd85/defs/asana_oas.yaml" || operation.Trace.Location != `paths["/access_requests"].get` || operation.Trace.SHA256 == "" || operation.Trace.Bytes <= 0 {
+			t.Fatalf("Asana access-request evidence = %+v, want document-owned source trace", operation)
+		}
+		return
+	}
+	t.Fatal("Asana access-request source operation is absent")
 }
 
 func TestOperationEvidenceReportsEachMissingEvidenceKind(t *testing.T) {
@@ -343,14 +820,6 @@ func TestOperationEvidenceFixed100RejectsEveryRegression(t *testing.T) {
 	if err := validateOperationEvidenceFixed100(artifact, fixed); err != nil {
 		t.Fatalf("unmodified fixed cohort rejected: %v", err)
 	}
-	t.Run("source row removal", func(t *testing.T) {
-		removalRoot := operationEvidenceWorkspace(t)
-		removeOperationEvidenceSourceOperation(t, removalRoot, githubIssuesSourceID)
-		removed, _, _ := runOperationEvidenceForTest(t, removalRoot, "")
-		if err := validateOperationEvidenceFixed100(removed, fixed); err == nil || !strings.Contains(err.Error(), githubIssuesSourceID) {
-			t.Fatalf("GitHub source-row removal error = %v, want source-specific fixed-cohort failure", err)
-		}
-	})
 	for _, expectation := range fixed.Rows {
 		t.Run(expectation.SourceID, func(t *testing.T) {
 			mutated := artifact.clone()
@@ -381,16 +850,6 @@ func TestOperationEvidenceCheckRunsFixed100Gate(t *testing.T) {
 	if code, stderr := runCheck(); code != 0 {
 		t.Fatalf("fixed-100 check exit=%d stderr=%q", code, stderr)
 	}
-	removalRoot := operationEvidenceWorkspace(t)
-	removalOutput := filepath.Join(removalRoot, "operation-evidence.json")
-	removalFixedPath := filepath.Join(removalRoot, "internal", "connectors", "operation-evidence-fixed-100.json")
-	removeOperationEvidenceSourceOperation(t, removalRoot, githubIssuesSourceID)
-	_, _, _ = runOperationEvidenceForTest(t, removalRoot, "")
-	var removalStdout, removalStderr bytes.Buffer
-	removalCode := run([]string{"operation-evidence", removalRoot, "--output", removalOutput, "--fixed-100", removalFixedPath, "--check"}, &removalStdout, &removalStderr)
-	if removalCode == 0 || !strings.Contains(removalStderr.String(), githubIssuesSourceID) {
-		t.Fatalf("GitHub source-row removal check exit=%d stderr=%q, want source-specific fixed-100 failure", removalCode, removalStderr.String())
-	}
 	mutateOperationEvidenceJSON(t, fixedPath, func(document map[string]any) {
 		rows := document["rows"].([]any)
 		rows[0].(map[string]any)["source_sha256"] = "regressed"
@@ -403,15 +862,10 @@ func TestOperationEvidenceCheckRunsFixed100Gate(t *testing.T) {
 func operationEvidenceWorkspace(t *testing.T) string {
 	t.Helper()
 	root := t.TempDir()
-	fixedPath := filepath.Join(root, "internal", "connectors", "operation-evidence-fixed-100.json")
-	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "operation-evidence-fixed-100.json"), fixedPath)
+	copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", "asana"), filepath.Join(root, "internal", "connectors", "defs", "asana"))
+	copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", "github"), filepath.Join(root, "internal", "connectors", "defs", "github"))
+	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "operation-evidence-fixed-100.json"), filepath.Join(root, "internal", "connectors", "operation-evidence-fixed-100.json"))
 	copyOperationEvidenceFile(t, filepath.Join("..", "..", "internal", "connectors", "certifications", "current-subject.json"), filepath.Join(root, "internal", "connectors", "certifications", "current-subject.json"))
-	connectors := operationEvidenceFixedConnectorNames(t, loadOperationEvidenceFixed100(t, root))
-	connectorSet := make(map[string]bool, len(connectors))
-	for _, connector := range connectors {
-		connectorSet[connector] = true
-		copyOperationEvidenceTree(t, filepath.Join("..", "..", "internal", "connectors", "defs", connector), filepath.Join(root, "internal", "connectors", "defs", connector))
-	}
 
 	websiteRaw, err := os.ReadFile(filepath.Join("..", "..", "website", "data", "connectors.generated.json"))
 	if err != nil {
@@ -421,59 +875,46 @@ func operationEvidenceWorkspace(t *testing.T) string {
 	if err := json.Unmarshal(websiteRaw, &rows); err != nil {
 		t.Fatalf("decode generated website data: %v", err)
 	}
-	selected := make([]any, 0, len(connectors))
+	connectorRows := make([]any, 0, 2)
 	for _, item := range rows {
 		row := item.(map[string]any)
-		if connectorSet[row["slug"].(string)] {
-			selected = append(selected, row)
+		if row["slug"] == "github" || row["slug"] == "asana" {
+			connectorRows = append(connectorRows, row)
 		}
 	}
-	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": selected})
+	writeOperationEvidenceJSON(t, filepath.Join(root, "website", "data", "connectors.generated.json"), map[string]any{"rows": connectorRows})
 	return root
 }
 
-func operationEvidenceFixedConnectorNames(t *testing.T, fixed operationEvidenceFixed100) []string {
+func operationEvidenceRewriteGitHubLockAsV3(t *testing.T, root string) {
 	t.Helper()
-	seen := make(map[string]bool)
-	for _, row := range fixed.Rows {
-		connector, _, found := strings.Cut(row.SourceID, ".")
-		if !found || connector == "" {
-			t.Fatalf("fixed source ID %q has no connector prefix", row.SourceID)
+	path := filepath.Join(root, "internal", "connectors", "defs", "github", "sources", "github-operation-source-lock.json")
+	mutateOperationEvidenceJSON(t, path, func(lock map[string]any) {
+		rest := lock["rest"].(map[string]any)
+		artifact := map[string]any{
+			"source_url": rest["source_url"],
+			"sha256":     rest["sha256"],
+			"bytes":      rest["bytes"],
+			"openapi":    rest["openapi"],
 		}
-		seen[connector] = true
-	}
-	connectors := make([]string, 0, len(seen))
-	for connector := range seen {
-		connectors = append(connectors, connector)
-	}
-	slices.Sort(connectors)
-	return connectors
-}
-
-func removeOperationEvidenceSourceOperation(t *testing.T, root, sourceID string) {
-	t.Helper()
-	connector, _, found := strings.Cut(sourceID, ".")
-	if !found || connector == "" {
-		t.Fatalf("source ID %q has no connector prefix", sourceID)
-	}
-	path := filepath.Join(root, "internal", "connectors", "defs", connector, "sources", connector+"-operation-source-lock.json")
-	mutateOperationEvidenceJSON(t, path, func(document map[string]any) {
-		rest := document["rest"].(map[string]any)
-		operations := rest["operations"].([]any)
-		filtered := make([]any, 0, len(operations)-1)
-		removed := false
-		for _, item := range operations {
-			operation := item.(map[string]any)
-			if operation["id"] == sourceID {
-				removed = true
-				continue
-			}
-			filtered = append(filtered, item)
+		lock["schema_version"] = 3
+		lock["rest"] = map[string]any{
+			"retrieval": "hermetic operation-evidence v3 document inventory fixture",
+			"openapi":   []any{rest["openapi"]},
+			"source_documents": []any{map[string]any{
+				"id":       "github-rest",
+				"artifact": artifact,
+				"published_source": map[string]any{
+					"source_url":  "https://docs.github.com/rest",
+					"capture_url": rest["source_url"],
+					"sha256":      rest["sha256"],
+					"bytes":       rest["bytes"],
+					"adapter":     "operation-evidence-v3-fixture-capture",
+				},
+				"info_version": rest["info_version"],
+				"operations":   rest["operations"],
+			}},
 		}
-		if !removed {
-			t.Fatalf("source operation %q was not present in %s", sourceID, path)
-		}
-		rest["operations"] = filtered
 	})
 }
 

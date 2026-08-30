@@ -184,6 +184,16 @@ func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (
 }
 
 func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	stream, err := findStream(c.bundle, req.Stream)
+	if err != nil {
+		return err
+	}
+	if err := preflightDeclaredSourceBoundStreamRead(c.bundle, stream); err != nil {
+		return err
+	}
+	if err := preflightSourceBoundStreamOrigin(c.bundle, req.Config, stream); err != nil {
+		return err
+	}
 	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, Read(admitted, c.bundle, req, c.hooks, emit))
 	})
@@ -193,6 +203,16 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 // the normal authentication boundary while making a known page budget stop
 // distinguishable from provider exhaustion for a durable continuation.
 func (c *Connector) ReadWithOutcome(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	stream, err := findStream(c.bundle, req.Stream)
+	if err != nil {
+		return err
+	}
+	if err := preflightDeclaredSourceBoundStreamRead(c.bundle, stream); err != nil {
+		return err
+	}
+	if err := preflightSourceBoundStreamOrigin(c.bundle, req.Config, stream); err != nil {
+		return err
+	}
 	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, ReadWithOutcome(admitted, c.bundle, req, c.hooks, emit))
 	})
@@ -239,8 +259,15 @@ func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadReq
 }
 
 func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	op, err := operationDirectReadSpec(c.bundle, req.Operation)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	if err := preflightSourceBoundOperationOrigin(c.bundle, req.Config, op); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	var result connectors.DirectReadResult
-	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
+	err = executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		var err error
 		result, err = OperationDirectRead(admitted, c.bundle, req, c.hooks)
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, err)
@@ -302,6 +329,30 @@ func (c *Connector) PreflightOperationDirectRead(operation, method, path string,
 
 func (c *Connector) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
 	return PreflightOperationDirectReadBindings(c.bundle, operation, pathFields, queryFields, bodyFields, rawBody)
+}
+
+func (c *Connector) PreflightSourceBoundRead(operation, sourceOperation, method, path string) error {
+	return PreflightSourceBoundRead(c.bundle, operation, sourceOperation, method, path)
+}
+
+func (c *Connector) PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error {
+	return PreflightSourceBoundStreamRead(c.bundle, stream, sourceOperation, method, path)
+}
+
+func (c *Connector) PreflightSourceBoundOperationOrigin(operation string, cfg connectors.RuntimeConfig) error {
+	op, err := findOperation(c.bundle, operation)
+	if err != nil {
+		return err
+	}
+	return preflightSourceBoundOperationOrigin(c.bundle, cfg, op)
+}
+
+func (c *Connector) PreflightSourceBoundStreamOrigin(stream string, cfg connectors.RuntimeConfig) error {
+	spec, err := findStream(c.bundle, stream)
+	if err != nil {
+		return err
+	}
+	return preflightSourceBoundStreamOrigin(c.bundle, cfg, spec)
 }
 
 // OperationStatusCheck delegates one closed, response-less HEAD operation to
@@ -580,6 +631,7 @@ func BinaryUploadSourcesForWriteAction(action WriteAction) ([]connectors.BinaryU
 			sources = append(sources, connectors.BinaryUploadSource{
 				Field:             part.Field,
 				MaxBytes:          part.MaxBytes,
+				MediaPolicy:       part.MediaPolicy,
 				AllowedMediaTypes: append([]string(nil), part.AllowedMediaTypes...),
 			})
 		}
@@ -593,8 +645,17 @@ func BinaryUploadSourcesForWriteAction(action WriteAction) ([]connectors.BinaryU
 		if strings.TrimSpace(source.Field) == "" || source.MaxBytes <= 0 {
 			return nil, fmt.Errorf("binary upload source must declare its field and positive byte cap")
 		}
-		if len(source.AllowedMediaTypes) == 0 {
-			return nil, fmt.Errorf("binary upload source %q must declare allowed_media_types", source.Field)
+		switch source.MediaPolicy {
+		case "":
+			if len(source.AllowedMediaTypes) == 0 {
+				return nil, fmt.Errorf("binary upload source %q must declare an explicit media policy", source.Field)
+			}
+		case connectors.BinaryUploadMediaPolicyProviderUnrestricted:
+			if source.AllowedMediaTypes != nil {
+				return nil, fmt.Errorf("binary upload source %q provider-unrestricted media policy must not declare allowed_media_types", source.Field)
+			}
+		default:
+			return nil, fmt.Errorf("binary upload source %q has unsupported media policy %q", source.Field, source.MediaPolicy)
 		}
 	}
 	return sources, nil
@@ -717,6 +778,30 @@ func (b Base) PreflightOperationDirectRead(operation, method, path string, maxBy
 
 func (b Base) PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error {
 	return PreflightOperationDirectReadBindings(b.bundle, operation, pathFields, queryFields, bodyFields, rawBody)
+}
+
+func (b Base) PreflightSourceBoundRead(operation, sourceOperation, method, path string) error {
+	return PreflightSourceBoundRead(b.bundle, operation, sourceOperation, method, path)
+}
+
+func (b Base) PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error {
+	return PreflightSourceBoundStreamRead(b.bundle, stream, sourceOperation, method, path)
+}
+
+func (b Base) PreflightSourceBoundOperationOrigin(operation string, cfg connectors.RuntimeConfig) error {
+	op, err := findOperation(b.bundle, operation)
+	if err != nil {
+		return err
+	}
+	return preflightSourceBoundOperationOrigin(b.bundle, cfg, op)
+}
+
+func (b Base) PreflightSourceBoundStreamOrigin(stream string, cfg connectors.RuntimeConfig) error {
+	spec, err := findStream(b.bundle, stream)
+	if err != nil {
+		return err
+	}
+	return preflightSourceBoundStreamOrigin(b.bundle, cfg, spec)
 }
 
 // PreflightOperationDirectWrite validates a native connector's declared
@@ -1027,6 +1112,10 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	if b.SyncTransport != nil {
 		syncTransport = b.SyncTransport.Clone()
 	}
+	var enabledContract *connectors.EnabledConnectorContract
+	if b.EnabledContract != nil {
+		enabledContract = b.EnabledContract.Clone()
+	}
 
 	return connectors.Definition{
 		Name:             b.Metadata.Name,
@@ -1039,6 +1128,7 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 		Changefeed:       changefeed,
 		PollingWatermark: pollingWatermark,
 		SyncTransport:    syncTransport,
+		EnabledContract:  enabledContract,
 		Spec:             specJSON(b),
 		Streams:          streamSummaries,
 		WriteActions:     writeActions,
@@ -1087,24 +1177,27 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			flags = append(flags, commandSurfaceOperationFlag(b, cmd, flag))
 		}
 		out.Commands = append(out.Commands, connectors.CommandSurfaceCommand{
-			Path:          cmd.Path,
-			Summary:       cmd.Summary,
-			Intent:        cmd.Intent,
-			Availability:  cmd.Availability,
-			Stream:        cmd.Stream,
-			Write:         cmd.Write,
-			Operation:     cmd.Operation,
-			SourceCLIPath: cmd.SourceCLIPath,
-			SourceURL:     cmd.SourceURL,
-			Flags:         flags,
-			Constraints:   commandSurfaceConstraints(cmd.Constraints),
-			Examples:      append([]string(nil), cmd.Examples...),
-			APISurface:    commandSurfaceEndpointRefs(cmd.APISurface),
-			OutputPolicy:  cmd.OutputPolicy,
-			RedactFields:  append([]string(nil), cmd.RedactFields...),
-			Risk:          cmd.Risk,
-			Approval:      cmd.Approval,
-			Notes:         cmd.Notes,
+			Path:            cmd.Path,
+			Summary:         cmd.Summary,
+			Intent:          cmd.Intent,
+			Availability:    cmd.Availability,
+			Stream:          cmd.Stream,
+			Write:           cmd.Write,
+			Operation:       cmd.Operation,
+			SourceOperation: cmd.SourceOperation,
+			SourceCLIPath:   cmd.SourceCLIPath,
+			SourceURL:       cmd.SourceURL,
+			Flags:           flags,
+			Constraints:     commandSurfaceConstraints(cmd.Constraints),
+			Examples:        append([]string(nil), cmd.Examples...),
+			APISurface:      commandSurfaceEndpointRefs(cmd.APISurface),
+			OutputPolicy:    cmd.OutputPolicy,
+			RedactFields:    append([]string(nil), cmd.RedactFields...),
+			Risk:            cmd.Risk,
+			Approval:        cmd.Approval,
+			Foundation:      commandSurfaceFoundation(cmd.Foundation),
+			Unsupported:     commandSurfaceUnsupported(cmd.Unsupported),
+			Notes:           cmd.Notes,
 		})
 	}
 	if commandSurfaceHasWriteIntent(out.Commands) {
@@ -1121,6 +1214,33 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 		})
 	}
 	return out
+}
+
+func commandSurfaceUnsupported(disposition *CommandUnsupportedDisposition) *connectors.CommandUnsupportedDisposition {
+	if disposition == nil {
+		return nil
+	}
+	return &connectors.CommandUnsupportedDisposition{
+		Reason: disposition.Reason,
+		Target: connectors.CommandUnsupportedTarget{
+			SourceID: disposition.Target.SourceID, ProviderOperationID: disposition.Target.ProviderOperationID,
+			Method: disposition.Target.Method, Path: disposition.Target.Path,
+		},
+	}
+}
+
+func commandSurfaceFoundation(foundation *CommandFoundation) *connectors.CommandFoundation {
+	if foundation == nil {
+		return nil
+	}
+	return &connectors.CommandFoundation{
+		ID: foundation.ID, Reason: foundation.Reason, Component: foundation.Component, Evidence: foundation.Evidence,
+		Target: connectors.CommandFoundationTarget{
+			SourceID: foundation.Target.SourceID, ProviderOperationID: foundation.Target.ProviderOperationID,
+			Binding:         connectors.CommandBindingIdentity{Kind: foundation.Target.Binding.Kind, ID: foundation.Target.Binding.ID},
+			DestructiveKind: foundation.Target.DestructiveKind, Method: foundation.Target.Method, Path: foundation.Target.Path,
+		},
+	}
 }
 
 func commandSurfaceHasWriteIntent(commands []connectors.CommandSurfaceCommand) bool {

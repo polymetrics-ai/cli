@@ -1,0 +1,31 @@
+{
+  "record": {
+    "data": {
+      "base_role_type": "member",
+      "description": "Fixture role",
+      "name": "Fixture role",
+      "workspace": "fixture-workspace"
+    },
+    "opt_fields": [
+      "base_role_type",
+      "creation_time"
+    ],
+    "opt_pretty": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/roles",
+    "body": {
+      "data": {
+        "base_role_type": "member",
+        "description": "Fixture role",
+        "name": "Fixture role",
+        "workspace": "fixture-workspace"
+      }
+    },
+    "query": {
+      "opt_fields": "base_role_type,creation_time",
+      "opt_pretty": "true"
+    }
+  }
+}

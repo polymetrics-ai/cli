@@ -819,13 +819,16 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 }
 
 func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
+	return runMaybeConnectorCommandWithRegistry(ctx, root, connectorName, args, stdout, stderr, jsonOut, appRegistry())
+}
+
+func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool, registry *connectors.Registry) error {
 	if err := safety.ValidateIdentifier(connectorName, "connector"); err != nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
 	if err := connectors.RejectLegacyConnectorName(connectorName); err != nil {
 		return err
 	}
-	registry := appRegistry()
 	connector, ok := registry.Get(connectorName)
 	if !ok {
 		return usageErrorf("unknown command %q", connectorName)
@@ -871,7 +874,26 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if err := validateConnectorLifecycleFlagValues(flags); err != nil {
 		return err
 	}
-	if err := commandrunner.Preflight(connector, path); err != nil {
+	config, err := keyValues(flags.values["config"])
+	if err != nil {
+		return err
+	}
+	if _, found := connectorSurfaceCommand(surface, strings.Join(path, " ")); !found {
+		return connectorCommandUsageError(surface, path)
+	}
+	var preparedCommandFlags map[string][]string
+	preflight := func() error {
+		resolvedFlags, resolveErr := resolveConnectorCommandEnvironmentOnlyFlags(surface, path, flags.values)
+		if resolveErr != nil {
+			return resolveErr
+		}
+		preparedCommandFlags = connectorCommandFlags(resolvedFlags)
+		return commandrunner.PreflightRequest(connector, commandrunner.Request{
+			Path: path, Flags: preparedCommandFlags, Config: connectors.RuntimeConfig{Config: config},
+			PlanContinuation: flags.first("plan") != "",
+		})
+	}
+	if err := preflight(); err != nil {
 		var blocked *commandrunner.BlockedCommandError
 		if errors.As(err, &blocked) {
 			if blocked.Reason == "unknown command" {
@@ -879,7 +901,32 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 			}
 			return connectorCommandBlockedError(blocked)
 		}
-		return err
+		var missingRequired *commandrunner.MissingRequiredFlagError
+		if errors.As(err, &missingRequired) {
+			return err
+		}
+		return validationErrorf("%v", err)
+	}
+	credential := flags.first("credential")
+	if credential == "" {
+		credential = flags.first("connection")
+	}
+	if command, found := connectorSurfaceCommand(surface, strings.Join(path, " ")); found && strings.TrimSpace(command.SourceOperation) != "" {
+		// First reject an explicitly supplied origin without consulting any
+		// project state. A persisted credential can only add a public default;
+		// it must not delay rejection of an untrusted command-line override.
+		if err := commandrunner.PreflightSourceBoundOrigin(connector, path, config); err != nil {
+			return err
+		}
+		if credential != "" {
+			preflightConfig, err := app.PublicCredentialConfiguration(root, connectorName, credential, config)
+			if err != nil {
+				return err
+			}
+			if err := commandrunner.PreflightSourceBoundOrigin(connector, path, preflightConfig); err != nil {
+				return err
+			}
+		}
 	}
 	approval, err := prepareReverseApprovalCarrier(flags, os.Stdin)
 	if err != nil {
@@ -887,11 +934,11 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	}
 	if approval.supplied {
 		return withReverseExecutionApp(root, func(a *app.App) error {
-			return runConnectorCommand(ctx, a, connectorName, args, approval, stdout, stderr, jsonOut)
+			return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
 		})
 	}
 	return withApp(root, func(a *app.App) error {
-		return runConnectorCommand(ctx, a, connectorName, args, approval, stdout, stderr, jsonOut)
+		return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
 	})
 }
 
@@ -1115,7 +1162,7 @@ func renderConnectorCommandDetail(connectorName string, connector connectors.Con
 // rather than from literals here, so runtime help and the generated
 // manual/skill/website docs cannot document different flags.
 func writeConnectorPageFlags(b *strings.Builder, cmd connectors.CommandSurfaceCommand) {
-	if cmd.Intent != "direct_read" {
+	if cmd.Intent != "direct_read" || strings.TrimSpace(cmd.Stream) != "" {
 		return
 	}
 	b.WriteString("\nPAGE FLAGS\n")
@@ -1290,7 +1337,7 @@ func connectorCommandSuggestion(surface *connectors.CommandSurface, path []strin
 	return ""
 }
 
-func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, approval reverseApprovalCarrier, stdout, stderr io.Writer, jsonOut bool) error {
+func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, preparedCommandFlags map[string][]string, approval reverseApprovalCarrier, stdout, stderr io.Writer, jsonOut bool) error {
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
@@ -1330,20 +1377,15 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if err != nil {
 		return err
 	}
-	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)
-	if !ok || surfaceProvider.CommandSurface() == nil {
-		return fmt.Errorf("connector %q has no command surface", connectorName)
-	}
-	resolvedFlags, err := resolveConnectorCommandEnvironmentOnlyFlags(surfaceProvider.CommandSurface(), path, flags.values)
-	if err != nil {
-		return err
-	}
 	// The page flags stay in commandFlags on purpose: only a direct_read can
 	// honour them, and the runner drops them for that intent alone. Stripping
 	// them here for every intent made `--page 3` on an ETL command
 	// accepted-and-ignored, which is the same quiet wrongness --page exists to
 	// remove.
-	commandFlags := connectorCommandFlags(resolvedFlags)
+	commandFlags := preparedCommandFlags
+	if commandFlags == nil {
+		return fmt.Errorf("connector command inputs were not preflighted")
+	}
 
 	if err := runConnectorWriteCommand(ctx, a, connectorName, credential, config, path, commandFlags, flags, stdout, jsonOut); err != commandrunner.ErrNotWriteCommand {
 		if err != nil {
@@ -1935,6 +1977,15 @@ func connectorCommandPlanForPath(a *app.App, planID, connectorName string, path 
 }
 
 func connectorCommandBlockedError(err error) error {
+	var blocked *commandrunner.BlockedCommandError
+	if errors.As(err, &blocked) && blocked.Failure != nil && blocked.Failure.Code() == "missing_foundation" {
+		return &cliError{
+			category: categoryInternal,
+			code:     "missing_foundation",
+			message:  blocked.Error(),
+			err:      err,
+		}
+	}
 	return &cliError{
 		category: categoryPolicy,
 		code:     "connector_command_blocked",
@@ -2293,6 +2344,9 @@ func runDocs(args []string, stdout io.Writer) error {
 	if len(args) == 0 {
 		return errUsage
 	}
+	if args[0] == "connector" {
+		return runDocsConnector(args[1:], stdout)
+	}
 	flags := parseFlags(args[1:])
 	switch args[0] {
 	case "generate":
@@ -2328,6 +2382,108 @@ func runDocs(args []string, stdout io.Writer) error {
 	default:
 		return errUsage
 	}
+}
+
+const docsConnectorHelp = `NAME
+  pm docs connector - generate or validate one connector's authored docs
+
+SYNOPSIS
+  pm docs connector generate --connector <name> [--connectors-dir <path>]
+  pm docs connector validate --connector <name> [--connectors-dir <path>]
+
+DESCRIPTION
+  Generates or validates only the named connector's MANUAL.md, SKILL.md, and
+  referenced icon asset. It does not rewrite other connector directories or
+  the all-connector README/catalog. Use pm docs generate and pm docs validate
+  for the full publication and full catalog validation pass.
+
+OPTIONS
+  --connector name        registered connector name
+  --connectors-dir path   connector docs root; default docs/connectors
+
+SECURITY
+  Generated docs contain no credentials.
+
+EXIT STATUS
+  0 success
+  1 runtime error
+  2 usage error
+`
+
+type docsConnectorOptions struct {
+	connector string
+	dir       string
+}
+
+func runDocsConnector(args []string, stdout io.Writer) error {
+	if len(args) == 0 {
+		_, _ = fmt.Fprint(stdout, docsConnectorHelp)
+		return nil
+	}
+
+	action := args[0]
+	opts, err := parseDocsConnectorOptions(args[1:])
+	if err != nil {
+		return err
+	}
+
+	switch action {
+	case "generate":
+		if err := writeSelectedConnectorDocs(opts.dir, opts.connector, appRegistry()); err != nil {
+			return err
+		}
+		_, _ = fmt.Fprintf(stdout, "Generated connector docs for %s in %s\n", opts.connector, opts.dir)
+		return nil
+	case "validate":
+		if err := validateSelectedConnectorDocs(opts.dir, opts.connector, appRegistry()); err != nil {
+			return err
+		}
+		_, _ = fmt.Fprintf(stdout, "Validated connector docs for %s in %s\n", opts.connector, opts.dir)
+		return nil
+	default:
+		return errUsage
+	}
+}
+
+func parseDocsConnectorOptions(args []string) (docsConnectorOptions, error) {
+	opts := docsConnectorOptions{dir: filepath.Join("docs", "connectors")}
+	connectorsDirSet := false
+	for index := 0; index < len(args); index++ {
+		arg := args[index]
+		name, value, hasValue := strings.Cut(arg, "=")
+		switch name {
+		case "--connector", "--connectors-dir":
+			if !hasValue {
+				if index+1 >= len(args) || strings.HasPrefix(args[index+1], "--") {
+					return docsConnectorOptions{}, fmt.Errorf("%s requires a value", name)
+				}
+				index++
+				value = args[index]
+			}
+			if strings.TrimSpace(value) == "" {
+				return docsConnectorOptions{}, fmt.Errorf("%s requires a non-empty value", name)
+			}
+			switch name {
+			case "--connector":
+				if opts.connector != "" {
+					return docsConnectorOptions{}, errors.New("--connector may be specified only once")
+				}
+				opts.connector = value
+			case "--connectors-dir":
+				if connectorsDirSet {
+					return docsConnectorOptions{}, errors.New("--connectors-dir may be specified only once")
+				}
+				opts.dir = value
+				connectorsDirSet = true
+			}
+		default:
+			return docsConnectorOptions{}, fmt.Errorf("unknown flag or argument %q", arg)
+		}
+	}
+	if opts.connector == "" {
+		return docsConnectorOptions{}, errors.New("missing --connector")
+	}
+	return opts, nil
 }
 
 func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {

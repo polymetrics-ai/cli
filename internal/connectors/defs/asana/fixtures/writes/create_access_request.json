@@ -1,0 +1,4 @@
+{
+  "record": { "data": { "target": "fixture-target" } },
+  "expect": { "method": "POST", "path": "/access_requests", "body": { "data": { "target": "fixture-target" } } }
+}

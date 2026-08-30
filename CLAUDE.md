@@ -1,2 +1,2 @@
-<!-- Points Claude at AGENTS.md via import; edit AGENTS.md, not this file. -->
+<!-- Imports AGENTS.md, including its Foundation Atlas policy; edit AGENTS.md, not this file. -->
 @AGENTS.md

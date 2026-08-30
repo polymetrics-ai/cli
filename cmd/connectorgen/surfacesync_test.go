@@ -642,6 +642,9 @@ func TestSyncRuntimeOperationEndpointLedgerCreatesCompactProjection(t *testing.T
 			t.Fatalf("write %s: %v", target, err)
 		}
 	}
+	if err := os.WriteFile(filepath.Join(root, "cli-surface", "certification.json"), []byte(`{"schema_version":"invalid"}`), 0o644); err != nil {
+		t.Fatalf("write malformed certification overlay: %v", err)
+	}
 
 	stats, err := syncRuntimeOperationEndpointLedger(root, false)
 	if err != nil {
@@ -703,6 +706,80 @@ func TestSyncRuntimeOperationEndpointLedgerCreatesCompactProjection(t *testing.T
 	}
 	if !stats.Changed {
 		t.Fatalf("malformed runtime endpoint ledger did not report replacement: %+v", stats)
+	}
+}
+
+func TestSyncRuntimeOperationEndpointLedgerConnectorPreservesUnselectedEntries(t *testing.T) {
+	root := t.TempDir()
+	for path, file := range operationCLISurfaceBundleFS(validOperationCLISurfaceJSON(), validOperationsJSON()) {
+		target := filepath.Join(root, filepath.FromSlash(path))
+		if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", target, err)
+		}
+		if err := os.WriteFile(target, file.Data, 0o644); err != nil {
+			t.Fatalf("write %s: %v", target, err)
+		}
+	}
+
+	const untouched = `{"unselected":[{"method":"GET","path":"/unchanged","kind":"rest_read","max_bytes":1024}]}`
+	ledgerPath := filepath.Join(root, "operation_endpoint_ledger.json")
+	if err := os.WriteFile(ledgerPath, []byte(untouched), 0o644); err != nil {
+		t.Fatalf("write existing runtime endpoint ledger: %v", err)
+	}
+
+	stats, err := syncRuntimeOperationEndpointLedgerConnector(root, "cli-surface", false)
+	if err != nil {
+		t.Fatalf("syncRuntimeOperationEndpointLedgerConnector: %v", err)
+	}
+	if !stats.Changed || stats.Entries != 1 {
+		t.Fatalf("stats = %+v, want one selected endpoint update", stats)
+	}
+
+	raw, err := os.ReadFile(ledgerPath)
+	if err != nil {
+		t.Fatalf("read runtime endpoint ledger: %v", err)
+	}
+	var ledger map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &ledger); err != nil {
+		t.Fatalf("decode runtime endpoint ledger: %v", err)
+	}
+	var unselected []map[string]any
+	if err := json.Unmarshal(ledger["unselected"], &unselected); err != nil {
+		t.Fatalf("decode unselected endpoint ledger entry: %v", err)
+	}
+	if len(unselected) != 1 || unselected[0]["method"] != "GET" || unselected[0]["path"] != "/unchanged" || unselected[0]["kind"] != "rest_read" || unselected[0]["max_bytes"] != float64(1024) {
+		t.Fatalf("unselected endpoint ledger entry = %#v, want preserved closed metadata", unselected)
+	}
+	if len(ledger["cli-surface"]) == 0 {
+		t.Fatal("selected connector was not added to runtime endpoint ledger")
+	}
+
+	stats, err = syncRuntimeOperationEndpointLedgerConnector(root, "cli-surface", true)
+	if err != nil {
+		t.Fatalf("syncRuntimeOperationEndpointLedgerConnector --check: %v", err)
+	}
+	if stats.Changed {
+		t.Fatalf("clean selected runtime endpoint ledger reported drift: %+v", stats)
+	}
+}
+
+func TestSurfaceSyncConnectorNamesSelectsOnlyRequestedDefinition(t *testing.T) {
+	root := t.TempDir()
+	for _, name := range []string{"gitlab", "unselected"} {
+		if err := os.Mkdir(filepath.Join(root, name), 0o755); err != nil {
+			t.Fatalf("mkdir %s: %v", name, err)
+		}
+	}
+
+	names, err := surfaceSyncConnectorNames(root, "gitlab")
+	if err != nil {
+		t.Fatalf("surfaceSyncConnectorNames selected connector: %v", err)
+	}
+	if got := strings.Join(names, ","); got != "gitlab" {
+		t.Fatalf("selected connector names = %q, want only gitlab", got)
+	}
+	if _, err := surfaceSyncConnectorNames(root, "missing"); err == nil {
+		t.Fatal("missing selected connector was accepted")
 	}
 }
 

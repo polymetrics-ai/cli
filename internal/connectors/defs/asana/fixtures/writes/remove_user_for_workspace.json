@@ -1,0 +1,4 @@
+{
+  "record": { "workspace_gid": "fixture-workspace", "data": { "user": "fixture-user" } },
+  "expect": { "method": "POST", "path": "/workspaces/fixture-workspace/removeUser", "body": { "data": { "user": "fixture-user" } } }
+}

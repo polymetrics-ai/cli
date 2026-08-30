@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "name": "Fixture category",
+      "workspace": "fixture-workspace"
+    },
+    "opt_fields": [
+      "color",
+      "is_archived"
+    ],
+    "opt_pretty": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/time_tracking_categories",
+    "body": {
+      "data": {
+        "name": "Fixture category",
+        "workspace": "fixture-workspace"
+      }
+    },
+    "query": {
+      "opt_fields": "color,is_archived",
+      "opt_pretty": "true"
+    }
+  }
+}

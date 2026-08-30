@@ -107,6 +107,69 @@ func TestOperationRoutesRejectConflictingBasesBeforeProviderIO(t *testing.T) {
 	}
 }
 
+func TestSourceBoundOperationRejectsConfiguredOriginBeforeAuthenticationOrIO(t *testing.T) {
+	var declaredHits, overrideHits atomic.Int64
+	declared := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { declaredHits.Add(1) }))
+	defer declared.Close()
+	override := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { overrideHits.Add(1) }))
+	defer override.Close()
+
+	bundle := routedOperationBundle(declared.URL)
+	specRaw, err := json.Marshal(map[string]any{
+		"type": "object",
+		"properties": map[string]any{
+			"base_url": map[string]any{"type": "string", "default": declared.URL + "/v2"},
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	bundle.Spec, err = CompileSchema(specRaw)
+	if err != nil {
+		t.Fatalf("compile declared test configuration: %v", err)
+	}
+	bundle.Operations[0].SourceOperation = &SourceOperationBinding{ID: "acme.rest.getRead", Method: http.MethodGet, Path: "/v3/read"}
+	admission := &capturingAuthenticationAdmission{}
+	_, err = New(bundle, nil).OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "acme.read",
+		Config: connectors.RuntimeConfig{
+			Config:                  map[string]string{"base_url": override.URL + "/v2"},
+			AuthenticationAdmission: admission,
+		},
+	})
+	if err == nil || !strings.Contains(err.Error(), "rejects configured base_url override") {
+		t.Fatalf("configured source-bound origin error = %v, want closed origin refusal", err)
+	}
+	if admission.calls != 0 || declaredHits.Load() != 0 || overrideHits.Load() != 0 {
+		t.Fatalf("origin override reached auth or I/O: auth=%d declared=%d override=%d", admission.calls, declaredHits.Load(), overrideHits.Load())
+	}
+
+	streamBundle := Bundle{
+		Name:    "acme-stream",
+		HTTP:    HTTPBase{URL: "{{ config.base_url }}", Pagination: &PaginationSpec{Type: "next_url", NextURLPath: "next"}},
+		Spec:    bundle.Spec,
+		Streams: []StreamSpec{{Name: "items", Path: "/items", Records: RecordsSpec{Path: "data"}, SchemaRef: "schemas/items.json"}},
+		Operations: []OperationSpec{{
+			ID: "acme.items", Kind: "stream_etl", SourceOperation: &SourceOperationBinding{ID: "acme.rest.getItems", Method: http.MethodGet, Path: "/items"},
+			Composite: &CompositeOperationSpec{Steps: []string{"stream:items"}},
+		}},
+	}
+	admission = &capturingAuthenticationAdmission{}
+	err = New(streamBundle, nil).Read(context.Background(), connectors.ReadRequest{
+		Stream: "items",
+		Config: connectors.RuntimeConfig{
+			Config:                  map[string]string{"base_url": override.URL + "/v2"},
+			AuthenticationAdmission: admission,
+		},
+	}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "rejects configured base_url override") {
+		t.Fatalf("configured source-bound stream origin error = %v, want closed origin refusal", err)
+	}
+	if admission.calls != 0 || declaredHits.Load() != 0 || overrideHits.Load() != 0 {
+		t.Fatalf("stream origin override reached auth or I/O: auth=%d declared=%d override=%d", admission.calls, declaredHits.Load(), overrideHits.Load())
+	}
+}
+
 func routedOperationBundle(baseURL string) Bundle {
 	return Bundle{
 		Name: "acme",

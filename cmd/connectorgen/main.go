@@ -4,6 +4,9 @@
 //	validate [dir] [--json]   loads and validates every bundle under dir
 //	                           (default internal/connectors/defs), exit 1 on
 //	                           any finding
+//	validate [dir] --connector <name> --require-operational-contract <profile>
+//	                           additionally proves one declared capability
+//	                           profile has a closed executable declaration
 //	boundary [repo] [--json] [--base <ref>]
 //	                           scans shared Go for connector-specific policy
 //	                           outside definition-owned locations
@@ -16,13 +19,16 @@
 //	                           (api_surface, output_policy, flag maps_to,
 //	                           rest.max_bytes) and the compact runtime
 //	                           direct-read endpoint ledger from bundle sources
+//	declaration-admission [dir] [--json]
+//	                           checks optional source-cited declaration
+//	                           sidecars without asserting runtime or live proof
 //	source-import <connector> --out <path> [--defs <dir>] [--check]
 //	                           verifies a connector-owned source lock and
 //	                           emits canonical provider contracts for later
 //	                           declaration materializers
 //	source-retain <connector> --retrieved-at <RFC3339> --license <text> --terms <text>
-//	                           explicitly obtains, verifies, and stores the
-//	                           bytes already pinned by a source lock
+//	                           explicitly obtains, verifies, and stores source
+//	                           bytes using the lock-selected identity
 //	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
 //	                           derives direct-read api_surface coverage and
 //	                           blocked reasons from runtime preflight
@@ -47,6 +53,8 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
+	"strings"
 )
 
 func main() {
@@ -72,10 +80,14 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runGen(args, stdout, stderr)
 	case "surface-sync":
 		return runSurfaceSync(args, stdout, stderr)
+	case "declaration-admission":
+		return runDeclarationAdmission(args, stdout, stderr)
 	case "params-import":
 		return runParamsImport(args, stdout, stderr)
 	case "source-import":
 		return runSourceImport(args, stdout, stderr)
+	case "source-materialize":
+		return runSourceMaterialize(args, stdout, stderr)
 	case "source-retain":
 		return runSourceRetain(args, stdout, stderr)
 	case "evidence-gate":
@@ -123,12 +135,14 @@ func logf(w io.Writer, format string, a ...any) {
 
 func usage() string {
 	return `usage:
-  connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs)
+	connectorgen validate [dir] [--json] [--connector <name> --require-operational-contract <check|read|write|declared>]   (default dir: internal/connectors/defs)
   connectorgen boundary [repo-root] [--json] [--base <ref>]
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
 	connectorgen gen
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
+	connectorgen declaration-admission [dir] [--json]  (default dir: internal/connectors/defs)
 	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
+	connectorgen source-materialize <connector> [--defs <dir>] [--check]
 	connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>
 	connectorgen evidence-gate <evidence-manifest.json> <TDD-LEDGER.md> <REVIEW.md>
 	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
@@ -139,7 +153,7 @@ func usage() string {
 	connectorgen certification-evidence (transport|change-capture) --connector <name> --report <path> --binary-sha <sha256> --from-env password=<ENV> --run-id <id> --record-prefix <id> [--repo-root <path>]
 	connectorgen certification-evidence report --connector <name> --report <path> --external-proof <path> --record-prefix <id> [--repo-root <path>]
 	connectorgen certification-evidence draft --draft <.tmp/live-certification/drafts/record.json> [--repo-root <path>]
-	connectorgen operation-evidence [repo-root] [--output <path>] [--fixed-100 <path>] [--check] [--write-fixed-100]
+	connectorgen operation-evidence [repo-root] [--connector <name> ... --output <path>] [--fixed-100 <path>] [--check] [--write-fixed-100]
 	connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
   connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
   connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]
@@ -150,17 +164,60 @@ func usage() string {
 func runValidate(args []string, stdout, stderr io.Writer) int {
 	dir := ""
 	asJSON := false
-	for _, a := range args[1:] {
+	connector := ""
+	connectorSet := false
+	profile := ""
+	profileSet := false
+	for index := 1; index < len(args); index++ {
+		a := args[index]
 		switch a {
 		case "--json":
 			asJSON = true
+		case "--connector", "--require-operational-contract":
+			if index+1 >= len(args) || strings.HasPrefix(args[index+1], "-") {
+				logf(stderr, "connectorgen validate: %s requires a value\n", a)
+				return 2
+			}
+			index++
+			value := args[index]
+			if strings.TrimSpace(value) == "" {
+				logf(stderr, "connectorgen validate: %s requires a non-empty value\n", a)
+				return 2
+			}
+			if a == "--connector" {
+				if connectorSet {
+					logln(stderr, "connectorgen validate: --connector may be specified only once")
+					return 2
+				}
+				connector = value
+				connectorSet = true
+			} else {
+				if profileSet {
+					logln(stderr, "connectorgen validate: --require-operational-contract may be specified only once")
+					return 2
+				}
+				profile = value
+				profileSet = true
+			}
 		default:
+			if strings.HasPrefix(a, "-") {
+				logf(stderr, "connectorgen validate: unknown flag %q\n", a)
+				return 2
+			}
 			if dir != "" {
 				logf(stderr, "connectorgen validate: unexpected extra argument %q\n", a)
 				return 2
 			}
 			dir = a
 		}
+	}
+	if profileSet && !connectorSet {
+		logln(stderr, "connectorgen validate: --require-operational-contract requires --connector")
+		return 2
+	}
+	if connectorSet && !namePattern.MatchString(connector) {
+		logf(stderr, "connectorgen validate: invalid connector name %q\n", connector)
+		return 2
 	}
 
 	if dir == "" {
@@ -172,10 +229,37 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
+	if connectorSet {
+		if isBundleDir(dir) {
+			if filepath.Base(filepath.Clean(dir)) != connector {
+				logln(stderr, "connectorgen validate:", sourceMaterializeBundleTargetMismatchError{Connector: connector, Target: filepath.Base(filepath.Clean(dir))})
+				return 2
+			}
+		} else {
+			dir = filepath.Join(dir, connector)
+		}
+	}
 	report, err := validatePath(dir)
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
+	}
+	if profileSet {
+		findings, gateErr := validateOperationalContractPath(dir, connector, profile)
+		if gateErr != nil {
+			logln(stderr, "connectorgen validate:", gateErr)
+			return 1
+		}
+		report.Findings = append(report.Findings, findings...)
+		sort.Slice(report.Findings, func(i, j int) bool {
+			if report.Findings[i].Connector != report.Findings[j].Connector {
+				return report.Findings[i].Connector < report.Findings[j].Connector
+			}
+			if report.Findings[i].File != report.Findings[j].File {
+				return report.Findings[i].File < report.Findings[j].File
+			}
+			return report.Findings[i].Rule < report.Findings[j].Rule
+		})
 	}
 
 	if asJSON {

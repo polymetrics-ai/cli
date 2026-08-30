@@ -5,27 +5,16 @@
       "family": "declarative_api",
       "id": "declarative_stream_source"
     },
-    "eligible_streams": [
-      "projects",
-      "groups",
-      "users",
-      "issues"
-    ],
-    "modes": [
-      "full_overwrite",
-      "full_append",
-      "incremental_upsert",
-      "incremental_dedupe",
-      "incremental_dedupe_history"
-    ],
+    "eligible_streams": ["projects", "groups", "users", "issues"],
+    "modes": ["full_overwrite", "full_append"],
     "delivery": {
       "idempotency": "at_least_once",
-      "ordering": "source_ordered",
+      "ordering": "unordered",
       "deletes": "not_available"
     },
     "conformance": {
-      "suite": "batch1_declarative_stream_transport",
-      "run_id": "gitlab_all_executable_streams_v1"
+      "suite": "declarative_stream_transport",
+      "run_id": "all_executable_streams_v1"
     }
   }
 }

@@ -22,33 +22,45 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 	"unicode/utf8"
 
 	"gopkg.in/yaml.v3"
 
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-// source-import turns a verified, connector-owned provider source into a
-// canonical intermediate descriptor. It intentionally owns no execution
-// controls: a connector name selects its checked-in lock, and that lock alone
-// supplies the artifact URL, byte count, and digest.
-const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check]
+// source-import turns a connector-owned provider source into a canonical
+// intermediate descriptor. It intentionally owns no execution controls: a
+// connector name selects its checked-in lock, and that lock alone supplies the
+// byte-backed artifact identity or an explicit declaration-only citation.
+const sourceImportUsage = `connectorgen source-import <connector> [--out <path>] [--defs <dir>] [--check] [--read-projection-only] [--materialize-eligible-lanes]
 
-Verifies the connector-owned source lock against its tracked retained artifact
-copy and writes canonical provider operation descriptors for later declaration
+Verifies a byte-backed connector-owned source lock against its tracked retained
+artifact copy, or projects an explicit declaration-only source reference, and
+writes canonical provider operation descriptors for later declaration
 generators. It never contacts a provider or a local cache.
 
   <connector>     connector whose sources/<connector>-operation-source-lock.json is used
   --out <path>    descriptor output path (default: connector-owned canonical descriptor)
   --defs <dir>    connector defs root (default internal/connectors/defs)
   --check         compare generated descriptors with --out; do not write
+  --read-projection-only
+                  verify or materialize only source-bound read declarations;
+                  preserve existing write contracts unchanged
+  --materialize-eligible-lanes
+                  materialize only source-complete fixed JSON GET and no-body
+                  scalar-path reverse-ETL contracts through existing runtimes
 
-The source lock is authoritative. A byte or SHA-256 mismatch requires a
-source-lock refresh; this command never accepts a replacement URL, method,
-path, header, body, credential, or generic request input. Version 3 locks may
-cite provider URLs with bounded queries, but the importer never fetches those
-citations: it reads only the retained content-addressed document artifacts.`
+The source lock is authoritative. A mismatch against its selected byte or
+canonical-JSON identity requires a source-lock refresh; this command never
+accepts a replacement URL, method, path, header, body, credential, or generic
+request input. A declaration-only source reference preserves the locked URL,
+digest, byte count, and operation identity but emits source_contract_unavailable
+instead of materializing an executable contract. Version 3 locks may cite
+provider URLs with bounded queries, but the importer never fetches citations:
+byte-backed locks read only retained content-addressed document artifacts.`
 
 const (
 	defaultSourceImportArtifactBytes = int64(16 << 20)
@@ -138,12 +150,80 @@ func defaultSourceImportLimits() sourceImportLimits {
 }
 
 type sourceImportArtifact struct {
-	SourceURL     string `json:"source_url"`
-	SHA256        string `json:"sha256"`
-	Bytes         int64  `json:"bytes"`
-	OpenAPI       string `json:"openapi,omitempty"`
-	Swagger       string `json:"swagger,omitempty"`
-	IdentityQuery bool   `json:"identity_query,omitempty"`
+	SourceURL       string `json:"source_url"`
+	SHA256          string `json:"sha256"`
+	Bytes           int64  `json:"bytes"`
+	OpenAPI         string `json:"openapi,omitempty"`
+	Swagger         string `json:"swagger,omitempty"`
+	IdentityQuery   bool   `json:"identity_query,omitempty"`
+	Identity        string `json:"identity,omitempty"`
+	CanonicalSHA256 string `json:"canonical_sha256,omitempty"`
+	// RetainExpectedContentType is document metadata carried only along the
+	// retain path. It is never accepted from or emitted into an artifact lock;
+	// source-retain may use an already-declared v3 document content type to
+	// recognise an HTML/error response before comparing pinned identity.
+	RetainExpectedContentType string `json:"-"`
+}
+
+// sourceImportRenderedReferenceCitationBinding names the hash-pinned capture
+// and locked extraction location that make a generic rendered publication URL
+// an exact operation citation. A fragment remains the simpler direct pointer.
+// The citation itself remains provenance only and is never fetched.
+type sourceImportRenderedReferenceCitationBinding struct {
+	CaptureURL     string `json:"capture_url"`
+	CaptureSHA256  string `json:"capture_sha256"`
+	CaptureBytes   int64  `json:"capture_bytes"`
+	SourceLocation string `json:"source_location"`
+}
+
+// sourceImportOperationEnrichment retains an exact provider-owned operation
+// fragment beside its source-lock identity. It is evidence only: source import
+// still derives executable provider facts from the hash-pinned artifact. The
+// OpenAPI grammar and provider extensions belong to that source, so forcing a
+// partial local mirror would silently drop valid provider facts. The enclosing
+// source-lock and operation-identity envelopes remain strictly decoded.
+type sourceImportOperationEnrichment struct {
+	Raw json.RawMessage `json:"-"`
+}
+
+func (enrichment *sourceImportOperationEnrichment) UnmarshalJSON(raw []byte) error {
+	preserved, err := sourceImportProviderObject(raw, "source_operation")
+	if err != nil {
+		return err
+	}
+	enrichment.Raw = preserved
+	return nil
+}
+
+// sourceImportSourceContractEnrichment retains an exact provider-owned source
+// contract alongside a legacy source lock. A structurally sufficient retained
+// contract is canonical mapping evidence: source import may parse it only after
+// the lock's exact identity inventory has been checked. Its source hash and raw
+// artifact remain provenance and verification evidence, not an admission gate.
+// Components and server variables remain provider grammar; they are carried
+// through the closed importer rather than flattened into a partial local model.
+type sourceImportSourceContractEnrichment struct {
+	Raw json.RawMessage `json:"-"`
+}
+
+func (contract *sourceImportSourceContractEnrichment) UnmarshalJSON(raw []byte) error {
+	preserved, err := sourceImportProviderObject(raw, "source_contract")
+	if err != nil {
+		return err
+	}
+	contract.Raw = preserved
+	return nil
+}
+
+func sourceImportProviderObject(raw []byte, name string) (json.RawMessage, error) {
+	var object map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &object); err != nil {
+		return nil, fmt.Errorf("%s must be an object: %w", name, err)
+	}
+	if object == nil {
+		return nil, fmt.Errorf("%s must be an object", name)
+	}
+	return append(json.RawMessage(nil), raw...), nil
 }
 
 type sourceImportRESTOperation struct {
@@ -154,18 +234,95 @@ type sourceImportRESTOperation struct {
 	OperationID    string `json:"operation_id"`
 	Deprecated     bool   `json:"deprecated"`
 	SourceLocation string `json:"source_location"`
-	CitationURL    string `json:"citation_url,omitempty"`
+	// SourceURL is populated only after decoding the separate legacy
+	// source-reference contract. Normal byte-backed and v3 operation wires must
+	// reject it rather than silently accepting reference-only provenance.
+	SourceURL       string                                        `json:"-"`
+	CitationURL     string                                        `json:"citation_url,omitempty"`
+	CitationBinding *sourceImportRenderedReferenceCitationBinding `json:"citation_binding,omitempty"`
+	SourceOperation *sourceImportOperationEnrichment              `json:"source_operation,omitempty"`
+}
+
+// sourceImportPathBridge is a closed source-to-declaration mapping rule. It
+// preserves the provider path on the descriptor while naming the exact
+// connector-relative route an already-declared runtime uses. It cannot accept
+// arbitrary substitutions, templates, queries, or per-call values.
+type sourceImportPathBridge struct {
+	SourcePrefix    string `json:"source_prefix"`
+	ConnectorPrefix string `json:"connector_prefix"`
 }
 
 type sourceImportREST struct {
 	sourceImportArtifact
-	Commit             string                          `json:"commit,omitempty"`
-	InfoVersion        string                          `json:"info_version,omitempty"`
-	Operations         []sourceImportRESTOperation     `json:"operations,omitempty"`
-	Retrieval          string                          `json:"-"`
-	OpenAPIVersions    []string                        `json:"-"`
-	CoverageConfidence *sourceImportCoverageConfidence `json:"-"`
-	SourceDocuments    []sourceImportRESTDocument      `json:"-"`
+	Commit      string                      `json:"commit,omitempty"`
+	InfoVersion string                      `json:"info_version,omitempty"`
+	Operations  []sourceImportRESTOperation `json:"operations,omitempty"`
+	PathBridge  *sourceImportPathBridge     `json:"path_bridge,omitempty"`
+	// CanonicalEvidence explicitly opts this legacy lock into source-contract
+	// reconstruction. Ordinary source-operation enrichment remains tied to the
+	// byte-pinned artifact and must not change that hash-verification path.
+	CanonicalEvidence bool `json:"canonical_evidence,omitempty"`
+	// These fields are internal projections of the separately decoded legacy
+	// cited-only contract. They must not widen ordinary v1/v2 byte-backed wire
+	// decoding.
+	SourceKind           string                            `json:"-"`
+	OperationCounts      map[string]int                    `json:"-"`
+	Supplements          []sourceImportRESTSupplement      `json:"-"`
+	Retrieval            string                            `json:"-"`
+	OpenAPIVersions      []string                          `json:"-"`
+	CoverageConfidence   *sourceImportCoverageConfidence   `json:"-"`
+	SourceDocuments      []sourceImportRESTDocument        `json:"-"`
+	EventSchemaInventory *sourceImportEventSchemaInventory `json:"-"`
+	BatchActionInventory *sourceImportBatchActionInventory `json:"-"`
+}
+
+// sourceImportRESTSupplement is a closed citation for an operation inventory
+// that augments a legacy source-reference lock. It is not an artifact reader:
+// its identity remains a provider-source citation until the original bytes are
+// retained through the ordinary byte-backed path.
+type sourceImportRESTSupplement struct {
+	sourceImportArtifact
+	SourceLocation string `json:"source_location"`
+	OperationCount int    `json:"operation_count"`
+}
+
+// sourceImportLegacyReferenceRESTOperation is the closed legacy cited-only
+// wire contract. Byte-backed legacy operations deliberately have no per-row
+// source URL: their selected source is the retained REST artifact.
+type sourceImportLegacyReferenceRESTOperation struct {
+	ID             string `json:"id"`
+	Protocol       string `json:"protocol"`
+	Method         string `json:"method"`
+	Path           string `json:"path"`
+	OperationID    string `json:"operation_id"`
+	Deprecated     bool   `json:"deprecated"`
+	SourceLocation string `json:"source_location"`
+	SourceURL      string `json:"source_url"`
+}
+
+func (operation sourceImportLegacyReferenceRESTOperation) sourceOperation() sourceImportRESTOperation {
+	return sourceImportRESTOperation{
+		ID:             operation.ID,
+		Protocol:       operation.Protocol,
+		Method:         operation.Method,
+		Path:           operation.Path,
+		OperationID:    operation.OperationID,
+		Deprecated:     operation.Deprecated,
+		SourceLocation: operation.SourceLocation,
+	}
+}
+
+// sourceImportRESTLegacyReference is selected only by the schema-v2
+// source_kind discriminator. Keep it separate from sourceImportREST so every
+// reference-only field remains unknown to ordinary byte-backed v1/v2 locks.
+type sourceImportRESTLegacyReference struct {
+	sourceImportArtifact
+	Commit          string                                     `json:"commit,omitempty"`
+	InfoVersion     string                                     `json:"info_version,omitempty"`
+	SourceKind      string                                     `json:"source_kind"`
+	OperationCounts map[string]int                             `json:"operation_counts"`
+	Supplements     []sourceImportRESTSupplement               `json:"supplements"`
+	Operations      []sourceImportLegacyReferenceRESTOperation `json:"operations"`
 }
 
 // sourceImportPublishedSource records the provider document cited by an
@@ -184,7 +341,18 @@ const (
 	sourceImportDocumentKindOpenAPI           = "openapi"
 	sourceImportDocumentKindRenderedReference = "rendered_reference"
 	sourceImportDocumentKindBundle            = "bundle"
+	sourceImportDocumentKindSourceReference   = "source_reference"
 	sourceImportDocumentKindUnavailable       = "unavailable"
+
+	// sourceImportLegacySourceReferenceKind is the already-retained Outreach
+	// declaration form. It is deliberately explicit: an ordinary v1/v2 lock
+	// retains its byte-backed importer semantics and cannot silently become a
+	// citation-only source.
+	sourceImportLegacySourceReferenceKind = "complete_machine_readable_specification_with_rendered_dynamic_supplement"
+
+	// sourceContractUnavailableFoundation is a truthful, source-owned runtime
+	// gap. It is neither a digest failure nor a credential/certification state.
+	sourceContractUnavailableFoundation = "source_contract_unavailable"
 )
 
 // sourceImportRESTDocument is a v3 document-owned REST inventory. The absent
@@ -197,6 +365,7 @@ type sourceImportRESTDocument struct {
 	Kind              string                      `json:"kind,omitempty"`
 	ContentType       string                      `json:"content_type,omitempty"`
 	Artifact          sourceImportArtifact        `json:"artifact"`
+	SourceReference   *sourceImportArtifact       `json:"source_reference,omitempty"`
 	PublishedSource   sourceImportPublishedSource `json:"published_source"`
 	InfoVersion       string                      `json:"info_version,omitempty"`
 	UnavailableReason string                      `json:"unavailable_reason,omitempty"`
@@ -214,9 +383,58 @@ func (document sourceImportRESTDocument) isUnavailable() bool {
 	return document.sourceKind() == sourceImportDocumentKindUnavailable
 }
 
+func (document sourceImportRESTDocument) isSourceReference() bool {
+	return document.sourceKind() == sourceImportDocumentKindSourceReference
+}
+
+func (document sourceImportRESTDocument) sourceArtifact() sourceImportArtifact {
+	if document.isSourceReference() && document.SourceReference != nil {
+		return *document.SourceReference
+	}
+	return document.Artifact
+}
+
 type sourceImportCoverageConfidence struct {
 	Level string `json:"level"`
 	Basis string `json:"basis"`
+}
+
+// sourceImportEventSchemaInventory is a closed, source-owned selector for the
+// small component-schema set an event transport needs. It intentionally keeps
+// provider schema bytes in the retained OpenAPI document rather than copying
+// opaque component fragments into the source lock.
+type sourceImportEventSchemaInventory struct {
+	SourceDocument string                            `json:"source_document"`
+	Schemas        []sourceImportEventSchemaSelector `json:"schemas"`
+}
+
+type sourceImportEventSchemaSelector struct {
+	Name           string `json:"name"`
+	SourceLocation string `json:"source_location"`
+}
+
+// sourceImportBatchActionInventory binds one provider-declared batch
+// operation to the exact retained request/action/response schemas and field
+// names used by the closed declared_batch executor. It contains selectors and
+// scalar provider facts only; provider schema bytes remain in the retained
+// source document and the connector definition continues to own the typed
+// allow-list of executable actions.
+type sourceImportBatchActionInventory struct {
+	SourceDocument           string                          `json:"source_document"`
+	SourceOperation          string                          `json:"source_operation"`
+	RequestSchema            sourceImportEventSchemaSelector `json:"request_schema"`
+	ActionSchema             sourceImportEventSchemaSelector `json:"action_schema"`
+	ResponseSchema           sourceImportEventSchemaSelector `json:"response_schema"`
+	MaxActions               int                             `json:"max_actions"`
+	MaxActionsSourceLocation string                          `json:"max_actions_source_location"`
+	ProviderMethods          []string                        `json:"provider_methods"`
+	RequestEnvelopeField     string                          `json:"request_envelope_field"`
+	RequestActionsField      string                          `json:"request_actions_field"`
+	ActionMethodField        string                          `json:"action_method_field"`
+	ActionPathField          string                          `json:"action_path_field"`
+	ActionDataField          string                          `json:"action_data_field"`
+	ResponseEnvelopeField    string                          `json:"response_envelope_field"`
+	ResponseStatusField      string                          `json:"response_status_field"`
 }
 
 type sourceGraphQLTypeRef struct {
@@ -267,6 +485,10 @@ type sourceGraphQLTypeSystem struct {
 
 type sourceImportGraphQL struct {
 	sourceImportArtifact
+	// DocumentID is the lock-owned identity for the retained GraphQL schema
+	// artifact. Unlike a field-derived operation ID, it remains stable for
+	// every query/mutation row that cites the same retained schema.
+	DocumentID       string                  `json:"document_id,omitempty"`
 	ProjectionSHA256 string                  `json:"projection_sha256,omitempty"`
 	ProjectionBytes  int64                   `json:"projection_bytes,omitempty"`
 	QueryFields      []sourceGraphQLField    `json:"query_fields"`
@@ -282,31 +504,49 @@ type sourceImportCounts struct {
 }
 
 type sourceImportLock struct {
-	SchemaVersion int                 `json:"schema_version"`
-	Connector     string              `json:"connector"`
-	CapturedAt    string              `json:"captured_at,omitempty"`
-	Rest          sourceImportREST    `json:"rest"`
-	GraphQL       sourceImportGraphQL `json:"graphql,omitempty"`
-	Counts        sourceImportCounts  `json:"counts,omitempty"`
+	SchemaVersion      int                                   `json:"schema_version"`
+	Connector          string                                `json:"connector"`
+	CapturedAt         string                                `json:"captured_at,omitempty"`
+	Rest               sourceImportREST                      `json:"rest"`
+	GraphQL            sourceImportGraphQL                   `json:"graphql,omitempty"`
+	Counts             sourceImportCounts                    `json:"counts,omitempty"`
+	SourceContract     *sourceImportSourceContractEnrichment `json:"-"`
+	Materialization    *sourceMaterialization                `json:"-"`
+	OperationsFound    sourceImportCounts                    `json:"-"`
+	CoverageConfidence *sourceImportCoverageConfidence       `json:"-"`
 }
 
 // sourceImportLockLegacy and sourceImportLockV3 keep strict wire decoding
 // versioned. In particular, a future schema must not inherit v2 semantics just
 // because its version number happens to be greater than two.
 type sourceImportLockLegacy struct {
-	SchemaVersion int                 `json:"schema_version"`
-	Connector     string              `json:"connector"`
-	CapturedAt    string              `json:"captured_at,omitempty"`
-	Rest          sourceImportREST    `json:"rest"`
-	GraphQL       sourceImportGraphQL `json:"graphql,omitempty"`
-	Counts        sourceImportCounts  `json:"counts,omitempty"`
+	SchemaVersion  int                                   `json:"schema_version"`
+	Connector      string                                `json:"connector"`
+	CapturedAt     string                                `json:"captured_at,omitempty"`
+	Rest           sourceImportREST                      `json:"rest"`
+	GraphQL        sourceImportGraphQL                   `json:"graphql,omitempty"`
+	Counts         sourceImportCounts                    `json:"counts,omitempty"`
+	SourceContract *sourceImportSourceContractEnrichment `json:"source_contract,omitempty"`
+}
+
+type sourceImportLockLegacyReference struct {
+	SchemaVersion      int                             `json:"schema_version"`
+	Connector          string                          `json:"connector"`
+	CapturedAt         string                          `json:"captured_at,omitempty"`
+	Rest               sourceImportRESTLegacyReference `json:"rest"`
+	GraphQL            sourceImportGraphQL             `json:"graphql,omitempty"`
+	Counts             sourceImportCounts              `json:"counts,omitempty"`
+	OperationsFound    sourceImportCounts              `json:"operations_found"`
+	CoverageConfidence *sourceImportCoverageConfidence `json:"coverage_confidence"`
 }
 
 type sourceImportRESTV3 struct {
-	Retrieval          string                          `json:"retrieval"`
-	OpenAPIVersions    []string                        `json:"openapi"`
-	CoverageConfidence *sourceImportCoverageConfidence `json:"coverage_confidence,omitempty"`
-	SourceDocuments    []sourceImportRESTDocument      `json:"source_documents"`
+	Retrieval            string                            `json:"retrieval"`
+	OpenAPIVersions      []string                          `json:"openapi"`
+	CoverageConfidence   *sourceImportCoverageConfidence   `json:"coverage_confidence,omitempty"`
+	SourceDocuments      []sourceImportRESTDocument        `json:"source_documents"`
+	EventSchemaInventory *sourceImportEventSchemaInventory `json:"event_schema_inventory,omitempty"`
+	BatchActionInventory *sourceImportBatchActionInventory `json:"batch_action_inventory,omitempty"`
 }
 
 type sourceImportLockV3 struct {
@@ -318,20 +558,53 @@ type sourceImportLockV3 struct {
 	Counts        sourceImportCounts  `json:"counts,omitempty"`
 }
 
+// sourceImportLockV4 deliberately keeps the verified source inventory wire
+// compatible with v3 and adds one closed materialization plan.  The plan is
+// decoded here (rather than as an untyped map in source-materialize) so a v4
+// lock cannot silently accept a future spelling or an accidental free-form
+// request field.
+type sourceImportLockV4 struct {
+	SchemaVersion   int                    `json:"schema_version"`
+	Connector       string                 `json:"connector"`
+	CapturedAt      string                 `json:"captured_at,omitempty"`
+	Rest            sourceImportRESTV3     `json:"rest"`
+	GraphQL         sourceImportGraphQL    `json:"graphql,omitempty"`
+	Counts          sourceImportCounts     `json:"counts,omitempty"`
+	Materialization *sourceMaterialization `json:"materialization"`
+}
+
 func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
 	var header struct {
 		SchemaVersion int `json:"schema_version"`
+		Rest          struct {
+			SourceKind string `json:"source_kind"`
+		} `json:"rest"`
 	}
 	if err := json.Unmarshal(raw, &header); err != nil {
 		return err
 	}
 	switch header.SchemaVersion {
-	case 1, 2:
+	case 1:
 		var legacy sourceImportLockLegacy
 		if err := decodeSourceStrictJSON(raw, &legacy); err != nil {
 			return err
 		}
-		*lock = sourceImportLock(legacy)
+		*lock = sourceImportLockFromLegacy(legacy)
+		return nil
+	case 2:
+		if header.Rest.SourceKind == "" {
+			var legacy sourceImportLockLegacy
+			if err := decodeSourceStrictJSON(raw, &legacy); err != nil {
+				return err
+			}
+			*lock = sourceImportLockFromLegacy(legacy)
+			return nil
+		}
+		var reference sourceImportLockLegacyReference
+		if err := decodeSourceStrictJSON(raw, &reference); err != nil {
+			return err
+		}
+		*lock = sourceImportLockFromLegacyReference(reference)
 		return nil
 	case 3:
 		var v3 sourceImportLockV3
@@ -343,17 +616,87 @@ func (lock *sourceImportLock) UnmarshalJSON(raw []byte) error {
 			Connector:     v3.Connector,
 			CapturedAt:    v3.CapturedAt,
 			Rest: sourceImportREST{
-				Retrieval:          v3.Rest.Retrieval,
-				OpenAPIVersions:    v3.Rest.OpenAPIVersions,
-				CoverageConfidence: v3.Rest.CoverageConfidence,
-				SourceDocuments:    v3.Rest.SourceDocuments,
+				Retrieval:            v3.Rest.Retrieval,
+				OpenAPIVersions:      v3.Rest.OpenAPIVersions,
+				CoverageConfidence:   v3.Rest.CoverageConfidence,
+				SourceDocuments:      v3.Rest.SourceDocuments,
+				EventSchemaInventory: v3.Rest.EventSchemaInventory,
+				BatchActionInventory: v3.Rest.BatchActionInventory,
 			},
 			GraphQL: v3.GraphQL,
 			Counts:  v3.Counts,
 		}
 		return nil
+	case 4:
+		materializationCount, err := sourceImportTopLevelFieldCount(raw, "materialization")
+		if err != nil {
+			return err
+		}
+		if materializationCount != 1 {
+			return fmt.Errorf("source lock v4 requires exactly one materialization block")
+		}
+		var v4 sourceImportLockV4
+		if err := decodeSourceStrictJSON(raw, &v4); err != nil {
+			return err
+		}
+		*lock = sourceImportLock{
+			SchemaVersion: v4.SchemaVersion,
+			Connector:     v4.Connector,
+			CapturedAt:    v4.CapturedAt,
+			Rest: sourceImportREST{
+				Retrieval:            v4.Rest.Retrieval,
+				OpenAPIVersions:      v4.Rest.OpenAPIVersions,
+				CoverageConfidence:   v4.Rest.CoverageConfidence,
+				SourceDocuments:      v4.Rest.SourceDocuments,
+				EventSchemaInventory: v4.Rest.EventSchemaInventory,
+				BatchActionInventory: v4.Rest.BatchActionInventory,
+			},
+			GraphQL:         v4.GraphQL,
+			Counts:          v4.Counts,
+			Materialization: v4.Materialization,
+		}
+		return nil
 	default:
 		return fmt.Errorf("source lock has unsupported schema version %d", header.SchemaVersion)
+	}
+}
+
+func sourceImportLockFromLegacy(legacy sourceImportLockLegacy) sourceImportLock {
+	return sourceImportLock{
+		SchemaVersion:  legacy.SchemaVersion,
+		Connector:      legacy.Connector,
+		CapturedAt:     legacy.CapturedAt,
+		Rest:           legacy.Rest,
+		GraphQL:        legacy.GraphQL,
+		Counts:         legacy.Counts,
+		SourceContract: legacy.SourceContract,
+	}
+}
+
+func sourceImportLockFromLegacyReference(reference sourceImportLockLegacyReference) sourceImportLock {
+	rest := sourceImportREST{
+		sourceImportArtifact: reference.Rest.sourceImportArtifact,
+		Commit:               reference.Rest.Commit,
+		InfoVersion:          reference.Rest.InfoVersion,
+		SourceKind:           reference.Rest.SourceKind,
+		OperationCounts:      reference.Rest.OperationCounts,
+		Supplements:          reference.Rest.Supplements,
+		Operations:           make([]sourceImportRESTOperation, 0, len(reference.Rest.Operations)),
+	}
+	for _, operation := range reference.Rest.Operations {
+		converted := operation.sourceOperation()
+		converted.SourceURL = operation.SourceURL
+		rest.Operations = append(rest.Operations, converted)
+	}
+	return sourceImportLock{
+		SchemaVersion:      reference.SchemaVersion,
+		Connector:          reference.Connector,
+		CapturedAt:         reference.CapturedAt,
+		Rest:               rest,
+		GraphQL:            reference.GraphQL,
+		Counts:             reference.Counts,
+		OperationsFound:    reference.OperationsFound,
+		CoverageConfidence: reference.CoverageConfidence,
 	}
 }
 
@@ -400,8 +743,12 @@ type sourceExecutionLimit struct {
 
 type sourceContractGap struct {
 	Foundation string `json:"foundation"`
-	Location   string `json:"location"`
-	Reason     string `json:"reason"`
+	// Phase identifies whether an operation-local source gap belongs to the
+	// request contract or the response declaration.  It is intentionally
+	// omitted for document-wide gaps which are not reached from one operation.
+	Phase    string `json:"phase,omitempty"`
+	Location string `json:"location"`
+	Reason   string `json:"reason"`
 }
 
 // sourceOperationCitation binds a manual declaration disposition to the exact
@@ -420,10 +767,21 @@ type sourceNonExecutableMutationDisposition struct {
 	Reason string                  `json:"reason"`
 }
 
+// sourcePartialMutationCoverageDisposition records the exact source operation
+// behind an already working, but source-incomplete declared mutation. It does
+// not change the action or command; it makes the missing shared request
+// foundation explicit at the source-operation granularity.
+type sourcePartialMutationCoverageDisposition struct {
+	Source     sourceOperationCitation `json:"source"`
+	Foundation string                  `json:"foundation"`
+	Reason     string                  `json:"reason"`
+}
+
 type sourceRuntimeReachability struct {
-	MergeBlocked          bool                                    `json:"merge_blocked"`
-	Gaps                  []sourceContractGap                     `json:"gaps,omitempty"`
-	NonExecutableMutation *sourceNonExecutableMutationDisposition `json:"non_executable_mutation,omitempty"`
+	MergeBlocked            bool                                      `json:"merge_blocked"`
+	Gaps                    []sourceContractGap                       `json:"gaps,omitempty"`
+	NonExecutableMutation   *sourceNonExecutableMutationDisposition   `json:"non_executable_mutation,omitempty"`
+	PartialCoverageMutation *sourcePartialMutationCoverageDisposition `json:"partial_coverage_mutation,omitempty"`
 }
 
 type sourceParameterWireDescriptor struct {
@@ -522,6 +880,7 @@ type sourceOperationDescriptor struct {
 	Source              sourceImportSource                `json:"source"`
 	Method              string                            `json:"method"`
 	Path                string                            `json:"path"`
+	MappingPath         string                            `json:"mapping_path,omitempty"`
 	Request             sourceRequestDescriptor           `json:"request"`
 	Responses           []sourceResponseDescriptor        `json:"responses"`
 	Output              sourceOutputDescriptor            `json:"output"`
@@ -530,6 +889,7 @@ type sourceOperationDescriptor struct {
 	AuthScopes          sourceAuthDescriptor              `json:"auth_scopes"`
 	Servers             sourceServerOverrides             `json:"servers"`
 	Runtime             sourceRuntimeReachability         `json:"runtime"`
+	BatchAction         *sourceImportBatchActionInventory `json:"batch_action,omitempty"`
 	GraphQL             *sourceGraphQLOperationDescriptor `json:"graphql,omitempty"`
 }
 
@@ -627,6 +987,26 @@ type sourceImportVerifiedArtifactFetcher interface {
 	FetchArtifact(context.Context, sourceImportArtifact) ([]byte, error)
 }
 
+// sourceRetainVerifiedArtifactFetcher is intentionally narrower than the
+// import fetcher contract: source retention validates only URL and identity
+// facts, while source import additionally validates form and inventory facts.
+type sourceRetainVerifiedArtifactFetcher interface {
+	FetchRetainArtifact(context.Context, sourceImportArtifact) ([]byte, error)
+}
+
+// sourceRetainArtifactFetchResult carries response evidence only as far as
+// source-retain's pre-identity classification. Source import deliberately
+// remains byte-only: MIME is not a substitute for its lock-selected form and
+// inventory validation.
+type sourceRetainArtifactFetchResult struct {
+	Raw         []byte
+	ContentType string
+}
+
+type sourceRetainResponseArtifactFetcher interface {
+	FetchRetainArtifactResponse(context.Context, sourceImportArtifact) (sourceRetainArtifactFetchResult, error)
+}
+
 func fetchSourceImportArtifact(ctx context.Context, fetcher sourceImportFetcher, artifact sourceImportArtifact) ([]byte, error) {
 	if verified, ok := fetcher.(sourceImportVerifiedArtifactFetcher); ok {
 		return verified.FetchArtifact(ctx, artifact)
@@ -634,12 +1014,24 @@ func fetchSourceImportArtifact(ctx context.Context, fetcher sourceImportFetcher,
 	return fetcher.Fetch(ctx, artifact.SourceURL)
 }
 
+func fetchSourceRetainArtifact(ctx context.Context, fetcher sourceImportFetcher, artifact sourceImportArtifact) (sourceRetainArtifactFetchResult, error) {
+	if responseFetcher, ok := fetcher.(sourceRetainResponseArtifactFetcher); ok {
+		return responseFetcher.FetchRetainArtifactResponse(ctx, artifact)
+	}
+	if verified, ok := fetcher.(sourceRetainVerifiedArtifactFetcher); ok {
+		raw, err := verified.FetchRetainArtifact(ctx, artifact)
+		return sourceRetainArtifactFetchResult{Raw: raw}, err
+	}
+	raw, err := fetchSourceImportArtifact(ctx, fetcher, artifact)
+	return sourceRetainArtifactFetchResult{Raw: raw}, err
+}
+
 func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLock, error) {
 	var lock sourceImportLock
 	if err := decodeSourceStrictJSON(raw, &lock); err != nil {
 		return sourceImportLock{}, fmt.Errorf("parse source lock: %w", err)
 	}
-	if lock.SchemaVersion != 1 && lock.SchemaVersion != 2 && lock.SchemaVersion != 3 {
+	if lock.SchemaVersion != 1 && lock.SchemaVersion != 2 && lock.SchemaVersion != 3 && lock.SchemaVersion != 4 {
 		return sourceImportLock{}, fmt.Errorf("source lock has unsupported schema version %d", lock.SchemaVersion)
 	}
 	if lock.Connector == "" {
@@ -651,7 +1043,7 @@ func parseSourceImportLock(raw []byte, expectedConnector string) (sourceImportLo
 	if err := validateSourceImportConnector(lock.Connector); err != nil {
 		return sourceImportLock{}, err
 	}
-	if lock.SchemaVersion < 3 {
+	if lock.SchemaVersion < 3 && !lock.isLegacySourceReference() {
 		if lock.Rest.IdentityQuery || lock.GraphQL.IdentityQuery {
 			return sourceImportLock{}, fmt.Errorf("source lock identity query declaration requires a v3 REST source document")
 		}
@@ -680,9 +1072,61 @@ func decodeSourceStrictJSON(raw []byte, target any) error {
 	return sourceJSONEOF(decoder)
 }
 
+// sourceImportTopLevelFieldCount closes a JSON decoder edge where duplicate
+// object keys otherwise overwrite earlier values. V4 has one plan-bearing
+// materialization block, so accepting two would make its provenance unclear.
+func sourceImportTopLevelFieldCount(raw []byte, field string) (int, error) {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	token, err := decoder.Token()
+	if err != nil {
+		return 0, err
+	}
+	if delimiter, ok := token.(json.Delim); !ok || delimiter != '{' {
+		return 0, fmt.Errorf("source lock must be a JSON object")
+	}
+	count := 0
+	for decoder.More() {
+		token, err := decoder.Token()
+		if err != nil {
+			return 0, err
+		}
+		key, ok := token.(string)
+		if !ok {
+			return 0, fmt.Errorf("source lock has non-string object key")
+		}
+		var value json.RawMessage
+		if err := decoder.Decode(&value); err != nil {
+			return 0, err
+		}
+		if key == field {
+			count++
+		}
+	}
+	if _, err := decoder.Token(); err != nil {
+		return 0, err
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err == nil {
+			return 0, fmt.Errorf("invalid JSON: multiple top-level values")
+		}
+		return 0, err
+	}
+	return count, nil
+}
+
 func validateSourceImportLockInventory(lock sourceImportLock) error {
-	if lock.SchemaVersion == 3 {
-		return validateSourceImportV3LockInventory(lock)
+	if lock.SchemaVersion >= 3 {
+		if err := validateSourceImportV3LockInventory(lock); err != nil {
+			return err
+		}
+		if lock.SchemaVersion == 4 {
+			return validateSourceMaterializationWire(lock)
+		}
+		return nil
+	}
+	if lock.isLegacySourceReference() {
+		return validateSourceImportLegacySourceReferenceInventory(lock)
 	}
 	restCount := len(lock.Rest.Operations)
 	if lock.Counts.REST != restCount {
@@ -735,6 +1179,149 @@ func validateSourceImportLockInventory(lock sourceImportLock) error {
 	return nil
 }
 
+func (lock sourceImportLock) isLegacySourceReference() bool {
+	return lock.SchemaVersion == 2 && lock.Rest.SourceKind != ""
+}
+
+// validateSourceImportLegacySourceReferenceInventory accepts the retained
+// pre-v3 Outreach declaration shape without weakening the normal legacy
+// importer. Its operation list is enough for source-to-declaration mapping;
+// it is deliberately insufficient for request/response materialization.
+func validateSourceImportLegacySourceReferenceInventory(lock sourceImportLock) error {
+	if lock.Rest.SourceKind != sourceImportLegacySourceReferenceKind {
+		return fmt.Errorf("source lock has unsupported source-reference kind %q", lock.Rest.SourceKind)
+	}
+	if lock.Rest.IdentityQuery || lock.GraphQL.IdentityQuery {
+		return fmt.Errorf("source-reference lock cannot declare identity queries")
+	}
+	if err := validateSourceImportArtifact(lock.Rest.sourceImportArtifact); err != nil {
+		return fmt.Errorf("source-reference primary citation: %w", err)
+	}
+	if lock.CoverageConfidence == nil || lock.CoverageConfidence.Level != lock.Rest.SourceKind {
+		return fmt.Errorf("source-reference lock coverage confidence must repeat its source kind")
+	}
+	if err := validateSourceImportCoverageConfidence(*lock.CoverageConfidence); err != nil {
+		return fmt.Errorf("source-reference lock has invalid coverage confidence: %w", err)
+	}
+	if len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) != 0 || lock.Counts.GraphQLQuery != 0 || lock.Counts.GraphQLMutation != 0 {
+		return fmt.Errorf("source-reference lock cannot declare a GraphQL inventory")
+	}
+	artifacts, err := sourceImportLegacyReferenceArtifacts(lock)
+	if err != nil {
+		return err
+	}
+	if len(lock.Rest.Operations) == 0 || len(lock.Rest.OperationCounts) == 0 {
+		return fmt.Errorf("source-reference lock has no operation inventory or counts")
+	}
+	counts := make(map[string]int, len(lock.Rest.OperationCounts))
+	seenIDs := make(map[string]bool, len(lock.Rest.Operations))
+	seenRoutes := make(map[string]bool, len(lock.Rest.Operations))
+	for _, operation := range lock.Rest.Operations {
+		if err := validateSourceImportReferenceOperation(operation); err != nil {
+			return fmt.Errorf("source-reference lock operation %q: %w", operation.ID, err)
+		}
+		if operation.SourceURL == "" {
+			return fmt.Errorf("source-reference lock has incomplete REST operation identity")
+		}
+		if seenIDs[operation.ID] {
+			return fmt.Errorf("source-reference lock duplicates REST operation identity %q", operation.ID)
+		}
+		seenIDs[operation.ID] = true
+		route := operation.Method + "\x00" + operation.Path
+		if seenRoutes[route] {
+			return fmt.Errorf("source-reference lock duplicates REST route %s %s", operation.Method, operation.Path)
+		}
+		seenRoutes[route] = true
+		if _, found := artifacts[operation.SourceURL]; !found {
+			return fmt.Errorf("source-reference lock operation %q cites an undeclared source URL", operation.ID)
+		}
+		counts[operation.Method]++
+	}
+	if lock.Counts.REST != len(lock.Rest.Operations) || lock.Counts.Total != lock.Counts.REST {
+		return fmt.Errorf("source-reference lock counts do not match REST operation inventory")
+	}
+	if lock.OperationsFound != lock.Counts {
+		return fmt.Errorf("source-reference lock operations_found does not match counts")
+	}
+	if len(counts) != len(lock.Rest.OperationCounts) {
+		return fmt.Errorf("source-reference lock operation counts do not match operation inventory")
+	}
+	for method, count := range lock.Rest.OperationCounts {
+		if !sourceImportReferenceHTTPMethod(method) || count <= 0 || counts[method] != count {
+			return fmt.Errorf("source-reference lock operation count for %q does not match operation inventory", method)
+		}
+	}
+	return nil
+}
+
+func sourceImportLegacyReferenceArtifacts(lock sourceImportLock) (map[string]sourceImportArtifact, error) {
+	artifacts := map[string]sourceImportArtifact{lock.Rest.SourceURL: lock.Rest.sourceImportArtifact}
+	for _, supplement := range lock.Rest.Supplements {
+		if supplement.SourceLocation == "" || !sourceImportReferenceText(supplement.SourceLocation, 4096) || supplement.OperationCount <= 0 {
+			return nil, fmt.Errorf("source-reference supplement has invalid source location or operation count")
+		}
+		if err := validateSourceImportArtifact(supplement.sourceImportArtifact); err != nil {
+			return nil, fmt.Errorf("source-reference supplement %q: %w", supplement.SourceURL, err)
+		}
+		if _, exists := artifacts[supplement.SourceURL]; exists {
+			return nil, fmt.Errorf("source-reference lock duplicates source URL %q", supplement.SourceURL)
+		}
+		artifacts[supplement.SourceURL] = supplement.sourceImportArtifact
+	}
+	for _, supplement := range lock.Rest.Supplements {
+		count := 0
+		for _, operation := range lock.Rest.Operations {
+			if operation.SourceURL == supplement.SourceURL {
+				if operation.SourceLocation != supplement.SourceLocation {
+					return nil, fmt.Errorf("source-reference operation %q citation location %q does not match supplement %q location %q", operation.ID, operation.SourceLocation, supplement.SourceURL, supplement.SourceLocation)
+				}
+				count++
+			}
+		}
+		if count != supplement.OperationCount {
+			return nil, fmt.Errorf("source-reference supplement %q operation count %d does not match %d operations", supplement.SourceURL, supplement.OperationCount, count)
+		}
+	}
+	return artifacts, nil
+}
+
+func sourceImportReferenceHTTPMethod(value string) bool {
+	switch value {
+	case http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete, http.MethodHead, http.MethodOptions:
+		return true
+	default:
+		return false
+	}
+}
+
+// validateSourceImportReferenceOperation closes the identity surface shared by
+// legacy cited-only inventories and schema-v3 source_reference documents. A
+// reference has no raw request contract to correct malformed identity later,
+// so its protocol, method, IDs, route, and source location must be canonical
+// at admission time.
+func validateSourceImportReferenceOperation(operation sourceImportRESTOperation) error {
+	if !sourceImportReferenceText(operation.ID, 1024) || operation.Protocol != "rest" || operation.Method == "" || operation.Method != strings.ToUpper(operation.Method) || operation.Path == "" || !sourceImportReferenceText(operation.SourceLocation, 4096) {
+		return fmt.Errorf("has incomplete or non-canonical REST operation identity")
+	}
+	if operation.OperationID != "" && !sourceImportReferenceText(operation.OperationID, 1024) {
+		return fmt.Errorf("has invalid provider operation ID")
+	}
+	if !sourceImportReferenceHTTPMethod(operation.Method) {
+		return fmt.Errorf("has unsupported HTTP method %q", operation.Method)
+	}
+	if err := validateSourceImportPath(operation.Path); err != nil {
+		return fmt.Errorf("has invalid path")
+	}
+	return nil
+}
+
+func sourceImportReferenceText(value string, limit int) bool {
+	if value == "" || value != strings.TrimSpace(value) || len(value) > limit {
+		return false
+	}
+	return !strings.ContainsFunc(value, unicode.IsControl)
+}
+
 func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 	if lock.Rest.Retrieval == "" || lock.Rest.Retrieval != strings.TrimSpace(lock.Rest.Retrieval) || len(lock.Rest.Retrieval) > 1024 || strings.ContainsAny(lock.Rest.Retrieval, "\r\n") {
 		return fmt.Errorf("source lock has invalid v3 REST retrieval metadata")
@@ -776,7 +1363,7 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 		seenDocuments[document.ID] = true
 		kind := document.sourceKind()
 		switch kind {
-		case sourceImportDocumentKindOpenAPI, sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle, sourceImportDocumentKindUnavailable:
+		case sourceImportDocumentKindOpenAPI, sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle, sourceImportDocumentKindSourceReference, sourceImportDocumentKindUnavailable:
 		default:
 			return fmt.Errorf("source lock v3 REST document %q has unsupported kind %q", document.ID, kind)
 		}
@@ -793,41 +1380,51 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 			}
 			continue
 		}
-		if err := validateSourceImportArtifact(document.Artifact); err != nil {
-			return fmt.Errorf("source lock v3 REST document %q has invalid artifact: %w", document.ID, err)
-		}
-		if err := validateSourceImportPublishedSource(document.PublishedSource); err != nil {
-			return fmt.Errorf("source lock v3 REST document %q has invalid published source: %w", document.ID, err)
-		}
-		switch kind {
-		case sourceImportDocumentKindOpenAPI:
-			if document.Artifact.Swagger != "" {
-				// Swagger 2.0 is a complete source description with its own form
-				// pin. It does not enter openapi_versions, which inventories only
-				// OpenAPI 3.0/3.1 documents.
-				break
-			}
-			openAPIDocuments++
-			if document.Artifact.OpenAPI == "" || !versions[document.Artifact.OpenAPI] {
-				return fmt.Errorf("source lock v3 REST document %q has an OpenAPI version outside the aggregate inventory", document.ID)
-			}
-		case sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle:
+		if kind == sourceImportDocumentKindSourceReference {
 			requiresCoverageConfidence = true
-			if document.Artifact.OpenAPI != "" || document.Artifact.Swagger != "" {
-				return fmt.Errorf("source lock v3 REST document %q kind %q must not declare an OpenAPI or Swagger version", document.ID, kind)
+			if err := validateSourceImportSourceReferenceDocument(document); err != nil {
+				return fmt.Errorf("source lock v3 source-reference document %q: %w", document.ID, err)
 			}
-			if err := validateSourceImportDocumentContentType(document.ContentType); err != nil {
-				return fmt.Errorf("source lock v3 REST document %q has invalid content type: %w", document.ID, err)
+		} else {
+			if document.SourceReference != nil {
+				return fmt.Errorf("source lock v3 REST document %q kind %q must not declare source_reference", document.ID, kind)
 			}
-			if err := validateSourceImportCapturedDocumentEvidence(document); err != nil {
-				return fmt.Errorf("source lock v3 REST document %q has invalid captured evidence: %w", document.ID, err)
+			if err := validateSourceImportArtifact(document.Artifact); err != nil {
+				return fmt.Errorf("source lock v3 REST document %q has invalid artifact: %w", document.ID, err)
 			}
-			if kind == sourceImportDocumentKindBundle && !sourceImportBundleContentType(document.ContentType) {
-				return fmt.Errorf("source lock v3 REST bundle document %q must declare an archive content type (application/zip, application/gzip, or application/x-gzip)", document.ID)
+			if err := validateSourceImportPublishedSource(document.PublishedSource); err != nil {
+				return fmt.Errorf("source lock v3 REST document %q has invalid published source: %w", document.ID, err)
+			}
+			switch kind {
+			case sourceImportDocumentKindOpenAPI:
+				if document.Artifact.Swagger != "" {
+					// Swagger 2.0 is a complete source description with its own form
+					// pin. It does not enter openapi_versions, which inventories only
+					// OpenAPI 3.0/3.1 documents.
+					break
+				}
+				openAPIDocuments++
+				if document.Artifact.OpenAPI == "" || !versions[document.Artifact.OpenAPI] {
+					return fmt.Errorf("source lock v3 REST document %q has an OpenAPI version outside the aggregate inventory", document.ID)
+				}
+			case sourceImportDocumentKindRenderedReference, sourceImportDocumentKindBundle:
+				requiresCoverageConfidence = true
+				if document.Artifact.OpenAPI != "" || document.Artifact.Swagger != "" {
+					return fmt.Errorf("source lock v3 REST document %q kind %q must not declare an OpenAPI or Swagger version", document.ID, kind)
+				}
+				if err := validateSourceImportDocumentContentType(document.ContentType); err != nil {
+					return fmt.Errorf("source lock v3 REST document %q has invalid content type: %w", document.ID, err)
+				}
+				if err := validateSourceImportCapturedDocumentEvidence(document); err != nil {
+					return fmt.Errorf("source lock v3 REST document %q has invalid captured evidence: %w", document.ID, err)
+				}
+				if kind == sourceImportDocumentKindBundle && !sourceImportBundleContentType(document.ContentType) {
+					return fmt.Errorf("source lock v3 REST bundle document %q must declare an archive content type (application/zip, application/gzip, or application/x-gzip)", document.ID)
+				}
 			}
 		}
 		if len(document.Operations) == 0 {
-			if kind == sourceImportDocumentKindOpenAPI {
+			if kind == sourceImportDocumentKindOpenAPI || kind == sourceImportDocumentKindSourceReference {
 				return fmt.Errorf("source lock v3 REST document %q has no operations", document.ID)
 			}
 			// A rendered page or archive can be retained as hash-pinned coverage
@@ -838,7 +1435,14 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 		}
 		for _, operation := range document.Operations {
 			restCount++
-			if operation.ID == "" || operation.Protocol != "rest" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" {
+			if kind == sourceImportDocumentKindSourceReference {
+				if err := validateSourceImportReferenceOperation(operation); err != nil {
+					return fmt.Errorf("source lock v3 source-reference operation %q: %w", operation.ID, err)
+				}
+				if operation.CitationURL != "" || operation.CitationBinding != nil {
+					return fmt.Errorf("source lock v3 source-reference operation %q must inherit its document citation", operation.ID)
+				}
+			} else if operation.ID == "" || operation.Protocol != "rest" || operation.Method == "" || operation.Path == "" || operation.SourceLocation == "" {
 				return fmt.Errorf("source lock has incomplete v3 REST operation identity")
 			}
 			if seenOperations[operation.ID] {
@@ -848,7 +1452,7 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 				return fmt.Errorf("source lock v3 REST operation %q has invalid path", operation.ID)
 			}
 			if kind == sourceImportDocumentKindRenderedReference {
-				if err := validateSourceImportRenderedReferenceCitation(operation.CitationURL, document.PublishedSource.SourceURL); err != nil {
+				if err := validateSourceImportRenderedReferenceCitation(operation, document); err != nil {
 					return fmt.Errorf("source lock v3 rendered-reference operation %q has invalid citation URL: %w", operation.ID, err)
 				}
 			}
@@ -874,10 +1478,411 @@ func validateSourceImportV3LockInventory(lock sourceImportLock) error {
 			return fmt.Errorf("source lock has invalid v3 REST coverage confidence: %w", err)
 		}
 	}
+	if err := validateSourceImportV3EventSchemaInventory(lock); err != nil {
+		return err
+	}
+	if err := validateSourceImportV3BatchActionInventory(lock); err != nil {
+		return err
+	}
 	if lock.Counts.REST != restCount || lock.Counts.Total != restCount+len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) {
 		return fmt.Errorf("source lock v3 counts do not match document inventories")
 	}
-	return validateSourceImportGraphQLInventory(lock)
+	if err := validateSourceImportGraphQLInventory(lock); err != nil {
+		return err
+	}
+	if lock.SchemaVersion == 4 && len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) > 0 && seenDocuments[lock.GraphQL.DocumentID] {
+		return fmt.Errorf("source lock v4 GraphQL document_id %q collides with REST source document ID %q; GraphQL and REST citations must retain distinct document identities", lock.GraphQL.DocumentID, lock.GraphQL.DocumentID)
+	}
+	return nil
+}
+
+func validateSourceImportV3EventSchemaInventory(lock sourceImportLock) error {
+	inventory := lock.Rest.EventSchemaInventory
+	if inventory == nil {
+		return nil
+	}
+	if !sourceImportDocumentID(inventory.SourceDocument) {
+		return fmt.Errorf("source lock v3 event schema inventory has invalid source document %q", inventory.SourceDocument)
+	}
+	var document *sourceImportRESTDocument
+	for index := range lock.Rest.SourceDocuments {
+		if lock.Rest.SourceDocuments[index].ID == inventory.SourceDocument {
+			document = &lock.Rest.SourceDocuments[index]
+			break
+		}
+	}
+	if document == nil {
+		return fmt.Errorf("source lock v3 event schema inventory references unknown source document %q", inventory.SourceDocument)
+	}
+	if document.sourceKind() != sourceImportDocumentKindOpenAPI {
+		return fmt.Errorf("source lock v3 event schema inventory source document %q is not an OpenAPI or Swagger document", inventory.SourceDocument)
+	}
+	if len(inventory.Schemas) == 0 {
+		return fmt.Errorf("source lock v3 event schema inventory has no schema selectors")
+	}
+	seenNames := make(map[string]bool, len(inventory.Schemas))
+	previousName := ""
+	for _, selector := range inventory.Schemas {
+		if !sourceImportEventSchemaName(selector.Name) {
+			return fmt.Errorf("source lock v3 event schema inventory has invalid schema name %q", selector.Name)
+		}
+		if seenNames[selector.Name] {
+			return fmt.Errorf("source lock v3 event schema inventory duplicates schema name %q", selector.Name)
+		}
+		if previousName != "" && previousName > selector.Name {
+			return fmt.Errorf("source lock v3 event schema inventory schema selectors are not sorted")
+		}
+		if selector.SourceLocation != sourceImportEventSchemaLocation(selector.Name) {
+			return fmt.Errorf("source lock v3 event schema inventory schema %q has non-canonical schema source location %q", selector.Name, selector.SourceLocation)
+		}
+		seenNames[selector.Name] = true
+		previousName = selector.Name
+	}
+	return nil
+}
+
+func sourceImportEventSchemaName(value string) bool {
+	if !sourceImportReferenceText(value, 1024) {
+		return false
+	}
+	for index, character := range value {
+		if (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z') || character == '_' {
+			continue
+		}
+		if index > 0 && ((character >= '0' && character <= '9') || character == '-' || character == '.') {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func sourceImportEventSchemaLocation(name string) string {
+	return `components.schemas["` + name + `"]`
+}
+
+func validateSourceImportV3BatchActionInventory(lock sourceImportLock) error {
+	inventory := lock.Rest.BatchActionInventory
+	if inventory == nil {
+		return nil
+	}
+	if !sourceImportDocumentID(inventory.SourceDocument) {
+		return fmt.Errorf("source lock v3 batch action inventory has invalid source document %q", inventory.SourceDocument)
+	}
+	var document *sourceImportRESTDocument
+	for index := range lock.Rest.SourceDocuments {
+		if lock.Rest.SourceDocuments[index].ID == inventory.SourceDocument {
+			document = &lock.Rest.SourceDocuments[index]
+			break
+		}
+	}
+	if document == nil {
+		return fmt.Errorf("source lock v3 batch action inventory references unknown source document %q", inventory.SourceDocument)
+	}
+	if document.sourceKind() != sourceImportDocumentKindOpenAPI {
+		return fmt.Errorf("source lock v3 batch action inventory source document %q is not an OpenAPI or Swagger document", inventory.SourceDocument)
+	}
+	var operation *sourceImportRESTOperation
+	for index := range document.Operations {
+		if document.Operations[index].ID == inventory.SourceOperation {
+			operation = &document.Operations[index]
+			break
+		}
+	}
+	if operation == nil {
+		return fmt.Errorf("source lock v3 batch action inventory references unknown source operation %q", inventory.SourceOperation)
+	}
+	if !strings.EqualFold(operation.Method, http.MethodPost) {
+		return fmt.Errorf("source lock v3 batch action inventory source operation %q must use POST", inventory.SourceOperation)
+	}
+	selectors := []struct {
+		role     string
+		selector sourceImportEventSchemaSelector
+	}{
+		{role: "request", selector: inventory.RequestSchema},
+		{role: "action", selector: inventory.ActionSchema},
+		{role: "response", selector: inventory.ResponseSchema},
+	}
+	seenSchemas := map[string]bool{}
+	for _, entry := range selectors {
+		if !sourceImportEventSchemaName(entry.selector.Name) {
+			return fmt.Errorf("source lock v3 batch action inventory has invalid %s schema name %q", entry.role, entry.selector.Name)
+		}
+		if entry.selector.SourceLocation != sourceImportEventSchemaLocation(entry.selector.Name) {
+			return fmt.Errorf("source lock v3 batch action inventory %s schema %q has non-canonical schema source location %q", entry.role, entry.selector.Name, entry.selector.SourceLocation)
+		}
+		if seenSchemas[entry.selector.Name] {
+			return fmt.Errorf("source lock v3 batch action inventory reuses schema %q", entry.selector.Name)
+		}
+		seenSchemas[entry.selector.Name] = true
+	}
+	if inventory.MaxActions < 1 || inventory.MaxActions > 64 {
+		return fmt.Errorf("source lock v3 batch action inventory max_actions must be between 1 and 64")
+	}
+	if _, ok := sourceImportBatchMaxActionsTag(inventory.MaxActionsSourceLocation); !ok {
+		return fmt.Errorf("source lock v3 batch action inventory has invalid max actions source location %q", inventory.MaxActionsSourceLocation)
+	}
+	if len(inventory.ProviderMethods) == 0 {
+		return fmt.Errorf("source lock v3 batch action inventory has no provider methods")
+	}
+	seenMethods := map[string]bool{}
+	for _, method := range inventory.ProviderMethods {
+		if method != strings.ToLower(method) {
+			return fmt.Errorf("source lock v3 batch action inventory provider method %q is not canonical", method)
+		}
+		switch method {
+		case "get", "post", "put", "delete", "patch", "head":
+		default:
+			return fmt.Errorf("source lock v3 batch action inventory has unsupported provider method %q", method)
+		}
+		if seenMethods[method] {
+			return fmt.Errorf("source lock v3 batch action inventory duplicates provider method %q", method)
+		}
+		seenMethods[method] = true
+	}
+	fields := []struct {
+		role  string
+		value string
+	}{
+		{role: "request envelope", value: inventory.RequestEnvelopeField},
+		{role: "request actions", value: inventory.RequestActionsField},
+		{role: "action method", value: inventory.ActionMethodField},
+		{role: "action path", value: inventory.ActionPathField},
+		{role: "action data", value: inventory.ActionDataField},
+		{role: "response envelope", value: inventory.ResponseEnvelopeField},
+		{role: "response status", value: inventory.ResponseStatusField},
+	}
+	for _, field := range fields {
+		if !sourceImportBatchFieldName(field.value) {
+			return fmt.Errorf("source lock v3 batch action inventory has invalid %s field %q", field.role, field.value)
+		}
+	}
+	if inventory.ActionMethodField == inventory.ActionPathField || inventory.ActionMethodField == inventory.ActionDataField || inventory.ActionPathField == inventory.ActionDataField {
+		return fmt.Errorf("source lock v3 batch action inventory action method, path, and data fields must be distinct")
+	}
+	return nil
+}
+
+func sourceImportBatchFieldName(value string) bool {
+	if value == "" || len(value) > 128 {
+		return false
+	}
+	for index, character := range value {
+		if (character >= 'a' && character <= 'z') || character == '_' || (index > 0 && character >= '0' && character <= '9') {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func sourceImportBatchMaxActionsTag(location string) (string, bool) {
+	const prefix = `tags["`
+	const suffix = `"].description`
+	if !strings.HasPrefix(location, prefix) || !strings.HasSuffix(location, suffix) {
+		return "", false
+	}
+	name := strings.TrimSuffix(strings.TrimPrefix(location, prefix), suffix)
+	if name == "" || strings.ContainsAny(name, "\"\\\r\n") {
+		return "", false
+	}
+	return name, true
+}
+
+// validateSourceImportV3EventSchemaResolution makes the selector useful at
+// import time. Structural admission above proves it can select only a declared
+// source document and a canonical components.schemas member; this check proves
+// that exact named component exists and is a source schema object in the
+// retained bytes.
+func validateSourceImportV3EventSchemaResolution(lock sourceImportLock, document sourceImportRESTDocument, source map[string]any) error {
+	inventory := lock.Rest.EventSchemaInventory
+	if inventory == nil || inventory.SourceDocument != document.ID {
+		return nil
+	}
+	components, ok := source["components"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("source lock v3 event schema inventory source document %q does not resolve components.schemas", document.ID)
+	}
+	schemas, ok := components["schemas"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("source lock v3 event schema inventory source document %q does not resolve components.schemas", document.ID)
+	}
+	for _, selector := range inventory.Schemas {
+		schema, ok := schemas[selector.Name]
+		if !ok {
+			return fmt.Errorf("source lock v3 event schema inventory selector %q at %q does not resolve to an object schema in document %q", selector.Name, selector.SourceLocation, document.ID)
+		}
+		if _, ok := schema.(map[string]any); !ok {
+			return fmt.Errorf("source lock v3 event schema inventory selector %q at %q does not resolve to an object schema in document %q", selector.Name, selector.SourceLocation, document.ID)
+		}
+	}
+	return nil
+}
+
+func validateSourceImportV3BatchActionResolution(lock sourceImportLock, document sourceImportRESTDocument, source map[string]any) error {
+	inventory := lock.Rest.BatchActionInventory
+	if inventory == nil || inventory.SourceDocument != document.ID {
+		return nil
+	}
+	components, ok := source["components"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("source lock v3 batch action inventory source document %q does not resolve components.schemas", document.ID)
+	}
+	schemas, ok := components["schemas"].(map[string]any)
+	if !ok {
+		return fmt.Errorf("source lock v3 batch action inventory source document %q does not resolve components.schemas", document.ID)
+	}
+	requestSchema, err := sourceImportBatchSchemaObject(schemas, inventory.RequestSchema, document.ID)
+	if err != nil {
+		return err
+	}
+	actionSchema, err := sourceImportBatchSchemaObject(schemas, inventory.ActionSchema, document.ID)
+	if err != nil {
+		return err
+	}
+	responseSchema, err := sourceImportBatchSchemaObject(schemas, inventory.ResponseSchema, document.ID)
+	if err != nil {
+		return err
+	}
+
+	var lockedOperation *sourceImportRESTOperation
+	for index := range document.Operations {
+		if document.Operations[index].ID == inventory.SourceOperation {
+			lockedOperation = &document.Operations[index]
+			break
+		}
+	}
+	if lockedOperation == nil {
+		return fmt.Errorf("source lock v3 batch action inventory references unknown source operation %q", inventory.SourceOperation)
+	}
+	paths, _ := source["paths"].(map[string]any)
+	pathItem, _ := paths[lockedOperation.Path].(map[string]any)
+	operation, _ := pathItem[strings.ToLower(lockedOperation.Method)].(map[string]any)
+	if operation == nil {
+		return fmt.Errorf("source lock v3 batch action inventory source operation %q does not resolve in document %q", inventory.SourceOperation, document.ID)
+	}
+	requestBody, _ := operation["requestBody"].(map[string]any)
+	if required, _ := requestBody["required"].(bool); !required {
+		return fmt.Errorf("source lock v3 batch action inventory source operation %q has no required request body", inventory.SourceOperation)
+	}
+	requestRoot := sourceImportBatchMediaSchema(requestBody["content"])
+	if !sourceImportBatchPropertyReferences(requestRoot, inventory.RequestEnvelopeField, inventory.RequestSchema.Name) {
+		return fmt.Errorf("source lock v3 batch action inventory request envelope field %q does not reference schema %q", inventory.RequestEnvelopeField, inventory.RequestSchema.Name)
+	}
+	requestProperties, _ := requestSchema["properties"].(map[string]any)
+	actions, _ := requestProperties[inventory.RequestActionsField].(map[string]any)
+	if actions == nil || sourceSchemaType(actions) != "array" || !sourceImportBatchReferenceNames(actions["items"], inventory.ActionSchema.Name) {
+		return fmt.Errorf("source lock v3 batch action inventory request actions field %q does not reference schema %q", inventory.RequestActionsField, inventory.ActionSchema.Name)
+	}
+	actionProperties, _ := actionSchema["properties"].(map[string]any)
+	for role, field := range map[string]string{"method": inventory.ActionMethodField, "path": inventory.ActionPathField, "data": inventory.ActionDataField} {
+		if _, exists := actionProperties[field]; !exists {
+			return fmt.Errorf("source lock v3 batch action inventory action %s field %q is absent", role, field)
+		}
+	}
+	actionRequired := sourceSchemaRequired(actionSchema)
+	if !actionRequired[inventory.ActionMethodField] || !actionRequired[inventory.ActionPathField] {
+		return fmt.Errorf("source lock v3 batch action inventory action method/path fields are not required")
+	}
+	methodSchema, _ := actionProperties[inventory.ActionMethodField].(map[string]any)
+	providerMethods := sourceImportBatchStringArray(methodSchema["enum"])
+	if !reflect.DeepEqual(providerMethods, inventory.ProviderMethods) {
+		return fmt.Errorf("source lock v3 batch action inventory provider methods do not match retained action schema")
+	}
+	responses, _ := operation["responses"].(map[string]any)
+	response200, _ := responses["200"].(map[string]any)
+	responseRoot := sourceImportBatchMediaSchema(response200["content"])
+	responseProperties, _ := responseRoot["properties"].(map[string]any)
+	responseEnvelope, _ := responseProperties[inventory.ResponseEnvelopeField].(map[string]any)
+	if responseEnvelope == nil || sourceSchemaType(responseEnvelope) != "array" || !sourceImportBatchReferenceNames(responseEnvelope["items"], inventory.ResponseSchema.Name) {
+		return fmt.Errorf("source lock v3 batch action inventory response envelope field %q does not reference schema %q", inventory.ResponseEnvelopeField, inventory.ResponseSchema.Name)
+	}
+	responseSchemaProperties, _ := responseSchema["properties"].(map[string]any)
+	statusSchema, _ := responseSchemaProperties[inventory.ResponseStatusField].(map[string]any)
+	if statusSchema == nil || sourceSchemaType(statusSchema) != "integer" {
+		return fmt.Errorf("source lock v3 batch action inventory response status field %q is not an integer", inventory.ResponseStatusField)
+	}
+	tagName, _ := sourceImportBatchMaxActionsTag(inventory.MaxActionsSourceLocation)
+	if !sourceImportBatchTagProvesMaxActions(source["tags"], tagName, inventory.MaxActions) {
+		return fmt.Errorf("source lock v3 batch action inventory max actions evidence at %q does not prove %d", inventory.MaxActionsSourceLocation, inventory.MaxActions)
+	}
+	return nil
+}
+
+func sourceImportBatchSchemaObject(schemas map[string]any, selector sourceImportEventSchemaSelector, documentID string) (map[string]any, error) {
+	raw, ok := schemas[selector.Name]
+	if !ok {
+		return nil, fmt.Errorf("source lock v3 batch action inventory selector %q at %q does not resolve to an object schema in document %q", selector.Name, selector.SourceLocation, documentID)
+	}
+	schema, ok := raw.(map[string]any)
+	if !ok || sourceSchemaType(schema) != "object" {
+		return nil, fmt.Errorf("source lock v3 batch action inventory selector %q at %q does not resolve to an object schema in document %q", selector.Name, selector.SourceLocation, documentID)
+	}
+	return schema, nil
+}
+
+func sourceImportBatchMediaSchema(raw any) map[string]any {
+	content, _ := raw.(map[string]any)
+	media, _ := content["application/json"].(map[string]any)
+	schema, _ := media["schema"].(map[string]any)
+	return schema
+}
+
+func sourceImportBatchPropertyReferences(schema map[string]any, field, schemaName string) bool {
+	properties, _ := schema["properties"].(map[string]any)
+	return sourceImportBatchReferenceNames(properties[field], schemaName)
+}
+
+func sourceImportBatchReferenceNames(raw any, schemaName string) bool {
+	schema, _ := raw.(map[string]any)
+	reference, _ := schema["$ref"].(string)
+	return reference == "#/components/schemas/"+schemaName
+}
+
+func sourceImportBatchStringArray(raw any) []string {
+	values, _ := raw.([]any)
+	out := make([]string, 0, len(values))
+	for _, value := range values {
+		text, ok := value.(string)
+		if !ok {
+			return nil
+		}
+		out = append(out, text)
+	}
+	return out
+}
+
+func sourceImportBatchTagProvesMaxActions(raw any, name string, maxActions int) bool {
+	tags, _ := raw.([]any)
+	for _, rawTag := range tags {
+		tag, _ := rawTag.(map[string]any)
+		if tag == nil || tag["name"] != name {
+			continue
+		}
+		description, _ := tag["description"].(string)
+		if !strings.Contains(strings.ToLower(description), "maximum") {
+			return false
+		}
+		for _, token := range strings.FieldsFunc(description, func(character rune) bool { return character < '0' || character > '9' }) {
+			if token == strconv.Itoa(maxActions) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func validateSourceImportSourceReferenceDocument(document sourceImportRESTDocument) error {
+	if document.SourceReference == nil {
+		return fmt.Errorf("source reference is required")
+	}
+	if document.Artifact != (sourceImportArtifact{}) || document.PublishedSource != (sourceImportPublishedSource{}) || document.ContentType != "" || document.UnavailableReason != "" {
+		return fmt.Errorf("source reference cannot mix with retained artifact, publication, content type, or unavailable capture fields")
+	}
+	if err := validateSourceImportArtifact(*document.SourceReference); err != nil {
+		return fmt.Errorf("source reference: %w", err)
+	}
+	return nil
 }
 
 func validateSourceImportDocumentContentType(value string) error {
@@ -965,10 +1970,16 @@ func validateSourceImportGraphQLInventory(lock sourceImportLock) error {
 	}
 	graphqlCount := len(lock.GraphQL.QueryFields) + len(lock.GraphQL.MutationFields)
 	if graphqlCount == 0 {
+		if lock.SchemaVersion == 4 && lock.GraphQL.DocumentID != "" {
+			return fmt.Errorf("source lock v4 GraphQL document_id requires a GraphQL inventory")
+		}
 		if lock.Counts.GraphQLQuery != 0 || lock.Counts.GraphQLMutation != 0 {
 			return fmt.Errorf("source lock GraphQL counts require a GraphQL inventory")
 		}
 		return nil
+	}
+	if lock.SchemaVersion == 4 && (lock.GraphQL.DocumentID == "" || lock.GraphQL.DocumentID != strings.ToLower(lock.GraphQL.DocumentID) || lock.GraphQL.DocumentID != strings.TrimSpace(lock.GraphQL.DocumentID) || !sourceImportDocumentID(lock.GraphQL.DocumentID)) {
+		return fmt.Errorf("source lock v4 GraphQL inventory requires a canonical document_id")
 	}
 	if err := validateSourceImportArtifact(lock.GraphQL.sourceImportArtifact); err != nil {
 		return fmt.Errorf("source lock has invalid GraphQL artifact: %w", err)
@@ -1009,6 +2020,33 @@ func validateSourceImportConnector(connector string) error {
 }
 
 func validateSourceImportArtifact(artifact sourceImportArtifact) error {
+	if err := validateSourceRetainArtifact(artifact); err != nil {
+		return err
+	}
+	if artifact.OpenAPI != "" && artifact.Swagger != "" {
+		return fmt.Errorf("source lock has ambiguous OpenAPI and Swagger form pins")
+	}
+	if artifact.OpenAPI != "" {
+		major, minor, ok := sourceOpenAPIMajorMinor(artifact.OpenAPI)
+		if !ok || major != 3 || (minor != 0 && minor != 1) {
+			return fmt.Errorf("source lock has unsupported OpenAPI form pin %q", artifact.OpenAPI)
+		}
+	}
+	if artifact.Swagger != "" && artifact.Swagger != "2.0" {
+		return fmt.Errorf("source lock has unsupported Swagger form pin %q", artifact.Swagger)
+	}
+	return nil
+}
+
+const (
+	sourceArtifactIdentityBytes         = "byte"
+	sourceArtifactIdentityCanonicalJSON = "canonical_json"
+)
+
+// validateSourceRetainArtifact deliberately validates only the facts needed to
+// fetch and preserve source bytes. Import adds document-form and complete
+// inventory checks after retained bytes are available.
+func validateSourceRetainArtifact(artifact sourceImportArtifact) error {
 	policy := batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery}
 	parsed, err := parseBatchArtifactURLWithPolicy(artifact.SourceURL, policy)
 	if err != nil {
@@ -1028,19 +2066,29 @@ func validateSourceImportArtifact(artifact sourceImportArtifact) error {
 	if _, err := hex.DecodeString(artifact.SHA256); err != nil {
 		return fmt.Errorf("source lock has invalid SHA-256: %w", err)
 	}
-	if artifact.OpenAPI != "" && artifact.Swagger != "" {
-		return fmt.Errorf("source lock has ambiguous OpenAPI and Swagger form pins")
-	}
-	if artifact.OpenAPI != "" {
-		major, minor, ok := sourceOpenAPIMajorMinor(artifact.OpenAPI)
-		if !ok || major != 3 || (minor != 0 && minor != 1) {
-			return fmt.Errorf("source lock has unsupported OpenAPI form pin %q", artifact.OpenAPI)
+	switch sourceArtifactIdentity(artifact) {
+	case sourceArtifactIdentityBytes:
+		if artifact.CanonicalSHA256 != "" {
+			return fmt.Errorf("source lock byte identity must not declare canonical SHA-256")
 		}
-	}
-	if artifact.Swagger != "" && artifact.Swagger != "2.0" {
-		return fmt.Errorf("source lock has unsupported Swagger form pin %q", artifact.Swagger)
+	case sourceArtifactIdentityCanonicalJSON:
+		if len(artifact.CanonicalSHA256) != sha256.Size*2 {
+			return fmt.Errorf("source lock canonical JSON identity has invalid SHA-256")
+		}
+		if _, err := hex.DecodeString(artifact.CanonicalSHA256); err != nil {
+			return fmt.Errorf("source lock canonical JSON identity has invalid SHA-256: %w", err)
+		}
+	default:
+		return fmt.Errorf("source lock has unsupported artifact identity %q", artifact.Identity)
 	}
 	return nil
+}
+
+func sourceArtifactIdentity(artifact sourceImportArtifact) string {
+	if artifact.Identity == "" {
+		return sourceArtifactIdentityBytes
+	}
+	return artifact.Identity
 }
 
 const (
@@ -1126,10 +2174,13 @@ func validateSourceImportBoundedQuery(parsed *url.URL, subject string, requireQu
 }
 
 // validateSourceImportRenderedReferenceCitation keeps an operation citation
-// constrained to the provider publication it documents. Source import never
+// constrained to the provider publication it documents and refuses a generic
+// rendered-reference page as proof of an exact operation. Source import never
 // fetches this URL: the captured artifact bytes and their SHA-256 are the
 // evidence, and a citation remains provenance only.
-func validateSourceImportRenderedReferenceCitation(raw, publishedRaw string) error {
+func validateSourceImportRenderedReferenceCitation(operation sourceImportRESTOperation, document sourceImportRESTDocument) error {
+	raw := operation.CitationURL
+	publishedRaw := document.PublishedSource.SourceURL
 	if raw == "" || raw != strings.TrimSpace(raw) || strings.ContainsAny(raw, "\r\n") {
 		return fmt.Errorf("citation must be a non-empty absolute HTTPS URL")
 	}
@@ -1146,6 +2197,30 @@ func validateSourceImportRenderedReferenceCitation(raw, publishedRaw string) err
 	canonicalCitation.RawFragment = ""
 	if err := validateSourceImportPublishedURL(canonicalCitation.String()); err != nil {
 		return fmt.Errorf("citation: %w", err)
+	}
+	binding := operation.CitationBinding
+	if binding != nil {
+		if binding.CaptureURL != document.PublishedSource.CaptureURL ||
+			!strings.EqualFold(binding.CaptureSHA256, document.PublishedSource.SHA256) ||
+			binding.CaptureBytes != document.PublishedSource.Bytes ||
+			binding.SourceLocation != operation.SourceLocation {
+			return fmt.Errorf("citation capture extraction binding does not match the locked document and operation")
+		}
+		if binding.CaptureURL == "" || binding.SourceLocation == "" || len(binding.CaptureSHA256) != sha256.Size*2 {
+			return fmt.Errorf("citation capture extraction binding is incomplete")
+		}
+		if _, err := hex.DecodeString(binding.CaptureSHA256); err != nil {
+			return fmt.Errorf("citation capture extraction binding has invalid SHA-256: %w", err)
+		}
+	}
+	if fragment := strings.TrimSpace(citation.Fragment); fragment != "" {
+		if fragment != strings.TrimPrefix(operation.SourceLocation, "#") {
+			return fmt.Errorf("citation fragment %q does not match locked operation extraction location %q", fragment, operation.SourceLocation)
+		}
+		return nil
+	}
+	if binding == nil {
+		return fmt.Errorf("citation must include an operation-specific fragment or a verified capture extraction binding")
 	}
 	return nil
 }
@@ -1183,9 +2258,6 @@ func importSourceLocks(ctx context.Context, locks []sourceImportLock, fetcher so
 }
 
 func importSourceLockResults(ctx context.Context, locks []sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits) (sourceImportResult, error) {
-	if fetcher == nil {
-		return sourceImportResult{}, fmt.Errorf("source importer has no fetcher")
-	}
 	if err := validateSourceImportLimits(limits); err != nil {
 		return sourceImportResult{}, err
 	}
@@ -1245,20 +2317,29 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	if err := validateSourceImportLimits(limits); err != nil {
 		return sourceImportResult{}, err
 	}
-	if fetcher == nil {
-		return sourceImportResult{}, fmt.Errorf("source importer has no fetcher")
-	}
 	if budget == nil {
 		return sourceImportResult{}, fmt.Errorf("source importer has no descriptor budget")
 	}
-	if lock.SchemaVersion != 1 && lock.SchemaVersion != 2 && lock.SchemaVersion != 3 {
+	if lock.SchemaVersion != 1 && lock.SchemaVersion != 2 && lock.SchemaVersion != 3 && lock.SchemaVersion != 4 {
 		return sourceImportResult{}, fmt.Errorf("source lock has unsupported schema version %d", lock.SchemaVersion)
 	}
 	if err := validateSourceImportConnector(lock.Connector); err != nil {
 		return sourceImportResult{}, err
 	}
-	if lock.SchemaVersion == 3 {
+	if err := validateSourceImportPathBridge(lock.Rest.PathBridge); err != nil {
+		return sourceImportResult{}, err
+	}
+	if sourceImportLockHasCanonicalEvidenceContract(lock) {
+		return importSourceLockCanonicalEvidence(ctx, lock, fetcher, limits, budget)
+	}
+	if fetcher == nil && !sourceImportLockIsReferenceOnly(lock) {
+		return sourceImportResult{}, fmt.Errorf("source importer has no fetcher")
+	}
+	if lock.SchemaVersion >= 3 {
 		return importSourceLockResultV3(ctx, lock, fetcher, limits, budget)
+	}
+	if lock.isLegacySourceReference() {
+		return importSourceLegacySourceReferenceLock(lock, limits, budget)
 	}
 	if err := validateSourceImportArtifact(lock.Rest.sourceImportArtifact); err != nil {
 		return sourceImportResult{}, err
@@ -1310,6 +2391,200 @@ func importSourceLockResultWithBudget(ctx context.Context, lock sourceImportLock
 	return result, nil
 }
 
+// sourceImportLockHasCanonicalEvidenceContract identifies the closed legacy
+// mapping form that can replace a separately retained source artifact. The
+// provider object is only eligible when the lock still owns a complete REST
+// inventory; source import validates the parsed result against that inventory
+// before it is admitted to descriptor mapping. Legacy source references remain
+// their own deliberately non-executable wire form.
+func sourceImportLockHasCanonicalEvidenceContract(lock sourceImportLock) bool {
+	return lock.SchemaVersion < 3 && !lock.isLegacySourceReference() && lock.Rest.CanonicalEvidence && lock.SourceContract != nil && len(bytes.TrimSpace(lock.SourceContract.Raw)) > 0 && len(lock.Rest.Operations) > 0
+}
+
+// importSourceLockCanonicalEvidence imports a provider contract already
+// retained in the source lock. It never fetches the provider URL and it never
+// validates the lock's raw-artifact hash against a duplicate local file: those
+// are provenance overlays. Closed parsing, bounded reference resolution, and
+// exact lock-to-contract identity reconciliation still apply before any
+// descriptor is returned.
+func importSourceLockCanonicalEvidence(ctx context.Context, lock sourceImportLock, fetcher sourceImportFetcher, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
+	if err := validateSourceImportArtifact(lock.Rest.sourceImportArtifact); err != nil {
+		return sourceImportResult{}, err
+	}
+	if lock.SourceContract == nil || len(bytes.TrimSpace(lock.SourceContract.Raw)) == 0 {
+		return sourceImportResult{}, fmt.Errorf("source lock has no retained canonical source contract")
+	}
+	if int64(len(lock.SourceContract.Raw)) > limits.MaxArtifactBytes {
+		return sourceImportResult{}, fmt.Errorf("canonical source contract byte limit exceeded")
+	}
+	doc, form, err := sourceImportCanonicalEvidenceDocument(lock)
+	if err != nil {
+		return sourceImportResult{}, fmt.Errorf("assemble retained canonical source contract: %w", err)
+	}
+	if err := validateSourceImportArtifactForm(lock.Rest.sourceImportArtifact, form); err != nil {
+		return sourceImportResult{}, fmt.Errorf("retained canonical source contract form: %w", err)
+	}
+	// Version 2 locks are provider-authoritative inventories. Preserve an exact
+	// descriptor and attach gaps only where the current closed runtime cannot
+	// faithfully express an otherwise locked provider contract.
+	limits.AllowSourceContractGaps = true
+	resolver := sourceReferenceResolver{root: doc, limits: limits, form: form}
+	result, err := importSourceDocumentResult(sourceImportDocumentContext{Lock: lock, Artifact: lock.Rest.sourceImportArtifact}, doc, form, &resolver, limits, budget)
+	if err != nil {
+		return sourceImportResult{}, err
+	}
+	result.DescriptorSchemaVersion = 2
+	if err := sourceImportApplyPathBridge(lock.Rest.PathBridge, &result); err != nil {
+		return sourceImportResult{}, err
+	}
+	if err := validateLockedRESTProjection(lock, result.Operations); err != nil {
+		return sourceImportResult{}, fmt.Errorf("retained canonical source contract: %w", err)
+	}
+	if err := appendLockedGraphQLProjection(ctx, lock, fetcher, limits, budget, &result); err != nil {
+		return sourceImportResult{}, err
+	}
+	sortSourceOperationDescriptors(result.Operations)
+	sortSourceInboundEventDescriptors(result.InboundEvents)
+	sortSourceExtensions(result.Extensions)
+	if err := validateSourceImportResultIdentities(result); err != nil {
+		return sourceImportResult{}, err
+	}
+	return result, nil
+}
+
+// sourceImportCanonicalEvidenceDocument reassembles the provider document from
+// the two exact legacy source-lock evidence channels: source_contract owns the
+// shared OpenAPI grammar, while source_operation owns each cited operation
+// fragment. Some providers retain a complete paths object in source_contract;
+// others, such as an OpenAPI document whose shared components are far larger
+// than a single operation, retain the paths as closed operation fragments. The
+// merge is structural and fails on conflicts, unknown shapes, or missing
+// operation evidence. It never uses a connector name or a provider URL branch.
+func sourceImportCanonicalEvidenceDocument(lock sourceImportLock) (map[string]any, sourceDocumentForm, error) {
+	if lock.SourceContract == nil {
+		return nil, sourceDocumentForm{}, fmt.Errorf("source lock has no retained canonical source contract")
+	}
+	doc, form, err := parseSourceImportDocument(lock.SourceContract.Raw)
+	if err != nil {
+		return nil, sourceDocumentForm{}, err
+	}
+	paths := map[string]any{}
+	if rawPaths, exists := doc["paths"]; exists {
+		declaredPaths, ok := rawPaths.(map[string]any)
+		if !ok {
+			return nil, sourceDocumentForm{}, fmt.Errorf("retained canonical source contract paths must be an object")
+		}
+		for path, item := range declaredPaths {
+			paths[path] = sourceCloneLiteral(item)
+		}
+	}
+	for _, locked := range lock.Rest.Operations {
+		if locked.SourceOperation == nil || len(bytes.TrimSpace(locked.SourceOperation.Raw)) == 0 {
+			continue
+		}
+		var rawOperation any
+		if err := decodeSourceJSON(locked.SourceOperation.Raw, &rawOperation); err != nil {
+			return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q: %w", locked.ID, err)
+		}
+		operation, ok := rawOperation.(map[string]any)
+		if !ok {
+			return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q must be an object", locked.ID)
+		}
+		// Legacy locks retain operation identity separately so provider operation
+		// fragments can omit the duplicated OpenAPI operationId member. Reinsert
+		// only that exact locked value; a conflicting provider fragment is source
+		// drift rather than a value the importer may choose.
+		if locked.OperationID != "" {
+			if existing, exists := operation["operationId"]; exists {
+				operationID, ok := existing.(string)
+				if !ok || operationID != locked.OperationID {
+					return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q operationId conflicts with source lock", locked.ID)
+				}
+			} else {
+				operation["operationId"] = locked.OperationID
+			}
+		}
+		pathItem, exists := paths[locked.Path]
+		if !exists {
+			pathItem = map[string]any{}
+			paths[locked.Path] = pathItem
+		}
+		item, ok := pathItem.(map[string]any)
+		if !ok {
+			return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q path item %q must be an object", locked.ID, locked.Path)
+		}
+		method := strings.ToLower(locked.Method)
+		if existing, exists := item[method]; exists {
+			if !reflect.DeepEqual(existing, operation) {
+				return nil, sourceDocumentForm{}, fmt.Errorf("source operation %q conflicts with retained canonical source contract", locked.ID)
+			}
+			continue
+		}
+		item[method] = operation
+	}
+	doc["paths"] = paths
+	return doc, form, nil
+}
+
+func validateSourceImportPathBridge(bridge *sourceImportPathBridge) error {
+	if bridge == nil {
+		return nil
+	}
+	if !sourceImportBridgePrefix(bridge.SourcePrefix, false) {
+		return errors.New("source path bridge has an invalid source_prefix")
+	}
+	if !sourceImportBridgePrefix(bridge.ConnectorPrefix, true) {
+		return errors.New("source path bridge has an invalid connector_prefix")
+	}
+	return nil
+}
+
+func sourceImportBridgePrefix(value string, allowEmpty bool) bool {
+	if value == "" {
+		return allowEmpty
+	}
+	if !strings.HasPrefix(value, "/") || value != strings.TrimSpace(value) || strings.ContainsAny(value, "?#{}\r\n") {
+		return false
+	}
+	return value == "/" || !strings.HasSuffix(value, "/")
+}
+
+func sourceImportApplyPathBridge(bridge *sourceImportPathBridge, result *sourceImportResult) error {
+	if result == nil || bridge == nil {
+		return nil
+	}
+	if err := validateSourceImportPathBridge(bridge); err != nil {
+		return err
+	}
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if operation.Protocol != "rest" {
+			continue
+		}
+		mapped, err := sourceImportBridgePathForOperation(*bridge, operation.Path)
+		if err != nil {
+			return fmt.Errorf("source operation %q: %w", operation.SourceID, err)
+		}
+		operation.MappingPath = mapped
+	}
+	return nil
+}
+
+func sourceImportBridgePathForOperation(bridge sourceImportPathBridge, sourcePath string) (string, error) {
+	if sourcePath != bridge.SourcePrefix && !strings.HasPrefix(sourcePath, bridge.SourcePrefix+"/") {
+		return "", fmt.Errorf("source path %q does not begin with bridge prefix %q", sourcePath, bridge.SourcePrefix)
+	}
+	suffix := strings.TrimPrefix(sourcePath, bridge.SourcePrefix)
+	mapped := bridge.ConnectorPrefix + suffix
+	if mapped == "" {
+		mapped = "/"
+	}
+	if validateSourceImportPath(mapped) != nil {
+		return "", fmt.Errorf("mapped connector path %q is invalid", mapped)
+	}
+	return mapped, nil
+}
+
 type sourceImportDocumentContext struct {
 	Lock     sourceImportLock
 	Artifact sourceImportArtifact
@@ -1317,10 +2592,11 @@ type sourceImportDocumentContext struct {
 }
 
 func (context sourceImportDocumentContext) lockedRESTOperation(method, path string) (sourceImportRESTOperation, bool) {
-	if context.Document == nil {
-		return sourceImportRESTOperation{}, false
+	operations := context.Lock.Rest.Operations
+	if context.Document != nil {
+		operations = context.Document.Operations
 	}
-	for _, operation := range context.Document.Operations {
+	for _, operation := range operations {
 		if strings.EqualFold(operation.Method, method) && operation.Path == path {
 			return operation, true
 		}
@@ -1336,27 +2612,48 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 		return sourceImportResult{}, fmt.Errorf("source document count limit exceeded")
 	}
 	remainingArtifactBytes := sourceImportTotalArtifactLimit(limits)
+	retainedDocuments := make([]sourceImportRESTDocument, 0, len(lock.Rest.SourceDocuments))
 	for _, document := range lock.Rest.SourceDocuments {
 		if document.isUnavailable() {
 			return sourceImportResult{}, fmt.Errorf("source document %q is unavailable: %s", document.ID, document.UnavailableReason)
+		}
+		if document.isSourceReference() {
+			continue
 		}
 		if document.Artifact.Bytes > remainingArtifactBytes {
 			return sourceImportResult{}, fmt.Errorf("source artifact corpus byte limit exceeded by document %q", document.ID)
 		}
 		remainingArtifactBytes -= document.Artifact.Bytes
+		retainedDocuments = append(retainedDocuments, document)
 	}
 	corpusContext, cancel := context.WithTimeout(ctx, defaultSourceImportCorpusTimeout)
 	defer cancel()
-	rawDocuments, err := fetchSourceImportV3Documents(corpusContext, lock.Rest.SourceDocuments, fetcher)
+	rawDocuments, err := fetchSourceImportV3Documents(corpusContext, retainedDocuments, fetcher)
 	if err != nil {
 		return sourceImportResult{}, err
 	}
 	// Version 3 is the immutable document-owned contract and therefore the
 	// first descriptor version that can make PM execution policy explicit
-	// without rewriting legacy canonical descriptor bytes.
+	// without rewriting legacy canonical descriptor bytes.  The source remains
+	// authoritative even where PM cannot yet execute one of its request
+	// contracts: retain that operation with a source-bound runtime gap instead
+	// of refusing to generate the complete locked inventory.  Execution
+	// envelopes still make the representable portion of the contract explicit.
+	limits.AllowSourceContractGaps = true
 	limits.UseExecutionEnvelopes = true
 	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: []sourceOperationDescriptor{}}
 	for _, document := range lock.Rest.SourceDocuments {
+		if document.isSourceReference() {
+			imported, err := importSourceReferenceDocument(lock, document, limits, budget)
+			if err != nil {
+				return sourceImportResult{}, err
+			}
+			if err := validateLockedRESTDocumentProjection(document, imported.Operations); err != nil {
+				return sourceImportResult{}, err
+			}
+			result.Operations = append(result.Operations, imported.Operations...)
+			continue
+		}
 		raw := rawDocuments[document.ID]
 		if kind := document.sourceKind(); kind == sourceImportDocumentKindRenderedReference || kind == sourceImportDocumentKindBundle {
 			if kind == sourceImportDocumentKindRenderedReference {
@@ -1381,6 +2678,12 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 		if err := validateSourceImportArtifactForm(document.Artifact, form); err != nil {
 			return sourceImportResult{}, fmt.Errorf("validate source document %q form: %w", document.ID, err)
 		}
+		if err := validateSourceImportV3EventSchemaResolution(lock, document, doc); err != nil {
+			return sourceImportResult{}, err
+		}
+		if err := validateSourceImportV3BatchActionResolution(lock, document, doc); err != nil {
+			return sourceImportResult{}, err
+		}
 		resolver := sourceReferenceResolver{root: doc, limits: limits, form: form}
 		documentContext := sourceImportDocumentContext{Lock: lock, Artifact: document.Artifact, Document: &document}
 		imported, err := importSourceDocumentResult(documentContext, doc, form, &resolver, limits, budget)
@@ -1388,6 +2691,9 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 			return sourceImportResult{}, fmt.Errorf("import source document %q: %w", document.ID, err)
 		}
 		if err := validateLockedRESTDocumentProjection(document, imported.Operations); err != nil {
+			return sourceImportResult{}, err
+		}
+		if err := sourceImportApplyV3BatchActionInventory(lock, document, &imported); err != nil {
 			return sourceImportResult{}, err
 		}
 		result.Operations = append(result.Operations, imported.Operations...)
@@ -1405,6 +2711,122 @@ func importSourceLockResultV3(ctx context.Context, lock sourceImportLock, fetche
 		return sourceImportResult{}, err
 	}
 	return result, nil
+}
+
+func sourceImportApplyV3BatchActionInventory(lock sourceImportLock, document sourceImportRESTDocument, result *sourceImportResult) error {
+	inventory := lock.Rest.BatchActionInventory
+	if inventory == nil || inventory.SourceDocument != document.ID {
+		return nil
+	}
+	for index := range result.Operations {
+		if result.Operations[index].SourceID != inventory.SourceOperation {
+			continue
+		}
+		contract := *inventory
+		contract.ProviderMethods = append([]string(nil), inventory.ProviderMethods...)
+		result.Operations[index].BatchAction = &contract
+		return nil
+	}
+	return fmt.Errorf("source lock v3 batch action inventory source operation %q was not imported from document %q", inventory.SourceOperation, document.ID)
+}
+
+func importSourceLegacySourceReferenceLock(lock sourceImportLock, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
+	if err := validateSourceImportLegacySourceReferenceInventory(lock); err != nil {
+		return sourceImportResult{}, err
+	}
+	artifacts, err := sourceImportLegacyReferenceArtifacts(lock)
+	if err != nil {
+		return sourceImportResult{}, err
+	}
+	countBudget, err := budget.countBudget(limits)
+	if err != nil {
+		return sourceImportResult{}, err
+	}
+	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: make([]sourceOperationDescriptor, 0, len(lock.Rest.Operations))}
+	for _, operation := range lock.Rest.Operations {
+		if err := countBudget.reserveOperations(1); err != nil {
+			return sourceImportResult{}, err
+		}
+		artifact := artifacts[operation.SourceURL]
+		descriptor := sourceImportReferenceOperation(lock.Connector, operation, artifact, sourceImportReferenceForm(artifact))
+		if err := budget.add(descriptor, "source-reference operation"); err != nil {
+			return sourceImportResult{}, err
+		}
+		result.Operations = append(result.Operations, descriptor)
+	}
+	sortSourceOperationDescriptors(result.Operations)
+	if err := validateSourceImportResultIdentities(result); err != nil {
+		return sourceImportResult{}, err
+	}
+	return result, nil
+}
+
+func importSourceReferenceDocument(lock sourceImportLock, document sourceImportRESTDocument, limits sourceImportLimits, budget *sourceImportBudget) (sourceImportResult, error) {
+	if document.SourceReference == nil {
+		return sourceImportResult{}, fmt.Errorf("source-reference document %q has no source reference", document.ID)
+	}
+	countBudget, err := budget.countBudget(limits)
+	if err != nil {
+		return sourceImportResult{}, err
+	}
+	result := sourceImportResult{DescriptorSchemaVersion: 3, Operations: make([]sourceOperationDescriptor, 0, len(document.Operations))}
+	for _, operation := range document.Operations {
+		if err := countBudget.reserveOperations(1); err != nil {
+			return sourceImportResult{}, err
+		}
+		descriptor := sourceImportReferenceOperation(lock.Connector, operation, *document.SourceReference, sourceImportReferenceForm(*document.SourceReference))
+		descriptor.Source.DocumentID = document.ID
+		if err := budget.add(descriptor, "source-reference operation"); err != nil {
+			return sourceImportResult{}, err
+		}
+		result.Operations = append(result.Operations, descriptor)
+	}
+	return result, nil
+}
+
+func sourceImportReferenceOperation(connector string, operation sourceImportRESTOperation, artifact sourceImportArtifact, form sourceDocumentForm) sourceOperationDescriptor {
+	return sourceOperationDescriptor{
+		Connector:           connector,
+		Protocol:            operation.Protocol,
+		SourceID:            operation.ID,
+		ProviderOperationID: operation.OperationID,
+		Source:              sourceImportReferenceProvenance(artifact, operation.SourceLocation, form),
+		Method:              strings.ToLower(operation.Method),
+		Path:                operation.Path,
+		Runtime: sourceRuntimeReachability{
+			MergeBlocked: true,
+			Gaps: []sourceContractGap{sourceContractGapFor(
+				sourceContractUnavailableFoundation,
+				"source operation "+operation.ID+" at "+artifact.SourceURL+"#"+operation.SourceLocation,
+				"canonical provider source is cited without retained bytes; request, response, pagination, authentication, and execution contract details are source_contract_unavailable",
+			)},
+		},
+	}
+}
+
+// sourceImportReferenceProvenance is the complete provenance a
+// declaration-only source reference can honestly project. Both source import
+// and descriptor validation use it so source_reference documents cannot drift
+// from the retained legacy-reference form by selecting the wrong artifact.
+func sourceImportReferenceProvenance(artifact sourceImportArtifact, location string, form sourceDocumentForm) sourceImportSource {
+	return sourceImportSource{
+		URL:      artifact.SourceURL,
+		SHA256:   strings.ToLower(artifact.SHA256),
+		Bytes:    artifact.Bytes,
+		Location: location,
+		Form:     form.Family,
+		Version:  form.Version,
+	}
+}
+
+func sourceImportReferenceForm(artifact sourceImportArtifact) sourceDocumentForm {
+	if artifact.OpenAPI != "" {
+		return sourceDocumentForm{Family: "openapi", Version: artifact.OpenAPI}
+	}
+	if artifact.Swagger != "" {
+		return sourceDocumentForm{Family: "swagger", Version: artifact.Swagger}
+	}
+	return sourceDocumentForm{Family: sourceImportDocumentKindSourceReference}
 }
 
 func validateSourceImportRenderedReferenceCapture(raw []byte) error {
@@ -1667,12 +3089,13 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 	schema := sourceGraphQLSchemaDescriptor{
 		Connector: lock.Connector,
 		Source: sourceImportSource{
-			URL:      lock.GraphQL.SourceURL,
-			SHA256:   strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
-			Bytes:    firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
-			Location: "graphql.type_system",
-			Form:     "graphql",
-			Version:  strconv.Itoa(lock.SchemaVersion),
+			DocumentID: lock.GraphQL.DocumentID,
+			URL:        lock.GraphQL.SourceURL,
+			SHA256:     strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
+			Bytes:      firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
+			Location:   "graphql.type_system",
+			Form:       "graphql",
+			Version:    strconv.Itoa(lock.SchemaVersion),
 		},
 		TypeSystem: lock.GraphQL.TypeSystem,
 	}
@@ -1691,12 +3114,13 @@ func appendLockedGraphQLProjection(ctx context.Context, lock sourceImportLock, f
 			Protocol:  "graphql",
 			SourceID:  fmt.Sprintf("%s.graphql.%s.%s", lock.Connector, kind, field.Name),
 			Source: sourceImportSource{
-				URL:      lock.GraphQL.SourceURL,
-				SHA256:   strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
-				Bytes:    firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
-				Location: location,
-				Form:     "graphql",
-				Version:  strconv.Itoa(lock.SchemaVersion),
+				DocumentID: lock.GraphQL.DocumentID,
+				URL:        lock.GraphQL.SourceURL,
+				SHA256:     strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)),
+				Bytes:      firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes),
+				Location:   location,
+				Form:       "graphql",
+				Version:    strconv.Itoa(lock.SchemaVersion),
 			},
 			Method:     "post",
 			Path:       "/graphql",
@@ -6081,6 +7505,7 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 			return sourceOperationDescriptor{}, fmt.Errorf("%s request: %w", location, err)
 		}
 	}
+	requestSchemaReferenceSiblingGapsEnd := len(resolver.schemaReferenceSiblingGaps)
 	responses, _, responseGaps, err := sourceResponses(location, operation, doc, form, resolver, limits, remainingDescriptorBytes)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s responses: %w", location, err)
@@ -6101,17 +7526,23 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 	if sourceID == "" {
 		sourceID = fmt.Sprintf("%s.rest.%s_%s", lock.Connector, method, path)
 	}
-	if documentContext.Document != nil {
+	if documentContext.Document != nil || len(lock.Rest.Operations) > 0 {
 		locked, exists := documentContext.lockedRESTOperation(method, path)
 		if !exists {
-			return sourceOperationDescriptor{}, fmt.Errorf("%s is not present in source document %q inventory", location, documentContext.Document.ID)
+			if documentContext.Document != nil {
+				return sourceOperationDescriptor{}, fmt.Errorf("%s is not present in source document %q inventory", location, documentContext.Document.ID)
+			}
+			return sourceOperationDescriptor{}, fmt.Errorf("%s is not present in source lock REST inventory", location)
 		}
 		if locked.OperationID != providerID || locked.SourceLocation != location {
-			return sourceOperationDescriptor{}, fmt.Errorf("%s disagrees with source document %q inventory", location, documentContext.Document.ID)
+			if documentContext.Document != nil {
+				return sourceOperationDescriptor{}, fmt.Errorf("%s disagrees with source document %q inventory", location, documentContext.Document.ID)
+			}
+			return sourceOperationDescriptor{}, fmt.Errorf("%s disagrees with source lock REST inventory", location)
 		}
 		sourceID = locked.ID
 	}
-	pagination, err := sourcePagination(operation, resolver)
+	pagination, err := sourcePagination(operation, responses, request.Query, resolver)
 	if err != nil {
 		return sourceOperationDescriptor{}, fmt.Errorf("%s: %w", location, err)
 	}
@@ -6163,7 +7594,8 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 	runtimeGaps = append(runtimeGaps, responseGaps...)
 	runtimeGaps = append(runtimeGaps, resolver.requestSchemaCycleGaps(request)...)
 	runtimeGaps = append(runtimeGaps, resolver.responseSchemaCycleGaps(responses)...)
-	runtimeGaps = append(runtimeGaps, resolver.schemaReferenceSiblingGaps[schemaReferenceSiblingGapsStart:]...)
+	runtimeGaps = append(runtimeGaps, sourceContractGapsWithPhase(resolver.schemaReferenceSiblingGaps[schemaReferenceSiblingGapsStart:requestSchemaReferenceSiblingGapsEnd], "request")...)
+	runtimeGaps = append(runtimeGaps, sourceContractGapsWithPhase(resolver.schemaReferenceSiblingGaps[requestSchemaReferenceSiblingGapsEnd:], "response")...)
 	runtimeGaps = sourceSortedGaps(runtimeGaps)
 	runtime := sourceRuntimeReachability{MergeBlocked: len(runtimeGaps) > 0, Gaps: runtimeGaps}
 	return sourceOperationDescriptor{
@@ -6183,6 +7615,18 @@ func importSourceOperation(documentContext sourceImportDocumentContext, doc map[
 		Servers:             servers,
 		Runtime:             runtime,
 	}, nil
+}
+
+func sourceContractGapsWithPhase(gaps []sourceContractGap, phase string) []sourceContractGap {
+	if len(gaps) == 0 {
+		return nil
+	}
+	qualified := make([]sourceContractGap, len(gaps))
+	copy(qualified, gaps)
+	for index := range qualified {
+		qualified[index].Phase = phase
+	}
+	return qualified
 }
 
 type sourceParameterValue struct {
@@ -6807,6 +8251,9 @@ func sourceRequestGaps(request sourceRequestDescriptor, form sourceDocumentForm,
 		if err := sourceProjectionSchemaGap(request.Body.Schema, form, limits); err != nil {
 			gaps = append(gaps, sourceContractGapFor("cli-request-schema-foundation-r1", "request body", err.Error()))
 		}
+		if gap := sourceProjectionP5NamedBodyEngineGap(request); gap != nil {
+			gaps = append(gaps, *gap)
+		}
 	}
 	for _, media := range request.Media {
 		if err := sourceProjectionSchemaGap(media.Schema, form, limits); err != nil {
@@ -6904,6 +8351,82 @@ func sourceProjectionSchemaGap(schema any, form sourceDocumentForm, limits sourc
 	// blockers such as unions and dynamic objects without error-string matching.
 	_, projectionErr := sourceProjectionSchema(schema)
 	return projectionErr
+}
+
+// sourceProjectionP5NamedBodyEngineGap keeps a source-open body visible when
+// its closed-root P5 projection would reach a JSON-Schema feature the existing
+// engine cannot compile. It is an importer classification only: the source
+// pattern is retained verbatim, no regex is rewritten or relaxed, and no new
+// runtime schema behavior is implied.
+func sourceProjectionP5NamedBodyEngineGap(request sourceRequestDescriptor) *sourceContractGap {
+	if request.Body == nil || !sourceJSONMediaType(sourceNormalizedMediaType(request.MediaType)) {
+		return nil
+	}
+	body, ok := request.Body.Schema.(map[string]any)
+	if !ok || sourceSchemaType(body) != "object" || body["additionalProperties"] == false {
+		return nil
+	}
+	if _, hasUnion := body["oneOf"]; hasUnion {
+		return nil
+	}
+	if _, hasUnion := body["anyOf"]; hasUnion {
+		return nil
+	}
+	for _, name := range sortedSourceMapKeys(sourceProjectionObjectProperties(body)) {
+		property := sourceProjectionObjectProperties(body)[name]
+		if sourceProjectionSchemaReadOnly(property) {
+			continue
+		}
+		projected, err := sourceProjectionSchema(property)
+		if err != nil {
+			projected, err = sourceProjectionBoundedNamedJSONSchema(property)
+		}
+		if err != nil {
+			continue
+		}
+		raw, err := json.Marshal(map[string]any{
+			"type":                 "object",
+			"additionalProperties": false,
+			"properties":           map[string]any{name: projected},
+		})
+		if err != nil {
+			return &sourceContractGap{Foundation: "cli-request-schema-foundation-r1", Location: "request body property " + name, Reason: "engine JSON-Schema projection could not encode named source field: " + err.Error()}
+		}
+		if _, err := engine.CompileSchema(raw); err != nil {
+			reason := "engine JSON-Schema compiler cannot compile closed named source field: " + err.Error()
+			if sourceProjectionSchemaContainsPattern(property) {
+				reason = "engine JSON-Schema regex compiler cannot compile source pattern: " + err.Error()
+			}
+			return &sourceContractGap{Foundation: "cli-request-schema-foundation-r1", Location: "request body property " + name, Reason: reason}
+		}
+	}
+	return nil
+}
+
+func sourceProjectionSchemaContainsPattern(raw any) bool {
+	schema, ok := raw.(map[string]any)
+	if !ok {
+		return false
+	}
+	if _, hasPattern := schema["pattern"]; hasPattern {
+		return true
+	}
+	for _, child := range sourceProjectionObjectProperties(schema) {
+		if sourceProjectionSchemaContainsPattern(child) {
+			return true
+		}
+	}
+	if items, exists := schema["items"]; exists && sourceProjectionSchemaContainsPattern(items) {
+		return true
+	}
+	for _, arms := range []any{schema["allOf"], schema["oneOf"], schema["anyOf"]} {
+		for _, arm := range sourceAnySlice(arms) {
+			if sourceProjectionSchemaContainsPattern(arm) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func sourceServerLayerHasFixedOrigin(layer sourceServerLayer) bool {
@@ -7088,6 +8611,9 @@ func sourceSortedGaps(gaps []sourceContractGap) []sourceContractGap {
 	sort.Slice(out, func(i, j int) bool {
 		if out[i].Foundation != out[j].Foundation {
 			return out[i].Foundation < out[j].Foundation
+		}
+		if out[i].Phase != out[j].Phase {
+			return out[i].Phase < out[j].Phase
 		}
 		if out[i].Location != out[j].Location {
 			return out[i].Location < out[j].Location
@@ -7869,10 +9395,10 @@ func sourceOutputForResponses(method string, responses []sourceResponseDescripto
 }
 
 func sourceSuccessfulResponseStatus(status string) bool {
-	if strings.EqualFold(status, "2XX") {
+	if strings.EqualFold(strings.TrimSpace(status), "2XX") {
 		return true
 	}
-	code, err := strconv.Atoi(status)
+	code, err := connsdk.NormalizeExactHTTPStatus(status)
 	return err == nil && code >= 200 && code < 300
 }
 
@@ -7908,21 +9434,138 @@ func sourceOutputClassForMediaType(mediaType string) (sourceOutputClass, error) 
 	return sourceOutputBinary, nil
 }
 
-func sourcePagination(operation map[string]any, resolver *sourceReferenceResolver) (any, error) {
+func sourcePagination(operation map[string]any, responses []sourceResponseDescriptor, query []sourceParameterDescriptor, resolver *sourceReferenceResolver) (any, error) {
 	var keys []string
 	for key := range operation {
 		if strings.Contains(strings.ToLower(key), "pagination") {
 			keys = append(keys, key)
 		}
 	}
-	if len(keys) == 0 {
-		return nil, nil
-	}
-	sort.Strings(keys)
 	if len(keys) > 1 {
+		sort.Strings(keys)
 		return nil, fmt.Errorf("ambiguous pagination metadata")
 	}
-	return resolver.resolve(operation[keys[0]])
+	if len(keys) == 1 {
+		return resolver.resolve(operation[keys[0]])
+	}
+	return sourceInferredNextURLPagination(responses, query), nil
+}
+
+// sourceInferredNextURLPagination recognizes the fully declared response
+// shape used by APIs such as Asana: a successful JSON envelope names a
+// next_page object whose uri member is an absolute URI.  It is deliberately
+// narrower than guessing from parameter names or prose, so it cannot turn a
+// generic response link into an ETL claim.  The returned dialect is the
+// engine's closed next_url paginator and contains only provider-owned field
+// names from the retained response schema.
+func sourceInferredNextURLPagination(responses []sourceResponseDescriptor, query []sourceParameterDescriptor) any {
+	paths := map[string]bool{}
+	for _, response := range responses {
+		if !sourceSuccessfulResponseStatus(response.Status) {
+			continue
+		}
+		declaration, ok := response.Declaration.(map[string]any)
+		if !ok {
+			continue
+		}
+		content, ok := declaration["content"].(map[string]any)
+		if !ok {
+			continue
+		}
+		for mediaType, rawMedia := range content {
+			if !sourceJSONMediaType(mediaType) {
+				continue
+			}
+			media, ok := rawMedia.(map[string]any)
+			if !ok {
+				continue
+			}
+			if path, found := sourceNextPageURIPath(media["schema"]); found {
+				paths[path] = true
+			}
+		}
+	}
+	if len(paths) != 1 {
+		return nil
+	}
+	for path := range paths {
+		pagination := map[string]any{"type": "next_url", "next_url_path": path}
+		if pageSize, ok := sourceInferredNextURLLimitOffsetPageSize(query); ok {
+			// The source response owns continuation through next_page.uri, but
+			// Asana's source contract produces that URI only after an initial
+			// bounded limit request. These remain engine-owned pagination
+			// controls, never raw command flags: size_param drives page one and
+			// offset_param admits the provider-returned continuation URL.
+			pagination["size_param"] = "limit"
+			pagination["limit_param"] = "limit"
+			pagination["offset_param"] = "offset"
+			pagination["page_size"] = pageSize
+		}
+		return pagination
+	}
+	return nil
+}
+
+// sourceInferredNextURLLimitOffsetPageSize recognizes the exact bounded
+// limit/offset pair behind a next_page.uri response. The response shape proves
+// the continuation authority; the two typed query declarations prove which
+// source-owned controls the declarative engine may send and subsequently admit
+// in that returned URL. This narrow derivation deliberately does not infer a
+// pager from parameter names alone.
+func sourceInferredNextURLLimitOffsetPageSize(query []sourceParameterDescriptor) (int, bool) {
+	var limit, offset *sourceParameterDescriptor
+	for index := range query {
+		parameter := &query[index]
+		switch parameter.Name {
+		case "limit":
+			limit = parameter
+		case "offset":
+			offset = parameter
+		}
+	}
+	if limit == nil || offset == nil || !sourceScalarWireSchema(offset.Schema) {
+		return 0, false
+	}
+	schema, ok := limit.Schema.(map[string]any)
+	if !ok || schema["type"] != "integer" {
+		return 0, false
+	}
+	maximum := sourcePositiveInteger(schema["maximum"])
+	if maximum <= 0 || maximum > int64(math.MaxInt) {
+		return 0, false
+	}
+	return int(maximum), true
+}
+
+func sourceNextPageURIPath(schema any) (string, bool) {
+	root, ok := schema.(map[string]any)
+	if !ok {
+		return "", false
+	}
+	properties, ok := root["properties"].(map[string]any)
+	if !ok {
+		return "", false
+	}
+	for _, name := range sortedSourceMapKeys(properties) {
+		normalized := strings.ReplaceAll(strings.ReplaceAll(strings.ToLower(name), "_", ""), "-", "")
+		if normalized != "nextpage" {
+			continue
+		}
+		nextPage, ok := properties[name].(map[string]any)
+		if !ok || nextPage["type"] != "object" {
+			continue
+		}
+		nextProperties, ok := nextPage["properties"].(map[string]any)
+		if !ok {
+			continue
+		}
+		uri, ok := nextProperties["uri"].(map[string]any)
+		if !ok || uri["type"] != "string" || uri["format"] != "uri" {
+			continue
+		}
+		return name + ".uri", true
+	}
+	return "", false
 }
 
 func sourceServerLayerFrom(object map[string]any) (sourceServerLayer, error) {
@@ -8315,11 +9958,13 @@ func marshalSourceImportResult(result sourceImportResult) ([]byte, error) {
 }
 
 type sourceImportOptions struct {
-	Connector string
-	DefsDir   string
-	Output    string
-	CacheDir  string
-	Check     bool
+	Connector                string
+	DefsDir                  string
+	Output                   string
+	CacheDir                 string
+	Check                    bool
+	ReadProjectionOnly       bool
+	MaterializeEligibleLanes bool
 }
 
 func runSourceImport(args []string, stdout, stderr io.Writer) int {
@@ -8369,6 +10014,9 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import:", err)
 		return 1
 	}
+	if opts.ReadProjectionOnly {
+		return runSourceImportReadProjection(opts, result, stdout, stderr)
+	}
 	surface, err := sourceProjectionExecutionSurface(filepath.Join(opts.DefsDir, opts.Connector), opts.Connector)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
@@ -8379,12 +10027,38 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import: read source-cited mutation dispositions:", err)
 		return 1
 	}
+	partialMutationCoverageDispositions, err := sourceProjectionReadPartialMutationCoverageDispositions(filepath.Join(opts.DefsDir, opts.Connector))
+	if err != nil {
+		logln(stderr, "connectorgen source-import: read source-cited partial mutation coverage dispositions:", err)
+		return 1
+	}
 	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	sourceProjectionApplyUnsafeProviderQueryParameterGaps(surface, &result)
 	sourceProjectionRestoreSourceBoundDirectReadPathFlags(&surface, result)
 	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
 	if err := sourceProjectionApplyNonExecutableMutationDispositions(surface, &result, mutationDispositions); err != nil {
 		logln(stderr, "connectorgen source-import: apply source-cited mutation dispositions:", err)
 		return 1
+	}
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(surface, &result, partialMutationCoverageDispositions); err != nil {
+		logln(stderr, "connectorgen source-import: apply source-cited partial mutation coverage dispositions:", err)
+		return 1
+	}
+	sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result)
+	if opts.MaterializeEligibleLanes {
+		// A write-capable bundle can still cover only a subset of its locked
+		// mutations. Keep every non-selected identity in the same cited typed
+		// state used by an explicitly write-disabled connector.
+		sourceProjectionApplyUnmappedMutationArtifacts(surface, &result)
+		projection, projectionErr := projectEligibleSourceLockLanesToBundle(filepath.Join(opts.DefsDir, opts.Connector), result, opts.Check)
+		if projectionErr != nil {
+			logln(stderr, "connectorgen source-import: materialize eligible source-lock lanes:", projectionErr)
+			return 1
+		}
+		if opts.Check && projection.Changed() {
+			logln(stderr, fmt.Sprintf("connectorgen source-import: eligible source-lock lane projection has drifted (writes=%d operations=%d cli=%d metadata=%d); rerun without --check", projection.Writes, projection.Operations, projection.CLI, projection.Metadata))
+			return 1
+		}
 	}
 	raw, err := marshalSourceImportResult(result)
 	if err != nil {
@@ -8393,6 +10067,14 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 	}
 	existing, readErr := os.ReadFile(opts.Output)
 	if opts.Check {
+		if opts.MaterializeEligibleLanes {
+			if readErr != nil || !bytes.Equal(existing, raw) {
+				logln(stderr, "connectorgen source-import: descriptor or eligible source-lock lane projection has drifted; rerun without --check after source-lock verification")
+				return 1
+			}
+			logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) verified", opts.Connector, len(result.Operations), len(result.InboundEvents)))
+			return 0
+		}
 		projection, projectionErr := projectSourceDescriptorToBundle(filepath.Join(opts.DefsDir, opts.Connector), result, true)
 		if projectionErr != nil {
 			logln(stderr, "connectorgen source-import: check source-derived bundle projection:", projectionErr)
@@ -8409,9 +10091,84 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 		logln(stderr, "connectorgen source-import: write descriptors:", err)
 		return 1
 	}
+	if opts.MaterializeEligibleLanes {
+		logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported; eligible source-lock lanes materialized", opts.Connector, len(result.Operations), len(result.InboundEvents)))
+		return 0
+	}
 	projection, err := projectSourceDescriptorToBundle(filepath.Join(opts.DefsDir, opts.Connector), result, false)
 	if err != nil {
 		logln(stderr, "connectorgen source-import: project source-derived bundle:", err)
+		return 1
+	}
+	logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported; source projection updated writes=%d cli=%d", opts.Connector, len(result.Operations), len(result.InboundEvents), projection.Writes, projection.CLI))
+	return 0
+}
+
+// runSourceImportReadProjection materializes or verifies only the declarative
+// source-bound read bridge. Its two phases are deliberate: first the bundle
+// receives the eligible read bindings; then the refreshed declaration surface
+// records which remaining reads still lack an executable foundation. Annotating
+// before projection would make that derived absence mask a valid new binding.
+func runSourceImportReadProjection(opts sourceImportOptions, result sourceImportResult, stdout, stderr io.Writer) int {
+	bundleDir := filepath.Join(opts.DefsDir, opts.Connector)
+	sourceProjectionNormalizeNonBlockingReadGaps(&result)
+	surface, err := sourceProjectionExecutionSurface(bundleDir, opts.Connector)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: load declaration-owned execution surface:", err)
+		return 1
+	}
+	sourceProjectionApplyUnsafeProviderQueryParameterGaps(surface, &result)
+	projectionResult, err := sourceProjectionReadOnlyResult(bundleDir, result)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: select materialized source-bound reads:", err)
+		return 1
+	}
+	projection, err := projectSourceBoundReadDescriptorToBundle(bundleDir, projectionResult, opts.Check)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: source-bound read projection:", err)
+		return 1
+	}
+	if opts.Check && projection.Changed() {
+		logln(stderr, fmt.Sprintf("connectorgen source-import: descriptor or derived bundle projection has drifted (writes=%d cli=%d); rerun without --check after source-lock verification", projection.Writes, projection.CLI))
+		return 1
+	}
+
+	sourceProjectionAnnotateUnreachableReadGaps(surface, &result)
+	mutationDispositions, err := sourceProjectionReadNonExecutableMutationDispositions(bundleDir)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: read source-cited mutation dispositions:", err)
+		return 1
+	}
+	partialMutationCoverageDispositions, err := sourceProjectionReadPartialMutationCoverageDispositions(bundleDir)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: read source-cited partial mutation coverage dispositions:", err)
+		return 1
+	}
+	if err := sourceProjectionApplyNonExecutableMutationDispositions(surface, &result, mutationDispositions); err != nil {
+		logln(stderr, "connectorgen source-import: apply source-cited mutation dispositions:", err)
+		return 1
+	}
+	if err := sourceProjectionApplyPartialMutationCoverageDispositions(surface, &result, partialMutationCoverageDispositions); err != nil {
+		logln(stderr, "connectorgen source-import: apply source-cited partial mutation coverage dispositions:", err)
+		return 1
+	}
+	sourceProjectionApplyWriteDisabledMutationArtifacts(surface, &result)
+	raw, err := marshalSourceImportResult(result)
+	if err != nil {
+		logln(stderr, "connectorgen source-import: encode descriptors:", err)
+		return 1
+	}
+	existing, readErr := os.ReadFile(opts.Output)
+	if opts.Check {
+		if readErr != nil || !bytes.Equal(existing, raw) {
+			logln(stderr, fmt.Sprintf("connectorgen source-import: descriptor or derived bundle projection has drifted (writes=%d cli=%d); rerun without --check after source-lock verification", projection.Writes, projection.CLI))
+			return 1
+		}
+		logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) verified", opts.Connector, len(result.Operations), len(result.InboundEvents)))
+		return 0
+	}
+	if err := os.WriteFile(opts.Output, raw, 0o644); err != nil {
+		logln(stderr, "connectorgen source-import: write descriptors:", err)
 		return 1
 	}
 	logln(stdout, fmt.Sprintf("connectorgen source-import: %s, %d operation(s), %d inbound event(s) imported; source projection updated writes=%d cli=%d", opts.Connector, len(result.Operations), len(result.InboundEvents), projection.Writes, projection.CLI))
@@ -8423,15 +10180,29 @@ func runSourceImportWithFetcher(args []string, stdout, stderr io.Writer, fetcher
 // Every actual artifact remains mandatory and is therefore served only by the
 // connector-owned retained reader during normal source-import execution.
 func sourceImportLockRequiresRetainedArtifact(lock sourceImportLock) bool {
+	if lock.isLegacySourceReference() {
+		return false
+	}
+	// A retained canonical source contract supplies the complete REST mapping
+	// input itself. Its artifact digest remains a provenance overlay, so a
+	// duplicate local artifact is required only for any separate GraphQL source
+	// that cannot be reconstructed from the REST lock evidence.
+	if sourceImportLockHasCanonicalEvidenceContract(lock) {
+		return len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) > 0
+	}
 	if lock.SchemaVersion < 3 {
 		return true
 	}
 	for _, document := range lock.Rest.SourceDocuments {
-		if !document.isUnavailable() {
+		if !document.isUnavailable() && !document.isSourceReference() {
 			return true
 		}
 	}
 	return len(lock.GraphQL.QueryFields)+len(lock.GraphQL.MutationFields) > 0
+}
+
+func sourceImportLockIsReferenceOnly(lock sourceImportLock) bool {
+	return !sourceImportLockRequiresRetainedArtifact(lock)
 }
 
 func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
@@ -8440,6 +10211,10 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 		switch arg := args[i]; arg {
 		case "--check":
 			opts.Check = true
+		case "--read-projection-only":
+			opts.ReadProjectionOnly = true
+		case "--materialize-eligible-lanes":
+			opts.MaterializeEligibleLanes = true
 		case "--defs", "--out", "--cache-dir":
 			if i+1 >= len(args) {
 				return sourceImportOptions{}, fmt.Errorf("%s requires a value", arg)
@@ -8465,6 +10240,9 @@ func parseSourceImportOptions(args []string) (sourceImportOptions, error) {
 	}
 	if opts.Connector == "" {
 		return sourceImportOptions{}, fmt.Errorf("a connector name is required")
+	}
+	if opts.ReadProjectionOnly && opts.MaterializeEligibleLanes {
+		return sourceImportOptions{}, fmt.Errorf("--read-projection-only and --materialize-eligible-lanes cannot be combined")
 	}
 	if err := validateSourceImportConnector(opts.Connector); err != nil {
 		return sourceImportOptions{}, err
@@ -8508,12 +10286,22 @@ func sourceImportConnectorSourcesDir(defsDir, connector string) (string, error) 
 		return "", fmt.Errorf("resolve connector definitions directory: %w", err)
 	}
 	bundleDir := filepath.Join(absDefsDir, connector)
+	bundleInfo, err := os.Lstat(bundleDir)
+	if err != nil {
+		return "", fmt.Errorf("inspect connector bundle directory: %w", err)
+	}
+	if !bundleInfo.IsDir() || bundleInfo.Mode()&os.ModeSymlink != 0 {
+		return "", fmt.Errorf("connector bundle must not be a symlink and must be a directory")
+	}
 	resolvedBundleDir, err := filepath.EvalSymlinks(bundleDir)
 	if err != nil {
 		return "", fmt.Errorf("resolve connector bundle directory: %w", err)
 	}
 	if !sourceImportPathWithin(resolvedDefsDir, resolvedBundleDir) {
 		return "", fmt.Errorf("connector bundle is outside definitions directory")
+	}
+	if filepath.Base(resolvedBundleDir) != connector {
+		return "", fmt.Errorf("resolved connector bundle identity %q does not match requested connector %q", filepath.Base(resolvedBundleDir), connector)
 	}
 	sourcesDir := filepath.Join(bundleDir, "sources")
 	sourcesInfo, err := os.Lstat(sourcesDir)
@@ -8554,13 +10342,53 @@ type sourceImportRetainedArtifactManifestDocument struct {
 }
 
 type sourceImportRetainedArtifactRecord struct {
-	SHA256        string `json:"sha256"`
-	Bytes         int64  `json:"bytes"`
-	SourceURL     string `json:"source_url"`
-	IdentityQuery bool   `json:"identity_query,omitempty"`
-	RetrievedAt   string `json:"retrieved_at"`
-	License       string `json:"license"`
-	Terms         string `json:"terms"`
+	SHA256          string `json:"sha256"`
+	Bytes           int64  `json:"bytes"`
+	SourceURL       string `json:"source_url"`
+	IdentityQuery   bool   `json:"identity_query,omitempty"`
+	Identity        string `json:"identity,omitempty"`
+	CanonicalSHA256 string `json:"canonical_sha256,omitempty"`
+	RetainedSHA256  string `json:"retained_sha256,omitempty"`
+	RetainedBytes   int64  `json:"retained_bytes,omitempty"`
+	Form            string `json:"form,omitempty"`
+	Version         string `json:"version,omitempty"`
+	RetrievedAt     string `json:"retrieved_at"`
+	License         string `json:"license"`
+	Terms           string `json:"terms"`
+}
+
+func sourceRetainedArtifactRecordLockKey(record sourceImportRetainedArtifactRecord) string {
+	return sourceRetainArtifactLockKey(sourceImportArtifact{
+		SourceURL:       record.SourceURL,
+		SHA256:          record.SHA256,
+		Bytes:           record.Bytes,
+		IdentityQuery:   record.IdentityQuery,
+		Identity:        record.Identity,
+		CanonicalSHA256: record.CanonicalSHA256,
+	})
+}
+
+func sourceRetainedArtifactRecordRawSHA256(record sourceImportRetainedArtifactRecord) string {
+	if record.RetainedSHA256 != "" {
+		return record.RetainedSHA256
+	}
+	return record.SHA256
+}
+
+func sourceRetainedArtifactRecordRawBytes(record sourceImportRetainedArtifactRecord) int64 {
+	if record.RetainedBytes != 0 {
+		return record.RetainedBytes
+	}
+	return record.Bytes
+}
+
+func sourceRetainedArtifactRecordMatches(record sourceImportRetainedArtifactRecord, artifact sourceImportArtifact) bool {
+	return record.SourceURL == artifact.SourceURL &&
+		record.IdentityQuery == artifact.IdentityQuery &&
+		strings.EqualFold(record.SHA256, artifact.SHA256) &&
+		record.Bytes == artifact.Bytes &&
+		sourceArtifactIdentity(sourceImportArtifact{Identity: record.Identity}) == sourceArtifactIdentity(artifact) &&
+		strings.EqualFold(record.CanonicalSHA256, artifact.CanonicalSHA256)
 }
 
 // sourceImportRetainedArtifactFetcher is the sole production source-import
@@ -8625,20 +10453,13 @@ func newSourceImportRetainedArtifactFetcher(sourcesDir, connector string, limits
 	}
 	records := make(map[string][]sourceImportRetainedArtifactRecord, len(manifest.Artifacts))
 	for _, record := range manifest.Artifacts {
-		artifact := sourceImportArtifact{SourceURL: record.SourceURL, SHA256: record.SHA256, Bytes: record.Bytes, IdentityQuery: record.IdentityQuery}
-		if err := validateSourceImportArtifact(artifact); err != nil {
+		if err := sourceRetainValidateManifestRecord(record); err != nil {
 			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record: %w", err)
 		}
-		if _, err := time.Parse(time.RFC3339, record.RetrievedAt); err != nil {
-			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record has invalid retrieval timestamp: %w", err)
-		}
-		if strings.TrimSpace(record.License) == "" || strings.TrimSpace(record.Terms) == "" {
-			return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest record must state license and terms as data")
-		}
-		key := strings.ToLower(record.SHA256)
+		key := sourceRetainedArtifactRecordLockKey(record)
 		for _, existing := range records[key] {
-			if existing.SourceURL == record.SourceURL {
-				return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest duplicates source URL for SHA-256 %q", record.SHA256)
+			if strings.EqualFold(sourceRetainedArtifactRecordRawSHA256(existing), sourceRetainedArtifactRecordRawSHA256(record)) {
+				return sourceImportRetainedArtifactFetcher{}, fmt.Errorf("retained artifact manifest duplicates retained bytes for source lock identity")
 			}
 		}
 		records[key] = append(records[key], record)
@@ -8663,19 +10484,19 @@ func (fetcher sourceImportRetainedArtifactFetcher) FetchArtifact(ctx context.Con
 	if artifact.Bytes > fetcher.limits.MaxArtifactBytes {
 		return nil, fmt.Errorf("artifact byte limit exceeded by source lock")
 	}
-	key := strings.ToLower(artifact.SHA256)
-	foundRecord := false
+	key := sourceRetainArtifactLockKey(artifact)
+	var foundRecord *sourceImportRetainedArtifactRecord
 	for _, record := range fetcher.records[key] {
-		if record.Bytes == artifact.Bytes && record.SourceURL == artifact.SourceURL && record.IdentityQuery == artifact.IdentityQuery {
-			foundRecord = true
-			break
+		if sourceRetainedArtifactRecordMatches(record, artifact) && (foundRecord == nil || record.RetrievedAt > foundRecord.RetrievedAt || (record.RetrievedAt == foundRecord.RetrievedAt && sourceRetainedArtifactRecordRawSHA256(record) > sourceRetainedArtifactRecordRawSHA256(*foundRecord))) {
+			candidate := record
+			foundRecord = &candidate
 		}
 	}
-	if !foundRecord {
+	if foundRecord == nil {
 		return nil, fmt.Errorf("retained source artifact provenance does not match source lock")
 	}
 	artifactDir := filepath.Join(fetcher.sourcesDir, sourceImportRetainedArtifactDirectory)
-	artifactPath := filepath.Join(artifactDir, key+sourceImportRetainedArtifactExtension)
+	artifactPath := filepath.Join(artifactDir, strings.ToLower(sourceRetainedArtifactRecordRawSHA256(*foundRecord))+sourceImportRetainedArtifactExtension)
 	dirInfo, err := os.Lstat(artifactDir)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -8711,8 +10532,15 @@ func (fetcher sourceImportRetainedArtifactFetcher) FetchArtifact(ctx context.Con
 	if int64(len(raw)) > fetcher.limits.MaxArtifactBytes {
 		return nil, fmt.Errorf("retained source artifact exceeds byte limit")
 	}
+	rawDigest := sha256.Sum256(raw)
+	if !strings.EqualFold(hex.EncodeToString(rawDigest[:]), sourceRetainedArtifactRecordRawSHA256(*foundRecord)) || int64(len(raw)) != sourceRetainedArtifactRecordRawBytes(*foundRecord) {
+		if sourceArtifactIdentity(artifact) == sourceArtifactIdentityBytes {
+			return nil, fmt.Errorf("retained source artifact does not match locked bytes and SHA-256")
+		}
+		return nil, fmt.Errorf("retained source artifact does not match its recorded fetched bytes and SHA-256")
+	}
 	if err := validateSourceImportArtifactBytes(raw, artifact); err != nil {
-		return nil, fmt.Errorf("retained source artifact does not match locked bytes and SHA-256")
+		return nil, fmt.Errorf("retained source artifact does not match the source lock identity")
 	}
 	return raw, nil
 }
@@ -8724,11 +10552,42 @@ type httpSourceImportFetcher struct {
 }
 
 func validateSourceImportArtifactBytes(raw []byte, artifact sourceImportArtifact) error {
-	digest := sha256.Sum256(raw)
-	if int64(len(raw)) != artifact.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), artifact.SHA256) {
-		return fmt.Errorf("source-lock refresh required: fetched artifact does not match locked bytes and SHA-256")
+	switch sourceArtifactIdentity(artifact) {
+	case sourceArtifactIdentityBytes:
+		digest := sha256.Sum256(raw)
+		if int64(len(raw)) != artifact.Bytes || !strings.EqualFold(hex.EncodeToString(digest[:]), artifact.SHA256) {
+			return fmt.Errorf("source-lock refresh required: fetched artifact does not match locked bytes and SHA-256")
+		}
+		return nil
+	case sourceArtifactIdentityCanonicalJSON:
+		canonicalDigest, err := sourceCanonicalJSONSHA256(raw)
+		if err != nil {
+			return fmt.Errorf("canonical JSON identity requires one unambiguous JSON value: %w", err)
+		}
+		if !strings.EqualFold(canonicalDigest, artifact.CanonicalSHA256) {
+			return fmt.Errorf("source-lock refresh required: fetched artifact does not match locked canonical JSON SHA-256")
+		}
+		return nil
+	default:
+		return fmt.Errorf("source lock has unsupported artifact identity %q", artifact.Identity)
 	}
-	return nil
+}
+
+// sourceCanonicalJSONSHA256 hashes JSON after decoding with preserved number
+// tokens and re-marshalling Go's deterministic, key-sorted object form. It is
+// intentionally an identity for parsed JSON, not a claim that the provider
+// delivered byte-identical serialisation.
+func sourceCanonicalJSONSHA256(raw []byte) (string, error) {
+	var document any
+	if err := decodeSourceJSON(raw, &document); err != nil {
+		return "", err
+	}
+	canonical, err := json.Marshal(document)
+	if err != nil {
+		return "", err
+	}
+	digest := sha256.Sum256(canonical)
+	return hex.EncodeToString(digest[:]), nil
 }
 
 func (fetcher httpSourceImportFetcher) Fetch(ctx context.Context, sourceURL string) ([]byte, error) {
@@ -8742,23 +10601,40 @@ func (fetcher httpSourceImportFetcher) FetchArtifact(ctx context.Context, artifa
 	return fetcher.fetch(ctx, artifact.SourceURL, batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery})
 }
 
+func (fetcher httpSourceImportFetcher) FetchRetainArtifact(ctx context.Context, artifact sourceImportArtifact) ([]byte, error) {
+	result, err := fetcher.FetchRetainArtifactResponse(ctx, artifact)
+	return result.Raw, err
+}
+
+func (fetcher httpSourceImportFetcher) FetchRetainArtifactResponse(ctx context.Context, artifact sourceImportArtifact) (sourceRetainArtifactFetchResult, error) {
+	if err := validateSourceRetainArtifact(artifact); err != nil {
+		return sourceRetainArtifactFetchResult{}, err
+	}
+	return fetcher.fetchResponse(ctx, artifact.SourceURL, batchArtifactURLPolicy{allowIdentityQuery: artifact.IdentityQuery})
+}
+
 func (fetcher httpSourceImportFetcher) fetch(ctx context.Context, sourceURL string, policy batchArtifactURLPolicy) ([]byte, error) {
+	result, err := fetcher.fetchResponse(ctx, sourceURL, policy)
+	return result.Raw, err
+}
+
+func (fetcher httpSourceImportFetcher) fetchResponse(ctx context.Context, sourceURL string, policy batchArtifactURLPolicy) (sourceRetainArtifactFetchResult, error) {
 	if err := validateSourceImportLimits(fetcher.limits); err != nil {
-		return nil, err
+		return sourceRetainArtifactFetchResult{}, err
 	}
 	if fetcher.lookup == nil {
-		return nil, fmt.Errorf("source importer has no public address resolver")
+		return sourceRetainArtifactFetchResult{}, fmt.Errorf("source importer has no public address resolver")
 	}
 	parsed, err := parseBatchArtifactURLWithPolicy(sourceURL, policy)
 	if err != nil {
-		return nil, fmt.Errorf("validate locked source artifact URL: %w", err)
+		return sourceRetainArtifactFetchResult{}, fmt.Errorf("validate locked source artifact URL: %w", err)
 	}
 	if err := validateBatchArtifactRequestURLWithPolicy(ctx, parsed, fetcher.lookup, policy); err != nil {
-		return nil, fmt.Errorf("validate locked source artifact destination: %w", err)
+		return sourceRetainArtifactFetchResult{}, fmt.Errorf("validate locked source artifact destination: %w", err)
 	}
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, parsed.String(), nil)
 	if err != nil {
-		return nil, err
+		return sourceRetainArtifactFetchResult{}, err
 	}
 	client := fetcher.client
 	if client == nil {
@@ -8766,30 +10642,36 @@ func (fetcher httpSourceImportFetcher) fetch(ctx context.Context, sourceURL stri
 	}
 	response, err := client.Do(request)
 	if err != nil {
-		return nil, err
+		return sourceRetainArtifactFetchResult{}, err
 	}
 	if response.StatusCode != http.StatusOK {
 		if closeErr := response.Body.Close(); closeErr != nil {
-			return nil, fmt.Errorf("close source-lock artifact response after HTTP %d: %w", response.StatusCode, closeErr)
+			if response.StatusCode == http.StatusForbidden {
+				return sourceRetainArtifactFetchResult{}, sourceRetainBotBlockError{Reason: fmt.Sprintf("provider returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
+			}
+			return sourceRetainArtifactFetchResult{}, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d and its response could not be closed: %v", response.StatusCode, closeErr)}
 		}
-		return nil, fmt.Errorf("source-lock artifact returned HTTP %d", response.StatusCode)
+		if response.StatusCode == http.StatusForbidden {
+			return sourceRetainArtifactFetchResult{}, sourceRetainBotBlockError{Reason: "provider returned HTTP 403 to an automated fetch"}
+		}
+		return sourceRetainArtifactFetchResult{}, sourceRetainWrongSourceError{Reason: fmt.Sprintf("locked URL returned HTTP %d", response.StatusCode)}
 	}
 	raw, readErr := io.ReadAll(io.LimitReader(response.Body, fetcher.limits.MaxArtifactBytes+1))
 	closeErr := response.Body.Close()
 	if readErr != nil {
-		return nil, readErr
+		return sourceRetainArtifactFetchResult{}, readErr
 	}
 	if closeErr != nil {
-		return nil, fmt.Errorf("close source-lock artifact response: %w", closeErr)
+		return sourceRetainArtifactFetchResult{}, fmt.Errorf("close source-lock artifact response: %w", closeErr)
 	}
-	return raw, nil
+	return sourceRetainArtifactFetchResult{Raw: raw, ContentType: response.Header.Get("Content-Type")}, nil
 }
 
 func newSourceImportHTTPClient(lookup batchArtifactLookupIPAddr) *http.Client {
 	client := newBatchArtifactHTTPClient(lookup)
 	client.Timeout = defaultSourceImportFetchTimeout
 	client.CheckRedirect = func(*http.Request, []*http.Request) error {
-		return fmt.Errorf("source-lock artifact redirects are not permitted")
+		return sourceRetainWrongSourceError{Reason: "locked URL redirected instead of serving the pinned artifact"}
 	}
 	return client
 }

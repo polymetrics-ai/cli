@@ -98,6 +98,8 @@
             "type": "string",
             "enum": [
               "implemented",
+              "deferred",
+              "unsupported_with_provider_evidence",
               "partial",
               "planned",
               "excluded",
@@ -110,6 +112,7 @@
           "stream": { "type": "string" },
           "write": { "type": "string" },
           "operation": { "type": "string" },
+          "source_operation": { "type": "string", "minLength": 1 },
           "source_cli_path": { "type": "string" },
           "source_url": { "type": "string" },
           "flags": {
@@ -205,6 +208,63 @@
           },
           "risk": { "type": "string" },
           "approval": { "type": "string" },
+          "foundation_gap": {
+            "type": "object",
+            "required": ["id", "reason", "component", "evidence", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "reason": { "type": "string", "minLength": 1 },
+              "component": {
+                "type": "string",
+                "enum": ["typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor", "binary_transfer_binding", "source_importer", "runtime_executor"]
+              },
+              "evidence": {
+                "type": "string",
+                "enum": ["write_action_absent", "record_schema_absent", "request_body_schema_absent", "response_descriptor_absent", "binary_transfer_binding_absent", "source_importer_absent", "runtime_executor_absent"]
+              },
+              "target": {
+                "type": "object",
+                "required": ["method", "path"],
+                "additionalProperties": false,
+                "properties": {
+                  "source_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+                  "operation_id": { "type": "string", "maxLength": 512 },
+                  "binding": {
+                    "type": "object",
+                    "required": ["kind", "id"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "kind": { "type": "string", "enum": ["command", "stream", "write", "operation"] },
+                      "id": { "type": "string", "minLength": 1, "maxLength": 512 }
+                    }
+                  },
+                  "destructive_kind": { "type": "string", "enum": ["none", "delete", "destructive"] },
+                  "method": { "type": "string", "minLength": 1 },
+                  "path": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          },
+          "unsupported_disposition": {
+            "type": "object",
+            "required": ["reason", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "reason": { "type": "string", "minLength": 1, "maxLength": 512 },
+              "target": {
+                "type": "object",
+                "required": ["source_id", "operation_id", "method", "path"],
+                "additionalProperties": false,
+                "properties": {
+                  "source_id": { "type": "string", "minLength": 1, "maxLength": 256 },
+                  "operation_id": { "type": "string", "maxLength": 512 },
+                  "method": { "type": "string", "enum": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "GRAPHQL"] },
+                  "path": { "type": "string", "minLength": 1, "maxLength": 8192 }
+                }
+              }
+            }
+          },
           "notes": { "type": "string" }
         }
       }

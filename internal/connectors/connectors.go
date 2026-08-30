@@ -429,6 +429,22 @@ func (e *ReadBudgetStoppedError) Error() string {
 	return "source pagination stopped at its page budget before exhaustion"
 }
 
+// ReadRequestBudgetExceededError reports that a caller-owned aggregate send
+// budget stopped a stream before another provider request was admitted. Limit
+// and Used are safe control-flow counters; the error deliberately carries no
+// route, query, credential, or provider response.
+type ReadRequestBudgetExceededError struct {
+	Limit int
+	Used  int
+}
+
+func (e *ReadRequestBudgetExceededError) Error() string {
+	if e == nil {
+		return "source read stopped at its request budget"
+	}
+	return fmt.Sprintf("source read stopped at its request budget after %d of %d requests", e.Used, e.Limit)
+}
+
 type SourceOrderedCursorReader interface {
 	CursorStateFromRecord(Record, string) (OpaqueCursorState, error)
 	ValidateCursorField(RuntimeConfig, string) error
@@ -446,6 +462,11 @@ type ReadRequest struct {
 	// tighten a declared stream limit; zero leaves it unchanged and a negative
 	// value is rejected.
 	MaxPages int
+	// MaxRequests is an optional caller-side aggregate provider-send cap.
+	// Unlike MaxPages it is shared by fan-out discovery, every child sequence,
+	// retries, and permitted redirects. Zero leaves established saved-ETL reads
+	// unbounded; a negative value is rejected before provider I/O.
+	MaxRequests int
 	// Continuation is accepted only by an engine-owned bounded-source resume.
 	// It is deliberately not mapped from command input or connector config.
 	Continuation *ReadContinuation
@@ -692,6 +713,29 @@ type OperationDirectReadPreflighter interface {
 // operation from receiving undeclared caller fields.
 type OperationDirectReadBindingPreflighter interface {
 	PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error
+}
+
+// SourceBoundReadPreflighter verifies that a source-projected direct read
+// still names the exact locked source operation carried by its selected engine
+// operation. It has no URL, header, method, or request-body escape hatch.
+type SourceBoundReadPreflighter interface {
+	PreflightSourceBoundRead(operation, sourceOperation, method, path string) error
+}
+
+// SourceBoundStreamReadPreflighter performs the matching no-network proof for
+// an existing ETL stream. It keeps a collection command on the stream executor
+// only when its declaration-owned stream and source-bound operation agree.
+type SourceBoundStreamReadPreflighter interface {
+	PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error
+}
+
+// SourceBoundOriginPreflighter checks the one declared source origin using
+// public configuration only. Command dispatch invokes it before App credential
+// resolution, so a caller cannot cause source-bound credential/auth state to
+// materialize merely by selecting another provider origin.
+type SourceBoundOriginPreflighter interface {
+	PreflightSourceBoundOperationOrigin(operation string, cfg RuntimeConfig) error
+	PreflightSourceBoundStreamOrigin(stream string, cfg RuntimeConfig) error
 }
 
 // OperationStructuredJSONVariablePreflighter exposes the deliberately narrow
@@ -3201,6 +3245,7 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 		Modes: []synccontract.Mode{
 			synccontract.ModeFullOverwrite,
 			synccontract.ModeFullAppend,
+			synccontract.ModeIncrementalAppend,
 			synccontract.ModeIncrementalUpsert,
 			synccontract.ModeIncrementalDedupe,
 			synccontract.ModeIncrementalDedupeHistory,
@@ -3215,6 +3260,7 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 		ApplyStrategies: []DestinationApplyStrategy{
 			{Mode: synccontract.ModeFullOverwrite, Strategy: ApplyStrategyReplace, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeIncrementalAppend, Strategy: ApplyStrategyAppend, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalUpsert, Strategy: ApplyStrategyMerge, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalDedupe, Strategy: ApplyStrategyDedupe, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalDedupeHistory, Strategy: ApplyStrategyDedupeHistory, Action: localWarehouseDestinationTransportAction},

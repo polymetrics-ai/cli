@@ -479,6 +479,12 @@ func executeApprovedWrite(ctx context.Context, b Bundle, action WriteAction, req
 				class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 				return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Class: class, Hint: hint, Err: redactWriteActionError(err, step.action, pinned)}
 			}
+			if step.action.DeclaredBatch != nil {
+				if err := validateDeclaredBatchResponse(step.action, pinned, response); err != nil {
+					result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
+					return result, &Error{Connector: b.Name, Action: step.action.Name, Page: -1, RecordIndex: recordIndex, Err: redactWriteActionError(err, step.action, pinned)}
+				}
+			}
 			if responseValidator != nil {
 				if err := responseValidator.ValidatePreparedWriteResponse(step.action, pinned, response); err != nil {
 					result.RecordsFailed = len(records) - result.RecordsWritten - result.RecordsUnchanged
@@ -615,6 +621,12 @@ func executeWriteRecordWithResponse(ctx context.Context, b Bundle, action WriteA
 	requester.BaseURL = baseURL
 
 	switch bodyTypeOf(action) {
+	case "declared_batch":
+		payload, _, err := buildDeclaredBatchPayload(b, action, rec, cfg)
+		if err != nil {
+			return nil, err
+		}
+		return requester.DoLimited(ctx, method, path, query, payload, connsdk.DefaultMaxResponseBody)
 	case "form":
 		form := buildForm(rec, action.PathFields)
 		return requester.DoFormLimited(ctx, method, path, query, form, connsdk.DefaultMaxResponseBody)

@@ -171,6 +171,26 @@ func (s *CertificationEphemeralSession) credential(name string) (CredentialMeta,
 	}, cloneStringMap(credential.Secrets), true
 }
 
+// publicCredential returns only immutable credential metadata for command
+// preflight. Unlike credential, it never copies or reads the secret map.
+func (s *CertificationEphemeralSession) publicCredential(name string) (CredentialMeta, bool) {
+	if s == nil {
+		return CredentialMeta{}, false
+	}
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	credential, ok := s.credentials[name]
+	if !ok || s.closed {
+		return CredentialMeta{}, false
+	}
+	return CredentialMeta{
+		ID:        "certification-" + credential.Name,
+		Name:      credential.Name,
+		Connector: credential.Connector,
+		Config:    cloneStringMap(credential.Config),
+	}, true
+}
+
 // HasCredential reports whether name is currently registered without exposing
 // its secret values. Certification stages use this as their observable proof
 // that an intake was retained only by the process-local session.

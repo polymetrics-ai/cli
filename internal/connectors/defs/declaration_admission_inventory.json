@@ -1,0 +1,12 @@
+{
+  "schema_version": 2,
+  "cohort": "batch-1-foundation",
+  "operations": [
+    {
+      "connector": "github",
+      "source_id": "github.rest.issues.delete-label",
+      "source_lock": "github/sources/github-operation-source-lock.json",
+      "source_operation_id": "github.rest.issues/delete-label"
+    }
+  ]
+}

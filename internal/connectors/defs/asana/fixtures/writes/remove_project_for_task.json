@@ -1,0 +1,4 @@
+{
+  "record": { "task_gid": "fixture-task", "data": { "project": "fixture-project" } },
+  "expect": { "method": "POST", "path": "/tasks/fixture-task/removeProject", "body": { "data": { "project": "fixture-project" } } }
+}

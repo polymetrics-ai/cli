@@ -1,14 +1,14 @@
 {
   "name": "gitlab",
   "display_name": "GitLab",
-  "description": "Reads GitLab projects, groups, users, and issues through existing GitLab REST API v4 ETL streams; its provider-owned ledger records the full published surface, but G1 declares no write command.",
+  "description": "Runs 582 source-bound direct reads, four GitLab REST ETL streams, and 381 source-bound mutations through direct-write and approval-gated reverse-ETL commands; its 1,752-row provider ledger retains a cited named-foundation outcome for every remaining source operation.",
   "integration_type": "api",
   "docs_url": "https://docs.gitlab.com/ee/api/rest/",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
@@ -18,7 +18,7 @@
   },
   "risk": {
     "read": "external GitLab API read of projects, groups, users, and issues",
-    "write": "GitLab publishes mutation endpoints, but this G1 bundle declares no executable write actions.",
-    "approval": "Any future GitLab write must use the standard plan, preview, explicit approval, and execute flow; no GitLab writes are executable in this wave."
+    "write": "381 source-bound GitLab mutations have one-request direct-write commands and approval-gated reverse-ETL commands; the remaining provider mutations retain cited named-foundation outcomes.",
+    "approval": "Every GitLab reverse-ETL action requires the standard plan, preview, explicit approval, and execute flow."
   }
 }

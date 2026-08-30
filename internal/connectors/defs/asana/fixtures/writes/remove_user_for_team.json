@@ -1,0 +1,4 @@
+{
+  "record": { "team_gid": "fixture-team", "data": { "user": "fixture-user" } },
+  "expect": { "method": "POST", "path": "/teams/fixture-team/removeUser", "body": { "data": { "user": "fixture-user" } } }
+}

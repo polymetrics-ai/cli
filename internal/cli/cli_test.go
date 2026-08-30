@@ -2,13 +2,18 @@ package cli_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
+	"sync/atomic"
 	"testing"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
@@ -78,6 +83,202 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestSourceBoundOriginRejectsBeforeAppOrCredential(t *testing.T) {
+	root := filepath.Join(t.TempDir(), "uninitialized-project")
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"--root", root,
+		"asana", "custom-fields", "list",
+		"--credential", "unresolved-credential",
+		"--config", "base_url=https://invalid.example",
+	}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run(source-bound invalid origin) succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	output := stdout.String() + stderr.String()
+	if !strings.Contains(output, `source-bound provider operation "custom_fields" rejects configured base_url override`) {
+		t.Fatalf("invalid source origin did not reach source-bound preflight:\n%s", output)
+	}
+	for _, forbidden := range []string{"missing project", "missing --credential"} {
+		if strings.Contains(output, forbidden) {
+			t.Fatalf("invalid source origin reached App or credential handling (%q):\n%s", forbidden, output)
+		}
+	}
+}
+
+func TestSentrySeerModelsCommandStopsBeforeProviderIOWithoutCredential(t *testing.T) {
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+
+	spy := &sentrySeerModelsTransportSpy{}
+	oldTransport := http.DefaultTransport
+	http.DefaultTransport = spy
+	t.Cleanup(func() { http.DefaultTransport = oldTransport })
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"sentry", "seer", "list-models", "--root", root}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run(sentry seer list-models) unexpectedly succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	if got := strings.TrimSpace(stdout.String() + stderr.String()); got != "error: missing --credential" {
+		t.Fatalf("Run(sentry seer list-models) output = %q, want %q", got, "error: missing --credential")
+	}
+	if got := spy.requests.Load(); got != 0 {
+		t.Fatalf("Run(sentry seer list-models) provider requests = %d, want zero", got)
+	}
+}
+
+type sentrySeerModelsTransportSpy struct {
+	requests atomic.Int64
+}
+
+func (spy *sentrySeerModelsTransportSpy) RoundTrip(*http.Request) (*http.Response, error) {
+	spy.requests.Add(1)
+	return nil, fmt.Errorf("unexpected Sentry provider I/O")
+}
+
+func TestSentrySeerModelsHelpAndBareNamespaces(t *testing.T) {
+	for _, testCase := range []struct {
+		name string
+		args []string
+		want []string
+	}{
+		{
+			name: "connector help topic",
+			args: []string{"help", "sentry"},
+			want: []string{"Sentry connector manual", "seer list-models"},
+		},
+		{
+			name: "bare connector",
+			args: []string{"sentry"},
+			want: []string{"pm sentry - Sentry command surface", "seer - see pm sentry seer --help"},
+		},
+		{
+			name: "bare command group",
+			args: []string{"sentry", "seer"},
+			want: []string{"pm sentry seer - Sentry seer commands", "seer list-models"},
+		},
+		{
+			name: "command help",
+			args: []string{"sentry", "seer", "list-models", "--help"},
+			want: []string{"INTENT\n  direct_read", "OPERATION\n  sentry.seer_models_list", "No command-specific flags."},
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			if code := cli.Run(testCase.args, &stdout, &stderr); code != 0 {
+				t.Fatalf("Run(%v) code = %d; stdout=%s stderr=%s", testCase.args, code, stdout.String(), stderr.String())
+			}
+			for _, want := range testCase.want {
+				if !strings.Contains(stdout.String(), want) {
+					t.Fatalf("Run(%v) help omitted %q:\n%s", testCase.args, want, stdout.String())
+				}
+			}
+		})
+	}
+
+	var stdout, stderr bytes.Buffer
+	if code := cli.Run([]string{"sentry", "seer", "unknown"}, &stdout, &stderr); code == 0 || !strings.Contains(stdout.String()+stderr.String(), `unknown command "seer unknown"`) {
+		t.Fatalf("Run(invalid Sentry command) code=%d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault(t *testing.T) {
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject: %v", err)
+	}
+	project, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open: %v", err)
+	}
+	credential, err := project.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      "asana-persisted-origin",
+		Connector: "asana",
+		Config:    map[string]string{"base_url": "https://invalid.example"},
+	})
+	if err != nil {
+		t.Fatalf("AddCredential: %v", err)
+	}
+	if err := os.Remove(filepath.Join(root, ".polymetrics", "vault", credential.ID+".enc")); err != nil {
+		t.Fatalf("remove temporary encrypted credential: %v", err)
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"--root", root,
+		"asana", "custom-fields", "list",
+		"--credential", credential.Name,
+	}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("Run(persisted source-bound invalid origin) succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	output := stdout.String() + stderr.String()
+	if !strings.Contains(output, `source-bound provider operation "custom_fields" rejects configured base_url override`) {
+		t.Fatalf("persisted invalid source origin did not reach early preflight:\n%s", output)
+	}
+	if strings.Contains(output, "read encrypted credential") {
+		t.Fatalf("persisted invalid source origin reached vault access:\n%s", output)
+	}
+}
+
+func TestSourceBoundReadHelpUsesClosedPagingFlags(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"asana", "agents", "get-agents-for-workspace", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(source-bound help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	help := stdout.String()
+	commandFlags, _, found := strings.Cut(help, "PAGE FLAGS")
+	if !found {
+		t.Fatalf("source-bound direct-read help omitted declared page navigation:\n%s", help)
+	}
+	for _, want := range []string{"--page (integer)", "--page-cursor (string)"} {
+		if !strings.Contains(help, want) {
+			t.Fatalf("source-bound direct-read help omitted %q:\n%s", want, help)
+		}
+	}
+	for _, rawPagingFlag := range []string{"\n  --offset", "\n  --limit"} {
+		if strings.Contains(commandFlags, rawPagingFlag) {
+			t.Fatalf("source-bound direct-read command flags expose raw provider paging %q:\n%s", strings.TrimSpace(rawPagingFlag), help)
+		}
+	}
+}
+
+func TestSourceBoundStreamDirectReadHelpUsesStreamLimitWithoutPageFlags(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"asana", "tasks", "list", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(source-bound stream help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	help := stdout.String()
+	if strings.Contains(help, "PAGE FLAGS") || strings.Contains(help, "--page-cursor") {
+		t.Fatalf("stream-backed direct-read help exposes unsupported direct-read navigation:\n%s", help)
+	}
+	if !strings.Contains(help, "--limit") {
+		t.Fatalf("stream-backed direct-read help omitted its bounded stream limit:\n%s", help)
+	}
+}
+
+func TestPromotedAsanaMutationHelpIsExecutableRatherThanHistoricalPlan(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"asana", "allocations", "delete-allocation", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(promoted Asana mutation help) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	help := stdout.String()
+	for _, want := range []string{"AVAILABILITY\n  implemented", "WRITE\n  delete_allocation", "Implemented source-bound Asana mutation"} {
+		if !strings.Contains(help, want) {
+			t.Fatalf("promoted Asana mutation help omitted %q:\n%s", want, help)
+		}
+	}
+	if strings.Contains(help, "Planned fixed-target Asana mutation") {
+		t.Fatalf("promoted Asana mutation help retains historical planned label:\n%s", help)
 	}
 }
 
@@ -534,6 +735,82 @@ func TestDocsGenerateAndValidateConnectorDocs(t *testing.T) {
 	code = cli.Run([]string{"docs", "validate", "--connectors-dir", connectorsDir}, &stdout, &stderr)
 	if code != 0 {
 		t.Fatalf("docs validate code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+}
+
+func TestDocsConnectorGenerateAndValidateSelectedOnly(t *testing.T) {
+	dir := t.TempDir()
+	connectorsDir := filepath.Join(dir, "connectors")
+	const selected = "asana"
+
+	sentinels := map[string]string{
+		filepath.Join(connectorsDir, "github", "MANUAL.md"):            "unselected manual sentinel\n",
+		filepath.Join(connectorsDir, "github", "SKILL.md"):             "unselected skill sentinel\n",
+		filepath.Join(connectorsDir, "icons", "github.svg"):            "unselected icon sentinel\n",
+		filepath.Join(connectorsDir, "README.md"):                      "shared README sentinel\n",
+		filepath.Join(connectorsDir, "catalog", "all-connectors.json"): "shared catalog JSON sentinel\n",
+		filepath.Join(connectorsDir, "catalog", "all-connectors.md"):   "shared catalog markdown sentinel\n",
+	}
+	for path, content := range sentinels {
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			t.Fatalf("create sentinel parent %s: %v", path, err)
+		}
+		if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
+			t.Fatalf("write sentinel %s: %v", path, err)
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"docs", "connector", "generate", "--connector", selected, "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("selected docs generate code = %d stderr = %s", code, stderr.String())
+	}
+	for path, want := range map[string]string{
+		filepath.Join(connectorsDir, selected, "MANUAL.md"): "# pm connectors inspect asana",
+		filepath.Join(connectorsDir, selected, "SKILL.md"):  "name: pm-asana",
+		filepath.Join(connectorsDir, "icons", "asana.svg"):  "<svg",
+	} {
+		content, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read selected output %s: %v", path, err)
+		}
+		if !strings.Contains(string(content), want) {
+			t.Fatalf("selected output %s missing %q", path, want)
+		}
+	}
+	for path, want := range sentinels {
+		got, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read untouched output %s: %v", path, err)
+		}
+		if string(got) != want {
+			t.Fatalf("untouched output %s = %q, want %q", path, got, want)
+		}
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"docs", "connector", "validate", "--connector=" + selected, "--connectors-dir=" + connectorsDir}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("selected docs validate code = %d stderr = %s stdout = %s", code, stderr.String(), stdout.String())
+	}
+
+	selectedSkillPath := filepath.Join(connectorsDir, selected, "SKILL.md")
+	selectedSkill, err := os.ReadFile(selectedSkillPath)
+	if err != nil {
+		t.Fatalf("read selected skill before staleness check: %v", err)
+	}
+	if err := os.WriteFile(selectedSkillPath, append(selectedSkill, []byte("\nstale selected skill\n")...), 0o644); err != nil {
+		t.Fatalf("write stale selected skill: %v", err)
+	}
+	stdout.Reset()
+	stderr.Reset()
+	code = cli.Run([]string{"docs", "connector", "validate", "--connector", selected, "--connectors-dir", connectorsDir}, &stdout, &stderr)
+	if code != 1 {
+		t.Fatalf("stale selected docs validate code = %d, want 1; stderr = %s", code, stderr.String())
+	}
+	if got := stderr.String(); !strings.Contains(got, "pm docs connector generate --connector asana") || strings.Contains(got, "run pm docs generate") {
+		t.Fatalf("selected validation regeneration guidance = %q, want scoped command only", got)
 	}
 }
 

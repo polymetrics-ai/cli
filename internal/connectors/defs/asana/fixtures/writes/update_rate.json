@@ -1,0 +1,24 @@
+{
+  "record": {
+    "rate_gid": "fixture-rate",
+    "data": {
+      "rate": 150
+    },
+    "opt_fields": [
+      "created_by",
+      "created_by.name"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/rates/fixture-rate",
+    "body": {
+      "data": {
+        "rate": 150
+      }
+    },
+    "query": {
+      "opt_fields": "created_by,created_by.name"
+    }
+  }
+}

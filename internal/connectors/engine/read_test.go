@@ -2287,6 +2287,129 @@ func TestCheckDeclarativeRequestSucceeds(t *testing.T) {
 	}
 }
 
+func TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome(t *testing.T) {
+	tests := []struct {
+		name      string
+		statuses  string
+		response  int
+		wantError string
+		wantCalls int
+	}{
+		{name: "happy accepts exact declared 204", statuses: `["204"]`, response: http.StatusNoContent, wantCalls: 1},
+		{name: "happy normalizes plus 200", statuses: `["+200"]`, response: http.StatusOK, wantCalls: 1},
+		{name: "edge normalizes zero-padded 0200", statuses: `["0200"]`, response: http.StatusOK, wantCalls: 1},
+		{name: "edge blocks exact non-2xx 404 before provider IO", statuses: `["404"]`, response: http.StatusNotFound, wantError: "exact response-status non-2xx execution", wantCalls: 0},
+		{name: "bad rejects undeclared 200", statuses: `["204"]`, response: http.StatusOK, wantError: "not declared", wantCalls: 1},
+		{name: "bad rejects uninterpretable status before provider IO", statuses: `["provider-success"]`, response: http.StatusOK, wantError: "unambiguous numeric HTTP status", wantCalls: 0},
+		{name: "edge rejects status range before provider IO", statuses: `["2XX"]`, response: http.StatusOK, wantError: "exact response-status range execution", wantCalls: 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			calls := 0
+			srv := jsonServer(t, func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				w.WriteHeader(tt.response)
+			})
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/streams.json"].Data = []byte(fmt.Sprintf(`{
+				"base": {
+					"url": "{{ config.base_url }}",
+					"check": { "method": "GET", "path": "/status", "success_statuses": %s }
+				},
+				"streams": [
+					{ "name": "widgets", "path": "/widgets", "records": { "path": "data" }, "schema": "schemas/widgets.json" }
+				]
+			}`, tt.statuses))
+			bundle, err := Load(fsys, "acme")
+			if err != nil {
+				t.Fatalf("Load exact check statuses: %v", err)
+			}
+			bundle.HTTP.URL = srv.URL
+			err = Check(context.Background(), bundle, connectors.RuntimeConfig{}, nil)
+			if tt.wantError == "" {
+				if err != nil {
+					t.Fatalf("Check exact status: %v", err)
+				}
+			} else if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("Check exact status error = %v, want %q", err, tt.wantError)
+			}
+			if calls != tt.wantCalls {
+				t.Fatalf("provider calls = %d, want %d", calls, tt.wantCalls)
+			}
+		})
+	}
+}
+
+func TestRequesterWithCheckSuccessStatuses_BlocksNon2xxRuntimeGaps(t *testing.T) {
+	for _, status := range []string{"100", "599"} {
+		t.Run(status, func(t *testing.T) {
+			_, err := requesterWithCheckSuccessStatuses(&connsdk.Requester{}, &RequestSpec{SuccessStatuses: []string{status}})
+			if err == nil || !strings.Contains(err.Error(), "exact response-status non-2xx execution") {
+				t.Fatalf("configure non-2xx status %q error = %v, want named runtime gap", status, err)
+			}
+		})
+	}
+}
+
+func TestCheck_ResponseMaxBytesPreservesDeclaredBound(t *testing.T) {
+	tests := []struct {
+		name        string
+		maxBytes    int
+		response    string
+		wantLoadErr string
+		wantCheck   string
+		wantCalls   int
+	}{
+		{name: "happy accepts response at exact cap", maxBytes: 3, response: "abc", wantCalls: 1},
+		{name: "bad rejects response over cap", maxBytes: 3, response: "abcd", wantCheck: "exceeds declared max_bytes", wantCalls: 1},
+		{name: "edge rejects invalid cap before provider IO", maxBytes: 0, wantLoadErr: "minimum", wantCalls: 0},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			calls := 0
+			srv := jsonServer(t, func(w http.ResponseWriter, _ *http.Request) {
+				calls++
+				_, _ = w.Write([]byte(tt.response))
+			})
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/streams.json"].Data = []byte(fmt.Sprintf(`{
+				"base": {
+					"url": "{{ config.base_url }}",
+					"check": { "method": "GET", "path": "/status", "max_bytes": %d }
+				},
+				"streams": [
+					{ "name": "widgets", "path": "/widgets", "records": { "path": "data" }, "schema": "schemas/widgets.json" }
+				]
+			}`, tt.maxBytes))
+			bundle, err := Load(fsys, "acme")
+			if tt.wantLoadErr != "" {
+				if err == nil || !strings.Contains(err.Error(), tt.wantLoadErr) {
+					t.Fatalf("Load cap error = %v, want %q", err, tt.wantLoadErr)
+				}
+				if calls != tt.wantCalls {
+					t.Fatalf("provider calls after invalid cap = %d, want %d", calls, tt.wantCalls)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Load check cap: %v", err)
+			}
+			bundle.HTTP.URL = srv.URL
+			err = Check(context.Background(), bundle, connectors.RuntimeConfig{}, nil)
+			if tt.wantCheck == "" {
+				if err != nil {
+					t.Fatalf("Check exact cap: %v", err)
+				}
+			} else if err == nil || !strings.Contains(err.Error(), tt.wantCheck) {
+				t.Fatalf("Check cap error = %v, want %q", err, tt.wantCheck)
+			}
+			if calls != tt.wantCalls {
+				t.Fatalf("provider calls = %d, want %d", calls, tt.wantCalls)
+			}
+		})
+	}
+}
+
 func TestCheckNoDeclaredCheckIsNoop(t *testing.T) {
 	b := Bundle{Name: "acme", HTTP: HTTPBase{URL: "http://example.invalid"}}
 	if err := Check(context.Background(), b, connectors.RuntimeConfig{}, nil); err != nil {
@@ -2995,6 +3118,143 @@ func TestReadFanOutRequestIDsPreliminaryPaginatedRequest(t *testing.T) {
 	}
 	if len(records) != 3 {
 		t.Fatalf("got %d records, want 3 (one task per project)", len(records))
+	}
+}
+
+// TestReadMaxRequestsBoundsRequestBackedFanOutGlobally is the F24 RED witness:
+// MaxPages is intentionally per sequence, but an interactive command budget is
+// aggregate. The preliminary parent listing consumes the only admitted send,
+// so the first child request must be refused before it reaches the provider.
+func TestReadMaxRequestsBoundsRequestBackedFanOutGlobally(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		if r.URL.Path != "/projects" {
+			t.Fatalf("provider request %d path = %q, want only fan-out discovery /projects", hits, r.URL.Path)
+		}
+		_, _ = w.Write([]byte(`{"data":[{"id":"p1"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Path:    "/projects/{{ fanout.id }}/tasks",
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{Request: &FanOutIDsRequest{
+				Path:        "/projects",
+				RecordsPath: "data",
+				IDField:     "id",
+			}},
+			Into: FanOutInto{PathVar: "parent_id"},
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", MaxRequests: 1}, nil)
+	var stopped *connectors.ReadRequestBudgetExceededError
+	if !errors.As(err, &stopped) {
+		t.Fatalf("Read error = %v, want typed ReadRequestBudgetExceededError", err)
+	}
+	if stopped.Limit != 1 || stopped.Used != 1 {
+		t.Fatalf("budget error = %+v, want limit=1 used=1", stopped)
+	}
+	if hits != 1 {
+		t.Fatalf("provider requests = %d, want exactly 1 across discovery and children", hits)
+	}
+}
+
+// TestReadMaxRequestsZeroLeavesSavedFanOutUnbounded proves the new caller cap
+// is opt-in. Saved ETL passes the zero value and must retain the established
+// discovery-plus-all-children behavior.
+func TestReadMaxRequestsZeroLeavesSavedFanOutUnbounded(t *testing.T) {
+	var paths []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		paths = append(paths, r.URL.Path)
+		switch r.URL.Path {
+		case "/projects":
+			_, _ = w.Write([]byte(`{"data":[{"id":"p1"},{"id":"p2"}]}`))
+		case "/projects/p1/tasks":
+			_, _ = w.Write([]byte(`{"data":[{"id":"t1"}]}`))
+		case "/projects/p2/tasks":
+			_, _ = w.Write([]byte(`{"data":[{"id":"t2"}]}`))
+		default:
+			t.Fatalf("unexpected provider request path %q", r.URL.Path)
+		}
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Path:    "/projects/{{ fanout.id }}/tasks",
+		Records: RecordsSpec{Path: "data"},
+		FanOut: &FanOutSpec{
+			IDsFrom: FanOutIDsFrom{Request: &FanOutIDsRequest{Path: "/projects", RecordsPath: "data", IDField: "id"}},
+			Into:    FanOutInto{PathVar: "parent_id"},
+		},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read saved-ETL zero budget: %v", err)
+	}
+	if got, want := strings.Join(paths, ","), "/projects,/projects/p1/tasks,/projects/p2/tasks"; got != want {
+		t.Fatalf("provider request sequence = %q, want %q", got, want)
+	}
+	if len(records) != 2 {
+		t.Fatalf("records = %d, want 2", len(records))
+	}
+}
+
+func TestReadMaxRequestsRejectsNegativeBeforeProviderIO(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", MaxRequests: -1}, nil)
+	if err == nil || !strings.Contains(err.Error(), "max requests must not be negative") {
+		t.Fatalf("Read error = %v, want negative max-requests rejection", err)
+	}
+	if hits != 0 {
+		t.Fatalf("provider requests = %d, want 0", hits)
+	}
+}
+
+func TestReadMaxRequestsCountsRetrySendsGlobally(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		http.Error(w, "transient", http.StatusInternalServerError)
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+
+	err := ReadWithSleeper(context.Background(), b, connectors.ReadRequest{Stream: "widgets", MaxRequests: 1}, nil, func(connectors.Record) error {
+		return nil
+	}, func(context.Context, time.Duration) error { return nil })
+	var stopped *connectors.ReadRequestBudgetExceededError
+	if !errors.As(err, &stopped) {
+		t.Fatalf("Read error = %v, want retry stopped by typed request budget", err)
+	}
+	if hits != 1 {
+		t.Fatalf("provider retry requests = %d, want exactly 1", hits)
+	}
+}
+
+func TestReadMaxRequestsCountsRedirectHopsGlobally(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		if r.URL.Path == "/widgets" {
+			http.Redirect(w, r, "/redirected", http.StatusFound)
+			return
+		}
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{Records: RecordsSpec{Path: "data"}})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", MaxRequests: 1}, nil)
+	var stopped *connectors.ReadRequestBudgetExceededError
+	if !errors.As(err, &stopped) {
+		t.Fatalf("Read error = %v, want redirect stopped by typed request budget", err)
+	}
+	if hits != 1 {
+		t.Fatalf("provider redirect requests = %d, want exactly 1", hits)
 	}
 }
 

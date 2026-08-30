@@ -1,0 +1,4 @@
+{
+  "record": { "task_gid": "fixture-task", "data": { "dependents": ["fixture-dependent"] } },
+  "expect": { "method": "POST", "path": "/tasks/fixture-task/removeDependents", "body": { "data": { "dependents": ["fixture-dependent"] } } }
+}

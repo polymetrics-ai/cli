@@ -1,8 +1,11 @@
 package engine
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors"
 )
 
 func TestValidateMultipartMediaTypes(t *testing.T) {
@@ -14,6 +17,10 @@ func TestValidateMultipartMediaTypes(t *testing.T) {
 		{
 			name: "absent is unconstrained",
 			part: MultipartPartSpec{Name: "file", Type: "file", Field: "path"},
+		},
+		{
+			name: "provider unrestricted is an explicit public upload policy",
+			part: MultipartPartSpec{Name: "file", Type: "file", Field: "path", MediaPolicy: connectors.BinaryUploadMediaPolicyProviderUnrestricted},
 		},
 		{
 			name: "declared list is accepted",
@@ -39,6 +46,32 @@ func TestValidateMultipartMediaTypes(t *testing.T) {
 			part:    MultipartPartSpec{Name: "meta", Type: "field", Field: "meta", AllowedMediaTypes: []string{"image/png"}},
 			wantErr: "only meaningful on a file part",
 		},
+		{
+			name:    "unknown media policy is refused",
+			part:    MultipartPartSpec{Name: "file", Type: "file", Field: "path", MediaPolicy: "allow_anything"},
+			wantErr: "unsupported media_policy",
+		},
+		{
+			name: "provider unrestricted conflicts with an allow list",
+			part: MultipartPartSpec{
+				Name: "file", Type: "file", Field: "path",
+				MediaPolicy: connectors.BinaryUploadMediaPolicyProviderUnrestricted, AllowedMediaTypes: []string{"image/png"},
+			},
+			wantErr: "must not declare allowed_media_types",
+		},
+		{
+			name: "provider unrestricted conflicts with a fixed content type",
+			part: MultipartPartSpec{
+				Name: "file", Type: "file", Field: "path",
+				MediaPolicy: connectors.BinaryUploadMediaPolicyProviderUnrestricted, ContentType: "application/octet-stream",
+			},
+			wantErr: "must not declare content_type",
+		},
+		{
+			name:    "provider unrestricted is file-only",
+			part:    MultipartPartSpec{Name: "meta", Type: "field", Field: "meta", MediaPolicy: connectors.BinaryUploadMediaPolicyProviderUnrestricted},
+			wantErr: "only meaningful on a file part",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -53,6 +86,25 @@ func TestValidateMultipartMediaTypes(t *testing.T) {
 				t.Fatalf("validateMultipartMediaTypes error = %v, want it to contain %q", err, tt.wantErr)
 			}
 		})
+	}
+}
+
+func TestCanonicalMultipartPreviewBindsProviderUnrestrictedMediaPolicy(t *testing.T) {
+	canonical, err := prepareCanonicalMultipartSpec("fixture", &MultipartSpec{
+		MaxBytes: 1024,
+		Parts: []MultipartPartSpec{{
+			Name: "file", Type: "file", Field: "file_path", Required: true, MaxBytes: 1024,
+			MediaPolicy: connectors.BinaryUploadMediaPolicyProviderUnrestricted,
+		}}}, connectors.Record{"file_path": "opaque.fixture"}, 0, connectors.RuntimeConfig{}, false)
+	if err != nil {
+		t.Fatalf("prepareCanonicalMultipartSpec: %v", err)
+	}
+	raw, err := json.Marshal(canonical)
+	if err != nil {
+		t.Fatalf("marshal canonical multipart preview: %v", err)
+	}
+	if !strings.Contains(string(raw), `"media_policy":"provider_unrestricted"`) {
+		t.Fatalf("canonical multipart preview = %s, want provider media policy bound into approval identity", raw)
 	}
 }
 

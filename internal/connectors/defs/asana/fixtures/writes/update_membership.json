@@ -1,0 +1,4 @@
+{
+  "record": { "membership_gid": "fixture-membership", "data": { "access_level": "editor" } },
+  "expect": { "method": "PUT", "path": "/memberships/fixture-membership", "body": { "data": { "access_level": "editor" } } }
+}

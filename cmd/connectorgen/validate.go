@@ -10,6 +10,8 @@ import (
 	"sort"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
@@ -43,6 +45,7 @@ const (
 	ruleDefaultTypeMismatch       = "default_type_mismatch"
 	ruleIncrementalPolicy         = "incremental_policy"
 	ruleSourceProjection          = "source_projection"
+	ruleEnabledConnectorContract  = "enabled_connector_contract"
 )
 
 var supportedParamFormats = map[string]bool{
@@ -299,6 +302,7 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
 	findings = append(findings, checkIncrementalPolicies(b)...)
 	findings = append(findings, checkSourceProjection(fsys, b)...)
+	findings = append(findings, checkEnabledConnectorContract(fsys, b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
 	return findings, warnings
 }
@@ -873,6 +877,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 
 	var findings []Finding
 	for i, cmd := range b.CLISurface.Commands {
+		findings = append(findings, checkCLISurfaceFoundation(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceReferences(b, i, cmd, streams, writes, operations)...)
 		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd, writes)...)
@@ -884,6 +889,80 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
 	}
 	return findings
+}
+
+func checkCLISurfaceFoundation(b engine.Bundle, index int, command engine.CLICommand) []Finding {
+	if command.Availability == declarationAdmissionStateUnsupported {
+		if command.Unsupported == nil || strings.TrimSpace(command.Unsupported.Reason) == "" ||
+			strings.TrimSpace(command.Unsupported.Target.SourceID) == "" || strings.TrimSpace(command.Unsupported.Target.Method) == "" ||
+			strings.TrimSpace(command.Unsupported.Target.Path) == "" || command.Foundation != nil {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) provider-evidenced unsupported availability requires one exact unsupported_disposition and no foundation_gap", index, command.Path),
+			}}
+		}
+		if command.Stream != "" || command.Write != "" || command.Operation != "" {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) provider-evidenced unsupported availability must not claim an executable target", index, command.Path),
+			}}
+		}
+		if len(command.APISurface) != 1 || !strings.EqualFold(command.APISurface[0].Method, command.Unsupported.Target.Method) || command.APISurface[0].Path != command.Unsupported.Target.Path {
+			return []Finding{{
+				Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety,
+				Message: fmt.Sprintf("command %d (%q) unsupported source target must match exactly one api_surface endpoint", index, command.Path),
+			}}
+		}
+		return nil
+	}
+	if command.Availability == declarationAdmissionStateDeferred {
+		if command.Foundation == nil || strings.TrimSpace(command.Foundation.ID) == "" || strings.TrimSpace(command.Foundation.Reason) == "" ||
+			!connectors.ValidCommandFoundationComponent(command.Foundation.Component) ||
+			!connectors.ValidCommandFoundationEvidence(command.Foundation.Component, command.Foundation.Evidence) ||
+			strings.TrimSpace(command.Foundation.Target.Method) == "" || strings.TrimSpace(command.Foundation.Target.Path) == "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) deferred availability requires foundation_gap.id, reason, typed component/evidence, and target", index, command.Path),
+			}}
+		}
+		if len(command.APISurface) != 1 || !strings.EqualFold(command.APISurface[0].Method, command.Foundation.Target.Method) || command.APISurface[0].Path != command.Foundation.Target.Path {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) deferred foundation target must match exactly one api_surface endpoint", index, command.Path),
+			}}
+		}
+		path, err := commandrunner.CommandPathSegments(command.Path)
+		if err != nil {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) has no canonical round-trippable command path: %v", index, command.Path, err),
+			}}
+		}
+		if message := declarationAdmissionDeferredPreflight(b, path); message != "" {
+			return []Finding{{
+				Connector: b.Name,
+				File:      "cli_surface.json",
+				Rule:      ruleCLISurfaceSafety,
+				Message:   fmt.Sprintf("command %d (%q) %s", index, command.Path, message),
+			}}
+		}
+		return nil
+	}
+	if command.Foundation == nil && command.Unsupported == nil {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "cli_surface.json",
+		Rule:      ruleCLISurfaceSafety,
+		Message:   fmt.Sprintf("command %d (%q) foundation_gap or unsupported_disposition requires its matching availability", index, command.Path),
+	}}
 }
 
 // checkCLISurfaceEnvOnlyFlags requires every declaration-owned request secret
@@ -1056,7 +1135,7 @@ func validEnvOnlyGraphQLQueryVariable(cmd engine.CLICommand, flag engine.CLIFlag
 // checkCLISurfaceStructuredJSONFlags keeps the schema vocabulary closed even
 // though the bundle meta-schema must recognize `json` before the engine can
 // inspect an authored command. Runtime preflight permits it only for a named,
-// top-level reverse-ETL record field; this static half rejects every other
+// top-level declared write-action record field; this static half rejects every other
 // executable placement before it can become an `implemented` claim.
 func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
 	if cmd.Availability != "implemented" {
@@ -1072,7 +1151,7 @@ func checkCLISurfaceStructuredJSONFlags(b engine.Bundle, i int, cmd engine.CLICo
 			continue
 		}
 		switch {
-		case (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload") && strings.TrimSpace(cmd.Write) != "" && strings.HasPrefix(flag.MapsTo, "record."):
+		case (cmd.Intent == "reverse_etl" || cmd.Intent == "direct_write" || cmd.Intent == "binary_upload") && strings.TrimSpace(cmd.Write) != "" && strings.HasPrefix(flag.MapsTo, "record."):
 			continue
 		case cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Operation) != "":
 			variable, ok := strings.CutPrefix(flag.MapsTo, "body.")
@@ -1811,7 +1890,7 @@ func checkCLISurfaceWriteFlags(
 	cmd engine.CLICommand,
 	writes map[string]engine.WriteAction,
 ) []Finding {
-	if cmd.Availability != "implemented" || (cmd.Intent != "reverse_etl" && cmd.Intent != "binary_upload") || cmd.Write == "" {
+	if cmd.Availability != "implemented" || (cmd.Intent != "reverse_etl" && cmd.Intent != "direct_write" && cmd.Intent != "binary_upload") || cmd.Write == "" {
 		return nil
 	}
 
@@ -1835,16 +1914,16 @@ func checkCLISurfaceWriteFlags(
 	for _, flag := range cmd.Flags {
 		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
 		if !ok || target == "" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented write-action command %d (%q) flag --%s maps to unsupported target %q", i, cmd.Path, flag.Name, flag.MapsTo)})
 			continue
 		}
 		if prior := mappedByFlag[target]; prior != "" {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flags --%s and --%s both map to record.%s", i, cmd.Path, prior, flag.Name, target)})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented write-action command %d (%q) flags --%s and --%s both map to record.%s", i, cmd.Path, prior, flag.Name, target)})
 			continue
 		}
 		for existing, prior := range mappedByFlag {
 			if dottedPathPrefix(existing, target) || dottedPathPrefix(target, existing) {
-				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flags --%s and --%s have conflicting record mappings", i, cmd.Path, prior, flag.Name)})
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented write-action command %d (%q) flags --%s and --%s have conflicting record mappings", i, cmd.Path, prior, flag.Name)})
 			}
 		}
 		mappedByFlag[target] = flag.Name
@@ -1854,7 +1933,7 @@ func checkCLISurfaceWriteFlags(
 		}
 		leaf, err := schema.recordPath(target)
 		if err != nil {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s maps outside write %q schema: %v", i, cmd.Path, flag.Name, cmd.Write, err)})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented write-action command %d (%q) flag --%s maps outside write %q schema: %v", i, cmd.Path, flag.Name, cmd.Write, err)})
 			continue
 		}
 		if flag.Type == "json" {
@@ -1863,12 +1942,12 @@ func checkCLISurfaceWriteFlags(
 			// that shared rule: a hand-copied object/array test here would drift
 			// as soon as the declarative schema contract changes.
 			if err := engine.ValidateStructuredJSONRecordField(action.RecordSchema, target); err != nil {
-				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) structured JSON flag --%s is not declared safely: %v", i, cmd.Path, flag.Name, err)})
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented write-action command %d (%q) structured JSON flag --%s is not declared safely: %v", i, cmd.Path, flag.Name, err)})
 			}
 			continue
 		}
 		if !cliFlagTypeMatchesSchema(flag.Type, leaf) {
-			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) flag --%s type %q is incompatible with record.%s schema type %s", i, cmd.Path, flag.Name, flag.Type, target, strings.Join(leaf.effectiveTypes(), ","))})
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented write-action command %d (%q) flag --%s type %q is incompatible with record.%s schema type %s", i, cmd.Path, flag.Name, flag.Type, target, strings.Join(leaf.effectiveTypes(), ","))})
 		}
 	}
 
@@ -1893,7 +1972,7 @@ func checkCLISurfaceWriteFlags(
 	}
 	if len(missing) > 0 {
 		sort.Strings(missing)
-		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceMissingMapping, Message: fmt.Sprintf("implemented reverse ETL command %d (%q) for write %q lacks flag mappings for required record fields: %s", i, cmd.Path, cmd.Write, strings.Join(missing, ", "))})
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceMissingMapping, Message: fmt.Sprintf("implemented write-action command %d (%q) for write %q lacks flag mappings for required record fields: %s", i, cmd.Path, cmd.Write, strings.Join(missing, ", "))})
 	}
 	return findings
 }
@@ -2243,9 +2322,11 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand, writes
 				})
 			}
 		}
-		// Asserted unconditionally: an empty output_policy is the finding, not
-		// a reason to skip. The runtime rejects both empty and unsupported.
-		if !directReadOutputPolicies[cmd.OutputPolicy] {
+		// Operation/endpoint direct reads shape one response and therefore own
+		// an output policy. Stream-backed interactive reads emit the declared
+		// records through the stream executor; commandrunner does not consult an
+		// output policy on that path, so inventing one would be false metadata.
+		if cmd.Stream == "" && !directReadOutputPolicies[cmd.OutputPolicy] {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
@@ -2253,7 +2334,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand, writes
 				Message:   fmt.Sprintf("implemented direct read command %d (%q) must declare a supported output_policy", i, cmd.Path),
 			})
 		}
-		if cmd.Operation == "" && operationOnlyDirectReadOutputPolicies[cmd.OutputPolicy] {
+		if cmd.Stream == "" && cmd.Operation == "" && operationOnlyDirectReadOutputPolicies[cmd.OutputPolicy] {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
@@ -2265,17 +2346,17 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand, writes
 			return findings
 		}
 	case "direct_write":
-		// Mirrors commandrunner.validateOperationDirectWriteCommand. Direct
-		// execution still remains blocked there; satisfying this contract only
-		// makes the command eligible for App's plan -> preview -> approval
-		// lifecycle.
+		// Mirrors both commandrunner direct-write paths. An operation-backed
+		// command owns its REST body and output policy; an action-backed command
+		// owns a writes.json record and reaches the same plan -> preview ->
+		// approval lifecycle. Neither is a generic HTTP escape hatch.
 		var findings []Finding
-		if cmd.Operation == "" {
+		if cmd.Operation == "" && cmd.Write == "" {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
 				Rule:      ruleCLISurfaceMissingMapping,
-				Message:   fmt.Sprintf("implemented direct write command %d (%q) must reference an operation", i, cmd.Path),
+				Message:   fmt.Sprintf("implemented direct write command %d (%q) must reference an operation or write action", i, cmd.Path),
 			})
 		}
 		if len(cmd.APISurface) != 1 {
@@ -2305,7 +2386,7 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand, writes
 				})
 			}
 		}
-		if !directWriteOutputPolicies[cmd.OutputPolicy] {
+		if cmd.Operation != "" && !directWriteOutputPolicies[cmd.OutputPolicy] {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "cli_surface.json",
@@ -2459,6 +2540,17 @@ func checkCLISurfaceEndpointCoverage(
 		if sourceBoundPartialReadCommand(cmd) {
 			continue
 		}
+		if declarationBoundDeferredCommand(cmd) {
+			if state.excluded || state.operation == nil || state.operation.Status != "blocked" || !state.operation.BlockedByDefault {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("deferred command %d (%q) references api_surface endpoint %s %s that is not one blocked operation target", i, cmd.Path, strings.ToUpper(ep.Method), ep.Path),
+				})
+			}
+			continue
+		}
 		if cmd.Operation != "" && slices.Contains(state.coveredBy.OperationTargets(), cmd.Operation) {
 			continue
 		}
@@ -2511,6 +2603,20 @@ func sourceBoundPartialReadCommand(cmd engine.CLICommand) bool {
 	return cmd.Availability == "partial" && cmd.Intent == "direct_read" &&
 		strings.HasPrefix(cmd.Notes, "Blocked: locked source operation ") &&
 		strings.Contains(cmd.Notes, "declaration-owned executable")
+}
+
+// declarationBoundDeferredCommand is a source-admission command that is
+// deliberately unroutable until its named implementation foundation exists.
+// Its cited API endpoint remains discoverable; treating the endpoint's policy,
+// method, risk, or current runtime coverage as grounds to hide the command
+// would lose the declaration it was added to preserve. The admission checker
+// separately requires a specific evidenced component for this state.
+func declarationBoundDeferredCommand(cmd engine.CLICommand) bool {
+	return cmd.Availability == declarationAdmissionStateDeferred && cmd.Foundation != nil &&
+		strings.TrimSpace(cmd.Foundation.ID) != "" && strings.TrimSpace(cmd.Foundation.Reason) != "" &&
+		connectors.ValidCommandFoundationComponent(cmd.Foundation.Component) &&
+		connectors.ValidCommandFoundationEvidence(cmd.Foundation.Component, cmd.Foundation.Evidence) &&
+		strings.TrimSpace(cmd.Foundation.Target.Method) != "" && strings.TrimSpace(cmd.Foundation.Target.Path) != ""
 }
 
 func cliSurfaceEndpointStates(surface *engine.APISurface) map[string]cliSurfaceEndpointState {

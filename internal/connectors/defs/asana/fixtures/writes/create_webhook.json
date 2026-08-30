@@ -1,0 +1,25 @@
+{
+  "record": {
+    "data": {
+      "resource": "fixture-project",
+      "target": "https://example.invalid/asana-webhook"
+    },
+    "opt_fields": [
+      "active",
+      "created_at"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/webhooks",
+    "body": {
+      "data": {
+        "resource": "fixture-project",
+        "target": "https://example.invalid/asana-webhook"
+      }
+    },
+    "query": {
+      "opt_fields": "active,created_at"
+    }
+  }
+}

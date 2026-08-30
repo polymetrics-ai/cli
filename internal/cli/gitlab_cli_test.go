@@ -1,17 +1,23 @@
 package cli_test
 
 import (
+	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 
+	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
+	"polymetrics.ai/internal/connectors/commandrunner"
 )
 
-func TestGitLabCommandSurfaceAdvertisesOnlyCitedReadCommands(t *testing.T) {
+func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("gitlab")
 	if !ok {
@@ -19,8 +25,8 @@ func TestGitLabCommandSurfaceAdvertisesOnlyCitedReadCommands(t *testing.T) {
 	}
 
 	manifest := connectors.ManifestOf(connector)
-	if !manifest.Metadata.Capabilities.Read || manifest.Metadata.Capabilities.Write || len(manifest.WriteActions) != 0 {
-		t.Fatalf("GitLab executable capabilities = %+v with %d write actions, want read-only", manifest.Metadata.Capabilities, len(manifest.WriteActions))
+	if !manifest.Metadata.Capabilities.Read || !manifest.Metadata.Capabilities.Write || len(manifest.WriteActions) != 382 {
+		t.Fatalf("GitLab executable capabilities = %+v with %d write actions, want source-locked read/write lanes", manifest.Metadata.Capabilities, len(manifest.WriteActions))
 	}
 
 	provider, ok := connector.(connectors.CommandSurfaceProvider)
@@ -40,20 +46,54 @@ func TestGitLabCommandSurfaceAdvertisesOnlyCitedReadCommands(t *testing.T) {
 	}
 
 	surface := provider.CommandSurface()
-	if len(surface.Commands) != len(want) {
-		t.Fatalf("GitLab command count = %d, want %d", len(surface.Commands), len(want))
+	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") {
+		t.Fatalf("GitLab command tagline = %q, want current source-locked lanes", surface.Tagline)
 	}
+	writeActions := make(map[string]struct{}, len(manifest.WriteActions))
+	for _, action := range manifest.WriteActions {
+		writeActions[action.Name] = struct{}{}
+	}
+	counts := map[string]int{}
 	for _, command := range surface.Commands {
-		expectation, ok := want[command.Path]
-		if !ok {
-			t.Fatalf("unexpected GitLab command %q", command.Path)
+		switch command.Intent {
+		case "etl":
+			counts["etl"]++
+			expectation, known := want[command.Path]
+			if !known {
+				t.Fatalf("unexpected GitLab ETL command %q", command.Path)
+			}
+			if command.Availability != "implemented" || command.Stream != expectation.stream || command.SourceCLIPath != expectation.method+" "+expectation.path || command.SourceURL != expectation.url {
+				t.Fatalf("command %q = %+v, want implemented %s stream with provider citation %s", command.Path, command, expectation.stream, expectation.url)
+			}
+			if len(command.APISurface) != 1 || command.APISurface[0].Method != expectation.method || command.APISurface[0].Path != expectation.path {
+				t.Fatalf("command %q API surface = %+v, want %s %s", command.Path, command.APISurface, expectation.method, expectation.path)
+			}
+		case "direct_read":
+			counts["direct_read"]++
+			if command.Availability != "implemented" || command.Operation == "" || command.SourceOperation == "" || len(command.APISurface) != 1 {
+				t.Fatalf("GitLab direct-read command %q = %+v, want source-bound implemented command", command.Path, command)
+			}
+		case "direct_write", "reverse_etl":
+			counts[command.Intent]++
+			if command.Availability == "implemented" {
+				counts[command.Intent+"_implemented"]++
+			} else if command.Availability == "partial" {
+				counts[command.Intent+"_partial"]++
+			} else {
+				t.Fatalf("GitLab %s command %q availability = %q, want implemented or partial", command.Intent, command.Path, command.Availability)
+			}
+			if command.Write == "" || command.SourceOperation == "" || len(command.APISurface) != 1 || !strings.Contains(command.Approval, "plan, preview, approval, execute") {
+				t.Fatalf("GitLab %s command %q = %+v, want source-bound approval-gated action", command.Intent, command.Path, command)
+			}
+			if _, found := writeActions[command.Write]; !found {
+				t.Fatalf("GitLab %s command %q references unknown write %q", command.Intent, command.Path, command.Write)
+			}
+		default:
+			t.Fatalf("unexpected GitLab command intent %q for %q", command.Intent, command.Path)
 		}
-		if command.Intent != "etl" || command.Availability != "implemented" || command.Stream != expectation.stream || command.SourceCLIPath != expectation.method+" "+expectation.path || command.SourceURL != expectation.url {
-			t.Fatalf("command %q = %+v, want implemented %s stream with provider citation %s", command.Path, command, expectation.stream, expectation.url)
-		}
-		if len(command.APISurface) != 1 || command.APISurface[0].Method != expectation.method || command.APISurface[0].Path != expectation.path {
-			t.Fatalf("command %q API surface = %+v, want %s %s", command.Path, command.APISurface, expectation.method, expectation.path)
-		}
+	}
+	if counts["direct_read"] != 582 || counts["etl"] != len(want) || counts["direct_write"] != len(manifest.WriteActions) || counts["reverse_etl"] != len(manifest.WriteActions) || counts["direct_write_implemented"] != 381 || counts["direct_write_partial"] != 1 || counts["reverse_etl_implemented"] != 381 || counts["reverse_etl_partial"] != 1 {
+		t.Fatalf("GitLab command lane counts = %+v, want 582 direct reads, %d ETL streams, and direct-write/reverse-ETL 381 implemented + 1 partial actions", counts, len(want))
 	}
 }
 
@@ -134,4 +174,66 @@ func TestGitLabCommandSurfaceRunsAllDeclaredStreams(t *testing.T) {
 			t.Fatalf("requests to %s = %d, want 1", tt.path, requests[tt.path])
 		}
 	}
+}
+
+func TestGitLabGeneratedDirectReadReachesCredentialBoundary(t *testing.T) {
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("init project: %v", err)
+	}
+
+	spy := &gitLabNoNetworkTransportSpy{}
+	oldTransport := http.DefaultTransport
+	http.DefaultTransport = spy
+	t.Cleanup(func() { http.DefaultTransport = oldTransport })
+
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{
+		"gitlab", "api", "op-474554202f6170692f76342f61646d696e2f6163746976655f636f6e746578742f636f6e6e656374696f6e73",
+		"--root", root,
+	}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("generated GitLab direct read unexpectedly succeeded; stdout=%s stderr=%s", stdout.String(), stderr.String())
+	}
+	if got := strings.TrimSpace(stdout.String() + stderr.String()); got != "error: missing --credential" {
+		t.Fatalf("generated GitLab direct read = %q, want credential boundary", got)
+	}
+	if got := spy.requests.Load(); got != 0 {
+		t.Fatalf("generated GitLab direct read provider requests = %d, want zero", got)
+	}
+}
+
+func TestGitLabSourceLockedCommandsPassRuntimePreflight(t *testing.T) {
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("gitlab")
+	if !ok {
+		t.Fatal("GitLab connector is not registered")
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("GitLab connector has no command surface")
+	}
+
+	counts := map[string]int{}
+	for _, command := range provider.CommandSurface().Commands {
+		if command.Availability != "implemented" {
+			continue
+		}
+		if err := commandrunner.Preflight(connector, strings.Fields(command.Path)); err != nil {
+			t.Fatalf("GitLab implemented %s command %q fails runtime preflight: %v", command.Intent, command.Path, err)
+		}
+		counts[command.Intent]++
+	}
+	if counts["direct_read"] != 582 || counts["etl"] != 4 || counts["direct_write"] != 381 || counts["reverse_etl"] != 381 {
+		t.Fatalf("runtime-preflight lane counts = %+v, want direct_read=582 etl=4 direct_write=381 reverse_etl=381", counts)
+	}
+}
+
+type gitLabNoNetworkTransportSpy struct {
+	requests atomic.Int64
+}
+
+func (spy *gitLabNoNetworkTransportSpy) RoundTrip(*http.Request) (*http.Response, error) {
+	spy.requests.Add(1)
+	return nil, fmt.Errorf("unexpected GitLab provider I/O")
 }

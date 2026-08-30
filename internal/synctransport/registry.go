@@ -271,7 +271,12 @@ func validateDeliveryCompatibility(mode synccontract.Mode, strategy connectors.A
 	if destination.Idempotency != connectors.DeliveryIdempotencyKeyed {
 		return fmt.Errorf("transport sync mode %q requires keyed destination idempotency", mode)
 	}
-	if mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory || mode == synccontract.ModeChangeCapture {
+	if mode == synccontract.ModeIncrementalDedupe {
+		if (source.Ordering != connectors.DeliveryOrderingSource && source.Ordering != connectors.DeliveryOrderingWindowCoalesced) || destination.Ordering != connectors.DeliveryOrderingSource {
+			return fmt.Errorf("transport sync mode %q requires source-ordered or token-window-coalesced source delivery and a source-ordered destination", mode)
+		}
+	}
+	if mode == synccontract.ModeIncrementalDedupeHistory || mode == synccontract.ModeChangeCapture {
 		if source.Ordering != connectors.DeliveryOrderingSource || destination.Ordering != connectors.DeliveryOrderingSource {
 			return fmt.Errorf("transport sync mode %q requires source-ordered delivery at both endpoints", mode)
 		}

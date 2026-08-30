@@ -57,8 +57,41 @@ func GuideOf(c Connector) ConnectorGuide {
 		guide = guideWithCommandSurface(guide, provider.CommandSurface())
 	}
 	guide = guideWithSyncTransport(guide, c)
+	guide = guideWithEnabledConnectorContract(guide, c)
 	guide = guideWithPollingWatermark(guide, c)
 	return guideWithIcon(guide, manifest)
+}
+
+// guideWithEnabledConnectorContract renders the contract's own lane states so
+// a manual never turns a deferred or provider-evidenced binary lane into an
+// implied successful command. This is an inspection projection only; command
+// availability still comes from the real command surface and preflight.
+func guideWithEnabledConnectorContract(guide ConnectorGuide, connector Connector) ConnectorGuide {
+	definition, ok := DefinitionOf(connector)
+	if !ok || definition.EnabledContract == nil {
+		return guide
+	}
+	for _, section := range guide.Sections {
+		if strings.EqualFold(section.Title, "enabled connector contract") {
+			return guide
+		}
+	}
+	contract := definition.EnabledContract
+	lines := []string{
+		"Source lock: " + contract.SourceLock.Path + " (sha256=" + contract.SourceLock.SHA256 + ", bytes=" + fmt.Sprintf("%d", contract.SourceLock.Bytes) + ").",
+		"Lane states are source-backed contract outcomes; certification and credential availability do not change them.",
+	}
+	lanes := append([]EnabledConnectorLane(nil), contract.Lanes...)
+	sort.Slice(lanes, func(i, j int) bool { return lanes[i].Name < lanes[j].Name })
+	for _, lane := range lanes {
+		lines = append(lines, fmt.Sprintf("%s: %s (source coverage: %s %d/%d; unmapped=%d; deferred=%d; unsupported=%d) — %s", lane.Name, lane.State, lane.Source.Coverage, lane.Source.Implemented, lane.Source.Expected, lane.Source.UnmappedMapping, lane.Source.DeferredFoundation, lane.Source.Unsupported, lane.Reason))
+	}
+	return appendGuideSection(guide, GuideSection{Title: "Enabled Connector Contract", Lines: lines})
+}
+
+func appendGuideSection(guide ConnectorGuide, section GuideSection) ConnectorGuide {
+	guide.Sections = append(guide.Sections, section)
+	return guide
 }
 
 func guideWithIcon(guide ConnectorGuide, manifest Manifest) ConnectorGuide {
@@ -314,6 +347,9 @@ func commandSurfaceRenderedFlags(cmd CommandSurfaceCommand) []CommandSurfaceFlag
 	case "binary_download", "text_export":
 		runtimeFlags = BinaryDownloadFlags()
 	case "direct_read":
+		if strings.TrimSpace(cmd.Stream) != "" {
+			return cmd.Flags
+		}
 		runtimeFlags = DirectReadPageFlags()
 	default:
 		return cmd.Flags

@@ -3,6 +3,7 @@
 package engine
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"encoding/json"
@@ -13,6 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -20,6 +22,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/database"
+	"polymetrics.ai/internal/synccontract"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -31,30 +34,33 @@ var certificationEvidenceIdentifierPattern = regexp.MustCompile(`^[A-Za-z0-9][A-
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
-	Name               string
-	Metadata           Metadata
-	Changefeed         *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
-	PollingWatermark   *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
-	SyncTransport      *connectors.SyncTransportDescriptor    // sync_transport.json; nil when no closed source/destination role is declared
-	Database           *database.Definition                   // database.json; nil for non-database or unmigrated bundles
-	Spec               *Schema                                // compiled spec.json; SecretKeys() from x-secret
-	RawSpec            json.RawMessage                        // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP               HTTPBase                               // streams.json "base"; zero value when no streams.json
-	Streams            []StreamSpec                           // streams.json "streams"
-	Writes             []WriteAction                          // writes.json "actions"; nil when writes.json absent
-	Operations         []OperationSpec                        // operations.json "operations"; nil when operations.json absent
-	RawOperations      json.RawMessage                        // verbatim operations.json bytes for validation/audit scanning
-	Schemas            map[string]*StreamSchema               // stream name -> compiled schema + PK/cursor
-	Surface            *APISurface                            // api_surface.json, when available on disk
-	directWriteSurface *APISurface                            // runtime projection from shipped rest_write declarations
-	directReadLedger   *operationEndpointLedger               // generated direct-read endpoint projection
-	CLISurface         *CLISurface                            // cli_surface.json
-	RawCLISurface      json.RawMessage                        // verbatim cli_surface.json bytes; nil when absent
-	Certification      *CertificationSpec                     // certification.json; nil when absent
-	RawCertification   json.RawMessage                        // verbatim certification.json bytes; nil when absent
-	RateLimits         *connsdk.RateLimits                    // rate_limits.json; nil when absent
-	Docs               string                                 // docs.md
-	Fixtures           fs.FS                                  // fixtures/ subtree; nil when absent
+	Name                          string
+	Metadata                      Metadata
+	Changefeed                    *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
+	PollingWatermark              *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
+	SyncTransport                 *connectors.SyncTransportDescriptor    // sync_transport.json; nil when no closed source/destination role is declared
+	EnabledContract               *connectors.EnabledConnectorContract   // enabled_connector_contract.json; nil until a connector adopts the full lane inventory
+	Database                      *database.Definition                   // database.json; nil for non-database or unmigrated bundles
+	Spec                          *Schema                                // compiled spec.json; SecretKeys() from x-secret
+	RawSpec                       json.RawMessage                        // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP                          HTTPBase                               // streams.json "base"; zero value when no streams.json
+	Streams                       []StreamSpec                           // streams.json "streams"
+	Writes                        []WriteAction                          // writes.json "actions"; nil when writes.json absent
+	Operations                    []OperationSpec                        // operations.json "operations"; nil when operations.json absent
+	RawOperations                 json.RawMessage                        // verbatim operations.json bytes for validation/audit scanning
+	Schemas                       map[string]*StreamSchema               // stream name -> compiled schema + PK/cursor
+	Surface                       *APISurface                            // api_surface.json, when available on disk
+	directWriteSurface            *APISurface                            // runtime projection from shipped rest_write declarations
+	directReadLedger              *operationEndpointLedger               // generated direct-read endpoint projection
+	declarationTargets            *declarationTargetLedger               // admitted source identities needed by shipped deferred preflight
+	CLISurface                    *CLISurface                            // cli_surface.json
+	RawCLISurface                 json.RawMessage                        // verbatim cli_surface.json bytes; nil when absent
+	Certification                 *CertificationSpec                     // certification.json; nil when absent
+	RawCertification              json.RawMessage                        // verbatim certification.json bytes; nil when absent
+	RateLimits                    *connsdk.RateLimits                    // rate_limits.json; nil when absent
+	CompositeProviderPathIdentity *CompositeProviderPathIdentity         // composite_provider_path_identity.json; nil when no closed source-cited proof is declared
+	Docs                          string                                 // docs.md
+	Fixtures                      fs.FS                                  // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -96,6 +102,50 @@ type Capabilities struct {
 	Query         bool `json:"query"`
 	CDC           bool `json:"cdc"`
 	DynamicSchema bool `json:"dynamic_schema"`
+
+	// WriteDeclared keeps an omitted JSON member distinct from an explicit
+	// false. An automatic source-cited mutation artifact is an opt-out that
+	// must never be inferred from Go's false zero value.
+	WriteDeclared bool `json:"-"`
+}
+
+// UnmarshalJSON preserves whether metadata.json.capabilities explicitly
+// declared write. The other capability members retain their existing optional
+// semantics; only write carries a source-executable-coverage opt-out.
+func (c *Capabilities) UnmarshalJSON(raw []byte) error {
+	type capabilitiesDocument struct {
+		Check         bool  `json:"check"`
+		Read          bool  `json:"read"`
+		Write         *bool `json:"write"`
+		Query         bool  `json:"query"`
+		CDC           bool  `json:"cdc"`
+		DynamicSchema bool  `json:"dynamic_schema"`
+	}
+	var document capabilitiesDocument
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&document); err != nil {
+		return err
+	}
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return fmt.Errorf("invalid JSON: multiple top-level values")
+		}
+		return err
+	}
+	*c = Capabilities{
+		Check:         document.Check,
+		Read:          document.Read,
+		Query:         document.Query,
+		CDC:           document.CDC,
+		DynamicSchema: document.DynamicSchema,
+		WriteDeclared: document.Write != nil,
+	}
+	if document.Write != nil {
+		c.Write = *document.Write
+	}
+	return nil
 }
 
 // BatchSpec mirrors metadata.json.batch.
@@ -153,9 +203,11 @@ type OperationRouteSpec struct {
 // meta-schema rejection (post-hardening) or a silently-dropped no-op
 // (pre-hardening) — see read.go's Check() for how it is now resolved+sent.
 type RequestSpec struct {
-	Method string                `json:"method"`
-	Path   string                `json:"path"`
-	Query  map[string]QueryParam `json:"query,omitempty"`
+	Method          string                `json:"method"`
+	Path            string                `json:"path"`
+	Query           map[string]QueryParam `json:"query,omitempty"`
+	SuccessStatuses []string              `json:"success_statuses,omitempty"`
+	MaxBytes        int                   `json:"max_bytes,omitempty"`
 }
 
 // AuthSpec describes one candidate authenticator, selected by "when" (first
@@ -504,7 +556,7 @@ type WriteAction struct {
 	// samples and returned write errors. DryRunWrite preview warnings preserve
 	// their resolved values.
 	RedactFields []string `json:"redact_fields,omitempty"`
-	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload | binary_upload
+	BodyType     string   `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart | base64_upload | binary_upload | declared_batch
 	// SuccessStatuses optionally narrows generic 2xx success to the exact
 	// provider receipt statuses the action declares.
 	SuccessStatuses []int `json:"success_statuses,omitempty"`
@@ -518,7 +570,12 @@ type WriteAction struct {
 	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
 	Base64Upload *Base64UploadSpec   `json:"base64_upload,omitempty"`
 	BinaryUpload *BinaryUploadSpec   `json:"binary_upload,omitempty"`
-	RecordSchema json.RawMessage     `json:"record_schema"`
+	// DeclaredBatch turns one record into a provider batch whose subrequests
+	// may select only the named write actions in AllowedActions. Callers never
+	// provide a method, path, headers, or raw body: those are resolved from the
+	// existing typed action declarations and sealed into the ordinary preview.
+	DeclaredBatch *DeclaredBatchSpec `json:"declared_batch,omitempty"`
+	RecordSchema  json.RawMessage    `json:"record_schema"`
 	// IdempotencyKeyHeader names a provider-documented request header. Execution
 	// generates one fresh key per record and reuses it only across that record's retries.
 	IdempotencyKeyHeader string `json:"idempotency_key_header,omitempty"`
@@ -622,6 +679,25 @@ type MultipartSpec struct {
 	Parts    []MultipartPartSpec `json:"parts,omitempty"`
 }
 
+// DeclaredBatchSpec describes a closed provider batch envelope over existing
+// named write actions. The field names are provider facts owned by the bundle;
+// the executor is fixed engine code, not a JSON callback or generic HTTP hook.
+// AllowedActions is an explicit allow-list so adding a new connector action
+// never silently makes it batch-addressable.
+type DeclaredBatchSpec struct {
+	MaxActions            int      `json:"max_actions"`
+	AllowedActions        []string `json:"allowed_actions"`
+	AllowedMethods        []string `json:"allowed_methods"`
+	ProviderEnvelopeField string   `json:"provider_envelope_field"`
+	ProviderActionsField  string   `json:"provider_actions_field"`
+	ProviderMethodField   string   `json:"provider_method_field"`
+	ProviderPathField     string   `json:"provider_path_field"`
+	ProviderDataField     string   `json:"provider_data_field"`
+	InnerBodyField        string   `json:"inner_body_field"`
+	ResponseEnvelopeField string   `json:"response_envelope_field"`
+	ResponseStatusField   string   `json:"response_status_field"`
+}
+
 // Base64UploadSpec describes body_type "base64_upload": a JSON body carrying a
 // base64-encoded payload in one declared property. It exists because APIs that
 // want an inline encoded upload (Airtable's uploadAttachment among them) had no
@@ -678,10 +754,11 @@ type BinaryUploadSpec struct {
 }
 
 type MultipartPartSpec struct {
-	Name        string `json:"name"`
-	Type        string `json:"type"`
-	Field       string `json:"field"`
-	ContentType string `json:"content_type,omitempty"`
+	Name        string                             `json:"name"`
+	Type        string                             `json:"type"`
+	Field       string                             `json:"field"`
+	ContentType string                             `json:"content_type,omitempty"`
+	MediaPolicy connectors.BinaryUploadMediaPolicy `json:"media_policy,omitempty"`
 	// AllowedMediaTypes bounds what the part's bytes may sniff as. ContentType
 	// is what the bundle asserts to the provider; this is what makes that
 	// assertion checkable. Absent means unconstrained; present and empty is a
@@ -805,18 +882,23 @@ type SurfaceOperation struct {
 // opt-in per kind; unsupported kinds stay metadata-only and unknown kinds are
 // rejected by the meta-schema.
 type OperationSpec struct {
-	ID            string            `json:"id"`
-	Kind          string            `json:"kind"`
-	Summary       string            `json:"summary"`
-	Description   string            `json:"description,omitempty"`
-	SourceURL     string            `json:"source_url,omitempty"`
-	Risk          string            `json:"risk"`
-	Approval      string            `json:"approval"`
-	OutputPolicy  string            `json:"output_policy"`
-	AuthScopes    []string          `json:"auth_scopes,omitempty"`
-	MutationClass string            `json:"mutation_class,omitempty"`
-	Destructive   bool              `json:"destructive,omitempty"`
-	Confirmation  *ConfirmationSpec `json:"confirmation,omitempty"`
+	ID string `json:"id"`
+	// SourceOperation is the exact locked provider operation that this
+	// declaration materializes. It is optional for legacy declarations, but a
+	// source-projected command must repeat its ID and is refused unless this
+	// method/path binding agrees with the selected executor.
+	SourceOperation *SourceOperationBinding `json:"source_operation,omitempty"`
+	Kind            string                  `json:"kind"`
+	Summary         string                  `json:"summary"`
+	Description     string                  `json:"description,omitempty"`
+	SourceURL       string                  `json:"source_url,omitempty"`
+	Risk            string                  `json:"risk"`
+	Approval        string                  `json:"approval"`
+	OutputPolicy    string                  `json:"output_policy"`
+	AuthScopes      []string                `json:"auth_scopes,omitempty"`
+	MutationClass   string                  `json:"mutation_class,omitempty"`
+	Destructive     bool                    `json:"destructive,omitempty"`
+	Confirmation    *ConfirmationSpec       `json:"confirmation,omitempty"`
 	// Batchable gates this operation out of a bulk plan when explicitly false.
 	// It is a pointer because false is restrictive while the omitted default is
 	// permissive; see WriteAction.Batchable for the matching write-action
@@ -838,6 +920,16 @@ type OperationSpec struct {
 	LocalFile *LocalFileOperationSpec `json:"local_file,omitempty"`
 	Browser   *BrowserOperationSpec   `json:"browser,omitempty"`
 	Composite *CompositeOperationSpec `json:"composite,omitempty"`
+}
+
+// SourceOperationBinding is deliberately an identity plus a fixed wire
+// endpoint, not a provider URL or a generic transport configuration. The
+// source projection owns its creation from a locked descriptor; runtime only
+// checks that a command cannot substitute another declaration endpoint.
+type SourceOperationBinding struct {
+	ID     string `json:"id"`
+	Method string `json:"method"`
+	Path   string `json:"path"`
 }
 
 // IsBatchable reports whether the operation may be placed in a bulk plan.
@@ -1140,6 +1232,51 @@ type CLIConstraint struct {
 	Message       string   `json:"message,omitempty"`
 }
 
+// CommandFoundation is the named missing capability for a deferred command.
+// Target makes the future provider endpoint explicit so the runtime can reject
+// a policy or excluded row rather than treating it as an executable binding.
+type CommandFoundation struct {
+	ID        string                  `json:"id"`
+	Reason    string                  `json:"reason"`
+	Component string                  `json:"component"`
+	Evidence  string                  `json:"evidence"`
+	Target    CommandFoundationTarget `json:"target"`
+}
+
+// CommandFoundationTarget is the exact admitted source and runtime binding of
+// a deferred command. Method/path are duplicated with the command reference;
+// the stable identities disambiguate operations sharing one transport.
+type CommandFoundationTarget struct {
+	SourceID            string                 `json:"source_id,omitempty"`
+	ProviderOperationID string                 `json:"operation_id,omitempty"`
+	Binding             CommandBindingIdentity `json:"binding,omitempty"`
+	DestructiveKind     string                 `json:"destructive_kind,omitempty"`
+	Method              string                 `json:"method"`
+	Path                string                 `json:"path"`
+}
+
+// CommandUnsupportedDisposition is source-backed discovery metadata for an
+// operation the CLI cannot represent or execute. It is intentionally separate
+// from a missing foundation, which describes an implementation gap.
+type CommandUnsupportedDisposition struct {
+	Reason string                   `json:"reason"`
+	Target CommandUnsupportedTarget `json:"target"`
+}
+
+type CommandUnsupportedTarget struct {
+	SourceID            string `json:"source_id"`
+	ProviderOperationID string `json:"operation_id"`
+	Method              string `json:"method"`
+	Path                string `json:"path"`
+}
+
+// CommandBindingIdentity selects one stream, write action, operation, or
+// operation-free command independently of its shared transport endpoint.
+type CommandBindingIdentity struct {
+	Kind string `json:"kind"`
+	ID   string `json:"id"`
+}
+
 // CLICommand is one provider-inspired command path.
 type CLICommand struct {
 	Path          string                  `json:"path"`
@@ -1157,9 +1294,15 @@ type CLICommand struct {
 	OutputPolicy  string                  `json:"output_policy,omitempty"`
 	RedactFields  []string                `json:"redact_fields,omitempty"`
 	Operation     string                  `json:"operation,omitempty"`
-	Risk          string                  `json:"risk,omitempty"`
-	Approval      string                  `json:"approval,omitempty"`
-	Notes         string                  `json:"notes,omitempty"`
+	// SourceOperation names the locked provider identity selected by a
+	// source-projected command. It must match OperationSpec.SourceOperation
+	// before commandrunner may reach credential resolution.
+	SourceOperation string                         `json:"source_operation,omitempty"`
+	Risk            string                         `json:"risk,omitempty"`
+	Approval        string                         `json:"approval,omitempty"`
+	Foundation      *CommandFoundation             `json:"foundation_gap,omitempty"`
+	Unsupported     *CommandUnsupportedDisposition `json:"unsupported_disposition,omitempty"`
+	Notes           string                         `json:"notes,omitempty"`
 }
 
 // CLISurfaceEndpointRef points from a command to a tracked api_surface row.
@@ -1487,8 +1630,8 @@ type CertificationWriteWaveBlockedAction struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, pollingWatermark, syncTransport, spec, streams, writes, apiSurface, operations, cliSurface, certification, rateLimits *Schema
-	err                                                                                                                                         error
+	metadata, changefeed, pollingWatermark, syncTransport, enabledConnectorContract, spec, streams, writes, apiSurface, compositeProviderPathIdentity, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, certification, rateLimits *Schema
+	err                                                                                                                                                                                                                                                                                    error
 }{}
 
 func init() {
@@ -1507,14 +1650,60 @@ func init() {
 	metaSchemas.changefeed = compileMeta(changefeedSchemaJSON)
 	metaSchemas.pollingWatermark = compileMeta(pollingWatermarkSchemaJSON)
 	metaSchemas.syncTransport = compileMeta(syncTransportSchemaJSON)
+	metaSchemas.enabledConnectorContract = compileMeta(enabledConnectorContractSchemaJSON)
 	metaSchemas.spec = compileMeta(specSchemaJSON)
 	metaSchemas.streams = compileMeta(streamsSchemaJSON)
 	metaSchemas.writes = compileMeta(writesSchemaJSON)
 	metaSchemas.apiSurface = compileMeta(apiSurfaceSchemaJSON)
+	metaSchemas.compositeProviderPathIdentity = compileMeta(compositeProviderPathIdentitySchemaJSON)
 	metaSchemas.operations = compileMeta(operationsSchemaJSON)
 	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
+	metaSchemas.declarationAdmission = compileMeta(declarationAdmissionSchemaJSON)
+	metaSchemas.declarationAdmissionSources = compileMeta(declarationAdmissionSourcesSchemaJSON)
+	metaSchemas.declarationAdmissionInventory = compileMeta(declarationAdmissionInventorySchemaJSON)
 	metaSchemas.certification = compileMeta(certificationSchemaJSON)
 	metaSchemas.rateLimits = compileMeta(rateLimitsSchemaJSON)
+}
+
+// ValidateDeclarationAdmission validates the repository declaration catalog
+// shared by connectorgen. It deliberately validates only its declaration
+// shape: source-lock retention, runtime preflight, and live proof are separate
+// certificates with their own stricter contracts.
+func ValidateDeclarationAdmission(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("declaration-admission meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.declarationAdmission.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ValidateDeclarationAdmissionSources validates the independent admission
+// denominator. It does not require retained provider bytes or make provider
+// requests; those remain separate certification concerns.
+func ValidateDeclarationAdmissionSources(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("declaration-admission source meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.declarationAdmissionSources.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ValidateDeclarationAdmissionInventory validates the independently reviewed
+// operation selections that control the admission denominator. Resolving each
+// selection against its connector-owned source lock remains connectorgen's
+// repository-only authoring check; the production runtime never reads it.
+func ValidateDeclarationAdmissionInventory(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("declaration-admission inventory meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.declarationAdmissionInventory.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
 }
 
 // requiredFiles lists the bundle files that must always exist relative to a
@@ -1595,6 +1784,10 @@ func LoadAll(fsys fs.FS) ([]Bundle, error) {
 	if err != nil {
 		return nil, fmt.Errorf("load runtime operation endpoint ledger: %w", err)
 	}
+	declarationTargetLedgers, err := loadDeclarationTargetLedgers(fsys)
+	if err != nil {
+		return nil, fmt.Errorf("load declaration-admission target ledger: %w", err)
+	}
 	entries, err := fs.ReadDir(fsys, ".")
 	if err != nil {
 		return nil, fmt.Errorf("load all bundles: read root: %w", err)
@@ -1612,7 +1805,7 @@ func LoadAll(fsys fs.FS) ([]Bundle, error) {
 	bundles := make([]Bundle, 0, len(names))
 	var loadErr LoadAllError
 	for _, name := range names {
-		b, err := loadBundle(fsys, name, operationEndpointLedgers)
+		b, err := loadBundle(fsys, name, operationEndpointLedgers, declarationTargetLedgers)
 		if err != nil {
 			loadErr.Failures = append(loadErr.Failures, BundleLoadFailure{Name: name, Err: err})
 			continue
@@ -1632,10 +1825,14 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	if err != nil {
 		return Bundle{}, fmt.Errorf("load runtime operation endpoint ledger: %w", err)
 	}
-	return loadBundle(fsys, dirName, operationEndpointLedgers)
+	declarationTargetLedgers, err := loadDeclarationTargetLedgers(fsys)
+	if err != nil {
+		return Bundle{}, fmt.Errorf("load declaration-admission target ledger: %w", err)
+	}
+	return loadBundle(fsys, dirName, operationEndpointLedgers, declarationTargetLedgers)
 }
 
-func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]*operationEndpointLedger) (Bundle, error) {
+func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]*operationEndpointLedger, declarationTargetLedgers map[string]*declarationTargetLedger) (Bundle, error) {
 	if metaSchemas.err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: meta-schemas failed to compile: %w", dirName, metaSchemas.err)
 	}
@@ -1667,6 +1864,13 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	enabledContract, err := loadEnabledConnectorContract(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+	if enabledContract != nil && enabledContract.Connector != dirName {
+		return Bundle{}, fmt.Errorf("load bundle %s: enabled_connector_contract.json connector %q does not match directory", dirName, enabledContract.Connector)
+	}
 	databaseDefinition, err := loadDatabaseDefinition(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
@@ -1689,6 +1893,9 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	if err != nil {
 		return Bundle{}, err
 	}
+	if err := validateEnabledConnectorContractActivation(enabledContract, syncTransport, streams, writes); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: enabled_connector_contract.json: %w", dirName, err)
+	}
 
 	operations, rawOperations, err := loadOperations(sub, dirName)
 	if err != nil {
@@ -1708,6 +1915,10 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	}
 
 	surface, err := loadAPISurface(sub, dirName)
+	if err != nil {
+		return Bundle{}, err
+	}
+	compositeProviderPathIdentity, err := loadCompositeProviderPathIdentity(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
 	}
@@ -1739,30 +1950,33 @@ func loadBundle(fsys fs.FS, dirName string, operationEndpointLedgers map[string]
 	fixtures := loadFixtures(sub)
 
 	return Bundle{
-		Name:               dirName,
-		Metadata:           metadata,
-		Changefeed:         changefeed,
-		PollingWatermark:   pollingWatermark,
-		SyncTransport:      syncTransport,
-		Database:           databaseDefinition,
-		Spec:               spec,
-		RawSpec:            rawSpec,
-		HTTP:               httpBase,
-		Streams:            streams,
-		Writes:             writes,
-		Operations:         operations,
-		RawOperations:      rawOperations,
-		Schemas:            schemas,
-		Surface:            surface,
-		directWriteSurface: directWriteSurface,
-		directReadLedger:   directReadLedger,
-		CLISurface:         cliSurface,
-		RawCLISurface:      rawCLISurface,
-		Certification:      certification,
-		RawCertification:   rawCertification,
-		RateLimits:         rateLimits,
-		Docs:               docs,
-		Fixtures:           fixtures,
+		Name:                          dirName,
+		Metadata:                      metadata,
+		Changefeed:                    changefeed,
+		PollingWatermark:              pollingWatermark,
+		SyncTransport:                 syncTransport,
+		EnabledContract:               enabledContract,
+		Database:                      databaseDefinition,
+		Spec:                          spec,
+		RawSpec:                       rawSpec,
+		HTTP:                          httpBase,
+		Streams:                       streams,
+		Writes:                        writes,
+		Operations:                    operations,
+		RawOperations:                 rawOperations,
+		Schemas:                       schemas,
+		Surface:                       surface,
+		directWriteSurface:            directWriteSurface,
+		directReadLedger:              directReadLedger,
+		declarationTargets:            declarationTargetLedgers[dirName],
+		CLISurface:                    cliSurface,
+		RawCLISurface:                 rawCLISurface,
+		Certification:                 certification,
+		RawCertification:              rawCertification,
+		RateLimits:                    rateLimits,
+		CompositeProviderPathIdentity: compositeProviderPathIdentity,
+		Docs:                          docs,
+		Fixtures:                      fixtures,
 	}, nil
 }
 
@@ -1916,6 +2130,112 @@ func loadSyncTransport(sub fs.FS, dirName string) (*connectors.SyncTransportDesc
 		return nil, fmt.Errorf("load bundle %s: sync_transport.json: %w", dirName, err)
 	}
 	return descriptor.Clone(), nil
+}
+
+// loadEnabledConnectorContract keeps the full lane inventory additive while
+// requiring every opted-in connector to expose only the closed, validated
+// states in inspection and generated documentation.
+func loadEnabledConnectorContract(sub fs.FS, dirName string) (*connectors.EnabledConnectorContract, error) {
+	if !fileExists(sub, "enabled_connector_contract.json") {
+		return nil, nil
+	}
+	raw, err := readFile(sub, "enabled_connector_contract.json")
+	if err != nil {
+		return nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.enabledConnectorContract.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, fmt.Errorf("load bundle %s: enabled_connector_contract.json: %w", dirName, err)
+	}
+	var contract connectors.EnabledConnectorContract
+	if err := strictDecode(raw, &contract); err != nil {
+		return nil, fmt.Errorf("load bundle %s: enabled_connector_contract.json: %w", dirName, err)
+	}
+	if err := contract.Validate(); err != nil {
+		return nil, fmt.Errorf("load bundle %s: enabled_connector_contract.json: %w", dirName, err)
+	}
+	// Contract artifacts include source locks and coverage manifests which are
+	// intentionally repository-only; the installed binary does not embed them.
+	// connectorgen validates their presence and retained-byte identities. Runtime
+	// loading validates only the embedded closed contract and its executable
+	// stream/write bindings below.
+	return contract.Clone(), nil
+}
+
+// validateEnabledConnectorContractActivation ties the optional full lane
+// inventory to actual loaded artifacts. It cannot inspect a provider source;
+// connectorgen reconciles those immutable identities separately. It does keep
+// an enabled artifact from inventing transport modes, delivery guarantees, or
+// a destination action count the runtime cannot select.
+func validateEnabledConnectorContractActivation(contract *connectors.EnabledConnectorContract, transport *connectors.SyncTransportDescriptor, _ []StreamSpec, writes []WriteAction) error {
+	if contract == nil {
+		return nil
+	}
+	if err := contract.Validate(); err != nil {
+		return err
+	}
+	findLane := func(name string) *connectors.EnabledConnectorLane {
+		for index := range contract.Lanes {
+			if contract.Lanes[index].Name == name {
+				return &contract.Lanes[index]
+			}
+		}
+		return nil
+	}
+	syncLane := findLane("sync_transport")
+	if syncLane == nil || syncLane.State != connectors.EnabledLaneImplemented || syncLane.Transport == nil {
+		return nil
+	}
+	if transport == nil || transport.Source == nil {
+		return fmt.Errorf("implemented sync_transport lane requires sync_transport.json source_transport")
+	}
+	if !sameEnabledContractStrings(syncLane.Transport.Modes, syncModesAsStrings(transport.Source.Modes)) {
+		return fmt.Errorf("sync transport modes do not match the enabled contract")
+	}
+	if transport.Source.Delivery != syncLane.Transport.RuntimeDelivery {
+		return fmt.Errorf("sync transport delivery policy does not match the enabled contract")
+	}
+	if !sameEnabledContractStrings(transport.Source.EligibleStreams, enabledContractTransportStreamNames(syncLane.Transport.Streams)) {
+		return fmt.Errorf("sync transport eligible streams do not match the enabled contract")
+	}
+	reverseLane := findLane("reverse_etl")
+	if reverseLane == nil || reverseLane.State != connectors.EnabledLaneImplemented || reverseLane.Transport == nil || reverseLane.Transport.Destination == nil {
+		return nil
+	}
+	destination := reverseLane.Transport.Destination
+	if destination.ActionsArtifact != "writes.json" || destination.ExpectedActions != len(writes) {
+		return fmt.Errorf("DuckDB-to-provider destination does not match loaded typed write actions")
+	}
+	if destination.PlanExecutor != "internal/app.PlanReverseETL" || destination.PreviewExecutor != "internal/app.PreviewReversePlan" || destination.ApprovalExecutor != "internal/app.RunReverseETL" {
+		return fmt.Errorf("DuckDB-to-provider destination must bind the closed reverse plan/preview/approval executors")
+	}
+	return nil
+}
+
+func syncModesAsStrings(modes []synccontract.Mode) []string {
+	values := make([]string, 0, len(modes))
+	for _, mode := range modes {
+		values = append(values, string(mode))
+	}
+	return values
+}
+
+func enabledContractTransportStreamNames(evidence []connectors.EnabledContractTransportStreamEvidence) []string {
+	values := make([]string, 0, len(evidence))
+	for _, stream := range evidence {
+		values = append(values, stream.Stream)
+	}
+	return values
+}
+
+func sameEnabledContractStrings(left, right []string) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	left = append([]string(nil), left...)
+	right = append([]string(nil), right...)
+	sort.Strings(left)
+	sort.Strings(right)
+	return slices.Equal(left, right)
 }
 
 // loadDatabaseDefinition keeps database.json optional for the existing broad
@@ -2131,6 +2451,10 @@ func compileDynamicKeyPattern(pattern string) (*regexp.Regexp, error) {
 }
 
 func validateWriteBodies(actions []WriteAction) error {
+	actionsByName := make(map[string]WriteAction, len(actions))
+	for _, action := range actions {
+		actionsByName[action.Name] = action
+	}
 	for i, action := range actions {
 		if err := validateDynamicFields(i, action); err != nil {
 			return err
@@ -2163,6 +2487,9 @@ func validateWriteBodies(actions []WriteAction) error {
 		if action.BinaryUpload != nil && bodyType != "binary_upload" {
 			return fmt.Errorf("action %d (%q) declares binary_upload but body_type is %q", i, action.Name, bodyType)
 		}
+		if action.DeclaredBatch != nil && bodyType != "declared_batch" {
+			return fmt.Errorf("action %d (%q) declares declared_batch but body_type is %q", i, action.Name, bodyType)
+		}
 		switch bodyType {
 		case "graphql":
 			if action.GraphQL == nil {
@@ -2192,6 +2519,10 @@ func validateWriteBodies(actions []WriteAction) error {
 			if err := validateBinaryUploadSpec(i, action); err != nil {
 				return err
 			}
+		case "declared_batch":
+			if err := validateDeclaredBatchSpec(i, action, actionsByName); err != nil {
+				return err
+			}
 		case "multipart":
 			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
 				return fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name)
@@ -2210,6 +2541,86 @@ func validateWriteBodies(actions []WriteAction) error {
 				}
 			}
 		}
+	}
+	return nil
+}
+
+func validateDeclaredBatchSpec(index int, action WriteAction, actionsByName map[string]WriteAction) error {
+	spec := action.DeclaredBatch
+	if spec == nil {
+		return fmt.Errorf("action %d (%q) body_type declared_batch requires declared_batch", index, action.Name)
+	}
+	if !strings.EqualFold(strings.TrimSpace(action.Method), http.MethodPost) {
+		return fmt.Errorf("action %d (%q) declared_batch method must be POST", index, action.Name)
+	}
+	if spec.MaxActions < 1 || spec.MaxActions > 64 {
+		return fmt.Errorf("action %d (%q) declared_batch max_actions must be between 1 and 64", index, action.Name)
+	}
+	fields := map[string]string{
+		"provider_envelope_field": spec.ProviderEnvelopeField,
+		"provider_actions_field":  spec.ProviderActionsField,
+		"provider_method_field":   spec.ProviderMethodField,
+		"provider_path_field":     spec.ProviderPathField,
+		"provider_data_field":     spec.ProviderDataField,
+		"inner_body_field":        spec.InnerBodyField,
+		"response_envelope_field": spec.ResponseEnvelopeField,
+		"response_status_field":   spec.ResponseStatusField,
+	}
+	for name, field := range fields {
+		if !isPreparedWriteBindingField(field) {
+			return fmt.Errorf("action %d (%q) declared_batch %s must be a simple field name", index, action.Name, name)
+		}
+	}
+	if spec.ProviderMethodField == spec.ProviderPathField || spec.ProviderMethodField == spec.ProviderDataField || spec.ProviderPathField == spec.ProviderDataField {
+		return fmt.Errorf("action %d (%q) declared_batch provider method, path, and data fields must be distinct", index, action.Name)
+	}
+	allowedMethods := make(map[string]struct{}, len(spec.AllowedMethods))
+	for _, raw := range spec.AllowedMethods {
+		method := strings.ToUpper(strings.TrimSpace(raw))
+		switch method {
+		case http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete:
+		default:
+			return fmt.Errorf("action %d (%q) declared_batch allowed method %q is unsupported", index, action.Name, raw)
+		}
+		if _, duplicate := allowedMethods[method]; duplicate {
+			return fmt.Errorf("action %d (%q) declared_batch repeats allowed method %q", index, action.Name, method)
+		}
+		allowedMethods[method] = struct{}{}
+	}
+	if len(allowedMethods) == 0 {
+		return fmt.Errorf("action %d (%q) declared_batch requires allowed_methods", index, action.Name)
+	}
+	seenActions := make(map[string]struct{}, len(spec.AllowedActions))
+	for _, name := range spec.AllowedActions {
+		if name == action.Name {
+			return fmt.Errorf("action %d (%q) declared_batch cannot select itself", index, action.Name)
+		}
+		if _, duplicate := seenActions[name]; duplicate {
+			return fmt.Errorf("action %d (%q) declared_batch repeats allowed action %q", index, action.Name, name)
+		}
+		seenActions[name] = struct{}{}
+		inner, ok := actionsByName[name]
+		if !ok {
+			return fmt.Errorf("action %d (%q) declared_batch references unknown write action %q", index, action.Name, name)
+		}
+		method := strings.ToUpper(strings.TrimSpace(inner.Method))
+		if _, ok := allowedMethods[method]; !ok {
+			return fmt.Errorf("action %d (%q) declared_batch action %q method %s is outside allowed_methods", index, action.Name, name, method)
+		}
+		switch bodyTypeOf(inner) {
+		case "json", "none":
+		default:
+			return fmt.Errorf("action %d (%q) declared_batch action %q has unsupported body_type %q", index, action.Name, name, bodyTypeOf(inner))
+		}
+		if strings.TrimSpace(inner.Hook) != "" || strings.TrimSpace(inner.BaseURL) != "" || strings.TrimSpace(inner.Route) != "" || strings.TrimSpace(inner.IdempotencyKeyHeader) != "" {
+			return fmt.Errorf("action %d (%q) declared_batch action %q requires unsupported alternate execution semantics", index, action.Name, name)
+		}
+		if confirmationKindForWriteAction(inner) == string(connectors.ConfirmationKindDestructive) && confirmationKindForWriteAction(action) != string(connectors.ConfirmationKindDestructive) {
+			return fmt.Errorf("action %d (%q) declared_batch selecting destructive action %q requires destructive confirmation", index, action.Name, name)
+		}
+	}
+	if len(seenActions) == 0 {
+		return fmt.Errorf("action %d (%q) declared_batch requires allowed_actions", index, action.Name)
 	}
 	return nil
 }
@@ -2523,6 +2934,23 @@ func isArrayType(node map[string]any) bool {
 // absent means unconstrained and present means bounded, and a bundle must not be
 // able to look bounded while permitting everything.
 func validateMultipartMediaTypes(part MultipartPartSpec) error {
+	switch part.MediaPolicy {
+	case "":
+		// Existing declaration semantics continue below.
+	case connectors.BinaryUploadMediaPolicyProviderUnrestricted:
+		if part.Type != "file" {
+			return fmt.Errorf("media_policy %q is only meaningful on a file part, got type %q", part.MediaPolicy, part.Type)
+		}
+		if part.AllowedMediaTypes != nil {
+			return fmt.Errorf("media_policy %q must not declare allowed_media_types", part.MediaPolicy)
+		}
+		if strings.TrimSpace(part.ContentType) != "" {
+			return fmt.Errorf("media_policy %q must not declare content_type", part.MediaPolicy)
+		}
+		return nil
+	default:
+		return fmt.Errorf("unsupported media_policy %q", part.MediaPolicy)
+	}
 	if part.AllowedMediaTypes == nil {
 		return nil
 	}
@@ -2719,9 +3147,35 @@ func validateOperations(ops []OperationSpec) error {
 		if block != expected {
 			return fmt.Errorf("operation %d (%q) kind %q must declare %s block, got %s", i, op.ID, op.Kind, expected, block)
 		}
+		if err := validateSourceOperationBinding(i, op); err != nil {
+			return err
+		}
 		if err := validateOperationSemantics(i, op); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func validateSourceOperationBinding(i int, op OperationSpec) error {
+	binding := op.SourceOperation
+	if binding == nil {
+		return nil
+	}
+	if strings.TrimSpace(binding.ID) == "" || strings.TrimSpace(binding.Method) == "" || strings.TrimSpace(binding.Path) == "" {
+		return fmt.Errorf("operation %d (%q) source_operation requires non-empty id, method, and path", i, op.ID)
+	}
+	if strings.ToUpper(strings.TrimSpace(binding.Method)) != http.MethodGet {
+		return fmt.Errorf("operation %d (%q) source_operation currently supports only GET reads, got %s", i, op.ID, strings.ToUpper(strings.TrimSpace(binding.Method)))
+	}
+	if isAbsoluteHTTPURL(binding.Path) || strings.HasPrefix(strings.TrimSpace(binding.Path), "//") || !strings.HasPrefix(binding.Path, "/") {
+		return fmt.Errorf("operation %d (%q) source_operation path must be connector-relative", i, op.ID)
+	}
+	if op.REST != nil && (!strings.EqualFold(op.REST.Method, binding.Method) || op.REST.Path != binding.Path) {
+		return fmt.Errorf("operation %d (%q) source_operation must match its declared REST method/path", i, op.ID)
+	}
+	if op.Kind != "rest_read" && op.Kind != "stream_etl" {
+		return fmt.Errorf("operation %d (%q) source_operation is supported only by rest_read or stream_etl", i, op.ID)
 	}
 	return nil
 }
@@ -2842,7 +3296,7 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 			if part.MaxBytes <= 0 {
 				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires a positive max_bytes", i, op.ID, part.Name)
 			}
-			if strings.TrimSpace(part.ContentType) == "" && len(part.AllowedMediaTypes) == 0 {
+			if strings.TrimSpace(part.ContentType) == "" && len(part.AllowedMediaTypes) == 0 && part.MediaPolicy == "" {
 				return fmt.Errorf("operation %d (%q) rest.multipart file part %q requires declared media policy", i, op.ID, part.Name)
 			}
 		default:
@@ -3168,7 +3622,13 @@ func restPaginationQueryParameters(spec PaginationSpec) []string {
 		appendName(valueOrDefault(spec.StartIndexParam, defaultStartIndexParam))
 		appendName(valueOrDefault(spec.CountParam, defaultStartIndexCount))
 		appendName(spec.SizeParam)
-	case "next_url", "link_header", "none", "":
+	case "next_url":
+		appendName(spec.SizeParam)
+		appendName(spec.LimitParam)
+		appendName(spec.OffsetParam)
+	case "link_header":
+		appendName(spec.SizeParam)
+	case "none", "":
 		// These have no operation query mechanics to verify.
 	}
 	return names
@@ -3282,6 +3742,18 @@ func loadCLISurface(sub fs.FS, dirName string) (*CLISurface, json.RawMessage, er
 	var surface CLISurface
 	if err := strictDecode(raw, &surface); err != nil {
 		return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
+	}
+	for index, command := range surface.Commands {
+		if command.Foundation != nil {
+			if err := ValidateCommandEndpoint(command.Foundation.Target.Method, command.Foundation.Target.Path); err != nil {
+				return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: command %d foundation target: %w", dirName, index, err)
+			}
+		}
+		if command.Unsupported != nil {
+			if err := ValidateCommandEndpoint(command.Unsupported.Target.Method, command.Unsupported.Target.Path); err != nil {
+				return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: command %d unsupported target: %w", dirName, index, err)
+			}
+		}
 	}
 	return &surface, json.RawMessage(raw), nil
 }

@@ -248,6 +248,28 @@ func TestSourceRequestSchemaDispositionSeparatesPolicyBoundsFromMalformedInput(t
 	}
 }
 
+func TestSourceRequestGapsRetainsEngineIncompatibleP5Pattern(t *testing.T) {
+	t.Parallel()
+	request := sourceRequestDescriptor{
+		MediaType: "application/json",
+		Body: &sourceRequestBodyDescriptor{Schema: map[string]any{
+			"type": "object", "properties": map[string]any{
+				"origin": map[string]any{
+					"type": "string", "nullable": true,
+					"pattern": `^(?:[\uD800-\uDBFF][\uDC00-\uDFFF]|[^\n\uD800-\uDFFF]){1,255}$`,
+				},
+			},
+		}},
+	}
+	gaps := sourceRequestGaps(request, sourceDocumentForm{Family: "openapi", Version: "3.0.3"}, defaultSourceImportLimits(), http.MethodPost)
+	for _, gap := range gaps {
+		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body property origin" && strings.Contains(gap.Reason, "engine JSON-Schema regex") {
+			return
+		}
+	}
+	t.Fatalf("request gaps = %+v, want retained engine-incompatible P5 pattern disposition", gaps)
+}
+
 func TestSourceParameterExecutionEnvelopeUsesTighterProviderDerivedByteCap(t *testing.T) {
 	limits := defaultSourceImportLimits()
 	limits.UseExecutionEnvelopes = true
@@ -866,6 +888,31 @@ func TestSourceOutputClassifiesOnlyJSONAsJSON(t *testing.T) {
 	}
 }
 
+func TestSourceInferredNextURLPaginationRetainsClosedLimitOffsetControls(t *testing.T) {
+	responses := []sourceResponseDescriptor{{
+		Status: "200",
+		Declaration: map[string]any{"content": map[string]any{
+			"application/json": map[string]any{"schema": map[string]any{"properties": map[string]any{
+				"next_page": map[string]any{"type": "object", "properties": map[string]any{
+					"uri": map[string]any{"type": "string", "format": "uri"},
+				}},
+			}}},
+		}},
+	}}
+	query := []sourceParameterDescriptor{
+		{Name: "limit", Schema: map[string]any{"type": "integer", "minimum": json.Number("1"), "maximum": json.Number("100")}},
+		{Name: "offset", Schema: map[string]any{"type": "string"}},
+	}
+	got := sourceInferredNextURLPagination(responses, query)
+	want := map[string]any{
+		"type": "next_url", "next_url_path": "next_page.uri",
+		"size_param": "limit", "limit_param": "limit", "offset_param": "offset", "page_size": 100,
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("inferred next-url pagination = %#v, want %#v", got, want)
+	}
+}
+
 func TestSourceImportRejectsArtifactDriftAndSizeBeforeParsing(t *testing.T) {
 	t.Parallel()
 	raw := loadSourceImportFixture(t, filepath.Join("alpha", "alpha-openapi.yaml"))
@@ -1077,8 +1124,19 @@ func TestSourceImportCommandContractAndMigrationDocumentation(t *testing.T) {
 			t.Fatalf("source-import help exposes %s: %s", forbidden, stdout.String())
 		}
 	}
-	if !strings.Contains(stdout.String(), "source-import <connector>") || !strings.Contains(stdout.String(), "retained artifact") || strings.Contains(stdout.String(), "--cache-dir") {
-		t.Fatalf("source-import help is incomplete: %s", stdout.String())
+	for _, required := range []string{
+		"source-import <connector>",
+		"byte-backed",
+		"declaration-only source reference",
+		"source_contract_unavailable",
+		"retained content-addressed document artifacts",
+	} {
+		if !strings.Contains(stdout.String(), required) {
+			t.Fatalf("source-import help is missing %q: %s", required, stdout.String())
+		}
+	}
+	if strings.Contains(stdout.String(), "--cache-dir") {
+		t.Fatalf("source-import help exposes obsolete cache flag: %s", stdout.String())
 	}
 	stdout.Reset()
 	stderr.Reset()
@@ -1139,6 +1197,102 @@ func TestSourceImportCommandUsesOnlyConnectorOwnedLockAndCheckMode(t *testing.T)
 	}
 }
 
+func TestSourceImportCommandDerivesWriteDisabledMutationArtifacts(t *testing.T) {
+	defsRoot := t.TempDir()
+	bundleDir := filepath.Join(defsRoot, "alpha")
+	sourcesDir := filepath.Join(bundleDir, "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create source fixture directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "alpha-operation-source-lock.json"), loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json")), 0o644); err != nil {
+		t.Fatalf("write source lock: %v", err)
+	}
+	const metadata = `{
+	  "name":"alpha",
+	  "display_name":"Alpha",
+	  "description":"fixture",
+	  "integration_type":"api",
+	  "release_stage":"ga",
+	  "capabilities":{"check":true,"read":true,"write":false,"query":false,"cdc":false,"dynamic_schema":false}
+	}`
+	if err := os.WriteFile(filepath.Join(bundleDir, "metadata.json"), []byte(metadata), 0o644); err != nil {
+		t.Fatalf("write write-disabled metadata: %v", err)
+	}
+
+	outPath := filepath.Join(sourcesDir, "alpha-operation-descriptor.json")
+	args := []string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath}
+	var stdout, stderr bytes.Buffer
+	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 0 {
+		t.Fatalf("write-disabled source-import exit = %d, stderr = %s", exit, stderr.String())
+	}
+	raw, err := os.ReadFile(outPath)
+	if err != nil {
+		t.Fatalf("read imported descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
+		t.Fatalf("decode imported descriptor: %v", err)
+	}
+	var mutation sourceOperationDescriptor
+	for _, operation := range descriptor.Operations {
+		if operation.SourceID == "alpha.rest.post_/widgets" {
+			mutation = operation
+			break
+		}
+	}
+	if !sourceProjectionHasNonExecutableMutationDisposition(mutation) {
+		t.Fatalf("imported mutation = %#v, want source-cited non-executable artifact", mutation)
+	}
+	if mutation.Runtime.NonExecutableMutation.Reason != sourceWriteDisabledMutationArtifactReason ||
+		mutation.Runtime.NonExecutableMutation.Source.SourceID != mutation.SourceID ||
+		!strings.EqualFold(mutation.Runtime.NonExecutableMutation.Source.Method, mutation.Method) ||
+		mutation.Runtime.NonExecutableMutation.Source.Path != mutation.Path {
+		t.Fatalf("imported mutation artifact = %#v, want exact automatic source citation", mutation.Runtime.NonExecutableMutation)
+	}
+	if !sourceOperationHasFoundationGap(mutation, sourceNonExecutableMutationDispositionFoundation) {
+		t.Fatalf("imported mutation gaps = %#v, want named non-executable foundation", mutation.Runtime.Gaps)
+	}
+
+	stdout.Reset()
+	stderr.Reset()
+	if exit := runSourceImportWithFetcher(append(args, "--check"), &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 0 {
+		t.Fatalf("write-disabled source-import --check exit = %d, stderr = %s", exit, stderr.String())
+	}
+}
+
+func TestSourceImportCommandRejectsOmittedWriteCapabilityBeforeArtifactAdmission(t *testing.T) {
+	defsRoot := t.TempDir()
+	bundleDir := filepath.Join(defsRoot, "alpha")
+	sourcesDir := filepath.Join(bundleDir, "sources")
+	if err := os.MkdirAll(sourcesDir, 0o755); err != nil {
+		t.Fatalf("create source fixture directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(sourcesDir, "alpha-operation-source-lock.json"), loadSourceImportFixture(t, filepath.Join("alpha", "alpha-operation-source-lock.json")), 0o644); err != nil {
+		t.Fatalf("write source lock: %v", err)
+	}
+	const metadataWithoutWrite = `{
+	  "name":"alpha",
+	  "display_name":"Alpha",
+	  "description":"fixture",
+	  "integration_type":"api",
+	  "release_stage":"ga",
+	  "capabilities":{"check":true,"read":true,"query":false,"cdc":false,"dynamic_schema":false}
+	}`
+	if err := os.WriteFile(filepath.Join(bundleDir, "metadata.json"), []byte(metadataWithoutWrite), 0o644); err != nil {
+		t.Fatalf("write metadata without write capability: %v", err)
+	}
+
+	outPath := filepath.Join(sourcesDir, "alpha-operation-descriptor.json")
+	args := []string{"source-import", "alpha", "--defs", defsRoot, "--out", outPath}
+	var stdout, stderr bytes.Buffer
+	if exit := runSourceImportWithFetcher(args, &stdout, &stderr, fixtureSourceImportFetcher(t)); exit != 1 || !strings.Contains(stderr.String(), "capabilities.write must be explicitly declared") {
+		t.Fatalf("source-import missing capabilities.write exit = %d stderr = %s, want explicit write declaration refusal", exit, stderr.String())
+	}
+	if _, err := os.Stat(outPath); !os.IsNotExist(err) {
+		t.Fatalf("source-import with omitted capabilities.write wrote descriptor: %v", err)
+	}
+}
+
 func TestSourceImportRejectsSymlinkedSourcesDirectoryEvenInsideConnectorBundle(t *testing.T) {
 	t.Parallel()
 	defsRoot := t.TempDir()
@@ -1179,6 +1333,81 @@ func TestSourceImportCheckedInGitHubArtifactsAreRetainedAndLockVerified(t *testi
 			t.Fatalf("verify GitHub retained %s: %v", artifact.SourceURL, validateErr)
 		}
 	}
+}
+
+func TestSourceImportRetainedAsanaPreservesLockedRESTOperationIDs(t *testing.T) {
+	defsRoot := filepath.Join("..", "..", "internal", "connectors", "defs")
+	lock, err := loadConnectorSourceImportLock(defsRoot, "asana")
+	if err != nil {
+		t.Fatalf("load Asana source lock: %v", err)
+	}
+	fetcher, err := newConnectorSourceImportRetainedArtifactFetcher(defsRoot, "asana", defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("construct Asana retained-artifact reader: %v", err)
+	}
+	result, err := importSourceLockResult(context.Background(), lock, fetcher, defaultSourceImportLimits())
+	if err != nil {
+		t.Fatalf("import retained Asana source lock: %v", err)
+	}
+	byRoute := make(map[string]sourceOperationDescriptor, len(result.Operations))
+	for _, operation := range result.Operations {
+		byRoute[strings.ToUpper(operation.Method)+"\x00"+operation.Path] = operation
+	}
+	for _, want := range []struct {
+		name        string
+		sourceID    string
+		operationID string
+		method      string
+		path        string
+	}{
+		{
+			name:        "fixed 100 ETL custom fields",
+			sourceID:    "asana.rest.getCustomFieldsForWorkspace",
+			operationID: "getCustomFieldsForWorkspace",
+			method:      "GET",
+			path:        "/workspaces/{workspace_gid}/custom_fields",
+		},
+		{
+			name:        "partial mutation custom field",
+			sourceID:    "asana.rest.createCustomField",
+			operationID: "createCustomField",
+			method:      "POST",
+			path:        "/custom_fields",
+		},
+		{
+			name:        "fan-out sections stream",
+			sourceID:    "asana.rest.getSectionsForProject",
+			operationID: "getSectionsForProject",
+			method:      "GET",
+			path:        "/projects/{project_gid}/sections",
+		},
+	} {
+		want := want
+		t.Run(want.name, func(t *testing.T) {
+			operation, found := byRoute[want.method+"\x00"+want.path]
+			if !found {
+				t.Fatalf("imported Asana operation %s %s is absent", want.method, want.path)
+			}
+			if operation.SourceID != want.sourceID || operation.ProviderOperationID != want.operationID {
+				t.Fatalf("imported Asana operation %s %s identity = source_id=%q operation_id=%q, want source_id=%q operation_id=%q", want.method, want.path, operation.SourceID, operation.ProviderOperationID, want.sourceID, want.operationID)
+			}
+		})
+	}
+
+	t.Run("rejects mismatched locked provider identity before ID propagation", func(t *testing.T) {
+		mismatched := lock
+		mismatched.Rest.SourceDocuments = append([]sourceImportRESTDocument(nil), lock.Rest.SourceDocuments...)
+		mismatched.Rest.SourceDocuments[0].Operations = append([]sourceImportRESTOperation(nil), lock.Rest.SourceDocuments[0].Operations...)
+		for index := range mismatched.Rest.SourceDocuments[0].Operations {
+			if mismatched.Rest.SourceDocuments[0].Operations[index].ID == "asana.rest.getSectionsForProject" {
+				mismatched.Rest.SourceDocuments[0].Operations[index].OperationID = "wrongSectionsOperation"
+				break
+			}
+		}
+		if _, err := importSourceLockResult(context.Background(), mismatched, fetcher, defaultSourceImportLimits()); err == nil || !strings.Contains(err.Error(), "disagrees with source document \"asana-openapi\" inventory") {
+			t.Fatalf("mismatched locked provider identity error = %v, want locked/provider refusal", err)
+		}
+	})
 }
 
 func TestSourceImportCommandReadsConnectorOwnedRetainedArtifact(t *testing.T) {
@@ -1437,6 +1666,68 @@ func TestSourceImportRetainsBoundedOpenAPI30ReferenceSiblings(t *testing.T) {
 	_, err := importSourceLock(context.Background(), lock, sourceImportFetchFunc(func(context.Context, string) ([]byte, error) { return semantic, nil }), defaultSourceImportLimits())
 	if err == nil || !strings.Contains(err.Error(), `ambiguous response reference with sibling field "content"`) {
 		t.Fatalf("OpenAPI 3.0 semantic reference sibling error = %v", err)
+	}
+}
+
+func TestSourceImportQualifiesReferenceSiblingGapByRequestOrResponsePhase(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name         string
+		raw          []byte
+		wantPhase    string
+		wantBlocking bool
+	}{
+		{
+			name: "response-only schema sibling remains evidence without blocking a bounded read",
+			raw: []byte(`{
+  "openapi":"3.0.3","info":{"title":"x","version":"1"},
+  "components":{"schemas":{"Identifier":{"type":"string","maxLength":32}}},
+  "paths":{"/items":{"get":{"operationId":"getItems","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Identifier","type":"integer"}}}}}}}}
+}`),
+			wantPhase:    "response",
+			wantBlocking: false,
+		},
+		{
+			name: "request schema sibling still blocks an incomplete request contract",
+			raw: []byte(`{
+  "openapi":"3.0.3","info":{"title":"x","version":"1"},
+  "components":{"schemas":{"Identifier":{"type":"string","maxLength":32}}},
+  "paths":{"/items":{"get":{"operationId":"getItems","parameters":[{"name":"id","in":"query","required":true,"schema":{"$ref":"#/components/schemas/Identifier","type":"boolean"}}],"responses":{"200":{"description":"ok"}}}}}
+}`),
+			wantPhase:    "request",
+			wantBlocking: true,
+		},
+	}
+	for _, testCase := range tests {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+			result := importInlineSourceResult(t, testCase.raw, defaultSourceImportLimits())
+			if len(result.Operations) != 1 {
+				t.Fatalf("operation count = %d, want 1", len(result.Operations))
+			}
+			operation := result.Operations[0]
+			var siblingGap *sourceContractGap
+			for index := range operation.Runtime.Gaps {
+				if operation.Runtime.Gaps[index].Foundation == sourceOpenAPI30ReferenceSiblingFoundation {
+					siblingGap = &operation.Runtime.Gaps[index]
+					break
+				}
+			}
+			if siblingGap == nil {
+				t.Fatalf("runtime gaps = %+v, want retained OpenAPI 3.0 sibling evidence", operation.Runtime.Gaps)
+			}
+			encoded, err := json.Marshal(siblingGap)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !strings.Contains(string(encoded), `"phase":"`+testCase.wantPhase+`"`) {
+				t.Fatalf("qualified sibling gap = %s, want phase %q", encoded, testCase.wantPhase)
+			}
+			if got := sourceProjectionReadHasBlockingGap(operation); got != testCase.wantBlocking {
+				t.Fatalf("read blocking = %t, want %t for %s-only sibling gap", got, testCase.wantBlocking, testCase.wantPhase)
+			}
+		})
 	}
 }
 

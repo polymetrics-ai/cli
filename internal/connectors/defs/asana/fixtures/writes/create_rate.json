@@ -1,0 +1,27 @@
+{
+  "record": {
+    "data": {
+      "parent": "fixture-project",
+      "rate": 125,
+      "resource": "fixture-user"
+    },
+    "opt_fields": [
+      "created_by",
+      "created_by.name"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rates",
+    "body": {
+      "data": {
+        "parent": "fixture-project",
+        "rate": 125,
+        "resource": "fixture-user"
+      }
+    },
+    "query": {
+      "opt_fields": "created_by,created_by.name"
+    }
+  }
+}

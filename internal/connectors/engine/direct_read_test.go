@@ -56,6 +56,110 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 }
 
+func TestPreflightSourceBoundReadRejectsIdentityAndRouteSubstitution(t *testing.T) {
+	bundle := Bundle{
+		Name: "asana",
+		Operations: []OperationSpec{{
+			ID: "get_agent", Kind: "rest_read", OutputPolicy: "json_redacted",
+			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getAgent", Method: http.MethodGet, Path: "/agents/{agent_gid}"},
+			REST:            &RESTOperationSpec{Method: http.MethodGet, Path: "/agents/{agent_gid}", MaxBytes: 1024},
+		}},
+		directReadLedger: &operationEndpointLedger{entries: []OperationEndpointLedgerEntry{{Method: http.MethodGet, Path: "/agents/{agent_gid}", Kind: "rest_read", MaxBytes: 1024}}},
+	}
+	if err := PreflightSourceBoundRead(bundle, "get_agent", "asana.rest.getAgent", http.MethodGet, "/agents/{agent_gid}"); err != nil {
+		t.Fatalf("valid source-bound read preflight: %v", err)
+	}
+	for _, test := range []struct {
+		name            string
+		sourceOperation string
+		method          string
+		path            string
+		want            string
+	}{
+		{name: "identity", sourceOperation: "asana.rest.getUsers", method: http.MethodGet, path: "/agents/{agent_gid}", want: "does not match command source operation"},
+		{name: "method", sourceOperation: "asana.rest.getAgent", method: http.MethodPost, path: "/agents/{agent_gid}", want: "does not match command method"},
+		{name: "path", sourceOperation: "asana.rest.getAgent", method: http.MethodGet, path: "/users/{user_gid}", want: "does not match command path"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			err := PreflightSourceBoundRead(bundle, "get_agent", test.sourceOperation, test.method, test.path)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("PreflightSourceBoundRead error = %v, want %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestPreflightSourceBoundStreamReadRequiresDeclaredRecordAndPaginationSemantics(t *testing.T) {
+	bundle := Bundle{
+		Operations: []OperationSpec{{
+			ID: "get_workspaces", Kind: "stream_etl",
+			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getWorkspaces", Method: http.MethodGet, Path: "/workspaces"},
+			Composite:       &CompositeOperationSpec{Steps: []string{"stream:workspaces"}},
+		}},
+		HTTP:    HTTPBase{Pagination: &PaginationSpec{Type: "next_url", NextURLPath: "next_page.uri"}},
+		Streams: []StreamSpec{{Name: "workspaces", Path: "/workspaces", Records: RecordsSpec{Path: "data"}, SchemaRef: "schemas/workspaces.json"}},
+	}
+	if err := PreflightSourceBoundStreamRead(bundle, "workspaces", "asana.rest.getWorkspaces", http.MethodGet, "/workspaces"); err != nil {
+		t.Fatalf("valid source-bound stream preflight: %v", err)
+	}
+	bundle.Streams[0].SchemaRef = ""
+	err := PreflightSourceBoundStreamRead(bundle, "workspaces", "asana.rest.getWorkspaces", http.MethodGet, "/workspaces")
+	if err == nil || !strings.Contains(err.Error(), "record semantics") {
+		t.Fatalf("missing stream schema error = %v, want record semantics rejection", err)
+	}
+}
+
+func TestReadRejectsSourceBoundStreamDriftBeforeOriginOrAuthentication(t *testing.T) {
+	base := Bundle{
+		Operations: []OperationSpec{{
+			ID: "get_workspaces", Kind: "stream_etl",
+			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getWorkspaces", Method: http.MethodGet, Path: "/workspaces"},
+			Composite:       &CompositeOperationSpec{Steps: []string{"stream:workspaces"}},
+		}},
+		HTTP:    HTTPBase{Pagination: &PaginationSpec{Type: "next_url", NextURLPath: "next_page.uri"}},
+		Streams: []StreamSpec{{Name: "workspaces", Path: "/workspaces", Records: RecordsSpec{Path: "data"}, SchemaRef: "schemas/workspaces.json"}},
+	}
+	for _, test := range []struct {
+		name   string
+		mutate func(*Bundle)
+		want   string
+	}{
+		{name: "path", mutate: func(b *Bundle) { b.Streams[0].Path = "/users" }, want: "does not match locked source endpoint"},
+		{name: "method", mutate: func(b *Bundle) { b.Streams[0].Method = http.MethodPost }, want: "does not match locked source endpoint"},
+		{name: "records", mutate: func(b *Bundle) { b.Streams[0].Records.Path = "" }, want: "lacks declared record semantics"},
+		{name: "pagination", mutate: func(b *Bundle) { b.HTTP.Pagination = nil }, want: "lacks declared pagination semantics"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			bundle := base
+			bundle.Streams = append([]StreamSpec(nil), base.Streams...)
+			test.mutate(&bundle)
+			err := Read(context.Background(), bundle, connectors.ReadRequest{Stream: "workspaces"}, nil, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("direct Read source-bound drift error = %v, want %q before route/authentication", err, test.want)
+			}
+		})
+	}
+}
+
+func TestSourceBoundStreamPathMatchesDeclaredFanOutSegmentOnly(t *testing.T) {
+	for _, tc := range []struct {
+		name       string
+		streamPath string
+		lockedPath string
+		want       bool
+	}{
+		{name: "declared fan out", streamPath: "/projects/{{ fanout.id }}/sections", lockedPath: "/projects/{project_gid}/sections", want: true},
+		{name: "fan out cannot substitute route", streamPath: "/projects/{{ fanout.id }}/stories", lockedPath: "/projects/{project_gid}/sections", want: false},
+		{name: "arbitrary record interpolation is not accepted", streamPath: "/projects/{{ record.path }}/sections", lockedPath: "/projects/{project_gid}/sections", want: false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := sourceBoundStreamPathMatchesLockedPath(tc.streamPath, tc.lockedPath); got != tc.want {
+				t.Fatalf("sourceBoundStreamPathMatchesLockedPath(%q, %q) = %t, want %t", tc.streamPath, tc.lockedPath, got, tc.want)
+			}
+		})
+	}
+}
+
 func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/repos/octo/hello/git/ref/heads/main" {

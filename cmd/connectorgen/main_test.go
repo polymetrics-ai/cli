@@ -825,6 +825,82 @@ func TestValidate_CLISurfaceImplementedDirectWritePasses(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceActionBackedDirectWriteStructuredJSON(t *testing.T) {
+	newBundle := func(write, mapsTo string) fstest.MapFS {
+		writeField := ""
+		if write != "" {
+			writeField = `"write": "` + write + `",`
+		}
+		fsys := cliSurfaceBundleFS(`{
+			"tagline": "Work with CLI Surface from the command line.",
+			"usage": "pm cli-surface <command> [flags]",
+			"commands": [{
+				"path": "widget create",
+				"summary": "Create a widget through its declared action",
+				"intent": "direct_write",
+				"availability": "implemented",
+				` + writeField + `
+				"source_cli_path": "clis widget create",
+				"api_surface": [{"method": "POST", "path": "/widgets"}],
+				"flags": [{"name": "data", "type": "json", "maps_to": "` + mapsTo + `", "required": true}],
+				"risk": "creates a widget",
+				"approval": "direct writes require plan, preview, approval, execute"
+			}]
+		}`)
+		fsys["cli-surface/writes.json"] = &fstest.MapFile{Data: []byte(`{
+			"actions": [{
+				"name": "create_widget",
+				"kind": "create",
+				"method": "POST",
+				"path": "/widgets",
+				"body_type": "json",
+				"body_fields": ["data"],
+				"record_schema": {
+					"type": "object",
+					"required": ["data"],
+					"properties": {
+						"data": {
+							"type": "object",
+							"required": ["name"],
+							"properties": {"name": {"type": "string"}},
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false
+				},
+				"risk": "creates a widget"
+			}]
+		}`)}
+		return fsys
+	}
+
+	t.Run("declared action field is accepted", func(t *testing.T) {
+		report, err := validateDir(newBundle("create_widget", "record.data"))
+		if err != nil {
+			t.Fatalf("validateDir: %v", err)
+		}
+		if len(report.Findings) != 0 {
+			t.Fatalf("valid action-backed direct_write findings = %+v, want none", report.Findings)
+		}
+	})
+
+	t.Run("field outside action schema is rejected", func(t *testing.T) {
+		report, err := validateDir(newBundle("create_widget", "record.missing"))
+		if err != nil {
+			t.Fatalf("validateDir: %v", err)
+		}
+		assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+	})
+
+	t.Run("targetless direct write is rejected", func(t *testing.T) {
+		report, err := validateDir(newBundle("", "record.data"))
+		if err != nil {
+			t.Fatalf("validateDir: %v", err)
+		}
+		assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
+	})
+}
+
 func TestCheckCLISurfaceBinaryUploadRequiresBoundDeclaredFileAction(t *testing.T) {
 	newBundle := func(action engine.WriteAction, command engine.CLICommand) engine.Bundle {
 		return engine.Bundle{
@@ -1255,6 +1331,17 @@ func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testi
 	}
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid direct_read cli surface, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceStreamBackedDirectReadDoesNotInventOutputPolicy(t *testing.T) {
+	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "direct_read"`, 1)
+	report, err := validateDir(cliSurfaceBundleFS(cliSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("valid stream-backed direct_read findings = %+v, want none", report.Findings)
 	}
 }
 

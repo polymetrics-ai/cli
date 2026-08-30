@@ -37,6 +37,19 @@ committed, verified issue/PR branches and open PRs after local gates pass. Never
 parent PR into `main` remains human-gated. Legacy connector Go under
 `internal/connectors/<name>/*.go` stays until the human-gated wave 6 cutover.
 
+## Foundation Atlas Discovery Is Mandatory
+
+The CLI-owned, authoring-only Foundation Atlas lives at
+`docs/connector-canon/foundations/`. Before proposing foundation code, consult
+the catalog's owner symbols and proof tests, then classify the need as reuse of
+an existing foundation, an extension through its declared seam, or an actual
+gap. Source locks remain authoritative for provider facts. The Atlas is not a
+runtime input and does not participate in mapping or certification admission;
+it cannot block them. Any genuinely new shared runtime foundation still
+requires the captain's approval. Follow the Atlas README's same-change
+maintenance rule when a real shared-foundation contract, selection, supported
+shape, constraint, owner, or proof changes.
+
 ## Project
 
 Polymetrics is a Go CLI monolith for dependency-free ETL, reverse ETL, connector inspection, credential management, local warehouse queries, and optional runtime-backed execution.

@@ -266,12 +266,12 @@ func (a *App) ProjectDir() string { return a.projectDir }
 
 func (a *App) projectRoot() string { return filepath.Dir(a.projectDir) }
 
-// connectorCommandRuntime gives the public binary-upload command one
-// documented confinement root: the project root a caller invokes pm in. The
-// application's .polymetrics directory remains private state storage and is
-// never a path callers must know to provide upload bytes.
+// connectorCommandRuntime gives public binary-upload and direct-write commands
+// one documented confinement root: the project root a caller invokes pm in.
+// The application's .polymetrics directory remains private state storage and
+// is never a path callers must know to provide attachment bytes.
 func (a *App) connectorCommandRuntime(intent string, runtime connectors.RuntimeConfig) connectors.RuntimeConfig {
-	if intent == "binary_upload" {
+	if intent == "binary_upload" || intent == "direct_write" {
 		runtime.ProjectDir = a.projectRoot()
 	}
 	return runtime
@@ -1211,7 +1211,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 				return Connection{}, err
 			}
 		}
-		if err := ValidateStreamSyncConfig(stream); err != nil {
+		if err := a.validateEndpointStreamSyncConfig(source, destination, name, stream, mode); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)
 		}
 		streamID, err := allocateUniquePrefixedID("stream", streamIDs)
@@ -1477,15 +1477,15 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return a.failRun(runID, err)
 	}
 	stream.SyncMode = mode.Name
-	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
-	}
 	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
 	if err != nil {
 		return a.failRun(runID, err)
 	}
 	destination, destRuntime, err := a.resolveEndpoint(ctx, conn.Destination)
 	if err != nil {
+		return a.failRun(runID, err)
+	}
+	if err := a.validateEndpointStreamSyncConfig(source, destination, req.Stream, stream, mode); err != nil {
 		return a.failRun(runID, err)
 	}
 	destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
@@ -2140,6 +2140,15 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 
 func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommandRequest) (ReversePlan, *connectors.WritePreview, error) {
 	if err := connectors.RejectLegacyConnectorName(req.Connector); err != nil {
+		return ReversePlan{}, nil, err
+	}
+	preflightConnector, ok := a.registry.Get(req.Connector)
+	if !ok {
+		return ReversePlan{}, nil, fmt.Errorf("connector %q not found", req.Connector)
+	}
+	if err := commandrunner.PreflightRequest(preflightConnector, commandrunner.Request{
+		Path: req.Path, Flags: req.Flags, Config: connectors.RuntimeConfig{Config: req.Config},
+	}); err != nil {
 		return ReversePlan{}, nil, err
 	}
 	connector, runtime, err := a.ResolveConnectorCredential(ctx, req.Connector, req.Credential, req.Config)

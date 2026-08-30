@@ -100,6 +100,10 @@ func embeddedArtifactClass(path string) (string, error) {
 		return "certification_source_lock_exception", nil
 	case path == "operation_endpoint_ledger.json":
 		return "runtime_endpoint_ledger", nil
+	case path == "declaration_admission_sources.json":
+		return "runtime_declaration_target_ledger", nil
+	case path == "circleci/composite_provider_path_identity.json":
+		return "composite_provider_path_identity", nil
 	case strings.HasSuffix(path, "/schemas.json") || strings.Contains(path, "/schemas/"):
 		return "schema", nil
 	}

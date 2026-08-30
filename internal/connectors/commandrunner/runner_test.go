@@ -20,6 +20,7 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/failures"
 )
 
 type fakeConnector struct {
@@ -32,6 +33,14 @@ type fakeConnector struct {
 	operationReadPreflightErr  error
 	operationReadBindings      operationDirectReadBindingPreflightCall
 	operationReadBindingsErr   error
+	sourceBoundRead            sourceBoundReadPreflightCall
+	sourceBoundReadErr         error
+	sourceBoundStreamRead      sourceBoundStreamReadPreflightCall
+	sourceBoundStreamReadErr   error
+	sourceBoundOriginOperation string
+	sourceBoundOriginStream    string
+	sourceBoundOriginConfig    connectors.RuntimeConfig
+	sourceBoundOriginErr       error
 	operationJSONVariable      operationStructuredJSONVariablePreflightCall
 	operationJSONVariableErr   error
 	operationJSONBodyField     operationStructuredJSONVariablePreflightCall
@@ -83,6 +92,20 @@ type operationDirectReadBindingPreflightCall struct {
 	queryFields []string
 	bodyFields  []string
 	rawBody     bool
+}
+
+type sourceBoundReadPreflightCall struct {
+	operation       string
+	sourceOperation string
+	method          string
+	path            string
+}
+
+type sourceBoundStreamReadPreflightCall struct {
+	stream          string
+	sourceOperation string
+	method          string
+	path            string
 }
 
 type operationStructuredJSONVariablePreflightCall struct {
@@ -166,6 +189,128 @@ func TestCommandRunnerRejectsDuplicateSingletonTargetsBeforeIO(t *testing.T) {
 	record, err := recordOverrides(arrayCommand, map[string][]string{"tag": {"one", "two"}})
 	if err != nil || !reflect.DeepEqual(record["tags"], []string{"one", "two"}) {
 		t.Fatalf("repeatable array = %#v, err %v", record, err)
+	}
+}
+
+func TestPreflightProviderEvidencedUnsupportedReturnsTypedTerminal(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets unsupported", Intent: "direct_read", Availability: "unsupported_with_provider_evidence",
+		Unsupported: &connectors.CommandUnsupportedDisposition{
+			Reason: "the provider documents this operation but the CLI cannot support its semantics",
+			Target: connectors.CommandUnsupportedTarget{
+				SourceID: "provider.rest.widgets.get", ProviderOperationID: "widgets/get", Method: "GET", Path: "/widgets/{id}",
+			},
+		},
+	}}}}
+	err := Preflight(connector, []string{"widgets", "unsupported"})
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) || blocked.Failure == nil {
+		t.Fatalf("unsupported preflight = %v, want typed terminal", err)
+	}
+	if blocked.Failure.Code() != "provider_evidenced_unsupported" || blocked.Failure.Domain() != failures.DomainSystem {
+		t.Fatalf("unsupported failure = %+v, want system/provider_evidenced_unsupported", blocked.Failure)
+	}
+}
+
+func TestPreflightRequestValidatesDeclaredInputsWithoutExecutor(t *testing.T) {
+	minimum := connectors.ExactNumber("2")
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets list", Intent: "etl", Availability: "implemented", Stream: "widgets",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "query.state", Required: true},
+			{Name: "limit", Type: "integer", MapsTo: "query.limit", Minimum: &minimum},
+		},
+	}}}}
+	tests := []struct {
+		name  string
+		flags map[string][]string
+		want  string
+	}{
+		{name: "missing required", flags: map[string][]string{}, want: "missing required flag --state"},
+		{name: "unknown", flags: map[string][]string{"state": {"open"}, "other": {"value"}}, want: "unknown flag --other"},
+		{name: "enum", flags: map[string][]string{"state": {"pending"}}, want: "want one of"},
+		{name: "minimum", flags: map[string][]string{"state": {"open"}, "limit": {"1"}}, want: "at least 2"},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			err := PreflightRequest(connector, Request{Path: []string{"widgets", "list"}, Flags: testCase.flags})
+			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("request preflight = %v, want %q", err, testCase.want)
+			}
+		})
+	}
+	if err := PreflightRequest(connector, Request{
+		Path: []string{"widgets", "list"}, Flags: map[string][]string{"state": {"closed"}, "limit": {"2"}},
+	}); err != nil {
+		t.Fatalf("valid request preflight: %v", err)
+	}
+}
+
+func TestPreflightRequestValidatesConfiguredDeclaredValuesWithoutExecutor(t *testing.T) {
+	minimum := connectors.ExactNumber("2")
+	maximum := connectors.ExactNumber("4")
+	allowEmpty := false
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets list", Intent: "etl", Availability: "implemented", Stream: "widgets",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "state", Type: "enum", Values: []string{"open", "closed"}, MapsTo: "config.state"},
+			{Name: "enabled", Type: "boolean", MapsTo: "config.enabled"},
+			{Name: "count", Type: "integer", MapsTo: "config.count", Minimum: &minimum, Maximum: &maximum},
+			{Name: "since", Type: "string", Format: "date-time", MapsTo: "config.since"},
+			{Name: "label", Type: "string", AllowEmpty: &allowEmpty, MapsTo: "config.label"},
+			{Name: "token", Type: "string", MapsTo: "config.token", MaxBytes: 4},
+			{Name: "groups", Type: "string_array", MapsTo: "config.groups", MinItems: 2, MaxItems: 3},
+		},
+	}}}}
+	tests := []struct {
+		name   string
+		config map[string]string
+	}{
+		{name: "enum", config: map[string]string{"state": "not-a-state"}},
+		{name: "boolean", config: map[string]string{"enabled": "not-a-boolean"}},
+		{name: "integer", config: map[string]string{"count": "not-an-integer"}},
+		{name: "format", config: map[string]string{"since": "not-a-timestamp"}},
+		{name: "empty", config: map[string]string{"label": "   "}},
+		{name: "byte cap", config: map[string]string{"token": "five!"}},
+		{name: "minimum", config: map[string]string{"count": "1"}},
+		{name: "maximum", config: map[string]string{"count": "5"}},
+		{name: "minimum cardinality", config: map[string]string{"groups": "one"}},
+		{name: "maximum cardinality", config: map[string]string{"groups": "one,two,three,four"}},
+	}
+	for _, testCase := range tests {
+		t.Run(testCase.name, func(t *testing.T) {
+			err := PreflightRequest(connector, Request{
+				Path:   []string{"widgets", "list"},
+				Config: connectors.RuntimeConfig{Config: testCase.config},
+			})
+			if err == nil {
+				t.Fatal("configured request preflight accepted an invalid declared value")
+			}
+			for _, value := range testCase.config {
+				if value != "" && strings.Contains(err.Error(), value) {
+					t.Fatalf("configured request preflight leaked value %q in %q", value, err.Error())
+				}
+			}
+			if !strings.Contains(err.Error(), "configured value") {
+				t.Fatalf("configured request preflight error = %q, want redacted configured-value context", err.Error())
+			}
+		})
+	}
+
+	valid := connectors.RuntimeConfig{Config: map[string]string{
+		"state": "closed", "enabled": "true", "count": "4",
+		"since": "2026-08-26T07:30:00Z", "label": "ready", "token": "four", "groups": "one,two",
+	}}
+	if err := PreflightRequest(connector, Request{Path: []string{"widgets", "list"}, Config: valid}); err != nil {
+		t.Fatalf("valid configured request preflight: %v", err)
+	}
+
+	if err := PreflightRequest(connector, Request{
+		Path:   []string{"widgets", "list"},
+		Flags:  map[string][]string{"state": {"open"}},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"state": "not-a-state"}},
+	}); err != nil {
+		t.Fatalf("explicit argv did not override invalid config value: %v", err)
 	}
 }
 
@@ -264,6 +409,24 @@ func (f *fakeConnector) PreflightOperationDirectReadBindings(operation string, p
 		operation: operation, pathFields: pathFields, queryFields: queryFields, bodyFields: bodyFields, rawBody: rawBody,
 	}
 	return f.operationReadBindingsErr
+}
+func (f *fakeConnector) PreflightSourceBoundRead(operation, sourceOperation, method, path string) error {
+	f.sourceBoundRead = sourceBoundReadPreflightCall{operation: operation, sourceOperation: sourceOperation, method: method, path: path}
+	return f.sourceBoundReadErr
+}
+func (f *fakeConnector) PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error {
+	f.sourceBoundStreamRead = sourceBoundStreamReadPreflightCall{stream: stream, sourceOperation: sourceOperation, method: method, path: path}
+	return f.sourceBoundStreamReadErr
+}
+func (f *fakeConnector) PreflightSourceBoundOperationOrigin(operation string, cfg connectors.RuntimeConfig) error {
+	f.sourceBoundOriginOperation = operation
+	f.sourceBoundOriginConfig = cfg
+	return f.sourceBoundOriginErr
+}
+func (f *fakeConnector) PreflightSourceBoundStreamOrigin(stream string, cfg connectors.RuntimeConfig) error {
+	f.sourceBoundOriginStream = stream
+	f.sourceBoundOriginConfig = cfg
+	return f.sourceBoundOriginErr
 }
 func (f *fakeConnector) PreflightOperationStructuredJSONVariable(operation, variable string) error {
 	f.operationJSONVariable = operationStructuredJSONVariablePreflightCall{operation: operation, variable: variable}
@@ -428,6 +591,99 @@ func TestRunImplementedStreamCommand(t *testing.T) {
 	}
 	if len(records) != 1 || records[0]["state"] != "closed" {
 		t.Fatalf("records = %+v, want one closed record", records)
+	}
+}
+
+func TestRunStreamBackedDirectReadUsesStreamExecutorWithoutPageNavigation(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "records list", Intent: "direct_read", Availability: "implemented", Stream: "records",
+			SourceOperation: "provider.rest.listRecords",
+			APISurface:      []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/records"}},
+			Flags:           []connectors.CommandSurfaceFlag{{Name: "state", Type: "string", MapsTo: "query.state"}},
+		}}},
+		readRecords: []connectors.Record{{"id": "one"}, {"id": "two"}},
+	}
+
+	var records []connectors.Record
+	result, err := Run(context.Background(), connector, Request{
+		Path: []string{"records", "list"}, Flags: map[string][]string{"state": {"open"}}, Limit: 1,
+	}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run stream-backed direct read: %v", err)
+	}
+	if result.Command != "records list" || result.Stream != "records" || result.Count != 1 {
+		t.Fatalf("stream-backed direct-read result = %+v, want records list/records/1", result)
+	}
+	if connector.readReq.Stream != "records" || connector.readReq.Query["state"] != "open" {
+		t.Fatalf("stream-backed direct-read request = %+v, want records stream and state=open", connector.readReq)
+	}
+	if connector.readReq.MaxRequests != 1 {
+		t.Fatalf("stream-backed direct-read MaxRequests = %d, want one aggregate provider request", connector.readReq.MaxRequests)
+	}
+	if connector.readReq.MaxPages != 1 {
+		t.Fatalf("stream-backed direct-read MaxPages = %d, want one page", connector.readReq.MaxPages)
+	}
+	if connector.sourceBoundStreamRead != (sourceBoundStreamReadPreflightCall{
+		stream: "records", sourceOperation: "provider.rest.listRecords", method: http.MethodGet, path: "/records",
+	}) {
+		t.Fatalf("source-bound stream preflight = %+v, want exact locked endpoint", connector.sourceBoundStreamRead)
+	}
+	if len(records) != 1 || records[0]["id"] != "one" {
+		t.Fatalf("stream-backed direct-read records = %+v, want first bounded record", records)
+	}
+
+	for _, flag := range []string{"page", "page-cursor"} {
+		t.Run("reject_"+flag, func(t *testing.T) {
+			_, err := Run(context.Background(), connector, Request{
+				Path: []string{"records", "list"}, Flags: map[string][]string{flag: {"2"}}, Page: 2,
+			}, func(connectors.Record) error { return nil })
+			if err == nil || !strings.Contains(err.Error(), "unknown flag --"+flag) {
+				t.Fatalf("stream-backed direct read --%s error = %v, want closed page-flag refusal", flag, err)
+			}
+		})
+	}
+}
+
+func TestRunETLLeavesGlobalRequestBudgetUnbounded(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "records sync", Intent: "etl", Availability: "implemented", Stream: "records",
+		}}},
+		readRecords: []connectors.Record{{"id": "one"}},
+	}
+
+	_, err := Run(context.Background(), connector, Request{Path: []string{"records", "sync"}}, func(connectors.Record) error { return nil })
+	if err != nil {
+		t.Fatalf("Run ETL: %v", err)
+	}
+	if connector.readReq.MaxRequests != 0 {
+		t.Fatalf("ETL MaxRequests = %d, want zero/unbounded for saved transport", connector.readReq.MaxRequests)
+	}
+	if connector.readReq.MaxPages != 0 {
+		t.Fatalf("ETL MaxPages = %d, want zero/unbounded for saved transport", connector.readReq.MaxPages)
+	}
+}
+
+func TestPreflightSourceBoundOriginRoutesStreamBackedDirectRead(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "records list", Intent: "direct_read", Availability: "implemented", Stream: "records",
+		SourceOperation: "provider.rest.listRecords",
+		APISurface:      []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/records"}},
+	}}}}
+	config := map[string]string{"base_url": "https://api.example.test"}
+	if err := PreflightSourceBoundOrigin(connector, []string{"records", "list"}, config); err != nil {
+		t.Fatalf("PreflightSourceBoundOrigin stream-backed direct read: %v", err)
+	}
+	if connector.sourceBoundOriginStream != "records" || connector.sourceBoundOriginOperation != "" {
+		t.Fatalf("origin preflight routed to stream %q operation %q, want records stream only",
+			connector.sourceBoundOriginStream, connector.sourceBoundOriginOperation)
+	}
+	if connector.sourceBoundOriginConfig.Config["base_url"] != config["base_url"] {
+		t.Fatalf("origin preflight config = %+v, want caller public config", connector.sourceBoundOriginConfig.Config)
 	}
 }
 
@@ -1120,6 +1376,42 @@ func TestBuildWriteCommandPlansWithoutExecuting(t *testing.T) {
 	}
 }
 
+func TestBuildWriteCommandPlansWriteBackedDirectWriteWithoutExecuting(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path: "widgets create", Intent: "direct_write", Availability: "implemented", Write: "create_widget",
+			Risk:  "creates a widget",
+			Flags: []connectors.CommandSurfaceFlag{{Name: "name", Type: "string", MapsTo: "record.name", Required: true}},
+		}}},
+		manifest: connectors.Manifest{WriteActions: []connectors.WriteActionSpec{{
+			Name: "create_widget", Method: http.MethodPost, Path: "/widgets", Risk: "creates a widget",
+		}}},
+	}
+
+	result, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"widgets", "create"}, Flags: map[string][]string{"name": {"one"}}, Preview: true,
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand write-backed direct write: %v", err)
+	}
+	if result.Write != "create_widget" || result.Record["name"] != "one" || result.RedactedRecord["name"] != "one" {
+		t.Fatalf("write-backed direct-write plan = %+v, want one create_widget record", result)
+	}
+	if !result.ApprovalRequired || result.Approval != "direct writes require plan, preview, approval, execute" {
+		t.Fatalf("write-backed direct-write approval = required %t policy %q", result.ApprovalRequired, result.Approval)
+	}
+	if result.Preview == nil || result.Preview.RecordsStaged != 1 {
+		t.Fatalf("write-backed direct-write preview = %+v, want one staged record", result.Preview)
+	}
+	if connector.validateReq.Action != "create_widget" || connector.dryRunReq.Action != "create_widget" {
+		t.Fatalf("write-backed direct-write validation/dry-run = %q/%q, want create_widget",
+			connector.validateReq.Action, connector.dryRunReq.Action)
+	}
+	if connector.writeReq.Action != "" || len(connector.writeRecords) != 0 {
+		t.Fatalf("write-backed direct write executed during planning: request=%+v records=%+v", connector.writeReq, connector.writeRecords)
+	}
+}
+
 func TestBuildWriteCommandInfersDestructiveConfirmationFromDeleteMethod(t *testing.T) {
 	connector := &fakeConnector{
 		surface: &connectors.CommandSurface{
@@ -1516,6 +1808,70 @@ func TestBuildWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testi
 	}
 }
 
+// An action-backed direct_write uses the same one-record plan as reverse ETL.
+// Its JSON flag remains closed by the named write action and record schema; the
+// direct_write intent must not turn JSON into a generic HTTP-body escape hatch.
+func TestBuildDirectWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags(t *testing.T) {
+	newConnector := func(write string) connectors.Connector {
+		return engine.New(engine.Bundle{
+			Name: "widgets",
+			Writes: []engine.WriteAction{{
+				Name:   "create_widget",
+				Kind:   "create",
+				Method: http.MethodPost,
+				Path:   "/widgets",
+				RecordSchema: json.RawMessage(`{
+					"type":"object","additionalProperties":false,"required":["payload"],
+					"properties":{"payload":{"type":"object","additionalProperties":false,"required":["kind"],"properties":{"kind":{"type":"string"}}}}
+				}`),
+			}},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "widgets create", Intent: "direct_write", Availability: "implemented", Write: write,
+				Flags: []engine.CLIFlag{{Name: "payload", Type: "json", MapsTo: "record.payload", Required: true, MaxBytes: 64}},
+			}}},
+		}, nil)
+	}
+
+	connector := newConnector("create_widget")
+	if err := Preflight(connector, []string{"widgets", "create"}); err != nil {
+		t.Fatalf("Preflight action-backed direct_write: %v", err)
+	}
+
+	command, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path: []string{"widgets", "create"}, Flags: map[string][]string{"payload": {`{"kind":"fixture"}`}},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand action-backed direct_write: %v", err)
+	}
+	payload, ok := command.Record["payload"].(map[string]any)
+	if !ok || payload["kind"] != "fixture" {
+		t.Fatalf("planned payload = %#v, want parsed object", command.Record["payload"])
+	}
+
+	for _, tc := range []struct {
+		name    string
+		value   string
+		wantErr string
+	}{
+		{name: "malformed JSON", value: `{`, wantErr: "invalid JSON"},
+		{name: "schema mismatch", value: `[]`, wantErr: "does not match type"},
+		{name: "bounded input", value: `{"kind":"` + strings.Repeat("x", 64) + `"}`, wantErr: "structured JSON exceeds 64 bytes"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := BuildWriteCommand(context.Background(), connector, Request{
+				Path: []string{"widgets", "create"}, Flags: map[string][]string{"payload": {tc.value}},
+			})
+			if err == nil || !strings.Contains(err.Error(), tc.wantErr) {
+				t.Fatalf("BuildWriteCommand error = %v, want %q", err, tc.wantErr)
+			}
+		})
+	}
+
+	if err := Preflight(newConnector(""), []string{"widgets", "create"}); err == nil || !strings.Contains(err.Error(), "no resolvable runtime binding") {
+		t.Fatalf("actionless direct_write Preflight error = %v, want closed runtime-binding rejection", err)
+	}
+}
+
 // binary_upload is a public command intent, but it is still a reverse-plan
 // write. This exercises the real commandrunner boundary: a declared file flag
 // must produce a plan, while a normal JSON write must not be promoted merely
@@ -1552,6 +1908,14 @@ func TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions(t *testing.T) {
 			Name: "upload_multipart", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "multipart",
 			RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
 			Multipart:    &engine.MultipartSpec{MaxBytes: 1024, Parts: []engine.MultipartPartSpec{{Name: "file", Type: "file", Field: "file_path", Required: true, MaxBytes: 1024, AllowedMediaTypes: []string{"application/octet-stream"}}}},
+		}},
+		{name: "provider unrestricted multipart file part", action: engine.WriteAction{
+			Name: "upload_unrestricted_multipart", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "multipart",
+			RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+			Multipart: &engine.MultipartSpec{MaxBytes: 1024, Parts: []engine.MultipartPartSpec{{
+				Name: "file", Type: "file", Field: "file_path", Required: true, MaxBytes: 1024,
+				MediaPolicy: connectors.BinaryUploadMediaPolicyProviderUnrestricted,
+			}}},
 		}},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -1594,6 +1958,16 @@ func TestBuildWriteCommandPlansOnlyDeclaredBinaryUploadActions(t *testing.T) {
 			action:     binary,
 			flagTarget: "record.other_path",
 			want:       "source",
+		},
+		{
+			name: "multipart without an explicit media policy cannot be public",
+			action: engine.WriteAction{
+				Name: "upload_unbounded_multipart", Kind: "create", Method: http.MethodPost, Path: "/assets", BodyType: "multipart",
+				RecordSchema: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["file_path"],"properties":{"file_path":{"type":"string"}}}`),
+				Multipart:    &engine.MultipartSpec{MaxBytes: 1024, Parts: []engine.MultipartPartSpec{{Name: "file", Type: "file", Field: "file_path", Required: true, MaxBytes: 1024}}},
+			},
+			flagTarget: "record.file_path",
+			want:       "media policy",
 		},
 	} {
 		t.Run(tt.name, func(t *testing.T) {
@@ -2131,6 +2505,102 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 	if got := connector.operationDirectReadReq.Headers["X-Request-Mode"]; got != "safe" {
 		t.Fatalf("operation request header = %q, want exact declared value", got)
+	}
+}
+
+func TestRunSourceBoundOperationDirectReadRejectsBeforeDispatch(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "agents get-agent", Intent: "direct_read", Availability: "implemented",
+		Operation: "get_agent", SourceOperation: "asana.rest.getAgent", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/agents/{agent_gid}"}},
+		Flags:      []connectors.CommandSurfaceFlag{{Name: "agent-gid", Type: "string", Required: true, MapsTo: "path.agent_gid"}},
+	}}}}
+	connector.sourceBoundReadErr = errors.New("source path does not match locked provider operation")
+	_, err := Run(context.Background(), connector, Request{Path: []string{"agents", "get-agent"}, Flags: map[string][]string{"agent-gid": {"123"}}}, func(connectors.Record) error {
+		t.Fatal("source-bound direct read emitted a record")
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "source-bound read metadata is not executable") {
+		t.Fatalf("Run source-bound rejection = %v, want source metadata refusal", err)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("source-bound route substitution reached dispatch: %#v", connector.operationDirectReadReq)
+	}
+
+	connector.sourceBoundReadErr = nil
+	if _, err := Run(context.Background(), connector, Request{Path: []string{"agents", "get-agent"}, Flags: map[string][]string{"agent-gid": {"123"}}}, func(connectors.Record) error { return nil }); err != nil {
+		t.Fatalf("Run valid source-bound read: %v", err)
+	}
+	if got, want := connector.sourceBoundRead, (sourceBoundReadPreflightCall{operation: "get_agent", sourceOperation: "asana.rest.getAgent", method: http.MethodGet, path: "/agents/{agent_gid}"}); got != want {
+		t.Fatalf("source-bound preflight = %#v, want %#v", got, want)
+	}
+	if connector.operationDirectReadReq.Operation != "get_agent" {
+		t.Fatalf("valid source-bound read did not dispatch fixed operation: %#v", connector.operationDirectReadReq)
+	}
+}
+
+func TestPreflightSourceBoundOriginUsesPublicConfigurationBeforeDispatch(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "agents get-agent", Intent: "direct_read", Availability: "implemented",
+		Operation: "get_agent", SourceOperation: "asana.rest.getAgent", OutputPolicy: "json_redacted",
+		APISurface: []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/agents/{agent_gid}"}},
+		Flags:      []connectors.CommandSurfaceFlag{{Name: "agent-gid", Type: "string", Required: true, MapsTo: "path.agent_gid"}},
+	}}}}
+	connector.sourceBoundOriginErr = errors.New("rejects configured base_url override")
+	err := PreflightSourceBoundOrigin(connector, []string{"agents", "get-agent"}, map[string]string{"base_url": "https://invalid.example"})
+	if err == nil || !strings.Contains(err.Error(), "configured base_url") {
+		t.Fatalf("source-bound origin preflight error = %v, want configured-origin refusal", err)
+	}
+	if connector.sourceBoundOriginOperation != "get_agent" || connector.sourceBoundOriginConfig.Config["base_url"] != "https://invalid.example" {
+		t.Fatalf("source-bound origin preflight = operation %q config %#v, want declared operation and public overlay", connector.sourceBoundOriginOperation, connector.sourceBoundOriginConfig.Config)
+	}
+}
+
+func TestRunSourceBoundReadMissingFoundationRefusesBeforeDispatch(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "agents get-agent", Intent: "etl", Availability: "planned", Operation: "get_agent",
+		Notes: "missing_foundation=source-bound-read-execution-r1: required path parameter agent_gid has no typed operation binding; source_operation=asana.rest.getAgent",
+	}}}}
+	_, err := Run(context.Background(), connector, Request{Path: []string{"agents", "get-agent"}}, func(connectors.Record) error {
+		t.Fatal("missing foundation command emitted a record")
+		return nil
+	})
+	if err == nil || !strings.Contains(err.Error(), "missing_foundation=source-bound-read-execution-r1:") || !strings.Contains(err.Error(), "agent_gid") {
+		t.Fatalf("Run missing source-bound foundation = %v, want stable actionable error", err)
+	}
+	if connector.operationDirectReadReq.Operation != "" {
+		t.Fatalf("missing foundation reached operation dispatch: %#v", connector.operationDirectReadReq)
+	}
+}
+
+func TestPreflightUnavailableCommandReturnsOnlyDeclaredStructuredDisposition(t *testing.T) {
+	for _, test := range []struct {
+		name         string
+		availability string
+		notes        string
+	}{
+		{name: "schema", availability: "planned", notes: "missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAccessRequest"},
+		{name: "encoding", availability: "planned", notes: "missing_foundation=cli-request-encoding-foundation-r1; missing_foundation=cli-request-schema-foundation-r1; source_operation=asana.rest.createAttachment"},
+		{name: "openapi sibling", availability: "planned", notes: "missing_foundation=cli-openapi30-reference-sibling-foundation-r1; source_operation=asana.rest.getMembership"},
+		{name: "batch", availability: "unsupported_api", notes: "not_applicable=generic_batch_wrapper; source_operation=asana.rest.createBatchRequest"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path: "widgets unavailable", Intent: "reverse_etl", Availability: test.availability, Notes: test.notes,
+			}}}}
+			_, _, err := resolvePreflightCommand(connector, []string{"widgets", "unavailable"})
+			var blocked *BlockedCommandError
+			if !errors.As(err, &blocked) || blocked.Reason != test.notes {
+				t.Fatalf("preflight = %#v, want exact declared disposition %q", err, test.notes)
+			}
+		})
+	}
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path: "widgets prose", Intent: "reverse_etl", Availability: "planned", Notes: "missing foundation is described in prose",
+	}}}}
+	_, _, err := resolvePreflightCommand(connector, []string{"widgets", "prose"})
+	if err == nil || strings.Contains(err.Error(), "missing foundation is described in prose") {
+		t.Fatalf("arbitrary note controlled unavailable reason: %v", err)
 	}
 }
 

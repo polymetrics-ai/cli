@@ -68,12 +68,21 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if req.MaxPages < 0 {
 		return fmt.Errorf("engine: max pages must not be negative")
 	}
+	if req.MaxRequests < 0 {
+		return fmt.Errorf("engine: max requests must not be negative")
+	}
 	if req.Continuation != nil && !trackPaginationOutcome {
 		return fmt.Errorf("engine: source continuation requires tracked pagination outcome")
 	}
 
 	stream, err := findStream(b, req.Stream)
 	if err != nil {
+		return err
+	}
+	if err := preflightDeclaredSourceBoundStreamRead(b, stream); err != nil {
+		return err
+	}
+	if err := preflightSourceBoundStreamOrigin(b, req.Config, stream); err != nil {
 		return err
 	}
 
@@ -93,6 +102,7 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if rt.Requester.BaseURL != routeBaseURL {
 		return fmt.Errorf("engine: resolved stream route base changed before execution")
 	}
+	attachReadRequestBudget(rt, req.MaxRequests)
 	if sleeper != nil {
 		rt.Requester.Sleep = sleeper
 	}
@@ -2033,10 +2043,58 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
-	_, err = requester.Do(ctx, method, checkPath, checkQuery, nil)
+	requester, err = requesterWithCheckSuccessStatuses(requester, b.HTTP.Check)
+	if err != nil {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	if b.HTTP.Check.MaxBytes < 0 || b.HTTP.Check.MaxBytes > connsdk.DefaultMaxResponseBody {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("check max_bytes must be between 1 and %d when declared", connsdk.DefaultMaxResponseBody)}
+	}
+	if b.HTTP.Check.MaxBytes > 0 {
+		response, requestErr := requester.DoLimited(ctx, method, checkPath, checkQuery, nil, b.HTTP.Check.MaxBytes)
+		if requestErr == nil && len(response.Body) > b.HTTP.Check.MaxBytes {
+			return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("check response body exceeds declared max_bytes %d", b.HTTP.Check.MaxBytes)}
+		}
+		err = requestErr
+	} else {
+		_, err = requester.Do(ctx, method, checkPath, checkQuery, nil)
+	}
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Class: class, Hint: hint, Err: err}
 	}
 	return nil
+}
+
+// requesterWithCheckSuccessStatuses applies the optional, declaration-owned
+// base-check status set without mutating the shared runtime requester. An
+// omitted set preserves the legacy generic-2xx acceptance policy; a declared
+// set accepts only exact HTTP codes, never an implicit range.
+func requesterWithCheckSuccessStatuses(requester *connsdk.Requester, check *RequestSpec) (*connsdk.Requester, error) {
+	if check == nil || len(check.SuccessStatuses) == 0 {
+		return requester, nil
+	}
+	accepted := make([]connsdk.StatusRange, 0, len(check.SuccessStatuses))
+	seen := make(map[int]struct{}, len(check.SuccessStatuses))
+	for _, declared := range check.SuccessStatuses {
+		status, err := connsdk.NormalizeExactHTTPStatus(declared)
+		if err != nil {
+			var rangeErr *connsdk.ExactHTTPStatusRangeError
+			if errors.As(err, &rangeErr) {
+				return nil, fmt.Errorf("check success status %q requires runtime gap: %s", declared, connsdk.ExactHTTPStatusRangeExecutionGap)
+			}
+			return nil, fmt.Errorf("check success status %q must be an unambiguous numeric HTTP status: %w", declared, err)
+		}
+		if status < http.StatusOK || status >= http.StatusMultipleChoices {
+			return nil, fmt.Errorf("check success status %q requires runtime gap: %s", declared, connsdk.ExactHTTPStatusNon2xxExecutionGap)
+		}
+		if _, duplicate := seen[status]; duplicate {
+			return nil, fmt.Errorf("check success status %q is duplicated", declared)
+		}
+		seen[status] = struct{}{}
+		accepted = append(accepted, connsdk.StatusRange{Min: status, Max: status})
+	}
+	clone := *requester
+	clone.AcceptedStatuses = accepted
+	return &clone, nil
 }

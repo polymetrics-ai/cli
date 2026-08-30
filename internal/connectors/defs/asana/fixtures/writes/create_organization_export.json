@@ -1,0 +1,23 @@
+{
+  "record": {
+    "data": {
+      "organization": "fixture-workspace"
+    },
+    "opt_fields": [
+      "created_at",
+      "download_url"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/organization_exports",
+    "body": {
+      "data": {
+        "organization": "fixture-workspace"
+      }
+    },
+    "query": {
+      "opt_fields": "created_at,download_url"
+    }
+  }
+}

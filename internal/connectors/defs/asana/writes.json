@@ -3929,6 +3929,4529 @@
         "additionalProperties": false
       },
       "risk": "external mutation; medium-risk create against POST /workspaces/{workspace_gid}/addUser; requires reverse ETL plan -> preview -> explicit approval -> execute"
+    },
+    {
+      "name": "delete_allocation",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/allocations/{{ record.allocation_gid }}",
+      "path_fields": [
+        "allocation_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "allocation_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "allocation_gid"
+        ],
+        "properties": {
+          "allocation_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "upload_attachment_file",
+      "kind": "create",
+      "method": "POST",
+      "path": "/attachments",
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 104857600,
+        "parts": [
+          {
+            "name": "parent",
+            "type": "field",
+            "field": "parent",
+            "required": true
+          },
+          {
+            "name": "file",
+            "type": "file",
+            "field": "file_path",
+            "media_policy": "provider_unrestricted",
+            "required": true,
+            "max_bytes": 104857600
+          }
+        ]
+      },
+      "success_statuses": [
+        200
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "parent",
+          "file_path"
+        ],
+        "properties": {
+          "parent": {
+            "type": "string",
+            "description": "Required identifier of the parent task, project, or project brief."
+          },
+          "file_path": {
+            "type": "string",
+            "description": "Project-relative path whose bytes become the source field `file`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "uploads one bounded local file as an Asana attachment; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "parent",
+        "file_path"
+      ]
+    },
+    {
+      "name": "create_external_attachment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/attachments",
+      "body_type": "multipart",
+      "multipart": {
+        "parts": [
+          {
+            "name": "parent",
+            "type": "field",
+            "field": "parent",
+            "required": true
+          },
+          {
+            "name": "resource_subtype",
+            "type": "field",
+            "field": "resource_subtype",
+            "required": true
+          },
+          {
+            "name": "url",
+            "type": "field",
+            "field": "url",
+            "required": true
+          },
+          {
+            "name": "name",
+            "type": "field",
+            "field": "name",
+            "required": true
+          },
+          {
+            "name": "connect_to_app",
+            "type": "field",
+            "field": "connect_to_app"
+          }
+        ]
+      },
+      "success_statuses": [
+        200
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "parent",
+          "resource_subtype",
+          "url"
+        ],
+        "properties": {
+          "connect_to_app": {
+            "type": "boolean"
+          },
+          "name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "parent": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "resource_subtype": {
+            "enum": [
+              "external"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "url": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "creates an external Asana attachment; requires reverse ETL plan -> preview -> explicit approval -> execute",
+      "redact_fields": [
+        "parent",
+        "url"
+      ]
+    },
+    {
+      "name": "delete_attachment",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/attachments/{{ record.attachment_gid }}",
+      "path_fields": [
+        "attachment_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "attachment_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attachment_gid"
+        ],
+        "properties": {
+          "attachment_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_budget",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/budgets/{{ record.budget_gid }}",
+      "path_fields": [
+        "budget_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "budget_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "budget_gid"
+        ],
+        "properties": {
+          "budget_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_custom_field",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/custom_fields/{{ record.custom_field_gid }}",
+      "path_fields": [
+        "custom_field_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "custom_field_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "custom_field_gid"
+        ],
+        "properties": {
+          "custom_field_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_goal",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/goals/{{ record.goal_gid }}",
+      "path_fields": [
+        "goal_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "goal_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "goal_gid"
+        ],
+        "properties": {
+          "goal_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_membership",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/memberships/{{ record.membership_gid }}",
+      "path_fields": [
+        "membership_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "membership_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "membership_gid"
+        ],
+        "properties": {
+          "membership_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_ooo_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/ooo_entries/{{ record.ooo_entry_gid }}",
+      "path_fields": [
+        "ooo_entry_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "ooo_entry_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ooo_entry_gid"
+        ],
+        "properties": {
+          "ooo_entry_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_portfolio",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/portfolios/{{ record.portfolio_gid }}",
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "portfolio_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "portfolio_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "portfolio_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_project_brief",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project_briefs/{{ record.project_brief_gid }}",
+      "path_fields": [
+        "project_brief_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "project_brief_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "project_brief_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "project_brief_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_project_status",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project_statuses/{{ record.project_status_gid }}",
+      "path_fields": [
+        "project_status_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "project_status_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "project_status_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "project_status_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_project_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/project_templates/{{ record.project_template_gid }}",
+      "path_fields": [
+        "project_template_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "project_template_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "project_template_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "project_template_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_rate",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/rates/{{ record.rate_gid }}",
+      "path_fields": [
+        "rate_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "rate_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rate_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "rate_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_role",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/roles/{{ record.role_gid }}",
+      "path_fields": [
+        "role_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "role_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "role_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_status",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/status_updates/{{ record.status_update_gid }}",
+      "path_fields": [
+        "status_update_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "status_update_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status_update_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "status_update_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_story",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/stories/{{ record.story_gid }}",
+      "path_fields": [
+        "story_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "story_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "story_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "story_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_task_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/task_templates/{{ record.task_template_gid }}",
+      "path_fields": [
+        "task_template_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "task_template_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "task_template_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "task_template_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_time_tracking_category",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/time_tracking_categories/{{ record.time_tracking_category_gid }}",
+      "path_fields": [
+        "time_tracking_category_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "time_tracking_category_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "time_tracking_category_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "time_tracking_category_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_time_tracking_entry",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/time_tracking_entries/{{ record.time_tracking_entry_gid }}",
+      "path_fields": [
+        "time_tracking_entry_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "time_tracking_entry_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "time_tracking_entry_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "time_tracking_entry_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "delete_webhook",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/webhooks/{{ record.webhook_gid }}",
+      "path_fields": [
+        "webhook_gid"
+      ],
+      "body_type": "none",
+      "delete": {
+        "missing_ok_status": [
+          404
+        ],
+        "idempotent": true
+      },
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "webhook_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "webhook_gid"
+        ],
+        "properties": {
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "webhook_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "approve_access_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/access_requests/{{ record.access_request_gid }}/approve",
+      "path_fields": [
+        "access_request_gid"
+      ],
+      "body_type": "none",
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "access_request_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "access_request_gid"
+        ],
+        "properties": {
+          "access_request_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "reject_access_request",
+      "kind": "update",
+      "method": "POST",
+      "path": "/access_requests/{{ record.access_request_gid }}/reject",
+      "path_fields": [
+        "access_request_gid"
+      ],
+      "body_type": "none",
+      "risk": "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "redact_fields": [
+        "access_request_gid"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "access_request_gid"
+        ],
+        "properties": {
+          "access_request_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_access_request",
+      "kind": "create",
+      "method": "POST",
+      "path": "/access_requests",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "message": {
+                "maxLength": 8192,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "target": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "target"
+            ],
+            "type": "object"
+          }
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "update_allocation",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/allocations/{{ record.allocation_gid }}",
+      "path_fields": [
+        "allocation_gid"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "allocation_gid",
+          "data"
+        ],
+        "properties": {
+          "allocation_gid": {
+            "type": "string",
+            "maxLength": 8192
+          },
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "assignee": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "effort": {
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "hours",
+                      "percent"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "end_date": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "start_date": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "assignee",
+                "assignee.name",
+                "created_by",
+                "created_by.name",
+                "effort",
+                "effort.type",
+                "effort.value",
+                "end_date",
+                "parent",
+                "parent.name",
+                "resource_subtype",
+                "start_date"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "create_allocation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/allocations",
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "assignee": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "effort": {
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "hours",
+                      "percent"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "end_date": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "start_date": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "assignee",
+              "end_date",
+              "parent",
+              "start_date"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "assignee",
+                "assignee.name",
+                "created_by",
+                "created_by.name",
+                "effort",
+                "effort.type",
+                "effort.value",
+                "end_date",
+                "parent",
+                "parent.name",
+                "resource_subtype",
+                "start_date"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "create_budget",
+      "kind": "create",
+      "method": "POST",
+      "path": "/budgets",
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "actual": {
+                "additionalProperties": false,
+                "properties": {
+                  "billable_status_filter": {
+                    "enum": [
+                      "billable",
+                      "non_billable",
+                      "any"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "budget_type": {
+                "enum": [
+                  "cost",
+                  "time"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "estimate": {
+                "additionalProperties": false,
+                "properties": {
+                  "billable_status_filter": {
+                    "enum": [
+                      "billable",
+                      "non_billable",
+                      "any"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "source": {
+                    "enum": [
+                      "none",
+                      "tasks",
+                      "capacity_plans"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "total": {
+                "additionalProperties": false,
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "update_budget",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/budgets/{{ record.budget_gid }}",
+      "path_fields": [
+        "budget_gid"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "budget_gid",
+          "data"
+        ],
+        "properties": {
+          "budget_gid": {
+            "type": "string",
+            "maxLength": 8192
+          },
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "actual": {
+                "additionalProperties": false,
+                "properties": {
+                  "billable_status_filter": {
+                    "enum": [
+                      "billable",
+                      "non_billable",
+                      "any"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "budget_type": {
+                "enum": [
+                  "cost",
+                  "time"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "estimate": {
+                "additionalProperties": false,
+                "properties": {
+                  "billable_status_filter": {
+                    "enum": [
+                      "billable",
+                      "non_billable",
+                      "any"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "source": {
+                    "enum": [
+                      "none",
+                      "tasks",
+                      "capacity_plans"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "total": {
+                "additionalProperties": false,
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "actual",
+                "actual.billable_status_filter",
+                "actual.units",
+                "actual.value",
+                "budget_type",
+                "estimate",
+                "estimate.billable_status_filter",
+                "estimate.enabled",
+                "estimate.source",
+                "estimate.units",
+                "estimate.value",
+                "parent",
+                "parent.name",
+                "total",
+                "total.enabled",
+                "total.units",
+                "total.value"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "remove_supporting_relationship",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/removeSupportingRelationship",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "goal_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "supporting_resource": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "supporting_resource"
+            ],
+            "type": "object"
+          },
+          "goal_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "path_fields": [
+        "goal_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_followers",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/removeFollowers",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "goal_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "followers": {
+                "items": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "maxItems": 256,
+                "type": "array"
+              }
+            },
+            "required": [
+              "followers"
+            ],
+            "type": "object"
+          },
+          "goal_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "current_status_update",
+                "current_status_update.resource_subtype",
+                "current_status_update.title",
+                "custom_field_settings",
+                "custom_field_settings.custom_field",
+                "custom_field_settings.custom_field.asana_created_field",
+                "custom_field_settings.custom_field.created_by",
+                "custom_field_settings.custom_field.created_by.name",
+                "custom_field_settings.custom_field.currency_code",
+                "custom_field_settings.custom_field.custom_label",
+                "custom_field_settings.custom_field.custom_label_position",
+                "custom_field_settings.custom_field.date_value",
+                "custom_field_settings.custom_field.date_value.date",
+                "custom_field_settings.custom_field.date_value.date_time",
+                "custom_field_settings.custom_field.default_access_level",
+                "custom_field_settings.custom_field.description",
+                "custom_field_settings.custom_field.display_value",
+                "custom_field_settings.custom_field.enabled",
+                "custom_field_settings.custom_field.enum_options",
+                "custom_field_settings.custom_field.enum_options.color",
+                "custom_field_settings.custom_field.enum_options.enabled",
+                "custom_field_settings.custom_field.enum_options.name",
+                "custom_field_settings.custom_field.enum_value",
+                "custom_field_settings.custom_field.enum_value.color",
+                "custom_field_settings.custom_field.enum_value.enabled",
+                "custom_field_settings.custom_field.enum_value.name",
+                "custom_field_settings.custom_field.format",
+                "custom_field_settings.custom_field.has_notifications_enabled",
+                "custom_field_settings.custom_field.html_text_value",
+                "custom_field_settings.custom_field.id_prefix",
+                "custom_field_settings.custom_field.input_restrictions",
+                "custom_field_settings.custom_field.is_formula_field",
+                "custom_field_settings.custom_field.is_global_to_workspace",
+                "custom_field_settings.custom_field.is_value_read_only",
+                "custom_field_settings.custom_field.multi_enum_values",
+                "custom_field_settings.custom_field.multi_enum_values.color",
+                "custom_field_settings.custom_field.multi_enum_values.enabled",
+                "custom_field_settings.custom_field.multi_enum_values.name",
+                "custom_field_settings.custom_field.name",
+                "custom_field_settings.custom_field.number_value",
+                "custom_field_settings.custom_field.people_value",
+                "custom_field_settings.custom_field.people_value.name",
+                "custom_field_settings.custom_field.precision",
+                "custom_field_settings.custom_field.privacy_setting",
+                "custom_field_settings.custom_field.reference_value",
+                "custom_field_settings.custom_field.reference_value.name",
+                "custom_field_settings.custom_field.representation_type",
+                "custom_field_settings.custom_field.resource_subtype",
+                "custom_field_settings.custom_field.text_value",
+                "custom_field_settings.custom_field.type",
+                "custom_field_settings.is_important",
+                "custom_field_settings.parent",
+                "custom_field_settings.parent.name",
+                "custom_field_settings.project",
+                "custom_field_settings.project.name",
+                "custom_fields",
+                "custom_fields.date_value",
+                "custom_fields.date_value.date",
+                "custom_fields.date_value.date_time",
+                "custom_fields.display_value",
+                "custom_fields.enabled",
+                "custom_fields.enum_options",
+                "custom_fields.enum_options.color",
+                "custom_fields.enum_options.enabled",
+                "custom_fields.enum_options.name",
+                "custom_fields.enum_value",
+                "custom_fields.enum_value.color",
+                "custom_fields.enum_value.enabled",
+                "custom_fields.enum_value.name",
+                "custom_fields.id_prefix",
+                "custom_fields.input_restrictions",
+                "custom_fields.is_formula_field",
+                "custom_fields.multi_enum_values",
+                "custom_fields.multi_enum_values.color",
+                "custom_fields.multi_enum_values.enabled",
+                "custom_fields.multi_enum_values.name",
+                "custom_fields.name",
+                "custom_fields.number_value",
+                "custom_fields.representation_type",
+                "custom_fields.text_value",
+                "custom_fields.type",
+                "default_access_level",
+                "due_on",
+                "followers",
+                "followers.name",
+                "html_notes",
+                "is_workspace_level",
+                "liked",
+                "likes",
+                "likes.user",
+                "likes.user.name",
+                "metric",
+                "metric.can_manage",
+                "metric.currency_code",
+                "metric.current_display_value",
+                "metric.current_number_value",
+                "metric.initial_number_value",
+                "metric.is_custom_weight",
+                "metric.precision",
+                "metric.progress_source",
+                "metric.resource_subtype",
+                "metric.target_number_value",
+                "metric.unit",
+                "name",
+                "notes",
+                "num_likes",
+                "owner",
+                "owner.name",
+                "privacy_setting",
+                "start_on",
+                "status",
+                "team",
+                "team.name",
+                "time_period",
+                "time_period.display_name",
+                "time_period.end_on",
+                "time_period.period",
+                "time_period.start_on",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "path_fields": [
+        "goal_gid"
+      ],
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_custom_field_setting_for_goal",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/goals/{{ record.goal_gid }}/removeCustomFieldSetting",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "goal_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "custom_field": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "custom_field"
+            ],
+            "type": "object"
+          },
+          "goal_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "path_fields": [
+        "goal_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "create_membership",
+      "kind": "create",
+      "method": "POST",
+      "path": "/memberships",
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "access_level": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "member": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "role": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "update_membership",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/memberships/{{ record.membership_gid }}",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "membership_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "access_level": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "membership_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "path_fields": [
+        "membership_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "create_organization_export",
+      "kind": "create",
+      "method": "POST",
+      "path": "/organization_exports",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "organization": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "created_at",
+                "download_url",
+                "organization",
+                "organization.name",
+                "state"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_item_for_portfolio",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/portfolios/{{ record.portfolio_gid }}/removeItem",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "portfolio_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "item": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "item"
+            ],
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "portfolio_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_custom_field_setting_for_portfolio",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/portfolios/{{ record.portfolio_gid }}/removeCustomFieldSetting",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "portfolio_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "custom_field": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "custom_field"
+            ],
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "portfolio_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_members_for_portfolio",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/portfolios/{{ record.portfolio_gid }}/removeMembers",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "portfolio_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "members": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "members"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "archived",
+                "color",
+                "created_at",
+                "created_by",
+                "created_by.name",
+                "current_status_update",
+                "current_status_update.resource_subtype",
+                "current_status_update.title",
+                "custom_field_settings",
+                "custom_field_settings.custom_field",
+                "custom_field_settings.custom_field.asana_created_field",
+                "custom_field_settings.custom_field.created_by",
+                "custom_field_settings.custom_field.created_by.name",
+                "custom_field_settings.custom_field.currency_code",
+                "custom_field_settings.custom_field.custom_label",
+                "custom_field_settings.custom_field.custom_label_position",
+                "custom_field_settings.custom_field.date_value",
+                "custom_field_settings.custom_field.date_value.date",
+                "custom_field_settings.custom_field.date_value.date_time",
+                "custom_field_settings.custom_field.default_access_level",
+                "custom_field_settings.custom_field.description",
+                "custom_field_settings.custom_field.display_value",
+                "custom_field_settings.custom_field.enabled",
+                "custom_field_settings.custom_field.enum_options",
+                "custom_field_settings.custom_field.enum_options.color",
+                "custom_field_settings.custom_field.enum_options.enabled",
+                "custom_field_settings.custom_field.enum_options.name",
+                "custom_field_settings.custom_field.enum_value",
+                "custom_field_settings.custom_field.enum_value.color",
+                "custom_field_settings.custom_field.enum_value.enabled",
+                "custom_field_settings.custom_field.enum_value.name",
+                "custom_field_settings.custom_field.format",
+                "custom_field_settings.custom_field.has_notifications_enabled",
+                "custom_field_settings.custom_field.html_text_value",
+                "custom_field_settings.custom_field.id_prefix",
+                "custom_field_settings.custom_field.input_restrictions",
+                "custom_field_settings.custom_field.is_formula_field",
+                "custom_field_settings.custom_field.is_global_to_workspace",
+                "custom_field_settings.custom_field.is_value_read_only",
+                "custom_field_settings.custom_field.multi_enum_values",
+                "custom_field_settings.custom_field.multi_enum_values.color",
+                "custom_field_settings.custom_field.multi_enum_values.enabled",
+                "custom_field_settings.custom_field.multi_enum_values.name",
+                "custom_field_settings.custom_field.name",
+                "custom_field_settings.custom_field.number_value",
+                "custom_field_settings.custom_field.people_value",
+                "custom_field_settings.custom_field.people_value.name",
+                "custom_field_settings.custom_field.precision",
+                "custom_field_settings.custom_field.privacy_setting",
+                "custom_field_settings.custom_field.reference_value",
+                "custom_field_settings.custom_field.reference_value.name",
+                "custom_field_settings.custom_field.representation_type",
+                "custom_field_settings.custom_field.resource_subtype",
+                "custom_field_settings.custom_field.text_value",
+                "custom_field_settings.custom_field.type",
+                "custom_field_settings.is_important",
+                "custom_field_settings.parent",
+                "custom_field_settings.parent.name",
+                "custom_field_settings.project",
+                "custom_field_settings.project.name",
+                "custom_fields",
+                "custom_fields.date_value",
+                "custom_fields.date_value.date",
+                "custom_fields.date_value.date_time",
+                "custom_fields.display_value",
+                "custom_fields.enabled",
+                "custom_fields.enum_options",
+                "custom_fields.enum_options.color",
+                "custom_fields.enum_options.enabled",
+                "custom_fields.enum_options.name",
+                "custom_fields.enum_value",
+                "custom_fields.enum_value.color",
+                "custom_fields.enum_value.enabled",
+                "custom_fields.enum_value.name",
+                "custom_fields.id_prefix",
+                "custom_fields.input_restrictions",
+                "custom_fields.is_formula_field",
+                "custom_fields.multi_enum_values",
+                "custom_fields.multi_enum_values.color",
+                "custom_fields.multi_enum_values.enabled",
+                "custom_fields.multi_enum_values.name",
+                "custom_fields.name",
+                "custom_fields.number_value",
+                "custom_fields.representation_type",
+                "custom_fields.text_value",
+                "custom_fields.type",
+                "default_access_level",
+                "due_on",
+                "members",
+                "members.name",
+                "name",
+                "owner",
+                "owner.name",
+                "permalink_url",
+                "privacy_setting",
+                "project_templates",
+                "project_templates.name",
+                "public",
+                "start_on",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "portfolio_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "portfolio_gid"
+      ],
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_custom_field_setting_for_project",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/removeCustomFieldSetting",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "project_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "custom_field": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "custom_field"
+            ],
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "project_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "project_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_members_for_project",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/removeMembers",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "project_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "members": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "members"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "archived",
+                "color",
+                "completed",
+                "completed_at",
+                "completed_by",
+                "completed_by.name",
+                "created_at",
+                "created_from_template",
+                "created_from_template.name",
+                "current_status",
+                "current_status.author",
+                "current_status.author.name",
+                "current_status.color",
+                "current_status.created_at",
+                "current_status.created_by",
+                "current_status.created_by.name",
+                "current_status.html_text",
+                "current_status.modified_at",
+                "current_status.text",
+                "current_status.title",
+                "current_status_update",
+                "current_status_update.resource_subtype",
+                "current_status_update.title",
+                "custom_field_settings",
+                "custom_field_settings.custom_field",
+                "custom_field_settings.custom_field.asana_created_field",
+                "custom_field_settings.custom_field.created_by",
+                "custom_field_settings.custom_field.created_by.name",
+                "custom_field_settings.custom_field.currency_code",
+                "custom_field_settings.custom_field.custom_label",
+                "custom_field_settings.custom_field.custom_label_position",
+                "custom_field_settings.custom_field.date_value",
+                "custom_field_settings.custom_field.date_value.date",
+                "custom_field_settings.custom_field.date_value.date_time",
+                "custom_field_settings.custom_field.default_access_level",
+                "custom_field_settings.custom_field.description",
+                "custom_field_settings.custom_field.display_value",
+                "custom_field_settings.custom_field.enabled",
+                "custom_field_settings.custom_field.enum_options",
+                "custom_field_settings.custom_field.enum_options.color",
+                "custom_field_settings.custom_field.enum_options.enabled",
+                "custom_field_settings.custom_field.enum_options.name",
+                "custom_field_settings.custom_field.enum_value",
+                "custom_field_settings.custom_field.enum_value.color",
+                "custom_field_settings.custom_field.enum_value.enabled",
+                "custom_field_settings.custom_field.enum_value.name",
+                "custom_field_settings.custom_field.format",
+                "custom_field_settings.custom_field.has_notifications_enabled",
+                "custom_field_settings.custom_field.html_text_value",
+                "custom_field_settings.custom_field.id_prefix",
+                "custom_field_settings.custom_field.input_restrictions",
+                "custom_field_settings.custom_field.is_formula_field",
+                "custom_field_settings.custom_field.is_global_to_workspace",
+                "custom_field_settings.custom_field.is_value_read_only",
+                "custom_field_settings.custom_field.multi_enum_values",
+                "custom_field_settings.custom_field.multi_enum_values.color",
+                "custom_field_settings.custom_field.multi_enum_values.enabled",
+                "custom_field_settings.custom_field.multi_enum_values.name",
+                "custom_field_settings.custom_field.name",
+                "custom_field_settings.custom_field.number_value",
+                "custom_field_settings.custom_field.people_value",
+                "custom_field_settings.custom_field.people_value.name",
+                "custom_field_settings.custom_field.precision",
+                "custom_field_settings.custom_field.privacy_setting",
+                "custom_field_settings.custom_field.reference_value",
+                "custom_field_settings.custom_field.reference_value.name",
+                "custom_field_settings.custom_field.representation_type",
+                "custom_field_settings.custom_field.resource_subtype",
+                "custom_field_settings.custom_field.text_value",
+                "custom_field_settings.custom_field.type",
+                "custom_field_settings.is_important",
+                "custom_field_settings.parent",
+                "custom_field_settings.parent.name",
+                "custom_field_settings.project",
+                "custom_field_settings.project.name",
+                "custom_fields",
+                "custom_fields.date_value",
+                "custom_fields.date_value.date",
+                "custom_fields.date_value.date_time",
+                "custom_fields.display_value",
+                "custom_fields.enabled",
+                "custom_fields.enum_options",
+                "custom_fields.enum_options.color",
+                "custom_fields.enum_options.enabled",
+                "custom_fields.enum_options.name",
+                "custom_fields.enum_value",
+                "custom_fields.enum_value.color",
+                "custom_fields.enum_value.enabled",
+                "custom_fields.enum_value.name",
+                "custom_fields.id_prefix",
+                "custom_fields.input_restrictions",
+                "custom_fields.is_formula_field",
+                "custom_fields.multi_enum_values",
+                "custom_fields.multi_enum_values.color",
+                "custom_fields.multi_enum_values.enabled",
+                "custom_fields.multi_enum_values.name",
+                "custom_fields.name",
+                "custom_fields.number_value",
+                "custom_fields.representation_type",
+                "custom_fields.text_value",
+                "custom_fields.type",
+                "default_access_level",
+                "default_view",
+                "due_date",
+                "due_on",
+                "followers",
+                "followers.name",
+                "html_notes",
+                "icon",
+                "members",
+                "members.name",
+                "minimum_access_level_for_customization",
+                "minimum_access_level_for_sharing",
+                "modified_at",
+                "name",
+                "notes",
+                "owner",
+                "permalink_url",
+                "privacy_setting",
+                "project_brief",
+                "public",
+                "start_on",
+                "team",
+                "team.name",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "project_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "project_gid"
+      ],
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_followers_for_project",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/projects/{{ record.project_gid }}/removeFollowers",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "project_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "followers": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "followers"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "archived",
+                "color",
+                "completed",
+                "completed_at",
+                "completed_by",
+                "completed_by.name",
+                "created_at",
+                "created_from_template",
+                "created_from_template.name",
+                "current_status",
+                "current_status.author",
+                "current_status.author.name",
+                "current_status.color",
+                "current_status.created_at",
+                "current_status.created_by",
+                "current_status.created_by.name",
+                "current_status.html_text",
+                "current_status.modified_at",
+                "current_status.text",
+                "current_status.title",
+                "current_status_update",
+                "current_status_update.resource_subtype",
+                "current_status_update.title",
+                "custom_field_settings",
+                "custom_field_settings.custom_field",
+                "custom_field_settings.custom_field.asana_created_field",
+                "custom_field_settings.custom_field.created_by",
+                "custom_field_settings.custom_field.created_by.name",
+                "custom_field_settings.custom_field.currency_code",
+                "custom_field_settings.custom_field.custom_label",
+                "custom_field_settings.custom_field.custom_label_position",
+                "custom_field_settings.custom_field.date_value",
+                "custom_field_settings.custom_field.date_value.date",
+                "custom_field_settings.custom_field.date_value.date_time",
+                "custom_field_settings.custom_field.default_access_level",
+                "custom_field_settings.custom_field.description",
+                "custom_field_settings.custom_field.display_value",
+                "custom_field_settings.custom_field.enabled",
+                "custom_field_settings.custom_field.enum_options",
+                "custom_field_settings.custom_field.enum_options.color",
+                "custom_field_settings.custom_field.enum_options.enabled",
+                "custom_field_settings.custom_field.enum_options.name",
+                "custom_field_settings.custom_field.enum_value",
+                "custom_field_settings.custom_field.enum_value.color",
+                "custom_field_settings.custom_field.enum_value.enabled",
+                "custom_field_settings.custom_field.enum_value.name",
+                "custom_field_settings.custom_field.format",
+                "custom_field_settings.custom_field.has_notifications_enabled",
+                "custom_field_settings.custom_field.html_text_value",
+                "custom_field_settings.custom_field.id_prefix",
+                "custom_field_settings.custom_field.input_restrictions",
+                "custom_field_settings.custom_field.is_formula_field",
+                "custom_field_settings.custom_field.is_global_to_workspace",
+                "custom_field_settings.custom_field.is_value_read_only",
+                "custom_field_settings.custom_field.multi_enum_values",
+                "custom_field_settings.custom_field.multi_enum_values.color",
+                "custom_field_settings.custom_field.multi_enum_values.enabled",
+                "custom_field_settings.custom_field.multi_enum_values.name",
+                "custom_field_settings.custom_field.name",
+                "custom_field_settings.custom_field.number_value",
+                "custom_field_settings.custom_field.people_value",
+                "custom_field_settings.custom_field.people_value.name",
+                "custom_field_settings.custom_field.precision",
+                "custom_field_settings.custom_field.privacy_setting",
+                "custom_field_settings.custom_field.reference_value",
+                "custom_field_settings.custom_field.reference_value.name",
+                "custom_field_settings.custom_field.representation_type",
+                "custom_field_settings.custom_field.resource_subtype",
+                "custom_field_settings.custom_field.text_value",
+                "custom_field_settings.custom_field.type",
+                "custom_field_settings.is_important",
+                "custom_field_settings.parent",
+                "custom_field_settings.parent.name",
+                "custom_field_settings.project",
+                "custom_field_settings.project.name",
+                "custom_fields",
+                "custom_fields.date_value",
+                "custom_fields.date_value.date",
+                "custom_fields.date_value.date_time",
+                "custom_fields.display_value",
+                "custom_fields.enabled",
+                "custom_fields.enum_options",
+                "custom_fields.enum_options.color",
+                "custom_fields.enum_options.enabled",
+                "custom_fields.enum_options.name",
+                "custom_fields.enum_value",
+                "custom_fields.enum_value.color",
+                "custom_fields.enum_value.enabled",
+                "custom_fields.enum_value.name",
+                "custom_fields.id_prefix",
+                "custom_fields.input_restrictions",
+                "custom_fields.is_formula_field",
+                "custom_fields.multi_enum_values",
+                "custom_fields.multi_enum_values.color",
+                "custom_fields.multi_enum_values.enabled",
+                "custom_fields.multi_enum_values.name",
+                "custom_fields.name",
+                "custom_fields.number_value",
+                "custom_fields.representation_type",
+                "custom_fields.text_value",
+                "custom_fields.type",
+                "default_access_level",
+                "default_view",
+                "due_date",
+                "due_on",
+                "followers",
+                "followers.name",
+                "html_notes",
+                "icon",
+                "members",
+                "members.name",
+                "minimum_access_level_for_customization",
+                "minimum_access_level_for_sharing",
+                "modified_at",
+                "name",
+                "notes",
+                "owner",
+                "permalink_url",
+                "privacy_setting",
+                "project_brief",
+                "public",
+                "start_on",
+                "team",
+                "team.name",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "project_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "project_gid"
+      ],
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "create_rate",
+      "kind": "create",
+      "method": "POST",
+      "path": "/rates",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "parent": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "rate": {
+                "type": "number"
+              },
+              "resource": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "parent",
+              "resource",
+              "rate"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "created_by",
+                "created_by.name",
+                "currency_code",
+                "parent",
+                "parent.name",
+                "rate",
+                "resource",
+                "resource.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "update_rate",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/rates/{{ record.rate_gid }}",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "rate_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "rate": {
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "created_by",
+                "created_by.name",
+                "currency_code",
+                "parent",
+                "parent.name",
+                "rate",
+                "resource",
+                "resource.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "rate_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "rate_gid"
+      ],
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "create_role",
+      "kind": "create",
+      "method": "POST",
+      "path": "/roles",
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "base_role_type": {
+                "enum": [
+                  "guest",
+                  "member",
+                  "admin",
+                  "super_admin"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "is_standard_role": {
+                "type": "boolean"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "permissions": {
+                "additionalProperties": false,
+                "properties": {
+                  "allowed_guest_invites": {
+                    "enum": [
+                      "all",
+                      "none"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "assign_roles": {
+                    "type": "boolean"
+                  },
+                  "create_and_edit_ai_automations": {
+                    "type": "boolean"
+                  },
+                  "create_and_edit_ai_teammates": {
+                    "type": "boolean"
+                  },
+                  "create_app_authorization": {
+                    "type": "boolean"
+                  },
+                  "create_global_custom_fields": {
+                    "type": "boolean"
+                  },
+                  "create_goal": {
+                    "type": "boolean"
+                  },
+                  "create_pat_authorization": {
+                    "type": "boolean"
+                  },
+                  "create_portfolio": {
+                    "type": "boolean"
+                  },
+                  "create_project": {
+                    "type": "boolean"
+                  },
+                  "create_read_only_link": {
+                    "type": "boolean"
+                  },
+                  "create_team": {
+                    "type": "boolean"
+                  },
+                  "download_mobile_attachments": {
+                    "type": "boolean"
+                  },
+                  "export_project_data": {
+                    "type": "boolean"
+                  },
+                  "import_data": {
+                    "type": "boolean"
+                  },
+                  "manage_roles": {
+                    "type": "boolean"
+                  },
+                  "proactive_ai": {
+                    "type": "boolean"
+                  },
+                  "share_goal_with_domain": {
+                    "type": "boolean"
+                  },
+                  "share_portfolios_with_org": {
+                    "type": "boolean"
+                  },
+                  "share_teams_with_org": {
+                    "type": "boolean"
+                  },
+                  "standard_ai": {
+                    "type": "boolean"
+                  },
+                  "task_deletion_policy": {
+                    "enum": [
+                      "all",
+                      "owned",
+                      "none"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "upload_attachments": {
+                    "type": "boolean"
+                  },
+                  "view_public_teams": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_portfolios": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_projects": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_tasks": {
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              },
+              "workspace": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "base_role_type",
+              "description",
+              "name",
+              "workspace"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "base_role_type",
+                "creation_time",
+                "description",
+                "is_standard_role",
+                "modified_at",
+                "name",
+                "permissions",
+                "permissions.allowed_guest_invites",
+                "permissions.assign_roles",
+                "permissions.create_and_edit_ai_automations",
+                "permissions.create_and_edit_ai_teammates",
+                "permissions.create_app_authorization",
+                "permissions.create_global_custom_fields",
+                "permissions.create_goal",
+                "permissions.create_pat_authorization",
+                "permissions.create_portfolio",
+                "permissions.create_project",
+                "permissions.create_read_only_link",
+                "permissions.create_team",
+                "permissions.download_mobile_attachments",
+                "permissions.export_project_data",
+                "permissions.import_data",
+                "permissions.manage_roles",
+                "permissions.proactive_ai",
+                "permissions.share_goal_with_domain",
+                "permissions.share_portfolios_with_org",
+                "permissions.share_teams_with_org",
+                "permissions.standard_ai",
+                "permissions.task_deletion_policy",
+                "permissions.upload_attachments",
+                "permissions.view_public_teams",
+                "permissions.view_shared_with_org_portfolios",
+                "permissions.view_shared_with_org_projects",
+                "permissions.view_shared_with_org_tasks",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "update_role",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/roles/{{ record.role_gid }}",
+      "path_fields": [
+        "role_gid"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "role_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "base_role_type": {
+                "enum": [
+                  "guest",
+                  "member",
+                  "admin",
+                  "super_admin"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "description": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "is_standard_role": {
+                "type": "boolean"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "permissions": {
+                "additionalProperties": false,
+                "properties": {
+                  "allowed_guest_invites": {
+                    "enum": [
+                      "all",
+                      "none"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "assign_roles": {
+                    "type": "boolean"
+                  },
+                  "create_and_edit_ai_automations": {
+                    "type": "boolean"
+                  },
+                  "create_and_edit_ai_teammates": {
+                    "type": "boolean"
+                  },
+                  "create_app_authorization": {
+                    "type": "boolean"
+                  },
+                  "create_global_custom_fields": {
+                    "type": "boolean"
+                  },
+                  "create_goal": {
+                    "type": "boolean"
+                  },
+                  "create_pat_authorization": {
+                    "type": "boolean"
+                  },
+                  "create_portfolio": {
+                    "type": "boolean"
+                  },
+                  "create_project": {
+                    "type": "boolean"
+                  },
+                  "create_read_only_link": {
+                    "type": "boolean"
+                  },
+                  "create_team": {
+                    "type": "boolean"
+                  },
+                  "download_mobile_attachments": {
+                    "type": "boolean"
+                  },
+                  "export_project_data": {
+                    "type": "boolean"
+                  },
+                  "import_data": {
+                    "type": "boolean"
+                  },
+                  "manage_roles": {
+                    "type": "boolean"
+                  },
+                  "proactive_ai": {
+                    "type": "boolean"
+                  },
+                  "share_goal_with_domain": {
+                    "type": "boolean"
+                  },
+                  "share_portfolios_with_org": {
+                    "type": "boolean"
+                  },
+                  "share_teams_with_org": {
+                    "type": "boolean"
+                  },
+                  "standard_ai": {
+                    "type": "boolean"
+                  },
+                  "task_deletion_policy": {
+                    "enum": [
+                      "all",
+                      "owned",
+                      "none"
+                    ],
+                    "maxLength": 8192,
+                    "type": "string"
+                  },
+                  "upload_attachments": {
+                    "type": "boolean"
+                  },
+                  "view_public_teams": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_portfolios": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_projects": {
+                    "type": "boolean"
+                  },
+                  "view_shared_with_org_tasks": {
+                    "type": "boolean"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "base_role_type",
+                "creation_time",
+                "description",
+                "is_standard_role",
+                "modified_at",
+                "name",
+                "permissions",
+                "permissions.allowed_guest_invites",
+                "permissions.assign_roles",
+                "permissions.create_and_edit_ai_automations",
+                "permissions.create_and_edit_ai_teammates",
+                "permissions.create_app_authorization",
+                "permissions.create_global_custom_fields",
+                "permissions.create_goal",
+                "permissions.create_pat_authorization",
+                "permissions.create_portfolio",
+                "permissions.create_project",
+                "permissions.create_read_only_link",
+                "permissions.create_team",
+                "permissions.download_mobile_attachments",
+                "permissions.export_project_data",
+                "permissions.import_data",
+                "permissions.manage_roles",
+                "permissions.proactive_ai",
+                "permissions.share_goal_with_domain",
+                "permissions.share_portfolios_with_org",
+                "permissions.share_teams_with_org",
+                "permissions.standard_ai",
+                "permissions.task_deletion_policy",
+                "permissions.upload_attachments",
+                "permissions.view_public_teams",
+                "permissions.view_shared_with_org_portfolios",
+                "permissions.view_shared_with_org_projects",
+                "permissions.view_shared_with_org_tasks",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "role_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "remove_dependencies_for_task",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/removeDependencies",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "task_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "dependencies": {
+                "items": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "maxItems": 256,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "task_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "task_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_dependents_for_task",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/removeDependents",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "task_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "dependents": {
+                "items": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "maxItems": 256,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "task_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "task_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_project_for_task",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/removeProject",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "task_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "project": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "project"
+            ],
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "task_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "task_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_tag_for_task",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/removeTag",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "task_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "tag": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "tag"
+            ],
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "task_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "task_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_follower_for_task",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/tasks/{{ record.task_gid }}/removeFollowers",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "task_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "followers": {
+                "items": {
+                  "maxLength": 8192,
+                  "type": "string"
+                },
+                "maxItems": 256,
+                "type": "array"
+              }
+            },
+            "required": [
+              "followers"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "actual_time_minutes",
+                "approval_status",
+                "assigned_by",
+                "assigned_by.name",
+                "assignee",
+                "assignee.name",
+                "assignee_section",
+                "assignee_section.name",
+                "assignee_status",
+                "completed",
+                "completed_at",
+                "completed_by",
+                "completed_by.name",
+                "created_at",
+                "created_by",
+                "custom_fields",
+                "custom_fields.asana_created_field",
+                "custom_fields.created_by",
+                "custom_fields.created_by.name",
+                "custom_fields.currency_code",
+                "custom_fields.custom_label",
+                "custom_fields.custom_label_position",
+                "custom_fields.date_value",
+                "custom_fields.date_value.date",
+                "custom_fields.date_value.date_time",
+                "custom_fields.default_access_level",
+                "custom_fields.description",
+                "custom_fields.display_value",
+                "custom_fields.enabled",
+                "custom_fields.enum_options",
+                "custom_fields.enum_options.color",
+                "custom_fields.enum_options.enabled",
+                "custom_fields.enum_options.name",
+                "custom_fields.enum_value",
+                "custom_fields.enum_value.color",
+                "custom_fields.enum_value.enabled",
+                "custom_fields.enum_value.name",
+                "custom_fields.format",
+                "custom_fields.has_notifications_enabled",
+                "custom_fields.html_text_value",
+                "custom_fields.id_prefix",
+                "custom_fields.input_restrictions",
+                "custom_fields.is_formula_field",
+                "custom_fields.is_global_to_workspace",
+                "custom_fields.is_value_read_only",
+                "custom_fields.multi_enum_values",
+                "custom_fields.multi_enum_values.color",
+                "custom_fields.multi_enum_values.enabled",
+                "custom_fields.multi_enum_values.name",
+                "custom_fields.name",
+                "custom_fields.number_value",
+                "custom_fields.people_value",
+                "custom_fields.people_value.name",
+                "custom_fields.precision",
+                "custom_fields.privacy_setting",
+                "custom_fields.reference_value",
+                "custom_fields.reference_value.name",
+                "custom_fields.representation_type",
+                "custom_fields.resource_subtype",
+                "custom_fields.text_value",
+                "custom_fields.type",
+                "custom_type",
+                "custom_type.name",
+                "custom_type_status_option",
+                "custom_type_status_option.name",
+                "dependencies",
+                "dependents",
+                "due_at",
+                "due_on",
+                "external",
+                "external.data",
+                "followers",
+                "followers.name",
+                "hearted",
+                "hearts",
+                "hearts.user",
+                "hearts.user.name",
+                "html_notes",
+                "is_rendered_as_separator",
+                "liked",
+                "likes",
+                "likes.user",
+                "likes.user.name",
+                "memberships",
+                "memberships.project",
+                "memberships.project.name",
+                "memberships.section",
+                "memberships.section.name",
+                "modified_at",
+                "name",
+                "notes",
+                "num_hearts",
+                "num_likes",
+                "num_subtasks",
+                "parent",
+                "parent.created_by",
+                "parent.name",
+                "parent.resource_subtype",
+                "permalink_url",
+                "projects",
+                "projects.name",
+                "resource_subtype",
+                "start_at",
+                "start_on",
+                "tags",
+                "tags.name",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "task_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "task_gid"
+      ],
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_user_for_team",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/teams/{{ record.team_gid }}/removeUser",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "team_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "user": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "team_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "team_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "update_time_tracking_category",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/time_tracking_categories/{{ record.time_tracking_category_gid }}",
+      "path_fields": [
+        "time_tracking_category_gid"
+      ],
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "time_tracking_category_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "enum": [
+                  "none",
+                  "red",
+                  "orange",
+                  "yellow-orange",
+                  "yellow",
+                  "yellow-green",
+                  "green",
+                  "blue-green",
+                  "aqua",
+                  "blue",
+                  "indigo",
+                  "purple",
+                  "magenta",
+                  "hot-pink",
+                  "pink",
+                  "cool-gray"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "is_archived": {
+                "type": "boolean"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "color",
+                "is_archived",
+                "name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "time_tracking_category_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "create_time_tracking_category",
+      "kind": "create",
+      "method": "POST",
+      "path": "/time_tracking_categories",
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ],
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "enum": [
+                  "none",
+                  "red",
+                  "orange",
+                  "yellow-orange",
+                  "yellow",
+                  "yellow-green",
+                  "green",
+                  "blue-green",
+                  "aqua",
+                  "blue",
+                  "indigo",
+                  "purple",
+                  "magenta",
+                  "hot-pink",
+                  "pink",
+                  "cool-gray"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "workspace": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "workspace"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "color",
+                "is_archived",
+                "name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    {
+      "name": "update_timesheet_approval_status",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/timesheet_approval_statuses/{{ record.timesheet_approval_status_gid }}",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "timesheet_approval_status_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "approval_status": {
+                "enum": [
+                  "submitted",
+                  "draft",
+                  "approved",
+                  "rejected"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "message": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "approval_status"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "approval_status",
+                "created_at",
+                "end_date",
+                "start_date",
+                "user",
+                "user.name",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "timesheet_approval_status_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "timesheet_approval_status_gid"
+      ],
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "create_timesheet_approval_status",
+      "kind": "create",
+      "method": "POST",
+      "path": "/timesheet_approval_statuses",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "end_date": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "start_date": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "user": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "workspace": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "user",
+              "workspace",
+              "start_date",
+              "end_date"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "approval_status",
+                "created_at",
+                "end_date",
+                "start_date",
+                "user",
+                "user.name",
+                "workspace",
+                "workspace.name"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "create_webhook",
+      "kind": "create",
+      "method": "POST",
+      "path": "/webhooks",
+      "risk": "external source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "filters": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "action": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "fields": {
+                      "items": {
+                        "maxLength": 8192,
+                        "type": "string"
+                      },
+                      "maxItems": 256,
+                      "type": "array"
+                    },
+                    "resource_subtype": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "resource_type": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "maxItems": 256,
+                "type": "array"
+              },
+              "resource": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "target": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "resource",
+              "target"
+            ],
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "active",
+                "created_at",
+                "delivery_retry_count",
+                "failure_deletion_timestamp",
+                "filters",
+                "filters.action",
+                "filters.fields",
+                "filters.resource_subtype",
+                "last_failure_at",
+                "last_failure_content",
+                "last_success_at",
+                "next_attempt_after",
+                "resource",
+                "resource.name",
+                "target"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "update_webhook",
+      "kind": "update",
+      "method": "PUT",
+      "path": "/webhooks/{{ record.webhook_gid }}",
+      "risk": "external source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "webhook_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "filters": {
+                "items": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "action": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "fields": {
+                      "items": {
+                        "maxLength": 8192,
+                        "type": "string"
+                      },
+                      "maxItems": 256,
+                      "type": "array"
+                    },
+                    "resource_subtype": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    },
+                    "resource_type": {
+                      "maxLength": 8192,
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "maxItems": 256,
+                "type": "array"
+              }
+            },
+            "type": "object"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "active",
+                "created_at",
+                "delivery_retry_count",
+                "failure_deletion_timestamp",
+                "filters",
+                "filters.action",
+                "filters.fields",
+                "filters.resource_subtype",
+                "last_failure_at",
+                "last_failure_content",
+                "last_success_at",
+                "next_attempt_after",
+                "resource",
+                "resource.name",
+                "target"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "webhook_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "webhook_gid"
+      ],
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "remove_user_for_workspace",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/workspaces/{{ record.workspace_gid }}/removeUser",
+      "risk": "destructive source-bound Asana mutation; requires plan -> preview -> explicit approval -> execute and typed confirm destructive",
+      "confirm": "destructive",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "workspace_gid"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "user": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          },
+          "workspace_gid": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        }
+      },
+      "path_fields": [
+        "workspace_gid"
+      ],
+      "query": {
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      },
+      "body_type": "json",
+      "body_fields": [
+        "data"
+      ]
+    },
+    {
+      "name": "create_batch_request",
+      "kind": "custom",
+      "method": "POST",
+      "path": "/batch",
+      "body_type": "declared_batch",
+      "success_statuses": [
+        200
+      ],
+      "declared_batch": {
+        "max_actions": 10,
+        "allowed_actions": [
+          "create_task",
+          "update_task",
+          "delete_task",
+          "create_project",
+          "update_project",
+          "delete_project",
+          "create_section",
+          "update_section",
+          "delete_section",
+          "create_tag",
+          "update_tag",
+          "delete_tag",
+          "add_comment",
+          "create_custom_field",
+          "update_custom_field",
+          "create_enum_option_for_custom_field",
+          "insert_enum_option_for_custom_field",
+          "update_enum_option",
+          "create_graph_export",
+          "create_resource_export",
+          "update_goal_relationship",
+          "add_supporting_relationship",
+          "update_goal",
+          "create_goal",
+          "create_goal_metric",
+          "update_goal_metric",
+          "add_followers",
+          "add_custom_field_setting_for_goal",
+          "update_ooo_entry",
+          "create_ooo_entry",
+          "create_portfolio",
+          "update_portfolio",
+          "add_item_for_portfolio",
+          "add_custom_field_setting_for_portfolio",
+          "add_members_for_portfolio",
+          "duplicate_portfolio",
+          "update_project_brief",
+          "create_project_brief",
+          "update_project_portfolio_setting",
+          "create_project_status_for_project",
+          "instantiate_project",
+          "duplicate_project",
+          "create_project_for_team",
+          "create_project_for_workspace",
+          "add_custom_field_setting_for_project",
+          "add_members_for_project",
+          "add_followers_for_project",
+          "project_save_as_template",
+          "trigger_rule",
+          "add_task_for_section",
+          "insert_section_for_project",
+          "create_status_for_object",
+          "update_story",
+          "create_story_for_goal",
+          "create_tag_for_workspace",
+          "instantiate_task",
+          "duplicate_task",
+          "create_subtask_for_task",
+          "set_parent_for_task",
+          "add_dependencies_for_task",
+          "add_dependents_for_task",
+          "add_project_for_task",
+          "add_tag_for_task",
+          "add_followers_for_task",
+          "create_team",
+          "update_team",
+          "add_user_for_team",
+          "create_time_tracking_entry",
+          "update_time_tracking_entry",
+          "update_user",
+          "update_user_for_workspace",
+          "update_workspace",
+          "add_user_for_workspace",
+          "delete_allocation",
+          "delete_attachment",
+          "delete_budget",
+          "delete_custom_field",
+          "delete_goal",
+          "delete_membership",
+          "delete_ooo_entry",
+          "delete_portfolio",
+          "delete_project_brief",
+          "delete_project_status",
+          "delete_project_template",
+          "delete_rate",
+          "delete_role",
+          "delete_status",
+          "delete_story",
+          "delete_task_template",
+          "delete_time_tracking_category",
+          "delete_time_tracking_entry",
+          "delete_webhook",
+          "approve_access_request",
+          "reject_access_request",
+          "create_access_request",
+          "update_allocation",
+          "create_allocation",
+          "create_budget",
+          "update_budget",
+          "remove_supporting_relationship",
+          "remove_followers",
+          "remove_custom_field_setting_for_goal",
+          "create_membership",
+          "update_membership",
+          "remove_item_for_portfolio",
+          "remove_custom_field_setting_for_portfolio",
+          "remove_members_for_portfolio",
+          "remove_custom_field_setting_for_project",
+          "remove_members_for_project",
+          "remove_followers_for_project",
+          "create_rate",
+          "update_rate",
+          "create_role",
+          "update_role",
+          "remove_dependencies_for_task",
+          "remove_dependents_for_task",
+          "remove_project_for_task",
+          "remove_tag_for_task",
+          "remove_follower_for_task",
+          "remove_user_for_team",
+          "update_time_tracking_category",
+          "create_time_tracking_category",
+          "update_timesheet_approval_status",
+          "create_timesheet_approval_status",
+          "create_webhook",
+          "update_webhook",
+          "remove_user_for_workspace"
+        ],
+        "allowed_methods": [
+          "POST",
+          "PUT",
+          "DELETE"
+        ],
+        "provider_envelope_field": "data",
+        "provider_actions_field": "actions",
+        "provider_method_field": "method",
+        "provider_path_field": "relative_path",
+        "provider_data_field": "data",
+        "inner_body_field": "data",
+        "response_envelope_field": "data",
+        "response_status_field": "status_code"
+      },
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actions"
+        ],
+        "properties": {
+          "actions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "action": {
+                  "maxLength": 128,
+                  "pattern": "^[a-z][a-z0-9_]*$",
+                  "type": "string"
+                },
+                "record": {
+                  "additionalProperties": true,
+                  "maxProperties": 256,
+                  "type": "object"
+                }
+              },
+              "required": [
+                "action",
+                "record"
+              ],
+              "type": "object"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "type": "array"
+          },
+          "opt_fields": {
+            "items": {
+              "enum": [
+                "body",
+                "headers",
+                "status_code"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          },
+          "opt_pretty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "executes up to 10 explicitly allow-listed Asana write actions in one provider batch; partial provider results fail closed and the entire approved batch requires typed destructive confirmation",
+      "confirm": "destructive",
+      "query": {
+        "opt_fields": {
+          "template": "{{ record.opt_fields | join:, }}",
+          "omit_when_absent": true
+        },
+        "opt_pretty": {
+          "template": "{{ record.opt_pretty }}",
+          "omit_when_absent": true
+        }
+      }
     }
   ]
 }

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/fs"
 	"math"
+	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -19,22 +20,34 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/safety"
 )
 
 const (
-	sourceProjectionDefaultStringBytes               = 8 << 10
-	sourceProjectionDefaultArrayItems                = 256
-	sourceProjectionDefaultObjectProperties          = 256
-	sourceOperationExecutionFoundation               = "closed-source-operation-execution-foundation-r1"
+	sourceProjectionDefaultStringBytes      = 8 << 10
+	sourceProjectionDefaultArrayItems       = 256
+	sourceProjectionDefaultObjectProperties = 256
+	sourceOperationExecutionFoundation      = "closed-source-operation-execution-foundation-r1"
+	// sourceProviderParameterAliasFoundation names the Atlas-tracked runtime
+	// candidate required when a provider query key cannot be represented as a
+	// closed safe CLI flag. Source projection must retain this cited gap rather
+	// than emitting an unsafe raw flag or a lossy substitute.
+	sourceProviderParameterAliasFoundation           = "runtime-provider-parameter-alias-investigating-r1"
 	sourceNonExecutableMutationDispositionFoundation = "source-cited-non-executable-mutation-foundation-r1"
+	sourcePartialMutationCoverageFoundation          = "source-cited-partial-mutation-coverage-foundation-r1"
 	// sourceReadOnlyOperationFoundation is intentionally distinct from the
 	// mutation disposition. A read-only declaration can never satisfy mutation
 	// coverage, even when its endpoint currently lacks an executable action.
 	sourceReadOnlyOperationFoundation = "source-read-only-operation-foundation-r1"
 	sourceReadOnlyOperationModel      = "read_only"
 	sourceReadOnlyPolicy              = "source-cited-read-only-operations-r1"
+	// sourceWriteDisabledMutationArtifactReason is attached only to a mutation
+	// whose connector explicitly declares no write capability. The matching
+	// provider citation and named non-executable foundation make that absence
+	// auditable without fabricating an action or a runnable command.
+	sourceWriteDisabledMutationArtifactReason = "connector declares no write capability and has no complete declaration-owned executable action"
 	// JSON-valued command flags carry a complete named field through the
 	// declaration-owned body path. They are not an unbounded replacement for a
 	// request body, so keep their encoded input explicitly bounded.
@@ -54,13 +67,1120 @@ var (
 )
 
 type sourceProjectionStats struct {
-	Writes  int
-	CLI     int
-	Surface int
-	Missing int
+	Writes     int
+	Operations int
+	Streams    int
+	CLI        int
+	Surface    int
+	Metadata   int
+	Missing    int
 }
 
-func (s sourceProjectionStats) Changed() bool { return s.Writes+s.CLI+s.Surface+s.Missing > 0 }
+func (s sourceProjectionStats) Changed() bool {
+	return s.Writes+s.Operations+s.Streams+s.CLI+s.Surface+s.Metadata+s.Missing > 0
+}
+
+// projectEligibleSourceLockLanesToBundle is the opt-in complete-definition
+// bridge for a connector whose source lock names every operation. It creates
+// only contracts that the existing closed runtime can execute exactly: JSON
+// GET direct reads and no-body reverse-ETL mutations with required scalar path
+// inputs. Every other source row remains in its descriptor and source-evidence
+// matrix with its named foundation or provider-evidence disposition.
+//
+// The bridge is intentionally generic. It takes its route, method, parameters,
+// success status, response media, and source citation exclusively from the
+// canonical descriptor; it never branches on a connector name or provider URL.
+func projectEligibleSourceLockLanesToBundle(bundleDir string, result sourceImportResult, check bool) (sourceProjectionStats, error) {
+	writesPath := filepath.Join(bundleDir, "writes.json")
+	operationsPath := filepath.Join(bundleDir, "operations.json")
+	cliPath := filepath.Join(bundleDir, "cli_surface.json")
+	streamsPath := filepath.Join(bundleDir, "streams.json")
+	apiPath := filepath.Join(bundleDir, "api_surface.json")
+	metadataPath := filepath.Join(bundleDir, "metadata.json")
+
+	writes, writesRaw, writesExists, err := sourceProjectionLoadOrCreateDocument(writesPath, "actions")
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
+	operations, operationsRaw, operationsExists, err := sourceProjectionLoadOrCreateDocument(operationsPath, "operations")
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
+	cli, cliRaw, cliExists, err := sourceProjectionLoadOrCreateDocument(cliPath, "commands")
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
+	streams, _, _, err := sourceProjectionLoadOrCreateDocument(streamsPath, "streams")
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
+	api, apiRaw, apiExists, err := sourceProjectionLoadOrCreateDocument(apiPath, "endpoints")
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
+	metadataRaw, err := os.ReadFile(metadataPath)
+	if err != nil {
+		return sourceProjectionStats{}, fmt.Errorf("metadata.json: %w", err)
+	}
+	var metadata orderedJSON
+	if err := json.Unmarshal(metadataRaw, &metadata); err != nil {
+		return sourceProjectionStats{}, fmt.Errorf("metadata.json: %w", err)
+	}
+
+	stats := sourceProjectionStats{}
+	pruned := sourceProjectionPruneUnsafeGeneratedDirectReads(operations.root, cli.root, api.root, result)
+	stats.Operations += pruned.Operations
+	stats.CLI += pruned.CLI
+	stats.Surface += pruned.Surface
+	// writes.json and operations.json are strict collection documents, not the
+	// CLI surface dialect. Earlier generic projection scaffolding copied a
+	// schema_version key into them; remove that invalid shape before publishing
+	// an otherwise valid source-bound action or operation.
+	if writes.root.remove("schema_version") {
+		stats.Writes++
+	}
+	if operations.root.remove("schema_version") {
+		stats.Operations++
+	}
+	materializedRead := false
+	materializedWrite := false
+	for _, source := range result.Operations {
+		switch {
+		case sourceProjectionGeneratedDirectReadEligible(source) || sourceProjectionGeneratedDirectReadExists(operations.root, source):
+			created, readStats, err := sourceProjectionCreateDirectRead(operations.root, cli.root, source)
+			if err != nil {
+				return stats, fmt.Errorf("source operation %s: %w", source.SourceID, err)
+			}
+			stats.Operations += readStats.Operations
+			stats.CLI += readStats.CLI
+			if created {
+				materializedRead = true
+			}
+			// Coverage is derived from the current declared stream and command
+			// surfaces. Refresh it for an existing generated operation too: a
+			// prior pass may have created the direct-read binding before the
+			// complementary stream ownership was available.
+			if sourceProjectionSetEndpointCoverage(api.root, source, "direct_read", sourceProjectionGeneratedCommandPath(source), streams.root) {
+				stats.Surface++
+			}
+		case sourceProjectionGeneratedNoBodyMutationEligible(source) || sourceProjectionGeneratedNoBodyMutationExists(writes.root, source):
+			created, refreshed, err := sourceProjectionCreateNoBodyMutation(writes.root, cli.root, source)
+			if err != nil {
+				return stats, fmt.Errorf("source operation %s: %w", source.SourceID, err)
+			}
+			if created {
+				materializedWrite = true
+				stats.Writes++
+				stats.CLI++
+				if sourceProjectionSetEndpointCoverage(api.root, source, "write", sourceProjectionGeneratedWriteID(source), streams.root) {
+					stats.Surface++
+				}
+			} else if refreshed {
+				stats.CLI++
+			}
+			// The descriptor is produced before this closed generated action exists,
+			// so it correctly carries the one non-executable-mutation disposition
+			// needed at import time. Once the exact no-body action and its
+			// source-bound command have been materialized, retaining that synthetic
+			// disposition would contradict the declaration and make a repeatable
+			// projection fail. Clear only this exact, sole disposition; all other
+			// source-cited gaps remain blocking evidence.
+			sourceProjectionClearGeneratedNoBodyMutationDisposition(&result, source)
+		case sourceProjectionGeneratedJSONBodyMutationEligible(source) || sourceProjectionGeneratedJSONBodyMutationExists(writes.root, source):
+			created, refreshed, err := sourceProjectionCreateJSONBodyMutation(writes.root, cli.root, source)
+			if err != nil {
+				return stats, fmt.Errorf("source operation %s: %w", source.SourceID, err)
+			}
+			if created {
+				materializedWrite = true
+				stats.Writes++
+				stats.CLI++
+				if sourceProjectionSetEndpointCoverage(api.root, source, "write", sourceProjectionGeneratedWriteID(source), streams.root) {
+					stats.Surface++
+				}
+			} else if refreshed {
+				stats.Writes++
+				stats.CLI++
+			}
+			// P5 permits only the documented named JSON members and the existing
+			// bounded named-value seam. Once that exact action/command pair exists,
+			// its two synthetic import dispositions must not block repeatable
+			// projection; unrelated source gaps remain intact.
+			sourceProjectionClearGeneratedJSONBodyMutationDisposition(&result, source)
+		}
+	}
+	directWriteCommands, err := sourceProjectionMaterializeActionBackedDirectWrites(writes.root, cli.root, result)
+	if err != nil {
+		return stats, err
+	}
+	if directWriteCommands > 0 {
+		materializedWrite = true
+		stats.CLI += directWriteCommands
+	}
+	// The eligible-lane bridge may refresh an existing command from its closed
+	// action. Reapply retained source execution gaps after that refresh so no
+	// direct-write or reverse-ETL sibling stays executable around the same
+	// source request constraint.
+	gapStats := sourceProjectionAnnotateMutationFoundationGaps(operations.root, cli.root, api.root, result)
+	stats.Operations += gapStats.Operations
+	stats.CLI += gapStats.CLI
+	stats.Surface += gapStats.Surface
+	if materializedRead && sourceProjectionSetCapability(metadata.root, "read") {
+		stats.Metadata++
+	}
+	if materializedWrite && sourceProjectionSetCapability(metadata.root, "write") {
+		stats.Metadata++
+	}
+	if check {
+		// Some repair passes rebuild ordered command fields from their already
+		// canonical source contract. Count drift from the final rendered document,
+		// not intermediate idempotent rewrites, so --check reports only a real
+		// selected-connector change.
+		stats.Writes = sourceProjectionDocumentDrift(writesRaw, writes)
+		stats.Operations = sourceProjectionDocumentDrift(operationsRaw, operations)
+		stats.CLI = sourceProjectionDocumentDrift(cliRaw, cli)
+		stats.Surface = sourceProjectionDocumentDrift(apiRaw, api)
+		stats.Metadata = sourceProjectionDocumentDrift(metadataRaw, metadata)
+		return stats, nil
+	}
+	if !stats.Changed() {
+		return stats, nil
+	}
+	if stats.Writes > 0 || !writesExists {
+		if err := sourceProjectionWriteDocument(writesPath, writes, writesRaw, writesExists); err != nil {
+			return stats, err
+		}
+	}
+	if stats.Operations > 0 || !operationsExists {
+		if err := sourceProjectionWriteDocument(operationsPath, operations, operationsRaw, operationsExists); err != nil {
+			return stats, err
+		}
+	}
+	if stats.CLI > 0 || !cliExists {
+		if err := sourceProjectionWriteDocument(cliPath, cli, cliRaw, cliExists); err != nil {
+			return stats, err
+		}
+	}
+	if stats.Surface > 0 || !apiExists {
+		if err := sourceProjectionWriteDocument(apiPath, api, apiRaw, apiExists); err != nil {
+			return stats, err
+		}
+	}
+	if stats.Metadata > 0 {
+		if err := writeBundleJSON(metadataPath, metadata, metadataRaw); err != nil {
+			return stats, err
+		}
+	}
+	return stats, nil
+}
+
+func sourceProjectionDocumentDrift(original []byte, document orderedJSON) int {
+	var existing orderedJSON
+	if err := json.Unmarshal(original, &existing); err == nil && orderedSemanticEqual(existing.root, document.root) {
+		return 0
+	}
+	return 1
+}
+
+func sourceProjectionSetCapability(metadata *orderedObject, name string) bool {
+	if metadata == nil {
+		return false
+	}
+	capabilitiesRaw, declared := metadata.get("capabilities")
+	capabilities, ok := capabilitiesRaw.(*orderedObject)
+	if !declared || !ok {
+		return false
+	}
+	return setOrderedIfDifferent(capabilities, name, true)
+}
+
+func sourceProjectionLoadOrCreateDocument(path, collection string) (orderedJSON, []byte, bool, error) {
+	raw, err := os.ReadFile(path)
+	if err == nil {
+		var document orderedJSON
+		if err := json.Unmarshal(raw, &document); err != nil {
+			return orderedJSON{}, nil, false, fmt.Errorf("%s: %w", filepath.Base(path), err)
+		}
+		return document, raw, true, nil
+	}
+	if !os.IsNotExist(err) {
+		return orderedJSON{}, nil, false, err
+	}
+	root := newOrderedObject()
+	root.set(collection, []any{})
+	return orderedJSON{root: root}, nil, false, nil
+}
+
+func sourceProjectionWriteDocument(path string, document orderedJSON, original []byte, existed bool) error {
+	if existed {
+		return writeBundleJSON(path, document, original)
+	}
+	raw, err := json.MarshalIndent(document.root, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, append(raw, '\n'), 0o644)
+}
+
+func sourceProjectionGeneratedDirectReadEligible(source sourceOperationDescriptor) bool {
+	if source.Protocol != "rest" || !strings.EqualFold(source.Method, http.MethodGet) || source.Output.Class != sourceOutputJSON || source.Request.Body != nil || len(source.Request.Header) != 0 || len(source.Request.Media) != 0 {
+		return false
+	}
+	if _, unsafe := sourceProjectionUnsafeProviderQueryParameter(source); unsafe {
+		return false
+	}
+	if !sourceProjectionOnlyRuntimeFoundation(source, sourceOperationExecutionFoundation) {
+		return false
+	}
+	_, ok := sourceProjectionExact2xxStatuses(source, sourceOutputJSON)
+	return ok
+}
+
+func sourceProjectionGeneratedDirectReadExists(operations *orderedObject, source sourceOperationDescriptor) bool {
+	if operations == nil {
+		return false
+	}
+	if _, unsafe := sourceProjectionUnsafeProviderQueryParameter(source); unsafe {
+		return false
+	}
+	operation := sourceProjectionOperationForEndpoint(operations, source.Method, sourceProjectionDeclaredPath(source))
+	return operation != nil && stringField(operation, "id") == sourceProjectionGeneratedReadID(source)
+}
+
+// sourceProjectionUnsafeProviderQueryParameter identifies a provider query
+// key that the existing closed engine cannot expose as a raw flag. The exact
+// source key remains in the descriptor and gets an Atlas-named gap; no
+// connector-specific alias or generic raw transport is introduced here.
+func sourceProjectionUnsafeProviderQueryParameter(source sourceOperationDescriptor) (sourceParameterDescriptor, bool) {
+	for _, parameter := range source.Request.Query {
+		if parameter.Name == "" {
+			continue
+		}
+		if err := safety.ValidateIdentifier(parameter.Name, "provider query parameter"); err != nil {
+			return parameter, true
+		}
+	}
+	return sourceParameterDescriptor{}, false
+}
+
+// sourceProjectionApplyUnsafeProviderQueryParameterGaps turns an otherwise
+// materializable GET into a discoverable cited outcome while the Atlas
+// candidate for reversible provider-key aliases is awaiting captain approval.
+func sourceProjectionApplyUnsafeProviderQueryParameterGaps(bundle engine.Bundle, result *sourceImportResult) int {
+	if result == nil {
+		return 0
+	}
+	changed := 0
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if operation.Protocol != "rest" || !strings.EqualFold(operation.Method, http.MethodGet) {
+			continue
+		}
+		parameter, unsafe := sourceProjectionUnsafeProviderQueryParameter(*operation)
+		if !unsafe {
+			continue
+		}
+		// An already declared source-backed executor can make the documented
+		// zero-filter request without exposing this optional query key. The
+		// pending alias candidate therefore blocks only a new source-generated
+		// direct-read projection, not an independent existing ETL/read lane.
+		if sourceRESTOperationIsDeclaredReachable(bundle, *operation, false) {
+			continue
+		}
+		location := "query parameter " + parameter.Name
+		alreadyRecorded := false
+		for _, gap := range operation.Runtime.Gaps {
+			if gap.Foundation == sourceProviderParameterAliasFoundation && gap.Phase == "request" && gap.Location == location {
+				alreadyRecorded = true
+				break
+			}
+		}
+		if alreadyRecorded {
+			continue
+		}
+		operation.Runtime.Gaps = append(operation.Runtime.Gaps, sourceContractGap{
+			Foundation: sourceProviderParameterAliasFoundation,
+			Phase:      "request",
+			Location:   location,
+			Reason:     "source-declared provider query key requires the Atlas-tracked reversible CLI-to-provider parameter alias foundation",
+		})
+		operation.Runtime.MergeBlocked = true
+		changed++
+	}
+	return changed
+}
+
+// sourceProjectionPruneUnsafeGeneratedDirectReads retracts only the exact
+// generated operation/command pair when a newly classified provider query key
+// needs the awaiting alias foundation. The source descriptor and API surface
+// retain the cited blocked row; author-owned declarations are never removed.
+func sourceProjectionPruneUnsafeGeneratedDirectReads(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
+	stats := sourceProjectionStats{}
+	blocked := map[string]sourceOperationDescriptor{}
+	generated := map[string]string{}
+	for _, source := range result.Operations {
+		if _, unsafe := sourceProjectionUnsafeProviderQueryParameter(source); !unsafe {
+			continue
+		}
+		endpoint := sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))
+		blocked[endpoint] = source
+		generated[sourceProjectionGeneratedReadID(source)] = source.SourceID
+	}
+	if len(generated) == 0 {
+		return stats
+	}
+	keptOperations := make([]any, 0, len(arrayField(operations, "operations")))
+	for _, raw := range arrayField(operations, "operations") {
+		operation, ok := raw.(*orderedObject)
+		if !ok {
+			keptOperations = append(keptOperations, raw)
+			continue
+		}
+		if _, generatedOperation := generated[stringField(operation, "id")]; generatedOperation {
+			stats.Operations++
+			continue
+		}
+		keptOperations = append(keptOperations, raw)
+	}
+	if stats.Operations > 0 {
+		operations.set("operations", keptOperations)
+	}
+	keptCommands := make([]any, 0, len(arrayField(cli, "commands")))
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok {
+			keptCommands = append(keptCommands, raw)
+			continue
+		}
+		operationID := stringField(command, "operation")
+		sourceID, generatedOperation := generated[operationID]
+		if generatedOperation && stringField(command, "source_operation") == sourceID {
+			stats.CLI++
+			continue
+		}
+		keptCommands = append(keptCommands, raw)
+	}
+	if stats.CLI > 0 {
+		cli.set("commands", keptCommands)
+	}
+	stats.Surface = sourceProjectionBlockUnreachableReadSurfaceEndpoints(surface, blocked)
+	return stats
+}
+
+func sourceProjectionGeneratedNoBodyMutationEligible(source sourceOperationDescriptor) bool {
+	if source.Protocol != "rest" || !sourceProjectionMutationMethod(source.Method) || source.Runtime.NonExecutableMutation == nil {
+		return false
+	}
+	if !sourceProjectionGeneratedNoBodyMutationShape(source) {
+		return false
+	}
+	if !sourceProjectionOnlyRuntimeFoundation(source, sourceNonExecutableMutationDispositionFoundation) {
+		return false
+	}
+	return true
+}
+
+// sourceProjectionGeneratedNoBodyMutationExists recognizes only the exact
+// generated action identity so a stale generated command can be refreshed
+// before the source importer re-evaluates its non-executable disposition.
+func sourceProjectionGeneratedNoBodyMutationExists(writes *orderedObject, source sourceOperationDescriptor) bool {
+	if !sourceProjectionGeneratedNoBodyMutationShape(source) {
+		return false
+	}
+	action := sourceProjectionActionForEndpoint(writes, source.Method, sourceProjectionDeclaredPath(source))
+	return action != nil && stringField(action, "name") == sourceProjectionGeneratedWriteID(source)
+}
+
+func sourceProjectionGeneratedNoBodyMutationShape(source sourceOperationDescriptor) bool {
+	if source.Protocol != "rest" || !sourceProjectionMutationMethod(source.Method) || source.Request.Body != nil || len(source.Request.Query) != 0 || len(source.Request.Header) != 0 || len(source.Request.Media) != 0 || len(source.Request.Path) == 0 {
+		return false
+	}
+	for _, parameter := range source.Request.Path {
+		if !parameter.Required || !sourceScalarWireSchema(parameter.Schema) {
+			return false
+		}
+	}
+	_, ok := sourceProjectionExact2xxStatuses(source, "")
+	return ok
+}
+
+// sourceProjectionGeneratedJSONBodyMutationEligible admits the narrow P5
+// source-open body case. The generated record root stays closed; it retains
+// only named writable provider properties and delegates an unrepresentable
+// *named* nested value to the existing bounded JSON field seam. It never adds
+// a raw body flag or makes the source object's open root executable.
+func sourceProjectionGeneratedJSONBodyMutationEligible(source sourceOperationDescriptor) bool {
+	if !sourceProjectionGeneratedJSONBodyMutationShape(source) {
+		return false
+	}
+	return sourceProjectionOnlyRuntimeFoundation(source, "cli-request-schema-foundation-r1") ||
+		sourceProjectionOnlyRuntimeFoundations(source, "cli-request-schema-foundation-r1", sourceNonExecutableMutationDispositionFoundation)
+}
+
+func sourceProjectionGeneratedJSONBodyMutationExists(writes *orderedObject, source sourceOperationDescriptor) bool {
+	if sourceProjectionHasBlockingGap(source.Runtime.Gaps) || !sourceProjectionGeneratedJSONBodyMutationShape(source) {
+		return false
+	}
+	action := sourceProjectionActionForEndpoint(writes, source.Method, sourceProjectionDeclaredPath(source))
+	return action != nil && stringField(action, "name") == sourceProjectionGeneratedWriteID(source) && stringField(action, "body_type") == "json"
+}
+
+// sourceProjectionGeneratedJSONBodyMutationAction recognizes only the exact
+// action created for the narrow P5 source-open JSON-body projection. It is the
+// one case where a now-cleared importer gap may continue to use the bounded
+// named-value seam while validating the generated declaration. A different
+// JSON action never receives that allowance merely because it shares an HTTP
+// method or endpoint.
+func sourceProjectionGeneratedJSONBodyMutationAction(action *orderedObject, source sourceOperationDescriptor) bool {
+	return action != nil &&
+		stringField(action, "name") == sourceProjectionGeneratedWriteID(source) &&
+		stringField(action, "body_type") == "json" &&
+		stringField(action, "path") == sourceProjectionMutationRecordPath(sourceProjectionDeclaredPath(source)) &&
+		sourceProjectionGeneratedJSONBodyMutationShape(source)
+}
+
+func sourceProjectionGeneratedJSONBodyMutationShape(source sourceOperationDescriptor) bool {
+	if source.Protocol != "rest" || !sourceProjectionMutationMethod(source.Method) || source.Request.Body == nil || len(source.Request.Query) != 0 || len(source.Request.Header) != 0 || len(source.Request.Media) != 0 || !sourceJSONMediaType(sourceNormalizedMediaType(source.Request.MediaType)) {
+		return false
+	}
+	body, ok := source.Request.Body.Schema.(map[string]any)
+	if !ok || sourceSchemaType(body) != "object" || body["additionalProperties"] == false {
+		return false
+	}
+	if _, hasUnion := body["oneOf"]; hasUnion {
+		return false
+	}
+	if _, hasUnion := body["anyOf"]; hasUnion {
+		return false
+	}
+	// P5 reuses the current engine schema compiler; it cannot silently turn a
+	// source pattern the engine rejects into an executable write. The importer
+	// retains the precise named field gap for this case.
+	if sourceProjectionP5NamedBodyEngineGap(source.Request) != nil {
+		return false
+	}
+	writable := 0
+	for _, property := range sourceProjectionObjectProperties(body) {
+		if !sourceProjectionSchemaReadOnly(property) {
+			writable++
+		}
+	}
+	if writable == 0 {
+		return false
+	}
+	for _, parameter := range source.Request.Path {
+		if !parameter.Required || !sourceScalarWireSchema(parameter.Schema) {
+			return false
+		}
+	}
+	_, ok = sourceProjectionExact2xxStatuses(source, "")
+	return ok
+}
+
+func sourceProjectionOnlyRuntimeFoundation(source sourceOperationDescriptor, foundation string) bool {
+	if !source.Runtime.MergeBlocked || len(source.Runtime.Gaps) == 0 {
+		return false
+	}
+	for _, gap := range source.Runtime.Gaps {
+		if gap.Foundation != foundation {
+			return false
+		}
+	}
+	return true
+}
+
+func sourceProjectionOnlyRuntimeFoundations(source sourceOperationDescriptor, foundations ...string) bool {
+	if !source.Runtime.MergeBlocked || len(source.Runtime.Gaps) != len(foundations) || len(foundations) == 0 {
+		return false
+	}
+	wanted := make(map[string]bool, len(foundations))
+	for _, foundation := range foundations {
+		if foundation == "" || wanted[foundation] {
+			return false
+		}
+		wanted[foundation] = true
+	}
+	for _, gap := range source.Runtime.Gaps {
+		if !wanted[gap.Foundation] {
+			return false
+		}
+	}
+	return true
+}
+
+func sourceProjectionClearGeneratedNoBodyMutationDisposition(result *sourceImportResult, source sourceOperationDescriptor) {
+	if result == nil || source.Runtime.NonExecutableMutation == nil || !sourceProjectionOnlyRuntimeFoundation(source, sourceNonExecutableMutationDispositionFoundation) {
+		return
+	}
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if operation.SourceID != source.SourceID {
+			continue
+		}
+		operation.Runtime.NonExecutableMutation = nil
+		operation.Runtime.Gaps = nil
+		operation.Runtime.MergeBlocked = false
+		return
+	}
+}
+
+func sourceProjectionClearGeneratedJSONBodyMutationDisposition(result *sourceImportResult, source sourceOperationDescriptor) {
+	if result == nil || !sourceProjectionGeneratedJSONBodyMutationEligible(source) {
+		return
+	}
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if operation.SourceID != source.SourceID {
+			continue
+		}
+		if sourceProjectionOnlyRuntimeFoundation(source, "cli-request-schema-foundation-r1") {
+			operation.Runtime.Gaps = nil
+			operation.Runtime.MergeBlocked = false
+			return
+		}
+		operation.Runtime.NonExecutableMutation = nil
+		operation.Runtime.Gaps = nil
+		operation.Runtime.MergeBlocked = false
+		return
+	}
+}
+
+func sourceProjectionExact2xxStatuses(source sourceOperationDescriptor, class sourceOutputClass) ([]string, bool) {
+	if len(source.Output.Success) == 0 {
+		return nil, false
+	}
+	seen := map[int]bool{}
+	statuses := make([]string, 0, len(source.Output.Success))
+	for _, variant := range source.Output.Success {
+		if class != "" && (variant.Class != class || (class == sourceOutputJSON && variant.MediaType != "application/json")) {
+			return nil, false
+		}
+		status, err := connsdk.NormalizeExactHTTPStatus(variant.Status)
+		if err != nil || status < http.StatusOK || status >= http.StatusMultipleChoices || seen[status] {
+			return nil, false
+		}
+		seen[status] = true
+		statuses = append(statuses, strconv.Itoa(status))
+	}
+	return statuses, true
+}
+
+func sourceProjectionCreateDirectRead(operations, cli *orderedObject, source sourceOperationDescriptor) (bool, sourceProjectionReadStats, error) {
+	path := sourceProjectionDeclaredPath(source)
+	operationID := sourceProjectionGeneratedReadID(source)
+	if existing := sourceProjectionOperationForEndpoint(operations, source.Method, path); existing != nil {
+		if stringField(existing, "id") != operationID {
+			return false, sourceProjectionReadStats{}, nil
+		}
+		command := sourceProjectionCommandForOperation(cli, operationID, source.Method, path)
+		if command == nil {
+			return false, sourceProjectionReadStats{}, fmt.Errorf("generated direct read %q has no canonical command", operationID)
+		}
+		stats, err := sourceProjectionMaterializeDirectRead(existing, command, source)
+		return false, stats, err
+	}
+	statuses, ok := sourceProjectionExact2xxStatuses(source, sourceOutputJSON)
+	if !ok {
+		return false, sourceProjectionReadStats{}, nil
+	}
+	operation := newOrderedObject()
+	operation.set("id", operationID)
+	operation.set("kind", "rest_read")
+	operation.set("summary", strings.ToUpper(source.Method)+" "+path)
+	operation.set("source_url", source.Source.URL)
+	operation.set("risk", "low")
+	operation.set("approval", "none")
+	operation.set("output_policy", "json_redacted")
+	rest := newOrderedObject()
+	rest.set("method", "GET")
+	rest.set("path", path)
+	rest.set("max_bytes", json.Number(strconv.Itoa(connsdk.DefaultMaxResponseBody)))
+	rest.set("response", orderedFromAny(map[string]any{"success_statuses": stringSliceAny(statuses)}))
+	operation.set("rest", rest)
+	operations.set("operations", append(arrayField(operations, "operations"), operation))
+
+	command := newOrderedObject()
+	command.set("path", sourceProjectionGeneratedCommandPath(source))
+	command.set("summary", strings.ToUpper(source.Method)+" "+path)
+	command.set("intent", "direct_read")
+	command.set("availability", "implemented")
+	command.set("operation", operationID)
+	if source.Source.URL != "" {
+		command.set("source_url", source.Source.URL)
+	}
+	command.set("risk", "low")
+	command.set("approval", "none")
+	cli.set("commands", append(arrayField(cli, "commands"), command))
+	if _, err := sourceProjectionMaterializeDirectRead(operation, command, source); err != nil {
+		return false, sourceProjectionReadStats{}, err
+	}
+	return true, sourceProjectionReadStats{Operations: 1, CLI: 1}, nil
+}
+
+func sourceProjectionCreateNoBodyMutation(writes, cli *orderedObject, source sourceOperationDescriptor) (bool, bool, error) {
+	path := sourceProjectionDeclaredPath(source)
+	name := sourceProjectionGeneratedWriteID(source)
+	if existing := sourceProjectionActionForEndpoint(writes, source.Method, path); existing != nil {
+		if stringField(existing, "name") != name {
+			return false, false, nil
+		}
+		command := sourceProjectionCommandForWrite(cli, name)
+		if command == nil || stringField(command, "source_operation") != source.SourceID {
+			return false, false, fmt.Errorf("generated reverse-ETL action %q has no canonical source-bound command", name)
+		}
+		flags, err := sourceProjectionNoBodyMutationFlags(source)
+		if err != nil {
+			return false, false, err
+		}
+		return false, setOrderedIfDifferent(command, "flags", flags), nil
+	}
+	statuses, ok := sourceProjectionExact2xxStatuses(source, "")
+	if !ok {
+		return false, false, nil
+	}
+	action := newOrderedObject()
+	action.set("name", name)
+	switch strings.ToUpper(source.Method) {
+	case http.MethodDelete:
+		action.set("kind", "delete")
+	case http.MethodPost:
+		action.set("kind", "create")
+	default:
+		action.set("kind", "update")
+	}
+	action.set("method", strings.ToUpper(source.Method))
+	action.set("path", sourceProjectionMutationRecordPath(path))
+	pathFields := make([]any, 0, len(source.Request.Path))
+	redactFields := make([]any, 0, len(source.Request.Path))
+	fields := make(map[string]any, len(source.Request.Path))
+	required := make(map[string]bool, len(source.Request.Path))
+	for _, parameter := range source.Request.Path {
+		schema, err := sourceProjectionSchema(parameter.Schema)
+		if err != nil {
+			return false, false, fmt.Errorf("path parameter %q: %w", parameter.Name, err)
+		}
+		fields[parameter.Name] = schema
+		required[parameter.Name] = true
+		pathFields = append(pathFields, parameter.Name)
+		redactFields = append(redactFields, parameter.Name)
+	}
+	contract := sourceActionContract{Fields: fields, Required: required, PathFields: stringSlice(pathFields), BodyType: "none"}
+	sourceProjectAction(action, contract)
+	action.set("body_type", "none")
+	action.set("success_statuses", sourceProjectionStatusCodesAny(statuses))
+	action.set("risk", "source-bound mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirmation")
+	action.set("confirm", "destructive")
+	action.set("redact_fields", redactFields)
+	if strings.EqualFold(source.Method, http.MethodDelete) {
+		deleteSpec := newOrderedObject()
+		deleteSpec.set("missing_ok_status", []any{json.Number("404")})
+		deleteSpec.set("idempotent", true)
+		action.set("delete", deleteSpec)
+	}
+	writes.set("actions", append(arrayField(writes, "actions"), action))
+
+	command := sourceProjectionNewCommand(source, action)
+	command.set("source_operation", source.SourceID)
+	flags, err := sourceProjectionNoBodyMutationFlags(source)
+	if err != nil {
+		return false, false, err
+	}
+	command.set("flags", flags)
+	cli.set("commands", append(arrayField(cli, "commands"), command))
+	return true, false, nil
+}
+
+func sourceProjectionCreateJSONBodyMutation(writes, cli *orderedObject, source sourceOperationDescriptor) (bool, bool, error) {
+	path := sourceProjectionDeclaredPath(source)
+	name := sourceProjectionGeneratedWriteID(source)
+	statuses, ok := sourceProjectionExact2xxStatuses(source, "")
+	if !ok {
+		return false, false, nil
+	}
+	if existing := sourceProjectionActionForEndpoint(writes, source.Method, path); existing != nil {
+		if stringField(existing, "name") != name || stringField(existing, "body_type") != "json" {
+			return false, false, nil
+		}
+		command := sourceProjectionCommandForWrite(cli, name)
+		if command == nil || stringField(command, "source_operation") != source.SourceID {
+			return false, false, fmt.Errorf("generated JSON-body reverse-ETL action %q has no canonical source-bound command", name)
+		}
+		contract, err := sourceContractForAction(source, existing)
+		if err != nil {
+			return false, false, err
+		}
+		changed := sourceProjectAction(existing, contract)
+		changed = setOrderedIfDifferent(existing, "success_statuses", sourceProjectionStatusCodesAny(statuses)) || changed
+		changed = sourceProjectCommand(command, contract) || changed
+		return false, changed, nil
+	}
+
+	action := newOrderedObject()
+	action.set("name", name)
+	switch strings.ToUpper(source.Method) {
+	case http.MethodDelete:
+		action.set("kind", "delete")
+	case http.MethodPost:
+		action.set("kind", "create")
+	default:
+		action.set("kind", "update")
+	}
+	action.set("method", strings.ToUpper(source.Method))
+	action.set("path", sourceProjectionMutationRecordPath(path))
+	contract, err := sourceContractForAction(source, action)
+	if err != nil {
+		return false, false, err
+	}
+	if len(contract.BodyFields) == 0 {
+		return false, false, fmt.Errorf("source-open JSON body has no writable named fields")
+	}
+	sourceProjectAction(action, contract)
+	action.set("success_statuses", sourceProjectionStatusCodesAny(statuses))
+	action.set("risk", "source-bound mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirmation")
+	action.set("confirm", "destructive")
+	if strings.EqualFold(source.Method, http.MethodDelete) {
+		deleteSpec := newOrderedObject()
+		deleteSpec.set("missing_ok_status", []any{json.Number("404")})
+		deleteSpec.set("idempotent", true)
+		action.set("delete", deleteSpec)
+	}
+	writes.set("actions", append(arrayField(writes, "actions"), action))
+
+	command := sourceProjectionNewCommand(source, action)
+	command.set("source_operation", source.SourceID)
+	sourceProjectCommand(command, contract)
+	cli.set("commands", append(arrayField(cli, "commands"), command))
+	return true, false, nil
+}
+
+// sourceProjectionMaterializeActionBackedDirectWrites gives every exact,
+// source-bound one-record mutation that already has an executable write action
+// a distinct bounded direct-write command. It reuses the same action and
+// record schema as reverse ETL: no second HTTP implementation, raw body, or
+// API-to-API transport is introduced.
+func sourceProjectionMaterializeActionBackedDirectWrites(writes, cli *orderedObject, result sourceImportResult) (int, error) {
+	changed := 0
+	sources := sourceProjectionOperationsByID(result)
+	commands := arrayField(cli, "commands")
+	retained := make([]any, 0, len(commands))
+	for _, raw := range commands {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "direct_write" {
+			retained = append(retained, raw)
+			continue
+		}
+		source, found := sources[stringField(command, "source_operation")]
+		if !found || sourceProjectionHasBlockingGap(source.Runtime.Gaps) || stringField(command, "path") != sourceProjectionGeneratedDirectWriteCommandPath(source) {
+			retained = append(retained, raw)
+			continue
+		}
+		changed++
+	}
+	if len(retained) != len(commands) {
+		cli.set("commands", retained)
+	}
+	for _, source := range result.Operations {
+		if source.Protocol != "rest" || !sourceProjectionMutationMethod(source.Method) || sourceProjectionHasBlockingGap(source.Runtime.Gaps) {
+			continue
+		}
+		action := sourceProjectionActionForEndpoint(writes, source.Method, sourceProjectionDeclaredPath(source))
+		if action == nil || stringField(action, "name") == "" {
+			continue
+		}
+		reverse := sourceProjectionReverseETLCommandForSource(cli, source)
+		if reverse == nil || stringField(reverse, "write") != stringField(action, "name") {
+			continue
+		}
+		// Prefer the locked source contract whenever this exact action remains
+		// representable. In particular, the P5 named JSON-value seam carries a
+		// source-declared bare-string arm that the action's JSON Schema cannot
+		// encode on its own. Fall back only for a genuinely pre-existing closed
+		// action whose source shape is still blocked.
+		contract, err := sourceContractForAction(source, action)
+		if err != nil {
+			contract, err = sourceContractForExistingClosedAction(source, action)
+		}
+		if err != nil {
+			return changed, fmt.Errorf("source operation %s action-backed direct write: %w", source.SourceID, err)
+		}
+		path := sourceProjectionGeneratedDirectWriteCommandPath(source)
+		existing := sourceProjectionCommandForPath(cli, path)
+		if existing != nil {
+			if stringField(existing, "intent") != "direct_write" || stringField(existing, "source_operation") != source.SourceID || stringField(existing, "write") != stringField(action, "name") {
+				continue
+			}
+			if sourceProjectCommand(existing, contract) {
+				changed++
+			}
+			continue
+		}
+		command := sourceProjectionNewActionBackedDirectWriteCommand(source, action)
+		sourceProjectCommand(command, contract)
+		cli.set("commands", append(arrayField(cli, "commands"), command))
+		changed++
+	}
+	return changed, nil
+}
+
+func sourceProjectionReverseETLCommandForSource(cli *orderedObject, source sourceOperationDescriptor) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))
+	var match *orderedObject
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "reverse_etl" || stringField(command, "availability") != "implemented" || stringField(command, "source_operation") != source.SourceID || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = command
+	}
+	return match
+}
+
+func sourceProjectionCommandForPath(cli *orderedObject, path string) *orderedObject {
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if ok && stringField(command, "path") == path {
+			return command
+		}
+	}
+	return nil
+}
+
+func sourceProjectionNewActionBackedDirectWriteCommand(source sourceOperationDescriptor, action *orderedObject) *orderedObject {
+	command := sourceProjectionNewCommand(source, action)
+	command.set("path", sourceProjectionGeneratedDirectWriteCommandPath(source))
+	command.set("intent", "direct_write")
+	command.set("source_operation", source.SourceID)
+	return command
+}
+
+func sourceProjectionNoBodyMutationFlags(source sourceOperationDescriptor) ([]any, error) {
+	flags := make([]any, 0, len(source.Request.Path))
+	for _, parameter := range source.Request.Path {
+		schema, err := sourceProjectionSchema(parameter.Schema)
+		if err != nil {
+			return nil, fmt.Errorf("path parameter %q: %w", parameter.Name, err)
+		}
+		flag := newOrderedObject()
+		flag.set("name", strings.ReplaceAll(parameter.Name, "_", "-"))
+		flagType := sourceProjectionReadParameterType(schema)
+		flag.set("type", flagType)
+		flag.set("maps_to", "record."+parameter.Name)
+		flag.set("required", true)
+		if maxBytes := sourceProjectionFlagMaxBytes(schema, flagType); maxBytes > 0 {
+			flag.set("max_bytes", json.Number(strconv.FormatInt(maxBytes, 10)))
+		}
+		if sourceProjectionSetReadParameterEnum(flag, schema) {
+			// The enum has been written into the generated command flag.
+		}
+		flags = append(flags, flag)
+	}
+	return flags, nil
+}
+
+func sourceProjectionCommandForWrite(cli *orderedObject, write string) *orderedObject {
+	var match *orderedObject
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "reverse_etl" || stringField(command, "write") != write {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = command
+	}
+	return match
+}
+
+func sourceProjectionSetEndpointCoverage(surface *orderedObject, source sourceOperationDescriptor, lane, binding string, streams *orderedObject) bool {
+	path := sourceProjectionDeclaredPath(source)
+	key := sourceProjectionEndpointKey(source.Method, path)
+	var endpoint *orderedObject
+	for _, raw := range arrayField(surface, "endpoints") {
+		candidate, ok := raw.(*orderedObject)
+		if ok && sourceProjectionEndpointKey(stringField(candidate, "method"), stringField(candidate, "path")) == key {
+			endpoint = candidate
+			break
+		}
+	}
+	if endpoint == nil {
+		endpoint = newOrderedObject()
+		endpoint.set("method", strings.ToUpper(source.Method))
+		endpoint.set("path", path)
+		surface.set("endpoints", append(arrayField(surface, "endpoints"), endpoint))
+	}
+	changed := endpoint.remove("operation")
+	var coverage *orderedObject
+	if lane == "direct_read" {
+		coverage, _ = sourceProjectionMergeDirectReadSurfaceCoverage(nil, streams, source, []string{binding})
+	} else {
+		coverage = newOrderedObject()
+		coverage.set("write", binding)
+	}
+	if setOrderedIfDifferent(endpoint, "covered_by", coverage) {
+		changed = true
+	}
+	return changed
+}
+
+func sourceProjectionGeneratedReadID(source sourceOperationDescriptor) string {
+	return "source_read_" + hex.EncodeToString([]byte(sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))))
+}
+
+func sourceProjectionGeneratedWriteID(source sourceOperationDescriptor) string {
+	return "source_write_" + hex.EncodeToString([]byte(sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))))
+}
+
+func stringSlice(values []any) []string {
+	result := make([]string, 0, len(values))
+	for _, value := range values {
+		if text, ok := value.(string); ok {
+			result = append(result, text)
+		}
+	}
+	return result
+}
+
+func stringSliceAny(values []string) []any {
+	result := make([]any, len(values))
+	for index := range values {
+		result[index] = values[index]
+	}
+	return result
+}
+
+func sourceProjectionStatusCodesAny(values []string) []any {
+	result := make([]any, len(values))
+	for index, value := range values {
+		result[index] = json.Number(value)
+	}
+	return result
+}
+
+// sourceProjectionMaterializeDirectReadSurfaceEndpoints replaces only a
+// legacy blocked API record once its exact canonical command has already been
+// materialized. Source metadata by itself cannot promote a route; the command
+// must be implemented, source-bound, and name the same method/path. When an
+// endpoint already has a valid stream owner, that ETL ownership stays alongside
+// the materialized direct-read binding.
+func sourceProjectionMaterializeDirectReadSurfaceEndpoints(surface, cli, streams *orderedObject, result sourceImportResult) int {
+	byEndpoint := map[string]sourceOperationDescriptor{}
+	for _, source := range result.Operations {
+		if source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || sourceProjectionReadHasBlockingGap(source) {
+			continue
+		}
+		endpoint := sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))
+		if _, duplicate := byEndpoint[endpoint]; duplicate {
+			delete(byEndpoint, endpoint)
+			continue
+		}
+		byEndpoint[endpoint] = source
+	}
+	changed := 0
+	for _, raw := range arrayField(surface, "endpoints") {
+		endpoint, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		key := sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path"))
+		source, found := byEndpoint[key]
+		if !found {
+			continue
+		}
+		paths := sourceProjectionImplementedDirectReadCommandPaths(cli, key, source.SourceID)
+		if len(paths) == 0 {
+			continue
+		}
+		current, hasCoverage := endpoint.get("covered_by")
+		coverage, coverageChanged := sourceProjectionMergeDirectReadSurfaceCoverage(current, streams, source, paths)
+		if hasCoverage && !coverageChanged {
+			if endpoint.remove("operation") {
+				changed++
+			}
+			continue
+		}
+		endpoint.remove("operation")
+		endpoint.set("covered_by", coverage)
+		changed++
+	}
+	return changed
+}
+
+// sourceProjectionMergeDirectReadSurfaceCoverage keeps a declared stream
+// owner only when it still names the exact source endpoint. The generated
+// direct-read owner then complements it; a stale direct_read(s) member is
+// reconciled rather than accumulated. Invalid or absent stream ownership is
+// not preserved as a claim of ETL coverage.
+func sourceProjectionMergeDirectReadSurfaceCoverage(current any, streams *orderedObject, source sourceOperationDescriptor, paths []string) (*orderedObject, bool) {
+	direct := directReadCoverage(paths)
+	coverage, ok := current.(*orderedObject)
+	if !ok || !sourceProjectionExistingStreamCoverageValid(coverage, streams, source) {
+		if stream := sourceProjectionDeclaredStreamForEndpoint(streams, source.Method, source.Path); stream != "" {
+			merged := newOrderedObject()
+			merged.set("stream", stream)
+			for _, key := range direct.keys {
+				merged.set(key, direct.values[key])
+			}
+			return merged, !orderedSemanticEqual(current, merged)
+		}
+		return direct, !orderedSemanticEqual(current, direct)
+	}
+	merged, ok := orderedFromAny(coverage).(*orderedObject)
+	if !ok {
+		return direct, !orderedSemanticEqual(current, direct)
+	}
+	merged.remove("direct_read")
+	merged.remove("direct_reads")
+	for _, key := range direct.keys {
+		merged.set(key, direct.values[key])
+	}
+	return merged, !orderedSemanticEqual(current, merged)
+}
+
+func sourceProjectionDeclaredStreamForEndpoint(streams *orderedObject, method, path string) string {
+	match := ""
+	for _, raw := range arrayField(streams, "streams") {
+		stream, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		name := stringField(stream, "name")
+		if name == "" || !sourceProjectionDeclaredStreamEndpointMatches(streams, name, method, path) {
+			continue
+		}
+		if match != "" {
+			return ""
+		}
+		match = name
+	}
+	return match
+}
+
+func sourceProjectionExistingStreamCoverageValid(coverage, streams *orderedObject, source sourceOperationDescriptor) bool {
+	stream := stringField(coverage, "stream")
+	if stream == "" || stream != strings.TrimSpace(stream) || strings.ContainsAny(stream, "\r\n") {
+		return false
+	}
+	return sourceProjectionDeclaredStreamEndpointMatches(streams, stream, source.Method, source.Path)
+}
+
+func sourceProjectionImplementedDirectReadCommandPaths(cli *orderedObject, endpoint, sourceID string) []string {
+	paths := make([]string, 0)
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "direct_read" || stringField(command, "availability") != "implemented" || stringField(command, "source_operation") != sourceID || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		if path := stringField(command, "path"); path != "" {
+			paths = append(paths, path)
+		}
+	}
+	sort.Strings(paths)
+	return paths
+}
 
 type sourceActionContract struct {
 	Fields           map[string]any
@@ -79,6 +1199,34 @@ type sourceActionContract struct {
 // method/path union: semantic aliases remain narrow, while the broad action
 // proves the provider contract is reachable without double-counting aliases.
 func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult, check bool) (sourceProjectionStats, error) {
+	return projectSourceDescriptorToBundleMode(bundleDir, result, check, false, true)
+}
+
+// projectSourceBoundReadDescriptorToBundle is the explicit, read-only source
+// binding lane. Generic source import deliberately leaves provider reads alone:
+// it must remain byte-stable for connectors that have not opted into this
+// foundation.
+func projectSourceBoundReadDescriptorToBundle(bundleDir string, result sourceImportResult, check bool) (sourceProjectionStats, error) {
+	return projectSourceDescriptorToBundleMode(bundleDir, result, check, true, true)
+}
+
+// projectSourceMutationMappingsToBundle verifies source-cited mutation
+// dispositions from an already checked-in descriptor without rewriting the
+// connector's separately planned read surface. surface-sync uses this narrow
+// mode so its generic mutation parity check cannot replace author-owned
+// declaration-pending read explanations.
+func projectSourceMutationMappingsToBundle(bundleDir string, result sourceImportResult, check bool) (sourceProjectionStats, error) {
+	return projectSourceDescriptorToBundleMode(bundleDir, result, check, false, false)
+}
+
+func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportResult, check, materializeReads, reconcileReadSurface bool) (sourceProjectionStats, error) {
+	// A cited-only descriptor contributes source-to-declaration evidence, but it
+	// has no executable contract. Remove it before *any* mode-specific
+	// projection transform so source references cannot become an execution gate.
+	result = sourceProjectionMaterializableResult(result)
+	if len(result.Operations) == 0 {
+		return sourceProjectionStats{}, nil
+	}
 	if err := validateSourceProjectionExecutionEnvelopes(result); err != nil {
 		return sourceProjectionStats{}, err
 	}
@@ -105,6 +1253,29 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	if err := json.Unmarshal(cliRaw, &cli); err != nil {
 		return sourceProjectionStats{}, fmt.Errorf("cli_surface.json: %w", err)
 	}
+	operationsPath := filepath.Join(bundleDir, "operations.json")
+	operationsRaw, operationsErr := os.ReadFile(operationsPath)
+	if operationsErr != nil && !os.IsNotExist(operationsErr) {
+		return sourceProjectionStats{}, operationsErr
+	}
+	var operations orderedJSON
+	hasOperations := operationsErr == nil
+	if hasOperations {
+		if err := json.Unmarshal(operationsRaw, &operations); err != nil {
+			return sourceProjectionStats{}, fmt.Errorf("operations.json: %w", err)
+		}
+	}
+	streamsPath := filepath.Join(bundleDir, "streams.json")
+	streamsRaw, streamsErr := os.ReadFile(streamsPath)
+	if streamsErr != nil && !os.IsNotExist(streamsErr) {
+		return sourceProjectionStats{}, streamsErr
+	}
+	var streams orderedJSON
+	if streamsErr == nil {
+		if err := json.Unmarshal(streamsRaw, &streams); err != nil {
+			return sourceProjectionStats{}, fmt.Errorf("streams.json: %w", err)
+		}
+	}
 	apiPath := filepath.Join(bundleDir, "api_surface.json")
 	apiRaw, err := os.ReadFile(apiPath)
 	if err != nil && !os.IsNotExist(err) {
@@ -120,6 +1291,11 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	if len(result.Operations) > 0 {
 		declarationBundle.Name = result.Operations[0].Connector
 	}
+	executionSurface, err := sourceProjectionExecutionSurface(bundleDir, declarationBundle.Name)
+	if err != nil {
+		return sourceProjectionStats{}, err
+	}
+	declarationBundle.Metadata = executionSurface.Metadata
 	if api.root != nil {
 		raw, marshalErr := marshalNoEscapeHTML(api.root)
 		if marshalErr != nil {
@@ -146,14 +1322,17 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		return sourceProjectionStats{}, fmt.Errorf("cli_surface.json: %w", err)
 	}
 	declaredMutationBundle := engine.Bundle{Spec: spec, Writes: declaredWrites.Actions, CLISurface: &declaredCLI}
-	blockedReads := sourceProjectionBlockedReadSources(result)
-	reachableReads := sourceProjectionReachableReadSources(result)
-	stats := sourceProjectionStats{CLI: sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli.root, spec, result)}
-	stats.CLI += sourceProjectionDowngradeUnreachableReadCommands(cli.root, blockedReads)
-	stats.CLI += sourceProjectionRestoreReachableReadCommands(cli.root, blockedReads, reachableReads)
-	if api.root != nil {
-		stats.Surface = sourceProjectionBlockUnreachableReadSurfaceEndpoints(api.root, blockedReads)
-		stats.Surface += sourceProjectionRestoreReachableReadSurfaceEndpoints(api.root, cli.root, blockedReads, reachableReads)
+	stats := sourceProjectionStats{}
+	if reconcileReadSurface {
+		blockedReads := sourceProjectionBlockedReadSources(result)
+		reachableReads := sourceProjectionReachableReadSources(result)
+		stats.CLI = sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli.root, spec, result)
+		stats.CLI += sourceProjectionDowngradeUnreachableReadCommands(cli.root, blockedReads)
+		stats.CLI += sourceProjectionRestoreReachableReadCommands(cli.root, blockedReads, reachableReads)
+		if api.root != nil {
+			stats.Surface = sourceProjectionBlockUnreachableReadSurfaceEndpoints(api.root, blockedReads)
+			stats.Surface += sourceProjectionRestoreReachableReadSurfaceEndpoints(api.root, cli.root, blockedReads, reachableReads)
+		}
 	}
 
 	actionsByEndpoint := map[string][]*orderedObject{}
@@ -174,8 +1353,43 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		write := stringField(command, "write")
 		commandsByWrite[write] = append(commandsByWrite[write], command)
 	}
-
+	noBodyStats, err := sourceProjectionMaterializeNoBodyMutationActions(writes.root, cli.root, operations.root, result)
+	if err != nil {
+		return stats, err
+	}
+	stats.Writes += noBodyStats.Writes
+	stats.CLI += noBodyStats.CLI
+	stats.Operations += noBodyStats.Operations
+	if noBodyStats.Writes > 0 || noBodyStats.CLI > 0 {
+		actionsByEndpoint = map[string][]*orderedObject{}
+		for _, raw := range arrayField(writes.root, "actions") {
+			action, ok := raw.(*orderedObject)
+			if !ok {
+				continue
+			}
+			key := sourceProjectionEndpointKey(stringField(action, "method"), sourceProjectionPath(stringField(action, "path")))
+			actionsByEndpoint[key] = append(actionsByEndpoint[key], action)
+		}
+		commandsByWrite = map[string][]*orderedObject{}
+		for _, raw := range arrayField(cli.root, "commands") {
+			command, ok := raw.(*orderedObject)
+			if !ok || stringField(command, "write") == "" {
+				continue
+			}
+			write := stringField(command, "write")
+			commandsByWrite[write] = append(commandsByWrite[write], command)
+		}
+	}
+	if api.root != nil {
+		stats.Surface += sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(api.root, writes.root, cli.root, result)
+	}
 	for _, operation := range result.Operations {
+		// A source reference carries operation identity and a cited provider URL,
+		// not a request/response contract. It may update evidence and validation,
+		// but it must never materialize or mutate a declaration-owned action.
+		if sourceOperationHasFoundationGap(operation, sourceContractUnavailableFoundation) {
+			continue
+		}
 		_, readOnly, readOnlyErr := sourceProjectionReadOnlyDeclaration(declarationBundle, operation)
 		if readOnlyErr != nil {
 			return stats, fmt.Errorf("source operation %s: %w", operation.SourceID, readOnlyErr)
@@ -192,6 +1406,9 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 				if !sourceProjectionHasNonExecutableMutationDisposition(operation) {
 					return stats, fmt.Errorf("source-cited non-executable mutation disposition is invalid: %s", operation.SourceID)
 				}
+				if err := sourceProjectionValidateWriteDisabledMutationArtifact(declarationBundle, operation); err != nil {
+					return stats, fmt.Errorf("%w: %s", err, operation.SourceID)
+				}
 				if sourceProjectionMutationActionIsComplete(declaredMutationBundle, operation) {
 					return stats, fmt.Errorf("source-cited non-executable mutation disposition claims a complete executable action: %s", operation.SourceID)
 				}
@@ -200,14 +1417,42 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 				}
 				continue
 			}
+			if operation.Runtime.PartialCoverageMutation != nil {
+				if !sourceProjectionHasPartialMutationCoverageDisposition(operation) {
+					return stats, fmt.Errorf("source-cited partial mutation coverage disposition is invalid: %s", operation.SourceID)
+				}
+				if !sourceProjectionPartialCoverageFoundationMatchesOperation(declaredMutationBundle, operation, *operation.Runtime.PartialCoverageMutation) {
+					return stats, fmt.Errorf("source-cited partial mutation coverage disposition has no matching missing foundation: %s", operation.SourceID)
+				}
+				if sourceProjectionMutationActionIsComplete(declaredMutationBundle, operation) {
+					return stats, fmt.Errorf("source-cited partial mutation coverage disposition claims a complete executable action: %s", operation.SourceID)
+				}
+				if !sourceProjectionMutationClaimsImplementedAction(declaredMutationBundle, operation) {
+					return stats, fmt.Errorf("source-cited partial mutation coverage disposition has no implemented declared action: %s", operation.SourceID)
+				}
+				continue
+			}
 		}
 		if readOnly {
+			continue
+		}
+		if !sourceProjectionOperationMutates(operation) {
+			if !materializeReads || !hasOperations {
+				continue
+			}
+			readStats, err := sourceProjectionMaterializeReadOperation(operations.root, cli.root, streams.root, operation, result.Operations)
+			if err != nil {
+				return stats, fmt.Errorf("source operation %s: %w", operation.SourceID, err)
+			}
+			stats.Operations += readStats.Operations
+			stats.Streams += readStats.Streams
+			stats.CLI += readStats.CLI
 			continue
 		}
 		if operation.Protocol == "graphql" || !sourceProjectionMutationMethod(operation.Method) {
 			continue
 		}
-		candidates := actionsByEndpoint[sourceProjectionEndpointKey(operation.Method, operation.Path)]
+		candidates := actionsByEndpoint[sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation))]
 		if len(candidates) == 0 {
 			if sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
 				continue
@@ -280,6 +1525,21 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 			}
 		}
 	}
+	// Request and command materialization may legitimately refresh an existing
+	// closed action. Apply source-backed gap dispositions last so that a
+	// representable sibling field cannot re-promote the endpoint around an
+	// importer-retained execution gap.
+	gapStats := sourceProjectionAnnotateMutationFoundationGaps(operations.root, cli.root, api.root, result)
+	stats.Operations += gapStats.Operations
+	stats.CLI += gapStats.CLI
+	stats.Surface += gapStats.Surface
+	readGapStats := sourceProjectionAnnotateReadFoundationGaps(operations.root, cli.root, api.root, result)
+	stats.Operations += readGapStats.Operations
+	stats.CLI += readGapStats.CLI
+	stats.Surface += readGapStats.Surface
+	if materializeReads && api.root != nil {
+		stats.Surface += sourceProjectionMaterializeDirectReadSurfaceEndpoints(api.root, cli.root, streams.root, result)
+	}
 	if stats.Missing > 0 {
 		return stats, fmt.Errorf("%d source operation(s) have no complete executable action", stats.Missing)
 	}
@@ -289,6 +1549,16 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 	}
 	if stats.Writes > 0 {
 		if err := writeBundleJSON(writesPath, writes, writesRaw); err != nil {
+			return stats, err
+		}
+	}
+	if stats.Operations > 0 {
+		if err := writeBundleJSON(operationsPath, operations, operationsRaw); err != nil {
+			return stats, err
+		}
+	}
+	if stats.Streams > 0 {
+		if err := writeBundleJSON(streamsPath, streams, streamsRaw); err != nil {
 			return stats, err
 		}
 	}
@@ -303,6 +1573,530 @@ func projectSourceDescriptorToBundle(bundleDir string, result sourceImportResult
 		}
 	}
 	return stats, nil
+}
+
+func sourceProjectionMaterializableResult(result sourceImportResult) sourceImportResult {
+	filtered := result
+	filtered.Operations = make([]sourceOperationDescriptor, 0, len(result.Operations))
+	for _, operation := range result.Operations {
+		if sourceOperationHasFoundationGap(operation, sourceContractUnavailableFoundation) {
+			continue
+		}
+		filtered.Operations = append(filtered.Operations, operation)
+	}
+	return filtered
+}
+
+// sourceProjectionMaterializeNoBodyMutationActions promotes a source-complete
+// fixed mutation only when its existing rest_write operation and canonical CLI
+// command already identify the exact endpoint. It supplies the established
+// reverse-ETL action envelope (including destructive approval), never a
+// generic HTTP write route.
+func sourceProjectionMaterializeNoBodyMutationActions(writes, cli, operations *orderedObject, result sourceImportResult) (sourceProjectionStats, error) {
+	stats := sourceProjectionStats{}
+	for _, source := range result.Operations {
+		if !sourceProjectionNoBodyMutationActionEligible(source) {
+			continue
+		}
+		operation := sourceProjectionRestWriteOperationForEndpoint(operations, source.Method, source.Path)
+		if operation == nil {
+			// The source projection never invents an operation just to promote a
+			// mutation. Connectors which do not yet declare this endpoint keep
+			// their own explicit foundation disposition; the coverage gate below
+			// proves every eligible endpoint has a real lane.
+			continue
+		}
+		operationID := stringField(operation, "id")
+		command := sourceProjectionReverseETLCommandForOperation(cli, operationID)
+		if operationID == "" || command == nil {
+			continue
+		}
+		contract, redactFields, err := sourceProjectionNoBodyMutationActionContract(source)
+		if err != nil {
+			return stats, err
+		}
+		statuses, ok := sourceProjectionExact2xxStatuses(source, "")
+		if !ok {
+			return stats, fmt.Errorf("source operation %s has no exact successful response status", source.SourceID)
+		}
+		if stringField(command, "write") != "" {
+			action := sourceProjectionActionForEndpoint(writes, source.Method, sourceProjectionDeclaredPath(source))
+			if action == nil || stringField(action, "name") != stringField(command, "write") {
+				return stats, fmt.Errorf("source operation %s has no exact declared reverse-ETL action", source.SourceID)
+			}
+			if sourceProjectAction(action, contract) {
+				stats.Writes++
+			}
+			if setOrderedIfDifferent(action, "body_type", "none") {
+				stats.Writes++
+			}
+			if setOrderedIfDifferent(action, "success_statuses", sourceProjectionStatusCodesAny(statuses)) {
+				stats.Writes++
+			}
+			if setOrderedIfDifferent(action, "redact_fields", redactFields) {
+				stats.Writes++
+			}
+			if sourceProjectionReplaceLegacyPromotedMutationSummary(command) {
+				stats.CLI++
+			}
+			if setOrderedIfDifferent(command, "notes", "Implemented source-bound provider mutation through the declared reverse-ETL action.") {
+				stats.CLI++
+			}
+			if sourceProjectionRemoveApprovalConfirmFlag(command) {
+				stats.CLI++
+			}
+			continue
+		}
+		if sourceProjectionActionForEndpoint(writes, source.Method, sourceProjectionDeclaredPath(source)) != nil {
+			continue
+		}
+		action := newOrderedObject()
+		action.set("name", operationID)
+		if strings.EqualFold(source.Method, http.MethodDelete) {
+			action.set("kind", "delete")
+		} else {
+			action.set("kind", "update")
+		}
+		action.set("method", strings.ToUpper(source.Method))
+		action.set("path", sourceProjectionMutationRecordPath(source.Path))
+		sourceProjectAction(action, contract)
+		action.set("body_type", "none")
+		action.set("success_statuses", sourceProjectionStatusCodesAny(statuses))
+		if strings.EqualFold(source.Method, http.MethodDelete) {
+			deleteSpec := newOrderedObject()
+			deleteSpec.set("missing_ok_status", []any{404})
+			deleteSpec.set("idempotent", true)
+			action.set("delete", deleteSpec)
+		}
+		action.set("risk", "destructive mutation; requires reverse ETL plan -> preview -> explicit approval -> execute and typed confirm destructive")
+		action.set("confirm", "destructive")
+		action.set("redact_fields", redactFields)
+		writes.set("actions", append(arrayField(writes, "actions"), action))
+
+		command.set("availability", "implemented")
+		command.set("write", operationID)
+		command.remove("operation")
+		sourceProjectionRemoveApprovalConfirmFlag(command)
+		sourceProjectionReplaceLegacyPromotedMutationSummary(command)
+		command.set("notes", "Implemented source-bound provider mutation through the declared reverse-ETL action.")
+		operation.set("description", "Implemented source-bound provider operation mapped to declared reverse-ETL action "+operationID+".")
+		stats.Writes++
+		stats.CLI++
+		stats.Operations++
+	}
+	return stats, nil
+}
+
+func sourceProjectionNoBodyMutationActionContract(source sourceOperationDescriptor) (sourceActionContract, []any, error) {
+	pathFields := make([]any, 0, len(source.Request.Path))
+	redactFields := make([]any, 0, len(source.Request.Path))
+	fields := make(map[string]any, len(source.Request.Path))
+	required := make(map[string]bool, len(source.Request.Path))
+	for _, parameter := range source.Request.Path {
+		if !parameter.Required || !sourceScalarWireSchema(parameter.Schema) {
+			return sourceActionContract{}, nil, fmt.Errorf("source operation %s has no bounded typed path action contract", source.SourceID)
+		}
+		schema, err := sourceProjectionSchema(parameter.Schema)
+		if err != nil {
+			return sourceActionContract{}, nil, fmt.Errorf("source operation %s path parameter %q: %w", source.SourceID, parameter.Name, err)
+		}
+		fields[parameter.Name] = schema
+		required[parameter.Name] = true
+		pathFields = append(pathFields, parameter.Name)
+		redactFields = append(redactFields, parameter.Name)
+	}
+	return sourceActionContract{Fields: fields, Required: required, PathFields: stringSlice(pathFields), BodyType: "none"}, redactFields, nil
+}
+
+// sourceProjectionRemoveApprovalConfirmFlag removes a legacy command-owned
+// echo of the reverse-ETL confirmation carrier. `--confirm` is handled by the
+// shared plan/approval lifecycle, not a record or command mapping; retaining
+// it on a newly implemented command would make the declared CLI invalid and
+// suggest a second execution channel.
+func sourceProjectionRemoveApprovalConfirmFlag(command *orderedObject) bool {
+	flags := arrayField(command, "flags")
+	kept := make([]any, 0, len(flags))
+	changed := false
+	for _, raw := range flags {
+		flag, ok := raw.(*orderedObject)
+		if ok && stringField(flag, "maps_to") == "approval.confirm" {
+			changed = true
+			continue
+		}
+		kept = append(kept, raw)
+	}
+	if changed {
+		command.set("flags", kept)
+	}
+	return changed
+}
+
+// sourceProjectionReplaceLegacyPromotedMutationSummary replaces a historical
+// planning label only once the source-complete operation has a declared,
+// executable reverse-ETL action. It deliberately retains the author-owned
+// operation wording after the standard source-bound prefix.
+func sourceProjectionReplaceLegacyPromotedMutationSummary(command *orderedObject) bool {
+	const prefix = "Planned fixed-target "
+	summary := stringField(command, "summary")
+	if !strings.HasPrefix(summary, prefix) {
+		return false
+	}
+	return setOrderedIfDifferent(command, "summary", "Implemented source-bound "+strings.TrimPrefix(summary, prefix))
+}
+
+func sourceProjectionRestWriteOperationForEndpoint(operations *orderedObject, method, path string) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	var match *orderedObject
+	for _, raw := range arrayField(operations, "operations") {
+		operation, ok := raw.(*orderedObject)
+		if !ok || stringField(operation, "kind") != "rest_write" {
+			continue
+		}
+		restRaw, declared := operation.get("rest")
+		rest, ok := restRaw.(*orderedObject)
+		if !declared || !ok || sourceProjectionEndpointKey(stringField(rest, "method"), stringField(rest, "path")) != endpoint {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = operation
+	}
+	return match
+}
+
+func sourceProjectionReverseETLCommandForOperation(cli *orderedObject, operationID string) *orderedObject {
+	var match *orderedObject
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "reverse_etl" {
+			continue
+		}
+		if stringField(command, "operation") != operationID && stringField(command, "write") != operationID {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = command
+	}
+	return match
+}
+
+func sourceProjectionNoBodyMutationActionEligible(source sourceOperationDescriptor) bool {
+	return source.Protocol != "graphql" && sourceProjectionMutationMethod(source.Method) && source.Runtime.NonExecutableMutation == nil && source.Runtime.PartialCoverageMutation == nil && !sourceProjectionHasBlockingGap(source.Runtime.Gaps) && source.Request.Body == nil && len(source.Request.Header) == 0 && len(source.Request.Media) == 0 && len(source.Request.Path) > 0
+}
+
+func sourceProjectionActionForEndpoint(writes *orderedObject, method, path string) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	for _, raw := range arrayField(writes, "actions") {
+		action, ok := raw.(*orderedObject)
+		if ok && sourceProjectionEndpointKey(stringField(action, "method"), sourceProjectionPath(stringField(action, "path"))) == endpoint {
+			return action
+		}
+	}
+	return nil
+}
+
+func sourceProjectionMutationRecordPath(path string) string {
+	return sourceProjectionPathVariableRE.ReplaceAllString(path, "{{ record.$1 }}")
+}
+
+// sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints promotes the
+// source-ledger row only after its exact action and implemented reverse-ETL
+// command exist. This is the mutation equivalent of the source-bound direct
+// read projection: api_surface is a declaration of executable coverage, never
+// a way to make an endpoint executable by itself.
+func sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(surface, writes, cli *orderedObject, result sourceImportResult) int {
+	actions := map[string]string{}
+	for _, raw := range arrayField(writes, "actions") {
+		action, ok := raw.(*orderedObject)
+		if !ok || stringField(action, "name") == "" {
+			continue
+		}
+		key := sourceProjectionEndpointKey(stringField(action, "method"), sourceProjectionPath(stringField(action, "path")))
+		if _, duplicate := actions[key]; duplicate {
+			delete(actions, key)
+			continue
+		}
+		actions[key] = stringField(action, "name")
+	}
+	commands := map[string]bool{}
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "intent") != "reverse_etl" || stringField(command, "availability") != "implemented" || stringField(command, "write") == "" {
+			continue
+		}
+		commands[stringField(command, "write")] = true
+	}
+	sources := map[string]sourceOperationDescriptor{}
+	for _, source := range result.Operations {
+		if sourceProjectionNoBodyMutationActionEligible(source) {
+			sources[sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))] = source
+		}
+	}
+	changed := 0
+	for _, raw := range arrayField(surface, "endpoints") {
+		endpoint, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		key := sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path"))
+		if _, sourceComplete := sources[key]; !sourceComplete {
+			continue
+		}
+		write := actions[key]
+		if write == "" || !commands[write] {
+			continue
+		}
+		coverage := newOrderedObject()
+		coverage.set("write", write)
+		current, hasCoverage := endpoint.get("covered_by")
+		if hasCoverage && orderedSemanticEqual(current, coverage) {
+			if endpoint.remove("operation") {
+				changed++
+			}
+			continue
+		}
+		endpoint.remove("operation")
+		endpoint.set("covered_by", coverage)
+		changed++
+	}
+	return changed
+}
+
+// sourceProjectionAnnotateMutationFoundationGaps preserves every
+// source-backed mutation that is not executable yet, but replaces inherited
+// generic planned wording with the exact current source foundations. These are
+// not a promotion path: availability stays non-executable until the declared
+// action can satisfy those foundations.
+func sourceProjectionAnnotateMutationFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
+	stats := sourceProjectionStats{}
+	for _, source := range result.Operations {
+		if !sourceProjectionOperationMutates(source) {
+			continue
+		}
+		operation := sourceProjectionRestWriteOperationForEndpoint(operations, source.Method, sourceProjectionDeclaredPath(source))
+		operationID := ""
+		if operation != nil {
+			operationID = stringField(operation, "id")
+		}
+		commands := sourceProjectionMutationCommandsForEndpoint(cli, source.Method, sourceProjectionDeclaredPath(source))
+		if len(commands) == 0 {
+			command := sourceProjectionCommandForOperation(cli, operationID, source.Method, sourceProjectionDeclaredPath(source))
+			if command != nil {
+				commands = []*orderedObject{command}
+				operationID = firstNonEmpty(stringField(command, "operation"), stringField(command, "write"))
+				operation = sourceProjectionOperationByID(operations, operationID)
+			}
+		}
+		if len(commands) == 0 {
+			continue
+		}
+		for _, command := range commands {
+			availability := stringField(command, "availability")
+			blockingGap := sourceProjectionHasBlockingGap(source.Runtime.Gaps)
+			if availability == "implemented" && blockingGap {
+				// A legacy command may have claimed an endpoint before the locked
+				// source exposed an unrepresentable request contract. Keep its exact
+				// command and citation discoverable, but never leave that command
+				// executable: partial is the commandrunner's typed blocked outcome.
+				// Every command bound to that action (reverse ETL and direct write)
+				// receives the same source-cited outcome; one must not remain an
+				// alternate executable path around the gap.
+				if setOrderedIfDifferent(command, "availability", "partial") {
+					stats.CLI++
+				}
+				availability = "partial"
+			}
+			if availability != "planned" && availability != "partial" && availability != "unsupported_api" {
+				continue
+			}
+			note := ""
+			if blockingGap && (availability == "planned" || availability == "partial") {
+				note = sourceProjectionMutationFoundationNote(source)
+			} else if availability == "unsupported_api" && source.Path == "/batch" {
+				note = "not_applicable=generic_batch_wrapper; source_operation=" + source.SourceID
+			} else {
+				continue
+			}
+			if setOrderedIfDifferent(command, "notes", note) {
+				stats.CLI++
+			}
+			if setOrderedIfDifferent(command, "source_operation", source.SourceID) {
+				stats.CLI++
+			}
+			if sourceProjectionReplaceLegacyUnavailableMutationSummary(command, availability == "unsupported_api") {
+				stats.CLI++
+			}
+		}
+		note := ""
+		if sourceProjectionHasBlockingGap(source.Runtime.Gaps) {
+			note = sourceProjectionMutationFoundationNote(source)
+		}
+		if note == "" {
+			continue
+		}
+		if operation != nil && setOrderedIfDifferent(operation, "description", "Unavailable source-bound provider mutation: "+note) {
+			stats.Operations++
+		}
+		if surface == nil {
+			continue
+		}
+		for _, raw := range arrayField(surface, "endpoints") {
+			endpoint, ok := raw.(*orderedObject)
+			if !ok || sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path")) != sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source)) {
+				continue
+			}
+			operationRaw, declared := endpoint.get("operation")
+			classified, ok := operationRaw.(*orderedObject)
+			if !declared || !ok {
+				continue
+			}
+			if setOrderedIfDifferent(classified, "reason", note) {
+				stats.Surface++
+			}
+			if setOrderedIfDifferent(classified, "notes", "source_operation="+source.SourceID) {
+				stats.Surface++
+			}
+		}
+	}
+	return stats
+}
+
+// sourceProjectionMutationCommandForEndpoint locates a declared write command
+// by the provider endpoint it names. File and composite operations do not have
+// a rest_write declaration, but they are still source-ledger rows and must
+// retain their exact unavailable classification rather than old planning prose.
+func sourceProjectionMutationCommandForEndpoint(cli *orderedObject, method, path string) *orderedObject {
+	commands := sourceProjectionMutationCommandsForEndpoint(cli, method, path)
+	if len(commands) != 1 {
+		return nil
+	}
+	return commands[0]
+}
+
+// sourceProjectionMutationCommandsForEndpoint returns every executable-write
+// surface that names an endpoint. A source-bound runtime gap applies to the
+// complete command family; retaining one lane as implemented would create an
+// alternate route around the exact same unrepresentable source contract.
+func sourceProjectionMutationCommandsForEndpoint(cli *orderedObject, method, path string) []*orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	commands := make([]*orderedObject, 0, 2)
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		intent := stringField(command, "intent")
+		if intent == "reverse_etl" || intent == "direct_write" {
+			commands = append(commands, command)
+		}
+	}
+	return commands
+}
+
+func sourceProjectionOperationByID(operations *orderedObject, operationID string) *orderedObject {
+	if operationID == "" {
+		return nil
+	}
+	for _, raw := range arrayField(operations, "operations") {
+		operation, ok := raw.(*orderedObject)
+		if ok && stringField(operation, "id") == operationID {
+			return operation
+		}
+	}
+	return nil
+}
+
+func sourceProjectionMutationFoundationNote(source sourceOperationDescriptor) string {
+	foundations := map[string]bool{}
+	for _, gap := range source.Runtime.Gaps {
+		if sourceProjectionHasBlockingGap([]sourceContractGap{gap}) && gap.Foundation != "" {
+			foundations[gap.Foundation] = true
+		}
+	}
+	names := make([]string, 0, len(foundations))
+	for foundation := range foundations {
+		names = append(names, foundation)
+	}
+	sort.Strings(names)
+	parts := make([]string, 0, len(names)+1)
+	for _, foundation := range names {
+		parts = append(parts, "missing_foundation="+foundation)
+	}
+	if len(parts) == 0 {
+		parts = append(parts, "missing_foundation="+sourceOperationExecutionFoundation)
+	}
+	parts = append(parts, "source_operation="+source.SourceID)
+	return strings.Join(parts, "; ")
+}
+
+// sourceProjectionAnnotateReadFoundationGaps gives a retained
+// source-bound read the same precise provenance as a mutation gap. The command
+// remains unavailable; this removes only inherited planning prose, not the
+// declared source requirement or the blocked-by-default guard.
+func sourceProjectionAnnotateReadFoundationGaps(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
+	stats := sourceProjectionStats{}
+	for _, source := range result.Operations {
+		if sourceProjectionOperationMutates(source) || !sourceProjectionReadHasBlockingGap(source) {
+			continue
+		}
+		operation := sourceProjectionOperationForEndpoint(operations, source.Method, sourceProjectionDeclaredPath(source))
+		if operation == nil {
+			continue
+		}
+		operationID := stringField(operation, "id")
+		command := sourceProjectionCommandForOperation(cli, operationID, source.Method, sourceProjectionDeclaredPath(source))
+		if command == nil || stringField(command, "availability") != "planned" {
+			continue
+		}
+		note := sourceProjectionMutationFoundationNote(source)
+		if setOrderedIfDifferent(command, "notes", note) {
+			stats.CLI++
+		}
+		const plannedPrefix = "Planned fixed-target "
+		if summary := stringField(command, "summary"); strings.HasPrefix(summary, plannedPrefix) && setOrderedIfDifferent(command, "summary", "Unavailable source-bound "+strings.TrimPrefix(summary, plannedPrefix)) {
+			stats.CLI++
+		}
+		if setOrderedIfDifferent(operation, "description", "Unavailable source-bound provider read: "+note) {
+			stats.Operations++
+		}
+		if surface == nil {
+			continue
+		}
+		for _, raw := range arrayField(surface, "endpoints") {
+			endpoint, ok := raw.(*orderedObject)
+			if !ok || sourceProjectionEndpointKey(stringField(endpoint, "method"), stringField(endpoint, "path")) != sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source)) {
+				continue
+			}
+			blocked, declared := endpoint.get("operation")
+			classified, ok := blocked.(*orderedObject)
+			if !declared || !ok {
+				continue
+			}
+			if setOrderedIfDifferent(classified, "reason", note) {
+				stats.Surface++
+			}
+			if setOrderedIfDifferent(classified, "notes", "source_operation="+source.SourceID) {
+				stats.Surface++
+			}
+		}
+	}
+	return stats
+}
+
+func sourceProjectionReplaceLegacyUnavailableMutationSummary(command *orderedObject, notApplicable bool) bool {
+	const prefix = "Planned fixed-target "
+	summary := stringField(command, "summary")
+	if !strings.HasPrefix(summary, prefix) {
+		return false
+	}
+	replacement := "Unavailable source-bound "
+	if notApplicable {
+		replacement = "Not-applicable source-bound "
+	}
+	return setOrderedIfDifferent(command, "summary", replacement+strings.TrimPrefix(summary, prefix))
 }
 
 func validateSourceProjectionExecutionEnvelopes(result sourceImportResult) error {
@@ -345,6 +2139,978 @@ func validateSourceProjectionExecutionEnvelopes(result sourceImportResult) error
 	return nil
 }
 
+// sourceProjectionReadStats deliberately counts operations separately from
+// commands. A read becomes callable only when both sides carry the same locked
+// source operation identity; changing just one would be an executable-claim
+// drift, not partial progress.
+type sourceProjectionReadStats struct {
+	Operations int
+	Streams    int
+	CLI        int
+}
+
+const sourceBoundReadMissingFoundationPrefix = "missing_foundation=source-bound-read-execution-r1: "
+const sourceProjectionLegacyPlannedReadNote = "Planned ETL/direct read metadata only; no raw provider request execution is exposed."
+
+// sourceProjectionMaterializeReadOperation is the narrow bridge from a
+// locked, non-mutating source descriptor to an existing declaration-owned
+// operation. It never creates an HTTP route, derives a URL, or turns a list
+// into ETL. The inventory operation and command must already name the exact
+// method/path; source projection merely seals their common source identity and
+// promotes the one executor whose prerequisites are present.
+func sourceProjectionMaterializeReadOperation(operations, cli, streams *orderedObject, source sourceOperationDescriptor, inventory []sourceOperationDescriptor) (sourceProjectionReadStats, error) {
+	if source.Protocol == "graphql" || !strings.EqualFold(source.Method, "GET") || source.SourceID == "" {
+		return sourceProjectionReadStats{}, nil
+	}
+	if sourceProjectionReadHasBlockingGap(source) {
+		return sourceProjectionMarkReadMissingFoundation(cli, source, sourceProjectionReadFoundationReason(source)), nil
+	}
+	if sourceProjectionSourceEndpointCount(inventory, source.Method, sourceProjectionDeclaredPath(source)) != 1 {
+		return sourceProjectionMarkReadMissingFoundation(cli, source, "exact source binding is ambiguous for this method/path"), nil
+	}
+	op := sourceProjectionOperationForEndpoint(operations, source.Method, sourceProjectionDeclaredPath(source))
+	if op == nil {
+		op = sourceProjectionStreamOperationForEndpoint(operations, cli, streams, source.Method, sourceProjectionDeclaredPath(source))
+	}
+	if op == nil {
+		return sourceProjectionMarkReadMissingFoundation(cli, source, "no declaration-owned REST or stream operation has this exact method/path"), nil
+	}
+	operationID := stringField(op, "id")
+	if operationID == "" {
+		return sourceProjectionReadStats{}, fmt.Errorf("operation at %s %s has no id", source.Method, source.Path)
+	}
+	command := sourceProjectionCommandForOperation(cli, operationID, source.Method, sourceProjectionDeclaredPath(source))
+	if command == nil && stringField(op, "kind") == "stream_etl" {
+		command = sourceProjectionCommandForStreamOperation(cli, op, source.Method, source.Path)
+	}
+	if command == nil && stringField(op, "kind") != "stream_etl" {
+		return sourceProjectionMarkReadMissingFoundation(cli, source, "no unambiguous canonical command is bound to declaration operation "+operationID), nil
+	}
+
+	switch stringField(op, "kind") {
+	case "rest_read":
+		return sourceProjectionMaterializeDirectRead(op, command, source)
+	case "stream_etl":
+		return sourceProjectionMaterializeStreamRead(op, command, streams, source)
+	default:
+		return sourceProjectionMarkReadMissingFoundation(cli, source, "operation "+operationID+" has no read executor kind"), nil
+	}
+}
+
+func sourceProjectionSourceEndpointCount(inventory []sourceOperationDescriptor, method, path string) int {
+	count := 0
+	endpoint := sourceProjectionEndpointKey(method, path)
+	for _, operation := range inventory {
+		if operation.Protocol == "graphql" || sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation)) != endpoint {
+			continue
+		}
+		count++
+	}
+	return count
+}
+
+func sourceProjectionOperationForEndpoint(operations *orderedObject, method, path string) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	var match *orderedObject
+	for _, raw := range arrayField(operations, "operations") {
+		operation, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		restRaw, declared := operation.get("rest")
+		rest, ok := restRaw.(*orderedObject)
+		if !declared || !ok || sourceProjectionEndpointKey(stringField(rest, "method"), stringField(rest, "path")) != endpoint {
+			continue
+		}
+		// Two declaration operations must not silently share one source route:
+		// there would be no way for a caller to select its source identity.
+		if match != nil {
+			return nil
+		}
+		match = operation
+	}
+	return match
+}
+
+func sourceProjectionStreamOperationForEndpoint(operations, cli, streams *orderedObject, method, path string) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	streamName := ""
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || !sourceProjectionCommandHasEndpoint(command, endpoint) || stringField(command, "stream") == "" {
+			continue
+		}
+		name := stringField(command, "stream")
+		if streamName != "" && streamName != name {
+			return nil
+		}
+		streamName = name
+	}
+	var match *orderedObject
+	for _, raw := range arrayField(operations, "operations") {
+		operation, ok := raw.(*orderedObject)
+		if !ok || stringField(operation, "kind") != "stream_etl" {
+			continue
+		}
+		selectedStream := sourceProjectionOperationStreamName(operation)
+		if selectedStream == "" || (streamName != "" && selectedStream != streamName) {
+			continue
+		}
+		if streamName == "" && !sourceProjectionDeclaredStreamEndpointMatches(streams, selectedStream, method, path) {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = operation
+	}
+	return match
+}
+
+func sourceProjectionDeclaredStreamEndpointMatches(streams *orderedObject, streamName, method, path string) bool {
+	for _, raw := range arrayField(streams, "streams") {
+		stream, ok := raw.(*orderedObject)
+		if !ok || stringField(stream, "name") != streamName {
+			continue
+		}
+		streamMethod := stringField(stream, "method")
+		if streamMethod == "" {
+			streamMethod = "GET"
+		}
+		return strings.EqualFold(streamMethod, method) && sourceProjectionStreamPathMatchesSourcePath(stringField(stream, "path"), path)
+	}
+	return false
+}
+
+func sourceProjectionCommandForOperation(cli *orderedObject, operationID, method, path string) *orderedObject {
+	endpoint := sourceProjectionEndpointKey(method, path)
+	var match *orderedObject
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "operation") != operationID || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = command
+	}
+	return match
+}
+
+func sourceProjectionCommandForStreamOperation(cli, operation *orderedObject, method, path string) *orderedObject {
+	streamName := sourceProjectionOperationStreamName(operation)
+	if streamName == "" {
+		return nil
+	}
+	endpoint := sourceProjectionEndpointKey(method, path)
+	var match *orderedObject
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || stringField(command, "stream") != streamName || !sourceProjectionCommandHasEndpoint(command, endpoint) {
+			continue
+		}
+		if match != nil {
+			return nil
+		}
+		match = command
+	}
+	return match
+}
+
+func sourceProjectionOperationStreamName(operation *orderedObject) string {
+	compositeRaw, declared := operation.get("composite")
+	composite, ok := compositeRaw.(*orderedObject)
+	if !declared || !ok {
+		return ""
+	}
+	for _, raw := range arrayField(composite, "steps") {
+		if step, ok := raw.(string); ok && strings.HasPrefix(step, "stream:") && strings.TrimPrefix(step, "stream:") != "" {
+			return strings.TrimPrefix(step, "stream:")
+		}
+	}
+	return ""
+}
+
+func sourceProjectionMaterializeDirectRead(operation, command *orderedObject, source sourceOperationDescriptor) (sourceProjectionReadStats, error) {
+	restRaw, _ := operation.get("rest")
+	rest, _ := restRaw.(*orderedObject)
+	stats := sourceProjectionReadStats{}
+	if source.Output.Class != sourceOutputJSON {
+		return sourceProjectionMarkOneReadMissingFoundation(command, source, "the source response is not a bounded JSON direct-read contract"), nil
+	}
+	if len(source.Request.Header) != 0 || source.Request.Body != nil || len(source.Request.Media) != 0 {
+		return sourceProjectionMarkOneReadMissingFoundation(command, source, "typed request header or body execution is not available for source-bound GET reads"), nil
+	}
+	if !positiveNumberValue(rest, "max_bytes") || stringField(operation, "output_policy") == "" {
+		return sourceProjectionMarkOneReadMissingFoundation(command, source, "operation lacks a bounded response cap or output policy"), nil
+	}
+	if sourceProjectionSyncReadParameters(rest, source) {
+		stats.Operations++
+	}
+	if changed, err := sourceProjectionSyncReadPagination(rest, source); err != nil {
+		return stats, err
+	} else if changed {
+		stats.Operations++
+	}
+	if reason := sourceProjectionReadParametersComplete(rest, source); reason != "" {
+		missing := sourceProjectionMarkOneReadMissingFoundation(command, source, reason)
+		stats.CLI += missing.CLI
+		return stats, nil
+	}
+
+	if sourceProjectionSetSourceOperation(operation, source) {
+		stats.Operations++
+	}
+	commandChanged := setOrderedIfDifferent(command, "intent", "direct_read")
+	if setOrderedIfDifferent(command, "availability", "implemented") {
+		commandChanged = true
+	}
+	if setOrderedIfDifferent(command, "source_operation", source.SourceID) {
+		commandChanged = true
+	}
+	if setOrderedIfDifferent(command, "api_surface", derivedAPISurface(source.Method, sourceProjectionDeclaredPath(source))) {
+		commandChanged = true
+	}
+	if setOrderedIfDifferent(command, "output_policy", stringField(operation, "output_policy")) {
+		commandChanged = true
+	}
+	if deriveCommandParameterFlags(command, rest) > 0 {
+		commandChanged = true
+	}
+	if sourceProjectionRequireSourceReadPathFlags(command, source) {
+		commandChanged = true
+	}
+	if sourceProjectionClearReadMissingFoundation(command) || sourceProjectionClearBlockedReadNote(command, source.SourceID) || sourceProjectionClearHistoricalBlockedReadNote(command) {
+		commandChanged = true
+	}
+	if sourceProjectionClearLegacyPlannedReadNote(command) {
+		commandChanged = true
+	}
+	if sourceProjectionClearLegacyPlannedReadSummary(command) {
+		commandChanged = true
+	}
+	if commandChanged {
+		stats.CLI++
+	}
+	return stats, nil
+}
+
+func sourceProjectionMaterializeStreamRead(operation, command, streams *orderedObject, source sourceOperationDescriptor) (sourceProjectionReadStats, error) {
+	streamName := ""
+	if command == nil || stringField(command, "stream") == "" {
+		streamName = sourceProjectionOperationStreamName(operation)
+	} else {
+		streamName = stringField(command, "stream")
+	}
+	if streamName == "" {
+		return sourceProjectionMarkOneReadMissingFoundation(command, source, "source-backed ETL requires an already implemented named stream"), nil
+	}
+	if source.Pagination == nil {
+		return sourceProjectionMarkOneReadMissingFoundation(command, source, "source pagination semantics are absent; the operation may only be a bounded direct read"), nil
+	}
+	stats := sourceProjectionReadStats{}
+	if sourceProjectionSyncStreamPagination(streams, streamName, source.Pagination) {
+		stats.Streams++
+	}
+	if !sourceProjectionStreamMatchesReadOperation(operation, streams, streamName, source) {
+		missing := sourceProjectionMarkOneReadMissingFoundation(command, source, "named stream lacks exact source path, record schema, or pagination semantics")
+		missing.Streams += stats.Streams
+		return missing, nil
+	}
+	if sourceProjectionSetSourceOperation(operation, source) {
+		stats.Operations++
+	}
+	if command == nil {
+		return stats, nil
+	}
+	commandChanged := command.remove("operation")
+	if setOrderedIfDifferent(command, "availability", "implemented") {
+		commandChanged = true
+	}
+	if setOrderedIfDifferent(command, "stream", streamName) {
+		commandChanged = true
+	}
+	if setOrderedIfDifferent(command, "source_operation", source.SourceID) {
+		commandChanged = true
+	}
+	if setOrderedIfDifferent(command, "api_surface", derivedAPISurface(source.Method, sourceProjectionDeclaredPath(source))) {
+		commandChanged = true
+	}
+	if command.remove("flags") {
+		commandChanged = true
+	}
+	if sourceProjectionClearReadMissingFoundation(command) || sourceProjectionClearHistoricalBlockedReadNote(command) {
+		commandChanged = true
+	}
+	if sourceProjectionClearLegacyPlannedReadNote(command) {
+		commandChanged = true
+	}
+	if sourceProjectionClearLegacyPlannedReadSummary(command) {
+		commandChanged = true
+	}
+	if commandChanged {
+		stats.CLI++
+	}
+	return stats, nil
+}
+
+// sourceProjectionSyncStreamPagination admits a source-derived pagination
+// extension only when the existing declared stream already proves the same
+// response-owned pager after those closed controls are removed. This keeps the
+// pre-existing ETL route/record contract intact while making the initial page
+// use the bounded provider window needed to obtain its next URL.
+func sourceProjectionSyncStreamPagination(streams *orderedObject, streamName string, pagination any) bool {
+	for _, raw := range arrayField(streams, "streams") {
+		stream, ok := raw.(*orderedObject)
+		if !ok || stringField(stream, "name") != streamName {
+			continue
+		}
+		if current, declared := stream.get("pagination"); declared {
+			if !sourceProjectionPaginationAddsOnlyClosedControls(current, pagination) {
+				return false
+			}
+			return setOrderedIfDifferent(stream, "pagination", pagination)
+		}
+		baseRaw, declared := streams.get("base")
+		base, ok := baseRaw.(*orderedObject)
+		if !declared || !ok {
+			return false
+		}
+		current, declared := base.get("pagination")
+		if !declared || !sourceProjectionPaginationAddsOnlyClosedControls(current, pagination) {
+			return false
+		}
+		return setOrderedIfDifferent(base, "pagination", pagination)
+	}
+	return false
+}
+
+func sourceProjectionPaginationAddsOnlyClosedControls(current, source any) bool {
+	if orderedSemanticEqual(current, source) {
+		return true
+	}
+	derived, ok := source.(map[string]any)
+	if !ok {
+		return false
+	}
+	base := make(map[string]any, len(derived))
+	for key, value := range derived {
+		switch key {
+		case "size_param", "limit_param", "offset_param", "page_size":
+			continue
+		default:
+			base[key] = value
+		}
+	}
+	return orderedSemanticEqual(current, base)
+}
+
+// sourceProjectionClearLegacyPlannedReadSummary removes the generated
+// declaration-era prefix only after the same command has been materialized as
+// a source-bound executor.  It deliberately leaves an author-owned summary
+// alone unless it matches the historical generated form, so projection never
+// uses source import as a general documentation rewriter.
+func sourceProjectionClearLegacyPlannedReadSummary(command *orderedObject) bool {
+	summary := stringField(command, "summary")
+	const prefix = "Planned fixed-target "
+	if !strings.HasPrefix(summary, prefix) {
+		return false
+	}
+	readPrefixEnd := strings.Index(summary[len(prefix):], " read: ")
+	if readPrefixEnd < 0 {
+		return false
+	}
+	materialized := summary[len(prefix)+readPrefixEnd+len(" read: "):]
+	if materialized == "" {
+		return false
+	}
+	return setOrderedIfDifferent(command, "summary", materialized)
+}
+
+func sourceProjectionStreamMatchesReadOperation(operation, streams *orderedObject, streamName string, source sourceOperationDescriptor) bool {
+	compositeRaw, declared := operation.get("composite")
+	composite, ok := compositeRaw.(*orderedObject)
+	if !declared || !ok {
+		return false
+	}
+	foundStep := false
+	for _, raw := range arrayField(composite, "steps") {
+		if name, ok := raw.(string); ok && name == "stream:"+streamName {
+			foundStep = true
+		}
+	}
+	if !foundStep {
+		return false
+	}
+	for _, raw := range arrayField(streams, "streams") {
+		stream, ok := raw.(*orderedObject)
+		if !ok || stringField(stream, "name") != streamName {
+			continue
+		}
+		method := stringField(stream, "method")
+		if method == "" {
+			method = "GET"
+		}
+		if !strings.EqualFold(method, source.Method) || !sourceProjectionStreamPathMatchesSourcePath(stringField(stream, "path"), source.Path) {
+			return false
+		}
+		recordsRaw, recordsDeclared := stream.get("records")
+		records, recordsOK := recordsRaw.(*orderedObject)
+		if !recordsDeclared || !recordsOK || stringField(records, "path") == "" || stringField(stream, "schema") == "" {
+			return false
+		}
+		if pagination, ownPagination := stream.get("pagination"); ownPagination {
+			return orderedSemanticEqual(pagination, source.Pagination)
+		}
+		baseRaw, baseDeclared := streams.get("base")
+		base, baseOK := baseRaw.(*orderedObject)
+		if !baseDeclared || !baseOK {
+			return false
+		}
+		pagination, inheritedPagination := base.get("pagination")
+		return inheritedPagination && orderedSemanticEqual(pagination, source.Pagination)
+	}
+	return false
+}
+
+// sourceProjectionStreamPathMatchesSourcePath permits a stream to use a typed
+// connection setting for one complete source path segment.  It does not make
+// that setting a route escape hatch: every literal segment must still be the
+// locked source path, and both variable spellings must occupy a whole segment.
+// This preserves long-standing streams whose configured `workspace_id` is the
+// provider's `workspace_gid`, while retaining the provider's exact method/path
+// in source_operation and cli_surface.
+func sourceProjectionStreamPathMatchesSourcePath(streamPath, sourcePath string) bool {
+	streamParts := strings.Split(strings.Trim(streamPath, "/"), "/")
+	sourceParts := strings.Split(strings.Trim(sourcePath, "/"), "/")
+	if len(streamParts) != len(sourceParts) {
+		return false
+	}
+	for index := range streamParts {
+		if streamParts[index] == sourceParts[index] {
+			continue
+		}
+		if (sourceProjectionConfigPathSegment(streamParts[index]) || sourceProjectionFanOutPathSegment(streamParts[index])) && sourceProjectionSourcePathSegment(sourceParts[index]) {
+			continue
+		}
+		return false
+	}
+	return true
+}
+
+func sourceProjectionConfigPathSegment(segment string) bool {
+	return strings.HasPrefix(segment, "{{ config.") && strings.HasSuffix(segment, " }}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{{ config."), " }}")) > 0
+}
+
+func sourceProjectionFanOutPathSegment(segment string) bool {
+	return segment == "{{ fanout.id }}"
+}
+
+func sourceProjectionSourcePathSegment(segment string) bool {
+	return strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") && len(strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")) > 0
+}
+
+func sourceProjectionReadParametersComplete(rest *orderedObject, source sourceOperationDescriptor) string {
+	if _, declared := rest.get("parameters"); !declared {
+		return "typed operation parameters have not been imported from the locked provider definition"
+	}
+	parameters := map[string]*orderedObject{}
+	for _, raw := range arrayField(rest, "parameters") {
+		parameter, ok := raw.(*orderedObject)
+		if !ok {
+			continue
+		}
+		location := stringField(parameter, "in")
+		name := stringField(parameter, "name")
+		if (location == "path" || location == "query") && name != "" {
+			parameters[location+"."+name] = parameter
+		}
+	}
+	for _, candidate := range []struct {
+		location   string
+		parameters []sourceParameterDescriptor
+	}{
+		{location: "path", parameters: source.Request.Path},
+		{location: "query", parameters: source.Request.Query},
+	} {
+		for _, parameter := range candidate.parameters {
+			if candidate.location == "query" && sourceProjectionProviderPagingParameter(parameter) {
+				continue
+			}
+			// A bounded direct read may intentionally omit an optional provider
+			// filter. Its command then exposes no lossy substitute for that
+			// field; only a caller-required source input must have an executable
+			// typed command contract before this operation can advance.
+			if !parameter.Required {
+				continue
+			}
+			if !sourceScalarWireSchema(parameter.Schema) {
+				return "typed " + candidate.location + " parameter " + parameter.Name + " requires unsupported serialization"
+			}
+			declared, found := parameters[candidate.location+"."+parameter.Name]
+			if !found {
+				return "typed " + candidate.location + " parameter " + parameter.Name + " has not been imported from the locked provider definition"
+			}
+			required, _ := declared.get("required")
+			if required != true {
+				return "typed " + candidate.location + " parameter " + parameter.Name + " lost requiredness"
+			}
+		}
+	}
+	return ""
+}
+
+// sourceProjectionSyncReadParameters imports every scalar non-paging caller
+// input from the canonical descriptor, including optional filters. Paging
+// controls are deliberately excluded: the declared stream/operation pagination
+// contract is navigated only by --page or --page-cursor. A zero-input read
+// receives an explicit empty parameter list so its bounded direct-read contract
+// is distinguishable from one whose typed inputs were never imported. Optional
+// non-scalar filters deliberately remain omitted: the one-page direct read
+// stays useful without inventing a serialization surface that the source
+// contract did not prove PM can execute.
+func sourceProjectionSyncReadParameters(rest *orderedObject, source sourceOperationDescriptor) bool {
+	rawParameters, declaredParameters := rest.get("parameters")
+	parameters, parametersAreArray := rawParameters.([]any)
+	if parameters == nil {
+		parameters = make([]any, 0)
+	}
+	changed := !declaredParameters || !parametersAreArray
+	kept := parameters[:0]
+	for _, raw := range parameters {
+		parameter, ok := raw.(*orderedObject)
+		if !ok {
+			kept = append(kept, raw)
+			continue
+		}
+		location := stringField(parameter, "in")
+		name := stringField(parameter, "name")
+		if (location == "path" || location == "query" || location == "header") && !sourceProjectionReadParameterAdmitted(source, location, name) {
+			changed = true
+			continue
+		}
+		kept = append(kept, raw)
+	}
+	parameters = kept
+	for _, group := range []struct {
+		location   string
+		parameters []sourceParameterDescriptor
+	}{
+		{location: "path", parameters: source.Request.Path},
+		{location: "query", parameters: source.Request.Query},
+	} {
+		for _, sourceParameter := range group.parameters {
+			if group.location == "query" && sourceProjectionProviderPagingParameter(sourceParameter) {
+				continue
+			}
+			if !sourceScalarWireSchema(sourceParameter.Schema) {
+				continue
+			}
+			typeName := sourceProjectionReadParameterType(sourceParameter.Schema)
+			if typeName == "" {
+				continue
+			}
+			var declared *orderedObject
+			for _, raw := range parameters {
+				parameter, ok := raw.(*orderedObject)
+				if ok && stringField(parameter, "in") == group.location && stringField(parameter, "name") == sourceParameter.Name {
+					declared = parameter
+					break
+				}
+			}
+			if declared == nil {
+				declared = newOrderedObject()
+				declared.set("name", sourceParameter.Name)
+				declared.set("in", group.location)
+				parameters = append(parameters, declared)
+				changed = true
+			}
+			if setOrderedIfDifferent(declared, "type", typeName) {
+				changed = true
+			}
+			if sourceParameter.Required {
+				if required, _ := declared.get("required"); required != true {
+					declared.set("required", true)
+					changed = true
+				}
+			} else if declared.remove("required") {
+				changed = true
+			}
+			if sourceProjectionSetReadParameterEnum(declared, sourceParameter.Schema) {
+				changed = true
+			}
+		}
+	}
+	if sourceProjectionSyncReadStaticQuery(rest, source) {
+		changed = true
+	}
+	if sourceProjectionSyncReadBody(rest, source) {
+		changed = true
+	}
+	if changed {
+		rest.set("parameters", parameters)
+	}
+	return changed
+}
+
+// sourceProjectionReadParameterAdmitted is the local-to-source half of the
+// source-bound read closure. A source descriptor is allowed to omit optional
+// caller filters from a bounded direct read, but a local request parameter
+// must never manufacture a path/query/header channel the retained provider
+// operation did not declare. Paging is deliberately excluded here: its only
+// admitted representation is the operation's closed pagination contract.
+func sourceProjectionReadParameterAdmitted(source sourceOperationDescriptor, location, name string) bool {
+	if name == "" {
+		return false
+	}
+	for _, group := range []struct {
+		location   string
+		parameters []sourceParameterDescriptor
+	}{
+		{location: "path", parameters: source.Request.Path},
+		{location: "query", parameters: source.Request.Query},
+		{location: "header", parameters: source.Request.Header},
+	} {
+		if location != group.location {
+			continue
+		}
+		for _, parameter := range group.parameters {
+			if parameter.Name != name {
+				continue
+			}
+			return location != "query" || !sourceProjectionProviderPagingParameter(parameter)
+		}
+	}
+	return false
+}
+
+func sourceProjectionSyncReadStaticQuery(rest *orderedObject, source sourceOperationDescriptor) bool {
+	raw, declared := rest.get("query")
+	if !declared {
+		return false
+	}
+	query, ok := raw.(*orderedObject)
+	if !ok {
+		return false
+	}
+	changed := false
+	for _, name := range append([]string(nil), query.keys...) {
+		if sourceProjectionReadParameterAdmitted(source, "query", name) {
+			continue
+		}
+		query.remove(name)
+		changed = true
+	}
+	if len(query.keys) == 0 {
+		return rest.remove("query") || changed
+	}
+	return changed
+}
+
+// A source-bound GET whose retained request has no body/media cannot gain a
+// declaration-owned body or content-type channel. If the source does declare
+// either class, materialization stops at its explicit shared-foundation gap
+// before reaching this direct-read projection.
+func sourceProjectionSyncReadBody(rest *orderedObject, source sourceOperationDescriptor) bool {
+	if source.Request.Body != nil || len(source.Request.Media) != 0 || source.Request.MediaType != "" {
+		return false
+	}
+	changed := rest.remove("body")
+	if rest.remove("body_schema") {
+		changed = true
+	}
+	if rest.remove("content_type") {
+		changed = true
+	}
+	return changed
+}
+
+// sourceProjectionSyncReadPagination materializes source-proven pagination in
+// the operation-owned block. The controls stay out of rest.parameters, so
+// surface-sync can never make a raw paging flag; pagination_parameters proves
+// that the closed engine dialect is backed by this operation's provider
+// contract.
+func sourceProjectionSyncReadPagination(rest *orderedObject, source sourceOperationDescriptor) (bool, error) {
+	if source.Pagination == nil {
+		changed := rest.remove("pagination")
+		if rest.remove("pagination_parameters") {
+			changed = true
+		}
+		return changed, nil
+	}
+	pagination, ok := source.Pagination.(map[string]any)
+	if !ok {
+		return false, fmt.Errorf("source pagination is not an object")
+	}
+	names := sourceProjectionPaginationParameterNames(pagination)
+	byName := make(map[string]sourceParameterDescriptor, len(source.Request.Query))
+	for _, parameter := range source.Request.Query {
+		byName[parameter.Name] = parameter
+	}
+	parameters := make([]any, 0, len(names))
+	for _, name := range names {
+		parameter, found := byName[name]
+		if !found || !sourceScalarWireSchema(parameter.Schema) {
+			return false, fmt.Errorf("source pagination parameter %q is not a scalar query parameter", name)
+		}
+		entry := newOrderedObject()
+		entry.set("name", name)
+		entry.set("in", "query")
+		if typeName := sourceProjectionReadParameterType(parameter.Schema); typeName != "" {
+			entry.set("type", typeName)
+		}
+		if parameter.Required {
+			entry.set("required", true)
+		}
+		parameters = append(parameters, entry)
+	}
+
+	changed := setOrderedIfDifferent(rest, "pagination", pagination)
+	if len(parameters) == 0 {
+		if rest.remove("pagination_parameters") {
+			changed = true
+		}
+		return changed, nil
+	}
+	if setOrderedIfDifferent(rest, "pagination_parameters", parameters) {
+		changed = true
+	}
+	return changed, nil
+}
+
+func sourceProjectionPaginationParameterNames(pagination map[string]any) []string {
+	field := func(key string) string {
+		value, _ := pagination[key].(string)
+		return strings.TrimSpace(value)
+	}
+	names := make([]string, 0, 3)
+	add := func(name string) {
+		if name == "" {
+			return
+		}
+		for _, existing := range names {
+			if existing == name {
+				return
+			}
+		}
+		names = append(names, name)
+	}
+	switch field("type") {
+	case "page_number":
+		add(field("page_param"))
+		add(field("size_param"))
+	case "offset_limit":
+		add(field("offset_param"))
+		add(field("limit_param"))
+		add(field("size_param"))
+	case "cursor":
+		add(field("cursor_param"))
+		add(field("size_param"))
+	case "start_index":
+		add(field("start_index_param"))
+		add(field("count_param"))
+		add(field("size_param"))
+	case "next_url":
+		// A next URL owns the next page, but a documented initial size and
+		// continuation offset are still part of its closed contract.
+		add(field("size_param"))
+		add(field("limit_param"))
+		add(field("offset_param"))
+	case "link_header":
+		add(field("size_param"))
+	}
+	return names
+}
+
+// sourceProjectionProviderPagingParameter keeps source-projected reads on the
+// same closed paging classifier as params-import. Source descriptors retain
+// only typed parameter shape, so provider paging descriptions are unavailable
+// here; the shared semantic-name classifier still prevents a second raw
+// navigation channel.
+func sourceProjectionProviderPagingParameter(parameter sourceParameterDescriptor) bool {
+	return isProviderPagingParameter(openAPIParameter{Name: parameter.Name, In: "query"})
+}
+
+func sourceProjectionReadParameterType(schema any) string {
+	if sourceStringScalarWireUnion(schema) {
+		return "string"
+	}
+	return sourceProjectionFlagType(schema)
+}
+
+func sourceProjectionSetReadParameterEnum(parameter *orderedObject, schema any) bool {
+	object, _ := schema.(map[string]any)
+	values, present := sourceProjectionCLIEnumValues(object["enum"])
+	if !present || len(values) == 0 {
+		return parameter.remove("values")
+	}
+	text := make([]any, len(values))
+	for index := range values {
+		text[index] = values[index]
+	}
+	return setOrderedIfDifferent(parameter, "values", text)
+}
+
+// sourceProjectionCLIEnumValues retains an exact scalar enum in the command
+// surface's string-token vocabulary. The record schema remains numeric or
+// boolean, so normal engine coercion still validates its typed value before
+// provider I/O. Composite or null values are not a CLI flag enum contract.
+func sourceProjectionCLIEnumValues(raw any) ([]string, bool) {
+	values := sourceAnySlice(raw)
+	if len(values) == 0 {
+		return nil, true
+	}
+	result := make([]string, len(values))
+	for index, value := range values {
+		switch typed := value.(type) {
+		case string:
+			result[index] = typed
+		case json.Number:
+			result[index] = typed.String()
+		case bool:
+			result[index] = strconv.FormatBool(typed)
+		default:
+			return nil, false
+		}
+	}
+	return result, true
+}
+
+func sourceProjectionSetSourceOperation(operation *orderedObject, source sourceOperationDescriptor) bool {
+	binding := newOrderedObject()
+	binding.set("id", source.SourceID)
+	binding.set("method", strings.ToUpper(strings.TrimSpace(source.Method)))
+	binding.set("path", sourceProjectionDeclaredPath(source))
+	return setOrderedIfDifferent(operation, "source_operation", binding)
+}
+
+func sourceProjectionRequireSourceReadPathFlags(command *orderedObject, source sourceOperationDescriptor) bool {
+	changed := false
+	required := map[string]bool{}
+	for _, parameter := range source.Request.Path {
+		if parameter.Required {
+			required["path."+parameter.Name] = true
+		}
+	}
+	for _, raw := range arrayField(command, "flags") {
+		flag, ok := raw.(*orderedObject)
+		if !ok || !required[stringField(flag, "maps_to")] {
+			continue
+		}
+		if present, _ := flag.get("required"); present != true {
+			flag.set("required", true)
+			changed = true
+		}
+	}
+	return changed
+}
+
+func sourceProjectionMarkReadMissingFoundation(cli *orderedObject, source sourceOperationDescriptor, reason string) sourceProjectionReadStats {
+	stats := sourceProjectionReadStats{}
+	for _, raw := range arrayField(cli, "commands") {
+		command, ok := raw.(*orderedObject)
+		if !ok || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))) {
+			continue
+		}
+		child := sourceProjectionMarkOneReadMissingFoundation(command, source, reason)
+		stats.CLI += child.CLI
+	}
+	return stats
+}
+
+func sourceProjectionMarkOneReadMissingFoundation(command *orderedObject, source sourceOperationDescriptor, reason string) sourceProjectionReadStats {
+	changed := false
+	if stringField(command, "availability") == "implemented" {
+		if stringField(command, "source_operation") != source.SourceID {
+			// A pre-foundation command may already have its own working executor.
+			// Do not downgrade it merely because this source-bound bridge cannot
+			// yet describe the full provider contract. Only a command the bridge
+			// previously bound to this exact source identity can be reclassified.
+			return sourceProjectionReadStats{}
+		}
+		// An implemented command may retain a source_operation binding from an
+		// earlier projection while its present locked source facts no longer
+		// establish the executor it claims (for example a stream whose declared
+		// pagination differs from the provider response).  It must stop claiming
+		// implementation until the declaration and source contract agree again.
+		command.set("availability", "planned")
+		changed = true
+	}
+	note := sourceBoundReadMissingFoundationPrefix + reason + "; source_operation=" + source.SourceID
+	if sourceProjectionReadHasBlockingGap(source) {
+		note = sourceProjectionMutationFoundationNote(source)
+		const plannedPrefix = "Planned fixed-target "
+		if summary := stringField(command, "summary"); strings.HasPrefix(summary, plannedPrefix) {
+			command.set("summary", "Unavailable source-bound "+strings.TrimPrefix(summary, plannedPrefix))
+			changed = true
+		}
+	}
+	if setOrderedIfDifferent(command, "notes", note) {
+		changed = true
+	}
+	if changed {
+		return sourceProjectionReadStats{CLI: 1}
+	}
+	return sourceProjectionReadStats{}
+}
+
+func sourceProjectionReadFoundationReason(source sourceOperationDescriptor) string {
+	foundations := make([]string, 0, len(source.Runtime.Gaps))
+	for _, gap := range source.Runtime.Gaps {
+		if !sourceProjectionHasBlockingGap([]sourceContractGap{gap}) {
+			continue
+		}
+		foundations = append(foundations, gap.Foundation)
+	}
+	sort.Strings(foundations)
+	if len(foundations) == 0 {
+		return "missing foundation " + sourceOperationExecutionFoundation
+	}
+	return "missing foundation " + strings.Join(foundations, ",")
+}
+
+func sourceProjectionClearReadMissingFoundation(command *orderedObject) bool {
+	notes := stringField(command, "notes")
+	if strings.HasPrefix(notes, sourceBoundReadMissingFoundationPrefix) || strings.HasPrefix(notes, "missing_foundation=closed-source-operation-execution-foundation-r1; source_operation=") {
+		return command.remove("notes")
+	}
+	return false
+}
+
+func sourceProjectionClearLegacyPlannedReadNote(command *orderedObject) bool {
+	if stringField(command, "notes") != sourceProjectionLegacyPlannedReadNote {
+		return false
+	}
+	return command.remove("notes")
+}
+
+// sourceProjectionClearBlockedReadNote removes only the exact source-derived
+// block that a previous projection wrote.  It must not erase an author note:
+// those can describe a broader workflow dependency than this one operation.
+func sourceProjectionClearBlockedReadNote(command *orderedObject, sourceID string) bool {
+	if stringField(command, "notes") != sourceProjectionBlockedReadCommandNote(sourceID) {
+		return false
+	}
+	return command.remove("notes")
+}
+
+// sourceProjectionClearHistoricalBlockedReadNote removes the old generated
+// blocker wording only after this same command has been promoted from a
+// complete source contract. A real current foundation remains represented by
+// the exact missing_foundation note and is never cleared here.
+func sourceProjectionClearHistoricalBlockedReadNote(command *orderedObject) bool {
+	if !strings.HasPrefix(stringField(command, "notes"), "Blocked until ") {
+		return false
+	}
+	return command.remove("notes")
+}
+
+func positiveNumberValue(object *orderedObject, key string) bool {
+	value, _ := object.get(key)
+	return positiveNumber(value)
+}
+
 func sourceProjectionBundleSpec(bundleDir string) (*engine.Schema, error) {
 	raw, err := os.ReadFile(filepath.Join(bundleDir, "spec.json"))
 	if os.IsNotExist(err) {
@@ -361,8 +3127,9 @@ func sourceProjectionBundleSpec(bundleDir string) (*engine.Schema, error) {
 }
 
 type sourceNonExecutableMutationDispositionDocument struct {
-	SchemaVersion int                                      `json:"schema_version"`
-	Dispositions  []sourceNonExecutableMutationDisposition `json:"dispositions"`
+	SchemaVersion               int                                        `json:"schema_version"`
+	Dispositions                []sourceNonExecutableMutationDisposition   `json:"dispositions"`
+	PartialCoverageDispositions []sourcePartialMutationCoverageDisposition `json:"partial_coverage_dispositions,omitempty"`
 }
 
 // sourceProjectionReadNonExecutableMutationDispositions reads the connector-
@@ -399,26 +3166,75 @@ func sourceProjectionReadNonExecutableMutationDispositions(bundleDir string) ([]
 	return document.Dispositions, nil
 }
 
+// sourceProjectionReadPartialMutationCoverageDispositions reads the
+// operation-granular exception for a working action whose complete provider
+// request contract needs a missing shared foundation. It is intentionally
+// separate from a non-executable disposition: neither form can disguise the
+// other, nor an unsupported provider operation.
+func sourceProjectionReadPartialMutationCoverageDispositions(bundleDir string) ([]sourcePartialMutationCoverageDisposition, error) {
+	connector := filepath.Base(filepath.Clean(bundleDir))
+	path := filepath.Join(bundleDir, "sources", connector+"-mutation-dispositions.json")
+	raw, err := os.ReadFile(path)
+	if os.IsNotExist(err) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	var document sourceNonExecutableMutationDispositionDocument
+	if err := decodeSourceStrictJSON(raw, &document); err != nil {
+		return nil, fmt.Errorf("parse mutation dispositions: %w", err)
+	}
+	if document.SchemaVersion != 1 {
+		return nil, fmt.Errorf("mutation dispositions schema_version = %d, want 1", document.SchemaVersion)
+	}
+	seen := make(map[string]bool, len(document.PartialCoverageDispositions))
+	for _, disposition := range document.PartialCoverageDispositions {
+		if err := sourceProjectionValidatePartialMutationCoverageDispositionInput(disposition); err != nil {
+			return nil, err
+		}
+		if seen[disposition.Source.SourceID] {
+			return nil, fmt.Errorf("partial mutation coverage dispositions duplicate source operation %q", disposition.Source.SourceID)
+		}
+		seen[disposition.Source.SourceID] = true
+	}
+	return document.PartialCoverageDispositions, nil
+}
+
 func sourceProjectionValidateNonExecutableMutationDispositionInput(disposition sourceNonExecutableMutationDisposition) error {
+	return sourceProjectionValidateMutationDispositionInput("mutation disposition", disposition.Source, disposition.Reason)
+}
+
+func sourceProjectionValidatePartialMutationCoverageDispositionInput(disposition sourcePartialMutationCoverageDisposition) error {
+	if err := sourceProjectionValidateMutationDispositionInput("partial mutation coverage disposition", disposition.Source, disposition.Reason); err != nil {
+		return err
+	}
+	if disposition.Foundation == "" || disposition.Foundation != strings.TrimSpace(disposition.Foundation) || len(disposition.Foundation) > 256 || strings.ContainsAny(disposition.Foundation, "\r\n\x00") {
+		return fmt.Errorf("partial mutation coverage disposition foundation is invalid")
+	}
+	return nil
+}
+
+func sourceProjectionValidateMutationDispositionInput(kind string, source sourceOperationCitation, reason string) error {
 	for _, value := range []struct {
 		name  string
 		value string
 		max   int
 	}{
-		{name: "source_id", value: disposition.Source.SourceID, max: 1024},
-		{name: "method", value: disposition.Source.Method, max: 16},
-		{name: "path", value: disposition.Source.Path, max: 4096},
-		{name: "reason", value: disposition.Reason, max: 1024},
+		{name: "source_id", value: source.SourceID, max: 1024},
+		{name: "method", value: source.Method, max: 16},
+		{name: "path", value: source.Path, max: 4096},
+		{name: "reason", value: reason, max: 1024},
 	} {
 		if value.value == "" || value.value != strings.TrimSpace(value.value) || len(value.value) > value.max || strings.ContainsAny(value.value, "\r\n\x00") {
-			return fmt.Errorf("mutation disposition %s is invalid", value.name)
+			return fmt.Errorf("%s %s is invalid", kind, value.name)
 		}
 	}
-	if !sourceProjectionMutationMethod(disposition.Source.Method) {
-		return fmt.Errorf("mutation disposition source method %q is not mutating", disposition.Source.Method)
+	if !sourceProjectionMutationMethod(source.Method) {
+		return fmt.Errorf("%s source method %q is not mutating", kind, source.Method)
 	}
-	if !strings.HasPrefix(disposition.Source.Path, "/") {
-		return fmt.Errorf("mutation disposition source path %q is invalid", disposition.Source.Path)
+	if !strings.HasPrefix(source.Path, "/") {
+		return fmt.Errorf("%s source path %q is invalid", kind, source.Path)
 	}
 	return nil
 }
@@ -460,7 +3276,7 @@ func sourceProjectionApplyNonExecutableMutationDispositions(bundle engine.Bundle
 			if result.Operations[index].SourceID != operation.SourceID {
 				continue
 			}
-			if result.Operations[index].Runtime.NonExecutableMutation != nil {
+			if result.Operations[index].Runtime.NonExecutableMutation != nil || result.Operations[index].Runtime.PartialCoverageMutation != nil {
 				return fmt.Errorf("source operation %q already has a non-executable mutation disposition", operation.SourceID)
 			}
 			copyDisposition := disposition
@@ -473,15 +3289,167 @@ func sourceProjectionApplyNonExecutableMutationDispositions(bundle engine.Bundle
 	return nil
 }
 
+// sourceProjectionApplyPartialMutationCoverageDispositions attaches an exact
+// provider citation to an implemented mutation whose declared action remains
+// deliberately narrower than the source request contract. It cannot suppress
+// an absent action, a source-complete action, an unsupported provider route,
+// or a read.
+func sourceProjectionApplyPartialMutationCoverageDispositions(bundle engine.Bundle, result *sourceImportResult, dispositions []sourcePartialMutationCoverageDisposition) error {
+	if len(dispositions) == 0 {
+		return nil
+	}
+	if result == nil {
+		return fmt.Errorf("partial mutation coverage dispositions require source operations")
+	}
+	operations := sourceProjectionOperationsByID(*result)
+	seen := make(map[string]bool, len(dispositions))
+	for _, disposition := range dispositions {
+		if err := sourceProjectionValidatePartialMutationCoverageDispositionInput(disposition); err != nil {
+			return err
+		}
+		if seen[disposition.Source.SourceID] {
+			return fmt.Errorf("partial mutation coverage dispositions duplicate source operation %q", disposition.Source.SourceID)
+		}
+		seen[disposition.Source.SourceID] = true
+		operation, found := operations[disposition.Source.SourceID]
+		if !found {
+			return fmt.Errorf("partial mutation coverage disposition cites unknown source operation %q", disposition.Source.SourceID)
+		}
+		if err := sourceProjectionValidatePartialMutationCoverageDispositionCitation(operation, disposition); err != nil {
+			return err
+		}
+		if sourceProjectionMutationActionIsComplete(bundle, operation) {
+			return fmt.Errorf("partial mutation coverage disposition source operation %q already has a complete executable action", operation.SourceID)
+		}
+		if !sourceProjectionMutationClaimsImplementedAction(bundle, operation) {
+			return fmt.Errorf("partial mutation coverage disposition source operation %q has no implemented declared action", operation.SourceID)
+		}
+		if !sourceProjectionPartialCoverageFoundationMatchesOperation(bundle, operation, disposition) {
+			return fmt.Errorf("partial mutation coverage disposition source operation %q has no matching missing foundation %q", operation.SourceID, disposition.Foundation)
+		}
+		for index := range result.Operations {
+			if result.Operations[index].SourceID != operation.SourceID {
+				continue
+			}
+			if result.Operations[index].Runtime.NonExecutableMutation != nil || result.Operations[index].Runtime.PartialCoverageMutation != nil {
+				return fmt.Errorf("source operation %q already has a mutation disposition", operation.SourceID)
+			}
+			copyDisposition := disposition
+			result.Operations[index].Runtime.PartialCoverageMutation = &copyDisposition
+			result.Operations[index].Runtime.Gaps = sourceSortedGaps(append(result.Operations[index].Runtime.Gaps, sourceProjectionPartialMutationCoverageRuntimeGap(result.Operations[index], copyDisposition)))
+			result.Operations[index].Runtime.MergeBlocked = true
+			break
+		}
+	}
+	return nil
+}
+
+// sourceProjectionApplyWriteDisabledMutationArtifacts retains a provider
+// mutation when the connector has explicitly opted out of writes. It uses the
+// same source-cited non-executable mutation artifact as a manual disposition,
+// but derives it from the locked provider operation on every source import so
+// no local source document, action, request schema, transport, or CLI command
+// has to be invented merely to make the read surface validate.
+//
+// An executable action or implemented action claim always wins. Those
+// operations remain ordinary executable coverage, including delete and reverse
+// ETL actions; the write-disabled declaration is never a safety suppression.
+func sourceProjectionApplyWriteDisabledMutationArtifacts(bundle engine.Bundle, result *sourceImportResult) int {
+	if result == nil || !sourceProjectionExplicitWriteDisabled(bundle) {
+		return 0
+	}
+
+	artifacts := 0
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if !sourceProjectionOperationMutates(*operation) || operation.Runtime.NonExecutableMutation != nil {
+			continue
+		}
+		if _, declared, err := sourceProjectionReadOnlyDeclaration(bundle, *operation); err != nil || declared {
+			// A malformed or mutating `read_only` row must remain a validation
+			// failure. Do not cover it with a separate mutation artifact.
+			continue
+		}
+		if sourceProjectionMutationActionIsComplete(bundle, *operation) || sourceProjectionMutationClaimsImplementedAction(bundle, *operation) {
+			continue
+		}
+		disposition := sourceNonExecutableMutationDisposition{
+			Source: sourceOperationCitation{
+				SourceID: operation.SourceID,
+				Method:   operation.Method,
+				Path:     operation.Path,
+			},
+			Reason: sourceWriteDisabledMutationArtifactReason,
+		}
+		if sourceProjectionValidateNonExecutableMutationDispositionCitation(*operation, disposition) != nil {
+			// Source import normally guarantees this provenance. Keep the helper
+			// fail-closed as well so callers cannot synthesize an artifact from a
+			// mutation-shaped value without a retained provider citation.
+			continue
+		}
+		operation.Runtime.NonExecutableMutation = &disposition
+		operation.Runtime.Gaps = sourceSortedGaps(append(operation.Runtime.Gaps, sourceProjectionNonExecutableMutationRuntimeGap(*operation, disposition)))
+		operation.Runtime.MergeBlocked = true
+		artifacts++
+	}
+	return artifacts
+}
+
+// sourceProjectionApplyUnmappedMutationArtifacts is the write-capable
+// counterpart to the explicit-write-disabled accounting path. A connector may
+// materialize some closed source operations while other provider mutations
+// still need a request-schema, media, parameter, or target-selection
+// foundation. Those remaining identities must stay visible; they cannot fall
+// through as an implied executable write merely because the connector has one
+// other reverse-ETL action.
+func sourceProjectionApplyUnmappedMutationArtifacts(bundle engine.Bundle, result *sourceImportResult) int {
+	if result == nil {
+		return 0
+	}
+	artifacts := 0
+	for index := range result.Operations {
+		operation := &result.Operations[index]
+		if !sourceProjectionOperationMutates(*operation) || operation.Runtime.NonExecutableMutation != nil || operation.Runtime.PartialCoverageMutation != nil {
+			continue
+		}
+		if _, declared, err := sourceProjectionReadOnlyDeclaration(bundle, *operation); err != nil || declared {
+			continue
+		}
+		if sourceProjectionMutationActionIsComplete(bundle, *operation) || sourceProjectionMutationClaimsImplementedAction(bundle, *operation) {
+			continue
+		}
+		disposition := sourceNonExecutableMutationDisposition{
+			Source: sourceOperationCitation{SourceID: operation.SourceID, Method: operation.Method, Path: operation.Path},
+			Reason: "provider-cited mutation has no complete declaration-owned executable action for its full retained request contract",
+		}
+		if sourceProjectionValidateNonExecutableMutationDispositionCitation(*operation, disposition) != nil {
+			continue
+		}
+		operation.Runtime.NonExecutableMutation = &disposition
+		operation.Runtime.Gaps = sourceSortedGaps(append(operation.Runtime.Gaps, sourceProjectionNonExecutableMutationRuntimeGap(*operation, disposition)))
+		operation.Runtime.MergeBlocked = true
+		artifacts++
+	}
+	return artifacts
+}
+
 func sourceProjectionValidateNonExecutableMutationDispositionCitation(operation sourceOperationDescriptor, disposition sourceNonExecutableMutationDisposition) error {
+	return sourceProjectionValidateMutationDispositionCitation(operation, disposition.Source, "mutation disposition")
+}
+
+func sourceProjectionValidatePartialMutationCoverageDispositionCitation(operation sourceOperationDescriptor, disposition sourcePartialMutationCoverageDisposition) error {
+	return sourceProjectionValidateMutationDispositionCitation(operation, disposition.Source, "partial mutation coverage disposition")
+}
+
+func sourceProjectionValidateMutationDispositionCitation(operation sourceOperationDescriptor, citation sourceOperationCitation, kind string) error {
 	if !sourceProjectionOperationMutates(operation) {
-		return fmt.Errorf("mutation disposition source operation %q is not mutating", operation.SourceID)
+		return fmt.Errorf("%s source operation %q is not mutating", kind, operation.SourceID)
 	}
-	if operation.Source.URL == "" || operation.Source.SHA256 == "" || operation.Source.Bytes <= 0 || operation.Source.Location == "" {
-		return fmt.Errorf("mutation disposition source operation %q lacks a provider source citation", operation.SourceID)
+	if operation.Source.URL == "" || operation.Source.Location == "" {
+		return fmt.Errorf("%s source operation %q lacks a provider source citation", kind, operation.SourceID)
 	}
-	if disposition.Source.SourceID != operation.SourceID || !strings.EqualFold(disposition.Source.Method, operation.Method) || disposition.Source.Path != operation.Path {
-		return fmt.Errorf("mutation disposition citation does not match provider source operation %q", operation.SourceID)
+	if citation.SourceID != operation.SourceID || !strings.EqualFold(citation.Method, operation.Method) || citation.Path != operation.Path {
+		return fmt.Errorf("%s citation does not match provider source operation %q", kind, operation.SourceID)
 	}
 	return nil
 }
@@ -508,6 +3476,106 @@ func sourceProjectionHasNonExecutableMutationDisposition(operation sourceOperati
 	return false
 }
 
+func sourceProjectionPartialMutationCoverageRuntimeGap(operation sourceOperationDescriptor, disposition sourcePartialMutationCoverageDisposition) sourceContractGap {
+	return sourceContractGapFor(
+		sourcePartialMutationCoverageFoundation,
+		"source operation "+operation.SourceID+" at "+operation.Source.URL+"#"+operation.Source.Location,
+		"missing_foundation: provider-cited implemented mutation retains only its declared typed subset: "+disposition.Reason,
+	)
+}
+
+func sourceProjectionHasPartialMutationCoverageDisposition(operation sourceOperationDescriptor) bool {
+	disposition := operation.Runtime.PartialCoverageMutation
+	if disposition == nil || !operation.Runtime.MergeBlocked || sourceProjectionValidatePartialMutationCoverageDispositionInput(*disposition) != nil || sourceProjectionValidatePartialMutationCoverageDispositionCitation(operation, *disposition) != nil {
+		return false
+	}
+	want := sourceProjectionPartialMutationCoverageRuntimeGap(operation, *disposition)
+	for _, gap := range operation.Runtime.Gaps {
+		if gap == want {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionPartialCoverageFoundationMatchesOperation(bundle engine.Bundle, operation sourceOperationDescriptor, disposition sourcePartialMutationCoverageDisposition) bool {
+	if disposition.Foundation == "source-path-parameter-alias-foundation-r1" {
+		return sourceProjectionMutationHasImplementedPathParameterAlias(bundle, operation)
+	}
+	for _, gap := range operation.Runtime.Gaps {
+		if gap.Foundation == disposition.Foundation && sourceProjectionHasBlockingGap([]sourceContractGap{gap}) {
+			return true
+		}
+	}
+	return false
+}
+
+// sourceProjectionMutationHasImplementedPathParameterAlias is the one legacy
+// partial-coverage category that is not represented by an importer gap: older
+// actions may name their typed record path field differently from the locked
+// provider parameter (for example, local gid versus provider project_gid).
+// Require that exact evidence from the declared, implemented action; an
+// arbitrary incomplete mutation cannot select this foundation name.
+func sourceProjectionMutationHasImplementedPathParameterAlias(bundle engine.Bundle, operation sourceOperationDescriptor) bool {
+	if bundle.CLISurface == nil || len(operation.Request.Path) == 0 {
+		return false
+	}
+	endpoint := sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation))
+	actions := make(map[string]engine.WriteAction, len(bundle.Writes))
+	for _, action := range bundle.Writes {
+		actions[action.Name] = action
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Availability != "implemented" || command.Write == "" {
+			continue
+		}
+		matchesSourceEndpoint := false
+		for _, surface := range command.APISurface {
+			if sourceProjectionEndpointKey(surface.Method, surface.Path) == endpoint {
+				matchesSourceEndpoint = true
+				break
+			}
+		}
+		if !matchesSourceEndpoint {
+			continue
+		}
+		action, found := actions[command.Write]
+		if !found {
+			continue
+		}
+		pathFields := make(map[string]bool, len(action.PathFields))
+		for _, field := range action.PathFields {
+			pathFields[field] = true
+		}
+		for _, parameter := range operation.Request.Path {
+			if !pathFields[parameter.Name] {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+// sourceProjectionValidateWriteDisabledMutationArtifact ensures the automatic
+// artifact cannot be copied into a write-capable bundle to waive source
+// executable coverage. Manually authored non-executable mutation dispositions
+// retain their existing policy; this applies only to the exact automatic
+// write-disabled reason.
+func sourceProjectionValidateWriteDisabledMutationArtifact(bundle engine.Bundle, operation sourceOperationDescriptor) error {
+	disposition := operation.Runtime.NonExecutableMutation
+	if disposition == nil || disposition.Reason != sourceWriteDisabledMutationArtifactReason {
+		return nil
+	}
+	if !sourceProjectionExplicitWriteDisabled(bundle) {
+		return errors.New("automatic write-disabled mutation artifact requires connector metadata capabilities.write=false")
+	}
+	return nil
+}
+
+func sourceProjectionExplicitWriteDisabled(bundle engine.Bundle) bool {
+	return bundle.Metadata.Name != "" && bundle.Metadata.Capabilities.WriteDeclared && !bundle.Metadata.Capabilities.Write
+}
+
 func sourceProjectionHasReadOnlyDisposition(operation sourceOperationDescriptor) bool {
 	return sourceOperationHasFoundationGap(operation, sourceReadOnlyOperationFoundation)
 }
@@ -522,7 +3590,7 @@ func sourceProjectionMutationActionIsComplete(bundle engine.Bundle, operation so
 		}
 	}
 	for _, action := range bundle.Writes {
-		if sourceProjectionEndpointKey(action.Method, sourceProjectionPath(action.Path)) == sourceProjectionEndpointKey(operation.Method, operation.Path) && sourceActionCoversOperation(action, commands[action.Name], operation) {
+		if sourceProjectionEndpointKey(action.Method, sourceProjectionPath(action.Path)) == sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation)) && sourceActionCoversOperation(action, commands[action.Name], operation) {
 			return true
 		}
 	}
@@ -537,7 +3605,7 @@ func sourceProjectionMutationClaimsImplementedAction(bundle engine.Bundle, opera
 	if bundle.CLISurface == nil {
 		return false
 	}
-	endpoint := sourceProjectionEndpointKey(operation.Method, operation.Path)
+	endpoint := sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation))
 	for _, command := range bundle.CLISurface.Commands {
 		if command.Availability != "implemented" {
 			continue
@@ -569,7 +3637,7 @@ func sourceProjectionBlockedReadSources(result sourceImportResult) map[string]so
 		if operation.Protocol == "graphql" || sourceProjectionMutationMethod(operation.Method) || !sourceProjectionReadHasBlockingGap(operation) {
 			continue
 		}
-		blocked[sourceProjectionEndpointKey(operation.Method, operation.Path)] = operation
+		blocked[sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation))] = operation
 	}
 	return blocked
 }
@@ -592,7 +3660,7 @@ func sourceProjectionReachableReadSources(result sourceImportResult) map[string]
 // caller values. Required inputs and all other source gaps remain blocking.
 func sourceProjectionReadHasBlockingGap(operation sourceOperationDescriptor) bool {
 	for _, gap := range operation.Runtime.Gaps {
-		if sourceProjectionOptionalParameterSchemaGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) {
+		if sourceProjectionOptionalParameterSchemaGap(operation, gap) || sourceProjectionOmittedOptionalRequestBodySchemaGap(operation, gap) || sourceProjectionResponseOnlyJSONSchemaGap(operation, gap) {
 			continue
 		}
 		if sourceProjectionHasBlockingGap([]sourceContractGap{gap}) {
@@ -600,6 +3668,12 @@ func sourceProjectionReadHasBlockingGap(operation sourceOperationDescriptor) boo
 		}
 	}
 	return false
+}
+
+func sourceProjectionResponseOnlyJSONSchemaGap(operation sourceOperationDescriptor, gap sourceContractGap) bool {
+	return gap.Phase == "response" &&
+		gap.Foundation == sourceOpenAPI30ReferenceSiblingFoundation &&
+		operation.Output.Class == sourceOutputJSON
 }
 
 // sourceProjectionNormalizeNonBlockingReadGaps removes only a typed source
@@ -720,7 +3794,7 @@ func sourceProjectionRestoreReachableReadCommands(cli *orderedObject, blocked ma
 			continue
 		}
 		source, found := reachable[sourceID]
-		if !found || sourceProjectionCommandHasBlockedEndpoint(command, blocked) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, source.Path)) {
+		if !found || sourceProjectionCommandHasBlockedEndpoint(command, blocked) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))) {
 			continue
 		}
 		command.set("availability", "implemented")
@@ -743,7 +3817,7 @@ func sourceProjectionRestoreSourceBoundDirectReadPathFlagObjects(cli *orderedObj
 			continue
 		}
 		source, found := operations[sourceID]
-		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, source.Path)) {
+		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpoint(command, sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))) {
 			continue
 		}
 		commandChanged := false
@@ -911,8 +3985,14 @@ func sourceProjectionBlockUnreachableReadSurfaceEndpoints(surface *orderedObject
 		operation.set("status", "blocked")
 		operation.set("risk", "low")
 		operation.set("blocked_by_default", true)
-		operation.set("reason", sourceProjectionBlockedReadSurfaceReason(source.SourceID))
-		operation.set("notes", sourceProjectionBlockedReadSurfaceNote(source.SourceID))
+		reason := sourceProjectionBlockedReadSurfaceReason(source.SourceID)
+		note := sourceProjectionBlockedReadSurfaceNote(source.SourceID)
+		if sourceProjectionReadHasBlockingGap(source) {
+			reason = sourceProjectionMutationFoundationNote(source)
+			note = "source_operation=" + source.SourceID
+		}
+		operation.set("reason", reason)
+		operation.set("notes", note)
 		if setOrderedIfDifferent(endpoint, "operation", operation) {
 			endpointChanged = true
 		}
@@ -939,7 +4019,7 @@ func sourceProjectionRestoreReachableReadSurfaceEndpoints(surface, cli *orderedO
 			continue
 		}
 		source, found := reachable[sourceID]
-		if !found || sourceProjectionEndpointKey(source.Method, source.Path) != endpointKey {
+		if !found || sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source)) != endpointKey {
 			continue
 		}
 		commands := sourceProjectionReadSurfaceCommandPaths(cli, endpointKey)
@@ -1087,7 +4167,7 @@ func sourceProjectionReadOnlyDeclaration(bundle engine.Bundle, source sourceOper
 	if err != nil || !declared {
 		return declaration, declared, err
 	}
-	if sourceProjectionMutationMethod(source.Method) {
+	if sourceProjectionOperationMutates(source) {
 		return sourceReadOnlyDeclaration{}, true, errors.New("read-only declaration cannot cover a mutating source operation")
 	}
 	return declaration, true, nil
@@ -1179,11 +4259,18 @@ func sourceProjectionActionPropertyCount(action *orderedObject) int {
 }
 
 func sourceContractForAction(operation sourceOperationDescriptor, action *orderedObject) (sourceActionContract, error) {
+	if operation.BatchAction != nil || stringField(action, "body_type") == "declared_batch" {
+		return sourceContractForDeclaredBatchAction(operation, action)
+	}
 	contract := sourceActionContract{Fields: map[string]any{}, BareStringFields: map[string]bool{}, SecretFields: map[string]bool{}, Required: map[string]bool{}}
 	// A retained source gap does not authorize a raw body. It does permit a
 	// source-owned named field to use the bounded JSON flag path when its exact
 	// nested shape is not expressible by the closed record-schema subset.
-	allowBoundedNamedJSON := sourceProjectionHasBlockingGap(operation.Runtime.Gaps)
+	// The P5 generator clears its importer-only gap after it has created this
+	// exact, closed-root action. Keep the named bounded-value allowance attached
+	// to that identity so repeat projection and source coverage validate the
+	// same contract. No other action gains a raw or dynamic request channel.
+	allowBoundedNamedJSON := sourceProjectionHasBlockingGap(operation.Runtime.Gaps) || sourceProjectionGeneratedJSONBodyMutationAction(action, operation)
 	pathFields := map[string]bool{}
 	for _, match := range sourceProjectionRecordTemplateRE.FindAllStringSubmatch(stringField(action, "path"), -1) {
 		pathFields[match[1]] = true
@@ -1203,21 +4290,8 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 		contract.Required[parameter.Name] = true
 		contract.PathFields = append(contract.PathFields, parameter.Name)
 	}
-	for _, parameter := range operation.Request.Query {
-		converted, err := sourceProjectionSchema(parameter.Schema)
-		if err != nil && allowBoundedNamedJSON {
-			converted, err = sourceProjectionBoundedNamedJSONSchema(parameter.Schema)
-		}
-		if err != nil {
-			return sourceActionContract{}, err
-		}
-		contract.setSourceField(parameter.Name, parameter.Schema, converted)
-		// One record field can legitimately bind more than one declared input
-		// location (for example a path `name` plus an optional body `name`).
-		// Requiredness is the union of those declarations: an optional second
-		// occurrence must never downgrade the structural path requirement.
-		contract.Required[parameter.Name] = contract.Required[parameter.Name] || parameter.Required
-		contract.Query = append(contract.Query, parameter)
+	if err := sourceContractAddQueryFields(operation, allowBoundedNamedJSON, &contract); err != nil {
+		return sourceActionContract{}, err
 	}
 	if operation.Request.Body != nil {
 		media := sourceNormalizedMediaType(operation.Request.MediaType)
@@ -1254,7 +4328,21 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 		}
 		properties, _ := body["properties"].(map[string]any)
 		required := sourceSchemaRequired(body)
+		// OpenAPI requestBody.required applies to the body as a whole.  For the
+		// common single-field JSON envelope, that provider requirement is also
+		// the executable record requirement: without the sole `data` field there
+		// is no body to send.  An optional request body (for example Asana's
+		// createMembership operation) must remain optional, and multi-field bodies
+		// continue to use their schema's own required array.
+		if operation.Request.Body.Required && len(properties) == 1 {
+			if _, dataEnvelope := properties["data"]; dataEnvelope {
+				required["data"] = true
+			}
+		}
 		for _, name := range sortedSourceMapKeys(properties) {
+			if sourceProjectionSchemaReadOnly(properties[name]) {
+				continue
+			}
 			converted, err := sourceProjectionSchema(properties[name])
 			if err != nil && allowBoundedNamedJSON {
 				converted, err = sourceProjectionBoundedNamedJSONSchema(properties[name])
@@ -1275,6 +4363,141 @@ func sourceContractForAction(operation sourceOperationDescriptor, action *ordere
 	sort.Strings(contract.PathFields)
 	sort.Slice(contract.Query, func(i, j int) bool { return contract.Query[i].Name < contract.Query[j].Name })
 	sort.Strings(contract.BodyFields)
+	return contract, nil
+}
+
+func sourceContractAddQueryFields(operation sourceOperationDescriptor, allowBoundedNamedJSON bool, contract *sourceActionContract) error {
+	for _, parameter := range operation.Request.Query {
+		converted, err := sourceProjectionSchema(parameter.Schema)
+		if err != nil && allowBoundedNamedJSON {
+			converted, err = sourceProjectionBoundedNamedJSONSchema(parameter.Schema)
+		}
+		if err != nil {
+			return err
+		}
+		contract.setSourceField(parameter.Name, parameter.Schema, converted)
+		// One record field can legitimately bind more than one declared input
+		// location (for example a path `name` plus an optional body `name`).
+		// Requiredness is the union of those declarations: an optional second
+		// occurrence must never downgrade the structural path requirement.
+		contract.Required[parameter.Name] = contract.Required[parameter.Name] || parameter.Required
+		contract.Query = append(contract.Query, parameter)
+	}
+	return nil
+}
+
+// sourceContractForDeclaredBatchAction preserves a connector definition's
+// closed, typed action selector only when the source descriptor carries the
+// matching provider batch inventory. The provider source owns the envelope,
+// field names, supported methods, and maximum; the definition continues to
+// own which already-declared write actions may be selected. No caller-provided
+// method, path, header, or body is introduced by source projection.
+func sourceContractForDeclaredBatchAction(operation sourceOperationDescriptor, action *orderedObject) (sourceActionContract, error) {
+	inventory := operation.BatchAction
+	if inventory == nil {
+		return sourceActionContract{}, fmt.Errorf("declared_batch action has no source-backed batch action inventory")
+	}
+	if inventory.SourceOperation != operation.SourceID {
+		return sourceActionContract{}, fmt.Errorf("declared_batch source operation %q does not match %q", inventory.SourceOperation, operation.SourceID)
+	}
+	if stringField(action, "body_type") != "declared_batch" {
+		return sourceActionContract{}, fmt.Errorf("source-backed batch operation requires declared_batch")
+	}
+	rawSpec, declared := action.get("declared_batch")
+	spec, ok := rawSpec.(*orderedObject)
+	if !declared || !ok {
+		return sourceActionContract{}, fmt.Errorf("declared_batch action has no closed batch spec")
+	}
+	rawMaxActions, _ := spec.get("max_actions")
+	if int(sourcePositiveInteger(rawMaxActions)) != inventory.MaxActions {
+		return sourceActionContract{}, fmt.Errorf("declared_batch max_actions does not match source-backed maximum %d", inventory.MaxActions)
+	}
+	providerFields := map[string]string{
+		"provider_envelope_field": inventory.RequestEnvelopeField,
+		"provider_actions_field":  inventory.RequestActionsField,
+		"provider_method_field":   inventory.ActionMethodField,
+		"provider_path_field":     inventory.ActionPathField,
+		"provider_data_field":     inventory.ActionDataField,
+		"inner_body_field":        inventory.ActionDataField,
+		"response_envelope_field": inventory.ResponseEnvelopeField,
+		"response_status_field":   inventory.ResponseStatusField,
+	}
+	for name, wanted := range providerFields {
+		if got := stringField(spec, name); got != wanted {
+			return sourceActionContract{}, fmt.Errorf("declared_batch %s = %q, want source-backed %q", name, got, wanted)
+		}
+	}
+	providerMethods := make(map[string]bool, len(inventory.ProviderMethods))
+	for _, method := range inventory.ProviderMethods {
+		providerMethods[strings.ToUpper(method)] = true
+	}
+	allowedMethods := arrayField(spec, "allowed_methods")
+	if len(allowedMethods) == 0 {
+		return sourceActionContract{}, fmt.Errorf("declared_batch has no typed allowed methods")
+	}
+	for _, rawMethod := range allowedMethods {
+		method, ok := rawMethod.(string)
+		if !ok || !providerMethods[strings.ToUpper(method)] {
+			return sourceActionContract{}, fmt.Errorf("declared_batch allowed method %v is absent from the source-backed provider method enum", rawMethod)
+		}
+	}
+	if len(arrayField(spec, "allowed_actions")) == 0 {
+		return sourceActionContract{}, fmt.Errorf("declared_batch has no typed allowed actions")
+	}
+	contract := sourceActionContract{
+		Fields:           map[string]any{},
+		BareStringFields: map[string]bool{},
+		SecretFields:     map[string]bool{},
+		Required:         map[string]bool{},
+		BodyType:         "declared_batch",
+	}
+	if err := sourceContractAddQueryFields(operation, sourceProjectionHasBlockingGap(operation.Runtime.Gaps), &contract); err != nil {
+		return sourceActionContract{}, err
+	}
+	if _, collision := contract.Fields["actions"]; collision {
+		return sourceActionContract{}, fmt.Errorf("declared_batch source query collides with the typed actions selector")
+	}
+
+	rawSchema, exists := action.get("record_schema")
+	if !exists {
+		return sourceActionContract{}, fmt.Errorf("declared_batch action has no record schema")
+	}
+	encoded, err := marshalNoEscapeHTML(rawSchema)
+	if err != nil {
+		return sourceActionContract{}, fmt.Errorf("encode declared_batch record schema: %w", err)
+	}
+	decoder := json.NewDecoder(bytes.NewReader(encoded))
+	decoder.UseNumber()
+	var schema map[string]any
+	if err := decoder.Decode(&schema); err != nil {
+		return sourceActionContract{}, fmt.Errorf("decode declared_batch record schema: %w", err)
+	}
+	if sourceSchemaType(schema) != "object" || schema["additionalProperties"] != false {
+		return sourceActionContract{}, fmt.Errorf("declared_batch record schema is not closed")
+	}
+	properties, _ := schema["properties"].(map[string]any)
+	allowedProperties := map[string]bool{"actions": true}
+	for _, parameter := range contract.Query {
+		allowedProperties[parameter.Name] = true
+	}
+	if len(properties) > len(allowedProperties) {
+		return sourceActionContract{}, fmt.Errorf("declared_batch record schema must expose only the typed actions selector and source-backed query fields")
+	}
+	for name := range properties {
+		if !allowedProperties[name] {
+			return sourceActionContract{}, fmt.Errorf("declared_batch record schema field %q is not source-backed", name)
+		}
+	}
+	actions, _ := properties["actions"].(map[string]any)
+	if actions == nil || sourceSchemaType(actions) != "array" || sourcePositiveInteger(actions["minItems"]) < 1 || int(sourcePositiveInteger(actions["maxItems"])) != inventory.MaxActions {
+		return sourceActionContract{}, fmt.Errorf("declared_batch actions selector does not match source-backed bounds")
+	}
+	if !sourceSchemaRequired(schema)["actions"] {
+		return sourceActionContract{}, fmt.Errorf("declared_batch actions selector must be required")
+	}
+	contract.Fields["actions"] = actions
+	contract.Required["actions"] = true
+	sort.Slice(contract.Query, func(i, j int) bool { return contract.Query[i].Name < contract.Query[j].Name })
 	return contract, nil
 }
 
@@ -1382,6 +4605,9 @@ func sourceContractForConcreteVariant(operation sourceOperationDescriptor, actio
 		}
 	}
 	for _, name := range sortedSourceMapKeys(properties) {
+		if sourceProjectionSchemaReadOnly(properties[name]) {
+			continue
+		}
 		converted, err := sourceProjectionSchema(properties[name])
 		if err != nil {
 			converted, err = sourceProjectionBoundedNamedJSONSchema(properties[name])
@@ -1609,6 +4835,13 @@ func sourceProjectionSchema(raw any) (any, error) {
 	if !ok {
 		return nil, fmt.Errorf("source schema is not an object")
 	}
+	if _, exists := schema["allOf"]; exists {
+		flattened, err := sourceProjectionFlattenObjectAllOf(schema)
+		if err != nil {
+			return nil, err
+		}
+		schema = flattened
+	}
 	if _, exists := schema["oneOf"]; exists {
 		return nil, fmt.Errorf("oneOf requires a typed gap")
 	}
@@ -1683,6 +4916,9 @@ func sourceProjectionSchema(raw any) (any, error) {
 		properties, _ := schema["properties"].(map[string]any)
 		convertedProperties := map[string]any{}
 		for _, name := range sortedSourceMapKeys(properties) {
+			if sourceProjectionSchemaReadOnly(properties[name]) {
+				continue
+			}
 			converted, err := sourceProjectionSchema(properties[name])
 			if err != nil {
 				return nil, fmt.Errorf("property %q: %w", name, err)
@@ -1691,11 +4927,148 @@ func sourceProjectionSchema(raw any) (any, error) {
 		}
 		out["properties"] = convertedProperties
 		out["additionalProperties"] = false
-		if required := sourceAnySlice(schema["required"]); len(required) > 0 {
+		if required := sourceProjectionWritableRequired(schema["required"], convertedProperties); len(required) > 0 {
 			out["required"] = required
 		}
 	}
 	return out, nil
+}
+
+// sourceProjectionSchemaReadOnly applies OpenAPI request directionality at the
+// property boundary. A response-owned field can remain in the immutable source
+// contract, but it must never become a caller flag or an executable request
+// field. An allOf arm may carry the annotation after reference resolution, so
+// inspect only each arm's root annotation without treating nested read-only
+// children as making their writable parent read-only.
+func sourceProjectionSchemaReadOnly(raw any) bool {
+	schema, ok := raw.(map[string]any)
+	if !ok {
+		return false
+	}
+	if readOnly, _ := schema["readOnly"].(bool); readOnly {
+		return true
+	}
+	for _, rawArm := range sourceAnySlice(schema["allOf"]) {
+		arm, ok := rawArm.(map[string]any)
+		if !ok {
+			continue
+		}
+		if sourceProjectionSchemaReadOnly(arm) {
+			return true
+		}
+	}
+	return false
+}
+
+func sourceProjectionWritableRequired(raw any, properties map[string]any) []any {
+	result := make([]any, 0)
+	seen := map[string]bool{}
+	for _, value := range sourceAnySlice(raw) {
+		name, ok := value.(string)
+		if !ok || seen[name] {
+			continue
+		}
+		if _, writable := properties[name]; !writable {
+			continue
+		}
+		seen[name] = true
+		result = append(result, name)
+	}
+	return result
+}
+
+// sourceProjectionFlattenObjectAllOf converts a fully source-resolved OpenAPI
+// object intersection into the engine's closed object subset. It is purposely
+// narrower than a general JSON-Schema composition engine: every structural arm
+// must be an object, duplicate properties retain their intersection, and an
+// unsupported/dynamic arm still falls back through the existing typed-gap
+// path. This lets named Asana request objects keep every documented writable
+// field without admitting response-only identifiers through an open JSON map.
+func sourceProjectionFlattenObjectAllOf(schema map[string]any) (map[string]any, error) {
+	rawArms, exists := schema["allOf"]
+	if !exists {
+		return schema, nil
+	}
+	arms, ok := rawArms.([]any)
+	if !ok || len(arms) == 0 {
+		return nil, fmt.Errorf("source schema allOf must be a non-empty array")
+	}
+
+	result := make(map[string]any, len(schema)+2)
+	for key, value := range schema {
+		if key != "allOf" && key != "properties" && key != "required" {
+			result[key] = value
+		}
+	}
+	properties := map[string]any{}
+	if rawProperties, ok := schema["properties"].(map[string]any); ok {
+		for name, value := range rawProperties {
+			properties[name] = value
+		}
+	}
+	required := sourceSchemaRequired(schema)
+
+	for index, rawArm := range arms {
+		arm, ok := rawArm.(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("source schema allOf arm %d is not an object", index)
+		}
+		if _, nested := arm["allOf"]; nested {
+			var err error
+			arm, err = sourceProjectionFlattenObjectAllOf(arm)
+			if err != nil {
+				return nil, fmt.Errorf("source schema allOf arm %d: %w", index, err)
+			}
+		}
+		armType, hasType := arm["type"].(string)
+		armProperties, hasProperties := arm["properties"].(map[string]any)
+		armRequired := sourceSchemaRequired(arm)
+		if !hasType && !hasProperties && len(armRequired) == 0 {
+			// An annotation-only allOf arm has no request-validation effect.
+			continue
+		}
+		if hasType && armType != "object" {
+			return nil, fmt.Errorf("source schema allOf arm %d has non-object type %q", index, armType)
+		}
+		for _, name := range sortedSourceMapKeys(armProperties) {
+			if existing, duplicate := properties[name]; duplicate && !reflect.DeepEqual(existing, armProperties[name]) {
+				properties[name] = map[string]any{"allOf": []any{existing, armProperties[name]}}
+				continue
+			}
+			properties[name] = armProperties[name]
+		}
+		for name := range armRequired {
+			required[name] = true
+		}
+		for _, key := range []string{"additionalProperties", "minProperties", "maxProperties"} {
+			value, declared := arm[key]
+			if !declared {
+				continue
+			}
+			if current, alreadyDeclared := result[key]; alreadyDeclared && !reflect.DeepEqual(current, value) {
+				return nil, fmt.Errorf("source schema allOf arms conflict on %s", key)
+			}
+			result[key] = value
+		}
+	}
+	if declaredType, exists := result["type"]; exists && declaredType != "object" {
+		return nil, fmt.Errorf("source schema allOf root has non-object type %v", declaredType)
+	}
+	result["type"] = "object"
+	result["properties"] = properties
+	if len(required) > 0 {
+		names := make([]string, 0, len(required))
+		for name := range required {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		values := make([]any, len(names))
+		for index := range names {
+			values[index] = names[index]
+		}
+		result["required"] = values
+	}
+	return result, nil
 }
 
 // sourceProjectionBoundedNamedJSONSchema retains a source-owned value whose
@@ -1871,12 +5244,13 @@ func sourceProjectAction(action *orderedObject, contract sourceActionContract) b
 
 	query := newOrderedObject()
 	for _, parameter := range contract.Query {
+		template := sourceProjectionQueryParameterTemplate(parameter)
 		if parameter.Required {
-			query.set(parameter.Name, "{{ record."+parameter.Name+" }}")
+			query.set(parameter.Name, template)
 			continue
 		}
 		value := newOrderedObject()
-		value.set("template", "{{ record."+parameter.Name+" }}")
+		value.set("template", template)
 		value.set("omit_when_absent", true)
 		query.set(parameter.Name, value)
 	}
@@ -1917,69 +5291,91 @@ func sourceProjectAction(action *orderedObject, contract sourceActionContract) b
 	return changed
 }
 
+func sourceProjectionQueryParameterTemplate(parameter sourceParameterDescriptor) string {
+	template := "{{ record." + parameter.Name
+	schema, _ := parameter.Schema.(map[string]any)
+	if sourceSchemaType(schema) == "array" && parameter.Wire.Style == "form" && parameter.Wire.Explode != nil && !*parameter.Wire.Explode {
+		template += " | join:,"
+	}
+	return template + " }}"
+}
+
 func sourceProjectCommand(command *orderedObject, contract sourceActionContract) bool {
-	existing := map[string]*orderedObject{}
-	var preserved []any
+	seen := map[string]bool{}
+	flags := make([]any, 0, len(contract.Fields))
 	for _, raw := range arrayField(command, "flags") {
 		flag, ok := raw.(*orderedObject)
 		if !ok {
-			preserved = append(preserved, raw)
+			flags = append(flags, raw)
 			continue
 		}
 		target := stringField(flag, "maps_to")
 		name, record := strings.CutPrefix(target, "record.")
 		if !record {
-			preserved = append(preserved, flag)
+			flags = append(flags, flag)
 			continue
 		}
-		existing[name] = flag
+		if _, retained := contract.Fields[name]; !retained || seen[name] {
+			continue
+		}
+		flags = append(flags, sourceProjectionCommandFlag(name, flag, contract))
+		seen[name] = true
 	}
-	flags := append([]any{}, preserved...)
 	for _, name := range sortedAnyMapKeys(contract.Fields) {
-		flag := newOrderedObject()
-		flag.set("name", strings.ReplaceAll(name, "_", "-"))
-		if prior := existing[name]; prior != nil {
-			if summary := stringField(prior, "summary"); summary != "" {
-				flag.set("summary", summary)
-			}
+		if seen[name] {
+			continue
 		}
-		flagType := sourceProjectionFlagType(contract.Fields[name])
-		flag.set("type", flagType)
-		if contract.BareStringFields[name] {
-			flag.set("allow_bare_string", true)
-		} else {
-			flag.remove("allow_bare_string")
-		}
-		if contract.SecretFields[name] {
-			flag.set("env_only", true)
-		} else {
-			flag.remove("env_only")
-		}
-		if schema, ok := contract.Fields[name].(map[string]any); ok {
-			if values, ok := schema["enum"].([]any); ok && len(values) > 0 {
-				flag.set("values", orderedFromAny(values))
-			}
-		}
-		flag.set("maps_to", "record."+name)
-		if contract.Required[name] {
-			flag.set("required", true)
-		} else {
-			flag.remove("required")
-		}
-		if maxBytes := sourceProjectionFlagMaxBytes(contract.Fields[name], flagType); maxBytes > 0 {
-			flag.set("max_bytes", json.Number(fmt.Sprintf("%d", maxBytes)))
-		} else {
-			flag.remove("max_bytes")
-		}
-		flags = append(flags, flag)
+		flags = append(flags, sourceProjectionCommandFlag(name, nil, contract))
 	}
 	return setOrderedIfDifferent(command, "flags", flags)
+}
+
+func sourceProjectionCommandFlag(name string, prior *orderedObject, contract sourceActionContract) *orderedObject {
+	flag := newOrderedObject()
+	flagName := strings.ReplaceAll(name, "_", "-")
+	if prior != nil {
+		if declared := stringField(prior, "name"); declared != "" {
+			flagName = declared
+		}
+	}
+	flag.set("name", flagName)
+	if prior != nil {
+		if summary := stringField(prior, "summary"); summary != "" {
+			flag.set("summary", summary)
+		}
+	}
+	flagType := sourceProjectionFlagType(contract.Fields[name])
+	flag.set("type", flagType)
+	if contract.BareStringFields[name] {
+		flag.set("allow_bare_string", true)
+	}
+	if contract.SecretFields[name] {
+		flag.set("env_only", true)
+	}
+	if schema, ok := contract.Fields[name].(map[string]any); ok {
+		if values, present := sourceProjectionCLIEnumValues(schema["enum"]); present && len(values) > 0 {
+			serialized := make([]any, len(values))
+			for index := range values {
+				serialized[index] = values[index]
+			}
+			flag.set("values", serialized)
+		}
+	}
+	flag.set("maps_to", "record."+name)
+	if contract.Required[name] {
+		flag.set("required", true)
+	}
+	if maxBytes := sourceProjectionFlagMaxBytes(contract.Fields[name], flagType); maxBytes > 0 {
+		flag.set("max_bytes", json.Number(fmt.Sprintf("%d", maxBytes)))
+	}
+	return flag
 }
 
 func sourceProjectionNewCommand(operation sourceOperationDescriptor, action *orderedObject) *orderedObject {
 	command := newOrderedObject()
 	command.set("path", sourceProjectionGeneratedCommandPath(operation))
-	command.set("summary", strings.ToUpper(operation.Method)+" "+operation.Path)
+	declaredPath := sourceProjectionDeclaredPath(operation)
+	command.set("summary", strings.ToUpper(operation.Method)+" "+declaredPath)
 	command.set("intent", "reverse_etl")
 	command.set("availability", "implemented")
 	command.set("write", stringField(action, "name"))
@@ -1990,7 +5386,7 @@ func sourceProjectionNewCommand(operation sourceOperationDescriptor, action *ord
 	command.set("approval", sourceProjectionApproval(action))
 	endpoint := newOrderedObject()
 	endpoint.set("method", strings.ToUpper(operation.Method))
-	endpoint.set("path", operation.Path)
+	endpoint.set("path", declaredPath)
 	command.set("api_surface", []any{endpoint})
 	return command
 }
@@ -2003,6 +5399,11 @@ func sourceProjectionGeneratedCommandPath(operation sourceOperationDescriptor) s
 	// a path parameter (or two parameter names) cannot collapse to one command.
 	endpoint := sourceProjectionEndpointKey(operation.Method, operation.Path)
 	return "api op-" + hex.EncodeToString([]byte(endpoint))
+}
+
+func sourceProjectionGeneratedDirectWriteCommandPath(operation sourceOperationDescriptor) string {
+	endpoint := sourceProjectionEndpointKey(operation.Method, operation.Path)
+	return "api direct-op-" + hex.EncodeToString([]byte(endpoint))
 }
 
 func sourceProjectionLegacyGeneratedCommandPath(operation sourceOperationDescriptor) string {
@@ -2057,9 +5458,7 @@ func sourceProjectionApproval(action *orderedObject) string {
 
 func sourceProjectionFlagType(schema any) string {
 	object, _ := schema.(map[string]any)
-	if enum, ok := object["enum"].([]any); ok && len(enum) > 0 {
-		return "enum"
-	}
+	_, hasEnum := object["enum"].([]any)
 	var types []string
 	switch rawType := object["type"].(type) {
 	case string:
@@ -2085,6 +5484,9 @@ func sourceProjectionFlagType(schema any) string {
 	case "boolean":
 		return "boolean"
 	case "string":
+		if hasEnum {
+			return "enum"
+		}
 		return "string"
 	default:
 		return "json"
@@ -2235,22 +5637,23 @@ func orderedSemanticEqual(left, right any) bool {
 	return reflect.DeepEqual(leftValue, rightValue)
 }
 
-// checkSourceProjection proves the checked-in descriptor is the exact lock
-// projection and every executable source request is field-complete at both the
-// action and CLI boundary. Operations with an explicit typed gap stay visible
-// and intentionally do not masquerade as implemented coverage.
+// checkSourceProjection proves the checked-in descriptor is the exact
+// mapping-relevant lock projection and every executable source request is
+// field-complete at both the action and CLI boundary. Retention integrity stays
+// with source-import. Operations with an explicit typed gap stay visible and
+// intentionally do not masquerade as implemented coverage.
 func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	lockPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-operation-source-lock.json"))
 	lockRaw, err := fs.ReadFile(fsys, lockPath)
 	if err != nil {
 		return nil
 	}
-	lock, err := parseSourceImportLock(lockRaw, bundle.Name)
+	lock, err := parseDeclarationAdmissionSourceLock(lockRaw, bundle.Name)
 	if err != nil {
 		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, err.Error())}
 	}
-	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
-		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, sourceImportUnavailableFindingMessage(unavailable))}
+	if unavailable, exists := sourceProjectionUnavailableMappingDocument(lock); exists {
+		return []Finding{sourceProjectionFinding(bundle.Name, lockPath, sourceProjectionUnavailableMappingFindingMessage(unavailable))}
 	}
 	descriptorPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-operation-descriptor.json"))
 	descriptorRaw, err := fs.ReadFile(fsys, descriptorPath)
@@ -2261,9 +5664,27 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	if err := decodeSourceStrictJSON(descriptorRaw, &descriptor); err != nil {
 		return []Finding{sourceProjectionFinding(bundle.Name, descriptorPath, "parse canonical source descriptor: "+err.Error())}
 	}
-	findings := validateSourceDescriptorAgainstLock(bundle.Name, descriptorPath, lock, descriptor)
+	findings := validateSourceDescriptorAgainstMappingLock(bundle.Name, descriptorPath, lock, descriptor)
 	findings = append(findings, validateSourceExecutableCoverage(bundle, descriptorPath, descriptor)...)
 	return findings
+}
+
+func sourceProjectionUnavailableMappingDocument(lock declarationAdmissionReviewedSourceLock) (declarationAdmissionReviewedUnavailableDocument, bool) {
+	if len(lock.Unavailable) == 0 {
+		return declarationAdmissionReviewedUnavailableDocument{}, false
+	}
+	return lock.Unavailable[0], true
+}
+
+func sourceProjectionUnavailableMappingFindingMessage(document declarationAdmissionReviewedUnavailableDocument) string {
+	reason := strings.TrimSpace(document.Reason)
+	if reason == "" {
+		reason = "provider operation inventory is unavailable"
+	}
+	if document.SourceURL != "" {
+		return fmt.Sprintf("source inventory is unavailable: document %q cites %s: %s", document.ID, document.SourceURL, reason)
+	}
+	return fmt.Sprintf("source inventory is unavailable: document %q: %s", document.ID, reason)
 }
 
 func sourceImportUnavailableDocument(lock sourceImportLock) (sourceImportRESTDocument, bool) {
@@ -2289,12 +5710,158 @@ func sourceProjectionFinding(connector, file, message string) Finding {
 	return Finding{Connector: connector, File: strings.TrimPrefix(file, connector+"/"), Rule: ruleSourceProjection, Message: message}
 }
 
+// validateSourceDescriptorAgainstMappingLock binds a checked-in descriptor to
+// only the source-lock facts used by declaration projection: stable identity,
+// provider identity, citation, method, and route. Retention hashes and bytes
+// are validated by source-import and deliberately do not enter this boundary.
+func validateSourceDescriptorAgainstMappingLock(connector, file string, lock declarationAdmissionReviewedSourceLock, descriptor sourceImportDescriptorDocument) []Finding {
+	if unavailable, exists := sourceProjectionUnavailableMappingDocument(lock); exists {
+		return []Finding{sourceProjectionFinding(connector, file, sourceProjectionUnavailableMappingFindingMessage(unavailable))}
+	}
+	if descriptor.SchemaVersion != 2 && descriptor.SchemaVersion != 3 {
+		return []Finding{sourceProjectionFinding(connector, file, fmt.Sprintf("source descriptor schema_version = %d, want 2 or 3", descriptor.SchemaVersion))}
+	}
+	if len(descriptor.Operations) != len(lock.Operations) {
+		return []Finding{sourceProjectionFinding(connector, file, fmt.Sprintf("source descriptor has %d identities, lock requires %d", len(descriptor.Operations), len(lock.Operations)))}
+	}
+
+	providerAliases := make(map[string]string, len(lock.Operations))
+	ambiguousAliases := map[string]bool{}
+	for sourceID, operation := range lock.Operations {
+		if lock.SchemaVersion >= 3 || operation.SourceReference || operation.Protocol != "rest" || operation.ProviderOperationID == "" || ambiguousAliases[operation.ProviderOperationID] {
+			continue
+		}
+		if previous, exists := providerAliases[operation.ProviderOperationID]; exists && previous != sourceID {
+			delete(providerAliases, operation.ProviderOperationID)
+			ambiguousAliases[operation.ProviderOperationID] = true
+			continue
+		}
+		providerAliases[operation.ProviderOperationID] = sourceID
+	}
+
+	seenDescriptorIDs := map[string]bool{}
+	matchedSourceIDs := map[string]bool{}
+	referenceGaps := []sourceContractGap{}
+	referenceCount := 0
+	for _, operation := range descriptor.Operations {
+		if seenDescriptorIDs[operation.SourceID] {
+			return []Finding{sourceProjectionFinding(connector, file, "duplicate source identity "+operation.SourceID)}
+		}
+		seenDescriptorIDs[operation.SourceID] = true
+
+		sourceID := operation.SourceID
+		reviewed, found := lock.Operations[sourceID]
+		if !found {
+			if alias, exists := providerAliases[sourceID]; exists {
+				sourceID = alias
+				reviewed, found = lock.Operations[sourceID]
+			}
+		}
+		if !found || matchedSourceIDs[sourceID] {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+operation.SourceID)}
+		}
+		matchedSourceIDs[sourceID] = true
+
+		if reviewed.SourceReference {
+			gap := sourceContractGapFor(
+				sourceContractUnavailableFoundation,
+				"source operation "+sourceID+" at "+reviewed.SourceURL+"#"+reviewed.Location,
+				"canonical provider source is cited without retained bytes; request, response, pagination, authentication, and execution contract details are source_contract_unavailable",
+			)
+			expected := sourceOperationDescriptor{
+				Connector:           connector,
+				Protocol:            reviewed.Protocol,
+				SourceID:            sourceID,
+				ProviderOperationID: reviewed.ProviderOperationID,
+				Source: sourceImportSource{
+					URL:        reviewed.SourceURL,
+					Location:   reviewed.Location,
+					DocumentID: reviewed.DocumentID,
+				},
+				Method: strings.ToLower(reviewed.Method),
+				Path:   reviewed.Path,
+				Runtime: sourceRuntimeReachability{
+					MergeBlocked: true,
+					Gaps:         []sourceContractGap{gap},
+				},
+			}
+			normalized := operation
+			// A citation-only reference may retain digest/form metadata, but that
+			// representation is not declaration admission. Every executable field
+			// and the exact source_contract_unavailable disposition remain closed.
+			normalized.Source.SHA256 = ""
+			normalized.Source.Bytes = 0
+			normalized.Source.Form = ""
+			normalized.Source.Version = ""
+			if !reflect.DeepEqual(normalized, expected) {
+				return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift for "+sourceID)}
+			}
+			referenceCount++
+			referenceGaps = append(referenceGaps, gap)
+			continue
+		}
+
+		citationMatches := reviewed.SourceURL == "" || operation.Source.URL == reviewed.SourceURL || operation.Source.PublishedURL == reviewed.SourceURL || operation.Source.CitationURL == reviewed.SourceURL
+		if reviewed.CitationURL != "" {
+			citationMatches = operation.Source.CitationURL == reviewed.CitationURL && operation.Source.PublishedURL == reviewed.PublishedSourceURL
+		}
+		if operation.Connector != connector || operation.Protocol != reviewed.Protocol || !citationMatches || operation.Source.Location != reviewed.Location || (reviewed.DocumentID != "" && operation.Source.DocumentID != reviewed.DocumentID) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+sourceID)}
+		}
+		if reviewed.Protocol == "rest" && (operation.ProviderOperationID != reviewed.ProviderOperationID || !strings.EqualFold(operation.Method, reviewed.Method) || operation.Path != reviewed.Path) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+sourceID)}
+		}
+		if operation.MappingPath != reviewed.MappingPath {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor path bridge drift for "+sourceID)}
+		}
+		if operation.Runtime.MergeBlocked != (len(operation.Runtime.Gaps) > 0) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor gap state is inconsistent for "+sourceID)}
+		}
+	}
+	if referenceCount > 0 {
+		if !descriptor.MergeBlocked {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: merge_blocked must remain true")}
+		}
+		descriptorGaps := sourceSortedGaps(descriptor.Gaps)
+		if referenceCount == len(lock.Operations) {
+			if !reflect.DeepEqual(descriptorGaps, sourceSortedGaps(referenceGaps)) {
+				return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: descriptor gaps do not match the cited source contract")}
+			}
+		} else {
+			for _, gap := range referenceGaps {
+				found := false
+				for _, descriptorGap := range descriptorGaps {
+					if descriptorGap == gap {
+						found = true
+						break
+					}
+				}
+				if !found {
+					return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: descriptor gaps omit the cited source contract")}
+				}
+			}
+		}
+	}
+
+	if len(matchedSourceIDs) != len(lock.Operations) {
+		missing := make([]string, 0, len(lock.Operations)-len(matchedSourceIDs))
+		for sourceID := range lock.Operations {
+			if !matchedSourceIDs[sourceID] {
+				missing = append(missing, sourceID)
+			}
+		}
+		sort.Strings(missing)
+		return []Finding{sourceProjectionFinding(connector, file, "source descriptor is missing identity "+missing[0])}
+	}
+	return nil
+}
+
 func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImportLock, descriptor sourceImportDescriptorDocument) []Finding {
 	if unavailable, exists := sourceImportUnavailableDocument(lock); exists {
 		return []Finding{sourceProjectionFinding(connector, file, sourceImportUnavailableFindingMessage(unavailable))}
 	}
 	wantSchemaVersion := 2
-	if lock.SchemaVersion == 3 {
+	if lock.SchemaVersion == 3 || lock.isLegacySourceReference() {
 		wantSchemaVersion = 3
 	}
 	if descriptor.SchemaVersion != wantSchemaVersion {
@@ -2303,40 +5870,50 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	type expectedSource struct {
 		source              sourceImportSource
 		providerOperationID string
+		reference           *sourceOperationDescriptor
+		method              string
+		path                string
 	}
 	expected := map[string]expectedSource{}
+	referenceGaps := []sourceContractGap{}
+	referenceCount := 0
 	if lock.SchemaVersion == 3 {
 		for _, document := range lock.Rest.SourceDocuments {
 			for _, operation := range document.Operations {
-				form := document.sourceKind()
-				version := ""
-				if form == sourceImportDocumentKindOpenAPI {
-					if document.Artifact.Swagger != "" {
-						form = "swagger"
-						version = document.Artifact.Swagger
-					} else {
-						version = document.Artifact.OpenAPI
-					}
-				}
-				expected[operation.ID] = expectedSource{
-					source: sourceImportSource{
-						URL:                 document.Artifact.SourceURL,
-						SHA256:              strings.ToLower(document.Artifact.SHA256),
-						Bytes:               document.Artifact.Bytes,
-						Location:            operation.SourceLocation,
-						Form:                form,
-						Version:             version,
-						DocumentID:          document.ID,
-						PublishedURL:        document.PublishedSource.SourceURL,
-						PublishedCaptureURL: document.PublishedSource.CaptureURL,
-						PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
-						PublishedBytes:      document.PublishedSource.Bytes,
-						PublishedAdapter:    document.PublishedSource.Adapter,
-						ContentType:         document.ContentType,
-						CitationURL:         operation.CitationURL,
-					},
+				source := sourceImportExpectedV3DescriptorProvenance(document, operation)
+				expectedOperation := expectedSource{
+					source:              source,
 					providerOperationID: operation.OperationID,
+					method:              strings.ToUpper(operation.Method),
+					path:                operation.Path,
 				}
+				if document.isSourceReference() {
+					reference := sourceImportReferenceOperation(lock.Connector, operation, document.sourceArtifact(), sourceImportReferenceForm(document.sourceArtifact()))
+					reference.Source.DocumentID = document.ID
+					expectedOperation.reference = &reference
+					referenceGaps = append(referenceGaps, reference.Runtime.Gaps...)
+					referenceCount++
+				}
+				expected[operation.ID] = expectedOperation
+			}
+		}
+	} else if lock.isLegacySourceReference() {
+		artifacts, err := sourceImportLegacyReferenceArtifacts(lock)
+		if err != nil {
+			return []Finding{sourceProjectionFinding(connector, file, "source-reference provenance: "+err.Error())}
+		}
+		for _, operation := range lock.Rest.Operations {
+			artifact, found := artifacts[operation.SourceURL]
+			if !found {
+				return []Finding{sourceProjectionFinding(connector, file, "source-reference operation "+operation.ID+" cites an undeclared source URL")}
+			}
+			reference := sourceImportReferenceOperation(lock.Connector, operation, artifact, sourceImportReferenceForm(artifact))
+			referenceGaps = append(referenceGaps, reference.Runtime.Gaps...)
+			referenceCount++
+			expected[operation.ID] = expectedSource{
+				source:              sourceImportReferenceProvenance(artifact, operation.SourceLocation, sourceImportReferenceForm(artifact)),
+				providerOperationID: operation.OperationID,
+				reference:           &reference,
 			}
 		}
 	} else {
@@ -2345,7 +5922,7 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 			if identity == "" {
 				identity = operation.ID
 			}
-			expected[identity] = expectedSource{source: sourceImportSource{SHA256: strings.ToLower(lock.Rest.SHA256), Bytes: lock.Rest.Bytes, Location: operation.SourceLocation}, providerOperationID: operation.OperationID}
+			expected[identity] = expectedSource{source: sourceImportSource{URL: lock.Rest.SourceURL, Location: operation.SourceLocation}, method: strings.ToUpper(operation.Method), path: operation.Path}
 		}
 	}
 	for _, field := range lock.GraphQL.QueryFields {
@@ -2353,6 +5930,12 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 	}
 	for _, field := range lock.GraphQL.MutationFields {
 		expected[fmt.Sprintf("%s.graphql.mutation.%s", connector, field.Name)] = expectedSource{source: sourceImportSource{SHA256: strings.ToLower(firstNonEmpty(lock.GraphQL.ProjectionSHA256, lock.GraphQL.SHA256)), Bytes: firstPositiveInt64(lock.GraphQL.ProjectionBytes, lock.GraphQL.Bytes)}}
+	}
+	if referenceCount > 0 && !descriptor.MergeBlocked {
+		return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: merge_blocked must remain true")}
+	}
+	if referenceCount == len(expected) && !reflect.DeepEqual(sourceSortedGaps(descriptor.Gaps), sourceSortedGaps(referenceGaps)) {
+		return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift: descriptor gaps do not match the cited source contract")}
 	}
 	actual := map[string]sourceOperationDescriptor{}
 	for _, operation := range descriptor.Operations {
@@ -2369,17 +5952,58 @@ func validateSourceDescriptorAgainstLock(connector, file string, lock sourceImpo
 		if !ok {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor is missing identity "+identity)}
 		}
-		if operation.Source.SHA256 != expectedOperation.source.SHA256 || operation.Source.Bytes != expectedOperation.source.Bytes || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) {
-			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
+		if expectedOperation.reference != nil && !reflect.DeepEqual(operation, *expectedOperation.reference) {
+			// A cited-only source has no request or response contract to repair
+			// downstream. Its exact operation descriptor is therefore the closed
+			// lock projection: identity, provenance, empty execution fields, and
+			// the sole source_contract_unavailable gap all travel together.
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor reference contract drift for "+identity)}
 		}
-		if lock.SchemaVersion == 3 && (operation.ProviderOperationID != expectedOperation.providerOperationID || operation.Source.URL != expectedOperation.source.URL || operation.Source.Form != expectedOperation.source.Form || operation.Source.Version != expectedOperation.source.Version || operation.Source.DocumentID != expectedOperation.source.DocumentID || operation.Source.PublishedURL != expectedOperation.source.PublishedURL || operation.Source.PublishedCaptureURL != expectedOperation.source.PublishedCaptureURL || operation.Source.PublishedSHA256 != expectedOperation.source.PublishedSHA256 || operation.Source.PublishedBytes != expectedOperation.source.PublishedBytes || operation.Source.PublishedAdapter != expectedOperation.source.PublishedAdapter || operation.Source.ContentType != expectedOperation.source.ContentType || operation.Source.CitationURL != expectedOperation.source.CitationURL) {
-			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provenance drift for "+identity)}
+		if (expectedOperation.source.URL != "" && operation.Source.URL != expectedOperation.source.URL) || (expectedOperation.source.Location != "" && operation.Source.Location != expectedOperation.source.Location) || (expectedOperation.method != "" && (!strings.EqualFold(operation.Method, expectedOperation.method) || operation.Path != expectedOperation.path)) {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+identity)}
+		}
+		if lock.SchemaVersion == 3 && operation.ProviderOperationID != expectedOperation.providerOperationID {
+			return []Finding{sourceProjectionFinding(connector, file, "source descriptor provider contract drift for "+identity)}
 		}
 		if operation.Runtime.MergeBlocked != (len(operation.Runtime.Gaps) > 0) {
 			return []Finding{sourceProjectionFinding(connector, file, "source descriptor gap state is inconsistent for "+identity)}
 		}
 	}
 	return nil
+}
+
+func sourceImportExpectedV3DescriptorProvenance(document sourceImportRESTDocument, operation sourceImportRESTOperation) sourceImportSource {
+	if document.isSourceReference() {
+		source := sourceImportReferenceProvenance(document.sourceArtifact(), operation.SourceLocation, sourceImportReferenceForm(document.sourceArtifact()))
+		source.DocumentID = document.ID
+		return source
+	}
+	form := document.sourceKind()
+	version := ""
+	if form == sourceImportDocumentKindOpenAPI {
+		if document.Artifact.Swagger != "" {
+			form = "swagger"
+			version = document.Artifact.Swagger
+		} else {
+			version = document.Artifact.OpenAPI
+		}
+	}
+	return sourceImportSource{
+		URL:                 document.Artifact.SourceURL,
+		SHA256:              strings.ToLower(document.Artifact.SHA256),
+		Bytes:               document.Artifact.Bytes,
+		Location:            operation.SourceLocation,
+		Form:                form,
+		Version:             version,
+		DocumentID:          document.ID,
+		PublishedURL:        document.PublishedSource.SourceURL,
+		PublishedCaptureURL: document.PublishedSource.CaptureURL,
+		PublishedSHA256:     strings.ToLower(document.PublishedSource.SHA256),
+		PublishedBytes:      document.PublishedSource.Bytes,
+		PublishedAdapter:    document.PublishedSource.Adapter,
+		ContentType:         document.ContentType,
+		CitationURL:         operation.CitationURL,
+	}
 }
 
 func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descriptor sourceImportDescriptorDocument) []Finding {
@@ -2404,12 +6028,35 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited non-executable mutation disposition is invalid: "+operation.SourceID))
 					continue
 				}
+				if err := sourceProjectionValidateWriteDisabledMutationArtifact(bundle, operation); err != nil {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, err.Error()+": "+operation.SourceID))
+					continue
+				}
 				if sourceProjectionMutationActionIsComplete(bundle, operation) {
 					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited non-executable mutation disposition claims a complete executable action: "+operation.SourceID))
 					continue
 				}
 				if sourceProjectionMutationClaimsImplementedAction(bundle, operation) {
 					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited non-executable mutation disposition claims an implemented executable action: "+operation.SourceID))
+					continue
+				}
+				continue
+			}
+			if operation.Runtime.PartialCoverageMutation != nil {
+				if !sourceProjectionHasPartialMutationCoverageDisposition(operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited partial mutation coverage disposition is invalid: "+operation.SourceID))
+					continue
+				}
+				if !sourceProjectionPartialCoverageFoundationMatchesOperation(bundle, operation, *operation.Runtime.PartialCoverageMutation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited partial mutation coverage disposition has no matching missing foundation: "+operation.SourceID))
+					continue
+				}
+				if sourceProjectionMutationActionIsComplete(bundle, operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited partial mutation coverage disposition claims a complete executable action: "+operation.SourceID))
+					continue
+				}
+				if !sourceProjectionMutationClaimsImplementedAction(bundle, operation) {
+					findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-cited partial mutation coverage disposition has no implemented declared action: "+operation.SourceID))
 					continue
 				}
 				continue
@@ -2450,6 +6097,10 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 				}
 				continue
 			}
+			if violation := sourceProjectionReadInputClosure(bundle, operation); violation != "" {
+				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source-bound request input absent from locked source contract: "+operation.SourceID+": "+violation))
+				continue
+			}
 			if !sourceRESTOperationIsReachable(bundle, operation) {
 				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source operation has no reachable executable operation: "+operation.SourceID))
 			}
@@ -2460,7 +6111,7 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 			findings = append(findings, sourceProjectionFinding(bundle.Name, file, readOnlyErr.Error()+": "+operation.SourceID))
 			continue
 		}
-		candidates := actions[sourceProjectionEndpointKey(operation.Method, operation.Path)]
+		candidates := actions[sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation))]
 		if len(candidates) == 0 {
 			if sourceProjectionHasBlockingGap(operation.Runtime.Gaps) {
 				continue
@@ -2483,7 +6134,8 @@ func validateSourceExecutableCoverage(bundle engine.Bundle, file string, descrip
 				findings = append(findings, sourceProjectionFinding(bundle.Name, file, "implemented source operation retains an unresolved source-bound gap: "+operation.SourceID))
 				continue
 			}
-			findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source request fields are missing from action/CLI union: "+operation.SourceID))
+			reason := sourceActionCoverageReason(candidates[0], commands[candidates[0].Name], operation)
+			findings = append(findings, sourceProjectionFinding(bundle.Name, file, "source request fields are missing from action/CLI union: "+operation.SourceID+": "+reason))
 		}
 	}
 	return findings
@@ -2499,7 +6151,8 @@ func sourceRESTOperationIsReachable(bundle engine.Bundle, source sourceOperation
 // operation; otherwise repeated generation would turn an unrelated source gap
 // into a cascading new execution gap.
 func sourceRESTOperationIsDeclaredReachable(bundle engine.Bundle, source sourceOperationDescriptor, allowSourceBoundPartial bool) bool {
-	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
+	declaredPath := sourceProjectionDeclaredPath(source)
+	endpoint := sourceProjectionEndpointKey(source.Method, declaredPath)
 	for _, operation := range bundle.Operations {
 		if operation.REST != nil && sourceProjectionEndpointKey(operation.REST.Method, operation.REST.Path) == endpoint {
 			flags, implemented := sourceProjectionOperationFlags(bundle, operation.ID, source.SourceID, allowSourceBoundPartial)
@@ -2519,7 +6172,7 @@ func sourceRESTOperationIsDeclaredReachable(bundle engine.Bundle, source sourceO
 		if method == "" {
 			method = "GET"
 		}
-		if sourceProjectionEndpointKey(method, stream.Path) == endpoint && sourceProjectionDeclaredStream(bundle, stream.Name, source.SourceID, allowSourceBoundPartial) {
+		if strings.EqualFold(method, source.Method) && sourceProjectionStreamPathMatchesSourcePath(stream.Path, declaredPath) && sourceProjectionDeclaredStream(bundle, stream.Name, source.SourceID, allowSourceBoundPartial) {
 			return true
 		}
 	}
@@ -2537,7 +6190,8 @@ func sourceProjectionDeclaredDirectRead(bundle engine.Bundle, source sourceOpera
 	if bundle.CLISurface == nil {
 		return false
 	}
-	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
+	declaredPath := sourceProjectionDeclaredPath(source)
+	endpoint := sourceProjectionEndpointKey(source.Method, declaredPath)
 	for _, command := range bundle.CLISurface.Commands {
 		if command.Intent != "direct_read" || len(command.APISurface) != 1 || !sourceProjectionCommandHasEndpointRef(command, endpoint) {
 			continue
@@ -2545,7 +6199,7 @@ func sourceProjectionDeclaredDirectRead(bundle engine.Bundle, source sourceOpera
 		if command.Availability != "implemented" && (!allowSourceBoundPartial || command.Availability != "partial" || !sourceProjectionCommandIsSourceBoundPartial(command, source.SourceID)) {
 			continue
 		}
-		covered := sourceProjectionDeclaredConfigPathFields(bundle.Spec, source.Path)
+		covered := sourceProjectionDeclaredConfigPathFields(bundle.Spec, declaredPath)
 		for _, flag := range command.Flags {
 			covered[flag.MapsTo] = true
 		}
@@ -2556,18 +6210,15 @@ func sourceProjectionDeclaredDirectRead(bundle engine.Bundle, source sourceOpera
 	return false
 }
 
-func sourceProjectionReadCandidateCommandDeclared(bundle engine.Bundle, path string) bool {
-	if bundle.Certification == nil || bundle.Certification.DirectReadGeneration == nil {
-		return false
+// sourceProjectionDeclaredPath is the connector-relative route selected by a
+// closed source-lock path bridge. The descriptor's Path remains the provider
+// source route and citation identity; only pre-existing declaration matching
+// consumes MappingPath.
+func sourceProjectionDeclaredPath(source sourceOperationDescriptor) string {
+	if source.MappingPath != "" {
+		return source.MappingPath
 	}
-	for _, cohort := range bundle.Certification.DirectReadGeneration.Cohorts {
-		for _, command := range cohort.Commands {
-			if command == path {
-				return true
-			}
-		}
-	}
-	return false
+	return source.Path
 }
 
 func sourceProjectionCommandHasEndpointRef(command engine.CLICommand, endpoint string) bool {
@@ -2597,11 +6248,8 @@ func sourceProjectionRestoreSourceBoundDirectReadPathFlags(bundle *engine.Bundle
 		if !ok || len(command.APISurface) != 1 {
 			continue
 		}
-		if !sourceProjectionReadCandidateCommandDeclared(*bundle, command.Path) {
-			continue
-		}
 		source, found := operations[sourceID]
-		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpointRef(*command, sourceProjectionEndpointKey(source.Method, source.Path)) {
+		if !found || source.Protocol == "graphql" || sourceProjectionMutationMethod(source.Method) || !sourceProjectionCommandHasEndpointRef(*command, sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))) {
 			continue
 		}
 		missing := sourceProjectionMissingRequiredDirectReadPathParameters(bundle.Spec, source, command.Flags)
@@ -2811,7 +6459,154 @@ func sourceRESTOperationCoversSource(bundle engine.Bundle, operation *engine.RES
 	for _, flag := range flags {
 		covered[flag.MapsTo] = true
 	}
-	return sourceCallerFieldsCovered(source, covered)
+	// A direct read is allowed to omit a provider's optional filters and use
+	// the provider default page.  Requiring those optional inputs here made a
+	// fully typed required input look unreachable, which in turn downgraded an
+	// otherwise closed command on every generator pass.
+	return sourceRequiredCallerFieldsCovered(source, covered)
+}
+
+// sourceProjectionReadInputClosure is deliberately stricter than the
+// required-input coverage test above. Coverage answers whether the source's
+// required fields have a declaration-owned route. Closure also answers the
+// inverse question: whether a source-bound read has added an input that its
+// retained source never admitted. This keeps a local operation-only parameter
+// from becoming an unchecked provider request channel even when no CLI flag
+// exposes it.
+func sourceProjectionReadInputClosure(bundle engine.Bundle, source sourceOperationDescriptor) string {
+	for _, operation := range bundle.Operations {
+		if operation.SourceOperation == nil || operation.SourceOperation.ID != source.SourceID || operation.REST == nil {
+			continue
+		}
+		if violation := sourceProjectionRESTReadInputClosure(operation.REST, source); violation != "" {
+			return "operation " + operation.ID + " " + violation
+		}
+	}
+	if bundle.CLISurface == nil {
+		return ""
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if command.SourceOperation != source.SourceID {
+			continue
+		}
+		for _, flag := range command.Flags {
+			if violation := sourceProjectionReadFlagInputClosure(flag, source); violation != "" {
+				return "command " + command.Path + " " + violation
+			}
+		}
+	}
+	return ""
+}
+
+func sourceProjectionRESTReadInputClosure(rest *engine.RESTOperationSpec, source sourceOperationDescriptor) string {
+	for _, parameter := range rest.Parameters {
+		if sourceProjectionReadParameterAdmitted(source, parameter.In, parameter.Name) {
+			continue
+		}
+		return "parameter " + parameter.In + "." + parameter.Name
+	}
+	for _, parameter := range rest.PaginationParameters {
+		if sourceProjectionReadPaginationParameterAdmitted(source, parameter) {
+			continue
+		}
+		return "pagination parameter " + parameter.In + "." + parameter.Name
+	}
+	for name := range rest.Query {
+		if sourceProjectionReadParameterAdmitted(source, "query", name) {
+			continue
+		}
+		return "static query " + name
+	}
+	if violation := sourceProjectionReadBodyInputClosure(rest, source); violation != "" {
+		return violation
+	}
+	return ""
+}
+
+func sourceProjectionReadPaginationParameterAdmitted(source sourceOperationDescriptor, parameter engine.OperationParameter) bool {
+	if parameter.In != "query" || source.Pagination == nil {
+		return false
+	}
+	pagination, ok := source.Pagination.(map[string]any)
+	if !ok {
+		return false
+	}
+	for _, name := range sourceProjectionPaginationParameterNames(pagination) {
+		if name != parameter.Name {
+			continue
+		}
+		for _, sourceParameter := range source.Request.Query {
+			if sourceParameter.Name == name {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func sourceProjectionReadFlagInputClosure(flag engine.CLIFlag, source sourceOperationDescriptor) string {
+	mapping := strings.TrimSpace(flag.MapsTo)
+	for _, location := range []string{"path", "query", "header"} {
+		prefix := location + "."
+		if !strings.HasPrefix(mapping, prefix) {
+			continue
+		}
+		if sourceProjectionReadParameterAdmitted(source, location, strings.TrimPrefix(mapping, prefix)) {
+			return ""
+		}
+		return "flag --" + flag.Name + " mapping " + mapping
+	}
+	if strings.HasPrefix(mapping, "body") {
+		field := strings.TrimPrefix(strings.TrimPrefix(mapping, "body"), ".")
+		if sourceProjectionReadBodyFieldAdmitted(source, field) {
+			return ""
+		}
+		return "flag --" + flag.Name + " mapping " + mapping
+	}
+	return ""
+}
+
+func sourceProjectionReadBodyInputClosure(rest *engine.RESTOperationSpec, source sourceOperationDescriptor) string {
+	if source.Request.Body == nil {
+		if len(rest.Body) != 0 || len(rest.BodySchema) != 0 || rest.ContentType != "" {
+			return "body"
+		}
+		return ""
+	}
+	for name := range rest.Body {
+		if !sourceProjectionReadBodyFieldAdmitted(source, name) {
+			return "body." + name
+		}
+	}
+	if len(rest.BodySchema) == 0 {
+		return ""
+	}
+	var schema map[string]any
+	decoder := json.NewDecoder(bytes.NewReader(rest.BodySchema))
+	decoder.UseNumber()
+	if decoder.Decode(&schema) != nil {
+		return "body schema"
+	}
+	properties, _ := schema["properties"].(map[string]any)
+	for name := range properties {
+		if !sourceProjectionReadBodyFieldAdmitted(source, name) {
+			return "body schema." + name
+		}
+	}
+	return ""
+}
+
+func sourceProjectionReadBodyFieldAdmitted(source sourceOperationDescriptor, field string) bool {
+	if source.Request.Body == nil || field == "" {
+		return false
+	}
+	schema, ok := source.Request.Body.Schema.(map[string]any)
+	if !ok {
+		return false
+	}
+	properties, _ := schema["properties"].(map[string]any)
+	_, admitted := properties[field]
+	return admitted
 }
 
 func sourceBinaryOperationCoversSource(bundle engine.Bundle, operation *engine.BinaryOperationSpec, source sourceOperationDescriptor, flags []engine.CLIFlag) bool {
@@ -2875,16 +6670,48 @@ func sourceProjectionAnnotateUnreachableReadGaps(bundle engine.Bundle, result *s
 	}
 }
 
-// sourceProjectionExecutionSurface reads only the declaration-owned execution
-// surfaces needed to classify a locked source operation. Source import must
-// keep working for a descriptor-only fixture, so absent optional runtime files
-// mean that no executable route has been declared rather than a raw fallback.
+// sourceProjectionReadOnlyResult retains the complete provider descriptor but
+// selects every non-mutating GET for the closed materializer. The materializer
+// alone decides whether an exact declaration-owned REST operation can become a
+// bounded direct read, an existing stream proves ETL semantics, or a named
+// foundation must remain visible. Pre-filtering against a historical status
+// would let planned/deferred metadata hide an otherwise complete provider
+// contract.
+func sourceProjectionReadOnlyResult(bundleDir string, result sourceImportResult) (sourceImportResult, error) {
+	_ = bundleDir // Callers retain the argument while this lane becomes capability-based.
+	filtered := result
+	filtered.Operations = make([]sourceOperationDescriptor, 0, len(result.Operations))
+	for _, operation := range result.Operations {
+		if sourceProjectionOperationMutates(operation) || operation.Protocol == "graphql" || !strings.EqualFold(operation.Method, "GET") {
+			continue
+		}
+		filtered.Operations = append(filtered.Operations, operation)
+	}
+	return filtered, nil
+}
+
+// sourceProjectionExecutionSurface reads only declaration-owned execution
+// surfaces needed to classify a locked source operation. Certification is a
+// live-proof overlay, not a source-mapping input. Source import must keep
+// working for a descriptor-only fixture, so absent optional runtime files mean
+// that no executable route has been declared rather than a raw fallback.
 func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundle, error) {
 	bundle := engine.Bundle{Name: connector}
 	for _, document := range []struct {
 		path   string
 		decode func([]byte) error
 	}{
+		{path: "metadata.json", decode: func(raw []byte) error {
+			var value engine.Metadata
+			if err := json.Unmarshal(raw, &value); err != nil {
+				return err
+			}
+			if !value.Capabilities.WriteDeclared {
+				return errors.New("metadata capabilities.write must be explicitly declared")
+			}
+			bundle.Metadata = value
+			return nil
+		}},
 		{path: "spec.json", decode: func(raw []byte) error {
 			spec, err := engine.CompileSchema(json.RawMessage(raw))
 			if err != nil {
@@ -2939,14 +6766,6 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 			bundle.Surface = &value
 			return nil
 		}},
-		{path: "certification.json", decode: func(raw []byte) error {
-			var value engine.CertificationSpec
-			if err := json.Unmarshal(raw, &value); err != nil {
-				return err
-			}
-			bundle.Certification = &value
-			return nil
-		}},
 	} {
 		raw, err := os.ReadFile(filepath.Join(bundleDir, document.path))
 		if os.IsNotExist(err) {
@@ -2964,7 +6783,10 @@ func sourceProjectionExecutionSurface(bundleDir, connector string) (engine.Bundl
 
 func sourceGapMutationOperationIsImplementedIncompletely(bundle engine.Bundle, candidates []engine.WriteAction, commands map[string]engine.CLICommand, source sourceOperationDescriptor) bool {
 	for _, action := range candidates {
-		command := commands[action.Name]
+		command, implemented := commands[action.Name]
+		if !implemented {
+			continue
+		}
 		mapped := map[string]bool{}
 		for _, flag := range command.Flags {
 			if field, ok := strings.CutPrefix(flag.MapsTo, "record."); ok {
@@ -3084,7 +6906,7 @@ func sourceGapDirectOperationIsImplementedIncompletely(bundle engine.Bundle, sou
 		if operation.REST == nil || len(implemented[operation.ID]) == 0 && !sourceOperationHasNoCallerFields(source) {
 			continue
 		}
-		if sourceProjectionEndpointKey(operation.REST.Method, operation.REST.Path) != sourceProjectionEndpointKey(source.Method, source.Path) {
+		if sourceProjectionEndpointKey(operation.REST.Method, operation.REST.Path) != sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source)) {
 			continue
 		}
 		covered := map[string]bool{}
@@ -3121,7 +6943,7 @@ func sourceGapHasImplementedAPICommand(bundle engine.Bundle, source sourceOperat
 	if bundle.CLISurface == nil {
 		return false
 	}
-	endpoint := sourceProjectionEndpointKey(source.Method, source.Path)
+	endpoint := sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))
 	for _, command := range bundle.CLISurface.Commands {
 		if command.Availability != "implemented" || command.Intent != "direct_read" {
 			continue
@@ -3166,7 +6988,22 @@ func sourceOperationHasNoCallerFields(operation sourceOperationDescriptor) bool 
 }
 
 func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICommand, operation sourceOperationDescriptor) bool {
+	return sourceActionCoverageReason(action, command, operation) == ""
+}
+
+// sourceActionCoverageReason returns the first exact source-derived binding
+// missing from an action/CLI pair. Keeping the diagnostic next to the actual
+// coverage predicate prevents validation from collapsing a schema, flag, or
+// encoder mismatch into an unactionable generic source-projection finding.
+func sourceActionCoverageReason(action engine.WriteAction, command engine.CLICommand, operation sourceOperationDescriptor) string {
+	if sourceNormalizedMediaType(operation.Request.MediaType) == "multipart/form-data" {
+		if sourceMultipartActionCoversOperation(action, command, operation) {
+			return ""
+		}
+		return "multipart action/CLI pair does not cover the locked request"
+	}
 	actionObject := newOrderedObject()
+	actionObject.set("name", action.Name)
 	actionObject.set("body_type", action.BodyType)
 	actionObject.set("path", action.Path)
 	if action.BinaryUpload != nil {
@@ -3179,19 +7016,23 @@ func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICo
 		pathFields[index] = action.PathFields[index]
 	}
 	actionObject.set("path_fields", pathFields)
+	if action.DeclaredBatch != nil {
+		actionObject.set("declared_batch", orderedFromAny(action.DeclaredBatch))
+		actionObject.set("record_schema", orderedFromAny(action.RecordSchema))
+	}
 	contract, err := sourceContractForAction(operation, actionObject)
 	if err != nil {
-		return false
+		return "source contract: " + err.Error()
 	}
 	schema, err := engine.CompileSchema(action.RecordSchema)
 	if err != nil {
-		return false
+		return "action record_schema: " + err.Error()
 	}
 	var schemaDocument map[string]any
 	decoder := json.NewDecoder(bytes.NewReader(action.RecordSchema))
 	decoder.UseNumber()
 	if err := decoder.Decode(&schemaDocument); err != nil {
-		return false
+		return "action record_schema JSON: " + err.Error()
 	}
 	recordProperties, _ := schemaDocument["properties"].(map[string]any)
 	properties := map[string]bool{}
@@ -3208,25 +7049,48 @@ func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICo
 			flags[name] = flag
 		}
 	}
-	for name := range contract.Fields {
+	for _, name := range sortedAnyMapKeys(contract.Fields) {
 		flag := flags[name]
 		flagType := sourceProjectionFlagType(contract.Fields[name])
-		if !properties[name] || flag.MapsTo == "" || !sourceProjectionFieldEquivalent(recordProperties[name], contract.Fields[name]) ||
-			flag.Type != flagType || flag.MaxBytes != int(sourceProjectionFlagMaxBytes(contract.Fields[name], flagType)) ||
-			flag.AllowBareString != contract.BareStringFields[name] ||
-			!sourceProjectionFlagEnumEquivalent(flag.Values, contract.Fields[name]) ||
-			(contract.Required[name] && (!required[name] || !flag.Required)) || (!contract.Required[name] && (required[name] || flag.Required)) {
-			return false
+		if !properties[name] {
+			return "record_schema omits source field " + name
+		}
+		if flag.MapsTo == "" {
+			return "CLI flag omits source field " + name
+		}
+		if !sourceProjectionFieldEquivalent(recordProperties[name], contract.Fields[name]) {
+			return "record_schema differs for source field " + name
+		}
+		if flag.Type != flagType {
+			return "CLI flag type differs for source field " + name
+		}
+		if flag.MaxBytes != int(sourceProjectionFlagMaxBytes(contract.Fields[name], flagType)) {
+			return "CLI byte cap differs for source field " + name
+		}
+		if flag.AllowBareString != contract.BareStringFields[name] {
+			return "CLI bare-string policy differs for source field " + name
+		}
+		if !sourceProjectionFlagEnumEquivalent(flag.Values, contract.Fields[name]) {
+			return "CLI enum values differ for source field " + name
+		}
+		if contract.Required[name] && (!required[name] || !flag.Required) {
+			return "required source field is not required in action/CLI: " + name
+		}
+		if !contract.Required[name] && (required[name] || flag.Required) {
+			return "optional source field is required in action/CLI: " + name
 		}
 	}
 	if contract.Binary {
 		fixedOrigin := sourceProjectionFixedOrigin(operation)
-		return fixedOrigin != "" && strings.TrimRight(action.BaseURL, "/") == fixedOrigin && action.BodyType == "binary_upload" && action.BinaryUpload != nil
+		if fixedOrigin != "" && strings.TrimRight(action.BaseURL, "/") == fixedOrigin && action.BodyType == "binary_upload" && action.BinaryUpload != nil {
+			return ""
+		}
+		return "binary action does not bind the locked fixed origin/upload contract"
 	}
 	for _, parameter := range contract.Query {
 		query, ok := action.Query[parameter.Name]
-		if !ok || query.Template != "{{ record."+parameter.Name+" }}" || query.OmitWhenAbsent == parameter.Required || query.Default != "" {
-			return false
+		if !ok || query.Template != sourceProjectionQueryParameterTemplate(parameter) || query.OmitWhenAbsent == parameter.Required || query.Default != "" {
+			return "query binding differs for source field " + parameter.Name
 		}
 	}
 	bodyFields := map[string]bool{}
@@ -3235,6 +7099,182 @@ func sourceActionCoversOperation(action engine.WriteAction, command engine.CLICo
 	}
 	for _, name := range contract.BodyFields {
 		if !bodyFields[name] {
+			return "action body omits source field " + name
+		}
+	}
+	return ""
+}
+
+// sourceMultipartActionCoversOperation recognizes a closed, declaration-owned
+// multipart variant of a provider multipart request. Unlike a generic body
+// projection, every emitted part, record property, and CLI flag must be bound
+// to a retained provider field. The provider may offer several legal multipart
+// variants (for example an uploaded file or an external URL); each declared
+// closed variant can cover the source route when it supplies every
+// provider-required part and no invented input channel.
+func sourceMultipartActionCoversOperation(action engine.WriteAction, command engine.CLICommand, operation sourceOperationDescriptor) bool {
+	if action.BodyType != "multipart" || action.Multipart == nil || len(action.Multipart.Parts) == 0 ||
+		operation.Request.Body == nil || sourceNormalizedMediaType(operation.Request.MediaType) != "multipart/form-data" ||
+		command.Availability != "implemented" || command.Write != action.Name ||
+		!sourceProjectionCommandHasEndpointRef(command, sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation))) {
+		return false
+	}
+	body, ok := operation.Request.Body.Schema.(map[string]any)
+	if !ok || sourceSchemaType(body) != "object" {
+		return false
+	}
+	sourceFields := sourceProjectionObjectProperties(body)
+	if len(sourceFields) == 0 {
+		return false
+	}
+
+	schema, err := engine.CompileSchema(action.RecordSchema)
+	if err != nil {
+		return false
+	}
+	decoder := json.NewDecoder(bytes.NewReader(action.RecordSchema))
+	decoder.UseNumber()
+	var schemaDocument map[string]any
+	if err := decoder.Decode(&schemaDocument); err != nil {
+		return false
+	}
+	recordFields, _ := schemaDocument["properties"].(map[string]any)
+	if len(recordFields) == 0 {
+		return false
+	}
+	recordProperties := map[string]bool{}
+	for _, name := range schema.Properties() {
+		recordProperties[name] = true
+	}
+	recordRequired := map[string]bool{}
+	for _, name := range schema.RequiredKeys() {
+		recordRequired[name] = true
+	}
+	flags := map[string]engine.CLIFlag{}
+	for _, flag := range command.Flags {
+		if name, ok := strings.CutPrefix(flag.MapsTo, "record."); ok {
+			flags[name] = flag
+		}
+	}
+
+	partNames := make(map[string]engine.MultipartPartSpec, len(action.Multipart.Parts))
+	partFields := make(map[string]bool, len(action.Multipart.Parts))
+	for _, part := range action.Multipart.Parts {
+		if part.Name == "" || part.Field == "" || partNames[part.Name].Name != "" || partFields[part.Field] {
+			return false
+		}
+		sourceField, found := sourceFields[part.Name]
+		if !found || !sourceMultipartPartMatchesSourceField(part, sourceField, recordFields[part.Field]) || !recordProperties[part.Field] {
+			return false
+		}
+		mustBeRequired := sourceSchemaRequired(body)[part.Name]
+		if mustBeRequired && !part.Required {
+			return false
+		}
+		if !sourceMultipartRecordFlagCoversField(part.Field, recordFields[part.Field], part.Required || mustBeRequired, recordRequired, flags) {
+			return false
+		}
+		partNames[part.Name] = part
+		partFields[part.Field] = true
+	}
+	for name := range sourceSchemaRequired(body) {
+		part, found := partNames[name]
+		if !found || !part.Required {
+			return false
+		}
+	}
+	// A multipart action's closed record schema is its only caller-controlled
+	// body surface. An extra record property without a declared multipart part
+	// would otherwise become an unchecked provider input.
+	for field := range recordFields {
+		if !partFields[field] {
+			return false
+		}
+	}
+	return sourceMultipartRequiredInputsCovered(action, operation, recordFields, recordRequired, flags)
+}
+
+func sourceMultipartPartMatchesSourceField(part engine.MultipartPartSpec, sourceField, recordField any) bool {
+	sourceSchema, sourceOK := sourceField.(map[string]any)
+	recordSchema, recordOK := recordField.(map[string]any)
+	if !sourceOK || !recordOK {
+		return false
+	}
+	sourceType := sourceProjectionFlagType(sourceSchema)
+	recordType := sourceProjectionFlagType(recordSchema)
+	switch part.Type {
+	case "file":
+		format, _ := sourceSchema["format"].(string)
+		return sourceType == "string" && recordType == "string" && format == "binary"
+	case "field":
+		if sourceType == "json" || recordType != sourceType {
+			return false
+		}
+		return sourceMultipartEnumIsSubset(recordSchema, sourceSchema)
+	default:
+		return false
+	}
+}
+
+func sourceMultipartEnumIsSubset(recordSchema, sourceSchema map[string]any) bool {
+	sourceValues := sourceAnySlice(sourceSchema["enum"])
+	if len(sourceValues) == 0 {
+		return true
+	}
+	allowed := make(map[string]bool, len(sourceValues))
+	for _, raw := range sourceValues {
+		value, ok := raw.(string)
+		if !ok {
+			return false
+		}
+		allowed[value] = true
+	}
+	recordValues := sourceAnySlice(recordSchema["enum"])
+	if len(recordValues) == 0 {
+		return false
+	}
+	for _, raw := range recordValues {
+		value, ok := raw.(string)
+		if !ok || !allowed[value] {
+			return false
+		}
+	}
+	return true
+}
+
+func sourceMultipartRecordFlagCoversField(field string, recordField any, required bool, recordRequired map[string]bool, flags map[string]engine.CLIFlag) bool {
+	flag, found := flags[field]
+	if !found || flag.MapsTo != "record."+field || flag.Type != sourceProjectionFlagType(recordField) || !sourceProjectionFlagEnumEquivalent(flag.Values, recordField) {
+		return false
+	}
+	return !required || (recordRequired[field] && flag.Required)
+}
+
+func sourceMultipartRequiredInputsCovered(action engine.WriteAction, operation sourceOperationDescriptor, recordFields map[string]any, recordRequired map[string]bool, flags map[string]engine.CLIFlag) bool {
+	pathFields := make(map[string]bool, len(action.PathFields))
+	for _, field := range action.PathFields {
+		pathFields[field] = true
+	}
+	for _, parameter := range operation.Request.Path {
+		if parameter.Required && (!pathFields[parameter.Name] || !sourceMultipartRecordFlagCoversField(parameter.Name, recordFields[parameter.Name], true, recordRequired, flags)) {
+			return false
+		}
+	}
+	for _, parameter := range operation.Request.Query {
+		if !parameter.Required {
+			continue
+		}
+		query, found := action.Query[parameter.Name]
+		if !found || query.Template != "{{ record."+parameter.Name+" }}" || query.OmitWhenAbsent || query.Default != "" ||
+			!sourceMultipartRecordFlagCoversField(parameter.Name, recordFields[parameter.Name], true, recordRequired, flags) {
+			return false
+		}
+	}
+	// writes.json has no declaration-owned arbitrary header-input channel. A
+	// source-required header therefore remains uncovered rather than being
+	// silently assumed from credential or transport state.
+	for _, parameter := range operation.Request.Header {
+		if parameter.Required {
 			return false
 		}
 	}
@@ -3249,17 +7289,12 @@ func sourceProjectionFieldEquivalent(actual, expected any) bool {
 
 func sourceProjectionFlagEnumEquivalent(actual []string, schema any) bool {
 	object, _ := schema.(map[string]any)
-	raw, _ := object["enum"].([]any)
-	if len(raw) == 0 {
+	expected, present := sourceProjectionCLIEnumValues(object["enum"])
+	if !present {
 		return len(actual) == 0
 	}
-	expected := make([]string, len(raw))
-	for index, value := range raw {
-		text, ok := value.(string)
-		if !ok {
-			return false
-		}
-		expected[index] = text
+	if len(expected) == 0 {
+		return len(actual) == 0
 	}
 	return slices.Equal(actual, expected)
 }
