@@ -1630,8 +1630,8 @@ type CertificationWriteWaveBlockedAction struct {
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, changefeed, pollingWatermark, syncTransport, enabledConnectorContract, spec, streams, writes, apiSurface, compositeProviderPathIdentity, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, certification, rateLimits *Schema
-	err                                                                                                                                                                                                                                                                                    error
+	metadata, changefeed, pollingWatermark, syncTransport, enabledConnectorContract, spec, streams, writes, apiSurface, compositeProviderPathIdentity, operations, cliSurface, declarationAdmission, declarationAdmissionSources, declarationAdmissionInventory, sourceOperationMapping, certification, rateLimits *Schema
+	err                                                                                                                                                                                                                                                                                                            error
 }{}
 
 func init() {
@@ -1661,6 +1661,7 @@ func init() {
 	metaSchemas.declarationAdmission = compileMeta(declarationAdmissionSchemaJSON)
 	metaSchemas.declarationAdmissionSources = compileMeta(declarationAdmissionSourcesSchemaJSON)
 	metaSchemas.declarationAdmissionInventory = compileMeta(declarationAdmissionInventorySchemaJSON)
+	metaSchemas.sourceOperationMapping = compileMeta(sourceOperationMappingSchemaJSON)
 	metaSchemas.certification = compileMeta(certificationSchemaJSON)
 	metaSchemas.rateLimits = compileMeta(rateLimitsSchemaJSON)
 }
@@ -1701,6 +1702,20 @@ func ValidateDeclarationAdmissionInventory(raw []byte) error {
 		return fmt.Errorf("declaration-admission inventory meta-schema failed to compile: %w", metaSchemas.err)
 	}
 	if err := metaSchemas.declarationAdmissionInventory.Validate(mustDecodeAny(raw)); err != nil {
+		return err
+	}
+	return nil
+}
+
+// ValidateSourceOperationMappingManifest validates the authoring-only shape
+// used to account source-lock operations across connector lanes. It has no
+// runtime, source-retention, certification, or provider-I/O behavior; the
+// connectorgen checker resolves the manifest's cited rows against source locks.
+func ValidateSourceOperationMappingManifest(raw []byte) error {
+	if metaSchemas.err != nil {
+		return fmt.Errorf("source-operation-mapping meta-schema failed to compile: %w", metaSchemas.err)
+	}
+	if err := metaSchemas.sourceOperationMapping.Validate(mustDecodeAny(raw)); err != nil {
 		return err
 	}
 	return nil
