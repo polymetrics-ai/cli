@@ -26,3 +26,14 @@
 
 - No execution, provider I/O, credentials, certification, CLI surface, generator, importer, shared foundation, or merge.
 - No treatment of `rest.path_bridge` as a reason to omit a retained source row.
+
+## Semantic repair continuation — 2026-08-31
+
+- Inline/manual GSD fallback: `scripts/gsd doctor`, all five command-source resolutions, and generated prompts for `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and `code-review` were inspected. This worker is already an isolated repair agent and the team policy forbids spawning further role agents, so the lifecycle is executed inline and recorded in this phase evidence.
+- Required skills used: `connector-lane-build-order`, `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, and `golang-testing`.
+
+1. Add failing real-matrix assertions for semantic HEAD/POST reads, reject a mutation POST promoted to read, reject a semantic POST promoted to mutation, and require source request-plus-success-response continuation evidence before ETL.
+2. Derive semantic state from retained source method, summary/description, successful response statuses, parameter/body controls, and response headers/schema fields. Do not use a fixed operation-ID allow-list and do not classify arbitrary POST mutations as reads.
+3. Regenerate only GitLab matrix facts/cells from the locked inputs. Preserve every documented mutation/delete as paired `direct_write` and `reverse_etl`; preserve sync only for source-cited webhook registration.
+4. Run focused, full-package, race, vet, JSON, agent-contract, diff, and connector-definition validation. Record the shared `rest.path_bridge` parser outcome without changing it.
+5. Commit/push the scoped repair, verify the remote SHA, and request fresh independent review in a #4384 proof comment. Do not open a PR or merge.

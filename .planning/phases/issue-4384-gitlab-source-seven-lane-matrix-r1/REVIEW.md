@@ -23,3 +23,15 @@ Pass for the scoped Track A mapping delivery. The change set is connector-local 
 ## Remaining review boundary
 
 The shared source-lock parser must later accept and preserve the established `rest.path_bridge` field before its generic source-import/projection checks can pass. That is a mapping-control repair outside this issue's connector-local scope.
+
+## Semantic repair continuation — review outcome
+
+Pass for the connector-local semantic correction, pending fresh independent review of the pushed commit.
+
+- The repair replaces only the invalid lane heuristics: direct read is no longer GET-only, and ETL is no longer created by request pagination controls alone.
+- Semantic POST reads require all three retained facts: POST method, a provider-documented query/lookup-style summary (or execute+query/GraphQL wording), and a 2xx/3xx source response. This is a rule over source facts, not a fixed operation-ID list; arbitrary mutation POSTs remain writes.
+- Pagination recognizes explicit provider request controls (`page`, `per_page`, `page_token`, cursor forms, `after`, or `offset`) even where descriptions are absent. It requires the matching successful-response successor before an ETL cell is emitted, avoiding description rigidity without allowing a request-only false positive.
+- The two true pairs are visible with their exact request/response fields. The 257 request-control-only rows retain source evidence but truthfully remain non-ETL. This correction does not change an existing stream or claim runtime execution.
+- All source-documented provider mutations/deletes remain paired direct-write and reverse-ETL candidates. Three source-cited hook registrations remain the sole sync candidates; list pagination cannot create sync.
+- Safety review: no provider I/O, credentials, generic transport, path handling, subprocess invocation, or runtime parser change is added. JSON comes only from already locked source artifacts, and safe map assertions avoid assuming a request-body `content` block exists.
+- The only scoped validation failure is unchanged: generic `connectorgen validate` rejects `rest.path_bridge` as an unknown field. The repair does not bypass it, delete a source row, or modify shared parser/certification/mapping controls.
