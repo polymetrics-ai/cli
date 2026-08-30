@@ -4994,7 +4994,9 @@ func sourceProjectionFlattenObjectAllOf(schema map[string]any) (map[string]any, 
 		return nil, fmt.Errorf("source schema allOf must be a non-empty array")
 	}
 
-	result := make(map[string]any, len(schema)+2)
+	// Do not derive an allocation size from provider-controlled schema shape:
+	// len(schema)+2 could overflow before this structural projection starts.
+	result := make(map[string]any)
 	for key, value := range schema {
 		if key != "allOf" && key != "properties" && key != "required" {
 			result[key] = value
