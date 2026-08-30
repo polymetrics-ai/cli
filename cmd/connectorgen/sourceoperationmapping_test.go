@@ -378,6 +378,102 @@ func TestSourceOperationMappingCheckRequiresGraphQLMutationWriteCells(t *testing
 	}
 }
 
+func TestSourceOperationMappingCheckAcceptsSourceCitedConcreteBinaryMedia(t *testing.T) {
+	tests := []struct {
+		name  string
+		media string
+	}{
+		{
+			name:  "gzip upload",
+			media: "application/gzip",
+		},
+		{
+			name:  "parameterized gzip upload",
+			media: "application/gzip; charset=binary",
+		},
+		{
+			name:  "provider archive upload",
+			media: "application/x-provider-archive",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			manifest := sourceOperationMappingFixture(t)
+			document := sourceOperationMappingReadJSON(t, manifest)
+			operation := document["operations"].([]any)[1].(map[string]any)
+			facts := operation["facts"].(map[string]any)
+			facts["media"].(map[string]any)["request"] = []any{test.media}
+			facts["applicability"].(map[string]any)["binary_upload"].(map[string]any)["kind"] = "applicable"
+			sourceOperationMappingSetCellState(t, operation, "binary_upload", "mapped_unproven")
+			sourceOperationMappingWriteJSON(t, manifest, document)
+
+			var stdout, stderr bytes.Buffer
+			if code := run([]string{"source-operation-mapping", manifest, "--check"}, &stdout, &stderr); code != 0 {
+				t.Fatalf("source-cited media %q exit=%d stdout=%q stderr=%q", test.media, code, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestSourceOperationMappingCheckRejectsUncitedOrContradictoryBinaryMedia(t *testing.T) {
+	tests := []struct {
+		name   string
+		media  string
+		mutate func(map[string]any)
+		want   string
+	}{
+		{
+			name:  "media fact cites another source node",
+			media: "application/gzip",
+			mutate: func(facts map[string]any) {
+				facts["media"].(map[string]any)["citation"].(map[string]any)["location"] = `paths["/widgets"].get`
+			},
+			want: "media fact citation: location",
+		},
+		{
+			name:  "media fact lacks a source citation",
+			media: "application/gzip",
+			mutate: func(facts map[string]any) {
+				delete(facts["media"].(map[string]any), "citation")
+			},
+			want: "validate manifest shape",
+		},
+		{
+			name:  "JSON request is not binary evidence",
+			media: "application/json",
+			want:  "binary_upload applicability is not supported by request media evidence",
+		},
+		{
+			name:  "malformed media type is not binary evidence",
+			media: "not-a-media-type",
+			want:  "binary_upload applicability is not supported by request media evidence",
+		},
+		{
+			name:  "wildcard media type is not binary evidence",
+			media: "application/*",
+			want:  "binary_upload applicability is not supported by request media evidence",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			manifest := sourceOperationMappingFixture(t)
+			document := sourceOperationMappingReadJSON(t, manifest)
+			operation := document["operations"].([]any)[1].(map[string]any)
+			facts := operation["facts"].(map[string]any)
+			facts["media"].(map[string]any)["request"] = []any{test.media}
+			facts["applicability"].(map[string]any)["binary_upload"].(map[string]any)["kind"] = "applicable"
+			sourceOperationMappingSetCellState(t, operation, "binary_upload", "mapped_unproven")
+			if test.mutate != nil {
+				test.mutate(facts)
+			}
+			sourceOperationMappingWriteJSON(t, manifest, document)
+			sourceOperationMappingAssertRejected(t, manifest, test.want)
+		})
+	}
+}
+
 func TestSourceOperationMappingCheckRejectsGraphQLMutationFactMismatch(t *testing.T) {
 	manifest := sourceOperationMappingGraphQLMutationFixture(t)
 	document := sourceOperationMappingReadJSON(t, manifest)
@@ -603,6 +699,20 @@ func sourceOperationMappingRemoveCell(operation map[string]any, lane string) {
 		filtered = append(filtered, rawCell)
 	}
 	operation["cells"] = filtered
+}
+
+func sourceOperationMappingSetCellState(t *testing.T, operation map[string]any, lane, state string) {
+	t.Helper()
+	for _, rawCell := range operation["cells"].([]any) {
+		cell := rawCell.(map[string]any)
+		if cell["lane"] != lane {
+			continue
+		}
+		cell["state"] = state
+		delete(cell, "reason")
+		return
+	}
+	t.Fatalf("source operation has no %s cell", lane)
 }
 
 func sourceOperationMappingAssertRejected(t *testing.T, manifest, want string) {

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"mime"
 	"os"
 	"path/filepath"
 	"sort"
@@ -580,13 +581,32 @@ func sourceOperationMappingMutationIdentity(operation declarationAdmissionReview
 
 func sourceOperationMappingBinaryMedia(media []string) bool {
 	for _, value := range media {
-		lower := strings.ToLower(value)
-		if lower == "application/pdf" || lower == "application/octet-stream" || lower == "application/zip" ||
-			strings.HasPrefix(lower, "image/") || strings.HasPrefix(lower, "audio/") || strings.HasPrefix(lower, "video/") {
-			return true
+		mediaType, _, err := mime.ParseMediaType(value)
+		if err != nil || !sourceOperationMappingConcreteMediaType(mediaType) || sourceOperationMappingJSONMediaType(mediaType) {
+			continue
 		}
+		// The manifest's media fact has already been bound to the exact source
+		// operation node by sourceOperationMappingFactFindings. A concrete,
+		// source-cited non-JSON type is therefore provider evidence for the
+		// binary lane; do not replace that evidence with a closed MIME allow-list.
+		return true
 	}
 	return false
+}
+
+func sourceOperationMappingConcreteMediaType(mediaType string) bool {
+	mediaType = strings.ToLower(strings.TrimSpace(mediaType))
+	topLevel, subType, found := strings.Cut(mediaType, "/")
+	return found && topLevel != "" && subType != "" && topLevel != "*" && subType != "*"
+}
+
+func sourceOperationMappingJSONMediaType(mediaType string) bool {
+	mediaType = strings.ToLower(strings.TrimSpace(mediaType))
+	_, subType, found := strings.Cut(mediaType, "/")
+	if !found {
+		return false
+	}
+	return subType == "json" || strings.HasSuffix(subType, "+json")
 }
 
 func sourceOperationMappingCellFindings(operation sourceOperationMappingOperation, cell sourceOperationMappingLaneCell, locked declarationAdmissionReviewedOperation) []string {
