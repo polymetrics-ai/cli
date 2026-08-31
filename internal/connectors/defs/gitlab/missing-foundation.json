@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "connector": "gitlab",
+  "purpose": "Connector-local source mapping ledger for concrete execution gaps. This authoring artifact does not load an executor, enable a command, or change source-lane membership.",
+  "source_lock": {
+    "path": "sources/gitlab-operation-source-lock.json",
+    "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
+    "sha256": "b33e80759af3a529d71a0bb58c8c76d65c9f0b20774a042196c6d3c0c57310bd"
+  },
+  "foundations": [
+    {
+      "id": "gitlab-inbound-webhook-source-executor-r1",
+      "state": "recorded_only_requires_captain_approval_before_implementation",
+      "atlas_capability": "transport.sync-contract.v1",
+      "affected_lane": "sync_transport",
+      "source_ids": [
+        {
+          "id": "gitlab.rest.postApiV4GroupsIdHooks"
+        },
+        {
+          "id": "gitlab.rest.postApiV4Hooks"
+        },
+        {
+          "id": "gitlab.rest.postApiV4ProjectsIdHooks"
+        }
+      ],
+      "reason": "The provider documents webhook registration with URL and event selectors, but the available sync contract has no closed inbound GitLab webhook receiver or selected GitLab source executor.",
+      "runtime_claim": "No inbound GitLab webhook receiver, selected source executor, or executable sync transport is claimed."
+    },
+    {
+      "id": "cli-request-schema-surrogate-regex-foundation-r1",
+      "state": "planned_runtime_foundation_requires_captain_approval",
+      "atlas_capability": "runtime.json-schema-surrogate-regex.v1",
+      "affected_lanes": [
+        "direct_write",
+        "reverse_etl"
+      ],
+      "source_ids": [
+        {
+          "id": "gitlab.rest.postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection"
+        }
+      ],
+      "reason": "The retained provider request schema includes a surrogate-pair Unicode escape regex which Go's current JSON-Schema regex compiler cannot compile. The exact pattern remains in the source descriptor and the affected write commands remain partial.",
+      "runtime_claim": "No regex translation, raw request-body bypass, or executable promotion is claimed."
+    },
+    {
+      "id": "runtime-provider-parameter-alias-investigating-r1",
+      "state": "investigating_runtime_foundation_requires_captain_approval",
+      "atlas_capability": "runtime.provider-parameter-alias.v1",
+      "affected_lane": "direct_read",
+      "source_ids": [
+        {
+          "id": "gitlab.rest.getApiV4AnalyticsCodeReview"
+        },
+        {
+          "id": "gitlab.rest.getApiV4GroupsIdDashEpics"
+        },
+        {
+          "id": "gitlab.rest.getApiV4GroupsIdEpics"
+        },
+        {
+          "id": "gitlab.rest.getApiV4GroupsIdIssues"
+        },
+        {
+          "id": "gitlab.rest.getApiV4GroupsIdIssuesStatistics"
+        },
+        {
+          "id": "gitlab.rest.getApiV4GroupsIdMergeRequests"
+        },
+        {
+          "id": "gitlab.rest.getApiV4IssuesStatistics"
+        },
+        {
+          "id": "gitlab.rest.getApiV4MergeRequests"
+        },
+        {
+          "id": "gitlab.rest.getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests"
+        },
+        {
+          "id": "gitlab.rest.getApiV4ProjectsIdIssues"
+        },
+        {
+          "id": "gitlab.rest.getApiV4ProjectsIdIssuesStatistics"
+        },
+        {
+          "id": "gitlab.rest.getApiV4ProjectsIdMergeRequests"
+        },
+        {
+          "id": "gitlab.rest.getApiV4ProjectsIdRepositoryFilesFilePathBlame"
+        },
+        {
+          "id": "gitlab.rest.getApiV4ProjectsIdVariablesKey"
+        },
+        {
+          "id": "gitlab.rest.getApiV4ProjectsProjectIdPackagesNugetV2Packages"
+        }
+      ],
+      "reason": "These retained GET operations require source-declared punctuated provider query keys. The current runtime has no approved injective, reversible CLI alias grammar that preserves their exact wire keys.",
+      "runtime_claim": "No unsafe raw flag, lossy normalization, provider-key rewrite, or executable direct-read promotion is claimed."
+    }
+  ]
+}
