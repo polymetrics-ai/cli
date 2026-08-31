@@ -1,6 +1,7 @@
 package cli_test
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -9,30 +10,28 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/cli"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
 const (
 	stripeTransportDefsRoot = "../connectors/defs"
-	stripeTransportToken    = "fixture-stripe-source-token"
+	stripeTransportToken    = "fixture-stripe-token"
 )
 
-var stripeTransportPathParameter = regexp.MustCompile(`\{\{[^}]+\}\}|\{[^}]+\}`)
-
-// TestStripeSourceBoundETLMaterializesDuckDB executes every current
-// declaration-owned Stripe ETL binding through App.RunETL and a temporary
-// DuckDB project. The matrix, source lock, stream definition, and CLI
-// declaration choose the cohort; the test does not maintain a parallel source
-// operation allow-list.
-func TestStripeSourceBoundETLMaterializesDuckDB(t *testing.T) {
+// TestStripeDeclaredETLStreamsMaterializeDuckDB exercises every current Stripe
+// stream declaration through the existing App.RunETL path and a temporary
+// DuckDB project. It proves local legacy app behavior only; source-lane matrix
+// states remain mapping-only until a source descriptor contract is available.
+func TestStripeDeclaredETLStreamsMaterializeDuckDB(t *testing.T) {
 	fixture := newStripeTransportFixture(t)
 	application := fixture.openApplication(t)
 	ctx := context.Background()
@@ -50,7 +49,7 @@ func TestStripeSourceBoundETLMaterializesDuckDB(t *testing.T) {
 				}},
 			})
 			if err != nil {
-				t.Fatalf("create %s source-bound full-refresh connection: %v", binding.Record, err)
+				t.Fatalf("create %s declared full-refresh connection: %v", binding.Record, err)
 			}
 
 			fixture.resetCalls()
@@ -59,7 +58,7 @@ func TestStripeSourceBoundETLMaterializesDuckDB(t *testing.T) {
 				t.Fatalf("RunETL(%s): %v", binding.Record, err)
 			}
 			if run.Status != "completed" || run.RecordsRead != 2 || run.RecordsLoaded != 2 {
-				t.Fatalf("RunETL(%s) = %+v, want two staged source records", binding.Record, run)
+				t.Fatalf("RunETL(%s) = %+v, want two staged declared-stream records", binding.Record, run)
 			}
 
 			rows, err := application.QueryTable(ctx, app.QueryTableRequest{Connection: connection.Name, Table: "stripe_" + binding.Record + "_witness", Limit: 10})
@@ -71,7 +70,7 @@ func TestStripeSourceBoundETLMaterializesDuckDB(t *testing.T) {
 			}
 			for _, row := range rows {
 				if id, _ := row["id"].(string); id == "" {
-					t.Fatalf("%s DuckDB row lacks source id: %#v", binding.Record, row)
+					t.Fatalf("%s DuckDB row lacks id: %#v", binding.Record, row)
 				}
 			}
 			fixture.assertPaginatedETLCalls(t, binding)
@@ -79,16 +78,15 @@ func TestStripeSourceBoundETLMaterializesDuckDB(t *testing.T) {
 	}
 }
 
-// TestStripeSourceBoundETLNonSuccessDoesNotMaterialize uses one source-bound
-// stream selected from the same matrix cohort. A provider non-success must be
-// terminal before any source row reaches DuckDB.
-func TestStripeSourceBoundETLNonSuccessDoesNotMaterialize(t *testing.T) {
+// TestStripeDeclaredETLNonSuccessDoesNotMaterialize uses one declared stream.
+// A provider non-success must be terminal before any source row reaches DuckDB.
+func TestStripeDeclaredETLNonSuccessDoesNotMaterialize(t *testing.T) {
 	fixture := newStripeTransportFixture(t)
 	if len(fixture.etlBindings) == 0 {
-		t.Fatal("Stripe matrix has no implemented ETL binding")
+		t.Fatal("Stripe declaration has no ETL stream")
 	}
 	binding := fixture.etlBindings[0]
-	fixture.failETLSourceID = binding.SourceID
+	fixture.failETLRecord = binding.Record
 	application := fixture.openApplication(t)
 	ctx := context.Background()
 
@@ -114,24 +112,24 @@ func TestStripeSourceBoundETLNonSuccessDoesNotMaterialize(t *testing.T) {
 		t.Fatalf("failed Stripe run = %+v, want terminal failure before warehouse materialization", run)
 	}
 	if calls := fixture.snapshotETLCalls(); len(calls) == 0 {
-		t.Fatal("failed Stripe source made no provider request")
+		t.Fatal("failed Stripe declaration made no provider request")
 	} else {
 		for _, call := range calls {
-			if call.SourceID != binding.SourceID || call.Query.Get("starting_after") != "" {
-				t.Fatalf("failed Stripe source calls = %#v, want only first-page %s requests", calls, binding.SourceID)
+			if call.Record != binding.Record || call.Query.Get("starting_after") != "" {
+				t.Fatalf("failed Stripe calls = %#v, want only first-page %s requests", calls, binding.Record)
 			}
 		}
 	}
 	if rows, queryErr := application.QueryTable(ctx, app.QueryTableRequest{Connection: connection.Name, Table: "stripe_" + binding.Record + "_failure_witness", Limit: 10}); queryErr == nil || len(rows) != 0 {
-		t.Fatalf("failed Stripe source materialized rows=%#v err=%v, want no warehouse result", rows, queryErr)
+		t.Fatalf("failed Stripe stream materialized rows=%#v err=%v, want no warehouse result", rows, queryErr)
 	}
 }
 
-// TestStripeSourceBoundReverseETLPlanPreviewApprovalAndExecute proves every
-// current source-bound Stripe customer action through the real plan → preview
-// → approval → execute path. It also asserts that the typed destructive gate
-// rejects delete before the fake provider observes a request.
-func TestStripeSourceBoundReverseETLPlanPreviewApprovalAndExecute(t *testing.T) {
+// TestStripeDeclaredReverseETLPlanPreviewApprovalAndExecute exercises every
+// currently declared Stripe customer action through the existing plan →
+// preview → approval → execute path. It also verifies the typed delete gate
+// refuses a mutation before the fixture observes it.
+func TestStripeDeclaredReverseETLPlanPreviewApprovalAndExecute(t *testing.T) {
 	fixture := newStripeTransportFixture(t)
 	application := fixture.openApplication(t)
 	ctx := context.Background()
@@ -193,52 +191,86 @@ func TestStripeSourceBoundReverseETLPlanPreviewApprovalAndExecute(t *testing.T) 
 				t.Fatalf("approved %s run: %v", binding.Record, err)
 			}
 			if run.Status != "completed" || run.RecordsStaged != 1 || run.RecordsSucceeded != 1 || run.RecordsFailed != 0 {
-				t.Fatalf("approved %s run = %+v, want one completed source-bound write", binding.Record, run)
+				t.Fatalf("approved %s run = %+v, want one completed declared write", binding.Record, run)
 			}
 			fixture.assertWriteCall(t, binding)
 		})
 	}
 }
 
-type stripeTransportMatrix struct {
-	Operations []stripeTransportMatrixOperation `json:"operations"`
+// TestStripePublicCommandsReachCredentialBoundaryWithBaseURLOverride makes
+// every currently declared ETL/reverse-ETL public command pass ordinary command
+// resolution with an intentionally unusable base URL. A missing credential
+// stops each invocation before provider I/O; descriptor-specific failures are
+// rejected because these legacy declarations carry no descriptor binding.
+func TestStripePublicCommandsReachCredentialBoundaryWithBaseURLOverride(t *testing.T) {
+	bundle := stripeTransportBundle(t)
+	if bundle.CLISurface == nil {
+		t.Fatal("Stripe CLI surface is absent")
+	}
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("init Stripe command-boundary project: %v", err)
+	}
+
+	spy := &stripeNoNetworkTransportSpy{}
+	oldTransport := http.DefaultTransport
+	http.DefaultTransport = spy
+	t.Cleanup(func() { http.DefaultTransport = oldTransport })
+
+	public := make([]engine.CLICommand, 0, len(bundle.CLISurface.Commands))
+	for _, command := range bundle.CLISurface.Commands {
+		switch command.Intent {
+		case "etl", "reverse_etl":
+			if command.Availability != "implemented" || strings.TrimSpace(command.Path) == "" {
+				t.Fatalf("Stripe public command = %+v, want a declared implemented command", command)
+			}
+			public = append(public, command)
+		default:
+			t.Fatalf("unexpected Stripe public command intent %q for %q", command.Intent, command.Path)
+		}
+	}
+	if len(public) != len(bundle.Streams)+len(bundle.Writes) {
+		t.Fatalf("Stripe public command cohort = %d, want every declared stream/write command (%d + %d)", len(public), len(bundle.Streams), len(bundle.Writes))
+	}
+	sort.Slice(public, func(i, j int) bool { return public[i].Path < public[j].Path })
+
+	for _, command := range public {
+		command := command
+		t.Run(strings.ReplaceAll(command.Path, " ", "_"), func(t *testing.T) {
+			args := append([]string{"stripe"}, strings.Fields(command.Path)...)
+			args = append(args, "--root", root, "--config", "base_url=https://invalid.example")
+			var stdout, stderr bytes.Buffer
+			if code := cli.Run(args, &stdout, &stderr); code == 0 {
+				t.Fatalf("Run(%v) unexpectedly succeeded; stdout=%s stderr=%s", args, stdout.String(), stderr.String())
+			}
+			output := strings.TrimSpace(stdout.String() + stderr.String())
+			if !strings.Contains(output, "missing --credential") {
+				t.Fatalf("Run(%v) = %q, want ordinary credential-bound refusal", args, output)
+			}
+			lower := strings.ToLower(output)
+			for _, forbidden := range []string{"source-bound", "source descriptor", "source operation", "preflight"} {
+				if strings.Contains(lower, forbidden) {
+					t.Fatalf("Run(%v) reached a descriptor-specific refusal %q: %s", args, forbidden, output)
+				}
+			}
+		})
+	}
+	if got := spy.requests.Load(); got != 0 {
+		t.Fatalf("Stripe public command provider requests = %d, want zero", got)
+	}
 }
 
-type stripeTransportMatrixOperation struct {
-	SourceID string                      `json:"source_id"`
-	Method   string                      `json:"method"`
-	Path     string                      `json:"path"`
-	Cells    []stripeTransportMatrixCell `json:"cells"`
+type stripeNoNetworkTransportSpy struct {
+	requests atomic.Int64
 }
 
-type stripeTransportMatrixCell struct {
-	Lane      string                           `json:"lane"`
-	State     string                           `json:"state"`
-	Reason    string                           `json:"reason"`
-	Execution *stripeTransportExecutionBinding `json:"execution,omitempty"`
+func (spy *stripeNoNetworkTransportSpy) RoundTrip(*http.Request) (*http.Response, error) {
+	spy.requests.Add(1)
+	return nil, fmt.Errorf("unexpected Stripe provider I/O")
 }
 
-type stripeTransportExecutionBinding struct {
-	Artifact   string `json:"artifact"`
-	Record     string `json:"record"`
-	CLICommand string `json:"cli_command"`
-	Proof      string `json:"proof"`
-}
-
-type stripeTransportSourceLock struct {
-	REST struct {
-		Operations []stripeTransportSourceOperation `json:"operations"`
-	} `json:"rest"`
-}
-
-type stripeTransportSourceOperation struct {
-	ID     string `json:"id"`
-	Method string `json:"method"`
-	Path   string `json:"path"`
-}
-
-type stripeRuntimeBinding struct {
-	SourceID   string
+type stripeDeclaredBinding struct {
 	Method     string
 	Path       string
 	Lane       string
@@ -247,42 +279,42 @@ type stripeRuntimeBinding struct {
 }
 
 type stripeTransportCall struct {
-	SourceID string
-	Method   string
-	Path     string
-	Query    url.Values
-	Form     url.Values
+	Record string
+	Method string
+	Path   string
+	Query  url.Values
+	Form   url.Values
 }
 
 type stripeTransportFixture struct {
 	t               *testing.T
 	server          *httptest.Server
-	etlBindings     []stripeRuntimeBinding
-	reverseBindings []stripeRuntimeBinding
-	byRoute         map[string]stripeRuntimeBinding
+	etlBindings     []stripeDeclaredBinding
+	reverseBindings []stripeDeclaredBinding
+	byRoute         map[string]stripeDeclaredBinding
 
-	mu              sync.Mutex
-	failETLSourceID string
-	etlCalls        []stripeTransportCall
-	writeCalls      []stripeTransportCall
+	mu            sync.Mutex
+	failETLRecord string
+	etlCalls      []stripeTransportCall
+	writeCalls    []stripeTransportCall
 }
 
 func newStripeTransportFixture(t *testing.T) *stripeTransportFixture {
 	t.Helper()
 	etlBindings, reverseBindings := stripeDeclaredRuntimeBindings(t)
 	if len(etlBindings) == 0 || len(reverseBindings) == 0 {
-		t.Fatalf("Stripe source-bound runtime bindings = ETL:%d reverse:%d, want both non-empty", len(etlBindings), len(reverseBindings))
+		t.Fatalf("Stripe declared runtime bindings = ETL:%d reverse:%d, want both non-empty", len(etlBindings), len(reverseBindings))
 	}
 	fixture := &stripeTransportFixture{
 		t:               t,
 		etlBindings:     etlBindings,
 		reverseBindings: reverseBindings,
-		byRoute:         make(map[string]stripeRuntimeBinding, len(etlBindings)+len(reverseBindings)),
+		byRoute:         make(map[string]stripeDeclaredBinding, len(etlBindings)+len(reverseBindings)),
 	}
-	for _, binding := range append(append([]stripeRuntimeBinding(nil), etlBindings...), reverseBindings...) {
+	for _, binding := range append(append([]stripeDeclaredBinding(nil), etlBindings...), reverseBindings...) {
 		key := binding.Method + " " + binding.Path
 		if previous, exists := fixture.byRoute[key]; exists {
-			t.Fatalf("Stripe runtime bindings duplicate route %q for %s and %s", key, previous.SourceID, binding.SourceID)
+			t.Fatalf("Stripe declared runtime bindings duplicate route %q for %s and %s", key, previous.Record, binding.Record)
 		}
 		fixture.byRoute[key] = binding
 	}
@@ -291,12 +323,18 @@ func newStripeTransportFixture(t *testing.T) *stripeTransportFixture {
 	return fixture
 }
 
-func stripeDeclaredRuntimeBindings(t *testing.T) ([]stripeRuntimeBinding, []stripeRuntimeBinding) {
+func stripeTransportBundle(t *testing.T) engine.Bundle {
 	t.Helper()
 	bundle, err := engine.Load(os.DirFS(stripeTransportDefsRoot), "stripe")
 	if err != nil {
 		t.Fatalf("load Stripe declaration bundle: %v", err)
 	}
+	return bundle
+}
+
+func stripeDeclaredRuntimeBindings(t *testing.T) ([]stripeDeclaredBinding, []stripeDeclaredBinding) {
+	t.Helper()
+	bundle := stripeTransportBundle(t)
 	if bundle.CLISurface == nil {
 		t.Fatal("Stripe CLI surface is absent")
 	}
@@ -315,87 +353,78 @@ func stripeDeclaredRuntimeBindings(t *testing.T) ([]stripeRuntimeBinding, []stri
 		}
 		writes[action.Name] = action
 	}
-	commands := make(map[string]engine.CLICommand, len(bundle.CLISurface.Commands))
+
+	streamCommands := make(map[string]engine.CLICommand, len(streams))
+	writeCommands := make(map[string]engine.CLICommand, len(writes))
 	for _, command := range bundle.CLISurface.Commands {
-		if _, duplicate := commands[command.Path]; duplicate {
-			t.Fatalf("Stripe CLI repeats command %q", command.Path)
+		if command.Availability != "implemented" {
+			t.Fatalf("Stripe command %q availability = %q, want implemented legacy declaration", command.Path, command.Availability)
 		}
-		commands[command.Path] = command
-	}
-
-	lockRaw, err := os.ReadFile(filepath.Join(stripeTransportDefsRoot, "stripe", "sources", "stripe-operation-source-lock.json"))
-	if err != nil {
-		t.Fatalf("read Stripe source lock: %v", err)
-	}
-	var lock stripeTransportSourceLock
-	if err := json.Unmarshal(lockRaw, &lock); err != nil {
-		t.Fatalf("decode Stripe source lock: %v", err)
-	}
-	locked := make(map[string]stripeTransportSourceOperation, len(lock.REST.Operations))
-	for _, operation := range lock.REST.Operations {
-		if _, duplicate := locked[operation.ID]; duplicate {
-			t.Fatalf("Stripe source lock repeats operation %q", operation.ID)
-		}
-		locked[operation.ID] = operation
-	}
-
-	matrixRaw, err := os.ReadFile(filepath.Join(stripeTransportDefsRoot, "stripe", "sources", "stripe-source-lane-matrix.json"))
-	if err != nil {
-		t.Fatalf("read Stripe source lane matrix: %v", err)
-	}
-	var matrix stripeTransportMatrix
-	if err := json.Unmarshal(matrixRaw, &matrix); err != nil {
-		t.Fatalf("decode Stripe source lane matrix: %v", err)
-	}
-
-	seen := make(map[string]struct{})
-	var etlBindings, reverseBindings []stripeRuntimeBinding
-	for _, row := range matrix.Operations {
-		lockedOperation, exists := locked[row.SourceID]
-		if !exists || row.Method != lockedOperation.Method || row.Path != lockedOperation.Path {
-			t.Fatalf("Stripe matrix row %q does not preserve the locked source identity", row.SourceID)
-		}
-		for _, cell := range row.Cells {
-			if cell.State != "implemented" {
-				continue
+		switch command.Intent {
+		case "etl":
+			if command.Stream == "" || command.Write != "" {
+				t.Fatalf("Stripe ETL command %q = %+v, want one stream only", command.Path, command)
 			}
-			if cell.Execution == nil || (cell.Lane != "etl" && cell.Lane != "reverse_etl") {
-				t.Fatalf("Stripe implemented matrix cell %s/%s = %+v, want a source-bound ETL or reverse-ETL execution", row.SourceID, cell.Lane, cell)
+			if _, duplicate := streamCommands[command.Stream]; duplicate {
+				t.Fatalf("Stripe stream %q has duplicate public commands", command.Stream)
 			}
-			key := row.SourceID + ":" + cell.Lane
-			if _, duplicate := seen[key]; duplicate {
-				t.Fatalf("Stripe matrix repeats implemented binding %q", key)
+			streamCommands[command.Stream] = command
+		case "reverse_etl":
+			if command.Write == "" || command.Stream != "" {
+				t.Fatalf("Stripe reverse-ETL command %q = %+v, want one write only", command.Path, command)
 			}
-			seen[key] = struct{}{}
-
-			command, exists := commands[cell.Execution.CLICommand]
-			if !exists || command.Availability != "implemented" || command.Intent != cell.Lane || command.SourceOperation != row.SourceID || command.SourceCLIPath != row.Method+" "+row.Path {
-				t.Fatalf("Stripe matrix execution %s/%s CLI binding = %+v, want exact source-bound declared command", row.SourceID, cell.Lane, command)
+			if _, duplicate := writeCommands[command.Write]; duplicate {
+				t.Fatalf("Stripe write %q has duplicate public commands", command.Write)
 			}
-			binding := stripeRuntimeBinding{SourceID: row.SourceID, Method: row.Method, Path: row.Path, Lane: cell.Lane, Record: cell.Execution.Record, CLICommand: cell.Execution.CLICommand}
-			switch cell.Lane {
-			case "etl":
-				stream, exists := streams[binding.Record]
-				if !exists || cell.Execution.Artifact != "streams.json" || command.Stream != binding.Record || stream.Records.Path != "data" || row.Method != http.MethodGet || strings.TrimPrefix(row.Path, "/v1") != stream.Path {
-					t.Fatalf("Stripe ETL binding %s = stream:%+v command:%+v, want an exact GET source/stream/CLI chain", row.SourceID, stream, command)
-				}
-				etlBindings = append(etlBindings, binding)
-			case "reverse_etl":
-				action, exists := writes[binding.Record]
-				if !exists || cell.Execution.Artifact != "writes.json" || command.Write != binding.Record || action.Method != row.Method || stripeTransportCanonicalPath(action.Path) != stripeTransportCanonicalPath(strings.TrimPrefix(row.Path, "/v1")) {
-					t.Fatalf("Stripe reverse-ETL binding %s = action:%+v command:%+v, want an exact source/write/CLI chain", row.SourceID, action, command)
-				}
-				reverseBindings = append(reverseBindings, binding)
-			}
+			writeCommands[command.Write] = command
+		default:
+			t.Fatalf("Stripe command %q intent = %q, want ETL or reverse ETL", command.Path, command.Intent)
 		}
 	}
+
+	etlBindings := make([]stripeDeclaredBinding, 0, len(streams))
+	for name, stream := range streams {
+		command, exists := streamCommands[name]
+		if !exists || stream.Records.Path != "data" || stream.Path == "" {
+			t.Fatalf("Stripe stream %q lacks a usable legacy command/record path: stream=%+v command=%+v", name, stream, command)
+		}
+		etlBindings = append(etlBindings, stripeDeclaredBinding{
+			Method:     http.MethodGet,
+			Path:       "/v1" + stream.Path,
+			Lane:       "etl",
+			Record:     name,
+			CLICommand: command.Path,
+		})
+	}
+	for name := range streamCommands {
+		if _, exists := streams[name]; !exists {
+			t.Fatalf("Stripe public ETL command references unknown stream %q", name)
+		}
+	}
+
+	reverseBindings := make([]stripeDeclaredBinding, 0, len(writes))
+	for name, action := range writes {
+		command, exists := writeCommands[name]
+		if !exists || action.Method == "" || action.Path == "" {
+			t.Fatalf("Stripe write %q lacks a usable legacy command/action path: action=%+v command=%+v", name, action, command)
+		}
+		reverseBindings = append(reverseBindings, stripeDeclaredBinding{
+			Method:     action.Method,
+			Path:       "/v1" + action.Path,
+			Lane:       "reverse_etl",
+			Record:     name,
+			CLICommand: command.Path,
+		})
+	}
+	for name := range writeCommands {
+		if _, exists := writes[name]; !exists {
+			t.Fatalf("Stripe public reverse-ETL command references unknown write %q", name)
+		}
+	}
+
 	sort.Slice(etlBindings, func(i, j int) bool { return etlBindings[i].Record < etlBindings[j].Record })
 	sort.Slice(reverseBindings, func(i, j int) bool { return reverseBindings[i].Record < reverseBindings[j].Record })
 	return etlBindings, reverseBindings
-}
-
-func stripeTransportCanonicalPath(path string) string {
-	return stripeTransportPathParameter.ReplaceAllString(path, "{}")
 }
 
 func stripeTransportPathMatches(template, actual string) bool {
@@ -449,7 +478,7 @@ func (f *stripeTransportFixture) openApplication(t *testing.T) *app.App {
 
 func (f *stripeTransportFixture) materializeCustomerSource(t *testing.T, application *app.App) (string, string) {
 	t.Helper()
-	var customer stripeRuntimeBinding
+	var customer stripeDeclaredBinding
 	for _, binding := range f.etlBindings {
 		if binding.Record == "customers" {
 			customer = binding
@@ -457,7 +486,7 @@ func (f *stripeTransportFixture) materializeCustomerSource(t *testing.T, applica
 		}
 	}
 	if customer.Record == "" {
-		t.Fatal("Stripe source-bound reverse witness requires the declared customers ETL stream")
+		t.Fatal("Stripe reverse witness requires the declared customers ETL stream")
 	}
 	const connectionName = "stripe_customers_reverse_source"
 	const tableName = "stripe_customers_reverse_witness"
@@ -471,12 +500,12 @@ func (f *stripeTransportFixture) materializeCustomerSource(t *testing.T, applica
 		}},
 	})
 	if err != nil {
-		t.Fatalf("create source-bound Stripe customers connection: %v", err)
+		t.Fatalf("create Stripe customers connection: %v", err)
 	}
 	f.resetCalls()
 	run, err := application.RunETL(context.Background(), app.RunETLRequest{Connection: connection.Name, Stream: customer.Record, BatchSize: 1})
 	if err != nil || run.Status != "completed" || run.RecordsLoaded != 2 {
-		t.Fatalf("materialize Stripe customers source run=%+v err=%v", run, err)
+		t.Fatalf("materialize Stripe customers stream run=%+v err=%v", run, err)
 	}
 	f.assertPaginatedETLCalls(t, customer)
 	f.resetCalls()
@@ -493,7 +522,7 @@ func stripeReverseWitnessMappings(t *testing.T, action string) map[string]string
 	case "delete_customer":
 		return map[string]string{"id": "id"}
 	default:
-		t.Fatalf("Stripe source matrix selected unsupported reverse witness action %q", action)
+		t.Fatalf("Stripe declaration selected unsupported reverse witness action %q", action)
 		return nil
 	}
 }
@@ -530,23 +559,23 @@ func (f *stripeTransportFixture) serveHTTP(w http.ResponseWriter, request *http.
 	}
 }
 
-func (f *stripeTransportFixture) serveETL(w http.ResponseWriter, request *http.Request, binding stripeRuntimeBinding) {
+func (f *stripeTransportFixture) serveETL(w http.ResponseWriter, request *http.Request, binding stripeDeclaredBinding) {
 	query := request.URL.Query()
-	f.recordETLCall(stripeTransportCall{SourceID: binding.SourceID, Method: request.Method, Path: request.URL.Path, Query: query})
+	f.recordETLCall(stripeTransportCall{Record: binding.Record, Method: request.Method, Path: request.URL.Path, Query: query})
 	if query.Get("limit") != "100" || query.Get("created[gte]") != "" {
-		f.failf("Stripe %s query = %q, want declared limit=100 without an undeclared incremental start", binding.SourceID, request.URL.RawQuery)
+		f.failf("Stripe %s query = %q, want declared limit=100 without an undeclared incremental start", binding.Record, request.URL.RawQuery)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	if binding.SourceID == f.failureSourceID() {
-		f.writeJSON(w, http.StatusBadGateway, map[string]any{"error": map[string]any{"message": "fixture source failure"}})
+	if binding.Record == f.failureRecord() {
+		f.writeJSON(w, http.StatusBadGateway, map[string]any{"error": map[string]any{"message": "fixture stream failure"}})
 		return
 	}
 
 	page := 0
 	if after := query.Get("starting_after"); after != "" {
 		if after != f.recordID(binding, 0) {
-			f.failf("Stripe %s continuation = %q, want first-page id %q", binding.SourceID, after, f.recordID(binding, 0))
+			f.failf("Stripe %s continuation = %q, want first-page id %q", binding.Record, after, f.recordID(binding, 0))
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -558,23 +587,23 @@ func (f *stripeTransportFixture) serveETL(w http.ResponseWriter, request *http.R
 	})
 }
 
-func (f *stripeTransportFixture) serveReverseWrite(w http.ResponseWriter, request *http.Request, binding stripeRuntimeBinding) {
+func (f *stripeTransportFixture) serveReverseWrite(w http.ResponseWriter, request *http.Request, binding stripeDeclaredBinding) {
 	if err := request.ParseForm(); err != nil {
-		f.failf("parse Stripe %s form: %v", binding.SourceID, err)
+		f.failf("parse Stripe %s form: %v", binding.Record, err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	call := stripeTransportCall{SourceID: binding.SourceID, Method: request.Method, Path: request.URL.Path, Query: request.URL.Query(), Form: request.PostForm}
+	call := stripeTransportCall{Record: binding.Record, Method: request.Method, Path: request.URL.Path, Query: request.URL.Query(), Form: request.PostForm}
 	f.recordWriteCall(call)
-	if strings.HasPrefix(request.Header.Get("Content-Type"), "application/x-www-form-urlencoded") == false && binding.Record != "delete_customer" {
-		f.failf("Stripe %s content type = %q, want declared form encoding", binding.SourceID, request.Header.Get("Content-Type"))
+	if !strings.HasPrefix(request.Header.Get("Content-Type"), "application/x-www-form-urlencoded") && binding.Record != "delete_customer" {
+		f.failf("Stripe %s content type = %q, want declared form encoding", binding.Record, request.Header.Get("Content-Type"))
 		w.WriteHeader(http.StatusUnsupportedMediaType)
 		return
 	}
 	switch binding.Record {
 	case "create_customer":
 		if request.URL.Path != "/v1/customers" || request.PostForm.Get("name") != "Fixture Customer" {
-			f.failf("Stripe create request = path:%q form:%q, want source-bound customer form", request.URL.Path, request.PostForm.Encode())
+			f.failf("Stripe create request = path:%q form:%q, want declared customer form", request.URL.Path, request.PostForm.Encode())
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -586,7 +615,7 @@ func (f *stripeTransportFixture) serveReverseWrite(w http.ResponseWriter, reques
 		}
 	case "delete_customer":
 		if request.URL.Path != "/v1/customers/"+f.customerID() || len(request.PostForm) != 0 {
-			f.failf("Stripe delete request = path:%q form:%q, want source-bound bodyless delete", request.URL.Path, request.PostForm.Encode())
+			f.failf("Stripe delete request = path:%q form:%q, want bodyless delete", request.URL.Path, request.PostForm.Encode())
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -598,7 +627,7 @@ func (f *stripeTransportFixture) serveReverseWrite(w http.ResponseWriter, reques
 	f.writeJSON(w, http.StatusOK, map[string]any{"id": f.customerID(), "object": "customer", "deleted": binding.Record == "delete_customer"})
 }
 
-func (f *stripeTransportFixture) record(binding stripeRuntimeBinding, page int) map[string]any {
+func (f *stripeTransportFixture) record(binding stripeDeclaredBinding, page int) map[string]any {
 	record := map[string]any{
 		"id":      f.recordID(binding, page),
 		"object":  strings.TrimSuffix(binding.Record, "s"),
@@ -607,13 +636,13 @@ func (f *stripeTransportFixture) record(binding stripeRuntimeBinding, page int) 
 	if binding.Record == "customers" {
 		record["name"] = "Fixture Customer"
 		record["email"] = "fixture@example.test"
-		record["description"] = "local source-bound Stripe fixture"
+		record["description"] = "local declared Stripe fixture"
 		record["phone"] = "+15550100"
 	}
 	return record
 }
 
-func (f *stripeTransportFixture) recordID(binding stripeRuntimeBinding, page int) string {
+func (f *stripeTransportFixture) recordID(binding stripeDeclaredBinding, page int) string {
 	if binding.Record == "customers" && page == 0 {
 		return f.customerID()
 	}
@@ -625,31 +654,31 @@ func (*stripeTransportFixture) customerID() string {
 	return "cus_fixture_customer"
 }
 
-func (f *stripeTransportFixture) assertPaginatedETLCalls(t *testing.T, binding stripeRuntimeBinding) {
+func (f *stripeTransportFixture) assertPaginatedETLCalls(t *testing.T, binding stripeDeclaredBinding) {
 	t.Helper()
 	calls := f.snapshotETLCalls()
 	if len(calls) != 2 {
-		t.Fatalf("Stripe %s requests = %#v, want declared first and starting_after pages", binding.SourceID, calls)
+		t.Fatalf("Stripe %s requests = %#v, want declared first and starting_after pages", binding.Record, calls)
 	}
 	for index, call := range calls {
-		if call.SourceID != binding.SourceID || call.Method != http.MethodGet || call.Path != binding.Path || call.Query.Get("limit") != "100" {
-			t.Fatalf("Stripe %s request %d = %#v, want exact declared source GET", binding.SourceID, index, call)
+		if call.Record != binding.Record || call.Method != http.MethodGet || call.Path != binding.Path || call.Query.Get("limit") != "100" {
+			t.Fatalf("Stripe %s request %d = %#v, want exact declared GET", binding.Record, index, call)
 		}
 	}
 	if calls[0].Query.Get("starting_after") != "" || calls[1].Query.Get("starting_after") != f.recordID(binding, 0) {
-		t.Fatalf("Stripe %s pagination calls = %#v, want source id-cursor continuation", binding.SourceID, calls)
+		t.Fatalf("Stripe %s pagination calls = %#v, want id-cursor continuation", binding.Record, calls)
 	}
 }
 
-func (f *stripeTransportFixture) assertWriteCall(t *testing.T, binding stripeRuntimeBinding) {
+func (f *stripeTransportFixture) assertWriteCall(t *testing.T, binding stripeDeclaredBinding) {
 	t.Helper()
 	calls := f.snapshotWriteCalls()
-	if len(calls) != 1 || calls[0].SourceID != binding.SourceID || calls[0].Method != binding.Method || calls[0].Path != f.expectedWritePath(binding) {
-		t.Fatalf("Stripe %s provider writes = %#v, want one exact source-bound request", binding.SourceID, calls)
+	if len(calls) != 1 || calls[0].Record != binding.Record || calls[0].Method != binding.Method || calls[0].Path != f.expectedWritePath(binding) {
+		t.Fatalf("Stripe %s provider writes = %#v, want one exact declared request", binding.Record, calls)
 	}
 }
 
-func (f *stripeTransportFixture) expectedWritePath(binding stripeRuntimeBinding) string {
+func (f *stripeTransportFixture) expectedWritePath(binding stripeDeclaredBinding) string {
 	if binding.Record == "create_customer" {
 		return "/v1/customers"
 	}
@@ -687,10 +716,10 @@ func (f *stripeTransportFixture) snapshotWriteCalls() []stripeTransportCall {
 	return append([]stripeTransportCall(nil), f.writeCalls...)
 }
 
-func (f *stripeTransportFixture) failureSourceID() string {
+func (f *stripeTransportFixture) failureRecord() string {
 	f.mu.Lock()
 	defer f.mu.Unlock()
-	return f.failETLSourceID
+	return f.failETLRecord
 }
 
 func (f *stripeTransportFixture) writeJSON(w http.ResponseWriter, status int, value any) {
