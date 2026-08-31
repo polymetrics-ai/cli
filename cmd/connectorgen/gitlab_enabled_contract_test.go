@@ -78,6 +78,36 @@ func TestGitLabEnabledContractReconcilesSourceLock(t *testing.T) {
 			if !strings.Contains(lane.Reason, "mapped_unproven") || !strings.Contains(lane.Reason, "source-contract-unavailable") {
 				t.Fatalf("GitLab %s reason = %q, want source-contract-unavailable mapped-unproven boundary", lane.Name, lane.Reason)
 			}
+		case "etl":
+			wantSourceIDs := []string{
+				"getApiV4Projects",
+				"getApiV4Groups",
+				"getApiV4Users",
+				"getApiV4Issues",
+				"getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+			}
+			if !slices.Equal(lane.Source.OperationIDs, wantSourceIDs) || lane.Source.Expected != 5 || lane.Source.Implemented != 5 || lane.Source.MappedUnproven != 0 || lane.Source.UnmappedMapping != 0 || lane.Source.DeferredFoundation != 0 || lane.Source.Unsupported != 0 {
+				t.Fatalf("GitLab ETL source state = %+v, want exactly the four legacy streams plus source-bound MLflow metrics history", lane.Source)
+			}
+			if len(lane.Warehouse) != 1 || lane.Warehouse[0].Direction != "provider_to_duckdb" || lane.Warehouse[0].Runtime != "internal/app/declarativeStreamSourceExecutor -> internal/app/localWarehouseDestinationExecutor" || lane.Warehouse[0].Proof != "internal/connectors/defs/gitlab/mlflow_metrics_history_etl_test.go:TestGitLabMLflowMetricsHistoryETLMaterializesThroughDuckDB" {
+				t.Fatalf("GitLab ETL warehouse witness = %+v, want exact source-bound MLflow provider-to-DuckDB proof", lane.Warehouse)
+			}
+		case "sync_transport":
+			wantSourceIDs := []string{
+				"getApiV4Projects",
+				"getApiV4Groups",
+				"getApiV4Users",
+				"getApiV4Issues",
+				"getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+			}
+			if !slices.Equal(lane.Source.OperationIDs, wantSourceIDs) || lane.Source.Expected != 5 || lane.Source.Implemented != 5 || lane.Source.MappedUnproven != 0 || lane.Source.UnmappedMapping != 0 || lane.Source.DeferredFoundation != 0 || lane.Source.Unsupported != 0 {
+				t.Fatalf("GitLab source transport state = %+v, want exactly the five declared full-refresh streams", lane.Source)
+			}
+			if lane.Transport == nil || !slices.ContainsFunc(lane.Transport.Streams, func(stream connectors.EnabledContractTransportStreamEvidence) bool {
+				return stream.Stream == "mlflow_metrics_history" && stream.SourceOperation == "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory" && stream.CursorEvidence == "source_cited" && stream.DeleteEvidence == "not_declared" && stream.OrderEvidence == "not_declared"
+			}) {
+				t.Fatalf("GitLab source transport = %+v, want exact MLflow continuation evidence", lane.Transport)
+			}
 		}
 	}
 	if len(lanes) != len(want) {

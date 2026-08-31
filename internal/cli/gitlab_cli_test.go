@@ -34,19 +34,27 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 		t.Fatal("GitLab connector has no command surface")
 	}
 	want := map[string]struct {
-		stream string
-		method string
-		path   string
-		url    string
+		stream          string
+		method          string
+		path            string
+		url             string
+		sourceOperation string
 	}{
 		"projects list": {stream: "projects", method: http.MethodGet, path: "/projects", url: "https://docs.gitlab.com/api/projects/"},
 		"groups list":   {stream: "groups", method: http.MethodGet, path: "/groups", url: "https://docs.gitlab.com/api/groups/"},
 		"users list":    {stream: "users", method: http.MethodGet, path: "/users", url: "https://docs.gitlab.com/api/users/"},
 		"issues list":   {stream: "issues", method: http.MethodGet, path: "/issues", url: "https://docs.gitlab.com/api/issues/"},
+		"mlflow-metrics-history list": {
+			stream:          "mlflow_metrics_history",
+			method:          http.MethodGet,
+			path:            "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
+			url:             "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
+			sourceOperation: "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+		},
 	}
 
 	surface := provider.CommandSurface()
-	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") {
+	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "five GitLab ETL streams") || !strings.Contains(surface.Tagline, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") {
 		t.Fatalf("GitLab command tagline = %q, want current source-locked lanes", surface.Tagline)
 	}
 	writeActions := make(map[string]struct{}, len(manifest.WriteActions))
@@ -67,6 +75,24 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 			}
 			if len(command.APISurface) != 1 || command.APISurface[0].Method != expectation.method || command.APISurface[0].Path != expectation.path {
 				t.Fatalf("command %q API surface = %+v, want %s %s", command.Path, command.APISurface, expectation.method, expectation.path)
+			}
+			if expectation.sourceOperation != "" {
+				if command.SourceOperation != expectation.sourceOperation {
+					t.Fatalf("command %q source operation = %q, want %q", command.Path, command.SourceOperation, expectation.sourceOperation)
+				}
+				wantFlags := map[string]string{
+					"project-id": "config.project_id",
+					"run-id":     "config.mlflow_run_id",
+					"metric-key": "config.mlflow_metric_key",
+				}
+				if len(command.Flags) != len(wantFlags) {
+					t.Fatalf("MLflow command flags = %+v, want exact config-bound source selectors", command.Flags)
+				}
+				for _, flag := range command.Flags {
+					if !flag.Required || flag.MapsTo != wantFlags[flag.Name] {
+						t.Fatalf("MLflow command flag = %+v, want required exact source config binding", flag)
+					}
+				}
 			}
 		case "direct_read":
 			counts["direct_read"]++
@@ -97,7 +123,7 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 	}
 }
 
-func TestGitLabCommandSurfaceRunsAllDeclaredStreams(t *testing.T) {
+func TestGitLabCommandSurfaceRunsLegacyDeclaredStreams(t *testing.T) {
 	tests := []struct {
 		name    string
 		path    string
@@ -224,8 +250,8 @@ func TestGitLabSourceLockedCommandsPassRuntimePreflight(t *testing.T) {
 		}
 		counts[command.Intent]++
 	}
-	if counts["direct_read"] != 582 || counts["etl"] != 4 || counts["direct_write"] != 381 || counts["reverse_etl"] != 381 {
-		t.Fatalf("runtime-preflight lane counts = %+v, want direct_read=582 etl=4 direct_write=381 reverse_etl=381", counts)
+	if counts["direct_read"] != 582 || counts["etl"] != 5 || counts["direct_write"] != 381 || counts["reverse_etl"] != 381 {
+		t.Fatalf("runtime-preflight lane counts = %+v, want direct_read=582 etl=5 direct_write=381 reverse_etl=381", counts)
 	}
 }
 

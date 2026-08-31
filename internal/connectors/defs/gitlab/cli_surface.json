@@ -1,5 +1,5 @@
 {
-  "tagline": "Run 582 source-bound direct reads, four GitLab ETL streams, and 381 source-bound mutations through direct-write and approval-gated reverse-ETL commands.",
+  "tagline": "Run 582 source-bound direct reads, five GitLab ETL streams, and 381 source-bound mutations through direct-write and approval-gated reverse-ETL commands.",
   "usage": "pm gitlab <command> [flags]",
   "source_cli": {
     "name": "GitLab REST API v4",
@@ -15,7 +15,8 @@
         "projects",
         "groups",
         "users",
-        "issues"
+        "issues",
+        "mlflow-metrics-history"
       ]
     }
   ],
@@ -117,6 +118,48 @@
       ],
       "examples": [
         "pm gitlab issues list --json --limit 25"
+      ]
+    },
+    {
+      "path": "mlflow-metrics-history list",
+      "summary": "Extract source-bound GitLab MLflow metric-history records to the warehouse.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "mlflow_metrics_history",
+      "source_operation": "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+      "source_cli_path": "GET /projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history"
+        }
+      ],
+      "flags": [
+        {
+          "name": "project-id",
+          "type": "string",
+          "summary": "GitLab project ID or URL-encoded project path.",
+          "maps_to": "config.project_id",
+          "required": true
+        },
+        {
+          "name": "run-id",
+          "type": "string",
+          "summary": "MLflow run_id query value.",
+          "maps_to": "config.mlflow_run_id",
+          "required": true
+        },
+        {
+          "name": "metric-key",
+          "type": "string",
+          "summary": "MLflow metric_key query value.",
+          "maps_to": "config.mlflow_metric_key",
+          "required": true
+        }
+      ],
+      "examples": [
+        "pm gitlab mlflow-metrics-history list --credential gitlab-prod --project-id 42 --run-id run-123 --metric-key accuracy --json --limit 25"
       ]
     },
     {
