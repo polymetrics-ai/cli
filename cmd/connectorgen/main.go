@@ -22,6 +22,10 @@
 //	declaration-admission [dir] [--json]
 //	                           checks optional source-cited declaration
 //	                           sidecars without asserting runtime or live proof
+//	retained-source-mapping <connector> [--check]
+//	                           verifies a frozen v2 retained source contract
+//	                           and exact source-lane accounting without
+//	                           generating descriptor or runtime artifacts
 //	source-import <connector> --out <path> [--defs <dir>] [--check]
 //	                           verifies a connector-owned source lock and
 //	                           emits canonical provider contracts for later
@@ -86,6 +90,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runSourceOperationMapping(args, stdout, stderr)
 	case "source-operation-mapping-cohort":
 		return runSourceOperationMappingCohort(args, stdout, stderr)
+	case "retained-source-mapping":
+		return runRetainedSourceMapping(args, stdout, stderr)
 	case "params-import":
 		return runParamsImport(args, stdout, stderr)
 	case "source-import":
@@ -147,6 +153,7 @@ func usage() string {
 	connectorgen declaration-admission [dir] [--json]  (default dir: internal/connectors/defs)
 	connectorgen source-operation-mapping <manifest> --check
 	connectorgen source-operation-mapping-cohort <manifest> --check
+	connectorgen retained-source-mapping <connector> [--check]
 	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
 	connectorgen source-materialize <connector> [--defs <dir>] [--check]
 	connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>
