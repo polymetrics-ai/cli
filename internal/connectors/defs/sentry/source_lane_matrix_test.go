@@ -12,8 +12,11 @@ import (
 )
 
 const (
-	sentryMatrixPath     = "sources/sentry-source-lane-matrix.json"
-	sentrySourceLockPath = "sources/sentry-operation-source-lock.json"
+	sentryMatrixPath                 = "sources/sentry-source-lane-matrix.json"
+	sentrySourceLockPath             = "sources/sentry-operation-source-lock.json"
+	sentryDispositionPath            = "sources/sentry-declaration-disposition.json"
+	sentryMissingFoundationPath      = "missing-foundation.json"
+	sentryFoundationAtlasCatalogPath = "../../../../docs/connector-canon/foundations/catalog.json"
 )
 
 var sentryLaneOrder = []string{
@@ -72,6 +75,96 @@ type sentryArtifactRecords struct {
 	SurfaceByStream map[string]string
 }
 
+// sentryDeclarationDisposition records source-backed mapping truth alongside
+// the very small set of already-proven runtime bindings. It is intentionally
+// not a runtime bundle or an enabled-connector contract.
+type sentryDeclarationDisposition struct {
+	SchemaVersion    int                         `json:"schema_version"`
+	Connector        string                      `json:"connector"`
+	Purpose          string                      `json:"purpose"`
+	SourceLock       sentryDispositionSourceLock `json:"source_lock"`
+	SourceLaneMatrix string                      `json:"source_lane_matrix"`
+	Mapping          sentryDispositionMapping    `json:"mapping"`
+	Notes            []string                    `json:"notes"`
+}
+
+type sentryDispositionSourceLock struct {
+	Path                 string `json:"path"`
+	SourceURL            string `json:"source_url"`
+	SHA256               string `json:"sha256"`
+	SourceOperationCount int    `json:"source_operation_count"`
+}
+
+type sentryDispositionMapping struct {
+	State                 string                                      `json:"state"`
+	LaneCells             map[string]sentryDispositionLaneCell        `json:"lane_cells"`
+	RuntimeArtifacts      map[string]sentryDispositionRuntimeArtifact `json:"runtime_artifacts"`
+	SourceBoundExecutions []sentrySourceBoundExecution                `json:"source_bound_executions"`
+}
+
+type sentryDispositionLaneCell struct {
+	MappedUnproven    int `json:"mapped_unproven"`
+	NotApplicable     int `json:"not_applicable"`
+	Implemented       int `json:"implemented"`
+	MissingFoundation int `json:"missing_foundation"`
+}
+
+type sentryDispositionRuntimeArtifact struct {
+	Path               string `json:"path"`
+	Present            bool   `json:"present"`
+	RecordCount        int    `json:"record_count"`
+	SourceBoundRecords int    `json:"source_bound_records"`
+	Role               string `json:"role"`
+}
+
+type sentrySourceBoundExecution struct {
+	SourceID                string   `json:"source_id"`
+	Lanes                   []string `json:"lanes"`
+	Operation               string   `json:"operation"`
+	Command                 string   `json:"command"`
+	State                   string   `json:"state"`
+	CredentialBoundaryProof string   `json:"credential_boundary_proof"`
+	RouteProof              string   `json:"route_proof"`
+}
+
+// sentryMissingFoundation is a connector-local statement of the one source
+// fact that cannot truthfully be called a runnable transport. It records a
+// gap; it does not provide an ingress, executor, or transport declaration.
+type sentryMissingFoundation struct {
+	SchemaVersion    int                         `json:"schema_version"`
+	Connector        string                      `json:"connector"`
+	Purpose          string                      `json:"purpose"`
+	SourceLock       sentryDispositionSourceLock `json:"source_lock"`
+	SourceLaneMatrix string                      `json:"source_lane_matrix"`
+	Foundations      []sentryInboundWebhookGap   `json:"foundations"`
+}
+
+type sentryInboundWebhookGap struct {
+	ID           string                `json:"id"`
+	State        string                `json:"state"`
+	AtlasStatus  string                `json:"atlas_status"`
+	AffectedLane string                `json:"affected_lane"`
+	SourceIDs    []sentryWebhookSource `json:"source_ids"`
+	Reason       string                `json:"reason"`
+	RuntimeClaim string                `json:"runtime_claim"`
+}
+
+type sentryWebhookSource struct {
+	ID             string   `json:"id"`
+	Method         string   `json:"method"`
+	Path           string   `json:"path"`
+	SourceLocation string   `json:"source_location"`
+	RequiredFields []string `json:"required_fields"`
+}
+
+type sentryFoundationAtlas struct {
+	Foundations []sentryFoundationAtlasEntry `json:"foundations"`
+}
+
+type sentryFoundationAtlasEntry struct {
+	ID string `json:"id"`
+}
+
 func TestSentrySourceLaneMatrixContract(t *testing.T) {
 	matrix := readSentryJSONObject(t, sentryMatrixPath)
 	lock := readSentryJSONObject(t, sentrySourceLockPath)
@@ -79,6 +172,51 @@ func TestSentrySourceLaneMatrixContract(t *testing.T) {
 	if err := validateSentrySourceLaneMatrix(matrix, lock, readSentryArtifactRecords(t)); err != nil {
 		t.Fatal(err)
 	}
+}
+
+func TestSentryDeclarationDispositionIsSourceBoundAndNonFabricating(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	disposition := readSentryDeclarationDisposition(t)
+	if err := validateSentryDeclarationDisposition(disposition, matrix, lock, readSentryArtifactRecords(t)); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestSentryDeclarationDispositionRejectsUnprovenBinding(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	disposition := readSentryDeclarationDisposition(t)
+	if len(disposition.Mapping.SourceBoundExecutions) == 0 {
+		t.Fatal("declaration disposition has no source-bound execution to mutate")
+	}
+	disposition.Mapping.SourceBoundExecutions[0].SourceID = "sentry.rest.not-a-locked-operation"
+	if err := validateSentryDeclarationDisposition(disposition, matrix, lock, readSentryArtifactRecords(t)); err == nil || !strings.Contains(err.Error(), "source-bound execution") {
+		t.Fatalf("invalid source-bound execution error = %v, want source-bound execution rejection", err)
+	}
+}
+
+func TestSentryMissingFoundationIsOnlyTheDocumentedServiceHookReceiverGap(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	missingFoundation := readSentryMissingFoundation(t)
+	if err := validateSentryMissingFoundation(missingFoundation, matrix, lock); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestSentryMissingFoundationRejectsPaginationAsWebhookReceiver(t *testing.T) {
+	matrix, lock := readSentryMatrixAndLock(t)
+	missingFoundation := readSentryMissingFoundation(t)
+	sources := sentrySourceOperationsByID(t, lock)
+	for _, source := range sources {
+		if !sentryRequiresETL(source) || sentryRequiresSyncTransport(source) {
+			continue
+		}
+		missingFoundation.Foundations[0].SourceIDs[0].ID = source.ID
+		if err := validateSentryMissingFoundation(missingFoundation, matrix, lock); err == nil || !strings.Contains(err.Error(), "webhook registration") {
+			t.Fatalf("pagination-as-receiver error = %v, want webhook registration rejection", err)
+		}
+		return
+	}
+	t.Fatal("source lock has no continuation-only operation to mutate")
 }
 
 func TestSentrySourceLaneMatrixRejectsHiddenSourceRow(t *testing.T) {
@@ -379,6 +517,328 @@ func sentryTestJSONResponse(schemaType string) map[string]any {
 			"application/json": map[string]any{"schema": map[string]any{"type": schemaType}},
 		},
 	}
+}
+
+func readSentryDeclarationDisposition(t *testing.T) sentryDeclarationDisposition {
+	t.Helper()
+	var disposition sentryDeclarationDisposition
+	readSentryTypedJSON(t, sentryDispositionPath, &disposition)
+	return disposition
+}
+
+func readSentryMissingFoundation(t *testing.T) sentryMissingFoundation {
+	t.Helper()
+	var missingFoundation sentryMissingFoundation
+	readSentryTypedJSON(t, sentryMissingFoundationPath, &missingFoundation)
+	return missingFoundation
+}
+
+func readSentryTypedJSON(t *testing.T, path string, target any) {
+	t.Helper()
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read %s: %v", path, err)
+	}
+	if err := json.Unmarshal(bytes, target); err != nil {
+		t.Fatalf("decode %s: %v", path, err)
+	}
+}
+
+func validateSentryDeclarationDisposition(disposition sentryDeclarationDisposition, matrix, lock map[string]any, artifacts sentryArtifactRecords) error {
+	if disposition.SchemaVersion != 1 || disposition.Connector != "sentry" {
+		return fmt.Errorf("declaration disposition identity = version:%d connector:%q, want version:1 connector:sentry", disposition.SchemaVersion, disposition.Connector)
+	}
+	if disposition.Purpose != "Connector-local source mapping, declaration, and execution-gap ledger. This authoring artifact does not load an executor, enable a command, or change source-lane membership." {
+		return fmt.Errorf("declaration disposition purpose is not mapping-only: %q", disposition.Purpose)
+	}
+	if err := sentryValidateDispositionSourceBasis(disposition.SourceLock, disposition.SourceLaneMatrix, lock); err != nil {
+		return err
+	}
+	if disposition.Mapping.State != "source_mapped_runtime_partially_proven" {
+		return fmt.Errorf("declaration disposition mapping state = %q, want source_mapped_runtime_partially_proven", disposition.Mapping.State)
+	}
+
+	cells := sentryMatrixCellCounts(matrix)
+	if len(disposition.Mapping.LaneCells) != len(sentryLaneOrder) {
+		return fmt.Errorf("declaration disposition lane count = %d, want %d", len(disposition.Mapping.LaneCells), len(sentryLaneOrder))
+	}
+	for _, lane := range sentryLaneOrder {
+		actual, exists := disposition.Mapping.LaneCells[lane]
+		if !exists {
+			return fmt.Errorf("declaration disposition is missing %s lane", lane)
+		}
+		if actual.MappedUnproven != cells[lane]["mapped_unproven"] ||
+			actual.NotApplicable != cells[lane]["not_applicable"] ||
+			actual.Implemented != cells[lane]["implemented"] ||
+			actual.MissingFoundation != cells[lane]["missing_foundation"] {
+			return fmt.Errorf("declaration disposition %s cells = %+v, want matrix %+v", lane, actual, cells[lane])
+		}
+	}
+	if err := sentryValidateDispositionArtifactSnapshot(disposition.Mapping.RuntimeArtifacts, artifacts); err != nil {
+		return err
+	}
+	return sentryValidateSourceBoundExecutions(disposition.Mapping.SourceBoundExecutions, matrix, lock, artifacts)
+}
+
+func sentryValidateDispositionSourceBasis(basis sentryDispositionSourceLock, matrixPath string, lock map[string]any) error {
+	sources, err := sentrySourceOperationsByIDNoTest(lock)
+	if err != nil {
+		return err
+	}
+	rest := sentryObjectField(nil, lock, "rest")
+	if basis.Path != sentrySourceLockPath || matrixPath != sentryMatrixPath ||
+		basis.SourceURL != sentryStringField(nil, rest, "source_url") ||
+		basis.SHA256 != sentryStringField(nil, rest, "sha256") ||
+		basis.SourceOperationCount != len(sources) {
+		return fmt.Errorf("declaration disposition source basis = %+v/%q, does not match the retained Sentry lock and matrix", basis, matrixPath)
+	}
+	return nil
+}
+
+func sentryValidateDispositionArtifactSnapshot(snapshot map[string]sentryDispositionRuntimeArtifact, artifacts sentryArtifactRecords) error {
+	expected := map[string]sentryDispositionRuntimeArtifact{
+		"api_surface": {
+			Path:               "api_surface.json",
+			Present:            true,
+			RecordCount:        len(artifacts.API),
+			SourceBoundRecords: 0,
+			Role:               "source_inventory_not_execution_proof",
+		},
+		"streams": {
+			Path:               "streams.json",
+			Present:            true,
+			RecordCount:        len(artifacts.Streams),
+			SourceBoundRecords: 0,
+			Role:               "source_stream_declarations_not_execution_proof",
+		},
+		"operations": {
+			Path:               "operations.json",
+			Present:            true,
+			RecordCount:        len(artifacts.Operations),
+			SourceBoundRecords: sentryOperationSourceBindingCount(artifacts.Operations),
+			Role:               "existing_exact_direct_read_definition",
+		},
+		"cli_surface": {
+			Path:               "cli_surface.json",
+			Present:            true,
+			RecordCount:        len(artifacts.Commands),
+			SourceBoundRecords: sentryCommandSourceBindingCount(artifacts.Commands),
+			Role:               "existing_public_direct_read_command",
+		},
+		"writes": {
+			Path:               "writes.json",
+			Present:            false,
+			RecordCount:        0,
+			SourceBoundRecords: 0,
+			Role:               "no_declared_write_actions",
+		},
+		"sync_transport": {
+			Path:               "sync_transport.json",
+			Present:            false,
+			RecordCount:        0,
+			SourceBoundRecords: 0,
+			Role:               "no_declared_sync_transport",
+		},
+	}
+	if len(snapshot) != len(expected) {
+		return fmt.Errorf("declaration disposition artifact count = %d, want %d", len(snapshot), len(expected))
+	}
+	for name, want := range expected {
+		got, exists := snapshot[name]
+		if !exists || got != want {
+			return fmt.Errorf("declaration disposition runtime artifact %s = %+v, want %+v", name, got, want)
+		}
+	}
+	for _, path := range []string{"writes.json", "sync_transport.json"} {
+		if _, err := os.Stat(path); !errors.Is(err, os.ErrNotExist) {
+			return fmt.Errorf("declaration disposition says %s is absent, but it is present or unreadable: %v", path, err)
+		}
+	}
+	return nil
+}
+
+func sentryOperationSourceBindingCount(operations map[string]map[string]any) int {
+	count := 0
+	for _, operation := range operations {
+		if sentryStringFieldOrEmpty(sentryObjectFieldOrEmpty(operation, "source_operation"), "id") != "" {
+			count++
+		}
+	}
+	return count
+}
+
+func sentryCommandSourceBindingCount(commands map[string]map[string]any) int {
+	count := 0
+	for _, command := range commands {
+		if sentryStringFieldOrEmpty(command, "source_operation") != "" {
+			count++
+		}
+	}
+	return count
+}
+
+func sentryValidateSourceBoundExecutions(proofs []sentrySourceBoundExecution, matrix, lock map[string]any, artifacts sentryArtifactRecords) error {
+	sources, err := sentrySourceOperationsByIDNoTest(lock)
+	if err != nil {
+		return err
+	}
+	matrixByID := sentryMatrixByID(matrix)
+	operationsBySource := make(map[string]string)
+	for operationID, operation := range artifacts.Operations {
+		sourceBinding := sentryObjectFieldOrEmpty(operation, "source_operation")
+		sourceID := sentryStringFieldOrEmpty(sourceBinding, "id")
+		if sourceID == "" {
+			continue
+		}
+		source, exists := sources[sourceID]
+		if !exists || sourceBinding["method"] != source.Method || sourceBinding["path"] != source.Path {
+			return fmt.Errorf("operation %q has a non-locked source binding %q", operationID, sourceID)
+		}
+		if _, duplicate := operationsBySource[sourceID]; duplicate {
+			return fmt.Errorf("source operation %q is bound by multiple operation definitions", sourceID)
+		}
+		operationsBySource[sourceID] = operationID
+	}
+	commandsBySource := make(map[string]string)
+	for commandPath, command := range artifacts.Commands {
+		sourceID := sentryStringFieldOrEmpty(command, "source_operation")
+		if sourceID == "" {
+			continue
+		}
+		if _, exists := sources[sourceID]; !exists {
+			return fmt.Errorf("command %q has a non-locked source binding %q", commandPath, sourceID)
+		}
+		if _, duplicate := commandsBySource[sourceID]; duplicate {
+			return fmt.Errorf("source operation %q is bound by multiple public commands", sourceID)
+		}
+		commandsBySource[sourceID] = commandPath
+	}
+	if len(proofs) == 0 || len(proofs) != len(operationsBySource) || len(proofs) != len(commandsBySource) {
+		return fmt.Errorf("source-bound execution count = proofs:%d operations:%d commands:%d, want one exact proof per existing binding", len(proofs), len(operationsBySource), len(commandsBySource))
+	}
+	seen := make(map[string]struct{}, len(proofs))
+	for _, proof := range proofs {
+		if _, duplicate := seen[proof.SourceID]; duplicate {
+			return fmt.Errorf("duplicate source-bound execution %q", proof.SourceID)
+		}
+		seen[proof.SourceID] = struct{}{}
+		source, exists := sources[proof.SourceID]
+		if !exists || operationsBySource[proof.SourceID] != proof.Operation || commandsBySource[proof.SourceID] != proof.Command {
+			return fmt.Errorf("source-bound execution %q does not match an exact existing operation and public command binding", proof.SourceID)
+		}
+		matrixOperation := matrixByID[proof.SourceID]
+		if matrixOperation == nil || !sentryEqualStrings(proof.Lanes, []string{"direct_read"}) ||
+			sentryMatrixCellByLaneNoTest(matrixOperation, "direct_read") == nil ||
+			sentryStringField(nil, sentryMatrixCellByLaneNoTest(matrixOperation, "direct_read"), "state") != "mapped_unproven" {
+			return fmt.Errorf("source-bound execution %q is not a mapped direct-read source cell", proof.SourceID)
+		}
+		command := artifacts.Commands[proof.Command]
+		if sentryStringFieldOrEmpty(command, "intent") != "direct_read" || sentryStringFieldOrEmpty(command, "availability") != "implemented" || sentryStringFieldOrEmpty(command, "operation") != proof.Operation {
+			return fmt.Errorf("source-bound execution %q public command is not an implemented direct read", proof.SourceID)
+		}
+		if proof.State != "existing_preflight_proven" || proof.CredentialBoundaryProof != "internal/cli/cli_test.go TestSentrySeerModelsCommandStopsBeforeProviderIOWithoutCredential" || proof.RouteProof != "internal/connectors/engine/sentry_seer_models_route_test.go TestSentrySeerModelsSourceBoundRoute" {
+			return fmt.Errorf("source-bound execution %q does not cite the existing credential-bound route proof", proof.SourceID)
+		}
+		if source.Method != sentryStringFieldOrEmpty(sentryObjectFieldOrEmpty(artifacts.Operations[proof.Operation], "source_operation"), "method") || source.Path != sentryStringFieldOrEmpty(sentryObjectFieldOrEmpty(artifacts.Operations[proof.Operation], "source_operation"), "path") {
+			return fmt.Errorf("source-bound execution %q does not preserve the locked route", proof.SourceID)
+		}
+	}
+	return nil
+}
+
+func sentryMatrixByID(matrix map[string]any) map[string]map[string]any {
+	result := make(map[string]map[string]any)
+	for _, rawOperation := range sentryArrayField(nil, matrix, "operations") {
+		operation := sentryObjectValue(nil, rawOperation, "matrix operation")
+		result[sentryStringField(nil, operation, "source_id")] = operation
+	}
+	return result
+}
+
+func validateSentryMissingFoundation(missingFoundation sentryMissingFoundation, matrix, lock map[string]any) error {
+	if missingFoundation.SchemaVersion != 1 || missingFoundation.Connector != "sentry" {
+		return fmt.Errorf("missing-foundation identity = version:%d connector:%q, want version:1 connector:sentry", missingFoundation.SchemaVersion, missingFoundation.Connector)
+	}
+	if missingFoundation.Purpose != "Connector-local source mapping and execution-gap ledger. This authoring artifact does not load an executor, enable a command, or change source-lane membership." {
+		return fmt.Errorf("missing-foundation purpose is not mapping-only: %q", missingFoundation.Purpose)
+	}
+	if err := sentryValidateDispositionSourceBasis(missingFoundation.SourceLock, missingFoundation.SourceLaneMatrix, lock); err != nil {
+		return err
+	}
+	if len(missingFoundation.Foundations) != 1 {
+		return fmt.Errorf("missing-foundation entries = %d, want only the documented service-hook receiver gap", len(missingFoundation.Foundations))
+	}
+	gap := missingFoundation.Foundations[0]
+	if gap.ID != "sentry-inbound-webhook-receiver-r1" ||
+		gap.State != "recorded_only_requires_captain_approval_before_implementation" ||
+		gap.AtlasStatus != "no_canonical_sentry_inbound_webhook_receiver_v1" ||
+		gap.AffectedLane != "sync_transport" {
+		return fmt.Errorf("missing-foundation identity = %+v, want the non-executable Sentry inbound webhook receiver record", gap)
+	}
+	if gap.RuntimeClaim != "No Sentry inbound webhook receiver, selected source executor, or executable sync transport is claimed." {
+		return fmt.Errorf("missing-foundation runtime claim is not explicitly non-executing: %q", gap.RuntimeClaim)
+	}
+	if strings.TrimSpace(gap.Reason) == "" || !strings.Contains(gap.Reason, "url") || !strings.Contains(gap.Reason, "events") {
+		return fmt.Errorf("missing-foundation reason does not retain the provider callback and event-selector facts: %q", gap.Reason)
+	}
+	if err := sentryValidateNoEquivalentInboundWebhookAtlasEntry(); err != nil {
+		return err
+	}
+
+	sources, err := sentrySourceOperationsByIDNoTest(lock)
+	if err != nil {
+		return err
+	}
+	matrixByID := sentryMatrixByID(matrix)
+	expected := make(map[string]sentrySourceInfo)
+	for sourceID, source := range sources {
+		if !sentryRequiresSyncTransport(source) {
+			continue
+		}
+		matrixOperation := matrixByID[sourceID]
+		if matrixOperation == nil || sentryMatrixCellByLaneNoTest(matrixOperation, "sync_transport") == nil ||
+			sentryStringField(nil, sentryMatrixCellByLaneNoTest(matrixOperation, "sync_transport"), "state") != "mapped_unproven" {
+			return fmt.Errorf("source-backed webhook registration %q has no mapped-unproven sync cell", sourceID)
+		}
+		expected[sourceID] = source
+	}
+	if len(gap.SourceIDs) != len(expected) || len(expected) != 1 {
+		return fmt.Errorf("missing-foundation service-hook source count = gap:%d expected:%d, want one", len(gap.SourceIDs), len(expected))
+	}
+	seen := make(map[string]struct{}, len(gap.SourceIDs))
+	for _, actual := range gap.SourceIDs {
+		if _, duplicate := seen[actual.ID]; duplicate {
+			return fmt.Errorf("missing-foundation duplicates source %q", actual.ID)
+		}
+		seen[actual.ID] = struct{}{}
+		source, exists := expected[actual.ID]
+		if !exists {
+			return fmt.Errorf("missing-foundation source %q does not identify a source-backed webhook registration", actual.ID)
+		}
+		if actual.Method != source.Method || actual.Path != source.Path || actual.SourceLocation != source.SourceLocation ||
+			!sentryEqualStrings(actual.RequiredFields, sentrySourceEventTransport(source).RequiredFields) {
+			return fmt.Errorf("missing-foundation source %q does not preserve its exact webhook registration contract", actual.ID)
+		}
+	}
+	return nil
+}
+
+func sentryValidateNoEquivalentInboundWebhookAtlasEntry() error {
+	bytes, err := os.ReadFile(sentryFoundationAtlasCatalogPath)
+	if err != nil {
+		return fmt.Errorf("read Foundation Atlas: %w", err)
+	}
+	var atlas sentryFoundationAtlas
+	if err := json.Unmarshal(bytes, &atlas); err != nil {
+		return fmt.Errorf("decode Foundation Atlas: %w", err)
+	}
+	for _, entry := range atlas.Foundations {
+		id := strings.ToLower(entry.ID)
+		if strings.Contains(id, "sentry") && strings.Contains(id, "webhook") {
+			return fmt.Errorf("Foundation Atlas now contains %q; connector-local gap must be reclassified rather than duplicating it", entry.ID)
+		}
+	}
+	return nil
 }
 
 func readSentryMatrixAndLock(t *testing.T) (map[string]any, map[string]any) {

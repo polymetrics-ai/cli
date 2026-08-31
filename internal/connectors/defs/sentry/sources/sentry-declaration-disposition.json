@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "connector": "sentry",
+  "purpose": "Connector-local source mapping, declaration, and execution-gap ledger. This authoring artifact does not load an executor, enable a command, or change source-lane membership.",
+  "source_lock": {
+    "path": "sources/sentry-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+    "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
+    "source_operation_count": 223
+  },
+  "source_lane_matrix": "sources/sentry-source-lane-matrix.json",
+  "mapping": {
+    "state": "source_mapped_runtime_partially_proven",
+    "lane_cells": {
+      "direct_read": {
+        "mapped_unproven": 120,
+        "not_applicable": 103,
+        "implemented": 0,
+        "missing_foundation": 0
+      },
+      "direct_write": {
+        "mapped_unproven": 103,
+        "not_applicable": 120,
+        "implemented": 0,
+        "missing_foundation": 0
+      },
+      "binary_download": {
+        "mapped_unproven": 0,
+        "not_applicable": 223,
+        "implemented": 0,
+        "missing_foundation": 0
+      },
+      "binary_upload": {
+        "mapped_unproven": 2,
+        "not_applicable": 221,
+        "implemented": 0,
+        "missing_foundation": 0
+      },
+      "etl": {
+        "mapped_unproven": 45,
+        "not_applicable": 178,
+        "implemented": 0,
+        "missing_foundation": 0
+      },
+      "reverse_etl": {
+        "mapped_unproven": 103,
+        "not_applicable": 120,
+        "implemented": 0,
+        "missing_foundation": 0
+      },
+      "sync_transport": {
+        "mapped_unproven": 1,
+        "not_applicable": 222,
+        "implemented": 0,
+        "missing_foundation": 0
+      }
+    },
+    "runtime_artifacts": {
+      "api_surface": {
+        "path": "api_surface.json",
+        "present": true,
+        "record_count": 221,
+        "source_bound_records": 0,
+        "role": "source_inventory_not_execution_proof"
+      },
+      "streams": {
+        "path": "streams.json",
+        "present": true,
+        "record_count": 4,
+        "source_bound_records": 0,
+        "role": "source_stream_declarations_not_execution_proof"
+      },
+      "operations": {
+        "path": "operations.json",
+        "present": true,
+        "record_count": 1,
+        "source_bound_records": 1,
+        "role": "existing_exact_direct_read_definition"
+      },
+      "cli_surface": {
+        "path": "cli_surface.json",
+        "present": true,
+        "record_count": 1,
+        "source_bound_records": 1,
+        "role": "existing_public_direct_read_command"
+      },
+      "writes": {
+        "path": "writes.json",
+        "present": false,
+        "record_count": 0,
+        "source_bound_records": 0,
+        "role": "no_declared_write_actions"
+      },
+      "sync_transport": {
+        "path": "sync_transport.json",
+        "present": false,
+        "record_count": 0,
+        "source_bound_records": 0,
+        "role": "no_declared_sync_transport"
+      }
+    },
+    "source_bound_executions": [
+      {
+        "source_id": "sentry.rest.listSeerModels",
+        "lanes": [
+          "direct_read"
+        ],
+        "operation": "sentry.seer_models_list",
+        "command": "seer list-models",
+        "state": "existing_preflight_proven",
+        "credential_boundary_proof": "internal/cli/cli_test.go TestSentrySeerModelsCommandStopsBeforeProviderIOWithoutCredential",
+        "route_proof": "internal/connectors/engine/sentry_seer_models_route_test.go TestSentrySeerModelsSourceBoundRoute"
+      }
+    ]
+  },
+  "notes": [
+    "All 223 retained source operations and their seven lane cells remain source-mapping facts. A mapped_unproven state is not a declaration, command, executor, transport, or certification claim.",
+    "The only existing exact source-bound public surface is the Seer Models direct read. Its source lock route, operation definition, CLI command, credential boundary, and engine route proof are retained above.",
+    "No write action, binary action, ETL stream, reverse-ETL destination action, or sync transport is fabricated by this ledger."
+  ]
+}

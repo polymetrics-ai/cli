@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "connector": "sentry",
+  "purpose": "Connector-local source mapping and execution-gap ledger. This authoring artifact does not load an executor, enable a command, or change source-lane membership.",
+  "source_lock": {
+    "path": "sources/sentry-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/getsentry/sentry-api-schema/main/openapi-derefed.json",
+    "sha256": "b71216654e44cc18f5e262fbb5075df67f1504a123d4bcb51cc8e8cc74ebd435",
+    "source_operation_count": 223
+  },
+  "source_lane_matrix": "sources/sentry-source-lane-matrix.json",
+  "foundations": [
+    {
+      "id": "sentry-inbound-webhook-receiver-r1",
+      "state": "recorded_only_requires_captain_approval_before_implementation",
+      "atlas_status": "no_canonical_sentry_inbound_webhook_receiver_v1",
+      "affected_lane": "sync_transport",
+      "source_ids": [
+        {
+          "id": "sentry.rest.Register a New Service Hook",
+          "method": "POST",
+          "path": "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/",
+          "source_location": "paths[\"/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/hooks/\"].post",
+          "required_fields": [
+            "events",
+            "url"
+          ]
+        }
+      ],
+      "reason": "The retained provider contract documents service-hook registration with required url and events fields, but no Polymetrics inbound receiver, selected source executor, durable staging worker, or executable sync transport currently exists.",
+      "runtime_claim": "No Sentry inbound webhook receiver, selected source executor, or executable sync transport is claimed."
+    }
+  ]
+}
