@@ -14,7 +14,8 @@ preserving canonical-descriptor requirements for every executable claim.
    descriptor import.
 2. Add failing negative tests for implemented lanes, unmapped cells, legacy
    method partitions, missing/duplicate IDs, unsafe IDs, runtime artifacts,
-   and a descriptor-less executable claim.
+   a descriptor-less executable claim, and an actual loaded Jira bundle with
+   executable declarations.
 3. Extend the closed contract schema and contract validator with a dedicated
    retention-only invariant. Keep legacy ordinary contracts compatible.
 4. Teach only `checkSourceProjection` to accept the missing descriptor after
@@ -38,10 +39,12 @@ preserving canonical-descriptor requirements for every executable claim.
    foundation, or provider-evidenced/not-applicable.
 5. Each lane references only the primary source-lock artifact; it has no
    transport or warehouse binding.
-6. Retention-only source IDs remain opaque provider data, including ordinary
+6. The actual loaded bundle has no operations, writes, streams, selected sync
+   transport, or CLI command marked `implemented`.
+7. Retention-only source IDs remain opaque provider data, including ordinary
    spaces and `/`; reject only empty IDs and control characters. IDs are never
    normalized or used as filesystem paths.
-7. A missing descriptor remains a failure for every ordinary or executable
+8. A missing descriptor remains a failure for every ordinary or executable
    contract.
 
 ## Foundation Atlas update

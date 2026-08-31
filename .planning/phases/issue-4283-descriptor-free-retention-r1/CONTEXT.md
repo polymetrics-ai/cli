@@ -17,7 +17,9 @@ It is mapping admission only. It may waive the *descriptor-presence* check
 only after the existing source-lock bridge verifies an exact primary-lock
 digest/byte identity and exact source-operation-ID reconciliation. Every lane
 must remain nonimplemented and source-only. Any executable claim continues to
-require the canonical descriptor and its existing projection validation.
+require the canonical descriptor and its existing projection validation. The
+actual loaded bundle must additionally have no operations, writes, streams,
+selected sync transport, or CLI command marked `implemented`.
 
 ## Frozen evidence
 

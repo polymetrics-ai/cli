@@ -17,21 +17,18 @@ import (
 
 // TestSourceProjectionDescriptorFreeRetentionFromFrozenSourceEvidence proves
 // that an exact, source-only seven-lane contract can preserve mapping
-// accounting without importing a historical canonical descriptor. The helper
-// reads the actual checked-in source locks and matrices; it does not invent a
-// request, response, command, stream, or runtime artifact.
+// accounting without importing a historical canonical descriptor only for a
+// bundle that carries no executable declaration. The helper reads the actual
+// checked-in source locks and matrices; it does not invent a request, response,
+// command, stream, or runtime artifact.
 func TestSourceProjectionDescriptorFreeRetentionFromFrozenSourceEvidence(t *testing.T) {
 	const defsRoot = "../../internal/connectors/defs"
 	fsys := os.DirFS(defsRoot)
 
 	for _, connector := range []string{"jira", "sentry", "vercel"} {
 		t.Run(connector, func(t *testing.T) {
-			bundle, err := engine.Load(fsys, connector)
-			if err != nil {
-				t.Fatalf("load %s bundle: %v", connector, err)
-			}
 			contract := descriptorFreeRetentionContractFromFrozenMatrix(t, fsys, connector)
-			bundle.EnabledContract = &contract
+			bundle := engine.Bundle{Name: connector, EnabledContract: &contract}
 
 			if findings := checkEnabledConnectorContract(fsys, bundle); len(findings) != 0 {
 				t.Fatalf("%s exact retained-source contract findings = %+v", connector, findings)
@@ -43,13 +40,79 @@ func TestSourceProjectionDescriptorFreeRetentionFromFrozenSourceEvidence(t *test
 	}
 }
 
-func TestSourceProjectionDescriptorFreeRetentionStillRequiresDescriptorForExecutableClaims(t *testing.T) {
+func TestSourceProjectionDescriptorFreeRetentionDoesNotWaiveLoadedExecutableJiraBundle(t *testing.T) {
 	const defsRoot = "../../internal/connectors/defs"
 	fsys := os.DirFS(defsRoot)
 	bundle, err := engine.Load(fsys, "jira")
 	if err != nil {
 		t.Fatalf("load Jira bundle: %v", err)
 	}
+	if len(bundle.Operations) != 25 || len(bundle.Writes) != 292 || len(bundle.Streams) != 3 || descriptorFreeRetentionImplementedCLICommandCount(bundle) != 584 {
+		t.Fatalf("loaded Jira declarations = operations=%d writes=%d streams=%d implemented_cli=%d, want 25/292/3/584", len(bundle.Operations), len(bundle.Writes), len(bundle.Streams), descriptorFreeRetentionImplementedCLICommandCount(bundle))
+	}
+	contract := descriptorFreeRetentionContractFromFrozenMatrix(t, fsys, "jira")
+	bundle.EnabledContract = &contract
+
+	findings := checkSourceProjection(fsys, bundle)
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "canonical source descriptor is missing") {
+		t.Fatalf("loaded executable Jira retention findings = %+v, want canonical descriptor failure", findings)
+	}
+}
+
+func TestSourceProjectionDescriptorFreeRetentionRejectsRuntimeDeclarations(t *testing.T) {
+	const defsRoot = "../../internal/connectors/defs"
+	fsys := os.DirFS(defsRoot)
+	for _, test := range []struct {
+		name   string
+		mutate func(*engine.Bundle)
+	}{
+		{
+			name: "operation",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.Operations = []engine.OperationSpec{{}}
+			},
+		},
+		{
+			name: "write",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.Writes = []engine.WriteAction{{}}
+			},
+		},
+		{
+			name: "stream",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.Streams = []engine.StreamSpec{{}}
+			},
+		},
+		{
+			name: "implemented CLI command",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.CLISurface = &engine.CLISurface{Commands: []engine.CLICommand{{Availability: "implemented"}}}
+			},
+		},
+		{
+			name: "sync transport",
+			mutate: func(bundle *engine.Bundle) {
+				bundle.SyncTransport = &connectors.SyncTransportDescriptor{}
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			contract := descriptorFreeRetentionContractFromFrozenMatrix(t, fsys, "jira")
+			bundle := engine.Bundle{Name: "jira", EnabledContract: &contract}
+			test.mutate(&bundle)
+
+			findings := checkSourceProjection(fsys, bundle)
+			if len(findings) != 1 || !strings.Contains(findings[0].Message, "canonical source descriptor is missing") {
+				t.Fatalf("descriptor-free runtime declaration findings = %+v, want canonical descriptor failure", findings)
+			}
+		})
+	}
+}
+
+func TestSourceProjectionDescriptorFreeRetentionStillRequiresDescriptorForExecutableClaims(t *testing.T) {
+	const defsRoot = "../../internal/connectors/defs"
+	fsys := os.DirFS(defsRoot)
 	contract := descriptorFreeRetentionContractFromFrozenMatrix(t, fsys, "jira")
 	directRead := descriptorFreeRetentionLane(t, &contract, "direct_read")
 	directRead.State = connectors.EnabledLaneImplemented
@@ -59,7 +122,7 @@ func TestSourceProjectionDescriptorFreeRetentionStillRequiresDescriptorForExecut
 	directRead.Source.Unsupported = 0
 	directRead.Source.Coverage = connectors.EnabledCoverageComplete
 	directRead.Artifacts = []string{"operations.json"}
-	bundle.EnabledContract = &contract
+	bundle := engine.Bundle{Name: "jira", EnabledContract: &contract}
 
 	findings := checkSourceProjection(fsys, bundle)
 	if len(findings) != 1 || !strings.Contains(findings[0].Message, "canonical source descriptor is missing") {
@@ -70,16 +133,12 @@ func TestSourceProjectionDescriptorFreeRetentionStillRequiresDescriptorForExecut
 func TestSourceProjectionDescriptorFreeRetentionRejectsIncompleteExactSourceClaims(t *testing.T) {
 	const defsRoot = "../../internal/connectors/defs"
 	fsys := os.DirFS(defsRoot)
-	bundle, err := engine.Load(fsys, "vercel")
-	if err != nil {
-		t.Fatalf("load Vercel bundle: %v", err)
-	}
 	contract := descriptorFreeRetentionContractFromFrozenMatrix(t, fsys, "vercel")
 	directRead := descriptorFreeRetentionLane(t, &contract, "direct_read")
 	directRead.Source.OperationIDs = directRead.Source.OperationIDs[1:]
 	directRead.Source.Expected--
 	directRead.Source.MappedUnproven--
-	bundle.EnabledContract = &contract
+	bundle := engine.Bundle{Name: "vercel", EnabledContract: &contract}
 
 	findings := checkSourceProjection(fsys, bundle)
 	if len(findings) != 1 || !strings.Contains(findings[0].Message, "canonical source descriptor is missing") {
@@ -90,17 +149,13 @@ func TestSourceProjectionDescriptorFreeRetentionRejectsIncompleteExactSourceClai
 func TestSourceProjectionDescriptorFreeRetentionRejectsDuplicateExactSourceClaims(t *testing.T) {
 	const defsRoot = "../../internal/connectors/defs"
 	fsys := os.DirFS(defsRoot)
-	bundle, err := engine.Load(fsys, "sentry")
-	if err != nil {
-		t.Fatalf("load Sentry bundle: %v", err)
-	}
 	contract := descriptorFreeRetentionContractFromFrozenMatrix(t, fsys, "sentry")
 	directRead := descriptorFreeRetentionLane(t, &contract, "direct_read")
 	if len(directRead.Source.OperationIDs) < 2 {
 		t.Fatalf("Sentry direct-read retention fixture has %d IDs, want at least two", len(directRead.Source.OperationIDs))
 	}
 	directRead.Source.OperationIDs[1] = directRead.Source.OperationIDs[0]
-	bundle.EnabledContract = &contract
+	bundle := engine.Bundle{Name: "sentry", EnabledContract: &contract}
 
 	findings := checkSourceProjection(fsys, bundle)
 	if len(findings) != 1 || !strings.Contains(findings[0].Message, "canonical source descriptor is missing") {
@@ -316,6 +371,19 @@ func descriptorFreeRetentionLane(t *testing.T, contract *connectors.EnabledConne
 	}
 	t.Fatalf("contract omits lane %q", name)
 	return nil
+}
+
+func descriptorFreeRetentionImplementedCLICommandCount(bundle engine.Bundle) int {
+	if bundle.CLISurface == nil {
+		return 0
+	}
+	count := 0
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Availability == "implemented" {
+			count++
+		}
+	}
+	return count
 }
 
 func TestDescriptorFreeRetentionSourceIDsStaySourceOnly(t *testing.T) {

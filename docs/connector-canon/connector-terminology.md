@@ -58,8 +58,10 @@ immutable source lock and exact source-lane accounting are retained but whose
 historical canonical descriptor is intentionally absent. It is valid only when
 the primary lock's digest/byte identity and exact source-operation-ID
 reconciliation pass, every lane remains nonimplemented, and each lane cites
-only the source-lock artifact. It does not create a command, stream, write,
-transport, certification result, or executable connector.
+only the source-lock artifact. The actual loaded bundle must also have no
+operations, writes, streams, selected sync transport, or CLI command marked
+`implemented`. It does not create a command, stream, write, transport,
+certification result, or executable connector.
 
 Source operation IDs are opaque provider evidence, not filenames. Preserve
 ordinary spaces and slash-bearing provider spellings exactly; reject only empty
@@ -348,7 +350,9 @@ It does mean that provider-documented delete, reverse-ETL, and other destructive
 2. Freeze the source-lock denominator and normalize a source descriptor. A
    `retention_only` contract is the narrow non-executable exception: it keeps
    exact-ID source accounting without a historical descriptor only after lock
-   identity and full reconciliation pass.
+   identity and full reconciliation pass, and only when the loaded bundle has
+   no operations, writes, streams, selected sync transport, or implemented CLI
+   command.
 3. Classify each source operation into one or more lane cells or a cited unsupported state.
 4. Create source-operation bindings and project the required connector-definition artifacts.
 5. Consult the Foundation Atlas before recording any missing foundation.

@@ -5682,10 +5682,33 @@ func sourceProjectionAllowsDescriptorFreeRetention(fsys fs.FS, bundle engine.Bun
 	if contract == nil || !contract.RetentionOnly || contract.SourceLock.Path != strings.TrimPrefix(expectedLockPath, bundle.Name+"/") {
 		return false
 	}
+	if !sourceProjectionBundleHasNoExecutableDeclarations(bundle) {
+		return false
+	}
 	if err := contract.ValidateRetentionOnly(); err != nil {
 		return false
 	}
 	return len(checkEnabledConnectorContract(fsys, bundle)) == 0
+}
+
+// sourceProjectionBundleHasNoExecutableDeclarations keeps descriptor-free
+// retention on the source-accounting side of the authoring boundary. A loaded
+// operation, write, stream, selected sync transport, or implemented CLI
+// command needs the canonical descriptor that proves its field-complete
+// source projection; a retention_only contract cannot waive that proof.
+func sourceProjectionBundleHasNoExecutableDeclarations(bundle engine.Bundle) bool {
+	if len(bundle.Operations) != 0 || len(bundle.Writes) != 0 || len(bundle.Streams) != 0 || bundle.SyncTransport != nil {
+		return false
+	}
+	if bundle.CLISurface == nil {
+		return true
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Availability == "implemented" {
+			return false
+		}
+	}
+	return true
 }
 
 func sourceProjectionUnavailableMappingDocument(lock declarationAdmissionReviewedSourceLock) (declarationAdmissionReviewedUnavailableDocument, bool) {
