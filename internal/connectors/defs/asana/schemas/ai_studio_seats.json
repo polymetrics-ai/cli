@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ai_studio_seats",
+  "type": "object",
+  "x-primary-key": ["gid"],
+  "required": ["gid"],
+  "properties": {
+    "gid": { "type": "string" },
+    "resource_type": { "type": ["string", "null"] },
+    "assigned_at": { "type": ["string", "null"] },
+    "assigned_by": { "type": ["object", "null"] },
+    "license": { "type": ["string", "null"] },
+    "revoked_at": { "type": ["string", "null"] },
+    "state": { "type": ["string", "null"] },
+    "user": { "type": ["object", "null"] }
+  }
+}
