@@ -3,7 +3,7 @@
 ARG PNPM_VERSION=11.7.0
 
 # ── deps ──────────────────────────────────────────────────────────────────────
-FROM node:26-alpine@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019 AS deps
+FROM node:26-alpine@sha256:2d984a15c9b54fd0aeb608b8e0d0d83529eb34d2966db27a1fb4f1edc3d298a3 AS deps
 ARG PNPM_VERSION
 RUN npm install -g "pnpm@${PNPM_VERSION}"
 WORKDIR /app
@@ -13,7 +13,7 @@ COPY patches ./patches
 RUN pnpm install --frozen-lockfile --ignore-scripts --reporter=silent
 
 # ── builder ───────────────────────────────────────────────────────────────────
-FROM node:26-alpine@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019 AS builder
+FROM node:26-alpine@sha256:2d984a15c9b54fd0aeb608b8e0d0d83529eb34d2966db27a1fb4f1edc3d298a3 AS builder
 ARG PNPM_VERSION
 RUN npm install -g "pnpm@${PNPM_VERSION}"
 WORKDIR /app
@@ -29,7 +29,7 @@ ENV BETTER_AUTH_SECRET=build-only-f7Q2mP9xL4vN8cR1sT6wY3kH5jD0aBzE
 RUN pnpm build
 
 # ── runner ────────────────────────────────────────────────────────────────────
-FROM node:26-alpine@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019 AS runner
+FROM node:26-alpine@sha256:2d984a15c9b54fd0aeb608b8e0d0d83529eb34d2966db27a1fb4f1edc3d298a3 AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
