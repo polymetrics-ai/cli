@@ -160,7 +160,9 @@ func TestDeclarationAdmissionMappingReaderR2SourceReferenceStructure(t *testing.
 				document["published_source"] = map[string]any{
 					"source_url": "", "capture_url": "https://captures.polymetrics.invalid/fixture", "sha256": map[string]any{"ignored": "retention"}, "bytes": "ignored-retention-byte-count", "adapter": false,
 				}
-				document["operations"].([]any)[0].(map[string]any)["source_operation"] = []any{"opaque", map[string]any{"payload": true}}
+				document["operations"].([]any)[0].(map[string]any)["source_operation"] = map[string]any{
+					"opaque": []any{"opaque", map[string]any{"payload": true}},
+				}
 			},
 		},
 		{

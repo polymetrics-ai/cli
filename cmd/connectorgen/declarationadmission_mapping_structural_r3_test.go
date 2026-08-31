@@ -9,7 +9,8 @@ import (
 // TestDeclarationAdmissionMappingReaderR3RejectsCrossVersionAndVariantDrift
 // is the frozen-review matrix for the mapping-only reader. It deliberately
 // varies structural fields only: bytes, digests, capture metadata, and opaque
-// source_operation/source_contract leaves remain non-binding to mapping.
+// provider grammar inside object-shaped source_operation/source_contract leaves.
+// The source_operation container itself is an object boundary.
 func TestDeclarationAdmissionMappingReaderR3RejectsCrossVersionAndVariantDrift(t *testing.T) {
 	ordinaryTests := []struct {
 		name   string
@@ -369,7 +370,7 @@ func declarationAdmissionR3LegacyReferenceLock() map[string]any {
 					"id": "fixture.rest.list-widgets", "protocol": "rest", "method": "GET", "path": "/widgets",
 					"operation_id": "listWidgets", "deprecated": false, "source_location": `paths["/widgets"].get`,
 					"source_url":       "https://docs.polymetrics.invalid/fixture/openapi.json",
-					"source_operation": []any{"opaque provider operation"},
+					"source_operation": map[string]any{"opaque": []any{"provider operation"}},
 				},
 				map[string]any{
 					"id": "fixture.rest.create-widget", "protocol": "rest", "method": "POST", "path": "/widgets",
