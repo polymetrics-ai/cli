@@ -35,8 +35,8 @@
         "not_applicable": 27
       },
       "sync_transport": {
-        "mapped_unproven": 10,
-        "not_applicable": 44
+        "mapped_unproven": 0,
+        "not_applicable": 54
       }
     },
     "runtime_artifacts": {
@@ -93,6 +93,7 @@
   "notes": [
     "The 54 source operations and all seven lane cells are source-backed mapping facts, not certification or execution claims.",
     "No Docker Hub operations.json entry, writes.json action, or sync_transport.json declaration is invented by this mapping record.",
+    "The pinned Docker Hub source documents no webhook or event-registration operation, so all sync_transport cells are not_applicable; collection pagination remains ETL-only evidence.",
     "A source-mapped direct-write or reverse-ETL cell remains mapped_unproven until its own definition and execution proof exist."
   ]
 }

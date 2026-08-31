@@ -384,6 +384,100 @@ func TestDockerHubSourceLaneMatrixRejectsMissingPagingOrExtractableETLDispositio
 	t.Fatal("matrix has no pageable or extractable source operation")
 }
 
+func TestDockerHubSourceLaneMatrixRejectsPaginationDerivedSyncTransport(t *testing.T) {
+	matrix, lock, crosswalk := readDockerHubMatrixInputs(t)
+	sources, err := dockerHubSourceInfos(lock, crosswalk)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for index := range matrix.Operations {
+		source := sources[matrix.Operations[index].SourceID]
+		if !dockerHubRequiresETL(source, lock.SourceContract) {
+			continue
+		}
+		cell := dockerHubMatrixCellByLane(t, &matrix.Operations[index], "sync_transport")
+		cell.State = "mapped_unproven"
+		cell.Reason = "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1"
+		assertDockerHubMatrixValidationError(t, matrix, lock, crosswalk, "source-documented webhook/event registration")
+		return
+	}
+	t.Fatal("matrix has no pageable or extractable source operation")
+}
+
+func TestDockerHubSyncTransportRequiresSourceDocumentedWebhookEventRegistration(t *testing.T) {
+	_, lock, crosswalk := readDockerHubMatrixInputs(t)
+	sources, err := dockerHubSourceInfos(lock, crosswalk)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pageableRead, exists := sources["dockerhub.rest.listNamespaceRepositories"]
+	if !exists {
+		t.Fatal("missing retained pageable source operation")
+	}
+
+	documentedRegistration := dockerHubSourceInfo{
+		Lock: dockerHubSourceOperation{
+			Method: "POST",
+			Operation: map[string]any{
+				"callbacks": map[string]any{
+					"eventDelivery": map[string]any{
+						"{$request.body#/url}": map[string]any{},
+					},
+				},
+			},
+		},
+	}
+	callbackRead := documentedRegistration
+	callbackRead.Lock.Method = "GET"
+	mutationWithoutEvent := documentedRegistration
+	mutationWithoutEvent.Lock.Operation = map[string]any{}
+
+	tests := []struct {
+		name       string
+		source     dockerHubSourceInfo
+		wantMapped bool
+	}{
+		{
+			name:       "happy documented registration callback on a mutation",
+			source:     documentedRegistration,
+			wantMapped: true,
+		},
+		{
+			name:       "bad pageable collection read is not a sync transport",
+			source:     pageableRead,
+			wantMapped: false,
+		},
+		{
+			name:       "edge callback on a read is not a registration mutation",
+			source:     callbackRead,
+			wantMapped: false,
+		},
+		{
+			name:       "edge mutation without documented event evidence is not promoted",
+			source:     mutationWithoutEvent,
+			wantMapped: false,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			gotMapped := dockerHubRequiresSyncTransport(test.source)
+			if gotMapped != test.wantMapped {
+				t.Fatalf("dockerHubRequiresSyncTransport() = %t, want %t", gotMapped, test.wantMapped)
+			}
+			cell := dockerHubExpectedCells(test.source, lock.SourceContract)["sync_transport"]
+			if test.wantMapped {
+				if cell.State != "mapped_unproven" || cell.Reason != "dockerhub.source.sync_transport.documented_webhook_or_event_registration.v1" {
+					t.Fatalf("documented registration sync cell = %s/%s, want source-backed mapped_unproven", cell.State, cell.Reason)
+				}
+				return
+			}
+			if cell.State != "not_applicable" || cell.Reason != "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1" {
+				t.Fatalf("non-registration sync cell = %s/%s, want source-backed not_applicable", cell.State, cell.Reason)
+			}
+		})
+	}
+}
+
 func TestDockerHubSourceLaneMatrixRejectsMissingMutationDirectWriteDisposition(t *testing.T) {
 	matrix, lock, crosswalk := readDockerHubMatrixInputs(t)
 	for index := range matrix.Operations {
@@ -1010,6 +1104,9 @@ func dockerHubValidateOperation(operation *dockerHubMatrixOperation, source dock
 			if cell.Lane == "etl" && dockerHubRequiresETL(source, sourceContract) {
 				return fmt.Errorf("pageable or extractable source operation %s has %s cell = %s/%s, want %s/%s", source.Lock.ID, cell.Lane, cell.State, cell.Reason, want.State, want.Reason)
 			}
+			if cell.Lane == "sync_transport" && !dockerHubRequiresSyncTransport(source) {
+				return fmt.Errorf("sync transport source operation %s lacks source-documented webhook/event registration: got %s/%s, want %s/%s", source.Lock.ID, cell.State, cell.Reason, want.State, want.Reason)
+			}
 			if (cell.Lane == "direct_write" || cell.Lane == "reverse_etl") && dockerHubIsMutation(source.Lock.Method) {
 				return fmt.Errorf("mutation source operation %s has %s cell = %s/%s, want %s/%s", source.Lock.ID, cell.Lane, cell.State, cell.Reason, want.State, want.Reason)
 			}
@@ -1066,12 +1163,8 @@ func dockerHubValidateFacts(facts dockerHubMatrixFacts, source dockerHubSourceIn
 		return fmt.Errorf("source operation %s does not preserve exact media evidence", source.Lock.ID)
 	}
 
-	callbackCount := dockerHubDocumentedCallbackCount(source)
-	if facts.EventCursor.Kind != "not_documented" ||
-		facts.EventCursor.Parameter != "" ||
-		facts.EventCursor.Description != "" ||
-		facts.EventCursor.DocumentedCallbacks != callbackCount ||
-		facts.EventCursor.SourceLocation != source.Lock.SourceLocation {
+	wantEventCursor := dockerHubSourceEventCursor(source)
+	if facts.EventCursor != wantEventCursor {
 		return fmt.Errorf("source operation %s does not preserve its event/cursor evidence", source.Lock.ID)
 	}
 
@@ -1151,6 +1244,30 @@ func dockerHubDocumentedCallbackCount(source dockerHubSourceInfo) int {
 		return 0
 	}
 	return len(callbacks)
+}
+
+// dockerHubSourceEventCursor records the only source fact that admits a
+// sync-transport cell: a documented callback on a mutation operation. A
+// callback is the OpenAPI representation of a provider-initiated delivery;
+// pagination and an extractable collection response are unrelated ETL facts.
+func dockerHubSourceEventCursor(source dockerHubSourceInfo) dockerHubEventCursorFact {
+	kind := "not_documented"
+	description := ""
+	if dockerHubHasDocumentedWebhookEventRegistration(source) {
+		kind = "documented_webhook_or_event_registration"
+		description = dockerHubStringValue(source.Lock.Operation["description"])
+	}
+	return dockerHubEventCursorFact{
+		Kind:                kind,
+		Parameter:           "",
+		Description:         description,
+		DocumentedCallbacks: dockerHubDocumentedCallbackCount(source),
+		SourceLocation:      source.Lock.SourceLocation,
+	}
+}
+
+func dockerHubHasDocumentedWebhookEventRegistration(source dockerHubSourceInfo) bool {
+	return dockerHubIsMutation(source.Lock.Method) && dockerHubDocumentedCallbackCount(source) > 0
 }
 
 func dockerHubSourceExtractability(source dockerHubSourceInfo, sourceContract map[string]any) dockerHubExtractabilityFact {
@@ -1290,10 +1407,13 @@ func dockerHubExpectedCells(source dockerHubSourceInfo, sourceContract map[strin
 	}
 	if requiresETL {
 		expected["etl"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.etl.pageable_or_extractable_collection_read.v1"}
-		expected["sync_transport"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1"}
 	} else {
 		expected["etl"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1"}
-		expected["sync_transport"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1"}
+	}
+	if dockerHubRequiresSyncTransport(source) {
+		expected["sync_transport"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.sync_transport.documented_webhook_or_event_registration.v1"}
+	} else {
+		expected["sync_transport"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1"}
 	}
 	return expected
 }
@@ -1318,6 +1438,10 @@ func dockerHubRequiresETL(source dockerHubSourceInfo, sourceContract map[string]
 	}
 	return dockerHubSourcePagination(source).Kind != "not_documented" ||
 		dockerHubSourceExtractability(source, sourceContract).Kind == "array_response"
+}
+
+func dockerHubRequiresSyncTransport(source dockerHubSourceInfo) bool {
+	return dockerHubSourceEventCursor(source).Kind == "documented_webhook_or_event_registration"
 }
 
 func dockerHubHasBinaryDownload(source dockerHubSourceInfo) bool {
@@ -1363,7 +1487,7 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		return fmt.Errorf("retained source count reconciliation = matrix:%d lock:%d rest:%d total:%d, want 54", len(matrix.Operations), len(sources), lock.Counts.Rest, lock.Counts.Total)
 	}
 
-	var getCount, mutationCount, deleteCount, headCount, pagingCount, arrayReadCount, etlCount, scimCount, csvCount, callbackCount int
+	var getCount, mutationCount, deleteCount, headCount, pagingCount, arrayReadCount, etlCount, syncTransportCount, scimCount, csvCount, callbackCount int
 	for _, source := range sources {
 		if source.Lock.Method == "GET" {
 			getCount++
@@ -1388,6 +1512,9 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		if dockerHubRequiresETL(source, lock.SourceContract) {
 			etlCount++
 		}
+		if dockerHubRequiresSyncTransport(source) {
+			syncTransportCount++
+		}
 		if strings.Contains(source.Lock.Path, "/scim/2.0/") {
 			scimCount++
 		}
@@ -1398,10 +1525,10 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		callbackCount += dockerHubDocumentedCallbackCount(source)
 	}
 	if getCount != 24 || mutationCount != 27 || deleteCount != 6 || headCount != 3 ||
-		pagingCount != 9 || arrayReadCount != 2 || etlCount != 10 || scimCount != 9 ||
+		pagingCount != 9 || arrayReadCount != 2 || etlCount != 10 || syncTransportCount != 0 || scimCount != 9 ||
 		csvCount != 1 || callbackCount != 0 {
-		return fmt.Errorf("source fact counts = GET:%d mutation:%d delete:%d head:%d paging:%d array_read:%d etl:%d scim:%d csv:%d callbacks:%d",
-			getCount, mutationCount, deleteCount, headCount, pagingCount, arrayReadCount, etlCount, scimCount, csvCount, callbackCount)
+		return fmt.Errorf("source fact counts = GET:%d mutation:%d delete:%d head:%d paging:%d array_read:%d etl:%d sync_transport:%d scim:%d csv:%d callbacks:%d",
+			getCount, mutationCount, deleteCount, headCount, pagingCount, arrayReadCount, etlCount, syncTransportCount, scimCount, csvCount, callbackCount)
 	}
 
 	cells := dockerHubMatrixCellCounts(matrix)
@@ -1412,7 +1539,7 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		"binary_upload":   0,
 		"etl":             10,
 		"reverse_etl":     27,
-		"sync_transport":  10,
+		"sync_transport":  0,
 	}
 	mappedTotal, notApplicableTotal := 0, 0
 	for _, lane := range dockerHubLaneOrder {
@@ -1428,8 +1555,8 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		mappedTotal += cells[lane]["mapped_unproven"]
 		notApplicableTotal += cells[lane]["not_applicable"]
 	}
-	if mappedTotal != 102 || notApplicableTotal != 276 || mappedTotal+notApplicableTotal != 378 {
-		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 102/276/378", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
+	if mappedTotal != 92 || notApplicableTotal != 286 || mappedTotal+notApplicableTotal != 378 {
+		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 92/286/378", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
 	}
 	return nil
 }
@@ -1580,11 +1707,11 @@ func dockerHubValidateStreamLinks(artifact *dockerHubMatrixArtifact, records doc
 	}{
 		"repositories": {
 			SourceID: "dockerhub.rest.listNamespaceRepositories",
-			Lanes:    []string{"direct_read", "etl", "sync_transport"},
+			Lanes:    []string{"direct_read", "etl"},
 		},
 		"tags": {
 			SourceID: "dockerhub.rest.ListRepositoryTags",
-			Lanes:    []string{"direct_read", "etl", "sync_transport"},
+			Lanes:    []string{"direct_read", "etl"},
 		},
 		"repository_detail": {
 			SourceID: "dockerhub.rest.GetRepository",

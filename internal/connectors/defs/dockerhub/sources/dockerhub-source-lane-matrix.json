@@ -111,7 +111,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/auditlogs/{account}/actions\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -220,8 +220,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/auditlogs/{account}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -318,7 +318,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/auth/token\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -419,7 +419,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -520,7 +520,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -623,7 +623,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -724,7 +724,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -827,7 +827,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -933,8 +933,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1031,7 +1031,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/users/2fa-login\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1128,7 +1128,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/users/login\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1231,7 +1231,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1334,7 +1334,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1433,7 +1433,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/access-tokens/{uuid}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1532,7 +1532,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/invites/{id}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1633,7 +1633,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1734,7 +1734,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1837,7 +1837,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -1938,7 +1938,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2038,8 +2038,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/access-tokens\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2138,7 +2138,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/access-tokens/{uuid}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2238,8 +2238,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2338,7 +2338,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{name}/settings\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2439,7 +2439,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2545,8 +2545,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2647,7 +2647,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2754,8 +2754,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2854,7 +2854,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/invites\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -2964,8 +2964,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3066,8 +3066,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3162,7 +3162,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/ResourceTypes\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3261,7 +3261,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3356,7 +3356,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/Schemas\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3455,7 +3455,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/Schemas/{id}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3550,7 +3550,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3654,8 +3654,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/Users\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3754,7 +3754,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3855,7 +3855,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -3958,7 +3958,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4064,8 +4064,8 @@
         },
         {
           "lane": "sync_transport",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.sync_transport.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4166,7 +4166,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/access-tokens/{uuid}\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4265,7 +4265,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/invites/{id}/resend\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4368,7 +4368,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4471,7 +4471,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4568,7 +4568,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/access-tokens\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4665,7 +4665,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/invites/bulk\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4762,7 +4762,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4863,7 +4863,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -4966,7 +4966,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -5063,7 +5063,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/Users\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -5164,7 +5164,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{name}/settings\"].put",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -5267,7 +5267,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -5370,7 +5370,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].put",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -5471,7 +5471,7 @@
         {
           "lane": "sync_transport",
           "state": "not_applicable",
-          "reason": "dockerhub.source.sync_transport.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.sync_transport.no_documented_webhook_or_event_registration.v1",
           "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         }
@@ -5872,8 +5872,7 @@
           "source_id": "dockerhub.rest.listNamespaceRepositories",
           "lanes": [
             "direct_read",
-            "etl",
-            "sync_transport"
+            "etl"
           ]
         },
         {
@@ -5881,8 +5880,7 @@
           "source_id": "dockerhub.rest.ListRepositoryTags",
           "lanes": [
             "direct_read",
-            "etl",
-            "sync_transport"
+            "etl"
           ]
         },
         {
