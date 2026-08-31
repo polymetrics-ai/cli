@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "phase": "issue-4325-retained-source-mapping-r1",
+  "state": "verified-awaiting-independent-review",
+  "base": "925180aeb093b1c655ac4c1dbba52d7d81c47b07",
+  "working_branch": "codex/4283-retained-source-mapping-r1",
+  "delivery": "candidate-only push after green local verification; no parent integration or main merge",
+  "workflow": {
+    "discuss_phase": "inline/manual fallback recorded",
+    "plan_phase_tdd": "inline/manual fallback recorded",
+    "execute_phase": "complete; source-only command and strict decoder implemented",
+    "verify_work": "complete; focused/race/vet/JSON/cohort/agent-contract evidence recorded",
+    "code_review": "pending independent review"
+  }
+}
