@@ -25020,6 +25020,25 @@
         "method": "GET",
         "path": "/vulnerabilities/{id}/issue_links"
       }
+    },
+    {
+      "id": "get_mlflow_metrics_history",
+      "kind": "stream_etl",
+      "summary": "Gets metric history for a run",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
+      "risk": "none",
+      "approval": "none; read-only source-bound full-refresh ETL remains bounded and redacted",
+      "output_policy": "json_redacted",
+      "source_operation": {
+        "id": "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+        "method": "GET",
+        "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history"
+      },
+      "composite": {
+        "steps": [
+          "stream:mlflow_metrics_history"
+        ]
+      }
     }
   ]
 }

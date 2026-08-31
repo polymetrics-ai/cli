@@ -3349,7 +3349,8 @@
       "method": "GET",
       "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
       "covered_by": {
-        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6d6c2f6d6c666c6f772f6170692f322e302f6d6c666c6f772f6d6574726963732f6765742d686973746f7279"
+        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6d6c2f6d6c666c6f772f6170692f322e302f6d6c666c6f772f6d6574726963732f6765742d686973746f7279",
+        "stream": "mlflow_metrics_history"
       }
     },
     {

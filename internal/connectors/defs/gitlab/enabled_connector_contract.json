@@ -46,11 +46,11 @@
     {
       "name": "etl",
       "state": "implemented",
-      "reason": "Four fixed GET streams use the declared source executor and the local DuckDB/Parquet warehouse destination; no API-to-API route is selected.",
-      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "GET /api/v4/projects, /groups, /users, /issues"}],
-      "artifacts": ["streams.json", "schemas/projects.json", "schemas/groups.json", "schemas/users.json", "schemas/issues.json", "sync_transport.json", "cli_surface.json"],
-      "source": {"partition": false, "operation_ids": ["getApiV4Projects", "getApiV4Groups", "getApiV4Users", "getApiV4Issues"], "coverage": "complete", "expected": 4, "implemented": 4, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
-      "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app/declarativeStreamSourceExecutor -> internal/app/localWarehouseDestinationExecutor", "proof": "internal/cli/gitlab_transport_test.go:TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB"}]
+      "reason": "Four legacy GET streams and one source-bound MLflow metrics-history GET stream use the declared source executor and the local DuckDB/Parquet warehouse destination; no API-to-API route is selected.",
+      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "GET /api/v4/projects, /groups, /users, /issues, and /projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history"}],
+      "artifacts": ["operations.json", "streams.json", "schemas/projects.json", "schemas/groups.json", "schemas/users.json", "schemas/issues.json", "schemas/mlflow_metrics_history.json", "spec.json", "api_surface.json", "sync_transport.json", "cli_surface.json"],
+      "source": {"partition": false, "operation_ids": ["getApiV4Projects", "getApiV4Groups", "getApiV4Users", "getApiV4Issues", "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory"], "coverage": "complete", "expected": 5, "implemented": 5, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app/declarativeStreamSourceExecutor -> internal/app/localWarehouseDestinationExecutor", "proof": "internal/connectors/defs/gitlab/mlflow_metrics_history_etl_test.go:TestGitLabMLflowMetricsHistoryETLMaterializesThroughDuckDB"}]
     },
     {
       "name": "reverse_etl",
@@ -75,10 +75,10 @@
     {
       "name": "sync_transport",
       "state": "implemented",
-      "reason": "The shared declarative source is registered with immutable conformance evidence for a bounded full-snapshot route to the local durable DuckDB/Parquet warehouse; order, cursors, and delete events are not claimed where the locked source does not declare them.",
-      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "GET /api/v4/projects, /groups, /users, /issues"}],
+      "reason": "The shared declarative source is registered with immutable conformance evidence for five bounded full-snapshot routes to the local durable DuckDB/Parquet warehouse; only MLflow metrics-history claims its locked page_token -> next_page_token continuation, while order and delete events remain unclaimed where the source does not declare them.",
+      "citations": [{"url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "location": "GET /api/v4/projects, /groups, /users, /issues, and /projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history"}],
       "artifacts": ["sync_transport.json", "streams.json", "enabled_connector_contract.json"],
-      "source": {"partition": false, "operation_ids": ["getApiV4Projects", "getApiV4Groups", "getApiV4Users", "getApiV4Issues"], "coverage": "complete", "expected": 4, "implemented": 4, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
+      "source": {"partition": false, "operation_ids": ["getApiV4Projects", "getApiV4Groups", "getApiV4Users", "getApiV4Issues", "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory"], "coverage": "complete", "expected": 5, "implemented": 5, "unmapped_mapping": 0, "deferred_foundation": 0, "unsupported_with_provider_evidence": 0},
       "transport": {
         "modes": ["full_overwrite", "full_append"],
         "runtime_delivery": {"idempotency": "at_least_once", "ordering": "unordered", "deletes": "not_available"},
@@ -86,10 +86,11 @@
           {"stream": "projects", "source_operation": "getApiV4Projects", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
           {"stream": "groups", "source_operation": "getApiV4Groups", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
           {"stream": "users", "source_operation": "getApiV4Users", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
-          {"stream": "issues", "source_operation": "getApiV4Issues", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"}
+          {"stream": "issues", "source_operation": "getApiV4Issues", "cursor_evidence": "not_declared", "delete_evidence": "not_declared", "order_evidence": "not_declared"},
+          {"stream": "mlflow_metrics_history", "source_operation": "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory", "cursor_evidence": "source_cited", "delete_evidence": "not_declared", "order_evidence": "not_declared"}
         ]
       },
-      "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app/declarativeStreamSourceExecutor -> internal/app/localWarehouseDestinationExecutor", "proof": "internal/cli/gitlab_transport_test.go:TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB"}]
+      "warehouse_flows": [{"direction": "provider_to_duckdb", "runtime": "internal/app/declarativeStreamSourceExecutor -> internal/app/localWarehouseDestinationExecutor", "proof": "internal/connectors/defs/gitlab/mlflow_metrics_history_etl_test.go:TestGitLabMLflowMetricsHistoryETLMaterializesThroughDuckDB"}]
     }
   ]
 }

@@ -5,7 +5,7 @@
       "family": "declarative_api",
       "id": "declarative_stream_source"
     },
-    "eligible_streams": ["projects", "groups", "users", "issues"],
+    "eligible_streams": ["projects", "groups", "users", "issues", "mlflow_metrics_history"],
     "modes": ["full_overwrite", "full_append"],
     "delivery": {
       "idempotency": "at_least_once",

@@ -67785,19 +67785,61 @@
         },
         "etl": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Retained source documents page_token -> next_page_token continuation; the exact source-bound stream, schema, and declared full-refresh DuckDB route are materialized.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
-              "source_id": "gitlab.rest.getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory"
+            "source_id": "gitlab.rest.getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+            "stream": "mlflow_metrics_history",
+            "schema": "schemas/mlflow_metrics_history.json",
+            "mode": "full_refresh",
+            "records_path": "metrics",
+            "pagination": {
+              "type": "cursor",
+              "cursor_param": "page_token",
+              "token_path": "next_page_token"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
+            "config_bindings": [
+              {
+                "config_key": "project_id",
+                "source_parameter": {
+                  "in": "path",
+                  "name": "id"
+                },
+                "template": "{{ config.project_id }}"
+              },
+              {
+                "config_key": "mlflow_run_id",
+                "source_parameter": {
+                  "in": "query",
+                  "name": "run_id"
+                },
+                "template": "{{ config.mlflow_run_id }}"
+              },
+              {
+                "config_key": "mlflow_metric_key",
+                "source_parameter": {
+                  "in": "query",
+                  "name": "metric_key"
+                },
+                "template": "{{ config.mlflow_metric_key }}"
+              }
+            ],
             "source_fact": {
-              "classification": "source_request_response_continuation_candidate"
-            }
-          },
-          "reason": "Source retains a request-to-response continuation pair: page_token -> next_page_token."
+              "classification": "source_request_response_continuation_candidate",
+              "continuation": {
+                "request": "page_token",
+                "response": "next_page_token"
+              }
+            },
+            "definition_backlink": {
+              "kind": "stream_etl",
+              "path": "operations.json",
+              "operation": "get_mlflow_metrics_history",
+              "streams_path": "streams.json",
+              "stream": "mlflow_metrics_history"
+            },
+            "runtime_claim": "Declared source-bound stream_etl is exercised through the connector's existing declarative provider-to-DuckDB full-refresh route."
+          }
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -179646,7 +179688,8 @@
         "not_applicable": 1708
       },
       "etl": {
-        "mapped_unproven": 2,
+        "implemented": 1,
+        "mapped_unproven": 1,
         "not_applicable": 1752
       },
       "reverse_etl": {

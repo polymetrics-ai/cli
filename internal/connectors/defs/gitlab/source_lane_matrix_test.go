@@ -11,6 +11,8 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 const (
@@ -40,7 +42,7 @@ var gitLabExpectedCounts = map[string]map[string]int{
 	"direct_write":    {"mapped_unproven": 991, "not_applicable": 763},
 	"binary_download": {"mapped_unproven": 1, "not_applicable": 1753},
 	"binary_upload":   {"mapped_unproven": 46, "not_applicable": 1708},
-	"etl":             {"mapped_unproven": 2, "not_applicable": 1752},
+	"etl":             {"implemented": 1, "mapped_unproven": 1, "not_applicable": 1752},
 	"reverse_etl":     {"mapped_unproven": 991, "not_applicable": 763},
 	"sync_transport":  {"missing_foundation": 3, "not_applicable": 1751},
 }
@@ -50,6 +52,34 @@ var gitLabLegacyStreams = map[string]map[string]string{
 	"gitlab.rest.getApiV4Groups":   {"stream": "groups", "path": "/groups"},
 	"gitlab.rest.getApiV4Users":    {"stream": "users", "path": "/users"},
 	"gitlab.rest.getApiV4Issues":   {"stream": "issues", "path": "/issues"},
+}
+
+// gitLabMaterializedETLSpecs is a deliberately tiny source-ID allowlist, not
+// a method/name heuristic. A row enters it only after retained source facts,
+// a field-complete declaration, and a provider-to-DuckDB witness agree.
+// Keeping the connector-local path/config mapping here prevents a future
+// paginator from becoming executable merely because it looks like a list.
+var gitLabMaterializedETLSpecs = map[string]map[string]any{
+	"gitlab.rest.getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory": {
+		"source_operation": "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+		"method":           "GET",
+		"path":             "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
+		"operation":        "get_mlflow_metrics_history",
+		"stream":           "mlflow_metrics_history",
+		"schema":           "schemas/mlflow_metrics_history.json",
+		"records_path":     "metrics",
+		"mode":             "full_refresh",
+		"pagination": map[string]any{
+			"type":         "cursor",
+			"cursor_param": "page_token",
+			"token_path":   "next_page_token",
+		},
+		"config_bindings": []any{
+			map[string]any{"config_key": "project_id", "source_parameter": map[string]any{"in": "path", "name": "id"}, "template": "{{ config.project_id }}"},
+			map[string]any{"config_key": "mlflow_run_id", "source_parameter": map[string]any{"in": "query", "name": "run_id"}, "template": "{{ config.mlflow_run_id }}"},
+			map[string]any{"config_key": "mlflow_metric_key", "source_parameter": map[string]any{"in": "query", "name": "metric_key"}, "template": "{{ config.mlflow_metric_key }}"},
+		},
+	},
 }
 
 var gitLabPathRestrictionSpecs = []map[string]string{
@@ -350,8 +380,12 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 			switch state {
 			case "request_response_continuation_candidate":
 				paired++
-				if stringAt(etl, "disposition") != "mapped_unproven" {
-					t.Fatalf("paired continuation %s ETL=%#v, want mapped_unproven", stringAt(row, "source_id"), etl)
+				if _, materialized := gitLabMaterializedETLSpecs[stringAt(row, "source_id")]; materialized {
+					if stringAt(etl, "disposition") != "implemented" {
+						t.Fatalf("materialized continuation %s ETL=%#v, want implemented", stringAt(row, "source_id"), etl)
+					}
+				} else if stringAt(etl, "disposition") != "mapped_unproven" {
+					t.Fatalf("unmaterialized continuation %s ETL=%#v, want mapped_unproven", stringAt(row, "source_id"), etl)
 				}
 			case "request_controls_without_response_continuation":
 				unpaired++
@@ -368,6 +402,180 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 			t.Fatalf("continuation coverage paired=%d unpaired=%d page_per_page_without_response=%d, want all source states", paired, unpaired, pagePerPageWithoutContinuation)
 		}
 	})
+}
+
+// TestGitLabMLflowMetricsHistoryETLDeclarationIsSourceBound is deliberately
+// source-first: the connector's project_id spelling is an explicit declared
+// config-to-path binding for the retained {id} parameter, never an inferred
+// alias. It stays in the GitLab definition test package because it proves one
+// connector declaration against its frozen source facts, not a new runtime
+// dialect.
+func TestGitLabMLflowMetricsHistoryETLDeclarationIsSourceBound(t *testing.T) {
+	const (
+		sourceID       = "gitlab.rest.getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory"
+		rawOperationID = "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory"
+		streamName     = "mlflow_metrics_history"
+		lockedPath     = "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history"
+		mappingPath    = "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history"
+	)
+
+	matrix := loadGitLabObject(t, gitLabSourceLaneMatrixPath)
+	lock := loadGitLabObject(t, gitLabSourceLockPath)
+	row := gitLabMatrixRow(t, matrix, sourceID)
+	facts := objectAt(row, "source_facts")
+	if stringAt(facts, "operation_id") != rawOperationID || stringAt(facts, "method") != "GET" || stringAt(facts, "path") != lockedPath || stringAt(facts, "mapping_path") != mappingPath {
+		t.Fatalf("MLflow source facts = %#v, want exact retained identity/method/paths", facts)
+	}
+	continuation := objectAt(objectAt(facts, "pagination"), "continuation")
+	if stringAt(continuation, "request") != "page_token" || stringAt(continuation, "response") != "next_page_token" {
+		t.Fatalf("MLflow source continuation = %#v, want page_token -> next_page_token", continuation)
+	}
+
+	var locked map[string]any
+	for _, raw := range mustMapSlice(objectAt(lock, "rest")["operations"]) {
+		if stringAt(raw, "id") == rawOperationID {
+			locked = raw
+			break
+		}
+	}
+	if locked == nil {
+		t.Fatalf("retained GitLab source lock omits %q", rawOperationID)
+	}
+	parameters := mustMapSlice(objectAt(locked, "source_operation")["parameters"])
+	for _, want := range []struct {
+		name     string
+		location string
+		required bool
+	}{
+		{name: "id", location: "path", required: true},
+		{name: "run_id", location: "query", required: true},
+		{name: "metric_key", location: "query", required: true},
+		{name: "page_token", location: "query", required: false},
+	} {
+		found := false
+		for _, parameter := range parameters {
+			if stringAt(parameter, "name") == want.name && stringAt(parameter, "in") == want.location && parameter["required"] == want.required {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Fatalf("retained MLflow source omits required parameter fact %#v", want)
+		}
+	}
+
+	// RED on the frozen base: the exact source-backed ETL lane is still M-U.
+	etl := objectAt(objectAt(row, "lanes"), "etl")
+	if stringAt(etl, "disposition") != "implemented" {
+		t.Fatalf("RED: MLflow ETL %q disposition=%q, want implemented only after a field-complete source-bound stream is declared", sourceID, stringAt(etl, "disposition"))
+	}
+
+	mapping := objectAt(etl, "mapping")
+	if stringAt(mapping, "source_id") != sourceID || stringAt(mapping, "stream") != streamName || stringAt(mapping, "schema") != "schemas/mlflow_metrics_history.json" || stringAt(mapping, "mode") != "full_refresh" {
+		t.Fatalf("MLflow ETL mapping=%#v, want exact source ID, stream, schema, and full-refresh mode", mapping)
+	}
+	bindings := mustMapSlice(mapping["config_bindings"])
+	wantBindings := []map[string]any{
+		{"config_key": "project_id", "source_parameter": map[string]any{"in": "path", "name": "id"}, "template": "{{ config.project_id }}"},
+		{"config_key": "mlflow_run_id", "source_parameter": map[string]any{"in": "query", "name": "run_id"}, "template": "{{ config.mlflow_run_id }}"},
+		{"config_key": "mlflow_metric_key", "source_parameter": map[string]any{"in": "query", "name": "metric_key"}, "template": "{{ config.mlflow_metric_key }}"},
+	}
+	if len(bindings) != len(wantBindings) {
+		t.Fatalf("MLflow config bindings=%#v, want the three explicit source-backed bindings", bindings)
+	}
+	for index := range wantBindings {
+		if !sameGitLabJSON(bindings[index], wantBindings[index]) {
+			t.Fatalf("MLflow config binding %d=%#v, want %#v", index, bindings[index], wantBindings[index])
+		}
+	}
+
+	spec := loadGitLabObject(t, "spec.json")
+	for _, key := range []string{"project_id", "mlflow_run_id", "mlflow_metric_key"} {
+		if _, declared := objectAt(spec, "properties")[key]; !declared {
+			t.Fatalf("MLflow stream config key %q is not declared in spec.json", key)
+		}
+	}
+
+	bundle, err := engine.Load(os.DirFS(".."), "gitlab")
+	if err != nil {
+		t.Fatalf("load GitLab MLflow bundle: %v", err)
+	}
+	streamIndex := -1
+	for index := range bundle.Streams {
+		if bundle.Streams[index].Name == streamName {
+			streamIndex = index
+			break
+		}
+	}
+	if streamIndex < 0 {
+		t.Fatalf("MLflow source-bound ETL stream %q is not declared", streamName)
+	}
+	stream := bundle.Streams[streamIndex]
+	if stream.Path != "/projects/{{ config.project_id }}/ml/mlflow/api/2.0/mlflow/metrics/get-history" || stream.Records.Path != "metrics" || stream.SchemaRef != "schemas/mlflow_metrics_history.json" || stream.Pagination == nil || stream.Pagination.Type != "cursor" || stream.Pagination.CursorParam != "page_token" || stream.Pagination.TokenPath != "next_page_token" {
+		t.Fatalf("MLflow stream=%+v, want exact config-bound path, records, schema, and source cursor", stream)
+	}
+	if stream.Query["run_id"].Template != "{{ config.mlflow_run_id }}" || stream.Query["metric_key"].Template != "{{ config.mlflow_metric_key }}" || stream.Query["max_results"].Template != "1000" {
+		t.Fatalf("MLflow stream query=%+v, want explicit required source config and source default max_results", stream.Query)
+	}
+
+	if err := engine.PreflightSourceBoundStreamRead(bundle, streamName, rawOperationID, "GET", mappingPath); err != nil {
+		t.Fatalf("valid MLflow source-bound stream preflight: %v", err)
+	}
+	for _, testCase := range []struct {
+		name            string
+		sourceOperation string
+		method          string
+		path            string
+		mutate          func(*engine.Bundle)
+		want            string
+	}{
+		{name: "source operation", sourceOperation: "not-a-retained-operation", method: "GET", path: mappingPath, want: "does not match"},
+		{name: "method", sourceOperation: rawOperationID, method: "POST", path: mappingPath, want: "does not match"},
+		{name: "path", sourceOperation: rawOperationID, method: "GET", path: "/projects/{id}/other", want: "does not match"},
+		{name: "schema", sourceOperation: rawOperationID, method: "GET", path: mappingPath, mutate: func(b *engine.Bundle) { b.Streams[streamIndex].SchemaRef = "" }, want: "record semantics"},
+		{name: "pagination", sourceOperation: rawOperationID, method: "GET", path: mappingPath, mutate: func(b *engine.Bundle) { b.Streams[streamIndex].Pagination = nil; b.HTTP.Pagination = nil }, want: "pagination semantics"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			broken := bundle
+			broken.Streams = append([]engine.StreamSpec(nil), bundle.Streams...)
+			if testCase.mutate != nil {
+				testCase.mutate(&broken)
+			}
+			err := engine.PreflightSourceBoundStreamRead(broken, streamName, testCase.sourceOperation, testCase.method, testCase.path)
+			if err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("MLflow %s preflight error=%v, want %q before credential or provider I/O", testCase.name, err, testCase.want)
+			}
+		})
+	}
+
+	for _, testCase := range []struct {
+		name   string
+		mutate func(map[string]any)
+	}{
+		{name: "disposition", mutate: func(row map[string]any) {
+			objectAt(row, "lanes")["etl"] = gitLabMappedCell("regression", "source_request_response_continuation_candidate", map[string]any{"kind": "source_lock", "path": gitLabSourceLockPath, "source_id": sourceID})
+		}},
+		{name: "source ID", mutate: func(row map[string]any) {
+			objectAt(objectAt(objectAt(row, "lanes"), "etl"), "mapping")["source_id"] = "gitlab.rest.not-the-locked-mlflow-operation"
+		}},
+		{name: "stream", mutate: func(row map[string]any) {
+			objectAt(objectAt(objectAt(row, "lanes"), "etl"), "mapping")["stream"] = "issues"
+		}},
+		{name: "schema", mutate: func(row map[string]any) {
+			objectAt(objectAt(objectAt(row, "lanes"), "etl"), "mapping")["schema"] = "schemas/issues.json"
+		}},
+		{name: "pagination", mutate: func(row map[string]any) {
+			objectAt(objectAt(objectAt(row, "lanes"), "etl"), "mapping")["pagination"] = map[string]any{"type": "cursor", "cursor_param": "page", "token_path": "next"}
+		}},
+	} {
+		t.Run("matrix rejects "+testCase.name+" mismatch", func(t *testing.T) {
+			broken := cloneGitLabObject(t, matrix)
+			testCase.mutate(gitLabMatrixRow(t, broken, sourceID))
+			if err := validateGitLabSourceLaneMatrix(broken, lock, loadGitLabObject(t, gitLabBinaryLockPath), loadGitLabObject(t, gitLabCrosswalkPath), loadGitLabObject(t, gitLabDescriptorPath), loadGitLabObject(t, gitLabRetainedArtifacts), loadGitLabObject(t, gitLabStreamsPath)); err == nil || !strings.Contains(err.Error(), "lane cells") {
+				t.Fatalf("MLflow matrix %s mismatch error=%v, want deterministic lane-cell rejection", testCase.name, err)
+			}
+		})
+	}
 }
 
 func validateGitLabSourceLaneMatrix(matrix, lock, binaryLock, crosswalk, descriptor, retainedArtifacts, streams map[string]any) error {
@@ -844,6 +1052,10 @@ func expectedGitLabLanes(id string, facts, sourceOperation map[string]any) map[s
 
 	pagination := objectAt(facts, "pagination")
 	if gitLabPaginationState(pagination) == "request_response_continuation_candidate" && gitLabDirectReadCandidate(semantics) {
+		if materialized, ok := gitLabMaterializedETLSpecs[id]; ok {
+			lanes["etl"] = gitLabImplementedETLCell(id, materialized)
+			return gitLabFinalizeExpectedLanes(lanes, facts, id, backlink)
+		}
 		mapping := backlink
 		if stream, ok := gitLabLegacyStreams[id]; ok {
 			mapping = map[string]any{"kind": "existing_stream", "path": gitLabStreamsPath, "stream": stream["stream"], "stream_path": stream["path"]}
@@ -855,6 +1067,10 @@ func expectedGitLabLanes(id string, facts, sourceOperation map[string]any) map[s
 		lanes["etl"] = gitLabNotApplicableCell("No explicit source pagination controls match the Track A extraction criterion.")
 	}
 
+	return gitLabFinalizeExpectedLanes(lanes, facts, id, backlink)
+}
+
+func gitLabFinalizeExpectedLanes(lanes map[string]any, facts map[string]any, id string, backlink map[string]any) map[string]any {
 	event := objectAt(facts, "event_cursor")
 	if stringAt(event, "state") == "webhook_registration" {
 		lanes["sync_transport"] = map[string]any{
@@ -873,6 +1089,35 @@ func expectedGitLabLanes(id string, facts, sourceOperation map[string]any) map[s
 		lanes["sync_transport"] = gitLabNotApplicableCell("No retained source fact documents a webhook registration with required URL and event selectors.")
 	}
 	return lanes
+}
+
+func gitLabImplementedETLCell(sourceID string, spec map[string]any) map[string]any {
+	return map[string]any{
+		"applicability": "source_candidate",
+		"disposition":   "implemented",
+		"reason":        "Retained source documents page_token -> next_page_token continuation; the exact source-bound stream, schema, and declared full-refresh DuckDB route are materialized.",
+		"mapping": map[string]any{
+			"source_id":       sourceID,
+			"stream":          spec["stream"],
+			"schema":          spec["schema"],
+			"mode":            spec["mode"],
+			"records_path":    spec["records_path"],
+			"pagination":      spec["pagination"],
+			"config_bindings": spec["config_bindings"],
+			"source_fact": map[string]any{
+				"classification": "source_request_response_continuation_candidate",
+				"continuation":   map[string]any{"request": "page_token", "response": "next_page_token"},
+			},
+			"definition_backlink": map[string]any{
+				"kind":         "stream_etl",
+				"path":         "operations.json",
+				"operation":    spec["operation"],
+				"streams_path": gitLabStreamsPath,
+				"stream":       spec["stream"],
+			},
+			"runtime_claim": "Declared source-bound stream_etl is exercised through the connector's existing declarative provider-to-DuckDB full-refresh route.",
+		},
+	}
 }
 
 func gitLabSemanticPostReadRequiresUntypedJSONBody(sourceOperation map[string]any) bool {
