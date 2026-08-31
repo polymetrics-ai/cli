@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 11,
+  "catalog_revision": 12,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -906,32 +906,43 @@
     {
       "id": "runtime.provider-parameter-alias.v1",
       "layer": "direct_execution",
-      "status": "investigating",
+      "status": "available",
       "kind": "generic",
-      "summary": "Candidate for a closed, injective, reversible mapping between a safe CLI flag spelling and the source-declared REST query parameter key. It would retain the exact provider key for request encoding while refusing unsafe raw flags and alias collisions.",
+      "summary": "Provides a closed, injective typed CLI alias for source-declared REST direct-read query keys: established safe keys and ASCII identifier bracket segments such as filter[state]. The declaration retains the exact provider key for request encoding, while aliases and collisions are validated before provider I/O.",
       "owner": {
         "primary_package": "polymetrics.ai/internal/connectors/engine",
         "supporting_packages": [
-          "polymetrics.ai/cmd/connectorgen"
+          "polymetrics.ai/cmd/connectorgen",
+          "polymetrics.ai/internal/connectors/commandrunner"
         ],
         "files": [
+          "internal/connectors/engine/provider_parameter_alias.go",
           "internal/connectors/engine/operation_headers.go",
-          "internal/connectors/engine/operation_parameters.go",
           "internal/connectors/engine/direct_read.go",
-          "cmd/connectorgen/sourceprojection.go"
+          "internal/connectors/commandrunner/runner.go",
+          "cmd/connectorgen/sourceprojection.go",
+          "cmd/connectorgen/surfacesync.go"
         ],
         "symbols": [
           {
-            "file": "internal/connectors/engine/operation_headers.go",
-            "name": "validateOperationParameterCLIName"
+            "file": "internal/connectors/engine/provider_parameter_alias.go",
+            "name": "ProviderQueryParameterCLIName"
           },
           {
-            "file": "internal/connectors/engine/operation_parameters.go",
-            "name": "operationParametersForLocation"
+            "file": "internal/connectors/engine/provider_parameter_alias.go",
+            "name": "ValidateProviderQueryParameterCLINames"
+          },
+          {
+            "file": "internal/connectors/engine/direct_read.go",
+            "name": "operationDirectReadQueryValues"
+          },
+          {
+            "file": "internal/connectors/commandrunner/runner.go",
+            "name": "validateOperationDirectReadQueryTarget"
           },
           {
             "file": "cmd/connectorgen/sourceprojection.go",
-            "name": "sourceProjectionSyncReadParameters"
+            "name": "sourceProjectionUnsafeProviderQueryParameter"
           }
         ]
       },
@@ -946,13 +957,14 @@
           "canonical locked source-operation descriptors"
         ],
         "request_response_shapes": [
-          "scalar path and query parameter source keys with punctuation"
+          "scalar REST direct-read query keys using an established safe identifier or one non-empty bracketed safe identifier segment"
         ],
         "sync_modes": [],
         "guarantees": [
           "the encoded provider request key exactly equals the source-declared key",
           "the CLI spelling is safe, deterministic, injective, and reversible",
-          "a collision is rejected before provider I/O"
+          "a collision is rejected before provider I/O",
+          "no generic raw query map or JSON escape hatch is introduced"
         ]
       },
       "selection": {
@@ -970,18 +982,20 @@
           "CLI command flag maps_to query.<provider-key>",
           "connectorgen source-import --materialize-eligible-lanes"
         ],
-        "notes": "Investigating only: no unsafe provider key is admitted by this candidate until its exact safe alias grammar and runtime encoding proof are implemented and approved."
+        "notes": "For a source-backed rest_read operation, the generator derives the safe flag while maps_to retains query.<provider-key>; command and engine preflight preserve that exact original key on the wire. Unsupported source keys remain cited and nonimplemented rather than being rejected globally."
       },
       "constraints": [
         "No raw CLI flag may contain an unsafe provider punctuation character.",
-        "The mapping must be one-to-one and reversible for brackets, underscores, plus, percent, and other source-declared punctuation without normalization collisions.",
+        "Only existing safe identifiers or an ASCII-safe non-empty bracketed identifier segment are projected; the CLI alias replaces underscores with hyphens and joins the base and segment with one hyphen.",
+        "Alias collisions are rejected per operation before a command can run.",
         "The original provider key remains the operation parameter identity and the exact request query key.",
-        "The candidate cannot use connector-name branching, generic raw HTTP, or a lossy fallback."
+        "The alias is type-scoped to source-backed REST direct reads and cannot use connector-name branching, generic raw HTTP, or a lossy fallback."
       ],
       "non_goals": [
         "Weakening safety.ValidateIdentifier for arbitrary command inputs.",
         "Changing source operation membership or suppressing a cited source row.",
-        "Providing array, object, form, or media serialization beyond the source-declared scalar query contract."
+        "Providing aliases for Unicode, sigil, plus, percent, empty-bracket, array, object, form, or media query contracts beyond the source-declared scalar query subset.",
+        "Extending direct writes, binary operations, transport, credential, or approval behavior."
       ],
       "consumer_examples": [
         {
@@ -989,32 +1003,37 @@
           "files": [
             "internal/connectors/defs/gitlab/sources/gitlab-operation-descriptor.json"
           ],
-          "notes": "The provider source retains query keys such as not[milestone_title]; this candidate may only project a safe reversible spelling after approval and proof."
+          "notes": "The retained source declares getApiV4ProjectsIdVariablesKey filter[environment_scope], which projects to --filter-environment-scope while retaining filter[environment_scope] as the exact wire key."
         }
       ],
       "proof_tests": [
         {
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/operation_parameter_alias_test.go",
-          "name": "TestOperationParameterAliasPreservesPunctuatedProviderQueryKey"
+          "name": "TestOperationDirectReadProviderQueryAliasPreservesExactWireKey"
+        },
+        {
+          "package": "./internal/connectors/commandrunner",
+          "file": "internal/connectors/commandrunner/runner_test.go",
+          "name": "TestRunOperationDirectReadMapsBracketedProviderQueryAlias"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceprojection_test.go",
-          "name": "TestSourceProjectionMaterializesReversibleProviderQueryAliases"
+          "name": "TestGitLabSourceDescriptorBracketedQueryKeyHasClosedAlias"
         }
       ],
       "known_gap_refs": [
         {
           "id": "runtime-provider-parameter-alias-investigating-r1",
           "reference": "docs/connector-canon/foundations/catalog.json#runtime.provider-parameter-alias.v1",
-          "notes": "Existing engine validation permits cli_name only for path parameters and rejects punctuated query names, so no implemented direct-read contract can claim this behavior yet."
+          "notes": "Existing source descriptors may retain this historical gap until a separate source mapping reconciliation clears only keys covered by this available grammar. It remains a truthful gap for source keys outside that grammar, such as $filter, and this foundation does not rewrite source locks."
         }
       ],
       "update_conditions": [
         "The safe alias grammar, collision rule, wire encoding, or proof changes.",
         "The owner symbols or affected direct execution lanes change.",
-        "Captain approval or the status of the candidate changes."
+        "A source form requires a broader typed query contract than the closed scalar bracket subset."
       ],
       "supersedes": []
     },

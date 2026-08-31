@@ -2508,6 +2508,48 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	}
 }
 
+func TestRunOperationDirectReadMapsBracketedProviderQueryAlias(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "projects list",
+		Intent:       "direct_read",
+		Availability: "implemented",
+		Operation:    "gitlab.projects.list",
+		APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: http.MethodGet, Path: "/api/v4/projects"}},
+		OutputPolicy: "json_redacted",
+		Flags: []connectors.CommandSurfaceFlag{{
+			Name: "filter-state", Type: "string", MapsTo: "query.filter[state]",
+		}},
+	}}}}
+
+	if _, err := Run(context.Background(), connector, Request{
+		Path:  []string{"projects", "list"},
+		Flags: map[string][]string{"filter-state": {"opened"}},
+	}, func(connectors.Record) error {
+		t.Fatal("operation direct read must not emit stream records")
+		return nil
+	}); err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if got := connector.operationDirectReadReq.Query["filter[state]"]; got != "opened" {
+		t.Fatalf("OperationDirectRead provider query = %#v, want exact filter[state] key", connector.operationDirectReadReq.Query)
+	}
+	if _, leaked := connector.operationDirectReadReq.Query["filter-state"]; leaked {
+		t.Fatalf("OperationDirectRead received CLI alias instead of provider key: %#v", connector.operationDirectReadReq.Query)
+	}
+	if got := connector.operationReadBindings.queryFields; !reflect.DeepEqual(got, []string{"filter[state]"}) {
+		t.Fatalf("binding query fields = %#v, want original provider key", got)
+	}
+}
+
+func TestOperationDirectReadQueryAliasDoesNotBroadenOtherCommands(t *testing.T) {
+	if err := validateOperationDirectReadQueryTarget(connectors.CommandSurfaceCommand{Intent: "direct_write"}, "filter-state", "filter[state]"); err == nil {
+		t.Fatal("direct_write accepted a bracketed direct-read query alias")
+	}
+	if err := validateOperationDirectReadQueryTarget(connectors.CommandSurfaceCommand{Intent: "direct_read"}, "provider-filter", "filter[state]"); err == nil {
+		t.Fatal("direct_read accepted a non-deterministic provider query flag")
+	}
+}
+
 func TestRunSourceBoundOperationDirectReadRejectsBeforeDispatch(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
 		Path: "agents get-agent", Intent: "direct_read", Availability: "implemented",

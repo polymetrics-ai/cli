@@ -19,6 +19,7 @@ import (
 	"unicode/utf8"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/failures"
 	"polymetrics.ai/internal/safety"
 )
@@ -2258,7 +2259,7 @@ func operationDirectOverrides(cmd connectors.CommandSurfaceCommand, flags map[st
 			pathParams[target] = stringifyCommandValue(value)
 		case strings.HasPrefix(flag.MapsTo, "query."):
 			target := strings.TrimPrefix(flag.MapsTo, "query.")
-			if err := safety.ValidateIdentifier(target, "query parameter"); err != nil {
+			if err := validateOperationDirectReadQueryTarget(cmd, name, target); err != nil {
 				return nil, nil, nil, nil, nil, nil, err
 			}
 			query[target] = stringifyCommandValue(value)
@@ -2331,6 +2332,27 @@ func operationDirectOverrides(cmd connectors.CommandSurfaceCommand, flags map[st
 		return nil, nil, nil, nil, nil, nil, &BlockedCommandError{Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "raw body cannot mix with JSON body fields"}
 	}
 	return pathParams, query, headers, headerValues, body, rawBody, nil
+}
+
+// validateOperationDirectReadQueryTarget preserves the existing query-key
+// contract everywhere except a source-declared operation direct read that has
+// the exact bracketed provider-key alias admitted by engine. The flag's safe
+// spelling must be the deterministic alias; maps_to retains the provider key
+// that reaches the wire.
+func validateOperationDirectReadQueryTarget(cmd connectors.CommandSurfaceCommand, flagName, target string) error {
+	if err := safety.ValidateIdentifier(target, "query parameter"); err == nil {
+		return nil
+	} else if cmd.Intent != "direct_read" {
+		return err
+	}
+	alias, ok := engine.ProviderQueryParameterCLIName(target)
+	if !ok {
+		return safety.ValidateIdentifier(target, "query parameter")
+	}
+	if flagName != alias {
+		return fmt.Errorf("direct_read provider query parameter %q must use deterministic flag --%s", target, alias)
+	}
+	return nil
 }
 
 // validateOperationHeaderTarget does not decide whether a header is allowed —

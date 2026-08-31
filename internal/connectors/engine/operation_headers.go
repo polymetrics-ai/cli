@@ -33,6 +33,8 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 		}
 	}
 	seen := make(map[string]struct{})
+	queryKeys := make([]string, 0)
+	hasProviderQueryAlias := false
 	for _, parameter := range operationParameters(op) {
 		location := strings.ToLower(strings.TrimSpace(parameter.In))
 		if err := validateOperationParameterCLIName(parameter, location); err != nil {
@@ -42,10 +44,27 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 			return err
 		}
 		switch location {
-		case "path", "query":
+		case "path":
 			if err := safety.ValidateIdentifier(parameter.Name, "operation "+location+" parameter"); err != nil {
 				return err
 			}
+			if parameter.MaxBytes < 0 || parameter.MaxBytes > maxOperationParameterMaxBytes {
+				return fmt.Errorf("%s parameter %q max_bytes must be omitted or between 1 and %d", location, parameter.Name, maxOperationParameterMaxBytes)
+			}
+		case "query":
+			if err := safety.ValidateIdentifier(parameter.Name, "operation "+location+" parameter"); err != nil {
+				// The provider-key alias is narrowly available to typed REST
+				// direct reads only. Other execution lanes retain their existing
+				// identifier contract unchanged.
+				if op.Kind != "rest_read" {
+					return err
+				}
+				if _, ok := ProviderQueryParameterCLIName(parameter.Name); !ok {
+					return err
+				}
+				hasProviderQueryAlias = true
+			}
+			queryKeys = append(queryKeys, parameter.Name)
 			if parameter.MaxBytes < 0 || parameter.MaxBytes > maxOperationParameterMaxBytes {
 				return fmt.Errorf("%s parameter %q max_bytes must be omitted or between 1 and %d", location, parameter.Name, maxOperationParameterMaxBytes)
 			}
@@ -88,6 +107,11 @@ func validateOperationHeaderParameters(op OperationSpec) error {
 		}
 		if _, err := CompileSchema(parameter.Schema); err != nil {
 			return fmt.Errorf("header parameter %q schema: %w", parameter.Name, err)
+		}
+	}
+	if hasProviderQueryAlias {
+		if err := ValidateProviderQueryParameterCLINames(queryKeys); err != nil {
+			return err
 		}
 	}
 	return nil

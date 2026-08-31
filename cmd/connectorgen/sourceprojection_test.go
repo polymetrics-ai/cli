@@ -727,13 +727,81 @@ func TestSourceProjectionMaterializesEligibleSourceLockLanesWithMappedRoute(t *t
 	}
 }
 
-func TestSourceProjectionGeneratedDirectReadRefusesUnsafeProviderQueryParameter(t *testing.T) {
+func TestSourceProjectionGeneratedDirectReadProjectsGitLabBracketedQueryAlias(t *testing.T) {
+	operation := sourceOperationDescriptor{
+		Connector: "gitlab", Protocol: "rest", SourceID: "getApiV4Projects", ProviderOperationID: "getApiV4Projects",
+		Method: "GET", Path: "/api/v4/projects", MappingPath: "/api/v4/projects",
+		Source: sourceImportSource{
+			URL:      "https://docs.gitlab.com/api/projects/",
+			Location: `GET /api/v4/projects query filter[state]`,
+		},
+		Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{
+			{Name: "filter[state]", Schema: map[string]any{"type": "string"}},
+		}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "200", MediaType: "application/json", Class: sourceOutputJSON}}},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: sourceOperationExecutionFoundation, Location: "source operation getApiV4Projects"}}},
+	}
+	if parameter, unsafe := sourceProjectionUnsafeProviderQueryParameter(operation); unsafe {
+		t.Fatalf("source-backed GitLab key %q remained unsafe after alias foundation", parameter.Name)
+	}
+	if !sourceProjectionGeneratedDirectReadEligible(operation) {
+		t.Fatal("source-backed bracketed GitLab query key was not eligible for typed direct-read projection")
+	}
+	rest := newOrderedObject()
+	if !sourceProjectionSyncReadParameters(rest, operation) {
+		t.Fatal("source projection did not retain source-backed query parameter")
+	}
+	command := newOrderedObject()
+	if got := deriveCommandParameterFlags(command, rest); got != 1 {
+		t.Fatalf("derived flag changes = %d, want 1", got)
+	}
+	flags := arrayField(command, "flags")
+	if len(flags) != 1 {
+		t.Fatalf("derived flags = %#v, want one", flags)
+	}
+	flag, ok := flags[0].(*orderedObject)
+	if !ok || stringField(flag, "name") != "filter-state" || stringField(flag, "maps_to") != "query.filter[state]" {
+		t.Fatalf("derived GitLab alias flag = %#v, want --filter-state -> query.filter[state]", flag)
+	}
+}
+
+func TestGitLabSourceDescriptorBracketedQueryKeyHasClosedAlias(t *testing.T) {
+	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "connectors", "defs", "gitlab", "sources", "gitlab-operation-descriptor.json"))
+	if err != nil {
+		t.Fatalf("read retained GitLab source descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := json.Unmarshal(raw, &descriptor); err != nil {
+		t.Fatalf("decode retained GitLab source descriptor: %v", err)
+	}
+	for _, operation := range descriptor.Operations {
+		if operation.SourceID != "getApiV4ProjectsIdVariablesKey" {
+			continue
+		}
+		for _, parameter := range operation.Request.Query {
+			if parameter.Name != "filter[environment_scope]" {
+				continue
+			}
+			if got, ok := engine.ProviderQueryParameterCLIName(parameter.Name); !ok || got != "filter-environment-scope" {
+				t.Fatalf("retained GitLab key alias = (%q, %t), want (filter-environment-scope, true)", got, ok)
+			}
+			if unsafeParameter, unsafe := sourceProjectionUnsafeProviderQueryParameter(operation); unsafe {
+				t.Fatalf("retained GitLab source operation remained unsafe at %q", unsafeParameter.Name)
+			}
+			return
+		}
+		t.Fatal("retained GitLab read operation lost filter[environment_scope] source evidence")
+	}
+	t.Fatal("retained GitLab read operation getApiV4ProjectsIdVariablesKey not found")
+}
+
+func TestSourceProjectionGeneratedDirectReadRefusesUnsupportedProviderQueryParameter(t *testing.T) {
 	operation := sourceOperationDescriptor{
 		Connector: "alpha", Protocol: "rest", SourceID: "getFilteredWidgets", ProviderOperationID: "getFilteredWidgets",
 		Method: "GET", Path: "/api/v1/widgets", MappingPath: "/widgets",
 		Source: sourceImportSource{URL: "https://provider.invalid/openapi.json", Location: `paths["/api/v1/widgets"].get`},
 		Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{
-			{Name: "not[archived]", Schema: map[string]any{"type": "string"}},
+			{Name: "$filter", Schema: map[string]any{"type": "string"}},
 		}},
 		Output:  sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "200", MediaType: "application/json", Class: sourceOutputJSON}}},
 		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: sourceOperationExecutionFoundation, Location: "source operation getFilteredWidgets"}}},
@@ -750,11 +818,28 @@ func TestSourceProjectionGeneratedDirectReadRefusesUnsafeProviderQueryParameter(
 		t.Fatalf("unsafe provider query gaps = %+v, want existing execution and alias gaps", projected.Runtime.Gaps)
 	}
 	aliasGap := projected.Runtime.Gaps[1]
-	if aliasGap.Foundation != sourceProviderParameterAliasFoundation || aliasGap.Phase != "request" || aliasGap.Location != "query parameter not[archived]" {
+	if aliasGap.Foundation != sourceProviderParameterAliasFoundation || aliasGap.Phase != "request" || aliasGap.Location != "query parameter $filter" {
 		t.Fatalf("unsafe provider query gap = %+v, want exact Atlas candidate disposition", aliasGap)
 	}
 	if sourceProjectionGeneratedDirectReadEligible(projected) {
-		t.Fatal("generated direct read admitted an unsafe provider query key before the reversible alias foundation is approved")
+		t.Fatal("generated direct read admitted an unsupported provider query key outside the approved alias grammar")
+	}
+}
+
+func TestSourceProjectionGeneratedDirectReadRejectsProviderAliasCollision(t *testing.T) {
+	operation := sourceOperationDescriptor{
+		Connector: "gitlab", Protocol: "rest", SourceID: "getApiV4Projects", ProviderOperationID: "getApiV4Projects",
+		Method: "GET", Path: "/api/v4/projects", MappingPath: "/api/v4/projects",
+		Request: sourceRequestDescriptor{Query: []sourceParameterDescriptor{
+			{Name: "filter[state]", Schema: map[string]any{"type": "string"}},
+			{Name: "filter-state", Schema: map[string]any{"type": "string"}},
+		}},
+		Output:  sourceOutputDescriptor{Class: sourceOutputJSON, Success: []sourceOutputVariant{{Status: "200", MediaType: "application/json", Class: sourceOutputJSON}}},
+		Runtime: sourceRuntimeReachability{MergeBlocked: true, Gaps: []sourceContractGap{{Foundation: sourceOperationExecutionFoundation, Location: "source operation getApiV4Projects"}}},
+	}
+	parameter, unsafe := sourceProjectionUnsafeProviderQueryParameter(operation)
+	if !unsafe || parameter.Name != "filter-state" {
+		t.Fatalf("provider alias collision = (%+v, %t), want filter-state collision", parameter, unsafe)
 	}
 }
 

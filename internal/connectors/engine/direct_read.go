@@ -101,7 +101,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	query, err := directReadQuery(queryMap)
+	query, err := operationDirectReadQueryValues(op, queryMap)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -829,7 +829,7 @@ func validateOperationDirectReadQueryFields(op OperationSpec, queryFields []stri
 	}
 	seen := make(map[string]struct{}, len(queryFields))
 	for _, field := range queryFields {
-		if err := safety.ValidateIdentifier(field, "operation query parameter"); err != nil {
+		if err := validateOperationDirectReadQueryName(op, field); err != nil {
 			return fmt.Errorf("operation %q query field: %w", op.ID, err)
 		}
 		if _, duplicate := seen[field]; duplicate {
@@ -858,6 +858,18 @@ func validateOperationDirectReadQueryFields(op OperationSpec, queryFields []stri
 		}
 	}
 	return nil
+}
+
+func validateOperationDirectReadQueryName(op OperationSpec, name string) error {
+	if err := safety.ValidateIdentifier(name, "operation query parameter"); err == nil {
+		return nil
+	} else if op.Kind != "rest_read" {
+		return err
+	}
+	if _, ok := ProviderQueryParameterCLIName(name); ok {
+		return nil
+	}
+	return safety.ValidateIdentifier(name, "operation query parameter")
 }
 
 func operationDirectReadQuery(op OperationSpec, requested map[string]string, commandFields map[string]struct{}) (map[string]string, error) {
@@ -895,6 +907,27 @@ func operationDirectReadQuery(op OperationSpec, requested map[string]string, com
 		query[name] = requested[name]
 	}
 	return query, nil
+}
+
+// operationDirectReadQueryValues retains the exact provider key after the
+// operation has already proved it is a declared typed query parameter. The
+// generic directReadQuery helper intentionally keeps its older safe-identifier
+// contract for every other execution path.
+func operationDirectReadQueryValues(op OperationSpec, query map[string]string) (url.Values, error) {
+	values := url.Values{}
+	for name, value := range query {
+		if err := validateOperationDirectReadQueryName(op, name); err != nil {
+			return nil, err
+		}
+		if err := safety.RejectDangerousChars(value, "query parameter "+name); err != nil {
+			return nil, err
+		}
+		if encoded := url.QueryEscape(value); len(encoded) > maxOperationParameterMaxBytes {
+			return nil, fmt.Errorf("query parameter %q encoded value exceeds byte cap %d", name, maxOperationParameterMaxBytes)
+		}
+		values.Set(name, value)
+	}
+	return values, nil
 }
 
 func validateOperationDirectReadBodyFields(op OperationSpec, bodyFields []string) error {

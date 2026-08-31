@@ -856,6 +856,14 @@ func deriveCommandParameterFlags(cmd *orderedObject, rest *orderedObject) int {
 			continue
 		}
 		flagName := strings.ReplaceAll(name, "_", "-")
+		if location == "query" {
+			// The source-projection admission gate has already confirmed a
+			// deterministic provider-key alias. Preserve the exact wire key in
+			// maps_to below; only the CLI spelling is translated.
+			if alias, ok := engine.ProviderQueryParameterCLIName(name); ok {
+				flagName = alias
+			}
+		}
 		if location == "path" && stringField(param, "cli_name") != "" {
 			// A declaration can name a safe runtime path placeholder differently
 			// from the provider's resource identity. The alias remains closed:

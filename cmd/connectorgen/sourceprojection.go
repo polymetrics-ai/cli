@@ -348,24 +348,30 @@ func sourceProjectionGeneratedDirectReadExists(operations *orderedObject, source
 }
 
 // sourceProjectionUnsafeProviderQueryParameter identifies a provider query
-// key that the existing closed engine cannot expose as a raw flag. The exact
-// source key remains in the descriptor and gets an Atlas-named gap; no
+// key that the closed typed direct-read alias foundation cannot project. The
+// exact source key remains in the descriptor and gets an Atlas-named gap; no
 // connector-specific alias or generic raw transport is introduced here.
 func sourceProjectionUnsafeProviderQueryParameter(source sourceOperationDescriptor) (sourceParameterDescriptor, bool) {
+	aliases := make(map[string]string, len(source.Request.Query))
 	for _, parameter := range source.Request.Query {
 		if parameter.Name == "" {
 			continue
 		}
-		if err := safety.ValidateIdentifier(parameter.Name, "provider query parameter"); err != nil {
+		alias, ok := engine.ProviderQueryParameterCLIName(parameter.Name)
+		if !ok {
 			return parameter, true
 		}
+		if prior, collision := aliases[alias]; collision && prior != parameter.Name {
+			return parameter, true
+		}
+		aliases[alias] = parameter.Name
 	}
 	return sourceParameterDescriptor{}, false
 }
 
 // sourceProjectionApplyUnsafeProviderQueryParameterGaps turns an otherwise
-// materializable GET into a discoverable cited outcome while the Atlas
-// candidate for reversible provider-key aliases is awaiting captain approval.
+// materializable GET into a discoverable cited outcome when its source key is
+// outside the available reversible provider-key alias grammar.
 func sourceProjectionApplyUnsafeProviderQueryParameterGaps(bundle engine.Bundle, result *sourceImportResult) int {
 	if result == nil {
 		return 0
@@ -402,7 +408,7 @@ func sourceProjectionApplyUnsafeProviderQueryParameterGaps(bundle engine.Bundle,
 			Foundation: sourceProviderParameterAliasFoundation,
 			Phase:      "request",
 			Location:   location,
-			Reason:     "source-declared provider query key requires the Atlas-tracked reversible CLI-to-provider parameter alias foundation",
+			Reason:     "source-declared provider query key lies outside the available typed CLI-to-provider parameter alias grammar",
 		})
 		operation.Runtime.MergeBlocked = true
 		changed++
@@ -412,7 +418,7 @@ func sourceProjectionApplyUnsafeProviderQueryParameterGaps(bundle engine.Bundle,
 
 // sourceProjectionPruneUnsafeGeneratedDirectReads retracts only the exact
 // generated operation/command pair when a newly classified provider query key
-// needs the awaiting alias foundation. The source descriptor and API surface
+// lies outside the available alias grammar. The source descriptor and API surface
 // retain the cited blocked row; author-owned declarations are never removed.
 func sourceProjectionPruneUnsafeGeneratedDirectReads(operations, cli, surface *orderedObject, result sourceImportResult) sourceProjectionStats {
 	stats := sourceProjectionStats{}
