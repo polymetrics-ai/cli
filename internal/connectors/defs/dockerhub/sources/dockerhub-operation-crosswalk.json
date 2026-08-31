@@ -1,0 +1,3415 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "generated_at": "2026-08-19T00:00:00Z",
+  "source_lock": "sources/dockerhub-operation-source-lock.json",
+  "accounting": {
+    "source_operations": 54,
+    "source_unique_method_path": 54,
+    "api_surface_endpoints": 54,
+    "api_surface_unique_method_path": 54,
+    "exact_source_to_surface": 54,
+    "source_only": 0,
+    "surface_only": 0,
+    "duplicate_source_identity": []
+  },
+  "source_operations": [
+    {
+      "id": "dockerhub.rest.PostUsersLogin",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/users/login",
+      "operation_id": "PostUsersLogin",
+      "source_location": "paths[\"/v2/users/login\"].post",
+      "operation_title": "Create an authentication token",
+      "deprecated": true,
+      "security_requirements": [],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/UsersLoginRequest"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/PostUsersLoginErrorResponse",
+          "#/components/schemas/PostUsersLoginSuccessResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/users/login",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "username+password session-token exchange; this bundle's spec.json declares no password field and the public registry read surface needs no auth, so no login flow is wired"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "provider-does-not-expose"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.PostUsers2FALogin",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/users/2fa-login",
+      "operation_id": "PostUsers2FALogin",
+      "source_location": "paths[\"/v2/users/2fa-login\"].post",
+      "operation_title": "Second factor authentication",
+      "deprecated": false,
+      "security_requirements": [],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/Users2FALoginRequest"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/PostUsers2FALoginErrorResponse",
+          "#/components/schemas/PostUsersLoginSuccessResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/users/2fa-login",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "second-factor login continuation of the excluded /v2/users/login session exchange"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.postusers2falogin"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.AuthCreateAccessToken",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/auth/token",
+      "operation_id": "AuthCreateAccessToken",
+      "source_location": "paths[\"/v2/auth/token\"].post",
+      "operation_title": "Create access token",
+      "deprecated": false,
+      "security_requirements": [],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/AuthCreateTokenResponse",
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/auth/token",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "scoped registry bearer-token exchange (docker login/pull credential flow); not a data-read endpoint and out of scope for this credential-free public bundle"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.authcreateaccesstoken"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.post_/v2/access-tokens",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/access-tokens",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/access-tokens\"].post",
+      "operation_title": "Create personal access token",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/createAccessTokenRequest"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/ValueError",
+          "#/components/schemas/createAccessTokensResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/access-tokens",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "personal access token creation; authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.post__v2_access-tokens"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/access-tokens",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/access-tokens",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/access-tokens\"].get",
+      "operation_title": "List personal access tokens",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/ValueError",
+          "#/components/schemas/getAccessTokensResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/access-tokens",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "personal access token management requires an authenticated user session this bundle has no credential for"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_access-tokens"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.patch_/v2/access-tokens/{uuid}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PATCH",
+      "path": "/v2/access-tokens/{uuid}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/access-tokens/{uuid}\"].patch",
+      "operation_title": "Update personal access token",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/patchAccessTokenRequest"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/ValueError",
+          "#/components/schemas/patchAccessTokenResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/access-tokens/{uuid}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "personal access token update; authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.patch__v2_access-tokens__uuid_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/access-tokens/{uuid}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/access-tokens/{uuid}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/access-tokens/{uuid}\"].get",
+      "operation_title": "Get personal access token",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/access-tokens/{uuid}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "personal access token detail; authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_access-tokens__uuid_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.delete_/v2/access-tokens/{uuid}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "DELETE",
+      "path": "/v2/access-tokens/{uuid}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/access-tokens/{uuid}\"].delete",
+      "operation_title": "Delete personal access token",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v2/access-tokens/{uuid}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "revokes a personal access token; destructive and authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.delete__v2_access-tokens__uuid_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.AuditLogs_ListAuditActions",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/auditlogs/{account}/actions",
+      "operation_id": "AuditLogs_ListAuditActions",
+      "source_location": "paths[\"/v2/auditlogs/{account}/actions\"].get",
+      "operation_title": "List audit log actions",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/GetAuditActionsResponse",
+          "#/components/schemas/rpcStatus"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/auditlogs/{account}/actions",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "organization audit log action catalog; same auth gate as the audit log stream above"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.auditlogs_listauditactions"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.AuditLogs_ListAuditLogs",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/auditlogs/{account}",
+      "operation_id": "AuditLogs_ListAuditLogs",
+      "source_location": "paths[\"/v2/auditlogs/{account}\"].get",
+      "operation_title": "List audit log events",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [
+          {
+            "name": "action",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "actor",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/GetAuditLogsResponse",
+          "#/components/schemas/rpcStatus"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/auditlogs/{account}",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "audit logs list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.auditlogs_listauditlogs"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{name}/settings",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{name}/settings",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{name}/settings\"].get",
+      "operation_title": "Get organization settings",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/orgSettings"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{name}/settings",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "org settings read; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_orgs__name__settings"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.put_/v2/orgs/{name}/settings",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PUT",
+      "path": "/v2/orgs/{name}/settings",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{name}/settings\"].put",
+      "operation_title": "Update organization settings",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/orgSettings"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v2/orgs/{name}/settings",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org settings mutation; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.put__v2_orgs__name__settings"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/orgs/{name}/access-tokens",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post",
+      "operation_title": "Create access token",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/createOrgAccessTokenRequest"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/ValueError",
+          "#/components/schemas/createOrgAccessTokenResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/orgs/{name}/access-tokens",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org-scoped access token creation; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.post__v2_orgs__name__access-tokens"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{name}/access-tokens",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{name}/access-tokens",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].get",
+      "operation_title": "List access tokens",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "number"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "number"
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/getOrgAccessTokensResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{name}/access-tokens",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "org-scoped access token listing; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_orgs__name__access-tokens"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get",
+      "operation_title": "Get access token",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/getOrgAccessTokenResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "org-scoped access token detail; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_orgs__org_name__access-tokens__access_token_id_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch",
+      "operation_title": "Update access token",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/updateOrgAccessTokenRequest"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/updateOrgAccessTokenResponse"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org-scoped access token update; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.patch__v2_orgs__org_name__access-tokens__access_token_id_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete",
+      "operation_title": "Delete access token",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "access_token_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "revokes an org-scoped access token; destructive and authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.delete__v2_orgs__org_name__access-tokens__access_token_id_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.ListRepositoryTags",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+      "operation_id": "ListRepositoryTags",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get",
+      "operation_title": "List repository tags",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/paginated_tags"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+          "operation": null,
+          "covered_by": {
+            "stream": "tags"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.listrepositorytags"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head",
+      "operation_title": "Check repository tags",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HEAD",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.GetRepositoryTag",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+      "operation_id": "GetRepositoryTag",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].get",
+      "operation_title": "Read repository tag",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/tag"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+          "operation": null,
+          "covered_by": {
+            "stream": "tag_detail"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.getrepositorytag"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head",
+      "operation_title": "Check repository tag",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "tag",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HEAD",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.UpdateRepositoryImmutableTags",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PATCH",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+      "operation_id": "UpdateRepositoryImmutableTags",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch",
+      "operation_title": "Update repository immutable tags",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/update_repository_immutable_tags_request"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/repository_info"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org-admin immutable-tag policy mutation; requires an authenticated session this credential-free public bundle has no auth path for"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.updaterepositoryimmutabletags"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.VerifyRepositoryImmutableTags",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+      "operation_id": "VerifyRepositoryImmutableTags",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post",
+      "operation_title": "Verify repository immutable tags",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/immutable_tags_verify_request"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/immutable_tags_verify_response"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org-admin immutable-tag policy verification; requires an authenticated session this credential-free public bundle has no auth path for"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.verifyrepositoryimmutabletags"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.CreateRepositoryGroup",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/repositories/{namespace}/{repository}/groups",
+      "operation_id": "CreateRepositoryGroup",
+      "source_location": "paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post",
+      "operation_title": "Assign a group (Team) to a repository for access",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/RepositoryGroupCreationRequest"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/Error",
+          "#/components/schemas/RepositoryGroup",
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/repositories/{namespace}/{repository}/groups",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "assigns a Team/group to a repository; org-admin operation requiring an authenticated session not available to this credential-free bundle"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.createrepositorygroup"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.listNamespaceRepositories",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories",
+      "operation_id": "listNamespaceRepositories",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].get",
+      "operation_title": "List repositories in a namespace",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        },
+        {}
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "ordering",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "name",
+              "-name",
+              "last_updated",
+              "-last_updated",
+              "pull_count",
+              "-pull_count"
+            ]
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/list_repositories_response"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories",
+          "operation": null,
+          "covered_by": {
+            "stream": "repositories"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.listnamespacerepositories"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.CreateRepository",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/namespaces/{namespace}/repositories",
+      "operation_id": "CreateRepository",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].post",
+      "operation_title": "Create a new repository",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "BearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": [
+          "#/components/schemas/repo_creation_request"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/repository_info"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/namespaces/{namespace}/repositories",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "repository creation requires an authenticated session; legacy never implemented repository create/update and this bundle's spec.json declares no credential to authenticate the request"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.createrepository"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.GetRepository",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+      "operation_id": "GetRepository",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].get",
+      "operation_title": "Get repository in a namespace",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        },
+        {}
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/repository_info"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+          "operation": null,
+          "covered_by": {
+            "stream": "repository_detail"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.getrepository"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.CheckRepository",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "HEAD",
+      "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+      "operation_id": "CheckRepository",
+      "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head",
+      "operation_title": "Check repository in a namespace",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        },
+        {}
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "repository",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/repository_info"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "HEAD",
+          "path": "/v2/namespaces/{namespace}/repositories/{repository}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "HEAD existence-check only; the typed rest_status executor is present but engine operation-kind loader/validation path does not register rest_status."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{org_name}/members",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/members",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/members\"].get",
+      "operation_title": "List org members",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [
+          {
+            "name": "invites",
+            "in": "query",
+            "type": "boolean"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "owner",
+              "editor",
+              "member"
+            ]
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "all",
+              "invitee",
+              "member"
+            ]
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/members",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "org member listing; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_orgs__org_name__members"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/members/export",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get",
+      "operation_title": "Export org members CSV",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json",
+          "text/csv"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/members/export",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "Bounded text/csv export; the typed text_export executor is present but engine operation-kind loader/validation path does not register text_export."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "not_materialized",
+          "reason": "foundation-gap"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].put",
+      "operation_title": "Update org member (role)",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/org_member"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_name}/members/{username}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "updates an org member's role; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.put__v2_orgs__org_name__members__username_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/members/{username}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].delete",
+      "operation_title": "Remove member from org",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/members/{username}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "removes a member from an org; destructive and authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.delete__v2_orgs__org_name__members__username_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{org_name}/invites",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/invites",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/invites\"].get",
+      "operation_title": "List org invites",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/invites",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "org pending-invite listing; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_orgs__org_name__invites"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].get",
+      "operation_title": "Get groups of an organization",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "org Teams/groups listing; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_orgs__org_name__groups"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].post",
+      "operation_title": "Create a new group",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/org_group"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/orgs/{org_name}/groups",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org Team/group creation; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.post__v2_orgs__org_name__groups"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get",
+      "operation_title": "Get a group of an organization",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/org_group"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "org Team/group detail; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_orgs__org_name__groups__group_name_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PUT",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put",
+      "operation_title": "Update the details for an organization group",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/org_group"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org Team/group full update; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.put__v2_orgs__org_name__groups__group_name_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PATCH",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch",
+      "operation_title": "Update some details for an organization group",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error",
+          "#/components/schemas/org_group"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org Team/group partial update; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.patch__v2_orgs__org_name__groups__group_name_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete",
+      "operation_title": "Delete an organization group",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "deletes an org Team/group; destructive and authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.delete__v2_orgs__org_name__groups__group_name_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get",
+      "operation_title": "List members of a group",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "org Team/group membership listing; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_orgs__org_name__groups__group_name__members"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post",
+      "operation_title": "Add a member to a group",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "adds a member to an org Team/group; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.post__v2_orgs__org_name__groups__group_name__members"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "DELETE",
+      "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete",
+      "operation_title": "Remove a user from a group",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "group_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "org_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "removes a user from an org Team/group; destructive and authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.delete__v2_orgs__org_name__groups__group_name__members__username_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.delete_/v2/invites/{id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "DELETE",
+      "path": "/v2/invites/{id}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/invites/{id}\"].delete",
+      "operation_title": "Cancel an invite",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "DELETE",
+          "path": "/v2/invites/{id}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "cancels a pending org invite; destructive and authenticated-session-only"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.delete__v2_invites__id_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.patch_/v2/invites/{id}/resend",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PATCH",
+      "path": "/v2/invites/{id}/resend",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/invites/{id}/resend\"].patch",
+      "operation_title": "Resend an invite",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PATCH",
+          "path": "/v2/invites/{id}/resend",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "resends an org invite email; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.patch__v2_invites__id__resend"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.post_/v2/invites/bulk",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/invites/bulk",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/invites/bulk\"].post",
+      "operation_title": "Bulk create invites",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "schema_references": [
+          "#/components/schemas/error"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/invites/bulk",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "org member invitation creation; authenticated org-admin session required"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.post__v2_invites_bulk"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/scim/2.0/ServiceProviderConfig",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get",
+      "operation_title": "Get service provider config",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": [
+          "#/components/schemas/scim_service_provider_config"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ServiceProviderConfig",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "SCIM service provider config; same SCIM-token gate"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_scim_2.0_serviceproviderconfig"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/scim/2.0/ResourceTypes",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/ResourceTypes\"].get",
+      "operation_title": "List resource types",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": []
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ResourceTypes",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "SCIM identity-provisioning metadata; requires a separate SCIM bearer token this bundle has no auth path for"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_scim_2.0_resourcetypes"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/scim/2.0/ResourceTypes/{name}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get",
+      "operation_title": "Get a resource type",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": [
+          "#/components/schemas/scim_resource_type"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/scim/2.0/ResourceTypes/{name}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "SCIM identity-provisioning metadata; same SCIM-token gate"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_scim_2.0_resourcetypes__name_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/scim/2.0/Schemas",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/scim/2.0/Schemas",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/Schemas\"].get",
+      "operation_title": "List schemas",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": []
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Schemas",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "SCIM schema metadata; same SCIM-token gate"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_scim_2.0_schemas"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/scim/2.0/Schemas/{id}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/Schemas/{id}\"].get",
+      "operation_title": "Get a schema",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": [
+          "#/components/schemas/scim_schema"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Schemas/{id}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "SCIM schema metadata; same SCIM-token gate"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_scim_2.0_schemas__id_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/scim/2.0/Users",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/scim/2.0/Users",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/Users\"].get",
+      "operation_title": "List users",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [
+          {
+            "name": "attributes",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "type": "string",
+            "values": [
+              "ascending",
+              "descending"
+            ]
+          },
+          {
+            "name": "startIndex",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": []
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Users",
+          "operation": null,
+          "covered_by": {
+            "direct_read": "scim users list"
+          }
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_scim_2.0_users"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.post_/v2/scim/2.0/Users",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "POST",
+      "path": "/v2/scim/2.0/Users",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/Users\"].post",
+      "operation_title": "Create user",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/scim+json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": [
+          "#/components/schemas/scim_user"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "POST",
+          "path": "/v2/scim/2.0/Users",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "The executable direct-write command is bound to the source-pinned rest_write contract. api_surface operation metadata remains blocked-by-default because its schema has no implemented direct-write classifier."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.post__v2_scim_2.0_users"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.get_/v2/scim/2.0/Users/{id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "GET",
+      "path": "/v2/scim/2.0/Users/{id}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].get",
+      "operation_title": "Get a user",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": [
+          "#/components/schemas/scim_user"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "GET",
+          "path": "/v2/scim/2.0/Users/{id}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "medium",
+            "blocked_by_default": true,
+            "reason": "SCIM user detail; same SCIM-token gate"
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_read",
+          "id": "dockerhub.get__v2_scim_2.0_users__id_"
+        }
+      }
+    },
+    {
+      "id": "dockerhub.rest.put_/v2/scim/2.0/Users/{id}",
+      "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+      "server_url": "https://hub.docker.com",
+      "method": "PUT",
+      "path": "/v2/scim/2.0/Users/{id}",
+      "operation_id": "",
+      "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put",
+      "operation_title": "Update a user",
+      "deprecated": false,
+      "security_requirements": [
+        {
+          "bearerSCIMAuth": []
+        }
+      ],
+      "request": {
+        "path_parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "query_parameters": [],
+        "body_content_types": [
+          "application/scim+json"
+        ],
+        "body_schema_references": []
+      },
+      "response": {
+        "content_types": [
+          "application/scim+json"
+        ],
+        "schema_references": [
+          "#/components/schemas/scim_user"
+        ]
+      },
+      "crosswalk": {
+        "state": "exact",
+        "api_surface": {
+          "method": "PUT",
+          "path": "/v2/scim/2.0/Users/{id}",
+          "operation": {
+            "model": "disallowed",
+            "status": "blocked",
+            "risk": "high",
+            "blocked_by_default": true,
+            "reason": "The executable direct-write command is bound to the source-pinned rest_write contract. api_surface operation metadata remains blocked-by-default because its schema has no implemented direct-write classifier."
+          },
+          "covered_by": null
+        },
+        "inventory": {
+          "state": "materialized",
+          "kind": "rest_write",
+          "id": "dockerhub.put__v2_scim_2.0_users__id_"
+        }
+      }
+    }
+  ],
+  "surface_only": []
+}
