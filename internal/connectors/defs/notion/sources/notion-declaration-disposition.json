@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "connector": "notion",
+  "source_basis": {
+    "source_lock": {
+      "path": "sources/notion-operation-source-lock.json",
+      "source_url": "https://developers.notion.com/openapi.json",
+      "sha256": "dee5763763b0b9fbad2aa8d5adb173ca350ec26dda557e658c5dbe9d2ea2f258",
+      "bytes": 1304814,
+      "source_operation_count": 49
+    },
+    "source_lane_matrix": "sources/notion-source-lane-matrix.json",
+    "retention_contract": "sources/notion-retained-mapping-contract.json"
+  },
+  "mapping": {
+    "state": "source_mapped_runtime_unasserted",
+    "lane_cells": {
+      "direct_read": {
+        "mapped_unproven": 24,
+        "not_applicable": 25
+      },
+      "direct_write": {
+        "mapped_unproven": 25,
+        "not_applicable": 24
+      },
+      "binary_download": {
+        "mapped_unproven": 0,
+        "not_applicable": 49
+      },
+      "binary_upload": {
+        "mapped_unproven": 1,
+        "not_applicable": 48
+      },
+      "etl": {
+        "mapped_unproven": 12,
+        "not_applicable": 37
+      },
+      "reverse_etl": {
+        "mapped_unproven": 25,
+        "not_applicable": 24
+      },
+      "sync_transport": {
+        "mapped_unproven": 0,
+        "not_applicable": 49
+      }
+    },
+    "legacy_definition_artifacts": {
+      "api_surface": {
+        "path": "api_surface.json",
+        "present": true,
+        "record_count": 54,
+        "role": "legacy_inventory_not_source_bound_execution_proof"
+      },
+      "streams": {
+        "path": "streams.json",
+        "present": true,
+        "record_count": 6,
+        "role": "legacy_stream_declarations_not_source_bound_execution_proof"
+      },
+      "operations": {
+        "path": "operations.json",
+        "present": true,
+        "record_count": 19,
+        "role": "legacy_operation_definitions_not_source_bound_execution_proof"
+      },
+      "writes": {
+        "path": "writes.json",
+        "present": true,
+        "record_count": 24,
+        "role": "legacy_write_definitions_not_source_bound_execution_proof"
+      },
+      "cli_surface": {
+        "path": "cli_surface.json",
+        "present": true,
+        "record_count": 49,
+        "role": "legacy_cli_surface_not_source_bound_execution_proof"
+      },
+      "sync_transport": {
+        "path": "sync_transport.json",
+        "present": false,
+        "record_count": 0,
+        "role": "no_declared_sync_transport"
+      }
+    }
+  },
+  "retention_boundary": {
+    "mode": "retention_only_descriptor_absent",
+    "canonical_evidence": false,
+    "source_bound_artifact_claims": 0,
+    "mapping_restriction_ids": [
+      "notion.source_projection.v2_embedded_source_operation_payload",
+      "notion.source_projection.canonical_descriptor_absent"
+    ]
+  },
+  "historical_crosswalk_metadata": {
+    "path": "sources/notion-operation-crosswalk.json",
+    "state": "absent_historical_metadata_not_reconstructed",
+    "source_snapshot_ref": "fm/cli-top100-declaration-batch-r1",
+    "source_snapshot_commit": "dc481bac1a8b78d60ac0b4a2b0dfd1a9068ce8db",
+    "git_blob_sha1": "505e24e16371038ca6368342a3a7a2bc537e95ab",
+    "bytes": 43198,
+    "crosswalk_only_rows": 2,
+    "reason": "The source-lane matrix retains historical crosswalk provenance and two crosswalk-only identities, but the crosswalk file is absent from this connector definition. This evidence-only slice neither reconstructs nor rewrites that historical artifact."
+  },
+  "notes": [
+    "The frozen source lock retains 49 Notion source operations and all seven source-lane cells; this ledger does not assert runtime reachability.",
+    "The existing legacy definitions are inventoried only. Their zero source_operation bindings prevent treating any current public command, stream, operation, or write as source-bound execution proof.",
+    "The v2 embedded source_operation parser restriction and canonical-descriptor absence remain mapping restrictions, not runtime foundations.",
+    "No frozen Notion source operation declares a webhook-registration or callback route, so sync_transport remains source-evidenced not_applicable and no sync artifact is invented."
+  ]
+}
