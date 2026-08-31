@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "connector": "gitlab",
-  "purpose": "Connector-local source mapping ledger for concrete execution gaps. This authoring artifact does not load an executor, enable a command, or change source-lane membership.",
+  "purpose": "Connector-local source mapping, execution-gap, and contract-reconciliation ledger. This authoring artifact does not load an executor, enable a command, or change source-lane membership.",
   "source_lock": {
     "path": "sources/gitlab-operation-source-lock.json",
     "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
@@ -29,7 +29,7 @@
     },
     {
       "id": "cli-request-schema-surrogate-regex-foundation-r1",
-      "state": "planned_runtime_foundation_requires_captain_approval",
+      "state": "resolved_exact_pattern_mapping_with_remaining_source_contract_gaps",
       "atlas_capability": "runtime.json-schema-surrogate-regex.v1",
       "affected_lanes": [
         "direct_write",
@@ -40,21 +40,49 @@
           "id": "gitlab.rest.postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection"
         }
       ],
-      "reason": "The retained provider request schema includes a surrogate-pair Unicode escape regex which Go's current JSON-Schema regex compiler cannot compile. The exact pattern remains in the source descriptor and the affected write commands remain partial.",
+      "reason": "The available JSON-Schema surrogate-regex capability validates the exact retained provider pattern. This record no longer claims a compiler blocker: the affected write commands remain partial only because their source request root has dynamic additionalProperties and the full source-cited mutation has no complete declaration-owned executable action.",
+      "remaining_source_contract_gaps": [
+        {
+          "foundation": "cli-request-schema-foundation-r1",
+          "location": "request body",
+          "reason": "unbounded request schema object has dynamic additionalProperties"
+        },
+        {
+          "foundation": "source-cited-non-executable-mutation-foundation-r1",
+          "location": "source operation postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection",
+          "reason": "provider-cited mutation has no complete declaration-owned executable action for its full retained request contract"
+        }
+      ],
       "runtime_claim": "No regex translation, raw request-body bypass, or executable promotion is claimed."
     },
     {
       "id": "runtime-provider-parameter-alias-investigating-r1",
-      "state": "investigating_runtime_foundation_requires_captain_approval",
-      "atlas_capability": "runtime.provider-parameter-alias.v1",
+      "state": "mapped_unproven_connector_local_typed_alias_grammar",
+      "classification": "connector_local_mapping_restriction",
+      "consulted_atlas_capability": "runtime.provider-parameter-alias.v1",
       "affected_lane": "direct_read",
       "source_ids": [
         {
           "id": "gitlab.rest.getApiV4ProjectsProjectIdPackagesNugetV2Packages"
         }
       ],
-      "reason": "The retained GET operation requires the source-declared dollar-prefixed provider query key $filter. The available typed alias grammar intentionally supports plain identifiers and one bracketed identifier segment only, so this exact key remains mapped_unproven pending a separately approved extension that preserves the wire key.",
+      "reason": "The retained GET operation requires the source-declared dollar-prefixed provider query key $filter. The available typed alias grammar intentionally supports plain identifiers and one bracketed identifier segment only, so this exact key is a connector-local mapped_unproven restriction outside the supported grammar, not a generic foundation under investigation.",
       "runtime_claim": "No unsafe raw flag, lossy normalization, provider-key rewrite, or executable direct-read promotion is claimed."
+    }
+  ],
+  "mapping_contract_debts": [
+    {
+      "id": "gitlab-semantic-lane-method-partition-reconciliation-r1",
+      "state": "recorded_mapping_contract_debt",
+      "affected_lanes": ["direct_read", "direct_write", "reverse_etl"],
+      "source_lane_matrix": "sources/gitlab-source-lane-matrix.json",
+      "primary_source_lock": "sources/gitlab-operation-source-lock.json",
+      "semantic_primary_applicable_cells": {"direct_read": 762, "direct_write": 990, "reverse_etl": 990},
+      "semantic_post_direct_reads": 13,
+      "legacy_method_partition_expected": {"direct_read": 749, "reverse_etl": 1003},
+      "direct_write_execution_overlay_expected": 382,
+      "reason": "The source matrix classifies 13 primary POST operations as semantic direct reads from retained request/response facts. The current enabled contract still partitions the primary denominator by HTTP method (GET/HEAD versus DELETE/PATCH/POST/PUT), so it reports 749 direct-read and 1003 reverse-ETL rows rather than the semantic 762 direct-read and 990 reverse-ETL rows. Its 382 direct-write count is a non-partition declared-action execution overlay, not the 990 semantic direct-write source cells. This record makes the discrepancy explicit without inventing a lossy multi-selector solution.",
+      "runtime_claim": "No command, executor, source-lane membership, or executable declaration is changed by this mapping-contract debt record."
     }
   ]
 }

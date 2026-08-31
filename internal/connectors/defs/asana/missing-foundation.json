@@ -149,7 +149,7 @@
     },
     {
       "id": "asana_attachment_direct_write_multipart",
-      "state": "missing_runtime_contract",
+      "state": "resolved_runtime_mapping_with_legacy_operation_alias",
       "affected_lane": "direct_write",
       "source": {
         "id": "asana.rest.createAttachmentForObject",
@@ -157,7 +157,7 @@
         "method": "POST",
         "path": "/attachments"
       },
-      "reason": "The existing file_upload operation is metadata-only. Its legacy operation alias still lacks an operation-level multipart request declaration with the two documented request variants. The equivalent named write actions and binary-upload alias are executable through the closed write-action contract.",
+      "reason": "The existing file_upload operation alias is metadata-only and lacks an operation-level multipart request declaration with the two documented request variants. This is a legacy operation alias/projection boundary, not an absent runtime contract: the equivalent named write actions and binary-upload alias are declared and proven through the closed write-action contract.",
       "does_not_block": [
         "source mapping",
         "the equivalent direct-write and reverse-ETL attachment write actions",

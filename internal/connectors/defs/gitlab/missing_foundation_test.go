@@ -56,18 +56,31 @@ func TestGitLabMissingFoundationLedgerStaysSourceBound(t *testing.T) {
 	}
 
 	regex := byID["cli-request-schema-surrogate-regex-foundation-r1"]
-	if regex == nil || stringAt(regex, "atlas_capability") != "runtime.json-schema-surrogate-regex.v1" {
-		t.Fatalf("GitLab surrogate-regex gap = %#v, want cited Atlas candidate", regex)
+	if regex == nil || stringAt(regex, "state") != "resolved_exact_pattern_mapping_with_remaining_source_contract_gaps" || stringAt(regex, "atlas_capability") != "runtime.json-schema-surrogate-regex.v1" {
+		t.Fatalf("GitLab surrogate-regex ledger = %#v, want resolved exact-pattern component and cited Atlas capability", regex)
 	}
 	if got := gitLabFoundationSourceIDs(t, regex); !gitLabSameStringSet(got, map[string]bool{
 		"gitlab.rest.postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection": true,
 	}) {
 		t.Fatalf("GitLab surrogate-regex source ids = %v", got)
 	}
+	if strings.Contains(strings.ToLower(stringAt(regex, "reason")), "cannot compile") {
+		t.Fatalf("GitLab surrogate-regex ledger retains obsolete compiler blocker: %#v", regex)
+	}
+	remainingRegexGaps := map[string]bool{}
+	for _, raw := range mustGitLabArray(t, regex["remaining_source_contract_gaps"]) {
+		remainingRegexGaps[stringAt(mustGitLabObject(t, raw), "foundation")] = true
+	}
+	if !gitLabSameStringSet(remainingRegexGaps, map[string]bool{
+		"cli-request-schema-foundation-r1":                   true,
+		"source-cited-non-executable-mutation-foundation-r1": true,
+	}) {
+		t.Fatalf("GitLab surrogate-regex remaining source-contract gaps = %v, want dynamic-root and nonexecutable-mutation causes", remainingRegexGaps)
+	}
 
 	alias := byID["runtime-provider-parameter-alias-investigating-r1"]
-	if alias == nil || stringAt(alias, "atlas_capability") != "runtime.provider-parameter-alias.v1" {
-		t.Fatalf("GitLab provider-parameter-alias gap = %#v, want cited Atlas candidate", alias)
+	if alias == nil || stringAt(alias, "state") != "mapped_unproven_connector_local_typed_alias_grammar" || stringAt(alias, "classification") != "connector_local_mapping_restriction" || stringAt(alias, "consulted_atlas_capability") != "runtime.provider-parameter-alias.v1" {
+		t.Fatalf("GitLab provider-parameter-alias ledger = %#v, want connector-local typed-alias grammar restriction", alias)
 	}
 	if got := gitLabFoundationSourceIDs(t, alias); !gitLabSameStringSet(got, map[string]bool{
 		"gitlab.rest.getApiV4ProjectsProjectIdPackagesNugetV2Packages": true,
@@ -77,14 +90,24 @@ func TestGitLabMissingFoundationLedgerStaysSourceBound(t *testing.T) {
 	if len(byID) != 3 {
 		t.Fatalf("GitLab missing-foundation ids = %v, want exactly the three concrete named gaps", byID)
 	}
+
+	debts := mustGitLabArray(t, report["mapping_contract_debts"])
+	if len(debts) != 1 {
+		t.Fatalf("GitLab mapping-contract debts = %#v, want one semantic-method partition debt", debts)
+	}
+	debt := mustGitLabObject(t, debts[0])
+	if stringAt(debt, "id") != "gitlab-semantic-lane-method-partition-reconciliation-r1" || stringAt(debt, "state") != "recorded_mapping_contract_debt" || !strings.Contains(stringAt(debt, "reason"), "multi-selector") {
+		t.Fatalf("GitLab mapping-contract debt = %#v, want explicit non-runtime semantic/method reconciliation record", debt)
+	}
 }
 
 // TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability keeps
 // the connector-local artifacts honest after the reusable typed alias
 // foundation landed. A safe alias is not itself an executable command: these
 // source rows stay mapped_unproven until a declaration-owned direct-read
-// artifact is materialized. The sole dollar-prefixed key remains a real
-// missing foundation because it is outside the closed alias grammar.
+// artifact is materialized. The sole dollar-prefixed key remains a
+// connector-local mapped-unproven restriction because it is outside the
+// closed typed alias grammar.
 func TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability(t *testing.T) {
 	const aliasFoundation = "runtime-provider-parameter-alias-investigating-r1"
 	const unsupportedSourceID = "getApiV4ProjectsProjectIdPackagesNugetV2Packages"
@@ -192,6 +215,77 @@ func TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability(t *t
 		}
 	}
 	t.Fatalf("GitLab unsupported source %q has no retained $filter key", unsupportedSourceID)
+}
+
+// TestGitLabMappingContractDebtIsSourceBound keeps the legacy method-only
+// enabled-contract partition honest. The semantic source matrix is the source
+// authority: source-semantic POST reads must not silently become reverse-ETL
+// mutations merely because the present contract cannot select both methods and
+// exact IDs in a partition.
+func TestGitLabMappingContractDebtIsSourceBound(t *testing.T) {
+	matrix := loadGitLabObject(t, gitLabSourceLaneMatrixPath)
+	lock := loadGitLabObject(t, gitLabSourceLockPath)
+	contract := loadGitLabObject(t, "enabled_connector_contract.json")
+	report := loadGitLabObject(t, gitLabMissingFoundationPath)
+
+	primary := map[string]bool{}
+	for _, raw := range mustGitLabArray(t, objectAt(lock, "rest")["operations"]) {
+		primary["gitlab.rest."+stringAt(mustGitLabObject(t, raw), "id")] = true
+	}
+	semantic := map[string]int{"direct_read": 0, "direct_write": 0, "reverse_etl": 0}
+	semanticPostReads := 0
+	for _, raw := range mustGitLabArray(t, matrix["source_operations"]) {
+		row := mustGitLabObject(t, raw)
+		if !primary[stringAt(row, "source_id")] {
+			continue
+		}
+		lanes := objectAt(row, "lanes")
+		for lane := range semantic {
+			if stringAt(objectAt(lanes, lane), "applicability") != "not_applicable" {
+				semantic[lane]++
+			}
+		}
+		facts := objectAt(row, "source_facts")
+		if stringAt(objectAt(lanes, "direct_read"), "applicability") != "not_applicable" && strings.EqualFold(stringAt(facts, "method"), "POST") {
+			semanticPostReads++
+		}
+	}
+	if semantic["direct_read"] != 762 || semantic["direct_write"] != 990 || semantic["reverse_etl"] != 990 || semanticPostReads != 13 {
+		t.Fatalf("GitLab semantic primary lanes = %+v post_reads=%d, want direct_read=762 direct_write=990 reverse_etl=990 post_reads=13", semantic, semanticPostReads)
+	}
+
+	methodPartition := map[string]map[string]any{}
+	var directWriteOverlay map[string]any
+	for _, raw := range mustGitLabArray(t, contract["lanes"]) {
+		lane := mustGitLabObject(t, raw)
+		name := stringAt(lane, "name")
+		if name == "direct_read" || name == "reverse_etl" {
+			methodPartition[name] = objectAt(lane, "source")
+		}
+		if name == "direct_write" {
+			directWriteOverlay = objectAt(lane, "source")
+		}
+	}
+	if numberAt(methodPartition["direct_read"], "expected") != 749 || numberAt(methodPartition["reverse_etl"], "expected") != 1003 {
+		t.Fatalf("GitLab method-only contract denominators = %#v, want direct_read=749 reverse_etl=1003", methodPartition)
+	}
+	if directWriteOverlay == nil || numberAt(directWriteOverlay, "expected") != 382 || directWriteOverlay["partition"] != false {
+		t.Fatalf("GitLab direct-write execution overlay = %#v, want non-partition declared-action expected=382", directWriteOverlay)
+	}
+
+	debts := mustGitLabArray(t, report["mapping_contract_debts"])
+	debt := mustGitLabObject(t, debts[0])
+	semanticDebt := objectAt(debt, "semantic_primary_applicable_cells")
+	if numberAt(semanticDebt, "direct_read") != semantic["direct_read"] || numberAt(semanticDebt, "direct_write") != semantic["direct_write"] || numberAt(semanticDebt, "reverse_etl") != semantic["reverse_etl"] || numberAt(debt, "semantic_post_direct_reads") != semanticPostReads {
+		t.Fatalf("GitLab semantic denominator debt = %#v, want exact source-matrix facts", debt)
+	}
+	methodDebt := objectAt(debt, "legacy_method_partition_expected")
+	if numberAt(methodDebt, "direct_read") != numberAt(methodPartition["direct_read"], "expected") || numberAt(methodDebt, "reverse_etl") != numberAt(methodPartition["reverse_etl"], "expected") {
+		t.Fatalf("GitLab method denominator debt = %#v, want current enabled-contract facts", debt)
+	}
+	if numberAt(debt, "direct_write_execution_overlay_expected") != numberAt(directWriteOverlay, "expected") {
+		t.Fatalf("GitLab direct-write overlay debt = %#v, want current enabled-contract overlay", debt)
+	}
 }
 
 func gitLabDescriptorOperation(t *testing.T, descriptor map[string]any, sourceID string) map[string]any {
