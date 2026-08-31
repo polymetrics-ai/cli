@@ -1086,6 +1086,59 @@ func TestDeclarationAdmissionMappingReaderAcceptsRetainedAsanaV3EventSchemaInven
 	}
 }
 
+// TestDeclarationAdmissionRetainsBatchOneV2SourceLocks derives the legacy
+// provider-lock corpus from the canonical Batch R1 cohort instead of a
+// hand-maintained connector list. Every retained v2 lock must pass the same
+// declaration-admission parser that mapping controls consume.
+func TestDeclarationAdmissionRetainsBatchOneV2SourceLocks(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	manifestPath := filepath.Join(root, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json")
+	if _, err := sourceOperationMappingCohortPathCheck(root, manifestPath); err != nil {
+		t.Fatalf("validate Batch R1 cohort before v2 admission check: %v", err)
+	}
+	manifestRaw, err := os.ReadFile(manifestPath)
+	if err != nil {
+		t.Fatalf("read Batch R1 cohort: %v", err)
+	}
+	var manifest sourceOperationMappingCohortManifest
+	if err := decodeSourceStrictJSON(manifestRaw, &manifest); err != nil {
+		t.Fatalf("decode Batch R1 cohort: %v", err)
+	}
+
+	v2Locks, v2Operations := 0, 0
+	for _, sourceLock := range manifest.SourceLocks {
+		lockPath := filepath.Join(root, filepath.FromSlash(sourceLock.Path))
+		raw, err := os.ReadFile(lockPath)
+		if err != nil {
+			t.Fatalf("read %s source lock: %v", sourceLock.Connector, err)
+		}
+		var header struct {
+			SchemaVersion int `json:"schema_version"`
+		}
+		if err := json.Unmarshal(raw, &header); err != nil {
+			t.Fatalf("decode %s source lock header: %v", sourceLock.Connector, err)
+		}
+		if header.SchemaVersion != 2 {
+			continue
+		}
+		reviewed, err := parseDeclarationAdmissionSourceLock(raw, sourceLock.Connector)
+		if err != nil {
+			t.Fatalf("admit retained %s v2 source lock: %v", sourceLock.Connector, err)
+		}
+		if got := len(reviewed.Operations); got != sourceLock.SourceOperationCount {
+			t.Fatalf("%s admitted operations = %d, want tracked %d", sourceLock.Connector, got, sourceLock.SourceOperationCount)
+		}
+		v2Locks++
+		v2Operations += len(reviewed.Operations)
+	}
+	if v2Locks != 9 || v2Operations != 4092 {
+		t.Fatalf("Batch R1 v2 admission corpus = locks:%d operations:%d, want 9/4092", v2Locks, v2Operations)
+	}
+}
+
 // TestDeclarationAdmissionRejectsNonObjectRetainedSourceOperation ensures
 // declaration admission enforces the same source-operation object boundary as
 // source import. Provider grammar inside the retained object remains opaque;
