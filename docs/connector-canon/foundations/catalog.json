@@ -275,7 +275,7 @@
       "layer": "source_projection_admission",
       "status": "available",
       "kind": "generic",
-      "summary": "Projects canonical source operations into connector definitions and global operation ledgers, derives command bindings and flags, and accounts every source operation through declaration admission without treating projection as execution proof. Enabled-connector contracts add a source-lock denominator with exact lane selectors, retained supplemental evidence, and derived complete/partial/not-applicable coverage so an implemented subset is never presented as provider-surface parity. Unmapped mapping is a distinct visible coverage bucket, not a deferred runtime foundation, and may leave a runtime lane implemented with PARTIAL source coverage. A schema-v3 primary contract binds any exact retained provider document in its closed source lock, not a single-document assumption. The existing closed-name admission seam retains source parameter spelling in the descriptor and blocks an unsafe provider spelling rather than creating an ad-hoc alias or raw transport escape. A source-open JSON body may project a documented named field only as a closed root with that field's bounded source shape; a runtime compiler mismatch remains a cited partial command outcome, never a raw-body fallback.",
+      "summary": "Projects canonical source operations into connector definitions and global operation ledgers, derives command bindings and flags, and accounts every source operation through declaration admission without treating projection as execution proof. Enabled-connector contracts add a source-lock denominator with exact source-operation-ID semantic lane partitions (and legacy HTTP-method partitions), retained supplemental evidence, and derived complete/partial/not-applicable coverage so an implemented subset is never presented as provider-surface parity. mapped_unproven and unmapped_mapping are distinct visible coverage buckets: the former retains a semantic mapping without a field-complete executable declaration, while the latter is an absent mapping; neither is a deferred runtime foundation, and either may leave a runtime lane implemented with PARTIAL source coverage. A schema-v3 primary contract binds any exact retained provider document in its closed source lock, not a single-document assumption. The existing closed-name admission seam retains source parameter spelling in the descriptor and blocks an unsafe provider spelling rather than creating an ad-hoc alias or raw transport escape. A source-open JSON body may project a documented named field only as a closed root with that field's bounded source shape; a runtime compiler mismatch remains a cited partial command outcome, never a raw-body fallback.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [
@@ -406,7 +406,7 @@
           "runtime operation endpoint ledger rows",
           "source-selected runtime endpoint-ledger refreshes that retain unselected connector rows",
           "source-backed deferred and unsupported dispositions",
-          "source-lock denominator lane contracts with derived complete, partial, and not-applicable coverage plus a distinct unmapped_mapping bucket",
+          "source-lock denominator lane contracts with exact source-operation-ID semantic partitions or legacy method partitions, derived complete/partial/not-applicable coverage, and distinct mapped_unproven and unmapped_mapping buckets",
         "schema-v3 primary source-lock evidence bound to any exact retained provider document",
         "source-open JSON body projected only as a closed root containing a documented bounded named field"
         ],
@@ -421,7 +421,7 @@
           "a source-selected endpoint-ledger refresh changes only that connector's runtime row and retains unselected rows",
           "mapping admission and projection are independent of certification overlays and retained hash, byte, and capture representation while preserving version- and document-kind-specific source-reference, unavailable-document, v3 envelope, and closed event-schema-selector structure",
           "unavailable retained-source, certification-subject, or generated-surface evidence remains a per-source typed foundation gap and cannot suppress a source identity or fabricate an executable lane",
-      "unmapped_mapping records a source-preserving mapping deficit without relabeling it as a runtime foundation or demoting an otherwise implemented runtime lane",
+      "mapped_unproven retains a source-semantic mapping without a field-complete executable declaration, while unmapped_mapping records an absent mapping; neither is relabeled as a runtime foundation or an executable claim",
       "schema-v3 enabled-contract primary evidence matches an exact retained provider document by immutable digest and byte count while allowing multiple retained documents",
       "source deprecation and destructive classification remain source facts; they cannot become a declaration-admission exclusion or erase the named actual foundation gap",
       "a closed named P5 JSON projection retains its raw source schema and makes every command for that endpoint partial when the existing engine cannot compile its exact bounded schema"
@@ -461,7 +461,7 @@
         "Array query encoding must retain the source-declared style, explode behavior, and delimiter; generic value stringification is not source projection.",
         "A required requestBody with one data envelope makes that record field required; an optional requestBody remains optional.",
         "A declared batch is projectable only when a closed v3 batch_action_inventory resolves against retained provider bytes and the definition keeps a typed action allow-list; optional outer query fields remain source-projected while caller-authored subrequest HTTP stays forbidden.",
-        "An enabled-contract lane derives complete, partial, or not-applicable coverage from its source denominator. unmapped_mapping is a distinct source-preserving mapping deficit and may make an implemented lane PARTIAL; actual runtime gaps remain named deferred or provider-evidenced outcomes, and neither form can be reported as full provider-surface parity.",
+        "An enabled-contract lane derives complete, partial, or not-applicable coverage from its source denominator. Exact source-operation-ID partitions own retained semantic identities and cannot be mixed with legacy method partitions. mapped_unproven retains a semantic mapping without a field-complete executable declaration; unmapped_mapping is a distinct source-preserving absent-mapping deficit. Either may make an implemented lane PARTIAL; actual runtime gaps remain named deferred or provider-evidenced outcomes, and no coverage state can be reported as full provider-surface parity without executable proof.",
         "A schema-v3 enabled-contract primary source lock may retain several documents. Its evidence digest and byte count must bind one exact retained provider document; validation must not require a single-document lock.",
         "A provider-documented deprecated or destructive operation remains in the source denominator. Its API-surface row must retain source evidence and a named request, approval, response, or other actual foundation gap rather than classifying deprecation or destructive nature as an exclusion.",
         "Aliases and multiple lane bindings must not inflate the provider-operation count.",
@@ -672,6 +672,31 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
           "name": "TestGitLabEnabledContractReconcilesSourceLock"
+        },
+        {
+          "package": "./internal/connectors",
+          "file": "internal/connectors/enabled_contract_test.go",
+          "name": "TestEnabledContractReconcilesExactSemanticSourcePartitions"
+        },
+        {
+          "package": "./internal/connectors",
+          "file": "internal/connectors/enabled_contract_test.go",
+          "name": "TestEnabledContractKeepsLegacyMethodPartitions"
+        },
+        {
+          "package": "./internal/connectors",
+          "file": "internal/connectors/enabled_contract_test.go",
+          "name": "TestEnabledContractMappedUnprovenStateRoundTrips"
+        },
+        {
+          "package": "./internal/connectors",
+          "file": "internal/connectors/enabled_contract_test.go",
+          "name": "TestEnabledContractRejectsInvalidSemanticPartitions"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/enabled_contract_test.go",
+          "name": "TestEnabledContractSchemaAdmitsMappedUnprovenStateAndCoverage"
         },
         {
           "package": "./cmd/connectorgen",

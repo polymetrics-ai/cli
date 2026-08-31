@@ -29,6 +29,7 @@ type enabledContractFinalLaneResult struct {
 	Status          enabledContractFinalLaneStatus       `json:"status"`
 	Reason          string                               `json:"reason"`
 	Citations       []connectors.EnabledContractCitation `json:"citations"`
+	MappedUnproven  int                                  `json:"mapped_unproven"`
 	UnmappedMapping int                                  `json:"unmapped_mapping"`
 }
 
@@ -122,6 +123,7 @@ func enabledContractFinalLaneResults(fsys fs.FS, bundle engine.Bundle) []enabled
 			Name:            lane.Name,
 			Reason:          lane.Reason,
 			Citations:       append([]connectors.EnabledContractCitation(nil), lane.Citations...),
+			MappedUnproven:  lane.Source.MappedUnproven,
 			UnmappedMapping: lane.Source.UnmappedMapping,
 		}
 		missing := make([]string, 0)

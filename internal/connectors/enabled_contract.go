@@ -68,16 +68,20 @@ type EnabledContractCitation struct {
 // the source denominator. Non-partition selectors are overlays (such as an
 // ETL stream or sync transport) and must name their exact source IDs.
 type EnabledContractSourceCoverage struct {
-	SourceLock         string   `json:"source_lock,omitempty"`
-	Partition          bool     `json:"partition"`
-	Methods            []string `json:"methods,omitempty"`
-	OperationIDs       []string `json:"operation_ids,omitempty"`
-	Coverage           string   `json:"coverage"`
-	Expected           int      `json:"expected"`
-	Implemented        int      `json:"implemented"`
-	UnmappedMapping    int      `json:"unmapped_mapping"`
-	DeferredFoundation int      `json:"deferred_foundation"`
-	Unsupported        int      `json:"unsupported_with_provider_evidence"`
+	SourceLock   string   `json:"source_lock,omitempty"`
+	Partition    bool     `json:"partition"`
+	Methods      []string `json:"methods,omitempty"`
+	OperationIDs []string `json:"operation_ids,omitempty"`
+	Coverage     string   `json:"coverage"`
+	Expected     int      `json:"expected"`
+	Implemented  int      `json:"implemented"`
+	// MappedUnproven is source-semantic coverage that has been classified and
+	// retained but has no field-complete executable declaration yet. It is not
+	// an absent mapping and must not be relabeled as a runtime foundation gap.
+	MappedUnproven     int `json:"mapped_unproven"`
+	UnmappedMapping    int `json:"unmapped_mapping"`
+	DeferredFoundation int `json:"deferred_foundation"`
+	Unsupported        int `json:"unsupported_with_provider_evidence"`
 }
 
 const (
@@ -136,8 +140,11 @@ type EnabledContractSourceOperation struct {
 
 const (
 	EnabledLaneImplemented = "implemented"
-	EnabledLaneDeferred    = "deferred_foundation"
-	EnabledLaneUnsupported = "unsupported_with_provider_evidence"
+	// EnabledLaneMappedUnproven keeps a semantic source-lane classification
+	// visible without implying a runnable command or a missing runtime engine.
+	EnabledLaneMappedUnproven = "mapped_unproven"
+	EnabledLaneDeferred       = "deferred_foundation"
+	EnabledLaneUnsupported    = "unsupported_with_provider_evidence"
 )
 
 var enabledContractLaneNames = []string{
@@ -197,7 +204,7 @@ func (c EnabledConnectorContract) Validate() error {
 }
 
 func (l EnabledConnectorLane) Validate() error {
-	if l.State != EnabledLaneImplemented && l.State != EnabledLaneDeferred && l.State != EnabledLaneUnsupported {
+	if l.State != EnabledLaneImplemented && l.State != EnabledLaneMappedUnproven && l.State != EnabledLaneDeferred && l.State != EnabledLaneUnsupported {
 		return fmt.Errorf("state %q is invalid", l.State)
 	}
 	if strings.TrimSpace(l.Reason) == "" {
@@ -296,11 +303,11 @@ func enabledTransportMode(mode string) bool {
 }
 
 func (s EnabledContractSourceCoverage) Validate() error {
-	if s.Expected < 0 || s.Implemented < 0 || s.UnmappedMapping < 0 || s.DeferredFoundation < 0 || s.Unsupported < 0 {
+	if s.Expected < 0 || s.Implemented < 0 || s.MappedUnproven < 0 || s.UnmappedMapping < 0 || s.DeferredFoundation < 0 || s.Unsupported < 0 {
 		return fmt.Errorf("source coverage counts must be non-negative")
 	}
-	if s.Expected != s.Implemented+s.UnmappedMapping+s.DeferredFoundation+s.Unsupported {
-		return fmt.Errorf("source coverage expected=%d does not equal implemented+unmapped+deferred+unsupported=%d", s.Expected, s.Implemented+s.UnmappedMapping+s.DeferredFoundation+s.Unsupported)
+	if s.Expected != s.Implemented+s.MappedUnproven+s.UnmappedMapping+s.DeferredFoundation+s.Unsupported {
+		return fmt.Errorf("source coverage expected=%d does not equal implemented+mapped_unproven+unmapped+deferred+unsupported=%d", s.Expected, s.Implemented+s.MappedUnproven+s.UnmappedMapping+s.DeferredFoundation+s.Unsupported)
 	}
 	wantCoverage := EnabledCoveragePartial
 	if s.Expected == 0 {
@@ -326,8 +333,16 @@ func (s EnabledContractSourceCoverage) Validate() error {
 		}
 		seenIDs[id] = true
 	}
-	if s.Partition && len(s.Methods) == 0 {
-		return fmt.Errorf("source partition requires one or more methods")
+	if s.Partition {
+		if len(s.Methods) == 0 && len(s.OperationIDs) == 0 {
+			return fmt.Errorf("source partition requires one or more methods or operation IDs")
+		}
+		if len(s.Methods) > 0 && len(s.OperationIDs) > 0 {
+			return fmt.Errorf("source partition cannot combine methods and operation IDs")
+		}
+		if len(s.OperationIDs) > 0 && len(s.OperationIDs) != s.Expected {
+			return fmt.Errorf("source operation-ID partition count must match expected")
+		}
 	}
 	if !s.Partition && len(s.OperationIDs) > 0 && len(s.OperationIDs) != s.Expected {
 		return fmt.Errorf("non-partition source operation IDs must match expected count")
@@ -348,12 +363,27 @@ func (c EnabledConnectorContract) ReconcileSourceOperations(operations []Enabled
 	}
 	partitionCounts := make(map[string]int)
 	partitionMethods := make(map[string]string)
+	partitionIDs := make(map[string]string)
 	overlayIDs := make(map[string]bool)
+	partitionUsesMethods := false
+	partitionUsesIDs := false
 	for _, lane := range c.Lanes {
 		if lane.Source.SourceLock != "" {
 			continue
 		}
 		if lane.Source.Partition {
+			if len(lane.Source.OperationIDs) > 0 {
+				partitionUsesIDs = true
+				for _, id := range lane.Source.OperationIDs {
+					if prior, exists := partitionIDs[id]; exists {
+						return fmt.Errorf("source operation %q is claimed by both %q and %q", id, prior, lane.Name)
+					}
+					partitionIDs[id] = lane.Name
+				}
+			}
+			if len(lane.Source.Methods) > 0 {
+				partitionUsesMethods = true
+			}
 			for _, method := range lane.Source.Methods {
 				method = strings.ToUpper(method)
 				if prior, exists := partitionMethods[method]; exists {
@@ -368,13 +398,19 @@ func (c EnabledConnectorContract) ReconcileSourceOperations(operations []Enabled
 			}
 		}
 	}
+	if partitionUsesMethods && partitionUsesIDs {
+		return fmt.Errorf("source partitions cannot mix method and operation-ID selectors")
+	}
 	seenIDs := make(map[string]bool, len(operations))
 	for _, operation := range operations {
 		if !enabledContractSourceOperationIdentifier(operation.ID) || seenIDs[operation.ID] {
 			return fmt.Errorf("source operation identity %q is invalid or duplicated", operation.ID)
 		}
 		seenIDs[operation.ID] = true
-		lane, found := partitionMethods[strings.ToUpper(strings.TrimSpace(operation.Method))]
+		lane, found := partitionIDs[operation.ID]
+		if !found {
+			lane, found = partitionMethods[strings.ToUpper(strings.TrimSpace(operation.Method))]
+		}
 		if !found {
 			return fmt.Errorf("source operation %q method %q has no partition lane", operation.ID, operation.Method)
 		}
@@ -388,6 +424,11 @@ func (c EnabledConnectorContract) ReconcileSourceOperations(operations []Enabled
 	for id := range overlayIDs {
 		if !seenIDs[id] {
 			return fmt.Errorf("overlay references unknown source operation %q", id)
+		}
+	}
+	for id := range partitionIDs {
+		if !seenIDs[id] {
+			return fmt.Errorf("partition references unknown source operation %q", id)
 		}
 	}
 	return nil

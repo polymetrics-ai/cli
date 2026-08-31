@@ -86,13 +86,30 @@ func TestGitLabGuideRendersPartialSourceCoverage(t *testing.T) {
 	manual := connectors.RenderConnectorManual(New(bundle, nil))
 	for _, want := range []string{
 		"ENABLED CONNECTOR CONTRACT",
-		"direct_read: implemented (source coverage: partial 582/749; unmapped=0; deferred=167; unsupported=0)",
-		"reverse_etl: implemented (source coverage: partial 381/1003; unmapped=0; deferred=622; unsupported=0)",
-		"etl: implemented (source coverage: complete 4/4; unmapped=0; deferred=0; unsupported=0)",
+		"direct_read: implemented (source coverage: partial 582/749; mapped_unproven=0; unmapped=0; deferred=167; unsupported=0)",
+		"reverse_etl: implemented (source coverage: partial 381/1003; mapped_unproven=0; unmapped=0; deferred=622; unsupported=0)",
+		"etl: implemented (source coverage: complete 4/4; mapped_unproven=0; unmapped=0; deferred=0; unsupported=0)",
 	} {
 		if !strings.Contains(manual, want) {
 			t.Fatalf("GitLab manual does not disclose source coverage %q:\n%s", want, manual)
 		}
+	}
+}
+
+func TestEnabledContractSchemaAdmitsMappedUnprovenStateAndCoverage(t *testing.T) {
+	raw, err := os.ReadFile("../defs/gitlab/enabled_connector_contract.json")
+	if err != nil {
+		t.Fatalf("read enabled connector contract fixture: %v", err)
+	}
+	mapped := strings.Replace(string(raw), `"state": "implemented"`, `"state": "mapped_unproven"`, 1)
+	mapped = strings.Replace(mapped, `"unmapped_mapping": 0`, `"mapped_unproven": 0, "unmapped_mapping": 0`, 1)
+	if err := metaSchemas.enabledConnectorContract.Validate(mustDecodeAny([]byte(mapped))); err != nil {
+		t.Fatalf("schema rejects mapped-unproven lane state and coverage: %v", err)
+	}
+
+	invalid := strings.Replace(mapped, `"state": "mapped_unproven"`, `"state": "invented_state"`, 1)
+	if err := metaSchemas.enabledConnectorContract.Validate(mustDecodeAny([]byte(invalid))); err == nil {
+		t.Fatal("schema accepts an unknown enabled-contract lane state")
 	}
 }
 
