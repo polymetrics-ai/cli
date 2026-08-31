@@ -8,7 +8,7 @@
 - [x] `go run ./cmd/connectorgen source-operation-mapping-cohort --help` and root `--help` expose the check-only flag.
 - [x] JSON parse, `gofmt`, focused `go vet`, `go run ./cmd/agentcontractgen check`, and `git diff --check` are green.
 - [x] Diff contains no source lock, lane matrix, connector runtime artifact, source-import/materialize/projection, engine, certification, Atlas, or receiver change.
-- [ ] Candidate commit/push is reported for independent review only; no parent integration or main merge is performed.
+- [x] Candidate commit/push is reported for independent review only; no parent integration or main merge is performed.
 
 ## Foundation disposition
 
