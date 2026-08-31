@@ -208,6 +208,15 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 		if !reflect.DeepEqual(found, want) {
 			t.Fatalf("retained Conan JSON-body source IDs=%v, want %v", sortedGitLabSet(found), sortedGitLabSet(want))
 		}
+		conanRawOperationIDs := gitLabRawOperationIDsForRows(t, matrix, want)
+		cli := loadGitLabObject(t, "cli_surface.json")
+		operations := loadGitLabObject(t, "operations.json")
+		if err := gitLabNoImplementedDirectReadArtifactError(cli, operations, conanRawOperationIDs); err != nil {
+			t.Fatalf("baseline Conan direct-read artifact guard: %v", err)
+		}
+		if got := gitLabMatchingCLIArtifactCount(cli, conanRawOperationIDs); got == 0 {
+			t.Fatal("Conan artifact guard selected no legacy CLI rows; canonical matrix IDs must normalize to raw source operation IDs")
+		}
 
 		broken := cloneGitLabObject(t, matrix)
 		row := gitLabMatrixRow(t, broken, "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls")
@@ -225,6 +234,29 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 			if err := validateGitLabSourceLaneMatrix(broken, lock, binaryLock, crosswalk, descriptor, retainedArtifacts, streams); err == nil || !strings.Contains(err.Error(), "lane cells") {
 				t.Fatalf("Conan %s promotion error = %v, want deterministic lane-cell rejection", forbidden, err)
 			}
+		}
+
+		brokenCLI := cloneGitLabObject(t, cli)
+		commands := mustGitLabArray(t, brokenCLI["commands"])
+		brokenCLI["commands"] = append(commands, map[string]any{
+			"source_operation": "postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+			"intent":           "direct_read",
+			"availability":     "implemented",
+		})
+		if err := gitLabNoImplementedDirectReadArtifactError(brokenCLI, operations, conanRawOperationIDs); err == nil || !strings.Contains(err.Error(), "implemented CLI direct-read") {
+			t.Fatalf("Conan CLI direct-read binding error = %v, want deterministic direct-read binding rejection", err)
+		}
+
+		brokenOperations := cloneGitLabObject(t, operations)
+		declared := mustGitLabArray(t, brokenOperations["operations"])
+		brokenOperations["operations"] = append(declared, map[string]any{
+			"kind": "rest_read",
+			"source_operation": map[string]any{
+				"id": "postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+			},
+		})
+		if err := gitLabNoImplementedDirectReadArtifactError(cli, brokenOperations, conanRawOperationIDs); err == nil || !strings.Contains(err.Error(), "declared rest-read") {
+			t.Fatalf("Conan rest-read binding error = %v, want deterministic direct-read binding rejection", err)
 		}
 	})
 
@@ -247,20 +279,14 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 			}
 		}
 
+		statusRawOperationIDs := gitLabRawOperationIDsForRows(t, matrix, statusSourceIDs)
 		cli := loadGitLabObject(t, "cli_surface.json")
-		for _, raw := range mustGitLabArray(t, cli["commands"]) {
-			command := mustGitLabObject(t, raw)
-			if _, selected := statusSourceIDs[stringAt(command, "source_operation")]; selected && stringAt(command, "intent") == "direct_read" && stringAt(command, "availability") == "implemented" {
-				t.Fatalf("status-only source %q must not have an implemented direct-read command: %#v", stringAt(command, "source_operation"), command)
-			}
-		}
 		operations := loadGitLabObject(t, "operations.json")
-		for _, raw := range mustGitLabArray(t, operations["operations"]) {
-			operation := mustGitLabObject(t, raw)
-			source := objectAt(operation, "source_operation")
-			if _, selected := statusSourceIDs[stringAt(source, "id")]; selected && stringAt(operation, "kind") == "rest_read" {
-				t.Fatalf("status-only source %q must not have a declared rest_read operation: %#v", stringAt(source, "id"), operation)
-			}
+		if err := gitLabNoImplementedDirectReadArtifactError(cli, operations, statusRawOperationIDs); err != nil {
+			t.Fatalf("status-only direct-read artifact guard: %v", err)
+		}
+		if got := gitLabMatchingCLIArtifactCount(cli, statusRawOperationIDs); got == 0 {
+			t.Fatal("status-only artifact guard selected no CLI rows; canonical matrix IDs must normalize to raw source operation IDs")
 		}
 
 		broken := cloneGitLabObject(t, matrix)
@@ -1391,6 +1417,49 @@ func gitLabMatrixRow(t *testing.T, matrix map[string]any, sourceID string) map[s
 	}
 	t.Fatalf("matrix source row %q not found", sourceID)
 	return nil
+}
+
+func gitLabRawOperationIDsForRows(t *testing.T, matrix map[string]any, sourceIDs map[string]struct{}) map[string]struct{} {
+	t.Helper()
+	rawOperationIDs := make(map[string]struct{}, len(sourceIDs))
+	for sourceID := range sourceIDs {
+		facts := objectAt(gitLabMatrixRow(t, matrix, sourceID), "source_facts")
+		rawOperationID := stringAt(facts, "operation_id")
+		if rawOperationID == "" {
+			t.Fatalf("matrix source %q has no raw source_facts.operation_id", sourceID)
+		}
+		rawOperationIDs[rawOperationID] = struct{}{}
+	}
+	if len(rawOperationIDs) != len(sourceIDs) {
+		t.Fatalf("matrix source IDs=%v normalized to raw IDs=%v, want one raw source_facts.operation_id per source", sortedGitLabSet(sourceIDs), sortedGitLabSet(rawOperationIDs))
+	}
+	return rawOperationIDs
+}
+
+func gitLabNoImplementedDirectReadArtifactError(cli, operations map[string]any, rawOperationIDs map[string]struct{}) error {
+	for _, raw := range mustMapSlice(cli["commands"]) {
+		sourceOperationID := stringAt(raw, "source_operation")
+		if _, selected := rawOperationIDs[sourceOperationID]; selected && stringAt(raw, "intent") == "direct_read" && stringAt(raw, "availability") == "implemented" {
+			return fmt.Errorf("implemented CLI direct-read for source operation %q", sourceOperationID)
+		}
+	}
+	for _, raw := range mustMapSlice(operations["operations"]) {
+		sourceOperationID := stringAt(objectAt(raw, "source_operation"), "id")
+		if _, selected := rawOperationIDs[sourceOperationID]; selected && stringAt(raw, "kind") == "rest_read" {
+			return fmt.Errorf("declared rest-read for source operation %q", sourceOperationID)
+		}
+	}
+	return nil
+}
+
+func gitLabMatchingCLIArtifactCount(cli map[string]any, rawOperationIDs map[string]struct{}) int {
+	count := 0
+	for _, raw := range mustMapSlice(cli["commands"]) {
+		if _, selected := rawOperationIDs[stringAt(raw, "source_operation")]; selected {
+			count++
+		}
+	}
+	return count
 }
 
 func loadGitLabObject(t *testing.T, path string) map[string]any {
