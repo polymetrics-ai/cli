@@ -110,6 +110,7 @@
               "method": { "type": "string" },
               "path": { "type": "string" },
               "content_type": { "type": "string" },
+              "no_request_body": { "type": "boolean" },
               "max_bytes": { "type": "integer" },
               "pagination": {
                 "type": "object",

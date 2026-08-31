@@ -73,16 +73,17 @@
   "mapping_contract_debts": [
     {
       "id": "gitlab-semantic-lane-method-partition-reconciliation-r1",
-      "state": "recorded_mapping_contract_debt",
+      "state": "resolved_exact_source_id_partition",
       "affected_lanes": ["direct_read", "direct_write", "reverse_etl"],
       "source_lane_matrix": "sources/gitlab-source-lane-matrix.json",
       "primary_source_lock": "sources/gitlab-operation-source-lock.json",
       "semantic_primary_applicable_cells": {"direct_read": 762, "direct_write": 990, "reverse_etl": 990},
       "semantic_post_direct_reads": 13,
       "legacy_method_partition_expected": {"direct_read": 749, "reverse_etl": 1003},
+      "exact_source_id_partition_expected": {"direct_read": 762, "reverse_etl": 990},
       "direct_write_execution_overlay_expected": 382,
-      "reason": "The source matrix classifies 13 primary POST operations as semantic direct reads from retained request/response facts. The current enabled contract still partitions the primary denominator by HTTP method (GET/HEAD versus DELETE/PATCH/POST/PUT), so it reports 749 direct-read and 1003 reverse-ETL rows rather than the semantic 762 direct-read and 990 reverse-ETL rows. Its 382 direct-write count is a non-partition declared-action execution overlay, not the 990 semantic direct-write source cells. This record makes the discrepancy explicit without inventing a lossy multi-selector solution.",
-      "runtime_claim": "No command, executor, source-lane membership, or executable declaration is changed by this mapping-contract debt record."
+      "reason": "The source matrix classifies 13 primary POST operations as semantic direct reads from retained request/response facts. The enabled contract now uses its optional exact source-operation-ID partitions and reconciles the semantic 762 direct-read and 990 reverse-ETL rows. The former HTTP-method-only figures (749 direct-read and 1003 reverse-ETL) remain recorded solely as historical mapping-contract evidence. Its 382 direct-write count remains a non-partition declared-action execution overlay, not the 990 semantic direct-write source cells. This resolved record preserves the discrepancy without inventing a lossy multi-selector.",
+      "runtime_claim": "No command, executor, source-lane membership, or executable declaration is changed by this mapping-contract reconciliation record."
     }
   ]
 }

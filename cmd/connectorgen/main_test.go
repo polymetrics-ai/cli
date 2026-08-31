@@ -1334,6 +1334,45 @@ func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testi
 	}
 }
 
+func TestCheckCLISurfaceDirectReadOperationSafetyAllowsClosedSourceBoundBodylessPOST(t *testing.T) {
+	op := engine.OperationSpec{
+		ID:           "widgets.lookup",
+		Kind:         "rest_read",
+		Summary:      "Look up widgets",
+		Risk:         "low",
+		Approval:     "none",
+		OutputPolicy: "json_redacted",
+		SourceOperation: &engine.SourceOperationBinding{
+			ID: "postWidgetsLookup", Method: "POST", Path: "/widgets/lookup",
+		},
+		REST: &engine.RESTOperationSpec{
+			Method: "POST", Path: "/widgets/lookup", NoRequestBody: true, MaxBytes: 1024,
+			Response: &engine.OperationResponseSpec{SuccessStatuses: []string{"200"}},
+		},
+	}
+	command := engine.CLICommand{
+		Path: "widgets lookup", Intent: "direct_read", Availability: "implemented", Operation: op.ID,
+		OutputPolicy: "json_redacted", APISurface: []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/widgets/lookup"}},
+	}
+	bundle := engine.Bundle{
+		Name:       "widgets",
+		Operations: []engine.OperationSpec{op},
+		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
+			Method: "POST", Path: "/widgets/lookup", CoveredBy: &engine.SurfaceCoverage{DirectRead: command.Path},
+		}}},
+	}
+	operations := map[string]engine.OperationSpec{op.ID: op}
+	if findings := checkCLISurfaceOperationSafety(bundle, 0, command, operations); len(findings) != 0 {
+		t.Fatalf("closed bodyless POST direct read findings = %+v, want none", findings)
+	}
+
+	command.Flags = []engine.CLIFlag{{Name: "payload", Type: "string", MapsTo: "body.payload"}}
+	findings := checkCLISurfaceOperationSafety(bundle, 0, command, operations)
+	if len(findings) != 1 || !strings.Contains(findings[0].Message, "no_request_body") {
+		t.Fatalf("body-mapped bodyless POST findings = %+v, want closed body rejection", findings)
+	}
+}
+
 func TestValidate_CLISurfaceStreamBackedDirectReadDoesNotInventOutputPolicy(t *testing.T) {
 	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "direct_read"`, 1)
 	report, err := validateDir(cliSurfaceBundleFS(cliSurface))

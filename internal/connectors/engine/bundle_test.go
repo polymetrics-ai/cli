@@ -1390,6 +1390,120 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAllowsExplicitSourceBoundBodylessPOSTRead(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.lookup",
+				"kind": "rest_read",
+				"summary": "Look up an explicitly source-bound value",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json",
+				"source_operation": {
+					"id": "acme.rest.postLookup",
+					"method": "POST",
+					"path": "/lookup"
+				},
+				"rest": {
+					"method": "POST",
+					"path": "/lookup",
+					"max_bytes": 1024,
+					"no_request_body": true
+				}
+			}
+		]
+	}`)}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load explicit source-bound bodyless POST read: %v", err)
+	}
+	operation := bundle.Operations[0]
+	if operation.SourceOperation == nil || operation.SourceOperation.ID != "acme.rest.postLookup" {
+		t.Fatalf("source operation = %+v, want exact retained source binding", operation.SourceOperation)
+	}
+	if operation.REST == nil || operation.REST.Method != "POST" {
+		t.Fatalf("rest operation = %+v, want POST declaration", operation.REST)
+	}
+}
+
+func TestBundleLoadRejectsInvalidSourceBoundBodylessPOSTRead(t *testing.T) {
+	newOperation := func() map[string]any {
+		return map[string]any{
+			"id":            "acme.lookup",
+			"kind":          "rest_read",
+			"summary":       "Look up an explicitly source-bound value",
+			"risk":          "low",
+			"approval":      "none",
+			"output_policy": "json",
+			"source_operation": map[string]any{
+				"id": "acme.rest.postLookup", "method": "POST", "path": "/lookup",
+			},
+			"rest": map[string]any{
+				"method": "POST", "path": "/lookup", "max_bytes": 1024, "no_request_body": true,
+			},
+		}
+	}
+	tests := []struct {
+		name   string
+		mutate func(map[string]any)
+		want   string
+	}{
+		{
+			name: "missing exact source binding",
+			mutate: func(operation map[string]any) {
+				delete(operation, "source_operation")
+			},
+			want: "requires an exact matching POST source_operation",
+		},
+		{
+			name: "source method does not match",
+			mutate: func(operation map[string]any) {
+				operation["source_operation"].(map[string]any)["method"] = "GET"
+			},
+			want: "source_operation must match its declared REST method/path",
+		},
+		{
+			name: "GET cannot claim bodyless POST form",
+			mutate: func(operation map[string]any) {
+				operation["rest"].(map[string]any)["method"] = "GET"
+			},
+			want: "source_operation must match its declared REST method/path",
+		},
+		{
+			name: "body schema is not an escape hatch",
+			mutate: func(operation map[string]any) {
+				operation["rest"].(map[string]any)["body_schema"] = map[string]any{"type": "object"}
+			},
+			want: "must not declare body, body_schema, multipart, or content_type",
+		},
+		{
+			name: "content type is not inferred",
+			mutate: func(operation map[string]any) {
+				operation["rest"].(map[string]any)["content_type"] = "application/json"
+			},
+			want: "must not declare body, body_schema, multipart, or content_type",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			operation := newOperation()
+			test.mutate(operation)
+			raw, err := json.Marshal(map[string]any{"operations": []any{operation}})
+			if err != nil {
+				t.Fatalf("marshal operations: %v", err)
+			}
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/operations.json"] = &fstest.MapFile{Data: raw}
+			if _, err := Load(fsys, "acme"); err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("Load error = %v, want %q", err, test.want)
+			}
+		})
+	}
+}
+
 func TestBundleLoadRegistersStatusAndTextExportOperations(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
