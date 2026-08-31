@@ -12,11 +12,12 @@ import (
 )
 
 const (
-	dockerHubMatrixPath          = "sources/dockerhub-source-lane-matrix.json"
-	dockerHubSourceLockPath      = "sources/dockerhub-operation-source-lock.json"
-	dockerHubCrosswalkPath       = "sources/dockerhub-operation-crosswalk.json"
-	dockerHubDispositionPath     = "sources/dockerhub-declaration-disposition.json"
-	dockerHubReverseETLAuditPath = "sources/dockerhub-reverse-etl-action-audit.json"
+	dockerHubMatrixPath            = "sources/dockerhub-source-lane-matrix.json"
+	dockerHubSourceLockPath        = "sources/dockerhub-operation-source-lock.json"
+	dockerHubCrosswalkPath         = "sources/dockerhub-operation-crosswalk.json"
+	dockerHubDispositionPath       = "sources/dockerhub-declaration-disposition.json"
+	dockerHubReverseETLAuditPath   = "sources/dockerhub-reverse-etl-action-audit.json"
+	dockerHubRetentionContractPath = "sources/dockerhub-retained-mapping-contract.json"
 )
 
 var dockerHubLaneOrder = []string{
@@ -45,6 +46,7 @@ type dockerHubLockCounts struct {
 type dockerHubRestLock struct {
 	SourceURL  string                     `json:"source_url"`
 	SHA256     string                     `json:"sha256"`
+	Bytes      int                        `json:"bytes"`
 	Operations []dockerHubSourceOperation `json:"operations"`
 }
 
@@ -94,6 +96,7 @@ type dockerHubDisposition struct {
 	Connector                  string                          `json:"connector"`
 	SourceBasis                dockerHubDispositionSourceBasis `json:"source_basis"`
 	Mapping                    dockerHubDispositionMapping     `json:"mapping"`
+	RetentionBoundary          dockerHubRetentionBoundary      `json:"retention_boundary"`
 	SharedExecutorCapabilities []dockerHubExecutorCapability   `json:"shared_executor_capabilities"`
 	Notes                      []string                        `json:"notes"`
 }
@@ -109,6 +112,27 @@ type dockerHubDispositionMapping struct {
 	State            string                                    `json:"state"`
 	LaneCells        map[string]dockerHubDispositionLaneCounts `json:"lane_cells"`
 	RuntimeArtifacts map[string]dockerHubRuntimeArtifact       `json:"runtime_artifacts"`
+}
+
+// dockerHubRetentionBoundary records the point where a retained v2 source
+// lock stops: it is source evidence, not a canonical descriptor or an
+// execution declaration.
+type dockerHubRetentionBoundary struct {
+	Mode                      string `json:"mode"`
+	RetentionContract         string `json:"retention_contract"`
+	CanonicalEvidence         bool   `json:"canonical_evidence"`
+	SourceBoundArtifactClaims int    `json:"source_bound_artifact_claims"`
+}
+
+type dockerHubRetainedMappingContract struct {
+	Connector     string `json:"connector"`
+	RetentionOnly bool   `json:"retention_only"`
+	SourceLock    struct {
+		Path              string `json:"path"`
+		SHA256            string `json:"sha256"`
+		Bytes             int    `json:"bytes"`
+		CanonicalEvidence bool   `json:"canonical_evidence"`
+	} `json:"source_lock"`
 }
 
 type dockerHubDispositionLaneCounts struct {
@@ -280,6 +304,7 @@ type dockerHubArtifactRecords struct {
 	Streams                      map[string]dockerHubStreamRecord
 	Commands                     map[string]dockerHubCommandRecord
 	OperationCount               int
+	SourceBoundArtifactClaims    int
 	WritesArtifactPresent        bool
 	SyncTransportArtifactPresent bool
 }
@@ -326,8 +351,98 @@ func TestDockerHubSourceLaneMatrixContract(t *testing.T) {
 	if err := validateDockerHubDisposition(readDockerHubDisposition(t), matrix, lock, crosswalk, artifacts); err != nil {
 		t.Fatal(err)
 	}
+	if err := validateDockerHubRetentionBoundary(readDockerHubDisposition(t).RetentionBoundary, readDockerHubRetainedMappingContract(t), lock, artifacts); err != nil {
+		t.Fatal(err)
+	}
 	if err := validateDockerHubReverseETLAudit(readDockerHubReverseETLAudit(t), matrix, lock, crosswalk, artifacts); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestDockerHubRetainedSourceBoundaryRejectsDescriptorOrExecutionClaims(t *testing.T) {
+	_, lock, _ := readDockerHubMatrixInputs(t)
+	artifacts := readDockerHubArtifactRecords(t)
+	tests := []struct {
+		name string
+		edit func(*dockerHubDisposition, *dockerHubRetainedMappingContract, *dockerHubArtifactRecords)
+		want string
+	}{
+		{
+			name: "canonical evidence cannot be claimed by a retention-only lock",
+			edit: func(disposition *dockerHubDisposition, _ *dockerHubRetainedMappingContract, _ *dockerHubArtifactRecords) {
+				disposition.RetentionBoundary.CanonicalEvidence = true
+			},
+			want: "retention boundary canonical_evidence",
+		},
+		{
+			name: "retention contract cannot be upgraded to canonical evidence",
+			edit: func(_ *dockerHubDisposition, contract *dockerHubRetainedMappingContract, _ *dockerHubArtifactRecords) {
+				contract.SourceLock.CanonicalEvidence = true
+			},
+			want: "retention contract canonical_evidence",
+		},
+		{
+			name: "source-bound artifact execution claims require a canonical descriptor",
+			edit: func(_ *dockerHubDisposition, _ *dockerHubRetainedMappingContract, artifacts *dockerHubArtifactRecords) {
+				artifacts.SourceBoundArtifactClaims = 1
+			},
+			want: "retention boundary source-bound artifact claims",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			disposition := readDockerHubDisposition(t)
+			contract := readDockerHubRetainedMappingContract(t)
+			records := artifacts
+			test.edit(disposition, contract, &records)
+			err := validateDockerHubRetentionBoundary(disposition.RetentionBoundary, contract, lock, records)
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("retention boundary validation error = %v, want substring %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestDockerHubSourceBoundArtifactClaimCounter(t *testing.T) {
+	tests := []struct {
+		name  string
+		value any
+		want  int
+	}{
+		{
+			name:  "happy legacy artifact without a source binding",
+			value: map[string]any{"stream": "repositories"},
+			want:  0,
+		},
+		{
+			name:  "empty source operation is not an execution claim",
+			value: map[string]any{"source_operation": ""},
+			want:  0,
+		},
+		{
+			name:  "bad source operation binding is counted",
+			value: map[string]any{"source_operation": "provider.rest.listRecords"},
+			want:  1,
+		},
+		{
+			name: "edge nested command source operation binding is counted",
+			value: map[string]any{"commands": []any{
+				map[string]any{"source_operation": "provider.rest.listTags"},
+			}},
+			want: 1,
+		},
+		{
+			name:  "edge malformed source operation is still rejected as a claim",
+			value: map[string]any{"source_operation": map[string]any{"id": "provider.rest.listTags"}},
+			want:  1,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := dockerHubCountSourceOperationClaims(test.value); got != test.want {
+				t.Fatalf("dockerHubCountSourceOperationClaims() = %d, want %d", got, test.want)
+			}
+		})
 	}
 }
 
@@ -766,6 +881,13 @@ func readDockerHubDisposition(t *testing.T) *dockerHubDisposition {
 	return disposition
 }
 
+func readDockerHubRetainedMappingContract(t *testing.T) *dockerHubRetainedMappingContract {
+	t.Helper()
+	contract := new(dockerHubRetainedMappingContract)
+	readDockerHubJSON(t, dockerHubRetentionContractPath, contract)
+	return contract
+}
+
 func readDockerHubReverseETLAudit(t *testing.T) *dockerHubReverseETLAudit {
 	t.Helper()
 	audit := new(dockerHubReverseETLAudit)
@@ -908,6 +1030,37 @@ func validateDockerHubDisposition(disposition *dockerHubDisposition, matrix *doc
 	}
 	if len(disposition.Notes) == 0 {
 		return errors.New("disposition must explain that source mapping is not runtime reachability")
+	}
+	return nil
+}
+
+func validateDockerHubRetentionBoundary(boundary dockerHubRetentionBoundary, contract *dockerHubRetainedMappingContract, lock *dockerHubLock, artifacts dockerHubArtifactRecords) error {
+	if boundary.Mode != "retention_only_descriptor_absent" {
+		return fmt.Errorf("retention boundary mode = %q, want retention_only_descriptor_absent", boundary.Mode)
+	}
+	if boundary.RetentionContract != dockerHubRetentionContractPath {
+		return fmt.Errorf("retention boundary retention_contract = %q, want %q", boundary.RetentionContract, dockerHubRetentionContractPath)
+	}
+	if boundary.CanonicalEvidence {
+		return errors.New("retention boundary canonical_evidence must remain false for a descriptor-absent lock")
+	}
+	if contract.Connector != "dockerhub" || !contract.RetentionOnly {
+		return fmt.Errorf("retention contract identity = connector:%q retention_only:%t, want dockerhub/true", contract.Connector, contract.RetentionOnly)
+	}
+	if contract.SourceLock.Path != dockerHubSourceLockPath || contract.SourceLock.SHA256 != lock.Rest.SHA256 || contract.SourceLock.Bytes != lock.Rest.Bytes {
+		return errors.New("retention contract does not bind the exact Docker Hub source lock")
+	}
+	if contract.SourceLock.CanonicalEvidence {
+		return errors.New("retention contract canonical_evidence must remain false for a descriptor-absent lock")
+	}
+	if boundary.CanonicalEvidence != contract.SourceLock.CanonicalEvidence {
+		return errors.New("retention boundary canonical_evidence disagrees with the retention contract")
+	}
+	if boundary.SourceBoundArtifactClaims != artifacts.SourceBoundArtifactClaims {
+		return fmt.Errorf("retention boundary source-bound artifact claims = %d, actual artifacts = %d", boundary.SourceBoundArtifactClaims, artifacts.SourceBoundArtifactClaims)
+	}
+	if boundary.SourceBoundArtifactClaims != 0 {
+		return errors.New("retention boundary source-bound artifact claims must remain zero without a canonical descriptor")
 	}
 	return nil
 }
@@ -1734,6 +1887,7 @@ func readDockerHubArtifactRecords(t *testing.T) dockerHubArtifactRecords {
 		Streams:                      make(map[string]dockerHubStreamRecord, len(streams.Streams)),
 		Commands:                     make(map[string]dockerHubCommandRecord, len(cli.Commands)),
 		OperationCount:               len(operations.Operations),
+		SourceBoundArtifactClaims:    dockerHubSourceBoundArtifactClaims(t),
 		WritesArtifactPresent:        dockerHubFilePresent(t, "writes.json"),
 		SyncTransportArtifactPresent: dockerHubFilePresent(t, "sync_transport.json"),
 	}
@@ -1757,6 +1911,55 @@ func readDockerHubArtifactRecords(t *testing.T) dockerHubArtifactRecords {
 		records.Commands[command.Path] = command
 	}
 	return records
+}
+
+func dockerHubSourceBoundArtifactClaims(t *testing.T) int {
+	t.Helper()
+	paths := []string{
+		"api_surface.json",
+		"streams.json",
+		"operations.json",
+		"cli_surface.json",
+	}
+	claims := 0
+	for _, path := range paths {
+		var document any
+		readDockerHubJSON(t, path, &document)
+		claims += dockerHubCountSourceOperationClaims(document)
+	}
+	return claims
+}
+
+func dockerHubCountSourceOperationClaims(value any) int {
+	switch value := value.(type) {
+	case map[string]any:
+		claims := 0
+		if sourceOperation, exists := value["source_operation"]; exists {
+			switch sourceOperation := sourceOperation.(type) {
+			case string:
+				if strings.TrimSpace(sourceOperation) != "" {
+					claims++
+				}
+			case nil:
+				// A JSON null does not assert a source-bound execution path.
+			default:
+				// A malformed source_operation is still an unsafe execution claim.
+				claims++
+			}
+		}
+		for _, child := range value {
+			claims += dockerHubCountSourceOperationClaims(child)
+		}
+		return claims
+	case []any:
+		claims := 0
+		for _, child := range value {
+			claims += dockerHubCountSourceOperationClaims(child)
+		}
+		return claims
+	default:
+		return 0
+	}
 }
 
 func dockerHubFilePresent(t *testing.T, path string) bool {

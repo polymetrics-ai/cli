@@ -78,6 +78,12 @@
       }
     }
   },
+  "retention_boundary": {
+    "mode": "retention_only_descriptor_absent",
+    "retention_contract": "sources/dockerhub-retained-mapping-contract.json",
+    "canonical_evidence": false,
+    "source_bound_artifact_claims": 0
+  },
   "shared_executor_capabilities": [
     {
       "kind": "rest_status",
