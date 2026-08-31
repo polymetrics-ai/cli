@@ -67,6 +67,31 @@ The checker reads source locks through the mapping-only parser. It does not
 retain or fetch provider bytes, change connector definitions, alter a runtime
 executor, or act as certification evidence.
 
+## Deferred source visibility
+
+`connectorgen deferred-visibility <cohort-manifest> --check [--json]` reads
+the frozen cohort, the connector-local source-lane matrices, existing
+connector-local missing-foundation ledgers, and the Foundation Atlas. It emits
+one deterministic report entry for every `mapped_unproven` or
+`missing_foundation` lane cell. Each entry preserves both the matrix source
+identity and the exact operation identity in the cited immutable source lock,
+plus method, path, citation, source fact, typed reason, and Atlas capability.
+
+The report is discovery/preflight evidence only. It has no executable command,
+operation, stream, write, transport, credential, descriptor, or executor
+binding (opaque provider source facts may retain similarly named evidence
+keys), and it does not call source import, source materialization, or a
+provider. A source identity that differs from the lock operation key is
+accepted only when the matrix explicitly declares the provider operation ID
+and the locked method and path resolve uniquely; zero or multiple matches fail
+closed.
+
+For Batch R1 this distinguishes the 4,341 primary source operations from the
+4,343 source-lane matrix rows (two cited supplemental rows) and their 30,401
+seven-lane cells. It is not an execution-parity report: a later declaration,
+public command/engine preflight, and appropriate warehouse or transport proof
+are still required before a cell can become executable.
+
 `make verify` runs `connectorgen-operation-evidence`, equivalent to:
 
 ```bash

@@ -27,6 +27,11 @@
 //	                           and exact source-lane accounting without
 //	                           runtime artifacts; the explicit sidecar flags
 //	                           persist or check only source-only accounting
+//	deferred-visibility <manifest> --check [--json]
+//	                           reports every source-backed deferred lane cell
+//	                           with typed source evidence and no executable
+//	                           declaration, credential, transport, or runtime
+//	                           claim
 //	source-import <connector> --out <path> [--defs <dir>] [--check]
 //	                           verifies a connector-owned source lock and
 //	                           emits canonical provider contracts for later
@@ -93,6 +98,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runSourceOperationMappingCohort(args, stdout, stderr)
 	case "retained-source-mapping":
 		return runRetainedSourceMapping(args, stdout, stderr)
+	case "deferred-visibility":
+		return runDeferredVisibility(args, stdout, stderr)
 	case "params-import":
 		return runParamsImport(args, stdout, stderr)
 	case "source-import":
@@ -155,6 +162,7 @@ func usage() string {
 	connectorgen source-operation-mapping <manifest> --check
 	connectorgen source-operation-mapping-cohort <manifest> --check [--check-retention-receipts]
 	connectorgen retained-source-mapping <connector> [--check | --write-retention-sidecar | --check-retention-sidecar]
+	connectorgen deferred-visibility <manifest> --check [--json]
 	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
 	connectorgen source-materialize <connector> [--defs <dir>] [--check]
 	connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>
