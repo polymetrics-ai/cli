@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "connector": "bitbucket",
+  "purpose": "Connector-local source mapping and execution-gap ledger. This authoring artifact does not load an executor, enable a command, alter the retained source denominator, or change source-lane membership.",
+  "source_lock": {
+    "path": "sources/bitbucket-operation-source-lock.json",
+    "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+    "sha256": "3dbfe6a80143511a287e58c21a193d3551ab5d41e8b60e65c1ae121b7000dec3"
+  },
+  "foundations": [
+    {
+      "id": "cli-webhook-event-surface-foundation-r1",
+      "state": "recorded_only_requires_captain_approval_before_implementation",
+      "atlas_capability": "transport.sync-contract.v1",
+      "atlas_classification": "actual_gap",
+      "affected_lane": "sync_transport",
+      "source_ids": [
+        {
+          "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/hooks",
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}/hooks",
+          "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/hooks\"].post"
+        },
+        {
+          "id": "bitbucket.rest.post_/workspaces/{workspace}/hooks",
+          "method": "POST",
+          "path": "/workspaces/{workspace}/hooks",
+          "source_location": "paths[\"/workspaces/{workspace}/hooks\"].post"
+        },
+        {
+          "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+          "method": "PUT",
+          "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}",
+          "source_location": "paths[\"/repositories/{workspace}/{repo_slug}/hooks/{uid}\"].put"
+        },
+        {
+          "id": "bitbucket.rest.put_/workspaces/{workspace}/hooks/{uid}",
+          "method": "PUT",
+          "path": "/workspaces/{workspace}/hooks/{uid}",
+          "source_location": "paths[\"/workspaces/{workspace}/hooks/{uid}\"].put"
+        }
+      ],
+      "reason": "The retained source documents repository and workspace webhook registration/update with event delivery, but the available transport.sync-contract.v1 requires an already-selected source executor and does not implement Bitbucket HMAC-validated inbound receipt, durable staging, replay handling, or warehouse acknowledgement.",
+      "runtime_claim": "No inbound Bitbucket webhook receiver, selected source executor, or executable sync transport is claimed."
+    }
+  ],
+  "mapping_contract_debts": [
+    {
+      "id": "bitbucket-retained-source-descriptor-r1",
+      "state": "recorded_mapping_contract_debt",
+      "affected_lanes": [
+        "direct_read",
+        "direct_write",
+        "binary_download",
+        "binary_upload",
+        "etl",
+        "reverse_etl",
+        "sync_transport"
+      ],
+      "primary_source_lock": "sources/bitbucket-operation-source-lock.json",
+      "retained_mapping_contract": "sources/bitbucket-retained-mapping-contract.json",
+      "source_rows": 297,
+      "canonical_evidence": false,
+      "source_boundary_reconciliation": {
+        "source_lock_rows": 297,
+        "crosswalk_rows": 331,
+        "crosswalk_only_rows": 34,
+        "resolution": "The 34 crosswalk-only legacy rows remain outside the immutable source-lock denominator and are not source-bound artifacts."
+      },
+      "reason": "The v2 lock preserves provider request and response facts but has no canonical_evidence descriptor. The retention-only contract accounts for all 297 frozen source IDs without admitting an executable declaration. Existing legacy operations, streams, writes, and public commands remain unbound rather than being falsely promoted into source-bound preflight.",
+      "runtime_claim": "No source-bound command, no executor, and no executable declaration is claimed by this descriptor-free retained-source mapping debt."
+    }
+  ]
+}
