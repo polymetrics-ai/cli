@@ -25326,7 +25326,7 @@
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json_redacted",
+      "output_policy": "none",
       "rest": {
         "method": "POST",
         "path": "/ai/third_party_agents/direct_access",
@@ -25344,7 +25344,7 @@
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json_redacted",
+      "output_policy": "none",
       "rest": {
         "method": "POST",
         "path": "/code_suggestions/connection_details",
@@ -25362,7 +25362,7 @@
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json_redacted",
+      "output_policy": "none",
       "rest": {
         "method": "POST",
         "path": "/geo/node_proxy/{id}/graphql",
@@ -25380,7 +25380,7 @@
       "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
       "risk": "low",
       "approval": "none",
-      "output_policy": "json_redacted",
+      "output_policy": "none",
       "rest": {
         "method": "POST",
         "path": "/integrations/slack/options",

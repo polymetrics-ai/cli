@@ -1711,7 +1711,7 @@
             "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
             "internal/connectors/defs/gitlab/sources/gitlab-source-lane-matrix.json"
           ],
-          "notes": "The planned cohort is exactly gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess, gitlab.rest.postApiV4CodeSuggestionsConnectionDetails, gitlab.rest.postApiV4GeoNodeProxyIdGraphql, gitlab.rest.postApiV4IntegrationsSlackOptions, gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls, gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls, gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls, and gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls."
+          "notes": "The cohort is exactly gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess, gitlab.rest.postApiV4CodeSuggestionsConnectionDetails, gitlab.rest.postApiV4GeoNodeProxyIdGraphql, gitlab.rest.postApiV4IntegrationsSlackOptions, gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls, gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls, gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls, and gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls. The first four retain an empty status-only success response and therefore select output_policy=none; the four Conan upload-URL reads retain application/json and therefore select output_policy=json_redacted."
         }
       ],
       "proof_tests": [
@@ -1723,7 +1723,7 @@
       {
         "package": "./cmd/connectorgen",
         "file": "cmd/connectorgen/sourceprojection_test.go",
-        "name": "TestGitLabSourceProjectionAdmitsOnlyRetainedBodylessSemanticPOSTReads"
+        "name": "TestSourceProjectionNonExecutableMutationDispositionAllowsOnlyClosedBodylessPOSTRead"
       },
       {
         "package": "./internal/connectors/defs/gitlab",
@@ -1733,14 +1733,14 @@
       {
         "package": "./internal/cli",
         "file": "internal/cli/gitlab_cli_test.go",
-        "name": "TestGitLabGeneratedDirectReadReachesCredentialBoundary"
+        "name": "TestGitLabBodylessPOSTReadCommandsReachCredentialBoundaryWithoutProviderIO"
         }
       ],
       "known_gap_refs": [
         {
           "id": "gitlab-bodyless-semantic-post-read-r1",
           "reference": "internal/connectors/defs/gitlab/sources/gitlab-source-lane-matrix.json",
-      "notes": "The eight retained source-semantic POST lookup rows are materialized as exact source-bound direct reads after this closed form passed engine wire, source-projection, definition-reconciliation, and credential-boundary proof. Body-bearing POST reads, including GLQL, remain mapped_unproven."
+      "notes": "The eight retained source-semantic POST lookup rows are materialized as exact source-bound direct reads after this closed form passed engine wire, source-output-policy conformance, definition reconciliation, and credential-boundary/no-I/O proof. The four status-only rows use output_policy=none; the four JSON Conan rows retain output_policy=json_redacted. Body-bearing POST reads, including GLQL, remain mapped_unproven."
         }
       ],
       "update_conditions": [

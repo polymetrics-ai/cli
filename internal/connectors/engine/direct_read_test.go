@@ -818,60 +818,79 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndPreservesUndeclaredProviderV
 
 func TestOperationDirectReadExecutesSourceBoundBodylessPOST(t *testing.T) {
 	tests := []struct {
-		name       string
-		sourceID   string
-		path       string
-		pathParams map[string]string
+		name           string
+		sourceID       string
+		path           string
+		pathParams     map[string]string
+		outputPolicy   string
+		responseStatus int
+		responseBody   string
 	}{
 		{
-			name:     "ai third party agent direct access",
-			sourceID: "gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess",
-			path:     "/api/v4/ai/third_party_agents/direct_access",
+			name:           "ai third party agent direct access",
+			sourceID:       "gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess",
+			path:           "/api/v4/ai/third_party_agents/direct_access",
+			outputPolicy:   "none",
+			responseStatus: http.StatusCreated,
 		},
 		{
-			name:     "code suggestions connection details",
-			sourceID: "gitlab.rest.postApiV4CodeSuggestionsConnectionDetails",
-			path:     "/api/v4/code_suggestions/connection_details",
+			name:           "code suggestions connection details",
+			sourceID:       "gitlab.rest.postApiV4CodeSuggestionsConnectionDetails",
+			path:           "/api/v4/code_suggestions/connection_details",
+			outputPolicy:   "none",
+			responseStatus: http.StatusCreated,
 		},
 		{
-			name:       "geo node graphql proxy",
-			sourceID:   "gitlab.rest.postApiV4GeoNodeProxyIdGraphql",
-			path:       "/api/v4/geo/node_proxy/{id}/graphql",
-			pathParams: map[string]string{"id": "42"},
+			name:           "geo node graphql proxy",
+			sourceID:       "gitlab.rest.postApiV4GeoNodeProxyIdGraphql",
+			path:           "/api/v4/geo/node_proxy/{id}/graphql",
+			pathParams:     map[string]string{"id": "42"},
+			outputPolicy:   "none",
+			responseStatus: http.StatusOK,
 		},
 		{
-			name:     "slack interactive options",
-			sourceID: "gitlab.rest.postApiV4IntegrationsSlackOptions",
-			path:     "/api/v4/integrations/slack/options",
+			name:           "slack interactive options",
+			sourceID:       "gitlab.rest.postApiV4IntegrationsSlackOptions",
+			path:           "/api/v4/integrations/slack/options",
+			outputPolicy:   "none",
+			responseStatus: http.StatusCreated,
 		},
 		{
-			name:     "instance conan package upload urls",
-			sourceID: "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
-			path:     "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+			name:         "instance conan package upload urls",
+			sourceID:     "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+			path:         "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+			outputPolicy: "json_redacted",
+			responseBody: `{"ok":true}`,
 			pathParams: map[string]string{
 				"package_name": "pkg", "package_version": "1.0", "package_username": "user", "package_channel": "stable", "conan_package_reference": "ref",
 			},
 		},
 		{
-			name:     "instance conan recipe upload urls",
-			sourceID: "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
-			path:     "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+			name:         "instance conan recipe upload urls",
+			sourceID:     "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+			path:         "/api/v4/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+			outputPolicy: "json_redacted",
+			responseBody: `{"ok":true}`,
 			pathParams: map[string]string{
 				"package_name": "pkg", "package_version": "1.0", "package_username": "user", "package_channel": "stable",
 			},
 		},
 		{
-			name:     "project conan package upload urls",
-			sourceID: "gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
-			path:     "/api/v4/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+			name:         "project conan package upload urls",
+			sourceID:     "gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+			path:         "/api/v4/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+			outputPolicy: "json_redacted",
+			responseBody: `{"ok":true}`,
 			pathParams: map[string]string{
 				"id": "42", "package_name": "pkg", "package_version": "1.0", "package_username": "user", "package_channel": "stable", "conan_package_reference": "ref",
 			},
 		},
 		{
-			name:     "project conan recipe upload urls",
-			sourceID: "gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
-			path:     "/api/v4/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+			name:         "project conan recipe upload urls",
+			sourceID:     "gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+			path:         "/api/v4/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+			outputPolicy: "json_redacted",
+			responseBody: `{"ok":true}`,
 			pathParams: map[string]string{
 				"id": "42", "package_name": "pkg", "package_version": "1.0", "package_username": "user", "package_channel": "stable",
 			},
@@ -894,22 +913,63 @@ func TestOperationDirectReadExecutesSourceBoundBodylessPOST(t *testing.T) {
 				if len(body) != 0 || request.ContentLength != 0 {
 					t.Fatalf("body = %q content_length=%d, want true zero-byte POST body", body, request.ContentLength)
 				}
+				if test.responseBody == "" {
+					w.WriteHeader(test.responseStatus)
+					return
+				}
 				w.Header().Set("Content-Type", "application/json")
-				_, _ = w.Write([]byte(`{"ok":true}`))
+				_, _ = w.Write([]byte(test.responseBody))
 			}))
 			defer srv.Close()
 
 			op := OperationSpec{
-				ID: "gitlab.bodyless_post_read", Kind: "rest_read", Summary: "Read source-backed GitLab lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+				ID: "gitlab.bodyless_post_read", Kind: "rest_read", Summary: "Read source-backed GitLab lookup", Risk: "low", Approval: "none", OutputPolicy: test.outputPolicy,
 				SourceOperation: &SourceOperationBinding{ID: test.sourceID, Method: http.MethodPost, Path: test.path},
 				REST:            &RESTOperationSpec{Method: http.MethodPost, Path: test.path, MaxBytes: 1024, NoRequestBody: true},
 			}
-			if _, err := OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{
+			result, err := OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{
 				Operation: op.ID, PathParams: test.pathParams, MaxBytes: 1024,
-			}, nil); err != nil {
+			}, nil)
+			if err != nil {
 				t.Fatalf("OperationDirectRead: %v", err)
 			}
+			if test.outputPolicy == "none" {
+				if result.Body != nil {
+					t.Fatalf("status-only result body = %#v, want nil", result.Body)
+				}
+				return
+			}
+			body, ok := result.Body.(map[string]any)
+			if !ok || body["ok"] != true {
+				t.Fatalf("JSON result body = %#v, want {ok:true}", result.Body)
+			}
 		})
+	}
+}
+
+func TestOperationDirectReadRejectsNonemptyStatusResponseForSourceBoundBodylessPOST(t *testing.T) {
+	var calls int
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		calls++
+		if request.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", request.Method)
+		}
+		w.WriteHeader(http.StatusCreated)
+		_, _ = w.Write([]byte("unexpected"))
+	}))
+	defer srv.Close()
+
+	op := OperationSpec{
+		ID: "gitlab.bodyless_status_post", Kind: "rest_read", Summary: "Read source-backed GitLab status", Risk: "low", Approval: "none", OutputPolicy: "none",
+		SourceOperation: &SourceOperationBinding{ID: "gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess", Method: http.MethodPost, Path: "/ai/third_party_agents/direct_access"},
+		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/ai/third_party_agents/direct_access", MaxBytes: 1024, NoRequestBody: true},
+	}
+	_, err := OperationDirectRead(context.Background(), operationBindingTestBundle(srv.URL, op), connectors.OperationDirectReadRequest{Operation: op.ID, MaxBytes: 1024}, nil)
+	if err == nil || !strings.Contains(err.Error(), "status-only response must be empty") {
+		t.Fatalf("OperationDirectRead error = %v, want status-only empty-response rejection", err)
+	}
+	if calls != 1 {
+		t.Fatalf("provider calls = %d, want exactly one source-bound POST", calls)
 	}
 }
 

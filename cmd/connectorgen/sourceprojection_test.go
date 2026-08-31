@@ -4986,11 +4986,71 @@ func TestSourceProjectionNonExecutableMutationDispositionAllowsOnlyClosedBodyles
 		// no_request_body form.
 		source := newSource(sourceOutputStatus)
 		bundle := newBundle(true, "direct_read", nil, "", nil)
+		bundle.Operations[0].OutputPolicy = "none"
+		bundle.CLISurface.Commands[0].OutputPolicy = "none"
 		if sourceProjectionMutationClaimsImplementedAction(bundle, source) {
 			t.Fatal("closed bodyless POST direct read was treated as an implemented mutation")
 		}
 		if err := sourceProjectionApplyNonExecutableMutationDispositions(bundle, &sourceImportResult{Operations: []sourceOperationDescriptor{source}}, []sourceNonExecutableMutationDisposition{disposition}); err != nil {
 			t.Fatalf("closed bodyless POST direct read admission: %v", err)
+		}
+	})
+
+	t.Run("closed bodyless semantic direct read preserves source output policy", func(t *testing.T) {
+		for _, testCase := range []struct {
+			name            string
+			outputClass     sourceOutputClass
+			operationPolicy string
+			commandPolicy   string
+			want            bool
+		}{
+			{
+				name:            "status-only source requires none",
+				outputClass:     sourceOutputStatus,
+				operationPolicy: "json_redacted",
+				commandPolicy:   "json_redacted",
+				want:            false,
+			},
+			{
+				name:            "JSON source requires JSON redaction",
+				outputClass:     sourceOutputJSON,
+				operationPolicy: "none",
+				commandPolicy:   "none",
+				want:            false,
+			},
+			{
+				name:            "operation and command must agree",
+				outputClass:     sourceOutputStatus,
+				operationPolicy: "none",
+				commandPolicy:   "json_redacted",
+				want:            false,
+			},
+			{
+				name:            "status-only source admits none",
+				outputClass:     sourceOutputStatus,
+				operationPolicy: "none",
+				commandPolicy:   "none",
+				want:            true,
+			},
+			{
+				name:            "JSON source admits JSON redaction",
+				outputClass:     sourceOutputJSON,
+				operationPolicy: "json_redacted",
+				commandPolicy:   "json_redacted",
+				want:            true,
+			},
+		} {
+			testCase := testCase
+			t.Run(testCase.name, func(t *testing.T) {
+				source := newSource(testCase.outputClass)
+				bundle := newBundle(true, "direct_read", nil, "", nil)
+				bundle.Operations[0].OutputPolicy = testCase.operationPolicy
+				bundle.CLISurface.Commands[0].OutputPolicy = testCase.commandPolicy
+				got := sourceProjectionClosedBodylessPOSTReadCommand(bundle, bundle.CLISurface.Commands[0], source)
+				if got != testCase.want {
+					t.Fatalf("closed bodyless POST admission = %t, want %t for source=%q operation_policy=%q command_policy=%q", got, testCase.want, testCase.outputClass, testCase.operationPolicy, testCase.commandPolicy)
+				}
+			})
 		}
 	})
 

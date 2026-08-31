@@ -3687,6 +3687,10 @@ func sourceProjectionClosedBodylessPOSTReadCommand(bundle engine.Bundle, command
 	if _, ok := sourceProjectionExact2xxStatuses(source, source.Output.Class); !ok {
 		return false
 	}
+	expectedOutputPolicy, ok := sourceProjectionClosedBodylessPOSTReadOutputPolicy(source)
+	if !ok || command.OutputPolicy != expectedOutputPolicy {
+		return false
+	}
 	if command.Intent != "direct_read" || command.Availability != "implemented" || command.Write != "" || command.Operation == "" || command.SourceOperation != source.SourceID || len(command.APISurface) != 1 {
 		return false
 	}
@@ -3712,9 +3716,32 @@ func sourceProjectionClosedBodylessPOSTReadCommand(bundle engine.Bundle, command
 		if binding.ID != source.SourceID || !strings.EqualFold(binding.Method, http.MethodPost) || binding.Path != endpoint.Path {
 			return false
 		}
+		if declared.OutputPolicy != expectedOutputPolicy {
+			return false
+		}
 		return true
 	}
 	return false
+}
+
+// sourceProjectionClosedBodylessPOSTReadOutputPolicy preserves the retained
+// response contract at the one semantic POST-read admission edge. An empty
+// status-only success response is deliberately distinct from an explicitly
+// JSON response even though both requests carry no body.
+func sourceProjectionClosedBodylessPOSTReadOutputPolicy(source sourceOperationDescriptor) (string, bool) {
+	switch source.Output.Class {
+	case sourceOutputStatus:
+		for _, variant := range source.Output.Success {
+			if strings.TrimSpace(variant.MediaType) != "" {
+				return "", false
+			}
+		}
+		return "none", true
+	case sourceOutputJSON:
+		return "json_redacted", true
+	default:
+		return "", false
+	}
 }
 
 // sourceProjectionBlockedReadSources indexes source operations which are

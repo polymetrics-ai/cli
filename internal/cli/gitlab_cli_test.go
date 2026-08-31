@@ -209,6 +209,75 @@ func TestGitLabGeneratedDirectReadReachesCredentialBoundary(t *testing.T) {
 	}
 }
 
+func TestGitLabBodylessPOSTReadCommandsReachCredentialBoundaryWithoutProviderIO(t *testing.T) {
+	registry := bundleregistry.New()
+	connector, ok := registry.Get("gitlab")
+	if !ok {
+		t.Fatal("GitLab connector is not registered")
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("GitLab connector has no command surface")
+	}
+	commands := map[string]connectors.CommandSurfaceCommand{}
+	for _, command := range provider.CommandSurface().Commands {
+		if command.Intent == "direct_read" && command.Availability == "implemented" && command.SourceOperation != "" {
+			commands[command.SourceOperation] = command
+		}
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("init project: %v", err)
+	}
+	spy := &gitLabNoNetworkTransportSpy{}
+	oldTransport := http.DefaultTransport
+	http.DefaultTransport = spy
+	t.Cleanup(func() { http.DefaultTransport = oldTransport })
+
+	for _, sourceID := range []string{
+		"postApiV4AiThirdPartyAgentsDirectAccess",
+		"postApiV4CodeSuggestionsConnectionDetails",
+		"postApiV4GeoNodeProxyIdGraphql",
+		"postApiV4IntegrationsSlackOptions",
+		"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+		"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+		"postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+		"postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+	} {
+		command, found := commands[sourceID]
+		if !found {
+			t.Fatalf("GitLab bodyless POST source %q has no implemented direct-read command", sourceID)
+		}
+		t.Run(sourceID, func(t *testing.T) {
+			args := append([]string{"gitlab"}, strings.Fields(command.Path)...)
+			for _, flag := range command.Flags {
+				if !flag.Required {
+					continue
+				}
+				value := "fixture"
+				if flag.Type == "integer" {
+					value = "42"
+				}
+				args = append(args, "--"+flag.Name, value)
+			}
+			args = append(args, "--root", root)
+
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code == 0 {
+				t.Fatalf("GitLab source %q command unexpectedly succeeded; stdout=%s stderr=%s", sourceID, stdout.String(), stderr.String())
+			}
+			if got := strings.TrimSpace(stdout.String() + stderr.String()); got != "error: missing --credential" {
+				t.Fatalf("GitLab source %q credential boundary = %q, want missing credential", sourceID, got)
+			}
+		})
+	}
+	if got := spy.requests.Load(); got != 0 {
+		t.Fatalf("GitLab bodyless POST provider requests = %d, want zero before credentials", got)
+	}
+}
+
 func TestGitLabSourceLockedCommandsPassRuntimePreflight(t *testing.T) {
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("gitlab")

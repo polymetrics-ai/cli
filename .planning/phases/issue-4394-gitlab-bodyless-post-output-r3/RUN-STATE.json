@@ -1,0 +1,18 @@
+{
+  "phase": "issue-4394-gitlab-bodyless-post-output-r3",
+  "state": "validation_complete_pending_review",
+  "base_commit": "ceaae873aef0dd19aa23c036b9cb598f9b3eacc8",
+  "r2_baseline_commit": "a87908418b4bf69fa7b49bd64ae9ac8fa6a574bd",
+  "primary_issue": 4394,
+  "related_issues": [4384, 4413],
+  "execution_mode": "inline_manual_gsd_fallback",
+  "reason": "The active single-worker runtime forbids GSD role-agent spawning; canonical prompts were rendered and are executed inline with TDD evidence.",
+  "next_step": "perform_inline_final_review_then_commit_and_push_candidate",
+  "scope": {
+    "connector": "gitlab",
+    "runtime_changes": false,
+    "source_lock_changes": false,
+    "matrix_count_changes": false,
+    "atlas_classification": "reuse"
+  }
+}

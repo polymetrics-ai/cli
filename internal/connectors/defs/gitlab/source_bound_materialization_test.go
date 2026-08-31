@@ -10,31 +10,45 @@ import (
 // successful response and explicitly no source request body; the closed
 // rest.no_request_body contract is what permits its bounded POST read.
 var gitLabBodylessPOSTReadSources = map[string]struct {
-	path string
+	path                 string
+	outputPolicy         string
+	successResponseMedia []string
 }{
 	"postApiV4AiThirdPartyAgentsDirectAccess": {
-		path: "/ai/third_party_agents/direct_access",
+		path:         "/ai/third_party_agents/direct_access",
+		outputPolicy: "none",
 	},
 	"postApiV4CodeSuggestionsConnectionDetails": {
-		path: "/code_suggestions/connection_details",
+		path:         "/code_suggestions/connection_details",
+		outputPolicy: "none",
 	},
 	"postApiV4GeoNodeProxyIdGraphql": {
-		path: "/geo/node_proxy/{id}/graphql",
+		path:         "/geo/node_proxy/{id}/graphql",
+		outputPolicy: "none",
 	},
 	"postApiV4IntegrationsSlackOptions": {
-		path: "/integrations/slack/options",
+		path:         "/integrations/slack/options",
+		outputPolicy: "none",
 	},
 	"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls": {
-		path: "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+		path:                 "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+		outputPolicy:         "json_redacted",
+		successResponseMedia: []string{"application/json"},
 	},
 	"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls": {
-		path: "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+		path:                 "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+		outputPolicy:         "json_redacted",
+		successResponseMedia: []string{"application/json"},
 	},
 	"postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls": {
-		path: "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+		path:                 "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+		outputPolicy:         "json_redacted",
+		successResponseMedia: []string{"application/json"},
 	},
 	"postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls": {
-		path: "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+		path:                 "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+		outputPolicy:         "json_redacted",
+		successResponseMedia: []string{"application/json"},
 	},
 }
 
@@ -73,6 +87,19 @@ func TestGitLabSourceBoundMaterializationCohort(t *testing.T) {
 	}
 	for sourceID, want := range gitLabBodylessPOSTReadSources {
 		gitLabAssertMaterializedDirectRead(t, matrix, operations, cli, api, sourceID, "POST", want.path, "", true)
+		op := gitLabOperationBySourceID(t, operations, sourceID)
+		if got := stringAt(op, "output_policy"); got != want.outputPolicy {
+			t.Fatalf("GitLab source %q operation output_policy = %q, want source-backed %q", sourceID, got, want.outputPolicy)
+		}
+		command := gitLabCommandBySourceIDAndIntent(t, cli, sourceID, "direct_read")
+		if got := stringAt(command, "output_policy"); got != want.outputPolicy {
+			t.Fatalf("GitLab source %q direct-read output_policy = %q, want source-backed %q", sourceID, got, want.outputPolicy)
+		}
+		row := gitLabMatrixRow(t, matrix, "gitlab.rest."+sourceID)
+		media := stringSlice(objectAt(row, "source_facts")["success_response_media_types"])
+		if strings.Join(media, ",") != strings.Join(want.successResponseMedia, ",") {
+			t.Fatalf("GitLab source %q success response media = %q, want %q", sourceID, media, want.successResponseMedia)
+		}
 	}
 
 	const statusSourceID = "headApiV4ProjectsIdRepositoryBranchesBranch"
