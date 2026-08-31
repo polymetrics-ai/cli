@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "connector": "jira",
+  "purpose": "Source-lock-bound correction ledger for documented POST operations that return provider state and must not be exposed as Jira mutations or reverse ETL actions.",
+  "source_lock": {
+    "path": "sources/jira-operation-source-lock.json",
+    "schema_version": 2,
+    "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+    "sha256": "e7136af43bf72cd4ea5ada91ec665b318b60008814122461d4436a43b6c732bf",
+    "operation_count": 617
+  },
+  "corrections": [
+    {
+      "source_id": "jira.rest.getCustomFieldContextsForProjectsAndIssueTypes",
+      "source_location": "paths[\"/rest/api/3/field/{fieldId}/context/mapping\"].post",
+      "method": "POST",
+      "path": "/rest/api/3/field/{fieldId}/context/mapping",
+      "source_semantics_contains": "Returns a [paginated](#pagination) list of project and issue type mappings",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.field_get_custom_field_contexts_for_projects_and_issue_types",
+      "cli_path": "field get-custom-field-contexts-for-projects-and-issue-types",
+      "former_write_action": "field_get_custom_field_contexts_for_projects_and_issue_types"
+    },
+    {
+      "source_id": "jira.rest.getIsWatchingIssueBulk",
+      "source_location": "paths[\"/rest/api/3/issue/watching\"].post",
+      "method": "POST",
+      "path": "/rest/api/3/issue/watching",
+      "source_semantics_contains": "Returns, for the user, details of the watched status",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.issue_get_is_watching_issue_bulk",
+      "cli_path": "issue get-is-watching-issue-bulk",
+      "former_write_action": "issue_get_is_watching_issue_bulk"
+    },
+    {
+      "source_id": "jira.rest.getBulkPermissions",
+      "source_location": "paths[\"/rest/api/3/permissions/check\"].post",
+      "method": "POST",
+      "path": "/rest/api/3/permissions/check",
+      "source_semantics_contains": "Returns:",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.permissions_get_bulk_permissions",
+      "cli_path": "permissions get-bulk-permissions",
+      "former_write_action": "permissions_get_bulk_permissions"
+    },
+    {
+      "source_id": "jira.rest.getPermittedProjects",
+      "source_location": "paths[\"/rest/api/3/permissions/project\"].post",
+      "method": "POST",
+      "path": "/rest/api/3/permissions/project",
+      "source_semantics_contains": "Returns all the projects where the user is granted",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.permissions_get_permitted_projects",
+      "cli_path": "permissions get-permitted-projects",
+      "former_write_action": "permissions_get_permitted_projects"
+    },
+    {
+      "source_id": "jira.rest.readWorkflowFromHistory",
+      "source_location": "paths[\"/rest/api/3/workflow/history\"].post",
+      "method": "POST",
+      "path": "/rest/api/3/workflow/history",
+      "source_semantics_contains": "Returns a workflow and related statuses",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.workflow_read_workflow_from_history",
+      "cli_path": "workflow read-workflow-from-history",
+      "former_write_action": "workflow_read_workflow_from_history"
+    },
+    {
+      "source_id": "jira.rest.readWorkflows",
+      "source_location": "paths[\"/rest/api/3/workflows\"].post",
+      "method": "POST",
+      "path": "/rest/api/3/workflows",
+      "source_semantics_contains": "Returns a list of workflows and related statuses",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.workflows_read_workflows",
+      "cli_path": "workflows read-workflows",
+      "former_write_action": "workflows_read_workflows"
+    },
+    {
+      "source_id": "jira.rest.readWorkflowSchemes",
+      "source_location": "paths[\"/rest/api/3/workflowscheme/read\"].post",
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme/read",
+      "source_semantics_contains": "Returns a list of workflow schemes",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.workflowscheme_read_workflow_schemes",
+      "cli_path": "workflowscheme read-workflow-schemes",
+      "former_write_action": "workflowscheme_read_workflow_schemes"
+    },
+    {
+      "source_id": "jira.rest.getRequiredWorkflowSchemeMappings",
+      "source_location": "paths[\"/rest/api/3/workflowscheme/update/mappings\"].post",
+      "method": "POST",
+      "path": "/rest/api/3/workflowscheme/update/mappings",
+      "source_semantics_contains": "Gets the required status mappings",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.workflowscheme_get_required_workflow_scheme_mappings",
+      "cli_path": "workflowscheme get-required-workflow-scheme-mappings",
+      "former_write_action": "workflowscheme_get_required_workflow_scheme_mappings"
+    },
+    {
+      "source_id": "jira.rest.getWorklogsByIssueIdAndWorklogId",
+      "source_location": "paths[\"/rest/internal/api/latest/worklog/bulk\"].post",
+      "method": "POST",
+      "path": "/rest/internal/api/latest/worklog/bulk",
+      "source_semantics_contains": "Returns worklog details for a list of issue ID and worklog ID pairs.",
+      "request_schema_pointer": "source_operation.requestBody.content.application/json.schema",
+      "connector_operation_id": "jira.internal_get_worklogs_by_issue_id_and_worklog_id",
+      "cli_path": "internal get-worklogs-by-issue-id-and-worklog-id",
+      "former_write_action": "internal_get_worklogs_by_issue_id_and_worklog_id"
+    }
+  ],
+  "runtime_boundary": {
+    "execution_shape": "Existing typed rest_read operations and direct-read CLI bindings execute POST requests with a closed declared JSON body.",
+    "source_operation_binding": "Not projected: current generic source_operation admission permits only GET rest_read and stream_etl bindings. This correction preserves source evidence through this frozen lock-bound correction ledger instead of claiming a generic binding that the runtime rejects.",
+    "non_goals": [
+      "No source-lock or source-lane-matrix rewrite.",
+      "No generic engine, certification, transport, or Atlas change.",
+      "No reverse ETL or direct-write action is retained for these documented reads."
+    ]
+  }
+}

@@ -1121,6 +1121,402 @@
           }
         }
       }
+    },
+    {
+      "id": "jira.field_get_custom_field_contexts_for_projects_and_issue_types",
+      "kind": "rest_read",
+      "summary": "Get custom field contexts for projects and issue types.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/field/{fieldId}/context/mapping",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "parameters": [
+          {
+            "name": "fieldId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "The ID of the custom field."
+          }
+        ],
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "mappings"
+          ],
+          "properties": {
+            "mappings": {
+              "type": "array",
+              "description": "The project and issue type mappings.",
+              "items": {
+                "type": "object",
+                "description": "The project and issue type mapping.",
+                "required": [
+                  "issueTypeId",
+                  "projectId"
+                ],
+                "properties": {
+                  "issueTypeId": {
+                    "type": "string",
+                    "description": "The ID of the issue type."
+                  },
+                  "projectId": {
+                    "type": "string",
+                    "description": "The ID of the project."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.issue_get_is_watching_issue_bulk",
+      "kind": "rest_read",
+      "summary": "Get is watching issue bulk.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issue/watching",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "issueIds"
+          ],
+          "properties": {
+            "issueIds": {
+              "type": "array",
+              "description": "The list of issue IDs.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.permissions_get_bulk_permissions",
+      "kind": "rest_read",
+      "summary": "Get bulk permissions.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/permissions/check",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "string",
+              "description": "The account ID of a user."
+            },
+            "globalPermissions": {
+              "type": "array",
+              "description": "Global permissions to look up.",
+              "items": {
+                "type": "string"
+              }
+            },
+            "projectPermissions": {
+              "type": "array",
+              "description": "Project permissions with associated projects and issues to look up.",
+              "items": {
+                "type": "object",
+                "description": "Details of project permissions and associated issues and projects to look up.",
+                "required": [
+                  "permissions"
+                ],
+                "properties": {
+                  "issues": {
+                    "type": "array",
+                    "description": "List of issue IDs.",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "permissions": {
+                    "type": "array",
+                    "description": "List of project permissions.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "projects": {
+                    "type": "array",
+                    "description": "List of project IDs.",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.permissions_get_permitted_projects",
+      "kind": "rest_read",
+      "summary": "Get permitted projects.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/permissions/project",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "permissions"
+          ],
+          "properties": {
+            "permissions": {
+              "type": "array",
+              "description": "A list of permission keys.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.workflow_read_workflow_from_history",
+      "kind": "rest_read",
+      "summary": "Read workflow version from history.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflow/history",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "workflowId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.workflows_read_workflows",
+      "kind": "rest_read",
+      "summary": "Bulk get workflows.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflows",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "projectAndIssueTypes": {
+              "type": "array",
+              "description": "The list of projects and issue types to query.",
+              "items": {
+                "type": "object",
+                "description": "A project and issueType ID pair that identifies a status mapping.",
+                "required": [
+                  "issueTypeId",
+                  "projectId"
+                ],
+                "properties": {
+                  "issueTypeId": {
+                    "type": "string",
+                    "description": "The ID of the issue type."
+                  },
+                  "projectId": {
+                    "type": "string",
+                    "description": "The ID of the project."
+                  }
+                }
+              }
+            },
+            "workflowIds": {
+              "type": "array",
+              "description": "The list of workflow IDs to query.",
+              "items": {
+                "type": "string",
+                "description": "The list of workflow IDs to query."
+              }
+            },
+            "workflowNames": {
+              "type": "array",
+              "description": "The list of workflow names to query.",
+              "items": {
+                "type": "string",
+                "description": "The list of workflow names to query."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.workflowscheme_read_workflow_schemes",
+      "kind": "rest_read",
+      "summary": "Bulk get workflow schemes.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme/read",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "projectIds": {
+              "type": "array",
+              "description": "The list of project IDs to query.",
+              "items": {
+                "type": "string",
+                "description": "The list of project IDs to query."
+              }
+            },
+            "workflowSchemeIds": {
+              "type": "array",
+              "description": "The list of workflow scheme IDs to query.",
+              "items": {
+                "type": "string",
+                "description": "The list of workflow scheme IDs to query."
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.workflowscheme_get_required_workflow_scheme_mappings",
+      "kind": "rest_read",
+      "summary": "Get required status mappings for workflow scheme update.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme/update/mappings",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "required": [
+            "id",
+            "workflowsForIssueTypes"
+          ],
+          "properties": {
+            "defaultWorkflowId": {
+              "type": "string",
+              "description": "The ID of the new default workflow for this workflow scheme. Only used in global-scoped workflow schemes. If it isn't specified, is set to *Jira Workflow (jira)*."
+            },
+            "id": {
+              "type": "string",
+              "description": "The ID of the workflow scheme."
+            },
+            "workflowsForIssueTypes": {
+              "type": "array",
+              "description": "The new workflow to issue type mappings for this workflow scheme.",
+              "items": {
+                "type": "object",
+                "description": "The explicit association between issue types and a workflow in a workflow scheme.",
+                "required": [
+                  "issueTypeIds",
+                  "workflowId"
+                ],
+                "properties": {
+                  "issueTypeIds": {
+                    "type": "array",
+                    "description": "The issue types assigned to the workflow.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "workflowId": {
+                    "type": "string",
+                    "description": "The ID of the workflow."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.internal_get_worklogs_by_issue_id_and_worklog_id",
+      "kind": "rest_read",
+      "summary": "Get worklogs by issue id and worklog id.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/rest/internal/api/latest/worklog/bulk",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "requests": {
+              "type": "array",
+              "description": "A list of issue and worklog ID pairs.",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "issueId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The issue ID."
+                  },
+                  "worklogId": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The worklog ID."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   ]
 }

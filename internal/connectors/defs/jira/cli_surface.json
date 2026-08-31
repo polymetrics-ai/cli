@@ -2291,35 +2291,40 @@
     {
       "path": "field get-custom-field-contexts-for-projects-and-issue-types",
       "summary": "Get custom field contexts for projects and issue types.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "field_get_custom_field_contexts_for_projects_and_issue_types",
+      "operation": "jira.field_get_custom_field_contexts_for_projects_and_issue_types",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/api/3/field/{fieldId}/context/mapping; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
           "name": "field-id",
           "type": "string",
-          "summary": "Record field fieldId.",
-          "maps_to": "record.fieldId",
+          "summary": "Path parameter fieldId.",
+          "maps_to": "path.fieldId",
           "required": true
         },
         {
           "name": "mappings-0-issue-type-id",
           "type": "string",
           "summary": "The ID of the issue type.",
-          "maps_to": "record.mappings.0.issueTypeId",
+          "maps_to": "body.mappings.0.issueTypeId",
           "required": true
         },
         {
           "name": "mappings-0-project-id",
           "type": "string",
           "summary": "The ID of the project.",
-          "maps_to": "record.mappings.0.projectId",
+          "maps_to": "body.mappings.0.projectId",
           "required": true
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/api/3/field/{fieldId}/context/mapping"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "field get-project-context-mapping",
@@ -4200,21 +4205,26 @@
     {
       "path": "issue get-is-watching-issue-bulk",
       "summary": "Get is watching issue bulk.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "issue_get_is_watching_issue_bulk",
+      "operation": "jira.issue_get_is_watching_issue_bulk",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/api/3/issue/watching; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
           "name": "issue-ids",
           "type": "string_array",
           "summary": "The list of issue IDs.",
-          "maps_to": "record.issueIds",
+          "maps_to": "body.issueIds",
           "required": true
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/api/3/issue/watching"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "issue delete-issue",
@@ -6911,32 +6921,42 @@
     {
       "path": "permissions get-bulk-permissions",
       "summary": "Get bulk permissions.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "permissions_get_bulk_permissions",
+      "operation": "jira.permissions_get_bulk_permissions",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/api/3/permissions/check; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/api/3/permissions/check"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "permissions get-permitted-projects",
       "summary": "Get permitted projects.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "permissions_get_permitted_projects",
+      "operation": "jira.permissions_get_permitted_projects",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/api/3/permissions/project; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
           "name": "permissions",
           "type": "string_array",
           "summary": "A list of permission keys.",
-          "maps_to": "record.permissions",
+          "maps_to": "body.permissions",
           "required": true
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/api/3/permissions/project"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "permissionscheme get-all-permission-schemes",
@@ -11405,13 +11425,18 @@
     {
       "path": "workflow read-workflow-from-history",
       "summary": "Read workflow version from history.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "workflow_read_workflow_from_history",
+      "operation": "jira.workflow_read_workflow_from_history",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/api/3/workflow/history; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/api/3/workflow/history"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "workflow list-workflow-history",
@@ -11610,13 +11635,18 @@
     {
       "path": "workflows read-workflows",
       "summary": "Bulk get workflows.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "workflows_read_workflows",
+      "operation": "jira.workflows_read_workflows",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/api/3/workflows; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/api/3/workflows"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "workflows workflow-capabilities",
@@ -11791,13 +11821,18 @@
     {
       "path": "workflowscheme read-workflow-schemes",
       "summary": "Bulk get workflow schemes.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "workflowscheme_read_workflow_schemes",
+      "operation": "jira.workflowscheme_read_workflow_schemes",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/api/3/workflowscheme/read; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/api/3/workflowscheme/read"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "workflowscheme update-schemes",
@@ -11836,35 +11871,40 @@
     {
       "path": "workflowscheme get-required-workflow-scheme-mappings",
       "summary": "Get required status mappings for workflow scheme update.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "workflowscheme_get_required_workflow_scheme_mappings",
+      "operation": "jira.workflowscheme_get_required_workflow_scheme_mappings",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/api/3/workflowscheme/update/mappings; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
       "flags": [
         {
           "name": "id",
           "type": "string",
           "summary": "The ID of the workflow scheme.",
-          "maps_to": "record.id",
+          "maps_to": "body.id",
           "required": true
         },
         {
           "name": "workflows-for-issue-types-0-issue-type-ids",
           "type": "string_array",
           "summary": "The issue types assigned to the workflow.",
-          "maps_to": "record.workflowsForIssueTypes.0.issueTypeIds",
+          "maps_to": "body.workflowsForIssueTypes.0.issueTypeIds",
           "required": true
         },
         {
           "name": "workflows-for-issue-types-0-workflow-id",
           "type": "string",
           "summary": "The ID of the workflow.",
-          "maps_to": "record.workflowsForIssueTypes.0.workflowId",
+          "maps_to": "body.workflowsForIssueTypes.0.workflowId",
           "required": true
         }
-      ]
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/api/3/workflowscheme/update/mappings"
+        }
+      ],
+      "output_policy": "json_redacted"
     },
     {
       "path": "workflowscheme delete-workflow-scheme",
@@ -12880,13 +12920,18 @@
     {
       "path": "internal get-worklogs-by-issue-id-and-worklog-id",
       "summary": "Get worklogs by issue id and worklog id.",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "implemented",
-      "write": "internal_get_worklogs_by_issue_id_and_worklog_id",
+      "operation": "jira.internal_get_worklogs_by_issue_id_and_worklog_id",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/api-group-issues/",
-      "risk": "Jira POST on /rest/internal/api/latest/worklog/bulk; changes site data.",
-      "approval": "Reverse ETL writes require plan, preview, approval, execute.",
-      "flags": []
+      "flags": [],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/rest/internal/api/latest/worklog/bulk"
+        }
+      ],
+      "output_policy": "json_redacted"
     }
   ],
   "help_topics": [

@@ -4304,55 +4304,6 @@
       ]
     },
     {
-      "name": "field_get_custom_field_contexts_for_projects_and_issue_types",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/api/3/field/{{ record.fieldId }}/context/mapping",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "fieldId",
-          "mappings"
-        ],
-        "properties": {
-          "fieldId": {
-            "type": "string"
-          },
-          "mappings": {
-            "type": "array",
-            "description": "The project and issue type mappings.",
-            "items": {
-              "type": "object",
-              "description": "The project and issue type mapping.",
-              "required": [
-                "issueTypeId",
-                "projectId"
-              ],
-              "properties": {
-                "issueTypeId": {
-                  "type": "string",
-                  "description": "The ID of the issue type."
-                },
-                "projectId": {
-                  "type": "string",
-                  "description": "The ID of the project."
-                }
-              }
-            }
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/api/3/field/{fieldId}/context/mapping; changes site data.",
-      "path_fields": [
-        "fieldId"
-      ],
-      "body_type": "json",
-      "body_fields": [
-        "mappings"
-      ]
-    },
-    {
       "name": "field_delete_custom_field_context",
       "kind": "delete",
       "method": "DELETE",
@@ -8136,33 +8087,6 @@
       "body_type": "json",
       "body_fields": [
         "issueIdsOrKeys"
-      ]
-    },
-    {
-      "name": "issue_get_is_watching_issue_bulk",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/api/3/issue/watching",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "issueIds"
-        ],
-        "properties": {
-          "issueIds": {
-            "type": "array",
-            "description": "The list of issue IDs.",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/api/3/issue/watching; changes site data.",
-      "body_type": "json",
-      "body_fields": [
-        "issueIds"
       ]
     },
     {
@@ -13246,97 +13170,6 @@
         ]
       },
       "confirm": "destructive"
-    },
-    {
-      "name": "permissions_get_bulk_permissions",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/api/3/permissions/check",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-          "accountId": {
-            "type": "string",
-            "description": "The account ID of a user."
-          },
-          "globalPermissions": {
-            "type": "array",
-            "description": "Global permissions to look up.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "projectPermissions": {
-            "type": "array",
-            "description": "Project permissions with associated projects and issues to look up.",
-            "items": {
-              "type": "object",
-              "description": "Details of project permissions and associated issues and projects to look up.",
-              "required": [
-                "permissions"
-              ],
-              "properties": {
-                "issues": {
-                  "type": "array",
-                  "description": "List of issue IDs.",
-                  "items": {
-                    "type": "integer"
-                  }
-                },
-                "permissions": {
-                  "type": "array",
-                  "description": "List of project permissions.",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "projects": {
-                  "type": "array",
-                  "description": "List of project IDs.",
-                  "items": {
-                    "type": "integer"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/api/3/permissions/check; changes site data.",
-      "body_type": "json",
-      "body_fields": [
-        "accountId",
-        "globalPermissions",
-        "projectPermissions"
-      ]
-    },
-    {
-      "name": "permissions_get_permitted_projects",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/api/3/permissions/project",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "permissions"
-        ],
-        "properties": {
-          "permissions": {
-            "type": "array",
-            "description": "A list of permission keys.",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/api/3/permissions/project; changes site data.",
-      "body_type": "json",
-      "body_fields": [
-        "permissions"
-      ]
     },
     {
       "name": "permissionscheme_create_permission_scheme",
@@ -18979,31 +18812,6 @@
       ]
     },
     {
-      "name": "workflow_read_workflow_from_history",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/api/3/workflow/history",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "workflowId": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/api/3/workflow/history; changes site data.",
-      "body_type": "json",
-      "body_fields": [
-        "version",
-        "workflowId"
-      ]
-    },
-    {
       "name": "workflow_update_workflow_transition_rule_configurations",
       "kind": "update",
       "method": "PUT",
@@ -19157,63 +18965,6 @@
         ]
       },
       "confirm": "destructive"
-    },
-    {
-      "name": "workflows_read_workflows",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/api/3/workflows",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-          "projectAndIssueTypes": {
-            "type": "array",
-            "description": "The list of projects and issue types to query.",
-            "items": {
-              "type": "object",
-              "description": "A project and issueType ID pair that identifies a status mapping.",
-              "required": [
-                "issueTypeId",
-                "projectId"
-              ],
-              "properties": {
-                "issueTypeId": {
-                  "type": "string",
-                  "description": "The ID of the issue type."
-                },
-                "projectId": {
-                  "type": "string",
-                  "description": "The ID of the project."
-                }
-              }
-            }
-          },
-          "workflowIds": {
-            "type": "array",
-            "description": "The list of workflow IDs to query.",
-            "items": {
-              "type": "string",
-              "description": "The list of workflow IDs to query."
-            }
-          },
-          "workflowNames": {
-            "type": "array",
-            "description": "The list of workflow names to query.",
-            "items": {
-              "type": "string",
-              "description": "The list of workflow names to query."
-            }
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/api/3/workflows; changes site data.",
-      "body_type": "json",
-      "body_fields": [
-        "projectAndIssueTypes",
-        "workflowIds",
-        "workflowNames"
-      ]
     },
     {
       "name": "workflows_create_workflows",
@@ -19801,40 +19552,6 @@
       ]
     },
     {
-      "name": "workflowscheme_read_workflow_schemes",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/api/3/workflowscheme/read",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-          "projectIds": {
-            "type": "array",
-            "description": "The list of project IDs to query.",
-            "items": {
-              "type": "string",
-              "description": "The list of project IDs to query."
-            }
-          },
-          "workflowSchemeIds": {
-            "type": "array",
-            "description": "The list of workflow scheme IDs to query.",
-            "items": {
-              "type": "string",
-              "description": "The list of workflow scheme IDs to query."
-            }
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/api/3/workflowscheme/read; changes site data.",
-      "body_type": "json",
-      "body_fields": [
-        "projectIds",
-        "workflowSchemeIds"
-      ]
-    },
-    {
       "name": "workflowscheme_update_schemes",
       "kind": "create",
       "method": "POST",
@@ -19966,62 +19683,6 @@
         "statusMappingsByIssueTypeOverride",
         "statusMappingsByWorkflows",
         "version",
-        "workflowsForIssueTypes"
-      ]
-    },
-    {
-      "name": "workflowscheme_get_required_workflow_scheme_mappings",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/api/3/workflowscheme/update/mappings",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "id",
-          "workflowsForIssueTypes"
-        ],
-        "properties": {
-          "defaultWorkflowId": {
-            "type": "string",
-            "description": "The ID of the new default workflow for this workflow scheme. Only used in global-scoped workflow schemes. If it isn't specified, is set to *Jira Workflow (jira)*."
-          },
-          "id": {
-            "type": "string",
-            "description": "The ID of the workflow scheme."
-          },
-          "workflowsForIssueTypes": {
-            "type": "array",
-            "description": "The new workflow to issue type mappings for this workflow scheme.",
-            "items": {
-              "type": "object",
-              "description": "The explicit association between issue types and a workflow in a workflow scheme.",
-              "required": [
-                "issueTypeIds",
-                "workflowId"
-              ],
-              "properties": {
-                "issueTypeIds": {
-                  "type": "array",
-                  "description": "The issue types assigned to the workflow.",
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "workflowId": {
-                  "type": "string",
-                  "description": "The ID of the workflow."
-                }
-              }
-            }
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/api/3/workflowscheme/update/mappings; changes site data.",
-      "body_type": "json",
-      "body_fields": [
-        "defaultWorkflowId",
-        "id",
         "workflowsForIssueTypes"
       ]
     },
@@ -21346,42 +21007,6 @@
         ]
       },
       "confirm": "destructive"
-    },
-    {
-      "name": "internal_get_worklogs_by_issue_id_and_worklog_id",
-      "kind": "create",
-      "method": "POST",
-      "path": "/rest/internal/api/latest/worklog/bulk",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-          "requests": {
-            "type": "array",
-            "description": "A list of issue and worklog ID pairs.",
-            "items": {
-              "type": "object",
-              "properties": {
-                "issueId": {
-                  "type": "integer",
-                  "format": "int64",
-                  "description": "The issue ID."
-                },
-                "worklogId": {
-                  "type": "integer",
-                  "format": "int64",
-                  "description": "The worklog ID."
-                }
-              }
-            }
-          }
-        }
-      },
-      "risk": "Jira POST on /rest/internal/api/latest/worklog/bulk; changes site data.",
-      "body_type": "json",
-      "body_fields": [
-        "requests"
-      ]
     }
   ]
 }

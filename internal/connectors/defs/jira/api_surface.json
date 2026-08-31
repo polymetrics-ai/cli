@@ -954,8 +954,8 @@
       "method": "POST",
       "path": "/rest/api/3/field/{fieldId}/context/mapping",
       "covered_by": {
-        "writes": [
-          "field_get_custom_field_contexts_for_projects_and_issue_types"
+        "direct_reads": [
+          "field get-custom-field-contexts-for-projects-and-issue-types"
         ]
       }
     },
@@ -1750,8 +1750,8 @@
       "method": "POST",
       "path": "/rest/api/3/issue/watching",
       "covered_by": {
-        "writes": [
-          "issue_get_is_watching_issue_bulk"
+        "direct_reads": [
+          "issue get-is-watching-issue-bulk"
         ]
       }
     },
@@ -2962,8 +2962,8 @@
       "method": "POST",
       "path": "/rest/api/3/permissions/check",
       "covered_by": {
-        "writes": [
-          "permissions_get_bulk_permissions"
+        "direct_reads": [
+          "permissions get-bulk-permissions"
         ]
       }
     },
@@ -2971,8 +2971,8 @@
       "method": "POST",
       "path": "/rest/api/3/permissions/project",
       "covered_by": {
-        "writes": [
-          "permissions_get_permitted_projects"
+        "direct_reads": [
+          "permissions get-permitted-projects"
         ]
       }
     },
@@ -4968,8 +4968,8 @@
       "method": "POST",
       "path": "/rest/api/3/workflow/history",
       "covered_by": {
-        "writes": [
-          "workflow_read_workflow_from_history"
+        "direct_reads": [
+          "workflow read-workflow-from-history"
         ]
       }
     },
@@ -5058,8 +5058,8 @@
       "method": "POST",
       "path": "/rest/api/3/workflows",
       "covered_by": {
-        "writes": [
-          "workflows_read_workflows"
+        "direct_reads": [
+          "workflows read-workflows"
         ]
       }
     },
@@ -5192,8 +5192,8 @@
       "method": "POST",
       "path": "/rest/api/3/workflowscheme/read",
       "covered_by": {
-        "writes": [
-          "workflowscheme_read_workflow_schemes"
+        "direct_reads": [
+          "workflowscheme read-workflow-schemes"
         ]
       }
     },
@@ -5210,8 +5210,8 @@
       "method": "POST",
       "path": "/rest/api/3/workflowscheme/update/mappings",
       "covered_by": {
-        "writes": [
-          "workflowscheme_get_required_workflow_scheme_mappings"
+        "direct_reads": [
+          "workflowscheme get-required-workflow-scheme-mappings"
         ]
       }
     },
@@ -5654,8 +5654,8 @@
       "method": "POST",
       "path": "/rest/internal/api/latest/worklog/bulk",
       "covered_by": {
-        "writes": [
-          "internal_get_worklogs_by_issue_id_and_worklog_id"
+        "direct_reads": [
+          "internal get-worklogs-by-issue-id-and-worklog-id"
         ]
       }
     }

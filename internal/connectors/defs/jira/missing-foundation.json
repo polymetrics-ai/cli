@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "connector": "jira",
+  "purpose": "Connector-local source mapping and runtime-gap ledger. It records source-cited limitations without loading an executor, enabling a contract, or changing source-lane membership.",
+  "source_lock": {
+    "path": "sources/jira-operation-source-lock.json",
+    "source_url": "https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+    "sha256": "e7136af43bf72cd4ea5ada91ec665b318b60008814122461d4436a43b6c732bf"
+  },
+  "foundations": [
+    {
+      "id": "jira-inbound-webhook-source-executor-r1",
+      "state": "recorded_only_requires_captain_approval_before_implementation",
+      "atlas_capability": "transport.sync-contract.v1",
+      "affected_lane": "sync_transport",
+      "source_ids": [
+        {
+          "id": "jira.rest.registerDynamicWebhooks"
+        }
+      ],
+      "reason": "The Jira source documents dynamic webhook registration with a URL and event selectors, but PM has no closed inbound Jira webhook receiver, registered Jira source executor, durable staging worker, or DuckDB-mediated source transport for those events.",
+      "runtime_claim": "No inbound Jira webhook receiver, selected source executor, or executable sync transport is claimed."
+    }
+  ],
+  "mapping_contract_debts": [
+    {
+      "id": "jira-v2-canonical-descriptor-projection-r1",
+      "state": "recorded_mapping_contract_debt",
+      "atlas_capability": "source.retention-import.v1",
+      "affected_lanes": [
+        "direct_read",
+        "direct_write",
+        "binary_download",
+        "binary_upload",
+        "etl",
+        "reverse_etl"
+      ],
+      "source_inventory": {
+        "artifact": "sources/jira-retained-mapping-contract.json",
+        "retention_only": true,
+        "canonical_evidence": false,
+        "operation_count": 617
+      },
+      "reason": "Jira's v2 source lock retains exact source_contract and source_operation evidence but has no canonical descriptor. The existing descriptor-free retention guard permits only zero executable declarations, while the historical Jira bundle has operations, writes, streams, and implemented CLI commands. A generic provenance/projection extension would need separate captain approval; this connector-local ledger does not claim that extension exists.",
+      "runtime_claim": "No enabled connector contract, source_operation runtime binding, generic engine change, transport change, or executable promotion is claimed by this record."
+    }
+  ]
+}
