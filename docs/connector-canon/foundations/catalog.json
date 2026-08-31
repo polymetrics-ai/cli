@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 13,
+  "catalog_revision": 14,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -782,6 +782,124 @@
         "Enabled-contract source denominator, lane coverage state, source-lock reconciliation, or deprecation-admission behavior changes.",
         "A global admission or endpoint-ledger artifact changes shape or ownership.",
         "Surface derivation, runtime-preflight handoff, or proof tests change."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "source.retained-mapping-sidecar.v1",
+      "layer": "source_projection_admission",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Writes and verifies one deterministic, connector-owned retention_only source-accounting sidecar from a frozen v2 source lock and source-lane matrix. The sidecar records exact source-operation IDs and all seven lane states while remaining a non-executable authoring artifact.",
+      "owner": {
+        "primary_package": "polymetrics.ai/cmd/connectorgen",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors"
+        ],
+        "files": [
+          "cmd/connectorgen/retainedsourcemapping.go",
+          "internal/connectors/enabled_contract.go"
+        ],
+        "symbols": [
+          {
+            "file": "cmd/connectorgen/retainedsourcemapping.go",
+            "name": "runRetainedSourceMapping"
+          },
+          {
+            "file": "cmd/connectorgen/retainedsourcemapping.go",
+            "name": "retainedSourceMappingWriteRetentionSidecar"
+          },
+          {
+            "file": "cmd/connectorgen/retainedsourcemapping.go",
+            "name": "retainedSourceMappingValidateRetentionSidecarBytes"
+          },
+          {
+            "file": "internal/connectors/enabled_contract.go",
+            "name": "EnabledConnectorContract.ValidateRetentionOnly"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl",
+          "reverse_etl",
+          "direct_read",
+          "direct_write",
+          "binary_download",
+          "binary_upload"
+        ],
+        "protocols": [
+          "HTTP/REST retained-source evidence"
+        ],
+        "source_forms": [
+          "v2 source_contract and source_operation provider fragments",
+          "source-lane matrix exact-ID accounting"
+        ],
+        "request_response_shapes": [
+          "retention_only contract with all seven lane states and exact source-operation IDs"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "default and --check remain read-only",
+          "persistence is restricted to internal/connectors/defs/<connector>/sources/<connector>-retained-mapping-contract.json",
+          "check mode rejects malformed, unsafe, or byte-drifted sidecars",
+          "the sidecar has zero executable declarations and no CLI, transport, warehouse, credential, or runtime binding"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "authoring_command",
+          "verification_command"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/sources/<connector>-retained-mapping-contract.json"
+        ],
+        "selectors": [
+          "connectorgen retained-source-mapping <connector> --write-retention-sidecar",
+          "connectorgen retained-source-mapping <connector> --check-retention-sidecar"
+        ],
+        "notes": "The sidecar is not a root enabled_connector_contract.json or a source descriptor and is never loaded as a runtime bundle."
+      },
+      "constraints": [
+        "The output path is fixed to the connector-owned sources directory; there is no caller-selected output path.",
+        "The sidecar must pass retention_only validation, exact source-operation reconciliation, strict JSON decoding, and deterministic-byte comparison.",
+        "A root enabled contract, descriptor, operation, stream, CLI, transport, warehouse, credential, or certification artifact cannot be created, selected, or replaced by this command."
+      ],
+      "non_goals": [
+        "Making a lane, command, saved connection, transport, or provider request executable.",
+        "Changing source locks, source-lane matrices, canonical descriptors, root enabled contracts, or runtime definitions.",
+        "Supplying certification or credential-bound proof."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Batch R1 retained-source mapping authoring command",
+          "files": [
+            "cmd/connectorgen/retainedsourcemapping.go"
+          ],
+          "notes": "The command persists only after explicit write selection; this foundation candidate intentionally checks in no connector sidecar."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/retainedsourcemapping_test.go",
+          "name": "TestRetainedSourceMappingRetentionSidecarWriteCheckAndDrift"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/retainedsourcemapping_test.go",
+          "name": "TestRetainedSourceMappingDefaultAndCheckDoNotWriteRetentionSidecar"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/retainedsourcemapping_test.go",
+          "name": "TestRetainedSourceMappingFrozenV2Cohort"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "Retention sidecar path, exact-ID reconciliation, deterministic serialization, or strict sidecar validation changes.",
+        "The command's mapping-only boundary, owner symbol, proof tests, or non-execution guarantees change."
       ],
       "supersedes": []
     },

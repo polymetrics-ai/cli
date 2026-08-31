@@ -22,10 +22,11 @@
 //	declaration-admission [dir] [--json]
 //	                           checks optional source-cited declaration
 //	                           sidecars without asserting runtime or live proof
-//	retained-source-mapping <connector> [--check]
+//	retained-source-mapping <connector> [--check | --write-retention-sidecar | --check-retention-sidecar]
 //	                           verifies a frozen v2 retained source contract
 //	                           and exact source-lane accounting without
-//	                           generating descriptor or runtime artifacts
+//	                           runtime artifacts; the explicit sidecar flags
+//	                           persist or check only source-only accounting
 //	source-import <connector> --out <path> [--defs <dir>] [--check]
 //	                           verifies a connector-owned source lock and
 //	                           emits canonical provider contracts for later
@@ -153,7 +154,7 @@ func usage() string {
 	connectorgen declaration-admission [dir] [--json]  (default dir: internal/connectors/defs)
 	connectorgen source-operation-mapping <manifest> --check
 	connectorgen source-operation-mapping-cohort <manifest> --check
-	connectorgen retained-source-mapping <connector> [--check]
+	connectorgen retained-source-mapping <connector> [--check | --write-retention-sidecar | --check-retention-sidecar]
 	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
 	connectorgen source-materialize <connector> [--defs <dir>] [--check]
 	connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>

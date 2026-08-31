@@ -60,6 +60,13 @@ func TestRetainedSourceMappingFrozenV2Cohort(t *testing.T) {
 			if err := result.Contract.ReconcileSourceOperations(enabledContractSourceOperations(lock)); err != nil {
 				t.Fatalf("reconcile exact source IDs: %v", err)
 			}
+			raw, err := retainedSourceMappingContractJSON(result.Contract)
+			if err != nil {
+				t.Fatalf("encode retention sidecar: %v", err)
+			}
+			if err := retainedSourceMappingValidateRetentionSidecarBytes(raw, result.Contract); err != nil {
+				t.Fatalf("validate retention sidecar: %v", err)
+			}
 			for _, lane := range result.Contract.Lanes {
 				if lane.State == connectors.EnabledLaneImplemented || lane.Source.Implemented != 0 || lane.Source.UnmappedMapping != 0 || lane.Transport != nil || len(lane.Warehouse) != 0 {
 					t.Fatalf("%s lane escaped source-only boundary: %+v", lane.Name, lane)
@@ -99,6 +106,176 @@ func TestRetainedSourceMappingSidecarBytesAreDeterministicWithoutWriting(t *test
 	}
 	if !bytes.Contains(firstRaw, []byte(`"retention_only": true`)) || bytes.Contains(firstRaw, []byte(`"implemented": 1`)) {
 		t.Fatalf("deterministic bytes make an invalid execution claim: %s", firstRaw)
+	}
+	for _, forbidden := range []string{`"transport"`, `"warehouse_flows"`, `"cli"`, `"credential"`} {
+		if bytes.Contains(firstRaw, []byte(forbidden)) {
+			t.Fatalf("deterministic sidecar contains runtime-only field %q: %s", forbidden, firstRaw)
+		}
+	}
+}
+
+func TestRetainedSourceMappingRetentionSidecarOptionsAndHelp(t *testing.T) {
+	write, err := parseRetainedSourceMappingOptions([]string{"retained-source-mapping", "bitbucket", "--write-retention-sidecar"})
+	if err != nil || !write.WriteRetentionSidecar || write.Check || write.CheckRetentionSidecar {
+		t.Fatalf("write options=%+v err=%v", write, err)
+	}
+	check, err := parseRetainedSourceMappingOptions([]string{"retained-source-mapping", "bitbucket", "--check-retention-sidecar"})
+	if err != nil || !check.CheckRetentionSidecar || check.Check || check.WriteRetentionSidecar {
+		t.Fatalf("sidecar check options=%+v err=%v", check, err)
+	}
+	for _, flags := range [][]string{
+		{"retained-source-mapping", "bitbucket", "--check", "--write-retention-sidecar"},
+		{"retained-source-mapping", "bitbucket", "--check", "--check-retention-sidecar"},
+	} {
+		if _, err := parseRetainedSourceMappingOptions(flags); err == nil {
+			t.Fatalf("flags=%v unexpectedly accepted", flags)
+		}
+	}
+	for _, want := range []string{"--write-retention-sidecar", "--check-retention-sidecar", "does not\nwrite a descriptor"} {
+		if !strings.Contains(retainedSourceMappingUsage(), want) {
+			t.Fatalf("retained-source mapping help omits %q", want)
+		}
+	}
+}
+
+func TestRetainedSourceMappingDefaultAndCheckDoNotWriteRetentionSidecar(t *testing.T) {
+	root := retainedSourceMappingTestRoot(t)
+	sidecar, err := retainedSourceMappingSidecarPath(root, "bitbucket")
+	if err != nil {
+		t.Fatalf("resolve sidecar path: %v", err)
+	}
+	before, beforeErr := os.ReadFile(sidecar)
+	if beforeErr != nil && !os.IsNotExist(beforeErr) {
+		t.Fatalf("read preexisting sidecar: %v", beforeErr)
+	}
+	for _, args := range [][]string{
+		{"retained-source-mapping", "bitbucket"},
+		{"retained-source-mapping", "bitbucket", "--check"},
+	} {
+		var stdout, stderr bytes.Buffer
+		if exitCode := run(args, &stdout, &stderr); exitCode != 0 {
+			t.Fatalf("args=%v exit=%d stderr=%q", args, exitCode, stderr.String())
+		}
+		after, afterErr := os.ReadFile(sidecar)
+		if (beforeErr == nil) != (afterErr == nil) || (beforeErr == nil && !bytes.Equal(before, after)) {
+			t.Fatalf("args=%v changed retention sidecar", args)
+		}
+		if afterErr != nil && !os.IsNotExist(afterErr) {
+			t.Fatalf("read sidecar after args=%v: %v", args, afterErr)
+		}
+	}
+}
+
+func TestRetainedSourceMappingRetentionSidecarWriteCheckAndDrift(t *testing.T) {
+	root := retainedSourceMappingTestRoot(t)
+	result, err := retainedSourceMappingFromRepository(root, "bitbucket")
+	if err != nil {
+		t.Fatalf("build retained mapping: %v", err)
+	}
+	sourcesDir := t.TempDir()
+	sidecar, changed, err := retainedSourceMappingWriteRetentionSidecarAt(sourcesDir, "bitbucket", result)
+	if err != nil {
+		t.Fatalf("write first retention sidecar: %v", err)
+	}
+	if !changed {
+		t.Fatal("first retention sidecar write reported unchanged")
+	}
+	want, err := retainedSourceMappingContractJSON(result.Contract)
+	if err != nil {
+		t.Fatalf("encode expected retention sidecar: %v", err)
+	}
+	got, err := os.ReadFile(sidecar)
+	if err != nil {
+		t.Fatalf("read first retention sidecar: %v", err)
+	}
+	if !bytes.Equal(got, want) {
+		t.Fatal("first retention sidecar bytes differ from deterministic contract")
+	}
+	if err := retainedSourceMappingCheckRetentionSidecarAt(sourcesDir, "bitbucket", result); err != nil {
+		t.Fatalf("check first retention sidecar: %v", err)
+	}
+	_, changed, err = retainedSourceMappingWriteRetentionSidecarAt(sourcesDir, "bitbucket", result)
+	if err != nil {
+		t.Fatalf("idempotent retention sidecar write: %v", err)
+	}
+	if changed {
+		t.Fatal("identical retention sidecar write reported changed")
+	}
+
+	if err := os.WriteFile(sidecar, append(append([]byte(nil), want...), ' '), 0o644); err != nil {
+		t.Fatalf("write byte-drift sidecar: %v", err)
+	}
+	if err := retainedSourceMappingCheckRetentionSidecarAt(sourcesDir, "bitbucket", result); err == nil || !strings.Contains(err.Error(), "bytes drifted") {
+		t.Fatalf("byte-drift check error=%v, want exact-byte drift rejection", err)
+	}
+
+	unsafe := *result.Contract.Clone()
+	unsafe.Lanes[0].State = connectors.EnabledLaneImplemented
+	unsafe.Lanes[0].Source.Implemented = 1
+	unsafe.Lanes[0].Source.MappedUnproven--
+	unsafeRaw, err := retainedSourceMappingContractJSON(unsafe)
+	if err != nil {
+		t.Fatalf("encode unsafe retention sidecar: %v", err)
+	}
+	if err := os.WriteFile(sidecar, unsafeRaw, 0o644); err != nil {
+		t.Fatalf("write unsafe retention sidecar: %v", err)
+	}
+	if err := retainedSourceMappingCheckRetentionSidecarAt(sourcesDir, "bitbucket", result); err == nil || !strings.Contains(err.Error(), "cannot claim implemented coverage") {
+		t.Fatalf("unsafe sidecar check error=%v, want retention-only rejection", err)
+	}
+
+	var runtimeField map[string]any
+	if err := json.Unmarshal(want, &runtimeField); err != nil {
+		t.Fatalf("decode sidecar for runtime-field fixture: %v", err)
+	}
+	runtimeField["cli"] = map[string]any{"command": "must-not-be-accepted"}
+	runtimeRaw, err := json.MarshalIndent(runtimeField, "", "  ")
+	if err != nil {
+		t.Fatalf("encode runtime-field fixture: %v", err)
+	}
+	runtimeRaw = append(runtimeRaw, '\n')
+	if err := os.WriteFile(sidecar, runtimeRaw, 0o644); err != nil {
+		t.Fatalf("write runtime-field sidecar: %v", err)
+	}
+	if err := retainedSourceMappingCheckRetentionSidecarAt(sourcesDir, "bitbucket", result); err == nil || !strings.Contains(err.Error(), "unknown field") {
+		t.Fatalf("runtime-field sidecar check error=%v, want strict runtime-field rejection", err)
+	}
+
+	if err := os.WriteFile(sidecar, []byte("[]\n"), 0o644); err != nil {
+		t.Fatalf("write malformed retention sidecar: %v", err)
+	}
+	if err := retainedSourceMappingCheckRetentionSidecarAt(sourcesDir, "bitbucket", result); err == nil {
+		t.Fatal("malformed retention sidecar unexpectedly passed")
+	}
+	_, changed, err = retainedSourceMappingWriteRetentionSidecarAt(sourcesDir, "bitbucket", result)
+	if err != nil {
+		t.Fatalf("rewrite drifted retention sidecar: %v", err)
+	}
+	if !changed {
+		t.Fatal("drifted retention sidecar rewrite reported unchanged")
+	}
+	if err := retainedSourceMappingCheckRetentionSidecarAt(sourcesDir, "bitbucket", result); err != nil {
+		t.Fatalf("check rewritten retention sidecar: %v", err)
+	}
+}
+
+func TestRetainedSourceMappingRetentionSidecarPathRejectsRuntimeArtifactLocations(t *testing.T) {
+	sourcesDir := t.TempDir()
+	for _, candidate := range []string{
+		filepath.Join(filepath.Dir(sourcesDir), "enabled_connector_contract.json"),
+		filepath.Join(sourcesDir, "bitbucket-operation-descriptor.json"),
+		filepath.Join(sourcesDir, "operations.json"),
+	} {
+		if _, err := retainedSourceMappingValidateSidecarPath(sourcesDir, "bitbucket", candidate); err == nil || !strings.Contains(err.Error(), "retention sidecar") {
+			t.Fatalf("candidate=%q error=%v, want retention-sidecar path rejection", candidate, err)
+		}
+	}
+	path, err := retainedSourceMappingValidateSidecarPath(sourcesDir, "bitbucket", filepath.Join(sourcesDir, "bitbucket-retained-mapping-contract.json"))
+	if err != nil {
+		t.Fatalf("validate exact sidecar path: %v", err)
+	}
+	if path != filepath.Join(sourcesDir, "bitbucket-retained-mapping-contract.json") {
+		t.Fatalf("validated sidecar path=%q", path)
 	}
 }
 
@@ -382,6 +559,8 @@ func TestRetainedSourceMappingOptionErrors(t *testing.T) {
 	for _, args := range [][]string{
 		{"retained-source-mapping"},
 		{"retained-source-mapping", "bitbucket", "--check", "--check"},
+		{"retained-source-mapping", "bitbucket", "--write-retention-sidecar", "--check-retention-sidecar"},
+		{"retained-source-mapping", "bitbucket", "--not-a-real-flag"},
 		{"retained-source-mapping", "bitbucket", "--out", "x"},
 		{"retained-source-mapping", "bitbucket", "stripe"},
 	} {

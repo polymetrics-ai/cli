@@ -15,9 +15,13 @@ import (
 )
 
 // retainedSourceMappingCohortManifest is deliberately fixed to the reviewed
-// Batch R1 denominator. This command is a read-only authoring check: it does
-// not write a descriptor, an enabled contract, or a runtime declaration.
+// Batch R1 denominator. Default and --check invocation are read-only
+// authoring checks: they do not write a descriptor, enabled contract, or
+// runtime declaration. --write-retention-sidecar is the one explicit
+// mapping-only persistence path.
 const retainedSourceMappingCohortManifest = "data/connector-canon/batch1-source-operation-mapping-cohort.json"
+
+const retainedSourceMappingSidecarSuffix = "-retained-mapping-contract.json"
 
 var retainedSourceMappingLaneOrder = []string{
 	"direct_read",
@@ -43,8 +47,10 @@ var retainedSourceMappingPartitionOrder = []string{
 }
 
 type retainedSourceMappingOptions struct {
-	Connector string
-	Check     bool
+	Connector             string
+	Check                 bool
+	WriteRetentionSidecar bool
+	CheckRetentionSidecar bool
 }
 
 type retainedSourceMappingResult struct {
@@ -104,12 +110,39 @@ func runRetainedSourceMapping(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen retained-source-mapping: %v\n", err)
 		return 1
 	}
+	if opts.WriteRetentionSidecar {
+		path, changed, writeErr := retainedSourceMappingWriteRetentionSidecar(root, opts.Connector, result)
+		if writeErr != nil {
+			logf(stderr, "connectorgen retained-source-mapping: write retention sidecar: %v\n", writeErr)
+			return 1
+		}
+		if changed {
+			logf(stdout, "connectorgen retained-source-mapping: wrote retention-only sidecar %s\n", filepath.ToSlash(path))
+		} else {
+			logf(stdout, "connectorgen retained-source-mapping: retention-only sidecar already current %s\n", filepath.ToSlash(path))
+		}
+	}
+	if opts.CheckRetentionSidecar {
+		path, checkErr := retainedSourceMappingCheckRetentionSidecar(root, opts.Connector, result)
+		if checkErr != nil {
+			logf(stderr, "connectorgen retained-source-mapping: check retention sidecar: %v\n", checkErr)
+			return 1
+		}
+		logf(stdout, "connectorgen retained-source-mapping: retention-only sidecar verified %s\n", filepath.ToSlash(path))
+	}
 	logf(stdout, "connectorgen retained-source-mapping: %s: mapping-only; %d source operation(s), %d verified source operation(s), 0 executable declaration(s), %d lane(s), 0 finding(s)\n", result.Report.Connector, result.Report.SourceOperations, result.Report.VerifiedSourceOperations, len(result.Report.Lanes))
 	return 0
 }
 
 func retainedSourceMappingUsage() string {
-	return "usage: connectorgen retained-source-mapping <connector> [--check]"
+	return `usage: connectorgen retained-source-mapping <connector> [--check | --write-retention-sidecar | --check-retention-sidecar]
+
+Default and --check verify frozen retained source evidence only and do not
+write. --write-retention-sidecar persists one deterministic, retention_only
+source-accounting sidecar at the connector-owned sources path. It does not
+write a descriptor, root enabled contract, operation, stream, CLI, transport,
+credential, or runtime artifact. --check-retention-sidecar compares the exact
+deterministic sidecar bytes on disk without writing.`
 }
 
 func parseRetainedSourceMappingOptions(args []string) (retainedSourceMappingOptions, error) {
@@ -121,6 +154,16 @@ func parseRetainedSourceMappingOptions(args []string) (retainedSourceMappingOpti
 				return retainedSourceMappingOptions{}, fmt.Errorf("--check may only be specified once")
 			}
 			options.Check = true
+		case "--write-retention-sidecar":
+			if options.WriteRetentionSidecar {
+				return retainedSourceMappingOptions{}, fmt.Errorf("--write-retention-sidecar may only be specified once")
+			}
+			options.WriteRetentionSidecar = true
+		case "--check-retention-sidecar":
+			if options.CheckRetentionSidecar {
+				return retainedSourceMappingOptions{}, fmt.Errorf("--check-retention-sidecar may only be specified once")
+			}
+			options.CheckRetentionSidecar = true
 		default:
 			if strings.HasPrefix(argument, "-") {
 				return retainedSourceMappingOptions{}, fmt.Errorf("unknown flag %q", argument)
@@ -133,6 +176,12 @@ func parseRetainedSourceMappingOptions(args []string) (retainedSourceMappingOpti
 	}
 	if options.Connector == "" {
 		return retainedSourceMappingOptions{}, fmt.Errorf("a connector name is required")
+	}
+	if options.WriteRetentionSidecar && options.CheckRetentionSidecar {
+		return retainedSourceMappingOptions{}, fmt.Errorf("--write-retention-sidecar and --check-retention-sidecar cannot be combined")
+	}
+	if options.Check && (options.WriteRetentionSidecar || options.CheckRetentionSidecar) {
+		return retainedSourceMappingOptions{}, fmt.Errorf("--check cannot be combined with retention-sidecar persistence flags")
 	}
 	if err := validateSourceImportConnector(options.Connector); err != nil {
 		return retainedSourceMappingOptions{}, err
@@ -790,13 +839,200 @@ func retainedSourceMappingFinalizeLane(lane *connectors.EnabledConnectorLane) {
 	}
 }
 
-// retainedSourceMappingContractJSON provides deterministic bytes for a future
-// connector-owned sidecar without writing one. Keeping serialization pure lets
-// tests prove reproducibility while this bridge remains mapping-only.
+// retainedSourceMappingContractJSON provides deterministic bytes for the
+// connector-owned retention-only sidecar. Keeping serialization pure lets the
+// explicit persistence path prove reproducibility while this bridge remains
+// mapping-only.
 func retainedSourceMappingContractJSON(contract connectors.EnabledConnectorContract) ([]byte, error) {
 	raw, err := json.MarshalIndent(contract, "", "  ")
 	if err != nil {
 		return nil, err
 	}
 	return append(raw, '\n'), nil
+}
+
+// retainedSourceMappingSidecarPath resolves the one allowed persistence
+// location. A retention-only contract is source accounting, not the root
+// enabled connector contract or a canonical descriptor, so callers cannot
+// choose an alternate output path.
+func retainedSourceMappingSidecarPath(root, connector string) (string, error) {
+	defsDir := filepath.Join(root, "internal", "connectors", "defs")
+	sourcesDir, err := sourceImportConnectorSourcesDir(defsDir, connector)
+	if err != nil {
+		return "", err
+	}
+	return retainedSourceMappingValidateSidecarPath(sourcesDir, connector, filepath.Join(sourcesDir, connector+retainedSourceMappingSidecarSuffix))
+}
+
+// retainedSourceMappingValidateSidecarPath keeps a future call-site from
+// treating a mapping-only sidecar as an output-selectable descriptor or root
+// enabled contract. The command has no --out flag by design.
+func retainedSourceMappingValidateSidecarPath(sourcesDir, connector, candidate string) (string, error) {
+	if err := validateSourceImportConnector(connector); err != nil {
+		return "", err
+	}
+	absSourcesDir, err := filepath.Abs(sourcesDir)
+	if err != nil {
+		return "", fmt.Errorf("resolve connector-owned sources directory: %w", err)
+	}
+	info, err := os.Lstat(absSourcesDir)
+	if err != nil {
+		return "", fmt.Errorf("inspect connector-owned sources directory: %w", err)
+	}
+	if !info.IsDir() || info.Mode()&os.ModeSymlink != 0 {
+		return "", fmt.Errorf("connector-owned sources directory must be a non-symlink directory")
+	}
+	expected := filepath.Join(absSourcesDir, connector+retainedSourceMappingSidecarSuffix)
+	absCandidate, err := filepath.Abs(candidate)
+	if err != nil {
+		return "", fmt.Errorf("resolve retention sidecar path: %w", err)
+	}
+	absCandidate = filepath.Clean(absCandidate)
+	if absCandidate != expected {
+		rootContract := filepath.Join(filepath.Dir(absSourcesDir), "enabled_connector_contract.json")
+		descriptor := filepath.Join(absSourcesDir, connector+"-operation-descriptor.json")
+		if absCandidate == rootContract || absCandidate == descriptor {
+			return "", fmt.Errorf("retention sidecar cannot be reused as a root enabled contract or descriptor")
+		}
+		return "", fmt.Errorf("retention sidecar path must be exactly the connector-owned sources path")
+	}
+	if !sourceImportPathWithin(absSourcesDir, expected) {
+		return "", fmt.Errorf("retention sidecar path escapes connector-owned sources directory")
+	}
+	return expected, nil
+}
+
+func retainedSourceMappingWriteRetentionSidecar(root, connector string, result retainedSourceMappingResult) (string, bool, error) {
+	path, err := retainedSourceMappingSidecarPath(root, connector)
+	if err != nil {
+		return "", false, err
+	}
+	return retainedSourceMappingWriteRetentionSidecarAt(filepath.Dir(path), connector, result)
+}
+
+func retainedSourceMappingWriteRetentionSidecarAt(sourcesDir, connector string, result retainedSourceMappingResult) (string, bool, error) {
+	path, err := retainedSourceMappingValidateSidecarPath(sourcesDir, connector, filepath.Join(sourcesDir, connector+retainedSourceMappingSidecarSuffix))
+	if err != nil {
+		return "", false, err
+	}
+	raw, err := retainedSourceMappingContractJSON(result.Contract)
+	if err != nil {
+		return "", false, fmt.Errorf("encode retention sidecar: %w", err)
+	}
+	if err := retainedSourceMappingValidateRetentionSidecarBytes(raw, result.Contract); err != nil {
+		return "", false, fmt.Errorf("validate generated retention sidecar: %w", err)
+	}
+	existing, readErr := retainedSourceMappingReadSidecar(path)
+	if readErr == nil && bytes.Equal(existing, raw) {
+		return path, false, nil
+	}
+	if readErr != nil && !os.IsNotExist(readErr) {
+		return "", false, readErr
+	}
+	if err := sourceRetainReplaceRegularFile(path, raw); err != nil {
+		return "", false, fmt.Errorf("replace retention sidecar: %w", err)
+	}
+	return path, true, nil
+}
+
+func retainedSourceMappingCheckRetentionSidecar(root, connector string, result retainedSourceMappingResult) (string, error) {
+	path, err := retainedSourceMappingSidecarPath(root, connector)
+	if err != nil {
+		return "", err
+	}
+	if err := retainedSourceMappingCheckRetentionSidecarAt(filepath.Dir(path), connector, result); err != nil {
+		return "", err
+	}
+	return path, nil
+}
+
+func retainedSourceMappingCheckRetentionSidecarAt(sourcesDir, connector string, result retainedSourceMappingResult) error {
+	path, err := retainedSourceMappingValidateSidecarPath(sourcesDir, connector, filepath.Join(sourcesDir, connector+retainedSourceMappingSidecarSuffix))
+	if err != nil {
+		return err
+	}
+	raw, err := retainedSourceMappingReadSidecar(path)
+	if err != nil {
+		return fmt.Errorf("read retention sidecar: %w", err)
+	}
+	return retainedSourceMappingValidateRetentionSidecarBytes(raw, result.Contract)
+}
+
+func retainedSourceMappingReadSidecar(path string) ([]byte, error) {
+	info, err := os.Lstat(path)
+	if err != nil {
+		return nil, err
+	}
+	if !info.Mode().IsRegular() || info.Mode()&os.ModeSymlink != 0 {
+		return nil, fmt.Errorf("retention sidecar must be a regular non-symlink file")
+	}
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	return raw, nil
+}
+
+// retainedSourceMappingValidateRetentionSidecarBytes confirms that a persisted
+// sidecar remains the exact mapping-only output for the frozen source lock and
+// matrix. It validates semantic retention-only guards before byte comparison so
+// an unsafe runtime claim is reported as such rather than merely as drift.
+func retainedSourceMappingValidateRetentionSidecarBytes(raw []byte, expected connectors.EnabledConnectorContract) error {
+	if err := expected.ValidateRetentionOnly(); err != nil {
+		return fmt.Errorf("validate expected retention contract: %w", err)
+	}
+	operations, err := retainedSourceMappingContractSourceOperations(expected)
+	if err != nil {
+		return err
+	}
+	if err := expected.ReconcileSourceOperations(operations); err != nil {
+		return fmt.Errorf("reconcile expected retention contract: %w", err)
+	}
+
+	var actual connectors.EnabledConnectorContract
+	if err := decodeSourceStrictJSON(raw, &actual); err != nil {
+		return fmt.Errorf("decode retention sidecar: %w", err)
+	}
+	if actual.Connector != expected.Connector {
+		return fmt.Errorf("retention sidecar connector %q does not match expected connector %q", actual.Connector, expected.Connector)
+	}
+	if actual.SourceLock != expected.SourceLock {
+		return fmt.Errorf("retention sidecar source lock does not match the frozen source lock")
+	}
+	if err := actual.ValidateRetentionOnly(); err != nil {
+		return fmt.Errorf("validate retention sidecar: %w", err)
+	}
+	if err := actual.ReconcileSourceOperations(operations); err != nil {
+		return fmt.Errorf("reconcile retention sidecar source-operation IDs: %w", err)
+	}
+	want, err := retainedSourceMappingContractJSON(expected)
+	if err != nil {
+		return fmt.Errorf("encode expected retention sidecar: %w", err)
+	}
+	if !bytes.Equal(raw, want) {
+		return fmt.Errorf("retention sidecar bytes drifted from deterministic source-only mapping")
+	}
+	return nil
+}
+
+func retainedSourceMappingContractSourceOperations(contract connectors.EnabledConnectorContract) ([]connectors.EnabledContractSourceOperation, error) {
+	seen := make(map[string]bool)
+	operations := make([]connectors.EnabledContractSourceOperation, 0)
+	for _, lane := range contract.Lanes {
+		if !lane.Source.Partition {
+			continue
+		}
+		for _, sourceID := range lane.Source.OperationIDs {
+			if seen[sourceID] {
+				return nil, fmt.Errorf("retention sidecar partition duplicates source operation ID %q", sourceID)
+			}
+			seen[sourceID] = true
+			operations = append(operations, connectors.EnabledContractSourceOperation{ID: sourceID})
+		}
+	}
+	if len(operations) == 0 {
+		return nil, fmt.Errorf("retention sidecar has no partition source-operation IDs")
+	}
+	sort.Slice(operations, func(i, j int) bool { return operations[i].ID < operations[j].ID })
+	return operations, nil
 }
