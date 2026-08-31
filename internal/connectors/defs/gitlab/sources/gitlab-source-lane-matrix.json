@@ -113988,10 +113988,10 @@
             },
             "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
             "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
+              "classification": "source_semantic_post_read_requires_untyped_json_body"
             }
           },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read, but its retained description requires a JSON object with the name and size of the individual files and provides no requestBody media type or closed schema; keep the source-backed direct-read cell mapped_unproven and do not materialize a bodyless or raw-body request."
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -114091,10 +114091,10 @@
             },
             "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
             "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
+              "classification": "source_semantic_post_read_requires_untyped_json_body"
             }
           },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read, but its retained description requires a JSON object with the name and size of the individual files and provides no requestBody media type or closed schema; keep the source-backed direct-read cell mapped_unproven and do not materialize a bodyless or raw-body request."
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -129092,10 +129092,10 @@
             },
             "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
             "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
+              "classification": "source_semantic_post_read_requires_untyped_json_body"
             }
           },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read, but its retained description requires a JSON object with the name and size of the individual files and provides no requestBody media type or closed schema; keep the source-backed direct-read cell mapped_unproven and do not materialize a bodyless or raw-body request."
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -129196,10 +129196,10 @@
             },
             "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
             "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
+              "classification": "source_semantic_post_read_requires_untyped_json_body"
             }
           },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read, but its retained description requires a JSON object with the name and size of the individual files and provides no requestBody media type or closed schema; keep the source-backed direct-read cell mapped_unproven and do not materialize a bodyless or raw-body request."
         },
         "direct_write": {
           "applicability": "not_applicable",

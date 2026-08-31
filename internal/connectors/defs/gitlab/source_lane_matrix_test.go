@@ -153,13 +153,122 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 				}
 			case "source_semantic_post_read":
 				postRows++
-				if classification != "source_semantic_post_read_candidate" {
-					t.Fatalf("POST semantic read %s classification=%q", stringAt(row, "source_id"), classification)
+				if classification != "source_semantic_post_read_candidate" && classification != "source_semantic_post_read_requires_untyped_json_body" {
+					t.Fatalf("POST semantic read %s classification=%q, want ordinary or untyped-JSON-body source-backed direct-read mapping", stringAt(row, "source_id"), classification)
 				}
 			}
 		}
 		if headRows == 0 || postRows == 0 {
 			t.Fatalf("semantic read coverage head=%d post=%d, want both source-backed kinds", headRows, postRows)
+		}
+	})
+
+	t.Run("retains Conan JSON-body direct reads as mapped-unproven", func(t *testing.T) {
+		const bodyRequirement = "the request must include a json object with the name and size of the individual files."
+		want := map[string]struct{}{
+			"gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls":           {},
+			"gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls":                                        {},
+			"gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls": {},
+			"gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls":                              {},
+		}
+		found := make(map[string]struct{}, len(want))
+		for _, raw := range mustMapSlice(objectAt(lock, "rest")["operations"]) {
+			source := objectAt(raw, "source_operation")
+			if !strings.Contains(strings.ToLower(stringAt(source, "description")), bodyRequirement) {
+				continue
+			}
+			sourceID := "gitlab.rest." + stringAt(raw, "id")
+			if _, expected := want[sourceID]; !expected {
+				t.Fatalf("unexpected retained JSON-body-without-schema source %q", sourceID)
+			}
+			if _, hasBody := source["requestBody"]; hasBody || len(sourceRequestMediaTypes(raw)) != 0 {
+				t.Fatalf("Conan source %q unexpectedly has a typed request body/media contract", sourceID)
+			}
+			row := gitLabMatrixRow(t, matrix, sourceID)
+			directRead := objectAt(objectAt(row, "lanes"), "direct_read")
+			if stringAt(directRead, "applicability") != "source_candidate" || stringAt(directRead, "disposition") != "mapped_unproven" {
+				t.Fatalf("Conan source %q direct-read cell=%#v, want source-backed mapped-unproven", sourceID, directRead)
+			}
+			if stringAt(objectAt(objectAt(directRead, "mapping"), "source_fact"), "classification") != "source_semantic_post_read_requires_untyped_json_body" {
+				t.Fatalf("Conan source %q classification=%#v, want untyped JSON-body direct-read mapping", sourceID, objectAt(objectAt(directRead, "mapping"), "source_fact"))
+			}
+			reason := stringAt(directRead, "reason")
+			if !strings.Contains(reason, "requires a JSON object with the name and size") || !strings.Contains(reason, "no requestBody media type or closed schema") || !strings.Contains(reason, "bodyless or raw-body") {
+				t.Fatalf("Conan source %q reason=%q, want exact typed-body/no-shortcut boundary", sourceID, reason)
+			}
+			cellBytes, err := json.Marshal(directRead)
+			if err != nil {
+				t.Fatalf("marshal Conan source %q direct-read cell: %v", sourceID, err)
+			}
+			if strings.Contains(string(cellBytes), "no_request_body") || strings.Contains(string(cellBytes), "raw_body") {
+				t.Fatalf("Conan source %q direct-read cell=%s, must not claim bodyless/raw-body execution", sourceID, cellBytes)
+			}
+			found[sourceID] = struct{}{}
+		}
+		if !reflect.DeepEqual(found, want) {
+			t.Fatalf("retained Conan JSON-body source IDs=%v, want %v", sortedGitLabSet(found), sortedGitLabSet(want))
+		}
+
+		broken := cloneGitLabObject(t, matrix)
+		row := gitLabMatrixRow(t, broken, "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls")
+		cell := objectAt(objectAt(row, "lanes"), "direct_read")
+		cell["disposition"] = "implemented"
+		if err := validateGitLabSourceLaneMatrix(broken, lock, binaryLock, crosswalk, descriptor, retainedArtifacts, streams); err == nil || !strings.Contains(err.Error(), "lane cells") {
+			t.Fatalf("Conan implemented promotion error = %v, want deterministic lane-cell rejection", err)
+		}
+
+		for _, forbidden := range []string{"no_request_body", "raw_body"} {
+			broken := cloneGitLabObject(t, matrix)
+			row := gitLabMatrixRow(t, broken, "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls")
+			mapping := objectAt(objectAt(objectAt(row, "lanes"), "direct_read"), "mapping")
+			mapping[forbidden] = true
+			if err := validateGitLabSourceLaneMatrix(broken, lock, binaryLock, crosswalk, descriptor, retainedArtifacts, streams); err == nil || !strings.Contains(err.Error(), "lane cells") {
+				t.Fatalf("Conan %s promotion error = %v, want deterministic lane-cell rejection", forbidden, err)
+			}
+		}
+	})
+
+	t.Run("keeps status-only semantic POST reads unmapped from direct execution", func(t *testing.T) {
+		statusSourceIDs := map[string]struct{}{
+			"gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess":   {},
+			"gitlab.rest.postApiV4CodeSuggestionsConnectionDetails": {},
+			"gitlab.rest.postApiV4GeoNodeProxyIdGraphql":            {},
+			"gitlab.rest.postApiV4IntegrationsSlackOptions":         {},
+		}
+		for sourceID := range statusSourceIDs {
+			row := gitLabMatrixRow(t, matrix, sourceID)
+			facts := objectAt(row, "source_facts")
+			if stringAt(gitLabFactsOperationSemantics(facts), "state") != "source_semantic_post_read" || len(stringSlice(facts["success_response_media_types"])) != 0 {
+				t.Fatalf("status source %q facts=%#v, want semantic POST with no declared response media", sourceID, facts)
+			}
+			cell := objectAt(objectAt(row, "lanes"), "direct_read")
+			if stringAt(cell, "disposition") != "mapped_unproven" {
+				t.Fatalf("status source %q direct-read=%#v, want mapped-unproven", sourceID, cell)
+			}
+		}
+
+		cli := loadGitLabObject(t, "cli_surface.json")
+		for _, raw := range mustGitLabArray(t, cli["commands"]) {
+			command := mustGitLabObject(t, raw)
+			if _, selected := statusSourceIDs[stringAt(command, "source_operation")]; selected && stringAt(command, "intent") == "direct_read" && stringAt(command, "availability") == "implemented" {
+				t.Fatalf("status-only source %q must not have an implemented direct-read command: %#v", stringAt(command, "source_operation"), command)
+			}
+		}
+		operations := loadGitLabObject(t, "operations.json")
+		for _, raw := range mustGitLabArray(t, operations["operations"]) {
+			operation := mustGitLabObject(t, raw)
+			source := objectAt(operation, "source_operation")
+			if _, selected := statusSourceIDs[stringAt(source, "id")]; selected && stringAt(operation, "kind") == "rest_read" {
+				t.Fatalf("status-only source %q must not have a declared rest_read operation: %#v", stringAt(source, "id"), operation)
+			}
+		}
+
+		broken := cloneGitLabObject(t, matrix)
+		row := gitLabMatrixRow(t, broken, "gitlab.rest.postApiV4CodeSuggestionsConnectionDetails")
+		mapping := objectAt(objectAt(objectAt(row, "lanes"), "direct_read"), "mapping")
+		mapping["output_policy"] = "json_redacted"
+		if err := validateGitLabSourceLaneMatrix(broken, lock, binaryLock, crosswalk, descriptor, retainedArtifacts, streams); err == nil || !strings.Contains(err.Error(), "lane cells") {
+			t.Fatalf("status-only JSON output promotion error = %v, want deterministic lane-cell rejection", err)
 		}
 	})
 
@@ -308,6 +417,7 @@ func validateGitLabSourceLaneMatrix(matrix, lock, binaryLock, crosswalk, descrip
 		seen[id] = struct{}{}
 
 		var expectedFacts map[string]any
+		var sourceOperation map[string]any
 		expectedOrigin := "rendered_reference_supplement"
 		if strings.HasPrefix(id, "gitlab.rest.") {
 			operationID := strings.TrimPrefix(id, "gitlab.rest.")
@@ -316,6 +426,7 @@ func validateGitLabSourceLaneMatrix(matrix, lock, binaryLock, crosswalk, descrip
 				return fmt.Errorf("matrix primary source ID %q is absent from source lock", id)
 			}
 			expectedFacts = expectedGitLabPrimaryFacts(operation, descriptorByID[operationID], rest)
+			sourceOperation = objectAt(operation, "source_operation")
 			expectedOrigin = "primary_openapi"
 		} else {
 			operation := supplemental[id]
@@ -335,7 +446,7 @@ func validateGitLabSourceLaneMatrix(matrix, lock, binaryLock, crosswalk, descrip
 		if len(lanes) != len(gitLabLanes) {
 			return fmt.Errorf("lane cells %s=%d, want %d", id, len(lanes), len(gitLabLanes))
 		}
-		wantLanes := expectedGitLabLanes(id, expectedFacts)
+		wantLanes := expectedGitLabLanes(id, expectedFacts, sourceOperation)
 		if !sameGitLabJSON(lanes, wantLanes) {
 			return fmt.Errorf("lane cells %q drift", id)
 		}
@@ -660,7 +771,7 @@ func expectedGitLabSupplementalFacts(operation map[string]any) map[string]any {
 	}
 }
 
-func expectedGitLabLanes(id string, facts map[string]any) map[string]any {
+func expectedGitLabLanes(id string, facts, sourceOperation map[string]any) map[string]any {
 	method := strings.ToUpper(stringAt(facts, "method"))
 	lockPath := stringAt(facts, "source_lock")
 	backlink := map[string]any{"kind": "source_lock", "path": lockPath, "source_id": id}
@@ -672,7 +783,13 @@ func expectedGitLabLanes(id string, facts map[string]any) map[string]any {
 	case "source_semantic_head_read":
 		lanes["direct_read"] = gitLabMappedCell("Locked HEAD source row has a retained successful metadata response; source-backed bounded direct-read candidate only.", "source_semantic_head_read_candidate", backlink)
 	case "source_semantic_post_read":
-		lanes["direct_read"] = gitLabMappedCell("Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only.", "source_semantic_post_read_candidate", backlink)
+		reason := "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+		classification := "source_semantic_post_read_candidate"
+		if gitLabSemanticPostReadRequiresUntypedJSONBody(sourceOperation) {
+			reason = "Locked POST source summary and retained successful response document a bounded query/lookup read, but its retained description requires a JSON object with the name and size of the individual files and provides no requestBody media type or closed schema; keep the source-backed direct-read cell mapped_unproven and do not materialize a bodyless or raw-body request."
+			classification = "source_semantic_post_read_requires_untyped_json_body"
+		}
+		lanes["direct_read"] = gitLabMappedCell(reason, classification, backlink)
 	default:
 		lanes["direct_read"] = gitLabNotApplicableCell("Locked method " + method + " is not a GET direct-read candidate.")
 	}
@@ -730,6 +847,14 @@ func expectedGitLabLanes(id string, facts map[string]any) map[string]any {
 		lanes["sync_transport"] = gitLabNotApplicableCell("No retained source fact documents a webhook registration with required URL and event selectors.")
 	}
 	return lanes
+}
+
+func gitLabSemanticPostReadRequiresUntypedJSONBody(sourceOperation map[string]any) bool {
+	const bodyRequirement = "the request must include a json object with the name and size of the individual files."
+	if _, hasRequestBody := sourceOperation["requestBody"]; hasRequestBody {
+		return false
+	}
+	return strings.Contains(strings.ToLower(stringAt(sourceOperation, "description")), bodyRequirement)
 }
 
 func gitLabMappedCell(reason, classification string, backlink map[string]any) map[string]any {
@@ -1420,6 +1545,15 @@ func containsGitLabString(values []string, want string) bool {
 		}
 	}
 	return false
+}
+
+func sortedGitLabSet(values map[string]struct{}) []string {
+	keys := make([]string, 0, len(values))
+	for value := range values {
+		keys = append(keys, value)
+	}
+	sort.Strings(keys)
+	return keys
 }
 
 func stringsToAny(values []string) []any {
