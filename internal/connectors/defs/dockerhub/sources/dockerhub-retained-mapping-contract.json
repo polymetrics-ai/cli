@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "connector": "dockerhub",
+  "retention_only": true,
+  "source_lock": {
+    "path": "sources/dockerhub-operation-source-lock.json",
+    "sha256": "99d9d53c2d93656a3c66d604885abd153dc5df285abc0ecb13802a3bc53d0756",
+    "bytes": 148322,
+    "canonical_evidence": false
+  },
+  "lanes": [
+    {
+      "name": "direct_read",
+      "state": "mapped_unproven",
+      "reason": "The retained source-lane matrix retains source semantics without an executable declaration.",
+      "citations": [
+        {
+          "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "location": "source-lane-matrix"
+        }
+      ],
+      "artifacts": [
+        "sources/dockerhub-operation-source-lock.json"
+      ],
+      "source": {
+        "partition": true,
+        "operation_ids": [
+          "dockerhub.rest.AuditLogs_ListAuditActions",
+          "dockerhub.rest.AuditLogs_ListAuditLogs",
+          "dockerhub.rest.CheckRepository",
+          "dockerhub.rest.GetRepository",
+          "dockerhub.rest.GetRepositoryTag",
+          "dockerhub.rest.ListRepositoryTags",
+          "dockerhub.rest.get_/v2/access-tokens",
+          "dockerhub.rest.get_/v2/access-tokens/{uuid}",
+          "dockerhub.rest.get_/v2/orgs/{name}/access-tokens",
+          "dockerhub.rest.get_/v2/orgs/{name}/settings",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/groups",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/invites",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/members",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
+          "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes",
+          "dockerhub.rest.get_/v2/scim/2.0/ResourceTypes/{name}",
+          "dockerhub.rest.get_/v2/scim/2.0/Schemas",
+          "dockerhub.rest.get_/v2/scim/2.0/Schemas/{id}",
+          "dockerhub.rest.get_/v2/scim/2.0/ServiceProviderConfig",
+          "dockerhub.rest.get_/v2/scim/2.0/Users",
+          "dockerhub.rest.get_/v2/scim/2.0/Users/{id}",
+          "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags",
+          "dockerhub.rest.head_/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}",
+          "dockerhub.rest.listNamespaceRepositories"
+        ],
+        "coverage": "partial",
+        "expected": 27,
+        "implemented": 0,
+        "mapped_unproven": 27,
+        "unmapped_mapping": 0,
+        "deferred_foundation": 0,
+        "unsupported_with_provider_evidence": 0
+      }
+    },
+    {
+      "name": "direct_write",
+      "state": "mapped_unproven",
+      "reason": "The retained source-lane matrix retains source semantics without an executable declaration.",
+      "citations": [
+        {
+          "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "location": "source-lane-matrix"
+        }
+      ],
+      "artifacts": [
+        "sources/dockerhub-operation-source-lock.json"
+      ],
+      "source": {
+        "partition": false,
+        "operation_ids": [
+          "dockerhub.rest.AuthCreateAccessToken",
+          "dockerhub.rest.CreateRepository",
+          "dockerhub.rest.CreateRepositoryGroup",
+          "dockerhub.rest.PostUsers2FALogin",
+          "dockerhub.rest.PostUsersLogin",
+          "dockerhub.rest.UpdateRepositoryImmutableTags",
+          "dockerhub.rest.VerifyRepositoryImmutableTags",
+          "dockerhub.rest.delete_/v2/access-tokens/{uuid}",
+          "dockerhub.rest.delete_/v2/invites/{id}",
+          "dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}",
+          "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+          "dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}",
+          "dockerhub.rest.patch_/v2/access-tokens/{uuid}",
+          "dockerhub.rest.patch_/v2/invites/{id}/resend",
+          "dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}",
+          "dockerhub.rest.post_/v2/access-tokens",
+          "dockerhub.rest.post_/v2/invites/bulk",
+          "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+          "dockerhub.rest.post_/v2/orgs/{org_name}/groups",
+          "dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members",
+          "dockerhub.rest.post_/v2/scim/2.0/Users",
+          "dockerhub.rest.put_/v2/orgs/{name}/settings",
+          "dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}",
+          "dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}",
+          "dockerhub.rest.put_/v2/scim/2.0/Users/{id}"
+        ],
+        "coverage": "partial",
+        "expected": 27,
+        "implemented": 0,
+        "mapped_unproven": 27,
+        "unmapped_mapping": 0,
+        "deferred_foundation": 0,
+        "unsupported_with_provider_evidence": 0
+      }
+    },
+    {
+      "name": "binary_download",
+      "state": "mapped_unproven",
+      "reason": "The retained source-lane matrix retains source semantics without an executable declaration.",
+      "citations": [
+        {
+          "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "location": "source-lane-matrix"
+        }
+      ],
+      "artifacts": [
+        "sources/dockerhub-operation-source-lock.json"
+      ],
+      "source": {
+        "partition": false,
+        "operation_ids": [
+          "dockerhub.rest.get_/v2/orgs/{org_name}/members/export"
+        ],
+        "coverage": "partial",
+        "expected": 1,
+        "implemented": 0,
+        "mapped_unproven": 1,
+        "unmapped_mapping": 0,
+        "deferred_foundation": 0,
+        "unsupported_with_provider_evidence": 0
+      }
+    },
+    {
+      "name": "binary_upload",
+      "state": "unsupported_with_provider_evidence",
+      "reason": "The retained source-lane matrix records this provider lane as not applicable.",
+      "citations": [
+        {
+          "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "location": "source-lane-matrix"
+        }
+      ],
+      "artifacts": [
+        "sources/dockerhub-operation-source-lock.json"
+      ],
+      "source": {
+        "partition": false,
+        "coverage": "not_applicable",
+        "expected": 0,
+        "implemented": 0,
+        "mapped_unproven": 0,
+        "unmapped_mapping": 0,
+        "deferred_foundation": 0,
+        "unsupported_with_provider_evidence": 0
+      }
+    },
+    {
+      "name": "etl",
+      "state": "mapped_unproven",
+      "reason": "The retained source-lane matrix retains source semantics without an executable declaration.",
+      "citations": [
+        {
+          "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "location": "source-lane-matrix"
+        }
+      ],
+      "artifacts": [
+        "sources/dockerhub-operation-source-lock.json"
+      ],
+      "source": {
+        "partition": false,
+        "operation_ids": [
+          "dockerhub.rest.ListRepositoryTags",
+          "dockerhub.rest.get_/v2/access-tokens",
+          "dockerhub.rest.get_/v2/orgs/{name}/access-tokens",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/groups",
+          "dockerhub.rest.get_/v2/orgs/{org_name}/groups/{group_name}/members",
+          "dockerhub.rest.get_/v2/scim/2.0/Users",
+          "dockerhub.rest.listNamespaceRepositories"
+        ],
+        "coverage": "partial",
+        "expected": 7,
+        "implemented": 0,
+        "mapped_unproven": 7,
+        "unmapped_mapping": 0,
+        "deferred_foundation": 0,
+        "unsupported_with_provider_evidence": 0
+      }
+    },
+    {
+      "name": "reverse_etl",
+      "state": "mapped_unproven",
+      "reason": "The retained source-lane matrix retains source semantics without an executable declaration.",
+      "citations": [
+        {
+          "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "location": "source-lane-matrix"
+        }
+      ],
+      "artifacts": [
+        "sources/dockerhub-operation-source-lock.json"
+      ],
+      "source": {
+        "partition": true,
+        "operation_ids": [
+          "dockerhub.rest.AuthCreateAccessToken",
+          "dockerhub.rest.CreateRepository",
+          "dockerhub.rest.CreateRepositoryGroup",
+          "dockerhub.rest.PostUsers2FALogin",
+          "dockerhub.rest.PostUsersLogin",
+          "dockerhub.rest.UpdateRepositoryImmutableTags",
+          "dockerhub.rest.VerifyRepositoryImmutableTags",
+          "dockerhub.rest.delete_/v2/access-tokens/{uuid}",
+          "dockerhub.rest.delete_/v2/invites/{id}",
+          "dockerhub.rest.delete_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}",
+          "dockerhub.rest.delete_/v2/orgs/{org_name}/groups/{group_name}/members/{username}",
+          "dockerhub.rest.delete_/v2/orgs/{org_name}/members/{username}",
+          "dockerhub.rest.patch_/v2/access-tokens/{uuid}",
+          "dockerhub.rest.patch_/v2/invites/{id}/resend",
+          "dockerhub.rest.patch_/v2/orgs/{org_name}/access-tokens/{access_token_id}",
+          "dockerhub.rest.patch_/v2/orgs/{org_name}/groups/{group_name}",
+          "dockerhub.rest.post_/v2/access-tokens",
+          "dockerhub.rest.post_/v2/invites/bulk",
+          "dockerhub.rest.post_/v2/orgs/{name}/access-tokens",
+          "dockerhub.rest.post_/v2/orgs/{org_name}/groups",
+          "dockerhub.rest.post_/v2/orgs/{org_name}/groups/{group_name}/members",
+          "dockerhub.rest.post_/v2/scim/2.0/Users",
+          "dockerhub.rest.put_/v2/orgs/{name}/settings",
+          "dockerhub.rest.put_/v2/orgs/{org_name}/groups/{group_name}",
+          "dockerhub.rest.put_/v2/orgs/{org_name}/members/{username}",
+          "dockerhub.rest.put_/v2/scim/2.0/Users/{id}"
+        ],
+        "coverage": "partial",
+        "expected": 27,
+        "implemented": 0,
+        "mapped_unproven": 27,
+        "unmapped_mapping": 0,
+        "deferred_foundation": 0,
+        "unsupported_with_provider_evidence": 0
+      }
+    },
+    {
+      "name": "sync_transport",
+      "state": "unsupported_with_provider_evidence",
+      "reason": "The retained source-lane matrix records this provider lane as not applicable.",
+      "citations": [
+        {
+          "url": "https://docs.docker.com/reference/api/hub/latest.yaml",
+          "location": "source-lane-matrix"
+        }
+      ],
+      "artifacts": [
+        "sources/dockerhub-operation-source-lock.json"
+      ],
+      "source": {
+        "partition": false,
+        "coverage": "not_applicable",
+        "expected": 0,
+        "implemented": 0,
+        "mapped_unproven": 0,
+        "unmapped_mapping": 0,
+        "deferred_foundation": 0,
+        "unsupported_with_provider_evidence": 0
+      }
+    }
+  ]
+}
