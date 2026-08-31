@@ -67,7 +67,7 @@ func TestEnabledConnectorContractsKeepExecutableLanesImplementedWhenSourceMappin
 		connector string
 		lanes     map[string]string
 	}{
-		{connector: "asana", lanes: map[string]string{"etl": connectors.EnabledCoveragePartial, "reverse_etl": connectors.EnabledCoveragePartial, "sync_transport": connectors.EnabledCoverageComplete}},
+		{connector: "asana", lanes: map[string]string{"etl": connectors.EnabledCoveragePartial, "reverse_etl": connectors.EnabledCoverageComplete, "sync_transport": connectors.EnabledCoverageComplete}},
 		{connector: "github", lanes: map[string]string{"direct_write": connectors.EnabledCoveragePartial, "etl": connectors.EnabledCoveragePartial, "reverse_etl": connectors.EnabledCoveragePartial, "sync_transport": connectors.EnabledCoveragePartial}},
 	}
 	for _, test := range tests {
@@ -85,8 +85,8 @@ func TestEnabledConnectorContractsKeepExecutableLanesImplementedWhenSourceMappin
 				if lane.Source.Coverage != coverage {
 					t.Fatalf("%s %s coverage = %q, want %q", test.connector, laneName, lane.Source.Coverage, coverage)
 				}
-				if coverage == connectors.EnabledCoveragePartial && (lane.Source.UnmappedMapping == 0 || lane.Source.DeferredFoundation != 0) {
-					t.Fatalf("%s %s source coverage = %+v, want mapping-only partial coverage", test.connector, laneName, lane.Source)
+				if coverage == connectors.EnabledCoveragePartial && (lane.Source.UnmappedMapping == 0 && lane.Source.MappedUnproven == 0 || lane.Source.DeferredFoundation != 0) {
+					t.Fatalf("%s %s source coverage = %+v, want a retained mapping-only partial coverage", test.connector, laneName, lane.Source)
 				}
 			}
 		})

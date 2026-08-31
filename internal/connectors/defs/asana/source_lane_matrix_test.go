@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"sort"
 	"strings"
 	"testing"
 )
 
 const asanaSourceLaneMatrixPath = "sources/asana-source-lane-matrix.json"
+const asanaEnabledConnectorContractPath = "enabled_connector_contract.json"
 
 type asanaSourceLaneMatrix struct {
 	Lanes            []string                   `json:"lanes"`
@@ -61,6 +63,29 @@ type asanaSourceLaneDescriptor struct {
 	} `json:"operations"`
 }
 
+type asanaEnabledConnectorContract struct {
+	Lanes []asanaEnabledConnectorLane `json:"lanes"`
+}
+
+type asanaEnabledConnectorLane struct {
+	Name      string                             `json:"name"`
+	State     string                             `json:"state"`
+	Artifacts []string                           `json:"artifacts"`
+	Source    asanaEnabledContractSourceCoverage `json:"source"`
+}
+
+type asanaEnabledContractSourceCoverage struct {
+	Partition          bool     `json:"partition"`
+	OperationIDs       []string `json:"operation_ids"`
+	Coverage           string   `json:"coverage"`
+	Expected           int      `json:"expected"`
+	Implemented        int      `json:"implemented"`
+	MappedUnproven     int      `json:"mapped_unproven"`
+	UnmappedMapping    int      `json:"unmapped_mapping"`
+	DeferredFoundation int      `json:"deferred_foundation"`
+	Unsupported        int      `json:"unsupported_with_provider_evidence"`
+}
+
 func TestAsanaSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) {
 	matrix := loadAsanaSourceLaneMatrix(t)
 	lock := loadAsanaSourceLaneLock(t)
@@ -77,6 +102,24 @@ func TestAsanaSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) {
 	delete(broken.SourceOperations[0].Lanes, "sync_transport")
 	if err := validateAsanaSourceLaneMatrix(broken, lock, descriptor); err == nil || !strings.Contains(err.Error(), "missing lane cell") {
 		t.Fatalf("missing-cell matrix validation error = %v, want missing lane cell", err)
+	}
+}
+
+func TestAsanaEnabledContractReconcilesSourceLaneMatrix(t *testing.T) {
+	matrix := loadAsanaSourceLaneMatrix(t)
+	contract := loadAsanaEnabledConnectorContract(t)
+	if err := validateAsanaEnabledContractSourceLaneMatrix(contract, matrix); err != nil {
+		t.Fatalf("validate Asana enabled contract against source lane matrix: %v", err)
+	}
+
+	// Red counterpart: an overlay cannot hide a locked source ID by shrinking
+	// its selector while leaving the source-coverage count unchanged.
+	broken := contract
+	broken.Lanes = append([]asanaEnabledConnectorLane(nil), contract.Lanes...)
+	reverseETL := asanaEnabledContractLane(&broken, "reverse_etl")
+	reverseETL.Source.OperationIDs = append([]string(nil), reverseETL.Source.OperationIDs[:len(reverseETL.Source.OperationIDs)-1]...)
+	if err := validateAsanaEnabledContractSourceLaneMatrix(broken, matrix); err == nil || !strings.Contains(err.Error(), "operation IDs") {
+		t.Fatalf("short reverse_etl source selector validation error = %v, want exact operation IDs failure", err)
 	}
 }
 
@@ -117,6 +160,19 @@ func loadAsanaSourceLaneDescriptor(t *testing.T) asanaSourceLaneDescriptor {
 		t.Fatalf("decode source descriptor: %v", err)
 	}
 	return descriptor
+}
+
+func loadAsanaEnabledConnectorContract(t *testing.T) asanaEnabledConnectorContract {
+	t.Helper()
+	raw, err := os.ReadFile(asanaEnabledConnectorContractPath)
+	if err != nil {
+		t.Fatalf("read Asana enabled connector contract: %v", err)
+	}
+	var contract asanaEnabledConnectorContract
+	if err := json.Unmarshal(raw, &contract); err != nil {
+		t.Fatalf("decode Asana enabled connector contract: %v", err)
+	}
+	return contract
 }
 
 func validateAsanaSourceLaneMatrix(matrix asanaSourceLaneMatrix, lock asanaSourceLaneLock, descriptor asanaSourceLaneDescriptor) error {
@@ -196,6 +252,90 @@ func validateAsanaSourceLaneMatrix(matrix asanaSourceLaneMatrix, lock asanaSourc
 	for lane, want := range wantCounts {
 		if !equalAsanaLaneCounts(counts[lane], want) {
 			return fmt.Errorf("%s disposition counts = %v, want %v", lane, counts[lane], want)
+		}
+	}
+	return nil
+}
+
+func validateAsanaEnabledContractSourceLaneMatrix(contract asanaEnabledConnectorContract, matrix asanaSourceLaneMatrix) error {
+	if len(contract.Lanes) != len(matrix.Lanes) {
+		return fmt.Errorf("enabled contract lanes = %d, want %d", len(contract.Lanes), len(matrix.Lanes))
+	}
+	for _, laneName := range matrix.Lanes {
+		lane := asanaEnabledContractLane(&contract, laneName)
+		if lane == nil {
+			return fmt.Errorf("enabled contract omits lane %q", laneName)
+		}
+		want := asanaSourceLaneMatrixCoverage(matrix, laneName)
+		if lane.Source.Expected != want.expected || lane.Source.Implemented != want.implemented || lane.Source.MappedUnproven != want.mappedUnproven || lane.Source.UnmappedMapping != want.unmappedMapping || lane.Source.DeferredFoundation != want.deferredFoundation || lane.Source.Unsupported != 0 {
+			return fmt.Errorf("%s source coverage = %+v, want expected=%d implemented=%d mapped_unproven=%d unmapped=%d deferred=%d unsupported=0", laneName, lane.Source, want.expected, want.implemented, want.mappedUnproven, want.unmappedMapping, want.deferredFoundation)
+		}
+		if lane.Source.Coverage != want.coverage {
+			return fmt.Errorf("%s source coverage = %q, want %q", laneName, lane.Source.Coverage, want.coverage)
+		}
+		if lane.Source.Partition {
+			if len(lane.Source.OperationIDs) != 0 {
+				return fmt.Errorf("%s partition must not retain overlay operation IDs", laneName)
+			}
+			continue
+		}
+		if !slices.IsSorted(lane.Source.OperationIDs) || !slices.Equal(lane.Source.OperationIDs, want.operationIDs) {
+			return fmt.Errorf("%s source operation IDs = %v, want exact sorted matrix IDs %v", laneName, lane.Source.OperationIDs, want.operationIDs)
+		}
+		if (laneName == "etl" || laneName == "reverse_etl") && (!slices.Contains(lane.Artifacts, asanaSourceLaneMatrixPath) || !slices.Contains(lane.Artifacts, "api_surface.json")) {
+			return fmt.Errorf("%s artifacts must retain the source lane matrix and api surface", laneName)
+		}
+		if (laneName == "etl" || laneName == "reverse_etl") && lane.State != "implemented" {
+			return fmt.Errorf("%s state = %q, want implemented existing runtime lane", laneName, lane.State)
+		}
+	}
+	return nil
+}
+
+type asanaMatrixLaneCoverage struct {
+	expected           int
+	implemented        int
+	mappedUnproven     int
+	unmappedMapping    int
+	deferredFoundation int
+	coverage           string
+	operationIDs       []string
+}
+
+func asanaSourceLaneMatrixCoverage(matrix asanaSourceLaneMatrix, laneName string) asanaMatrixLaneCoverage {
+	coverage := asanaMatrixLaneCoverage{}
+	for _, row := range matrix.SourceOperations {
+		cell := row.Lanes[laneName]
+		if cell.Applicability != "applicable" {
+			continue
+		}
+		coverage.expected++
+		coverage.operationIDs = append(coverage.operationIDs, row.SourceID)
+		switch cell.Disposition {
+		case "implemented":
+			coverage.implemented++
+		case "mapped_unproven":
+			coverage.mappedUnproven++
+		case "missing_foundation":
+			coverage.deferredFoundation++
+		default:
+			coverage.unmappedMapping++
+		}
+	}
+	sort.Strings(coverage.operationIDs)
+	coverage.coverage = "partial"
+	if coverage.expected == 0 {
+		coverage.coverage = "not_applicable"
+	} else if coverage.implemented == coverage.expected {
+		coverage.coverage = "complete"
+	}
+	return coverage
+}
+
+func asanaEnabledContractLane(contract *asanaEnabledConnectorContract, laneName string) *asanaEnabledConnectorLane {
+	for index := range contract.Lanes {
+		if contract.Lanes[index].Name == laneName {
+			return &contract.Lanes[index]
 		}
 	}
 	return nil
