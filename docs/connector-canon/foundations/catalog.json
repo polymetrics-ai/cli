@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 14,
+  "catalog_revision": 15,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -2105,6 +2105,266 @@
       "supersedes": []
     },
     {
+      "id": "bitbucket.inbound-webhook-receiver.v1",
+      "layer": "sync_contract_transport",
+      "status": "planned",
+      "kind": "connector_specific_reference",
+      "summary": "Deferred until after Batch R1 merge: a planned Bitbucket inbound webhook receiver may turn the four source-cited repository or workspace hook registration/update facts into a selected ETL source only after separate captain approval and proof. Provider hook configuration asks Bitbucket to deliver to a URL; it is not a Polymetrics ingress endpoint, receiver, worker, executor, or runnable sync transport.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/synctransport",
+        "supporting_packages": [
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/synccontract"
+        ],
+        "files": [
+          "internal/app/transport_composition.go",
+          "internal/connectors/sync_transport.go",
+          "internal/synctransport/definition_composition.go",
+          "internal/synctransport/orchestrator.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/sync_transport.go",
+            "name": "SyncTransportDescriptor"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "DefinitionFactory"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "RegisterDeclaredTransports"
+          },
+          {
+            "file": "internal/synctransport/orchestrator.go",
+            "name": "(*Orchestrator).Run"
+          },
+          {
+            "file": "internal/app/transport_composition.go",
+            "name": "(*App).composeTransportRegistry"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "Bitbucket webhook HTTP delivery",
+          "HTTP/REST"
+        ],
+        "source_forms": [
+          "Bitbucket source-lock webhook registration and update facts"
+        ],
+        "request_response_shapes": [
+          "raw inbound HTTP body and provider authentication material",
+          "source-selected Bitbucket event envelope",
+          "durably staged work item and worker receipt"
+        ],
+        "sync_modes": [
+          "change_capture"
+        ],
+        "guarantees": [
+          "no inbound request is executable under this planned entry",
+          "a future receiver must retain the raw body, verify only source-cited Bitbucket authentication material before parsing, deduplicate only through a source-cited replay identity, durably stage accepted work, and dispatch a selected worker",
+          "a future checkpoint may advance only after durable staging and worker acknowledgement"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "application_composition",
+          "definition_field",
+          "interface_registration"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/bitbucket/missing-foundation.json",
+          "internal/connectors/defs/bitbucket/sources/bitbucket-source-lane-matrix.json"
+        ],
+        "selectors": [
+          "source operation IDs bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/hooks, bitbucket.rest.post_/workspaces/{workspace}/hooks, bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/hooks/{uid}, and bitbucket.rest.put_/workspaces/{workspace}/hooks/{uid} remain provider configuration facts",
+          "a future connector-owned sync_transport.json must select one registered receiver and conformance pair after separate captain approval"
+        ],
+        "notes": "This authoring-only planned record creates no sync_transport.json, ingress endpoint, worker, executor, CLI command, or provider I/O path. It reuses transport.sync-contract.v1 and runtime.provider-extension-seams.v1 rather than proposing generic webhook runtime behavior."
+      },
+      "constraints": [
+        "Bitbucket hook registration or update is not Polymetrics ingress or runtime execution.",
+        "Do not infer a delivery identity, signature scheme, event scope, retry policy, checkpoint, or executor from the registration/update request alone.",
+        "A future receiver must reject invalid source-cited authentication before parsing, use a source-cited replay identity for dedupe, and stage accepted work durably before a worker or checkpoint can acknowledge it.",
+        "Implementation is deferred until after Batch R1 merge and requires separate captain approval, source evidence, red tests, and conformance proof."
+      ],
+      "non_goals": [
+        "Implementing an HTTP ingress server, webhook receiver, worker, or Bitbucket sync transport in Batch R1.",
+        "Treating a provider hook-create or hook-update mutation as an executable ETL source.",
+        "Adding generic arbitrary-webhook ingestion or connector-name branching."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Bitbucket repository and workspace hook mappings",
+          "files": [
+            "internal/connectors/defs/bitbucket/missing-foundation.json",
+            "internal/connectors/defs/bitbucket/sources/bitbucket-source-lane-matrix.json"
+          ],
+          "notes": "The four source facts remain mapped as missing foundation; neither the ledger nor this Atlas record claims inbound receiver execution."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/defs/bitbucket",
+          "file": "internal/connectors/defs/bitbucket/missing_foundation_test.go",
+          "name": "TestBitbucketMissingFoundationLedgerBindsOnlyActualNonExecutingGaps"
+        },
+        {
+          "package": "./internal/synctransport",
+          "file": "internal/synctransport/definition_composition_test.go",
+          "name": "TestRegisterDeclaredTransportsRefusesBeforeAnyRegistration"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "cli-webhook-event-surface-foundation-r1",
+          "reference": "internal/connectors/defs/bitbucket/missing-foundation.json#foundations[cli-webhook-event-surface-foundation-r1]",
+          "notes": "The connector-local ledger retains the four exact provider registration/update rows and explicitly states that no inbound Bitbucket receiver or selected source executor exists."
+        }
+      ],
+      "update_conditions": [
+        "Batch R1 has merged and a separately captain-approved Bitbucket ingress implementation, source-evidence contract, or conformance proof is proposed.",
+        "The provider's authentication, delivery identity, event scope, or replay semantics are retained or revised in the source lock.",
+        "The selected transport factory, worker boundary, staging receipt, or checkpoint contract changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "circleci.inbound-webhook-receiver.v1",
+      "layer": "sync_contract_transport",
+      "status": "planned",
+      "kind": "connector_specific_reference",
+      "summary": "Deferred until after Batch R1 merge: a planned CircleCI inbound webhook receiver may turn the source-cited createWebhook and updateWebhook provider registration facts into a selected ETL source only after separate captain approval and proof. Creating or updating a provider webhook configures provider delivery to a URL; it is not a Polymetrics ingress endpoint, receiver, worker, executor, or runnable sync transport.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/synctransport",
+        "supporting_packages": [
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/synccontract"
+        ],
+        "files": [
+          "internal/app/transport_composition.go",
+          "internal/connectors/sync_transport.go",
+          "internal/synctransport/definition_composition.go",
+          "internal/synctransport/orchestrator.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/sync_transport.go",
+            "name": "SyncTransportDescriptor"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "DefinitionFactory"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "RegisterDeclaredTransports"
+          },
+          {
+            "file": "internal/synctransport/orchestrator.go",
+            "name": "(*Orchestrator).Run"
+          },
+          {
+            "file": "internal/app/transport_composition.go",
+            "name": "(*App).composeTransportRegistry"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "CircleCI webhook HTTP delivery",
+          "HTTP/REST"
+        ],
+        "source_forms": [
+          "CircleCI source-lock webhook registration facts"
+        ],
+        "request_response_shapes": [
+          "raw inbound HTTP body and provider authentication material",
+          "source-selected CircleCI event envelope",
+          "durably staged work item and worker receipt"
+        ],
+        "sync_modes": [
+          "change_capture"
+        ],
+        "guarantees": [
+          "no inbound request is executable under this planned entry",
+          "a future receiver must retain the raw body, verify only source-cited CircleCI authentication material before parsing, deduplicate only through a source-cited replay identity, durably stage accepted work, and dispatch a selected worker",
+          "a future checkpoint may advance only after durable staging and worker acknowledgement"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "application_composition",
+          "definition_field",
+          "interface_registration"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/circleci/missing-foundation.json",
+          "internal/connectors/defs/circleci/sources/circleci-source-lane-matrix.json"
+        ],
+        "selectors": [
+          "source operation IDs circleci.rest.createWebhook and circleci.rest.updateWebhook remain provider configuration facts",
+          "a future connector-owned sync_transport.json must select one registered receiver and conformance pair after separate captain approval"
+        ],
+        "notes": "This authoring-only planned record creates no sync_transport.json, ingress endpoint, worker, executor, CLI command, or provider I/O path. It reuses transport.sync-contract.v1 and runtime.provider-extension-seams.v1 rather than proposing generic webhook runtime behavior."
+      },
+      "constraints": [
+        "CircleCI webhook creation or update is not Polymetrics ingress or runtime execution.",
+        "Do not infer a delivery identity, signature scheme, event scope, retry policy, checkpoint, or executor from the registration request alone.",
+        "A future receiver must reject invalid source-cited authentication before parsing, use a source-cited replay identity for dedupe, and stage accepted work durably before a worker or checkpoint can acknowledge it.",
+        "Implementation is deferred until after Batch R1 merge and requires separate captain approval, source evidence, red tests, and conformance proof."
+      ],
+      "non_goals": [
+        "Implementing an HTTP ingress server, webhook receiver, worker, or CircleCI sync transport in Batch R1.",
+        "Treating a provider webhook-create or webhook-update mutation as an executable ETL source.",
+        "Adding generic arbitrary-webhook ingestion or connector-name branching."
+      ],
+      "consumer_examples": [
+        {
+          "name": "CircleCI webhook registration mappings",
+          "files": [
+            "internal/connectors/defs/circleci/missing-foundation.json",
+            "internal/connectors/defs/circleci/sources/circleci-source-lane-matrix.json"
+          ],
+          "notes": "The source facts remain mapped as missing foundation; neither the ledger nor this Atlas record claims inbound receiver execution."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/defs/circleci",
+          "file": "internal/connectors/defs/circleci/missing_foundation_test.go",
+          "name": "TestCircleCIMissingFoundationLedgerBindsOnlyActualNonExecutingGaps"
+        },
+        {
+          "package": "./internal/connectors/defs/circleci",
+          "file": "internal/connectors/defs/circleci/source_lane_matrix_test.go",
+          "name": "TestCircleCIWebhookRegistrationRequiresDeliverySemantics"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "circleci-inbound-webhook-receiver-r1",
+          "reference": "internal/connectors/defs/circleci/missing-foundation.json#foundations[circleci-inbound-webhook-receiver-r1]",
+          "notes": "The connector-local ledger retains the two exact provider registration rows and explicitly states that no inbound CircleCI receiver or selected source executor exists."
+        }
+      ],
+      "update_conditions": [
+        "Batch R1 has merged and a separately captain-approved CircleCI ingress implementation, source-evidence contract, or conformance proof is proposed.",
+        "The provider's authentication, delivery identity, event scope, or replay semantics are retained or revised in the source lock.",
+        "The selected transport factory, worker boundary, staging receipt, or checkpoint contract changes."
+      ],
+      "supersedes": []
+    },
+    {
       "id": "gitlab.inbound-webhook-receiver.v1",
       "layer": "sync_contract_transport",
       "status": "planned",
@@ -2235,6 +2495,134 @@
       "supersedes": []
     },
     {
+      "id": "jira.inbound-webhook-receiver.v1",
+      "layer": "sync_contract_transport",
+      "status": "planned",
+      "kind": "connector_specific_reference",
+      "summary": "Deferred until after Batch R1 merge: a planned Jira inbound webhook receiver may turn the source-cited registerDynamicWebhooks provider registration fact into a selected ETL source only after separate captain approval and proof. Registering a provider webhook configures provider delivery to a URL; it is not a Polymetrics ingress endpoint, receiver, worker, executor, or runnable sync transport.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/synctransport",
+        "supporting_packages": [
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/synccontract"
+        ],
+        "files": [
+          "internal/app/transport_composition.go",
+          "internal/connectors/sync_transport.go",
+          "internal/synctransport/definition_composition.go",
+          "internal/synctransport/orchestrator.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/sync_transport.go",
+            "name": "SyncTransportDescriptor"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "DefinitionFactory"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "RegisterDeclaredTransports"
+          },
+          {
+            "file": "internal/synctransport/orchestrator.go",
+            "name": "(*Orchestrator).Run"
+          },
+          {
+            "file": "internal/app/transport_composition.go",
+            "name": "(*App).composeTransportRegistry"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "Jira webhook HTTP delivery",
+          "HTTP/REST"
+        ],
+        "source_forms": [
+          "Jira source-lock dynamic-webhook registration facts"
+        ],
+        "request_response_shapes": [
+          "raw inbound HTTP body and source-cited provider authentication material when available",
+          "source-selected Jira event envelope",
+          "durably staged work item and worker receipt"
+        ],
+        "sync_modes": [
+          "change_capture"
+        ],
+        "guarantees": [
+          "no inbound request is executable under this planned entry",
+          "a future receiver must retain the raw body, verify only source-cited Jira authentication material before parsing, deduplicate only through a source-cited replay identity, durably stage accepted work, and dispatch a selected worker",
+          "a future checkpoint may advance only after durable staging and worker acknowledgement"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "application_composition",
+          "definition_field",
+          "interface_registration"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/jira/sources/jira-source-lane-matrix.json"
+        ],
+        "selectors": [
+          "source operation ID jira.rest.registerDynamicWebhooks remains a provider configuration fact with url plus webhooks[].events",
+          "a future connector-owned sync_transport.json must select one registered receiver and conformance pair after separate captain approval"
+        ],
+        "notes": "This authoring-only planned record creates no sync_transport.json, ingress endpoint, worker, executor, CLI command, or provider I/O path. It reuses transport.sync-contract.v1 and runtime.provider-extension-seams.v1 rather than proposing generic webhook runtime behavior."
+      },
+      "constraints": [
+        "Jira dynamic-webhook registration is not Polymetrics ingress or runtime execution.",
+        "Do not infer a delivery identity, signature scheme, event scope, retry policy, checkpoint, or executor from the registration request alone.",
+        "A future receiver must reject invalid source-cited authentication before parsing, use a source-cited replay identity for dedupe, and stage accepted work durably before a worker or checkpoint can acknowledge it.",
+        "Implementation is deferred until after Batch R1 merge and requires separate captain approval, source evidence, red tests, and conformance proof."
+      ],
+      "non_goals": [
+        "Implementing an HTTP ingress server, webhook receiver, worker, or Jira sync transport in Batch R1.",
+        "Treating a provider dynamic-webhook registration mutation as an executable ETL source.",
+        "Adding generic arbitrary-webhook ingestion or connector-name branching."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Jira dynamic webhook source mapping",
+          "files": [
+            "internal/connectors/defs/jira/sources/jira-source-lane-matrix.json"
+          ],
+          "notes": "The source operation documents url plus webhooks[].events; its sync cell remains missing foundation rather than claiming an inbound receiver."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/defs/jira",
+          "file": "internal/connectors/defs/jira/source_lane_matrix_test.go",
+          "name": "TestJiraSourceLaneMatrixRetainsEveryLockedOperationAndLane"
+        },
+        {
+          "package": "./internal/connectors/defs/jira",
+          "file": "internal/connectors/defs/jira/source_lane_matrix_test.go",
+          "name": "TestJiraSourceLaneMatrixUsesDocumentedSemanticsAndContinuationFacts"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "cli-webhook-event-surface-foundation-r1",
+          "reference": "internal/connectors/defs/jira/sources/jira-source-lane-matrix.json#foundation_atlas.sync_actual_gap",
+          "notes": "The connector-owned matrix retains the registration row and explicitly states that no inbound Jira receiver or selected source executor exists."
+        }
+      ],
+      "update_conditions": [
+        "Batch R1 has merged and a separately captain-approved Jira ingress implementation, source-evidence contract, or conformance proof is proposed.",
+        "The provider's authentication, delivery identity, event scope, or replay semantics are retained or revised in the source lock.",
+        "The selected transport factory, worker boundary, staging receipt, or checkpoint contract changes."
+      ],
+      "supersedes": []
+    },
+    {
       "id": "stripe.inbound-webhook-receiver.v1",
       "layer": "sync_contract_transport",
       "status": "planned",
@@ -2358,6 +2746,134 @@
       "update_conditions": [
         "Batch R1 has merged and a separately approved Stripe ingress implementation, source-evidence contract, or conformance proof is proposed.",
         "The provider's webhook signature, delivery identity, event scope, or replay semantics are retained or revised in the source lock.",
+        "The selected transport factory, worker boundary, staging receipt, or checkpoint contract changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "vercel.inbound-webhook-receiver.v1",
+      "layer": "sync_contract_transport",
+      "status": "planned",
+      "kind": "connector_specific_reference",
+      "summary": "Deferred until after Batch R1 merge: a planned Vercel inbound webhook receiver may turn the source-cited createWebhook provider registration fact into a selected ETL source only after separate captain approval and proof. Creating a provider webhook configures Vercel delivery to a URL; it is not a Polymetrics ingress endpoint, receiver, worker, executor, or runnable sync transport.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/synctransport",
+        "supporting_packages": [
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/synccontract"
+        ],
+        "files": [
+          "internal/app/transport_composition.go",
+          "internal/connectors/sync_transport.go",
+          "internal/synctransport/definition_composition.go",
+          "internal/synctransport/orchestrator.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/sync_transport.go",
+            "name": "SyncTransportDescriptor"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "DefinitionFactory"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "RegisterDeclaredTransports"
+          },
+          {
+            "file": "internal/synctransport/orchestrator.go",
+            "name": "(*Orchestrator).Run"
+          },
+          {
+            "file": "internal/app/transport_composition.go",
+            "name": "(*App).composeTransportRegistry"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "Vercel webhook HTTP delivery",
+          "HTTP/REST"
+        ],
+        "source_forms": [
+          "Vercel source-lock webhook registration facts"
+        ],
+        "request_response_shapes": [
+          "raw inbound HTTP body and source-cited provider authentication material when available",
+          "source-selected Vercel event envelope",
+          "durably staged work item and worker receipt"
+        ],
+        "sync_modes": [
+          "change_capture"
+        ],
+        "guarantees": [
+          "no inbound request is executable under this planned entry",
+          "a future receiver must retain the raw body, verify only source-cited Vercel authentication material before parsing, deduplicate only through a source-cited replay identity, durably stage accepted work, and dispatch a selected worker",
+          "a future checkpoint may advance only after durable staging and worker acknowledgement"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "application_composition",
+          "definition_field",
+          "interface_registration"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/vercel/sources/vercel-source-lane-matrix.json"
+        ],
+        "selectors": [
+          "source operation ID vercel.rest.createWebhook remains a provider configuration fact with url plus events",
+          "a future connector-owned sync_transport.json must select one registered receiver and conformance pair after separate captain approval"
+        ],
+        "notes": "This authoring-only planned record creates no sync_transport.json, ingress endpoint, worker, executor, CLI command, or provider I/O path. It reuses transport.sync-contract.v1 and runtime.provider-extension-seams.v1 rather than proposing generic webhook runtime behavior."
+      },
+      "constraints": [
+        "Vercel webhook creation is not Polymetrics ingress or runtime execution.",
+        "Do not infer a delivery identity, signature scheme, event scope, retry policy, checkpoint, or executor from the registration request alone.",
+        "A future receiver must reject invalid source-cited authentication before parsing, use a source-cited replay identity for dedupe, and stage accepted work durably before a worker or checkpoint can acknowledge it.",
+        "Implementation is deferred until after Batch R1 merge and requires separate captain approval, source evidence, red tests, and conformance proof."
+      ],
+      "non_goals": [
+        "Implementing an HTTP ingress server, webhook receiver, worker, or Vercel sync transport in Batch R1.",
+        "Treating a provider webhook-create mutation as an executable ETL source.",
+        "Adding generic arbitrary-webhook ingestion or connector-name branching."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Vercel webhook source mapping",
+          "files": [
+            "internal/connectors/defs/vercel/sources/vercel-source-lane-matrix.json"
+          ],
+          "notes": "The source operation documents url plus events registration; its sync cell remains missing foundation rather than claiming an inbound receiver."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/defs/vercel",
+          "file": "internal/connectors/defs/vercel/source_lane_matrix_test.go",
+          "name": "TestVercelSourceLaneMatrixRetainsEveryLockedOperationAndLane"
+        },
+        {
+          "package": "./internal/connectors/defs/vercel",
+          "file": "internal/connectors/defs/vercel/source_lane_matrix_test.go",
+          "name": "TestVercelSourceLaneMatrixUsesRetainedSourceSemanticsBeyondHTTPVerb"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "cli-webhook-event-surface-foundation-r1",
+          "reference": "internal/connectors/defs/vercel/sources/vercel-source-lane-matrix.json#foundation_atlas.sync_actual_gap",
+          "notes": "The connector-owned matrix retains the registration row and explicitly states that no inbound Vercel receiver or selected source executor exists."
+        }
+      ],
+      "update_conditions": [
+        "Batch R1 has merged and a separately captain-approved Vercel ingress implementation, source-evidence contract, or conformance proof is proposed.",
+        "The provider's authentication, delivery identity, event scope, or replay semantics are retained or revised in the source lock.",
         "The selected transport factory, worker boundary, staging receipt, or checkpoint contract changes."
       ],
       "supersedes": []

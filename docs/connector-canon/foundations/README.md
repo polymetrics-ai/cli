@@ -11,6 +11,10 @@ The files in this directory have separate roles:
 
 - [`catalog.json`](catalog.json) records the current foundation inventory.
 - [`catalog.schema.json`](catalog.schema.json) is the closed catalog shape.
+- [`BATCH-R1-DEMAND-REGISTER.md`](BATCH-R1-DEMAND-REGISTER.md) reconciles the
+  frozen Batch R1 deferred evidence with existing and planned Atlas entries.
+  It is issue-scoped authoring evidence, not a runtime input or execution
+  declaration.
 - This README is the sole owner of the discovery and maintenance procedure.
 
 ## Authority boundaries
