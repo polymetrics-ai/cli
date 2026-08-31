@@ -172,6 +172,98 @@ func TestGitLabEnabledContractReconcilesSourceLock(t *testing.T) {
 	}
 }
 
+// TestGitLabEnabledContractUsesExactSemanticSourcePartitions proves the
+// optional source-ID selector is exercised by GitLab rather than falling back
+// to an HTTP-method approximation. In particular, retained semantic POST
+// lookups belong to direct_read, while source mutations stay in reverse_etl.
+func TestGitLabEnabledContractUsesExactSemanticSourcePartitions(t *testing.T) {
+	const defsRoot = "../../internal/connectors/defs"
+	bundle, err := engine.Load(os.DirFS(defsRoot), "gitlab")
+	if err != nil {
+		t.Fatalf("load GitLab bundle: %v", err)
+	}
+	contract := bundle.EnabledContract
+	if contract == nil {
+		t.Fatal("GitLab enabled contract is absent")
+	}
+
+	matrixRaw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources", "gitlab-source-lane-matrix.json"))
+	if err != nil {
+		t.Fatalf("read GitLab source-lane matrix: %v", err)
+	}
+	var matrix struct {
+		SourceOperations []struct {
+			SourceID string `json:"source_id"`
+			Lanes    map[string]struct {
+				Applicability string `json:"applicability"`
+			} `json:"lanes"`
+		} `json:"source_operations"`
+	}
+	if err := json.Unmarshal(matrixRaw, &matrix); err != nil {
+		t.Fatalf("decode GitLab source-lane matrix: %v", err)
+	}
+
+	want := map[string]map[string]bool{
+		"direct_read": {},
+		"reverse_etl": {},
+	}
+	for _, row := range matrix.SourceOperations {
+		if !strings.HasPrefix(row.SourceID, "gitlab.rest.") {
+			continue
+		}
+		operationID := strings.TrimPrefix(row.SourceID, "gitlab.rest.")
+		for lane := range want {
+			if row.Lanes[lane].Applicability == "source_candidate" {
+				want[lane][operationID] = true
+			}
+		}
+	}
+	if len(want["direct_read"]) != 762 || len(want["reverse_etl"]) != 990 {
+		t.Fatalf("GitLab semantic source matrix direct=%d reverse=%d, want 762/990", len(want["direct_read"]), len(want["reverse_etl"]))
+	}
+	for _, semanticPOSTRead := range []string{
+		"postApiV4AiThirdPartyAgentsDirectAccess",
+		"postApiV4Glql",
+		"postApiV4ProjectsIdMlMlflowApi20MlflowRunsSearch",
+	} {
+		if !want["direct_read"][semanticPOSTRead] || want["reverse_etl"][semanticPOSTRead] {
+			t.Fatalf("GitLab semantic POST read %q direct=%t reverse=%t, want direct-only", semanticPOSTRead, want["direct_read"][semanticPOSTRead], want["reverse_etl"][semanticPOSTRead])
+		}
+	}
+
+	for _, lane := range contract.Lanes {
+		wantIDs, relevant := want[lane.Name]
+		if !relevant {
+			continue
+		}
+		if !lane.Source.Partition || len(lane.Source.Methods) != 0 {
+			t.Fatalf("GitLab %s source selector = %+v, want exact operation-ID partition", lane.Name, lane.Source)
+		}
+		if lane.Source.Expected != len(wantIDs) || len(lane.Source.OperationIDs) != len(wantIDs) {
+			t.Fatalf("GitLab %s source selector counts expected=%d ids=%d, want %d", lane.Name, lane.Source.Expected, len(lane.Source.OperationIDs), len(wantIDs))
+		}
+		got := make(map[string]bool, len(lane.Source.OperationIDs))
+		for _, operationID := range lane.Source.OperationIDs {
+			got[operationID] = true
+		}
+		if !mapsEqual(got, wantIDs) {
+			t.Fatalf("GitLab %s exact source IDs drift from semantic matrix", lane.Name)
+		}
+	}
+}
+
+func mapsEqual(got, want map[string]bool) bool {
+	if len(got) != len(want) {
+		return false
+	}
+	for key := range want {
+		if !got[key] {
+			return false
+		}
+	}
+	return true
+}
+
 // TestGitLabP5GeneratedNamedJSONValueFlagsRemainSourceBound proves that the
 // narrow P5 closed-root action path retains the declared bare-string policy
 // for an explicitly named JSON value. The allowance applies to the named

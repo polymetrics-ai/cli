@@ -2878,6 +2878,12 @@
     },
     {
       "method": "GET",
+      "path": "/analytics/code_review",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
       "path": "/analytics/group_activity/issues_count",
       "kind": "rest_read",
       "max_bytes": 67108864
@@ -3142,6 +3148,12 @@
     },
     {
       "method": "GET",
+      "path": "/groups/{id}/-/epics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
       "path": "/groups/{id}/-/epics/{epic_iid}",
       "kind": "rest_read",
       "max_bytes": 67108864
@@ -3340,6 +3352,12 @@
     },
     {
       "method": "GET",
+      "path": "/groups/{id}/epics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
       "path": "/groups/{id}/epics/{epic_iid}",
       "kind": "rest_read",
       "max_bytes": 67108864
@@ -3490,6 +3508,18 @@
     },
     {
       "method": "GET",
+      "path": "/groups/{id}/issues",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/issues_statistics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
       "path": "/groups/{id}/iterations",
       "kind": "rest_read",
       "max_bytes": 67108864
@@ -3551,6 +3581,12 @@
     {
       "method": "GET",
       "path": "/groups/{id}/merge_request_approval_setting",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/groups/{id}/merge_requests",
       "kind": "rest_read",
       "max_bytes": 67108864
     },
@@ -3820,6 +3856,12 @@
     },
     {
       "method": "GET",
+      "path": "/issues_statistics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
       "path": "/job",
       "kind": "rest_read",
       "max_bytes": 67108864
@@ -3875,6 +3917,12 @@
     {
       "method": "GET",
       "path": "/member_roles",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/merge_requests",
       "kind": "rest_read",
       "max_bytes": 67108864
     },
@@ -4288,6 +4336,12 @@
     },
     {
       "method": "GET",
+      "path": "/projects/{id}/deployments/{deployment_id}/merge_requests",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
       "path": "/projects/{id}/environments",
       "kind": "rest_read",
       "max_bytes": 67108864
@@ -4421,6 +4475,12 @@
     {
       "method": "GET",
       "path": "/projects/{id}/invited_groups",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/issues",
       "kind": "rest_read",
       "max_bytes": 67108864
     },
@@ -4600,6 +4660,12 @@
     },
     {
       "method": "GET",
+      "path": "/projects/{id}/issues_statistics",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
       "path": "/projects/{id}/iterations",
       "kind": "rest_read",
       "max_bytes": 67108864
@@ -4697,6 +4763,12 @@
     {
       "method": "GET",
       "path": "/projects/{id}/merge_request_approval_setting",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/merge_requests",
       "kind": "rest_read",
       "max_bytes": 67108864
     },
@@ -5464,6 +5536,12 @@
     },
     {
       "method": "GET",
+      "path": "/projects/{id}/repository/files/{file_path}/blame",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
       "path": "/projects/{id}/repository/health",
       "kind": "rest_read",
       "max_bytes": 67108864
@@ -5735,6 +5813,12 @@
     {
       "method": "GET",
       "path": "/projects/{id}/variables",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "GET",
+      "path": "/projects/{id}/variables/{key}",
       "kind": "rest_read",
       "max_bytes": 67108864
     },
@@ -6245,6 +6329,54 @@
     {
       "method": "GET",
       "path": "/vulnerabilities/{id}/issue_links",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "POST",
+      "path": "/ai/third_party_agents/direct_access",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "POST",
+      "path": "/code_suggestions/connection_details",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "POST",
+      "path": "/geo/node_proxy/{id}/graphql",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "POST",
+      "path": "/integrations/slack/options",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "POST",
+      "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "POST",
+      "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
+      "kind": "rest_read",
+      "max_bytes": 67108864
+    },
+    {
+      "method": "POST",
+      "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
       "kind": "rest_read",
       "max_bytes": 67108864
     }

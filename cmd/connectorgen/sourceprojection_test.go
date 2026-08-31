@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"maps"
+	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -70,6 +71,17 @@ func TestSourceProjectionSingleDataEnvelopeUsesRequestBodyRequiredness(t *testin
 			}
 		})
 	}
+
+	t.Run("non GitLab PATCH mutation remains a mutation", func(t *testing.T) {
+		mutation := sourceCitedMutationTestOperation("stripe", "stripe.items.update", http.MethodPatch, "/items/{item_id}")
+		bundle := engine.Bundle{Name: "stripe", CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+			Path: "items update", Intent: "direct_write", Availability: "implemented",
+			APISurface: []engine.CLISurfaceEndpointRef{{Method: http.MethodPatch, Path: "/items/{item_id}"}},
+		}}}}
+		if !sourceProjectionMutationClaimsImplementedAction(bundle, mutation) {
+			t.Fatal("non-GitLab PATCH mutation was incorrectly admitted as a semantic direct read")
+		}
+	})
 }
 
 func TestSourceProjectionQueryArrayUsesSourceFormEncoding(t *testing.T) {
@@ -937,7 +949,7 @@ func TestGitLabSourceLockSurfaceStatesCurrentEligibleLaneDisposition(t *testing.
 	if err := json.Unmarshal(cliRaw, &surface); err != nil {
 		t.Fatalf("decode GitLab CLI surface: %v", err)
 	}
-	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") {
+	if !strings.Contains(surface.Tagline, "604 source-bound direct reads") || !strings.Contains(surface.Tagline, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") {
 		t.Fatalf("GitLab CLI tagline = %q, want current source-lock lane disposition", surface.Tagline)
 	}
 	topics := strings.Join(func() []string {
@@ -4926,6 +4938,199 @@ func TestSourceProjectionSourceCitedNonExecutableMutationDispositionRejectsImple
 	}
 	if bundle.CLISurface.Commands[0].Availability != "implemented" {
 		t.Fatalf("implemented command availability = %q, want preserved implementation claim", bundle.CLISurface.Commands[0].Availability)
+	}
+}
+
+func TestSourceProjectionNonExecutableMutationDispositionAllowsOnlyClosedBodylessPOSTRead(t *testing.T) {
+	const (
+		sourceID = "postSourceLookup"
+		path     = "/api/v4/lookups"
+		mapped   = "/lookups"
+	)
+
+	newSource := func(outputClass sourceOutputClass) sourceOperationDescriptor {
+		mediaType := ""
+		if outputClass == sourceOutputJSON {
+			mediaType = "application/json"
+		}
+		return sourceOperationDescriptor{
+			Connector: "gitlab", Protocol: "rest", SourceID: sourceID, ProviderOperationID: sourceID,
+			Method: http.MethodPost, Path: path, MappingPath: mapped,
+			Source: sourceImportSource{URL: "https://provider.example.test/openapi.json", Location: "#/paths/~1api~1v4~1lookups/post"},
+			Output: sourceOutputDescriptor{Class: outputClass, Success: []sourceOutputVariant{{Status: "200", MediaType: mediaType, Class: outputClass}}},
+		}
+	}
+	newBundle := func(noRequestBody bool, intent string, bodySchema json.RawMessage, contentType string, flags []engine.CLIFlag) engine.Bundle {
+		return engine.Bundle{
+			Name: "gitlab",
+			Operations: []engine.OperationSpec{{
+				ID: "source_read_post_lookup", Kind: "rest_read", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
+				SourceOperation: &engine.SourceOperationBinding{ID: sourceID, Method: http.MethodPost, Path: mapped},
+				REST:            &engine.RESTOperationSpec{Method: http.MethodPost, Path: mapped, NoRequestBody: noRequestBody, ContentType: contentType, BodySchema: bodySchema, MaxBytes: 1024},
+			}},
+			CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
+				Path: "api source-read-post-lookup", Intent: intent, Availability: "implemented", Operation: "source_read_post_lookup", SourceOperation: sourceID,
+				APISurface: []engine.CLISurfaceEndpointRef{{Method: http.MethodPost, Path: mapped}}, Flags: flags,
+			}}},
+		}
+	}
+
+	disposition := sourceNonExecutableMutationDisposition{
+		Source: sourceOperationCitation{SourceID: sourceID, Method: http.MethodPost, Path: path},
+		Reason: "legacy method-only mutation classification",
+	}
+	t.Run("closed bodyless semantic direct read", func(t *testing.T) {
+		// A provider can document a bodyless semantic lookup as a status-only
+		// response. It remains a closed direct read when its retained request
+		// contract has no body and the declared operation opts into the exact
+		// no_request_body form.
+		source := newSource(sourceOutputStatus)
+		bundle := newBundle(true, "direct_read", nil, "", nil)
+		if sourceProjectionMutationClaimsImplementedAction(bundle, source) {
+			t.Fatal("closed bodyless POST direct read was treated as an implemented mutation")
+		}
+		if err := sourceProjectionApplyNonExecutableMutationDispositions(bundle, &sourceImportResult{Operations: []sourceOperationDescriptor{source}}, []sourceNonExecutableMutationDisposition{disposition}); err != nil {
+			t.Fatalf("closed bodyless POST direct read admission: %v", err)
+		}
+	})
+
+	for _, testCase := range []struct {
+		name          string
+		noRequestBody bool
+		intent        string
+		bodySchema    json.RawMessage
+		contentType   string
+		flags         []engine.CLIFlag
+		body          *sourceRequestBodyDescriptor
+	}{
+		{
+			name:        "JSON body POST remains a mutation",
+			intent:      "direct_read",
+			bodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false}`),
+			contentType: "application/json",
+			body:        &sourceRequestBodyDescriptor{Schema: map[string]any{"type": "object", "additionalProperties": false}},
+		},
+		{
+			name:   "missing no-request-body marker remains a mutation",
+			intent: "direct_read",
+		},
+		{
+			name:          "body flag defeats no-request-body marker",
+			noRequestBody: true,
+			intent:        "direct_read",
+			flags:         []engine.CLIFlag{{Name: "payload", MapsTo: "body.payload"}},
+		},
+		{
+			name:   "non GitLab mutation remains a mutation",
+			intent: "direct_write",
+		},
+	} {
+		testCase := testCase
+		t.Run(testCase.name, func(t *testing.T) {
+			source := newSource(sourceOutputJSON)
+			source.Request.Body = testCase.body
+			bundle := newBundle(testCase.noRequestBody, testCase.intent, testCase.bodySchema, testCase.contentType, testCase.flags)
+			if !sourceProjectionMutationClaimsImplementedAction(bundle, source) {
+				t.Fatal("ordinary or malformed POST was incorrectly admitted as a semantic direct read")
+			}
+			if err := sourceProjectionApplyNonExecutableMutationDispositions(bundle, &sourceImportResult{Operations: []sourceOperationDescriptor{source}}, []sourceNonExecutableMutationDisposition{disposition}); err == nil || !strings.Contains(err.Error(), "implemented executable action") {
+				t.Fatalf("ordinary or malformed POST mutation disposition error = %v, want implemented-action rejection", err)
+			}
+		})
+	}
+}
+
+// TestGitLabSourceProjectionAdmitsOnlyRetainedBodylessSemanticPOSTReads
+// proves that the narrow exception reaches the real retained GitLab source
+// rows consumed by the canonical surface-sync path. The table is intentionally
+// source-ID based: a generic POST method exception would make unrelated
+// mutations look executable.
+func TestGitLabSourceProjectionAdmitsOnlyRetainedBodylessSemanticPOSTReads(t *testing.T) {
+	const defsRoot = "../../internal/connectors/defs"
+	bundle, err := engine.Load(os.DirFS(defsRoot), "gitlab")
+	if err != nil {
+		t.Fatalf("load GitLab bundle: %v", err)
+	}
+	raw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources", "gitlab-operation-descriptor.json"))
+	if err != nil {
+		t.Fatalf("read GitLab source descriptor: %v", err)
+	}
+	var descriptor sourceImportDescriptorDocument
+	if err := decodeSourceStrictJSON(raw, &descriptor); err != nil {
+		t.Fatalf("decode GitLab source descriptor: %v", err)
+	}
+	sources := make(map[string]sourceOperationDescriptor, len(descriptor.Operations))
+	for _, source := range descriptor.Operations {
+		sources[source.SourceID] = source
+	}
+
+	want := []string{
+		"postApiV4AiThirdPartyAgentsDirectAccess",
+		"postApiV4CodeSuggestionsConnectionDetails",
+		"postApiV4GeoNodeProxyIdGraphql",
+		"postApiV4IntegrationsSlackOptions",
+		"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+		"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+		"postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+		"postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+	}
+	// These legacy commands share a route with the semantic read. Their
+	// continued reachability must not make the exact no-body read source row
+	// method-classify as a mutation during surface-sync admission.
+	legacyMutationViews := map[string]bool{
+		"postApiV4GeoNodeProxyIdGraphql": true,
+		"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls": true,
+		"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls":                              true,
+	}
+	for _, sourceID := range want {
+		source, found := sources[sourceID]
+		if !found {
+			t.Fatalf("GitLab source descriptor omits %q", sourceID)
+		}
+		if source.Request.Body != nil || strings.TrimSpace(source.Request.MediaType) != "" || len(source.Request.Media) != 0 {
+			t.Fatalf("GitLab source %q is not a bodyless source contract: %+v", sourceID, source.Request)
+		}
+		if sourceProjectionMutationClaimsImplementedAction(bundle, source) {
+			t.Fatalf("GitLab closed bodyless semantic POST read %q remains classified as an implemented mutation", sourceID)
+		}
+		intents := map[string]bool{}
+		for _, command := range bundle.CLISurface.Commands {
+			if command.SourceOperation == sourceID && command.Availability == "implemented" {
+				intents[command.Intent] = true
+			}
+		}
+		if !intents["direct_read"] {
+			t.Fatalf("GitLab closed bodyless semantic POST read %q lost its direct_read command", sourceID)
+		}
+		if legacyMutationViews[sourceID] && (!intents["direct_write"] || !intents["reverse_etl"]) {
+			t.Fatalf("GitLab semantic POST read %q legacy write/reverse views = %v, want both preserved", sourceID, intents)
+		}
+	}
+
+	const genuineMutationID = "postApiV4AdminCiVariables"
+	genuineMutation, found := sources[genuineMutationID]
+	if !found || genuineMutation.Request.Body == nil {
+		t.Fatalf("GitLab genuine POST mutation %q lost its retained request body", genuineMutationID)
+	}
+	if !sourceProjectionMutationClaimsImplementedAction(bundle, genuineMutation) {
+		t.Fatalf("GitLab genuine POST mutation %q was incorrectly admitted as a semantic direct read", genuineMutationID)
+	}
+}
+
+// TestGitLabClosedBodylessPOSTReadsReachSurfaceSync proves that the same
+// retained semantic POST-read cohort can reach the canonical source-projection
+// step that precedes endpoint-ledger reconciliation. This exercises the
+// projection bundle, not merely an engine-loaded fixture.
+func TestGitLabClosedBodylessPOSTReadsReachSurfaceSync(t *testing.T) {
+	stats, err := syncCheckedInSourceProjection(filepath.Join("..", "..", "internal", "connectors", "defs", "gitlab"), "gitlab", true)
+	if err != nil {
+		t.Fatalf("GitLab source projection rejects closed bodyless semantic POST reads: %v", err)
+	}
+	// This is an admission boundary, not a broad surface-sync drift test. A
+	// legacy write projection must not replace any of the exact bodyless POST
+	// direct-read API bindings while the canonical ledger is being reconciled.
+	if stats.Surface != 0 {
+		t.Fatalf("GitLab source projection rewrote semantic POST direct-read API bindings: %+v", stats)
 	}
 }
 

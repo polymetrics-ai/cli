@@ -937,6 +937,12 @@ func validateOperationDirectReadBodyFields(op OperationSpec, bodyFields []string
 		}
 		return fmt.Errorf("operation %q does not accept request body fields", op.ID)
 	}
+	if op.REST.NoRequestBody {
+		if len(bodyFields) == 0 {
+			return nil
+		}
+		return fmt.Errorf("operation %q declares no_request_body and does not accept request body fields", op.ID)
+	}
 	if operationDirectReadContentType(op) != "application/json" {
 		if len(bodyFields) == 0 {
 			return nil
@@ -958,6 +964,12 @@ func operationReadBody(op OperationSpec, overrides map[string]any, rawBody *stri
 	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
 		if rawBody != nil {
 			return nil, fmt.Errorf("operation %q raw body requires a POST operation", op.ID)
+		}
+		return nil, nil
+	}
+	if op.REST.NoRequestBody {
+		if len(overrides) != 0 || rawBody != nil {
+			return nil, fmt.Errorf("operation %q declares no_request_body and does not accept a request body", op.ID)
 		}
 		return nil, nil
 	}
@@ -1025,6 +1037,9 @@ func validateOperationDirectReadPOSTContract(op OperationSpec) error {
 	if op.REST == nil {
 		return fmt.Errorf("operation direct read POST requires rest declaration")
 	}
+	if op.REST.NoRequestBody {
+		return validateOperationDirectReadBodylessPOSTContract(op)
+	}
 	if len(op.REST.BodySchema) == 0 {
 		return fmt.Errorf("operation direct read POST requires body_schema")
 	}
@@ -1044,6 +1059,30 @@ func validateOperationDirectReadPOSTContract(op OperationSpec) error {
 	default:
 		return fmt.Errorf("operation direct read POST requires application/json or text/plain content_type")
 	}
+}
+
+// validateOperationDirectReadBodylessPOSTContract admits one deliberately
+// closed exception to the normal JSON/text POST-read contract. The retained
+// provider source must name this exact POST operation and explicitly prove that
+// it has no request body; callers therefore receive neither a generic POST
+// escape hatch nor an inferred empty JSON object.
+func validateOperationDirectReadBodylessPOSTContract(op OperationSpec) error {
+	if op.REST == nil {
+		return fmt.Errorf("operation direct read bodyless POST requires rest declaration")
+	}
+	if op.Kind != "rest_read" {
+		return fmt.Errorf("operation direct read bodyless POST requires rest_read kind")
+	}
+	if method := strings.ToUpper(strings.TrimSpace(op.REST.Method)); method != http.MethodPost {
+		return fmt.Errorf("operation direct read no_request_body requires POST, got %s", method)
+	}
+	if op.SourceOperation == nil || strings.TrimSpace(op.SourceOperation.ID) == "" || strings.ToUpper(strings.TrimSpace(op.SourceOperation.Method)) != http.MethodPost || op.SourceOperation.Path != op.REST.Path {
+		return fmt.Errorf("operation direct read bodyless POST requires an exact matching POST source_operation")
+	}
+	if len(op.REST.Body) != 0 || len(op.REST.BodySchema) != 0 || op.REST.Multipart != nil || strings.TrimSpace(op.REST.ContentType) != "" {
+		return fmt.Errorf("operation direct read bodyless POST must not declare body, body_schema, multipart, or content_type")
+	}
+	return nil
 }
 
 // compileOperationDirectReadBodySchema applies the engine's conservative

@@ -96,18 +96,17 @@ func TestGitLabMissingFoundationLedgerStaysSourceBound(t *testing.T) {
 		t.Fatalf("GitLab mapping-contract debts = %#v, want one semantic-method partition debt", debts)
 	}
 	debt := mustGitLabObject(t, debts[0])
-	if stringAt(debt, "id") != "gitlab-semantic-lane-method-partition-reconciliation-r1" || stringAt(debt, "state") != "recorded_mapping_contract_debt" || !strings.Contains(stringAt(debt, "reason"), "multi-selector") {
+	if stringAt(debt, "id") != "gitlab-semantic-lane-method-partition-reconciliation-r1" || stringAt(debt, "state") != "resolved_exact_source_id_partition" || !strings.Contains(stringAt(debt, "reason"), "multi-selector") {
 		t.Fatalf("GitLab mapping-contract debt = %#v, want explicit non-runtime semantic/method reconciliation record", debt)
 	}
 }
 
 // TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability keeps
 // the connector-local artifacts honest after the reusable typed alias
-// foundation landed. A safe alias is not itself an executable command: these
-// source rows stay mapped_unproven until a declaration-owned direct-read
-// artifact is materialized. The sole dollar-prefixed key remains a
-// connector-local mapped-unproven restriction because it is outside the
-// closed typed alias grammar.
+// foundation landed. The safe bracketed-key cohort is materialized only after
+// each row has an exact direct-read operation and CLI binding; the sole
+// dollar-prefixed key remains connector-local mapped_unproven because it is
+// outside the closed typed alias grammar.
 func TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability(t *testing.T) {
 	const aliasFoundation = "runtime-provider-parameter-alias-investigating-r1"
 	const unsupportedSourceID = "getApiV4ProjectsProjectIdPackagesNugetV2Packages"
@@ -128,12 +127,6 @@ func TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability(t *t
 		"getApiV4ProjectsIdRepositoryFilesFilePathBlame":         true,
 		"getApiV4ProjectsIdVariablesKey":                         true,
 	}
-	statusOutputSources := map[string]bool{
-		"getApiV4GroupsIdIssuesStatistics":   true,
-		"getApiV4IssuesStatistics":           true,
-		"getApiV4ProjectsIdIssuesStatistics": true,
-	}
-
 	descriptor := loadGitLabObject(t, gitLabDescriptorPath)
 	historicalGaps := gitLabDescriptorGapSourceIDs(t, aliasFoundation)
 	wantHistoricalGaps := map[string]bool{"gitlab.rest." + unsupportedSourceID: true}
@@ -162,9 +155,10 @@ func TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability(t *t
 
 	api := loadGitLabObject(t, "api_surface.json")
 	cli := loadGitLabObject(t, "cli_surface.json")
+	operations := loadGitLabObject(t, "operations.json")
 	for sourceID := range safeSourceIDs {
-		operation := gitLabDescriptorOperation(t, descriptor, sourceID)
-		queryKeys := gitLabDescriptorQueryKeys(t, operation)
+		descriptorOperation := gitLabDescriptorOperation(t, descriptor, sourceID)
+		queryKeys := gitLabDescriptorQueryKeys(t, descriptorOperation)
 		bracketed := false
 		for _, key := range queryKeys {
 			if strings.Contains(key, "[") {
@@ -181,23 +175,18 @@ func TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability(t *t
 			t.Fatalf("GitLab safe source %q alias collision: %v", sourceID, err)
 		}
 
-		apiOperation := gitLabAPISurfaceOperationForSourceID(t, api, sourceID)
-		if stringAt(apiOperation, "model") != "direct_read" || stringAt(apiOperation, "status") != "blocked" || apiOperation["blocked_by_default"] != true {
-			t.Fatalf("GitLab safe source %q API disposition = %#v, want blocked mapped-unproven direct-read", sourceID, apiOperation)
+		command := gitLabCommandBySourceIDAndIntent(t, cli, sourceID, "direct_read")
+		if stringAt(command, "availability") != "implemented" {
+			t.Fatalf("GitLab safe source %q command = %#v, want implemented direct-read artifact", sourceID, command)
 		}
-		reason := stringAt(apiOperation, "reason")
-		if !strings.Contains(reason, "source_disposition=mapped_unproven") || !strings.Contains(reason, "typed_provider_query_alias=available") || strings.Contains(reason, "missing_foundation=") {
-			t.Fatalf("GitLab safe source %q API reason = %q, want mapped-unproven typed-alias disposition without missing-foundation claim", sourceID, reason)
+		operation := gitLabOperationBySourceID(t, operations, sourceID)
+		if stringAt(command, "operation") != stringAt(operation, "id") {
+			t.Fatalf("GitLab safe source %q command operation=%q, want %q", sourceID, stringAt(command, "operation"), stringAt(operation, "id"))
 		}
-		notes := stringAt(apiOperation, "notes")
-		if !strings.Contains(notes, "historical_descriptor_alias_gap") || !strings.Contains(notes, "no declaration-owned direct-read artifact") {
-			t.Fatalf("GitLab safe source %q API notes = %q, want retained historical-gap and non-executable boundary", sourceID, notes)
-		}
-		if statusOutputSources[sourceID] && !strings.Contains(notes, "retained_success_output=status") {
-			t.Fatalf("GitLab status-output safe source %q API notes = %q, want retained status-output boundary", sourceID, notes)
-		}
-		if gitLabCLISurfaceHasSourceOperation(cli, sourceID) {
-			t.Fatalf("GitLab safe source %q incorrectly gained a declaration-owned CLI command", sourceID)
+		rest := objectAt(operation, "rest")
+		endpoint := gitLabAPISurfaceEndpoint(t, api, stringAt(rest, "method"), stringAt(rest, "path"))
+		if got := stringAt(objectAt(endpoint, "covered_by"), "direct_read"); got != stringAt(command, "path") {
+			t.Fatalf("GitLab safe source %q API coverage=%q, want command %q", sourceID, got, stringAt(command, "path"))
 		}
 	}
 
@@ -217,11 +206,9 @@ func TestGitLabProviderAliasArtifactDispositionTracksCurrentAliasCapability(t *t
 	t.Fatalf("GitLab unsupported source %q has no retained $filter key", unsupportedSourceID)
 }
 
-// TestGitLabMappingContractDebtIsSourceBound keeps the legacy method-only
-// enabled-contract partition honest. The semantic source matrix is the source
-// authority: source-semantic POST reads must not silently become reverse-ETL
-// mutations merely because the present contract cannot select both methods and
-// exact IDs in a partition.
+// TestGitLabMappingContractDebtIsSourceBound preserves the former
+// method-partition discrepancy as historical evidence, while requiring the
+// current enabled contract to reconcile semantic lanes by exact source IDs.
 func TestGitLabMappingContractDebtIsSourceBound(t *testing.T) {
 	matrix := loadGitLabObject(t, gitLabSourceLaneMatrixPath)
 	lock := loadGitLabObject(t, gitLabSourceLockPath)
@@ -254,20 +241,26 @@ func TestGitLabMappingContractDebtIsSourceBound(t *testing.T) {
 		t.Fatalf("GitLab semantic primary lanes = %+v post_reads=%d, want direct_read=762 direct_write=990 reverse_etl=990 post_reads=13", semantic, semanticPostReads)
 	}
 
-	methodPartition := map[string]map[string]any{}
+	exactPartition := map[string]map[string]any{}
 	var directWriteOverlay map[string]any
 	for _, raw := range mustGitLabArray(t, contract["lanes"]) {
 		lane := mustGitLabObject(t, raw)
 		name := stringAt(lane, "name")
 		if name == "direct_read" || name == "reverse_etl" {
-			methodPartition[name] = objectAt(lane, "source")
+			exactPartition[name] = objectAt(lane, "source")
 		}
 		if name == "direct_write" {
 			directWriteOverlay = objectAt(lane, "source")
 		}
 	}
-	if numberAt(methodPartition["direct_read"], "expected") != 749 || numberAt(methodPartition["reverse_etl"], "expected") != 1003 {
-		t.Fatalf("GitLab method-only contract denominators = %#v, want direct_read=749 reverse_etl=1003", methodPartition)
+	if numberAt(exactPartition["direct_read"], "expected") != semantic["direct_read"] || numberAt(exactPartition["reverse_etl"], "expected") != semantic["reverse_etl"] {
+		t.Fatalf("GitLab exact source-ID contract denominators = %#v, want semantic direct_read=%d reverse_etl=%d", exactPartition, semantic["direct_read"], semantic["reverse_etl"])
+	}
+	for lane, source := range exactPartition {
+		methods, methodsDeclared := source["methods"]
+		if source["partition"] != true || len(mustGitLabArray(t, source["operation_ids"])) != numberAt(source, "expected") || (methodsDeclared && len(mustGitLabArray(t, methods)) != 0) {
+			t.Fatalf("GitLab %s selector = %#v, want exact operation-ID partition without method approximation", lane, source)
+		}
 	}
 	if directWriteOverlay == nil || numberAt(directWriteOverlay, "expected") != 382 || directWriteOverlay["partition"] != false {
 		t.Fatalf("GitLab direct-write execution overlay = %#v, want non-partition declared-action expected=382", directWriteOverlay)
@@ -275,13 +268,20 @@ func TestGitLabMappingContractDebtIsSourceBound(t *testing.T) {
 
 	debts := mustGitLabArray(t, report["mapping_contract_debts"])
 	debt := mustGitLabObject(t, debts[0])
+	if stringAt(debt, "state") != "resolved_exact_source_id_partition" {
+		t.Fatalf("GitLab mapping-contract debt state=%q, want resolved exact-source-ID partition", stringAt(debt, "state"))
+	}
 	semanticDebt := objectAt(debt, "semantic_primary_applicable_cells")
 	if numberAt(semanticDebt, "direct_read") != semantic["direct_read"] || numberAt(semanticDebt, "direct_write") != semantic["direct_write"] || numberAt(semanticDebt, "reverse_etl") != semantic["reverse_etl"] || numberAt(debt, "semantic_post_direct_reads") != semanticPostReads {
 		t.Fatalf("GitLab semantic denominator debt = %#v, want exact source-matrix facts", debt)
 	}
 	methodDebt := objectAt(debt, "legacy_method_partition_expected")
-	if numberAt(methodDebt, "direct_read") != numberAt(methodPartition["direct_read"], "expected") || numberAt(methodDebt, "reverse_etl") != numberAt(methodPartition["reverse_etl"], "expected") {
-		t.Fatalf("GitLab method denominator debt = %#v, want current enabled-contract facts", debt)
+	if numberAt(methodDebt, "direct_read") != 749 || numberAt(methodDebt, "reverse_etl") != 1003 {
+		t.Fatalf("GitLab legacy method denominator history = %#v, want direct_read=749 reverse_etl=1003", debt)
+	}
+	exactDebt := objectAt(debt, "exact_source_id_partition_expected")
+	if numberAt(exactDebt, "direct_read") != numberAt(exactPartition["direct_read"], "expected") || numberAt(exactDebt, "reverse_etl") != numberAt(exactPartition["reverse_etl"], "expected") {
+		t.Fatalf("GitLab exact source-ID denominator record = %#v, want current enabled-contract facts", debt)
 	}
 	if numberAt(debt, "direct_write_execution_overlay_expected") != numberAt(directWriteOverlay, "expected") {
 		t.Fatalf("GitLab direct-write overlay debt = %#v, want current enabled-contract overlay", debt)

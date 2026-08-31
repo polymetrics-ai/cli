@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 14,
+  "catalog_revision": 16,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -1609,6 +1609,144 @@
         "Command binding or runtime-preflight selection changes.",
         "A supported direct request shape, owner symbol, constraint, or proof test changes.",
         "Base-check accepted-status behavior changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.source-bound-bodyless-post-read.v1",
+      "layer": "direct_execution",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Closed REST direct-read form for a source-bound POST operation that explicitly declares no request body. The form emits the declared POST with a true zero-byte body and no inferred JSON content type or `{}` payload. It is not a raw HTTP escape hatch: the exact source-operation ID, POST method, connector-relative path, bounded request parameters, response policy, and no-request-body declaration remain fixed in the connector definition.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/connectors/commandrunner"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/direct_read.go",
+          "internal/connectors/commandrunner/runner.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "RESTOperationSpec"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "validateSourceOperationBinding"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "validateOperationSemantics"
+          },
+          {
+            "file": "internal/connectors/engine/direct_read.go",
+            "name": "operationReadBody"
+          },
+          {
+            "file": "internal/connectors/engine/direct_read.go",
+            "name": "validateOperationDirectReadPOSTContract"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "direct_read"
+        ],
+        "protocols": [
+          "HTTP/REST"
+        ],
+        "source_forms": [
+          "exact locked REST POST operation with no requestBody declaration"
+        ],
+        "request_response_shapes": [
+          "fixed source-bound POST method and connector-relative path",
+          "zero-byte request body with no JSON object or inferred content type",
+          "closed declared path and query parameters",
+          "bounded declared response policy"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the bodyless form is selectable only by an explicit closed operation declaration and exact source-operation binding",
+          "caller body fields and raw bodies are rejected before provider I/O",
+          "ordinary POST reads with a declared body schema retain the existing structured JSON or text/plain contract",
+          "legacy GET, HEAD, and method-partition contracts retain their existing behavior"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field",
+          "exact_source_operation_binding"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/operations.json",
+          "internal/connectors/defs/<connector>/api_surface.json",
+          "internal/connectors/defs/<connector>/cli_surface.json"
+        ],
+        "selectors": [
+          "rest.no_request_body=true",
+          "source_operation.id with matching POST method and path"
+        ],
+        "notes": "This available record is selected only by an exact engine-validated declaration and source binding. It does not add an arbitrary method, path, headers, query, body, or content-type input."
+      },
+      "constraints": [
+        "Only rest_read POST operations with a source-operation binding may select the form.",
+        "The declaration must explicitly assert no_request_body and must not also declare rest.body, body_schema, multipart, content_type, or caller body bindings.",
+        "The executor must emit no JSON payload, including no implicit empty object, and no content type inferred from the form.",
+        "The exact source binding must match the operation's POST method and connector-relative path.",
+        "This form does not admit POST operations whose retained source declares a request body, GLQL or other cursor body queries, or provider mutations."
+      ],
+      "non_goals": [
+        "Generic caller-authored HTTP or raw request bodies.",
+        "Implementing source-backed POST reads with a declared JSON body.",
+        "Implementing GitLab GLQL cursor ETL, inbound webhook sync, or any provider mutation."
+      ],
+      "consumer_examples": [
+        {
+          "name": "GitLab documented bodyless semantic POST lookup cohort",
+          "files": [
+            "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+            "internal/connectors/defs/gitlab/sources/gitlab-source-lane-matrix.json"
+          ],
+          "notes": "The planned cohort is exactly gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess, gitlab.rest.postApiV4CodeSuggestionsConnectionDetails, gitlab.rest.postApiV4GeoNodeProxyIdGraphql, gitlab.rest.postApiV4IntegrationsSlackOptions, gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls, gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls, gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls, and gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/direct_read_test.go",
+          "name": "TestOperationDirectReadExecutesSourceBoundBodylessPOST"
+        },
+      {
+        "package": "./cmd/connectorgen",
+        "file": "cmd/connectorgen/sourceprojection_test.go",
+        "name": "TestGitLabSourceProjectionAdmitsOnlyRetainedBodylessSemanticPOSTReads"
+      },
+      {
+        "package": "./internal/connectors/defs/gitlab",
+        "file": "internal/connectors/defs/gitlab/source_bound_materialization_test.go",
+        "name": "TestGitLabSourceBoundMaterializationCohort"
+      },
+      {
+        "package": "./internal/cli",
+        "file": "internal/cli/gitlab_cli_test.go",
+        "name": "TestGitLabGeneratedDirectReadReachesCredentialBoundary"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "gitlab-bodyless-semantic-post-read-r1",
+          "reference": "internal/connectors/defs/gitlab/sources/gitlab-source-lane-matrix.json",
+      "notes": "The eight retained source-semantic POST lookup rows are materialized as exact source-bound direct reads after this closed form passed engine wire, source-projection, definition-reconciliation, and credential-boundary proof. Body-bearing POST reads, including GLQL, remain mapped_unproven."
+        }
+      ],
+      "update_conditions": [
+        "The source-bound no-request-body declaration, validation boundary, or emitted wire shape changes.",
+        "A supported source form, owner symbol, consumer cohort, or proof test changes.",
+        "A provider source lock changes the requestBody fact for one of the listed GitLab source operations."
       ],
       "supersedes": []
     },

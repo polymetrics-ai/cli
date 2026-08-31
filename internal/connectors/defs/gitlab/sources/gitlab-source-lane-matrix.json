@@ -25428,18 +25428,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4AnalyticsCodeReview"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f616e616c79746963732f636f64655f726576696577",
+              "target": "api op-474554202f6170692f76342f616e616c79746963732f636f64655f726576696577",
+              "source_id": "gitlab.rest.getApiV4AnalyticsCodeReview"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -30884,18 +30887,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4GroupsIdDashEpics"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f67726f7570732f7b69647d2f2d2f6570696373",
+              "target": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f2d2f6570696373",
+              "source_id": "gitlab.rest.getApiV4GroupsIdDashEpics"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -34810,18 +34816,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4GroupsIdEpics"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f67726f7570732f7b69647d2f6570696373",
+              "target": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6570696373",
+              "source_id": "gitlab.rest.getApiV4GroupsIdEpics"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -37689,18 +37698,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4GroupsIdIssues"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f67726f7570732f7b69647d2f697373756573",
+              "target": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f697373756573",
+              "source_id": "gitlab.rest.getApiV4GroupsIdIssues"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -37815,18 +37827,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4GroupsIdIssuesStatistics"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f67726f7570732f7b69647d2f6973737565735f73746174697374696373",
+              "target": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6973737565735f73746174697374696373",
+              "source_id": "gitlab.rest.getApiV4GroupsIdIssuesStatistics"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -39270,18 +39285,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4GroupsIdMergeRequests"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f67726f7570732f7b69647d2f6d657267655f7265717565737473",
+              "target": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6d657267655f7265717565737473",
+              "source_id": "gitlab.rest.getApiV4GroupsIdMergeRequests"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -44751,18 +44769,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4IssuesStatistics"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f6973737565735f73746174697374696373",
+              "target": "api op-474554202f6170692f76342f6973737565735f73746174697374696373",
+              "source_id": "gitlab.rest.getApiV4IssuesStatistics"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -46187,18 +46208,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4MergeRequests"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f6d657267655f7265717565737473",
+              "target": "api op-474554202f6170692f76342f6d657267655f7265717565737473",
+              "source_id": "gitlab.rest.getApiV4MergeRequests"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -54365,18 +54389,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f70726f6a656374732f7b69647d2f6465706c6f796d656e74732f7b6465706c6f796d656e745f69647d2f6d657267655f7265717565737473",
+              "target": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6465706c6f796d656e74732f7b6465706c6f796d656e745f69647d2f6d657267655f7265717565737473",
+              "source_id": "gitlab.rest.getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -57356,18 +57383,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4ProjectsIdIssues"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f70726f6a656374732f7b69647d2f697373756573",
+              "target": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f697373756573",
+              "source_id": "gitlab.rest.getApiV4ProjectsIdIssues"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -60289,18 +60319,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4ProjectsIdIssuesStatistics"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f70726f6a656374732f7b69647d2f6973737565735f73746174697374696373",
+              "target": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6973737565735f73746174697374696373",
+              "source_id": "gitlab.rest.getApiV4ProjectsIdIssuesStatistics"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -62399,18 +62432,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4ProjectsIdMergeRequests"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f70726f6a656374732f7b69647d2f6d657267655f7265717565737473",
+              "target": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6d657267655f7265717565737473",
+              "source_id": "gitlab.rest.getApiV4ProjectsIdMergeRequests"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -67785,19 +67821,27 @@
         },
         "etl": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "The retained source declares metrics[] with page_token -> next_page_token continuation. This exact source ID is materialized as a full-refresh source-to-DuckDB stream; no API-to-API route is claimed.",
           "mapping": {
+            "source_fact": {
+              "classification": "source_request_response_continuation_candidate",
+              "source_id": "gitlab.rest.getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+              "continuation": {
+                "request": "page_token",
+                "response": "next_page_token"
+              }
+            },
             "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "kind": "stream",
+              "path": "streams.json",
+              "stream": "mlflow_metric_history",
+              "schema": "schemas/mlflow_metric_history.json",
+              "target": "mlflow_metric_history",
               "source_id": "gitlab.rest.getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_request_response_continuation_candidate"
-            }
-          },
-          "reason": "Source retains a request-to-response continuation pair: page_token -> next_page_token."
+            "runtime_claim": "Declared full-refresh stream has source-to-DuckDB fake-server proof; credential-boundary certification is not claimed."
+          }
         },
         "sync_transport": {
           "applicability": "not_applicable",
@@ -79262,18 +79306,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4ProjectsIdRepositoryFilesFilePathBlame"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f70726f6a656374732f7b69647d2f7265706f7369746f72792f66696c65732f7b66696c655f706174687d2f626c616d65",
+              "target": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f7265706f7369746f72792f66696c65732f7b66696c655f706174687d2f626c616d65",
+              "source_id": "gitlab.rest.getApiV4ProjectsIdRepositoryFilesFilePathBlame"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -84705,18 +84752,21 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
-          "reason": "Locked GET source row; source-backed direct-read candidate only.",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
             "source_fact": {
-              "classification": "read_verb_candidate"
-            },
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+              "classification": "read_verb_candidate",
               "source_id": "gitlab.rest.getApiV4ProjectsIdVariablesKey"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_474554202f70726f6a656374732f7b69647d2f7661726961626c65732f7b6b65797d",
+              "target": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f7661726961626c65732f7b6b65797d",
+              "source_id": "gitlab.rest.getApiV4ProjectsIdVariablesKey"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
           }
         },
         "direct_write": {
@@ -95121,19 +95171,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared status_check; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_head_read_candidate",
               "source_id": "gitlab.rest.headApiV4ProjectsIdRepositoryBranchesBranch"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_head_read_candidate"
-            }
-          },
-          "reason": "Locked HEAD source row has a retained successful metadata response; source-backed bounded direct-read candidate only."
+            "definition_backlink": {
+              "kind": "status_check",
+              "path": "operations.json",
+              "operation": "source_status_48454144202f70726f6a656374732f7b69647d2f7265706f7369746f72792f6272616e636865732f7b6272616e63687d",
+              "target": "api status-48454144202f6170692f76342f70726f6a656374732f7b69647d2f7265706f7369746f72792f6272616e636865732f7b6272616e63687d",
+              "source_id": "gitlab.rest.headApiV4ProjectsIdRepositoryBranchesBranch"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -100029,19 +100082,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate",
               "source_id": "gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
-            }
-          },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_504f5354202f61692f74686972645f70617274795f6167656e74732f6469726563745f616363657373",
+              "target": "api read-op-504f5354202f6170692f76342f61692f74686972645f70617274795f6167656e74732f6469726563745f616363657373",
+              "source_id": "gitlab.rest.postApiV4AiThirdPartyAgentsDirectAccess"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -100849,19 +100905,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate",
               "source_id": "gitlab.rest.postApiV4CodeSuggestionsConnectionDetails"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
-            }
-          },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_504f5354202f636f64655f73756767657374696f6e732f636f6e6e656374696f6e5f64657461696c73",
+              "target": "api read-op-504f5354202f6170692f76342f636f64655f73756767657374696f6e732f636f6e6e656374696f6e5f64657461696c73",
+              "source_id": "gitlab.rest.postApiV4CodeSuggestionsConnectionDetails"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -101975,19 +102034,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate",
               "source_id": "gitlab.rest.postApiV4GeoNodeProxyIdGraphql"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
-            }
-          },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_504f5354202f67656f2f6e6f64655f70726f78792f7b69647d2f6772617068716c",
+              "target": "api read-op-504f5354202f6170692f76342f67656f2f6e6f64655f70726f78792f7b69647d2f6772617068716c",
+              "source_id": "gitlab.rest.postApiV4GeoNodeProxyIdGraphql"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -112057,19 +112119,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate",
               "source_id": "gitlab.rest.postApiV4IntegrationsSlackOptions"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
-            }
-          },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_504f5354202f696e746567726174696f6e732f736c61636b2f6f7074696f6e73",
+              "target": "api read-op-504f5354202f6170692f76342f696e746567726174696f6e732f736c61636b2f6f7074696f6e73",
+              "source_id": "gitlab.rest.postApiV4IntegrationsSlackOptions"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -113979,19 +114044,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate",
               "source_id": "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
-            }
-          },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_504f5354202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73",
+              "target": "api read-op-504f5354202f6170692f76342f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73",
+              "source_id": "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -114082,19 +114150,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate",
               "source_id": "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
-            }
-          },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_504f5354202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73",
+              "target": "api read-op-504f5354202f6170692f76342f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73",
+              "source_id": "gitlab.rest.postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -129083,19 +129154,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate",
               "source_id": "gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
-            }
-          },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_504f5354202f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73",
+              "target": "api read-op-504f5354202f6170692f76342f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73",
+              "source_id": "gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -129187,19 +129261,22 @@
       "lanes": {
         "direct_read": {
           "applicability": "source_candidate",
-          "disposition": "mapped_unproven",
+          "disposition": "implemented",
+          "reason": "Exact retained source operation is materialized as a bounded declared direct_read; focused fake-server proof covers request construction without claiming credential-boundary certification.",
           "mapping": {
-            "definition_backlink": {
-              "kind": "source_lock",
-              "path": "sources/gitlab-operation-source-lock.json",
+            "source_fact": {
+              "classification": "source_semantic_post_read_candidate",
               "source_id": "gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls"
             },
-            "runtime_claim": "Source-backed mapping only; no runtime execution, certification, or availability proof is claimed.",
-            "source_fact": {
-              "classification": "source_semantic_post_read_candidate"
-            }
-          },
-          "reason": "Locked POST source summary and retained successful response document a bounded query/lookup read; source-backed direct-read candidate only."
+            "definition_backlink": {
+              "kind": "direct_read",
+              "path": "operations.json",
+              "operation": "source_read_504f5354202f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73",
+              "target": "api read-op-504f5354202f6170692f76342f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73",
+              "source_id": "gitlab.rest.postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls"
+            },
+            "runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed."
+          }
         },
         "direct_write": {
           "applicability": "not_applicable",
@@ -179628,10 +179705,11 @@
     "source_rows": 1754,
     "source_rows_with_all_lanes": 1754,
     "total_lane_cells": 12278,
-    "lane_counts": {
-      "direct_read": {
-        "mapped_unproven": 763,
-        "not_applicable": 991
+      "lane_counts": {
+        "direct_read": {
+          "implemented": 23,
+          "mapped_unproven": 740,
+          "not_applicable": 991
       },
       "direct_write": {
         "mapped_unproven": 991,
@@ -179645,9 +179723,10 @@
         "mapped_unproven": 46,
         "not_applicable": 1708
       },
-      "etl": {
-        "mapped_unproven": 2,
-        "not_applicable": 1752
+        "etl": {
+          "implemented": 1,
+          "mapped_unproven": 1,
+          "not_applicable": 1752
       },
       "reverse_etl": {
         "mapped_unproven": 991,

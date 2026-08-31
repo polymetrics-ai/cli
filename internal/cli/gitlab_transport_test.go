@@ -3,9 +3,11 @@ package cli_test
 import (
 	"bytes"
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -120,6 +122,99 @@ func TestGitLabSourceTransportFixtureStopsOnDeclaredNonSuccess(t *testing.T) {
 	}
 	if rows, err := application.QueryTable(context.Background(), app.QueryTableRequest{Table: "gitlab_groups", Limit: 10}); err == nil || len(rows) != 0 {
 		t.Fatalf("failed GitLab source read materialized rows=%#v err=%v", rows, err)
+	}
+}
+
+// TestGitLabMLflowMetricHistoryFullRefreshMaterializesDuckDB is the exact
+// retained-source proof for getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory.
+// It follows the provider's page_token -> next_page_token continuation through
+// the declared stream into the local DuckDB warehouse; it does not claim a
+// managed GitLab destination or any body-bearing POST cursor route.
+func TestGitLabMLflowMetricHistoryFullRefreshMaterializesDuckDB(t *testing.T) {
+	fixture := newGitLabMLflowMetricHistoryFixture(t, false)
+	application := fixture.openApplication(t)
+	connection, err := application.CreateConnection(context.Background(), app.CreateConnectionRequest{
+		Name:        "gitlab_mlflow_metric_history_to_warehouse",
+		Source:      app.EndpointConfig{Connector: "gitlab", Credential: "gitlab-mlflow-local"},
+		Destination: app.EndpointConfig{Connector: "warehouse", Credential: "warehouse-local"},
+		Streams: map[string]app.StreamConfig{"mlflow_metric_history": {
+			SyncMode:         "full_refresh_append",
+			DestinationTable: "gitlab_mlflow_metric_history_witness",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create GitLab MLflow full-refresh connection: %v", err)
+	}
+
+	run, err := application.RunETL(context.Background(), app.RunETLRequest{
+		Connection: connection.Name,
+		Stream:     "mlflow_metric_history",
+		BatchSize:  1,
+	})
+	if err != nil {
+		t.Fatalf("run GitLab MLflow metric-history ETL: %v", err)
+	}
+	if run.Status != "completed" || run.RecordsRead != 2 || run.RecordsLoaded != 2 {
+		t.Fatalf("GitLab MLflow metric-history run = %#v, want completed two-row full refresh", run)
+	}
+	fixture.assertRequests(t, false)
+
+	rows, err := application.QueryTable(context.Background(), app.QueryTableRequest{
+		Connection: connection.Name,
+		Table:      "gitlab_mlflow_metric_history_witness",
+		Limit:      10,
+	})
+	if err != nil {
+		t.Fatalf("query GitLab MLflow metric-history DuckDB table: %v", err)
+	}
+	if len(rows) != 2 {
+		t.Fatalf("GitLab MLflow metric-history DuckDB rows = %#v, want two source records", rows)
+	}
+	for _, row := range rows {
+		if key, _ := row["key"].(string); key != "loss" {
+			t.Fatalf("GitLab MLflow metric-history DuckDB row = %#v, want source key loss", row)
+		}
+	}
+}
+
+// TestGitLabMLflowMetricHistoryNonSuccessDoesNotMaterialize keeps the source
+// failure boundary explicit: the first retained provider request may fail, but
+// no response-derived record or DuckDB materialization may follow.
+func TestGitLabMLflowMetricHistoryNonSuccessDoesNotMaterialize(t *testing.T) {
+	fixture := newGitLabMLflowMetricHistoryFixture(t, true)
+	application := fixture.openApplication(t)
+	connection, err := application.CreateConnection(context.Background(), app.CreateConnectionRequest{
+		Name:        "gitlab_mlflow_metric_history_failure_to_warehouse",
+		Source:      app.EndpointConfig{Connector: "gitlab", Credential: "gitlab-mlflow-local"},
+		Destination: app.EndpointConfig{Connector: "warehouse", Credential: "warehouse-local"},
+		Streams: map[string]app.StreamConfig{"mlflow_metric_history": {
+			SyncMode:         "full_refresh_append",
+			DestinationTable: "gitlab_mlflow_metric_history_failure_witness",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("create failed GitLab MLflow full-refresh connection: %v", err)
+	}
+
+	run, err := application.RunETL(context.Background(), app.RunETLRequest{
+		Connection: connection.Name,
+		Stream:     "mlflow_metric_history",
+		BatchSize:  1,
+	})
+	if err == nil || !strings.Contains(err.Error(), "502") {
+		t.Fatalf("run GitLab MLflow metric-history 502 = %v, want provider non-success", err)
+	}
+	if run.Status != "failed" || run.RecordsRead != 0 || run.RecordsLoaded != 0 {
+		t.Fatalf("failed GitLab MLflow metric-history run = %#v, want no source/warehouse records", run)
+	}
+	fixture.assertRequests(t, true)
+	rows, queryErr := application.QueryTable(context.Background(), app.QueryTableRequest{
+		Connection: connection.Name,
+		Table:      "gitlab_mlflow_metric_history_failure_witness",
+		Limit:      10,
+	})
+	if queryErr == nil || len(rows) != 0 {
+		t.Fatalf("failed GitLab MLflow metric-history materialized rows=%#v err=%v, want no warehouse result", rows, queryErr)
 	}
 }
 
@@ -293,6 +388,218 @@ type gitLabTransportRequest struct {
 	Method string
 	Path   string
 	Body   string
+}
+
+const gitLabMLflowMetricHistorySourceOperation = "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory"
+
+type gitLabMLflowMetricHistoryFixture struct {
+	t       *testing.T
+	token   string
+	fail    bool
+	server  *httptest.Server
+	mu      sync.Mutex
+	queries []string
+}
+
+func newGitLabMLflowMetricHistoryFixture(t *testing.T, fail bool) *gitLabMLflowMetricHistoryFixture {
+	t.Helper()
+	fixture := &gitLabMLflowMetricHistoryFixture{t: t, token: "gitlab-mlflow-fixture-token", fail: fail}
+	fixture.assertRetainedSourceFacts(t)
+	fixture.server = httptest.NewTLSServer(http.HandlerFunc(fixture.serveHTTP))
+	t.Cleanup(fixture.server.Close)
+	fixture.installSourceBoundOriginRedirect(t)
+	return fixture
+}
+
+// installSourceBoundOriginRedirect keeps the actual request URL at the
+// retained GitLab origin while dialing only this test's TLS listener. The
+// source-bound runtime must reject a configurable base_url substitution; this
+// fixture therefore proves the declaration without relaxing that guard.
+func (f *gitLabMLflowMetricHistoryFixture) installSourceBoundOriginRedirect(t *testing.T) {
+	t.Helper()
+	serverTransport, ok := f.server.Client().Transport.(*http.Transport)
+	if !ok {
+		t.Fatal("GitLab MLflow httptest client does not expose an HTTP transport")
+	}
+	transport := serverTransport.Clone()
+	transport.Proxy = nil
+	if transport.TLSClientConfig == nil {
+		transport.TLSClientConfig = &tls.Config{}
+	} else {
+		transport.TLSClientConfig = transport.TLSClientConfig.Clone()
+	}
+	transport.TLSClientConfig.InsecureSkipVerify = true //nolint:gosec // local httptest-only retained-origin redirect
+	transport.DialContext = func(ctx context.Context, network, address string) (net.Conn, error) {
+		if address == "gitlab.com:443" {
+			return (&net.Dialer{}).DialContext(ctx, network, f.server.Listener.Addr().String())
+		}
+		return nil, fmt.Errorf("GitLab MLflow fixture blocked unexpected outbound dial to %q", address)
+	}
+	previous := http.DefaultTransport
+	http.DefaultTransport = transport
+	t.Cleanup(func() { http.DefaultTransport = previous })
+}
+
+func (f *gitLabMLflowMetricHistoryFixture) assertRetainedSourceFacts(t *testing.T) {
+	t.Helper()
+	const defsRoot = "../connectors/defs"
+	raw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources", "gitlab-operation-source-lock.json"))
+	if err != nil {
+		t.Fatalf("read GitLab MLflow retained source lock: %v", err)
+	}
+	var lock gitLabTransportSourceLock
+	if err := json.Unmarshal(raw, &lock); err != nil {
+		t.Fatalf("decode GitLab MLflow retained source lock: %v", err)
+	}
+	foundOperation := false
+	for _, operation := range lock.REST.Operations {
+		if operation.ID != gitLabMLflowMetricHistorySourceOperation {
+			continue
+		}
+		response := operation.SourceOperation.Responses["200"]
+		if operation.Method != http.MethodGet || operation.Path != "/api/v4/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history" || !operation.hasJSONSuccess(http.StatusOK) || !bytes.Contains(response, []byte(`APIEntitiesMlMlflowGetMetricHistory`)) {
+			t.Fatalf("GitLab MLflow retained source operation = %+v, want cited GET JSON response reference", operation)
+		}
+		foundOperation = true
+		break
+	}
+	if !foundOperation {
+		t.Fatalf("GitLab retained source lock has no valid MLflow metric-history operation %q", gitLabMLflowMetricHistorySourceOperation)
+	}
+	matrixRaw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources", "gitlab-source-lane-matrix.json"))
+	if err != nil {
+		t.Fatalf("read GitLab MLflow source-lane matrix: %v", err)
+	}
+	var matrix struct {
+		SourceOperations []struct {
+			SourceID    string `json:"source_id"`
+			SourceFacts struct {
+				Pagination struct {
+					Continuation struct {
+						Request  string `json:"request"`
+						Response string `json:"response"`
+					} `json:"continuation"`
+				} `json:"pagination"`
+			} `json:"source_facts"`
+		} `json:"source_operations"`
+	}
+	if err := json.Unmarshal(matrixRaw, &matrix); err != nil {
+		t.Fatalf("decode GitLab MLflow source-lane matrix: %v", err)
+	}
+	for _, row := range matrix.SourceOperations {
+		if row.SourceID == "gitlab.rest."+gitLabMLflowMetricHistorySourceOperation {
+			if row.SourceFacts.Pagination.Continuation.Request != "page_token" || row.SourceFacts.Pagination.Continuation.Response != "next_page_token" {
+				t.Fatalf("GitLab MLflow retained continuation facts = %+v, want page_token -> next_page_token", row.SourceFacts.Pagination.Continuation)
+			}
+			return
+		}
+	}
+	t.Fatalf("GitLab retained source evidence has no MLflow metric-history operation %q", gitLabMLflowMetricHistorySourceOperation)
+}
+
+func (f *gitLabMLflowMetricHistoryFixture) openApplication(t *testing.T) *app.App {
+	t.Helper()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("initialize GitLab MLflow witness project: %v", err)
+	}
+	application, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("open GitLab MLflow witness project: %v", err)
+	}
+	ctx := context.Background()
+	if _, err := application.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "gitlab-mlflow-local",
+		Connector: "gitlab",
+		Config: map[string]string{
+			"mlflow_project_id":  "project-one",
+			"mlflow_run_id":      "run-one",
+			"mlflow_metric_key":  "loss",
+			"mlflow_max_results": "2",
+		},
+		Secrets: map[string]string{"access_token": f.token},
+	}); err != nil {
+		t.Fatalf("add GitLab MLflow source credential: %v", err)
+	}
+	if _, err := application.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "warehouse-local",
+		Connector: "warehouse",
+		Config:    map[string]string{"path": filepath.Join(root, ".polymetrics", "warehouse")},
+	}); err != nil {
+		t.Fatalf("add GitLab MLflow warehouse credential: %v", err)
+	}
+	return application
+}
+
+func (f *gitLabMLflowMetricHistoryFixture) serveHTTP(w http.ResponseWriter, r *http.Request) {
+	if got := r.Header.Get("Authorization"); got != "Bearer "+f.token {
+		f.t.Errorf("GitLab MLflow authorization=%q, want fixture bearer token", got)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+	if r.Method != http.MethodGet || r.URL.Path != "/api/v4/projects/project-one/ml/mlflow/api/2.0/mlflow/metrics/get-history" {
+		f.t.Errorf("GitLab MLflow request=%s %s, want cited GET metric-history path", r.Method, r.URL.String())
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	query := r.URL.Query()
+	if got := query.Get("run_id"); got != "run-one" {
+		f.t.Errorf("GitLab MLflow run_id=%q, want run-one", got)
+	}
+	if got := query.Get("metric_key"); got != "loss" {
+		f.t.Errorf("GitLab MLflow metric_key=%q, want loss", got)
+	}
+	if got := query.Get("max_results"); got != "2" {
+		f.t.Errorf("GitLab MLflow max_results=%q, want source-configured 2", got)
+	}
+	f.mu.Lock()
+	f.queries = append(f.queries, r.URL.RawQuery)
+	f.mu.Unlock()
+	if f.fail {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusBadGateway)
+		_, _ = w.Write([]byte(`{"message":"fixture metric history failure"}`))
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	token := query.Get("page_token")
+	if token == "" {
+		_, _ = w.Write([]byte(`{"metrics":[{"key":"loss","step":1,"timestamp":1000,"value":0.8}],"next_page_token":"fixture-next-page"}`))
+		return
+	}
+	if token == "fixture-next-page" {
+		_, _ = w.Write([]byte(`{"metrics":[{"key":"loss","step":2,"timestamp":2000,"value":0.7}]}`))
+		return
+	}
+	f.t.Errorf("GitLab MLflow page_token=%q, want empty or fixture-next-page", token)
+	w.WriteHeader(http.StatusBadRequest)
+}
+
+func (f *gitLabMLflowMetricHistoryFixture) assertRequests(t *testing.T, failed bool) {
+	t.Helper()
+	f.mu.Lock()
+	queries := append([]string(nil), f.queries...)
+	f.mu.Unlock()
+	if failed {
+		if len(queries) == 0 {
+			t.Fatal("GitLab MLflow non-success made no source request")
+		}
+		for _, query := range queries {
+			if !strings.Contains(query, "run_id=run-one") || !strings.Contains(query, "metric_key=loss") || !strings.Contains(query, "max_results=2") || strings.Contains(query, "page_token=") {
+				t.Fatalf("GitLab MLflow failed source query=%q, want only retryable first-page requests with no continuation", query)
+			}
+		}
+		return
+	}
+	if len(queries) != 2 {
+		t.Fatalf("GitLab MLflow source queries=%v, want two provider pages", queries)
+	}
+	if !strings.Contains(queries[0], "run_id=run-one") || !strings.Contains(queries[0], "metric_key=loss") || !strings.Contains(queries[0], "max_results=2") || strings.Contains(queries[0], "page_token=") {
+		t.Fatalf("GitLab MLflow first query=%q, want retained source request without continuation", queries[0])
+	}
+	if !strings.Contains(queries[1], "page_token=fixture-next-page") || !strings.Contains(queries[1], "run_id=run-one") || !strings.Contains(queries[1], "metric_key=loss") {
+		t.Fatalf("GitLab MLflow next query=%q, want next_page_token mapped to page_token", queries[1])
+	}
 }
 
 func newGitLabTransportFixture(t *testing.T, badRead bool) *gitLabTransportFixture {
