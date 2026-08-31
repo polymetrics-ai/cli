@@ -39,8 +39,8 @@ func TestGitLabEnabledContractReconcilesSourceLock(t *testing.T) {
 	want := map[string]string{
 		"direct_read":     "implemented",
 		"direct_write":    "implemented",
-		"binary_download": "deferred_foundation",
-		"binary_upload":   "deferred_foundation",
+		"binary_download": "mapped_unproven",
+		"binary_upload":   "mapped_unproven",
 		"etl":             "implemented",
 		"reverse_etl":     "implemented",
 		"sync_transport":  "implemented",
@@ -69,6 +69,15 @@ func TestGitLabEnabledContractReconcilesSourceLock(t *testing.T) {
 			}
 		} else if lane.Source.Coverage != "partial" {
 			t.Fatalf("GitLab lane %q implemented=%d/%d coverage = %q, want partial", lane.Name, lane.Source.Implemented, lane.Source.Expected, lane.Source.Coverage)
+		}
+		switch lane.Name {
+		case "binary_download", "binary_upload":
+			if lane.Source.Expected != 1 || lane.Source.Implemented != 0 || lane.Source.MappedUnproven != 1 || lane.Source.UnmappedMapping != 0 || lane.Source.DeferredFoundation != 0 || lane.Source.Unsupported != 0 {
+				t.Fatalf("GitLab %s source state = %+v, want one source-contract-unavailable mapped-unproven row and no deferred runtime foundation", lane.Name, lane.Source)
+			}
+			if !strings.Contains(lane.Reason, "mapped_unproven") || !strings.Contains(lane.Reason, "source-contract-unavailable") {
+				t.Fatalf("GitLab %s reason = %q, want source-contract-unavailable mapped-unproven boundary", lane.Name, lane.Reason)
+			}
 		}
 	}
 	if len(lanes) != len(want) {

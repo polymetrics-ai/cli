@@ -123,6 +123,55 @@ func TestAsanaEnabledContractReconcilesSourceLaneMatrix(t *testing.T) {
 	}
 }
 
+// TestAsanaMissingFoundationLedgerSeparatesLegacyAttachmentAliasFromRuntime
+// keeps the historical metadata-only attachment alias visible without
+// misclassifying it as a missing multipart runtime contract. The named write
+// actions already carry the source-backed multipart declaration and proof.
+func TestAsanaMissingFoundationLedgerSeparatesLegacyAttachmentAliasFromRuntime(t *testing.T) {
+	raw, err := os.ReadFile("missing-foundation.json")
+	if err != nil {
+		t.Fatalf("read Asana missing-foundation ledger: %v", err)
+	}
+	var report struct {
+		Foundations []struct {
+			ID           string   `json:"id"`
+			State        string   `json:"state"`
+			Reason       string   `json:"reason"`
+			DoesNotBlock []string `json:"does_not_block"`
+		} `json:"foundations"`
+	}
+	if err := json.Unmarshal(raw, &report); err != nil {
+		t.Fatalf("decode Asana missing-foundation ledger: %v", err)
+	}
+	byID := map[string]struct {
+		State        string
+		Reason       string
+		DoesNotBlock []string
+	}{}
+	for _, foundation := range report.Foundations {
+		byID[foundation.ID] = struct {
+			State        string
+			Reason       string
+			DoesNotBlock []string
+		}{foundation.State, foundation.Reason, foundation.DoesNotBlock}
+	}
+	attachment, ok := byID["asana_attachment_direct_write_multipart"]
+	if !ok || attachment.State != "resolved_runtime_mapping_with_legacy_operation_alias" {
+		t.Fatalf("Asana attachment ledger = %+v, want resolved legacy operation-alias state", attachment)
+	}
+	if !strings.Contains(attachment.Reason, "legacy operation alias") || !strings.Contains(attachment.Reason, "not an absent runtime contract") || !strings.Contains(attachment.Reason, "equivalent named write actions") {
+		t.Fatalf("Asana attachment reason = %q, want legacy-alias and proven-equivalent boundary", attachment.Reason)
+	}
+	if !slices.Contains(attachment.DoesNotBlock, "the equivalent direct-write and reverse-ETL attachment write actions") {
+		t.Fatalf("Asana attachment does_not_block = %v, want declared equivalent attachment actions", attachment.DoesNotBlock)
+	}
+
+	events, ok := byID["asana_incremental_event_scope_coverage"]
+	if !ok || events.State != "existing_mapping_backlog" || !strings.Contains(events.Reason, "other 11 streams") || !slices.Contains(events.DoesNotBlock, "full-refresh overwrite and append for all 12 streams") {
+		t.Fatalf("Asana event-scope ledger = %+v, want retained source-scope limit without full-refresh regression", events)
+	}
+}
+
 func loadAsanaSourceLaneMatrix(t *testing.T) asanaSourceLaneMatrix {
 	t.Helper()
 	raw, err := os.ReadFile(asanaSourceLaneMatrixPath)
