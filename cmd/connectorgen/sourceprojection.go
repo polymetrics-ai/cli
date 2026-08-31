@@ -5658,6 +5658,9 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	descriptorPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-operation-descriptor.json"))
 	descriptorRaw, err := fs.ReadFile(fsys, descriptorPath)
 	if err != nil {
+		if errors.Is(err, fs.ErrNotExist) && sourceProjectionAllowsDescriptorFreeRetention(fsys, bundle, lockPath) {
+			return nil
+		}
 		return []Finding{sourceProjectionFinding(bundle.Name, descriptorPath, "canonical source descriptor is missing")}
 	}
 	var descriptor sourceImportDescriptorDocument
@@ -5667,6 +5670,22 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 	findings := validateSourceDescriptorAgainstMappingLock(bundle.Name, descriptorPath, lock, descriptor)
 	findings = append(findings, validateSourceExecutableCoverage(bundle, descriptorPath, descriptor)...)
 	return findings
+}
+
+// sourceProjectionAllowsDescriptorFreeRetention is the sole descriptor-free
+// admission seam. It never projects or executes an operation. The contract
+// model limits the claim to source-only nonimplemented lanes, while the
+// existing authoring bridge verifies the exact frozen lock identity, required
+// source-lock artifact, and complete source-operation-ID reconciliation.
+func sourceProjectionAllowsDescriptorFreeRetention(fsys fs.FS, bundle engine.Bundle, expectedLockPath string) bool {
+	contract := bundle.EnabledContract
+	if contract == nil || !contract.RetentionOnly || contract.SourceLock.Path != strings.TrimPrefix(expectedLockPath, bundle.Name+"/") {
+		return false
+	}
+	if err := contract.ValidateRetentionOnly(); err != nil {
+		return false
+	}
+	return len(checkEnabledConnectorContract(fsys, bundle)) == 0
 }
 
 func sourceProjectionUnavailableMappingDocument(lock declarationAdmissionReviewedSourceLock) (declarationAdmissionReviewedUnavailableDocument, bool) {

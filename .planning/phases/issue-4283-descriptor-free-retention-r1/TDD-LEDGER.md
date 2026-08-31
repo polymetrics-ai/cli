@@ -1,0 +1,15 @@
+# TDD Ledger — Descriptor-Free Retention Admission
+
+| Stage | Test / command | Expected evidence | Actual evidence |
+| --- | --- | --- | --- |
+| Red | `go test ./internal/connectors -run 'TestEnabledContract(RetentionOnly|LegacySourceIDCanContainSlash)' -count=1` | New retention-only API/schema expectations fail before implementation. | Failed as intended: `EnabledConnectorContract.ValidateRetentionOnly` and `RetentionOnly` are absent. |
+| Red | `go test ./cmd/connectorgen -run 'TestSourceProjectionDescriptorFreeRetention' -count=1` | Real Jira/Sentry/Vercel lock-backed retention contracts still report missing descriptors before admission change. | Blocked by the preceding compile-time red failure; it will run after the model/schema seam exists. |
+| Green | Same focused tests | Exact retained-ID contracts pass; executable/malformed cases retain descriptor failure. | Passed: Jira 617, Sentry 223, and Vercel 400 retained IDs reconcile; Sentry’s ordinary-space ID and slash-bearing opaque IDs remain valid; executable and incomplete contracts report the missing descriptor. |
+| Full baseline | `go test ./cmd/connectorgen -count=1` | Broad changed-package regression proof. | Five unrelated baseline failures after 549s: GitLab source-lock bridge count, two Asana source-projection/mutation-disposition tests, and two existing projection drift tests. The exact five-test command fails identically on clean `c9ae575a734514b728a5e6add7ff8b0e55233437` in 13.452s; no retention-only finding appears. |
+| Regression | `go test -race ./internal/connectors ./internal/connectors/engine ./cmd/connectorgen -run 'Test(EnabledContractRetentionOnly|EnabledContractLegacySourceIDCanContainSlash|EnabledContractSchemaAdmitsRetentionOnlyFlag|SourceProjectionDescriptorFreeRetention|DescriptorFreeRetentionSourceIDsStaySourceOnly)$' -count=1` | Race-safe scoped regression proof. | Passed after the duplicate-ID regression addition: `internal/connectors` 5.648s, `internal/connectors/engine` 7.815s, and `cmd/connectorgen` 11.406s. |
+| Package | `go test ./internal/connectors ./internal/connectors/engine -count=1` | Full changed-model and schema package proof. | Passed: 3.864s and 16.710s. |
+| Focused projection | `go test ./cmd/connectorgen -run 'Test(SourceProjectionDescriptorFreeRetention|DescriptorFreeRetentionSourceIDsStaySourceOnly)' -count=1` | Real Jira/Sentry/Vercel retention plus executable/incomplete/duplicate negative proof. | Passed: 13.759s. |
+
+The fixture contracts are constructed in tests from checked-in frozen source
+locks and source-lane matrices. No connector definition or source evidence is
+rewritten by this task.

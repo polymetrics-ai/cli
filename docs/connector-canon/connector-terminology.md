@@ -51,6 +51,20 @@ An importer reads a retained source and produces or validates that descriptor.
 An importer is a source-reading tool, not a policy authority.
 An importer failure must retain the source operation with a named parsing or projection gap instead of silently dropping it.
 
+### Descriptor-free source-accounting retention
+
+`retention_only` is a narrow mapping-admission contract for a connector whose
+immutable source lock and exact source-lane accounting are retained but whose
+historical canonical descriptor is intentionally absent. It is valid only when
+the primary lock's digest/byte identity and exact source-operation-ID
+reconciliation pass, every lane remains nonimplemented, and each lane cites
+only the source-lock artifact. It does not create a command, stream, write,
+transport, certification result, or executable connector.
+
+Source operation IDs are opaque provider evidence, not filenames. Preserve
+ordinary spaces and slash-bearing provider spellings exactly; reject only empty
+or control-character IDs, and never normalize an ID to make it path-safe.
+
 ### Source operation and `source_operation_id`
 
 A source operation is one provider API identity, such as `GET /tasks/{task_gid}` or `POST /projects`.
@@ -331,7 +345,10 @@ It does mean that provider-documented delete, reverse-ETL, and other destructive
 ## Required build sequence
 
 1. Retain and validate the provider source.
-2. Freeze the source-lock denominator and normalize a source descriptor.
+2. Freeze the source-lock denominator and normalize a source descriptor. A
+   `retention_only` contract is the narrow non-executable exception: it keeps
+   exact-ID source accounting without a historical descriptor only after lock
+   identity and full reconciliation pass.
 3. Classify each source operation into one or more lane cells or a cited unsupported state.
 4. Create source-operation bindings and project the required connector-definition artifacts.
 5. Consult the Foundation Atlas before recording any missing foundation.

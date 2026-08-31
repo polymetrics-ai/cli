@@ -260,3 +260,146 @@ func enabledContractTestLane(contract *EnabledConnectorContract, name string) *E
 	}
 	panic("missing lane " + name)
 }
+
+func TestEnabledContractRetentionOnlyReconcilesExactNonExecutableSourceIDs(t *testing.T) {
+	contract := retentionOnlyTestContract()
+	operations := []EnabledContractSourceOperation{
+		{ID: "sentry.rest.List a Project's Issues", Method: "GET"},
+		{ID: "jira.rest.getCustomFieldsConfigurations", Method: "POST"},
+		{ID: "vercel.rest.createAccessGroup", Method: "POST"},
+	}
+
+	if err := contract.ValidateRetentionOnly(); err != nil {
+		t.Fatalf("validate descriptor-free retention contract: %v", err)
+	}
+	if err := contract.ReconcileSourceOperations(operations); err != nil {
+		t.Fatalf("reconcile descriptor-free exact source IDs: %v", err)
+	}
+}
+
+func TestEnabledContractRetentionOnlyRejectsExecutableOrUnsafeClaims(t *testing.T) {
+	for _, test := range []struct {
+		name   string
+		mutate func(*EnabledConnectorContract)
+		want   string
+	}{
+		{
+			name: "implemented lane",
+			mutate: func(contract *EnabledConnectorContract) {
+				lane := enabledContractTestLane(contract, "direct_read")
+				lane.State = EnabledLaneImplemented
+				lane.Source.Implemented = lane.Source.Expected
+				lane.Source.MappedUnproven = 0
+				lane.Source.Coverage = EnabledCoverageComplete
+			},
+			want: "implemented",
+		},
+		{
+			name: "unmapped source cell",
+			mutate: func(contract *EnabledConnectorContract) {
+				lane := enabledContractTestLane(contract, "direct_read")
+				lane.Source.UnmappedMapping = 1
+				lane.Source.MappedUnproven--
+			},
+			want: "unmapped_mapping",
+		},
+		{
+			name: "legacy method partition",
+			mutate: func(contract *EnabledConnectorContract) {
+				lane := enabledContractTestLane(contract, "direct_read")
+				lane.Source.OperationIDs = nil
+				lane.Source.Methods = []string{"GET"}
+			},
+			want: "exact source-operation IDs",
+		},
+		{
+			name: "runtime artifact",
+			mutate: func(contract *EnabledConnectorContract) {
+				enabledContractTestLane(contract, "direct_read").Artifacts = []string{"operations.json"}
+			},
+			want: "source-lock artifact",
+		},
+		{
+			name: "empty source ID",
+			mutate: func(contract *EnabledConnectorContract) {
+				enabledContractTestLane(contract, "direct_read").Source.OperationIDs[0] = ""
+			},
+			want: "source coverage operation IDs",
+		},
+		{
+			name: "control character source ID",
+			mutate: func(contract *EnabledConnectorContract) {
+				enabledContractTestLane(contract, "direct_read").Source.OperationIDs[0] = "provider\nlist"
+			},
+			want: "source coverage operation IDs",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			contract := retentionOnlyTestContract()
+			test.mutate(&contract)
+			if err := contract.ValidateRetentionOnly(); err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("retention-only validation error = %v, want %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestEnabledContractLegacySourceIDCanContainSlash(t *testing.T) {
+	contract := semanticPartitionContract()
+	enabledContractTestLane(&contract, "direct_read").Source.OperationIDs[0] = "github.rest.actions/download-artifact"
+	if err := contract.Validate(); err != nil {
+		t.Fatalf("legacy source evidence ID containing slash must remain valid: %v", err)
+	}
+}
+
+func TestEnabledContractRetentionOnlySourceIDRemainsOpaqueProviderData(t *testing.T) {
+	contract := retentionOnlyTestContract()
+	const sourceID = " github.rest.actions/download-artifact "
+	enabledContractTestLane(&contract, "direct_read").Source.OperationIDs[0] = sourceID
+	if err := contract.ValidateRetentionOnly(); err != nil {
+		t.Fatalf("retention-only opaque source ID containing spaces and slash must remain valid: %v", err)
+	}
+	if got := enabledContractTestLane(&contract, "direct_read").Source.OperationIDs[0]; got != sourceID {
+		t.Fatalf("retention-only source ID = %q, want exact opaque provider spelling %q", got, sourceID)
+	}
+}
+
+func retentionOnlyTestContract() EnabledConnectorContract {
+	contract := enabledContractTestContract(
+		EnabledConnectorLane{
+			Name:      "direct_read",
+			State:     EnabledLaneMappedUnproven,
+			Reason:    "Frozen provider source documents bounded reads but no executable declaration.",
+			Citations: enabledContractTestCitations(),
+			Artifacts: []string{"sources/semantic-operation-source-lock.json"},
+			Source: EnabledContractSourceCoverage{
+				Partition:      true,
+				OperationIDs:   []string{"sentry.rest.List a Project's Issues", "jira.rest.getCustomFieldsConfigurations"},
+				Coverage:       EnabledCoveragePartial,
+				Expected:       2,
+				MappedUnproven: 2,
+			},
+		},
+		EnabledConnectorLane{
+			Name:      "reverse_etl",
+			State:     EnabledLaneDeferred,
+			Reason:    "Frozen provider mutation remains behind a named execution foundation.",
+			Citations: enabledContractTestCitations(),
+			Artifacts: []string{"sources/semantic-operation-source-lock.json"},
+			Source: EnabledContractSourceCoverage{
+				Partition:          true,
+				OperationIDs:       []string{"vercel.rest.createAccessGroup"},
+				Coverage:           EnabledCoveragePartial,
+				Expected:           1,
+				DeferredFoundation: 1,
+			},
+		},
+		enabledContractTestNotApplicableLane("direct_write"),
+		enabledContractTestNotApplicableLane("binary_download"),
+		enabledContractTestNotApplicableLane("binary_upload"),
+		enabledContractTestNotApplicableLane("etl"),
+		enabledContractTestNotApplicableLane("sync_transport"),
+	)
+	contract.RetentionOnly = true
+	return contract
+}

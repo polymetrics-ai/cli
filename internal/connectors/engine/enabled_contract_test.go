@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"encoding/json"
 	"os"
 	"strings"
 	"testing"
@@ -110,6 +111,25 @@ func TestEnabledContractSchemaAdmitsMappedUnprovenStateAndCoverage(t *testing.T)
 	invalid := strings.Replace(mapped, `"state": "mapped_unproven"`, `"state": "invented_state"`, 1)
 	if err := metaSchemas.enabledConnectorContract.Validate(mustDecodeAny([]byte(invalid))); err == nil {
 		t.Fatal("schema accepts an unknown enabled-contract lane state")
+	}
+}
+
+func TestEnabledContractSchemaAdmitsRetentionOnlyFlag(t *testing.T) {
+	raw, err := os.ReadFile("../defs/gitlab/enabled_connector_contract.json")
+	if err != nil {
+		t.Fatalf("read enabled connector contract fixture: %v", err)
+	}
+	var document map[string]any
+	if err := json.Unmarshal(raw, &document); err != nil {
+		t.Fatalf("decode enabled connector contract fixture: %v", err)
+	}
+	document["retention_only"] = true
+	encoded, err := json.Marshal(document)
+	if err != nil {
+		t.Fatalf("encode retention-only schema fixture: %v", err)
+	}
+	if err := metaSchemas.enabledConnectorContract.Validate(mustDecodeAny(encoded)); err != nil {
+		t.Fatalf("schema rejects retention_only flag: %v", err)
 	}
 }
 

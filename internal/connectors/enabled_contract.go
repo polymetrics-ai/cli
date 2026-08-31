@@ -6,6 +6,7 @@ import (
 	"slices"
 	"sort"
 	"strings"
+	"unicode"
 )
 
 // EnabledConnectorContract is the closed declaration that makes an enabled
@@ -16,8 +17,16 @@ import (
 // A contract is intentionally additive. Connectors without this artifact keep
 // their existing definition semantics while a cohort is being migrated.
 type EnabledConnectorContract struct {
-	SchemaVersion           int                                     `json:"schema_version"`
-	Connector               string                                  `json:"connector"`
+	SchemaVersion int    `json:"schema_version"`
+	Connector     string `json:"connector"`
+	// RetentionOnly is an explicit mapping-admission mode for a connector
+	// whose frozen source lock and exact source-lane accounting are retained,
+	// but whose historical canonical descriptor is intentionally absent. It is
+	// never an execution claim: every lane must remain nonimplemented and
+	// source-only. The authoring layer additionally verifies the immutable lock
+	// identity and complete source-operation reconciliation before it can waive
+	// the descriptor-presence check.
+	RetentionOnly           bool                                    `json:"retention_only,omitempty"`
 	SourceLock              EnabledContractSourceLock               `json:"source_lock"`
 	SupplementalSourceLocks []EnabledContractSupplementalSourceLock `json:"supplemental_source_locks,omitempty"`
 	Lanes                   []EnabledConnectorLane                  `json:"lanes"`
@@ -162,6 +171,35 @@ var enabledContractLaneNames = []string{
 // is checked separately by ReconcileSourceOperations, because the runtime does
 // not own source locks.
 func (c EnabledConnectorContract) Validate() error {
+	if err := c.validateBase(); err != nil {
+		return err
+	}
+	if c.RetentionOnly {
+		return c.validateRetentionOnly()
+	}
+	return nil
+}
+
+// ValidateRetentionOnly validates the additional constraints required before
+// a missing canonical descriptor can be treated as source-accounting
+// retention. Callers must still verify the lock's actual digest/bytes and
+// reconcile its source-operation inventory through the authoring bridge.
+//
+// Provider identities remain opaque evidence keys in both ordinary and
+// descriptor-free contracts. They are never used as filesystem paths, so a
+// valid provider spelling may include spaces or a slash. Empty and
+// control-character values remain invalid.
+func (c EnabledConnectorContract) ValidateRetentionOnly() error {
+	if !c.RetentionOnly {
+		return fmt.Errorf("enabled connector contract is not retention_only")
+	}
+	if err := c.validateBase(); err != nil {
+		return err
+	}
+	return c.validateRetentionOnly()
+}
+
+func (c EnabledConnectorContract) validateBase() error {
 	if c.SchemaVersion != 1 {
 		return fmt.Errorf("enabled connector contract has unsupported schema version %d", c.SchemaVersion)
 	}
@@ -198,6 +236,47 @@ func (c EnabledConnectorContract) Validate() error {
 	for _, name := range enabledContractLaneNames {
 		if !seen[name] {
 			return fmt.Errorf("enabled connector contract omits lane %q", name)
+		}
+	}
+	return nil
+}
+
+func (c EnabledConnectorContract) validateRetentionOnly() error {
+	if len(c.SupplementalSourceLocks) != 0 {
+		return fmt.Errorf("retention_only contract cannot declare supplemental source locks")
+	}
+	for _, lane := range c.Lanes {
+		if lane.State == EnabledLaneImplemented || lane.Source.Implemented != 0 {
+			return fmt.Errorf("retention_only lane %q cannot claim implemented coverage", lane.Name)
+		}
+		if lane.Source.UnmappedMapping != 0 {
+			return fmt.Errorf("retention_only lane %q cannot retain unmapped_mapping coverage", lane.Name)
+		}
+		if lane.Source.SourceLock != "" {
+			return fmt.Errorf("retention_only lane %q cannot select a supplemental source lock", lane.Name)
+		}
+		if len(lane.Source.Methods) != 0 {
+			return fmt.Errorf("retention_only lane %q must use exact source-operation IDs, not methods", lane.Name)
+		}
+		if len(lane.Artifacts) != 1 || lane.Artifacts[0] != c.SourceLock.Path {
+			return fmt.Errorf("retention_only lane %q must retain only the primary source-lock artifact", lane.Name)
+		}
+		if lane.Transport != nil || len(lane.Warehouse) != 0 {
+			return fmt.Errorf("retention_only lane %q cannot declare runtime transport or warehouse bindings", lane.Name)
+		}
+		if lane.Source.Expected == 0 {
+			if lane.State != EnabledLaneUnsupported || len(lane.Source.OperationIDs) != 0 || lane.Source.Partition {
+				return fmt.Errorf("retention_only lane %q with no source operations must be provider not-applicable", lane.Name)
+			}
+			continue
+		}
+		if len(lane.Source.OperationIDs) != lane.Source.Expected {
+			return fmt.Errorf("retention_only lane %q must retain an exact source-operation ID for every claimed cell", lane.Name)
+		}
+		for _, sourceID := range lane.Source.OperationIDs {
+			if !enabledContractSourceOperationIdentifier(sourceID) {
+				return fmt.Errorf("retention_only lane %q has an invalid retained source operation ID %q", lane.Name, sourceID)
+			}
 		}
 	}
 	return nil
@@ -528,13 +607,21 @@ func enabledContractIdentifier(value string) bool {
 	return true
 }
 
-// enabledContractSourceOperationIdentifier validates retained provider source
-// identities. Unlike connector names and artifact paths, provider operation
-// IDs can legitimately contain a slash (for example GitHub's generated REST
-// operation IDs); they are evidence keys only and never filesystem targets.
+// enabledContractSourceOperationIdentifier validates ordinary retained
+// provider identities. Unlike connector names and artifact paths, source IDs
+// are evidence keys only and can retain provider punctuation, ordinary spaces,
+// and legacy slash-bearing operation names. They must not retain an empty or
+// control-character identity.
 func enabledContractSourceOperationIdentifier(value string) bool {
-	value = strings.TrimSpace(value)
-	return value != "" && len(value) <= 256 && !strings.ContainsAny(value, "\\\x00\r\n\t ")
+	if strings.TrimSpace(value) == "" {
+		return false
+	}
+	for _, character := range value {
+		if unicode.IsControl(character) {
+			return false
+		}
+	}
+	return true
 }
 
 // LaneNames returns the normalized closed vocabulary for inspection callers.
