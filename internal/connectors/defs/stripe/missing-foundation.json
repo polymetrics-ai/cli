@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "connector": "stripe",
+  "purpose": "Connector-local source mapping and execution-gap ledger. This authoring artifact does not load an executor, enable a command, or change source-lane membership.",
+  "source_lock": {
+    "path": "sources/stripe-operation-source-lock.json",
+    "source_url": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+    "sha256": "3653ad45bbec54fcbe461c541c908355b715018bdf455a0e11b27bedb2cbdee5"
+  },
+  "foundations": [
+    {
+      "id": "stripe-inbound-webhook-receiver-r1",
+      "state": "recorded_only_requires_captain_approval_before_implementation",
+      "atlas_capability": "stripe.inbound-webhook-receiver.v1",
+      "affected_lane": "sync_transport",
+      "source_ids": [
+        {
+          "id": "stripe.rest.PostWebhookEndpoints",
+          "operation_id": "PostWebhookEndpoints",
+          "method": "POST",
+          "path": "/v1/webhook_endpoints",
+          "source_location": "paths[\"/v1/webhook_endpoints\"].post"
+        }
+      ],
+      "reason": "The source documents a Stripe webhook registration with url and enabled_events, but the consulted connector-specific receiver capability remains planned. Endpoint creation configures Stripe delivery to a URL; it does not provide a Polymetrics ingress endpoint, receiver, worker, source executor, or runnable sync transport.",
+      "runtime_claim": "No inbound Stripe webhook receiver, selected source executor, or executable sync transport is claimed."
+    }
+  ]
+}

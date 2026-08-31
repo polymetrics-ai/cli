@@ -12,8 +12,12 @@ import (
 )
 
 const (
-	stripeMatrixPath     = "sources/stripe-source-lane-matrix.json"
-	stripeSourceLockPath = "sources/stripe-operation-source-lock.json"
+	stripeMatrixPath                     = "sources/stripe-source-lane-matrix.json"
+	stripeSourceLockPath                 = "sources/stripe-operation-source-lock.json"
+	stripeETLImplementationReason        = "stripe.runtime.etl.source_bound_app_duckdb_witness.v1"
+	stripeReverseETLImplementationReason = "stripe.runtime.reverse_etl.source_bound_plan_preview_approval_execute_witness.v1"
+	stripeETLImplementationProof         = "internal/cli/stripe_transport_test.go: TestStripeSourceBoundETLMaterializesDuckDB"
+	stripeReverseETLImplementationProof  = "internal/cli/stripe_transport_test.go: TestStripeSourceBoundReverseETLPlanPreviewApprovalAndExecute"
 )
 
 var (
@@ -51,9 +55,27 @@ type stripeWebhookRegistrationFact struct {
 }
 
 type stripeArtifactRecords struct {
-	API     map[string]struct{}
-	Streams map[string]struct{}
-	Writes  map[string]struct{}
+	API      map[string]struct{}
+	Streams  map[string]struct{}
+	Writes   map[string]struct{}
+	Commands map[string]stripeCLICommandRecord
+}
+
+type stripeCLICommandRecord struct {
+	Intent          string
+	Availability    string
+	Stream          string
+	Write           string
+	SourceOperation string
+	SourceCLIPath   string
+}
+
+type stripeExecutionBinding struct {
+	Artifact   string
+	Record     string
+	CLICommand string
+	Reason     string
+	Proof      string
 }
 
 func TestStripeSourceLaneMatrixContract(t *testing.T) {
@@ -146,8 +168,11 @@ func TestStripeSourceLaneMatrixPreservesBinaryAndDeleteSurface(t *testing.T) {
 	if got := counts["direct_write"]["mapped_unproven"]; got != 326 {
 		t.Fatalf("direct_write mapped_unproven cells = %d, want 326", got)
 	}
-	if got := counts["reverse_etl"]["mapped_unproven"]; got != 326 {
-		t.Fatalf("reverse_etl mapped_unproven cells = %d, want 326", got)
+	if got := counts["reverse_etl"]["implemented"]; got != len(readStripeArtifactRecords(t).Writes) {
+		t.Fatalf("reverse_etl implemented cells = %d, want one for each declared write", got)
+	}
+	if got := counts["etl"]["implemented"]; got != len(readStripeArtifactRecords(t).Streams) {
+		t.Fatalf("etl implemented cells = %d, want one for each declared stream", got)
 	}
 	if got := counts["sync_transport"]["mapped_unproven"]; got != 0 {
 		t.Fatalf("sync_transport mapped_unproven cells = %d, want 0", got)
@@ -176,8 +201,8 @@ func TestStripeSourceLaneMatrixSeparatesPageableETLFromWebhookSync(t *testing.T)
 	}
 
 	byID := stripeMatrixOperationsByID(t, matrix)
-	if got := stripeStringField(t, stripeMatrixCellByLane(t, byID[pageableRead.ID], "etl"), "state"); got != "mapped_unproven" {
-		t.Fatalf("pageable read ETL state = %q, want mapped_unproven", got)
+	if got := stripeStringField(t, stripeMatrixCellByLane(t, byID[pageableRead.ID], "etl"), "state"); got != "implemented" {
+		t.Fatalf("pageable read ETL state = %q, want implemented source-bound stream", got)
 	}
 	if got := stripeStringField(t, stripeMatrixCellByLane(t, byID[pageableRead.ID], "sync_transport"), "state"); got != "not_applicable" {
 		t.Fatalf("pageable read sync state = %q, want not_applicable", got)
@@ -421,7 +446,7 @@ func TestStripeSourceLaneMatrixDirectAndBinaryCellsFollowLockedFacts(t *testing.
 		{
 			name:   "provider mutation is direct-write and reverse-ETL",
 			source: "stripe.rest.DeleteCustomersCustomer",
-			lanes:  map[string]string{"direct_read": "not_applicable", "direct_write": "mapped_unproven", "reverse_etl": "mapped_unproven"},
+			lanes:  map[string]string{"direct_read": "not_applicable", "direct_write": "mapped_unproven", "reverse_etl": "implemented"},
 		},
 		{
 			name:   "PDF response is binary download",
@@ -496,13 +521,10 @@ func validateStripeSourceLaneMatrix(matrix, lock map[string]any, artifacts strip
 		}
 		matrixByID[sourceID] = operation
 	}
-	for sourceID, source := range sourceByID {
-		operation, exists := matrixByID[sourceID]
+	for sourceID := range sourceByID {
+		_, exists := matrixByID[sourceID]
 		if !exists {
 			return fmt.Errorf("source row absent from matrix: %s", sourceID)
-		}
-		if err := stripeValidateOperation(operation, source); err != nil {
-			return err
 		}
 	}
 	for sourceID := range matrixByID {
@@ -513,10 +535,19 @@ func validateStripeSourceLaneMatrix(matrix, lock map[string]any, artifacts strip
 	if len(matrixByID) != len(sourceByID) {
 		return fmt.Errorf("matrix operation count = %d, source lock count = %d", len(matrixByID), len(sourceByID))
 	}
-	if err := stripeValidateCountReconciliation(matrix, lock, sourceByID); err != nil {
+	executions, err := stripeValidateArtifactLinks(matrix, artifacts, matrixByID)
+	if err != nil {
 		return err
 	}
-	return stripeValidateArtifactLinks(matrix, artifacts, matrixByID)
+	for sourceID, source := range sourceByID {
+		if err := stripeValidateOperation(matrixByID[sourceID], source, executions[sourceID]); err != nil {
+			return err
+		}
+	}
+	if err := stripeValidateCountReconciliation(matrix, lock, sourceByID, executions); err != nil {
+		return err
+	}
+	return nil
 }
 
 func stripeValidateSourceLockReference(reference, lock map[string]any, sourceCount int) error {
@@ -537,7 +568,7 @@ func stripeValidateSourceLockReference(reference, lock map[string]any, sourceCou
 	return nil
 }
 
-func stripeValidateOperation(operation map[string]any, source stripeSourceInfo) error {
+func stripeValidateOperation(operation map[string]any, source stripeSourceInfo, executions map[string]stripeExecutionBinding) error {
 	if stripeStringField(nil, operation, "protocol") != source.Protocol ||
 		stripeStringField(nil, operation, "method") != source.Method ||
 		stripeStringField(nil, operation, "path") != source.Path ||
@@ -552,6 +583,13 @@ func stripeValidateOperation(operation map[string]any, source stripeSourceInfo) 
 	}
 
 	expected := stripeExpectedCells(source)
+	for lane, execution := range executions {
+		base := expected[lane]
+		if base[0] != "mapped_unproven" {
+			return fmt.Errorf("source operation %s cannot execute %s because its source disposition is %s", source.ID, lane, base[0])
+		}
+		expected[lane] = [2]string{"implemented", execution.Reason}
+	}
 	cells := stripeArrayField(nil, operation, "cells")
 	if len(cells) != len(stripeLaneOrder) {
 		return fmt.Errorf("source operation %s has %d cells, want %d", source.ID, len(cells), len(stripeLaneOrder))
@@ -582,11 +620,14 @@ func stripeValidateOperation(operation map[string]any, source stripeSourceInfo) 
 			return fmt.Errorf("source operation %s has uncited %s cell", source.ID, lane)
 		}
 		state := stripeStringField(nil, cell, "state")
-		if state != "mapped_unproven" && state != "missing_foundation" && state != "not_applicable" {
-			return fmt.Errorf("source operation %s has unsupported mapping-only state %q", source.ID, state)
+		if state != "implemented" && state != "mapped_unproven" && state != "missing_foundation" && state != "not_applicable" {
+			return fmt.Errorf("source operation %s has unsupported state %q", source.ID, state)
 		}
 		if state == "missing_foundation" && lane != "sync_transport" {
 			return fmt.Errorf("source operation %s has non-sync missing-foundation cell %q", source.ID, lane)
+		}
+		if err := stripeValidateCellExecution(cell, executions[lane]); err != nil {
+			return fmt.Errorf("source operation %s %s: %w", source.ID, lane, err)
 		}
 	}
 	for _, lane := range stripeLaneOrder {
@@ -688,7 +729,7 @@ func stripeExpectedCells(source stripeSourceInfo) map[string][2]string {
 	return expected
 }
 
-func stripeValidateCountReconciliation(matrix, lock map[string]any, sourceByID map[string]stripeSourceInfo) error {
+func stripeValidateCountReconciliation(matrix, lock map[string]any, sourceByID map[string]stripeSourceInfo, executions map[string]map[string]stripeExecutionBinding) error {
 	if len(stripeArrayField(nil, matrix, "operations")) != 589 || len(sourceByID) != 589 {
 		return fmt.Errorf("retained source count reconciliation = matrix:%d lock:%d, want 589", len(stripeArrayField(nil, matrix, "operations")), len(sourceByID))
 	}
@@ -744,79 +785,67 @@ func stripeValidateCountReconciliation(matrix, lock map[string]any, sourceByID m
 		return errors.New("Stripe source facts no longer match the cited paging, binary, or webhook registration operation set")
 	}
 
-	cells := stripeMatrixCellCounts(matrix)
-	wantMapped := map[string]int{
-		"direct_read":     263,
-		"direct_write":    326,
-		"binary_download": 1,
-		"binary_upload":   1,
-		"etl":             128,
-		"reverse_etl":     326,
-		"sync_transport":  0,
-	}
-	wantMissingFoundation := map[string]int{
-		"direct_read":     0,
-		"direct_write":    0,
-		"binary_download": 0,
-		"binary_upload":   0,
-		"etl":             0,
-		"reverse_etl":     0,
-		"sync_transport":  1,
-	}
-	mappedTotal, missingFoundationTotal, notApplicableTotal := 0, 0, 0
+	want := make(map[string]map[string]int, len(stripeLaneOrder))
 	for _, lane := range stripeLaneOrder {
-		if cells[lane]["mapped_unproven"] != wantMapped[lane] {
-			return fmt.Errorf("%s mapped_unproven count = %d, want %d", lane, cells[lane]["mapped_unproven"], wantMapped[lane])
+		want[lane] = map[string]int{}
+	}
+	for sourceID, source := range sourceByID {
+		for lane, disposition := range stripeExpectedCells(source) {
+			if execution := executions[sourceID][lane]; execution.Artifact != "" {
+				disposition = [2]string{"implemented", execution.Reason}
+			}
+			want[lane][disposition[0]]++
 		}
-		if cells[lane]["missing_foundation"] != wantMissingFoundation[lane] {
-			return fmt.Errorf("%s missing_foundation count = %d, want %d", lane, cells[lane]["missing_foundation"], wantMissingFoundation[lane])
+	}
+
+	cells := stripeMatrixCellCounts(matrix)
+	implementedTotal, mappedTotal, missingFoundationTotal, notApplicableTotal := 0, 0, 0, 0
+	for _, lane := range stripeLaneOrder {
+		for _, state := range []string{"implemented", "mapped_unproven", "missing_foundation", "not_applicable"} {
+			if cells[lane][state] != want[lane][state] {
+				return fmt.Errorf("%s %s count = %d, want %d derived from the lock and declaration bindings", lane, state, cells[lane][state], want[lane][state])
+			}
 		}
-		if cells[lane]["not_applicable"] != 589-wantMapped[lane]-wantMissingFoundation[lane] {
-			return fmt.Errorf("%s not_applicable count = %d, want %d", lane, cells[lane]["not_applicable"], 589-wantMapped[lane]-wantMissingFoundation[lane])
-		}
-		if cells[lane]["implemented"] != 0 {
-			return fmt.Errorf("%s contains an execution state", lane)
-		}
+		implementedTotal += cells[lane]["implemented"]
 		mappedTotal += cells[lane]["mapped_unproven"]
 		missingFoundationTotal += cells[lane]["missing_foundation"]
 		notApplicableTotal += cells[lane]["not_applicable"]
 	}
-	if mappedTotal != 1045 || missingFoundationTotal != 1 || notApplicableTotal != 3077 || mappedTotal+missingFoundationTotal+notApplicableTotal != 4123 {
-		return fmt.Errorf("matrix cell totals = mapped:%d missing_foundation:%d not_applicable:%d total:%d, want 1045/1/3077/4123", mappedTotal, missingFoundationTotal, notApplicableTotal, mappedTotal+missingFoundationTotal+notApplicableTotal)
+	if implementedTotal+mappedTotal+missingFoundationTotal+notApplicableTotal != len(sourceByID)*len(stripeLaneOrder) {
+		return fmt.Errorf("matrix cell total = %d, want %d exact source-lane cells", implementedTotal+mappedTotal+missingFoundationTotal+notApplicableTotal, len(sourceByID)*len(stripeLaneOrder))
 	}
 	return nil
 }
 
-func stripeValidateArtifactLinks(matrix map[string]any, records stripeArtifactRecords, matrixByID map[string]map[string]any) error {
+func stripeValidateArtifactLinks(matrix map[string]any, records stripeArtifactRecords, matrixByID map[string]map[string]any) (map[string]map[string]stripeExecutionBinding, error) {
 	byPath := make(map[string]map[string]any)
 	for _, rawArtifact := range stripeArrayField(nil, matrix, "artifacts") {
 		artifact := stripeObjectValue(nil, rawArtifact, "matrix artifact")
 		path := stripeStringField(nil, artifact, "path")
 		if _, exists := byPath[path]; exists {
-			return fmt.Errorf("duplicate artifact matrix %q", path)
+			return nil, fmt.Errorf("duplicate artifact matrix %q", path)
 		}
 		byPath[path] = artifact
 	}
-	if len(byPath) != 3 {
-		return fmt.Errorf("matrix artifact count = %d, want 3", len(byPath))
+	if len(byPath) != 4 {
+		return nil, fmt.Errorf("matrix artifact count = %d, want 4", len(byPath))
 	}
 	if err := stripeValidateAPISurfaceLinks(byPath["api_surface.json"], records.API, matrixByID); err != nil {
-		return err
+		return nil, err
 	}
-	if err := stripeValidateNamedArtifactLinks("streams.json", byPath["streams.json"], records.Streams, matrixByID, map[string]string{
-		"customers":     "stripe.rest.GetCustomers",
-		"charges":       "stripe.rest.GetCharges",
-		"invoices":      "stripe.rest.GetInvoices",
-		"subscriptions": "stripe.rest.GetSubscriptions",
-		"products":      "stripe.rest.GetProducts",
-	}, []string{"direct_read", "etl"}); err != nil {
-		return err
+	streamSourceIDs, err := stripeValidateNamedArtifactLinks("streams.json", byPath["streams.json"], records.Streams, matrixByID, []string{"direct_read", "etl"})
+	if err != nil {
+		return nil, err
 	}
-	return stripeValidateNamedArtifactLinks("writes.json", byPath["writes.json"], records.Writes, matrixByID, map[string]string{
-		"create_customer": "stripe.rest.PostCustomers",
-		"update_customer": "stripe.rest.PostCustomersCustomer",
-		"delete_customer": "stripe.rest.DeleteCustomersCustomer",
-	}, []string{"direct_write", "reverse_etl"})
+	writeSourceIDs, err := stripeValidateNamedArtifactLinks("writes.json", byPath["writes.json"], records.Writes, matrixByID, []string{"direct_write", "reverse_etl"})
+	if err != nil {
+		return nil, err
+	}
+	cliSourceIDs, err := stripeValidateCLISurfaceLinks(byPath["cli_surface.json"], records.Commands, matrixByID)
+	if err != nil {
+		return nil, err
+	}
+	return stripeDeclaredExecutionBindings(records.Commands, streamSourceIDs, writeSourceIDs, cliSourceIDs, matrixByID)
 }
 
 func stripeValidateAPISurfaceLinks(artifact map[string]any, records map[string]struct{}, matrixByID map[string]map[string]any) error {
@@ -857,41 +886,170 @@ func stripeValidateAPISurfaceLinks(artifact map[string]any, records map[string]s
 	return nil
 }
 
-func stripeValidateNamedArtifactLinks(path string, artifact map[string]any, records map[string]struct{}, matrixByID map[string]map[string]any, expectedSourceID map[string]string, expectedLanes []string) error {
+func stripeValidateNamedArtifactLinks(path string, artifact map[string]any, records map[string]struct{}, matrixByID map[string]map[string]any, expectedLanes []string) (map[string]string, error) {
 	if artifact == nil {
-		return fmt.Errorf("matrix is missing %s artifact", path)
+		return nil, fmt.Errorf("matrix is missing %s artifact", path)
 	}
 	links := stripeArrayField(nil, artifact, "links")
-	if stripeNumberField(artifact, "record_count") != len(records) || len(links) != len(records) || len(records) != len(expectedSourceID) {
-		return fmt.Errorf("artifact %s link count does not reconcile", path)
+	if stripeNumberField(artifact, "record_count") != len(records) || len(links) != len(records) {
+		return nil, fmt.Errorf("artifact %s link count does not reconcile", path)
 	}
 	seen := make(map[string]struct{}, len(links))
+	sourceIDs := make(map[string]string, len(links))
 	for _, rawLink := range links {
 		link := stripeObjectValue(nil, rawLink, "artifact backlink")
 		record := stripeStringField(nil, link, "record")
 		if _, exists := records[record]; !exists {
-			return fmt.Errorf("artifact %s link references nonexistent record %q", path, record)
+			return nil, fmt.Errorf("artifact %s link references nonexistent record %q", path, record)
 		}
 		if _, duplicate := seen[record]; duplicate {
-			return fmt.Errorf("artifact %s link duplicates record %q", path, record)
+			return nil, fmt.Errorf("artifact %s link duplicates record %q", path, record)
 		}
 		seen[record] = struct{}{}
 		sourceID := stripeStringField(nil, link, "source_id")
-		if sourceID != expectedSourceID[record] {
-			return fmt.Errorf("artifact %s link %q source id = %q, want %q", path, record, sourceID, expectedSourceID[record])
-		}
 		operation, exists := matrixByID[sourceID]
 		if !exists {
-			return fmt.Errorf("artifact %s link %q references nonexistent source cell owner %q", path, record, sourceID)
+			return nil, fmt.Errorf("artifact %s link %q references nonexistent source cell owner %q", path, record, sourceID)
 		}
 		if !stripeEqualStrings(stripeStringArrayField(nil, link, "lanes"), expectedLanes) {
-			return fmt.Errorf("artifact %s link %q lanes = %v, want %v", path, record, stripeStringArrayField(nil, link, "lanes"), expectedLanes)
+			return nil, fmt.Errorf("artifact %s link %q lanes = %v, want %v", path, record, stripeStringArrayField(nil, link, "lanes"), expectedLanes)
 		}
 		for _, lane := range expectedLanes {
 			if stripeMatrixCellByLaneNoTest(operation, lane) == nil {
-				return fmt.Errorf("artifact %s link %q references nonexistent cell %q", path, record, lane)
+				return nil, fmt.Errorf("artifact %s link %q references nonexistent cell %q", path, record, lane)
 			}
 		}
+		sourceIDs[record] = sourceID
+	}
+	return sourceIDs, nil
+}
+
+func stripeValidateCLISurfaceLinks(artifact map[string]any, commands map[string]stripeCLICommandRecord, matrixByID map[string]map[string]any) (map[string]string, error) {
+	if artifact == nil {
+		return nil, errors.New("matrix is missing cli_surface.json artifact")
+	}
+	links := stripeArrayField(nil, artifact, "links")
+	if stripeNumberField(artifact, "record_count") != len(commands) || len(links) != len(commands) {
+		return nil, fmt.Errorf("artifact cli_surface.json link count does not reconcile")
+	}
+
+	seen := make(map[string]struct{}, len(links))
+	sourceIDs := make(map[string]string, len(links))
+	for _, rawLink := range links {
+		link := stripeObjectValue(nil, rawLink, "CLI surface backlink")
+		commandPath := stripeStringField(nil, link, "record")
+		command, exists := commands[commandPath]
+		if !exists {
+			return nil, fmt.Errorf("artifact cli_surface.json link references nonexistent command %q", commandPath)
+		}
+		if _, duplicate := seen[commandPath]; duplicate {
+			return nil, fmt.Errorf("artifact cli_surface.json link duplicates command %q", commandPath)
+		}
+		seen[commandPath] = struct{}{}
+		if command.Availability != "implemented" || (command.Intent != "etl" && command.Intent != "reverse_etl") || command.SourceOperation == "" {
+			return nil, fmt.Errorf("CLI command %q is not a source-bound implemented ETL or reverse-ETL declaration", commandPath)
+		}
+
+		sourceID := stripeStringField(nil, link, "source_id")
+		if sourceID != command.SourceOperation {
+			return nil, fmt.Errorf("artifact cli_surface.json link %q source id = %q, want command source operation %q", commandPath, sourceID, command.SourceOperation)
+		}
+		operation, exists := matrixByID[sourceID]
+		if !exists {
+			return nil, fmt.Errorf("artifact cli_surface.json link %q references nonexistent source cell owner %q", commandPath, sourceID)
+		}
+		if !stripeEqualStrings(stripeStringArrayField(nil, link, "lanes"), []string{command.Intent}) || stripeMatrixCellByLaneNoTest(operation, command.Intent) == nil {
+			return nil, fmt.Errorf("artifact cli_surface.json link %q does not preserve its declared %s lane", commandPath, command.Intent)
+		}
+		sourceIDs[commandPath] = sourceID
+	}
+	return sourceIDs, nil
+}
+
+func stripeDeclaredExecutionBindings(commands map[string]stripeCLICommandRecord, streamSourceIDs, writeSourceIDs, cliSourceIDs map[string]string, matrixByID map[string]map[string]any) (map[string]map[string]stripeExecutionBinding, error) {
+	result := make(map[string]map[string]stripeExecutionBinding)
+	boundStreams := make(map[string]struct{}, len(streamSourceIDs))
+	boundWrites := make(map[string]struct{}, len(writeSourceIDs))
+	for commandPath, command := range commands {
+		sourceID := command.SourceOperation
+		if cliSourceIDs[commandPath] != sourceID {
+			return nil, fmt.Errorf("CLI command %q has no matching cli_surface matrix link", commandPath)
+		}
+		operation, exists := matrixByID[sourceID]
+		if !exists {
+			return nil, fmt.Errorf("CLI command %q references unknown source operation %q", commandPath, sourceID)
+		}
+		if command.SourceCLIPath != stripeStringField(nil, operation, "method")+" "+stripeStringField(nil, operation, "path") {
+			return nil, fmt.Errorf("CLI command %q source route = %q, want locked route %q", commandPath, command.SourceCLIPath, stripeStringField(nil, operation, "method")+" "+stripeStringField(nil, operation, "path"))
+		}
+
+		var lane string
+		var binding stripeExecutionBinding
+		switch command.Intent {
+		case "etl":
+			if command.Stream == "" || command.Write != "" || streamSourceIDs[command.Stream] != sourceID {
+				return nil, fmt.Errorf("CLI ETL command %q does not close over one source-bound stream declaration", commandPath)
+			}
+			lane = "etl"
+			binding = stripeExecutionBinding{
+				Artifact:   "streams.json",
+				Record:     command.Stream,
+				CLICommand: commandPath,
+				Reason:     stripeETLImplementationReason,
+				Proof:      stripeETLImplementationProof,
+			}
+			boundStreams[command.Stream] = struct{}{}
+		case "reverse_etl":
+			if command.Write == "" || command.Stream != "" || writeSourceIDs[command.Write] != sourceID {
+				return nil, fmt.Errorf("CLI reverse-ETL command %q does not close over one source-bound write declaration", commandPath)
+			}
+			lane = "reverse_etl"
+			binding = stripeExecutionBinding{
+				Artifact:   "writes.json",
+				Record:     command.Write,
+				CLICommand: commandPath,
+				Reason:     stripeReverseETLImplementationReason,
+				Proof:      stripeReverseETLImplementationProof,
+			}
+			boundWrites[command.Write] = struct{}{}
+		default:
+			return nil, fmt.Errorf("CLI command %q has unsupported implemented intent %q", commandPath, command.Intent)
+		}
+		if result[sourceID] == nil {
+			result[sourceID] = make(map[string]stripeExecutionBinding)
+		}
+		if _, duplicate := result[sourceID][lane]; duplicate {
+			return nil, fmt.Errorf("source operation %q has duplicate declaration-owned %s execution bindings", sourceID, lane)
+		}
+		result[sourceID][lane] = binding
+	}
+	if len(boundStreams) != len(streamSourceIDs) || len(boundWrites) != len(writeSourceIDs) {
+		return nil, fmt.Errorf("source declaration bindings do not cover every linked stream/write record: streams %d/%d writes %d/%d", len(boundStreams), len(streamSourceIDs), len(boundWrites), len(writeSourceIDs))
+	}
+	return result, nil
+}
+
+func stripeValidateCellExecution(cell map[string]any, binding stripeExecutionBinding) error {
+	raw, exists := cell["execution"]
+	if binding.Artifact == "" {
+		if exists {
+			return errors.New("non-executable cell retains an execution binding")
+		}
+		return nil
+	}
+	if !exists {
+		return errors.New("implemented cell omits its execution binding")
+	}
+	execution, ok := raw.(map[string]any)
+	if !ok {
+		return fmt.Errorf("execution binding is %T, want object", raw)
+	}
+	if len(execution) != 4 ||
+		stripeStringField(nil, execution, "artifact") != binding.Artifact ||
+		stripeStringField(nil, execution, "record") != binding.Record ||
+		stripeStringField(nil, execution, "cli_command") != binding.CLICommand ||
+		stripeStringField(nil, execution, "proof") != binding.Proof {
+		return fmt.Errorf("execution binding = %#v, want artifact=%q record=%q command=%q proof=%q", execution, binding.Artifact, binding.Record, binding.CLICommand, binding.Proof)
 	}
 	return nil
 }
@@ -1135,10 +1293,12 @@ func readStripeArtifactRecords(t *testing.T) stripeArtifactRecords {
 	surface := readStripeJSONObject(t, "api_surface.json")
 	streams := readStripeJSONObject(t, "streams.json")
 	writes := readStripeJSONObject(t, "writes.json")
+	cli := readStripeJSONObject(t, "cli_surface.json")
 	records := stripeArtifactRecords{
-		API:     map[string]struct{}{},
-		Streams: map[string]struct{}{},
-		Writes:  map[string]struct{}{},
+		API:      map[string]struct{}{},
+		Streams:  map[string]struct{}{},
+		Writes:   map[string]struct{}{},
+		Commands: map[string]stripeCLICommandRecord{},
 	}
 	for _, rawEndpoint := range stripeArrayField(t, surface, "endpoints") {
 		endpoint := stripeObjectValue(t, rawEndpoint, "api surface endpoint")
@@ -1151,6 +1311,21 @@ func readStripeArtifactRecords(t *testing.T) stripeArtifactRecords {
 	for _, rawAction := range stripeArrayField(t, writes, "actions") {
 		action := stripeObjectValue(t, rawAction, "write action")
 		records.Writes[stripeStringField(t, action, "name")] = struct{}{}
+	}
+	for _, rawCommand := range stripeArrayField(t, cli, "commands") {
+		command := stripeObjectValue(t, rawCommand, "CLI command")
+		path := stripeStringField(t, command, "path")
+		if _, duplicate := records.Commands[path]; duplicate {
+			t.Fatalf("duplicate Stripe CLI command %q", path)
+		}
+		records.Commands[path] = stripeCLICommandRecord{
+			Intent:          stripeStringField(t, command, "intent"),
+			Availability:    stripeStringField(t, command, "availability"),
+			Stream:          stripeOptionalStringField(t, command, "stream"),
+			Write:           stripeOptionalStringField(t, command, "write"),
+			SourceOperation: stripeStringField(t, command, "source_operation"),
+			SourceCLIPath:   stripeStringField(t, command, "source_cli_path"),
+		}
 	}
 	return records
 }
@@ -1280,6 +1455,22 @@ func stripeStringField(t *testing.T, object map[string]any, name string) string 
 			t.Fatalf("JSON field %q is %T, want string", name, value)
 		}
 		panic(fmt.Sprintf("JSON field %q is %T, want string", name, value))
+	}
+	return result
+}
+
+func stripeOptionalStringField(t *testing.T, object map[string]any, name string) string {
+	stripeMarkHelper(t)
+	value, exists := object[name]
+	if !exists || value == nil {
+		return ""
+	}
+	result, ok := value.(string)
+	if !ok {
+		if t != nil {
+			t.Fatalf("JSON field %q is %T, want string or null", name, value)
+		}
+		panic(fmt.Sprintf("JSON field %q is %T, want string or null", name, value))
 	}
 	return result
 }

@@ -4222,6 +4222,68 @@
           ]
         }
       ]
+    },
+    {
+      "path": "cli_surface.json",
+      "record_count": 8,
+      "links": [
+        {
+          "record": "customers list",
+          "source_id": "stripe.rest.GetCustomers",
+          "lanes": [
+            "etl"
+          ]
+        },
+        {
+          "record": "customers create",
+          "source_id": "stripe.rest.PostCustomers",
+          "lanes": [
+            "reverse_etl"
+          ]
+        },
+        {
+          "record": "customers update",
+          "source_id": "stripe.rest.PostCustomersCustomer",
+          "lanes": [
+            "reverse_etl"
+          ]
+        },
+        {
+          "record": "customers delete",
+          "source_id": "stripe.rest.DeleteCustomersCustomer",
+          "lanes": [
+            "reverse_etl"
+          ]
+        },
+        {
+          "record": "charges list",
+          "source_id": "stripe.rest.GetCharges",
+          "lanes": [
+            "etl"
+          ]
+        },
+        {
+          "record": "invoices list",
+          "source_id": "stripe.rest.GetInvoices",
+          "lanes": [
+            "etl"
+          ]
+        },
+        {
+          "record": "subscriptions list",
+          "source_id": "stripe.rest.GetSubscriptions",
+          "lanes": [
+            "etl"
+          ]
+        },
+        {
+          "record": "products list",
+          "source_id": "stripe.rest.GetProducts",
+          "lanes": [
+            "etl"
+          ]
+        }
+      ]
     }
   ],
   "operations": [
@@ -4873,8 +4935,14 @@
         },
         {
           "lane": "reverse_etl",
-          "state": "mapped_unproven",
-          "reason": "stripe.source.reverse_etl.mutation_verb.v1",
+          "state": "implemented",
+          "reason": "stripe.runtime.reverse_etl.source_bound_plan_preview_approval_execute_witness.v1",
+          "execution": {
+            "artifact": "writes.json",
+            "record": "delete_customer",
+            "cli_command": "customers delete",
+            "proof": "internal/cli/stripe_transport_test.go: TestStripeSourceBoundReverseETLPlanPreviewApprovalAndExecute"
+          },
           "source_location": "paths[\"/v1/customers/{customer}\"].delete"
         },
         {
@@ -10270,8 +10338,14 @@
         },
         {
           "lane": "etl",
-          "state": "mapped_unproven",
-          "reason": "stripe.source.etl.documented_pagination.v1",
+          "state": "implemented",
+          "reason": "stripe.runtime.etl.source_bound_app_duckdb_witness.v1",
+          "execution": {
+            "artifact": "streams.json",
+            "record": "charges",
+            "cli_command": "charges list",
+            "proof": "internal/cli/stripe_transport_test.go: TestStripeSourceBoundETLMaterializesDuckDB"
+          },
           "source_location": "paths[\"/v1/charges\"].get"
         },
         {
@@ -12496,8 +12570,14 @@
         },
         {
           "lane": "etl",
-          "state": "mapped_unproven",
-          "reason": "stripe.source.etl.documented_pagination.v1",
+          "state": "implemented",
+          "reason": "stripe.runtime.etl.source_bound_app_duckdb_witness.v1",
+          "execution": {
+            "artifact": "streams.json",
+            "record": "customers",
+            "cli_command": "customers list",
+            "proof": "internal/cli/stripe_transport_test.go: TestStripeSourceBoundETLMaterializesDuckDB"
+          },
           "source_location": "paths[\"/v1/customers\"].get"
         },
         {
@@ -17270,8 +17350,14 @@
         },
         {
           "lane": "etl",
-          "state": "mapped_unproven",
-          "reason": "stripe.source.etl.documented_pagination.v1",
+          "state": "implemented",
+          "reason": "stripe.runtime.etl.source_bound_app_duckdb_witness.v1",
+          "execution": {
+            "artifact": "streams.json",
+            "record": "invoices",
+            "cli_command": "invoices list",
+            "proof": "internal/cli/stripe_transport_test.go: TestStripeSourceBoundETLMaterializesDuckDB"
+          },
           "source_location": "paths[\"/v1/invoices\"].get"
         },
         {
@@ -21712,8 +21798,14 @@
         },
         {
           "lane": "etl",
-          "state": "mapped_unproven",
-          "reason": "stripe.source.etl.documented_pagination.v1",
+          "state": "implemented",
+          "reason": "stripe.runtime.etl.source_bound_app_duckdb_witness.v1",
+          "execution": {
+            "artifact": "streams.json",
+            "record": "products",
+            "cli_command": "products list",
+            "proof": "internal/cli/stripe_transport_test.go: TestStripeSourceBoundETLMaterializesDuckDB"
+          },
           "source_location": "paths[\"/v1/products\"].get"
         },
         {
@@ -25344,8 +25436,14 @@
         },
         {
           "lane": "etl",
-          "state": "mapped_unproven",
-          "reason": "stripe.source.etl.documented_pagination.v1",
+          "state": "implemented",
+          "reason": "stripe.runtime.etl.source_bound_app_duckdb_witness.v1",
+          "execution": {
+            "artifact": "streams.json",
+            "record": "subscriptions",
+            "cli_command": "subscriptions list",
+            "proof": "internal/cli/stripe_transport_test.go: TestStripeSourceBoundETLMaterializesDuckDB"
+          },
           "source_location": "paths[\"/v1/subscriptions\"].get"
         },
         {
@@ -35056,8 +35154,14 @@
         },
         {
           "lane": "reverse_etl",
-          "state": "mapped_unproven",
-          "reason": "stripe.source.reverse_etl.mutation_verb.v1",
+          "state": "implemented",
+          "reason": "stripe.runtime.reverse_etl.source_bound_plan_preview_approval_execute_witness.v1",
+          "execution": {
+            "artifact": "writes.json",
+            "record": "create_customer",
+            "cli_command": "customers create",
+            "proof": "internal/cli/stripe_transport_test.go: TestStripeSourceBoundReverseETLPlanPreviewApprovalAndExecute"
+          },
           "source_location": "paths[\"/v1/customers\"].post"
         },
         {
@@ -35138,8 +35242,14 @@
         },
         {
           "lane": "reverse_etl",
-          "state": "mapped_unproven",
-          "reason": "stripe.source.reverse_etl.mutation_verb.v1",
+          "state": "implemented",
+          "reason": "stripe.runtime.reverse_etl.source_bound_plan_preview_approval_execute_witness.v1",
+          "execution": {
+            "artifact": "writes.json",
+            "record": "update_customer",
+            "cli_command": "customers update",
+            "proof": "internal/cli/stripe_transport_test.go: TestStripeSourceBoundReverseETLPlanPreviewApprovalAndExecute"
+          },
           "source_location": "paths[\"/v1/customers/{customer}\"].post"
         },
         {
