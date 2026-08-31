@@ -31,6 +31,62 @@
       "type": "string",
       "description": "Optional Asana team gid; scopes the 'team_memberships' stream to this team when set (Asana requires either team, or workspace+user, on that endpoint)."
     },
+    "goal_id": {
+      "type": "string",
+      "description": "Optional Asana goal gid used by source-backed goal-scoped full-refresh streams."
+    },
+    "portfolio_id": {
+      "type": "string",
+      "description": "Optional Asana portfolio gid used by source-backed portfolio-scoped full-refresh streams."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Optional Asana task gid used by source-backed task-scoped full-refresh streams."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Optional Asana user gid used by source-backed user-scoped full-refresh streams."
+    },
+    "section_id": {
+      "type": "string",
+      "description": "Optional Asana section gid used by the source-backed section task collection stream."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "Optional Asana tag gid used by the source-backed tag task collection stream."
+    },
+    "user_task_list_id": {
+      "type": "string",
+      "description": "Optional Asana user task list gid used by its source-backed task collection stream."
+    },
+    "time_tracking_category_id": {
+      "type": "string",
+      "description": "Optional Asana time tracking category gid used by its source-backed entry collection stream."
+    },
+    "parent_id": {
+      "type": "string",
+      "description": "Optional exact source parent identifier used by attachment and status-update collection requests."
+    },
+    "supported_goal_id": {
+      "type": "string",
+      "description": "Optional Asana goal gid required by the source-backed goal relationship collection request."
+    },
+    "emoji_base": {
+      "type": "string",
+      "description": "Optional provider-documented emoji base required by the source-backed reactions collection request."
+    },
+    "target_id": {
+      "type": "string",
+      "description": "Optional provider-documented target identifier required by the source-backed reactions collection request."
+    },
+    "favorite_resource_type": {
+      "type": "string",
+      "description": "Optional provider-documented resource type required by the source-backed user favorites collection request."
+    },
+    "organization_id": {
+      "type": "string",
+      "description": "Optional Asana organization gid required by the source-backed teams-for-user collection request."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

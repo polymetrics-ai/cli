@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "goal_relationships",
+  "type": "object",
+  "x-primary-key": ["gid"],
+  "required": ["gid"],
+  "properties": {
+    "gid": { "type": "string" },
+    "contribution_weight": { "type": ["number", "null"] },
+    "resource_subtype": { "type": ["string", "null"] },
+    "resource_type": { "type": ["string", "null"] },
+    "supporting_resource": { "type": ["object", "null"] }
+  }
+}

@@ -71,8 +71,7 @@
       "etl": {
         "applicable": 64,
         "not_applicable": 185,
-        "mapped_unproven": 52,
-        "implemented": 12
+        "implemented": 64
       },
       "reverse_etl": {
         "applicable": 130,
@@ -9036,8 +9035,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -9048,8 +9047,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/agents.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getAgentsForWorkspace",
+            "stream": "agents_for_workspace",
+            "schema": "schemas/agents.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/workspaces/{workspace_gid}/agents"
+            }
           }
         },
         "reverse_etl": {
@@ -9155,8 +9164,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -9167,8 +9176,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/ai_studio_runs.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getAiStudioRuns",
+            "stream": "ai_studio_runs",
+            "schema": "schemas/ai_studio_runs.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/workspaces/{workspace_gid}/ai_studio/runs"
+            }
           }
         },
         "reverse_etl": {
@@ -9273,8 +9292,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -9285,8 +9304,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/ai_studio_seats.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getAiStudioSeats",
+            "stream": "ai_studio_seats",
+            "schema": "schemas/ai_studio_seats.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/workspaces/{workspace_gid}/ai_studio/seats"
+            }
           }
         },
         "reverse_etl": {
@@ -9486,8 +9515,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -9498,8 +9527,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/allocations.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getAllocations",
+            "stream": "allocations",
+            "schema": "schemas/allocations.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/allocations"
+            }
           }
         },
         "reverse_etl": {
@@ -9697,8 +9736,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -9709,8 +9748,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/attachments.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getAttachmentsForObject",
+            "stream": "attachments_for_object",
+            "schema": "schemas/attachments.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/attachments"
+            }
           }
         },
         "reverse_etl": {
@@ -9819,8 +9868,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -9831,8 +9880,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/audit_log_events.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getAuditLogEvents",
+            "stream": "audit_log_events",
+            "schema": "schemas/audit_log_events.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/workspaces/{workspace_gid}/audit_log_events"
+            }
           }
         },
         "reverse_etl": {
@@ -10219,8 +10278,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -10231,8 +10290,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/custom_field_settings.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getCustomFieldSettingsForGoal",
+            "stream": "custom_field_settings_for_goal",
+            "schema": "schemas/custom_field_settings.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/goals/{goal_gid}/custom_field_settings"
+            }
           }
         },
         "reverse_etl": {
@@ -10337,8 +10406,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -10349,8 +10418,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/custom_field_settings.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getCustomFieldSettingsForPortfolio",
+            "stream": "custom_field_settings_for_portfolio",
+            "schema": "schemas/custom_field_settings.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/portfolios/{portfolio_gid}/custom_field_settings"
+            }
           }
         },
         "reverse_etl": {
@@ -10455,8 +10534,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -10467,8 +10546,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/custom_field_settings.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getCustomFieldSettingsForProject",
+            "stream": "custom_field_settings_for_project",
+            "schema": "schemas/custom_field_settings.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/projects/{project_gid}/custom_field_settings"
+            }
           }
         },
         "reverse_etl": {
@@ -10680,7 +10769,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getCustomFieldsForWorkspace",
+            "schema": "schemas/custom_fields.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -10878,8 +10970,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -10890,8 +10982,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/custom_types.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getCustomTypes",
+            "stream": "custom_types",
+            "schema": "schemas/custom_types.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/custom_types"
+            }
           }
         },
         "reverse_etl": {
@@ -10996,8 +11098,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -11008,8 +11110,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tasks.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getDependenciesForTask",
+            "stream": "dependencies_for_task",
+            "schema": "schemas/tasks.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/tasks/{task_gid}/dependencies"
+            }
           }
         },
         "reverse_etl": {
@@ -11114,8 +11226,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -11126,8 +11238,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tasks.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getDependentsForTask",
+            "stream": "dependents_for_task",
+            "schema": "schemas/tasks.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/tasks/{task_gid}/dependents"
+            }
           }
         },
         "reverse_etl": {
@@ -11355,8 +11477,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -11367,8 +11489,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/favorites.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getFavoritesForUser",
+            "stream": "favorites_for_user",
+            "schema": "schemas/favorites.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/users/{user_gid}/favorites"
+            }
           }
         },
         "reverse_etl": {
@@ -11662,8 +11794,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -11674,8 +11806,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/goal_relationships.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getGoalRelationships",
+            "stream": "goal_relationships",
+            "schema": "schemas/goal_relationships.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/goal_relationships"
+            }
           }
         },
         "reverse_etl": {
@@ -11784,8 +11926,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -11796,8 +11938,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/goals.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getGoals",
+            "stream": "goals",
+            "schema": "schemas/goals.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/goals"
+            }
           }
         },
         "reverse_etl": {
@@ -11902,8 +12054,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -11914,8 +12066,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/portfolio_items.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getItemsForPortfolio",
+            "stream": "portfolio_items",
+            "schema": "schemas/portfolio_items.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/portfolios/{portfolio_gid}/items"
+            }
           }
         },
         "reverse_etl": {
@@ -12209,8 +12371,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -12221,8 +12383,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/memberships.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getMemberships",
+            "stream": "memberships",
+            "schema": "schemas/memberships.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/memberships"
+            }
           }
         },
         "reverse_etl": {
@@ -12328,8 +12500,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -12340,8 +12512,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/ooo_entries.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getOooEntries",
+            "stream": "ooo_entries",
+            "schema": "schemas/ooo_entries.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/ooo_entries"
+            }
           }
         },
         "reverse_etl": {
@@ -12921,8 +13103,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -12933,8 +13115,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/portfolio_memberships.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getPortfolioMemberships",
+            "stream": "portfolio_memberships",
+            "schema": "schemas/portfolio_memberships.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/portfolio_memberships"
+            }
           }
         },
         "reverse_etl": {
@@ -13040,8 +13232,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -13052,8 +13244,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/portfolio_memberships.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getPortfolioMembershipsForPortfolio",
+            "stream": "portfolio_memberships_for_portfolio",
+            "schema": "schemas/portfolio_memberships.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/portfolios/{portfolio_gid}/portfolio_memberships"
+            }
           }
         },
         "reverse_etl": {
@@ -13157,8 +13359,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -13169,8 +13371,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/portfolios.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getPortfolios",
+            "stream": "portfolios",
+            "schema": "schemas/portfolios.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/portfolios"
+            }
           }
         },
         "reverse_etl": {
@@ -13561,8 +13773,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -13573,8 +13785,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/project_memberships.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getProjectMembershipsForProject",
+            "stream": "project_memberships_for_project",
+            "schema": "schemas/project_memberships.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/projects/{project_gid}/project_memberships"
+            }
           }
         },
         "reverse_etl": {
@@ -13774,8 +13996,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -13786,8 +14008,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/project_portfolio_settings.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getProjectPortfolioSettingsForPortfolio",
+            "stream": "project_portfolio_settings_for_portfolio",
+            "schema": "schemas/project_portfolio_settings.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/portfolios/{portfolio_gid}/project_portfolio_settings"
+            }
           }
         },
         "reverse_etl": {
@@ -13892,8 +14124,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -13904,8 +14136,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/project_portfolio_settings.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getProjectPortfolioSettingsForProject",
+            "stream": "project_portfolio_settings_for_project",
+            "schema": "schemas/project_portfolio_settings.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/projects/{project_gid}/project_portfolio_settings"
+            }
           }
         },
         "reverse_etl": {
@@ -14022,7 +14264,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getProjects",
+            "schema": "schemas/projects.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -14127,8 +14372,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -14139,8 +14384,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/projects.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getProjectsForTask",
+            "stream": "projects_for_task",
+            "schema": "schemas/projects.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/tasks/{task_gid}/projects"
+            }
           }
         },
         "reverse_etl": {
@@ -14246,8 +14501,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -14258,8 +14513,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/projects.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getProjectsForTeam",
+            "stream": "projects_for_team",
+            "schema": "schemas/projects.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/teams/{team_gid}/projects"
+            }
           }
         },
         "reverse_etl": {
@@ -14365,8 +14630,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -14377,8 +14642,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/projects.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getProjectsForWorkspace",
+            "stream": "projects_for_workspace",
+            "schema": "schemas/projects.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/workspaces/{workspace_gid}/projects"
+            }
           }
         },
         "reverse_etl": {
@@ -14604,7 +14879,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getProjectStatusesForProject",
+            "schema": "schemas/project_statuses.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -14803,8 +15081,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -14815,8 +15093,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/project_templates.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getProjectTemplates",
+            "stream": "project_templates",
+            "schema": "schemas/project_templates.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/project_templates"
+            }
           }
         },
         "reverse_etl": {
@@ -14921,8 +15209,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -14933,8 +15221,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/project_templates.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getProjectTemplatesForTeam",
+            "stream": "project_templates_for_team",
+            "schema": "schemas/project_templates.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/teams/{team_gid}/project_templates"
+            }
           }
         },
         "reverse_etl": {
@@ -15133,8 +15431,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -15145,8 +15443,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/rates.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getRates",
+            "stream": "rates",
+            "schema": "schemas/rates.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/rates"
+            }
           }
         },
         "reverse_etl": {
@@ -15249,8 +15557,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -15261,8 +15569,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/reactions.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getReactionsOnObject",
+            "stream": "reactions_on_object",
+            "schema": "schemas/reactions.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/reactions"
+            }
           }
         },
         "reverse_etl": {
@@ -15461,8 +15779,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -15473,8 +15791,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/roles.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getRoles",
+            "stream": "roles",
+            "schema": "schemas/roles.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/roles"
+            }
           }
         },
         "reverse_etl": {
@@ -15700,7 +16028,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getSectionsForProject",
+            "schema": "schemas/sections.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -15899,8 +16230,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -15911,8 +16242,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/statuses.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getStatusesForObject",
+            "stream": "statuses_for_object",
+            "schema": "schemas/statuses.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/status_updates"
+            }
           }
         },
         "reverse_etl": {
@@ -16017,8 +16358,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -16029,8 +16370,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/stories.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getStoriesForGoal",
+            "stream": "stories_for_goal",
+            "schema": "schemas/stories.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/goals/{goal_gid}/stories"
+            }
           }
         },
         "reverse_etl": {
@@ -16161,7 +16512,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getStoriesForTask",
+            "schema": "schemas/stories.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -16361,8 +16715,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -16373,8 +16727,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tasks.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getSubtasksForTask",
+            "stream": "subtasks_for_task",
+            "schema": "schemas/tasks.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/tasks/{task_gid}/subtasks"
+            }
           }
         },
         "reverse_etl": {
@@ -16584,7 +16948,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getTags",
+            "schema": "schemas/tags.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -16689,8 +17056,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -16701,8 +17068,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tags.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTagsForTask",
+            "stream": "tags_for_task",
+            "schema": "schemas/tags.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/tasks/{task_gid}/tags"
+            }
           }
         },
         "reverse_etl": {
@@ -16807,8 +17184,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -16819,8 +17196,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tags.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTagsForWorkspace",
+            "stream": "tags_for_workspace",
+            "schema": "schemas/tags.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/workspaces/{workspace_gid}/tags"
+            }
           }
         },
         "reverse_etl": {
@@ -17248,7 +17635,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getTasks",
+            "schema": "schemas/tasks.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -17366,8 +17756,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -17378,8 +17768,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tasks.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTasksForProject",
+            "stream": "tasks_for_project",
+            "schema": "schemas/tasks.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/projects/{project_gid}/tasks"
+            }
           }
         },
         "reverse_etl": {
@@ -17485,8 +17885,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -17497,8 +17897,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tasks.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTasksForSection",
+            "stream": "tasks_for_section",
+            "schema": "schemas/tasks.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/sections/{section_gid}/tasks"
+            }
           }
         },
         "reverse_etl": {
@@ -17603,8 +18013,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -17615,8 +18025,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tasks.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTasksForTag",
+            "stream": "tasks_for_tag",
+            "schema": "schemas/tasks.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/tags/{tag_gid}/tasks"
+            }
           }
         },
         "reverse_etl": {
@@ -17722,8 +18142,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -17734,8 +18154,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/tasks.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTasksForUserTaskList",
+            "stream": "tasks_for_user_task_list",
+            "schema": "schemas/tasks.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/user_task_lists/{user_task_list_gid}/tasks"
+            }
           }
         },
         "reverse_etl": {
@@ -18232,7 +18662,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getTeamMemberships",
+            "schema": "schemas/team_memberships.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -18337,8 +18770,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -18349,8 +18782,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/team_memberships.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTeamMembershipsForTeam",
+            "stream": "team_memberships_for_team",
+            "schema": "schemas/team_memberships.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/teams/{team_gid}/team_memberships"
+            }
           }
         },
         "reverse_etl": {
@@ -18456,8 +18899,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -18468,8 +18911,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/team_memberships.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTeamMembershipsForUser",
+            "stream": "team_memberships_for_user",
+            "schema": "schemas/team_memberships.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/users/{user_gid}/team_memberships"
+            }
           }
         },
         "reverse_etl": {
@@ -18575,8 +19028,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -18587,8 +19040,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/teams.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTeamsForUser",
+            "stream": "teams_for_user",
+            "schema": "schemas/teams.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/users/{user_gid}/teams"
+            }
           }
         },
         "reverse_etl": {
@@ -18705,7 +19168,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getTeamsForWorkspace",
+            "schema": "schemas/teams.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -18905,8 +19371,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -18917,8 +19383,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/time_periods.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTimePeriods",
+            "stream": "time_periods",
+            "schema": "schemas/time_periods.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/time_periods"
+            }
           }
         },
         "reverse_etl": {
@@ -19120,8 +19596,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -19132,8 +19608,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/timesheet_approval_statuses.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTimesheetApprovalStatuses",
+            "stream": "timesheet_approval_statuses",
+            "schema": "schemas/timesheet_approval_statuses.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/timesheet_approval_statuses"
+            }
           }
         },
         "reverse_etl": {
@@ -19237,8 +19723,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -19249,8 +19735,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/time_tracking_categories.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTimeTrackingCategories",
+            "stream": "time_tracking_categories",
+            "schema": "schemas/time_tracking_categories.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/time_tracking_categories"
+            }
           }
         },
         "reverse_etl": {
@@ -19455,8 +19951,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -19467,8 +19963,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/time_tracking_entries.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTimeTrackingEntries",
+            "stream": "time_tracking_entries",
+            "schema": "schemas/time_tracking_entries.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/time_tracking_entries"
+            }
           }
         },
         "reverse_etl": {
@@ -19573,8 +20079,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -19585,8 +20091,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/time_tracking_entries.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTimeTrackingEntriesForTask",
+            "stream": "time_tracking_entries_for_task",
+            "schema": "schemas/time_tracking_entries.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/tasks/{task_gid}/time_tracking_entries"
+            }
           }
         },
         "reverse_etl": {
@@ -19693,8 +20209,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -19705,8 +20221,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/time_tracking_entries.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getTimeTrackingEntriesForTimeTrackingCategory",
+            "stream": "time_tracking_entries_for_category",
+            "schema": "schemas/time_tracking_entries.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/time_tracking_categories/{time_tracking_category_gid}/time_tracking_entries"
+            }
           }
         },
         "reverse_etl": {
@@ -20109,7 +20635,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getUsers",
+            "schema": "schemas/users.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -20691,8 +21220,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -20703,8 +21232,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/webhooks.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getWebhooks",
+            "stream": "webhooks",
+            "schema": "schemas/webhooks.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/webhooks"
+            }
           }
         },
         "reverse_etl": {
@@ -21094,8 +21633,8 @@
         },
         "etl": {
           "applicability": "applicable",
-          "disposition": "mapped_unproven",
-          "reason": "The descriptor declares pagination, but no source-backed Asana stream declaration is selected; this ETL candidate remains visible without an execution claim.",
+          "disposition": "implemented",
+          "reason": "The retained source declares data[] with next_page.uri continuation. This exact source ID is projected as a full-refresh stream; continuation ends only at next_page null, and its direct-read lane remains bounded.",
           "mapping": {
             "descriptor_pagination": {
               "limit_param": "limit",
@@ -21106,8 +21645,18 @@
               "type": "next_url"
             },
             "artifacts": [
-              "sources/asana-operation-descriptor.json"
-            ]
+              "streams.json",
+              "schemas/workspace_memberships.json",
+              "api_surface.json"
+            ],
+            "source_id": "asana.rest.getWorkspaceMembershipsForUser",
+            "stream": "workspace_memberships_for_user",
+            "schema": "schemas/workspace_memberships.json",
+            "mode": "full_refresh",
+            "api_surface": {
+              "method": "GET",
+              "path": "/users/{user_gid}/workspace_memberships"
+            }
           }
         },
         "reverse_etl": {
@@ -21225,7 +21774,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getWorkspaceMembershipsForWorkspace",
+            "schema": "schemas/workspace_memberships.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
@@ -21339,7 +21891,10 @@
               "streams.json",
               "schemas/",
               "api_surface.json"
-            ]
+            ],
+            "source_id": "asana.rest.getWorkspaces",
+            "schema": "schemas/workspaces.json",
+            "mode": "full_refresh"
           }
         },
         "reverse_etl": {
