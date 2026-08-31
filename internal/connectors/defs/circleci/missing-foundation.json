@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "connector": "circleci",
+  "purpose": "Connector-local source mapping and execution-gap ledger. This authoring artifact does not load an executor, enable a command, alter the retained source denominator, or change source-lane membership.",
+  "source_lock": {
+    "path": "sources/circleci-operation-source-lock.json",
+    "source_url": "https://circleci.com/api/v2/openapi.json",
+    "sha256": "61c6ce11e8de509948aa3d53dcd0169913f52de20920b130b6a85dea41d66d07"
+  },
+  "foundations": [
+    {
+      "id": "circleci-inbound-webhook-receiver-r1",
+      "state": "recorded_only_requires_captain_approval_before_implementation",
+      "atlas_capability": "transport.sync-contract.v1",
+      "atlas_classification": "actual_gap",
+      "affected_lane": "sync_transport",
+      "source_ids": [
+        {
+          "id": "circleci.rest.createWebhook",
+          "method": "POST",
+          "path": "/webhook",
+          "source_location": "paths[\"/webhook\"].post"
+        },
+        {
+          "id": "circleci.rest.updateWebhook",
+          "method": "PUT",
+          "path": "/webhook/{webhook_id}",
+          "source_location": "paths[\"/webhook/{webhook_id}\"].put"
+        }
+      ],
+      "reason": "The retained source documents outbound webhook registration and update with typed events, url, and signing-secret request fields. transport.sync-contract.v1 requires an already selected source executor; it does not provide a CircleCI inbound receiver, signature verification, durable staging/worker, replay handling, or warehouse acknowledgement. Creating or updating a provider webhook only configures provider delivery to a URL.",
+      "runtime_claim": "No inbound CircleCI webhook receiver, selected source executor, or executable sync transport is claimed."
+    }
+  ],
+  "mapping_contract_debts": [
+    {
+      "id": "circleci-retained-source-descriptor-r1",
+      "state": "recorded_mapping_contract_debt",
+      "affected_lanes": [
+        "direct_read",
+        "direct_write",
+        "binary_download",
+        "binary_upload",
+        "etl",
+        "reverse_etl",
+        "sync_transport"
+      ],
+      "primary_source_lock": "sources/circleci-operation-source-lock.json",
+      "retained_mapping_contract": "sources/circleci-retained-mapping-contract.json",
+      "source_rows": 111,
+      "canonical_evidence": false,
+      "reason": "The v2 lock preserves complete provider request and response facts but has no canonical source descriptor. The retention-only contract accounts for all 111 frozen source IDs: 61 direct-read, 50 direct-write, 14 ETL, and 50 reverse-ETL mapped-unproven cells; two source-backed webhook sync cells remain missing-foundation; both binary lanes are source-evidenced not applicable. The current definition has no source-bound operations, CLI surface, sync transport, or enabled connector contract, so no source row reaches a public preflight or credential boundary.",
+      "inherited_artifact_mismatches": [
+        {
+          "id": "circleci-legacy-stream-sync-backlinks-r1",
+          "state": "recorded_nonexecuting_legacy_mismatch",
+          "source_lane_matrix": "sources/circleci-source-lane-matrix.json",
+          "missing_artifact": "sync_transport.json",
+          "legacy_disposition": "sources/circleci-declaration-disposition.json",
+          "artifact_links": [
+            {
+              "artifact": "streams.json",
+              "record": "pipelines",
+              "source_operation_id": "circleci.rest.listPipelinesForProject",
+              "lane": "sync_transport",
+              "matrix_state": "not_applicable"
+            },
+            {
+              "artifact": "streams.json",
+              "record": "workflows",
+              "source_operation_id": "circleci.rest.listWorkflowsByPipelineId",
+              "lane": "sync_transport",
+              "matrix_state": "not_applicable"
+            },
+            {
+              "artifact": "streams.json",
+              "record": "jobs",
+              "source_operation_id": "circleci.rest.listWorkflowJobs",
+              "lane": "sync_transport",
+              "matrix_state": "not_applicable"
+            },
+            {
+              "artifact": "streams.json",
+              "record": "schedules",
+              "source_operation_id": "circleci.rest.listSchedulesForProject",
+              "lane": "sync_transport",
+              "matrix_state": "not_applicable"
+            },
+            {
+              "artifact": "streams.json",
+              "record": "insights_workflow_summary",
+              "source_operation_id": "circleci.rest.getProjectWorkflowMetrics",
+              "lane": "sync_transport",
+              "matrix_state": "not_applicable"
+            }
+          ],
+          "reason": "The inherited matrix backlink inventory names five legacy stream records against source cells whose sync_transport state is not_applicable, while the inherited declaration disposition separately describes a declared source transport even though sync_transport.json is absent. This record preserves the evidence without editing the legacy artifact links or treating them as source bindings or execution proof.",
+          "runtime_claim": "This evidence does not declare or enable sync transport, a source executor, a CLI command, or provider I/O."
+        }
+      ],
+      "runtime_claim": "No source-bound command, no executor, and no executable declaration is claimed by this descriptor-free retained-source mapping debt."
+    }
+  ]
+}
