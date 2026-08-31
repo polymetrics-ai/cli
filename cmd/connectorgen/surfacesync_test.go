@@ -8,6 +8,8 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 var endpointSummaryForInvariantRE = regexp.MustCompile(`^([A-Z]+) (\/[^[:space:]]+)(?: \([^)]*\))?$`)
@@ -761,6 +763,154 @@ func TestSyncRuntimeOperationEndpointLedgerConnectorPreservesUnselectedEntries(t
 	if stats.Changed {
 		t.Fatalf("clean selected runtime endpoint ledger reported drift: %+v", stats)
 	}
+}
+
+// TestGitLabRuntimeEndpointLedgerKeepsExistingRowsAndAddsSourceBoundReads
+// keeps the canonical selected-connector updater honest for the GitLab
+// semantic-read cohort. The cohort is derived from the retained matrix and
+// exact source-operation bindings, not from a method count: the HEAD status
+// row is intentionally excluded from the rest-read endpoint ledger.
+func TestGitLabRuntimeEndpointLedgerKeepsExistingRowsAndAddsSourceBoundReads(t *testing.T) {
+	const defsRoot = "../../internal/connectors/defs"
+	targets := gitLabImplementedDirectReadLedgerEntries(t, defsRoot)
+	if len(targets) != 22 {
+		t.Fatalf("GitLab source-bound rest-read ledger cohort = %d, want 22", len(targets))
+	}
+
+	ledgerPath := filepath.Join(defsRoot, engine.RuntimeOperationEndpointLedgerFile)
+	raw, err := os.ReadFile(ledgerPath)
+	if err != nil {
+		t.Fatalf("read GitLab runtime endpoint ledger: %v", err)
+	}
+	var current map[string][]engine.OperationEndpointLedgerEntry
+	if err := json.Unmarshal(raw, &current); err != nil {
+		t.Fatalf("decode GitLab runtime endpoint ledger: %v", err)
+	}
+	if got := len(current["gitlab"]); got != 604 {
+		t.Fatalf("GitLab runtime endpoint ledger rows = %d, want 604 (582 retained + 22 source-bound reads)", got)
+	}
+	for target := range targets {
+		if !containsRuntimeEndpointLedgerEntry(current["gitlab"], target) {
+			t.Fatalf("GitLab runtime endpoint ledger misses source-bound target %+v", target)
+		}
+	}
+	stats, err := syncRuntimeOperationEndpointLedgerConnector(defsRoot, "gitlab", true)
+	if err != nil {
+		t.Fatalf("check GitLab runtime endpoint ledger: %v", err)
+	}
+	if stats.Changed || stats.Entries != 604 {
+		t.Fatalf("GitLab runtime endpoint ledger check stats = %+v, want clean 604-row projection", stats)
+	}
+
+	root := t.TempDir()
+	if err := copySurfaceReconcileTree(filepath.Join(defsRoot, "gitlab"), filepath.Join(root, "gitlab")); err != nil {
+		t.Fatalf("copy GitLab connector fixture: %v", err)
+	}
+	baseline := make(map[string][]engine.OperationEndpointLedgerEntry, len(current))
+	for connector, entries := range current {
+		baseline[connector] = append([]engine.OperationEndpointLedgerEntry(nil), entries...)
+	}
+	retained := make([]engine.OperationEndpointLedgerEntry, 0, len(baseline["gitlab"]))
+	for _, entry := range baseline["gitlab"] {
+		if !targets[entry] {
+			retained = append(retained, entry)
+		}
+	}
+	baseline["gitlab"] = retained
+	if got := len(retained); got != 582 {
+		t.Fatalf("GitLab baseline after removing source-bound cohort = %d, want 582", got)
+	}
+	baselineRaw, err := json.MarshalIndent(baseline, "", "  ")
+	if err != nil {
+		t.Fatalf("encode GitLab baseline runtime ledger: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(root, engine.RuntimeOperationEndpointLedgerFile), append(baselineRaw, '\n'), 0o644); err != nil {
+		t.Fatalf("write GitLab baseline runtime ledger: %v", err)
+	}
+
+	stats, err = syncRuntimeOperationEndpointLedgerConnector(root, "gitlab", false)
+	if err != nil {
+		t.Fatalf("update GitLab runtime endpoint ledger: %v", err)
+	}
+	if !stats.Changed || stats.Entries != 604 {
+		t.Fatalf("GitLab runtime endpoint ledger update stats = %+v, want changed 604-row projection", stats)
+	}
+	updatedRaw, err := os.ReadFile(filepath.Join(root, engine.RuntimeOperationEndpointLedgerFile))
+	if err != nil {
+		t.Fatalf("read updated GitLab runtime endpoint ledger: %v", err)
+	}
+	var updated map[string][]engine.OperationEndpointLedgerEntry
+	if err := json.Unmarshal(updatedRaw, &updated); err != nil {
+		t.Fatalf("decode updated GitLab runtime endpoint ledger: %v", err)
+	}
+	if got := len(updated["gitlab"]); got != 604 {
+		t.Fatalf("updated GitLab runtime endpoint ledger rows = %d, want 604", got)
+	}
+	for _, entry := range retained {
+		if !containsRuntimeEndpointLedgerEntry(updated["gitlab"], entry) {
+			t.Fatalf("canonical updater dropped retained GitLab endpoint %+v", entry)
+		}
+	}
+	for target := range targets {
+		if !containsRuntimeEndpointLedgerEntry(updated["gitlab"], target) {
+			t.Fatalf("canonical updater omitted source-bound GitLab endpoint %+v", target)
+		}
+	}
+	for _, entry := range updated["gitlab"] {
+		if !targets[entry] && !containsRuntimeEndpointLedgerEntry(retained, entry) {
+			t.Fatalf("canonical updater introduced non-target GitLab endpoint %+v", entry)
+		}
+	}
+}
+
+func gitLabImplementedDirectReadLedgerEntries(t *testing.T, defsRoot string) map[engine.OperationEndpointLedgerEntry]bool {
+	t.Helper()
+	matrixRaw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources", "gitlab-source-lane-matrix.json"))
+	if err != nil {
+		t.Fatalf("read GitLab source-lane matrix: %v", err)
+	}
+	var matrix struct {
+		SourceOperations []struct {
+			SourceFacts struct {
+				OperationID string `json:"operation_id"`
+			} `json:"source_facts"`
+			Lanes map[string]struct {
+				Disposition string `json:"disposition"`
+			} `json:"lanes"`
+		} `json:"source_operations"`
+	}
+	if err := json.Unmarshal(matrixRaw, &matrix); err != nil {
+		t.Fatalf("decode GitLab source-lane matrix: %v", err)
+	}
+	implemented := map[string]bool{}
+	for _, row := range matrix.SourceOperations {
+		if row.Lanes["direct_read"].Disposition == "implemented" {
+			implemented[row.SourceFacts.OperationID] = true
+		}
+	}
+	bundle, err := engine.Load(withoutRuntimeOperationEndpointLedgerFS{FS: os.DirFS(defsRoot)}, "gitlab")
+	if err != nil {
+		t.Fatalf("load GitLab bundle without runtime ledger: %v", err)
+	}
+	entries := map[engine.OperationEndpointLedgerEntry]bool{}
+	for _, operation := range bundle.Operations {
+		if operation.Kind != "rest_read" || operation.REST == nil || operation.SourceOperation == nil || !implemented[operation.SourceOperation.ID] {
+			continue
+		}
+		entries[engine.OperationEndpointLedgerEntry{
+			Method: operation.REST.Method, Path: operation.REST.Path, Kind: operation.Kind, MaxBytes: operation.REST.MaxBytes,
+		}] = true
+	}
+	return entries
+}
+
+func containsRuntimeEndpointLedgerEntry(entries []engine.OperationEndpointLedgerEntry, want engine.OperationEndpointLedgerEntry) bool {
+	for _, entry := range entries {
+		if entry == want {
+			return true
+		}
+	}
+	return false
 }
 
 func TestSurfaceSyncConnectorNamesSelectsOnlyRequestedDefinition(t *testing.T) {

@@ -196,14 +196,8 @@
     {
       "method": "POST",
       "path": "/code_suggestions/connection_details",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=implementable_now; counting=semantic_post_read; operationId=postApiV4CodeSuggestionsConnectionDetails; summary=Retrieve connection details; tags=(none); request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+      "covered_by": {
+        "direct_read": "api read-op-504f5354202f6170692f76342f636f64655f73756767657374696f6e732f636f6e6e656374696f6e5f64657461696c73"
       }
     },
     {
@@ -216,14 +210,8 @@
     {
       "method": "POST",
       "path": "/ai/third_party_agents/direct_access",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "GitLab's OpenAPI declares a provider availability gate (x-gitlab-lifecycle=experiment); keep it blocked until the entitlement/lifecycle is explicitly supported.",
-        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=blocked_provider_restriction; counting=semantic_post_read; operationId=postApiV4AiThirdPartyAgentsDirectAccess; summary=Get connection details for third party agents; tags=GitLab Duo; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+      "covered_by": {
+        "direct_read": "api read-op-504f5354202f6170692f76342f61692f74686972645f70617274795f6167656e74732f6469726563745f616363657373"
       }
     },
     {
@@ -941,13 +929,8 @@
     {
       "method": "GET",
       "path": "/analytics/code_review",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4AnalyticsCodeReview",
-        "notes": "source_operation=getApiV4AnalyticsCodeReview; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f616e616c79746963732f636f64655f726576696577"
       }
     },
     {
@@ -2268,25 +2251,15 @@
     {
       "method": "GET",
       "path": "/groups/{id}/epics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdEpics",
-        "notes": "source_operation=getApiV4GroupsIdEpics; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6570696373"
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/-/epics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdDashEpics",
-        "notes": "source_operation=getApiV4GroupsIdDashEpics; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f2d2f6570696373"
       }
     },
     {
@@ -3349,7 +3322,8 @@
       "method": "GET",
       "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
       "covered_by": {
-        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6d6c2f6d6c666c6f772f6170692f322e302f6d6c666c6f772f6d6574726963732f6765742d686973746f7279"
+        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6d6c2f6d6c666c6f772f6170692f322e302f6d6c666c6f772f6d6574726963732f6765742d686973746f7279",
+        "stream": "mlflow_metric_history"
       }
     },
     {
@@ -9230,25 +9204,15 @@
     {
       "method": "GET",
       "path": "/merge_requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4MergeRequests",
-        "notes": "source_operation=getApiV4MergeRequests; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f6d657267655f7265717565737473"
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/merge_requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdMergeRequests",
-        "notes": "source_operation=getApiV4GroupsIdMergeRequests; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6d657267655f7265717565737473"
       }
     },
     {
@@ -9313,13 +9277,8 @@
     {
       "method": "GET",
       "path": "/projects/{id}/merge_requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdMergeRequests",
-        "notes": "source_operation=getApiV4ProjectsIdMergeRequests; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6d657267655f7265717565737473"
       }
     },
     {
@@ -9941,13 +9900,8 @@
     {
       "method": "GET",
       "path": "/issues_statistics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4IssuesStatistics",
-        "notes": "source_operation=getApiV4IssuesStatistics; historical_descriptor_alias_gap=retained; retained_success_output=status; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f6973737565735f73746174697374696373"
       }
     },
     {
@@ -9967,25 +9921,15 @@
     {
       "method": "GET",
       "path": "/groups/{id}/issues",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdIssues",
-        "notes": "source_operation=getApiV4GroupsIdIssues; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f697373756573"
       }
     },
     {
       "method": "GET",
       "path": "/groups/{id}/issues_statistics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdIssuesStatistics",
-        "notes": "source_operation=getApiV4GroupsIdIssuesStatistics; historical_descriptor_alias_gap=retained; retained_success_output=status; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6973737565735f73746174697374696373"
       }
     },
     {
@@ -10050,13 +9994,8 @@
     {
       "method": "GET",
       "path": "/projects/{id}/issues",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdIssues",
-        "notes": "source_operation=getApiV4ProjectsIdIssues; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f697373756573"
       }
     },
     {
@@ -10075,13 +10014,8 @@
     {
       "method": "GET",
       "path": "/projects/{id}/issues_statistics",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdIssuesStatistics",
-        "notes": "source_operation=getApiV4ProjectsIdIssuesStatistics; historical_descriptor_alias_gap=retained; retained_success_output=status; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6973737565735f73746174697374696373"
       }
     },
     {
@@ -10390,14 +10324,8 @@
     {
       "method": "POST",
       "path": "/integrations/slack/options",
-      "operation": {
-        "model": "disallowed",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "GitLab's OpenAPI tags this as Internal operations; it is not a normal customer-token connector surface without provider authorization evidence.",
-        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=blocked_provider_restriction; counting=semantic_post_read; operationId=postApiV4IntegrationsSlackOptions; summary=Get Slack interactive component options; tags=Integrations,Internal operations; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+      "covered_by": {
+        "direct_read": "api read-op-504f5354202f6170692f76342f696e746567726174696f6e732f736c61636b2f6f7074696f6e73"
       }
     },
     {
@@ -12959,7 +12887,7 @@
       "method": "POST",
       "path": "/geo/node_proxy/{id}/graphql",
       "covered_by": {
-        "write": "source_write_504f5354202f67656f2f6e6f64655f70726f78792f7b69647d2f6772617068716c"
+        "direct_read": "api read-op-504f5354202f6170692f76342f67656f2f6e6f64655f70726f78792f7b69647d2f6772617068716c"
       }
     },
     {
@@ -13031,13 +12959,8 @@
     {
       "method": "GET",
       "path": "/projects/{id}/repository/files/{file_path}/blame",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdRepositoryFilesFilePathBlame",
-        "notes": "source_operation=getApiV4ProjectsIdRepositoryFilesFilePathBlame; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f7265706f7369746f72792f66696c65732f7b66696c655f706174687d2f626c616d65"
       }
     },
     {
@@ -13529,13 +13452,8 @@
     {
       "method": "GET",
       "path": "/projects/{id}/deployments/{deployment_id}/merge_requests",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests",
-        "notes": "source_operation=getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6465706c6f796d656e74732f7b6465706c6f796d656e745f69647d2f6d657267655f7265717565737473"
       }
     },
     {
@@ -14144,27 +14062,15 @@
     {
       "method": "POST",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=implementable_now; counting=semantic_post_read; operationId=postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls; summary=List all package upload URLs; tags=Packages: Conan; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+      "covered_by": {
+        "direct_read": "api read-op-504f5354202f6170692f76342f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73"
       }
     },
     {
       "method": "POST",
       "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=implementable_now; counting=semantic_post_read; operationId=postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls; summary=List all recipe upload URLs; tags=Packages: Conan; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+      "covered_by": {
+        "direct_read": "api read-op-504f5354202f6170692f76342f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73"
       }
     },
     {
@@ -14363,14 +14269,14 @@
       "method": "POST",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls",
       "covered_by": {
-        "write": "source_write_504f5354202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73"
+        "direct_read": "api read-op-504f5354202f6170692f76342f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73"
       }
     },
     {
       "method": "POST",
       "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls",
       "covered_by": {
-        "write": "source_write_504f5354202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73"
+        "direct_read": "api read-op-504f5354202f6170692f76342f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73"
       }
     },
     {
@@ -14794,13 +14700,8 @@
     {
       "method": "GET",
       "path": "/projects/{id}/variables/{key}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdVariablesKey",
-        "notes": "source_operation=getApiV4ProjectsIdVariablesKey; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
+      "covered_by": {
+        "direct_read": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f7661726961626c65732f7b6b65797d"
       }
     },
     {
@@ -15999,14 +15900,8 @@
     {
       "method": "HEAD",
       "path": "/projects/{id}/repository/branches/{branch}",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Provider-published request/response operation is available for connector-owned typed stream or bounded direct-read authoring; it is not executable until that declaration, schema, fixtures, and command/stream binding are added.",
-        "source_url": "https://gitlab.com/gitlab-org/gitlab/-/blob/master/doc/api/openapi/openapi_v3.yaml",
-        "notes": "classification=implementable_now; counting=read; operationId=headApiV4ProjectsIdRepositoryBranchesBranch; summary=Check if a branch exists; tags=Branches; request_content_types=(none declared); source=openapi_v3.yaml@sha256:7aab00db0124f7b6addcb1608c2c84fe76215cfedaf6036a2d705696d837bde0"
+      "covered_by": {
+        "direct_read": "api status-48454144202f6170692f76342f70726f6a656374732f7b69647d2f7265706f7369746f72792f6272616e636865732f7b6272616e63687d"
       }
     },
     {

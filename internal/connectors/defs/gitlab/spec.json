@@ -25,6 +25,22 @@
       "default": "50",
       "description": "Records per page (1-100)."
     },
+    "mlflow_project_id": {
+      "type": "string",
+      "description": "GitLab project ID for the retained MLflow metric-history source operation."
+    },
+    "mlflow_run_id": {
+      "type": "string",
+      "description": "MLflow run_id required by GitLab's metric-history endpoint."
+    },
+    "mlflow_metric_key": {
+      "type": "string",
+      "description": "MLflow metric_key required by GitLab's metric-history endpoint."
+    },
+    "mlflow_max_results": {
+      "type": "string",
+      "description": "Optional GitLab-documented max_results request bound for one MLflow metric-history page."
+    },
     "mode": {
       "type": "string",
       "description": "Runtime mode: live (default) or fixture for credential-free conformance."

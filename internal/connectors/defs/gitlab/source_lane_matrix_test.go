@@ -36,11 +36,11 @@ var gitLabLanes = []string{
 }
 
 var gitLabExpectedCounts = map[string]map[string]int{
-	"direct_read":     {"mapped_unproven": 763, "not_applicable": 991},
+	"direct_read":     {"implemented": 23, "mapped_unproven": 740, "not_applicable": 991},
 	"direct_write":    {"mapped_unproven": 991, "not_applicable": 763},
 	"binary_download": {"mapped_unproven": 1, "not_applicable": 1753},
 	"binary_upload":   {"mapped_unproven": 46, "not_applicable": 1708},
-	"etl":             {"mapped_unproven": 2, "not_applicable": 1752},
+	"etl":             {"implemented": 1, "mapped_unproven": 1, "not_applicable": 1752},
 	"reverse_etl":     {"mapped_unproven": 991, "not_applicable": 763},
 	"sync_transport":  {"missing_foundation": 3, "not_applicable": 1751},
 }
@@ -137,11 +137,27 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 				continue
 			}
 			cell := objectAt(objectAt(row, "lanes"), "direct_read")
-			if stringAt(cell, "applicability") != "source_candidate" || stringAt(cell, "disposition") != "mapped_unproven" {
-				t.Fatalf("semantic read %s direct-read cell=%#v, want source-backed mapped_unproven", stringAt(row, "source_id"), cell)
+			if stringAt(cell, "applicability") != "source_candidate" {
+				t.Fatalf("semantic read %s direct-read cell=%#v, want source candidate", stringAt(row, "source_id"), cell)
+			}
+			materialized := gitLabMaterializedDirectRead(stringAt(row, "source_id"), objectAt(row, "source_facts"))
+			wantDisposition := "mapped_unproven"
+			if materialized {
+				wantDisposition = "implemented"
+			}
+			if stringAt(cell, "disposition") != wantDisposition {
+				t.Fatalf("semantic read %s direct-read cell=%#v, want %s", stringAt(row, "source_id"), cell, wantDisposition)
 			}
 			backlink := objectAt(objectAt(cell, "mapping"), "definition_backlink")
-			if stringAt(backlink, "kind") != "source_lock" || stringAt(backlink, "path") != gitLabSourceLockPath || stringAt(backlink, "source_id") != stringAt(row, "source_id") {
+			if materialized {
+				wantKind := "direct_read"
+				if state == "source_semantic_head_read" {
+					wantKind = "status_check"
+				}
+				if stringAt(backlink, "kind") != wantKind || stringAt(backlink, "path") != "operations.json" || stringAt(backlink, "source_id") != stringAt(row, "source_id") {
+					t.Fatalf("materialized semantic read %s backlink=%#v, want exact declared direct-read binding", stringAt(row, "source_id"), backlink)
+				}
+			} else if stringAt(backlink, "kind") != "source_lock" || stringAt(backlink, "path") != gitLabSourceLockPath || stringAt(backlink, "source_id") != stringAt(row, "source_id") {
 				t.Fatalf("semantic read %s source backlink=%#v, want exact retained source-lock binding", stringAt(row, "source_id"), backlink)
 			}
 			classification := stringAt(objectAt(objectAt(cell, "mapping"), "source_fact"), "classification")
@@ -215,8 +231,12 @@ func TestGitLabSourceLaneMatrixRetainsEveryLockedOperationAndLane(t *testing.T) 
 			switch state {
 			case "request_response_continuation_candidate":
 				paired++
-				if stringAt(etl, "disposition") != "mapped_unproven" {
-					t.Fatalf("paired continuation %s ETL=%#v, want mapped_unproven", stringAt(row, "source_id"), etl)
+				wantDisposition := "mapped_unproven"
+				if gitLabMaterializedETL(stringAt(row, "source_id")) {
+					wantDisposition = "implemented"
+				}
+				if stringAt(etl, "disposition") != wantDisposition {
+					t.Fatalf("paired continuation %s ETL=%#v, want %s", stringAt(row, "source_id"), etl, wantDisposition)
 				}
 			case "request_controls_without_response_continuation":
 				unpaired++
@@ -729,7 +749,101 @@ func expectedGitLabLanes(id string, facts map[string]any) map[string]any {
 	} else {
 		lanes["sync_transport"] = gitLabNotApplicableCell("No retained source fact documents a webhook registration with required URL and event selectors.")
 	}
+	if gitLabMaterializedDirectRead(id, facts) {
+		lanes["direct_read"] = gitLabImplementedDirectReadCell(id, facts)
+	}
+	if gitLabMaterializedETL(id) {
+		lanes["etl"] = gitLabImplementedMLflowETLCell(id, facts)
+	}
 	return lanes
+}
+
+// gitLabMaterializedDirectRead is an intentionally exact source-ID cohort.
+// It does not promote GET, HEAD, or POST by verb: every member has a concrete
+// operation, CLI binding, and source-bound regression proof in this package.
+func gitLabMaterializedDirectRead(id string, facts map[string]any) bool {
+	sourceOperation := strings.TrimPrefix(id, "gitlab.rest.")
+	if sourceOperation == "headApiV4ProjectsIdRepositoryBranchesBranch" {
+		return true
+	}
+	if _, ok := gitLabTypedAliasReadSources[sourceOperation]; ok {
+		return true
+	}
+	_, ok := gitLabBodylessPOSTReadSources[sourceOperation]
+	return ok
+}
+
+func gitLabMaterializedETL(id string) bool {
+	return id == "gitlab.rest.getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory"
+}
+
+func gitLabImplementedDirectReadCell(id string, facts map[string]any) map[string]any {
+	method := strings.ToUpper(stringAt(facts, "method"))
+	// The retained source fact includes the provider's /api/v4 base prefix;
+	// mapping_path is the exact connector-relative declaration path.
+	declarationPath := stringAt(facts, "mapping_path")
+	sourcePath := stringAt(facts, "path")
+	operationEncoded := hex.EncodeToString([]byte(method + " " + declarationPath))
+	commandEncoded := hex.EncodeToString([]byte(method + " " + sourcePath))
+	operation := "source_read_" + operationEncoded
+	command := "api op-" + commandEncoded
+	kind := "direct_read"
+	if method == "POST" {
+		command = "api read-op-" + commandEncoded
+	}
+	if method == "HEAD" {
+		operation = "source_status_" + operationEncoded
+		command = "api status-" + commandEncoded
+		kind = "status_check"
+	}
+	classification := "read_verb_candidate"
+	switch stringAt(gitLabFactsOperationSemantics(facts), "state") {
+	case "source_semantic_head_read":
+		classification = "source_semantic_head_read_candidate"
+	case "source_semantic_post_read":
+		classification = "source_semantic_post_read_candidate"
+	}
+	return map[string]any{
+		"applicability": "source_candidate",
+		"disposition":   "implemented",
+		"reason":        "Exact retained source operation is materialized as a bounded declared " + kind + "; focused fake-server proof covers request construction without claiming credential-boundary certification.",
+		"mapping": map[string]any{
+			"source_fact": map[string]any{"classification": classification, "source_id": id},
+			"definition_backlink": map[string]any{
+				"kind":      kind,
+				"path":      "operations.json",
+				"operation": operation,
+				"target":    command,
+				"source_id": id,
+			},
+			"runtime_claim": "Declared bounded request and fake-server execution proof are present; credential-boundary certification is not claimed.",
+		},
+	}
+}
+
+func gitLabImplementedMLflowETLCell(id string, facts map[string]any) map[string]any {
+	pagination := objectAt(facts, "pagination")
+	return map[string]any{
+		"applicability": "source_candidate",
+		"disposition":   "implemented",
+		"reason":        "The retained source declares metrics[] with page_token -> next_page_token continuation. This exact source ID is materialized as a full-refresh source-to-DuckDB stream; no API-to-API route is claimed.",
+		"mapping": map[string]any{
+			"source_fact": map[string]any{
+				"classification": "source_request_response_continuation_candidate",
+				"source_id":      id,
+				"continuation":   objectAt(pagination, "continuation"),
+			},
+			"definition_backlink": map[string]any{
+				"kind":      "stream",
+				"path":      "streams.json",
+				"stream":    "mlflow_metric_history",
+				"schema":    "schemas/mlflow_metric_history.json",
+				"target":    "mlflow_metric_history",
+				"source_id": id,
+			},
+			"runtime_claim": "Declared full-refresh stream has source-to-DuckDB fake-server proof; credential-boundary certification is not claimed.",
+		},
+	}
 }
 
 func gitLabMappedCell(reason, classification string, backlink map[string]any) map[string]any {

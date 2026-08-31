@@ -87,9 +87,9 @@ func TestGitLabGuideRendersPartialSourceCoverage(t *testing.T) {
 	manual := connectors.RenderConnectorManual(New(bundle, nil))
 	for _, want := range []string{
 		"ENABLED CONNECTOR CONTRACT",
-		"direct_read: implemented (source coverage: partial 582/749; mapped_unproven=0; unmapped=0; deferred=167; unsupported=0)",
-		"reverse_etl: implemented (source coverage: partial 381/1003; mapped_unproven=0; unmapped=0; deferred=622; unsupported=0)",
-		"etl: implemented (source coverage: complete 4/4; mapped_unproven=0; unmapped=0; deferred=0; unsupported=0)",
+		"direct_read: implemented (source coverage: partial 605/762; mapped_unproven=0; unmapped=0; deferred=157; unsupported=0)",
+		"reverse_etl: implemented (source coverage: partial 381/990; mapped_unproven=0; unmapped=0; deferred=609; unsupported=0)",
+		"etl: implemented (source coverage: complete 5/5; mapped_unproven=0; unmapped=0; deferred=0; unsupported=0)",
 	} {
 		if !strings.Contains(manual, want) {
 			t.Fatalf("GitLab manual does not disclose source coverage %q:\n%s", want, manual)

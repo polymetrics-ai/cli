@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GitLab MLflow metric history record",
+  "type": "object",
+  "required": ["key", "step", "timestamp", "value"],
+  "properties": {
+    "key": { "type": "string" },
+    "step": { "type": "integer" },
+    "timestamp": { "type": "integer" },
+    "value": { "type": "number" }
+  }
+}

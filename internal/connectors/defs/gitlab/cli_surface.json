@@ -1,5 +1,5 @@
 {
-  "tagline": "Run 582 source-bound direct reads, four GitLab ETL streams, and 381 source-bound mutations through direct-write and approval-gated reverse-ETL commands.",
+  "tagline": "Run 604 source-bound direct reads, one source-cited HEAD status check, five GitLab ETL streams, and 381 source-bound mutations through direct-write and approval-gated reverse-ETL commands.",
   "usage": "pm gitlab <command> [flags]",
   "source_cli": {
     "name": "GitLab REST API v4",
@@ -63400,6 +63400,186 @@
           "max_bytes": 32768
         }
       ]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f616e616c79746963732f636f64655f726576696577",
+      "summary": "GET /analytics/code_review", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f616e616c79746963732f636f64655f726576696577", "source_operation": "getApiV4AnalyticsCodeReview",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/analytics/code_review"}],
+      "flags": [{"name": "project-id", "type": "integer", "maps_to": "query.project_id", "required": true}, {"name": "not-milestone-title", "type": "string", "maps_to": "query.not[milestone_title]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f2d2f6570696373",
+      "summary": "GET /groups/{id}/-/epics", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f67726f7570732f7b69647d2f2d2f6570696373", "source_operation": "getApiV4GroupsIdDashEpics",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/groups/{id}/-/epics"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "not-author-id", "type": "integer", "maps_to": "query.not[author_id]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6570696373",
+      "summary": "GET /groups/{id}/epics", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f67726f7570732f7b69647d2f6570696373", "source_operation": "getApiV4GroupsIdEpics",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/groups/{id}/epics"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "not-author-id", "type": "integer", "maps_to": "query.not[author_id]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f697373756573",
+      "summary": "GET /groups/{id}/issues", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f67726f7570732f7b69647d2f697373756573", "source_operation": "getApiV4GroupsIdIssues",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/groups/{id}/issues"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "not-milestone", "type": "string", "maps_to": "query.not[milestone]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6973737565735f73746174697374696373",
+      "summary": "GET /groups/{id}/issues_statistics", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f67726f7570732f7b69647d2f6973737565735f73746174697374696373", "source_operation": "getApiV4GroupsIdIssuesStatistics",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/groups/{id}/issues_statistics"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "not-milestone", "type": "string", "maps_to": "query.not[milestone]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f67726f7570732f7b69647d2f6d657267655f7265717565737473",
+      "summary": "GET /groups/{id}/merge_requests", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f67726f7570732f7b69647d2f6d657267655f7265717565737473", "source_operation": "getApiV4GroupsIdMergeRequests",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/groups/{id}/merge_requests"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "not-author-id", "type": "integer", "maps_to": "query.not[author_id]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f6973737565735f73746174697374696373",
+      "summary": "GET /issues_statistics", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f6973737565735f73746174697374696373", "source_operation": "getApiV4IssuesStatistics",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/issues_statistics"}],
+      "flags": [{"name": "not-milestone", "type": "string", "maps_to": "query.not[milestone]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f6d657267655f7265717565737473",
+      "summary": "GET /merge_requests", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f6d657267655f7265717565737473", "source_operation": "getApiV4MergeRequests",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/merge_requests"}],
+      "flags": [{"name": "not-author-id", "type": "integer", "maps_to": "query.not[author_id]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6465706c6f796d656e74732f7b6465706c6f796d656e745f69647d2f6d657267655f7265717565737473",
+      "summary": "GET /projects/{id}/deployments/{deployment_id}/merge_requests", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f70726f6a656374732f7b69647d2f6465706c6f796d656e74732f7b6465706c6f796d656e745f69647d2f6d657267655f7265717565737473", "source_operation": "getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/projects/{id}/deployments/{deployment_id}/merge_requests"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "deployment-id", "type": "integer", "maps_to": "path.deployment_id", "required": true}, {"name": "not-author-id", "type": "integer", "maps_to": "query.not[author_id]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f697373756573",
+      "summary": "GET /projects/{id}/issues", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f70726f6a656374732f7b69647d2f697373756573", "source_operation": "getApiV4ProjectsIdIssues",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/projects/{id}/issues"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "not-milestone", "type": "string", "maps_to": "query.not[milestone]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6973737565735f73746174697374696373",
+      "summary": "GET /projects/{id}/issues_statistics", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f70726f6a656374732f7b69647d2f6973737565735f73746174697374696373", "source_operation": "getApiV4ProjectsIdIssuesStatistics",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/projects/{id}/issues_statistics"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "not-milestone", "type": "string", "maps_to": "query.not[milestone]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f6d657267655f7265717565737473",
+      "summary": "GET /projects/{id}/merge_requests", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f70726f6a656374732f7b69647d2f6d657267655f7265717565737473", "source_operation": "getApiV4ProjectsIdMergeRequests",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/projects/{id}/merge_requests"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "not-author-id", "type": "integer", "maps_to": "query.not[author_id]"}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f7265706f7369746f72792f66696c65732f7b66696c655f706174687d2f626c616d65",
+      "summary": "GET /projects/{id}/repository/files/{file_path}/blame", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f70726f6a656374732f7b69647d2f7265706f7369746f72792f66696c65732f7b66696c655f706174687d2f626c616d65", "source_operation": "getApiV4ProjectsIdRepositoryFilesFilePathBlame",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/projects/{id}/repository/files/{file_path}/blame"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "file-path", "type": "string", "maps_to": "path.file_path", "required": true}, {"name": "ref", "type": "string", "maps_to": "query.ref", "required": true}, {"name": "range-start", "type": "integer", "maps_to": "query.range[start]", "required": true}, {"name": "range-end", "type": "integer", "maps_to": "query.range[end]", "required": true}]
+    },
+    {
+      "path": "api op-474554202f6170692f76342f70726f6a656374732f7b69647d2f7661726961626c65732f7b6b65797d",
+      "summary": "GET /projects/{id}/variables/{key}", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_474554202f70726f6a656374732f7b69647d2f7661726961626c65732f7b6b65797d", "source_operation": "getApiV4ProjectsIdVariablesKey",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted",
+      "api_surface": [{"method": "GET", "path": "/projects/{id}/variables/{key}"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "key", "type": "string", "maps_to": "path.key", "required": true}, {"name": "filter-environment-scope", "type": "string", "maps_to": "query.filter[environment_scope]"}]
+    },
+    {
+      "path": "api status-48454144202f6170692f76342f70726f6a656374732f7b69647d2f7265706f7369746f72792f6272616e636865732f7b6272616e63687d",
+      "summary": "HEAD /projects/{id}/repository/branches/{branch}", "intent": "status_check", "availability": "implemented",
+      "operation": "source_status_48454144202f70726f6a656374732f7b69647d2f7265706f7369746f72792f6272616e636865732f7b6272616e63687d",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "status",
+      "notes": "source_operation=headApiV4ProjectsIdRepositoryBranchesBranch; status checks retain exact source evidence in the matrix and enabled contract while the existing status executor has no source-operation preflight binding.",
+      "api_surface": [{"method": "HEAD", "path": "/projects/{id}/repository/branches/{branch}"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "branch", "type": "string", "maps_to": "path.branch", "required": true}]
+    },
+    {
+      "path": "api read-op-504f5354202f6170692f76342f61692f74686972645f70617274795f6167656e74732f6469726563745f616363657373",
+      "summary": "POST /ai/third_party_agents/direct_access", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_504f5354202f61692f74686972645f70617274795f6167656e74732f6469726563745f616363657373", "source_operation": "postApiV4AiThirdPartyAgentsDirectAccess",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted", "api_surface": [{"method": "POST", "path": "/ai/third_party_agents/direct_access"}]
+    },
+    {
+      "path": "api read-op-504f5354202f6170692f76342f636f64655f73756767657374696f6e732f636f6e6e656374696f6e5f64657461696c73",
+      "summary": "POST /code_suggestions/connection_details", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_504f5354202f636f64655f73756767657374696f6e732f636f6e6e656374696f6e5f64657461696c73", "source_operation": "postApiV4CodeSuggestionsConnectionDetails",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted", "api_surface": [{"method": "POST", "path": "/code_suggestions/connection_details"}]
+    },
+    {
+      "path": "api read-op-504f5354202f6170692f76342f67656f2f6e6f64655f70726f78792f7b69647d2f6772617068716c",
+      "summary": "POST /geo/node_proxy/{id}/graphql", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_504f5354202f67656f2f6e6f64655f70726f78792f7b69647d2f6772617068716c", "source_operation": "postApiV4GeoNodeProxyIdGraphql",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted", "api_surface": [{"method": "POST", "path": "/geo/node_proxy/{id}/graphql"}],
+      "flags": [{"name": "id", "type": "integer", "maps_to": "path.id", "required": true}]
+    },
+    {
+      "path": "api read-op-504f5354202f6170692f76342f696e746567726174696f6e732f736c61636b2f6f7074696f6e73",
+      "summary": "POST /integrations/slack/options", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_504f5354202f696e746567726174696f6e732f736c61636b2f6f7074696f6e73", "source_operation": "postApiV4IntegrationsSlackOptions",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted", "api_surface": [{"method": "POST", "path": "/integrations/slack/options"}]
+    },
+    {
+      "path": "api read-op-504f5354202f6170692f76342f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73",
+      "summary": "POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_504f5354202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73", "source_operation": "postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted", "api_surface": [{"method": "POST", "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls"}],
+      "flags": [{"name": "package-name", "type": "string", "maps_to": "path.package_name", "required": true}, {"name": "package-version", "type": "string", "maps_to": "path.package_version", "required": true}, {"name": "package-username", "type": "string", "maps_to": "path.package_username", "required": true}, {"name": "package-channel", "type": "string", "maps_to": "path.package_channel", "required": true}, {"name": "conan-package-reference", "type": "string", "maps_to": "path.conan_package_reference", "required": true}]
+    },
+    {
+      "path": "api read-op-504f5354202f6170692f76342f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73",
+      "summary": "POST /packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_504f5354202f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73", "source_operation": "postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted", "api_surface": [{"method": "POST", "path": "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls"}],
+      "flags": [{"name": "package-name", "type": "string", "maps_to": "path.package_name", "required": true}, {"name": "package-version", "type": "string", "maps_to": "path.package_version", "required": true}, {"name": "package-username", "type": "string", "maps_to": "path.package_username", "required": true}, {"name": "package-channel", "type": "string", "maps_to": "path.package_channel", "required": true}]
+    },
+    {
+      "path": "api read-op-504f5354202f6170692f76342f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73",
+      "summary": "POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_504f5354202f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f7061636b616765732f7b636f6e616e5f7061636b6167655f7265666572656e63657d2f75706c6f61645f75726c73", "source_operation": "postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted", "api_surface": [{"method": "POST", "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "package-name", "type": "string", "maps_to": "path.package_name", "required": true}, {"name": "package-version", "type": "string", "maps_to": "path.package_version", "required": true}, {"name": "package-username", "type": "string", "maps_to": "path.package_username", "required": true}, {"name": "package-channel", "type": "string", "maps_to": "path.package_channel", "required": true}, {"name": "conan-package-reference", "type": "string", "maps_to": "path.conan_package_reference", "required": true}]
+    },
+    {
+      "path": "api read-op-504f5354202f6170692f76342f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73",
+      "summary": "POST /projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls", "intent": "direct_read", "availability": "implemented",
+      "operation": "source_read_504f5354202f70726f6a656374732f7b69647d2f7061636b616765732f636f6e616e2f76312f636f6e616e732f7b7061636b6167655f6e616d657d2f7b7061636b6167655f76657273696f6e7d2f7b7061636b6167655f757365726e616d657d2f7b7061636b6167655f6368616e6e656c7d2f75706c6f61645f75726c73", "source_operation": "postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "risk": "low", "approval": "none", "output_policy": "json_redacted", "api_surface": [{"method": "POST", "path": "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "path.id", "required": true}, {"name": "package-name", "type": "string", "maps_to": "path.package_name", "required": true}, {"name": "package-version", "type": "string", "maps_to": "path.package_version", "required": true}, {"name": "package-username", "type": "string", "maps_to": "path.package_username", "required": true}, {"name": "package-channel", "type": "string", "maps_to": "path.package_channel", "required": true}]
+    },
+    {
+      "path": "etl mlflow-metric-history list", "summary": "Full-refresh GitLab MLflow metric history into DuckDB.", "intent": "etl", "availability": "implemented", "stream": "mlflow_metric_history",
+      "source_operation": "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory", "source_cli_path": "GET /projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
+      "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml", "api_surface": [{"method": "GET", "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history"}],
+      "flags": [{"name": "id", "type": "string", "maps_to": "config.mlflow_project_id", "required": true, "max_bytes": 32768}, {"name": "run-id", "type": "string", "maps_to": "config.mlflow_run_id", "required": true, "max_bytes": 32768}, {"name": "metric-key", "type": "string", "maps_to": "config.mlflow_metric_key", "required": true, "max_bytes": 32768}, {"name": "max-results", "type": "string", "maps_to": "config.mlflow_max_results", "max_bytes": 32768}]
     }
   ],
   "help_topics": [
@@ -63409,7 +63589,7 @@
     },
     {
       "name": "operation-inventory",
-      "summary": "The GitLab source-lock ledger retains 1,752 cited REST identities: 582 direct reads, four ETL-only stream reads, and 381 mutations with direct-write and approval-gated reverse-ETL commands are executable through closed contracts."
+      "summary": "The GitLab source-lock ledger retains 1,752 cited REST identities: 604 source-bound direct reads, one source-cited status check, five ETL streams, and 381 mutations with direct-write and approval-gated reverse-ETL commands are executable through closed contracts."
     },
     {
       "name": "known-limits",

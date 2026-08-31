@@ -56,6 +56,22 @@
         "author_id": "{{ record.author.id }}"
       },
       "schema": "schemas/issues.json"
+    },
+    {
+      "name": "mlflow_metric_history",
+      "path": "/projects/{{ config.mlflow_project_id }}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
+      "query": {
+        "run_id": { "template": "{{ config.mlflow_run_id }}" },
+        "metric_key": { "template": "{{ config.mlflow_metric_key }}" },
+        "max_results": { "template": "{{ config.mlflow_max_results }}", "omit_when_absent": true }
+      },
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "page_token",
+        "token_path": "next_page_token"
+      },
+      "records": { "path": "metrics" },
+      "schema": "schemas/mlflow_metric_history.json"
     }
   ]
 }

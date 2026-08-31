@@ -963,10 +963,11 @@ type OperationParameter struct {
 }
 
 type RESTOperationSpec struct {
-	Method      string `json:"method"`
-	Path        string `json:"path"`
-	ContentType string `json:"content_type,omitempty"`
-	MaxBytes    int    `json:"max_bytes,omitempty"`
+	Method        string `json:"method"`
+	Path          string `json:"path"`
+	ContentType   string `json:"content_type,omitempty"`
+	NoRequestBody bool   `json:"no_request_body,omitempty"`
+	MaxBytes      int    `json:"max_bytes,omitempty"`
 	// Pagination is a direct-read operation's own pager. It deliberately
 	// shadows neither HTTP.Pagination nor streams.json: an API commonly mixes
 	// page/page_size and startIndex/count endpoints, and using the connector
@@ -3195,8 +3196,9 @@ func validateSourceOperationBinding(i int, op OperationSpec) error {
 	if strings.TrimSpace(binding.ID) == "" || strings.TrimSpace(binding.Method) == "" || strings.TrimSpace(binding.Path) == "" {
 		return fmt.Errorf("operation %d (%q) source_operation requires non-empty id, method, and path", i, op.ID)
 	}
-	if strings.ToUpper(strings.TrimSpace(binding.Method)) != http.MethodGet {
-		return fmt.Errorf("operation %d (%q) source_operation currently supports only GET reads, got %s", i, op.ID, strings.ToUpper(strings.TrimSpace(binding.Method)))
+	bindingMethod := strings.ToUpper(strings.TrimSpace(binding.Method))
+	if bindingMethod != http.MethodGet && !(bindingMethod == http.MethodPost && op.Kind == "rest_read" && op.REST != nil && op.REST.NoRequestBody) {
+		return fmt.Errorf("operation %d (%q) source_operation supports GET reads or an explicit source-bound bodyless POST read, got %s", i, op.ID, bindingMethod)
 	}
 	if isAbsoluteHTTPURL(binding.Path) || strings.HasPrefix(strings.TrimSpace(binding.Path), "//") || !strings.HasPrefix(binding.Path, "/") {
 		return fmt.Errorf("operation %d (%q) source_operation path must be connector-relative", i, op.ID)
@@ -3451,7 +3453,11 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if method != "GET" && method != "POST" {
 			return fmt.Errorf("operation %d (%q) rest_read method must be GET or POST, got %s", i, op.ID, method)
 		}
-		if method == "POST" && len(op.REST.BodySchema) == 0 {
+		if method == "POST" && op.REST.NoRequestBody {
+			if err := validateOperationDirectReadBodylessPOSTContract(op); err != nil {
+				return fmt.Errorf("operation %d (%q) rest_read POST: %w", i, op.ID, err)
+			}
+		} else if method == "POST" && len(op.REST.BodySchema) == 0 {
 			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
 		}
 		// text/plain is a new, closed operation contract. Validate it at load

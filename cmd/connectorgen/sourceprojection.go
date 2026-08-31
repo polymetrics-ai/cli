@@ -1323,11 +1323,23 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 	if err := json.Unmarshal(writesRaw, &declaredWrites); err != nil {
 		return sourceProjectionStats{}, fmt.Errorf("writes.json: %w", err)
 	}
+	var declaredOperations struct {
+		Operations []engine.OperationSpec `json:"operations"`
+	}
+	if hasOperations {
+		if err := json.Unmarshal(operationsRaw, &declaredOperations); err != nil {
+			return sourceProjectionStats{}, fmt.Errorf("operations.json: %w", err)
+		}
+	}
 	var declaredCLI engine.CLISurface
 	if err := json.Unmarshal(cliRaw, &declaredCLI); err != nil {
 		return sourceProjectionStats{}, fmt.Errorf("cli_surface.json: %w", err)
 	}
-	declaredMutationBundle := engine.Bundle{Spec: spec, Writes: declaredWrites.Actions, CLISurface: &declaredCLI}
+	// Keep the declared operations available to the mutation accounting check.
+	// The only currently relevant operation-side distinction is the closed
+	// rest.no_request_body semantic POST-read form; it is never inferred from
+	// method alone and has no effect when operations.json is absent.
+	declaredMutationBundle := engine.Bundle{Spec: spec, Operations: declaredOperations.Operations, Writes: declaredWrites.Actions, CLISurface: &declaredCLI}
 	stats := sourceProjectionStats{}
 	if reconcileReadSurface {
 		blockedReads := sourceProjectionBlockedReadSources(result)
@@ -1387,7 +1399,7 @@ func projectSourceDescriptorToBundleMode(bundleDir string, result sourceImportRe
 		}
 	}
 	if api.root != nil {
-		stats.Surface += sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(api.root, writes.root, cli.root, result)
+		stats.Surface += sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(api.root, writes.root, cli.root, declaredMutationBundle, result)
 	}
 	for _, operation := range result.Operations {
 		// A source reference carries operation identity and a cited provider URL,
@@ -1813,7 +1825,7 @@ func sourceProjectionMutationRecordPath(path string) string {
 // command exist. This is the mutation equivalent of the source-bound direct
 // read projection: api_surface is a declaration of executable coverage, never
 // a way to make an endpoint executable by itself.
-func sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(surface, writes, cli *orderedObject, result sourceImportResult) int {
+func sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(surface, writes, cli *orderedObject, declarations engine.Bundle, result sourceImportResult) int {
 	actions := map[string]string{}
 	for _, raw := range arrayField(writes, "actions") {
 		action, ok := raw.(*orderedObject)
@@ -1837,6 +1849,13 @@ func sourceProjectionMaterializeNoBodyMutationSurfaceEndpoints(surface, writes, 
 	}
 	sources := map[string]sourceOperationDescriptor{}
 	for _, source := range result.Operations {
+		// A closed source-bound bodyless POST direct read is semantically a read,
+		// even if an older write/reverse alias shares the same method/path. Do
+		// not let the generic no-body mutation projection overwrite that exact
+		// direct-read API binding.
+		if sourceProjectionHasClosedBodylessPOSTReadCommand(declarations, source) {
+			continue
+		}
 		if sourceProjectionNoBodyMutationActionEligible(source) {
 			sources[sourceProjectionEndpointKey(source.Method, sourceProjectionDeclaredPath(source))] = source
 		}
@@ -3611,6 +3630,14 @@ func sourceProjectionMutationClaimsImplementedAction(bundle engine.Bundle, opera
 	if bundle.CLISurface == nil {
 		return false
 	}
+	// A retained source row can be a semantic POST read even when legacy
+	// direct-write/reverse commands still expose the same method/path. The
+	// closed bodyless direct-read declaration is the only source-backed
+	// exception to method-only mutation accounting here. Complete write
+	// coverage remains checked separately by sourceProjectionMutationActionIsComplete.
+	if sourceProjectionHasClosedBodylessPOSTReadCommand(bundle, operation) {
+		return false
+	}
 	endpoint := sourceProjectionEndpointKey(operation.Method, sourceProjectionDeclaredPath(operation))
 	for _, command := range bundle.CLISurface.Commands {
 		if command.Availability != "implemented" {
@@ -3629,6 +3656,63 @@ func sourceProjectionMutationClaimsImplementedAction(bundle engine.Bundle, opera
 				return true
 			}
 		}
+	}
+	return false
+}
+
+func sourceProjectionHasClosedBodylessPOSTReadCommand(bundle engine.Bundle, source sourceOperationDescriptor) bool {
+	if bundle.CLISurface == nil {
+		return false
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if sourceProjectionClosedBodylessPOSTReadCommand(bundle, command, source) {
+			return true
+		}
+	}
+	return false
+}
+
+// sourceProjectionClosedBodylessPOSTReadCommand is the one semantic exception
+// to the method-only mutation admission check. It is deliberately stricter
+// than a POST verb: an exact retained source operation must have no request
+// body and the already-declared operation/command pair must select the closed
+// engine rest.no_request_body direct-read contract. This admission edge exists
+// solely to let the canonical surface-sync ledger derive that pre-existing
+// executable declaration; it neither projects a new route nor admits JSON,
+// raw-body, or ordinary provider mutations.
+func sourceProjectionClosedBodylessPOSTReadCommand(bundle engine.Bundle, command engine.CLICommand, source sourceOperationDescriptor) bool {
+	if source.Protocol != "rest" || !strings.EqualFold(source.Method, http.MethodPost) || source.Request.Body != nil || strings.TrimSpace(source.Request.MediaType) != "" || len(source.Request.Media) != 0 || len(source.Request.Header) != 0 || (source.Output.Class != sourceOutputJSON && source.Output.Class != sourceOutputStatus) {
+		return false
+	}
+	if _, ok := sourceProjectionExact2xxStatuses(source, source.Output.Class); !ok {
+		return false
+	}
+	if command.Intent != "direct_read" || command.Availability != "implemented" || command.Write != "" || command.Operation == "" || command.SourceOperation != source.SourceID || len(command.APISurface) != 1 {
+		return false
+	}
+	endpoint := command.APISurface[0]
+	if !strings.EqualFold(endpoint.Method, http.MethodPost) || endpoint.Path != sourceProjectionDeclaredPath(source) {
+		return false
+	}
+	for _, flag := range command.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		if mapsTo == "body" || strings.HasPrefix(mapsTo, "body.") {
+			return false
+		}
+	}
+	for _, declared := range bundle.Operations {
+		if declared.ID != command.Operation || declared.Kind != "rest_read" || declared.REST == nil || declared.SourceOperation == nil {
+			continue
+		}
+		rest := declared.REST
+		binding := declared.SourceOperation
+		if !rest.NoRequestBody || !strings.EqualFold(rest.Method, http.MethodPost) || rest.Path != endpoint.Path || strings.TrimSpace(rest.ContentType) != "" || len(rest.Body) != 0 || len(rest.BodySchema) != 0 || rest.Multipart != nil || declared.MutationClass != "" && declared.MutationClass != "none" {
+			return false
+		}
+		if binding.ID != source.SourceID || !strings.EqualFold(binding.Method, http.MethodPost) || binding.Path != endpoint.Path {
+			return false
+		}
+		return true
 	}
 	return false
 }
