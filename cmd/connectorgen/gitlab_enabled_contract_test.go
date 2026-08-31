@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
@@ -242,14 +243,15 @@ func TestGitLabP5GeneratedNamedJSONValueFlagsRemainSourceBound(t *testing.T) {
 	}
 }
 
-// TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred pins the current
-// Atlas gap: the provider's JSON-Schema regex is preserved in the source
-// descriptor, while both command lanes give a discoverable typed outcome
-// until a captain-approved engine dialect extension exists.
-func TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred(t *testing.T) {
+// TestGitLabUnicodeScalarSourceRowClearsOnlyExactSchemaGap proves that the
+// closed Unicode-scalar policy makes this one retained source field
+// representable without admitting its broader open request body or
+// source-bound mutation to execution.
+func TestGitLabUnicodeScalarSourceRowClearsOnlyExactSchemaGap(t *testing.T) {
 	const (
-		defsRoot = "../../internal/connectors/defs"
-		sourceID = "postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection"
+		defsRoot  = "../../internal/connectors/defs"
+		sourceID  = "postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection"
+		writeName = "source_write_504f5354202f76756c6e65726162696c69746965732f7b76756c6e65726162696c6974795f69647d2f666c6167732f61695f646574656374696f6e"
 	)
 	bundle, err := engine.Load(os.DirFS(defsRoot), "gitlab")
 	if err != nil {
@@ -273,15 +275,54 @@ func TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred(t *testing.T) {
 	if source.SourceID == "" {
 		t.Fatalf("GitLab source descriptor omits %q", sourceID)
 	}
-	matchedGap := false
+	body, ok := source.Request.Body.Schema.(map[string]any)
+	if !ok {
+		t.Fatalf("GitLab source request body schema type = %T, want object", source.Request.Body.Schema)
+	}
+	properties, ok := body["properties"].(map[string]any)
+	if !ok {
+		t.Fatalf("GitLab source request body properties = %T, want object", body["properties"])
+	}
+	confidenceScore, ok := properties["confidence_score"].(map[string]any)
+	if !ok || confidenceScore["minimum"] != json.Number("0") || confidenceScore["maximum"] != json.Number("100") {
+		t.Fatalf("GitLab source confidence_score = %#v, want exact 0..100 source bounds", properties["confidence_score"])
+	}
+	hasDynamicRootGap := false
+	hasSourceBoundMutationGap := false
 	for _, gap := range source.Runtime.Gaps {
-		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body property origin" && strings.Contains(gap.Reason, "engine JSON-Schema regex compiler") {
-			matchedGap = true
-			break
+		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body property origin" {
+			t.Fatalf("GitLab source runtime retained cleared origin compiler gap: %+v", source.Runtime)
+		}
+		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body" && strings.Contains(gap.Reason, "dynamic additionalProperties") {
+			hasDynamicRootGap = true
+		}
+		if gap.Foundation == "source-cited-non-executable-mutation-foundation-r1" {
+			hasSourceBoundMutationGap = true
 		}
 	}
-	if !source.Runtime.MergeBlocked || !matchedGap {
-		t.Fatalf("GitLab surrogate-regex source runtime = %+v, want exact retained schema gap", source.Runtime)
+	if !source.Runtime.MergeBlocked || !hasDynamicRootGap || !hasSourceBoundMutationGap {
+		t.Fatalf("GitLab Unicode-scalar source runtime = %+v, want retained root and source-bound mutation gaps", source.Runtime)
+	}
+
+	valid := connectors.Record{
+		"confidence_score": json.Number("100"),
+		"description":      "source-backed validation proof",
+		"origin":           strings.Repeat("😀", 255),
+		"vulnerability_id": "42",
+	}
+	if err := engine.ValidateWrite(context.Background(), bundle, connectors.WriteRequest{Action: writeName}, []connectors.Record{valid}); err != nil {
+		t.Fatalf("validate exact GitLab source-backed write record: %v", err)
+	}
+	for _, score := range []string{"-1", "101"} {
+		record := connectors.Record{
+			"confidence_score": json.Number(score),
+			"description":      "source-backed validation proof",
+			"origin":           "gitlab",
+			"vulnerability_id": "42",
+		}
+		if err := engine.ValidateWrite(context.Background(), bundle, connectors.WriteRequest{Action: writeName}, []connectors.Record{record}); err == nil {
+			t.Fatalf("confidence_score=%s: want source numeric bound error", score)
+		}
 	}
 	for _, intent := range []string{"reverse_etl", "direct_write"} {
 		matched := false
@@ -290,8 +331,21 @@ func TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred(t *testing.T) {
 				continue
 			}
 			matched = true
-			if command.Availability != "partial" || !strings.Contains(command.Notes, "missing_foundation=cli-request-schema-foundation-r1") {
-				t.Fatalf("GitLab surrogate-regex %s command = %+v, want source-cited partial outcome", intent, command)
+			if command.Availability != "partial" || !strings.Contains(command.Notes, "missing_foundation=cli-request-schema-foundation-r1") || !strings.Contains(command.Notes, "missing_foundation=source-cited-non-executable-mutation-foundation-r1") {
+				t.Fatalf("GitLab Unicode-scalar %s command = %+v, want source-cited partial outcome", intent, command)
+			}
+			matchedConfidenceScore := false
+			for _, flag := range command.Flags {
+				if flag.MapsTo != "record.confidence_score" {
+					continue
+				}
+				matchedConfidenceScore = true
+				if flag.Minimum == nil || flag.Minimum.String() != "0" || flag.Maximum == nil || flag.Maximum.String() != "100" {
+					t.Fatalf("GitLab Unicode-scalar %s confidence-score flag = %+v, want exact source bounds 0..100", intent, flag)
+				}
+			}
+			if !matchedConfidenceScore {
+				t.Fatalf("GitLab Unicode-scalar %s command has no confidence-score flag", intent)
 			}
 		}
 		if !matched {

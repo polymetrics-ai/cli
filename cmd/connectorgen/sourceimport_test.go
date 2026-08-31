@@ -248,7 +248,7 @@ func TestSourceRequestSchemaDispositionSeparatesPolicyBoundsFromMalformedInput(t
 	}
 }
 
-func TestSourceRequestGapsRetainsEngineIncompatibleP5Pattern(t *testing.T) {
+func TestSourceRequestGapsAdmitsClosedUnicodeScalarP5PatternButRetainsDynamicRootGap(t *testing.T) {
 	t.Parallel()
 	request := sourceRequestDescriptor{
 		MediaType: "application/json",
@@ -262,12 +262,18 @@ func TestSourceRequestGapsRetainsEngineIncompatibleP5Pattern(t *testing.T) {
 		}},
 	}
 	gaps := sourceRequestGaps(request, sourceDocumentForm{Family: "openapi", Version: "3.0.3"}, defaultSourceImportLimits(), http.MethodPost)
+	hasDynamicRootGap := false
 	for _, gap := range gaps {
-		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body property origin" && strings.Contains(gap.Reason, "engine JSON-Schema regex") {
-			return
+		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body property origin" {
+			t.Fatalf("request gaps = %+v, want exact Unicode-scalar field admitted", gaps)
+		}
+		if gap.Foundation == "cli-request-schema-foundation-r1" && gap.Location == "request body" && strings.Contains(gap.Reason, "dynamic additionalProperties") {
+			hasDynamicRootGap = true
 		}
 	}
-	t.Fatalf("request gaps = %+v, want retained engine-incompatible P5 pattern disposition", gaps)
+	if !hasDynamicRootGap {
+		t.Fatalf("request gaps = %+v, want retained dynamic-root disposition", gaps)
+	}
 }
 
 func TestSourceParameterExecutionEnvelopeUsesTighterProviderDerivedByteCap(t *testing.T) {

@@ -429302,11 +429302,6 @@
             "reason": "unbounded request schema object has dynamic additionalProperties"
           },
           {
-            "foundation": "cli-request-schema-foundation-r1",
-            "location": "request body property origin",
-            "reason": "engine JSON-Schema regex compiler cannot compile source pattern: compile schema: properties.origin: compile schema: pattern \"^(?:[\\\\uD800-\\\\uDBFF][\\\\uDC00-\\\\uDFFF]|[^\\\\n\\\\uD800-\\\\uDFFF]){1,255}$\": error parsing regexp: invalid escape sequence: `\\u`"
-          },
-          {
             "foundation": "source-cited-non-executable-mutation-foundation-r1",
             "location": "source operation postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection at https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml#paths[\"/api/v4/vulnerabilities/{vulnerability_id}/flags/ai_detection\"].post",
             "reason": "provider-cited mutation has no complete declaration-owned executable action: provider-cited mutation has no complete declaration-owned executable action for its full retained request contract"
@@ -548807,11 +548802,6 @@
       "foundation": "cli-request-schema-foundation-r1",
       "location": "request body property label",
       "reason": "engine JSON-Schema regex compiler cannot compile source pattern: compile schema: properties.label: compile schema: pattern \"(?:^(?:[0-9A-Za-z\\\\u017F\\\\u212A][\\\\x2D.0-9A-Za-z\\\\u017F\\\\u212A]*)$)\": error parsing regexp: invalid escape sequence: `\\u`"
-    },
-    {
-      "foundation": "cli-request-schema-foundation-r1",
-      "location": "request body property origin",
-      "reason": "engine JSON-Schema regex compiler cannot compile source pattern: compile schema: properties.origin: compile schema: pattern \"^(?:[\\\\uD800-\\\\uDBFF][\\\\uDC00-\\\\uDFFF]|[^\\\\n\\\\uD800-\\\\uDFFF]){1,255}$\": error parsing regexp: invalid escape sequence: `\\u`"
     },
     {
       "foundation": "closed-source-operation-execution-foundation-r1",

@@ -20,8 +20,14 @@
   "source_snapshot": {
     "source_snapshot_ref": "fm/cli-top100-declaration-batch-r1",
     "source_snapshot_commit": "dc481bac1a8b78d60ac0b4a2b0dfd1a9068ce8db",
-    "materialization": "git_archive_byte_identical",
-    "retained_files": [
+    "materialization": "source_lock_backed_descriptor_correction",
+    "base_materialization": "git_archive_byte_identical",
+    "descriptor_correction_provenance": {
+      "path": "sources/gitlab-operation-descriptor-correction-provenance.json",
+      "git_blob_sha1": "113fda185ecd7b0d9f6e41767a9b4c939a777856",
+      "bytes": 3320
+    },
+    "base_retained_files": [
       {
         "path": "sources/gitlab-operation-source-lock.json",
         "git_blob_sha1": "d874f0d462bc054d3065a41e32b0bb1b1675a84c",
@@ -36,6 +42,43 @@
         "path": "sources/gitlab-operation-descriptor.json",
         "git_blob_sha1": "19d74be07d6862ef2492c9fb6ff9e6467b67df96",
         "bytes": 18119458
+      },
+      {
+        "path": "sources/gitlab-binary-operation-source-lock.json",
+        "git_blob_sha1": "ee538b7ce20912ea13e95d87854b0c014928231d",
+        "bytes": 3058
+      },
+      {
+        "path": "sources/gitlab-retained-artifacts.json",
+        "git_blob_sha1": "1d7104c91be20f4ab73920389e681c7a0fb6bc56",
+        "bytes": 678
+      },
+      {
+        "path": "sources/artifacts/53244a720b8509536290e0058c946a246817c775c797df36f4c9aa1225fdf0a4.artifact",
+        "git_blob_sha1": "2328f5833aa166b7f44fae2ce1cebad2528c163f",
+        "bytes": 102560
+      },
+      {
+        "path": "sources/artifacts/f59c93194c095d0e925a5751a08eb7a2176a26c6b5f38bda52f805154219d0f0.artifact",
+        "git_blob_sha1": "a3a5ba1e5121258588101f1f9c33ebf226d7909b",
+        "bytes": 103189
+      }
+    ],
+    "retained_files": [
+      {
+        "path": "sources/gitlab-operation-source-lock.json",
+        "git_blob_sha1": "d874f0d462bc054d3065a41e32b0bb1b1675a84c",
+        "bytes": 5783052
+      },
+      {
+        "path": "sources/gitlab-operation-crosswalk.json",
+        "git_blob_sha1": "20353c196663b425280bc0f63ee09dddb5bdc913",
+        "bytes": 3004301
+      },
+      {
+        "path": "sources/gitlab-operation-descriptor.json",
+        "git_blob_sha1": "c54a6d4b5100067a3b1eb540a1a7ef5c4bb49b42",
+        "bytes": 18118622
       },
       {
         "path": "sources/gitlab-binary-operation-source-lock.json",

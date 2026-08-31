@@ -246,6 +246,69 @@ func TestSchemaValidateInstances(t *testing.T) {
 	}
 }
 
+func TestSchemaValidatesClosedUnicodeScalarNoLineFeedPolicy(t *testing.T) {
+	// This is the exact retained GitLab JSON-Schema source expression. It is
+	// deliberately not approximated with a broad Go regexp: the policy has to
+	// preserve JSON-Schema scalar semantics, where an astral code point is one
+	// logical character and CR is not excluded.
+	const schemaDocument = `{
+		"type":"object",
+		"additionalProperties":false,
+		"required":["confidence_score","origin"],
+		"properties":{
+			"confidence_score":{"type":"integer","minimum":0,"maximum":100},
+			"origin":{"type":["string","null"],"pattern":"^(?:[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[^\\n\\uD800-\\uDFFF]){1,255}$"}
+		}
+	}`
+
+	schema, err := CompileSchema(json.RawMessage(schemaDocument))
+	if err != nil {
+		t.Fatalf("compile exact Unicode-scalar source schema: %v", err)
+	}
+
+	tests := []struct {
+		name    string
+		origin  string
+		score   string
+		wantErr bool
+	}{
+		{name: "valid ASCII", origin: "gitlab", score: "0"},
+		{name: "valid carriage return", origin: "one\rtwo", score: "100"},
+		{name: "astral Unicode scalar boundary", origin: strings.Repeat("😀", 255), score: "100"},
+		{name: "ASCII boundary", origin: strings.Repeat("a", 255), score: "50"},
+		{name: "over logical character boundary", origin: strings.Repeat("a", 256), score: "50", wantErr: true},
+		{name: "line feed is rejected", origin: "one\ntwo", score: "50", wantErr: true},
+		{name: "invalid UTF-8 is rejected", origin: string([]byte{0xff}), score: "50", wantErr: true},
+		{name: "surrogate byte representation is rejected", origin: string([]byte{0xed, 0xa0, 0x80}), score: "50", wantErr: true},
+		{name: "score below source minimum", origin: "gitlab", score: "-1", wantErr: true},
+		{name: "score above source maximum", origin: "gitlab", score: "101", wantErr: true},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			err := schema.Validate(map[string]any{
+				"confidence_score": json.Number(test.score),
+				"origin":           test.origin,
+			})
+			if test.wantErr && err == nil {
+				t.Fatal("expected source-contract validation error, got nil")
+			}
+			if !test.wantErr && err != nil {
+				t.Fatalf("source-contract validation: %v", err)
+			}
+		})
+	}
+}
+
+func TestSchemaDoesNotGeneralizeUnicodeScalarNoLineFeedPolicy(t *testing.T) {
+	// A one-character cardinality change is a distinct source contract. It
+	// must stay rejected by Go's ordinary regexp compiler rather than being
+	// admitted by a broad surrogate-pattern parser.
+	_, err := CompileSchema(json.RawMessage(`{"type":"string","pattern":"^(?:[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[^\\n\\uD800-\\uDFFF]){1,254}$"}`))
+	if err == nil || !strings.Contains(err.Error(), "invalid escape sequence") {
+		t.Fatalf("near Unicode-scalar pattern compile error = %v, want ordinary unsupported pattern", err)
+	}
+}
+
 func TestSchemaEnumExactNumbersBeyondFloatPrecision(t *testing.T) {
 	schema, err := CompileSchema(json.RawMessage(`{"type":"integer","enum":[9007199254740992]}`))
 	if err != nil {

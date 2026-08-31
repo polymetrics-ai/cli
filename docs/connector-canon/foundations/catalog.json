@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 12,
+  "catalog_revision": 13,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -752,12 +752,12 @@
     {
       "package": "./cmd/connectorgen",
       "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
-      "name": "TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred"
+      "name": "TestGitLabUnicodeScalarSourceRowClearsOnlyExactSchemaGap"
     },
     {
       "package": "./cmd/connectorgen",
       "file": "cmd/connectorgen/sourceimport_test.go",
-      "name": "TestSourceRequestGapsRetainsEngineIncompatibleP5Pattern"
+      "name": "TestSourceRequestGapsAdmitsClosedUnicodeScalarP5PatternButRetainsDynamicRootGap"
         }
       ],
       "known_gap_refs": [
@@ -774,7 +774,7 @@
     {
       "id": "cli-request-schema-surrogate-regex-foundation-r1",
       "reference": "docs/connector-canon/foundations/catalog.json#runtime.json-schema-surrogate-regex.v1",
-      "notes": "A source JSON-Schema pattern rejected by the current engine remains source-bound and partial; the planned execution candidate is not a runtime capability."
+      "notes": "The exact closed Unicode-scalar/no-LF form is now supported, while other provider regex dialect forms remain source-bound and partial until separately approved."
         }
       ],
       "update_conditions": [
@@ -788,9 +788,9 @@
     {
       "id": "runtime.json-schema-surrogate-regex.v1",
       "layer": "direct_execution",
-      "status": "planned",
+      "status": "partial",
       "kind": "generic",
-      "summary": "Planned closed JSON-Schema regex dialect support for source patterns using Unicode surrogate-pair \\uXXXX escapes that Go's current regexp compiler rejects. It is a candidate execution foundation only; source projection retains the provider pattern and exposes a typed partial outcome until captain approval and proof.",
+      "summary": "Available only for one closed JSON-Schema Unicode-scalar string form: `^(?:[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[^\\n\\uD800-\\uDFFF]){1,255}$`. The engine validates valid UTF-8 Unicode scalars, rejects LF, counts scalar values rather than bytes, and allows CR without interpreting, rewriting, or admitting arbitrary provider regexes.",
       "owner": {
         "primary_package": "polymetrics.ai/internal/connectors/engine",
         "supporting_packages": [
@@ -828,13 +828,13 @@
           "canonical locked source-operation descriptors"
         ],
         "request_response_shapes": [
-          "closed JSON request root with one documented bounded named string field carrying a JSON-Schema surrogate-pair Unicode escape regex"
+          "closed JSON request root with one documented bounded named string field carrying the exact Unicode-scalar/no-LF pattern with 1..255 scalar cardinality"
         ],
         "sync_modes": [],
         "guarantees": [
           "the provider source pattern is retained byte-for-byte in the descriptor",
-          "a supported dialect translation, if approved, is closed, deterministic, and proven semantically equivalent for the admitted pattern subset",
-          "an unsupported pattern stays a cited partial command outcome before provider I/O"
+          "the exact closed form validates UTF-8 Unicode scalars, rejects LF, allows CR, and counts astral scalar values as one",
+          "a non-exact pattern stays a cited partial command outcome before provider I/O"
         ]
       },
       "selection": {
@@ -853,16 +853,17 @@
           "closed write action record_schema pattern",
           "CLI command source_operation and partial availability"
         ],
-        "notes": "Planned only: no runtime parser, regex rewriter, or execution promotion exists under this record. The importer keeps the exact source gap until a captain-approved implementation satisfies its proof contract."
+        "notes": "The engine selects only the exact closed form by equality; source import clears that field-level compiler gap but does not promote the enclosing request root or source-bound mutation to execution."
       },
       "constraints": [
         "Do not strip, weaken, broaden, or silently rewrite a provider regex.",
         "Do not accept an uncompiled source regex or add a generic raw request body escape.",
-        "Do not branch on connector name; support must be selected from a closed source schema form and exact dialect rule.",
-        "Every endpoint-bound direct-write and reverse-ETL command remains partial while the pattern is rejected."
+        "Do not branch on connector name; support is selected only by the exact closed source schema form.",
+        "Reject invalid UTF-8, surrogate-byte representations, LF, and scalar lengths outside 1..255; do not reject CR.",
+        "Do not promote an endpoint-bound direct-write or reverse-ETL command solely because this one field now validates."
       ],
       "non_goals": [
-        "Generic regex-dialect guessing or arbitrary regular-expression execution.",
+        "Generic regex-dialect guessing, arbitrary regular-expression execution, or a broad `^[^\\n]{1,255}$` substitute.",
         "Changing source-lock membership, source bytes, or the documented provider pattern.",
         "Promoting a command merely because its closed root and other fields are representable."
       ],
@@ -874,26 +875,31 @@
             "internal/connectors/defs/gitlab/writes.json",
             "internal/connectors/defs/gitlab/cli_surface.json"
           ],
-          "notes": "The source row retains its origin pattern; both write lanes are discoverably partial instead of disappearing or routing through raw JSON."
+          "notes": "The source row retains its origin pattern and 0..100 confidence-score bounds. Both write lanes remain discoverably partial because the source request root and mutation execution are still independently blocked."
         }
       ],
       "proof_tests": [
         {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/schema_test.go",
+          "name": "TestSchemaValidatesClosedUnicodeScalarNoLineFeedPolicy"
+        },
+        {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/sourceimport_test.go",
-          "name": "TestSourceRequestGapsRetainsEngineIncompatibleP5Pattern"
+          "name": "TestSourceRequestGapsAdmitsClosedUnicodeScalarP5PatternButRetainsDynamicRootGap"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/gitlab_enabled_contract_test.go",
-          "name": "TestGitLabSurrogateRegexSourceRowStaysMappedAndDeferred"
+          "name": "TestGitLabUnicodeScalarSourceRowClearsOnlyExactSchemaGap"
         }
       ],
       "known_gap_refs": [
         {
           "id": "cli-request-schema-surrogate-regex-foundation-r1",
           "reference": "cmd/connectorgen/sourceimport.go#sourceProjectionP5NamedBodyEngineGap",
-          "notes": "The current Go regexp compiler rejects the retained \\uXXXX escape form, so this planned candidate is a source-cited execution gap rather than an available foundation."
+          "notes": "The exact closed form is available; other retained provider regex forms remain source-cited execution gaps until a separately approved, bounded foundation covers them."
         }
       ],
       "update_conditions": [

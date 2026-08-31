@@ -19028,6 +19028,8 @@
         ],
         "properties": {
           "confidence_score": {
+            "minimum": 0,
+            "maximum": 100,
             "type": "integer"
           },
           "description": {

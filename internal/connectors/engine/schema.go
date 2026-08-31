@@ -13,6 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 // Schema is a compiled instance of the engine's minimal draft-07 subset. It is
@@ -37,6 +38,7 @@ type schemaNode struct {
 	oneOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
+	unicodeScalarNoLF    *unicodeScalarNoLFPolicy
 	format               string
 	minLength            int
 	hasMinLength         bool
@@ -87,6 +89,17 @@ type schemaPatternProperty struct {
 	pattern *regexp.Regexp
 	schema  *schemaNode
 }
+
+// unicodeScalarNoLFPolicy is a deliberately closed JSON-Schema dialect
+// fragment. Go's regexp package cannot compile JSON-Schema surrogate-pair
+// escapes, but this one retained form has exact scalar semantics that can be
+// validated without interpreting or rewriting arbitrary provider regexes.
+type unicodeScalarNoLFPolicy struct {
+	minScalars int
+	maxScalars int
+}
+
+const unicodeScalarNoLFPattern = `^(?:[\uD800-\uDBFF][\uDC00-\uDFFF]|[^\n\uD800-\uDFFF]){1,255}$`
 
 // annotationKeywords are accepted by the schema compiler. Supported formats
 // participate in instance validation, and configuration-time validation
@@ -308,11 +321,15 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		if err := json.Unmarshal(raw, &pat); err != nil {
 			return nil, fmt.Errorf("compile schema: pattern: %w", err)
 		}
-		re, err := regexp.Compile(pat)
-		if err != nil {
-			return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
+		if policy, ok := unicodeScalarNoLFPolicyForPattern(pat); ok {
+			n.unicodeScalarNoLF = policy
+		} else {
+			re, err := regexp.Compile(pat)
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
+			}
+			n.pattern = re
 		}
-		n.pattern = re
 	}
 	if err := compileStringLength(m, n); err != nil {
 		return nil, err
@@ -421,6 +438,38 @@ func compileStringLength(m map[string]json.RawMessage, n *schemaNode) error {
 	}
 	if n.hasMinLength && n.hasMaxLength && n.maxLength < n.minLength {
 		return fmt.Errorf("compile schema: maxLength %d is below minLength %d", n.maxLength, n.minLength)
+	}
+	return nil
+}
+
+// unicodeScalarNoLFPolicyForPattern recognizes only the exact retained
+// JSON-Schema pattern that represents one to 255 Unicode scalar values other
+// than LF. It is intentionally equality-based rather than a regex parser: a
+// near match remains an unsupported provider pattern instead of becoming a
+// broadened source contract.
+func unicodeScalarNoLFPolicyForPattern(pattern string) (*unicodeScalarNoLFPolicy, bool) {
+	if pattern != unicodeScalarNoLFPattern {
+		return nil, false
+	}
+	return &unicodeScalarNoLFPolicy{minScalars: 1, maxScalars: 255}, true
+}
+
+func (policy *unicodeScalarNoLFPolicy) validate(value string) error {
+	if !utf8.ValidString(value) {
+		return fmt.Errorf("value does not satisfy closed Unicode-scalar no-LF policy")
+	}
+	scalars := 0
+	for _, scalar := range value {
+		if !utf8.ValidRune(scalar) || scalar == '\n' {
+			return fmt.Errorf("value does not satisfy closed Unicode-scalar no-LF policy")
+		}
+		scalars++
+		if scalars > policy.maxScalars {
+			return fmt.Errorf("value does not satisfy closed Unicode-scalar no-LF policy")
+		}
+	}
+	if scalars < policy.minScalars {
+		return fmt.Errorf("value does not satisfy closed Unicode-scalar no-LF policy")
 	}
 	return nil
 }
@@ -593,6 +642,11 @@ func (n *schemaNode) validate(v any, path string) error {
 
 	switch val := v.(type) {
 	case string:
+		if n.unicodeScalarNoLF != nil {
+			if err := n.unicodeScalarNoLF.validate(val); err != nil {
+				return fmt.Errorf("%s: %w", displayPath(path), err)
+			}
+		}
 		if n.pattern != nil && !n.pattern.MatchString(val) {
 			return fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String())
 		}

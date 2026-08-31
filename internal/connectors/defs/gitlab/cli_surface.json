@@ -34213,6 +34213,8 @@
           "name": "confidence-score",
           "type": "integer",
           "maps_to": "record.confidence_score",
+          "minimum": 0,
+          "maximum": 100,
           "required": true
         },
         {
@@ -42518,6 +42520,8 @@
           "name": "confidence-score",
           "type": "integer",
           "maps_to": "record.confidence_score",
+          "minimum": 0,
+          "maximum": 100,
           "required": true
         },
         {

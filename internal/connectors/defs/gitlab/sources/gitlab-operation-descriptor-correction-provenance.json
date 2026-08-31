@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "connector": "gitlab",
+  "kind": "source_lock_backed_descriptor_correction",
+  "base_snapshot": {
+    "ref": "fm/cli-top100-declaration-batch-r1",
+    "commit": "dc481bac1a8b78d60ac0b4a2b0dfd1a9068ce8db",
+    "materialization": "git_archive_byte_identical"
+  },
+  "target": {
+    "path": "sources/gitlab-operation-descriptor.json",
+    "original": {
+      "path": "sources/gitlab-operation-descriptor.json",
+      "git_blob_sha1": "19d74be07d6862ef2492c9fb6ff9e6467b67df96",
+      "bytes": 18119458
+    },
+    "derived": {
+      "path": "sources/gitlab-operation-descriptor.json",
+      "git_blob_sha1": "c54a6d4b5100067a3b1eb540a1a7ef5c4bb49b42",
+      "bytes": 18118622
+    }
+  },
+  "source_lock": {
+    "path": "sources/gitlab-operation-source-lock.json",
+    "source_url": "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
+    "sha256": "b33e80759af3a529d71a0bb58c8c76d65c9f0b20774a042196c6d3c0c57310bd",
+    "bytes": 3611238
+  },
+  "corrections": [
+    {
+      "source_id": "postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection",
+      "operation_id": "postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection",
+      "method": "POST",
+      "path": "/api/v4/vulnerabilities/{vulnerability_id}/flags/ai_detection",
+      "source_location": "paths[\"/api/v4/vulnerabilities/{vulnerability_id}/flags/ai_detection\"].post",
+      "descriptor_pointer": "/request/body/schema/properties/origin",
+      "source_schema": {
+        "description": "Origin of the AI detection",
+        "nullable": true,
+        "pattern": "^(?:[\\uD800-\\uDBFF][\\uDC00-\\uDFFF]|[^\\n\\uD800-\\uDFFF]){1,255}$",
+        "type": "string"
+      },
+      "removed_gaps": [
+        {
+          "scope": "operation_runtime",
+          "foundation": "cli-request-schema-foundation-r1",
+          "location": "request body property origin",
+          "reason_sha256": "da5a1b5cc7aae7ec605607b2d9eeebc9905516fff905194f5f3d598fbc251b97"
+        },
+        {
+          "scope": "descriptor_aggregate",
+          "foundation": "cli-request-schema-foundation-r1",
+          "location": "request body property origin",
+          "reason_sha256": "da5a1b5cc7aae7ec605607b2d9eeebc9905516fff905194f5f3d598fbc251b97"
+        }
+      ],
+      "retained_gaps": [
+        {
+          "scope": "operation_runtime",
+          "foundation": "cli-request-schema-foundation-r1",
+          "location": "request body",
+          "reason_sha256": "e90c637792f3756b6a7ae1b9ab00f4ff28e612f9ce53812412f1078e9f3d9bb0"
+        },
+        {
+          "scope": "operation_runtime",
+          "foundation": "source-cited-non-executable-mutation-foundation-r1",
+          "location": "source operation postApiV4VulnerabilitiesVulnerabilityIdFlagsAiDetection at https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml#paths[\"/api/v4/vulnerabilities/{vulnerability_id}/flags/ai_detection\"].post",
+          "reason_sha256": "a369ebcd4261f04c7735f482cfc5ddf386b6afd63bb67bafc08a5faf6fd115c3"
+        }
+      ],
+      "rationale": "The frozen GitLab source lock identifies this exact POST operation and source digest; its resolved origin field is the closed Unicode-scalar, no-LF source form now supported by the bounded schema policy. Only the stale compiler gap is removed."
+    }
+  ]
+}

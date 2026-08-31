@@ -379,34 +379,71 @@ func validateGitLabSourceLaneMatrix(matrix, lock, binaryLock, crosswalk, descrip
 
 func validateGitLabSnapshotBinding(matrix, lock, binaryLock, crosswalk, descriptor, retainedArtifacts map[string]any) error {
 	snapshot := objectAt(matrix, "source_snapshot")
-	if stringAt(snapshot, "source_snapshot_ref") != "fm/cli-top100-declaration-batch-r1" || stringAt(snapshot, "source_snapshot_commit") != gitLabSnapshotCommit || stringAt(snapshot, "materialization") != "git_archive_byte_identical" {
+	if stringAt(snapshot, "source_snapshot_ref") != "fm/cli-top100-declaration-batch-r1" || stringAt(snapshot, "source_snapshot_commit") != gitLabSnapshotCommit || stringAt(snapshot, "materialization") != "source_lock_backed_descriptor_correction" || stringAt(snapshot, "base_materialization") != "git_archive_byte_identical" {
 		return fmt.Errorf("source snapshot identity drift")
 	}
-	files := mustMapSlice(snapshot["retained_files"])
-	wantFiles := []map[string]any{
-		{"path": gitLabSourceLockPath, "git_blob_sha1": "d874f0d462bc054d3065a41e32b0bb1b1675a84c", "bytes": float64(5783052)},
-		{"path": gitLabCrosswalkPath, "git_blob_sha1": "20353c196663b425280bc0f63ee09dddb5bdc913", "bytes": float64(3004301)},
-		{"path": gitLabDescriptorPath, "git_blob_sha1": "19d74be07d6862ef2492c9fb6ff9e6467b67df96", "bytes": float64(18119458)},
-		{"path": gitLabBinaryLockPath, "git_blob_sha1": "ee538b7ce20912ea13e95d87854b0c014928231d", "bytes": float64(3058)},
-		{"path": gitLabRetainedArtifacts, "git_blob_sha1": "1d7104c91be20f4ab73920389e681c7a0fb6bc56", "bytes": float64(678)},
-		{"path": "sources/artifacts/53244a720b8509536290e0058c946a246817c775c797df36f4c9aa1225fdf0a4.artifact", "git_blob_sha1": "2328f5833aa166b7f44fae2ce1cebad2528c163f", "bytes": float64(102560)},
-		{"path": "sources/artifacts/f59c93194c095d0e925a5751a08eb7a2176a26c6b5f38bda52f805154219d0f0.artifact", "git_blob_sha1": "a3a5ba1e5121258588101f1f9c33ebf226d7909b", "bytes": float64(103189)},
+	provenanceIdentity := objectAt(snapshot, "descriptor_correction_provenance")
+	provenancePath := stringAt(provenanceIdentity, "path")
+	provenance, err := readGitLabObject(provenancePath)
+	if err != nil {
+		return fmt.Errorf("read descriptor correction provenance %q: %w", provenancePath, err)
 	}
-	if len(files) != len(wantFiles) {
-		return fmt.Errorf("retained source file count=%d, want %d", len(files), len(wantFiles))
+	provenanceContents, err := os.ReadFile(provenancePath)
+	if err != nil {
+		return fmt.Errorf("read descriptor correction provenance bytes %q: %w", provenancePath, err)
 	}
-	for i, want := range wantFiles {
-		got := files[i]
-		if !sameGitLabJSON(got, want) {
-			return fmt.Errorf("retained source file metadata drift at index %d", i)
+	if len(provenanceContents) != numberAt(provenanceIdentity, "bytes") || gitLabBlobSHA1(provenanceContents) != stringAt(provenanceIdentity, "git_blob_sha1") {
+		return fmt.Errorf("descriptor correction provenance byte/blob identity drift")
+	}
+	if stringAt(provenance, "connector") != "gitlab" || stringAt(provenance, "kind") != "source_lock_backed_descriptor_correction" {
+		return fmt.Errorf("descriptor correction provenance identity drift")
+	}
+	baseSnapshot := objectAt(provenance, "base_snapshot")
+	if stringAt(baseSnapshot, "ref") != stringAt(snapshot, "source_snapshot_ref") || stringAt(baseSnapshot, "commit") != stringAt(snapshot, "source_snapshot_commit") || stringAt(baseSnapshot, "materialization") != stringAt(snapshot, "base_materialization") {
+		return fmt.Errorf("descriptor correction base snapshot drift")
+	}
+	target := objectAt(provenance, "target")
+	targetPath := stringAt(target, "path")
+	baseFiles, err := gitLabSourceFileIdentityMap(mustMapSlice(snapshot["base_retained_files"]))
+	if err != nil {
+		return fmt.Errorf("base retained source files: %w", err)
+	}
+	files, err := gitLabSourceFileIdentityMap(mustMapSlice(snapshot["retained_files"]))
+	if err != nil {
+		return fmt.Errorf("derived retained source files: %w", err)
+	}
+	if len(files) == 0 || len(files) != len(baseFiles) {
+		return fmt.Errorf("retained source file inventories differ")
+	}
+	original := objectAt(target, "original")
+	derived := objectAt(target, "derived")
+	for filePath, base := range baseFiles {
+		got, found := files[filePath]
+		if !found {
+			return fmt.Errorf("derived retained source file inventory omits %q", filePath)
 		}
-		contents, err := os.ReadFile(stringAt(got, "path"))
+		if filePath == targetPath {
+			if !sameGitLabJSON(base, original) || !sameGitLabJSON(got, derived) {
+				return fmt.Errorf("descriptor correction retained identity drift")
+			}
+		} else if !sameGitLabJSON(base, got) {
+			return fmt.Errorf("uncorrected retained source file identity changed %q", filePath)
+		}
+		contents, err := os.ReadFile(filePath)
 		if err != nil {
-			return fmt.Errorf("read retained source file %q: %w", stringAt(got, "path"), err)
+			return fmt.Errorf("read retained source file %q: %w", filePath, err)
 		}
 		if len(contents) != numberAt(got, "bytes") || gitLabBlobSHA1(contents) != stringAt(got, "git_blob_sha1") {
-			return fmt.Errorf("retained source file byte/blob identity drift %q", stringAt(got, "path"))
+			return fmt.Errorf("retained source file byte/blob identity drift %q", filePath)
 		}
+	}
+	if _, found := baseFiles[targetPath]; !found {
+		return fmt.Errorf("descriptor correction target %q is not retained", targetPath)
+	}
+	sourceLock := objectAt(provenance, "source_lock")
+	rest := objectAt(lock, "rest")
+	if stringAt(sourceLock, "path") != gitLabSourceLockPath || stringAt(sourceLock, "source_url") != stringAt(rest, "source_url") || stringAt(sourceLock, "sha256") != stringAt(rest, "sha256") || numberAt(sourceLock, "bytes") != numberAt(rest, "bytes") {
+		return fmt.Errorf("descriptor correction source-lock evidence drift")
 	}
 	if stringAt(lock, "connector") != "gitlab" || stringAt(binaryLock, "connector") != "gitlab" || stringAt(crosswalk, "connector") != "gitlab" || numberAt(descriptor, "schema_version") < 1 || stringAt(retainedArtifacts, "connector") != "gitlab" {
 		return fmt.Errorf("retained source artifact identity drift")
@@ -423,6 +460,21 @@ func validateGitLabSnapshotBinding(matrix, lock, binaryLock, crosswalk, descript
 		}
 	}
 	return nil
+}
+
+func gitLabSourceFileIdentityMap(files []map[string]any) (map[string]map[string]any, error) {
+	identities := make(map[string]map[string]any, len(files))
+	for _, file := range files {
+		filePath := stringAt(file, "path")
+		if filePath == "" || stringAt(file, "git_blob_sha1") == "" || numberAt(file, "bytes") <= 0 {
+			return nil, fmt.Errorf("retained source file identity is incomplete")
+		}
+		if _, duplicate := identities[filePath]; duplicate {
+			return nil, fmt.Errorf("retained source file identity is duplicated %q", filePath)
+		}
+		identities[filePath] = file
+	}
+	return identities, nil
 }
 
 func validateGitLabCrosswalkBoundary(matrix, crosswalk map[string]any, primary map[string]map[string]any, supplemental map[string]map[string]any) error {
@@ -1218,15 +1270,23 @@ func gitLabMatrixRow(t *testing.T, matrix map[string]any, sourceID string) map[s
 
 func loadGitLabObject(t *testing.T, path string) map[string]any {
 	t.Helper()
-	contents, err := os.ReadFile(path)
+	value, err := readGitLabObject(path)
 	if err != nil {
 		t.Fatalf("read %s: %v", path, err)
 	}
+	return value
+}
+
+func readGitLabObject(path string) (map[string]any, error) {
+	contents, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
 	var value map[string]any
 	if err := json.Unmarshal(contents, &value); err != nil {
-		t.Fatalf("parse %s: %v", path, err)
+		return nil, err
 	}
-	return value
+	return value, nil
 }
 
 func cloneGitLabObject(t *testing.T, value map[string]any) map[string]any {

@@ -5674,6 +5674,10 @@ func checkSourceProjection(fsys fs.FS, bundle engine.Bundle) []Finding {
 		return []Finding{sourceProjectionFinding(bundle.Name, descriptorPath, "parse canonical source descriptor: "+err.Error())}
 	}
 	findings := validateSourceDescriptorAgainstMappingLock(bundle.Name, descriptorPath, lock, descriptor)
+	if err := validateSourceDescriptorCorrectionProvenance(fsys, bundle.Name, lockRaw, descriptorRaw); err != nil {
+		matrixPath := filepath.ToSlash(filepath.Join(bundle.Name, "sources", bundle.Name+"-source-lane-matrix.json"))
+		findings = append(findings, sourceProjectionFinding(bundle.Name, matrixPath, "descriptor correction provenance: "+err.Error()))
+	}
 	findings = append(findings, validateSourceExecutableCoverage(bundle, descriptorPath, descriptor)...)
 	return findings
 }
