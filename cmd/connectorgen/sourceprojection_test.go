@@ -862,7 +862,7 @@ func TestSourceProjectionPrunesUnsafeGeneratedDirectReadToCitedBlockedSurface(t 
 		t.Fatalf("materialize safe source operation: %v", err)
 	}
 
-	operation.Request.Query = []sourceParameterDescriptor{{Name: "not[visibility]", Schema: map[string]any{"type": "string"}}}
+	operation.Request.Query = []sourceParameterDescriptor{{Name: "$filter", Schema: map[string]any{"type": "string"}}}
 	result := sourceImportResult{Operations: []sourceOperationDescriptor{operation}}
 	if changed := sourceProjectionApplyUnsafeProviderQueryParameterGaps(engine.Bundle{}, &result); changed != 1 {
 		t.Fatalf("unsafe provider query gap changes = %d, want 1", changed)
