@@ -97,7 +97,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/auditlogs/{account}/actions\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -128,12 +128,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "page_number",
+          "kind": "not_documented",
           "query_parameters": [
             "page",
             "page_size"
           ],
-          "description": "List audit log events for a given namespace.\n\n<span class=\"oat\"></span>\n",
+          "description": "",
           "source_location": "paths[\"/v2/auditlogs/{account}\"].get"
         },
         "scope": {
@@ -206,8 +206,8 @@
         },
         {
           "lane": "etl",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/auditlogs/{account}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -304,7 +304,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/auth/token\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -405,7 +405,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -506,7 +506,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -609,7 +609,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/repositories/{namespace}/{repository}/groups\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -710,7 +710,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -813,7 +813,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -844,12 +844,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "page_number",
+          "kind": "response_next_link",
           "query_parameters": [
             "page",
             "page_size"
           ],
-          "description": "",
+          "description": "retained response next-link field",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get"
         },
         "scope": {
@@ -920,7 +920,7 @@
         {
           "lane": "etl",
           "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1017,7 +1017,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/users/2fa-login\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1114,7 +1114,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/users/login\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1217,7 +1217,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1320,7 +1320,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/immutabletags/verify\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1419,7 +1419,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/access-tokens/{uuid}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1518,7 +1518,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/invites/{id}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1619,7 +1619,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1720,7 +1720,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1823,7 +1823,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members/{username}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1924,7 +1924,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].delete",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -1955,12 +1955,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "page_number",
+          "kind": "response_next_link",
           "query_parameters": [
             "page",
             "page_size"
           ],
-          "description": "Returns a paginated list of personal access tokens.",
+          "description": "retained response next-link field",
           "source_location": "paths[\"/v2/access-tokens\"].get"
         },
         "scope": {
@@ -2025,7 +2025,7 @@
         {
           "lane": "etl",
           "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/access-tokens\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2124,7 +2124,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/access-tokens/{uuid}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2155,12 +2155,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "page_number",
+          "kind": "response_next_link",
           "query_parameters": [
             "page",
             "page_size"
           ],
-          "description": "List access tokens for an organization.\n",
+          "description": "retained response next-link field",
           "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].get"
         },
         "scope": {
@@ -2225,7 +2225,7 @@
         {
           "lane": "etl",
           "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2324,7 +2324,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{name}/settings\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2425,7 +2425,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2456,12 +2456,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "page_number",
+          "kind": "response_next_link",
           "query_parameters": [
             "page",
             "page_size"
           ],
-          "description": "<span class=\"oat\"></span>\n",
+          "description": "retained response next-link field",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].get"
         },
         "scope": {
@@ -2532,7 +2532,7 @@
         {
           "lane": "etl",
           "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2633,7 +2633,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2664,12 +2664,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "page_number",
+          "kind": "response_next_link",
           "query_parameters": [
             "page",
             "page_size"
           ],
-          "description": "List the members (users) that are in a group.\nIf user is owner of the org or has otherwise elevated permissions, they can search by email and the result will also contain emails.\n\n<span class=\"oat\"></span>\n",
+          "description": "retained response next-link field",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get"
         },
         "scope": {
@@ -2741,7 +2741,7 @@
         {
           "lane": "etl",
           "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2840,7 +2840,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/invites\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -2871,12 +2871,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "page_number",
+          "kind": "not_documented",
           "query_parameters": [
             "page",
             "page_size"
           ],
-          "description": "Returns a list of members for an organization.\n\n_The following fields are only visible to orgs with insights enabled._\n\n- `last_logged_in_at`\n- `last_seen_at`\n- `last_desktop_version`\n\nTo make visible, please see [View Insights for organization users](https://docs.docker.com/admin/insights/#view-insights-for-organization-users).\n\n<span class=\"oat\"></span>\n",
+          "description": "",
           "source_location": "paths[\"/v2/orgs/{org_name}/members\"].get"
         },
         "scope": {
@@ -2950,8 +2950,8 @@
         },
         {
           "lane": "etl",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3052,8 +3052,8 @@
         },
         {
           "lane": "etl",
-          "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "state": "not_applicable",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members/export\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3148,7 +3148,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/ResourceTypes\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3247,7 +3247,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/ResourceTypes/{name}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3342,7 +3342,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/Schemas\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3441,7 +3441,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/Schemas/{id}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3536,7 +3536,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/ServiceProviderConfig\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3567,12 +3567,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "start_index",
+          "kind": "response_offset_terminal",
           "query_parameters": [
             "count",
             "startIndex"
           ],
-          "description": "Returns paginated users for an organization. Use `startIndex` and `count` query parameters to receive paginated results.\n\n**Sorting:**\n\nSorting allows you to specify the order in which resources are returned by specifying a combination of `sortBy` and `sortOrder` query parameters.\n\nThe `sortBy` parameter specifies the attribute whose value will be used to order the returned responses. The `sortOrder` parameter defines the order in which the `sortBy` parameter is applied. Allowed values are \"ascending\" and \"descending\".\n\n**Filtering:**\n\nYou can request a subset of resources by specifying the `filter` query parameter containing a filter expression. Attribute names and attribute operators used in filters are case insensitive. The filter parameter must contain at least one valid expression. Each expression must contain an attribute name followed by an attribute operator and an optional value.\n\nSupported operators are listed below.\n\n- `eq` equal\n- `ne` not equal\n- `co` contains\n- `sw` starts with\n- `and` Logical \"and\"\n- `or` Logical \"or\"\n- `not` \"Not\" function\n- `()` Precedence grouping\n",
+          "description": "retained response totalResults/startIndex/itemsPerPage terminal fields",
           "source_location": "paths[\"/v2/scim/2.0/Users\"].get"
         },
         "scope": {
@@ -3641,7 +3641,7 @@
         {
           "lane": "etl",
           "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/Users\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3740,7 +3740,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3841,7 +3841,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3944,7 +3944,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories/{repository}/tags/{tag}\"].head",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -3975,12 +3975,12 @@
       "facts": {
         "classification": "read",
         "pagination": {
-          "kind": "page_number",
+          "kind": "response_next_link",
           "query_parameters": [
             "page",
             "page_size"
           ],
-          "description": "Returns a list of repositories within the specified namespace (organization or user).\n\nPublic repositories are accessible to everyone, while private repositories require appropriate authentication and permissions.\n",
+          "description": "retained response next-link field",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].get"
         },
         "scope": {
@@ -4051,7 +4051,7 @@
         {
           "lane": "etl",
           "state": "mapped_unproven",
-          "reason": "dockerhub.source.etl.pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/namespaces/{namespace}/repositories\"].get",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4152,7 +4152,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/access-tokens/{uuid}\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4251,7 +4251,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/invites/{id}/resend\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4354,7 +4354,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/access-tokens/{access_token_id}\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4457,7 +4457,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].patch",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4554,7 +4554,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/access-tokens\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4651,7 +4651,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/invites/bulk\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4748,7 +4748,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{name}/access-tokens\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4849,7 +4849,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -4952,7 +4952,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}/members\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -5049,7 +5049,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/Users\"].post",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -5150,7 +5150,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{name}/settings\"].put",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -5253,7 +5253,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/groups/{group_name}\"].put",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -5356,7 +5356,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/orgs/{org_name}/members/{username}\"].put",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },
@@ -5457,7 +5457,7 @@
         {
           "lane": "etl",
           "state": "not_applicable",
-          "reason": "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1",
+          "reason": "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1",
           "source_location": "paths[\"/v2/scim/2.0/Users/{id}\"].put",
           "source_url": "https://docs.docker.com/reference/api/hub/latest.yaml"
         },

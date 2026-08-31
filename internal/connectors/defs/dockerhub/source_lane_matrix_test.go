@@ -366,7 +366,7 @@ func TestDockerHubSourceLaneMatrixRejectsMissingSourceFact(t *testing.T) {
 	assertDockerHubMatrixValidationError(t, matrix, lock, crosswalk, "does not preserve exact scope/path evidence")
 }
 
-func TestDockerHubSourceLaneMatrixRejectsMissingPagingOrExtractableETLDisposition(t *testing.T) {
+func TestDockerHubSourceLaneMatrixRejectsMissingResponseContinuationETLDisposition(t *testing.T) {
 	matrix, lock, crosswalk := readDockerHubMatrixInputs(t)
 	sources, err := dockerHubSourceInfos(lock, crosswalk)
 	if err != nil {
@@ -378,10 +378,75 @@ func TestDockerHubSourceLaneMatrixRejectsMissingPagingOrExtractableETLDispositio
 			continue
 		}
 		dockerHubMatrixCellByLane(t, &matrix.Operations[index], "etl").State = "not_applicable"
-		assertDockerHubMatrixValidationError(t, matrix, lock, crosswalk, "pageable or extractable source operation")
+		assertDockerHubMatrixValidationError(t, matrix, lock, crosswalk, "retained response/terminal continuation")
 		return
 	}
-	t.Fatal("matrix has no pageable or extractable source operation")
+	t.Fatal("matrix has no source operation with retained response/terminal continuation")
+}
+
+func TestDockerHubETLRequiresRetainedResponseOrTerminalContinuation(t *testing.T) {
+	_, lock, crosswalk := readDockerHubMatrixInputs(t)
+	sources, err := dockerHubSourceInfos(lock, crosswalk)
+	if err != nil {
+		t.Fatal(err)
+	}
+	tests := []struct {
+		name       string
+		sourceID   string
+		wantMapped bool
+	}{
+		{
+			name:       "happy response next link",
+			sourceID:   "dockerhub.rest.listNamespaceRepositories",
+			wantMapped: true,
+		},
+		{
+			name:       "happy SCIM response terminal fields",
+			sourceID:   "dockerhub.rest.get_/v2/scim/2.0/Users",
+			wantMapped: true,
+		},
+		{
+			name:       "bad request page parameters without response continuation",
+			sourceID:   "dockerhub.rest.AuditLogs_ListAuditLogs",
+			wantMapped: false,
+		},
+		{
+			name:       "edge top-level JSON array is a bounded direct read",
+			sourceID:   "dockerhub.rest.get_/v2/orgs/{org_name}/members",
+			wantMapped: false,
+		},
+		{
+			name:       "edge one-shot CSV export remains binary only",
+			sourceID:   "dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
+			wantMapped: false,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			source, exists := sources[test.sourceID]
+			if !exists {
+				t.Fatalf("missing retained source operation %s", test.sourceID)
+			}
+			if got := dockerHubRequiresETL(source, lock.SourceContract); got != test.wantMapped {
+				t.Fatalf("dockerHubRequiresETL(%s) = %t, want %t", test.sourceID, got, test.wantMapped)
+			}
+		})
+	}
+}
+
+func TestDockerHubSourceLaneMatrixRejectsETLWithoutResponseContinuation(t *testing.T) {
+	matrix, lock, crosswalk := readDockerHubMatrixInputs(t)
+	for _, sourceID := range []string{
+		"dockerhub.rest.AuditLogs_ListAuditLogs",
+		"dockerhub.rest.get_/v2/orgs/{org_name}/members",
+		"dockerhub.rest.get_/v2/orgs/{org_name}/members/export",
+	} {
+		row := dockerHubMatrixOperationByID(t, matrix, sourceID)
+		cell := dockerHubMatrixCellByLane(t, row, "etl")
+		cell.State = "mapped_unproven"
+		cell.Reason = "dockerhub.source.etl.pageable_or_extractable_collection_read.v1"
+		assertDockerHubMatrixValidationError(t, matrix, lock, crosswalk, "retained response/terminal continuation")
+	}
 }
 
 func TestDockerHubSourceLaneMatrixRejectsPaginationDerivedSyncTransport(t *testing.T) {
@@ -1102,7 +1167,10 @@ func dockerHubValidateOperation(operation *dockerHubMatrixOperation, source dock
 		}
 		if cell.State != want.State || cell.Reason != want.Reason {
 			if cell.Lane == "etl" && dockerHubRequiresETL(source, sourceContract) {
-				return fmt.Errorf("pageable or extractable source operation %s has %s cell = %s/%s, want %s/%s", source.Lock.ID, cell.Lane, cell.State, cell.Reason, want.State, want.Reason)
+				return fmt.Errorf("ETL source operation %s has retained response/terminal continuation but %s cell = %s/%s, want %s/%s", source.Lock.ID, cell.Lane, cell.State, cell.Reason, want.State, want.Reason)
+			}
+			if cell.Lane == "etl" && !dockerHubRequiresETL(source, sourceContract) {
+				return fmt.Errorf("ETL source operation %s lacks retained response/terminal continuation: got %s/%s, want %s/%s", source.Lock.ID, cell.State, cell.Reason, want.State, want.Reason)
 			}
 			if cell.Lane == "sync_transport" && !dockerHubRequiresSyncTransport(source) {
 				return fmt.Errorf("sync transport source operation %s lacks source-documented webhook/event registration: got %s/%s, want %s/%s", source.Lock.ID, cell.State, cell.Reason, want.State, want.Reason)
@@ -1139,7 +1207,7 @@ func dockerHubValidateFacts(facts dockerHubMatrixFacts, source dockerHubSourceIn
 		return fmt.Errorf("source operation %s classification = %q, want %q", source.Lock.ID, facts.Classification, classification)
 	}
 
-	wantPagination := dockerHubSourcePagination(source)
+	wantPagination := dockerHubSourcePagination(source, sourceContract)
 	if facts.Pagination.Kind != wantPagination.Kind ||
 		!dockerHubEqualStrings(facts.Pagination.QueryParameters, wantPagination.QueryParameters) ||
 		facts.Pagination.Description != wantPagination.Description ||
@@ -1185,32 +1253,109 @@ func dockerHubValidateFacts(facts dockerHubMatrixFacts, source dockerHubSourceIn
 	return nil
 }
 
-func dockerHubSourcePagination(source dockerHubSourceInfo) dockerHubPaginationFact {
-	if source.Lock.Method != "GET" {
-		return dockerHubPaginationFact{
-			Kind:            "not_documented",
-			QueryParameters: []string{},
-			SourceLocation:  source.Lock.SourceLocation,
-		}
-	}
-	queryNames := dockerHubParameterNames(source.Crosswalk.Request.QueryParameters, false)
-	kind, parameters := "not_documented", []string{}
-	switch {
-	case dockerHubContainsString(queryNames, "page") && dockerHubContainsString(queryNames, "page_size"):
-		kind, parameters = "page_number", []string{"page", "page_size"}
-	case dockerHubContainsString(queryNames, "startIndex") && dockerHubContainsString(queryNames, "count"):
-		kind, parameters = "start_index", []string{"count", "startIndex"}
-	}
-	description := ""
-	if kind != "not_documented" {
-		description = dockerHubStringValue(source.Lock.Operation["description"])
-	}
+// dockerHubSourcePagination records a continuation fact, not merely an input
+// shape. Page-like query parameters are retained for auditability but cannot
+// admit ETL until the response documents a next link or a terminal offset
+// shape that tells the runner when the collection is complete.
+func dockerHubSourcePagination(source dockerHubSourceInfo, sourceContract map[string]any) dockerHubPaginationFact {
+	parameters := dockerHubPaginationRequestParameters(source)
+	kind, description := dockerHubResponseContinuation(source, sourceContract)
 	return dockerHubPaginationFact{
 		Kind:            kind,
 		QueryParameters: parameters,
 		Description:     description,
 		SourceLocation:  source.Lock.SourceLocation,
 	}
+}
+
+func dockerHubPaginationRequestParameters(source dockerHubSourceInfo) []string {
+	if source.Lock.Method != "GET" {
+		return []string{}
+	}
+	queryNames := dockerHubParameterNames(source.Crosswalk.Request.QueryParameters, false)
+	switch {
+	case dockerHubContainsString(queryNames, "page") && dockerHubContainsString(queryNames, "page_size"):
+		return []string{"page", "page_size"}
+	case dockerHubContainsString(queryNames, "startIndex") && dockerHubContainsString(queryNames, "count"):
+		return []string{"count", "startIndex"}
+	default:
+		return []string{}
+	}
+}
+
+func dockerHubResponseContinuation(source dockerHubSourceInfo, sourceContract map[string]any) (string, string) {
+	if source.Lock.Method != "GET" {
+		return "not_documented", ""
+	}
+	responses, ok := source.Lock.Operation["responses"].(map[string]any)
+	if !ok {
+		return "not_documented", ""
+	}
+	hasNextLink, hasOffsetTerminal := false, false
+	for status, response := range responses {
+		if !strings.HasPrefix(status, "2") {
+			continue
+		}
+		for _, schema := range dockerHubResponseSchemas(response, sourceContract) {
+			if dockerHubSchemaHasTypedProperty(schema, sourceContract, "next", "string", map[string]bool{}) {
+				hasNextLink = true
+			}
+			if dockerHubSchemaHasTypedProperty(schema, sourceContract, "totalResults", "integer", map[string]bool{}) &&
+				dockerHubSchemaHasTypedProperty(schema, sourceContract, "startIndex", "integer", map[string]bool{}) &&
+				dockerHubSchemaHasTypedProperty(schema, sourceContract, "itemsPerPage", "integer", map[string]bool{}) {
+				hasOffsetTerminal = true
+			}
+		}
+	}
+	switch {
+	case hasNextLink:
+		return "response_next_link", "retained response next-link field"
+	case hasOffsetTerminal:
+		return "response_offset_terminal", "retained response totalResults/startIndex/itemsPerPage terminal fields"
+	default:
+		return "not_documented", ""
+	}
+}
+
+func dockerHubResponseSchemas(value any, sourceContract map[string]any) []any {
+	response := dockerHubDereferenceObject(value, sourceContract, map[string]bool{})
+	content, ok := response["content"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	schemas := make([]any, 0, len(content))
+	for _, media := range content {
+		mediaObject, ok := media.(map[string]any)
+		if !ok {
+			continue
+		}
+		if schema, exists := mediaObject["schema"]; exists {
+			schemas = append(schemas, schema)
+		}
+	}
+	return schemas
+}
+
+func dockerHubSchemaHasTypedProperty(value any, sourceContract map[string]any, property, wantType string, seenReferences map[string]bool) bool {
+	schema := dockerHubDereferenceObject(value, sourceContract, seenReferences)
+	if properties, ok := schema["properties"].(map[string]any); ok {
+		if raw, exists := properties[property]; exists {
+			propertySchema := dockerHubDereferenceObject(raw, sourceContract, map[string]bool{})
+			if dockerHubStringValue(propertySchema["type"]) == wantType {
+				return true
+			}
+		}
+	}
+	branches, ok := schema["allOf"].([]any)
+	if !ok {
+		return false
+	}
+	for _, branch := range branches {
+		if dockerHubSchemaHasTypedProperty(branch, sourceContract, property, wantType, seenReferences) {
+			return true
+		}
+	}
+	return false
 }
 
 func dockerHubSourceScope(source dockerHubSourceInfo) dockerHubScopeFact {
@@ -1406,9 +1551,9 @@ func dockerHubExpectedCells(source dockerHubSourceInfo, sourceContract map[strin
 		expected["binary_upload"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.binary_upload.no_binary_request_media.v1"}
 	}
 	if requiresETL {
-		expected["etl"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.etl.pageable_or_extractable_collection_read.v1"}
+		expected["etl"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.etl.documented_response_or_terminal_continuation.v1"}
 	} else {
-		expected["etl"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.etl.no_pageable_or_extractable_collection_read.v1"}
+		expected["etl"] = dockerHubExpectedCell{"not_applicable", "dockerhub.source.etl.no_documented_response_or_terminal_continuation.v1"}
 	}
 	if dockerHubRequiresSyncTransport(source) {
 		expected["sync_transport"] = dockerHubExpectedCell{"mapped_unproven", "dockerhub.source.sync_transport.documented_webhook_or_event_registration.v1"}
@@ -1433,11 +1578,7 @@ func dockerHubIsMutation(method string) bool {
 }
 
 func dockerHubRequiresETL(source dockerHubSourceInfo, sourceContract map[string]any) bool {
-	if source.Lock.Method != "GET" {
-		return false
-	}
-	return dockerHubSourcePagination(source).Kind != "not_documented" ||
-		dockerHubSourceExtractability(source, sourceContract).Kind == "array_response"
+	return dockerHubSourcePagination(source, sourceContract).Kind != "not_documented"
 }
 
 func dockerHubRequiresSyncTransport(source dockerHubSourceInfo) bool {
@@ -1487,7 +1628,7 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		return fmt.Errorf("retained source count reconciliation = matrix:%d lock:%d rest:%d total:%d, want 54", len(matrix.Operations), len(sources), lock.Counts.Rest, lock.Counts.Total)
 	}
 
-	var getCount, mutationCount, deleteCount, headCount, pagingCount, arrayReadCount, etlCount, syncTransportCount, scimCount, csvCount, callbackCount int
+	var getCount, mutationCount, deleteCount, headCount, continuationCount, requestOnlyPageCount, arrayReadCount, etlCount, syncTransportCount, scimCount, csvCount, callbackCount int
 	for _, source := range sources {
 		if source.Lock.Method == "GET" {
 			getCount++
@@ -1501,10 +1642,13 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		if source.Lock.Method == "HEAD" {
 			headCount++
 		}
-		pagination := dockerHubSourcePagination(source)
+		pagination := dockerHubSourcePagination(source, lock.SourceContract)
 		extractability := dockerHubSourceExtractability(source, lock.SourceContract)
 		if pagination.Kind != "not_documented" {
-			pagingCount++
+			continuationCount++
+		}
+		if pagination.Kind == "not_documented" && len(pagination.QueryParameters) > 0 {
+			requestOnlyPageCount++
 		}
 		if source.Lock.Method == "GET" && extractability.Kind == "array_response" {
 			arrayReadCount++
@@ -1525,10 +1669,10 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		callbackCount += dockerHubDocumentedCallbackCount(source)
 	}
 	if getCount != 24 || mutationCount != 27 || deleteCount != 6 || headCount != 3 ||
-		pagingCount != 9 || arrayReadCount != 2 || etlCount != 10 || syncTransportCount != 0 || scimCount != 9 ||
+		continuationCount != 7 || requestOnlyPageCount != 2 || arrayReadCount != 2 || etlCount != 7 || syncTransportCount != 0 || scimCount != 9 ||
 		csvCount != 1 || callbackCount != 0 {
-		return fmt.Errorf("source fact counts = GET:%d mutation:%d delete:%d head:%d paging:%d array_read:%d etl:%d sync_transport:%d scim:%d csv:%d callbacks:%d",
-			getCount, mutationCount, deleteCount, headCount, pagingCount, arrayReadCount, etlCount, syncTransportCount, scimCount, csvCount, callbackCount)
+		return fmt.Errorf("source fact counts = GET:%d mutation:%d delete:%d head:%d continuation:%d request_only_page:%d array_read:%d etl:%d sync_transport:%d scim:%d csv:%d callbacks:%d",
+			getCount, mutationCount, deleteCount, headCount, continuationCount, requestOnlyPageCount, arrayReadCount, etlCount, syncTransportCount, scimCount, csvCount, callbackCount)
 	}
 
 	cells := dockerHubMatrixCellCounts(matrix)
@@ -1537,7 +1681,7 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		"direct_write":    27,
 		"binary_download": 1,
 		"binary_upload":   0,
-		"etl":             10,
+		"etl":             7,
 		"reverse_etl":     27,
 		"sync_transport":  0,
 	}
@@ -1555,8 +1699,8 @@ func dockerHubValidateCountReconciliation(matrix *dockerHubMatrix, lock *dockerH
 		mappedTotal += cells[lane]["mapped_unproven"]
 		notApplicableTotal += cells[lane]["not_applicable"]
 	}
-	if mappedTotal != 92 || notApplicableTotal != 286 || mappedTotal+notApplicableTotal != 378 {
-		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 92/286/378", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
+	if mappedTotal != 89 || notApplicableTotal != 289 || mappedTotal+notApplicableTotal != 378 {
+		return fmt.Errorf("matrix cell totals = mapped:%d not_applicable:%d total:%d, want 89/289/378", mappedTotal, notApplicableTotal, mappedTotal+notApplicableTotal)
 	}
 	return nil
 }
