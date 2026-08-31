@@ -211,6 +211,196 @@ func TestBatch1SourceOperationMappingCohortCheckAcceptsTrackedDenominator(t *tes
 	}
 }
 
+// TestBatch1SourceOperationMappingCohortCheckValidatesMatricesAndDeclaredArtifactLinks
+// is the #4293 whole-cohort red test.  The public check must validate the
+// real connector-local matrix corpus, not only the frozen source-lock
+// denominator and the spelling of each matrix path.  Its report remains
+// mapping-only: a mapped_unproven or missing_foundation cell is accounted for
+// without being treated as an executable declaration.
+func TestBatch1SourceOperationMappingCohortCheckValidatesMatricesAndDeclaredArtifactLinks(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	manifest := filepath.Join(root, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json")
+
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"source-operation-mapping-cohort", manifest, "--check"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("cohort CLI exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	for _, want := range []string{
+		"matrix validation:",
+		"4343 source row(s)",
+		"30401 matrix cell(s)",
+		"artifact link record(s)",
+		"0 executable declaration(s)",
+	} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("cohort CLI output = %q, want whole-cohort evidence %q", stdout.String(), want)
+		}
+	}
+	_, matrixReport, err := sourceOperationMappingCohortFullCheck(root, manifest)
+	if err != nil {
+		t.Fatalf("whole-cohort check: %v", err)
+	}
+	if matrixReport.SourceRows != 4343 || matrixReport.MatrixCells != 30401 || matrixReport.DeferredCells == 0 {
+		t.Fatalf("whole-cohort matrix accounting = %#v", matrixReport)
+	}
+	if matrixReport.DeclaredArtifactLinkRecords == 0 || matrixReport.DeclaredArtifactLaneLinks == 0 {
+		t.Fatalf("whole-cohort declared artifact links = %#v, want source-backed links", matrixReport)
+	}
+	if matrixReport.ExecutableDeclarations != 0 {
+		t.Fatalf("whole-cohort matrix report made executable declarations=%d, want 0", matrixReport.ExecutableDeclarations)
+	}
+	if len(matrixReport.DeferredProjectionDeficits) == 0 {
+		t.Fatal("whole-cohort matrix report hid all deferred projection deficits")
+	}
+	for _, deficit := range matrixReport.DeferredProjectionDeficits {
+		if deficit.Kind != sourceOperationMappingCohortDeferredProjectionDeficitKind || deficit.Connector == "" || deficit.SourceOperationID == "" || !retainedSourceMappingKnownLane(deficit.Lane) {
+			t.Fatalf("incomplete typed deferred projection deficit: %#v", deficit)
+		}
+		if deficit.State != "mapped_unproven" && deficit.State != "missing_foundation" {
+			t.Fatalf("deferred projection deficit has non-deferred state: %#v", deficit)
+		}
+	}
+}
+
+func TestSourceOperationMappingCohortFullCheckRejectsRealMatrixEvidenceAndArtifactDefects(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	fixtureRoot, manifest := sourceOperationMappingCohortFullFixture(t, root)
+	cohort, err := sourceOperationMappingCohortReadManifest(manifest)
+	if err != nil {
+		t.Fatalf("read fixture cohort: %v", err)
+	}
+	if len(cohort.SourceLocks) == 0 {
+		t.Fatal("fixture cohort has no source locks")
+	}
+	firstMatrix := filepath.Join(fixtureRoot, filepath.FromSlash(cohort.SourceLocks[0].MatrixPath))
+
+	withMatrixMutation := func(t *testing.T, path string, mutate func(map[string]any)) {
+		t.Helper()
+		raw, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatalf("read matrix fixture %s: %v", path, err)
+		}
+		t.Cleanup(func() {
+			if err := os.WriteFile(path, raw, 0o644); err != nil {
+				t.Fatalf("restore matrix fixture %s: %v", path, err)
+			}
+		})
+		document := sourceOperationMappingReadJSON(t, path)
+		mutate(document)
+		sourceOperationMappingWriteJSON(t, path, document)
+	}
+	assertRejected := func(t *testing.T, want string) {
+		t.Helper()
+		_, _, err := sourceOperationMappingCohortFullCheck(fixtureRoot, manifest)
+		if err == nil {
+			t.Fatal("whole-cohort defect passed")
+		}
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("whole-cohort defect = %q, want %q", err, want)
+		}
+	}
+
+	t.Run("missing connector matrix", func(t *testing.T) {
+		raw, err := os.ReadFile(firstMatrix)
+		if err != nil {
+			t.Fatalf("read matrix fixture: %v", err)
+		}
+		if err := os.Remove(firstMatrix); err != nil {
+			t.Fatalf("remove matrix fixture: %v", err)
+		}
+		t.Cleanup(func() {
+			if err := os.WriteFile(firstMatrix, raw, 0o644); err != nil {
+				t.Fatalf("restore missing matrix fixture: %v", err)
+			}
+		})
+		assertRejected(t, "no such file")
+	})
+
+	t.Run("corrupt connector matrix", func(t *testing.T) {
+		withMatrixMutation(t, firstMatrix, func(document map[string]any) {
+			document["schema_version"] = "not-an-integer"
+		})
+		assertRejected(t, "schema_version")
+	})
+
+	t.Run("citation drift", func(t *testing.T) {
+		withMatrixMutation(t, firstMatrix, func(document map[string]any) {
+			row := sourceOperationMappingCohortFirstMatrixRow(t, document)
+			if facts, found := row["source_facts"].(map[string]any); found {
+				facts["source_location"] = "source.location.that.is.not.in.the.lock"
+				return
+			}
+			row["source_location"] = "source.location.that.is.not.in.the.lock"
+		})
+		assertRejected(t, "source fact citation location")
+	})
+
+	t.Run("hidden source row", func(t *testing.T) {
+		withMatrixMutation(t, firstMatrix, func(document map[string]any) {
+			if rows, found := document["source_operations"].([]any); found {
+				if len(rows) < 2 {
+					t.Fatal("fixture source_operations has fewer than two rows")
+				}
+				document["source_operations"] = rows[1:]
+				return
+			}
+			rows := document["operations"].([]any)
+			if len(rows) < 2 {
+				t.Fatal("fixture operations has fewer than two rows")
+			}
+			document["operations"] = rows[1:]
+		})
+		assertRejected(t, "is absent from its source-lane matrix")
+	})
+
+	artifactMatrix := sourceOperationMappingCohortFixtureMatrixWithDeclaredLink(t, fixtureRoot, cohort)
+	t.Run("declared artifact target is missing", func(t *testing.T) {
+		withMatrixMutation(t, artifactMatrix, func(document map[string]any) {
+			artifact := sourceOperationMappingCohortFirstArtifactWithDeclaredLink(t, document)
+			artifact["path"] = "artifact-target-that-does-not-exist.json"
+		})
+		assertRejected(t, "no such file")
+	})
+
+	t.Run("declared artifact link with unknown source identity", func(t *testing.T) {
+		withMatrixMutation(t, artifactMatrix, func(document map[string]any) {
+			link := sourceOperationMappingCohortFirstDeclaredArtifactLink(t, document)
+			if _, found := link["source_id"]; found {
+				link["source_id"] = "source.id.that.is.not.in.this.matrix"
+				return
+			}
+			link["source_operation_id"] = "source.id.that.is.not.in.this.matrix"
+		})
+		assertRejected(t, "does not resolve to a source-lane matrix row")
+	})
+
+	t.Run("ambiguous declared artifact link dialect", func(t *testing.T) {
+		withMatrixMutation(t, artifactMatrix, func(document map[string]any) {
+			link := sourceOperationMappingCohortFirstDeclaredArtifactLink(t, document)
+			if sourceID, found := link["source_id"].(string); found {
+				link["source_operation_id"] = sourceID
+				return
+			}
+			link["source_id"] = link["source_operation_id"]
+		})
+		assertRejected(t, "must declare exactly one of source_id or source_operation_id")
+	})
+
+	t.Run("unsafe declared artifact path", func(t *testing.T) {
+		withMatrixMutation(t, artifactMatrix, func(document map[string]any) {
+			artifact := sourceOperationMappingCohortFirstArtifactWithDeclaredLink(t, document)
+			artifact["path"] = "../outside.json"
+		})
+		assertRejected(t, "must be one canonical connector-relative path")
+	})
+}
+
 // TestBatch1SourceOperationMappingCohortRetentionReceipts starts the #4293
 // receipt-cohort slice red. A receipt is source-accounting evidence only: it
 // must prove all eligible descriptor-free v2 locks reconcile to their owned
@@ -858,6 +1048,155 @@ func sourceOperationMappingRetentionReceiptFixture(t *testing.T, root string) (s
 		}
 	}
 	return fixtureRoot, manifest
+}
+
+// sourceOperationMappingCohortFullFixture copies only immutable source input,
+// matrix evidence, Foundation Atlas facts, declared artifact targets, and
+// connector-local gap ledgers needed by the whole-cohort validator. It does
+// not copy descriptors or runtime declarations: the test fixture proves this
+// validation remains source-accounting only.
+func sourceOperationMappingCohortFullFixture(t *testing.T, root string) (string, string) {
+	t.Helper()
+	cohortPath := filepath.Join(root, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json")
+	raw, err := os.ReadFile(cohortPath)
+	if err != nil {
+		t.Fatalf("read Batch R1 cohort: %v", err)
+	}
+	var cohort sourceOperationMappingCohortManifest
+	if err := decodeSourceStrictJSON(raw, &cohort); err != nil {
+		t.Fatalf("decode Batch R1 cohort: %v", err)
+	}
+	fixtureRoot := t.TempDir()
+	manifest := filepath.Join(fixtureRoot, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json")
+	sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, filepath.ToSlash(filepath.Join("data", "connector-canon", "batch1-source-operation-mapping-cohort.json")))
+	sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, deferredVisibilityFoundationCatalogPath)
+	for _, entry := range cohort.SourceLocks {
+		sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, entry.MatrixPath)
+		sourceDirectory := filepath.Join(root, "internal", "connectors", "defs", entry.Connector, "sources")
+		files, err := os.ReadDir(sourceDirectory)
+		if err != nil {
+			t.Fatalf("read %s source directory: %v", entry.Connector, err)
+		}
+		for _, file := range files {
+			if file.IsDir() || !strings.HasSuffix(file.Name(), "-operation-source-lock.json") {
+				continue
+			}
+			relative := filepath.ToSlash(filepath.Join("internal", "connectors", "defs", entry.Connector, "sources", file.Name()))
+			sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, relative)
+		}
+		ledger := filepath.ToSlash(filepath.Join("internal", "connectors", "defs", entry.Connector, deferredVisibilityMissingFoundationFile))
+		if _, err := os.Stat(filepath.Join(root, filepath.FromSlash(ledger))); err == nil {
+			sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, ledger)
+		} else if !os.IsNotExist(err) {
+			t.Fatalf("stat %s: %v", ledger, err)
+		}
+		sourceOperationMappingCohortCopyDeclaredArtifactFiles(t, root, fixtureRoot, entry.Connector, entry.MatrixPath)
+	}
+	return fixtureRoot, manifest
+}
+
+func sourceOperationMappingCohortCopyDeclaredArtifactFiles(t *testing.T, sourceRoot, fixtureRoot, connector, matrixPath string) {
+	t.Helper()
+	document := sourceOperationMappingReadJSON(t, filepath.Join(sourceRoot, filepath.FromSlash(matrixPath)))
+	rawArtifacts, found := document["artifacts"]
+	if !found || rawArtifacts == nil {
+		return
+	}
+	artifacts, ok := rawArtifacts.([]any)
+	if !ok {
+		t.Fatalf("%s artifacts are not an array", matrixPath)
+	}
+	for index, rawArtifact := range artifacts {
+		artifact, ok := rawArtifact.(map[string]any)
+		if !ok {
+			t.Fatalf("%s artifacts[%d] is not an object", matrixPath, index)
+		}
+		path, ok := artifact["path"].(string)
+		if !ok || path == "" {
+			t.Fatalf("%s artifacts[%d] has no path", matrixPath, index)
+		}
+		relative := filepath.ToSlash(filepath.Join("internal", "connectors", "defs", connector, filepath.FromSlash(path)))
+		sourceOperationMappingCopyFixtureFile(t, sourceRoot, fixtureRoot, relative)
+	}
+}
+
+func sourceOperationMappingCohortFirstMatrixRow(t *testing.T, document map[string]any) map[string]any {
+	t.Helper()
+	if rows, found := document["source_operations"].([]any); found {
+		if len(rows) == 0 {
+			t.Fatal("source_operations has no rows")
+		}
+		row, ok := rows[0].(map[string]any)
+		if !ok {
+			t.Fatal("first source_operations row is not an object")
+		}
+		return row
+	}
+	rows, ok := document["operations"].([]any)
+	if !ok || len(rows) == 0 {
+		t.Fatal("operations has no rows")
+	}
+	row, ok := rows[0].(map[string]any)
+	if !ok {
+		t.Fatal("first operations row is not an object")
+	}
+	return row
+}
+
+func sourceOperationMappingCohortFixtureMatrixWithDeclaredLink(t *testing.T, fixtureRoot string, cohort sourceOperationMappingCohortManifest) string {
+	t.Helper()
+	for _, entry := range cohort.SourceLocks {
+		path := filepath.Join(fixtureRoot, filepath.FromSlash(entry.MatrixPath))
+		document := sourceOperationMappingReadJSON(t, path)
+		artifacts, found := document["artifacts"].([]any)
+		if !found {
+			continue
+		}
+		for _, rawArtifact := range artifacts {
+			artifact, ok := rawArtifact.(map[string]any)
+			if !ok {
+				continue
+			}
+			links, ok := artifact["links"].([]any)
+			if ok && len(links) > 0 {
+				return path
+			}
+		}
+	}
+	t.Fatal("fixture cohort has no declared artifact links")
+	return ""
+}
+
+func sourceOperationMappingCohortFirstDeclaredArtifactLink(t *testing.T, document map[string]any) map[string]any {
+	t.Helper()
+	artifact := sourceOperationMappingCohortFirstArtifactWithDeclaredLink(t, document)
+	links := artifact["links"].([]any)
+	link, ok := links[0].(map[string]any)
+	if !ok {
+		t.Fatal("declared artifact link is not an object")
+	}
+	return link
+}
+
+func sourceOperationMappingCohortFirstArtifactWithDeclaredLink(t *testing.T, document map[string]any) map[string]any {
+	t.Helper()
+	artifacts, ok := document["artifacts"].([]any)
+	if !ok {
+		t.Fatal("source-lane matrix has no artifacts")
+	}
+	for _, rawArtifact := range artifacts {
+		artifact, ok := rawArtifact.(map[string]any)
+		if !ok {
+			continue
+		}
+		links, ok := artifact["links"].([]any)
+		if !ok || len(links) == 0 {
+			continue
+		}
+		return artifact
+	}
+	t.Fatal("source-lane matrix has no artifact with a declared link")
+	return nil
 }
 
 func sourceOperationMappingCopyFixtureFile(t *testing.T, sourceRoot, destinationRoot, relative string) {

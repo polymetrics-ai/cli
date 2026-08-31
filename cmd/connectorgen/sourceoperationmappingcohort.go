@@ -35,7 +35,9 @@ var batch1SourceOperationMappingConnectors = []string{
 // sourceOperationMappingCohortManifest freezes the Batch R1 source-lock
 // denominator while leaving connector-local lane matrices in their owned
 // directories. The cohort intentionally records only matrix input paths, not
-// their rows or cells, so it cannot become a competing provider-fact source.
+// their rows or cells, so it cannot become a competing provider-fact source;
+// the public checker opens those owned inputs separately for source-backed
+// matrix validation.
 type sourceOperationMappingCohortManifest struct {
 	SchemaVersion          int                                      `json:"schema_version"`
 	Cohort                 string                                   `json:"cohort"`
@@ -105,7 +107,7 @@ func runSourceOperationMappingCohort(args []string, stdout, stderr io.Writer) in
 		logf(stderr, "connectorgen source-operation-mapping-cohort: resolve repository root: %v\n", err)
 		return 1
 	}
-	report, err := sourceOperationMappingCohortPathCheck(root, opts.ManifestPath)
+	report, matrixReport, err := sourceOperationMappingCohortFullCheck(root, opts.ManifestPath)
 	if err != nil {
 		logf(stderr, "connectorgen source-operation-mapping-cohort: %v\n", err)
 		return 1
@@ -117,6 +119,7 @@ func runSourceOperationMappingCohort(args []string, stdout, stderr io.Writer) in
 	if len(report.Findings) > 0 {
 		return 1
 	}
+	logf(stdout, "connectorgen source-operation-mapping-cohort: matrix validation: %d source row(s), %d matrix cell(s), %d deferred cell(s), %d declared artifact link record(s), %d declared source-lane link(s), %d deferred projection deficit(s), %d executable declaration(s)\n", matrixReport.SourceRows, matrixReport.MatrixCells, matrixReport.DeferredCells, matrixReport.DeclaredArtifactLinkRecords, matrixReport.DeclaredArtifactLaneLinks, len(matrixReport.DeferredProjectionDeficits), matrixReport.ExecutableDeclarations)
 	if opts.CheckRetentionReceipts {
 		receipts, receiptErr := sourceOperationMappingCohortRetentionReceiptCheck(root, opts.ManifestPath)
 		if receiptErr != nil {
@@ -136,6 +139,11 @@ func runSourceOperationMappingCohort(args []string, stdout, stderr io.Writer) in
 
 func sourceOperationMappingCohortUsage() string {
 	return `usage: connectorgen source-operation-mapping-cohort <manifest> --check [--check-retention-receipts]
+
+--check opens the frozen connector-local source-lane matrices, validates their
+source/citation/hidden-row evidence, and validates only explicit declared
+artifact links. Deferred rows without a declared link remain typed mapping
+deficits; this command never creates or admits an executable declaration.
 
 --check-retention-receipts re-derives and exact-byte checks eligible v2
 retention_only source-accounting sidecars. It does not materialize a
