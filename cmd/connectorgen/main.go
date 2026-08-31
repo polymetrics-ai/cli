@@ -153,7 +153,7 @@ func usage() string {
 	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
 	connectorgen declaration-admission [dir] [--json]  (default dir: internal/connectors/defs)
 	connectorgen source-operation-mapping <manifest> --check
-	connectorgen source-operation-mapping-cohort <manifest> --check
+	connectorgen source-operation-mapping-cohort <manifest> --check [--check-retention-receipts]
 	connectorgen retained-source-mapping <connector> [--check | --write-retention-sidecar | --check-retention-sidecar]
 	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
 	connectorgen source-materialize <connector> [--defs <dir>] [--check]

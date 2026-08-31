@@ -61,12 +61,41 @@ type sourceOperationMappingCohortReport struct {
 	Findings          []Finding `json:"findings"`
 }
 
+// sourceOperationMappingCohortOptions keeps the cohort validator explicitly
+// check-only. Retention receipts are immutable source-accounting sidecars, not
+// an output target or a request to materialize an executable bundle.
+type sourceOperationMappingCohortOptions struct {
+	ManifestPath           string
+	CheckRetentionReceipts bool
+}
+
+// sourceOperationMappingCohortRetentionReceipt is one deterministic,
+// connector-owned retention_only sidecar checked against the frozen source
+// lock and connector-local lane matrix. It deliberately has no descriptor,
+// operation, CLI, transport, credential, or runtime field.
+type sourceOperationMappingCohortRetentionReceipt struct {
+	Connector              string `json:"connector"`
+	SourceOperations       int    `json:"source_operations"`
+	ExecutableDeclarations int    `json:"executable_declarations"`
+}
+
+// sourceOperationMappingCohortRetentionReceiptReport records authoring-only
+// evidence. It cannot be used as a runtime admission result.
+type sourceOperationMappingCohortRetentionReceiptReport struct {
+	Manifest               string                                         `json:"manifest"`
+	ConnectorsChecked      int                                            `json:"connectors_checked"`
+	SourceOperations       int                                            `json:"source_operations"`
+	ExecutableDeclarations int                                            `json:"executable_declarations"`
+	Receipts               []sourceOperationMappingCohortRetentionReceipt `json:"receipts"`
+	Findings               []Finding                                      `json:"findings"`
+}
+
 func runSourceOperationMappingCohort(args []string, stdout, stderr io.Writer) int {
 	if len(args) == 2 && (args[1] == "-h" || args[1] == "--help") {
 		logln(stdout, sourceOperationMappingCohortUsage())
 		return 0
 	}
-	manifestPath, err := parseSourceOperationMappingCohortOptions(args)
+	opts, err := parseSourceOperationMappingCohortOptions(args)
 	if err != nil {
 		logf(stderr, "connectorgen source-operation-mapping-cohort: %v\n", err)
 		return 2
@@ -76,7 +105,7 @@ func runSourceOperationMappingCohort(args []string, stdout, stderr io.Writer) in
 		logf(stderr, "connectorgen source-operation-mapping-cohort: resolve repository root: %v\n", err)
 		return 1
 	}
-	report, err := sourceOperationMappingCohortPathCheck(root, manifestPath)
+	report, err := sourceOperationMappingCohortPathCheck(root, opts.ManifestPath)
 	if err != nil {
 		logf(stderr, "connectorgen source-operation-mapping-cohort: %v\n", err)
 		return 1
@@ -88,31 +117,69 @@ func runSourceOperationMappingCohort(args []string, stdout, stderr io.Writer) in
 	if len(report.Findings) > 0 {
 		return 1
 	}
+	if opts.CheckRetentionReceipts {
+		receipts, receiptErr := sourceOperationMappingCohortRetentionReceiptCheck(root, opts.ManifestPath)
+		if receiptErr != nil {
+			logf(stderr, "connectorgen source-operation-mapping-cohort: check retention receipts: %v\n", receiptErr)
+			return 1
+		}
+		for _, finding := range receipts.Findings {
+			logf(stdout, "%s: %s: %s\n", finding.Connector, finding.File, finding.Message)
+		}
+		logf(stdout, "connectorgen source-operation-mapping-cohort: retention receipts: %d connector(s), %d source operation(s), %d executable declaration(s), %d finding(s)\n", receipts.ConnectorsChecked, receipts.SourceOperations, receipts.ExecutableDeclarations, len(receipts.Findings))
+		if len(receipts.Findings) > 0 {
+			return 1
+		}
+	}
 	return 0
 }
 
 func sourceOperationMappingCohortUsage() string {
-	return "usage: connectorgen source-operation-mapping-cohort <manifest> --check"
+	return `usage: connectorgen source-operation-mapping-cohort <manifest> --check [--check-retention-receipts]
+
+--check-retention-receipts re-derives and exact-byte checks eligible v2
+retention_only source-accounting sidecars. It does not materialize a
+descriptor, operation, stream, CLI, transport, credential, or runtime artifact.`
 }
 
-func parseSourceOperationMappingCohortOptions(args []string) (string, error) {
-	return parseSourceOperationMappingOptions(args)
+func parseSourceOperationMappingCohortOptions(args []string) (sourceOperationMappingCohortOptions, error) {
+	var options sourceOperationMappingCohortOptions
+	check := false
+	for _, argument := range args[1:] {
+		switch argument {
+		case "--check":
+			if check {
+				return sourceOperationMappingCohortOptions{}, fmt.Errorf("--check may be specified only once")
+			}
+			check = true
+		case "--check-retention-receipts":
+			if options.CheckRetentionReceipts {
+				return sourceOperationMappingCohortOptions{}, fmt.Errorf("--check-retention-receipts may be specified only once")
+			}
+			options.CheckRetentionReceipts = true
+		default:
+			if strings.HasPrefix(argument, "-") {
+				return sourceOperationMappingCohortOptions{}, fmt.Errorf("unknown flag %q", argument)
+			}
+			if options.ManifestPath != "" {
+				return sourceOperationMappingCohortOptions{}, fmt.Errorf("unexpected extra argument %q", argument)
+			}
+			options.ManifestPath = argument
+		}
+	}
+	if options.ManifestPath == "" {
+		return sourceOperationMappingCohortOptions{}, fmt.Errorf("manifest path is required")
+	}
+	if !check {
+		return sourceOperationMappingCohortOptions{}, fmt.Errorf("--check is required; source-operation-mapping-cohort is validation only")
+	}
+	return options, nil
 }
 
 func sourceOperationMappingCohortPathCheck(root, manifestPath string) (sourceOperationMappingCohortReport, error) {
-	raw, err := os.ReadFile(manifestPath)
+	manifest, err := sourceOperationMappingCohortReadManifest(manifestPath)
 	if err != nil {
-		return sourceOperationMappingCohortReport{}, fmt.Errorf("read cohort manifest %s: %w", manifestPath, err)
-	}
-	if err := engine.ValidateSourceOperationMappingCohort(raw); err != nil {
-		return sourceOperationMappingCohortReport{}, fmt.Errorf("validate cohort manifest shape: %w", err)
-	}
-	var manifest sourceOperationMappingCohortManifest
-	if err := decodeSourceStrictJSON(raw, &manifest); err != nil {
-		return sourceOperationMappingCohortReport{}, fmt.Errorf("decode cohort manifest: %w", err)
-	}
-	if manifest.SchemaVersion != sourceOperationMappingCohortSchemaVersion {
-		return sourceOperationMappingCohortReport{}, fmt.Errorf("unsupported cohort schema version %d", manifest.SchemaVersion)
+		return sourceOperationMappingCohortReport{}, err
 	}
 
 	repositoryRoot, err := sourceOperationMappingCohortRoot(root)
@@ -205,6 +272,116 @@ func sourceOperationMappingCohortPathCheck(root, manifestPath string) (sourceOpe
 		return left.Message < right.Message
 	})
 	return report, nil
+}
+
+// sourceOperationMappingCohortRetentionReceiptCheck validates only the
+// descriptor-free, retained v2 subset of an already-valid frozen cohort. It
+// first reuses the immutable denominator check, then rebuilds each
+// retention_only source-accounting contract and compares it with the one
+// allowed connector-owned sidecar. It intentionally does not call
+// source-import, source-materialize, source projection, bundle loading, or a
+// runtime executor.
+func sourceOperationMappingCohortRetentionReceiptCheck(root, manifestPath string) (sourceOperationMappingCohortRetentionReceiptReport, error) {
+	cohort, err := sourceOperationMappingCohortPathCheck(root, manifestPath)
+	if err != nil {
+		return sourceOperationMappingCohortRetentionReceiptReport{}, err
+	}
+	if len(cohort.Findings) != 0 {
+		return sourceOperationMappingCohortRetentionReceiptReport{}, fmt.Errorf("frozen Batch R1 cohort has %d finding(s); retention receipts cannot be checked", len(cohort.Findings))
+	}
+	manifest, err := sourceOperationMappingCohortReadManifest(manifestPath)
+	if err != nil {
+		return sourceOperationMappingCohortRetentionReceiptReport{}, err
+	}
+	repositoryRoot, err := sourceOperationMappingCohortRoot(root)
+	if err != nil {
+		return sourceOperationMappingCohortRetentionReceiptReport{}, err
+	}
+	report := sourceOperationMappingCohortRetentionReceiptReport{
+		Manifest: manifestPath,
+		Receipts: make([]sourceOperationMappingCohortRetentionReceipt, 0, len(manifest.SourceLocks)),
+	}
+	add := func(connector, message string) {
+		report.Findings = append(report.Findings, Finding{Connector: connector, File: manifestPath, Message: message})
+	}
+	for _, entry := range manifest.SourceLocks {
+		lockPath, pathErr := sourceOperationMappingCohortOwnedPath(repositoryRoot, entry.Connector, entry.Path, "-operation-source-lock.json")
+		if pathErr != nil {
+			add(entry.Connector, fmt.Sprintf("resolve source lock for retention receipt: %v", pathErr))
+			continue
+		}
+		lockRaw, readErr := os.ReadFile(lockPath)
+		if readErr != nil {
+			return sourceOperationMappingCohortRetentionReceiptReport{}, fmt.Errorf("read source lock %s: %w", entry.Path, readErr)
+		}
+		lock, parseErr := parseSourceImportLock(lockRaw, entry.Connector)
+		if parseErr != nil {
+			return sourceOperationMappingCohortRetentionReceiptReport{}, fmt.Errorf("parse source lock %s: %w", entry.Path, parseErr)
+		}
+		if !retainedSourceMappingReceiptEligible(lock) {
+			continue
+		}
+		result, resultErr := retainedSourceMappingFromCohortEntry(repositoryRoot, entry)
+		if resultErr != nil {
+			add(entry.Connector, fmt.Sprintf("rebuild retention receipt from frozen source evidence: %v", resultErr))
+			continue
+		}
+		if result.Report.ExecutableDeclarations != 0 {
+			add(entry.Connector, fmt.Sprintf("retention receipt reports %d executable declaration(s), want 0", result.Report.ExecutableDeclarations))
+			continue
+		}
+		if _, sidecarErr := retainedSourceMappingCheckRetentionSidecar(repositoryRoot, entry.Connector, result); sidecarErr != nil {
+			add(entry.Connector, sidecarErr.Error())
+			continue
+		}
+		report.ConnectorsChecked++
+		report.SourceOperations += result.Report.SourceOperations
+		report.ExecutableDeclarations += result.Report.ExecutableDeclarations
+		report.Receipts = append(report.Receipts, sourceOperationMappingCohortRetentionReceipt{
+			Connector:              entry.Connector,
+			SourceOperations:       result.Report.SourceOperations,
+			ExecutableDeclarations: result.Report.ExecutableDeclarations,
+		})
+	}
+	if report.ConnectorsChecked == 0 {
+		add("", "frozen Batch R1 cohort has no eligible retained v2 source receipts")
+	}
+	sort.Slice(report.Receipts, func(i, j int) bool {
+		return report.Receipts[i].Connector < report.Receipts[j].Connector
+	})
+	sort.Slice(report.Findings, func(i, j int) bool {
+		left, right := report.Findings[i], report.Findings[j]
+		if left.Connector != right.Connector {
+			return left.Connector < right.Connector
+		}
+		if left.File != right.File {
+			return left.File < right.File
+		}
+		return left.Message < right.Message
+	})
+	return report, nil
+}
+
+func retainedSourceMappingReceiptEligible(lock sourceImportLock) bool {
+	return lock.SchemaVersion == 2 && !lock.Rest.CanonicalEvidence
+}
+
+func sourceOperationMappingCohortReadManifest(manifestPath string) (sourceOperationMappingCohortManifest, error) {
+	raw, err := os.ReadFile(manifestPath)
+	if err != nil {
+		return sourceOperationMappingCohortManifest{}, fmt.Errorf("read cohort manifest %s: %w", manifestPath, err)
+	}
+	if err := engine.ValidateSourceOperationMappingCohort(raw); err != nil {
+		return sourceOperationMappingCohortManifest{}, fmt.Errorf("validate cohort manifest shape: %w", err)
+	}
+	var manifest sourceOperationMappingCohortManifest
+	if err := decodeSourceStrictJSON(raw, &manifest); err != nil {
+		return sourceOperationMappingCohortManifest{}, fmt.Errorf("decode cohort manifest: %w", err)
+	}
+	if manifest.SchemaVersion != sourceOperationMappingCohortSchemaVersion {
+		return sourceOperationMappingCohortManifest{}, fmt.Errorf("unsupported cohort schema version %d", manifest.SchemaVersion)
+	}
+	return manifest, nil
 }
 
 func sourceOperationMappingCohortRoot(root string) (string, error) {

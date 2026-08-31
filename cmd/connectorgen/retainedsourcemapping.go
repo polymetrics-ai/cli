@@ -206,7 +206,19 @@ func retainedSourceMappingFromRepository(root, connector string) (retainedSource
 	if err != nil {
 		return retainedSourceMappingResult{}, err
 	}
+	return retainedSourceMappingFromCohortEntry(root, entry)
+}
 
+// retainedSourceMappingFromCohortEntry rebuilds one retention-only mapping
+// from a cohort entry that its caller has already bound through
+// sourceOperationMappingCohortPathCheck. It does not invoke source import,
+// descriptor materialization, source projection, runtime bundle loading, or a
+// connector executor.
+func retainedSourceMappingFromCohortEntry(root string, entry sourceOperationMappingCohortSourceLock) (retainedSourceMappingResult, error) {
+	connector := entry.Connector
+	if err := validateSourceImportConnector(connector); err != nil {
+		return retainedSourceMappingResult{}, err
+	}
 	lockPath, err := sourceOperationMappingCohortOwnedPath(root, connector, entry.Path, "-operation-source-lock.json")
 	if err != nil {
 		return retainedSourceMappingResult{}, fmt.Errorf("resolve source lock: %w", err)

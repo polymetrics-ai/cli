@@ -211,6 +211,128 @@ func TestBatch1SourceOperationMappingCohortCheckAcceptsTrackedDenominator(t *tes
 	}
 }
 
+// TestBatch1SourceOperationMappingCohortRetentionReceipts starts the #4293
+// receipt-cohort slice red. A receipt is source-accounting evidence only: it
+// must prove all eligible descriptor-free v2 locks reconcile to their owned
+// deterministic sidecars without making an executable declaration.
+func TestBatch1SourceOperationMappingCohortRetentionReceipts(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	manifest := filepath.Join(root, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json")
+	receipts, err := sourceOperationMappingCohortRetentionReceiptCheck(root, manifest)
+	if err != nil {
+		t.Fatalf("check Batch R1 retention receipts: %v", err)
+	}
+	if len(receipts.Findings) != 0 {
+		t.Fatalf("Batch R1 retention receipt findings = %+v, want none", receipts.Findings)
+	}
+	if receipts.ConnectorsChecked != 8 || receipts.SourceOperations != 2340 || receipts.ExecutableDeclarations != 0 {
+		t.Fatalf("retention receipts = connectors:%d source_operations:%d executable_declarations:%d, want 8/2340/0", receipts.ConnectorsChecked, receipts.SourceOperations, receipts.ExecutableDeclarations)
+	}
+	want := map[string]int{
+		"bitbucket": 297,
+		"circleci":  111,
+		"dockerhub": 54,
+		"jira":      617,
+		"notion":    49,
+		"sentry":    223,
+		"stripe":    589,
+		"vercel":    400,
+	}
+	got := make(map[string]int, len(receipts.Receipts))
+	for _, receipt := range receipts.Receipts {
+		if receipt.ExecutableDeclarations != 0 {
+			t.Fatalf("%s receipt reports executable declarations=%d, want 0", receipt.Connector, receipt.ExecutableDeclarations)
+		}
+		got[receipt.Connector] = receipt.SourceOperations
+	}
+	if !sourceOperationMappingReceiptCountsEqual(got, want) {
+		t.Fatalf("retention receipt counts = %#v, want %#v", got, want)
+	}
+
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"source-operation-mapping-cohort", manifest, "--check", "--check-retention-receipts"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("retention receipt CLI exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	if got := stdout.String(); !strings.Contains(got, "retention receipts: 8 connector(s), 2340 source operation(s), 0 executable declaration(s), 0 finding(s)") {
+		t.Fatalf("retention receipt CLI output = %q, want exact mapping-only receipt summary", got)
+	}
+}
+
+func TestBatch1SourceOperationMappingCohortRetentionReceiptsRejectMissingAndDriftedSidecars(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("resolve repository root: %v", err)
+	}
+	for _, test := range []struct {
+		name   string
+		mutate func(t *testing.T, root string)
+		want   string
+	}{
+		{
+			name: "missing receipt",
+			mutate: func(t *testing.T, root string) {
+				t.Helper()
+				path := filepath.Join(root, "internal", "connectors", "defs", "stripe", "sources", "stripe-retained-mapping-contract.json")
+				if err := os.Remove(path); err != nil {
+					t.Fatalf("remove fixture receipt: %v", err)
+				}
+			},
+			want: "read retention sidecar",
+		},
+		{
+			name: "deterministic byte drift",
+			mutate: func(t *testing.T, root string) {
+				t.Helper()
+				path := filepath.Join(root, "internal", "connectors", "defs", "stripe", "sources", "stripe-retained-mapping-contract.json")
+				raw, err := os.ReadFile(path)
+				if err != nil {
+					t.Fatalf("read fixture receipt: %v", err)
+				}
+				if err := os.WriteFile(path, append(raw, ' '), 0o644); err != nil {
+					t.Fatalf("drift fixture receipt: %v", err)
+				}
+			},
+			want: "bytes drifted",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			fixtureRoot, manifest := sourceOperationMappingRetentionReceiptFixture(t, root)
+			test.mutate(t, fixtureRoot)
+			receipts, err := sourceOperationMappingCohortRetentionReceiptCheck(fixtureRoot, manifest)
+			if err != nil {
+				t.Fatalf("check fixture retention receipts: %v", err)
+			}
+			if got := sourceOperationMappingFindingsText(receipts.Findings); !strings.Contains(got, "stripe:") || !strings.Contains(got, test.want) {
+				t.Fatalf("retention receipt findings = %q, want stripe-scoped %q", got, test.want)
+			}
+		})
+	}
+}
+
+func TestSourceOperationMappingCohortRetentionReceiptOptionsAndHelp(t *testing.T) {
+	for _, args := range [][]string{
+		{"source-operation-mapping-cohort", "manifest.json", "--check-retention-receipts"},
+		{"source-operation-mapping-cohort", "manifest.json", "--check", "--check-retention-receipts", "--check-retention-receipts"},
+	} {
+		var stdout, stderr bytes.Buffer
+		if code := run(args, &stdout, &stderr); code != 2 {
+			t.Fatalf("args=%v exit=%d stderr=%q, want usage error", args, code, stderr.String())
+		}
+	}
+	var stdout, stderr bytes.Buffer
+	if code := run([]string{"source-operation-mapping-cohort", "--help"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("cohort help exit=%d stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+	}
+	for _, want := range []string{"--check-retention-receipts", "retention_only", "does not materialize"} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("cohort help = %q, want %q", stdout.String(), want)
+		}
+	}
+}
+
 func TestBatch1SourceOperationMappingCohortCheckRejectsDigestCountAndMembershipDefects(t *testing.T) {
 	root, err := repoRoot()
 	if err != nil {
@@ -709,6 +831,60 @@ func sourceOperationMappingCohortFixture(t *testing.T, root string) string {
 		t.Fatalf("write cohort fixture: %v", err)
 	}
 	return path
+}
+
+func sourceOperationMappingRetentionReceiptFixture(t *testing.T, root string) (string, string) {
+	t.Helper()
+	cohortPath := filepath.Join(root, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json")
+	raw, err := os.ReadFile(cohortPath)
+	if err != nil {
+		t.Fatalf("read Batch R1 cohort: %v", err)
+	}
+	var cohort sourceOperationMappingCohortManifest
+	if err := decodeSourceStrictJSON(raw, &cohort); err != nil {
+		t.Fatalf("decode Batch R1 cohort: %v", err)
+	}
+	fixtureRoot := t.TempDir()
+	manifest := filepath.Join(fixtureRoot, "data", "connector-canon", "batch1-source-operation-mapping-cohort.json")
+	sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, filepath.ToSlash(filepath.Join("data", "connector-canon", "batch1-source-operation-mapping-cohort.json")))
+	for _, sourceLock := range cohort.SourceLocks {
+		sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, sourceLock.Path)
+		sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, sourceLock.MatrixPath)
+		sidecar := filepath.ToSlash(filepath.Join("internal", "connectors", "defs", sourceLock.Connector, "sources", sourceLock.Connector+retainedSourceMappingSidecarSuffix))
+		if _, err := os.Stat(filepath.Join(root, filepath.FromSlash(sidecar))); err == nil {
+			sourceOperationMappingCopyFixtureFile(t, root, fixtureRoot, sidecar)
+		} else if !os.IsNotExist(err) {
+			t.Fatalf("stat %s: %v", sidecar, err)
+		}
+	}
+	return fixtureRoot, manifest
+}
+
+func sourceOperationMappingCopyFixtureFile(t *testing.T, sourceRoot, destinationRoot, relative string) {
+	t.Helper()
+	raw, err := os.ReadFile(filepath.Join(sourceRoot, filepath.FromSlash(relative)))
+	if err != nil {
+		t.Fatalf("read fixture source %s: %v", relative, err)
+	}
+	destination := filepath.Join(destinationRoot, filepath.FromSlash(relative))
+	if err := os.MkdirAll(filepath.Dir(destination), 0o755); err != nil {
+		t.Fatalf("create fixture directory for %s: %v", relative, err)
+	}
+	if err := os.WriteFile(destination, raw, 0o644); err != nil {
+		t.Fatalf("write fixture source %s: %v", relative, err)
+	}
+}
+
+func sourceOperationMappingReceiptCountsEqual(left, right map[string]int) bool {
+	if len(left) != len(right) {
+		return false
+	}
+	for connector, expected := range right {
+		if left[connector] != expected {
+			return false
+		}
+	}
+	return true
 }
 
 func sourceOperationMappingFindingsText(findings []Finding) string {
