@@ -946,8 +946,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4AnalyticsCodeReview",
-        "notes": "source_operation=getApiV4AnalyticsCodeReview"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4AnalyticsCodeReview",
+        "notes": "source_operation=getApiV4AnalyticsCodeReview; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -2273,8 +2273,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4GroupsIdEpics",
-        "notes": "source_operation=getApiV4GroupsIdEpics"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdEpics",
+        "notes": "source_operation=getApiV4GroupsIdEpics; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -2285,8 +2285,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4GroupsIdDashEpics",
-        "notes": "source_operation=getApiV4GroupsIdDashEpics"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdDashEpics",
+        "notes": "source_operation=getApiV4GroupsIdDashEpics; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -9235,8 +9235,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4MergeRequests",
-        "notes": "source_operation=getApiV4MergeRequests"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4MergeRequests",
+        "notes": "source_operation=getApiV4MergeRequests; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -9247,8 +9247,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4GroupsIdMergeRequests",
-        "notes": "source_operation=getApiV4GroupsIdMergeRequests"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdMergeRequests",
+        "notes": "source_operation=getApiV4GroupsIdMergeRequests; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -9318,8 +9318,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4ProjectsIdMergeRequests",
-        "notes": "source_operation=getApiV4ProjectsIdMergeRequests"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdMergeRequests",
+        "notes": "source_operation=getApiV4ProjectsIdMergeRequests; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -9946,8 +9946,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4IssuesStatistics",
-        "notes": "source_operation=getApiV4IssuesStatistics"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4IssuesStatistics",
+        "notes": "source_operation=getApiV4IssuesStatistics; historical_descriptor_alias_gap=retained; retained_success_output=status; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -9972,8 +9972,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4GroupsIdIssues",
-        "notes": "source_operation=getApiV4GroupsIdIssues"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdIssues",
+        "notes": "source_operation=getApiV4GroupsIdIssues; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -9984,8 +9984,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4GroupsIdIssuesStatistics",
-        "notes": "source_operation=getApiV4GroupsIdIssuesStatistics"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4GroupsIdIssuesStatistics",
+        "notes": "source_operation=getApiV4GroupsIdIssuesStatistics; historical_descriptor_alias_gap=retained; retained_success_output=status; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -10055,8 +10055,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4ProjectsIdIssues",
-        "notes": "source_operation=getApiV4ProjectsIdIssues"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdIssues",
+        "notes": "source_operation=getApiV4ProjectsIdIssues; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -10080,8 +10080,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4ProjectsIdIssuesStatistics",
-        "notes": "source_operation=getApiV4ProjectsIdIssuesStatistics"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdIssuesStatistics",
+        "notes": "source_operation=getApiV4ProjectsIdIssuesStatistics; historical_descriptor_alias_gap=retained; retained_success_output=status; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -13036,8 +13036,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4ProjectsIdRepositoryFilesFilePathBlame",
-        "notes": "source_operation=getApiV4ProjectsIdRepositoryFilesFilePathBlame"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdRepositoryFilesFilePathBlame",
+        "notes": "source_operation=getApiV4ProjectsIdRepositoryFilesFilePathBlame; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -13534,8 +13534,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests",
-        "notes": "source_operation=getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests",
+        "notes": "source_operation=getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {
@@ -14799,8 +14799,8 @@
         "status": "blocked",
         "risk": "low",
         "blocked_by_default": true,
-        "reason": "missing_foundation=runtime-provider-parameter-alias-investigating-r1; source_operation=getApiV4ProjectsIdVariablesKey",
-        "notes": "source_operation=getApiV4ProjectsIdVariablesKey"
+        "reason": "source_disposition=mapped_unproven; typed_provider_query_alias=available; source_operation=getApiV4ProjectsIdVariablesKey",
+        "notes": "source_operation=getApiV4ProjectsIdVariablesKey; historical_descriptor_alias_gap=retained; no declaration-owned direct-read artifact or executable command is claimed."
       }
     },
     {

@@ -50,52 +50,10 @@
       "affected_lane": "direct_read",
       "source_ids": [
         {
-          "id": "gitlab.rest.getApiV4AnalyticsCodeReview"
-        },
-        {
-          "id": "gitlab.rest.getApiV4GroupsIdDashEpics"
-        },
-        {
-          "id": "gitlab.rest.getApiV4GroupsIdEpics"
-        },
-        {
-          "id": "gitlab.rest.getApiV4GroupsIdIssues"
-        },
-        {
-          "id": "gitlab.rest.getApiV4GroupsIdIssuesStatistics"
-        },
-        {
-          "id": "gitlab.rest.getApiV4GroupsIdMergeRequests"
-        },
-        {
-          "id": "gitlab.rest.getApiV4IssuesStatistics"
-        },
-        {
-          "id": "gitlab.rest.getApiV4MergeRequests"
-        },
-        {
-          "id": "gitlab.rest.getApiV4ProjectsIdDeploymentsDeploymentIdMergeRequests"
-        },
-        {
-          "id": "gitlab.rest.getApiV4ProjectsIdIssues"
-        },
-        {
-          "id": "gitlab.rest.getApiV4ProjectsIdIssuesStatistics"
-        },
-        {
-          "id": "gitlab.rest.getApiV4ProjectsIdMergeRequests"
-        },
-        {
-          "id": "gitlab.rest.getApiV4ProjectsIdRepositoryFilesFilePathBlame"
-        },
-        {
-          "id": "gitlab.rest.getApiV4ProjectsIdVariablesKey"
-        },
-        {
           "id": "gitlab.rest.getApiV4ProjectsProjectIdPackagesNugetV2Packages"
         }
       ],
-      "reason": "These retained GET operations require source-declared punctuated provider query keys. The current runtime has no approved injective, reversible CLI alias grammar that preserves their exact wire keys.",
+      "reason": "The retained GET operation requires the source-declared dollar-prefixed provider query key $filter. The available typed alias grammar intentionally supports plain identifiers and one bracketed identifier segment only, so this exact key remains mapped_unproven pending a separately approved extension that preserves the wire key.",
       "runtime_claim": "No unsafe raw flag, lossy normalization, provider-key rewrite, or executable direct-read promotion is claimed."
     }
   ]
