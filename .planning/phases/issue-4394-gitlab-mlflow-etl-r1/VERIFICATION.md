@@ -9,5 +9,5 @@
 - [x] 502 leaves no materialized table rows.
 - [x] Missing credential/preflight path makes no provider I/O.
 - [x] Focused normal source/matrix/CLI/contract tests, connector validation, JSON parsing, gofmt, and diff checks pass.
-- [ ] Candidate commit/push and remote SHA verification complete.
+- [x] Candidate commit/push and remote SHA verification complete: `4635266964f8225c770903e65c2da3dfd10f69b3` on `origin/codex/4394-gitlab-mlflow-etl-r1`.
 - [ ] Independent review complete before any parent integration.
