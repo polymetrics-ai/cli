@@ -1086,6 +1086,44 @@ func TestDeclarationAdmissionMappingReaderAcceptsRetainedAsanaV3EventSchemaInven
 	}
 }
 
+// TestDeclarationAdmissionRejectsNonObjectRetainedSourceOperation ensures
+// declaration admission enforces the same source-operation object boundary as
+// source import. Provider grammar inside the retained object remains opaque;
+// a scalar or array is not a provider operation object.
+func TestDeclarationAdmissionRejectsNonObjectRetainedSourceOperation(t *testing.T) {
+	lockPath := filepath.Join("..", "..", "internal", "connectors", "defs", "dockerhub", "sources", "dockerhub-operation-source-lock.json")
+	raw, err := os.ReadFile(lockPath)
+	if err != nil {
+		t.Fatalf("read retained Docker Hub source lock: %v", err)
+	}
+
+	var document map[string]any
+	if err := json.Unmarshal(raw, &document); err != nil {
+		t.Fatalf("decode retained Docker Hub source lock: %v", err)
+	}
+	rest, ok := document["rest"].(map[string]any)
+	if !ok {
+		t.Fatal("Docker Hub source lock rest is not an object")
+	}
+	operations, ok := rest["operations"].([]any)
+	if !ok || len(operations) == 0 {
+		t.Fatal("Docker Hub source lock has no REST operations")
+	}
+	operation, ok := operations[0].(map[string]any)
+	if !ok {
+		t.Fatal("Docker Hub source lock operation is not an object")
+	}
+	operation["source_operation"] = []any{}
+	mutated, err := json.Marshal(document)
+	if err != nil {
+		t.Fatalf("encode mutated Docker Hub source lock: %v", err)
+	}
+
+	if _, err := parseDeclarationAdmissionSourceLock(mutated, "dockerhub"); err == nil || !strings.Contains(err.Error(), "source_operation must be an object") {
+		t.Fatalf("declaration admission error = %v, want source_operation object rejection", err)
+	}
+}
+
 func declarationAdmissionV3EventSchemaInventoryFixture(t *testing.T) []byte {
 	t.Helper()
 	raw := sourceImportV3FixtureLock(t, "fixture", []sourceImportV3FixtureDocument{{
