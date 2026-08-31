@@ -10,7 +10,6 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
-	"reflect"
 	"sort"
 	"strings"
 	"sync"
@@ -37,19 +36,55 @@ const asanaETLFixtureToken = "fixture-asana-access-token"
 // so the witness cannot make a source-bound base_url override executable.
 const asanaETLProviderBaseURL = "https://app.asana.com/api/1.0"
 
-var asanaDeclaredETLStreamNames = []string{
-	"custom_fields",
-	"project_statuses",
-	"projects",
-	"sections",
-	"stories",
-	"tags",
-	"tasks",
-	"team_memberships",
-	"teams",
-	"users",
-	"workspace_memberships",
-	"workspaces",
+const asanaDeclaredETLStreamCount = 64
+
+func asanaETLFixtureCredentialConfig() map[string]string {
+	return map[string]string{
+		"workspace_id":              "workspace-one",
+		"project_id":                "project-one",
+		"team_id":                   "team-one",
+		"goal_id":                   "goal-one",
+		"portfolio_id":              "portfolio-one",
+		"task_id":                   "task-one",
+		"user_id":                   "user-one",
+		"section_id":                "section-one",
+		"tag_id":                    "tag-one",
+		"user_task_list_id":         "user-task-list-one",
+		"time_tracking_category_id": "time-tracking-category-one",
+		"parent_id":                 "parent-one",
+		"supported_goal_id":         "supported-goal-one",
+		"emoji_base":                "thumbs_up",
+		"target_id":                 "target-one",
+		"favorite_resource_type":    "project",
+		"organization_id":           "organization-one",
+	}
+}
+
+// asanaETLSourceLaneMatrix is deliberately a source-to-definition assertion,
+// not an operation-name allow-list. Every source-backed ETL row must cite its
+// exact source identity and resolve to one declared full-refresh stream and
+// schema. The saved connection uses that stream; its bounded direct-read
+// counterpart remains a separate command lane.
+type asanaETLSourceLaneMatrix struct {
+	SourceOperations []asanaETLSourceLaneRow `json:"source_operations"`
+}
+
+type asanaETLSourceLaneRow struct {
+	SourceID string                        `json:"source_id"`
+	Lanes    map[string]asanaETLSourceLane `json:"lanes"`
+}
+
+type asanaETLSourceLane struct {
+	Applicability string                `json:"applicability"`
+	Disposition   string                `json:"disposition"`
+	Mapping       asanaETLStreamMapping `json:"mapping"`
+}
+
+type asanaETLStreamMapping struct {
+	SourceID string `json:"source_id"`
+	Stream   string `json:"stream"`
+	Schema   string `json:"schema"`
+	Mode     string `json:"mode"`
 }
 
 type asanaETLHTTPCall struct {
@@ -61,6 +96,7 @@ type asanaETLFixture struct {
 	t        *testing.T
 	server   *httptest.Server
 	failPath string
+	paths    map[string]struct{}
 
 	mu    sync.Mutex
 	calls []asanaETLHTTPCall
@@ -68,7 +104,7 @@ type asanaETLFixture struct {
 
 func newAsanaETLFixture(t *testing.T) *asanaETLFixture {
 	t.Helper()
-	fixture := &asanaETLFixture{t: t}
+	fixture := &asanaETLFixture{t: t, paths: asanaETLFixturePaths(t)}
 	fixture.server = httptest.NewTLSServer(http.HandlerFunc(fixture.serveHTTP))
 	t.Cleanup(fixture.server.Close)
 	fixture.installSourceBoundOriginRedirect(t)
@@ -105,13 +141,11 @@ func (f *asanaETLFixture) installSourceBoundOriginRedirect(t *testing.T) {
 
 func (f *asanaETLFixture) assertEveryDeclaredStreamMaterializes(t *testing.T) {
 	t.Helper()
-	if got := asanaBundleETLStreamNames(t); !reflect.DeepEqual(got, asanaDeclaredETLStreamNames) {
-		t.Fatalf("Asana declared ETL streams = %v, want exact existing 12-stream witness cohort %v", got, asanaDeclaredETLStreamNames)
-	}
+	declaredStreams := asanaDeclaredETLStreamNames(t)
 
 	application := f.openApplication(t)
 	ctx := context.Background()
-	for _, stream := range asanaDeclaredETLStreamNames {
+	for _, stream := range declaredStreams {
 		stream := stream
 		t.Run(stream, func(t *testing.T) {
 			connectionName := "asana_" + stream + "_to_warehouse"
@@ -155,6 +189,9 @@ func (f *asanaETLFixture) assertEveryDeclaredStreamMaterializes(t *testing.T) {
 				}
 			}
 			f.assertPaginatedSourceRoute(t, stream, wantRows)
+			if stream == "agents_for_workspace" {
+				f.assertFullRefreshDoesNotReuseOffset(t, application, connection.Name, stream)
+			}
 		})
 	}
 }
@@ -218,12 +255,8 @@ func (f *asanaETLFixture) openApplication(t *testing.T) *app.App {
 	if _, err := application.AddCredential(ctx, app.AddCredentialRequest{
 		Name:      "asana-local",
 		Connector: "asana",
-		Config: map[string]string{
-			"workspace_id": "workspace-one",
-			"project_id":   "project-one",
-			"team_id":      "team-one",
-		},
-		Secrets: map[string]string{"access_token": asanaETLFixtureToken},
+		Config:    asanaETLFixtureCredentialConfig(),
+		Secrets:   map[string]string{"access_token": asanaETLFixtureToken},
 	}); err != nil {
 		t.Fatalf("add local Asana credential: %v", err)
 	}
@@ -237,15 +270,91 @@ func (f *asanaETLFixture) openApplication(t *testing.T) *app.App {
 	return application
 }
 
-func asanaBundleETLStreamNames(t *testing.T) []string {
+func asanaETLFixturePaths(t *testing.T) map[string]struct{} {
+	t.Helper()
+	bundle, err := engine.Load(os.DirFS("../connectors/defs"), "asana")
+	if err != nil {
+		t.Fatalf("load Asana fixture stream definitions: %v", err)
+	}
+	config := asanaETLFixtureCredentialConfig()
+	paths := make(map[string]struct{}, len(bundle.Streams)+6)
+	for _, stream := range bundle.Streams {
+		if stream.FanOut != nil {
+			continue
+		}
+		path := stream.Path
+		for key, value := range config {
+			path = strings.ReplaceAll(path, "{{ config."+key+" }}", value)
+		}
+		if strings.Contains(path, "{{") {
+			t.Fatalf("Asana fixture cannot resolve declared stream %q path %q", stream.Name, stream.Path)
+		}
+		paths[path] = struct{}{}
+	}
+	for _, path := range []string{
+		"/projects/project-one/sections",
+		"/projects/project-two/sections",
+		"/projects/project-one/project_statuses",
+		"/projects/project-two/project_statuses",
+		"/tasks/task-one/stories",
+		"/tasks/task-two/stories",
+	} {
+		paths[path] = struct{}{}
+	}
+	return paths
+}
+
+func asanaDeclaredETLStreamNames(t *testing.T) []string {
 	t.Helper()
 	bundle, err := engine.Load(os.DirFS("../connectors/defs"), "asana")
 	if err != nil {
 		t.Fatalf("load Asana declared stream bundle: %v", err)
 	}
-	names := make([]string, 0, len(bundle.Streams))
+	byName := make(map[string]engine.StreamSpec, len(bundle.Streams))
 	for _, stream := range bundle.Streams {
-		names = append(names, stream.Name)
+		if _, duplicate := byName[stream.Name]; duplicate {
+			t.Fatalf("Asana bundle repeats stream %q", stream.Name)
+		}
+		byName[stream.Name] = stream
+	}
+
+	raw, err := os.ReadFile("../connectors/defs/asana/sources/asana-source-lane-matrix.json")
+	if err != nil {
+		t.Fatalf("read Asana source lane matrix: %v", err)
+	}
+	var matrix asanaETLSourceLaneMatrix
+	if err := json.Unmarshal(raw, &matrix); err != nil {
+		t.Fatalf("decode Asana source lane matrix: %v", err)
+	}
+
+	names := make([]string, 0, asanaDeclaredETLStreamCount)
+	seen := make(map[string]string, asanaDeclaredETLStreamCount)
+	for _, row := range matrix.SourceOperations {
+		lane, ok := row.Lanes["etl"]
+		if !ok || lane.Applicability != "applicable" {
+			continue
+		}
+		if lane.Disposition != "implemented" {
+			t.Fatalf("source-backed Asana ETL %q disposition = %q, want implemented full-refresh declaration", row.SourceID, lane.Disposition)
+		}
+		if lane.Mapping.SourceID != row.SourceID || lane.Mapping.Stream == "" || lane.Mapping.Schema == "" || lane.Mapping.Mode != "full_refresh" {
+			t.Fatalf("source-backed Asana ETL %q mapping = %+v, want exact source_id, stream, schema, and full_refresh mode", row.SourceID, lane.Mapping)
+		}
+		stream, ok := byName[lane.Mapping.Stream]
+		if !ok {
+			t.Fatalf("source-backed Asana ETL %q maps absent stream %q", row.SourceID, lane.Mapping.Stream)
+		}
+		if stream.SchemaRef != lane.Mapping.Schema || stream.Records.Path != "data" || stream.Incremental != nil {
+			t.Fatalf("source-backed Asana ETL %q stream = %+v, want schema=%q records.data and no incremental checkpoint", row.SourceID, stream, lane.Mapping.Schema)
+		}
+		if prior, duplicate := seen[lane.Mapping.Stream]; duplicate {
+			t.Fatalf("Asana source-backed ETL stream %q is reused by %q and %q", lane.Mapping.Stream, prior, row.SourceID)
+		}
+		seen[lane.Mapping.Stream] = row.SourceID
+		names = append(names, lane.Mapping.Stream)
+	}
+	if len(names) != asanaDeclaredETLStreamCount || len(bundle.Streams) != asanaDeclaredETLStreamCount {
+		t.Fatalf("Asana full-refresh ETL declarations source=%d bundle=%d, want %d exact source-backed streams", len(names), len(bundle.Streams), asanaDeclaredETLStreamCount)
 	}
 	sort.Strings(names)
 	return names
@@ -293,7 +402,7 @@ func (f *asanaETLFixture) serveHTTP(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	if !asanaETLPathKnown(path) {
+	if _, known := f.paths[path]; !known {
 		f.failf("unexpected Asana ETL source path %q", path)
 		w.WriteHeader(http.StatusNotFound)
 		return
@@ -301,24 +410,14 @@ func (f *asanaETLFixture) serveHTTP(w http.ResponseWriter, r *http.Request) {
 	record := asanaETLRecord(path, page == "fixture-page-two")
 	payload := map[string]any{"data": []any{record}}
 	if page == "" {
-		payload["next_page"] = map[string]any{"uri": asanaETLProviderBaseURL + path + "?offset=fixture-page-two&limit=100"}
+		nextQuery := r.URL.Query()
+		nextQuery.Set("offset", "fixture-page-two")
+		if nextQuery.Get("limit") == "" {
+			nextQuery.Set("limit", "100")
+		}
+		payload["next_page"] = map[string]any{"uri": asanaETLProviderBaseURL + path + "?" + nextQuery.Encode()}
 	}
 	f.writeJSON(w, http.StatusOK, payload)
-}
-
-func asanaETLPathKnown(path string) bool {
-	switch path {
-	case "/workspaces", "/projects", "/tasks", "/users", "/tags", "/team_memberships":
-		return true
-	case "/workspaces/workspace-one/teams", "/workspaces/workspace-one/custom_fields", "/workspaces/workspace-one/workspace_memberships":
-		return true
-	case "/projects/project-one/sections", "/projects/project-two/sections", "/projects/project-one/project_statuses", "/projects/project-two/project_statuses":
-		return true
-	case "/tasks/task-one/stories", "/tasks/task-two/stories":
-		return true
-	default:
-		return false
-	}
 }
 
 func asanaETLRecord(path string, secondPage bool) map[string]any {
@@ -386,6 +485,28 @@ func (f *asanaETLFixture) assertPaginatedSourceRoute(t *testing.T, stream string
 	}
 	if !secondPage {
 		t.Fatalf("%s source requests = %+v, want at least one next_page continuation", stream, calls)
+	}
+}
+
+func (f *asanaETLFixture) assertFullRefreshDoesNotReuseOffset(t *testing.T, application *app.App, connection, stream string) {
+	t.Helper()
+	f.resetCalls()
+	run, err := application.RunETL(context.Background(), app.RunETLRequest{Connection: connection, Stream: stream, BatchSize: 1})
+	if err != nil {
+		t.Fatalf("repeat full-refresh RunETL(%s): %v", stream, err)
+	}
+	if run.Status != "completed" {
+		t.Fatalf("repeat full-refresh RunETL(%s) status = %q, want completed", stream, run.Status)
+	}
+	calls := f.snapshotCalls()
+	if len(calls) < 2 {
+		t.Fatalf("repeat full-refresh %s calls = %+v, want first and terminal next-page reads", stream, calls)
+	}
+	if strings.Contains(calls[0].Query, "offset=") {
+		t.Fatalf("repeat full-refresh %s first request reused provider offset: %+v", stream, calls)
+	}
+	if !strings.Contains(calls[1].Query, "offset=fixture-page-two") {
+		t.Fatalf("repeat full-refresh %s next request = %+v, want provider continuation URI", stream, calls)
 	}
 }
 

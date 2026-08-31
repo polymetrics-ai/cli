@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "time_tracking_categories",
+  "type": "object",
+  "x-primary-key": ["gid"],
+  "required": ["gid"],
+  "properties": {
+    "gid": { "type": "string" },
+    "color": { "type": ["string", "null"] },
+    "name": { "type": ["string", "null"] },
+    "resource_type": { "type": ["string", "null"] }
+  }
+}
