@@ -38,14 +38,14 @@ func TestProductionEmbedLoadsRuntimeBundles(t *testing.T) {
 	if len(github.Streams) == 0 {
 		t.Fatal("github bundle has zero streams")
 	}
-	if github.Docs != "" {
-		t.Fatal("production execution bundle unexpectedly loaded docs")
+	if github.Spec == nil {
+		t.Fatal("github bundle has no execution spec")
 	}
-	if github.Surface != nil {
-		t.Fatal("production embed should not include api_surface.json")
+	if github.CLISurface == nil {
+		t.Fatal("github bundle has no execution CLI surface")
 	}
-	if github.Fixtures != nil {
-		t.Fatal("production embed should not include fixtures")
+	if len(github.Operations) == 0 {
+		t.Fatal("github bundle has zero execution operations")
 	}
 }
 

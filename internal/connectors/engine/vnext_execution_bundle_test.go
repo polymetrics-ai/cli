@@ -30,7 +30,7 @@ var vNextExecutionFiles = map[string]bool{
 	"writes.json":            true,
 }
 
-func TestVNextReferenceBundlesRunFromExecutionJSONOnly(t *testing.T) {
+func TestVNextReferenceConnectorsDiscoverFromExecutionJSONOnly(t *testing.T) {
 	executionFS := vNextReferenceExecutionFS(t)
 	for _, name := range vNextReferenceConnectors {
 		t.Run(name, func(t *testing.T) {
