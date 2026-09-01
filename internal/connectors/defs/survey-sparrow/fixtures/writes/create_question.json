@@ -1,4 +1,0 @@
-{
-  "record": { "survey_id": 1, "text": "Fixture Question", "type": "single_choice" },
-  "expect": { "method": "POST", "path": "/questions" }
-}

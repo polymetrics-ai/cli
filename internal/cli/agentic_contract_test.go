@@ -56,8 +56,6 @@ func TestConnectorInspectJSONIncludesManifest(t *testing.T) {
 		`"token"`,
 		`"pagination"`,
 		`"risk"`,
-		`"certification"`,
-		`"label": "COMMUNITY BUILD, UNCERTIFIED"`,
 	} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("connector inspect output missing %q:\n%s", want, out)

@@ -7,8 +7,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-1-1 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -21,16 +20,14 @@
       "summary": "Declared etl: GET /wp-json/wc/v3/coupons.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-coupons-2-2 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-wp-json-wc-v3-coupons",
       "summary": "Declared direct write: POST /wp-json/wc/v3/coupons.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-coupons-3-3 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -39,8 +36,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/coupons/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-coupons-id-4-4 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -49,8 +45,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/coupons/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-coupons-id-5-5 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -63,8 +58,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/coupons/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-coupons-id-6-6 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -73,8 +67,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/coupons/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-coupons-batch-7-7 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -83,16 +76,14 @@
       "summary": "Declared etl: GET /wp-json/wc/v3/customers.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-customers-8-8 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-wp-json-wc-v3-customers",
       "summary": "Declared direct write: POST /wp-json/wc/v3/customers.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-customers-9-9 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -101,8 +92,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/customers/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-customers-id-10-10 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -111,8 +101,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/customers/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-customers-id-11-11 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -125,8 +114,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/customers/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-customers-id-12-12 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -135,8 +123,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/customers/{id}/downloads.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-customers-id-downloads-13-13 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -149,8 +136,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/customers/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-customers-batch-14-14 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -159,8 +145,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/data.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-data-15-15 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -173,8 +158,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/data/continents.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-data-continents-16-16 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -187,8 +171,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/data/continents/{location}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-data-continents-location-17-17 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -201,8 +184,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/data/countries.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-data-countries-18-18 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -215,8 +197,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/data/countries/{location}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-data-countries-location-19-19 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -229,8 +210,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/data/currencies.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-data-currencies-20-20 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -243,8 +223,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/data/currencies/{currency}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-data-currencies-currency-21-21 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -257,8 +236,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/data/currencies/current.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-data-currencies-current-22-22 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -271,16 +249,14 @@
       "summary": "Declared etl: GET /wp-json/wc/v3/orders.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-orders-23-23 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-wp-json-wc-v3-orders",
       "summary": "Declared direct write: POST /wp-json/wc/v3/orders.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-orders-24-24 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "/wp-json/wc/v3/orders is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -289,8 +265,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/orders/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-orders-id-25-25 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "reverse ETL delete not enabled for this connector",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -299,8 +274,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/orders/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-orders-id-26-26 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -313,8 +287,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/orders/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-orders-id-27-27 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "/wp-json/wc/v3/orders/{id} is a mutation endpoint; this bundle has no reviewed write record schema, approval risk, or legacy write contract for that operation",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -323,8 +296,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/orders/{id}/actions/email_templates.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-orders-id-actions-email-templates-28-28 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -337,8 +309,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/orders/{id}/actions/send_email.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-orders-id-actions-send-email-29-29 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -347,8 +318,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/orders/{id}/actions/send_order_details.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-orders-id-actions-send-order-details-30-30 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -357,8 +327,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/orders/{id}/notes.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-orders-id-notes-31-31 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -371,8 +340,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/orders/{id}/notes.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-orders-id-notes-32-32 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -381,8 +349,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/orders/{id}/notes/{note_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-orders-id-notes-note-id-33-33 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -391,8 +358,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/orders/{id}/notes/{note_id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-orders-id-notes-note-id-34-34 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -405,8 +371,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/orders/{id}/refunds.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-orders-id-refunds-35-35 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -419,8 +384,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/orders/{id}/refunds.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-orders-id-refunds-36-36 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -429,8 +393,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/orders/{id}/refunds/{refund_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-orders-id-refunds-refund-id-37-37 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -439,8 +402,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/orders/{id}/refunds/{refund_id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-orders-id-refunds-refund-id-38-38 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -453,8 +415,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/orders/{id}/refunds/preview.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-orders-id-refunds-preview-39-39 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -463,8 +424,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/orders/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-orders-batch-40-40 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -473,8 +433,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/payment_gateways.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-payment-gateways-41-41 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -487,8 +446,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/payment_gateways/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-payment-gateways-id-42-42 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -501,8 +459,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/payment_gateways/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-payment-gateways-id-43-43 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -511,16 +468,14 @@
       "summary": "Declared etl: GET /wp-json/wc/v3/products.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-44-44 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-wp-json-wc-v3-products",
       "summary": "Declared direct write: POST /wp-json/wc/v3/products.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-45-45 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -529,8 +484,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/products/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-products-id-46-46 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -539,8 +493,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-id-47-47 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -553,8 +506,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/products/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-products-id-48-48 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -563,8 +515,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/{product_id}/duplicate.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-product-id-duplicate-49-49 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -573,8 +524,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/{product_id}/variations.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-product-id-variations-50-50 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -587,8 +537,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/{product_id}/variations.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-product-id-variations-51-51 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -597,8 +546,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/products/{product_id}/variations/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-products-product-id-variations-id-52-52 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -607,8 +555,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/{product_id}/variations/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-product-id-variations-id-53-53 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -621,8 +568,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/products/{product_id}/variations/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-products-product-id-variations-id-54-54 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -631,8 +577,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/{product_id}/variations/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-product-id-variations-batch-55-55 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -641,8 +586,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/attributes.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-attributes-56-56 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -655,8 +599,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/attributes.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-attributes-57-57 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -665,8 +608,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/attributes/{attribute_id}/terms.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-attributes-attribute-id-terms-58-58 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -679,8 +621,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/attributes/{attribute_id}/terms.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-attributes-attribute-id-terms-59-59 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -689,8 +630,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/products/attributes/{attribute_id}/terms/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-products-attributes-attribute-id-terms-id-60-60 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -699,8 +639,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/attributes/{attribute_id}/terms/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-attributes-attribute-id-terms-id-61-61 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -713,8 +652,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/products/attributes/{attribute_id}/terms/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-products-attributes-attribute-id-terms-id-62-62 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -723,8 +661,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/attributes/{attribute_id}/terms/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-attributes-attribute-id-terms-batch-63-63 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -733,8 +670,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/products/attributes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-products-attributes-id-64-64 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -743,8 +679,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/attributes/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-attributes-id-65-65 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -757,8 +692,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/products/attributes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-products-attributes-id-66-66 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -767,8 +701,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/attributes/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-attributes-batch-67-67 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -777,8 +710,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-batch-68-68 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -787,8 +719,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/categories.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-categories-69-69 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -801,8 +732,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/categories.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-categories-70-70 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -811,8 +741,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/products/categories/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-products-categories-id-71-71 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -821,8 +750,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/categories/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-categories-id-72-72 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -835,8 +763,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/products/categories/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-products-categories-id-73-73 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -845,8 +772,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/categories/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-categories-batch-74-74 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -855,8 +781,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/custom-fields/names.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-custom-fields-names-75-75 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -869,8 +794,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/reviews.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-reviews-76-76 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -883,8 +807,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/reviews.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-reviews-77-77 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -893,8 +816,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/products/reviews/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-products-reviews-id-78-78 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -903,8 +825,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/reviews/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-reviews-id-79-79 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -917,8 +838,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/products/reviews/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-products-reviews-id-80-80 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -927,8 +847,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/reviews/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-reviews-batch-81-81 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -937,8 +856,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/shipping_classes.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-shipping-classes-82-82 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -951,8 +869,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/shipping_classes.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-shipping-classes-83-83 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -961,8 +878,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/products/shipping_classes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-products-shipping-classes-id-84-84 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -971,8 +887,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/shipping_classes/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-shipping-classes-id-85-85 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -985,8 +900,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/products/shipping_classes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-products-shipping-classes-id-86-86 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -995,8 +909,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/shipping_classes/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-shipping-classes-batch-87-87 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1005,8 +918,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/tags.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-tags-88-88 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1019,8 +931,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/tags.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-tags-89-89 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1029,8 +940,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/products/tags/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-products-tags-id-90-90 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1039,8 +949,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/products/tags/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-products-tags-id-91-91 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1053,8 +962,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/products/tags/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-products-tags-id-92-92 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1063,8 +971,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/products/tags/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-products-tags-batch-93-93 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1073,8 +980,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/refunds.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-refunds-94-94 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1087,8 +993,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/reports.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-reports-95-95 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1101,8 +1006,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/reports/coupons/totals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-reports-coupons-totals-96-96 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1115,8 +1019,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/reports/customers/totals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-reports-customers-totals-97-97 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1129,8 +1032,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/reports/orders/totals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-reports-orders-totals-98-98 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1143,8 +1045,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/reports/products/totals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-reports-products-totals-99-99 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1157,8 +1058,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/reports/reviews/totals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-reports-reviews-totals-100-100 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1171,8 +1071,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/reports/sales.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-reports-sales-101-101 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1185,8 +1084,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/reports/top_sellers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-reports-top-sellers-102-102 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1199,8 +1097,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/settings.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-settings-103-103 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1213,8 +1110,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/settings/{group_id}/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-settings-group-id-id-104-104 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1227,8 +1123,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/settings/{group_id}/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-settings-group-id-id-105-105 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1237,8 +1132,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/settings/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-settings-id-106-106 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1251,8 +1145,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/settings/{id}/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-settings-id-batch-107-107 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1261,8 +1154,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/shipping_methods.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-shipping-methods-108-108 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1275,8 +1167,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/shipping_methods/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-shipping-methods-id-109-109 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1289,8 +1180,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/shipping/zones.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-shipping-zones-110-110 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1303,8 +1193,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/shipping/zones.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-shipping-zones-111-111 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1313,8 +1202,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/shipping/zones/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-shipping-zones-id-112-112 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1323,8 +1211,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/shipping/zones/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-shipping-zones-id-113-113 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1337,8 +1224,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/shipping/zones/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-shipping-zones-id-114-114 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1347,8 +1233,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/shipping/zones/{id}/locations.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-shipping-zones-id-locations-115-115 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1361,8 +1246,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/shipping/zones/{id}/locations.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-shipping-zones-id-locations-116-116 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1371,8 +1255,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/shipping/zones/{id}/methods.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-shipping-zones-id-methods-117-117 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1385,8 +1268,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/shipping/zones/{id}/methods.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-shipping-zones-id-methods-118-118 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1395,8 +1277,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/shipping/zones/{zone_id}/methods/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-shipping-zones-zone-id-methods-id-119-119 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1405,8 +1286,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/shipping/zones/{zone_id}/methods/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-shipping-zones-zone-id-methods-id-120-120 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1419,8 +1299,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/shipping/zones/{zone_id}/methods/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-shipping-zones-zone-id-methods-id-121-121 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1429,8 +1308,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/system_status.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-system-status-122-122 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1443,8 +1321,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/system_status/tools.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-system-status-tools-123-123 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1457,8 +1334,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/system_status/tools/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-system-status-tools-id-124-124 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1471,8 +1347,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/system_status/tools/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-system-status-tools-id-125-125 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1481,8 +1356,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/taxes.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-taxes-126-126 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1495,8 +1369,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/taxes.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-taxes-127-127 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1505,8 +1378,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/taxes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-taxes-id-128-128 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1515,8 +1387,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/taxes/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-taxes-id-129-129 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1529,8 +1400,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/taxes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-taxes-id-130-130 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1539,8 +1409,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/taxes/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-taxes-batch-131-131 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1549,8 +1418,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/taxes/classes.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-taxes-classes-132-132 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1563,8 +1431,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/taxes/classes.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-taxes-classes-133-133 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1573,8 +1440,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/taxes/classes/{slug}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-taxes-classes-slug-134-134 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1583,8 +1449,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/webhooks.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-webhooks-135-135 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1597,8 +1462,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/webhooks.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-webhooks-136-136 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1607,8 +1471,7 @@
       "summary": "Declared direct write: DELETE /wp-json/wc/v3/webhooks/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.delete-wp-json-wc-v3-webhooks-id-137-137 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider deletion is not promoted without an operation-specific plan, preview, approval, typed confirmation, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1617,8 +1480,7 @@
       "summary": "Declared direct read: GET /wp-json/wc/v3/webhooks/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.get-wp-json-wc-v3-webhooks-id-138-138 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1631,8 +1493,7 @@
       "summary": "Declared direct write: PUT /wp-json/wc/v3/webhooks/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.put-wp-json-wc-v3-webhooks-id-139-139 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1641,8 +1502,7 @@
       "summary": "Declared direct write: POST /wp-json/wc/v3/webhooks/batch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://woocommerce.github.io/woocommerce-rest-api-docs/",
-      "notes": "Blocked: locked source operation woocommerce.provider.post-wp-json-wc-v3-webhooks-batch-140-140 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider mutation has no reviewed operation-specific body, risk, approval, and execution contract.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     }

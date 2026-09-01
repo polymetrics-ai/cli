@@ -1342,7 +1342,6 @@ SECURITY
 COMMAND SURFACE
   Read Jira issues, projects and users, run bounded reads, and plan typed Jira mutations.
   Usage: pm jira <group> <action> [flags]
-  Source CLI: Jira Cloud platform REST API v3 (Atlassian's own OpenAPI description, https://dac-static.atlassian.com/cloud/jira/platform/swagger-v3.v3.json)
   PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --json (boolean): Write machine-readable JSON output.

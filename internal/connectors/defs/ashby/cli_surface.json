@@ -1,12 +1,6 @@
 {
   "tagline": "Ashby applicant-tracking connector with typed REST streams, bounded direct reads, and gated reverse-ETL writes.",
   "usage": "pm connectors command ashby <command> [flags]",
-  "source_cli": {
-    "name": "Ashby Public API",
-    "docs": "https://developers.ashbyhq.com/",
-    "reference": "https://developers.ashbyhq.com/reference",
-    "source": "public ReadMe OpenAPI"
-  },
   "groups": [
     {
       "id": "streams",
@@ -212,7 +206,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidates",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatelist",
       "flags": [
         {
           "name": "created-after",
@@ -239,7 +232,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "jobs",
-      "source_url": "https://developers.ashbyhq.com/reference/joblist",
       "flags": [
         {
           "name": "created-after",
@@ -286,7 +278,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "applications",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationlist",
       "flags": [
         {
           "name": "created-after",
@@ -325,7 +316,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "users",
-      "source_url": "https://developers.ashbyhq.com/reference/userlist",
       "flags": [
         {
           "name": "include-deactivated",
@@ -348,7 +338,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "api_key_info",
-      "source_url": "https://developers.ashbyhq.com/reference/apikeyinfo",
       "flags": [],
       "api_surface": [
         {
@@ -364,7 +353,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "audit_log_list",
-      "source_url": "https://developers.ashbyhq.com/reference/auditloglist",
       "flags": [
         {
           "name": "start-date",
@@ -397,7 +385,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_application",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationcreate",
       "flags": [
         {
           "name": "candidate-id",
@@ -474,7 +461,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_application",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationupdate",
       "flags": [
         {
           "name": "application-id",
@@ -529,7 +515,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_application",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationdelete",
       "flags": [
         {
           "name": "application-id",
@@ -558,7 +543,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "application_info",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationinfo",
       "flags": [
         {
           "name": "application-id",
@@ -587,7 +571,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_application_hiring_team_member",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationaddhiringteammember",
       "flags": [
         {
           "name": "application-id",
@@ -632,7 +615,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_application_hiring_team_member",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationremovehiringteammember",
       "flags": [
         {
           "name": "application-id",
@@ -677,7 +659,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "application_hiring_team_role_list",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationhiringteamrolelist",
       "flags": [],
       "api_surface": [
         {
@@ -693,7 +674,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "change_application_stage",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationchangestage",
       "flags": [
         {
           "name": "application-id",
@@ -738,7 +718,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "change_application_stage_2",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationchangestage",
       "flags": [
         {
           "name": "application-id",
@@ -783,7 +762,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "change_application_source",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationchangesource",
       "flags": [
         {
           "name": "application-id",
@@ -819,7 +797,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "change_application_source_2",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationchangesource",
       "flags": [
         {
           "name": "application-id",
@@ -855,7 +832,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "transfer_application",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationtransfer",
       "flags": [
         {
           "name": "application-id",
@@ -913,7 +889,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_application_history",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationupdatehistory",
       "flags": [
         {
           "name": "application-id",
@@ -963,7 +938,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "application_list_history",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationlisthistory",
       "flags": [
         {
           "name": "application-id",
@@ -988,7 +962,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "application_list_criteria_evaluations",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationlistcriteriaevaluations",
       "flags": [
         {
           "name": "application-id",
@@ -1013,7 +986,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "application_feedback_list",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationfeedbacklist",
       "flags": [
         {
           "name": "application-id",
@@ -1041,7 +1013,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "submit_application_feedback",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationfeedbacksubmit",
       "flags": [
         {
           "name": "feedback-form-field-submissions-0-path",
@@ -1099,7 +1070,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_application_feedback_request",
-      "source_url": "https://developers.ashbyhq.com/reference/applicationfeedbackrequestcreate",
       "flags": [
         {
           "name": "application-id",
@@ -1144,7 +1114,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_approval_definition",
-      "source_url": "https://developers.ashbyhq.com/reference/approvaldefinitionupdate",
       "flags": [
         {
           "name": "entity-type",
@@ -1205,7 +1174,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "ashby.direct.candidate.search",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatesearch",
       "flags": [
         {
           "name": "email",
@@ -1237,7 +1205,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_info",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateinfo",
       "flags": [
         {
           "name": "id",
@@ -1266,7 +1233,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_candidate",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatecreate",
       "flags": [
         {
           "name": "name",
@@ -1355,7 +1321,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "upload_candidate_resume",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateuploadresume",
       "flags": [
         {
           "name": "candidate-id",
@@ -1391,7 +1356,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "upload_candidate_file",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateuploadfile",
       "flags": [
         {
           "name": "candidate-id",
@@ -1427,7 +1391,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_candidate",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateupdate",
       "flags": [
         {
           "name": "candidate-id",
@@ -1535,7 +1498,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_candidate_note",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatecreatenote",
       "flags": [
         {
           "name": "candidate-id",
@@ -1598,7 +1560,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_list_client_info",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatelistclientinfo",
       "flags": [
         {
           "name": "candidate-id",
@@ -1623,7 +1584,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_list_fraud_checks",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatelistfraudchecks",
       "flags": [
         {
           "name": "candidate-id",
@@ -1648,7 +1608,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_candidate_fraud_status",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatesetfraudstatus",
       "flags": [
         {
           "name": "candidate-id",
@@ -1688,7 +1647,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_list_notes",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatelistnotes",
       "flags": [
         {
           "name": "candidate-id",
@@ -1713,7 +1671,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "anonymize_candidate",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateanonymize",
       "flags": [
         {
           "name": "candidate-id",
@@ -1742,7 +1699,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_candidate_project",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateremoveproject",
       "flags": [
         {
           "name": "candidate-id",
@@ -1779,7 +1735,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_candidate_project",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateaddproject",
       "flags": [
         {
           "name": "candidate-id",
@@ -1816,7 +1771,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_candidate_email_message",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateaddemailmessage",
       "flags": [
         {
           "name": "candidate-id",
@@ -1927,7 +1881,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_candidate_tag",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateaddtag",
       "flags": [
         {
           "name": "candidate-id",
@@ -1964,7 +1917,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_candidate_tag",
-      "source_url": "https://developers.ashbyhq.com/reference/candidateremovetag",
       "flags": [
         {
           "name": "candidate-id",
@@ -2001,7 +1953,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_list_projects",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatelistprojects",
       "flags": [
         {
           "name": "candidate-id",
@@ -2026,7 +1977,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "push_candidate_to_hris",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatepushtohris",
       "flags": [
         {
           "name": "application-id",
@@ -2090,7 +2040,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_candidate_tag",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatetagcreate",
       "flags": [
         {
           "name": "title",
@@ -2117,7 +2066,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "archive_candidate_tag",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatetagarchive",
       "flags": [
         {
           "name": "tag-id",
@@ -2146,7 +2094,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "candidate_tag_list",
-      "source_url": "https://developers.ashbyhq.com/reference/candidatetaglist",
       "flags": [
         {
           "name": "include-archived",
@@ -2168,7 +2115,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "communication_template_list",
-      "source_url": "https://developers.ashbyhq.com/reference/communicationtemplatelist",
       "flags": [],
       "api_surface": [
         {
@@ -2184,7 +2130,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "feedback_form_definition_list",
-      "source_url": "https://developers.ashbyhq.com/reference/feedbackformdefinitionlist",
       "flags": [
         {
           "name": "include-archived",
@@ -2206,7 +2151,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "feedback_form_definition_info",
-      "source_url": "https://developers.ashbyhq.com/reference/feedbackformdefinitioninfo",
       "flags": [
         {
           "name": "feedback-form-definition-id",
@@ -2231,7 +2175,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_posting_list",
-      "source_url": "https://developers.ashbyhq.com/reference/jobpostinglist",
       "flags": [
         {
           "name": "location",
@@ -2276,7 +2219,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_posting_info",
-      "source_url": "https://developers.ashbyhq.com/reference/jobpostinginfo",
       "flags": [
         {
           "name": "job-posting-id",
@@ -2312,7 +2254,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_job_posting_compensation",
-      "source_url": "https://developers.ashbyhq.com/reference/jobpostingupdatecompensation",
       "flags": [
         {
           "name": "job-posting-id",
@@ -2379,7 +2320,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_job_posting",
-      "source_url": "https://developers.ashbyhq.com/reference/jobpostingupdate",
       "flags": [
         {
           "name": "job-posting-id",
@@ -2446,7 +2386,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_job_posting_status",
-      "source_url": "https://developers.ashbyhq.com/reference/jobpostingsetstatus",
       "flags": [
         {
           "name": "job-posting-id",
@@ -2484,7 +2423,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_info",
-      "source_url": "https://developers.ashbyhq.com/reference/jobinfo",
       "flags": [
         {
           "name": "id",
@@ -2514,7 +2452,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_job",
-      "source_url": "https://developers.ashbyhq.com/reference/jobcreate",
       "flags": [
         {
           "name": "title",
@@ -2592,7 +2529,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_job",
-      "source_url": "https://developers.ashbyhq.com/reference/jobupdate",
       "flags": [
         {
           "name": "job-id",
@@ -2671,7 +2607,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_job_compensation",
-      "source_url": "https://developers.ashbyhq.com/reference/jobupdatecompensation",
       "flags": [
         {
           "name": "job-id",
@@ -2733,7 +2668,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "ashby.direct.job.search",
-      "source_url": "https://developers.ashbyhq.com/reference/jobsearch",
       "flags": [
         {
           "name": "title",
@@ -2765,7 +2699,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_job_status",
-      "source_url": "https://developers.ashbyhq.com/reference/jobsetstatus",
       "flags": [
         {
           "name": "job-id",
@@ -2805,7 +2738,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_board_list",
-      "source_url": "https://developers.ashbyhq.com/reference/jobboardlist",
       "flags": [],
       "api_surface": [
         {
@@ -2821,7 +2753,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_interview_plan_info",
-      "source_url": "https://developers.ashbyhq.com/reference/jobinterviewplaninfo",
       "flags": [
         {
           "name": "job-id",
@@ -2846,7 +2777,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "job_template_list",
-      "source_url": "https://developers.ashbyhq.com/reference/jobtemplatelist",
       "flags": [],
       "api_surface": [
         {
@@ -2862,7 +2792,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "archive_department",
-      "source_url": "https://developers.ashbyhq.com/reference/departmentarchive",
       "flags": [
         {
           "name": "department-id",
@@ -2891,7 +2820,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "restore_department",
-      "source_url": "https://developers.ashbyhq.com/reference/departmentrestore",
       "flags": [
         {
           "name": "department-id",
@@ -2920,7 +2848,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_department",
-      "source_url": "https://developers.ashbyhq.com/reference/departmentcreate",
       "flags": [
         {
           "name": "name",
@@ -2963,7 +2890,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "department_info",
-      "source_url": "https://developers.ashbyhq.com/reference/departmentinfo",
       "flags": [
         {
           "name": "department-id",
@@ -2988,7 +2914,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "department_list",
-      "source_url": "https://developers.ashbyhq.com/reference/departmentlist",
       "flags": [
         {
           "name": "include-archived",
@@ -3010,7 +2935,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "move_department",
-      "source_url": "https://developers.ashbyhq.com/reference/departmentmove",
       "flags": [
         {
           "name": "department-id",
@@ -3046,7 +2970,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_department",
-      "source_url": "https://developers.ashbyhq.com/reference/departmentupdate",
       "flags": [
         {
           "name": "department-id",
@@ -3090,7 +3013,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "archive_location",
-      "source_url": "https://developers.ashbyhq.com/reference/locationarchive",
       "flags": [
         {
           "name": "location-id",
@@ -3119,7 +3041,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_location",
-      "source_url": "https://developers.ashbyhq.com/reference/locationcreate",
       "flags": [
         {
           "name": "name",
@@ -3187,7 +3108,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "restore_location",
-      "source_url": "https://developers.ashbyhq.com/reference/locationrestore",
       "flags": [
         {
           "name": "location-id",
@@ -3216,7 +3136,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "location_list",
-      "source_url": "https://developers.ashbyhq.com/reference/locationlist",
       "flags": [
         {
           "name": "include-archived",
@@ -3243,7 +3162,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "location_info",
-      "source_url": "https://developers.ashbyhq.com/reference/locationinfo",
       "flags": [
         {
           "name": "location-id",
@@ -3268,7 +3186,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "move_location",
-      "source_url": "https://developers.ashbyhq.com/reference/locationmove",
       "flags": [
         {
           "name": "location-id",
@@ -3305,7 +3222,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_location_address",
-      "source_url": "https://developers.ashbyhq.com/reference/locationupdateaddress",
       "flags": [
         {
           "name": "location-id",
@@ -3334,7 +3250,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_location_name",
-      "source_url": "https://developers.ashbyhq.com/reference/locationupdatename",
       "flags": [
         {
           "name": "location-id",
@@ -3371,7 +3286,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_location_workplace_type",
-      "source_url": "https://developers.ashbyhq.com/reference/locationupdateworkplacetype",
       "flags": [
         {
           "name": "location-id",
@@ -3410,7 +3324,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_location_external_name",
-      "source_url": "https://developers.ashbyhq.com/reference/locationupdateexternalname",
       "flags": [
         {
           "name": "location-id",
@@ -3446,7 +3359,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_plan_list",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewplanlist",
       "flags": [
         {
           "name": "include-archived",
@@ -3468,7 +3380,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_stage_list",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewstagelist",
       "flags": [
         {
           "name": "interview-plan-id",
@@ -3493,7 +3404,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_stage_group_list",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewstagegrouplist",
       "flags": [],
       "api_surface": [
         {
@@ -3509,7 +3419,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "ashby.direct.notetaker.transcript.info",
-      "source_url": "https://developers.ashbyhq.com/reference/notetakertranscriptinfo",
       "flags": [
         {
           "name": "notetaker-transcript-id",
@@ -3537,7 +3446,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "approve_offer",
-      "source_url": "https://developers.ashbyhq.com/reference/offerapprove",
       "flags": [
         {
           "name": "offer-version-id",
@@ -3585,7 +3493,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "create_offer",
-      "source_url": "https://developers.ashbyhq.com/reference/offercreate",
       "flags": [
         {
           "name": "offer-process-id",
@@ -3634,7 +3541,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "offer_list",
-      "source_url": "https://developers.ashbyhq.com/reference/offerlist",
       "flags": [
         {
           "name": "created-after",
@@ -3662,7 +3568,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "offer_info",
-      "source_url": "https://developers.ashbyhq.com/reference/offerinfo",
       "flags": [
         {
           "name": "offer-id",
@@ -3692,7 +3597,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "start_offer",
-      "source_url": "https://developers.ashbyhq.com/reference/offerstart",
       "flags": [
         {
           "name": "offer-process-id",
@@ -3721,7 +3625,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "start_offer_approval_process",
-      "source_url": "https://developers.ashbyhq.com/reference/offerstartapprovalprocess",
       "flags": [
         {
           "name": "offer-version-id",
@@ -3761,7 +3664,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "update_offer",
-      "source_url": "https://developers.ashbyhq.com/reference/offerupdate",
       "flags": [
         {
           "name": "offer-id",
@@ -3802,7 +3704,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_offer_status",
-      "source_url": "https://developers.ashbyhq.com/reference/offersetstatus",
       "flags": [
         {
           "name": "offer-id",
@@ -3847,7 +3748,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_offer_decided_at",
-      "source_url": "https://developers.ashbyhq.com/reference/offersetdecidedat",
       "flags": [
         {
           "name": "offer-id",
@@ -3890,7 +3790,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "start_offer_process",
-      "source_url": "https://developers.ashbyhq.com/reference/offerprocessstart",
       "flags": [
         {
           "name": "application-id",
@@ -3919,7 +3818,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opening_info",
-      "source_url": "https://developers.ashbyhq.com/reference/openinginfo",
       "flags": [
         {
           "name": "opening-id",
@@ -3944,7 +3842,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_opening",
-      "source_url": "https://developers.ashbyhq.com/reference/openingcreate",
       "flags": [
         {
           "name": "identifier",
@@ -4039,7 +3936,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_opening",
-      "source_url": "https://developers.ashbyhq.com/reference/openingupdate",
       "flags": [
         {
           "name": "opening-id",
@@ -4119,7 +4015,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_opening_archived",
-      "source_url": "https://developers.ashbyhq.com/reference/openingsetarchived",
       "flags": [
         {
           "name": "opening-id",
@@ -4154,7 +4049,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "set_opening_opening_state",
-      "source_url": "https://developers.ashbyhq.com/reference/openingsetopeningstate",
       "flags": [
         {
           "name": "opening-id",
@@ -4202,7 +4096,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_opening_job",
-      "source_url": "https://developers.ashbyhq.com/reference/openingaddjob",
       "flags": [
         {
           "name": "opening-id",
@@ -4239,7 +4132,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_opening_job",
-      "source_url": "https://developers.ashbyhq.com/reference/openingremovejob",
       "flags": [
         {
           "name": "opening-id",
@@ -4276,7 +4168,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_opening_location",
-      "source_url": "https://developers.ashbyhq.com/reference/openingaddlocation",
       "flags": [
         {
           "name": "opening-id",
@@ -4313,7 +4204,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_opening_location",
-      "source_url": "https://developers.ashbyhq.com/reference/openingremovelocation",
       "flags": [
         {
           "name": "opening-id",
@@ -4350,7 +4240,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "opening_list",
-      "source_url": "https://developers.ashbyhq.com/reference/openinglist",
       "flags": [
         {
           "name": "created-after",
@@ -4372,7 +4261,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "ashby.direct.opening.search",
-      "source_url": "https://developers.ashbyhq.com/reference/openingsearch",
       "flags": [
         {
           "name": "identifier",
@@ -4400,7 +4288,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "project_info",
-      "source_url": "https://developers.ashbyhq.com/reference/projectinfo",
       "flags": [
         {
           "name": "project-id",
@@ -4425,7 +4312,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "project_list",
-      "source_url": "https://developers.ashbyhq.com/reference/projectlist",
       "flags": [
         {
           "name": "created-after",
@@ -4447,7 +4333,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "ashby.direct.project.search",
-      "source_url": "https://developers.ashbyhq.com/reference/projectsearch",
       "flags": [
         {
           "name": "title",
@@ -4475,7 +4360,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "source_list",
-      "source_url": "https://developers.ashbyhq.com/reference/sourcelist",
       "flags": [
         {
           "name": "include-archived",
@@ -4497,7 +4381,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "source_tracking_link_list",
-      "source_url": "https://developers.ashbyhq.com/reference/sourcetrackinglinklist",
       "flags": [
         {
           "name": "include-disabled",
@@ -4525,7 +4408,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "archive_reason_list",
-      "source_url": "https://developers.ashbyhq.com/reference/archivereasonlist",
       "flags": [
         {
           "name": "include-archived",
@@ -4547,7 +4429,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "brand_list",
-      "source_url": "https://developers.ashbyhq.com/reference/brandlist",
       "flags": [],
       "api_surface": [
         {
@@ -4563,7 +4444,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "custom_field_list",
-      "source_url": "https://developers.ashbyhq.com/reference/customfieldlist",
       "flags": [
         {
           "name": "include-archived",
@@ -4585,7 +4465,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_custom_field",
-      "source_url": "https://developers.ashbyhq.com/reference/customfieldcreate",
       "flags": [
         {
           "name": "field-type",
@@ -4677,7 +4556,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "set_custom_field_value",
-      "source_url": "https://developers.ashbyhq.com/reference/customfieldsetvalue",
       "flags": [
         {
           "name": "object-id",
@@ -4726,7 +4604,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "custom_field_info",
-      "source_url": "https://developers.ashbyhq.com/reference/customfieldinfo",
       "flags": [
         {
           "name": "custom-field-id",
@@ -4751,7 +4628,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "set_custom_field_values",
-      "source_url": "https://developers.ashbyhq.com/reference/customfieldsetvalues",
       "flags": [
         {
           "name": "object-id",
@@ -4799,7 +4675,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_custom_field_selectable_values",
-      "source_url": "https://developers.ashbyhq.com/reference/customfieldupdateselectablevalues",
       "flags": [
         {
           "name": "custom-field-id",
@@ -4842,7 +4717,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_assessment",
-      "source_url": "https://developers.ashbyhq.com/reference/assessmentupdate",
       "flags": [
         {
           "name": "assessment-id",
@@ -4883,7 +4757,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_assessment_completed_to_candidate",
-      "source_url": "https://developers.ashbyhq.com/reference/assessmentaddcompletedtocandidate",
       "flags": [
         {
           "name": "candidate-id",
@@ -5019,7 +4892,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_hiring_team_member",
-      "source_url": "https://developers.ashbyhq.com/reference/hiringteamaddmember",
       "flags": [
         {
           "name": "application-id",
@@ -5080,7 +4952,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_hiring_team_member",
-      "source_url": "https://developers.ashbyhq.com/reference/hiringteamremovemember",
       "flags": [
         {
           "name": "application-id",
@@ -5141,7 +5012,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "hiring_team_role_list",
-      "source_url": "https://developers.ashbyhq.com/reference/hiringteamrolelist",
       "flags": [],
       "api_surface": [
         {
@@ -5157,7 +5027,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "user_info",
-      "source_url": "https://developers.ashbyhq.com/reference/userinfo",
       "flags": [
         {
           "name": "user-id",
@@ -5182,7 +5051,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "ashby.direct.user.search",
-      "source_url": "https://developers.ashbyhq.com/reference/usersearch",
       "flags": [
         {
           "name": "email",
@@ -5209,7 +5077,6 @@
       "summary": "Get interviewer settings for a user. Requires the organizationRead permission.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developers.ashbyhq.com/reference/userinterviewersettings",
       "flags": [
         {
           "name": "user-id",
@@ -5238,7 +5105,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_user_interviewer_settings",
-      "source_url": "https://developers.ashbyhq.com/reference/userupdateinterviewersettings",
       "flags": [
         {
           "name": "user-id",
@@ -5277,7 +5143,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_user_interviewer_pause",
-      "source_url": "https://developers.ashbyhq.com/reference/usercreateinterviewerpause",
       "flags": [
         {
           "name": "user-id",
@@ -5326,7 +5191,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "user_list_interviewer_pauses",
-      "source_url": "https://developers.ashbyhq.com/reference/userlistinterviewerpauses",
       "flags": [
         {
           "name": "user-id",
@@ -5351,7 +5215,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_user_interviewer_pause",
-      "source_url": "https://developers.ashbyhq.com/reference/userdeleteinterviewerpause",
       "flags": [
         {
           "name": "interviewer-pause-id",
@@ -5380,7 +5243,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "set_user_custom_field_value",
-      "source_url": "https://developers.ashbyhq.com/reference/usersetcustomfieldvalue",
       "flags": [
         {
           "name": "user-id",
@@ -5417,7 +5279,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "set_user_custom_field_values",
-      "source_url": "https://developers.ashbyhq.com/reference/usersetcustomfieldvalues",
       "flags": [
         {
           "name": "user-id",
@@ -5453,7 +5314,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "create_referral",
-      "source_url": "https://developers.ashbyhq.com/reference/referralcreate",
       "flags": [
         {
           "name": "id",
@@ -5504,7 +5364,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "email_sender_list",
-      "source_url": "https://developers.ashbyhq.com/reference/emailsenderlist",
       "flags": [],
       "api_surface": [
         {
@@ -5520,7 +5379,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_sequence",
-      "source_url": "https://developers.ashbyhq.com/reference/sequenceadd",
       "flags": [
         {
           "name": "sequence-template-id",
@@ -5571,7 +5429,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "cancel_sequence",
-      "source_url": "https://developers.ashbyhq.com/reference/sequencecancel",
       "flags": [
         {
           "name": "sequence-id",
@@ -5609,7 +5466,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "discard_sequence",
-      "source_url": "https://developers.ashbyhq.com/reference/sequencediscard",
       "flags": [
         {
           "name": "sequence-id",
@@ -5638,7 +5494,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "sequence_info",
-      "source_url": "https://developers.ashbyhq.com/reference/sequenceinfo",
       "flags": [
         {
           "name": "sequence-id",
@@ -5663,7 +5518,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "sequence_list",
-      "source_url": "https://developers.ashbyhq.com/reference/sequencelist",
       "flags": [
         {
           "name": "candidate-id",
@@ -5687,7 +5541,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_sequence_stage",
-      "source_url": "https://developers.ashbyhq.com/reference/sequenceupdatestage",
       "flags": [
         {
           "name": "sequence-id",
@@ -5738,7 +5591,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "start_sequence",
-      "source_url": "https://developers.ashbyhq.com/reference/sequencestart",
       "flags": [
         {
           "name": "sequence-id",
@@ -5767,7 +5619,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "sequence_template_info",
-      "source_url": "https://developers.ashbyhq.com/reference/sequencetemplateinfo",
       "flags": [
         {
           "name": "sequence-template-id",
@@ -5792,7 +5643,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "sequence_template_list",
-      "source_url": "https://developers.ashbyhq.com/reference/sequencetemplatelist",
       "flags": [
         {
           "name": "include-archived",
@@ -5815,7 +5665,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_schedule_list",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewschedulelist",
       "flags": [
         {
           "name": "application-id",
@@ -5849,7 +5698,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_interview_schedule",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewschedulecreate",
       "flags": [
         {
           "name": "application-id",
@@ -5899,7 +5747,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_interview_schedule",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewscheduleupdate",
       "flags": [
         {
           "name": "interview-schedule-id",
@@ -5940,7 +5787,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "cancel_interview_schedule",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewschedulecancel",
       "flags": [
         {
           "name": "id",
@@ -5974,7 +5820,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "take_home_assignment_list",
-      "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentlist",
       "flags": [
         {
           "name": "application-id",
@@ -6003,7 +5848,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "take_home_assignment_info",
-      "source_url": "https://developers.ashbyhq.com/reference/takehomeassignmentinfo",
       "flags": [
         {
           "name": "take-home-assignment-id",
@@ -6028,7 +5872,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_event_list",
-      "source_url": "https://developers.ashbyhq.com/reference/intervieweventlist",
       "flags": [
         {
           "name": "interview-schedule-id",
@@ -6058,7 +5901,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_briefing_info",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewbriefinginfo",
       "flags": [
         {
           "name": "interview-event-id",
@@ -6083,7 +5925,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_info",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewinfo",
       "flags": [
         {
           "name": "id",
@@ -6108,7 +5949,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_list",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewlist",
       "flags": [
         {
           "name": "include-archived",
@@ -6140,7 +5980,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interview_stage_info",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewstageinfo",
       "flags": [
         {
           "name": "interview-stage-id",
@@ -6165,7 +6004,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "ashby.direct.file.info",
-      "source_url": "https://developers.ashbyhq.com/reference/fileinfo",
       "flags": [
         {
           "name": "file-handle",
@@ -6193,7 +6031,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "survey_form_definition_info",
-      "source_url": "https://developers.ashbyhq.com/reference/surveyformdefinitioninfo",
       "flags": [
         {
           "name": "survey-form-definition-id",
@@ -6218,7 +6055,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "survey_form_definition_list",
-      "source_url": "https://developers.ashbyhq.com/reference/surveyformdefinitionlist",
       "flags": [],
       "api_surface": [
         {
@@ -6234,7 +6070,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_survey_request",
-      "source_url": "https://developers.ashbyhq.com/reference/surveyrequestcreate",
       "flags": [
         {
           "name": "candidate-id",
@@ -6279,7 +6114,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "survey_request_list",
-      "source_url": "https://developers.ashbyhq.com/reference/surveyrequestlist",
       "flags": [
         {
           "name": "survey-type",
@@ -6323,7 +6157,6 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "create_survey_submission",
-      "source_url": "https://developers.ashbyhq.com/reference/surveysubmissioncreate",
       "flags": [
         {
           "name": "survey-form-definition-id",
@@ -6368,7 +6201,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "survey_submission_list",
-      "source_url": "https://developers.ashbyhq.com/reference/surveysubmissionlist",
       "flags": [
         {
           "name": "survey-type",
@@ -6402,7 +6234,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_webhook",
-      "source_url": "https://developers.ashbyhq.com/reference/webhookcreate",
       "flags": [
         {
           "name": "webhook-type",
@@ -6473,7 +6304,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "webhook_info",
-      "source_url": "https://developers.ashbyhq.com/reference/webhookinfo",
       "flags": [
         {
           "name": "webhook-id",
@@ -6498,7 +6328,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_webhook",
-      "source_url": "https://developers.ashbyhq.com/reference/webhookupdate",
       "flags": [
         {
           "name": "webhook-id",
@@ -6548,7 +6377,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "delete_webhook",
-      "source_url": "https://developers.ashbyhq.com/reference/webhookdelete",
       "flags": [
         {
           "name": "webhook-id",
@@ -6577,7 +6405,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interviewer_pool_list",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewerpoollist",
       "flags": [
         {
           "name": "include-archived-pools",
@@ -6604,7 +6431,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "interviewer_pool_info",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewerpoolinfo",
       "flags": [
         {
           "name": "interviewer-pool-id",
@@ -6629,7 +6455,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "archive_interviewer_pool",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewerpoolarchive",
       "flags": [
         {
           "name": "interviewer-pool-id",
@@ -6658,7 +6483,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "restore_interviewer_pool",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewerpoolrestore",
       "flags": [
         {
           "name": "interviewer-pool-id",
@@ -6687,7 +6511,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "create_interviewer_pool",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewerpoolcreate",
       "flags": [
         {
           "name": "title",
@@ -6719,7 +6542,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "update_interviewer_pool",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewerpoolupdate",
       "flags": [
         {
           "name": "interviewer-pool-id",
@@ -6759,7 +6581,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "add_interviewer_pool_user",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewerpooladduser",
       "flags": [
         {
           "name": "interviewer-pool-id",
@@ -6803,7 +6624,6 @@
       "intent": "reverse_etl",
       "availability": "implemented",
       "write": "remove_interviewer_pool_user",
-      "source_url": "https://developers.ashbyhq.com/reference/interviewerpoolremoveuser",
       "flags": [
         {
           "name": "interviewer-pool-id",
@@ -6840,7 +6660,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "close_reason_list",
-      "source_url": "https://developers.ashbyhq.com/reference/closereasonlist",
       "flags": [
         {
           "name": "include-archived",
@@ -6861,7 +6680,6 @@
       "summary": "Start an Ashby report generation or check an existing request.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developers.ashbyhq.com/reference/reportgenerate",
       "flags": [
         {
           "name": "report-id",
@@ -6910,7 +6728,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "report_synchronous",
-      "source_url": "https://developers.ashbyhq.com/reference/reportsynchronous",
       "flags": [
         {
           "name": "report-id",
@@ -6949,7 +6766,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "approval_list",
-      "source_url": "https://developers.ashbyhq.com/reference/approvallist",
       "flags": [
         {
           "name": "entity-type",
@@ -6984,7 +6800,7 @@
     },
     {
       "name": "ashby parity",
-      "summary": "Public Ashby OpenAPI coverage ledger is recorded in api_surface.json with blocked webhook/partner/binary workflow reasons."
+      "summary": "Public Ashby OpenAPI coverage ledger is recorded in execution bundle with blocked webhook/partner/binary workflow reasons."
     }
   ]
 }

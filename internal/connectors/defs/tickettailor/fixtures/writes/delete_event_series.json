@@ -1,9 +1,0 @@
-{
-  "record": {
-    "id": "es_fixture_1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/event_series/es_fixture_1"
-  }
-}

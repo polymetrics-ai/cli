@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "percentage": {
+      "type": "integer"
+    },
+    "plan": {
+      "enum": [
+        "bronze",
+        "silver",
+        "premium",
+        "gold",
+        "ultimate",
+        "ultimate_trial",
+        "ultimate_trial_paid_customer",
+        "premium_trial",
+        "opensource"
+      ],
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "percentage",
+    "plan"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "detector": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "url": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "version": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "url"
+      ],
+      "type": "object"
+    },
+    "job": {
+      "additionalProperties": false,
+      "properties": {
+        "correlator": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "html_url": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "correlator"
+      ],
+      "type": "object"
+    },
+    "manifests": {
+      "additionalProperties": true,
+      "maxProperties": 256,
+      "type": "object"
+    },
+    "metadata": {
+      "additionalProperties": true,
+      "maxProperties": 8,
+      "type": "object"
+    },
+    "ref": {
+      "maxLength": 8192,
+      "pattern": "^refs/",
+      "type": "string"
+    },
+    "scanned": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "sha": {
+      "maxLength": 40,
+      "minLength": 40,
+      "type": "string"
+    },
+    "version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "detector",
+    "job",
+    "ref",
+    "scanned",
+    "sha",
+    "version"
+  ],
+  "type": "object"
+}

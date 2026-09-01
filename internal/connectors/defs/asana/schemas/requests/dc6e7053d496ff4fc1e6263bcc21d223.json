@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "maxLength": 128,
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "record": {
+            "additionalProperties": true,
+            "maxProperties": 256,
+            "type": "object"
+          }
+        },
+        "required": [
+          "action",
+          "record"
+        ],
+        "type": "object"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "type": "array"
+    },
+    "opt_fields": {
+      "items": {
+        "enum": [
+          "body",
+          "headers",
+          "status_code"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "actions"
+  ],
+  "type": "object"
+}

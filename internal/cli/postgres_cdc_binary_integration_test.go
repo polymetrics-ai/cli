@@ -192,7 +192,6 @@ func TestPMBinaryDispatchesPostgresChangeCaptureToWarehouse(t *testing.T) {
 	if !postgresBinaryWarehouseHasRow(ctx, warehouseDir, 901) || !postgresBinaryCheckpointPersisted(root, "postgres-cdc-binary", stream) || !postgresBinaryBoundedStageReceiptPersisted(root) || !acknowledgedAfterReceipt {
 		t.Fatal("fresh pm binary lost its observable PostgreSQL CDC state during shutdown")
 	}
-	writePostgresChangeCaptureCertificationEvidence(t, ctx, sha, "PM_POSTGRES_CDC_TEST_PASSWORD")
 	t.Logf("postgres_binary_cdc_evidence={\"binary_sha256\":%q,\"connection_id\":%q,\"source_id\":901,\"warehouse_row\":true,\"checkpoint\":true,\"stage_receipt\":true,\"source_lsn_acknowledged\":true}", sha, connectionID)
 }
 
@@ -341,61 +340,4 @@ func postgresBinarySourceAcknowledgedAtOrAfter(ctx context.Context, source *pgx.
 	var acknowledged bool
 	err := source.QueryRow(ctx, "SELECT COALESCE(confirmed_flush_lsn >= $1::pg_lsn, false) FROM pg_replication_slots WHERE active AND plugin = 'pgoutput' LIMIT 1", wantLSN).Scan(&acknowledged)
 	return err == nil && acknowledged
-}
-
-// writePostgresChangeCaptureCertificationEvidence is opt-in because it adds
-// immutable proof records only after this test's independent warehouse
-// read-back, bounded durable receipt, and source-acknowledgement checks pass.
-func writePostgresChangeCaptureCertificationEvidence(t *testing.T, ctx context.Context, binarySHA, passwordEnv string) {
-	t.Helper()
-	if os.Getenv("POLYMETRICS_WRITE_POSTGRES_CERTIFICATION_EVIDENCE") != "1" {
-		return
-	}
-	report := postgresChangeCaptureCertificationReport{
-		Kind:                              "ChangeCaptureCertification",
-		Connector:                         "postgres",
-		CompletedAt:                       time.Now().UTC(),
-		BoundedDurableStaging:             true,
-		WarehouseReceiptPersisted:         true,
-		IndependentWarehouseReadback:      true,
-		AcknowledgedAfterWarehouseReceipt: true,
-	}
-	reportJSON, err := json.Marshal(report)
-	if err != nil {
-		t.Fatalf("encode PostgreSQL change-capture certification report: %v", err)
-	}
-	reportPath := filepath.Join(t.TempDir(), "postgres-change-capture-certification.json")
-	if err := os.WriteFile(reportPath, reportJSON, 0o600); err != nil {
-		t.Fatalf("write PostgreSQL change-capture certification report: %v", err)
-	}
-	repoRoot := transportRepositoryRoot(t)
-	command := exec.CommandContext(ctx, "go", "run", "./cmd/connectorgen",
-		"certification-evidence", "change-capture", "--connector", "postgres",
-		"--report", reportPath,
-		"--binary-sha", binarySHA,
-		"--from-env", "password="+passwordEnv,
-		"--run-id", "postgres_cdc_r1",
-		"--record-prefix", "postgres_cdc_r1",
-		"--repo-root", repoRoot,
-	)
-	command.Dir = repoRoot
-	var stdout, stderr bytes.Buffer
-	command.Stdout = &stdout
-	command.Stderr = &stderr
-	if err := command.Run(); err != nil {
-		t.Fatalf("write PostgreSQL change-capture certification evidence: %v (stdout_bytes=%d stderr_bytes=%d)", err, stdout.Len(), stderr.Len())
-	}
-	if stdout.String() != "wrote change-capture evidence records: 2\n" {
-		t.Fatalf("write PostgreSQL change-capture certification evidence stdout=%q", stdout.String())
-	}
-}
-
-type postgresChangeCaptureCertificationReport struct {
-	Kind                              string    `json:"kind"`
-	Connector                         string    `json:"connector"`
-	CompletedAt                       time.Time `json:"completed_at"`
-	BoundedDurableStaging             bool      `json:"bounded_durable_staging"`
-	WarehouseReceiptPersisted         bool      `json:"warehouse_receipt_persisted"`
-	IndependentWarehouseReadback      bool      `json:"independent_warehouse_readback"`
-	AcknowledgedAfterWarehouseReceipt bool      `json:"acknowledged_after_warehouse_receipt"`
 }

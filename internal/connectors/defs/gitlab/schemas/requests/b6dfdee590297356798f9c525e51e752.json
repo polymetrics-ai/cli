@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "credit_card_expiration_month": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "credit_card_expiration_year": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "credit_card_holder_name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "credit_card_mask_number": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "credit_card_type": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "credit_card_validated_at": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stripe_card_fingerprint": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stripe_payment_method_xid": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stripe_setup_intent_xid": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "zuora_payment_method_xid": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "credit_card_expiration_month",
+    "credit_card_expiration_year",
+    "credit_card_holder_name",
+    "credit_card_mask_number",
+    "credit_card_type",
+    "credit_card_validated_at",
+    "user_id"
+  ],
+  "type": "object"
+}

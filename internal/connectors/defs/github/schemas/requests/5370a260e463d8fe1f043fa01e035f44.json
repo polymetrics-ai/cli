@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "base_tree": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "tree": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "mode": {
+            "enum": [
+              "100644",
+              "100755",
+              "040000",
+              "160000",
+              "120000"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "path": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "sha": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "type": {
+            "enum": [
+              "blob",
+              "tree",
+              "commit"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "tree"
+  ],
+  "type": "object"
+}

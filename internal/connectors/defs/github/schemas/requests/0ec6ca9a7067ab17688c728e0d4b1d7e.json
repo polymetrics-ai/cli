@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "custom_properties": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "property_name": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "values": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": "array"
+          }
+        },
+        "required": [
+          "property_name",
+          "values"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "enterprise": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "organizations": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "enterprise"
+  ],
+  "type": "object"
+}

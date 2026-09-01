@@ -1,12 +1,6 @@
 {
   "tagline": "Inspect and safely operate Amazon SQS queues through fixed typed commands.",
   "usage": "pm amazon-sqs <command> [options]",
-  "source_cli": {
-    "name": "AWS CLI sqs",
-    "docs": "https://docs.aws.amazon.com/cli/latest/reference/sqs/",
-    "reference": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html",
-    "source": "aws sqs"
-  },
   "groups": [
     {
       "id": "read",

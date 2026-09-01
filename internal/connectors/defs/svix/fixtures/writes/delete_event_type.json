@@ -1,7 +1,0 @@
-{
-  "record": { "name": "user.deleted" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/event-type/user.deleted"
-  }
-}

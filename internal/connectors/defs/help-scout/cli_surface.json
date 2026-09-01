@@ -1,12 +1,6 @@
 {
   "tagline": "Read Help Scout Mailbox records, run bounded reads and reports, and safely plan typed Help Scout mutations.",
   "usage": "pm help-scout <command> [flags]",
-  "source_cli": {
-    "name": "Help Scout Mailbox API",
-    "docs": "https://developer.helpscout.com/mailbox-api/",
-    "reference": "Help Scout Mailbox API reference fetched 2026-08-07 (146 endpoint pages)",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "etl",
@@ -183,7 +177,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversations",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/list/",
       "examples": [
         "pm help-scout conversations list --json"
       ]
@@ -194,7 +187,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "conversations_threads",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list/",
       "examples": [
         "pm help-scout conversations-threads list --json --conversation-id <conversation-id>"
       ],
@@ -215,7 +207,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "customer_properties",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/properties/list/",
       "examples": [
         "pm help-scout customer-properties list --json"
       ]
@@ -226,7 +217,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "customers",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list/",
       "examples": [
         "pm help-scout customers list --json"
       ]
@@ -237,7 +227,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "customers_chats",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/chat_handles/list/",
       "examples": [
         "pm help-scout customers-chats list --json --customer-id <customer-id>"
       ],
@@ -258,7 +247,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "customers_emails",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/emails/list/",
       "examples": [
         "pm help-scout customers-emails list --json --customer-id <customer-id>"
       ],
@@ -279,7 +267,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "customers_phones",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/phones/list/",
       "examples": [
         "pm help-scout customers-phones list --json --customer-id <customer-id>"
       ],
@@ -300,7 +287,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "customers_social_profiles",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/social_profiles/list/",
       "examples": [
         "pm help-scout customers-social-profiles list --json --customer-id <customer-id>"
       ],
@@ -321,7 +307,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "customers_websites",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/websites/list/",
       "examples": [
         "pm help-scout customers-websites list --json --customer-id <customer-id>"
       ],
@@ -342,7 +327,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "mailboxes",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/list/",
       "examples": [
         "pm help-scout mailboxes list --json"
       ]
@@ -353,7 +337,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "mailboxes_fields",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-fields/",
       "examples": [
         "pm help-scout mailboxes-fields list --json --mailbox-id <mailbox-id>"
       ],
@@ -374,7 +357,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "mailboxes_folders",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/inbox-folders/",
       "examples": [
         "pm help-scout mailboxes-folders list --json --mailbox-id <mailbox-id>"
       ],
@@ -395,7 +377,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "mailboxes_saved_replies",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-list/",
       "examples": [
         "pm help-scout mailboxes-saved-replies list --json --mailbox-id <mailbox-id>"
       ],
@@ -416,7 +397,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "organizations",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/list/",
       "examples": [
         "pm help-scout organizations list --json"
       ]
@@ -427,7 +407,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "organizations_properties",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/list/",
       "examples": [
         "pm help-scout organizations-properties list --json"
       ]
@@ -438,7 +417,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "organizations_conversations",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-conversations/",
       "examples": [
         "pm help-scout organizations-conversations list --json --organization-id <organization-id>"
       ],
@@ -459,7 +437,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "organizations_customers",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get-customers/",
       "examples": [
         "pm help-scout organizations-customers list --json --organization-id <organization-id>"
       ],
@@ -480,7 +457,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "tags",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/list/",
       "examples": [
         "pm help-scout tags list --json"
       ]
@@ -491,7 +467,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "teams",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-teams/",
       "examples": [
         "pm help-scout teams list --json"
       ]
@@ -502,7 +477,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "teams_members",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/teams/list-team-members/",
       "examples": [
         "pm help-scout teams-members list --json --team-id <team-id>"
       ],
@@ -523,7 +497,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "users",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/list/",
       "examples": [
         "pm help-scout users list --json"
       ]
@@ -534,7 +507,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "users_status",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/list/",
       "examples": [
         "pm help-scout users-status list --json"
       ]
@@ -545,7 +517,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "webhooks",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/list/",
       "examples": [
         "pm help-scout webhooks list --json"
       ]
@@ -556,7 +527,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "workflows",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/workflows/list/",
       "examples": [
         "pm help-scout workflows list --json"
       ]
@@ -566,7 +536,6 @@
       "summary": "Get Conversation.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -593,7 +562,6 @@
       "summary": "Get Attachment Data.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-data/",
       "api_surface": [
         {
           "method": "GET",
@@ -627,7 +595,6 @@
       "summary": "Get Thread Original Source.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/thread-source-json/",
       "api_surface": [
         {
           "method": "GET",
@@ -661,7 +628,6 @@
       "summary": "Get Customer.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -688,7 +654,6 @@
       "summary": "Get Address.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/address/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -715,7 +680,6 @@
       "summary": "Get Inbox.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -742,7 +706,6 @@
       "summary": "Get Routing configuration.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/routing/routing-configuration-get/",
       "api_surface": [
         {
           "method": "GET",
@@ -769,7 +732,6 @@
       "summary": "Get Saved Reply.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/inboxes/saved_Replies/saved-replies-get/",
       "api_surface": [
         {
           "method": "GET",
@@ -803,7 +765,6 @@
       "summary": "Get Organization Property Definition.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/properties/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -830,7 +791,6 @@
       "summary": "Get Organization by ID.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/organizations/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -857,7 +817,6 @@
       "summary": "Get Satisfaction Rating.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/ratings/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -884,7 +843,6 @@
       "summary": "Chat Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/chat/",
       "api_surface": [
         {
           "method": "GET",
@@ -902,7 +860,6 @@
       "summary": "Company Overall Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-overall/",
       "api_surface": [
         {
           "method": "GET",
@@ -920,7 +877,6 @@
       "summary": "Company Customers Helped.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-customers-helped/",
       "api_surface": [
         {
           "method": "GET",
@@ -938,7 +894,6 @@
       "summary": "Company Drilldown.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/company/reports-company-drilldown/",
       "api_surface": [
         {
           "method": "GET",
@@ -956,7 +911,6 @@
       "summary": "Conversations - Overall Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-overall/",
       "api_surface": [
         {
           "method": "GET",
@@ -974,7 +928,6 @@
       "summary": "Conversations - Busiest Time of Day.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-busy-times/",
       "api_surface": [
         {
           "method": "GET",
@@ -992,7 +945,6 @@
       "summary": "Conversations - Drilldown.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-drilldown/",
       "api_surface": [
         {
           "method": "GET",
@@ -1010,7 +962,6 @@
       "summary": "Conversations - Drilldown by Field.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-field-drilldown/",
       "api_surface": [
         {
           "method": "GET",
@@ -1028,7 +979,6 @@
       "summary": "Conversations - New Conversations.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new/",
       "api_surface": [
         {
           "method": "GET",
@@ -1046,7 +996,6 @@
       "summary": "Conversations - New Conversations Drilldown.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-new-drilldown/",
       "api_surface": [
         {
           "method": "GET",
@@ -1064,7 +1013,6 @@
       "summary": "Conversations - Received Messages Statistics.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-received-messages/",
       "api_surface": [
         {
           "method": "GET",
@@ -1082,7 +1030,6 @@
       "summary": "All Channels - Volumes by Channel.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/conversations/reports-conversations-volume-by-channel/",
       "api_surface": [
         {
           "method": "GET",
@@ -1100,7 +1047,6 @@
       "summary": "Docs Overall Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/docs/reports-docs-overall/",
       "api_surface": [
         {
           "method": "GET",
@@ -1118,7 +1064,6 @@
       "summary": "Email Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/email/",
       "api_surface": [
         {
           "method": "GET",
@@ -1136,7 +1081,6 @@
       "summary": "Happiness Overall Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-overall/",
       "api_surface": [
         {
           "method": "GET",
@@ -1154,7 +1098,6 @@
       "summary": "Happiness Ratings Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/happiness/reports-happiness-ratings/",
       "api_surface": [
         {
           "method": "GET",
@@ -1172,7 +1115,6 @@
       "summary": "Phone Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/phone/",
       "api_surface": [
         {
           "method": "GET",
@@ -1190,7 +1132,6 @@
       "summary": "Productivity Overall Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-overall/",
       "api_surface": [
         {
           "method": "GET",
@@ -1208,7 +1149,6 @@
       "summary": "Productivity - First Response Time.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-first-response-time/",
       "api_surface": [
         {
           "method": "GET",
@@ -1226,7 +1166,6 @@
       "summary": "Productivity - Replies Sent.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-replies-sent/",
       "api_surface": [
         {
           "method": "GET",
@@ -1244,7 +1183,6 @@
       "summary": "Productivity - Resolution Time.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolution-time/",
       "api_surface": [
         {
           "method": "GET",
@@ -1262,7 +1200,6 @@
       "summary": "Productivity - Resolved.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-resolved/",
       "api_surface": [
         {
           "method": "GET",
@@ -1280,7 +1217,6 @@
       "summary": "Productivity - Response Time.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/productivity/reports-productivity-respose-time/",
       "api_surface": [
         {
           "method": "GET",
@@ -1298,7 +1234,6 @@
       "summary": "User/Team Overall Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user/",
       "api_surface": [
         {
           "method": "GET",
@@ -1316,7 +1251,6 @@
       "summary": "User/Team Chat Report.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-chat/",
       "api_surface": [
         {
           "method": "GET",
@@ -1334,7 +1268,6 @@
       "summary": "User Conversation History.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-conversation-history/",
       "api_surface": [
         {
           "method": "GET",
@@ -1352,7 +1285,6 @@
       "summary": "User Customers Helped.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-customer-helped/",
       "api_surface": [
         {
           "method": "GET",
@@ -1370,7 +1302,6 @@
       "summary": "User Drill-down.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-drilldown/",
       "api_surface": [
         {
           "method": "GET",
@@ -1388,7 +1319,6 @@
       "summary": "User Happiness.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness/",
       "api_surface": [
         {
           "method": "GET",
@@ -1406,7 +1336,6 @@
       "summary": "User Happiness drilldown.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-happiness-drilldown/",
       "api_surface": [
         {
           "method": "GET",
@@ -1424,7 +1353,6 @@
       "summary": "User Replies.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-replies/",
       "api_surface": [
         {
           "method": "GET",
@@ -1442,7 +1370,6 @@
       "summary": "User Resolutions.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/reports/user/reports-user-resolutions/",
       "api_surface": [
         {
           "method": "GET",
@@ -1460,7 +1387,6 @@
       "summary": "Get Tag by ID.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/tags/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -1487,7 +1413,6 @@
       "summary": "Get Resource Owner.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/me/",
       "api_surface": [
         {
           "method": "GET",
@@ -1505,7 +1430,6 @@
       "summary": "Get User.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -1532,7 +1456,6 @@
       "summary": "Get Conversation Reassignment configuration.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/conversation reassignment/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -1559,7 +1482,6 @@
       "summary": "Get user status.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/users/status/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -1586,7 +1508,6 @@
       "summary": "Get Webhook.",
       "intent": "direct_read",
       "availability": "implemented",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/webhooks/get/",
       "api_surface": [
         {
           "method": "GET",
@@ -1614,7 +1535,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "help-scout.v3_get_conversation",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
       "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
       "examples": [
         "pm help-scout direct get-conversation-v3 --json --conversationId <conversationId>"
@@ -1642,7 +1562,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "help-scout.v3_list_conversation_threads",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
       "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
       "examples": [
         "pm help-scout direct list-conversation-threads-v3 --json --conversationId <conversationId>"
@@ -1670,7 +1589,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "help-scout.v3_list_customers",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
       "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
       "examples": [
         "pm help-scout direct list-customers-v3 --json"
@@ -1690,7 +1608,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "help-scout.v3_list_system_users",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
       "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
       "examples": [
         "pm help-scout direct list-system-users-v3 --json"
@@ -1710,7 +1627,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "help-scout.v3_get_system_user",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
       "risk": "Bounded Help Scout v3 JSON read; the response is size-limited and secret-shaped fields are redacted.",
       "examples": [
         "pm help-scout direct get-system-user-v3 --json --systemUserId <systemUserId>"
@@ -1738,7 +1654,6 @@
       "intent": "binary_download",
       "availability": "implemented",
       "operation": "help-scout.attachment_download",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
       "flags": [],
       "api_surface": [
         {

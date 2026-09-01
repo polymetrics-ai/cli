@@ -1,17 +1,58 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "approval_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "end_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_date": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "workspace": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
   "title": "timesheet_approval_statuses",
   "type": "object",
-  "x-primary-key": ["gid"],
-  "required": ["gid"],
-  "properties": {
-    "gid": { "type": "string" },
-    "approval_status": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "end_date": { "type": ["string", "null"] },
-    "resource_type": { "type": ["string", "null"] },
-    "start_date": { "type": ["string", "null"] },
-    "user": { "type": ["object", "null"] },
-    "workspace": { "type": ["object", "null"] }
-  }
+  "x-primary-key": [
+    "gid"
+  ]
 }

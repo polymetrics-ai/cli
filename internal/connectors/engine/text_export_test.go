@@ -13,7 +13,7 @@ func textExportBundle(baseURL string, maxBytes int) Bundle {
 	return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{
 		ID: "acme.audit.export", Kind: "text_export", Summary: "Export audit CSV", Risk: "medium", Approval: "explicit destination", OutputPolicy: "file_manifest",
 		Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/v2/audit.csv", MaxBytes: maxBytes, Accept: "text/csv", ContentTypes: []string{"text/csv"}, Charset: "utf-8", Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}, Headers: []OperationResponseHeaderSpec{{Name: "X-Export-ID", MaxBytes: 64}}}},
-	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v2/audit.csv", Operation: &SurfaceOperation{Model: "text_export"}}}}}
+	}}}
 }
 
 func TestOperationTextExportWritesBoundedCSV(t *testing.T) {

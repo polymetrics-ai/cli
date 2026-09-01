@@ -15,7 +15,6 @@ import (
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
-	"polymetrics.ai/internal/connectors/certifications"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/coordination"
@@ -218,11 +217,6 @@ func runConnectors(ctx context.Context, root string, args []string, stdout, stde
 		return errUsage
 	}
 	switch args[0] {
-	case "certify":
-		if len(args) == 2 && isHelpArg(args[1]) {
-			return writeManual("connectors", stdout, jsonOut)
-		}
-		return runCertify(ctx, root, args[1:], stdout, stderr, jsonOut)
 	case "list":
 		flags := parseFlags(args[1:])
 		if flags.first("all") != "" {
@@ -270,16 +264,11 @@ func runConnectors(ctx context.Context, root string, args []string, stdout, stde
 			return err
 		}
 		if c, ok := registry.Get(args[1]); ok {
-			status, err := certifications.StatusForRegistered(args[1], true)
-			if err != nil {
-				return fmt.Errorf("read connector certification status: %w", err)
-			}
 			if jsonOut {
 				response := envelope{
 					"kind":           "Connector",
 					"connector":      connectors.MetadataOf(c),
 					"manifest":       connectors.ManifestOf(c),
-					"certification":  status,
 					"sync_transport": connectors.SyncTransportEligibilityOf(c),
 				}
 				if rateLimits, ok := connectors.RateLimitCoordinationOf(c); ok {
@@ -299,10 +288,6 @@ func runConnectors(ctx context.Context, root string, args []string, stdout, stde
 			_, _ = fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
 			if rateLimits, ok := connectors.RateLimitCoordinationOf(c); ok {
 				_, _ = fmt.Fprintf(stdout, "\nRATE LIMIT COORDINATION\n  %s\n", rateLimits.Message)
-			}
-			_, _ = fmt.Fprintf(stdout, "\nCERTIFICATION\n  %s\n", status.Label)
-			if status.Warning != "" {
-				_, _ = fmt.Fprintf(stdout, "  %s\n", status.Warning)
 			}
 			return nil
 		}
@@ -910,23 +895,6 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 	credential := flags.first("credential")
 	if credential == "" {
 		credential = flags.first("connection")
-	}
-	if command, found := connectorSurfaceCommand(surface, strings.Join(path, " ")); found && strings.TrimSpace(command.SourceOperation) != "" {
-		// First reject an explicitly supplied origin without consulting any
-		// project state. A persisted credential can only add a public default;
-		// it must not delay rejection of an untrusted command-line override.
-		if err := commandrunner.PreflightSourceBoundOrigin(connector, path, config); err != nil {
-			return err
-		}
-		if credential != "" {
-			preflightConfig, err := app.PublicCredentialConfiguration(root, connectorName, credential, config)
-			if err != nil {
-				return err
-			}
-			if err := commandrunner.PreflightSourceBoundOrigin(connector, path, preflightConfig); err != nil {
-				return err
-			}
-		}
 	}
 	approval, err := prepareReverseApprovalCarrier(flags, os.Stdin)
 	if err != nil {

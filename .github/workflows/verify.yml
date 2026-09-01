@@ -44,25 +44,6 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
           "$(go env GOPATH)/bin/nfpm" --version
 
-      # The certify budget measures wall time INCLUDING compilation, and this job
-      # runs with the Go build cache disabled. Embedding DuckDB turned that
-      # compilation into a cold cgo link of two large test binaries, which is
-      # what pushed the measurement to 217.677s against a 210.000s budget — not
-      # the harness. Runtime was measured before and after the DuckDB change and
-      # is unchanged (75.4s vs 78.4s for the dominant test; it got marginally
-      # faster).
-      #
-      # Compiling the two timed binaries first moves that link out of the
-      # measured window without weakening anything: the budget still bounds the
-      # 25 harness calls and 92 CLI invocations it exists to bound, and
-      # certifytiming passes -count=1 so every test still really runs. Total CI
-      # time is unchanged; only what the number means is corrected.
-      - name: Precompile the timed test binaries
-        run: go test -run '^$' ./internal/cli/ ./internal/connectors/certify/
-
-      - name: Certify harness timing
-        run: make certify-timing
-
       - name: Verify
         run: make verify
 
@@ -88,10 +69,10 @@ jobs:
           go-version: '1.26.6'
           cache: false
 
-      # Shared admission is part of the small certification proof. This job
-      # owns its disposable Redis-compatible coordinator rather than relying on
-      # an ambient service supplied by a runner.
-      - name: Provision local shared-admission fixture
+      # Cross-process rate-limit coordination is part of the generated command
+      # proof. This job owns its disposable Redis-compatible coordinator rather
+      # than relying on an ambient runner service.
+      - name: Provision local coordination fixture
         run: |
           if ! command -v redis-server >/dev/null 2>&1; then
             sudo apt-get update

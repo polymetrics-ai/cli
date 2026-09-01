@@ -110,7 +110,7 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json), partitioned as
   101 executable (7 ETL streams, 34 direct reads, 60 reverse-ETL writes) and 47
   blocked-with-named-dependency or unsupported-with-source-citation. See
-  `internal/connectors/defs/chatwoot/api_surface.json` for the full, per-operation disposition.
+  `internal/connectors/defs/chatwoot/execution bundle` for the full, per-operation disposition.
 - The 47 non-executable operations fall outside this bundle's single account-scoped base URL
   (`/api/v1/accounts/{account_id}`): Chatwoot's `/api/v2` reporting surface, `/platform/api/v1`
   (a distinct, more-privileged credential), `/public/api/v1` (an anonymous widget-actor API),

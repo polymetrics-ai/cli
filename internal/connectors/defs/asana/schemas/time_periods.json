@@ -1,15 +1,46 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "display_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "end_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "period": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
   "title": "time_periods",
   "type": "object",
-  "x-primary-key": ["gid"],
-  "required": ["gid"],
-  "properties": {
-    "gid": { "type": "string" },
-    "display_name": { "type": ["string", "null"] },
-    "end_on": { "type": ["string", "null"] },
-    "period": { "type": ["string", "null"] },
-    "resource_type": { "type": ["string", "null"] },
-    "start_on": { "type": ["string", "null"] }
-  }
+  "x-primary-key": [
+    "gid"
+  ]
 }

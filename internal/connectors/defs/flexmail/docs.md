@@ -59,5 +59,5 @@ data.
 
 - Batch defaults: read_page_size=500.
 - API coverage includes 5 stream-backed endpoint group(s).
-- Other cited artifact endpoints are explicitly classified in `api_surface.json`; endpoints absent
+- Other cited artifact endpoints are explicitly classified in `execution bundle`; endpoints absent
   from the cited artifact are not exposed by this bundle.

@@ -309,53 +309,11 @@ func TestPreflightOperationDirectReadValidatesDeclaredContract(t *testing.T) {
 			mutate: func(b *Bundle) {
 				b.Operations[0].Kind = "rest_read"
 				b.Operations[0].REST.Method = http.MethodGet
-				b.Surface.Endpoints[0].Method = http.MethodGet
 			},
 			method:   http.MethodGet,
 			path:     "/users/fetch",
 			maxBytes: 16 << 20,
 			policy:   "json_redacted",
-		},
-		{
-			name: "missing runtime endpoint ledger",
-			mutate: func(b *Bundle) {
-				b.Surface = nil
-				b.directReadLedger = nil
-			},
-			method:   http.MethodPost,
-			path:     "/users/fetch",
-			maxBytes: 16 << 20,
-			policy:   "json_redacted",
-			wantErr:  "runtime operation endpoint ledger is unavailable",
-		},
-		{
-			name: "incomplete runtime endpoint ledger",
-			mutate: func(b *Bundle) {
-				b.Surface = nil
-				b.directReadLedger = &operationEndpointLedger{}
-			},
-			method:   http.MethodPost,
-			path:     "/users/fetch",
-			maxBytes: 16 << 20,
-			policy:   "json_redacted",
-			wantErr:  "runtime operation endpoint ledger does not contain",
-		},
-		{
-			name: "runtime endpoint ledger response cap mismatch",
-			mutate: func(b *Bundle) {
-				b.Surface = nil
-				b.directReadLedger = &operationEndpointLedger{entries: []OperationEndpointLedgerEntry{{
-					Method:   http.MethodPost,
-					Path:     "/users/fetch",
-					Kind:     "provider_search",
-					MaxBytes: 1,
-				}}}
-			},
-			method:   http.MethodPost,
-			path:     "/users/fetch",
-			maxBytes: 16 << 20,
-			policy:   "json_redacted",
-			wantErr:  "runtime operation endpoint ledger does not contain",
 		},
 		{
 			name: "unsupported operation kind",
@@ -412,7 +370,6 @@ func TestPreflightOperationDirectReadValidatesDeclaredContract(t *testing.T) {
 			rest := *op.REST
 			op.REST = &rest
 			bundle.Operations = []OperationSpec{op}
-			bundle.Surface = &APISurface{Endpoints: append([]SurfaceEndpoint(nil), base.Surface.Endpoints...)}
 			if tt.mutate != nil {
 				tt.mutate(&bundle)
 			}
@@ -504,10 +461,5 @@ func providerSearchBundle(baseURL string) Bundle {
 		Name:       "widget-demo",
 		HTTP:       HTTPBase{URL: baseURL},
 		Operations: []OperationSpec{providerSearchOp(nil)},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method:    "POST",
-			Path:      "/users/fetch",
-			Operation: &SurfaceOperation{Model: "direct_read", Status: "implemented", Risk: "low", Reason: "typed bounded provider search"},
-		}}},
 	}
 }

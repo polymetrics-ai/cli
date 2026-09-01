@@ -24,7 +24,7 @@
     },
     "mode": {
       "type": "string",
-      "description": "Legacy runtime mode: live (default) or fixture. The declarative engine does not branch on this value; conformance uses JSON fixtures directly."
+      "description": "Runtime mode: live (default) or fixture. The declarative engine does not branch on this value; execution-contract uses JSON fixtures directly."
     },
     "application_id": {
       "type": "string",

@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "language": {
+      "enum": [
+        "actions",
+        "cpp",
+        "csharp",
+        "go",
+        "java",
+        "javascript",
+        "python",
+        "ruby",
+        "rust",
+        "swift"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "query_pack": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "repositories": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "repository_lists": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 1,
+      "type": "array"
+    },
+    "repository_owners": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "language",
+    "query_pack"
+  ],
+  "type": "object"
+}

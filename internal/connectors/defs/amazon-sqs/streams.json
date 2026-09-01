@@ -19,11 +19,7 @@
         "page_size": 10,
         "max_pages": 1
       },
-      "schema": "schemas/messages.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "messages are read by the Tier-3 native SigV4/XML ReceiveMessage poll loop; native tests replay sanitized XML responses and fixture mode emits deterministic messages"
-      }
+      "schema": "schemas/messages.json"
     }
   ]
 }

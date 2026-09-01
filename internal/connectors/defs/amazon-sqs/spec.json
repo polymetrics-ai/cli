@@ -74,7 +74,7 @@
         "fixture"
       ],
       "default": "live",
-      "description": "Runtime mode: live (default) or fixture for credential-free local conformance."
+      "description": "Runtime mode: live (default) or fixture for credential-free local fixture tests."
     }
   }
 }

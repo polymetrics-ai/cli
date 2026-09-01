@@ -211,7 +211,7 @@ func decodeList(body []byte, resource string) (rows []map[string]any, total int,
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise metabase credential-free.
+// fixture tests can exercise metabase credential-free.
 func (c Connector) readFixture(ctx context.Context, stream string, endpoint streamEndpoint, emit func(connectors.Record) error) error {
 	for i := 1; i <= 2; i++ {
 		if err := ctx.Err(); err != nil {

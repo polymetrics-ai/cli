@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "delivery_id": {
+      "type": "integer"
+    },
+    "hook_id": {
+      "type": "integer"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "delivery_id",
+    "hook_id",
+    "org"
+  ],
+  "type": "object"
+}

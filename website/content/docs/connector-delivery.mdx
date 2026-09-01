@@ -1,62 +1,42 @@
 ---
-title: Connector Delivery Canon
-description: The required path from connector discovery to executable warehouse flows and honest live certification.
+title: source.lock vNext connector delivery
+description: One immutable authoring input, deterministic execution JSON, and executable lane proof.
 ---
 
-Use this guide before claiming a connector, command, flow, or certification is
-done. The repository's detailed procedure and source-pinned evidence live in
-the [connector delivery canon](https://github.com/polymetrics-ai/cli/tree/main/docs/connector-canon).
-
-## The rule that shapes every flow
-
-The warehouse is always the mediator. There is no direct source-to-destination
-hop:
+Connector authors use one pipeline:
 
 ```text
-API      -> warehouse -> API
-API      -> warehouse -> database
-database -> warehouse -> API
-database -> warehouse -> database
+source.lock.json -> canonical operation descriptors -> execution JSON -> runtime
 ```
 
-This includes API-to-API delivery through the same connector. Reverse delivery
-still uses plan, preview, approval, and execution; a flow or schedule does not
-bypass that gate.
+The schema-4 lock is immutable authoring/evidence input. Runtime reads only the
+rendered metadata, spec, streams/schemas, writes, operations, CLI surface, and
+optional typed execution files.
 
-## Foundation Check
+Every connector explicitly declares seven lanes: direct read, direct write,
+binary download, binary upload, ETL, reverse ETL, and sync transport. One
+provider operation may back several lanes, but interactive and saved semantics
+remain distinct.
 
-Before marking an operation or connector complete, prove the needed foundation
-exists and executes:
+Saved movement always crosses DuckDB:
 
-1. Derive the command surface from the provider specification; do not hand-add
-   opaque cursors or endpoints.
-2. Run the real runtime preflight for every operation declared `implemented`.
-3. Prove bounded warehouse materialization and the relevant approved target
-   flow.
-4. For database and CDC work, use the typed database/CDC contract rather than
-   generic SQL or a cursor fallback.
-5. If any foundation is missing, create its own issue and keep the capability
-   truthfully non-implemented. Do not work around it.
+```text
+API      -> DuckDB -> API
+API      -> DuckDB -> database
+database -> DuckDB -> API
+database -> DuckDB -> database
+```
 
-The repository checks the declaration/runtime boundary with:
+Before delivery, prove deterministic rendering, execution-only discovery,
+malformed-artifact rejection, unambiguous command bindings, real encoders and
+executors, fake-server wire behavior, and DuckDB saved flows.
 
 ```bash
+make connectorgen-vnext-locks
 make connector-runtime-preflight
 make connector-canon-check
 ```
 
-The first command invokes the real command runner's preflight rather than a
-copy of its rules. The second verifies that the binding reports, archive
-markers, and current procedure are present in a clean checkout.
-
-## Certification status
-
-There are currently **zero accepted live certifications**. A fixture, catalog
-entry, generated manual, endpoint ledger, or `certification.json` is useful
-implementation evidence, but none is live proof. Live certification needs an
-approved environment, scoped credential handling, bounded test data,
-receipt/idempotency evidence, cleanup, and an accepted artifact.
-
-The [remote reproducibility guide](https://github.com/polymetrics-ai/cli/blob/main/docs/connector-canon/REMOTE-REPRODUCIBILITY.md)
-lists what a clean environment can verify without provider access and the gaps
-that prevent it from proving live certification.
+Provider evidence and external operational tests never become runtime state. A
+genuine missing shared encoder or executor is reported through the Foundation
+Atlas before new runtime work begins.

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "access_token": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "client_id": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "access_token",
+    "client_id"
+  ],
+  "type": "object"
+}

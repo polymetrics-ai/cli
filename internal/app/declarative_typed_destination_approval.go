@@ -21,32 +21,30 @@ const (
 // It intentionally carries no URL, request body, arbitrary action, or source
 // record. Those stay in the bundle and the reopened warehouse workset.
 type declarativeTypedDestinationBinding struct {
-	Domain                          string                                  `json:"domain"`
-	ConnectionID                    string                                  `json:"connection_id"`
-	Stream                          string                                  `json:"stream"`
-	StreamID                        string                                  `json:"stream_id"`
-	Mode                            synccontract.Mode                       `json:"mode"`
-	Source                          string                                  `json:"source"`
-	SourceExecutor                  connectors.TransportExecutorReference   `json:"source_executor"`
-	SourceEvidence                  connectors.ConformanceEvidenceReference `json:"source_evidence"`
-	Destination                     string                                  `json:"destination"`
-	DestinationExecutor             connectors.TransportExecutorReference   `json:"destination_executor"`
-	DestinationEvidence             connectors.ConformanceEvidenceReference `json:"destination_evidence"`
-	Action                          string                                  `json:"action"`
-	ActionDefinitionSHA256          string                                  `json:"action_definition_sha256"`
-	IdempotencyKeyHeader            string                                  `json:"idempotency_key_header"`
-	Strategy                        connectors.ApplyStrategy                `json:"strategy"`
-	SourceMapping                   connectors.SourceRecordMapping          `json:"source_mapping"`
-	Batch                           connectors.DestinationBatch             `json:"batch"`
-	TombstoneAction                 string                                  `json:"tombstone_action,omitempty"`
-	TombstoneActionDefinitionSHA256 string                                  `json:"tombstone_action_definition_sha256,omitempty"`
-	TombstoneIdempotencyKeyHeader   string                                  `json:"tombstone_idempotency_key_header,omitempty"`
-	TombstoneSourceMapping          *connectors.TombstoneRecordMapping      `json:"tombstone_source_mapping,omitempty"`
-	TombstoneBatch                  *connectors.DestinationBatch            `json:"tombstone_batch,omitempty"`
-	ReadBackSHA256                  string                                  `json:"read_back_sha256,omitempty"`
-	CredentialRevision              string                                  `json:"credential_revision"`
-	ConfigurationDigest             string                                  `json:"configuration_digest"`
-	ApprovalScope                   string                                  `json:"approval_scope"`
+	Domain                          string                                `json:"domain"`
+	ConnectionID                    string                                `json:"connection_id"`
+	Stream                          string                                `json:"stream"`
+	StreamID                        string                                `json:"stream_id"`
+	Mode                            synccontract.Mode                     `json:"mode"`
+	Source                          string                                `json:"source"`
+	SourceExecutor                  connectors.TransportExecutorReference `json:"source_executor"`
+	Destination                     string                                `json:"destination"`
+	DestinationExecutor             connectors.TransportExecutorReference `json:"destination_executor"`
+	Action                          string                                `json:"action"`
+	ActionDefinitionSHA256          string                                `json:"action_definition_sha256"`
+	IdempotencyKeyHeader            string                                `json:"idempotency_key_header"`
+	Strategy                        connectors.ApplyStrategy              `json:"strategy"`
+	SourceMapping                   connectors.SourceRecordMapping        `json:"source_mapping"`
+	Batch                           connectors.DestinationBatch           `json:"batch"`
+	TombstoneAction                 string                                `json:"tombstone_action,omitempty"`
+	TombstoneActionDefinitionSHA256 string                                `json:"tombstone_action_definition_sha256,omitempty"`
+	TombstoneIdempotencyKeyHeader   string                                `json:"tombstone_idempotency_key_header,omitempty"`
+	TombstoneSourceMapping          *connectors.TombstoneRecordMapping    `json:"tombstone_source_mapping,omitempty"`
+	TombstoneBatch                  *connectors.DestinationBatch          `json:"tombstone_batch,omitempty"`
+	ReadBackSHA256                  string                                `json:"read_back_sha256,omitempty"`
+	CredentialRevision              string                                `json:"credential_revision"`
+	ConfigurationDigest             string                                `json:"configuration_digest"`
+	ApprovalScope                   string                                `json:"approval_scope"`
 }
 
 type preparedDeclarativeTypedDestinationTransport struct {
@@ -410,8 +408,8 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 	}
 	declaration := declarativeTypedDestinationBinding{
 		Domain: declarativeTypedDestinationBindingDomain, ConnectionID: conn.ID, Stream: streamName, StreamID: stream.StreamID, Mode: mode.ContractMode,
-		Source: source.Name(), SourceExecutor: resolved.SourceDescriptor.Executor, SourceEvidence: resolved.SourceDescriptor.Conformance,
-		Destination: destination.Name(), DestinationExecutor: resolved.DestinationDescriptor.Executor, DestinationEvidence: resolved.DestinationDescriptor.Conformance,
+		Source: source.Name(), SourceExecutor: resolved.SourceDescriptor.Executor,
+		Destination: destination.Name(), DestinationExecutor: resolved.DestinationDescriptor.Executor,
 		Action: resolved.ApplyStrategy.Action, ActionDefinitionSHA256: actionDefinitionSHA256, IdempotencyKeyHeader: idempotencyKeyHeader, Strategy: resolved.ApplyStrategy.Strategy, SourceMapping: binding.RecordMapping.Clone(), Batch: *binding.Batch, ReadBackSHA256: readBackSHA256,
 		CredentialRevision: runtime.CredentialRevision, ConfigurationDigest: runtime.ConfigurationDigest, ApprovalScope: runtime.WriteApprovalScope,
 	}

@@ -166,7 +166,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise fastbill credential-free (mirrors stripe's
+// fixture tests can exercise fastbill credential-free (mirrors stripe's
 // fixture intent).
 func (c Connector) readFixture(ctx context.Context, stream string, endpoint streamEndpoint, emit func(connectors.Record) error) error {
 	for i := 1; i <= 2; i++ {

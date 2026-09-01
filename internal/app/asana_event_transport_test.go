@@ -194,7 +194,6 @@ func (*asanaEventTestConnector) SyncTransportDescriptor() *connectors.SyncTransp
 			Ordering:    connectors.DeliveryOrderingWindowCoalesced,
 			Deletes:     connectors.DeliveryDeletesTombstone,
 		},
-		Conformance: asanaEventSourceConformance,
 	}}
 }
 

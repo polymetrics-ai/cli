@@ -100,21 +100,21 @@ install and fails on another.
 
 ## Binary size profile
 
-`pm` is still a single local binary. After the connector architecture v2 cleanup, production builds embed only runtime connector bundle files: metadata, connection specs, read/write declarations, schemas, and connector docs. Embedding DuckDB adds roughly 31 MiB, measured on darwin/arm64.
+`pm` is still a single local binary. Production builds embed only rendered execution JSON: metadata, connection specs, streams, schemas, writes, operations, CLI surface, and optional sync transport and rate limits. Compact `source.lock.json` authoring records are never embedded or read by the runtime. Embedding DuckDB adds roughly 31 MiB, measured on darwin/arm64.
 
 | Build mode | Measured size | Use |
 |---|---:|---|
 | Default local build | 137,779,042 bytes (131 MiB) | Developer builds with normal Go symbol/debug data. |
 | Release-style stripped build | 111,479,570 bytes (106 MiB) | Recommended release profile: `go build -trimpath -ldflags="-s -w" ./cmd/pm`. |
 
-Non-runtime validation files are intentionally left out of the shipping binary:
+Authoring inputs are intentionally left out of the shipping binary:
 
 | Excluded artifact | Raw size | Why it is not embedded |
 |---|---:|---|
-| `fixtures/**` | 22,496,157 bytes | Used only by connector replay/conformance tests. |
-| `api_surface.json` | 7,045,880 bytes | Used by authoring validation, conformance, and full-certification inventory. |
+| `source.lock.json` | Connector-dependent | Immutable provider facts used by `connectorgen lock-render`. |
+| Provider fixtures | Connector-dependent | Optional local test inputs; never a second runtime route. |
 
-`connectorgen validate`, conformance tests, and `pm connectors certify --full` from a source checkout still read the full on-disk definition tree, so the smaller production binary does not weaken connector validation. Release archives can be smaller or larger than the raw executable depending on operating system, architecture, and archive compression.
+`connectorgen lock-check` validates that a source lock deterministically renders the committed execution bundle. `connectorgen validate` then validates only the execution bundle that the runtime consumes. Release archives can be smaller or larger than the raw executable depending on operating system, architecture, and archive compression.
 
 ## Release cadence
 

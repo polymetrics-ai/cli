@@ -27,10 +27,6 @@ var (
 		Family: connectors.TransportExecutorFamilyDeclarativeAPI,
 		ID:     asanaEventSourceExecutorID,
 	}
-	asanaEventSourceConformance = connectors.ConformanceEvidenceReference{
-		Suite: "asana_event_token_source",
-		RunID: "source_lock_contract_v1",
-	}
 )
 
 // asanaEventPage is the source-locked response shared by Asana's resource and

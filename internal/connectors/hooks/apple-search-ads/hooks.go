@@ -73,7 +73,7 @@ var streamEndpoints = map[string]streamEndpoint{
 
 // ReadStream implements engine.StreamHook, handling all 4 declared streams
 // with handled=true always — the declarative streams.json fallback is a
-// structural "shadow" path exercised only by conformance's dynamic checks
+// structural "shadow" path exercised only by fixture execution checks
 // (Hooks=nil there, and every stream in this bundle carries its own
 // skip_dynamic marker anyway), never here, matching monday's/plaid's
 // documented precedent.

@@ -1,23 +1,89 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "author_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "closed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "downvotes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "iid": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "upvotes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "user_notes_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "web_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
   "title": "issues",
   "type": "object",
-  "x-primary-key": ["id"],
   "x-cursor-field": "updated_at",
-  "required": ["id"],
-  "properties": {
-    "id": { "type": "integer" },
-    "iid": { "type": ["integer", "null"] },
-    "project_id": { "type": ["integer", "null"] },
-    "title": { "type": ["string", "null"] },
-    "state": { "type": ["string", "null"] },
-    "web_url": { "type": ["string", "null"] },
-    "created_at": { "type": ["string", "null"] },
-    "updated_at": { "type": ["string", "null"] },
-    "closed_at": { "type": ["string", "null"] },
-    "author_id": { "type": ["integer", "null"] },
-    "upvotes": { "type": ["integer", "null"] },
-    "downvotes": { "type": ["integer", "null"] },
-    "user_notes_count": { "type": ["integer", "null"] }
-  }
+  "x-primary-key": [
+    "id"
+  ]
 }

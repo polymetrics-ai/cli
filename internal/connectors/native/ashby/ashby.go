@@ -17,16 +17,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/fs"
 	"net/http"
 	"net/url"
-	"path"
 	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
-	ashbydefs "polymetrics.ai/internal/connectors/defs/ashby"
 )
 
 const (
@@ -66,14 +63,10 @@ func (Connector) Metadata() connectors.Metadata {
 	}
 }
 
-// Check verifies the connector is configured well enough to talk to Ashby. In
-// fixture mode it short-circuits without a network call.
+// Check verifies the connector is configured well enough to talk to Ashby.
 func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	if err := ctx.Err(); err != nil {
 		return err
-	}
-	if fixtureMode(cfg) {
-		return nil
 	}
 	if _, err := ashbyBaseURL(cfg); err != nil {
 		return err
@@ -118,10 +111,6 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	endpoint, ok := ashbyStreamEndpoints[stream]
 	if !ok {
 		return fmt.Errorf("ashby stream %q not found", stream)
-	}
-
-	if fixtureMode(req.Config) {
-		return c.readFixture(ctx, stream, endpoint, req, emit)
 	}
 
 	r, err := c.requester(req.Config)
@@ -190,88 +179,6 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, endpoint s
 		pageCursor = next
 	}
 	return nil
-}
-
-func (c Connector) readFixture(ctx context.Context, stream string, endpoint streamEndpoint, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	fixtures, err := ashbyFixtureFS()
-	if err != nil {
-		return err
-	}
-	pages, err := ashbyFixtureBodies(fixtures, stream)
-	if err != nil {
-		return err
-	}
-	if len(pages) == 0 {
-		return fmt.Errorf("ashby stream %q has no replay fixtures", stream)
-	}
-	for pageIndex, body := range pages {
-		if err := ctx.Err(); err != nil {
-			return err
-		}
-		_, records, err := ashbyResultRecords(body)
-		if err != nil {
-			return fmt.Errorf("decode ashby fixture %s page %d: %w", stream, pageIndex+1, err)
-		}
-		for recordIndex, item := range records {
-			record := ashbyProjectRecord(endpoint, item, pageIndex, recordIndex)
-			if err := emit(record); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-type ashbyFixturePage struct {
-	Response struct {
-		Status int             `json:"status"`
-		Body   json.RawMessage `json:"body"`
-	} `json:"response"`
-}
-
-func ashbyFixtureFS() (fs.FS, error) {
-	return ashbydefs.Fixtures()
-}
-
-func ashbyFixtureBodies(fixtures fs.FS, stream string) ([][]byte, error) {
-	dir := path.Join("streams", stream)
-	entries, err := fs.ReadDir(fixtures, dir)
-	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			return nil, nil
-		}
-		return nil, fmt.Errorf("read ashby fixtures %s: %w", dir, err)
-	}
-	bodies := make([][]byte, 0, len(entries))
-	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
-			continue
-		}
-		raw, err := fs.ReadFile(fixtures, path.Join(dir, entry.Name()))
-		if err != nil {
-			return nil, fmt.Errorf("read ashby fixture %s/%s: %w", dir, entry.Name(), err)
-		}
-		body, err := ashbyFixtureBody(raw)
-		if err != nil {
-			return nil, fmt.Errorf("parse ashby fixture %s/%s: %w", dir, entry.Name(), err)
-		}
-		bodies = append(bodies, body)
-	}
-	return bodies, nil
-}
-
-func ashbyFixtureBody(raw []byte) ([]byte, error) {
-	var page ashbyFixturePage
-	if err := json.Unmarshal(raw, &page); err != nil {
-		return nil, err
-	}
-	if len(page.Response.Body) == 0 {
-		return raw, nil
-	}
-	if page.Response.Status >= 400 {
-		return nil, fmt.Errorf("status %d", page.Response.Status)
-	}
-	return page.Response.Body, nil
 }
 
 func ashbyStreamBody(endpoint streamEndpoint, cfg connectors.RuntimeConfig, query map[string]string, pageSize int) (map[string]any, error) {
@@ -571,11 +478,4 @@ func ashbyMaxPages(cfg connectors.RuntimeConfig) (int, error) {
 		return 0, errors.New("ashby config max_pages must be 0 for unlimited or a positive integer")
 	}
 	return value, nil
-}
-
-func fixtureMode(cfg connectors.RuntimeConfig) bool {
-	if cfg.Config == nil {
-		return false
-	}
-	return strings.EqualFold(strings.TrimSpace(cfg.Config["mode"]), "fixture")
 }

@@ -23,11 +23,7 @@ func (a *App) composeTransportRegistry() error {
 		return err
 	}
 	factories = append(factories, connectorFactories...)
-	verifier, err := synctransport.NewDefinitionConformanceVerifier(factories)
-	if err != nil {
-		return err
-	}
-	transports := synctransport.NewRegistry(verifier)
+	transports := synctransport.NewRegistry()
 	if err := synctransport.RegisterDeclaredTransports(a.registry, transports, factories); err != nil {
 		return err
 	}

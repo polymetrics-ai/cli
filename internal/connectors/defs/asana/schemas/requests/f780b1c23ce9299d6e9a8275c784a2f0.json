@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "enum": [
+            "none",
+            "red",
+            "orange",
+            "yellow-orange",
+            "yellow",
+            "yellow-green",
+            "green",
+            "blue-green",
+            "aqua",
+            "blue",
+            "indigo",
+            "purple",
+            "magenta",
+            "hot-pink",
+            "pink",
+            "cool-gray"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "is_archived": {
+          "type": "boolean"
+        },
+        "name": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "opt_fields": {
+      "items": {
+        "enum": [
+          "color",
+          "is_archived",
+          "name"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    },
+    "time_tracking_category_gid": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "data",
+    "time_tracking_category_gid"
+  ],
+  "type": "object"
+}

@@ -10,12 +10,12 @@ export GOTOOLCHAIN ?= auto
 # produces a pm that can read or write a warehouse table.
 export CGO_ENABLED ?= 1
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build pinned-build-dependencies-check release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-surface-sync connectorgen-declaration-admission connectorgen-operation-evidence connectorgen-certification-subject connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-runtime-preflight connector-canon-check certify-timing github-parity-artifacts-check
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build pinned-build-dependencies-check release-workflow-check verify verify-parallel perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint agent-contract-check connectorgen-validate connectorgen-vnext-locks connector-boundary connector-runtime-preflight connector-canon-check
 
 # Packages covered by `lint` include declarative connector and canonical agent-contract tooling.
 # Paths are filtered to existing directories so optional local trees do not hard-fail
 # golangci-lint's arg parsing.
-LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/conformance internal/connectors/certify internal/connectors/boundary internal/safety internal/agentcontract cmd/connectorgen cmd/agentcontractgen cmd/certifytiming
+LINT_CANDIDATE_DIRS := internal/connectors/engine internal/connectors/defs internal/connectors/hooks internal/connectors/native internal/connectors/boundary internal/safety internal/agentcontract cmd/connectorgen cmd/agentcontractgen
 LINT_PKGS := $(foreach d,$(LINT_CANDIDATE_DIRS),$(if $(wildcard $(d)),./$(d)/...))
 
 fmt:
@@ -30,17 +30,6 @@ tidy-check:
 
 test:
 	go test -timeout 20m ./...
-
-# Emits the raw cold -json streams and a compact timing summary for only the
-# certification harness and its CLI route tests. Verify invokes this target in
-# a separate step so the diagnostic is visible even when the aggregate suite
-# later fails or reaches its job limit. The active topology budgets 25 real
-# harness calls and 92 real CLI invocations; its hosted-measurement-derived
-# cap remains 3m30s.
-CERTIFY_TIMING_MAX_DURATION := 3m30s
-
-certify-timing:
-	go run ./cmd/certifytiming --max-duration $(CERTIFY_TIMING_MAX_DURATION)
 
 build:
 	go build ./cmd/pm
@@ -99,53 +88,12 @@ agent-contract-check:
 connectorgen-validate:
 	go run ./cmd/connectorgen validate internal/connectors/defs
 
-# Fails when derivable command metadata (api_surface, flag maps_to,
-# output_policy, rest.max_bytes) or the compact runtime endpoint ledger drifts.
-# Regenerate with `go run ./cmd/connectorgen surface-sync`.
-connectorgen-surface-sync:
-	go run ./cmd/connectorgen surface-sync --check
-
-# Source declaration admission resolves exact operations in connector-owned
-# reviewed source locks without fetching or rehashing provider artifacts. Its
-# independent inventory and mutable catalogs remain separate from runtime
-# preflight, generated operation evidence, and live proof.
-connectorgen-declaration-admission:
-	go run ./cmd/connectorgen declaration-admission
-
-# Fails on generated evidence drift and on any regression in the immutable,
-# source-locked 100-operation cohort across the runtime, CLI, website,
-# fixtures, conformance, and classification surfaces.
-connectorgen-operation-evidence:
-	go run ./cmd/connectorgen operation-evidence --check
-
-# The GitHub source lock is the shared REST + GraphQL denominator. These
-# hermetic checks reject a stale generated root contract, a stale combined
-# ledger, a missing operation classification, or a disappearance of the
-# organization-create canary before a connector surface change reaches CI.
-github-parity-artifacts-check:
-	node --test scripts/tests/github-combined-operation-ledger.test.mjs scripts/tests/gen-github-graphql-parity.test.mjs scripts/tests/github-source-drift.test.mjs
-	node scripts/gen-github-graphql-parity.mjs --check
-	node scripts/github-combined-operation-ledger.mjs --check
-
-# The checked-in subject is deterministic repository identity. Individual live
-# proof records separately bind the pm binary and build that actually ran.
-connectorgen-certification-subject:
-	go run ./cmd/connectorgen certification-subject --check
-
-# Fails when the allowlisted connector certification shards drift.
-# Regenerate one connector with `go run ./cmd/connectorgen certification-matrix --connector <name>`.
-connectorgen-certification-matrix: connectorgen-certification-subject
-	go run ./cmd/connectorgen certification-matrix --check
-
-# Fails when direct-read candidates generated from the declared connector surface drift.
-# Regenerate with `go run ./cmd/connectorgen certification-candidates --connector github`.
-connectorgen-certification-candidates:
-	go run ./cmd/connectorgen certification-candidates --connector github --check
-
-# Fails when GitHub's source-derived certification candidate ledger drifts.
-# Regenerate with `go run ./cmd/connectorgen certification-sweep --connector github`.
-connectorgen-certification-sweep:
-	go run ./cmd/connectorgen certification-sweep --connector github --check
+# Source locks are authoring input; this gate proves the materialized reference
+# execution bundles are byte-for-byte deterministic.
+connectorgen-vnext-locks:
+	go run ./cmd/connectorgen lock-render github --check
+	go run ./cmd/connectorgen lock-render gitlab --check
+	go run ./cmd/connectorgen lock-render asana --check
 
 # Structural runtime proof for every command that claims availability: implemented.
 # The test calls commandrunner.Preflight rather than a copied validator so newly
@@ -171,14 +119,13 @@ release-workflow-check: pinned-build-dependencies-check
 	./scripts/tests/verify-release-tooling.sh
 	./scripts/tests/release-size-budget.sh
 	./scripts/tests/release-production-layout.sh
-	./scripts/tests/release-installed-github-certification.sh
 
-verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-surface-sync connectorgen-declaration-admission connectorgen-operation-evidence github-parity-artifacts-check connectorgen-certification-subject connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check
+verify: fmt tidy-check vet test build docs-check smoke lint agent-contract-check connectorgen-validate connectorgen-vnext-locks connector-runtime-preflight connector-boundary connector-canon-check release-workflow-check
 
 # Opt-in local gate that overlaps independent read/build checks after the
 # mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.
 verify-parallel: fmt tidy-check
-	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-surface-sync connectorgen-declaration-admission connectorgen-operation-evidence github-parity-artifacts-check connectorgen-certification-subject connectorgen-certification-matrix connectorgen-certification-candidates connectorgen-certification-sweep connector-boundary connector-canon-check release-workflow-check
+	$(MAKE) -j$(VERIFY_JOBS) vet test build lint agent-contract-check connectorgen-validate connectorgen-vnext-locks connector-runtime-preflight connector-boundary connector-canon-check release-workflow-check
 	$(MAKE) -j$(VERIFY_JOBS) docs-check-no-build smoke-no-build
 
 perf-free: build

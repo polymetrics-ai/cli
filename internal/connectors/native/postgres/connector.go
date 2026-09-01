@@ -16,7 +16,7 @@
 // discovered at runtime from PostgreSQL's system catalogs, not declared ahead of
 // time). It still ships a defs bundle
 // (internal/connectors/defs/postgres/{metadata.json,spec.json,
-// api_surface.json,database.json,docs.md}) so identity/spec/docs stay uniform
+// database.json,docs.md}) so identity/spec/docs stay uniform
 // with every other connector. database.json is a typed policy declaration
 // only: it does not register a driver or promote write/CDC capability. The
 // connector embeds engine.Base — built from that bundle at construction — to
@@ -40,7 +40,7 @@
 // CDC uses PostgreSQL 14+ pgoutput v2 streamed transaction staging (cdc.go).
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
-// network access so the conformance harness and unit tests can run with no
+// network access so the fixture tests and unit tests can run with no
 // live DB: in fixture mode Check succeeds, Catalog returns canned streams,
 // and Read emits canned rows.
 //

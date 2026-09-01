@@ -352,7 +352,7 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 	// Rotation persistence is opt-in and requires BOTH a declared key and a
 	// store. A bundle that declares no key never writes anything — the engine
 	// does not guess which secret to overwrite (see AuthSpec.RefreshTokenStoreKey).
-	// A caller with no store (conformance harnesses, tests) keeps rotation in
+	// A caller with no store (for example, tests) keeps rotation in
 	// memory for the process lifetime; it is never downgraded to a plaintext
 	// write.
 	storeKey := strings.TrimSpace(spec.RefreshTokenStoreKey)

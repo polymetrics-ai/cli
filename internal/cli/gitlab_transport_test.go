@@ -24,11 +24,9 @@ import (
 )
 
 // TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB is a local
-// provider-double proof for the narrow, source-cited GitLab full snapshot
-// lane. Its fixture inputs come from the immutable source lock and the
-// enabled-connector contract; the double proves our request routing and
-// lifecycle only, not any undeclared GitLab cursor, tombstone, or order
-// semantics.
+// provider-double proof for GitLab's bounded full-snapshot execution lane. The
+// double proves request routing and lifecycle only, not undeclared cursor,
+// tombstone, or ordering semantics.
 func TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB(t *testing.T) {
 	fixture := newGitLabTransportFixture(t, false)
 	root := fixture.setupProject(t)
@@ -49,7 +47,7 @@ func TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB(t *testing.T) {
 		t.Fatalf("query connection-owned GitLab DuckDB table: %v", err)
 	}
 	if len(rows) != 2 || rows[0]["path"] == nil || rows[1]["path"] == nil {
-		t.Fatalf("GitLab staged rows = %#v, want both source-lock fixture pages", rows)
+		t.Fatalf("GitLab staged rows = %#v, want both provider-double pages", rows)
 	}
 
 	planStdout, _ := runCLI(t, []string{
@@ -124,13 +122,13 @@ func TestGitLabSourceTransportFixtureStopsOnDeclaredNonSuccess(t *testing.T) {
 }
 
 // TestGitLabManagedDestinationDuckDBLifecycle is the fake-server contract for
-// GitLab's declaration-owned single-attempt destination. It first materializes
+// GitLab's execution-bundle single-attempt destination. It first materializes
 // one group through the real DuckDB stage, then verifies the closed
 // plan/preview/approval route emits exactly one destination request. Before
 // this contract was admitted, CreateConnection refused GitLab as a destination
 // before either source or target request reached the double; the retained error
 // branch makes that regression explicit. No test adapter is installed and no
-// production admission path is bypassed.
+// production execution path is bypassed.
 func TestGitLabManagedDestinationDuckDBLifecycle(t *testing.T) {
 	for _, testCase := range []struct {
 		name           string
@@ -265,7 +263,6 @@ func TestGitLabManagedDestinationDuckDBLifecycle(t *testing.T) {
 type gitLabTransportFixture struct {
 	t                         *testing.T
 	stream                    string
-	sourceOperation           string
 	sourceMethod              string
 	sourcePath                string
 	deleteAction              string
@@ -298,14 +295,13 @@ type gitLabTransportRequest struct {
 func newGitLabTransportFixture(t *testing.T, badRead bool) *gitLabTransportFixture {
 	t.Helper()
 	const defsRoot = "../connectors/defs"
-	const deleteSourceOperation = "deleteApiV4GroupsId"
 
 	bundle, err := engine.Load(os.DirFS(defsRoot), "gitlab")
 	if err != nil {
 		t.Fatalf("load GitLab definition bundle: %v", err)
 	}
-	if bundle.EnabledContract == nil {
-		t.Fatal("GitLab enabled connector contract is absent")
+	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil {
+		t.Fatal("GitLab execution bundle has no source sync transport")
 	}
 
 	fixture := &gitLabTransportFixture{
@@ -317,23 +313,30 @@ func newGitLabTransportFixture(t *testing.T, badRead bool) *gitLabTransportFixtu
 		deleteStatus:  http.StatusAccepted,
 		deleteStarted: make(chan struct{}, 1),
 	}
-	for _, lane := range bundle.EnabledContract.Lanes {
-		if lane.Name != "sync_transport" || lane.State != connectors.EnabledLaneImplemented || lane.Transport == nil {
+	modes := make([]string, 0, len(bundle.SyncTransport.Source.Modes))
+	for _, mode := range bundle.SyncTransport.Source.Modes {
+		modes = append(modes, string(mode))
+	}
+	sort.Strings(modes)
+	if got := strings.Join(modes, ","); got != "full_append,full_overwrite" {
+		t.Fatalf("GitLab runtime full-snapshot modes = %q, want the closed local execution policy", got)
+	}
+	if !slicesContainsString(bundle.SyncTransport.Source.EligibleStreams, fixture.stream) {
+		t.Fatalf("GitLab sync source transport does not declare stream %q", fixture.stream)
+	}
+	for _, stream := range bundle.Streams {
+		if stream.Name != fixture.stream {
 			continue
 		}
-		modes := append([]string(nil), lane.Transport.Modes...)
-		sort.Strings(modes)
-		if got := strings.Join(modes, ","); got != "full_append,full_overwrite" {
-			t.Fatalf("GitLab runtime full-snapshot modes = %q, want the closed local execution policy", got)
+		fixture.sourceMethod = stream.Method
+		if fixture.sourceMethod == "" {
+			fixture.sourceMethod = http.MethodGet
 		}
-		for _, evidence := range lane.Transport.Streams {
-			if evidence.Stream == fixture.stream {
-				fixture.sourceOperation = evidence.SourceOperation
-			}
-		}
+		fixture.sourcePath = stream.Path
+		break
 	}
-	if fixture.sourceOperation == "" {
-		t.Fatalf("GitLab enabled source transport does not declare stream %q", fixture.stream)
+	if fixture.sourceMethod != http.MethodGet || fixture.sourcePath != "/groups" {
+		t.Fatalf("GitLab groups execution stream = %s %s, want GET /groups", fixture.sourceMethod, fixture.sourcePath)
 	}
 
 	for _, action := range bundle.Writes {
@@ -346,32 +349,6 @@ func newGitLabTransportFixture(t *testing.T, badRead bool) *gitLabTransportFixtu
 	}
 	if fixture.deleteAction == "" {
 		t.Fatal("GitLab source-bound group deletion action is absent")
-	}
-
-	lockRaw, err := os.ReadFile(filepath.Join(defsRoot, "gitlab", "sources", "gitlab-operation-source-lock.json"))
-	if err != nil {
-		t.Fatalf("read GitLab immutable source lock: %v", err)
-	}
-	var lock gitLabTransportSourceLock
-	if err := json.Unmarshal(lockRaw, &lock); err != nil {
-		t.Fatalf("decode GitLab immutable source lock: %v", err)
-	}
-	for _, operation := range lock.REST.Operations {
-		switch operation.ID {
-		case fixture.sourceOperation:
-			fixture.sourceMethod = operation.Method
-			fixture.sourcePath = strings.TrimPrefix(operation.Path, "/api/v4")
-			if fixture.sourceMethod != http.MethodGet || fixture.sourcePath != "/groups" || !operation.hasJSONSuccess(http.StatusOK) {
-				t.Fatalf("GitLab groups source lock operation = %+v, want cited GET /api/v4/groups JSON 200", operation)
-			}
-		case deleteSourceOperation:
-			if operation.Method != fixture.deleteMethod || operation.Path != "/api/v4/groups/{id}" || !operation.hasStatus(http.StatusAccepted) {
-				t.Fatalf("GitLab group deletion source lock operation = %+v, want cited DELETE /api/v4/groups/{id} 202", operation)
-			}
-		}
-	}
-	if fixture.sourceMethod == "" {
-		t.Fatalf("GitLab source lock does not retain %q", fixture.sourceOperation)
 	}
 
 	fixture.server = httptest.NewServer(http.HandlerFunc(fixture.serveHTTP))
@@ -575,27 +552,11 @@ func decodeGitLabReversePlanID(t *testing.T, raw string) string {
 	return envelope.Plan.ID
 }
 
-type gitLabTransportSourceLock struct {
-	REST struct {
-		Operations []gitLabTransportSourceOperation `json:"operations"`
-	} `json:"rest"`
-}
-
-type gitLabTransportSourceOperation struct {
-	ID              string `json:"id"`
-	Method          string `json:"method"`
-	Path            string `json:"path"`
-	SourceOperation struct {
-		Responses map[string]json.RawMessage `json:"responses"`
-	} `json:"source_operation"`
-}
-
-func (o gitLabTransportSourceOperation) hasStatus(status int) bool {
-	_, ok := o.SourceOperation.Responses[fmt.Sprintf("%d", status)]
-	return ok
-}
-
-func (o gitLabTransportSourceOperation) hasJSONSuccess(status int) bool {
-	raw, ok := o.SourceOperation.Responses[fmt.Sprintf("%d", status)]
-	return ok && bytes.Contains(raw, []byte(`"application/json"`))
+func slicesContainsString(values []string, candidate string) bool {
+	for _, value := range values {
+		if value == candidate {
+			return true
+		}
+	}
+	return false
 }

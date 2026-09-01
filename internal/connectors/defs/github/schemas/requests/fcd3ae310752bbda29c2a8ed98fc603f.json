@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "tfvc_project": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "vcs": {
+      "enum": [
+        "subversion",
+        "git",
+        "mercurial",
+        "tfvc"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "vcs_password": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "vcs_url": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "vcs_username": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "vcs_url"
+  ],
+  "type": "object"
+}

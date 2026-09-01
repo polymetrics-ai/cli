@@ -20,9 +20,5 @@
     "read": "external Help Scout API read of conversation, thread, customer, organization, mailbox, team, tag, webhook, workflow, and user data",
     "write": "external Help Scout Mailbox API mutation of conversations, threads, customers and their contact records, organizations, users, teams, tags, webhooks, and workflows; 18 of the 65 write actions are permanent DELETEs that remove Help Scout records outright, including delete_customer, delete_conversation, delete_attachment, delete_email, and delete_phone",
     "approval": "required for every write action; reverse ETL plan, preview, explicit approval, then execute, and the 18 destructive delete actions additionally require a typed confirmation"
-  },
-  "conformance": {
-    "skip_dynamic": true,
-    "reason": "oauth2_client_credentials auth requires a real token_url; conformance's synthetic non-secret config value (\"synthetic-conformance-value\") is not a resolvable URL, so the token exchange fails before any declarative request is ever issued, and every auth-resolving dynamic check would otherwise fail identically and uninformatively. Static checks (spec/schema validity, interpolations_resolve, docs/fixtures presence, secret redaction) still run and pass; parity for the read/pagination/schema-projection shape is proven by structural review against legacy internal/connectors/help-scout (this bundle has no Tier-2 hook, so there is no paritytest package for this wave). Matches sendpulse's and dwolla's identical documented precedent."
   }
 }

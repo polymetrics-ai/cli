@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -864,79 +863,6 @@ func TestReadRejectsRepeatedPageCursorBeforeReuse(t *testing.T) {
 	}
 	if requestCount != 2 {
 		t.Fatalf("provider request count = %d, want 2 before cursor reuse", requestCount)
-	}
-}
-
-func TestFixtureModeReadsEveryDeclaredAshbyStream(t *testing.T) {
-	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
-	for _, stream := range ashbyStreamOrder() {
-		stream := stream
-		t.Run(stream, func(t *testing.T) {
-			count := 0
-			err := New().Read(context.Background(), connectors.ReadRequest{Stream: stream, Config: cfg}, func(record connectors.Record) error {
-				count++
-				if len(record) == 0 {
-					t.Fatalf("empty fixture record for %s", stream)
-				}
-				return nil
-			})
-			if err != nil {
-				t.Fatalf("Read(fixture %s): %v", stream, err)
-			}
-			if count == 0 {
-				t.Fatalf("Read(fixture %s) emitted zero records", stream)
-			}
-		})
-	}
-}
-
-// TestFixtureModeReadsFromEmbeddedFixtures pins mode=fixture to the embedded
-// fixture tree rather than the source checkout: a shipped pm binary runs with
-// no repository on disk and from an arbitrary working directory, so reading a
-// stream must still succeed after chdir'ing away from the package source.
-func TestFixtureModeReadsFromEmbeddedFixtures(t *testing.T) {
-	t.Chdir(t.TempDir())
-
-	fixtures, err := ashbyFixtureFS()
-	if err != nil {
-		t.Fatalf("ashbyFixtureFS: %v", err)
-	}
-	if _, err := fs.Stat(fixtures, "streams/candidates"); err != nil {
-		t.Fatalf("fs.Stat(streams/candidates): %v", err)
-	}
-
-	count := 0
-	err = New().Read(context.Background(), connectors.ReadRequest{
-		Stream: "candidates",
-		Config: connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}},
-	}, func(connectors.Record) error {
-		count++
-		return nil
-	})
-	if err != nil {
-		t.Fatalf("Read(fixture candidates) outside the source tree: %v", err)
-	}
-	if count == 0 {
-		t.Fatal("Read(fixture candidates) emitted zero records outside the source tree")
-	}
-}
-
-// TestEmbeddedFixturesCoverEveryDeclaredStream keeps the connector-local embed
-// in step with the stream table, so a newly generated stream cannot ship with
-// fixtures that never made it into the binary.
-func TestEmbeddedFixturesCoverEveryDeclaredStream(t *testing.T) {
-	fixtures, err := ashbyFixtureFS()
-	if err != nil {
-		t.Fatalf("ashbyFixtureFS: %v", err)
-	}
-	for _, stream := range ashbyStreamOrder() {
-		bodies, err := ashbyFixtureBodies(fixtures, stream)
-		if err != nil {
-			t.Fatalf("ashbyFixtureBodies(%s): %v", stream, err)
-		}
-		if len(bodies) == 0 {
-			t.Errorf("stream %s has no embedded replay fixtures", stream)
-		}
 	}
 }
 

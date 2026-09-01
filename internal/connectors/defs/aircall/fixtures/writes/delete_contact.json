@@ -1,7 +1,0 @@
-{
-  "record": { "id": 3001 },
-  "expect": {
-    "method": "DELETE",
-    "path": "/contacts/3001"
-  }
-}

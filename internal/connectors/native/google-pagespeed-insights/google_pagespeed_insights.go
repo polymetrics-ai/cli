@@ -170,7 +170,7 @@ func decodeReport(body []byte) (map[string]any, error) {
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise the connector credential-free. It walks the
+// fixture tests can exercise the connector credential-free. It walks the
 // same (url, strategy) iteration the live path does, using configured values
 // when present and otherwise canned defaults.
 func (c Connector) readFixture(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {

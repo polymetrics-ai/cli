@@ -17,12 +17,10 @@ import (
 
 const bitbucketSourceBoundaryDefsRoot = "../connectors/defs"
 
-// TestBitbucketLegacyPublicCommandsStayCredentialBoundWithoutDescriptor proves
-// the descriptor-free Bitbucket retention boundary through every currently
-// implemented public command. The source matrix remains mapped_unproven: these
-// legacy declarations may reach ordinary credential resolution, but they must
-// not be silently promoted into source-bound descriptor preflight.
-func TestBitbucketLegacyPublicCommandsStayCredentialBoundWithoutDescriptor(t *testing.T) {
+// TestBitbucketPublicCommandsStayCredentialBound proves that every implemented
+// Bitbucket command reaches the ordinary credential boundary without provider
+// I/O when no credential is supplied.
+func TestBitbucketPublicCommandsStayCredentialBound(t *testing.T) {
 	bundle, err := engine.Load(os.DirFS(bitbucketSourceBoundaryDefsRoot), "bitbucket")
 	if err != nil {
 		t.Fatalf("load Bitbucket declaration bundle: %v", err)
@@ -39,14 +37,11 @@ func TestBitbucketLegacyPublicCommandsStayCredentialBoundWithoutDescriptor(t *te
 		if command.Intent != "etl" && command.Intent != "reverse_etl" {
 			t.Fatalf("Bitbucket implemented command %q intent=%q, want ETL or reverse ETL", command.Path, command.Intent)
 		}
-		if strings.TrimSpace(command.SourceOperation) != "" {
-			t.Fatalf("Bitbucket descriptor-free public command %q unexpectedly has source_operation=%q", command.Path, command.SourceOperation)
-		}
 		public = append(public, command)
 	}
 	sort.Slice(public, func(i, j int) bool { return public[i].Path < public[j].Path })
 	if got, want := len(public), 3; got != want {
-		t.Fatalf("Bitbucket implemented public commands=%d, want %d current legacy commands", got, want)
+		t.Fatalf("Bitbucket implemented public commands=%d, want %d execution commands", got, want)
 	}
 	wantCommands := []string{"repositories create", "repositories delete", "repositories list"}
 	for index, command := range public {

@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "allow_auto_merge": {
+      "type": "boolean"
+    },
+    "allow_merge_commit": {
+      "type": "boolean"
+    },
+    "allow_rebase_merge": {
+      "type": "boolean"
+    },
+    "allow_squash_merge": {
+      "type": "boolean"
+    },
+    "auto_init": {
+      "type": "boolean"
+    },
+    "delete_branch_on_merge": {
+      "type": "boolean"
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "gitignore_template": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "has_discussions": {
+      "type": "boolean"
+    },
+    "has_downloads": {
+      "type": "boolean"
+    },
+    "has_issues": {
+      "type": "boolean"
+    },
+    "has_projects": {
+      "type": "boolean"
+    },
+    "has_wiki": {
+      "type": "boolean"
+    },
+    "homepage": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "is_template": {
+      "type": "boolean"
+    },
+    "license_template": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "merge_commit_message": {
+      "enum": [
+        "PR_BODY",
+        "PR_TITLE",
+        "BLANK"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "merge_commit_title": {
+      "enum": [
+        "PR_TITLE",
+        "MERGE_MESSAGE"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "private": {
+      "type": "boolean"
+    },
+    "squash_merge_commit_message": {
+      "enum": [
+        "PR_BODY",
+        "COMMIT_MESSAGES",
+        "BLANK"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "squash_merge_commit_title": {
+      "enum": [
+        "PR_TITLE",
+        "COMMIT_OR_PR_TITLE"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "team_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "type": "object"
+}

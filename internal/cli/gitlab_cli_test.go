@@ -17,7 +17,7 @@ import (
 	"polymetrics.ai/internal/connectors/commandrunner"
 )
 
-func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
+func TestGitLabCommandSurfaceAdvertisesVNextExecutionLanes(t *testing.T) {
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("gitlab")
 	if !ok {
@@ -34,28 +34,24 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 		t.Fatal("GitLab connector has no command surface")
 	}
 	want := map[string]struct {
-		stream          string
-		method          string
-		path            string
-		url             string
-		sourceOperation string
+		stream string
+		method string
+		path   string
 	}{
-		"projects list": {stream: "projects", method: http.MethodGet, path: "/projects", url: "https://docs.gitlab.com/api/projects/"},
-		"groups list":   {stream: "groups", method: http.MethodGet, path: "/groups", url: "https://docs.gitlab.com/api/groups/"},
-		"users list":    {stream: "users", method: http.MethodGet, path: "/users", url: "https://docs.gitlab.com/api/users/"},
-		"issues list":   {stream: "issues", method: http.MethodGet, path: "/issues", url: "https://docs.gitlab.com/api/issues/"},
+		"projects list": {stream: "projects", method: http.MethodGet, path: "/projects"},
+		"groups list":   {stream: "groups", method: http.MethodGet, path: "/groups"},
+		"users list":    {stream: "users", method: http.MethodGet, path: "/users"},
+		"issues list":   {stream: "issues", method: http.MethodGet, path: "/issues"},
 		"mlflow-metrics-history list": {
-			stream:          "mlflow_metrics_history",
-			method:          http.MethodGet,
-			path:            "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
-			url:             "https://gitlab.com/gitlab-org/gitlab/-/raw/master/doc/api/openapi/openapi_v3.yaml",
-			sourceOperation: "getApiV4ProjectsIdMlMlflowApi20MlflowMetricsGetHistory",
+			stream: "mlflow_metrics_history",
+			method: http.MethodGet,
+			path:   "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
 		},
 	}
 
 	surface := provider.CommandSurface()
-	if !strings.Contains(surface.Tagline, "582 source-bound direct reads") || !strings.Contains(surface.Tagline, "five GitLab ETL streams") || !strings.Contains(surface.Tagline, "381 source-bound mutations through direct-write and approval-gated reverse-ETL commands") {
-		t.Fatalf("GitLab command tagline = %q, want current source-locked lanes", surface.Tagline)
+	if !strings.Contains(surface.Tagline, "direct reads") || !strings.Contains(surface.Tagline, "five GitLab ETL streams") || !strings.Contains(surface.Tagline, "mutations through direct-write and approval-gated reverse-ETL commands") {
+		t.Fatalf("GitLab command tagline = %q, want current execution lanes", surface.Tagline)
 	}
 	writeActions := make(map[string]struct{}, len(manifest.WriteActions))
 	for _, action := range manifest.WriteActions {
@@ -70,16 +66,13 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 			if !known {
 				t.Fatalf("unexpected GitLab ETL command %q", command.Path)
 			}
-			if command.Availability != "implemented" || command.Stream != expectation.stream || command.SourceCLIPath != expectation.method+" "+expectation.path || command.SourceURL != expectation.url {
-				t.Fatalf("command %q = %+v, want implemented %s stream with provider citation %s", command.Path, command, expectation.stream, expectation.url)
+			if command.Availability != "implemented" || command.Stream != expectation.stream {
+				t.Fatalf("command %q = %+v, want implemented %s stream", command.Path, command, expectation.stream)
 			}
 			if len(command.APISurface) != 1 || command.APISurface[0].Method != expectation.method || command.APISurface[0].Path != expectation.path {
 				t.Fatalf("command %q API surface = %+v, want %s %s", command.Path, command.APISurface, expectation.method, expectation.path)
 			}
-			if expectation.sourceOperation != "" {
-				if command.SourceOperation != expectation.sourceOperation {
-					t.Fatalf("command %q source operation = %q, want %q", command.Path, command.SourceOperation, expectation.sourceOperation)
-				}
+			if command.Path == "mlflow-metrics-history list" {
 				wantFlags := map[string]string{
 					"project-id": "config.project_id",
 					"run-id":     "config.mlflow_run_id",
@@ -96,8 +89,8 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 			}
 		case "direct_read":
 			counts["direct_read"]++
-			if command.Availability != "implemented" || command.Operation == "" || command.SourceOperation == "" || len(command.APISurface) != 1 {
-				t.Fatalf("GitLab direct-read command %q = %+v, want source-bound implemented command", command.Path, command)
+			if command.Availability != "implemented" || command.Operation == "" || len(command.APISurface) != 1 {
+				t.Fatalf("GitLab direct-read command %q = %+v, want implemented command", command.Path, command)
 			}
 		case "direct_write", "reverse_etl":
 			counts[command.Intent]++
@@ -108,8 +101,8 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 			} else {
 				t.Fatalf("GitLab %s command %q availability = %q, want implemented or partial", command.Intent, command.Path, command.Availability)
 			}
-			if command.Write == "" || command.SourceOperation == "" || len(command.APISurface) != 1 || !strings.Contains(command.Approval, "plan, preview, approval, execute") {
-				t.Fatalf("GitLab %s command %q = %+v, want source-bound approval-gated action", command.Intent, command.Path, command)
+			if command.Write == "" || len(command.APISurface) != 1 || !strings.Contains(command.Approval, "plan, preview, approval, execute") {
+				t.Fatalf("GitLab %s command %q = %+v, want approval-gated action", command.Intent, command.Path, command)
 			}
 			if _, found := writeActions[command.Write]; !found {
 				t.Fatalf("GitLab %s command %q references unknown write %q", command.Intent, command.Path, command.Write)
@@ -118,12 +111,12 @@ func TestGitLabCommandSurfaceAdvertisesSourceLockedLanes(t *testing.T) {
 			t.Fatalf("unexpected GitLab command intent %q for %q", command.Intent, command.Path)
 		}
 	}
-	if counts["direct_read"] != 582 || counts["etl"] != len(want) || counts["direct_write"] != len(manifest.WriteActions) || counts["reverse_etl"] != len(manifest.WriteActions) || counts["direct_write_implemented"] != 381 || counts["direct_write_partial"] != 1 || counts["reverse_etl_implemented"] != 381 || counts["reverse_etl_partial"] != 1 {
-		t.Fatalf("GitLab command lane counts = %+v, want 582 direct reads, %d ETL streams, and direct-write/reverse-ETL 381 implemented + 1 partial actions", counts, len(want))
+	if counts["direct_read"] != 582 || counts["etl"] != len(want) || counts["direct_write"] != len(manifest.WriteActions) || counts["reverse_etl"] != len(manifest.WriteActions) || counts["direct_write_implemented"] != 382 || counts["direct_write_partial"] != 0 || counts["reverse_etl_implemented"] != 382 || counts["reverse_etl_partial"] != 0 {
+		t.Fatalf("GitLab command lane counts = %+v, want 582 direct reads, %d ETL streams, and 382 implemented direct-write/reverse-ETL actions", counts, len(want))
 	}
 }
 
-func TestGitLabCommandSurfaceRunsLegacyDeclaredStreams(t *testing.T) {
+func TestGitLabCommandSurfaceRunsDeclaredStreams(t *testing.T) {
 	tests := []struct {
 		name    string
 		path    string
@@ -229,7 +222,7 @@ func TestGitLabGeneratedDirectReadReachesCredentialBoundary(t *testing.T) {
 	}
 }
 
-func TestGitLabSourceLockedCommandsPassRuntimePreflight(t *testing.T) {
+func TestGitLabVNextCommandsPassRuntimePreflight(t *testing.T) {
 	registry := bundleregistry.New()
 	connector, ok := registry.Get("gitlab")
 	if !ok {
@@ -250,8 +243,8 @@ func TestGitLabSourceLockedCommandsPassRuntimePreflight(t *testing.T) {
 		}
 		counts[command.Intent]++
 	}
-	if counts["direct_read"] != 582 || counts["etl"] != 5 || counts["direct_write"] != 381 || counts["reverse_etl"] != 381 {
-		t.Fatalf("runtime-preflight lane counts = %+v, want direct_read=582 etl=5 direct_write=381 reverse_etl=381", counts)
+	if counts["direct_read"] != 582 || counts["etl"] != 5 || counts["direct_write"] != 382 || counts["reverse_etl"] != 382 {
+		t.Fatalf("runtime-preflight lane counts = %+v, want direct_read=582 etl=5 direct_write=382 reverse_etl=382", counts)
 	}
 }
 

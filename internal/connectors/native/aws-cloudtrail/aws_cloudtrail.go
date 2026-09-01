@@ -194,7 +194,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, spec strea
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise the connector credential-free.
+// fixture tests can exercise the connector credential-free.
 func (c Connector) readFixture(ctx context.Context, stream string, spec streamSpec, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	for i := 1; i <= 2; i++ {
 		if err := ctx.Err(); err != nil {

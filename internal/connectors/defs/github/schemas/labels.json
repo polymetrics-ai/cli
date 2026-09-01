@@ -1,29 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "labels",
-  "type": "object",
-  "x-primary-key": [
-    "name"
-  ],
-  "required": [
-    "name"
-  ],
   "properties": {
-    "repository": {
-      "type": "string",
-      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
-    },
-    "id": {
-      "type": "integer"
-    },
-    "node_id": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
     "color": {
       "type": "string"
+    },
+    "default": {
+      "type": "boolean"
     },
     "description": {
       "type": [
@@ -31,11 +13,29 @@
         "null"
       ]
     },
-    "default": {
-      "type": "boolean"
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "repository": {
+      "description": "Repository marker derived from the configured owner and repository.",
+      "type": "string"
     },
     "url": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "labels",
+  "type": "object",
+  "x-primary-key": [
+    "name"
+  ]
 }

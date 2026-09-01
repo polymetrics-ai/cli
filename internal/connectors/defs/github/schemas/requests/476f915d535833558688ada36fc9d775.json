@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "placeholder_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "reason": {
+      "enum": [
+        "false_positive",
+        "used_in_tests",
+        "will_fix_later"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "placeholder_id",
+    "reason"
+  ],
+  "type": "object"
+}

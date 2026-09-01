@@ -277,7 +277,7 @@ func TestReadStream_EmitErrorPropagates(t *testing.T) {
 // must be declined (handled=false, no request issued) so the engine reads it
 // declaratively against its own path/fixture; without the stream-name guard
 // the hook hijacked every stream and drove it to config.query_path (which
-// broke dynamic conformance for the datasets stream).
+// broke dynamic execution for the datasets stream).
 func TestReadStream_DeclinesNonQueryStream(t *testing.T) {
 	requested := false
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

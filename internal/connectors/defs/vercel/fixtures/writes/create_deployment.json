@@ -1,9 +1,0 @@
-{
-  "record": {
-    "name": "fixture-app"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/v13/deployments"
-  }
-}

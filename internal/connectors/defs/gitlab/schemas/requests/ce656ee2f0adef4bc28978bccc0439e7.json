@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "integer"
+    },
+    "event_status": {
+      "enum": [
+        "queued",
+        "delivered"
+      ],
+      "maxLength": 8192,
+      "minLength": 1,
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_status",
+    "id"
+  ],
+  "type": "object"
+}

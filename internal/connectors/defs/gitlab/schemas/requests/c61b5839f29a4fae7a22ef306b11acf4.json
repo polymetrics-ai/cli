@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "issue_link_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "id",
+    "issue_link_id"
+  ],
+  "type": "object"
+}

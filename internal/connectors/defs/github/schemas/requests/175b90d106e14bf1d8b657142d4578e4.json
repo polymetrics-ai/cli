@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "permission": {
+      "enum": [
+        "pull",
+        "push",
+        "admin"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "team_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "team_id"
+  ],
+  "type": "object"
+}

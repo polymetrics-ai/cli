@@ -85,18 +85,18 @@ The registry is generated from connector definition bundles. The public catalog 
 
 Connector operations are narrow: check, catalog, read, write, query, ETL, and reverse ETL. Agents get capability metadata and schemas, not generic HTTP, SQL write, or shell execution tools.
 
-### Delivery and certification status
+### Delivery and execution status
 
 Every connector flow goes through the local warehouse: API → warehouse → API,
 API → warehouse → database, database → warehouse → API, or database →
 warehouse → database. A connection to the same connector does not permit a
 direct hop. Reverse delivery remains plan → preview → approval → execute.
 
-Before a command is declared implemented, the real runtime must accept it in
-preflight; a JSON declaration or generated manual is not enough. Run
+Before a command is rendered as implemented, the real runtime must have its
+encoder or executor and accept the invocation in preflight. Run
 `make connector-runtime-preflight` and `make connector-canon-check` for the
-repository guardrails. There are currently zero accepted live certifications;
-fixtures and certification configuration are not live proof. See the
+repository guardrails. Source locks and generated manuals are authoring facts,
+not runtime permission. See the
 [Connector Delivery Canon](/docs/connector-delivery) for the full procedure.
 
 ## ETL engine
@@ -111,7 +111,7 @@ pm etl status <run-id> --json
 
 Direct `check`, `catalog`, and `read` are useful for connector development and preflight. Configured `run` loads from a connection, adds Polymetrics metadata, and writes to the destination in bounded batches.
 
-Sync modes are configured on `pm connections create`, not on `pm etl run`. Incremental modes and deduped compatibility names require a cursor; deduped modes also require a primary key. A static connector advertises the full deduped compatibility name only with both fields, and advertises incremental modes only with a declared incremental executor. The two deduped compatibility names are accepted public inputs but currently refuse before source I/O unless a matching closed transport is admitted.
+Sync modes are configured on `pm connections create`, not on `pm etl run`. Incremental modes require a cursor; deduped modes also require a primary key. A static connector advertises a mode only when its rendered execution bundle names the required fields and an actual registered executor supports that mode. Unsupported or incompatible modes refuse before source I/O.
 
 ## Query engine
 

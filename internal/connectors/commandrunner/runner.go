@@ -117,7 +117,7 @@ type deferredCommandPreflighter interface {
 }
 
 // implementedCommandPreflighter is the engine-owned, lane-complete binding
-// resolver shared with declaration admission.
+// resolver shared by runtime command execution.
 type implementedCommandPreflighter interface {
 	PreflightImplementedCommand(connectors.CommandSurfaceCommand) error
 }
@@ -236,42 +236,6 @@ func (e *BlockedCommandError) Unwrap() error {
 func Preflight(connector connectors.Connector, path []string) error {
 	_, _, err := resolvePreflightCommand(connector, path)
 	return err
-}
-
-// PreflightSourceBoundOrigin refuses a caller-selected origin before the App
-// resolves credentials or constructs authentication state. It is deliberately
-// narrower than generic configuration validation: only a declared
-// source_operation uses the engine's closed origin equivalence.
-func PreflightSourceBoundOrigin(connector connectors.Connector, path []string, config map[string]string) error {
-	cmd, command, err := resolvePreflightCommand(connector, path)
-	if err != nil {
-		return err
-	}
-	if strings.TrimSpace(cmd.SourceOperation) == "" {
-		return nil
-	}
-	preflighter, ok := connector.(connectors.SourceBoundOriginPreflighter)
-	if !ok {
-		return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound command does not expose declared origin preflight"}
-	}
-	cfg := connectors.RuntimeConfig{Config: config}
-	switch cmd.Intent {
-	case "direct_read":
-		if strings.TrimSpace(cmd.Stream) != "" {
-			return preflighter.PreflightSourceBoundStreamOrigin(cmd.Stream, cfg)
-		}
-		if strings.TrimSpace(cmd.Operation) == "" {
-			return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound direct read has no operation"}
-		}
-		return preflighter.PreflightSourceBoundOperationOrigin(cmd.Operation, cfg)
-	case "etl":
-		if strings.TrimSpace(cmd.Stream) == "" {
-			return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound ETL read has no stream"}
-		}
-		return preflighter.PreflightSourceBoundStreamOrigin(cmd.Stream, cfg)
-	default:
-		return &BlockedCommandError{Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound origin preflight is available only for read commands"}
-	}
 }
 
 // PreflightRequest validates one public command invocation without credentials
@@ -560,21 +524,6 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 		}
 		return connectors.CommandSurfaceCommand{}, command, unsupportedCommandError(connector.Name(), command, cmd)
 	}
-	if reason, ok := declaredUnavailableReason(cmd.Notes); ok {
-		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
-			Connector:    connector.Name(),
-			Command:      command,
-			Intent:       cmd.Intent,
-			Availability: cmd.Availability,
-			Reason:       reason,
-		}
-	}
-	if strings.HasPrefix(strings.TrimSpace(cmd.Notes), "missing_foundation=source-bound-read-execution-r1:") {
-		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
-			Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability,
-			Reason: strings.TrimSpace(cmd.Notes),
-		}
-	}
 	if cmd.Availability == "deferred" {
 		implemented := cmd
 		implemented.Availability = "implemented"
@@ -607,49 +556,6 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 		Connector: connector.Name(), Command: command, Intent: cmd.Intent, Availability: cmd.Availability, Reason: blockReason(cmd),
 	}
-}
-
-// declaredUnavailableReason recognizes only the generator-owned unavailable
-// disposition grammar. Notes remain presentation text in general; this narrow
-// decoder refuses arbitrary prose and returns no authority for an unknown key,
-// duplicate key, malformed identifier, or missing source identity.
-func declaredUnavailableReason(notes string) (string, bool) {
-	parts := strings.Split(strings.TrimSpace(notes), "; ")
-	if len(parts) < 2 {
-		return "", false
-	}
-	foundations := 0
-	notApplicable := false
-	source := ""
-	for _, part := range parts {
-		key, value, ok := strings.Cut(part, "=")
-		if !ok || strings.TrimSpace(value) != value || value == "" {
-			return "", false
-		}
-		switch key {
-		case "missing_foundation":
-			if notApplicable || safety.ValidateIdentifier(value, "missing foundation") != nil {
-				return "", false
-			}
-			foundations++
-		case "not_applicable":
-			if foundations != 0 || notApplicable || value != "generic_batch_wrapper" {
-				return "", false
-			}
-			notApplicable = true
-		case "source_operation":
-			if source != "" || safety.ValidateIdentifier(value, "source operation") != nil {
-				return "", false
-			}
-			source = value
-		default:
-			return "", false
-		}
-	}
-	if source == "" || (foundations == 0 && !notApplicable) {
-		return "", false
-	}
-	return strings.TrimSpace(notes), true
 }
 
 func unsupportedCommandError(connectorName, command string, cmd connectors.CommandSurfaceCommand) *BlockedCommandError {
@@ -694,12 +600,6 @@ func preflightImplementedCommand(connector connectors.Connector, cmd connectors.
 		}
 	}
 	if cmd.Intent == "etl" && cmd.Availability == "implemented" {
-		if cmd.SourceOperation != "" {
-			if err := validateSourceBoundStreamReadCommand(connector, cmd); err != nil {
-				return connectors.CommandSurfaceCommand{}, err
-			}
-			return cmd, nil
-		}
 		if cmd.Stream != "" {
 			return cmd, nil
 		}
@@ -728,9 +628,6 @@ func preflightImplementedCommand(connector connectors.Connector, cmd connectors.
 		return cmd, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Stream != "" {
-		if err := validateSourceBoundStreamReadCommand(connector, cmd); err != nil {
-			return connectors.CommandSurfaceCommand{}, err
-		}
 		return cmd, nil
 	}
 	if cmd.Intent == "direct_read" && cmd.Availability == "implemented" && cmd.Operation != "" {
@@ -1229,15 +1126,6 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	if err := preflighter.PreflightOperationDirectRead(cmd.Operation, method, cmd.APISurface[0].Path, MaxOperationDirectReadBytes, cmd.OutputPolicy); err != nil {
 		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("operation direct read metadata is not executable: %v", err)}
 	}
-	if cmd.SourceOperation != "" {
-		sourcePreflighter, ok := connector.(connectors.SourceBoundReadPreflighter)
-		if !ok {
-			return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose source-bound read metadata"}
-		}
-		if err := sourcePreflighter.PreflightSourceBoundRead(cmd.Operation, cmd.SourceOperation, method, cmd.APISurface[0].Path); err != nil {
-			return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("source-bound read metadata is not executable: %v", err)}
-		}
-	}
 	pathFields := make([]string, 0, len(cmd.Flags))
 	queryFields := make([]string, 0, len(cmd.Flags))
 	bodyFields := make([]string, 0, len(cmd.Flags))
@@ -1264,27 +1152,8 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 	return nil
 }
 
-func validateSourceBoundStreamReadCommand(connector connectors.Connector, cmd connectors.CommandSurfaceCommand) error {
-	if cmd.SourceOperation == "" {
-		return nil
-	}
-	if cmd.Stream == "" || len(cmd.APISurface) != 1 {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound stream reads require one declared stream and exactly one api_surface endpoint"}
-	}
-	method := strings.ToUpper(strings.TrimSpace(cmd.APISurface[0].Method))
-	if method != http.MethodGet || isAbsoluteHTTPURL(cmd.APISurface[0].Path) {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "source-bound stream reads require one fixed relative GET endpoint"}
-	}
-	preflighter, ok := connector.(connectors.SourceBoundStreamReadPreflighter)
-	if !ok {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: "connector does not expose source-bound stream metadata"}
-	}
-	if err := preflighter.PreflightSourceBoundStreamRead(cmd.Stream, cmd.SourceOperation, method, cmd.APISurface[0].Path); err != nil {
-		return &BlockedCommandError{Connector: connector.Name(), Command: cmd.Path, Intent: cmd.Intent, Availability: cmd.Availability, Reason: fmt.Sprintf("source-bound stream metadata is not executable: %v", err)}
-	}
-	return nil
-}
-
+// validateOperationDirectWriteCommand is deliberately limited to the shape
+// the REST/fixed-GraphQL engine executor can prove safe. Its result makes a
 // validateOperationDirectWriteCommand is deliberately limited to the shape
 // the REST/fixed-GraphQL engine executor can prove safe. Its result makes a
 // command eligible for the plan lifecycle only; resolveRunnableCommand still
@@ -1425,7 +1294,7 @@ func commandPath(path []string) string {
 
 // CommandPathSegments parses a declaration-owned command path into the exact
 // segments commandrunner resolves. It rejects alternate whitespace spellings,
-// empty segments, and unsafe identifiers so a certification row cannot claim
+// empty segments, and unsafe identifiers so a diagnostic row cannot claim
 // a command that the runtime parser can never dispatch.
 func CommandPathSegments(raw string) ([]string, error) {
 	if raw == "" || raw != strings.TrimSpace(raw) {

@@ -65,7 +65,7 @@ func TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStage
 	// Opening a fresh process models a kill immediately after the checkpoint
 	// rename: the checkpoint is durable, while its transient receipt was never
 	// retired by the killed process. Open retains the evidence for recovery and
-	// certification; the next generic execution reconciles it before source I/O.
+	// finalization; the next generic execution reconciles it before source I/O.
 	fresh, err := Open(fixture.app.root)
 	if err != nil {
 		t.Fatalf("open after committed-stage interruption: %v", err)

@@ -9,9 +9,9 @@
 // link_header pagination type has no knowledge of results= at all
 // (engine/paginate.go's linkHeaderPaginator follows rel="next"
 // unconditionally) — see defs/sentry/docs.md's "Streams notes" for the full
-// ladder-rejection evidence (conformance's pagination_terminates check hard
-// -fails on the extra trailing request a Tier-1 paginator would always
-// issue). This hook ports legacy's harvest/nextCursor logic exactly: same
+// ladder-rejection evidence. A generic link paginator would make an extra
+// trailing request and fail the bounded termination contract, so this hook
+// ports the provider-specific harvest/nextCursor logic exactly: same
 // request shape (per_page + cursor query params), same stop condition
 // (results="false", or no next link at all).
 package sentry

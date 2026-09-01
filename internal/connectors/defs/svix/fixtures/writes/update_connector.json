@@ -1,7 +1,0 @@
-{
-  "record": { "id": "trtmpl_fixture_1", "name": "Renamed Fixture Connector", "transformation": "function handler(webhook) { return webhook; }" },
-  "expect": {
-    "method": "PUT",
-    "path": "/connector/trtmpl_fixture_1"
-  }
-}

@@ -31,9 +31,9 @@ func TestAsanaDeclaredETLStreamNonSuccessDoesNotMaterialize(t *testing.T) {
 
 const asanaETLFixtureToken = "fixture-asana-access-token"
 
-// asanaETLProviderBaseURL is deliberately the source-locked production
-// origin. The fixture redirects only its TLS dial to the local httptest server
-// so the witness cannot make a source-bound base_url override executable.
+// asanaETLProviderBaseURL is the execution bundle's fixed production origin.
+// The fixture redirects only its TLS dial to the local httptest server so the
+// witness cannot make a caller base_url override executable.
 const asanaETLProviderBaseURL = "https://app.asana.com/api/1.0"
 
 const asanaDeclaredETLStreamCount = 64
@@ -58,33 +58,6 @@ func asanaETLFixtureCredentialConfig() map[string]string {
 		"favorite_resource_type":    "project",
 		"organization_id":           "organization-one",
 	}
-}
-
-// asanaETLSourceLaneMatrix is deliberately a source-to-definition assertion,
-// not an operation-name allow-list. Every source-backed ETL row must cite its
-// exact source identity and resolve to one declared full-refresh stream and
-// schema. The saved connection uses that stream; its bounded direct-read
-// counterpart remains a separate command lane.
-type asanaETLSourceLaneMatrix struct {
-	SourceOperations []asanaETLSourceLaneRow `json:"source_operations"`
-}
-
-type asanaETLSourceLaneRow struct {
-	SourceID string                        `json:"source_id"`
-	Lanes    map[string]asanaETLSourceLane `json:"lanes"`
-}
-
-type asanaETLSourceLane struct {
-	Applicability string                `json:"applicability"`
-	Disposition   string                `json:"disposition"`
-	Mapping       asanaETLStreamMapping `json:"mapping"`
-}
-
-type asanaETLStreamMapping struct {
-	SourceID string `json:"source_id"`
-	Stream   string `json:"stream"`
-	Schema   string `json:"schema"`
-	Mode     string `json:"mode"`
 }
 
 type asanaETLHTTPCall struct {
@@ -124,7 +97,7 @@ func (f *asanaETLFixture) installSourceBoundOriginRedirect(t *testing.T) {
 	} else {
 		transport.TLSClientConfig = transport.TLSClientConfig.Clone()
 	}
-	// The request URL intentionally keeps app.asana.com for the source-bound
+	// The request URL intentionally keeps app.asana.com for the fixed-origin
 	// origin guard, while this test-only loopback dial uses httptest's ephemeral
 	// certificate rather than a certificate for that production hostname.
 	transport.TLSClientConfig.InsecureSkipVerify = true //nolint:gosec // local httptest-only redirect
@@ -155,9 +128,8 @@ func (f *asanaETLFixture) assertEveryDeclaredStreamMaterializes(t *testing.T) {
 				Source:      app.EndpointConfig{Connector: "asana", Credential: "asana-local"},
 				Destination: app.EndpointConfig{Connector: "warehouse", Credential: "warehouse-local"},
 				Streams: map[string]app.StreamConfig{stream: {
-					// These source-lock-backed collection reads remain on the
-					// established full-refresh compatibility route. They are not
-					// evidence that the closed full_append transport is admitted.
+					// These bounded collection reads use the ordinary warehouse
+					// execution route; they do not imply a full_append sync transport.
 					SyncMode:         "full_refresh_append",
 					DestinationTable: tableName,
 				}},
@@ -318,43 +290,15 @@ func asanaDeclaredETLStreamNames(t *testing.T) []string {
 		byName[stream.Name] = stream
 	}
 
-	raw, err := os.ReadFile("../connectors/defs/asana/sources/asana-source-lane-matrix.json")
-	if err != nil {
-		t.Fatalf("read Asana source lane matrix: %v", err)
-	}
-	var matrix asanaETLSourceLaneMatrix
-	if err := json.Unmarshal(raw, &matrix); err != nil {
-		t.Fatalf("decode Asana source lane matrix: %v", err)
-	}
-
 	names := make([]string, 0, asanaDeclaredETLStreamCount)
-	seen := make(map[string]string, asanaDeclaredETLStreamCount)
-	for _, row := range matrix.SourceOperations {
-		lane, ok := row.Lanes["etl"]
-		if !ok || lane.Applicability != "applicable" {
-			continue
+	for _, stream := range bundle.Streams {
+		if stream.SchemaRef == "" || stream.Records.Path != "data" || stream.Incremental != nil {
+			t.Fatalf("Asana execution stream %q = %+v, want a schema, records.data, and no incremental checkpoint", stream.Name, stream)
 		}
-		if lane.Disposition != "implemented" {
-			t.Fatalf("source-backed Asana ETL %q disposition = %q, want implemented full-refresh declaration", row.SourceID, lane.Disposition)
-		}
-		if lane.Mapping.SourceID != row.SourceID || lane.Mapping.Stream == "" || lane.Mapping.Schema == "" || lane.Mapping.Mode != "full_refresh" {
-			t.Fatalf("source-backed Asana ETL %q mapping = %+v, want exact source_id, stream, schema, and full_refresh mode", row.SourceID, lane.Mapping)
-		}
-		stream, ok := byName[lane.Mapping.Stream]
-		if !ok {
-			t.Fatalf("source-backed Asana ETL %q maps absent stream %q", row.SourceID, lane.Mapping.Stream)
-		}
-		if stream.SchemaRef != lane.Mapping.Schema || stream.Records.Path != "data" || stream.Incremental != nil {
-			t.Fatalf("source-backed Asana ETL %q stream = %+v, want schema=%q records.data and no incremental checkpoint", row.SourceID, stream, lane.Mapping.Schema)
-		}
-		if prior, duplicate := seen[lane.Mapping.Stream]; duplicate {
-			t.Fatalf("Asana source-backed ETL stream %q is reused by %q and %q", lane.Mapping.Stream, prior, row.SourceID)
-		}
-		seen[lane.Mapping.Stream] = row.SourceID
-		names = append(names, lane.Mapping.Stream)
+		names = append(names, stream.Name)
 	}
 	if len(names) != asanaDeclaredETLStreamCount || len(bundle.Streams) != asanaDeclaredETLStreamCount {
-		t.Fatalf("Asana full-refresh ETL declarations source=%d bundle=%d, want %d exact source-backed streams", len(names), len(bundle.Streams), asanaDeclaredETLStreamCount)
+		t.Fatalf("Asana full-refresh ETL declarations=%d bundle=%d, want %d execution streams", len(names), len(bundle.Streams), asanaDeclaredETLStreamCount)
 	}
 	sort.Strings(names)
 	return names

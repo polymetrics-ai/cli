@@ -75,7 +75,7 @@ func (w ChangeDeliveryWorkset) Identity() string { return w.manifest.Identity }
 // ContentSHA256 returns the SHA-256 digest over the sealed output artifacts.
 func (w ChangeDeliveryWorkset) ContentSHA256() string { return w.manifest.ContentSHA256 }
 
-// Records returns the count in the complete immutable source projection.
+// Records returns the count in the complete immutable staged workset.
 func (w ChangeDeliveryWorkset) Records() int64 { return w.manifest.ProjectionRecords }
 
 // Changes returns the count in the keyed insert/update delta projection.
@@ -136,7 +136,7 @@ func (w ChangeDeliveryWorkset) Tombstones(ctx context.Context) ([]synccontract.T
 	return tombstones, nil
 }
 
-// DeriveChangeDeliveryWorkset seals a complete source projection, a keyed
+// DeriveChangeDeliveryWorkset seals a complete staged input, a keyed
 // insert/update delta, explicit tombstones, and an unpromoted candidate
 // baseline. All artifacts are written to a temporary directory and atomically
 // published under their content-addressed identity only after every file and

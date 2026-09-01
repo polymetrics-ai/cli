@@ -18,14 +18,12 @@ import (
 // only after this no-I/O admission has succeeded.
 type PollingPreflightSourceExecutor interface {
 	PollingSourceExecutorReference() connectors.TransportExecutorReference
-	PollingSourceConformanceEvidence() PollingWatermarkConformanceEvidence
 }
 
 // PollingPreflightApplyExecutor is the runtime half of the closed target-apply
 // declaration. It does not expose DML; #3859 owns that executor.
 type PollingPreflightApplyExecutor interface {
 	PollingApplyExecutorReference() connectors.TransportExecutorReference
-	PollingApplyConformanceEvidence() PollingWatermarkConformanceEvidence
 }
 
 // PollingPreflightRegistry stores exact registered source and apply executors.
@@ -105,7 +103,7 @@ type ResolvedPollingWatermark struct {
 }
 
 // PollingPreflight validates a native polling declaration, resolves exact
-// source/apply registrations, and checks the immutable #3856 corpus proof
+// source/apply registrations, and checks their exact declared runtime modes
 // before source I/O is permitted. It does not call a source or target method.
 func PollingPreflight(ctx context.Context, registry *PollingPreflightRegistry, declaration *connectors.PollingWatermarkDescriptor, object connectors.PollingCatalogObject, mode synccontract.Mode) (ResolvedPollingWatermark, error) {
 	if ctx == nil {
@@ -146,17 +144,11 @@ func PollingPreflight(ctx context.Context, registry *PollingPreflightRegistry, d
 	if source.PollingSourceExecutorReference() != declaration.Source.Executor {
 		return ResolvedPollingWatermark{}, fmt.Errorf("registered source polling executor does not match the declaration")
 	}
-	if !source.PollingSourceConformanceEvidence().matchesRequired() {
-		return ResolvedPollingWatermark{}, fmt.Errorf("source immutable polling conformance evidence is missing or stale")
-	}
 	if !applyRegistered || isNilPollingPreflightExecutor(apply) {
 		return ResolvedPollingWatermark{}, fmt.Errorf("target polling executor %q is not registered", declaration.Target.Executor.ID)
 	}
 	if apply.PollingApplyExecutorReference() != declaration.Target.Executor {
 		return ResolvedPollingWatermark{}, fmt.Errorf("registered target polling executor does not match the declaration")
-	}
-	if !apply.PollingApplyConformanceEvidence().matchesRequired() {
-		return ResolvedPollingWatermark{}, fmt.Errorf("target immutable polling conformance evidence is missing or stale")
 	}
 	if err := validatePollingApplyMode(declaration.Target, mode); err != nil {
 		return ResolvedPollingWatermark{}, err

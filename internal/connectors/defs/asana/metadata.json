@@ -1,24 +1,24 @@
 {
-  "name": "asana",
-  "display_name": "Asana",
-  "description": "Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive reads with a global one-provider-request budget, and 131 approval-gated one-record direct writes across all 130 mutation endpoints. All 64 source-backed collection streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 131 write actions support warehouse-table reverse ETL. Every operation in the pinned OpenAPI ledger has an executable covered_by route, including POST /batch through a closed declaration-backed action selector.",
-  "integration_type": "api",
-  "docs_url": "https://developers.asana.com/reference/rest-api-reference",
-  "release_stage": "ga",
-  "capabilities": {
-    "check": true,
-    "read": true,
-    "write": true,
-    "query": false,
-    "cdc": false,
-    "dynamic_schema": false
-  },
   "batch": {
     "read_page_size": 100
   },
+  "capabilities": {
+    "cdc": false,
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": true
+  },
+  "description": "Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive reads with a global one-provider-request budget, and 131 approval-gated one-record direct writes across all 130 mutation endpoints. All 64 source-backed collection streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 131 write actions support warehouse-table reverse ETL. Every operation in the pinned OpenAPI ledger has an executable covered_by route, including POST /batch through a closed declaration-backed action selector.",
+  "display_name": "Asana",
+  "docs_url": "https://developers.asana.com/reference/rest-api-reference",
+  "integration_type": "api",
+  "name": "asana",
+  "release_stage": "ga",
   "risk": {
+    "approval": "all write execution follows plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive actions also require confirm: destructive",
     "read": "107 operation-backed commands are bounded source reads; the 12 stream-backed interactive commands have one aggregate provider-send and page budget across pagination, retries, redirects, and fan-out; saved full-refresh ETL remains separate and exhaustive; no raw provider query/path passthrough",
-    "write": "external mutations require named write actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin; POST /batch selects only explicitly allow-listed named actions and derives provider method/path/body from their declarations; interactive commands are one-record direct writes while warehouse-table reverse ETL remains system-level",
-    "approval": "all write execution follows plan -> preview -> explicit approval -> execute; destructive actions also require confirm: destructive"
+    "write": "external mutations require named write actions, schemas, previews, explicit approval, and typed destructive confirmation when destructive/admin; POST /batch selects only explicitly allow-listed named actions and derives provider method/path/body from their declarations; interactive commands are one-record direct writes while warehouse-table reverse ETL remains system-level"
   }
 }

@@ -1,261 +1,145 @@
-# Implementing a Connector End to End
+# Implementing a connector with source.lock vNext
 
-This is the single required procedure for a connector change. It covers an API
-or database connector, including CDC, reverse delivery, flows, schedules, live
-proof, and certification. It is intentionally stricter than “the bundle
-validates”: a declared surface is not an executable surface.
+This is the required end-to-end procedure for API and database connectors.
+Read the [canon index](INDEX.md) and the complete
+[vNext architecture](SOURCE-LOCK-VNEXT.md) first.
 
-Read [the canon index](INDEX.md) first. The database, CDC, bidirectional, and
-warehouse rulings there are binding.
+## 1. Scope and foundation check
 
-## Non-negotiable delivery rules
+Start with one scoped issue. Record the connector, provider material revision,
+intended operations, all seven lane outcomes, required runtime encoders and
+executors, and the exact tests that will prove the change.
 
-- The warehouse always mediates movement. There is no direct source →
-  destination hop. API → API means **API → warehouse → API**, even if both
-  ends use the same connector.
-- Use a typed connector capability. Never add generic shell, generic HTTP
-  write, or generic SQL write execution to fill a gap.
-- Database work uses the typed database framework. PostgreSQL is its reference
-  driver; do not create a second sync-mode enum, a generic SQL executor, or a
-  separate connector repository.
-- All reverse delivery remains `plan → preview → approval → execute`.
-- A missing shared capability is a foundation issue, not a connector-local
-  workaround and not an `implemented` declaration.
+Search the [Foundation Atlas](foundations/README.md) before changing shared
+runtime. Reuse an existing engine, encoder, warehouse, or sync executor when it
+matches. If an actual shared capability is absent, keep the source fact in the
+lock, declare the affected lane `unsupported`, name the exact missing contract,
+and request approval before implementing a new shared foundation. Never fill a
+shared gap with connector-specific runtime branching.
 
-## 1. Start with evidence and an issue
+## 2. Author the single input
 
-1. Create or link one scoped issue, then follow the repository's issue-first
-   GSD lifecycle. Record the source documentation version, endpoint inventory,
-   risk classification, intended streams/actions, and every claimed flow.
-2. Read the connector's existing bundle, generated manual, catalog entry, and
-   comparable reference bundle. Inspect the runtime-visible surface with:
+Create or update:
 
-   ```bash
-   pm connectors inspect <connector> --json
-   ```
-
-   This inspection is metadata-only; it must not read credentials.
-3. Build a source-of-truth inventory. For each provider operation, record one
-   primary classification: stream, direct read, reverse action, CDC/changefeed,
-   typed exclusion, or not applicable. Do not create duplicate operations for
-   aliases or documentation cross-links.
-4. Keep the authoring chain explicit: immutable source lock → source-backed
-   mapping/projection → connector runtime definitions → lane-specific execution
-   witness. Runtime loads the projected JSON definitions, not OpenAPI, rendered
-   pages, the source lock, or certification output. One provider operation may
-   have both a saved lane (`etl` or `reverse_etl`) and an interactive direct
-   lane; record both without counting the source operation twice.
-5. Name the intended warehouse flows explicitly. A connector that only has a
-   read definition has not delivered a reverse or bidirectional flow.
-
-## 2. FOUNDATION CHECK — perform this before claiming “done”
-
-Run the [Foundation Atlas discovery procedure](foundations/README.md) before
-filling this section. Record the selected stable Atlas IDs and the `reuse`,
-`constrained_extension`, or `actual_gap` classification in the issue plan; the
-Atlas README alone owns its same-change maintenance procedure.
-
-Before an operation, flow, or certification can be declared complete, prove
-that the foundations it needs **exist and execute**. “Declared in JSON”, “has a
-fixture”, and “is in a plan” are not proof.
-
-For every intended operation and flow, make this table in the issue plan and
-fill it with command/test evidence:
-
-| Need | Required proof | If absent |
-| --- | --- | --- |
-| Connector operation | Its executor is supported by the real command runner, accepts the derived surface, and passes runtime preflight. | Open a foundation issue; keep the operation truthfully non-implemented or typed-excluded. |
-| Read/ETL materialization | A connection can write the bounded batches, WAL, and owned warehouse table that the flow relies on. | Build the storage/runtime foundation first. |
-| Reverse delivery | A typed destination action can plan, preview, obtain approval, and execute with receipt/idempotency evidence. | Build the target/action foundation; do not create a direct hop. |
-| Database / CDC | The typed database contract and its protocol-specific safety rules are executable. | Build that framework capability as its own issue. No generic SQL or cursor fallback. |
-| Flow / schedule | The persisted flow can use warehouse tables and its approval gate still holds when the scheduler invokes it. | Build the flow/scheduler integration first. |
-| Certification | The required fixture, conformance, live environment, cleanup/receipt, and accepted artifact are all available. | Leave the connector uncertified and record the missing proof. |
-
-Run the structural proof on every connector change:
-
-```bash
-make connector-runtime-preflight
-make connector-canon-check
-go run ./cmd/connectorgen validate internal/connectors/defs
-go run ./cmd/connectorgen surface-sync --check
+```text
+internal/connectors/defs/<connector>/source.lock.json
 ```
 
-`connector-runtime-preflight` runs
-`TestEveryImplementedCommandPassesRuntimePreflight` against the real
-`commandrunner.Preflight` entry point for every registered bundle. It is the
-repository-wide guard against shipping a command whose metadata says
-`availability: implemented` but whose runtime refuses it. It is structural
-proof, not live-provider proof.
+Use schema version 4. Declare exactly the seven required lanes. Put provider
+citations and facts in `provider_evidence` or operation-local `source` objects;
+they remain authoring-only. Put execution content in metadata, config schema,
+HTTP, shared schemas, canonical operations, CLI root, and optional execution
+objects.
 
-Certification is proof-only and non-admitting. A missing live environment or
-accepted certification artifact may keep a connector uncertified, but it must
-not block source mapping, definition projection, or an independently proven
-runtime lane. Conversely, a certification file cannot make a missing mapping or
-executor executable.
+Model a provider operation once and attach every valid execution consumer to
+it. For example, one collection can own a direct-read command and an ETL stream;
+one typed mutation can own direct-write and reverse-ETL commands. Keep the
+interactive and saved semantics distinct.
 
-When a foundation is absent, open/link a dedicated foundation issue, state the
-missing executable contract, and stop that claim at the truthful state. Do not
-hide the gap in an adapter, a raw query, a hard-coded flag, or a certification
-filename.
+Use shared request, response, and record schema references. Requests must be
+closed to documented input fields. Recursive read-only response fields do not
+become request inputs. Multipart and binary contracts declare exact fields,
+media, status, and byte bounds. Pagination and fan-out remain bounded.
 
-## 3. Define the connector and derive its command surface
+## 3. Render execution JSON
 
-1. Author the definition bundle under `internal/connectors/defs/<name>/` using
-   [the migration conventions](../migration/conventions.md). The bundle is the
-   source for metadata, authentication shape, streams, schemas, writes,
-   operations, API provenance, fixtures, and connector documentation.
-2. Derive command parameters from provider operation specifications using
-   `connectorgen params-import`, then derive surface metadata with
-   `connectorgen surface-sync`. Do not hand-author opaque provider cursors,
-   generated `maps_to` fields, output policy, or a made-up API endpoint.
-   Mapping and projection read the source lock's identity/citation view, not
-   `certification.json`, credentials, or retention digest fields. Validate
-   retained bytes separately with `source-import`, and validate live proof
-   separately through certification; neither is an admission label. The
-   mapping view still validates source-reference identity and supplement
-   bindings, unavailable reason/source URL, and the version- and
-   document-kind-specific v3 envelope before it materializes a command surface.
-   An empty or `null` discriminator is not an ordinary fallback: the mapping
-   reader rejects foreign variant fields before a zero value can select another
-   source-lock wire.
-3. Project request direction, not the whole response schema. Exclude OpenAPI
-   `readOnly` fields recursively, including resolved `allOf` arms, remove those
-   names from `required`, and reject them before provider I/O. Do not use a
-   permissive named-object fallback to reintroduce read-only fields. Preserve
-   `requestBody.required`: when the provider requires a single `data` envelope,
-   that record field is required; an optional request body remains optional.
-   Keep unresolved request and response reference evidence phase-qualified so
-   a response-only schema diagnostic cannot block an otherwise complete bounded
-   request route.
-4. Encode query arrays from the locked parameter contract. For OpenAPI form
-   parameters with `explode: false`, emit the declared delimiter (normally a
-   comma), omit absent values, and avoid double encoding. Never stringify a Go
-   slice or hard-code a provider-specific query join in shared runtime.
-5. A structured `record.*` flag is valid for an action-backed direct write only
-   when the named field exists in that action's closed request schema. It is not
-   a generic JSON body or operation-backed HTTP escape hatch.
-6. Promote arbitrary-MIME upload only when the provider source explicitly says
-   that this exact file part is unrestricted. The declaration remains typed,
-   path-confined, byte-bounded, digest-bound, previewed, and approval-gated;
-   absence of an allow-list is not unrestricted-media evidence.
-7. A provider batch endpoint must remain a closed declared-action adapter. Its
-   source lock must bind the provider operation, canonical request/action/
-   response schema selectors, provider-proven maximum, method enum, and
-   envelope fields to retained provider bytes. Its bundle allow-lists existing
-   named actions and methods; the engine derives each subrequest's method,
-   relative path, and typed body. Source-backed outer query fields may still be
-   projected normally. Do not accept raw caller-authored HTTP, query-bearing
-   subrequests, nested batches, or actions outside the allow-list.
-8. Direct reads follow the declared paginator. Callers navigate through
-   `--page` or `--page-cursor`; raw opaque provider cursors are not a second
-   navigation channel. Returned page metadata must describe what reached the
-   wire and must not imply completeness it cannot prove. One interactive
-   request budget covers discovery, fanout children, pagination, retries, and
-   redirects in aggregate; saved ETL keeps its separate transport lifecycle.
-9. Mark an operation implemented only after the Foundation Check is green. An
-   unsupported, unsafe, provider-restricted, partial, or planned operation must
-   say so in the declaration and docs.
-10. Keep generated output synchronized rather than hand-edited:
+Run:
 
-   ```bash
-   go run ./cmd/connectorgen validate internal/connectors/defs
-   go run ./cmd/connectorgen surface-sync
-   pm docs generate --dir docs/cli --connectors-dir docs/connectors
-   ```
+```bash
+go run ./cmd/connectorgen lock-render <connector>
+go run ./cmd/connectorgen lock-render <connector> --check
+```
 
-## 4. Deliver the four warehouse-mediated flows
+Review both sides of the diff. Every rendered change must follow from the lock.
+No provider citation or authoring evidence may appear in execution JSON.
+`--check` must pass without writing and a repeated render must be byte-stable.
 
-All four flows use the same durable middle: bounded extraction into the
-connector's owned warehouse path, then a typed consumer from that warehouse.
-The end connectors may be the same, but the warehouse step is never skipped.
+For the first conversion of an existing connector, author
+`source.lock.json` directly from the retained provider facts. Review the first
+render as a replacement of the prior bundle. There is no reverse importer from
+execution JSON and no period in which both formats are mutable sources of truth.
 
-| Flow | Required delivery contract |
+## 4. Validate the runtime contract
+
+The runtime filesystem must contain execution JSON only. Prove that
+`engine.Load` discovers the bundle when source locks are not present in that
+filesystem. Check required artifacts, schema references, route bounds, command
+bindings, registered encoders/executors, invocation validation, credentials,
+approval, and sync mode compatibility.
+
+Runtime validation is allowed to reject only an actual execution-invalid
+condition. It must not consult provider citations, source locks, artifact
+digests, review results, or external proof state. Offline authoring diagnostics
+are advisory and cannot suppress a command.
+
+Run the structural checks:
+
+```bash
+go run ./cmd/connectorgen validate internal/connectors/defs
+go test ./cmd/connectorgen -run '^TestVNextSourceLock' -count=1
+go test ./internal/connectors/defs -count=1
+go test ./internal/connectors/engine -count=1
+go test ./internal/connectors/commandrunner -count=1
+```
+
+## 5. Prove each implemented lane
+
+| Lane | Minimum proof |
 | --- | --- |
-| **API → warehouse → API** | Extract API records into the warehouse, then deliver a selected warehouse workset through a typed API action. Reverse delivery needs plan, preview, explicit approval, execution, and receipt/idempotency evidence. |
-| **API → warehouse → database** | Extract API records into the warehouse, then use the typed database destination contract. No generic SQL executor may substitute for that contract. |
-| **Database → warehouse → API** | Read through the typed database source into the warehouse, then use the same approved typed API reverse action. |
-| **Database → warehouse → database** | Read from the typed database source into the warehouse, then deliver through the typed database destination contract. Source and destination identities remain isolated. |
+| Direct read | Command discovery, unambiguous binding, bounded request, fake-server wire shape, and credential-boundary reachability without external provider I/O. |
+| Direct write | Closed input validation, exact encoder, preview/approval when required, fake-server request, and response handling. |
+| Binary download | Declared media/status/size, bounded destination path, digest/output behavior, and fake binary response. |
+| Binary upload | Declared parts/media/size, confined input file, digest/preview, approval, and multipart fake-server proof. |
+| ETL | Stream/schema/pagination semantics and durable materialization into the connection-owned DuckDB path. |
+| Reverse ETL | Warehouse selection, plan, preview, approval, typed action dispatch, partial-failure/idempotency behavior, and receipt. |
+| Sync transport | Registered source/destination executors, compatible modes, warehouse mediation, checkpoint/acknowledgement, and rate-limit semantics when configured. |
 
-For PostgreSQL CDC specifically, use the accepted contract: PostgreSQL 14+,
-streamed `pgoutput` v2, bounded durable transaction staging, and a durable
-receipt before acknowledgement/checkpoint advance. A stage quota failure is
-fail-closed. Never substitute cursor or timestamp polling for the CDC contract.
+An `unsupported` lane needs an explicit empty declaration and a truthful reason
+in the issue or connector documentation. It must not have hidden execution
+content.
 
-For bidirectional changefeeds, keep one delivery contract while honestly
-modeling the two producers: an inbound committed source transaction and an
-outbound keyed warehouse/Parquet-DuckDB delta. Tombstones are explicit; do not
-infer deletion from an absent record.
+## 6. Warehouse and safety rules
 
-The DuckDB/Parquet boundary must preserve connector JSON shape rather than
-guessing semantic types. Date- and timestamp-looking JSON strings remain
-strings, nested scalar types round-trip unchanged, and a valid batch containing
-only `{}` rows retains its row count. Empty-object reconstruction requires
-file-bound metadata plus the expected physical schema; a column name alone is
-not authority.
+All saved movement is warehouse-mediated:
 
-## 5. Author flows and schedules without bypasses
+- API → DuckDB → API
+- API → DuckDB → database
+- database → DuckDB → API
+- database → DuckDB → database
 
-1. Create the connection/materialization first. A flow consumes named
-   warehouse tables, not a live source-to-destination shortcut.
-2. Write a flow manifest with explicit inputs and outputs. Use `pm flow plan`
-   and `pm flow preview` before `pm flow run`; approval-gated action steps stay
-   gated in the flow.
-3. Bind a schedule only to a named persisted flow after its plan/preview
-   evidence is accepted. A schedule is repetition, not an authorization to
-   bypass plan, preview, approval, safety confirmation, or credential scope.
-4. Test resume, retry, idempotency, and failure behavior around durable
-   warehouse state. Do not use raw source records as a reverse-delivery retry
-   queue.
+There is no source-to-destination shortcut, including a connector to itself.
+Reverse delivery always follows plan → preview → approval when required →
+execute. Database work uses the typed database framework; it does not add raw
+SQL execution. Retry, resume, idempotency, tombstones, checkpoint advancement,
+and acknowledgement must respect the existing warehouse/sync contracts.
 
-## 6. Test in layers
+## 7. Verification and delivery
 
-1. **Definition and derivation:** schema validation, API-surface checks,
-   parameter import/surface sync, request-direction checks, exact query fixtures,
-   independent saved/direct lane evidence, and focused fixtures.
-2. **Runtime preflight:** run the real preflight test above. Add a focused
-   regression that would fail if this connector claimed an unexecutable
-   operation.
-3. **Warehouse flow:** exercise the expected record counts through extraction,
-   warehouse materialization, query/workset selection, and approved target
-   delivery. Exit status alone is not enough for pagination/data-loss cases.
-4. **CDC or database contract:** test the protocol/receipt/acknowledgement and
-   quota behavior through the typed framework. For native database live tests,
-   use the reusable `native/dbtest` harness; its [maintainer guide](../../internal/connectors/native/dbtest/README.md)
-   owns the explicit Docker-or-Podman runtime and direct Unix endpoint contract.
-5. **Docs and surface parity:** regenerate manuals/catalog where needed, check
-   `pm help`, bare namespace help, command help, and website/docs validation.
+Add happy, bad, and edge tests before or with the implementation:
 
-Run changed-package tests and `internal/cli` separately with `-timeout 20m`;
-use CI for the full repository suite. Do not mistake a timed-out full local
-suite for a passing check.
+- healthy JSON-only discovery and provider-I/O-free preflight;
+- malformed or missing required execution JSON rejection;
+- ambiguous or missing runtime binding rejection;
+- all seven lane declarations and sync exposure;
+- deterministic render and drift detection;
+- multi-lane operation without semantic collapse;
+- fake-server encoder tests and DuckDB saved-flow tests.
 
-## 7. Produce live proof and certify
+Then run connector-local tests, affected shared-package tests, CLI tests, and a
+build. A typical final set is:
 
-1. Use an approved sandbox or explicitly authorized live environment. Supply
-   credentials only through environment variables or stdin; never put values in
-   source, issue text, fixtures, docs, logs, or report artifacts.
-2. Record the provider version/environment, intended read and write scope,
-   bounded test data, cleanup result, receipt/idempotency result, and the exact
-   flow(s) exercised. A live failure or missing environment is an honest
-   uncertified result, not a reason to relax the test.
-3. Certification is all-or-nothing across the connector's applicable surface
-   and the relevant warehouse flows. A `certification.json` file is harness
-   input, not certification. Fixture success is useful evidence but not live
-   certification.
-4. Only accepted live artifacts count. The current accepted count is zero;
-   [issue #3984](https://github.com/polymetrics-ai/cli/issues/3984) owns the
-   truthful capability/flow matrix needed to make that status mechanically
-   visible.
+```bash
+go run ./cmd/connectorgen lock-render <connector> --check
+go run ./cmd/connectorgen validate internal/connectors/defs
+go test ./cmd/connectorgen ./internal/connectors/defs ./internal/connectors/engine ./internal/connectors/commandrunner -count=1
+go test ./internal/cli -count=1
+go build ./cmd/pm
+```
 
-## Completion checklist
+Use a local fake server by default. Use provider credentials only when already
+non-interactive, separately authorized, and necessary. Never fetch mutable
+provider documentation as part of a deterministic render or test.
 
-- [ ] Source inventory and classifications are recorded with provenance.
-- [ ] Every claimed operation and flow has passed the FOUNDATION CHECK, or a
-      linked foundation issue and truthful non-implemented status exists.
-- [ ] All applicable warehouse-mediated flows are demonstrated; no direct hop
-      exists.
-- [ ] Generated surface/docs are synchronized and runtime preflight is green.
-- [ ] Focused tests, flow tests, and required docs/website checks are green.
-- [ ] Live proof is recorded, or the connector remains explicitly uncertified.
-- [ ] Certification claim is supported by accepted live artifacts, not names or
-      fixture files.
+Commit connector-local cohorts only after all required checks are green. Push
+normally; do not force-push. A changed lock, its complete rendered outputs, and
+the corresponding tests travel together.

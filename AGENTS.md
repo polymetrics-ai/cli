@@ -23,19 +23,14 @@ wrong — follow the contract and say so. Where the lifecycle genuinely cannot r
 record an explicit manual-GSD fallback with its red/green evidence in the planning
 file: that is a documented fallback with a named reason, never a silent exemption.
 
-## Active program: connector-architecture-v2
+## Active connector architecture: source.lock vNext
 
-An in-progress rewrite of the connector layer into JSON bundles (`internal/connectors/defs/<name>/`)
-interpreted by a declarative engine (`internal/connectors/engine/`). If you are continuing this
-work, read **`docs/migration/HANDOFF-CODEX.md`** first (current canon entry point),
-then `docs/migration/conventions.md` (the connector authoring recipe) and
-`docs/architecture/connector-architecture-v2-design.md`. The generated canonical workers are the
-active delivery agents. Legacy reusable YAML role specs under `.agents/` (including
-`.agents/connector-migration/`) are retained only for their owning cleanup waves and must not
-override the current connector delivery canon at `docs/connector-canon/INDEX.md`. Agents may push
-committed, verified issue/PR branches and open PRs after local gates pass. Never push to `main`; the
-parent PR into `main` remains human-gated. Legacy connector Go under
-`internal/connectors/<name>/*.go` stays until the human-gated wave 6 cutover.
+Read `docs/connector-canon/INDEX.md` and
+`docs/connector-canon/SOURCE-LOCK-VNEXT.md` before connector work. The only
+authoring pipeline is immutable schema-4 `source.lock.json` → canonical
+per-operation descriptors with shared schemas → deterministic execution JSON.
+Runtime reads execution JSON only. Do not add a second reader, fallback, feature
+flag, evidence gate, or connector-specific runtime bypass.
 
 ## Foundation Atlas Discovery Is Mandatory
 
@@ -44,8 +39,7 @@ The CLI-owned, authoring-only Foundation Atlas lives at
 the catalog's owner symbols and proof tests, then classify the need as reuse of
 an existing foundation, an extension through its declared seam, or an actual
 gap. Source locks remain authoritative for provider facts. The Atlas is not a
-runtime input and does not participate in mapping or certification admission;
-it cannot block them. Any genuinely new shared runtime foundation still
+runtime input and cannot block runtime-valid execution. Any genuinely new shared runtime foundation still
 requires the captain's approval. Follow the Atlas README's same-change
 maintenance rule when a real shared-foundation contract, selection, supported
 shape, constraint, owner, or proof changes.
@@ -265,91 +259,46 @@ flags, enum values, minimums and item counts are all enforced engine-side in
 network call, which is why they protect every caller rather than only the CLI.
 This fact explained a defect nobody could see; do not rediscover it the hard way.
 
-## Command Parameters Are Derived, Never Hand-Authored
+## Connector Authoring Is Lock-First
 
-Fixed REST or binary operation command flags come from the connector's own
-provider specification, not from authoring. `connectorgen params-import` writes
-the accepted parameter set into the operation's registered block; `surface-sync`
-adds missing command flags and synchronizes their operation-owned mapping,
-path/header requiredness, and header repeatability. It preserves author-owned
-summaries, types, and optional query/body behavior. The exact import and header
-contract lives in [the connector authoring conventions](docs/migration/conventions.md).
-The split keeps CI hermetic — `surface-sync --check` needs no artifact and no
-network.
+Author execution facts once in
+`internal/connectors/defs/<connector>/source.lock.json`. Use canonical operations
+to attach streams, writes, direct/binary operations, commands, and shared
+request/response/record schema references without duplicating the provider
+identity. Declare all seven lanes exactly as `implemented` or `unsupported`.
 
-Never hand-author an opaque provider cursor (`cursor`, `start_cursor`,
-`page_token`, and equivalents). Navigation is answered by `--page` or
-`--page-cursor` from the declared pagination spec, and a raw cursor flag is a
-second unchecked way to page that bypasses the completeness contract. A
-declared page/window control (`page_size`, `per_page`, `limit`, `offset`) is
-kept only when the runtime can honor the caller's value and report the actual
-window it sent.
+Render and verify with:
 
-`params-import` drops a parameter by MEANING, not by the names one bundle
-declares: a well-known paging name, or any parameter whose own specification
-calls it a cursor or pagination. That is why github's `after`/`before` cursors
-are excluded while the `before` on `/repos/{owner}/{repo}/notifications`, an ISO
-8601 timestamp filter, is kept. The only config-driven exclusion is a path
-variable the operation's own `rest.path` interpolates (`{owner}`/`{repo}`);
-skipping every `spec.json` property instead dropped github's ETL-only `since`,
-a filter nothing else supplies. The authoring rule lives in
-`docs/migration/conventions.md` §2.9; the user-facing surface is
-`docs/direct-read-pages-and-parameters.md`.
+```bash
+go run ./cmd/connectorgen lock-render <connector>
+go run ./cmd/connectorgen lock-render <connector> --check
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
 
-## Parity Counts Must Be Proven by the Binary
-
-`availability: implemented` is a claim the runtime has to honour. Two rules keep
-it honest; both exist because a validator that hand-copied the runtime's rules
-drifted and let 174 commands validate clean while blocking on every invocation.
-
-- Do not restate a runtime rule inside `cmd/connectorgen`. The guard is
-  `TestEveryImplementedCommandPassesRuntimePreflight` in
-  `internal/connectors/commandrunner/runner_test.go`: it sweeps every bundle in
-  `defs.FS` through the real `commandrunner.Preflight`, so it covers new
-  executor kinds the day they land. Any `connectorgen` rule for an executable
-  intent must mirror its `commandrunner` counterpart exactly, and an absent
-  field is a finding, never a reason to skip a check.
-- Do not hand-edit command metadata that is derivable. Run
-  `go run ./cmd/connectorgen surface-sync` to fill `api_surface`, flag
-  `maps_to`, `output_policy`, and `rest.max_bytes` from the bundle's own
-  `operations.json`; `--check` fails when a bundle has drifted, and `make verify`
-  runs it as the `connectorgen-surface-sync` gate.
-- A declarative reverse-ETL `record_schema` rooted at `oneOf` or `anyOf` is
-  not one executable command contract. Runtime preflight expands its arms and
-  rejects promotion; model each reachable arm as a separate named action, or
-  leave it non-implemented until the required runtime capability exists.
-
-Never invent an `api_surface` endpoint to make a command look implemented. If
-the endpoint is not in the connector's own `api_surface.json` and
-`operations.json`, the command is not ready.
-
-For generated certification parity cells, resource-key isolation, and atomic
-evidence fan-in, see
-[`docs/architecture/connector-certification-design.md`](docs/architecture/connector-certification-design.md#generated-parity-projection-cell-identity-and-safe-publication).
+Do not independently hand-edit rendered JSON. Provider citations stay in
+`provider_evidence` or operation-local `source` objects; they never appear in
+runtime artifacts. Never add a raw cursor, raw HTTP body, arbitrary SQL, generic
+multipart part, or connector-specific transport shortcut to bypass a typed
+runtime contract.
 
 ## Command Surface Must Stay Executable
 
-A parity count is a claim about the binary, so prove it with the binary.
-Run each `implemented`/`partial` command as `pm <connector> <path>` in an
-initialised project with **no credential configured**. There are exactly three
-outcomes, and they are not interchangeable evidence:
+An implemented command is a claim about the binary. Prove it through the real
+`commandrunner.Preflight`, then run it without a credential or against a local
+fake server. Healthy execution reaches the credential/approval boundary;
+malformed invocation, ambiguous binding, or a missing real encoder/executor
+fails before provider I/O.
 
-- `implemented` and dispatchable stops at `error: missing --credential`. This,
-  and only this, is the evidence that a command works.
-- `partial` answers with its declared block reason, e.g. `error: connector
-  command "gists create" is blocked: intent=reverse_etl: availability=partial:
-  Reverse ETL writes require plan, preview, approval, execute.`
-  `resolvePreflightCommand` gates reverse-ETL on `availability == "implemented"`
-  (`internal/connectors/commandrunner/runner.go`) and otherwise falls through to
-  a terminal `BlockedCommandError`. This is CORRECT behaviour for a `partial`
-  command — it is honestly labelled, not broken — but it must never be recorded
-  as "reachable" on the same footing as the line above.
-- `error: unknown command "..."` is the only reachability failure.
+`TestEveryImplementedCommandPassesRuntimePreflight` sweeps every embedded
+execution bundle. Add connector-focused tests for command discovery, exact
+binding, bounded wire shape, and response behavior. Direct reads use the
+runtime paginator and `--page` / `--page-cursor`; saved ETL uses its distinct
+warehouse lifecycle.
 
-A bundle can validate, pass `surface-sync --check`, and still be unreachable.
-Gmail once recorded 79 parity successes while the binary rejected all 79. Give
-each parallel worker its own project directory; a shared one produces state-lock
-races that read as failures but are not.
+A documented command is not suppressed by authoring citations, hashes, review
+records, or external proof state. A genuine missing shared executor is an
+explicit unsupported lane and Foundation Atlas gap until separately approved.
+
 ## Database Connector Container Harness
 
 `internal/connectors/native/dbtest` is the reusable, Docker- or Podman-backed
@@ -449,7 +398,7 @@ includes it) as a single command: the suite spans 550+ connectors and `internal/
 ~6.5 minutes, so the whole run is routinely cut off — and a cutoff is indistinguishable from a hang.
 Scope local runs to the packages you changed plus `internal/cli`, in separate commands, run
 `make verify`'s other gates individually (`tidy-check`, `lint`, `docs-check`, `smoke-no-build`,
-`agent-contract-check`, `connectorgen-validate`, `connectorgen-surface-sync`, `connector-boundary`,
+`agent-contract-check`, `connectorgen-validate`, `connectorgen-vnext-locks`, `connector-runtime-preflight`, `connector-boundary`,
 `release-workflow-check`), and let CI carry the full suite.
 
 Runtime-backed checks are optional and require local services:

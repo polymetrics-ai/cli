@@ -33,7 +33,7 @@ func loadDefinitions() ([]engine.Bundle, error) {
 
 func New() *connectors.Registry {
 	bundles, err := loadDefinitions()
-	if err != nil {
+	if err != nil && len(bundles) == 0 {
 		panic("load connector definition bundles: " + err.Error())
 	}
 

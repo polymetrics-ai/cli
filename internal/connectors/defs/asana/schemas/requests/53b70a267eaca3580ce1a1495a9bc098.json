@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "actual": {
+          "additionalProperties": false,
+          "properties": {
+            "billable_status_filter": {
+              "enum": [
+                "billable",
+                "non_billable",
+                "any"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "budget_type": {
+          "enum": [
+            "cost",
+            "time"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "estimate": {
+          "additionalProperties": false,
+          "properties": {
+            "billable_status_filter": {
+              "enum": [
+                "billable",
+                "non_billable",
+                "any"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "source": {
+              "enum": [
+                "none",
+                "tasks",
+                "capacity_plans"
+              ],
+              "maxLength": 8192,
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "parent": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "total": {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "value": {
+              "type": "number"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "type": "object"
+}

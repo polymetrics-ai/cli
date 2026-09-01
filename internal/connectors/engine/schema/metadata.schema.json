@@ -49,14 +49,6 @@
         "write": { "type": "string" },
         "approval": { "type": "string" }
       }
-    },
-    "conformance": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "skip_dynamic": { "type": "boolean" },
-        "reason": { "type": "string" }
-      }
     }
   }
 }

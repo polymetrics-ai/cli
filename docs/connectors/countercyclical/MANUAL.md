@@ -58,7 +58,7 @@ REVERSE ETL ACTIONS
   create_investment:
     endpoint: POST /integrations/make/actions/investments
     required fields: tickerSymbol
-    risk: creates a new Investment in the caller's Countercyclical workspace via the Make-integration action endpoint (the only documented general-purpose creation endpoint; the functionally-identical Zapier-integration endpoint is not separately exposed, see api_surface.json); external mutation, no approval required
+    risk: creates a new Investment in the caller's Countercyclical workspace via the Make-integration action endpoint (the only documented general-purpose creation endpoint; the functionally-identical Zapier-integration endpoint is not separately exposed, see execution bundle); external mutation, no approval required
 
 SECURITY
   read risk: external Countercyclical API read of investment and valuation data

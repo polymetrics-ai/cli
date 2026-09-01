@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "checkpoint_writes": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "channel": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "data": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "idx": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "task": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "write_type": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "task",
+          "idx",
+          "channel",
+          "write_type",
+          "data"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "thread_ts": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "checkpoint_writes",
+    "id",
+    "thread_ts"
+  ],
+  "type": "object"
+}

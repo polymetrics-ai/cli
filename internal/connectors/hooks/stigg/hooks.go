@@ -58,7 +58,7 @@ var streamQueries = map[string]streamQuery{
 // ReadStream implements engine.StreamHook, handling every declared stream
 // (products, plans, customers, subscriptions) with handled=true always --
 // the declarative streams.json fallback is a structural "shadow" path never
-// exercised by production traffic (conformance's dynamic checks run with
+// exercised by production traffic (fixture execution checks run with
 // Hooks=nil, so it never reaches this hook at all).
 func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
 	name := stream.Name

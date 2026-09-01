@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "contribution_weight": {
+          "type": "number"
+        },
+        "insert_after": {
+          "type": "string"
+        },
+        "insert_before": {
+          "type": "string"
+        },
+        "supporting_resource": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "supporting_resource"
+      ],
+      "type": "object"
+    },
+    "goal_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "goal_gid",
+    "data"
+  ],
+  "type": "object"
+}

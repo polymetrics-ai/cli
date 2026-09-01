@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "alert_number": {
+      "type": "integer"
+    },
+    "assignee": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resolution": {
+      "enum": [
+        "false_positive",
+        "wont_fix",
+        "revoked",
+        "used_in_tests"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resolution_comment": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "enum": [
+        "open",
+        "resolved"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "validity": {
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "alert_number"
+  ],
+  "type": "object"
+}

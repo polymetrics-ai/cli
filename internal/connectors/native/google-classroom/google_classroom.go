@@ -220,7 +220,7 @@ func (c Connector) listCourseIDs(ctx context.Context, r *connsdk.Requester, page
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise the connector credential-free (mirrors
+// fixture tests can exercise the connector credential-free (mirrors
 // stripe's fixture intent).
 func (c Connector) readFixture(ctx context.Context, stream string, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	endpoint := classroomStreamEndpoints[stream]

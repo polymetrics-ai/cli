@@ -1,8 +1,0 @@
-$ GOFLAGS=-p=3 go test -timeout 20m ./cmd/connectorgen -run '^TestSourceImportVersion3RepresentsGongWorkspaceQueryWithPMExecutionEnvelope$' -count=1
---- FAIL: TestSourceImportVersion3RepresentsGongWorkspaceQueryWithPMExecutionEnvelope (0.01s)
-    sourceimport_test.go:172: import Gong-shaped source: import source document "gong-v2": preflight source grammar: path item "/v2/all-permission-profiles": get operation: parameter 0: unbounded request schema string has no maxLength
-FAIL
-FAIL polymetrics.ai/cmd/connectorgen
-
-This is the exact official Gong blocker reproduced through a v3 source lock and
-the real importer path before production edits.

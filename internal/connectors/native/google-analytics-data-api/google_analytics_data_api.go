@@ -196,7 +196,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, spec repor
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise the connector credential-free (mirrors
+// fixture tests can exercise the connector credential-free (mirrors
 // stripe's fixture intent).
 func (c Connector) readFixture(ctx context.Context, spec reportSpec, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	for i := 0; i < gaFixtureRecordCount; i++ {

@@ -73,7 +73,7 @@ func currentSharedRateLimitRegistry() *coordination.SharedRateLimitRegistry {
 
 // ConfigureRateLimitEventSink attaches a bounded rate-limit event sink to one
 // project-local runtime. The project directory is an engine RuntimeConfig
-// boundary, so concurrent certification runs cannot collect each other's
+// boundary, so concurrent processes cannot collect each other's
 // events. The returned cleanup restores the prior registration.
 func ConfigureRateLimitEventSink(projectDir string, sink connsdk.RateLimitEventSink) func() {
 	if projectDir == "" || sink == nil {
@@ -102,7 +102,7 @@ func rateLimitEventSinkFor(projectDir string) connsdk.RateLimitEventSink {
 
 // ConfigureRateLimitAdmissionTimeout bounds individual waits for a project
 // runtime. It is deliberately narrower than a run deadline: normal
-// certification work may continue, but an exhausted provider budget cannot
+// unrelated work may continue, but an exhausted provider budget cannot
 // hold the run indefinitely.
 func ConfigureRateLimitAdmissionTimeout(projectDir string, timeout time.Duration) func() {
 	if projectDir == "" || timeout <= 0 {
@@ -514,7 +514,7 @@ func (r *endpointRateLimitResolver) AdmitRoute(ctx context.Context, route connsd
 // rateLimitSelectorMatchesNonRoute distinguishes a require-shared policy that
 // genuinely selected this credential/tier from one that belongs to another
 // traffic family. A selected policy with no matching endpoint must fail closed;
-// an unrelated GitHub certification overlay must not change ordinary traffic.
+// an unrelated selector tier must not change ordinary traffic.
 func rateLimitSelectorMatchesNonRoute(selector connsdk.RateLimitSelector, cfg map[string]string) bool {
 	selector.Endpoints = nil
 	selector.ExcludeEndpoints = nil

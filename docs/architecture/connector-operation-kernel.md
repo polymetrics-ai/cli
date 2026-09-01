@@ -1,162 +1,67 @@
-# Connector Operation Kernel
+# Connector operation kernel
 
-Started as the foundation slice for GitHub CLI parity (#56). The executor
-contract below describes what the runtime does today; `commandrunner` and
-`internal/connectors/engine` remain the authority when this document and the
-code disagree.
+The operation kernel executes bounded connector commands from the rendered
+execution JSON bundle. `commandrunner` and `internal/connectors/engine` are the
+runtime authority. The authoring pipeline is documented in
+[`../connector-canon/SOURCE-LOCK-VNEXT.md`](../connector-canon/SOURCE-LOCK-VNEXT.md).
 
-## Purpose
+`operations.json` is optional execution metadata for commands that are not a
+stream or write action. `cli_surface.json` binds a command to exactly one
+target: `stream`, `write`, or `operation`. Runtime discovery and execution read
+those rendered JSON files only.
 
-`operations.json` is optional per connector metadata for provider-style CLI
-commands that are not naturally represented by a stream or existing write
-action alone. It is a reviewed command execution contract, not a raw escape
-hatch.
+## Closed operation kinds
 
-Command surface entries may reference exactly one executable target:
+The schema recognizes a closed set of operation kinds, including bounded REST
+reads and writes, status checks, provider search, fixed-document GraphQL,
+binary download, text export, and file upload. A kind is executable only when
+the runtime has its actual encoder/executor and the command binding selects it
+unambiguously. Unsupported local-git, local-file, browser, XML, composite, or
+other declared kinds remain non-executable until a genuine shared executor
+exists.
 
-- `stream`
-- `write`
-- `operation`
+There is no generic shell, unrestricted HTTP, arbitrary SQL write, or
+caller-supplied GraphQL executor.
 
-API surface rows that are already executable through fixed direct-read command
-metadata use `covered_by.direct_read` or `covered_by.direct_reads`. Blocked
-`api_surface.operation` rows remain ledger-only. An API-surface operation row
-is never an execution allowlist: an implemented direct write must independently
-pass its declared operation and command preflight before it can enter the write
-lifecycle.
+## Runtime contract
 
-Operation execution is opt-in per intent, not blanket-enabled: an operation runs
-only through an intent whose executor exists. Direct reads; declared `rest_write`
-direct writes (including typed multipart); fixed-document GraphQL queries and
-mutations; bounded binary downloads and text exports; and declared status checks
-have executors today. XML, local git, local file, browser, and composite
-operations do not, and remain blocked.
+- Routes, verbs, GraphQL documents, request schemas, response schemas, output
+  policies, pagination, headers, redirect rules, and byte caps are fixed by
+  the rendered execution bundle.
+- Caller values are accepted only through schema-bound parameters. Unknown,
+  ambiguous, or malformed bindings fail before provider I/O.
+- Direct reads and status checks cross the normal credential boundary and
+  execute one bounded request.
+- Direct writes and mutations retain plan, preview, approval, authorization,
+  and execute. Destructive commands require the declared confirmation.
+- Binary downloads, text exports, and uploads use the existing bounded file
+  encoders and path containment rules.
+- Fixed GraphQL operations use their rendered document and checked variables;
+  the caller cannot substitute a document.
+- Successful provider response facts follow the declared output policy while
+  runtime-generated diagnostics remain secret-taint-safe.
 
-## Supported Operation Kinds
+Validation rejects true runtime-invalid inputs: malformed or missing required
+execution JSON, ambiguous bindings, missing encoders/executors, invalid bounded
+routes or schemas, invalid invocation/approval/auth, and incompatible sync
+executor/mode pairs. It does not suppress a documented command because of an
+external evidence ledger.
 
-- `stream_etl`
-- `rest_read`
-- `rest_status`
-- `rest_write`
-- `provider_search`
-- `graphql_query`
-- `graphql_mutation`
-- `xml_export`
-- `xml_import`
-- `binary_download`
-- `text_export`
-- `file_upload`
-- `local_git`
-- `local_file`
-- `browser_open`
-- `composite`
+## Authoring and proof
 
-Unknown kinds are rejected at load time. There is intentionally no generic
-shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
+Authors declare the operation lane in immutable `source.lock.json`, including
+shared request/response schema references. The canonical descriptor validates
+and sorts it; the deterministic renderer writes `operations.json`, referenced
+schemas, and `cli_surface.json`.
 
-`provider_search` is a read that carries a fixed POST body containing bounded
-lists; every array must declare `maxItems`, the body schema must be closed
-(`additionalProperties: false`), and the method/path are fixed by the bundle.
-It is a distinct kind rather than a convention over `rest_read` so its bound
-rules are enforceable at load time.
+Proof must include:
 
-## Safety Contract
+1. deterministic `lock-render --check`;
+2. discovery from execution JSON with no source-lock read;
+3. fake-server reachability through credentials without live provider I/O;
+4. happy, malformed, ambiguous, approval/auth, and bounded-output cases; and
+5. warehouse/sync tests when the same source operation populates ETL or sync
+   lanes.
 
-- Operations must be fixed, connector-scoped definitions.
-- Mutations must keep plan, preview, approval, execute.
-- Secrets must not appear in operation metadata, fixtures, logs, examples, or
-  review comments.
-- GraphQL operations must use fixed documents and checked variables.
-- Binary downloads and text exports are bounded by a byte cap and an explicit
-  caller-supplied destination; their declared file-manifest contract writes a
-  file on disk rather than rendering a JSON body.
-- A caller-provided operation header is an exact, declared bounded string
-  parameter. Authorization, cookies, content, routing, connection/proxy, and
-  other runtime-owned headers are never caller-selectable. Declared response
-  metadata is bounded by name and byte cap; every ordinary admitted value is
-  retained, while established credential/transport-secret headers retain
-  presence with an explicit redaction marker.
-- Local git/file operations must use allowlisted structured actions, never a
-  shell string.
-- Generated candidates from provider specs are not executable until reviewed
-  and promoted to production metadata.
-
-## Runtime Behavior
-
-`commandrunner` decides whether an operation-backed command executes, and it
-decides before any network or filesystem access:
-
-- `intent:"direct_read"` with `availability:"implemented"` executes a bounded
-  declared REST/provider-search read or fixed-document GraphQL query under the
-  command's `output_policy`. It issues exactly one request and returns one page:
-  the page size and the next-page context are derived from the connector's own
-  declared pagination spec, the result reports whether that page is the whole
-  collection, and the runtime-owned `--page`/`--page-cursor` flags reach the
-  rest. See AGENTS.md, "Direct Reads Return One Page, And Say So".
-- `intent:"status_check"` with `availability:"implemented"` executes exactly one
-  declared `rest_status` HEAD through `connectors.OperationStatusChecker`, which
-  the declarative engine satisfies with `engine.OperationStatusCheck`. It returns
-  status, body-byte count, and only declared bounded response metadata. The final
-  HTTP status, including a non-2xx response after normal retry handling, remains
-  a typed status result; transport, request-setup, and admission failures remain
-  errors.
-- `intent:"direct_write"` with `availability:"implemented"` executes one declared
-  `rest_write` (including typed multipart) or fixed-document `graphql_mutation`
-  only through the connector-command plan → preview → approval → execute lifecycle.
-  The command and operation must declare matching, explicit output policies;
-  their intent-specific choices are defined in the
-  [connector authoring conventions](../migration/conventions.md#2-authoring-rules).
-- `intent:"binary_download"` or `intent:"text_export"` with
-  `availability:"implemented"` executes through `connectors.OperationBinaryDownloader`,
-  which the declarative engine satisfies with `engine.OperationBinaryDownload`.
-  The endpoint must be a single connector-relative GET; `text_export` is the
-  closed `text/csv` variant. The caller must supply a destination root, and the
-  byte cap is the request value clamped by the operation's declared maximum and
-  then by the engine's own ceiling. The operation declares its accepted success
-  statuses, response media types, optional bounded response headers, and any
-  bounded redirect policy before a file can be created.
-- `intent:"status_check"` with `availability:"implemented"` executes one
-  declared connector-relative HEAD operation and returns its fixed status plus
-  only declared bounded response metadata, never a body.
-- `intent:"text_export"` with `availability:"implemented"` uses the bounded
-  download executor with a declared CSV media type and exact charset, declared
-  successful statuses, explicit destination, atomic file completion, and the
-  same response-metadata projection. A failed
-  media/charset or byte check leaves no output file.
-- A declared `rest_write` direct write cross-checks the operation's fixed
-  method/path against an `api_surface.json` operation entry for disk-backed
-  bundles. Shipped builds derive endpoint
-  validation only from embedded `rest_write` declarations because
-  `api_surface.json` is not embedded; that proves internal declaration
-  consistency, not provider documented-surface provenance. #3773 owns the
-  separate per-operation `api_surface` provenance foundation. Command preflight
-  requires one connector-relative mutating endpoint declaration.
-  `commandrunner` never dispatches the write directly.
-- Every other command that references an `operation` returns a blocked command
-  error naming the operation ID and explaining that its executor is not
-  implemented. This fail-closed default is deliberate: it lets docs, validation,
-  and parity planning land before any new side-effecting executor is available.
-
-`availability: "implemented"` is a runtime claim, not a label.
-`TestEveryImplementedCommandPassesRuntimePreflight` in
-`internal/connectors/commandrunner/runner_test.go` sweeps every bundle in
-`defs.FS` through the real `commandrunner.Preflight`, so a command cannot claim
-it while the runtime blocks it. See AGENTS.md, "Command Surface Must Stay
-Executable".
-
-## Example
-
-```json
-{
-  "id": "github.projects.list",
-  "kind": "graphql_query",
-  "summary": "List GitHub Projects using a fixed GraphQL query.",
-  "risk": "low",
-  "approval": "none",
-  "output_policy": "json",
-  "graphql": {
-    "operation_name": "ListProjects",
-    "document": "query ListProjects($owner: String!, $first: Int!, $after: String) { organization(login: $owner) { projectsV2(first: $first, after: $after) { nodes { id number title url closed updatedAt } pageInfo { hasNextPage endCursor } } } }"
-  }
-}
-```
+If an operation has no genuine shared executor, keep its source mapping and
+declare that lane unsupported. Do not add a connector-specific bypass.

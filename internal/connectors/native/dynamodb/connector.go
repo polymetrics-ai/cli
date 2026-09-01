@@ -59,7 +59,7 @@
 // native/bing-ads's identical "there is no cdc.go" precedent).
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
-// network access so the conformance harness and unit tests can run with no
+// network access so the fixture tests and unit tests can run with no
 // live AWS credentials: in fixture mode Check succeeds, Catalog returns the
 // static stream, and Read emits two canned rows (ported verbatim from
 // legacy's readFixture).

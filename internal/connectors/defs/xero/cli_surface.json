@@ -1,12 +1,6 @@
 {
   "tagline": "Run bounded Xero Accounting API streams, report reads, and approved reverse-ETL writes.",
   "usage": "pm connectors command xero <group> <action> --credential <name> [flags] --json",
-  "source_cli": {
-    "name": "Xero Accounting API",
-    "docs": "https://developer.xero.com/documentation/api/accounting/overview",
-    "reference": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
-    "source": "official OpenAPI operation ids; no separate provider CLI is required for parity"
-  },
   "groups": [
     {
       "id": "reports",
@@ -188,7 +182,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_ten_ninety_nine",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -209,7 +202,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_aged_payables_by_contact",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -230,7 +222,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_aged_receivables_by_contact",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -251,7 +242,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_balance_sheet",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -272,7 +262,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_bank_summary",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -293,7 +282,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_from_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -314,7 +302,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_budget_summary",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -335,7 +322,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_executive_summary",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -356,7 +342,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_reports_list",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -377,7 +362,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_profit_and_loss",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -398,7 +382,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "xero.get_report_trial_balance",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "flags": [],
       "api_surface": [
         {
@@ -419,7 +402,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_account_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -436,7 +418,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_account_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -453,7 +434,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_account_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -470,7 +450,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_account_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -487,7 +466,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_bank_transaction_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -504,7 +482,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_bank_transaction_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -521,7 +498,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_bank_transaction_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -538,7 +514,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_bank_transaction_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -555,7 +530,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_bank_transfer_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -572,7 +546,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_bank_transfer_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -589,7 +562,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_bank_transfer_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -606,7 +578,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_bank_transfer_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -623,7 +594,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_contact_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -640,7 +610,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_contact_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -657,7 +626,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_contact_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -674,7 +642,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_contact_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -691,7 +658,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_credit_note_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -708,7 +674,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_credit_note_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -725,7 +690,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_credit_note_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -742,7 +706,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_credit_note_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -759,7 +722,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_credit_note_as_pdf",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -776,7 +738,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_invoice_as_pdf",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -793,7 +754,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_invoice_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -810,7 +770,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_invoice_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -827,7 +786,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_invoice_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -844,7 +802,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_invoice_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -861,7 +818,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_manual_journal_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -878,7 +834,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_manual_journal_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -895,7 +850,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_manual_journal_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -912,7 +866,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_manual_journal_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -929,7 +882,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_purchase_order_as_pdf",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -946,7 +898,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_purchase_order_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -963,7 +914,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_purchase_order_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -980,7 +930,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_purchase_order_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -997,7 +946,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_purchase_order_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -1014,7 +962,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_quote_as_pdf",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -1031,7 +978,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_quote_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -1048,7 +994,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_quote_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -1065,7 +1010,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_quote_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -1082,7 +1026,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_quote_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -1099,7 +1042,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_receipt_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -1116,7 +1058,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_receipt_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -1133,7 +1074,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_receipt_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -1150,7 +1090,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_receipt_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",
@@ -1167,7 +1106,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_repeating_invoice_attachment_by_id",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -1184,7 +1122,6 @@
       "intent": "direct_read",
       "availability": "planned",
       "operation": "xero.get_repeating_invoice_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "GET",
@@ -1201,7 +1138,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.update_repeating_invoice_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "POST",
@@ -1218,7 +1154,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "xero.create_repeating_invoice_attachment_by_file_name",
-      "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
       "api_surface": [
         {
           "method": "PUT",

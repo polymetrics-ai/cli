@@ -16,7 +16,7 @@
 // derived from streams.json (streams.json exists purely as
 // documentation/schema-reference — see defs/bing-ads/docs.md). It still
 // ships a defs bundle (internal/connectors/defs/bing-ads/{metadata.json,
-// spec.json,streams.json,schemas/*.json,api_surface.json,docs.md}) so
+// spec.json,streams.json,schemas/*.json,docs.md}) so
 // identity/spec/docs/schema stay uniform with every other connector, and it
 // embeds engine.Base — built from that bundle at construction — purely to
 // serve Name()/Metadata()/Definition() (engine.Base does NOT provide
@@ -37,7 +37,7 @@
 //     ErrUnsupportedOperation.
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
-// network access so the conformance harness and unit tests can run with no
+// network access so the fixture tests and unit tests can run with no
 // live Microsoft Advertising credentials: in fixture mode Check succeeds
 // and Read emits canned per-stream records (cataloger.go).
 //

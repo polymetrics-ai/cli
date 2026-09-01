@@ -92,7 +92,7 @@ type Classification struct {
 }
 
 // New constructs a validated Classification. It rejects invalid wire values
-// before they can enter a certification or configuration report.
+// before they can enter a diagnostic or configuration report.
 func New(input Input, cause error) (*Classification, error) {
 	normalized, err := normalizeInput(input)
 	if err != nil {

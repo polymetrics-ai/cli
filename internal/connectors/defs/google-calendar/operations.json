@@ -5,7 +5,6 @@
       "kind": "rest_read",
       "summary": "Query Google Calendar free/busy windows for typed calendar IDs and RFC3339 time bounds.",
       "description": "Bounded Google Calendar free/busy query. The operation accepts typed time bounds and calendar IDs only; it is not a generic Calendar API request.",
-      "source_url": "https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query",
       "risk": "medium",
       "approval": "no write approval required; bounded direct read validates typed body schema and applies JSON-redacted output policy",
       "output_policy": "json_redacted",

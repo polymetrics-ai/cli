@@ -1,9 +1,0 @@
-# `go test -timeout 20m ./internal/connectors/database -run 'TestDeriveChangeDeliveryWorksetRejectsArtifactBeyondDeclaredBound' -count=1`
-
-```text
-# polymetrics.ai/internal/connectors/database_test [polymetrics.ai/internal/connectors/database.test]
-internal/connectors/database/parquet_delivery_workset_test.go:231:10: request.MaxArtifactBytes undefined (type database.ChangeDeliveryWorksetRequest has no field or method MaxArtifactBytes)
-internal/connectors/database/parquet_delivery_workset_test.go:275:3: unknown field MaxArtifactBytes in struct literal of type database.ChangeDeliveryWorksetRequest
-FAIL	polymetrics.ai/internal/connectors/database [build failed]
-FAIL
-```

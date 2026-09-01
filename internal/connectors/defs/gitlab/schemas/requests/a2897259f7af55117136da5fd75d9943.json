@@ -1,0 +1,284 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "export_format": {
+      "enum": [
+        "csv",
+        "pdf"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "report_data": {
+      "additionalProperties": false,
+      "properties": {
+        "dashboard_type": {
+          "enum": [
+            ":project",
+            ":group",
+            ":instance"
+          ],
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "full_path": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "group_vulnerabilities_over_time": {
+          "additionalProperties": false,
+          "properties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "open_vulnerabilities_over_time": {
+          "additionalProperties": false,
+          "properties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "project_security_status": {
+          "additionalProperties": false,
+          "properties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "project_vulnerabilities_history": {
+          "additionalProperties": false,
+          "properties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "total_risk_score": {
+          "additionalProperties": false,
+          "properties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "vulnerabilities_by_age": {
+          "additionalProperties": false,
+          "properties": {},
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "vulnerabilities_by_severity_count": {
+          "additionalProperties": false,
+          "properties": {
+            "critical": {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "medianAge": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "high": {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "medianAge": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "info": {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "medianAge": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "low": {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "medianAge": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "medium": {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "medianAge": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "unknown": {
+              "additionalProperties": false,
+              "properties": {
+                "color": {
+                  "maxLength": 8192,
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "count": {
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
+                },
+                "medianAge": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "send_email": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "author": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "email": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "email"
+      ],
+      "type": "object"
+    },
+    "committer": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "email": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "message": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "parents": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "signature": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "tree": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "message",
+    "tree"
+  ],
+  "type": "object"
+}

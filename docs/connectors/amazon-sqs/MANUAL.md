@@ -127,7 +127,6 @@ SECURITY
 COMMAND SURFACE
   Inspect and safely operate Amazon SQS queues through fixed typed commands.
   Usage: pm amazon-sqs <command> [options]
-  Source CLI: AWS CLI sqs (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_Operations.html)
   Global flags:
     --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   Read

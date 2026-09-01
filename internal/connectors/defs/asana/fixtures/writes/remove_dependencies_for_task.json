@@ -1,4 +1,0 @@
-{
-  "record": { "task_gid": "fixture-task", "data": { "dependencies": ["fixture-dependency"] } },
-  "expect": { "method": "POST", "path": "/tasks/fixture-task/removeDependencies", "body": { "data": { "dependencies": ["fixture-dependency"] } } }
-}

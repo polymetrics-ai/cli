@@ -169,51 +169,6 @@ func TestScanDistinguishesAgentProjectionLookupFromHarnessProviderPolicy(t *test
 	}
 }
 
-func TestScanDetectsCLISurfaceCommandAliases(t *testing.T) {
-	root := newFixtureRepo(t, map[string]string{
-		"internal/connectors/defs/github/cli_surface.json": `{"source_cli":{"name":"gh"}}`,
-		"internal/connectors/commandrunner/github_cli_policy.go": `package commandrunner
-
-type ghOutputPolicyConfig struct{}
-type GhReadQueryFallbackValue struct{}
-
-const commandExample = "gh issue list --json"
-const cliPolicyLiteral = "gh_output_policy"
-`,
-	})
-
-	report, err := Scan(root, Options{Now: fixedNow})
-	if err != nil {
-		t.Fatalf("Scan: %v", err)
-	}
-	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/github_cli_policy.go", "ghOutputPolicyConfig")
-	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/github_cli_policy.go", "GhReadQueryFallbackValue")
-	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/github_cli_policy.go", "gh_output_policy")
-	requireFinding(t, report, RuleConnectorLiteral, "github", "internal/connectors/commandrunner/github_cli_policy.go", "gh")
-}
-
-func TestScanKeepsCLISurfaceAliasesBounded(t *testing.T) {
-	root := newFixtureRepo(t, map[string]string{
-		"internal/connectors/defs/github/cli_surface.json": `{"source_cli":{"name":"gh"}}`,
-		"internal/connectors/commandrunner/github_cli_false_positive.go": `package commandrunner
-
-type ghostPolicyConfig struct{}
-type ghSet struct{}
-
-const prose = "through gh-specific guidance"
-const cliOutputLiteral = "gh_output"
-`,
-	})
-
-	report, err := Scan(root, Options{Now: fixedNow})
-	if err != nil {
-		t.Fatalf("Scan: %v", err)
-	}
-	if len(report.Findings) != 0 {
-		t.Fatalf("expected CLI alias matches to remain bounded, got %+v", report.Findings)
-	}
-}
-
 func TestScanDetectsLegacyConnectorPackageImport(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"internal/connectors/engine/import_legacy.go": `package engine

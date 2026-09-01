@@ -434,7 +434,7 @@ func TestRateLimitAdmissionCoversDirectReadsAndBinaryDownload(t *testing.T) {
 		{
 			name: "operation direct read",
 			make: func() Bundle {
-				return withAllRateLimit(Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/lookup", MaxBytes: 1024}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/lookup", Operation: &SurfaceOperation{Model: "direct_read"}}}}})
+				return withAllRateLimit(Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/lookup", MaxBytes: 1024}}}})
 			},
 			run: func(bundle Bundle) error {
 				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.lookup", Config: config}, nil)
@@ -444,7 +444,7 @@ func TestRateLimitAdmissionCoversDirectReadsAndBinaryDownload(t *testing.T) {
 		{
 			name: "binary download",
 			make: func() Bundle {
-				return withAllRateLimit(Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024, ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/file", Operation: &SurfaceOperation{}}}}})
+				return withAllRateLimit(Bundle{Name: "acme", HTTP: HTTPBase{URL: server.URL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024, ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}}}}})
 			},
 			run: func(bundle Bundle) error {
 				_, err := OperationBinaryDownload(context.Background(), bundle, BinaryDownloadRequest{Operation: "acme.file", Config: config, DestRoot: t.TempDir()}, nil)
@@ -534,7 +534,6 @@ func TestRateLimitAdmissionCoversOperationDirectWrite(t *testing.T) {
 	bundle := withAllRateLimit(Bundle{
 		Name: "acme", HTTP: HTTPBase{URL: server.URL},
 		Operations: []OperationSpec{{ID: "acme.update", Kind: "rest_write", Summary: "update", Risk: "low", Approval: "none", OutputPolicy: "json", MutationClass: "ordinary", Batchable: &batchable, REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/update", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{"type":"object","properties":{"name":{"type":"string"}}}`)}}},
-		Surface:    &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/update", Operation: &SurfaceOperation{}}}},
 	})
 	for run := 0; run < 2; run++ {
 		req := connectors.OperationDirectWriteRequest{Operation: "acme.update", Config: rateLimitTestConfig(t), Body: map[string]any{"name": "widget"}}

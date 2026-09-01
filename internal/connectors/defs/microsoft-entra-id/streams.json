@@ -25,64 +25,66 @@
     "check": {
       "method": "GET",
       "path": "/users",
-      "query": { "$top": "1" }
+      "query": {
+        "$top": "1"
+      }
     },
     "error_map": [
-      { "status": 401, "hint": "microsoft-entra-id client_id/client_secret/tenant_id are missing or invalid; re-run pm credentials add microsoft-entra-id" },
-      { "status": 403, "hint": "microsoft-entra-id application lacks Graph API directory permissions for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "microsoft-entra-id rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "microsoft-entra-id client_id/client_secret/tenant_id are missing or invalid; re-run pm credentials add microsoft-entra-id"
+      },
+      {
+        "status": 403,
+        "hint": "microsoft-entra-id application lacks Graph API directory permissions for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "microsoft-entra-id rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "users",
       "path": "/users",
-      "records": { "path": "value" },
-      "schema": "schemas/users.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
-      }
+      "records": {
+        "path": "value"
+      },
+      "schema": "schemas/users.json"
     },
     {
       "name": "groups",
       "path": "/groups",
-      "records": { "path": "value" },
-      "schema": "schemas/groups.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
-      }
+      "records": {
+        "path": "value"
+      },
+      "schema": "schemas/groups.json"
     },
     {
       "name": "applications",
       "path": "/applications",
-      "records": { "path": "value" },
-      "schema": "schemas/applications.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
-      }
+      "records": {
+        "path": "value"
+      },
+      "schema": "schemas/applications.json"
     },
     {
       "name": "serviceprincipals",
       "path": "/servicePrincipals",
-      "records": { "path": "value" },
-      "schema": "schemas/serviceprincipals.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
-      }
+      "records": {
+        "path": "value"
+      },
+      "schema": "schemas/serviceprincipals.json"
     },
     {
       "name": "directoryroles",
       "path": "/directoryRoles",
-      "records": { "path": "value" },
-      "schema": "schemas/directoryroles.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (hooks/microsoft-entra-id/hooks.go ports legacy's @odata.nextLink absolute-URL harvest loop verbatim; the engine's declarative next_url_path pagination cannot address the literal dotted key \"@odata.nextLink\"; see docs.md's Streams notes). hook-covered; proven live by archived parity evidence for microsoft-entra-id (TestParityMicrosoftEntraID_UsersNextLinkPagination) and internal/connectors/hooks/microsoft-entra-id/hooks_test.go."
-      }
+      "records": {
+        "path": "value"
+      },
+      "schema": "schemas/directoryroles.json"
     }
   ]
 }

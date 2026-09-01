@@ -358,9 +358,6 @@ func (s *goScanner) scanIdentifier(ident *ast.Ident) {
 }
 
 func (s *goScanner) ruleFor(match literalMatch, context literalContext) string {
-	if s.pathClass.Certify {
-		return RuleProviderCertifyContract
-	}
 	if s.pathClass.DocsOutput {
 		return RuleDocsExample
 	}
@@ -475,8 +472,6 @@ func messageForRule(rule string, match literalMatch) string {
 	switch rule {
 	case RuleProviderPolicy:
 		return fmt.Sprintf("connector-specific provider policy %q in shared production Go", match.Match)
-	case RuleProviderCertifyContract:
-		return fmt.Sprintf("connector-specific certification contract %q in shared certify code", match.Match)
 	case RuleDocsExample:
 		return fmt.Sprintf("connector-specific example or resource %q embedded in shared Go docs/help output", match.Match)
 	case RuleLegacyAlias:
@@ -492,8 +487,6 @@ func messageForRule(rule string, match literalMatch) string {
 
 func remediationForRule(rule string, _ literalMatch) string {
 	switch rule {
-	case RuleProviderCertifyContract:
-		return "move certification defaults, candidates, schemas, and pairings into connector definition metadata or keep a bounded migration exception"
 	case RuleDocsExample:
 		return "move provider-specific examples/resources into connector docs or generated definition-owned output"
 	case RuleProviderPolicy:

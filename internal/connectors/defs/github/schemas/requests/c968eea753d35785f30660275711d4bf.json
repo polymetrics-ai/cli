@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "is_alphanumeric": {
+      "type": "boolean"
+    },
+    "key_prefix": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "url_template": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "key_prefix",
+    "url_template"
+  ],
+  "type": "object"
+}

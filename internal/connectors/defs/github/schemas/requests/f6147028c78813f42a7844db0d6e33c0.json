@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "allowed_values": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "custom_property_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "default_value": {
+      "items": {},
+      "maxItems": 256,
+      "maxLength": 1048576,
+      "type": [
+        "array",
+        "null",
+        "string"
+      ]
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "require_explicit_values": {
+      "type": "boolean"
+    },
+    "required": {
+      "type": "boolean"
+    },
+    "value_type": {
+      "enum": [
+        "string",
+        "single_select",
+        "multi_select",
+        "true_false",
+        "url"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "values_editable_by": {
+      "enum": [
+        "org_actors",
+        "org_and_repo_actors"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "custom_property_name",
+    "org",
+    "value_type"
+  ],
+  "type": "object"
+}

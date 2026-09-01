@@ -27,7 +27,7 @@ DESCRIPTION
 
   Some catalog slugs remain migration metadata only. Those entries are still
   inspectable through pm connectors inspect, but cannot execute ETL until a
-  runnable connector definition or component passes conformance and is enabled.
+  runtime execution bundle or native component provides the required executor.
 
   ETL runs read records from a configured source connector stream, add
   Polymetrics metadata fields, and write records to the destination connector.
@@ -156,8 +156,8 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   The CLI accepts no connector, action, route, verb, body, mapping, or evidence
   flag. Connector JSON owns that behavior; shared Go validates the sealed
   descriptor, source binding, approval/workset guards, typed action execution,
-  acknowledgement, and read-back. An absent declaration, foreign action,
-  unlisted action, wrong source, malformed mapping, missing evidence, or
+  acknowledgement, and read-back. An absent binding, foreign action,
+  unlisted action, wrong source, malformed mapping, or
   unsupported mode fails before source or provider I/O. See
   docs/sync-transport-definition.md for the mechanical declaration contract.
 
@@ -228,27 +228,27 @@ SYNC MODES
     replaces the final Parquet table only after the run succeeds.
 
   full_refresh_overwrite_deduped
-    Compatibility name for typed full_overwrite admission. pm refuses before
-    source I/O until a matching transport is admitted.
+    Replaces the output and deduplicates by the declared primary key. pm
+    refuses before source I/O until a matching executor is available.
 
   incremental_append
     Reads records at or after the saved cursor and appends accepted records to
     the write-ahead log. Cursor state advances only after successful writes.
 
   incremental_append_deduped
-    Compatibility name for typed incremental_dedupe admission. pm refuses
-    before source I/O until a matching transport is admitted.
+    Appends newer records and deduplicates by the declared primary key. pm
+    refuses before source I/O until a matching executor is available.
 
   incremental_dedupe
-    For an admitted source-to-warehouse transport, retains one current record
-    per declared primary key. It refuses before source I/O for other pairs.
+    Retains one current record per declared primary key. It refuses before
+    source I/O for incompatible source and destination pairs.
 
   incremental_dedupe_history
-    For an admitted source-to-warehouse transport, retains deduplicated source versions with _valid_from, _valid_to, and _is_current fields. It requires
-    declared primary-key and cursor fields, and refuses before source I/O for
-    other pairs.
+    Retains deduplicated source versions with _valid_from, _valid_to, and
+    _is_current fields. It requires primary-key and cursor fields, and refuses
+    before source I/O for incompatible pairs.
 
-  Incremental modes and deduped compatibility names require --cursor. Deduped
+  Incremental modes require --cursor. Deduped
   modes require --primary-key. Static connector manifests advertise the full
   deduped compatibility name only with both fields, and incremental modes only
   with a declared incremental executor.
@@ -256,8 +256,8 @@ SYNC MODES
 POLLING-WATERMARK LIMITS
   polling_watermark is a bounded keyset scan, not CDC or a generic database
   query. The runtime evaluates every mode against the declared source ordering,
-  discovered object, destination binding, registered executors, and conformance
-  evidence before source I/O. A durable checkpoint records the watermark and
+  discovered object, destination binding, registered executors, and compatible
+  runtime mode before source I/O. A durable checkpoint records the watermark and
   unique tie-breaker only after downstream acknowledgement, so accepted records
   may replay. Hard deletes are not observable unless the declaration supplies
   a cursor-advancing soft-delete mapping. Incompatible state, source identity

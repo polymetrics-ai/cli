@@ -1,9 +1,6 @@
 // Package akeneo implements the akeneo AuthHook: an OAuth2 password-grant
-// connsdk.Authenticator, ported from legacy
-// internal/connectors/akeneo/akeneo.go's passwordGrantAuth. This test file
-// mirrors hooks/gmail/hooks_test.go's structure for the akeneo bundle's
-// substitute-hook-test-in-place-of-dynamic-conformance-coverage marker
-// (metadata.json's skip_dynamic reason names this test file explicitly).
+// connsdk.Authenticator. This test file mirrors hooks/gmail/hooks_test.go's
+// structure and exercises the hook directly.
 package akeneo
 
 import (

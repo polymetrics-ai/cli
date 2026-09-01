@@ -152,7 +152,7 @@ func TestDeriveChangeDeliveryWorksetDerivesRealParquetDeltaAndExplicitTombstones
 		t.Fatal("derivation mutated the supplied baseline instead of producing a separate candidate")
 	}
 	if got, want := len(readWorksetCandidateBaselineRows(t, workset)), 4; got != want {
-		t.Fatalf("candidate baseline rows = %d, want source projection count %d", got, want)
+		t.Fatalf("candidate baseline rows = %d, want staged input count %d", got, want)
 	}
 }
 

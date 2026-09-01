@@ -76,7 +76,6 @@ Reads the first Wave 1 set of Crisp REST API conversation resources through HTTP
 
 - Read Crisp conversation resources through bounded, typed Wave 1 REST commands.
 - Usage: pm crisp <conversations|conversation> <command> [flags]
-- Source CLI: Crisp REST API Reference (V1) (Official Postman Collection v2.1.0, retrieved 2026-08-05; ETag 6a6b6306-32de7)
 - PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
 - Global flags:
   - --credential (non-empty) (string): Credential profile name; never pass Crisp token values as flags.: maps_to=config.credential
@@ -108,7 +107,7 @@ Reads the first Wave 1 set of Crisp REST API conversation resources through HTTP
   - conversation call - Resolve an ongoing Crisp call session for one conversation. [intent=etl availability=implemented stream=conversation_call]; flags: --website-id (non-empty), --session-id (non-empty)
 - Help topics:
   - auth - Crisp uses HTTP Basic identifier/key credentials plus X-Crisp-Tier; add secrets from environment variables or stdin only.
-  - wave-1 - Wave 1 exposes 21 read-only conversation GET operations; later provider operations remain explicitly blocked in api_surface.json.
+  - wave-1 - Wave 1 exposes 21 read-only conversation GET operations; later provider operations remain explicitly blocked in execution bundle.
 
 ## Commands
 

@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "metadata": {
+      "additionalProperties": true,
+      "maxProperties": 256,
+      "type": "object"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "resource_type": {
+      "enum": [
+        "repository",
+        "github_file",
+        "free_text",
+        "github_issue",
+        "github_pull_request"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "space_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "metadata",
+    "org",
+    "resource_type",
+    "space_number"
+  ],
+  "type": "object"
+}

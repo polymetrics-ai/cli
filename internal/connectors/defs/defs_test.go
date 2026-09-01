@@ -2,8 +2,6 @@ package defs
 
 import (
 	"bytes"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"io/fs"
@@ -13,10 +11,6 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
-)
-
-const (
-	githubSourceLockSHA256 = "79f6eaf203394aabe7d2558d0f87a8100a7a084b2e39bd264f7773f235acf2c8"
 )
 
 func TestProductionEmbedLoadsRuntimeBundles(t *testing.T) {
@@ -44,8 +38,8 @@ func TestProductionEmbedLoadsRuntimeBundles(t *testing.T) {
 	if len(github.Streams) == 0 {
 		t.Fatal("github bundle has zero streams")
 	}
-	if github.Docs == "" {
-		t.Fatal("github bundle docs are empty")
+	if github.Docs != "" {
+		t.Fatal("production execution bundle unexpectedly loaded docs")
 	}
 	if github.Surface != nil {
 		t.Fatal("production embed should not include api_surface.json")
@@ -63,7 +57,7 @@ func TestProductionEmbedExcludesConformanceArtifacts(t *testing.T) {
 	}
 }
 
-func TestProductionEmbedDeclaresOnlyGithubSourceLockException(t *testing.T) {
+func TestProductionEmbedDeclaresExecutionJSONOnly(t *testing.T) {
 	defsSource, err := os.ReadFile("defs.go")
 	if err != nil {
 		t.Fatalf("ReadFile(defs.go): %v", err)
@@ -79,11 +73,10 @@ func TestProductionEmbedDeclaresOnlyGithubSourceLockException(t *testing.T) {
 	if directive == "" {
 		t.Fatal("defs.go has no //go:embed directive")
 	}
-	if strings.Contains(directive, "*/sources/*") {
-		t.Fatalf("source locks must be explicitly allowlisted, directive = %q", directive)
-	}
-	if !strings.Contains(directive, githubGraphQLSourceLockPath) {
-		t.Fatalf("directive = %q, want explicit %q exception", directive, githubGraphQLSourceLockPath)
+	for _, forbidden := range []string{"sources", "docs.md", "certification.json", "enabled_connector_contract.json", "operation_endpoint_ledger.json", "declaration_admission_sources.json", "api_surface.json", "fixtures"} {
+		if strings.Contains(directive, forbidden) {
+			t.Fatalf("execution embed directive contains %q: %q", forbidden, directive)
+		}
 	}
 
 	report, err := Inventory()
@@ -102,24 +95,6 @@ func TestProductionEmbedDeclaresOnlyGithubSourceLockException(t *testing.T) {
 		return strings.Compare(a.Class, b.Class)
 	}) {
 		t.Fatalf("inventory classes are not sorted: %#v", report.Classes)
-	}
-}
-
-func TestProductionEmbedPreservesGithubSourceLockBytes(t *testing.T) {
-	diskBytes, err := os.ReadFile(githubGraphQLSourceLockPath)
-	if err != nil {
-		t.Fatalf("ReadFile(%q): %v", githubGraphQLSourceLockPath, err)
-	}
-	embeddedBytes, err := fs.ReadFile(FS, githubGraphQLSourceLockPath)
-	if err != nil {
-		t.Fatalf("fs.ReadFile(FS, %q): %v", githubGraphQLSourceLockPath, err)
-	}
-	if !bytes.Equal(embeddedBytes, diskBytes) {
-		t.Fatalf("embedded %q differs from the committed source lock", githubGraphQLSourceLockPath)
-	}
-	digest := sha256.Sum256(embeddedBytes)
-	if got := hex.EncodeToString(digest[:]); got != githubSourceLockSHA256 {
-		t.Fatalf("SHA-256(%q) = %s, want %s", githubGraphQLSourceLockPath, got, githubSourceLockSHA256)
 	}
 }
 
@@ -144,48 +119,29 @@ func TestProductionEmbedInventoryIsDeterministicAndAttributed(t *testing.T) {
 		t.Fatalf("inventory JSON is not deterministic:\nfirst:  %s\nsecond: %s", firstJSON, secondJSON)
 	}
 
-	var filesTotal, sourceLockBytes, declarationLedgerBytes int64
+	var filesTotal int64
 	for _, file := range first.Files {
 		filesTotal += file.Bytes
-		if file.Path == githubGraphQLSourceLockPath {
-			if file.Class != "certification_source_lock_exception" {
-				t.Fatalf("GitHub source lock class = %q", file.Class)
-			}
-			sourceLockBytes = file.Bytes
+		if strings.Contains("/"+file.Path+"/", "/sources/") || file.Path == "operation_endpoint_ledger.json" || file.Path == "declaration_admission_sources.json" {
+			t.Fatalf("inventory contains non-execution artifact %q", file.Path)
 		}
-		if file.Path == "declaration_admission_sources.json" {
-			if file.Class != "runtime_declaration_target_ledger" {
-				t.Fatalf("declaration target ledger class = %q", file.Class)
+		if strings.Count(file.Path, "/") == 1 {
+			for _, forbidden := range []string{"docs.md", "certification.json", "enabled_connector_contract.json"} {
+				if strings.HasSuffix(file.Path, "/"+forbidden) {
+					t.Fatalf("inventory contains non-execution artifact %q", file.Path)
+				}
 			}
-			declarationLedgerBytes = file.Bytes
 		}
 	}
 	if filesTotal != first.TotalBytes {
 		t.Fatalf("file bytes = %d, report total = %d", filesTotal, first.TotalBytes)
 	}
-	if sourceLockBytes == 0 {
-		t.Fatalf("inventory omits %q", githubGraphQLSourceLockPath)
-	}
-	if declarationLedgerBytes == 0 {
-		t.Fatal("inventory omits declaration_admission_sources.json")
-	}
-
 	var classesTotal int64
-	declarationLedgerClasses := 0
 	for _, class := range first.Classes {
 		classesTotal += class.Bytes
-		if class.Class == "runtime_declaration_target_ledger" {
-			declarationLedgerClasses++
-			if class.Files != 1 || class.Bytes != declarationLedgerBytes {
-				t.Fatalf("declaration target ledger inventory class = %+v, want one exact attributed file", class)
-			}
-		}
 	}
 	if classesTotal != first.TotalBytes {
 		t.Fatalf("class bytes = %d, report total = %d", classesTotal, first.TotalBytes)
-	}
-	if declarationLedgerClasses != 1 {
-		t.Fatalf("declaration target ledger classes = %d, want exactly one", declarationLedgerClasses)
 	}
 }
 
@@ -198,9 +154,12 @@ func TestEmbeddedArtifactClassRejectsBuildTimeArtifacts(t *testing.T) {
 	}{
 		{name: "runtime metadata", path: "github/metadata.json", wantClass: "metadata"},
 		{name: "runtime schema", path: "github/schemas/repository.json", wantClass: "schema"},
-		{name: "runtime ledger", path: "operation_endpoint_ledger.json", wantClass: "runtime_endpoint_ledger"},
-		{name: "declaration target ledger", path: "declaration_admission_sources.json", wantClass: "runtime_declaration_target_ledger"},
-		{name: "GitHub certification exception", path: githubGraphQLSourceLockPath, wantClass: "certification_source_lock_exception"},
+		{name: "runtime ledger", path: "operation_endpoint_ledger.json", wantErr: true},
+		{name: "declaration target ledger", path: "declaration_admission_sources.json", wantErr: true},
+		{name: "GitHub source lock", path: "github/sources/github-operation-source-lock.json", wantErr: true},
+		{name: "docs", path: "github/docs.md", wantErr: true},
+		{name: "certification", path: "github/certification.json", wantErr: true},
+		{name: "enabled contract", path: "github/enabled_connector_contract.json", wantErr: true},
 		{name: "API surface", path: "github/api_surface.json", wantErr: true},
 		{name: "root fixture", path: "fixtures/page.json", wantErr: true},
 		{name: "fixture nested below sources", path: "github/fixtures/streams/sources/page_1.json", wantErr: true},

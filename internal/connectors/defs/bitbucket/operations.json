@@ -7,7 +7,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the client key of a Connect addon",
       "rest": {
         "method": "GET",
@@ -26,7 +25,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Compare two commits"
     },
     {
@@ -36,7 +34,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "List download artifacts",
       "rest": {
         "method": "GET",
@@ -54,7 +51,6 @@
       "kind": "file_upload",
       "output_policy": "none",
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Upload a download artifact"
     },
     {
@@ -69,7 +65,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get a download artifact link"
     },
     {
@@ -84,7 +79,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Check issue export status"
     },
     {
@@ -98,7 +92,6 @@
       "kind": "file_upload",
       "output_policy": "none",
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Import issues"
     },
     {
@@ -112,7 +105,6 @@
       "kind": "file_upload",
       "output_policy": "none",
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Upload an attachment to an issue"
     },
     {
@@ -127,7 +119,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get attachment for an issue"
     },
     {
@@ -137,7 +128,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Check if current user voted for an issue",
       "rest": {
         "method": "GET",
@@ -151,7 +141,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Check if current user is watching a issue",
       "rest": {
         "method": "GET",
@@ -170,7 +159,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get a patch for two commits"
     },
     {
@@ -185,7 +173,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get log file for a step"
     },
     {
@@ -200,7 +187,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the logs for the build container or a service container for a given step of a pipeline."
     },
     {
@@ -210,7 +196,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get a summary of test reports for a given step of a pipeline.",
       "rest": {
         "method": "GET",
@@ -224,7 +209,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get test cases for a given step of a pipeline.",
       "rest": {
         "method": "GET",
@@ -238,7 +222,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get test case reasons (output) for a given test case in a step of a pipeline.",
       "rest": {
         "method": "GET",
@@ -252,7 +235,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "List a pull request activity log",
       "rest": {
         "method": "GET",
@@ -266,7 +248,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "List a pull request activity log",
       "rest": {
         "method": "GET",
@@ -280,7 +261,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "List commits on a pull request",
       "rest": {
         "method": "GET",
@@ -294,7 +274,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get file conflicts for a pull request",
       "rest": {
         "method": "GET",
@@ -313,7 +292,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "List changes in a pull request"
     },
     {
@@ -323,7 +301,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the diff stat for a pull request",
       "rest": {
         "method": "GET",
@@ -337,7 +314,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the merge task status for a pull request",
       "rest": {
         "method": "GET",
@@ -356,7 +332,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the patch for a pull request"
     },
     {
@@ -370,7 +345,6 @@
       "kind": "file_upload",
       "output_policy": "none",
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Create a commit by uploading a file"
     },
     {
@@ -385,7 +359,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get file or directory contents"
     },
     {
@@ -400,7 +373,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get a snippet's raw file at HEAD"
     },
     {
@@ -410,7 +382,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Check if the current user is watching a snippet",
       "rest": {
         "method": "GET",
@@ -429,7 +400,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get a snippet's raw file"
     },
     {
@@ -444,7 +414,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get snippet changes between versions"
     },
     {
@@ -459,7 +428,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get snippet patch between versions"
     },
     {
@@ -474,7 +442,6 @@
         "path": "/teams/{username}/search/code"
       },
       "risk": "low",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Search for code in a team's repositories"
     },
     {
@@ -484,7 +451,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "List email addresses for the authenticated user",
       "rest": {
         "method": "GET",
@@ -498,7 +464,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get one authenticated-user email address",
       "rest": {
         "method": "GET",
@@ -517,7 +482,6 @@
         "path": "/users/{selected_user}/search/code"
       },
       "risk": "low",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Search for code in a user's repositories"
     },
     {
@@ -527,7 +491,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get OpenID configuration for OIDC in Pipelines",
       "rest": {
         "method": "GET",
@@ -541,7 +504,6 @@
       "kind": "rest_read",
       "output_policy": "json_redacted",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get keys for OIDC in Pipelines",
       "rest": {
         "method": "GET",
@@ -560,7 +522,6 @@
         "path": "/workspaces/{workspace}/search/code"
       },
       "risk": "low",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Search for code in a workspace"
     },
     {
@@ -575,7 +536,6 @@
       "kind": "binary_download",
       "output_policy": "binary_file_bounded",
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the workspace system GPG public key(s)"
     },
     {
@@ -590,7 +550,6 @@
         "path": "/addon"
       },
       "risk": "critical",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: DELETE /addon"
     },
     {
@@ -605,7 +564,6 @@
         "path": "/addon"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /addon"
     },
     {
@@ -620,7 +578,6 @@
         "path": "/repositories/{workspace}/{repo_slug}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}"
     },
     {
@@ -635,7 +592,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/branch-restrictions"
     },
     {
@@ -650,7 +606,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
     },
     {
@@ -665,7 +620,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/branching-model/settings"
     },
     {
@@ -680,7 +634,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
     },
     {
@@ -695,7 +648,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
     },
     {
@@ -710,7 +662,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
     },
     {
@@ -725,7 +676,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
     },
     {
@@ -740,7 +690,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
     },
     {
@@ -755,7 +704,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
     },
     {
@@ -770,7 +718,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
     },
     {
@@ -785,7 +732,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
     },
     {
@@ -800,7 +746,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
     },
     {
@@ -815,7 +760,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commits"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commits"
     },
     {
@@ -830,7 +774,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/commits/{revision}"
     },
     {
@@ -845,7 +788,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
     },
     {
@@ -860,7 +802,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/deploy-keys"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/deploy-keys"
     },
     {
@@ -875,7 +816,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
     },
     {
@@ -890,7 +830,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -914,7 +853,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -938,7 +876,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/environments"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/environments"
     },
     {
@@ -953,7 +890,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes"
     },
     {
@@ -968,7 +904,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/forks"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/forks"
     },
     {
@@ -983,7 +918,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/hooks"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/hooks",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1007,7 +941,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/hooks/{uid}",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1031,7 +964,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/issues"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/issues"
     },
     {
@@ -1046,7 +978,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/issues/export"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/issues/export"
     },
     {
@@ -1061,7 +992,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}"
     },
     {
@@ -1076,7 +1006,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes"
     },
     {
@@ -1091,7 +1020,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments"
     },
     {
@@ -1106,7 +1034,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}"
     },
     {
@@ -1121,7 +1048,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
     },
     {
@@ -1136,7 +1062,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
     },
     {
@@ -1151,7 +1076,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/override-settings"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/override-settings"
     },
     {
@@ -1166,7 +1090,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
     },
     {
@@ -1181,7 +1104,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
     },
     {
@@ -1196,7 +1118,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines"
     },
     {
@@ -1211,7 +1132,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines-config/runners"
     },
     {
@@ -1226,7 +1146,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
     },
     {
@@ -1241,7 +1160,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
     },
     {
@@ -1256,7 +1174,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config"
     },
     {
@@ -1271,7 +1188,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/build_number"
     },
     {
@@ -1286,7 +1202,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
     },
     {
@@ -1301,7 +1216,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
     },
     {
@@ -1316,7 +1230,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1341,7 +1254,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
     },
     {
@@ -1356,7 +1268,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
     },
     {
@@ -1371,7 +1282,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pipelines_config/variables",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1395,7 +1305,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1419,7 +1328,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
     },
     {
@@ -1434,7 +1342,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests"
     },
     {
@@ -1449,7 +1356,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
     },
     {
@@ -1464,7 +1370,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
     },
     {
@@ -1479,7 +1384,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
     },
     {
@@ -1494,7 +1398,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
     },
     {
@@ -1509,7 +1412,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
     },
     {
@@ -1524,7 +1426,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
     },
     {
@@ -1539,7 +1440,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
     },
     {
@@ -1554,7 +1454,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
     },
     {
@@ -1569,7 +1468,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
     },
     {
@@ -1584,7 +1482,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
     },
     {
@@ -1599,7 +1496,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
     },
     {
@@ -1614,7 +1510,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/refs/branches"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/refs/branches"
     },
     {
@@ -1629,7 +1524,6 @@
         "path": "/repositories/{workspace}/{repo_slug}/refs/tags"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /repositories/{workspace}/{repo_slug}/refs/tags"
     },
     {
@@ -1644,7 +1538,6 @@
         "path": "/snippets"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /snippets"
     },
     {
@@ -1659,7 +1552,6 @@
         "path": "/snippets/{workspace}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /snippets/{workspace}"
     },
     {
@@ -1674,7 +1566,6 @@
         "path": "/snippets/{workspace}/{encoded_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /snippets/{workspace}/{encoded_id}"
     },
     {
@@ -1689,7 +1580,6 @@
         "path": "/snippets/{workspace}/{encoded_id}/comments"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /snippets/{workspace}/{encoded_id}/comments"
     },
     {
@@ -1704,7 +1594,6 @@
         "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /snippets/{workspace}/{encoded_id}/comments/{comment_id}"
     },
     {
@@ -1719,7 +1608,6 @@
         "path": "/snippets/{workspace}/{encoded_id}/watch"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /snippets/{workspace}/{encoded_id}/watch"
     },
     {
@@ -1734,7 +1622,6 @@
         "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /snippets/{workspace}/{encoded_id}/{node_id}"
     },
     {
@@ -1749,7 +1636,6 @@
         "path": "/teams/{username}/pipelines_config/variables"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /teams/{username}/pipelines_config/variables",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1773,7 +1659,6 @@
         "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /teams/{username}/pipelines_config/variables/{variable_uuid}",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1797,7 +1682,6 @@
         "path": "/users/{selected_user}/gpg-keys"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /users/{selected_user}/gpg-keys"
     },
     {
@@ -1812,7 +1696,6 @@
         "path": "/users/{selected_user}/pipelines_config/variables"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /users/{selected_user}/pipelines_config/variables",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1836,7 +1719,6 @@
         "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /users/{selected_user}/pipelines_config/variables/{variable_uuid}",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1860,7 +1742,6 @@
         "path": "/users/{selected_user}/properties/{app_key}/{property_name}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /users/{selected_user}/properties/{app_key}/{property_name}"
     },
     {
@@ -1875,7 +1756,6 @@
         "path": "/users/{selected_user}/ssh-keys"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /users/{selected_user}/ssh-keys"
     },
     {
@@ -1890,7 +1770,6 @@
         "path": "/users/{selected_user}/ssh-keys/{key_id}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /users/{selected_user}/ssh-keys/{key_id}"
     },
     {
@@ -1905,7 +1784,6 @@
         "path": "/workspaces/{workspace}/hooks"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/hooks",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1929,7 +1807,6 @@
         "path": "/workspaces/{workspace}/hooks/{uid}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/hooks/{uid}",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -1953,7 +1830,6 @@
         "path": "/workspaces/{workspace}/pipelines-config/runners"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/pipelines-config/runners"
     },
     {
@@ -1968,7 +1844,6 @@
         "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
     },
     {
@@ -1983,7 +1858,6 @@
         "path": "/workspaces/{workspace}/pipelines-config/variables"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/pipelines-config/variables",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -2007,7 +1881,6 @@
         "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/pipelines-config/variables/{variable_uuid}",
       "secret_sensitive": true,
       "sensitive_policy": {
@@ -2031,7 +1904,6 @@
         "path": "/workspaces/{workspace}/projects"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/projects"
     },
     {
@@ -2046,7 +1918,6 @@
         "path": "/workspaces/{workspace}/projects/{project_key}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}"
     },
     {
@@ -2061,7 +1932,6 @@
         "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}/branching-model/settings"
     },
     {
@@ -2076,7 +1946,6 @@
         "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
       },
       "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
     },
     {
@@ -2091,7 +1960,6 @@
         "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: POST /workspaces/{workspace}/projects/{project_key}/deploy-keys"
     },
     {
@@ -2106,7 +1974,6 @@
         "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
     },
     {
@@ -2121,7 +1988,6 @@
         "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
       },
       "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Blocked Bitbucket write: PUT /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
     }
   ]

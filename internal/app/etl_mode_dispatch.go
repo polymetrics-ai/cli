@@ -92,7 +92,7 @@ func (a *App) dispatchETLMode(ctx context.Context, request etlModeDispatchReques
 	if request.mode.IsContractMode() {
 		return a.failRun(request.runID, &synccontract.ModeNotExecutableError{
 			Mode:   request.mode.ContractMode,
-			Reason: "no matching closed source/destination transport has completed externally verified conformance",
+			Reason: "no matching closed source/destination transport has registered compatible executors",
 		})
 	}
 	catalog, err := a.catalogForEndpoint(ctx, request.source, request.sourceRuntime, false)

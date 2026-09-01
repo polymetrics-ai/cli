@@ -61,13 +61,13 @@ COMMAND SURFACE
   Global flags:
     --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   Other Commands
-    operations get-advertiser-info - Declared etl: GET /advertiser/info/. [intent=etl availability=partial]; notes: Blocked: locked source operation tiktok-marketing.local-api-surface.get-advertiser-info-1 has no declaration-owned executable etl route.
-    operations get-campaign-get - Declared etl: GET /campaign/get/. [intent=etl availability=partial]; notes: Blocked: locked source operation tiktok-marketing.local-api-surface.get-campaign-get-2 has no declaration-owned executable etl route.
-    operations get-adgroup-get - Declared etl: GET /adgroup/get/. [intent=etl availability=partial]; notes: Blocked: locked source operation tiktok-marketing.local-api-surface.get-adgroup-get-3 has no declaration-owned executable etl route.
-    operations get-ad-get - Declared etl: GET /ad/get/. [intent=etl availability=partial]; notes: Blocked: locked source operation tiktok-marketing.local-api-surface.get-ad-get-4 has no declaration-owned executable etl route.
-    operations get-report-integrated-get - Declared direct read: GET /report/integrated/get/. [intent=direct_read availability=partial]; notes: Blocked: locked source operation tiktok-marketing.local-api-surface.get-report-integrated-get-5 has no declaration-owned executable stream, direct-read, binary, or status route.; flags: --page, --page-cursor
-    operations post-campaign-create - Declared direct write: POST /campaign/create/. [intent=direct_write availability=partial]; approval: direct_write commands require plan, preview, approval, execute; risk: Declared provider mutation: POST /campaign/create/.; notes: Blocked: locked source operation tiktok-marketing.local-api-surface.post-campaign-create-6 has no declaration-owned executable direct_write route.
-    operations post-campaign-update-status - Declared direct write: POST /campaign/update/status/. [intent=direct_write availability=partial]; approval: direct_write commands require plan, preview, approval, execute; risk: Declared provider mutation: POST /campaign/update/status/.; notes: Blocked: locked source operation tiktok-marketing.local-api-surface.post-campaign-update-status-7 has no declaration-owned executable direct_write route.
+    operations get-advertiser-info - Declared etl: GET /advertiser/info/. [intent=etl availability=partial]; notes: Unavailable: no ETL executor is declared for this provider operation.
+    operations get-campaign-get - Declared etl: GET /campaign/get/. [intent=etl availability=partial]; notes: Unavailable: no ETL executor is declared for this provider operation.
+    operations get-adgroup-get - Declared etl: GET /adgroup/get/. [intent=etl availability=partial]; notes: Unavailable: no ETL executor is declared for this provider operation.
+    operations get-ad-get - Declared etl: GET /ad/get/. [intent=etl availability=partial]; notes: Unavailable: no ETL executor is declared for this provider operation.
+    operations get-report-integrated-get - Declared direct read: GET /report/integrated/get/. [intent=direct_read availability=partial]; notes: Unavailable: no bounded read executor is declared for this provider operation.; flags: --page, --page-cursor
+    operations post-campaign-create - Declared direct write: POST /campaign/create/. [intent=direct_write availability=partial]; approval: direct_write commands require plan, preview, approval, execute; risk: Declared provider mutation: POST /campaign/create/.; notes: Unavailable: no bounded direct-write executor is declared for this provider operation.
+    operations post-campaign-update-status - Declared direct write: POST /campaign/update/status/. [intent=direct_write availability=partial]; approval: direct_write commands require plan, preview, approval, execute; risk: Declared provider mutation: POST /campaign/update/status/.; notes: Unavailable: no bounded direct-write executor is declared for this provider operation.
 
 EXAMPLES
   # Inspect as a manual

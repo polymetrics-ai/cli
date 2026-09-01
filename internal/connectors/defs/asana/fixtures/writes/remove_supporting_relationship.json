@@ -1,4 +1,0 @@
-{
-  "record": { "goal_gid": "fixture-goal", "data": { "supporting_resource": "fixture-supporting-goal" } },
-  "expect": { "method": "POST", "path": "/goals/fixture-goal/removeSupportingRelationship", "body": { "data": { "supporting_resource": "fixture-supporting-goal" } } }
-}

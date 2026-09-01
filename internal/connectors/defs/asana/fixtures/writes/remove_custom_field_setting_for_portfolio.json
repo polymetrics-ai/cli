@@ -1,4 +1,0 @@
-{
-  "record": { "portfolio_gid": "fixture-portfolio", "data": { "custom_field": "fixture-custom-field" } },
-  "expect": { "method": "POST", "path": "/portfolios/fixture-portfolio/removeCustomFieldSetting", "body": { "data": { "custom_field": "fixture-custom-field" } } }
-}

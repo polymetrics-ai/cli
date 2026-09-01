@@ -21,8 +21,7 @@ import (
 // composition root never picks a connector by name or capability.
 func localWarehouseTransportDefinitionFactories(a *App) []synctransport.DefinitionFactory {
 	return []synctransport.DefinitionFactory{{
-		Reference:           connectors.LocalWarehouseDestinationTransportReference,
-		DestinationEvidence: connectors.LocalWarehouseDestinationTransportConformance,
+		Reference: connectors.LocalWarehouseDestinationTransportReference,
 		BuildDestination: func(connector connectors.Connector) (synctransport.DestinationExecutor, error) {
 			return newLocalWarehouseDestinationExecutor(a, connector)
 		},
@@ -212,7 +211,6 @@ func (e *localWarehouseDestinationExecutor) connectionOwnsLocalWarehouse(conn Co
 func isLocalWarehouseDestination(connector connectors.Connector) bool {
 	descriptor, ok := connectors.DestinationTransportDescriptorOf(connector)
 	return ok && descriptor.Executor == connectors.LocalWarehouseDestinationTransportReference &&
-		descriptor.Conformance == connectors.LocalWarehouseDestinationTransportConformance &&
 		descriptor.Acknowledgement == connectors.TransportAcknowledgementDurableWarehouse
 }
 

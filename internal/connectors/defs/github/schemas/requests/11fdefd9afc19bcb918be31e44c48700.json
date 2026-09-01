@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enterprise": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "group_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "notification_setting": {
+      "enum": [
+        "notifications_enabled",
+        "notifications_disabled"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "organization_selection_type": {
+      "enum": [
+        "disabled",
+        "selected",
+        "all"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "sync_to_organizations": {
+      "enum": [
+        "all",
+        "disabled"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "enterprise",
+    "name"
+  ],
+  "type": "object"
+}

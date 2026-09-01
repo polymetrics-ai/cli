@@ -1,4 +1,0 @@
-{
-  "record": {"calendar_id": "calendar_fixture_1", "summary": "Updated Fixture Calendar", "timeZone": "UTC"},
-  "expect": {"method": "PUT", "path": "/calendars/calendar_fixture_1", "body": {"summary": "Updated Fixture Calendar", "timeZone": "UTC"}}
-}

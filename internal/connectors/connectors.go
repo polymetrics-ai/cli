@@ -501,8 +501,8 @@ type OperationDirectReadRequest struct {
 	Query      map[string]string
 	// CommandBindings seals the exact caller-controlled fields declared by the
 	// generated command descriptor. The engine revalidates this set against the
-	// loaded bundle before using it, so legacy descriptors can remain executable
-	// while undeclared direct callers stay closed.
+	// loaded execution bundle before using it, so undeclared direct callers stay
+	// closed.
 	CommandBindings *OperationDirectReadBindings
 	// Headers contains only values for exact, provider-declared non-auth
 	// header parameters. The operation engine validates the declaration and
@@ -713,29 +713,6 @@ type OperationDirectReadPreflighter interface {
 // operation from receiving undeclared caller fields.
 type OperationDirectReadBindingPreflighter interface {
 	PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error
-}
-
-// SourceBoundReadPreflighter verifies that a source-projected direct read
-// still names the exact locked source operation carried by its selected engine
-// operation. It has no URL, header, method, or request-body escape hatch.
-type SourceBoundReadPreflighter interface {
-	PreflightSourceBoundRead(operation, sourceOperation, method, path string) error
-}
-
-// SourceBoundStreamReadPreflighter performs the matching no-network proof for
-// an existing ETL stream. It keeps a collection command on the stream executor
-// only when its declaration-owned stream and source-bound operation agree.
-type SourceBoundStreamReadPreflighter interface {
-	PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error
-}
-
-// SourceBoundOriginPreflighter checks the one declared source origin using
-// public configuration only. Command dispatch invokes it before App credential
-// resolution, so a caller cannot cause source-bound credential/auth state to
-// materialize merely by selecting another provider origin.
-type SourceBoundOriginPreflighter interface {
-	PreflightSourceBoundOperationOrigin(operation string, cfg RuntimeConfig) error
-	PreflightSourceBoundStreamOrigin(stream string, cfg RuntimeConfig) error
 }
 
 // OperationStructuredJSONVariablePreflighter exposes the deliberately narrow
@@ -2960,10 +2937,6 @@ type SchemaMapper interface {
 	MapSchema(ctx context.Context, stream Stream) (Stream, error)
 }
 
-type LiveConformanceProvider interface {
-	LiveConformanceConfig(ctx context.Context) (RuntimeConfig, bool, error)
-}
-
 type Connector interface {
 	Name() string
 	Metadata() Metadata
@@ -3222,14 +3195,6 @@ var LocalWarehouseDestinationTransportReference = TransportExecutorReference{
 	ID:     "local_parquet_warehouse",
 }
 
-// LocalWarehouseDestinationTransportConformance is admitted only by the
-// production composition's matching factory; a descriptor alone cannot admit
-// an unregistered materializer.
-var LocalWarehouseDestinationTransportConformance = ConformanceEvidenceReference{
-	Suite: "local_parquet_warehouse",
-	RunID: "connection_owned_v1",
-}
-
 const localWarehouseDestinationTransportAction = "materialize_local_parquet"
 
 func (Warehouse) Name() string { return "warehouse" }
@@ -3259,7 +3224,6 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 			Ordering:    DeliveryOrderingSource,
 			Deletes:     DeliveryDeletesTombstone,
 		},
-		Conformance:     LocalWarehouseDestinationTransportConformance,
 		Acknowledgement: TransportAcknowledgementDurableWarehouse,
 		ApplyStrategies: []DestinationApplyStrategy{
 			{Mode: synccontract.ModeFullOverwrite, Strategy: ApplyStrategyReplace, Action: localWarehouseDestinationTransportAction},

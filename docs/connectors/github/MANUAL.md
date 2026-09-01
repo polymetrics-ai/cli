@@ -2799,7 +2799,6 @@ SECURITY
 COMMAND SURFACE
   Work with GitHub repositories from the command line.
   Usage: pm github <command> <subcommand> [flags]
-  Source CLI: gh (https://cli.github.com/manual/gh_help_reference)
   PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --json (boolean): Write machine-readable JSON output.
@@ -4433,7 +4432,7 @@ COMMAND SURFACE
 SYNC TRANSPORT
   Source transport: declared
   Destination transport: declared
-  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  A declared transport executes only when its named runtime executor and mode are available.
   Source executor: declarative_api/declarative_stream_source
   Destination executor: declarative_api/issue_label_destination
 

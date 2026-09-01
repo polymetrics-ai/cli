@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "assignee": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "assignees": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "body": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "duplicate_issue_id": {
+      "type": "integer"
+    },
+    "issue_field_values": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "issue_number": {
+      "type": "integer"
+    },
+    "labels": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "milestone": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "null",
+        "string"
+      ]
+    },
+    "state": {
+      "enum": [
+        "open",
+        "closed"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "state_reason": {
+      "enum": [
+        "completed",
+        "not_planned",
+        "duplicate",
+        "reopened"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "null",
+        "string"
+      ]
+    },
+    "type": {
+      "additionalProperties": true,
+      "maxLength": 1048576,
+      "maxProperties": 256,
+      "type": [
+        "null",
+        "object",
+        "string"
+      ]
+    }
+  },
+  "required": [
+    "issue_number"
+  ],
+  "type": "object"
+}

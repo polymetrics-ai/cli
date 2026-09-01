@@ -8,7 +8,7 @@
     "schema_version": {"type": "integer", "enum": [1]},
     "source_transport": {
       "type": "object",
-      "required": ["executor", "eligible_streams", "modes", "delivery", "conformance"],
+      "required": ["executor", "eligible_streams", "modes", "delivery"],
       "additionalProperties": false,
       "properties": {
         "executor": {
@@ -21,16 +21,12 @@
         "delivery": {
           "type": "object", "required": ["idempotency", "ordering", "deletes"], "additionalProperties": false,
           "properties": {"idempotency": {"type": "string"}, "ordering": {"type": "string"}, "deletes": {"type": "string"}}
-        },
-        "conformance": {
-          "type": "object", "required": ["suite", "run_id"], "additionalProperties": false,
-          "properties": {"suite": {"type": "string"}, "run_id": {"type": "string"}}
         }
       }
     },
     "destination_transport": {
       "type": "object",
-      "required": ["executor", "eligible_actions", "modes", "delivery", "conformance", "acknowledgement", "apply_strategies"],
+      "required": ["executor", "eligible_actions", "modes", "delivery", "acknowledgement", "apply_strategies"],
       "additionalProperties": false,
       "properties": {
         "executor": {
@@ -45,10 +41,6 @@
           "type": "object", "required": ["idempotency", "ordering", "deletes"], "additionalProperties": false,
           "properties": {"idempotency": {"type": "string"}, "ordering": {"type": "string"}, "deletes": {"type": "string"}}
         },
-        "conformance": {
-          "type": "object", "required": ["suite", "run_id"], "additionalProperties": false,
-          "properties": {"suite": {"type": "string"}, "run_id": {"type": "string"}}
-        },
         "acknowledgement": {"type": "string", "enum": ["durable_warehouse", "none"]},
         "apply_strategies": {
           "type": "array", "minItems": 1,
@@ -58,25 +50,23 @@
               "mode": {"type": "string"}, "strategy": {"type": "string"}, "action": {"type": "string"}, "tombstone_action": {"type": "string", "minLength": 1},
               "read_back": {
                 "type": "object", "additionalProperties": false,
-                "required": ["operation", "identity", "expected", "max_records", "max_attempts", "timeout_milliseconds", "receipt_locator", "conformance"],
+                "required": ["operation", "identity", "expected", "max_records", "max_attempts", "timeout_milliseconds", "receipt_locator"],
                 "properties": {
                   "operation": {"type": "string", "minLength": 1},
                   "identity": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["provider_field", "expected_field"], "properties": {"provider_field": {"type": "string", "minLength": 1}, "expected_field": {"type": "string", "minLength": 1}}}},
                   "expected": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["provider_field", "expected_field"], "properties": {"provider_field": {"type": "string", "minLength": 1}, "expected_field": {"type": "string", "minLength": 1}}}},
                   "max_records": {"type": "integer"}, "max_attempts": {"type": "integer"}, "timeout_milliseconds": {"type": "integer"}, "retry_delay_milliseconds": {"type": "integer"},
-                  "receipt_locator": {"type": "object", "required": ["response_index", "body_field", "query_parameter", "max_value_bytes", "max_pages"], "additionalProperties": false, "properties": {"response_index": {"type": "integer"}, "body_field": {"type": "string"}, "query_parameter": {"type": "string"}, "max_value_bytes": {"type": "integer"}, "max_pages": {"type": "integer"}}},
-                  "conformance": {"type": "object", "required": ["suite", "run_id"], "additionalProperties": false, "properties": {"suite": {"type": "string"}, "run_id": {"type": "string"}}}
+                  "receipt_locator": {"type": "object", "required": ["response_index", "body_field", "query_parameter", "max_value_bytes", "max_pages"], "additionalProperties": false, "properties": {"response_index": {"type": "integer"}, "body_field": {"type": "string"}, "query_parameter": {"type": "string"}, "max_value_bytes": {"type": "integer"}, "max_pages": {"type": "integer"}}}
                 }
               },
               "tombstone_read_back": {
                 "type": "object", "additionalProperties": false,
-                "required": ["operation", "identity", "max_records", "max_attempts", "timeout_milliseconds", "receipt_locator", "conformance"],
+                "required": ["operation", "identity", "max_records", "max_attempts", "timeout_milliseconds", "receipt_locator"],
                 "properties": {
                   "operation": {"type": "string", "minLength": 1},
                   "identity": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["provider_field", "expected_field"], "properties": {"provider_field": {"type": "string", "minLength": 1}, "expected_field": {"type": "string", "minLength": 1}}}},
                   "max_records": {"type": "integer"}, "max_attempts": {"type": "integer"}, "timeout_milliseconds": {"type": "integer"}, "retry_delay_milliseconds": {"type": "integer"},
-                  "receipt_locator": {"type": "object", "required": ["response_index", "body_field", "query_parameter", "max_value_bytes", "max_pages"], "additionalProperties": false, "properties": {"response_index": {"type": "integer"}, "body_field": {"type": "string"}, "query_parameter": {"type": "string"}, "max_value_bytes": {"type": "integer"}, "max_pages": {"type": "integer"}}},
-                  "conformance": {"type": "object", "required": ["suite", "run_id"], "additionalProperties": false, "properties": {"suite": {"type": "string"}, "run_id": {"type": "string"}}}
+                  "receipt_locator": {"type": "object", "required": ["response_index", "body_field", "query_parameter", "max_value_bytes", "max_pages"], "additionalProperties": false, "properties": {"response_index": {"type": "integer"}, "body_field": {"type": "string"}, "query_parameter": {"type": "string"}, "max_value_bytes": {"type": "integer"}, "max_pages": {"type": "integer"}}}
                 }
               }
             }
@@ -85,7 +75,7 @@
         "read_back": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["operation", "identity", "expected", "max_records", "max_attempts", "timeout_milliseconds", "receipt_locator", "conformance"],
+          "required": ["operation", "identity", "expected", "max_records", "max_attempts", "timeout_milliseconds", "receipt_locator"],
           "properties": {
             "operation": {"type": "string", "minLength": 1},
             "identity": {
@@ -119,17 +109,13 @@
                 "max_value_bytes": {"type": "integer"},
                 "max_pages": {"type": "integer"}
               }
-            },
-            "conformance": {
-              "type": "object", "required": ["suite", "run_id"], "additionalProperties": false,
-              "properties": {"suite": {"type": "string"}, "run_id": {"type": "string"}}
             }
           }
         },
 		"tombstone_read_back": {
 		  "type": "object",
 		  "additionalProperties": false,
-		  "required": ["operation", "identity", "max_records", "max_attempts", "timeout_milliseconds", "receipt_locator", "conformance"],
+		  "required": ["operation", "identity", "max_records", "max_attempts", "timeout_milliseconds", "receipt_locator"],
 		  "properties": {
 			"operation": {"type": "string", "minLength": 1},
 			"identity": {
@@ -155,10 +141,6 @@
 				"max_value_bytes": {"type": "integer"},
 				"max_pages": {"type": "integer"}
 			  }
-			},
-			"conformance": {
-			  "type": "object", "required": ["suite", "run_id"], "additionalProperties": false,
-			  "properties": {"suite": {"type": "string"}, "run_id": {"type": "string"}}
 			}
 		  }
 		},

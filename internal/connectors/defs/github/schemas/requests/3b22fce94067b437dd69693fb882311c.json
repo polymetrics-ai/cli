@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "pull_number": {
+      "type": "integer"
+    },
+    "review_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pull_number",
+    "review_id"
+  ],
+  "type": "object"
+}

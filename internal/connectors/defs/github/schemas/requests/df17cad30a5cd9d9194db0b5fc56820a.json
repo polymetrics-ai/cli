@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "configuration_id": {
+      "type": "integer"
+    },
+    "enterprise": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "scope": {
+      "enum": [
+        "all",
+        "all_without_configurations"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "configuration_id",
+    "enterprise",
+    "scope"
+  ],
+  "type": "object"
+}

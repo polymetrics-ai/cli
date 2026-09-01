@@ -263,8 +263,7 @@ func TestAppCompositionRoutesLoadedSyntheticDefinitionConnector(t *testing.T) {
 	connector := &syntheticDefinitionConnector{Connector: engine.New(bundle, nil)}
 	connector.factories = []synctransport.DefinitionFactory{
 		{
-			Reference:      sourceReference,
-			SourceEvidence: connectors.ConformanceEvidenceReference{Suite: "synthetic_transport", RunID: "source_v1"},
+			Reference: sourceReference,
 			BuildSource: func(received connectors.Connector) (synctransport.SourceExecutor, error) {
 				if received != connector {
 					return nil, fmt.Errorf("synthetic source hook received another connector")
@@ -273,8 +272,7 @@ func TestAppCompositionRoutesLoadedSyntheticDefinitionConnector(t *testing.T) {
 			},
 		},
 		{
-			Reference:           destinationReference,
-			DestinationEvidence: connectors.ConformanceEvidenceReference{Suite: "synthetic_transport", RunID: "destination_v1"},
+			Reference: destinationReference,
 			BuildDestination: func(received connectors.Connector) (synctransport.DestinationExecutor, error) {
 				if received != connector {
 					return nil, fmt.Errorf("synthetic destination hook received another connector")
@@ -361,11 +359,11 @@ func TestDefinitionTransportFactoriesSelectDeclaredEvidence(t *testing.T) {
 			destinationFactory = factory
 		}
 	}
-	if sourceFactory == nil || sourceFactory.SourceEvidence != source.Conformance {
-		t.Fatalf("source factory evidence = %#v, want declaration %#v", sourceFactory, source.Conformance)
+	if sourceFactory == nil {
+		t.Fatal("source factory was not composed from its execution declaration")
 	}
-	if destinationFactory == nil || destinationFactory.DestinationEvidence != destination.Conformance {
-		t.Fatalf("destination factory evidence = %#v, want declaration %#v", destinationFactory, destination.Conformance)
+	if destinationFactory == nil {
+		t.Fatal("destination factory was not composed from its execution declaration")
 	}
 	registered, err := destinationFactory.BuildDestination(github)
 	if err != nil {
@@ -396,8 +394,7 @@ func TestDefinitionTransportFactoriesRegisterSharedSourceOnce(t *testing.T) {
     "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
     "eligible_streams": ["widgets"],
     "modes": ["full_append"],
-    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-    "conformance": {"suite": "synthetic_declarative_source", "run_id": "source_v1"}
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"}
   }
 }`)}
 	bundle, err := engine.Load(bundleFS, "synthetic")
@@ -415,11 +412,7 @@ func TestDefinitionTransportFactoriesRegisterSharedSourceOnce(t *testing.T) {
 		t.Fatal(err)
 	}
 	factories = append(factories, connectorFactories...)
-	verifier, err := synctransport.NewDefinitionConformanceVerifier(factories)
-	if err != nil {
-		t.Fatal(err)
-	}
-	transports := synctransport.NewRegistry(verifier)
+	transports := synctransport.NewRegistry()
 	if err := synctransport.RegisterDeclaredTransports(a.registry, transports, factories); err != nil {
 		t.Fatalf("register shared declarative source: %v", err)
 	}
@@ -487,7 +480,6 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
 	bundleFS := syntheticTransportBundleFS()
 	bundleFS["synthetic/metadata.json"] = &fstest.MapFile{Data: []byte(`{"name":"synthetic","display_name":"Synthetic typed destination","description":"test-only typed destination","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":true,"query":false,"cdc":false,"dynamic_schema":false}}`)}
 	bundleFS["synthetic/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/widgets"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","query":{"id":{"template":"{{ query.id }}","omit_when_absent":true}},"records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)}
-	bundleFS["synthetic/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/target","covered_by":{"write":"apply_widget"}}]}`)}
 	bundleFS["synthetic/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","x-primary-key":["id"],"properties":{"id":{"type":"string"},"value":{"type":"string"}}}`)}
 	bundleFS["synthetic/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[{"name":"apply_widget","kind":"create","method":"POST","path":"/widgets/target","body_type":"json","body_fields":["target_id","value"],"idempotency_key_header":"Idempotency-Key","risk":"creates a synthetic widget target","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}]}`)}
 	bundleFS["synthetic/sync_transport.json"] = &fstest.MapFile{Data: []byte(`{
@@ -496,15 +488,13 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
     "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
     "eligible_streams": ["widgets"],
     "modes": ["full_append"],
-    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-    "conformance": {"suite": "synthetic_typed_destination", "run_id": "source_v1"}
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"}
   },
   "destination_transport": {
     "executor": {"family": "declarative_api", "id": "declarative_typed_destination"},
     "eligible_actions": ["apply_widget"],
     "modes": ["full_append"],
     "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-    "conformance": {"suite": "synthetic_typed_destination", "run_id": "destination_v1"},
     "acknowledgement": "durable_warehouse",
     "apply_strategies": [{
       "mode": "full_append", "strategy": "append", "action": "apply_widget",
@@ -516,8 +506,7 @@ func TestDeclarativeTypedDestination_ReadBackProviderStateBeforeCheckpoint(t *te
       "max_records": 1000,
       "max_attempts": 2,
       "timeout_milliseconds": 5000,
-      "retry_delay_milliseconds": 1,
-      "conformance": {"suite": "synthetic_typed_destination", "run_id": "destination_v1"}
+      "retry_delay_milliseconds": 1
       }
     }],
     "source_bindings": [{
@@ -2416,10 +2405,10 @@ func TestDeclarativeTypedDestinationRejectsPersistedFullOverwriteDuringPreparati
 	}
 }
 
-// TestDefinitionTransportFactoriesSelectDistinctTypedDestinationEvidence proves
-// a factory accepts exactly the evidence selected by each declaring bundle,
-// rather than silently admitting the first destination that happened to load.
-func TestDefinitionTransportFactoriesSelectDistinctTypedDestinationEvidence(t *testing.T) {
+// TestDefinitionTransportFactoriesComposeDistinctTypedDestinations proves one
+// exact executor factory can serve multiple execution declarations without a
+// connector-name branch or historical-evidence admission.
+func TestDefinitionTransportFactoriesComposeDistinctTypedDestinations(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
 		t.Fatal(err)
@@ -2456,21 +2445,6 @@ func TestDefinitionTransportFactoriesSelectDistinctTypedDestinationEvidence(t *t
 	if typedFactory == nil {
 		t.Fatal("declarative typed destination factory was not composed")
 	}
-	accepted := map[connectors.ConformanceEvidenceReference]bool{
-		typedFactory.DestinationEvidence: true,
-	}
-	for _, evidence := range typedFactory.AcceptedDestinationEvidences {
-		accepted[evidence] = true
-	}
-	for _, evidence := range []connectors.ConformanceEvidenceReference{
-		{Suite: "typed_destination", RunID: "destination_one"},
-		{Suite: "typed_destination", RunID: "destination_two"},
-	} {
-		if !accepted[evidence] {
-			t.Fatalf("typed destination evidence %#+v was not collected from its declaring definition", evidence)
-		}
-	}
-
 	if err := a.composeTransportRegistry(); err != nil {
 		t.Fatalf("compose distinct typed destinations: %v", err)
 	}
@@ -2729,24 +2703,21 @@ func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID str
 	}
 	files[name+"/metadata.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{"name":%q,"display_name":"Synthetic typed destination","description":"test-only typed destination","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":true,"query":false,"cdc":false,"dynamic_schema":false}}`, name))}
 	files[name+"/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/widgets"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","query":{"id":{"template":"{{ query.id }}","omit_when_absent":true}},"records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)}
-	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/target","covered_by":{"write":"apply_widget"}}]}`)}
 	files[name+"/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","x-primary-key":["id"],"properties":{"id":{"type":"string"},"value":{"type":"string"}}}`)}
 	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(`{"actions":[{"name":"apply_widget","kind":"create","method":"POST","path":"/widgets/target","body_type":"json","body_fields":["target_id","value"],"idempotency_key_header":"Idempotency-Key","risk":"creates a synthetic widget target","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}]}`)}
-	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(`{
   "schema_version": 1,
   "source_transport": {
     "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
     "eligible_streams": ["widgets"],
     "modes": ["full_append"],
-    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-    "conformance": {"suite": "typed_destination", "run_id": %q}
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"}
   },
   "destination_transport": {
     "executor": {"family": "declarative_api", "id": "declarative_typed_destination"},
     "eligible_actions": ["apply_widget"],
     "modes": ["full_append"],
     "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-    "conformance": {"suite": "typed_destination", "run_id": %q},
     "acknowledgement": "durable_warehouse",
     "apply_strategies": [{
       "mode": "full_append", "strategy": "append", "action": "apply_widget",
@@ -2758,8 +2729,7 @@ func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID str
       "max_records": 1000,
       "max_attempts": 2,
       "timeout_milliseconds": 5000,
-      "retry_delay_milliseconds": 1,
-      "conformance": {"suite": "typed_destination", "run_id": %q}
+      "retry_delay_milliseconds": 1
       }
     }],
     "source_bindings": [{
@@ -2770,13 +2740,13 @@ func declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID str
       "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}
     }]
   }
-}`, sourceRunID, destinationRunID, destinationRunID))}
+}`)}
 	return files
 }
 
 func declarativeTypedDestinationActionBundleFS(name, sourceRunID, destinationRunID, action, path string) fstest.MapFS {
 	files := declarativeTypedDestinationBundleFS(name, sourceRunID, destinationRunID)
-	for _, filename := range []string{name + "/writes.json", name + "/api_surface.json", name + "/sync_transport.json"} {
+	for _, filename := range []string{name + "/writes.json", name + "/sync_transport.json"} {
 		contents := strings.ReplaceAll(string(files[filename].Data), "apply_widget", action)
 		contents = strings.ReplaceAll(contents, "/widgets/target", path)
 		files[filename] = &fstest.MapFile{Data: []byte(contents)}
@@ -2807,33 +2777,30 @@ func declarativeTypedDestinationMultiActionBundleFS(name, sourceRunID, destinati
   {"name":"append_widget","kind":"create","method":"POST","path":"/widgets/append","body_type":"json","body_fields":["target_id","value"],"idempotency_key_header":"Idempotency-Key","risk":"creates a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}},
   {"name":"replace_widget","kind":"update","method":"POST","path":"/widgets/replace","body_type":"json","body_fields":["target_id","value"],"idempotency_key_header":"Idempotency-Key","risk":"replaces a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id","value"],"additionalProperties":false,"properties":{"target_id":{"type":"string"},"value":{"type":"string"}}}}
 ]}`)}
-	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}},{"method":"POST","path":"/widgets/append","covered_by":{"write":"append_widget"}},{"method":"POST","path":"/widgets/replace","covered_by":{"write":"replace_widget"}}]}`)}
-	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(`{
   "schema_version": 1,
   "source_transport": {
     "executor": {"family": "declarative_api", "id": "declarative_stream_source"},
     "eligible_streams": ["widgets"],
     "modes": ["full_append"],
-    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-    "conformance": {"suite": "typed_destination", "run_id": %q}
+    "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"}
   },
   "destination_transport": {
     "executor": {"family": "declarative_api", "id": "declarative_typed_destination"},
     "eligible_actions": ["append_widget", "replace_widget"],
     "modes": ["full_append"],
     "delivery": {"idempotency": "keyed", "ordering": "source_ordered", "deletes": "not_available"},
-    "conformance": {"suite": "typed_destination", "run_id": %q},
     "acknowledgement": "durable_warehouse",
     "apply_strategies": [
-      {"mode": "full_append", "strategy": "append", "action": "append_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "expected": [{"provider_field": "value", "expected_field": "value"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1, "conformance": {"suite": "typed_destination", "run_id": %q}}},
-      {"mode": "full_append", "strategy": "append", "action": "replace_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "expected": [{"provider_field": "value", "expected_field": "value"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1, "conformance": {"suite": "typed_destination", "run_id": %q}}}
+      {"mode": "full_append", "strategy": "append", "action": "append_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "expected": [{"provider_field": "value", "expected_field": "value"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1}},
+      {"mode": "full_append", "strategy": "append", "action": "replace_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "expected": [{"provider_field": "value", "expected_field": "value"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1}}
     ],
     "source_bindings": [
       {"action": "append_widget", "executor": {"family": "declarative_api", "id": "declarative_stream_source"}, "eligible_streams": ["widgets"], "batch": {"disposition": "per_record", "max_records": 1000}, "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}},
       {"action": "replace_widget", "executor": {"family": "declarative_api", "id": "declarative_stream_source"}, "eligible_streams": ["widgets"], "batch": {"disposition": "per_record", "max_records": 1000}, "record_mapping": {"kind": "input_fields", "inputs": [{"input": "target_id", "field": "id"}, {"input": "value", "field": "value"}]}}
     ]
   }
-}`, sourceRunID, destinationRunID, destinationRunID, destinationRunID))}
+}`)}
 	return files
 }
 
@@ -2844,15 +2811,13 @@ func declarativeTypedDestinationThreeActionBundleFS(name, sourceRunID, destinati
   {"name":"archive_widget","kind":"update","method":"POST","path":"/widgets/archive","body_type":"json","body_fields":["target_ref","state"],"idempotency_key_header":"Idempotency-Key","risk":"archives a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_ref","state"],"additionalProperties":false,"properties":{"target_ref":{"type":"string"},"state":{"type":"string"}}}}
 ]}`, 1)
 	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(writes)}
-	apiSurface := strings.Replace(string(files[name+"/api_surface.json"].Data), `}}]}`, `}},{"method":"POST","path":"/widgets/archive","covered_by":{"write":"archive_widget"}}]}`, 1)
-	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
 	transport := strings.ReplaceAll(string(files[name+"/sync_transport.json"].Data), `"eligible_actions": ["append_widget", "replace_widget"]`, `"eligible_actions": ["append_widget", "replace_widget", "archive_widget"]`)
 	transport = strings.Replace(transport, `
     ],
-    "source_bindings":`, fmt.Sprintf(`,
-      {"mode": "full_append", "strategy": "append", "action": "archive_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_ref"}], "expected": [{"provider_field": "state", "expected_field": "state"}], "max_records": 37, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1, "conformance": {"suite": "typed_destination", "run_id": %q}}}
+    "source_bindings":`, `,
+      {"mode": "full_append", "strategy": "append", "action": "archive_widget", "read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_ref"}], "expected": [{"provider_field": "state", "expected_field": "state"}], "max_records": 37, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1}}
     ],
-    "source_bindings":`, destinationRunID), 1)
+    "source_bindings":`, 1)
 	files[name+"/sync_transport.json"] = &fstest.MapFile{Data: []byte(transport)}
 	return files
 }
@@ -2878,13 +2843,11 @@ func declarativeTypedDestinationTombstoneBundleFS(name, sourceRunID, destination
   {"name":"delete_widget","kind":"delete","method":"DELETE","path":"/widgets/{{ record.target_id }}","path_fields":["target_id"],"body_type":"none","idempotency_key_header":"Idempotency-Key","delete":{"idempotent":true,"missing_ok_status":[404]},"risk":"deletes a synthetic widget target","confirm":"destructive","record_schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["target_id"],"additionalProperties":false,"properties":{"target_id":{"type":"string"}}}}
 ]}`, 1)
 	files[name+"/writes.json"] = &fstest.MapFile{Data: []byte(writes)}
-	apiSurface := strings.Replace(string(files[name+"/api_surface.json"].Data), `}}]}`, `}},{"method":"DELETE","path":"/widgets/{target_id}","covered_by":{"write":"delete_widget"}}]}`, 1)
-	files[name+"/api_surface.json"] = &fstest.MapFile{Data: []byte(apiSurface)}
 	transport := string(files[name+"/sync_transport.json"].Data)
 	transport = strings.Replace(transport, `"eligible_actions": ["apply_widget"]`, `"eligible_actions": ["apply_widget", "delete_widget"]`, 1)
 	transport = strings.ReplaceAll(transport, `"deletes": "not_available"`, `"deletes": "tombstone"`)
 	transport = strings.Replace(transport, `"action": "apply_widget",
-      "read_back":`, `"action": "apply_widget", "tombstone_action": "delete_widget", "tombstone_read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1, "conformance": {"suite": "typed_destination", "run_id": "`+destinationRunID+`"}},
+      "read_back":`, `"action": "apply_widget", "tombstone_action": "delete_widget", "tombstone_read_back": {"operation": "widgets", "receipt_locator": {"response_index": 0, "body_field": "receipt_id", "query_parameter": "id", "max_value_bytes": 256, "max_pages": 1}, "identity": [{"provider_field": "id", "expected_field": "target_id"}], "max_records": 1000, "max_attempts": 2, "timeout_milliseconds": 5000, "retry_delay_milliseconds": 1},
       "read_back":`, 1)
 	transport = strings.Replace(transport, `    }]
   }`, `    },
@@ -3081,10 +3044,9 @@ func syntheticTransportBundleFS() fstest.MapFS {
 		"synthetic/metadata.json":        &fstest.MapFile{Data: []byte(`{"name":"synthetic","display_name":"Synthetic","description":"test-only definition-owned connector","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":true,"query":false,"cdc":false,"dynamic_schema":false}}`)},
 		"synthetic/spec.json":            &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","required":["base_url"],"properties":{"base_url":{"type":"string"}}}`)},
 		"synthetic/streams.json":         &fstest.MapFile{Data: []byte(`{"base":{"url":"{{ config.base_url }}","user_agent":"synthetic","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/ping"},"error_map":[]},"streams":[{"name":"widgets","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}]}`)},
-		"synthetic/api_surface.json":     &fstest.MapFile{Data: []byte(`{"api":"synthetic","endpoints":[{"method":"GET","path":"/widgets","covered_by":{"stream":"widgets"}}]}`)},
 		"synthetic/schemas/widgets.json": &fstest.MapFile{Data: []byte(`{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","x-primary-key":["id"],"properties":{"id":{"type":"string"}}}`)},
 		"synthetic/docs.md":              &fstest.MapFile{Data: []byte("# Overview\n\nsynthetic\n\n## Auth setup\n\nnone\n\n## Streams notes\n\nnone\n\n## Write actions & risks\n\nnone\n\n## Known limits\n\nnone\n")},
-		"synthetic/sync_transport.json":  &fstest.MapFile{Data: []byte(`{"schema_version":1,"source_transport":{"executor":{"family":"native_api","id":"synthetic_snapshot_source"},"eligible_streams":["widgets"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"},"conformance":{"suite":"synthetic_transport","run_id":"source_v1"}},"destination_transport":{"executor":{"family":"native_api","id":"synthetic_stage_destination"},"eligible_actions":["stage_append"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"},"conformance":{"suite":"synthetic_transport","run_id":"destination_v1"},"acknowledgement":"durable_warehouse","apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append"}]}}`)},
+		"synthetic/sync_transport.json":  &fstest.MapFile{Data: []byte(`{"schema_version":1,"source_transport":{"executor":{"family":"native_api","id":"synthetic_snapshot_source"},"eligible_streams":["widgets"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"}},"destination_transport":{"executor":{"family":"native_api","id":"synthetic_stage_destination"},"eligible_actions":["stage_append"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"},"acknowledgement":"durable_warehouse","apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append"}]}}`)},
 	}
 }
 
@@ -3472,7 +3434,7 @@ func TestOpenComposedGitHubCommitsHonorsTransportMaxPages(t *testing.T) {
 		wantRecords  int
 		wantBudget   bool
 	}{
-		{name: "omitted defaults to one page", wantRequests: 1, wantRecords: 100, wantBudget: true},
+		{name: "omitted exhausts a declared full snapshot", wantRequests: 3, wantRecords: 201},
 		{name: "positive cap", maxPages: "2", wantRequests: 2, wantRecords: 200, wantBudget: true},
 		{name: "zero is unlimited", maxPages: "0", wantRequests: 3, wantRecords: 201},
 		{name: "all is unlimited", maxPages: "all", wantRequests: 3, wantRecords: 201},
@@ -3630,7 +3592,7 @@ func TestDeclarativeTransport_PageBudgetIsNotEOF(t *testing.T) {
 		wantRecords   int
 		wantExhausted bool
 	}{
-		{name: "omitted default is an incomplete one-page prefix", wantRequests: 1, wantRecords: 100},
+		{name: "omitted full snapshot is exhausted", wantRequests: 3, wantRecords: 201, wantExhausted: true},
 		{name: "explicit one-page prefix", maxPages: "1", wantRequests: 1, wantRecords: 100},
 		{name: "explicit two-page prefix", maxPages: "2", wantRequests: 2, wantRecords: 200},
 		{name: "unlimited scan is exhausted", maxPages: "unlimited", wantRequests: 3, wantRecords: 201, wantExhausted: true},

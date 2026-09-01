@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "edit_team_name_or_description_access_level": {
+          "type": "string"
+        },
+        "edit_team_visibility_or_trash_team_access_level": {
+          "type": "string"
+        },
+        "endorsed": {
+          "type": "boolean"
+        },
+        "guest_invite_management_access_level": {
+          "type": "string"
+        },
+        "html_description": {
+          "type": "string"
+        },
+        "join_request_management_access_level": {
+          "type": "string"
+        },
+        "member_invite_management_access_level": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "organization": {
+          "type": "string"
+        },
+        "team_content_management_access_level": {
+          "type": "string"
+        },
+        "team_member_removal_access_level": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "team_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "team_gid",
+    "data"
+  ],
+  "type": "object"
+}

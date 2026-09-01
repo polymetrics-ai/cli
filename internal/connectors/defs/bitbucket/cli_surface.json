@@ -104,7 +104,6 @@
       "output_policy": "json_redacted",
       "path": "search code",
       "risk": "planned bounded provider query; no raw query escape hatch is exposed",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Planned bounded Bitbucket provider search/query command; blocked pending shared provider-query foundation #2985."
     },
     {
@@ -116,7 +115,6 @@
       "output_policy": "binary_file_bounded",
       "path": "downloads get",
       "risk": "planned bounded binary transfer; no generic byte-stream command is exposed",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Planned bounded Bitbucket binary download command; blocked pending binary transfer foundation."
     }
   ],
@@ -196,12 +194,6 @@
       "summary": "Binary and provider-search operation ledger rows are present but command execution is blocked until the shared bounded-command foundations land."
     }
   ],
-  "source_cli": {
-    "docs": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-    "name": "Bitbucket Cloud REST API",
-    "reference": "OpenAPI 3.0 Bitbucket API 2.0",
-    "source": "provider_api"
-  },
   "tagline": "Read Bitbucket Cloud resources and plan typed repository mutations safely.",
   "usage": "pm bitbucket <command> [flags]"
 }

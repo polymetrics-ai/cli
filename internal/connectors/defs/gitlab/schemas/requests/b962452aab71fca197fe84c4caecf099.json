@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "epic_iid": {
+      "type": "integer"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "related_epic_link_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "epic_iid",
+    "id",
+    "related_epic_link_id"
+  ],
+  "type": "object"
+}

@@ -3,415 +3,110 @@
   "title": "Polymetrics CLI connector foundation catalog",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "$schema",
-    "schema_version",
-    "catalog_revision",
-    "authority",
-    "foundations"
-  ],
+  "required": ["$schema", "schema_version", "catalog_revision", "authority", "foundations"],
   "properties": {
-    "$schema": {
-      "const": "./catalog.schema.json"
-    },
-    "schema_version": {
-      "const": 1
-    },
-    "catalog_revision": {
-      "type": "integer",
-      "minimum": 1
-    },
+    "$schema": {"const": "./catalog.schema.json"},
+    "schema_version": {"const": 1},
+    "catalog_revision": {"type": "integer", "minimum": 1},
     "authority": {
-      "$ref": "#/$defs/authority"
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authoring_only", "runtime_input", "provider_fact_authority", "connector_specific_selection", "shared_runtime_connector_name_branching"],
+      "properties": {
+        "authoring_only": {"const": true},
+        "runtime_input": {"const": false},
+        "provider_fact_authority": {"const": "source_lock_vnext"},
+        "connector_specific_selection": {"const": "closed_definition_reference"},
+        "shared_runtime_connector_name_branching": {"const": false}
+      }
     },
     "foundations": {
       "type": "array",
       "minItems": 1,
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/$defs/foundation"
-      }
+      "items": {"$ref": "#/$defs/foundation"}
     }
   },
   "$defs": {
-    "nonEmptyString": {
-      "type": "string",
-      "minLength": 1
-    },
-    "repoPath": {
-      "type": "string",
-      "minLength": 1,
-      "pattern": "^[^/]"
-    },
-    "authority": {
+    "strings": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "symbol": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "authoring_only",
-        "runtime_input",
-        "mapping_admission",
-        "certification_admission",
-        "provider_fact_authority",
-        "connector_specific_selection",
-        "shared_runtime_connector_name_branching"
-      ],
-      "properties": {
-        "authoring_only": {
-          "const": true
-        },
-        "runtime_input": {
-          "const": false
-        },
-        "mapping_admission": {
-          "const": false
-        },
-        "certification_admission": {
-          "const": false
-        },
-        "provider_fact_authority": {
-          "const": "source_lock"
-        },
-        "connector_specific_selection": {
-          "const": "closed_definition_reference"
-        },
-        "shared_runtime_connector_name_branching": {
-          "const": false
-        }
-      }
+      "required": ["file", "name"],
+      "properties": {"file": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1}}
     },
     "owner": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "primary_package",
-        "supporting_packages",
-        "files",
-        "symbols"
-      ],
+      "required": ["primary_package", "supporting_packages", "files", "symbols"],
       "properties": {
-        "primary_package": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "supporting_packages": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/nonEmptyString"
-          }
-        },
-        "files": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/repoPath"
-          }
-        },
-        "symbols": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/ownerSymbol"
-          }
-        }
-      }
-    },
-    "ownerSymbol": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "file",
-        "name"
-      ],
-      "properties": {
-        "file": {
-          "$ref": "#/$defs/repoPath"
-        },
-        "name": {
-          "$ref": "#/$defs/nonEmptyString"
-        }
+        "primary_package": {"type": "string", "minLength": 1},
+        "supporting_packages": {"$ref": "#/$defs/strings"},
+        "files": {"$ref": "#/$defs/strings"},
+        "symbols": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/symbol"}}
       }
     },
     "supportedContracts": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "lanes",
-        "protocols",
-        "source_forms",
-        "request_response_shapes",
-        "sync_modes",
-        "guarantees"
-      ],
+      "required": ["lanes", "protocols", "source_forms", "request_response_shapes", "sync_modes", "guarantees"],
       "properties": {
-        "lanes": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "enum": [
-              "etl",
-              "reverse_etl",
-              "direct_read",
-              "direct_write",
-              "binary_download",
-              "binary_upload"
-            ]
-          }
-        },
-        "protocols": {
-          "$ref": "#/$defs/stringSet"
-        },
-        "source_forms": {
-          "$ref": "#/$defs/stringSet"
-        },
-        "request_response_shapes": {
-          "$ref": "#/$defs/stringSet"
-        },
-        "sync_modes": {
-          "$ref": "#/$defs/stringSet"
-        },
-        "guarantees": {
-          "$ref": "#/$defs/stringSet"
-        }
-      }
-    },
-    "stringSet": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "$ref": "#/$defs/nonEmptyString"
+        "lanes": {"type": "array", "uniqueItems": true, "items": {"enum": ["etl", "reverse_etl", "direct_read", "direct_write", "binary_download", "binary_upload", "sync_transport"]}},
+        "protocols": {"$ref": "#/$defs/strings"},
+        "source_forms": {"$ref": "#/$defs/strings"},
+        "request_response_shapes": {"$ref": "#/$defs/strings"},
+        "sync_modes": {"$ref": "#/$defs/strings"},
+        "guarantees": {"$ref": "#/$defs/strings"}
       }
     },
     "selection": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "mechanisms",
-        "definition_files",
-        "selectors",
-        "notes"
-      ],
+      "required": ["mechanisms", "definition_files", "selectors", "notes"],
       "properties": {
-        "mechanisms": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "enum": [
-              "authoring_command",
-              "definition_field",
-              "interface_registration",
-              "application_composition",
-              "public_api",
-              "verification_command"
-            ]
-          }
-        },
-        "definition_files": {
-          "$ref": "#/$defs/stringSet"
-        },
-        "selectors": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/nonEmptyString"
-          }
-        },
-        "notes": {
-          "$ref": "#/$defs/nonEmptyString"
-        }
+        "mechanisms": {"$ref": "#/$defs/strings"},
+        "definition_files": {"$ref": "#/$defs/strings"},
+        "selectors": {"$ref": "#/$defs/strings"},
+        "notes": {"type": "string", "minLength": 1}
       }
     },
     "consumerExample": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "name",
-        "files",
-        "notes"
-      ],
-      "properties": {
-        "name": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "files": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/repoPath"
-          }
-        },
-        "notes": {
-          "$ref": "#/$defs/nonEmptyString"
-        }
-      }
+      "required": ["name", "files", "notes"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "files": {"$ref": "#/$defs/strings"}, "notes": {"type": "string", "minLength": 1}}
     },
     "proofTest": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "package",
-        "file",
-        "name"
-      ],
-      "properties": {
-        "package": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "file": {
-          "$ref": "#/$defs/repoPath"
-        },
-        "name": {
-          "type": "string",
-          "pattern": "^Test[A-Za-z0-9_]+$"
-        }
-      }
+      "required": ["package", "file", "name"],
+      "properties": {"package": {"type": "string", "minLength": 1}, "file": {"type": "string", "minLength": 1}, "name": {"type": "string", "pattern": "^Test[A-Za-z0-9_]+$"}}
     },
-    "knownGapRef": {
+    "gap": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "reference",
-        "notes"
-      ],
-      "properties": {
-        "id": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "reference": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "notes": {
-          "$ref": "#/$defs/nonEmptyString"
-        }
-      }
+      "required": ["id", "reference", "notes"],
+      "properties": {"id": {"type": "string", "minLength": 1}, "reference": {"type": "string", "minLength": 1}, "notes": {"type": "string", "minLength": 1}}
     },
     "foundation": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "id",
-        "layer",
-        "status",
-        "kind",
-        "summary",
-        "owner",
-        "supported_contracts",
-        "selection",
-        "constraints",
-        "non_goals",
-        "consumer_examples",
-        "proof_tests",
-        "known_gap_refs",
-        "update_conditions",
-        "supersedes"
-      ],
+      "required": ["id", "layer", "status", "kind", "summary", "owner", "supported_contracts", "selection", "constraints", "non_goals", "consumer_examples", "proof_tests", "known_gap_refs", "update_conditions", "supersedes"],
       "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)*\\.v[1-9][0-9]*$"
-        },
-        "layer": {
-          "enum": [
-            "source_retention_import",
-            "source_projection_admission",
-            "declarative_bundle_loading",
-            "direct_execution",
-            "provider_extensions",
-            "sync_contract_transport",
-            "warehouse_etl",
-            "reverse_etl",
-            "flow_schedule",
-            "conformance_certification"
-          ]
-        },
-        "status": {
-          "enum": [
-            "investigating",
-            "available",
-            "partial",
-            "planned",
-            "retired"
-          ]
-        },
-        "kind": {
-          "enum": [
-            "generic",
-            "extension_seam",
-            "connector_specific_reference"
-          ]
-        },
-        "summary": {
-          "$ref": "#/$defs/nonEmptyString"
-        },
-        "owner": {
-          "$ref": "#/$defs/owner"
-        },
-        "supported_contracts": {
-          "$ref": "#/$defs/supportedContracts"
-        },
-        "selection": {
-          "$ref": "#/$defs/selection"
-        },
-        "constraints": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/nonEmptyString"
-          }
-        },
-        "non_goals": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/nonEmptyString"
-          }
-        },
-        "consumer_examples": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/consumerExample"
-          }
-        },
-        "proof_tests": {
-          "type": "array",
-          "minItems": 2,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/proofTest"
-          }
-        },
-        "known_gap_refs": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/knownGapRef"
-          }
-        },
-        "update_conditions": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/nonEmptyString"
-          }
-        },
-        "supersedes": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)*\\.v[1-9][0-9]*$"
-          }
-        }
+        "id": {"type": "string", "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)*\\.v[1-9][0-9]*$"},
+        "layer": {"type": "string", "minLength": 1},
+        "status": {"enum": ["available", "planned", "retired"]},
+        "kind": {"enum": ["generic", "extension_seam", "connector_specific_reference"]},
+        "summary": {"type": "string", "minLength": 1},
+        "owner": {"$ref": "#/$defs/owner"},
+        "supported_contracts": {"$ref": "#/$defs/supportedContracts"},
+        "selection": {"$ref": "#/$defs/selection"},
+        "constraints": {"$ref": "#/$defs/strings"},
+        "non_goals": {"$ref": "#/$defs/strings"},
+        "consumer_examples": {"type": "array", "items": {"$ref": "#/$defs/consumerExample"}},
+        "proof_tests": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/proofTest"}},
+        "known_gap_refs": {"type": "array", "items": {"$ref": "#/$defs/gap"}},
+        "update_conditions": {"$ref": "#/$defs/strings"},
+        "supersedes": {"$ref": "#/$defs/strings"}
       }
     }
   }

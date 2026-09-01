@@ -1,16 +1,52 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "attributable_to": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "categories": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "created_by": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "duration_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "entered_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
   "title": "time_tracking_entries",
   "type": "object",
-  "x-primary-key": ["gid"],
-  "required": ["gid"],
-  "properties": {
-    "gid": { "type": "string" },
-    "attributable_to": { "type": ["object", "null"] },
-    "categories": { "type": ["array", "null"] },
-    "created_by": { "type": ["object", "null"] },
-    "duration_minutes": { "type": ["integer", "null"] },
-    "entered_on": { "type": ["string", "null"] },
-    "resource_type": { "type": ["string", "null"] }
-  }
+  "x-primary-key": [
+    "gid"
+  ]
 }

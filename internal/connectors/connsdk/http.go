@@ -236,11 +236,11 @@ type Requester struct {
 	RateLimitCostHeader string
 	RouteRateLimits     RateLimitRouteResolver
 	// RateLimitEvents records bounded admission/observation transitions for a
-	// caller that needs an audit trail (for example, certification). It never
+	// caller that needs an audit trail. It never
 	// receives raw provider data and cannot influence request control flow.
 	RateLimitEvents RateLimitEventSink
 	// RateLimitAdmissionTimeout bounds one admission wait without shortening
-	// the surrounding request or certification run. A deadline failure is
+	// the surrounding request. A deadline failure is
 	// emitted as a not_sent event and the provider is never contacted.
 	RateLimitAdmissionTimeout time.Duration
 }

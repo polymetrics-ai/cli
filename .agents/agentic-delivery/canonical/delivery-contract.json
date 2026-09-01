@@ -133,7 +133,7 @@
       },
       {
         "id": "integrate_sub_pr",
-        "instruction": "Integrate the sub-PR only after required checks pass, actionable findings are resolved, automated review coverage satisfies the stacked-PR contract, and an in-scope connector certification Shepherd verdict is PROCEED."
+        "instruction": "Integrate the sub-PR only after required checks pass, actionable findings are resolved, and automated review coverage satisfies the stacked-PR contract."
       },
       {
         "id": "integrated_parent_gates",
@@ -141,7 +141,7 @@
       },
       {
         "id": "ready_parent",
-        "instruction": "Mark the draft parent PR ready only when every child is integrated, full parent checks are green, required review coverage is complete, and every in-scope connector certification Shepherd verdict is PROCEED. Ready is not merge approval."
+        "instruction": "Mark the draft parent PR ready only when every child is integrated, full parent checks are green, and required review coverage is complete. Ready is not merge approval."
       },
       {
         "id": "captain_merge",
@@ -157,24 +157,24 @@
     "wraps_state": "execute_tdd",
     "steps": [
       {
-        "id": "source_policy_map",
-        "instruction": "Build the accepted source-policy API map before implementation."
+        "id": "source_lock_authoring",
+        "instruction": "Author the immutable compact source.lock.json as the connector evidence input."
       },
       {
-        "id": "bundle_operation_plan",
-        "instruction": "Plan the bundle and operations with per-field provenance."
+        "id": "canonical_descriptor_plan",
+        "instruction": "Plan canonical per-operation descriptors with shared request and response schema references."
       },
       {
-        "id": "replay_conformance",
-        "instruction": "Add replay fixtures and conformance tests as the RED evidence before production behavior."
+        "id": "projection_characterization",
+        "instruction": "Add source-lock projection and execution-only runtime characterization tests as RED evidence before production behavior."
       },
       {
         "id": "implementation_slices",
         "instruction": "Execute the inherited RED, GREEN, and REFACTOR implementation slices."
       },
       {
-        "id": "runtime_surface_gates",
-        "instruction": "Run the real commandrunner Preflight sweep plus connectorgen validate and connectorgen surface-sync --check; do not copy runtime rules into a validator."
+        "id": "runtime_execution_gates",
+        "instruction": "Run source-lock rendering drift checks, execution JSON validation, and real commandrunner preflight against the rendered bundle only."
       },
       {
         "id": "website_data_refresh",
@@ -239,70 +239,6 @@
     "documentation_url": "https://opencode.ai/docs/agents/",
     "delegation_guarantee": "The generated permission map denies task and skill while retaining only bounded edit and bash access, so this worker cannot delegate to ambient agents or invoke an adapter-local skill surface."
   },
-  "connector_certification_gate": {
-    "schema_version": 1,
-    "name": "connector-certification-shepherd",
-    "input_schema_version": 1,
-    "verdict_schema_version": 1,
-    "accepted_evidence_schema_version": 2,
-    "proof_redaction_strategy": "repository_salted_hmac_sha256_v1",
-    "read_only": true,
-    "generated_command": "go run ./cmd/connectorgen certification-matrix --check",
-    "command": {
-      "argv": [
-        "go",
-        "run",
-        "./cmd/agentcontractgen",
-        "certification-gate",
-        "--root",
-        "<repository-root>",
-        "--connector",
-        "<connector>",
-        "--transition",
-        "<transition>"
-      ],
-      "instruction": "Run this read-only command at each protected transition with one canonical absolute non-symlink repository root. It emits the complete deterministic verdict as JSON, exits zero only for PROCEED, and otherwise preserves RETRY or HALT evidence on stdout while blocking the transition."
-    },
-    "inputs": {
-      "certification_shards": "internal/connectors/defs",
-      "status": "internal/connectors/certifications/status.json",
-      "evidence_directory": "internal/connectors/certifications/evidence"
-    },
-    "input_fields": [
-      "schema_version",
-      "connector",
-      "transition",
-      "inputs.certification_shards",
-      "inputs.status",
-      "inputs.evidence_directory"
-    ],
-    "verdict_fields": [
-      "schema_version",
-      "connector",
-      "transition",
-      "decision",
-      "failures"
-    ],
-    "binding_criteria": [
-      "declared",
-      "implemented",
-      "fixture_tested",
-      "live_tested",
-      "live_evidence"
-    ],
-    "enforced_transitions": [
-      "integrate_sub_pr",
-      "accepted",
-      "ready_parent",
-      "human_ready"
-    ],
-    "verdicts": [
-      "PROCEED",
-      "RETRY",
-      "HALT"
-    ],
-    "unsupported_proof_schema_behavior": "HALT"
-  },
   "tracker": {
     "draft_parent_before_production": true,
     "parent_seed": "Use a deliberate roadmap or status scaffold when useful; otherwise use an empty seed commit solely to make the draft parent PR possible.",
@@ -312,15 +248,13 @@
       "CI checks pass",
       "automated review findings are resolved and required coverage exists",
       "the diff stays inside the sub-issue scope",
-      "no requested-changes review or human gate remains",
-      "connector certification Shepherd verdict is PROCEED before an in-scope certification transition"
+      "no requested-changes review or human gate remains"
     ],
     "ready_when": [
       "all children are integrated",
       "full parent verification is green",
       "integrated review coverage is complete",
-      "no actionable finding remains",
-      "connector certification Shepherd verdict is PROCEED before an in-scope certification transition"
+      "no actionable finding remains"
     ],
     "final_merge": "Explicit captain approval is mandatory, approval is valid only while the parent is green, and no worker may merge red."
   },

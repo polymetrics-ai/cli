@@ -118,14 +118,13 @@ For human-readable connector pages with per-connector guides, visit [/docs/conne
 ## Connector transport eligibility
 
 `pm connectors inspect <slug> --json` includes `sync_transport.source` and
-`sync_transport.destination`. `unsupported` means that connector has not
-declared the corresponding closed transport role. `declared` is metadata only:
-the runtime must still pass its closed executor, mode, acknowledgement, and
-external-conformance preflight before any sync starts. Inspection does not read
-credentials and a declared role is not a certification claim. A structurally
-valid destination with `acknowledgement: "none"` remains `declared` in inspection
-so its policy is visible, but runtime preflight refuses it; only
-`durable_warehouse` may execute.
+`sync_transport.destination`. `unsupported` means that connector has no rendered
+execution binding for that closed transport role. `declared` is metadata only:
+the runtime must still find its registered executor and accept the requested
+mode and acknowledgement contract before any sync starts. Inspection does not
+read credentials. A structurally valid destination with `acknowledgement: "none"`
+remains `declared` in inspection so its policy is visible, but runtime preflight
+refuses it; only `durable_warehouse` may execute.
 
 GitHub currently declares both closed roles, so `pm connectors inspect github
 --json` reports `declared` for each role. This remains metadata-only and does

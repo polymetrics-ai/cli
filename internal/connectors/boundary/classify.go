@@ -22,7 +22,6 @@ type pathClass struct {
 	ScanGo      bool
 	Allowed     bool
 	DocsOutput  bool
-	Certify     bool
 	Description string
 }
 
@@ -64,7 +63,6 @@ func classifyPath(rel string, lx lexicon) pathClass {
 	}
 	if strings.HasPrefix(rel, "cmd/") || strings.HasPrefix(rel, "internal/") {
 		pc := pathClass{Class: pathClassSharedProduction, ScanGo: true}
-		pc.Certify = strings.HasPrefix(rel, "internal/connectors/certify/")
 		pc.DocsOutput = rel == "internal/connectors/guide.go" || rel == "internal/cli/docs.go" || rel == "internal/cli/skills.go" || rel == "internal/cli/connector_docs.go"
 		return pc
 	}

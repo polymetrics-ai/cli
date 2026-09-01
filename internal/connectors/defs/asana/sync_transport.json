@@ -1,26 +1,22 @@
 {
   "schema_version": 1,
   "source_transport": {
-    "executor": {
-      "family": "declarative_api",
-      "id": "asana_event_token_source"
+    "delivery": {
+      "deletes": "tombstone",
+      "idempotency": "keyed",
+      "ordering": "window_coalesced"
     },
     "eligible_streams": [
       "tasks"
     ],
+    "executor": {
+      "family": "declarative_api",
+      "id": "asana_event_token_source"
+    },
     "modes": [
       "incremental_append",
       "incremental_upsert",
       "incremental_dedupe"
-    ],
-    "delivery": {
-      "idempotency": "keyed",
-      "ordering": "window_coalesced",
-      "deletes": "tombstone"
-    },
-    "conformance": {
-      "suite": "asana_event_token_source",
-      "run_id": "source_lock_contract_v1"
-    }
+    ]
   }
 }

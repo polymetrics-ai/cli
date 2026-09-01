@@ -1,8 +1,0 @@
-{
-  "phase": "issue-3978-postgres-capability-publication-r1",
-  "mode": "inline-manual-gsd",
-  "status": "verified_pending_delivery",
-  "current_slice": "PGFINAL-8-generic-write-publication-correction-and-delivery",
-  "base_branch": "integration/4015-mvp-flat-r1",
-  "working_branch": "fm/cli-3978-postgres-certify-publish-r1"
-}

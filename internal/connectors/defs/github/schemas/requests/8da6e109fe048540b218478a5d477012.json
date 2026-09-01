@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "content_type": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "hook_id": {
+      "type": "integer"
+    },
+    "insecure_ssl": {
+      "maxLength": 1048576,
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "secret": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "url": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "hook_id"
+  ],
+  "type": "object"
+}

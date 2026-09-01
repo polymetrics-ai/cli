@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "end_date": {
+          "type": "string"
+        },
+        "start_date": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ooo_entry_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ooo_entry_gid",
+    "data"
+  ],
+  "type": "object"
+}

@@ -1,7 +1,0 @@
-{
-  "record": { "id": "fixture_dataset" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/datasets/fixture_dataset"
-  }
-}

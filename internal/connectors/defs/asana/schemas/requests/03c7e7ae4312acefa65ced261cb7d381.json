@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "custom_field_gid": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "after_enum_option": {
+          "type": "string"
+        },
+        "before_enum_option": {
+          "type": "string"
+        },
+        "enum_option": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "enum_option"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "custom_field_gid",
+    "data"
+  ],
+  "type": "object"
+}

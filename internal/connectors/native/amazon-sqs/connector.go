@@ -23,7 +23,7 @@
 //     record mapping.
 //
 // Still ships a defs bundle (internal/connectors/defs/amazon-sqs/
-// {metadata.json,spec.json,api_surface.json,docs.md}) so identity/spec/docs
+// {metadata.json,spec.json,docs.md}) so identity/spec/docs
 // stay uniform with every other connector; metadata.json sets
 // capabilities.dynamic_schema: true and the bundle ships no streams.json
 // (bundle.go's loadStreams only tolerates a missing streams.json when

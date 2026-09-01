@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "cluster_id": {
+      "type": "integer"
+    },
+    "domain": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "environment_scope": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "managed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "management_project_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "namespace_per_environment": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "platform_kubernetes_attributes": {
+      "additionalProperties": false,
+      "properties": {
+        "api_url": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ca_cert": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "namespace": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "token": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "cluster_id"
+  ],
+  "type": "object"
+}

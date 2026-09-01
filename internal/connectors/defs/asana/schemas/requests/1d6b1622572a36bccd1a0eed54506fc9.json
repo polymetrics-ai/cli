@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "insert_after": {
+          "type": "string"
+        },
+        "insert_before": {
+          "type": "string"
+        },
+        "task": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "task"
+      ],
+      "type": "object"
+    },
+    "section_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "section_gid",
+    "data"
+  ],
+  "type": "object"
+}

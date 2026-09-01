@@ -33,10 +33,10 @@ func TestBundleLoadPostgresDatabaseDefinitionWithProvenCDCCapability(t *testing.
 		synccontract.ModeIncrementalDedupeHistory,
 	}
 	if modes := bundle.Database.AdmittedModes(); !reflect.DeepEqual(modes, wantModes) {
-		t.Fatalf("PostgreSQL database definition admitted modes = %v, want the six certified managed-target modes including history %v", modes, wantModes)
+		t.Fatalf("PostgreSQL database definition modes = %v, want the six executable managed-target modes including history %v", modes, wantModes)
 	}
 	if bundle.Metadata.Capabilities.Write || !bundle.Metadata.Capabilities.CDC || bundle.Metadata.Capabilities.Query {
-		t.Fatalf("PostgreSQL metadata capabilities = %+v, want write=false cdc=true query=false; the certified target is declared separately", bundle.Metadata.Capabilities)
+		t.Fatalf("PostgreSQL metadata capabilities = %+v, want write=false cdc=true query=false; the managed target is bound separately", bundle.Metadata.Capabilities)
 	}
 	if bundle.SyncTransport == nil || bundle.SyncTransport.Source == nil || bundle.SyncTransport.Destination == nil {
 		t.Fatal("postgres bundle does not declare both transport endpoints")

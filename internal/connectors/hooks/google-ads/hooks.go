@@ -87,7 +87,7 @@ var gaqlStreams = map[string]gaqlStream{
 // ReadStream implements engine.StreamHook, handling all 3 declared streams
 // (accessible_customers, campaigns, ad_groups) with handled=true always --
 // the declarative streams.json fallback is a structural "shadow" path
-// exercised only by conformance's dynamic checks (Hooks=nil there, and every
+// exercised only by fixture execution checks (Hooks=nil there, and every
 // stream carries a skip_dynamic marker -- see docs.md "Known limits").
 func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
 	if err := ctx.Err(); err != nil {

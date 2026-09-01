@@ -6,8 +6,8 @@ package synccontract
 import "fmt"
 
 // Mode is the closed vocabulary for a database synchronization operation.
-// Parsing or declaring a mode does not make it executable; native executor and
-// conformance admission are checked separately by NativeCommandContract.
+// Parsing or declaring a mode does not make it executable; the matching native
+// executor and mode are resolved separately by NativeCommandContract.
 type Mode string
 
 const (
@@ -46,7 +46,7 @@ func (m Mode) Validate() error {
 }
 
 // ModeNotExecutableError distinguishes a recognized mode from one whose
-// native executor and conformance evidence have not been admitted yet.
+// matching native executor or mode has not been admitted yet.
 type ModeNotExecutableError struct {
 	Mode   Mode
 	Reason string
@@ -57,7 +57,7 @@ func (e *ModeNotExecutableError) Error() string {
 		return "sync mode is not executable"
 	}
 	if e.Reason == "" {
-		return fmt.Sprintf("sync mode %q is not executable: native executor and conformance evidence are required", e.Mode)
+		return fmt.Sprintf("sync mode %q is not executable: a matching native executor and mode are required", e.Mode)
 	}
 	return fmt.Sprintf("sync mode %q is not executable: %s", e.Mode, e.Reason)
 }

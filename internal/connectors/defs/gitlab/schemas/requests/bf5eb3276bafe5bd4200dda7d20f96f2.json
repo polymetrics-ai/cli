@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "external_status_check_id": {
+      "type": "integer"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "merge_request_iid": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "external_status_check_id",
+    "id",
+    "merge_request_iid"
+  ],
+  "type": "object"
+}

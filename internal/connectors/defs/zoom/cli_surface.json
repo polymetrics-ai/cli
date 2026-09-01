@@ -1,22 +1,21 @@
 {
   "tagline": "Read the currently stream-backed Zoom users, meetings, and webinars API routes.",
   "usage": "pm zoom <users|meetings|webinars> list [flags]",
-  "source_cli": {
-    "name": "Zoom API reference",
-    "docs": "https://developers.zoom.us/docs/api/",
-    "reference": "OpenAPI 3.1.1; docs static build 2026-08-03T14-58-19-06-00; retrieved 2026-08-05",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "users",
       "title": "Users",
-      "commands": ["users"]
+      "commands": [
+        "users"
+      ]
     },
     {
       "id": "meetings",
       "title": "Meetings and webinars",
-      "commands": ["meetings", "webinars"]
+      "commands": [
+        "meetings",
+        "webinars"
+      ]
     }
   ],
   "global_flags": [
@@ -53,10 +52,11 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "users",
-      "source_cli_path": "GET /v2/users",
-      "source_url": "https://developers.zoom.us/docs/api/users.md",
       "api_surface": [
-        { "method": "GET", "path": "/v2/users" }
+        {
+          "method": "GET",
+          "path": "/v2/users"
+        }
       ],
       "examples": [
         "pm zoom users list --credential zoom-fixture --limit 25 --json"
@@ -68,8 +68,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "meetings",
-      "source_cli_path": "GET /v2/users/{userId}/meetings",
-      "source_url": "https://developers.zoom.us/docs/api/meetings.md",
       "flags": [
         {
           "name": "user-id",
@@ -80,7 +78,10 @@
         }
       ],
       "api_surface": [
-        { "method": "GET", "path": "/v2/users/{userId}/meetings" }
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/meetings"
+        }
       ],
       "examples": [
         "pm zoom meetings list --credential zoom-fixture --user-id fixture-user --limit 25 --json"
@@ -92,8 +93,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "webinars",
-      "source_cli_path": "GET /v2/users/{userId}/webinars",
-      "source_url": "https://developers.zoom.us/docs/api/meetings.md",
       "flags": [
         {
           "name": "user-id",
@@ -104,7 +103,10 @@
         }
       ],
       "api_surface": [
-        { "method": "GET", "path": "/v2/users/{userId}/webinars" }
+        {
+          "method": "GET",
+          "path": "/v2/users/{userId}/webinars"
+        }
       ],
       "examples": [
         "pm zoom webinars list --credential zoom-fixture --user-id fixture-user --limit 25 --json"

@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-const githubGraphQLSourceLockPath = "github/sources/github-operation-source-lock.json"
-
 // EmbeddedInventory is a deterministic, attributed accounting of the files
 // compiled into FS. It is intentionally derived from the production filesystem
 // rather than the repository tree: build-time-only artifacts must not be able
@@ -34,9 +32,8 @@ type EmbeddedInventoryClass struct {
 }
 
 // Inventory returns the complete, sorted production embed inventory. It also
-// enforces the negative shipping contract: conformance API surfaces, fixtures,
-// and all source locks other than the explicit GitHub certification exception
-// are build-time repository artifacts, never runtime bundle content.
+// enforces the negative shipping contract: authoring, evidence, documentation,
+// old root ledgers, and fixtures are never runtime bundle content.
 func Inventory() (EmbeddedInventory, error) {
 	var report EmbeddedInventory
 	classes := make(map[string]*EmbeddedInventoryClass)
@@ -94,16 +91,13 @@ func embeddedArtifactClass(path string) (string, error) {
 	case strings.Contains("/"+path+"/", "/fixtures/"):
 		return "", fmt.Errorf("production embed contains fixture %q", path)
 	case strings.Contains("/"+path+"/", "/sources/"):
-		if path != githubGraphQLSourceLockPath {
-			return "", fmt.Errorf("production embed contains non-exempt source lock %q", path)
-		}
-		return "certification_source_lock_exception", nil
+		return "", fmt.Errorf("production embed contains source artifact %q", path)
 	case path == "operation_endpoint_ledger.json":
-		return "runtime_endpoint_ledger", nil
+		return "", fmt.Errorf("production embed contains legacy endpoint ledger %q", path)
 	case path == "declaration_admission_sources.json":
-		return "runtime_declaration_target_ledger", nil
+		return "", fmt.Errorf("production embed contains legacy declaration ledger %q", path)
 	case path == "circleci/composite_provider_path_identity.json":
-		return "composite_provider_path_identity", nil
+		return "", fmt.Errorf("production embed contains provider-identity evidence %q", path)
 	case strings.HasSuffix(path, "/schemas.json") || strings.Contains(path, "/schemas/"):
 		return "schema", nil
 	}
@@ -124,13 +118,15 @@ func embeddedArtifactClass(path string) (string, error) {
 	case "writes.json":
 		return "writes", nil
 	case "docs.md":
-		return "docs", nil
+		return "", fmt.Errorf("production embed contains documentation artifact %q", path)
 	case "operations.json":
 		return "operations", nil
 	case "cli_surface.json":
 		return "cli_surface", nil
 	case "certification.json":
-		return "certification", nil
+		return "", fmt.Errorf("production embed contains certification artifact %q", path)
+	case "enabled_connector_contract.json":
+		return "", fmt.Errorf("production embed contains legacy enabled-contract artifact %q", path)
 	case "rate_limits.json":
 		return "rate_limits", nil
 	case "database.json":

@@ -655,7 +655,6 @@ SECURITY
 COMMAND SURFACE
   Ashby applicant-tracking connector with typed REST streams, bounded direct reads, and gated reverse-ETL writes.
   Usage: pm connectors command ashby <command> [flags]
-  Source CLI: Ashby Public API (https://developers.ashbyhq.com/reference)
   PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
@@ -843,7 +842,7 @@ COMMAND SURFACE
     approval list - Full-refresh-only Ashby approval list read. Opaque syncToken checkpointing is unavailable pending ashby-sync-token-checkpoint-foundation. [intent=etl availability=implemented stream=approval_list]; notes: Fixed Ashby stream for approval.list; flags map only to documented request body fields. Opaque syncToken checkpointing is blocked pending ashby-sync-token-checkpoint-foundation; this stream is full-refresh only.; flags: --entity-type (max 4096 bytes), --entity-id (non-empty, max 4096 bytes)
   Help topics:
     ashby safety - Ashby writes are named, schema-validated actions only; reverse ETL must use plan, preview, explicit approval, and execute.
-    ashby parity - Public Ashby OpenAPI coverage ledger is recorded in api_surface.json with blocked webhook/partner/binary workflow reasons.
+    ashby parity - Public Ashby OpenAPI coverage ledger is recorded in execution bundle with blocked webhook/partner/binary workflow reasons.
 
 EXAMPLES
   # Inspect as a manual

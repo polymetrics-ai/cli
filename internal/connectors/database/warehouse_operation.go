@@ -101,6 +101,5 @@ func (c DatabaseOutboundCommand) Contract() synccontract.NativeCommandContract {
 func cloneNativeCommandContract(contract synccontract.NativeCommandContract) synccontract.NativeCommandContract {
 	clone := contract
 	clone.Modes = append([]synccontract.Mode(nil), contract.Modes...)
-	clone.Conformance.FixtureIDs = append([]string(nil), contract.Conformance.FixtureIDs...)
 	return clone
 }

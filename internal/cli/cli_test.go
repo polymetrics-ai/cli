@@ -670,7 +670,7 @@ func TestBareCommandJSONShowsManualForAgents(t *testing.T) {
 	}
 }
 
-func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *testing.T) {
+func TestConnectorsManualDocumentsExecutionBundlesAndGithubExamples(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"connectors"}, &stdout, &stderr)
 	if code != 0 {
@@ -678,16 +678,13 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 	}
 	out := stdout.String()
 	for _, want := range []string{
-		"declarative JSON bundles",
+		"schema-4 source.lock.json",
+		"execution JSON bundles",
 		"write=true/false",
 		"REVERSE ETL WRITE ACTIONS",
-		"DECLARATION-BOUND STRUCTURED WRITE INPUTS",
+		"SCHEMA-BOUND STRUCTURED WRITE INPUTS",
 		"There is no raw\n  --body flag",
 		"pm connectors catalog --capability write --json",
-		"pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]",
-		"legacy_unverified",
-		"provider-artifact",
-		"provenance evidence",
 		"GITHUB AUTHENTICATION",
 		"public",
 		"token",
@@ -714,7 +711,7 @@ func TestConnectorInspectHumanShowsManualNotRawJSON(t *testing.T) {
 	if strings.HasPrefix(strings.TrimSpace(out), "{") {
 		t.Fatalf("human connector inspect returned raw JSON:\n%s", out)
 	}
-	for _, want := range []string{"NAME", "SYNOPSIS", "AUTHENTICATION", "ETL STREAMS", "REVERSE ETL ACTIONS", "AGENT WORKFLOW", "CERTIFICATION", "COMMUNITY BUILD, UNCERTIFIED"} {
+	for _, want := range []string{"NAME", "SYNOPSIS", "AUTHENTICATION", "ETL STREAMS", "REVERSE ETL ACTIONS", "AGENT WORKFLOW"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("human connector manual missing %q:\n%s", want, out)
 		}

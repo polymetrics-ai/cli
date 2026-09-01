@@ -3,7 +3,6 @@ package agentcontract
 import (
 	"bytes"
 	"context"
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"slices"
@@ -47,73 +46,6 @@ func TestCheckProjectionRejectsDivergence(t *testing.T) {
 
 	if err := CheckProjection(want, got); err == nil {
 		t.Fatal("CheckProjection accepted a diverged projection")
-	}
-}
-
-func TestCertificationFlowKindCatalogSyncAndCheck(t *testing.T) {
-	repository := repositoryRoot(t)
-	contract := loadRepositoryContract(t, repository)
-	root := t.TempDir()
-	statusPath := filepath.Join(repository, filepath.FromSlash(contract.CertificationGate.Inputs.Status))
-	status, err := os.ReadFile(statusPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	fixtureStatusPath := filepath.Join(root, filepath.FromSlash(contract.CertificationGate.Inputs.Status))
-	if err := os.MkdirAll(filepath.Dir(fixtureStatusPath), 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(fixtureStatusPath, status, 0o644); err != nil {
-		t.Fatal(err)
-	}
-	var scope struct {
-		Connectors []struct {
-			Connector string `json:"connector"`
-		} `json:"connectors"`
-	}
-	if err := json.Unmarshal(status, &scope); err != nil {
-		t.Fatal(err)
-	}
-	for _, item := range scope.Connectors {
-		relative := filepath.Join(filepath.FromSlash(contract.CertificationGate.Inputs.CertificationShards), item.Connector, "certification-matrix.json")
-		shard, err := os.ReadFile(filepath.Join(repository, relative))
-		if err != nil {
-			t.Fatal(err)
-		}
-		fixtureShardPath := filepath.Join(root, relative)
-		if err := os.MkdirAll(filepath.Dir(fixtureShardPath), 0o755); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(fixtureShardPath, shard, 0o644); err != nil {
-			t.Fatal(err)
-		}
-	}
-
-	updated, err := SyncCertificationFlowKindCatalog(root, contract)
-	if err != nil {
-		t.Fatalf("SyncCertificationFlowKindCatalog: %v", err)
-	}
-	if updated != 1 {
-		t.Fatalf("SyncCertificationFlowKindCatalog updated %d files, want 1", updated)
-	}
-	if err := CheckCertificationFlowKindCatalog(root, contract); err != nil {
-		t.Fatalf("CheckCertificationFlowKindCatalog: %v", err)
-	}
-
-	catalogPath := filepath.Join(root, filepath.FromSlash(certificationFlowKindCatalogPath))
-	catalog, err := os.ReadFile(catalogPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(catalogPath, append(catalog, '\n'), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	if err := CheckCertificationFlowKindCatalog(root, contract); err == nil {
-		t.Fatal("CheckCertificationFlowKindCatalog accepted a drifted generated catalog")
-	}
-	updated, err = SyncCertificationFlowKindCatalog(root, contract)
-	if err != nil || updated != 1 {
-		t.Fatalf("SyncCertificationFlowKindCatalog repairs drift: updated=%d err=%v", updated, err)
 	}
 }
 

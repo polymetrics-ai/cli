@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "pull_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pull_number"
+  ],
+  "type": "object"
+}

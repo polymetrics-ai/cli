@@ -1407,7 +1407,7 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 // confinement, part declarations, and aggregate limits with execution; it
 // never reads an undeclared record field or returns payload bytes.
 //
-// Fixture conformance uses this before issuing its synthetic approval grant.
+// Fixture tests use this before issuing their synthetic approval grant.
 // Production callers retain the App-owned plan identity flow, which records
 // the same opaque SHA-256 values with its persisted plan.
 func ApprovedMultipartPayloadSHA256ForWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (map[string]string, error) {

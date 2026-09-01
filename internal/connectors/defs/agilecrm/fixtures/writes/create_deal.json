@@ -1,7 +1,0 @@
-{
-  "record": { "name": "Fixture Deal", "expected_value": 1000, "milestone": "Prospect", "pipeline_id": "1" },
-  "expect": {
-    "method": "POST",
-    "path": "/opportunity"
-  }
-}

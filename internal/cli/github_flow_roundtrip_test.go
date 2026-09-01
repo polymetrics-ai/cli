@@ -2,13 +2,9 @@ package cli
 
 import (
 	"bytes"
-	"context"
-	"crypto/rand"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -22,9 +18,27 @@ import (
 )
 
 const (
-	deniedGitHubFlowTokenEnv     = "PM_CERT_GITHUB_DENIED_TOKEN"
-	liveGitHubCertificationOwner = "Polymetrics-Cert"
+	deniedGitHubFlowTokenEnv = "PM_TEST_GITHUB_DENIED_TOKEN"
 )
+
+func assertNoCredentialMaterialInTree(t *testing.T, root, token string) {
+	t.Helper()
+	if err := filepath.WalkDir(root, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil || entry.IsDir() {
+			return walkErr
+		}
+		payload, readErr := os.ReadFile(path)
+		if readErr != nil {
+			return readErr
+		}
+		if bytes.Contains(payload, []byte(token)) {
+			return fmt.Errorf("credential material reached a persisted artifact")
+		}
+		return nil
+	}); err != nil {
+		t.Fatalf("persisted artifact credential audit: %v", err)
+	}
+}
 
 type githubFlowRoundTripTarget struct {
 	owner    string
@@ -57,11 +71,11 @@ type githubFlowRoundTripEvidence struct {
 }
 
 // TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip is the hermetic
-// control for the credential-gated live proof below. It uses the real compiled
+// execution proof. It uses the real compiled
 // GitHub definition, real durable warehouse, real reverse plan, and real flow
 // engine; only GitHub's HTTPS boundary is replaced with a faithful local API.
 func runFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip(t *testing.T) {
-	const tokenEnv = "PM_CERT_GITHUB_LOCAL_FLOW_TOKEN"
+	const tokenEnv = "PM_TEST_GITHUB_LOCAL_FLOW_TOKEN"
 	const token = "github-flow-local-canary"
 	server, comments := newGitHubFlowRoundTripServer(t, token)
 	t.Setenv(tokenEnv, token)
@@ -75,66 +89,6 @@ func runFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip(t *testing.T) {
 		provider: "faithful_local_github_api",
 	}
 	evidence := executeFreshBinaryGitHubFlowRoundTrip(t, target)
-	logGitHubFlowEvidence(t, evidence)
-}
-
-// TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip is Gap 3's acceptance
-// proof. It creates an isolated private repository using certification
-// credentials, runs GitHub -> durable warehouse -> comment_issue as a composed
-// flow through a freshly built binary, reads the comment back from GitHub in a
-// separate client, and deletes the repository with a 404 residue assertion.
-func TestLiveFreshBinaryGitHubWarehouseFlowRoundTrip(t *testing.T) {
-	tokenEnv := ""
-	for _, candidate := range []string{"PM_CERT_GITHUB_TOKEN", "PM_SCALE_GITHUB_TOKEN", "GITHUB_TOKEN"} {
-		if strings.TrimSpace(os.Getenv(candidate)) != "" {
-			tokenEnv = candidate
-			break
-		}
-	}
-	if tokenEnv == "" {
-		t.Skip("live GitHub flow proof requires PM_CERT_GITHUB_TOKEN, PM_SCALE_GITHUB_TOKEN, or GITHUB_TOKEN")
-	}
-	token := os.Getenv(tokenEnv)
-	client := newLiveGitHubFlowClient(token)
-	if _, err := client.currentLogin(context.Background()); err != nil {
-		t.Fatalf("resolve certification GitHub identity: %v", err)
-	}
-	owner := liveGitHubCertificationOwner
-	repo := "pm-cert-flow-4166-" + randomGitHubFlowSuffix(t)
-	if err := client.createRepository(context.Background(), owner, repo); err != nil {
-		t.Fatalf("create dedicated certification repository: %v", err)
-	}
-	deleted := false
-	t.Cleanup(func() {
-		if deleted {
-			return
-		}
-		if err := client.deleteRepositoryAndAssertAbsent(context.Background(), owner, repo); err != nil {
-			t.Errorf("clean dedicated certification repository: %v", err)
-			return
-		}
-		deleted = true
-	})
-	if err := client.createIssue(context.Background(), owner, repo, "pm certification flow issue 4166"); err != nil {
-		t.Fatalf("seed dedicated certification repository: %v", err)
-	}
-
-	target := githubFlowRoundTripTarget{
-		owner:    owner,
-		repo:     repo,
-		tokenEnv: tokenEnv,
-		token:    token,
-		provider: "live_github_https",
-		comments: func() ([]string, error) {
-			return client.issueComments(context.Background(), owner, repo, 1)
-		},
-	}
-	evidence := executeFreshBinaryGitHubFlowRoundTrip(t, target)
-	if err := client.deleteRepositoryAndAssertAbsent(context.Background(), owner, repo); err != nil {
-		t.Fatalf("delete dedicated certification repository: %v", err)
-	}
-	deleted = true
-	evidence.ZeroProviderResidue = true
 	logGitHubFlowEvidence(t, evidence)
 }
 
@@ -224,7 +178,7 @@ func executeFreshBinaryGitHubFlowRoundTrip(t *testing.T, target githubFlowRoundT
 	if len(afterFlow) != len(beforeFlow)+1 {
 		t.Fatalf("provider comments after composed flow = %d, want %d", len(afterFlow), len(beforeFlow)+1)
 	}
-	if afterFlow[len(afterFlow)-1] != "pm certification flow issue 4166" && afterFlow[len(afterFlow)-1] != "transport certification issue" {
+	if afterFlow[len(afterFlow)-1] != "transport execution issue" {
 		t.Fatalf("provider readback did not contain the issue title written by the flow")
 	}
 
@@ -661,7 +615,7 @@ func newGitHubFlowRoundTripServer(t *testing.T, token string) (*httptest.Server,
 		case request.Method == http.MethodGet && request.URL.Path == "/repos/acme/widgets/issues":
 			_ = json.NewEncoder(w).Encode([]map[string]any{{
 				"id": 1, "node_id": "I_flow_4166", "number": 1,
-				"title": "transport certification issue", "state": "open",
+				"title": "transport execution issue", "state": "open",
 				"created_at": now, "updated_at": now, "labels": []any{},
 			}})
 		case request.Method == http.MethodPost && request.URL.Path == "/repos/acme/widgets/issues/1/comments":
@@ -696,136 +650,4 @@ func newGitHubFlowRoundTripServer(t *testing.T, token string) (*httptest.Server,
 		defer mu.Unlock()
 		return append([]string(nil), comments...), nil
 	}
-}
-
-type liveGitHubFlowClient struct {
-	token string
-	http  *http.Client
-}
-
-func newLiveGitHubFlowClient(token string) *liveGitHubFlowClient {
-	return &liveGitHubFlowClient{token: token, http: &http.Client{Timeout: 30 * time.Second}}
-}
-
-func (c *liveGitHubFlowClient) currentLogin(ctx context.Context) (string, error) {
-	var response struct {
-		Login string `json:"login"`
-	}
-	if _, err := c.doJSON(ctx, http.MethodGet, "/user", nil, &response); err != nil {
-		return "", err
-	}
-	if strings.TrimSpace(response.Login) == "" {
-		return "", fmt.Errorf("GitHub identity response omitted login")
-	}
-	return response.Login, nil
-}
-
-func (c *liveGitHubFlowClient) createRepository(ctx context.Context, owner, repo string) error {
-	if owner != liveGitHubCertificationOwner {
-		return fmt.Errorf("refuse repository creation outside the certification owner")
-	}
-	status, err := c.doJSON(ctx, http.MethodPost, fmt.Sprintf("/orgs/%s/repos", owner), map[string]any{
-		"name": repo, "private": true, "has_issues": true, "auto_init": false,
-	}, nil)
-	if err != nil {
-		return err
-	}
-	if status != http.StatusCreated {
-		return fmt.Errorf("create repository returned HTTP %d", status)
-	}
-	return nil
-}
-
-func (c *liveGitHubFlowClient) createIssue(ctx context.Context, owner, repo, title string) error {
-	var response struct {
-		Number int `json:"number"`
-	}
-	status, err := c.doJSON(ctx, http.MethodPost, fmt.Sprintf("/repos/%s/%s/issues", owner, repo), map[string]string{"title": title}, &response)
-	if err != nil {
-		return err
-	}
-	if status != http.StatusCreated || response.Number != 1 {
-		return fmt.Errorf("create issue returned HTTP %d with number %d", status, response.Number)
-	}
-	return nil
-}
-
-func (c *liveGitHubFlowClient) issueComments(ctx context.Context, owner, repo string, issue int) ([]string, error) {
-	var response []struct {
-		Body string `json:"body"`
-	}
-	status, err := c.doJSON(ctx, http.MethodGet, fmt.Sprintf("/repos/%s/%s/issues/%d/comments?per_page=100", owner, repo, issue), nil, &response)
-	if err != nil {
-		return nil, err
-	}
-	if status != http.StatusOK {
-		return nil, fmt.Errorf("list issue comments returned HTTP %d", status)
-	}
-	comments := make([]string, len(response))
-	for i := range response {
-		comments[i] = response[i].Body
-	}
-	return comments, nil
-}
-
-func (c *liveGitHubFlowClient) deleteRepositoryAndAssertAbsent(ctx context.Context, owner, repo string) error {
-	if owner != liveGitHubCertificationOwner || !strings.HasPrefix(repo, "pm-cert-flow-4166-") || len(strings.TrimPrefix(repo, "pm-cert-flow-4166-")) != 10 {
-		return fmt.Errorf("refuse cleanup outside the issue 4166 disposable repository namespace")
-	}
-	status, err := c.doJSON(ctx, http.MethodDelete, fmt.Sprintf("/repos/%s/%s", owner, repo), nil, nil)
-	if err != nil {
-		return err
-	}
-	if status != http.StatusNoContent && status != http.StatusNotFound {
-		return fmt.Errorf("delete repository returned HTTP %d", status)
-	}
-	status, err = c.doJSON(ctx, http.MethodGet, fmt.Sprintf("/repos/%s/%s", owner, repo), nil, nil)
-	if err != nil {
-		return err
-	}
-	if status != http.StatusNotFound {
-		return fmt.Errorf("deleted repository residue check returned HTTP %d, want 404", status)
-	}
-	return nil
-}
-
-func (c *liveGitHubFlowClient) doJSON(ctx context.Context, method, path string, requestBody, responseBody any) (int, error) {
-	var body io.Reader
-	if requestBody != nil {
-		payload, err := json.Marshal(requestBody)
-		if err != nil {
-			return 0, fmt.Errorf("encode GitHub certification request: %w", err)
-		}
-		body = bytes.NewReader(payload)
-	}
-	request, err := http.NewRequestWithContext(ctx, method, "https://api.github.com"+path, body)
-	if err != nil {
-		return 0, fmt.Errorf("build GitHub certification request: %w", err)
-	}
-	request.Header.Set("Accept", "application/vnd.github+json")
-	request.Header.Set("Authorization", "Bearer "+c.token)
-	request.Header.Set("X-GitHub-Api-Version", "2022-11-28")
-	if requestBody != nil {
-		request.Header.Set("Content-Type", "application/json")
-	}
-	response, err := c.http.Do(request)
-	if err != nil {
-		return 0, fmt.Errorf("execute GitHub certification request: %w", err)
-	}
-	defer func() { _ = response.Body.Close() }()
-	if responseBody != nil && response.StatusCode >= 200 && response.StatusCode < 300 {
-		if err := json.NewDecoder(io.LimitReader(response.Body, 1<<20)).Decode(responseBody); err != nil {
-			return 0, fmt.Errorf("decode GitHub certification response: %w", err)
-		}
-	}
-	return response.StatusCode, nil
-}
-
-func randomGitHubFlowSuffix(t *testing.T) string {
-	t.Helper()
-	buffer := make([]byte, 5)
-	if _, err := rand.Read(buffer); err != nil {
-		t.Fatalf("generate certification repository suffix: %v", err)
-	}
-	return hex.EncodeToString(buffer)
 }

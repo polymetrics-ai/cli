@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector asana [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive reads with a global one-provider-request budget, and 131 approval-gated one-record direct writes across all 130 mutation endpoints. All 12 streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 131 write actions support warehouse-table reverse ETL. Every operation in the pinned OpenAPI ledger has an executable covered_by route, including POST /batch through a closed declaration-backed action selector.
+  Maps 107 bounded operation-backed direct reads, 12 stream-backed interactive reads with a global one-provider-request budget, and 131 approval-gated one-record direct writes across all 130 mutation endpoints. All 64 source-backed collection streams support saved full-refresh ETL; project-scoped tasks additionally support source-backed event-token incremental modes; all 131 write actions support warehouse-table reverse ETL. Every operation in the pinned OpenAPI ledger has an executable covered_by route, including POST /batch through a closed declaration-backed action selector.
 
 ICON
   id: asana
@@ -29,9 +29,23 @@ AUTHENTICATION
 CONFIGURATION
   assignee
   base_url
+  emoji_base
+  favorite_resource_type
+  goal_id
   mode
+  organization_id
+  parent_id
+  portfolio_id
   project_id
+  section_id
+  supported_goal_id
+  tag_id
+  target_id
+  task_id
   team_id
+  time_tracking_category_id
+  user_id
+  user_task_list_id
   workspace_id
   access_token (secret) (required)
 
@@ -70,6 +84,162 @@ ETL STREAMS
     primary key: gid
     fields: gid(string), is_admin(boolean), is_guest(boolean), is_limited_access(boolean), resource_type(string)
   workspace_memberships:
+    primary key: gid
+    fields: gid(string), is_active(boolean), is_admin(boolean), is_guest(boolean), resource_type(string)
+  agents_for_workspace:
+    primary key: gid
+    fields: gid(string), name(string), resource_subtype(string), resource_type(string)
+  ai_studio_runs:
+    primary key: gid
+    fields: credit_source(string), credits_used(number), division(object), gid(string), model(string), resource_type(string), rule(object), rule_owner(object), run_completed_at(string), run_started_at(string), status(string), triggered_by(object), triggering_container(object)
+  ai_studio_seats:
+    primary key: gid
+    fields: assigned_at(string), assigned_by(object), gid(string), license(string), resource_type(string), revoked_at(string), state(string), user(object)
+  allocations:
+    primary key: gid
+    fields: assignee(object), created_by(object), effort(object), end_date(string), gid(string), parent(object), resource_subtype(string), resource_type(string), start_date(string)
+  attachments_for_object:
+    primary key: gid
+    fields: gid(string), name(string), resource_subtype(string), resource_type(string)
+  audit_log_events:
+    primary key: gid
+    fields: actor(object), context(object), created_at(string), details(object), event_category(string), event_type(string), gid(string), resource(object)
+  custom_field_settings_for_goal:
+    primary key: gid
+    fields: custom_field(object), gid(string), is_important(boolean), parent(object), project(object), resource_type(string)
+  custom_field_settings_for_portfolio:
+    primary key: gid
+    fields: custom_field(object), gid(string), is_important(boolean), parent(object), project(object), resource_type(string)
+  custom_field_settings_for_project:
+    primary key: gid
+    fields: custom_field(object), gid(string), is_important(boolean), parent(object), project(object), resource_type(string)
+  custom_types:
+    primary key: gid
+    fields: gid(string), name(string), resource_type(string), status_options(array)
+  dependencies_for_task:
+    primary key: gid
+    fields: completed(boolean), created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  dependents_for_task:
+    primary key: gid
+    fields: completed(boolean), created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  favorites_for_user:
+    primary key: gid
+    fields: gid(string), name(string), resource_type(string)
+  goal_relationships:
+    primary key: gid
+    fields: contribution_weight(number), gid(string), resource_subtype(string), resource_type(string), supporting_resource(object)
+  goals:
+    primary key: gid
+    fields: gid(string), name(string), owner(object), resource_type(string)
+  portfolio_items:
+    primary key: gid
+    fields: gid(string), name(string), resource_type(string)
+  memberships:
+    primary key: gid
+    fields: access_level(string), gid(string), goal(object), is_commenter(boolean), is_editor(boolean), member(object), parent(object), resource_subtype(string), resource_type(string), role(string)
+  ooo_entries:
+    primary key: gid
+    fields: created_by(object), end_date(string), gid(string), resource_type(string), start_date(string), user(object)
+  portfolio_memberships:
+    primary key: gid
+    fields: access_level(string), gid(string), portfolio(object), resource_type(string), user(object)
+  portfolio_memberships_for_portfolio:
+    primary key: gid
+    fields: access_level(string), gid(string), portfolio(object), resource_type(string), user(object)
+  portfolios:
+    primary key: gid
+    fields: gid(string), name(string), resource_type(string)
+  project_memberships_for_project:
+    primary key: gid
+    fields: access_level(string), gid(string), member(object), parent(object), resource_type(string)
+  project_portfolio_settings_for_portfolio:
+    primary key: gid
+    fields: gid(string), is_access_control_inherited(boolean), portfolio(object), project(object), resource_type(string)
+  project_portfolio_settings_for_project:
+    primary key: gid
+    fields: gid(string), is_access_control_inherited(boolean), portfolio(object), project(object), resource_type(string)
+  projects_for_task:
+    primary key: gid
+    fields: created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  projects_for_team:
+    primary key: gid
+    fields: created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  projects_for_workspace:
+    primary key: gid
+    fields: created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  project_templates:
+    primary key: gid
+    fields: gid(string), name(string), resource_type(string)
+  project_templates_for_team:
+    primary key: gid
+    fields: gid(string), name(string), resource_type(string)
+  rates:
+    primary key: gid
+    fields: created_by(object), currency_code(string), gid(string), parent(object), rate(number), resource(object), resource_type(string)
+  reactions_on_object:
+    primary key: gid
+    fields: emoji(string), gid(string), user(object)
+  roles:
+    primary key: gid
+    fields: description(string), gid(string), is_standard_role(boolean), name(string), resource_type(string)
+  statuses_for_object:
+    primary key: gid
+    fields: gid(string), resource_subtype(string), resource_type(string), title(string)
+  stories_for_goal:
+    primary key: gid
+    fields: created_at(string), gid(string), resource_subtype(string), resource_type(string), task_gid(string), text(string), type(string)
+  subtasks_for_task:
+    primary key: gid
+    fields: completed(boolean), created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  tags_for_task:
+    primary key: gid
+    fields: color(string), created_at(string), gid(string), name(string), notes(string), resource_type(string)
+  tags_for_workspace:
+    primary key: gid
+    fields: color(string), created_at(string), gid(string), name(string), notes(string), resource_type(string)
+  tasks_for_project:
+    primary key: gid
+    fields: completed(boolean), created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  tasks_for_section:
+    primary key: gid
+    fields: completed(boolean), created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  tasks_for_tag:
+    primary key: gid
+    fields: completed(boolean), created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  tasks_for_user_task_list:
+    primary key: gid
+    fields: completed(boolean), created_at(string), gid(string), modified_at(string), name(string), resource_type(string)
+  team_memberships_for_team:
+    primary key: gid
+    fields: gid(string), is_admin(boolean), is_guest(boolean), is_limited_access(boolean), resource_type(string)
+  team_memberships_for_user:
+    primary key: gid
+    fields: gid(string), is_admin(boolean), is_guest(boolean), is_limited_access(boolean), resource_type(string)
+  teams_for_user:
+    primary key: gid
+    fields: description(string), gid(string), name(string), resource_type(string), visibility(string)
+  time_periods:
+    primary key: gid
+    fields: display_name(string), end_on(string), gid(string), period(string), resource_type(string), start_on(string)
+  timesheet_approval_statuses:
+    primary key: gid
+    fields: approval_status(string), created_at(string), end_date(string), gid(string), resource_type(string), start_date(string), user(object), workspace(object)
+  time_tracking_categories:
+    primary key: gid
+    fields: color(string), gid(string), name(string), resource_type(string)
+  time_tracking_entries:
+    primary key: gid
+    fields: attributable_to(object), categories(array), created_by(object), duration_minutes(integer), entered_on(string), gid(string), resource_type(string)
+  time_tracking_entries_for_task:
+    primary key: gid
+    fields: attributable_to(object), categories(array), created_by(object), duration_minutes(integer), entered_on(string), gid(string), resource_type(string)
+  time_tracking_entries_for_category:
+    primary key: gid
+    fields: attributable_to(object), categories(array), created_by(object), duration_minutes(integer), entered_on(string), gid(string), resource_type(string)
+  webhooks:
+    primary key: gid
+    fields: active(boolean), created_at(string), delivery_retry_count(integer), failure_deletion_timestamp(string), filters(array), gid(string), last_failure_at(string), last_failure_content(string), last_success_at(string), next_attempt_after(string), resource(object), resource_type(string), target(string)
+  workspace_memberships_for_user:
     primary key: gid
     fields: gid(string), is_active(boolean), is_admin(boolean), is_guest(boolean), resource_type(string)
 
@@ -611,7 +781,6 @@ SECURITY
 COMMAND SURFACE
   Run 118 bounded source-backed direct reads and 96 approval-gated one-record direct writes; use saved connections and local warehouse tables for bulk ETL and reverse ETL.
   Usage: pm asana <command> [flags]
-  Source CLI: Asana REST API (Pinned Asana OpenAPI commit 56796a67a3c093eedf55fd9682357957a2ebfd85)
   PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
   Global flags:
     --credential (string): Credential name to use for the Asana request.
@@ -645,10 +814,10 @@ COMMAND SURFACE
     attachments get-attachment - Get an attachment. [intent=direct_read availability=implemented operation=get_attachment]; flags: --attachment-gid (required, max 4096 bytes), --opt-pretty (max 4096 bytes), --page, --page-cursor
     attachments delete-attachment - Implemented source-bound Asana mutation: Delete an attachment. [intent=direct_write availability=implemented write=delete_attachment]; approval: direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Implemented source-bound provider mutation through the declared direct-write action.; flags: --attachment-gid (required, max 32768 bytes), --opt-pretty
     attachments get-attachments-for-object - Get attachments from an object. [intent=direct_read availability=implemented operation=get_attachments_for_object]; flags: --parent (required, max 4096 bytes), --opt-pretty (max 4096 bytes), --page, --page-cursor
-    attachments create-attachment-for-object - Source-bound direct-write alias for an Asana file attachment. [intent=direct_write availability=planned operation=create_attachment_for_object]; approval: direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: source_operation=asana.rest.createAttachmentForObject; the executable one-record write is attachments upload-attachment-file. This direct_write alias remains planned because the legacy file_upload operation is not a direct executor and Asana documents no fixed file-media allow-list for a direct multipart operation.; flags: --parent (required), --file-path (required)
-    attachments upload-attachment-file - Upload one file attachment to an Asana object. [intent=direct_write availability=implemented write=upload_attachment_file]; approval: direct-write plan -> preview -> explicit approval -> execute; risk: high; notes: source_operation=asana.rest.createAttachmentForObject; source location paths["/attachments"].post; Asana documents multipart/form-data and a 100 MB attachment limit.; flags: --parent (required), --file-path (required)
-    attachments create-external-attachment - Create one external URL attachment on an Asana object. [intent=direct_write availability=implemented write=create_external_attachment]; approval: direct-write plan -> preview -> explicit approval -> execute; risk: high; notes: source_operation=asana.rest.createAttachmentForObject; source location paths["/attachments"].post.; flags: --connect-to-app, --name (required, max 32768 bytes), --parent (required, max 32768 bytes), --resource-subtype (required), --url (required, max 32768 bytes)
-    attachments binary-upload-attachment - Upload one bounded local file as an Asana attachment. [intent=binary_upload availability=implemented write=upload_attachment_file]; approval: binary uploads require plan, preview, approval, execute; risk: high; notes: source_operation=asana.rest.createAttachmentForObject; the locked provider contract accepts arbitrary file contents rather than publishing a finite media allow-list. The upload_attachment_file action carries the closed provider_unrestricted media policy, so this alias uses the same bounded multipart request and approval lifecycle without fabricating MIME types.; flags: --parent (required), --file-path (required)
+    attachments create-attachment-for-object - Source-bound direct-write alias for an Asana file attachment. [intent=direct_write availability=planned operation=create_attachment_for_object]; approval: direct-write plan -> preview -> explicit approval -> execute; destructive/admin operations require typed confirmation destructive before execute; risk: high; notes: Provider operation asana.rest.createAttachmentForObject maps to the executable one-record write attachments upload-attachment-file. This direct-write alias remains planned because the file-upload action is not a direct executor and Asana documents no fixed file-media allow-list for a direct multipart operation.; flags: --parent (required), --file-path (required)
+    attachments upload-attachment-file - Upload one file attachment to an Asana object. [intent=direct_write availability=implemented write=upload_attachment_file]; approval: direct-write plan -> preview -> explicit approval -> execute; risk: high; notes: Provider operation asana.rest.createAttachmentForObject; source location paths["/attachments"].post; Asana documents multipart/form-data and a 100 MB attachment limit.; flags: --parent (required), --file-path (required)
+    attachments create-external-attachment - Create one external URL attachment on an Asana object. [intent=direct_write availability=implemented write=create_external_attachment]; approval: direct-write plan -> preview -> explicit approval -> execute; risk: high; notes: Provider operation asana.rest.createAttachmentForObject; source location paths["/attachments"].post.; flags: --connect-to-app, --name (required, max 32768 bytes), --parent (required, max 32768 bytes), --resource-subtype (required), --url (required, max 32768 bytes)
+    attachments binary-upload-attachment - Upload one bounded local file as an Asana attachment. [intent=binary_upload availability=implemented write=upload_attachment_file]; approval: binary uploads require plan, preview, approval, execute; risk: high; notes: Provider operation asana.rest.createAttachmentForObject; the locked provider contract accepts arbitrary file contents rather than publishing a finite media allow-list. The upload_attachment_file action carries the closed provider_unrestricted media policy, so this alias uses the same bounded multipart request and approval lifecycle without fabricating MIME types.; flags: --parent (required), --file-path (required)
   Audit log API
     audit-log-api get-audit-log-events - Get audit log events. [intent=direct_read availability=implemented operation=get_audit_log_events]; flags: --workspace-gid (required, max 4096 bytes), --actor-gid (max 4096 bytes), --actor-type (max 4096 bytes), --end-at (max 4096 bytes), --event-type (max 4096 bytes), --resource-gid (max 4096 bytes), --start-at (max 4096 bytes), --page, --page-cursor
   Batch API
@@ -933,7 +1102,7 @@ COMMAND SURFACE
 SYNC TRANSPORT
   Source transport: declared
   Destination transport: unsupported
-  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  A declared transport executes only when its named runtime executor and mode are available.
   Source executor: declarative_api/asana_event_token_source
 
 EXAMPLES

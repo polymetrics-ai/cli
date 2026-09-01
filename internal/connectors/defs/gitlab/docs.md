@@ -76,5 +76,5 @@ write requires plan, preview, explicit approval, and execute. Output is not reda
 - Runtime-enabled source rows: 967 — 582 direct reads, 4 ETL-only stream reads, and 381 mutations.
 - Blocked source rows: 785, each with one or more named foundations. The 1,845 `source_contract`
   gap entries overlap by row and are not a source denominator.
-- `api_surface.json`, `cli_surface.json`, and the operation-evidence artifact expose the command or
+- `execution bundle`, `cli_surface.json`, and the operation-evidence artifact expose the command or
   typed cited outcome for each source identity.

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "commit_message": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "commit_title": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "merge_action": {
+      "enum": [
+        "default",
+        "direct_merge",
+        "merge_queue"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "merge_method": {
+      "enum": [
+        "merge",
+        "squash",
+        "rebase"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "pull_number": {
+      "type": "integer"
+    },
+    "sha": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "pull_number"
+  ],
+  "type": "object"
+}

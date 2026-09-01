@@ -64,13 +64,12 @@ type NativeSyncResult struct {
 	CandidateCheckpoint *CheckpointEnvelope `json:"candidate_checkpoint,omitempty"`
 }
 
-// NativeExecutorAdmission is the descriptor/evidence portion shared by every
+// NativeExecutorAdmission is the descriptor portion shared by every
 // native source or database-target executor. It intentionally does not imply a
 // source RunNativeSync implementation: target database work has a different
 // typed lifecycle and must not be forced through NativeSyncRequest.
 type NativeExecutorAdmission interface {
 	NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor
-	NativeSyncConformanceEvidence() ConformanceEvidence
 }
 
 // NativeSyncExecutor is a source-side native implementation. The registry can
@@ -89,25 +88,21 @@ var ErrNativeSyncExecutorRequired = errors.New("native source execution requires
 // NativeCommandContract is the declarative admission record for a fixed
 // native database operation. It deliberately excludes generic query fields.
 type NativeCommandContract struct {
-	ContractVersion uint                `json:"contract_version"`
-	Protocol        string              `json:"protocol"`
-	Command         string              `json:"command"`
-	Executor        ExecutorReference   `json:"executor"`
-	Modes           []Mode              `json:"modes"`
-	Conformance     ConformanceEvidence `json:"conformance"`
+	ContractVersion uint              `json:"contract_version"`
+	Protocol        string            `json:"protocol"`
+	Command         string            `json:"command"`
+	Executor        ExecutorReference `json:"executor"`
+	Modes           []Mode            `json:"modes"`
 }
 
-// Validate confirms that the contract names a concrete operation and carries
-// the complete shared conformance evidence required for execution.
+// Validate confirms that the contract names a concrete operation and closed
+// executable modes.
 func (c NativeCommandContract) Validate() error {
 	if c.ContractVersion != NativeCommandContractVersion {
 		return fmt.Errorf("unsupported native command contract version %d", c.ContractVersion)
 	}
 	if err := validateNativeOperation(c.Protocol, c.Command, c.Executor, c.Modes); err != nil {
 		return err
-	}
-	if !c.Conformance.matchesRequired() {
-		return fmt.Errorf("native command requires complete shared conformance evidence")
 	}
 	return nil
 }
@@ -154,8 +149,7 @@ func NewNativeExecutorRegistry(executors ...NativeExecutorAdmission) (*NativeExe
 	return registry, nil
 }
 
-// Register admits one uniquely named executor only when its descriptor and
-// conformance evidence are complete.
+// Register admits one uniquely named executor when its descriptor is valid.
 func (r *NativeExecutorRegistry) Register(executor NativeExecutorAdmission) error {
 	if r == nil {
 		return fmt.Errorf("native executor registry is required")
@@ -166,9 +160,6 @@ func (r *NativeExecutorRegistry) Register(executor NativeExecutorAdmission) erro
 	descriptor := executor.NativeSyncExecutorDescriptor()
 	if err := descriptor.validate(); err != nil {
 		return err
-	}
-	if !executor.NativeSyncConformanceEvidence().matchesRequired() {
-		return fmt.Errorf("native executor requires complete shared conformance evidence")
 	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -182,7 +173,7 @@ func (r *NativeExecutorRegistry) Register(executor NativeExecutorAdmission) erro
 	return nil
 }
 
-// Admits reports whether a registered descriptor/evidence admission exactly
+// Admits reports whether a registered descriptor exactly
 // matches contract. It does not imply that the object is a runnable source
 // executor; Execute makes that stronger check at dispatch time.
 func (r *NativeExecutorRegistry) Admits(contract NativeCommandContract) bool {
@@ -241,7 +232,7 @@ func (r *NativeExecutorRegistry) admissionFor(contract NativeCommandContract) (N
 }
 
 // ValidateNativeAdmission confirms that a registered native object exactly
-// matches a command's descriptor and required conformance evidence. It is
+// matches a command's descriptor. It is
 // exported so non-source consumers (such as the database driver registry) can
 // use the one #3810 admission rule without reimplementing it.
 func ValidateNativeAdmission(admission NativeExecutorAdmission, contract NativeCommandContract) error {
@@ -254,10 +245,6 @@ func ValidateNativeAdmission(admission NativeExecutorAdmission, contract NativeC
 	descriptor := admission.NativeSyncExecutorDescriptor()
 	if descriptor.Protocol != contract.Protocol || descriptor.Command != contract.Command || descriptor.Executor != contract.Executor || !sameModeSet(descriptor.Modes, contract.Modes) {
 		return fmt.Errorf("registered native executor does not match the command contract")
-	}
-	evidence := admission.NativeSyncConformanceEvidence()
-	if !evidence.matchesRequired() || !evidence.equal(contract.Conformance) {
-		return fmt.Errorf("registered native executor lacks matching shared conformance evidence")
 	}
 	return nil
 }

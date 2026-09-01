@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/investments" },
-  "response": {
-    "status": 200,
-    "body": []
-  }
-}

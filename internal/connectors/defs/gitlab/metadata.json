@@ -1,24 +1,24 @@
 {
-  "name": "gitlab",
-  "display_name": "GitLab",
-  "description": "Runs 582 source-bound direct reads, four GitLab REST ETL streams, and 381 source-bound mutations through direct-write and approval-gated reverse-ETL commands; the groups deletion action also has one declaration-bound, response-captured single-attempt warehouse-to-destination route. Its 1,752-row provider ledger retains a cited named-foundation outcome for every remaining source operation.",
-  "integration_type": "api",
-  "docs_url": "https://docs.gitlab.com/ee/api/rest/",
-  "release_stage": "ga",
-  "capabilities": {
-    "check": true,
-    "read": true,
-    "write": true,
-    "query": false,
-    "cdc": false,
-    "dynamic_schema": false
-  },
   "batch": {
     "read_page_size": 50
   },
+  "capabilities": {
+    "cdc": false,
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": true
+  },
+  "description": "Runs 582 bounded direct reads, four GitLab REST ETL streams, and 381 provider mutations through direct-write and approval-gated reverse-ETL commands; the groups deletion action also has one execution-bound, response-captured single-attempt warehouse-to-destination route.",
+  "display_name": "GitLab",
+  "docs_url": "https://docs.gitlab.com/ee/api/rest/",
+  "integration_type": "api",
+  "name": "gitlab",
+  "release_stage": "ga",
   "risk": {
+    "approval": "Every GitLab reverse-ETL action requires the standard plan, preview, explicit approval, and execute flow.",
     "read": "external GitLab API read of projects, groups, users, and issues",
-    "write": "381 source-bound GitLab mutations have one-request direct-write commands and approval-gated reverse-ETL commands; groups deletion additionally has a saved single-attempt destination route that never claims provider retry safety or read-back. The remaining provider mutations retain cited named-foundation outcomes.",
-    "approval": "Every GitLab reverse-ETL action requires the standard plan, preview, explicit approval, and execute flow."
+    "write": "381 source-bound GitLab mutations have one-request direct-write commands and approval-gated reverse-ETL commands; groups deletion additionally has a saved single-attempt destination route that never claims provider retry safety or read-back. The remaining provider mutations retain cited named-foundation outcomes."
   }
 }

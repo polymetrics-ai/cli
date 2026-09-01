@@ -16,7 +16,7 @@ Connection fields:
 - `access_key_secret` (required, secret, string); Gong generated access key secret. Used for HTTP Basic auth; never logged.
 - `base_url` (optional, string); default `https://api.gong.io/v2`; format `uri`; Gong API base URL override for tests or proxies.
 - `max_pages` (optional, string); default `0`; maximum pages; use 0, all, or unlimited to exhaust a paginated stream.
-- `mode` (optional, string); fixture mode is used by credential-free conformance.
+- `mode` (optional, string); fixture mode is used by credential-free fixture tests.
 - `page_size` (optional, string); default `100`; compatibility page-size request value for legacy Gong list streams; current Gong OpenAPI does not document a provider-side page-size parameter. CLI `--limit` remains the PM output cap.
 - `start_date` (optional, string); format `date-time`; RFC3339 lower bound for supported incremental streams.
 

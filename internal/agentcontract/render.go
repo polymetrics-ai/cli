@@ -44,12 +44,6 @@ func RenderBlock(contract *Contract, role string) ([]byte, error) {
 	fmt.Fprintln(&output, "- Mark the parent ready only when:")
 	writeBullets(&output, contract.Tracker.ReadyWhen)
 	fmt.Fprintf(&output, "- Final merge: %s\n\n", contract.Tracker.FinalMerge)
-	gate, err := RenderCertificationGateIO(contract)
-	if err != nil {
-		return nil, err
-	}
-	output.Write(gate)
-
 	fmt.Fprintln(&output, "## Installed GSD lifecycle")
 	fmt.Fprintln(&output)
 	for _, invocation := range contract.GSD.Sequence {

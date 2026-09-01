@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/internal/api/v2/workspaces", "query": { "limit": "1" } },
-  "response": {
-    "status": 200,
-    "body": { "objects": [], "offset": 0, "limit": 1, "totalCount": 0 }
-  }
-}

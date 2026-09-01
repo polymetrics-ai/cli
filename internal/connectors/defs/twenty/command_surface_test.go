@@ -24,13 +24,6 @@ func TestAllProviderOperationsHaveExecutableCommands(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load %s bundle: %v", twentyBundleName, err)
 	}
-	if bundle.Surface == nil {
-		t.Fatal("api_surface.json did not load")
-	}
-	if got := len(bundle.Surface.Endpoints); got != 168 {
-		t.Fatalf("Twenty API-surface rows = %d, want 168", got)
-	}
-
 	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
 	surface := connector.CommandSurface()
 	if surface == nil {

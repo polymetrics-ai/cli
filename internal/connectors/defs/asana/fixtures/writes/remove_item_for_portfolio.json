@@ -1,4 +1,0 @@
-{
-  "record": { "portfolio_gid": "fixture-portfolio", "data": { "item": "fixture-project" } },
-  "expect": { "method": "POST", "path": "/portfolios/fixture-portfolio/removeItem", "body": { "data": { "item": "fixture-project" } } }
-}

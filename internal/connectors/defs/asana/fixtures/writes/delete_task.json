@@ -1,9 +1,0 @@
-{
-  "record": {
-    "gid": "fixture_task_1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/tasks/fixture_task_1"
-  }
-}

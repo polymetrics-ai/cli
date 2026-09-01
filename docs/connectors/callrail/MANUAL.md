@@ -143,7 +143,7 @@ REVERSE ETL ACTIONS
   send_text_message:
     endpoint: POST /a/{{ config.account_id }}/text-messages.json
     required fields: company_id, customer_phone_number, tracking_number, content
-    risk: sends a real SMS/MMS text message to a customer's phone (subject to 10DLC business-registration compliance rules); a real-world side effect outside the CallRail account itself, approval required. Direct file-upload MMS (multipart media_file) is out of scope — see api_surface.json/docs.md; the media_url variant covers publicly-hosted-image MMS instead.
+    risk: sends a real SMS/MMS text message to a customer's phone (subject to 10DLC business-registration compliance rules); a real-world side effect outside the CallRail account itself, approval required. Direct file-upload MMS (multipart media_file) is out of scope — see execution bundle/docs.md; the media_url variant covers publicly-hosted-image MMS instead.
   create_integration:
     endpoint: POST /a/{{ config.account_id }}/integrations.json
     required fields: type, company_id

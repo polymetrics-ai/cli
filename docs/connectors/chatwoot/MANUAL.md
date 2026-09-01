@@ -306,7 +306,6 @@ SECURITY
 COMMAND SURFACE
   Sync Chatwoot conversations, contacts, inboxes, agents, teams and labels, and manage the full Chatwoot Application API support-desk surface from the command line.
   Usage: pm chatwoot <command> [flags]
-  Source CLI: Chatwoot API (https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json)
   Global flags:
     --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.
   Account

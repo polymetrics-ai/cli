@@ -1,0 +1,929 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "cursor_last_event_date": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cursor_last_event_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "db_replication_lag_seconds": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "geo_node_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "last_event_date": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "last_event_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "last_successful_status_check_at": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "replication_slots_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "replication_slots_max_retained_wal_bytes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "replication_slots_used_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "revision": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "additionalProperties": false,
+          "properties": {
+            "ci_secure_files_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "ci_secure_files_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_replication_enabled": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "container_repositories_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "container_repositories_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "git_fetch_event_count_weekly": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "git_push_event_count_weekly": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "group_wiki_repositories_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "job_artifacts_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "lfs_objects_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "merge_request_diffs_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "package_files_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "packages_nuget_symbols_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pages_deployments_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "pipeline_artifacts_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "projects_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "proxy_local_requests_event_count_weekly": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "proxy_remote_requests_event_count_weekly": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "snippet_repositories_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "terraform_state_versions_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_checksum_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_checksum_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_checksummed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_registry_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_synced_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_verification_failed_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_verification_total_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "uploads_verified_count": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          },
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "status_message": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "geo_node_id"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [],
+  "type": "object"
+}

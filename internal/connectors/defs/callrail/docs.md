@@ -176,7 +176,7 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
   `tracking_number`; risk: sends a real SMS/MMS text message to a customer's phone (subject to 10DLC
   business-registration compliance rules); a real-world side effect outside the CallRail account
   itself, approval required. Direct file-upload MMS (multipart media_file) is out of scope - see
-  api_surface.json/docs.md; the media_url variant covers publicly-hosted-image MMS instead.
+  execution bundle/docs.md; the media_url variant covers publicly-hosted-image MMS instead.
 - `create_integration`: POST `/a/{{ config.account_id }}/integrations.json` - kind `create`; body
   type `json`; required record fields `type`, `company_id`; accepted fields `company_id`, `config`,
   `type`; risk: creates and activates a Webhooks or Custom-cookie-capture integration for a company

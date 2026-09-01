@@ -1,9 +1,0 @@
-{
-  "record": {
-    "name": "Fixture Series"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/event_series"
-  }
-}

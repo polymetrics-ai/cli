@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_field": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "insert_after": {
+          "type": "string"
+        },
+        "insert_before": {
+          "type": "string"
+        },
+        "is_important": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "goal_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "goal_gid",
+    "data"
+  ],
+  "type": "object"
+}

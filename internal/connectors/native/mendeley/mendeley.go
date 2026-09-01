@@ -148,7 +148,7 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise mendeley credential-free.
+// fixture tests can exercise mendeley credential-free.
 func (c Connector) readFixture(ctx context.Context, stream string, endpoint streamEndpoint, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	for i := 1; i <= 2; i++ {
 		if err := ctx.Err(); err != nil {

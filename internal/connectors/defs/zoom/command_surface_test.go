@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
-	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
@@ -35,108 +34,6 @@ func loadZoomBundle(t *testing.T) engine.Bundle {
 // that is not already stream-backed must remain explicitly blocked or a cited
 // justified exclusion; dropping a row is never an acceptable way to make the
 // inventory appear complete.
-func TestProviderInventoryLedgerIsComplete(t *testing.T) {
-	bundle := loadZoomBundle(t)
-	if bundle.Surface == nil {
-		t.Fatal("api_surface.json did not load")
-	}
-	if bundle.Surface.ReviewedAt != "2026-08-05" {
-		t.Fatalf("provider inventory reviewed_at = %q, want 2026-08-05", bundle.Surface.ReviewedAt)
-	}
-	if bundle.Surface.OperationLedgerVersion != 1 {
-		t.Fatalf("provider inventory operation_ledger_version = %d, want 1", bundle.Surface.OperationLedgerVersion)
-	}
-	if !strings.Contains(bundle.Surface.API, "OpenAPI 3.1.1") || !strings.Contains(bundle.Surface.API, "2026-08-03T14-58-19-06-00") {
-		t.Fatalf("provider inventory source = %q, want OpenAPI version and static-build provenance", bundle.Surface.API)
-	}
-
-	wantMethods := map[string]int{
-		http.MethodDelete: 319,
-		http.MethodGet:    881,
-		http.MethodPatch:  269,
-		http.MethodPost:   392,
-		http.MethodPut:    52,
-	}
-	gotMethods := make(map[string]int, len(wantMethods))
-	seen := make(map[string]struct{}, len(bundle.Surface.Endpoints))
-	unclassified := make([]string, 0)
-	covered, implementableNow, providerRestricted, deprecated := 0, 0, 0, 0
-
-	for _, endpoint := range bundle.Surface.Endpoints {
-		method := strings.ToUpper(strings.TrimSpace(endpoint.Method))
-		path := strings.TrimSpace(endpoint.Path)
-		key := method + " " + path
-		if method == "" || path == "" {
-			t.Errorf("provider inventory has an endpoint without method/path: %+v", endpoint)
-			continue
-		}
-		if _, duplicate := seen[key]; duplicate {
-			t.Errorf("provider inventory repeats %s", key)
-			continue
-		}
-		seen[key] = struct{}{}
-		gotMethods[method]++
-
-		switch {
-		case endpoint.CoveredBy != nil:
-			if endpoint.Operation != nil || endpoint.Excluded != nil {
-				t.Errorf("executable %s carries another disposition", key)
-			}
-			if endpoint.CoveredBy.Stream == "" {
-				t.Errorf("executable %s is not bound to a stream", key)
-			}
-			covered++
-		case endpoint.Operation != nil:
-			operation := endpoint.Operation
-			if operation.Status != "blocked" || !operation.BlockedByDefault || strings.TrimSpace(operation.Reason) == "" {
-				t.Errorf("blocked %s has incomplete disposition: %+v", key, operation)
-			}
-			if !strings.HasPrefix(operation.SourceURL, "https://developers.zoom.us/docs/api/") {
-				t.Errorf("blocked %s source_url = %q, want Zoom provider citation", key, operation.SourceURL)
-			}
-			switch {
-			case strings.Contains(operation.Notes, "classification=implementable_now"):
-				implementableNow++
-			case strings.Contains(operation.Notes, "classification=provider_restriction"):
-				providerRestricted++
-			case operation.Model == "deprecated" && strings.Contains(operation.Notes, "classification=justified_excluded"):
-				deprecated++
-			default:
-				unclassified = append(unclassified, key+" ("+operation.Model+")")
-			}
-		default:
-			unclassified = append(unclassified, key)
-		}
-	}
-
-	if got := len(bundle.Surface.Endpoints); got != 1913 {
-		t.Errorf("provider inventory endpoints = %d, want 1913", got)
-	}
-	if got := len(seen); got != 1913 {
-		t.Errorf("provider inventory unique method/path rows = %d, want 1913", got)
-	}
-	for method, want := range wantMethods {
-		if got := gotMethods[method]; got != want {
-			t.Errorf("provider inventory %s rows = %d, want %d", method, got, want)
-		}
-	}
-	if got := covered; got != 3 {
-		t.Errorf("executable stream-backed rows = %d, want 3", got)
-	}
-	if got := implementableNow; got != 1839 {
-		t.Errorf("operations awaiting Zoom-local contracts = %d, want 1839", got)
-	}
-	if got := providerRestricted; got != 17 {
-		t.Errorf("provider-restricted operations = %d, want 17", got)
-	}
-	if got := deprecated; got != 54 {
-		t.Errorf("provider-deprecated justified exclusions = %d, want 54", got)
-	}
-	if len(unclassified) > 0 {
-		t.Errorf("provider inventory has %d rows without a recognized disposition: %s", len(unclassified), strings.Join(unclassified, ", "))
-	}
-}
-
 // TestCoveredStreamsHaveReachableCommands proves the executable subset through
 // the real command runner. Before cli_surface.json exists this deliberately
 // fails: engine.synthesizeCommandSurface returns nil and `pm zoom <command>`
@@ -153,28 +50,24 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 		path       string
 		stream     string
 		apiPath    string
-		sourceURL  string
 		userScoped bool
 	}
 	wants := []commandWant{
 		{
-			path:      "users list",
-			stream:    "users",
-			apiPath:   "/v2/users",
-			sourceURL: "https://developers.zoom.us/docs/api/users.md",
+			path:    "users list",
+			stream:  "users",
+			apiPath: "/v2/users",
 		},
 		{
 			path:       "meetings list",
 			stream:     "meetings",
 			apiPath:    "/v2/users/{userId}/meetings",
-			sourceURL:  "https://developers.zoom.us/docs/api/meetings.md",
 			userScoped: true,
 		},
 		{
 			path:       "webinars list",
 			stream:     "webinars",
 			apiPath:    "/v2/users/{userId}/webinars",
-			sourceURL:  "https://developers.zoom.us/docs/api/meetings.md",
 			userScoped: true,
 		},
 	}
@@ -188,7 +81,6 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 		available  string
 		apiMethod  string
 		apiPath    string
-		sourceURL  string
 		userIDFlag bool
 	}, len(surface.Commands))
 	for _, command := range surface.Commands {
@@ -198,13 +90,11 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 			available  string
 			apiMethod  string
 			apiPath    string
-			sourceURL  string
 			userIDFlag bool
 		}{
 			stream:    command.Stream,
 			intent:    command.Intent,
 			available: command.Availability,
-			sourceURL: command.SourceURL,
 		}
 		if len(command.APISurface) == 1 {
 			entry.apiMethod = command.APISurface[0].Method
@@ -230,9 +120,6 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 		if command.apiMethod != http.MethodGet || command.apiPath != want.apiPath {
 			t.Errorf("command %q api_surface = %s %s, want GET %s", want.path, command.apiMethod, command.apiPath, want.apiPath)
 		}
-		if command.sourceURL != want.sourceURL {
-			t.Errorf("command %q source_url = %q, want %q", want.path, command.sourceURL, want.sourceURL)
-		}
 		if command.userIDFlag != want.userScoped {
 			t.Errorf("command %q optional --user-id config override = %t, want %t", want.path, command.userIDFlag, want.userScoped)
 		}
@@ -253,17 +140,17 @@ func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 
 }
 
-// TestCoveredStreamCommandsExecuteWithFixtures runs each Wave 1 command
-// through commandrunner against Zoom's committed sanitized fixtures. It proves
+// TestCoveredStreamCommandsExecuteWithLocalServer runs each command through
+// commandrunner against a local HTTP server. It proves
 // that command-specific config overrides reach the stream and that --limit
-// prevents the users cursor from fetching a second fixture page once enough
+// prevents the users cursor from fetching a second response page once enough
 // records have been emitted.
-func TestCoveredStreamCommandsExecuteWithFixtures(t *testing.T) {
+func TestCoveredStreamCommandsExecuteWithLocalServer(t *testing.T) {
 	responses := map[string]json.RawMessage{
-		"users-page-1":    zoomFixtureResponseBody(t, "users", "page_1.json"),
-		"users-page-2":    zoomFixtureResponseBody(t, "users", "page_2.json"),
-		"meetings-page-1": zoomFixtureResponseBody(t, "meetings", "page_1.json"),
-		"webinars-page-1": zoomFixtureResponseBody(t, "webinars", "page_1.json"),
+		"users-page-1":    json.RawMessage(`{"users":[{"id":"user_one","email":"one@example.test","first_name":"One","last_name":"User","updated_at":"2026-01-01T00:00:00Z"},{"id":"user_two","email":"two@example.test","first_name":"Two","last_name":"User","updated_at":"2026-01-02T00:00:00Z"}],"next_page_token":"page_two"}`),
+		"users-page-2":    json.RawMessage(`{"users":[{"id":"user_three","email":"three@example.test","first_name":"Three","last_name":"User","updated_at":"2026-01-03T00:00:00Z"}],"next_page_token":""}`),
+		"meetings-page-1": json.RawMessage(`{"meetings":[{"id":"meeting_one","uuid":"meeting_uuid_one","topic":"Meeting One","updated_at":"2026-01-01T00:00:00Z"},{"id":"meeting_two","uuid":"meeting_uuid_two","topic":"Meeting Two","start_time":"2026-01-02T00:00:00Z"}],"next_page_token":""}`),
+		"webinars-page-1": json.RawMessage(`{"webinars":[{"id":"webinar_one","uuid":"webinar_uuid_one","topic":"Webinar One","updated_at":"2026-01-01T00:00:00Z"},{"id":"webinar_two","uuid":"webinar_uuid_two","topic":"Webinar Two","start_time":"2026-01-02T00:00:00Z"}],"next_page_token":""}`),
 	}
 
 	var requestsMu sync.Mutex
@@ -272,14 +159,14 @@ func TestCoveredStreamCommandsExecuteWithFixtures(t *testing.T) {
 		responseKey := ""
 		switch request.URL.Path {
 		case "/users":
-			if request.URL.Query().Get("next_page_token") == "fixture_token_2" {
+			if request.URL.Query().Get("next_page_token") == "page_two" {
 				responseKey = "users-page-2"
 			} else {
 				responseKey = "users-page-1"
 			}
-		case "/users/fixture-user/meetings":
+		case "/users/local-user/meetings":
 			responseKey = "meetings-page-1"
-		case "/users/fixture-user/webinars":
+		case "/users/local-user/webinars":
 			responseKey = "webinars-page-1"
 		default:
 			http.NotFound(w, request)
@@ -320,13 +207,13 @@ func TestCoveredStreamCommandsExecuteWithFixtures(t *testing.T) {
 		{
 			name:       "meetings with user override",
 			path:       []string{"meetings", "list"},
-			flags:      map[string][]string{"user-id": {"fixture-user"}},
+			flags:      map[string][]string{"user-id": {"local-user"}},
 			wantStream: "meetings",
 		},
 		{
 			name:       "webinars with user override",
 			path:       []string{"webinars", "list"},
-			flags:      map[string][]string{"user-id": {"fixture-user"}},
+			flags:      map[string][]string{"user-id": {"local-user"}},
 			wantStream: "webinars",
 		},
 	}
@@ -347,36 +234,16 @@ func TestCoveredStreamCommandsExecuteWithFixtures(t *testing.T) {
 				t.Fatalf("Run(%q) = %v", strings.Join(test.path, " "), err)
 			}
 			if result.Stream != test.wantStream || result.Count != 2 || len(emitted) != 2 {
-				t.Fatalf("Run(%q) stream=%q count=%d emitted=%d, want stream=%q and two fixture records", strings.Join(test.path, " "), result.Stream, result.Count, len(emitted), test.wantStream)
+				t.Fatalf("Run(%q) stream=%q count=%d emitted=%d, want stream=%q and two records", strings.Join(test.path, " "), result.Stream, result.Count, len(emitted), test.wantStream)
 			}
 		})
 	}
 
 	requestsMu.Lock()
 	defer requestsMu.Unlock()
-	for _, path := range []string{"/users", "/users/fixture-user/meetings", "/users/fixture-user/webinars"} {
+	for _, path := range []string{"/users", "/users/local-user/meetings", "/users/local-user/webinars"} {
 		if got := requests[path]; got != 1 {
-			t.Errorf("fixture requests for %s = %d, want 1", path, got)
+			t.Errorf("requests for %s = %d, want 1", path, got)
 		}
 	}
-}
-
-func zoomFixtureResponseBody(t *testing.T, stream, file string) json.RawMessage {
-	t.Helper()
-	raw, err := os.ReadFile(filepath.Join("fixtures", "streams", stream, file))
-	if err != nil {
-		t.Fatalf("read %s fixture %s: %v", stream, file, err)
-	}
-	var fixture struct {
-		Response struct {
-			Body json.RawMessage `json:"body"`
-		} `json:"response"`
-	}
-	if err := json.Unmarshal(raw, &fixture); err != nil {
-		t.Fatalf("decode %s fixture %s: %v", stream, file, err)
-	}
-	if len(fixture.Response.Body) == 0 {
-		t.Fatalf("%s fixture %s has no response body", stream, file)
-	}
-	return fixture.Response.Body
 }

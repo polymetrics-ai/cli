@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
@@ -43,41 +42,6 @@ func TestConnectorAuthenticationAdmissionMarksOnlyDeclaredProviderFailures(t *te
 			}
 			if admission.verified != test.wantVerified {
 				t.Fatalf("verified classification=%t, want %t for %v", admission.verified, test.wantVerified, err)
-			}
-		})
-	}
-}
-
-func TestConnectorSourceBoundStreamDriftPrecedesAuthenticationAdmission(t *testing.T) {
-	for _, test := range []struct {
-		name string
-		read func(*Connector, context.Context, connectors.ReadRequest, func(connectors.Record) error) error
-	}{
-		{name: "Read", read: (*Connector).Read},
-		{name: "ReadWithOutcome", read: (*Connector).ReadWithOutcome},
-	} {
-		t.Run(test.name, func(t *testing.T) {
-			requests := 0
-			server := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests++ }))
-			t.Cleanup(server.Close)
-			bundle := Bundle{
-				HTTP: HTTPBase{URL: server.URL, Pagination: &PaginationSpec{Type: "next_url", NextURLPath: "next_page.uri"}},
-				Operations: []OperationSpec{{
-					ID: "get_workspaces", Kind: "stream_etl",
-					SourceOperation: &SourceOperationBinding{ID: "asana.rest.getWorkspaces", Method: http.MethodGet, Path: "/workspaces"},
-					Composite:       &CompositeOperationSpec{Steps: []string{"stream:workspaces"}},
-				}},
-				Streams: []StreamSpec{{Name: "workspaces", Path: "/users", Records: RecordsSpec{Path: "data"}, SchemaRef: "schemas/workspaces.json"}},
-			}
-			admission := &capturingAuthenticationAdmission{}
-			err := test.read(New(bundle, nil), context.Background(), connectors.ReadRequest{
-				Stream: "workspaces", Config: connectors.RuntimeConfig{AuthenticationAdmission: admission},
-			}, func(connectors.Record) error { return nil })
-			if err == nil || !strings.Contains(err.Error(), "does not match locked source endpoint") {
-				t.Fatalf("source-bound stream drift = %v, want structural refusal", err)
-			}
-			if admission.calls != 0 || requests != 0 {
-				t.Fatalf("auth admissions/requester calls = %d/%d, want 0/0", admission.calls, requests)
 			}
 		})
 	}

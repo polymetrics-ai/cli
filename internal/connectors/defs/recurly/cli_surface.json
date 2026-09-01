@@ -1,12 +1,6 @@
 {
   "tagline": "Recurly V3 API connector for accounts, subscriptions, invoices, transactions, catalog, previews, exports, and typed reverse ETL.",
   "usage": "pm recurly <command> [flags] --json",
-  "source_cli": {
-    "name": "Recurly API",
-    "docs": "https://recurly.com/developers/api/v2021-02-25/",
-    "reference": "https://recurly.com/developers/api/spec/v2021-02-25.yaml",
-    "source": "official-openapi"
-  },
   "groups": [
     {
       "id": "sites",
@@ -5278,7 +5272,6 @@
           "required": true
         }
       ],
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_invoice",
       "output_policy": "json_redacted",
       "redact_fields": [
         "billing_info",
@@ -5312,7 +5305,6 @@
           "required": true
         }
       ],
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_invoice_pdf",
       "api_surface": [
         {
           "method": "GET",
@@ -5339,7 +5331,6 @@
           "required": true
         }
       ],
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_preview_renewal",
       "output_policy": "json_redacted",
       "redact_fields": [
         "billing_info",
@@ -5373,7 +5364,6 @@
           "required": true
         }
       ],
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_subscription_change",
       "output_policy": "json_redacted",
       "redact_fields": [
         "billing_info",
@@ -5414,7 +5404,6 @@
           "maps_to": "body.account.code"
         }
       ],
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_purchase",
       "output_policy": "json_redacted",
       "redact_fields": [
         "billing_info",
@@ -5439,7 +5428,6 @@
       "intent": "binary_download",
       "availability": "implemented",
       "operation": "get_export_dates",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_dates",
       "api_surface": [
         {
           "method": "GET",
@@ -5466,7 +5454,6 @@
           "required": true
         }
       ],
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_files",
       "api_surface": [
         {
           "method": "GET",
@@ -5507,7 +5494,6 @@
           "maps_to": "body.currency"
         }
       ],
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_gift_card",
       "output_policy": "json_redacted",
       "redact_fields": [
         "billing_info",

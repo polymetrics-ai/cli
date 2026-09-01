@@ -4,7 +4,6 @@
       "id": "help-scout.v3_get_conversation",
       "kind": "rest_read",
       "summary": "Get Conversation (v3)",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/get-v3/",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
@@ -14,7 +13,13 @@
         "path": "/v3/conversations/{conversationId}",
         "max_bytes": 4194304,
         "parameters": [
-          {"name": "conversationId", "in": "path", "type": "string", "required": true, "summary": "Help Scout conversation id."}
+          {
+            "name": "conversationId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Help Scout conversation id."
+          }
         ]
       }
     },
@@ -22,7 +27,6 @@
       "id": "help-scout.v3_list_conversation_threads",
       "kind": "rest_read",
       "summary": "List Conversation Threads (v3)",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/threads/list-v3/",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
@@ -32,7 +36,13 @@
         "path": "/v3/conversations/{conversationId}/threads",
         "max_bytes": 4194304,
         "parameters": [
-          {"name": "conversationId", "in": "path", "type": "string", "required": true, "summary": "Help Scout conversation id."}
+          {
+            "name": "conversationId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Help Scout conversation id."
+          }
         ]
       }
     },
@@ -40,7 +50,6 @@
       "id": "help-scout.v3_list_customers",
       "kind": "rest_read",
       "summary": "List Customers (v3)",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/customers/list-v3/",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
@@ -55,7 +64,6 @@
       "id": "help-scout.v3_list_system_users",
       "kind": "rest_read",
       "summary": "List System Users (v3)",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/list-system-users/",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
@@ -70,7 +78,6 @@
       "id": "help-scout.v3_get_system_user",
       "kind": "rest_read",
       "summary": "Get System User (v3)",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/system-users/get-system-user/",
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
@@ -80,7 +87,13 @@
         "path": "/v3/system-users/{systemUserId}",
         "max_bytes": 4194304,
         "parameters": [
-          {"name": "systemUserId", "in": "path", "type": "string", "required": true, "summary": "Help Scout system user id."}
+          {
+            "name": "systemUserId",
+            "in": "path",
+            "type": "string",
+            "required": true,
+            "summary": "Help Scout system user id."
+          }
         ]
       }
     },
@@ -89,7 +102,6 @@
       "kind": "binary_download",
       "summary": "Download a conversation attachment to a bounded destination.",
       "description": "Help Scout streams the attachment bytes with Content-Disposition and the file's own Content-Type. The sibling .../data endpoint returns base64 inside JSON and is an ordinary read, not a download.",
-      "source_url": "https://developer.helpscout.com/mailbox-api/endpoints/conversations/attachments/get-attachment-file/",
       "risk": "medium",
       "approval": "filesystem writes require an explicit destination policy",
       "output_policy": "binary_file_bounded",

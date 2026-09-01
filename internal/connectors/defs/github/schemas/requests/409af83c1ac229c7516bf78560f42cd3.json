@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "member",
+        "maintainer"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "team_slug": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "username": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "org",
+    "team_slug",
+    "username"
+  ],
+  "type": "object"
+}

@@ -1,9 +1,0 @@
-{
-  "record": {
-    "name": "Fixture Pool"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/ip-pools"
-  }
-}

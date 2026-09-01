@@ -1,9 +1,0 @@
-{
-  "record": {
-    "token": "signer_fixture_1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/signer/signer_fixture_1/remove/"
-  }
-}

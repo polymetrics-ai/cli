@@ -1,7 +1,0 @@
-{
-  "record": { "name": "Fixture Environment" },
-  "expect": {
-    "method": "POST",
-    "path": "/v1/products/synthetic-conformance-value/environments"
-  }
-}

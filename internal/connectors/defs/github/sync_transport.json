@@ -1,9 +1,86 @@
 {
-  "schema_version": 1,
-  "source_transport": {
+  "destination_transport": {
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {
+        "action": "set_issue_labels",
+        "mode": "full_overwrite",
+        "strategy": "replace"
+      },
+      {
+        "action": "add_issue_labels",
+        "mode": "full_append",
+        "strategy": "append"
+      },
+      {
+        "action": "set_issue_labels",
+        "mode": "incremental_upsert",
+        "strategy": "merge"
+      }
+    ],
+    "delivery": {
+      "deletes": "not_available",
+      "idempotency": "keyed",
+      "ordering": "source_ordered"
+    },
+    "eligible_actions": [
+      "add_issue_labels",
+      "set_issue_labels"
+    ],
     "executor": {
       "family": "declarative_api",
-      "id": "declarative_stream_source"
+      "id": "issue_label_destination"
+    },
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_upsert"
+    ],
+    "source_bindings": [
+      {
+        "eligible_streams": [
+          "issues"
+        ],
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "record_mapping": {
+          "config_key": "transport_source_issue_number",
+          "kind": "config_match",
+          "record_field": "number"
+        }
+      },
+      {
+        "eligible_streams": [
+          "*"
+        ],
+        "executor": {
+          "family": "native_database",
+          "id": "postgres_polling_watermark"
+        },
+        "record_mapping": {
+          "inputs": [
+            {
+              "field": "target_issue",
+              "input": "target_issue"
+            },
+            {
+              "field": "label",
+              "input": "label"
+            }
+          ],
+          "kind": "input_fields"
+        }
+      }
+    ]
+  },
+  "schema_version": 1,
+  "source_transport": {
+    "delivery": {
+      "deletes": "tombstone",
+      "idempotency": "keyed",
+      "ordering": "source_ordered"
     },
     "eligible_streams": [
       "repository",
@@ -44,66 +121,16 @@
       "discussions",
       "discussion"
     ],
-    "modes": ["full_overwrite", "full_append", "incremental_upsert", "incremental_dedupe", "incremental_dedupe_history"],
-    "delivery": {
-      "idempotency": "keyed",
-      "ordering": "source_ordered",
-      "deletes": "tombstone"
-    },
-    "conformance": {
-      "suite": "declarative_stream_transport",
-      "run_id": "all_executable_streams_v1"
-    }
-  },
-  "destination_transport": {
     "executor": {
       "family": "declarative_api",
-      "id": "issue_label_destination"
+      "id": "declarative_stream_source"
     },
-    "eligible_actions": ["add_issue_labels", "set_issue_labels"],
-    "modes": ["full_overwrite", "full_append", "incremental_upsert"],
-    "delivery": {
-      "idempotency": "keyed",
-      "ordering": "source_ordered",
-      "deletes": "not_available"
-    },
-    "conformance": {
-      "suite": "closed_transport_demo",
-      "run_id": "accepted_issue_label_destination"
-    },
-    "acknowledgement": "durable_warehouse",
-    "apply_strategies": [
-      {"mode": "full_overwrite", "strategy": "replace", "action": "set_issue_labels"},
-      {"mode": "full_append", "strategy": "append", "action": "add_issue_labels"},
-      {"mode": "incremental_upsert", "strategy": "merge", "action": "set_issue_labels"}
-    ],
-    "source_bindings": [
-      {
-        "executor": {
-          "family": "declarative_api",
-          "id": "declarative_stream_source"
-        },
-        "eligible_streams": ["issues"],
-        "record_mapping": {
-          "kind": "config_match",
-          "config_key": "transport_source_issue_number",
-          "record_field": "number"
-        }
-      },
-      {
-        "executor": {
-          "family": "native_database",
-          "id": "postgres_polling_watermark"
-        },
-        "eligible_streams": ["*"],
-        "record_mapping": {
-          "kind": "input_fields",
-          "inputs": [
-            {"input": "target_issue", "field": "target_issue"},
-            {"input": "label", "field": "label"}
-          ]
-        }
-      }
+    "modes": [
+      "full_overwrite",
+      "full_append",
+      "incremental_upsert",
+      "incremental_dedupe",
+      "incremental_dedupe_history"
     ]
   }
 }

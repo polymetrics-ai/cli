@@ -163,9 +163,6 @@ func operationStatusCheckSpec(b Bundle, operation string) (OperationSpec, error)
 	if len(op.REST.Body) != 0 || len(op.REST.BodySchema) != 0 || strings.TrimSpace(op.REST.ContentType) != "" {
 		return OperationSpec{}, fmt.Errorf("operation %q status check must not declare a request body", operation)
 	}
-	if err := requireOperationSurfaceEndpoint(b, http.MethodHead, op.REST.Path); err != nil {
-		return OperationSpec{}, err
-	}
 	if _, err := requireOperationSuccessStatusPolicy(op); err != nil {
 		return OperationSpec{}, err
 	}

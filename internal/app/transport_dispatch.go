@@ -71,7 +71,7 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 		// exhaustive connector Read -> local warehouse materializer route.
 		return false, transportRouteDeclarationAbsent, nil
 	}
-	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) && !isEnabledFullSnapshotWarehouseTransport(source, destination, streamName, mode.ContractMode) {
+	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) && !a.isExecutableFullSnapshotWarehouseTransport(source, destination, streamName, mode.ContractMode) {
 		// The local warehouse primitive owns a closed, bounded ordinary ETL
 		// representation for these executable modes. Its two dedupe modes are
 		// the only ones promoted to the registered transport executor below;
@@ -100,7 +100,7 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 			return true, transportRouteDeclared, nil
 		}
 		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
-		if localWarehouse && materializer.MaterializesLocalWarehouse() && (isWarehouseDedupeContractMode(mode.ContractMode) || isEnabledFullSnapshotWarehouseTransport(source, destination, streamName, mode.ContractMode)) {
+		if localWarehouse && materializer.MaterializesLocalWarehouse() && (isWarehouseDedupeContractMode(mode.ContractMode) || a.isExecutableFullSnapshotWarehouseTransport(source, destination, streamName, mode.ContractMode)) {
 			return true, transportRouteDeclared, nil
 		}
 		return false, transportRouteDeclared, &synctransport.DeclaredDestinationRouteError{
@@ -144,53 +144,55 @@ func isBoundedLocalWarehouseLegacyRoute(destination connectors.Connector, mode s
 	return ok && materializer.MaterializesLocalWarehouse()
 }
 
-// isEnabledFullSnapshotWarehouseTransport admits a full provider collection
-// to the durable registered transport only when the connector itself carries
-// the closed enabled-contract evidence. This is deliberately structural: a
-// source's HTTP verb, connector name, or a local warehouse destination alone
-// cannot replace the established ETL route. The descriptor and registry still
-// validate the executor, stream, mode, and durable destination independently.
-func isEnabledFullSnapshotWarehouseTransport(source, destination connectors.Connector, stream string, mode synccontract.Mode) bool {
-	if !isLocalWarehouseDestination(destination) || !enabledFullSnapshotTransportSource(source, stream, mode) {
+// isExecutableFullSnapshotWarehouseTransport admits a full provider collection
+// from execution facts only. Full overwrite additionally requires the selected
+// destination executor to implement the existing run-scoped replacement port;
+// a descriptor cannot claim an executor capability that is not registered.
+func (a *App) isExecutableFullSnapshotWarehouseTransport(source, destination connectors.Connector, stream string, mode synccontract.Mode) bool {
+	if a == nil || a.transports == nil || !isLocalWarehouseDestination(destination) || !declaredFullSnapshotTransportSource(source, stream, mode) {
 		return false
 	}
 	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
-	return ok && materializer.MaterializesLocalWarehouse()
+	if !ok || !materializer.MaterializesLocalWarehouse() {
+		return false
+	}
+	descriptor, ok := connectors.DestinationTransportDescriptorOf(destination)
+	if !ok {
+		return false
+	}
+	executor, ok := a.transports.RegisteredDestination(descriptor.Executor)
+	if !ok {
+		return false
+	}
+	if mode == synccontract.ModeFullOverwrite {
+		_, ok = executor.(synctransport.FullOverwriteDestination)
+	}
+	return ok
 }
 
-func enabledFullSnapshotTransportSource(source connectors.Connector, stream string, mode synccontract.Mode) bool {
+func declaredFullSnapshotTransportSource(source connectors.Connector, stream string, mode synccontract.Mode) bool {
 	if mode != synccontract.ModeFullOverwrite && mode != synccontract.ModeFullAppend {
 		return false
 	}
 	definition, ok := connectors.DefinitionOf(source)
-	if !ok || definition.EnabledContract == nil {
+	if !ok || definition.SyncTransport == nil || definition.SyncTransport.Source == nil {
 		return false
 	}
-	for _, lane := range definition.EnabledContract.Lanes {
-		if lane.Name != "sync_transport" || lane.State != connectors.EnabledLaneImplemented || lane.Transport == nil || !enabledContractFullSnapshotMode(lane.Transport.Modes, mode) || !enabledContractStreamEvidence(lane.Transport.Streams, stream) {
-			continue
-		}
-		for _, flow := range lane.Warehouse {
-			if flow.Direction == "provider_to_duckdb" {
-				return true
-			}
-		}
+	transport := definition.SyncTransport.Source
+	if !declaredTransportMode(transport.Modes, mode) {
+		return false
 	}
-	return false
-}
-
-func enabledContractFullSnapshotMode(modes []string, mode synccontract.Mode) bool {
-	for _, candidate := range modes {
-		if candidate == string(mode) {
+	for _, candidate := range transport.EligibleStreams {
+		if candidate == "*" || candidate == stream {
 			return true
 		}
 	}
 	return false
 }
 
-func enabledContractStreamEvidence(streams []connectors.EnabledContractTransportStreamEvidence, stream string) bool {
-	for _, candidate := range streams {
-		if candidate.Stream == stream && candidate.SourceOperation != "" {
+func declaredTransportMode(modes []synccontract.Mode, mode synccontract.Mode) bool {
+	for _, candidate := range modes {
+		if candidate == mode {
 			return true
 		}
 	}
@@ -757,7 +759,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 // reconcileCommittedTransportStages retires only previously committed,
 // connection-owned worksets before the next closed transport can reach source
 // I/O. Ordinary Open deliberately leaves an accepted receipt observable for
-// recovery and certification evidence; a stage that needs eager disposal may
+// recovery and execution evidence; a stage that needs eager disposal may
 // separately opt into synctransport.RetirableWarehouseStage.
 func (a *App) reconcileCommittedTransportStages(ctx context.Context) error {
 	stage, ok := a.transportStage.(interface{ ReconcileCommitted(context.Context) error })

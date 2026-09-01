@@ -1,9 +1,0 @@
-{
-  "record": {
-    "devin_id": "devin-fixture-1"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/v3/organizations/synthetic-conformance-value/sessions/devin-fixture-1"
-  }
-}

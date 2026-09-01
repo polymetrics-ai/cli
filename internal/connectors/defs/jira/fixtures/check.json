@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/rest/api/3/myself" },
-  "response": {
-    "status": 200,
-    "body": { "accountId": "fixture-account-1", "displayName": "Fixture User", "active": true }
-  }
-}

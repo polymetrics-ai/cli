@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "approval_policy": {
+      "enum": [
+        "first_time_contributors_new_to_github",
+        "first_time_contributors",
+        "all_external_contributors"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "approval_policy",
+    "org"
+  ],
+  "type": "object"
+}

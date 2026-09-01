@@ -79,7 +79,7 @@ func githubCommitTransportScaleConfig(raw string) (githubCommitTransportScale, e
 	return githubCommitTransportScale{MaxPages: strconv.Itoa(pages), ExpectedRows: pages * githubCommitTransportPageSize}, nil
 }
 
-func TestGitHubCommitTransportScaleConfigDefaultFullCertification(t *testing.T) {
+func TestGitHubCommitTransportScaleConfigDefaultsToFullTraversal(t *testing.T) {
 	config, err := githubCommitTransportScaleConfig("")
 	if err != nil {
 		t.Fatalf("default GitHub commit scale config: %v", err)
@@ -1441,7 +1441,7 @@ func TestPMBinaryExecutesAuthenticatedGitHubWarehousePostgres(t *testing.T) {
 // decisive #4171 production proof. It intentionally traverses every declared
 // GitHub page with max_pages=unlimited and counts both durable hops
 // independently; a one-page default would therefore fail far below the
-// 99,345-row certification reference that exposed the admission defect.
+// 99,345-row execution reference that exposed the prior paging defect.
 func TestPMBinaryExecutesAuthenticatedGitHubCommitsWarehousePostgres(t *testing.T) {
 	if os.Getenv("POLYMETRICS_DATABASE_INTEGRATION") != "1" || os.Getenv("POLYMETRICS_GITHUB_INTEGRATION") != "1" {
 		t.Skip("authenticated GitHub commits-to-PostgreSQL integration is opt-in")

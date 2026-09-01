@@ -10,7 +10,7 @@ import (
 
 // CrontabBackend installs schedules by appending to the user's crontab.
 type CrontabBackend struct {
-	// File redirects crontab writes to a file, primarily for tests/certification.
+	// File redirects crontab writes to a file, primarily for tests/diagnostics.
 	File string
 }
 

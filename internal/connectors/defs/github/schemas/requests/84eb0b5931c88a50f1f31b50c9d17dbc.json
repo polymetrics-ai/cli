@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "patterns": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "custom_pattern_version": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "pattern_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pattern_id"
+        ],
+        "type": "object"
+      },
+      "maxItems": 500,
+      "type": "array"
+    },
+    "post_delete_action": {
+      "enum": [
+        "delete_alerts",
+        "resolve_alerts"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "org",
+    "patterns"
+  ],
+  "type": "object"
+}

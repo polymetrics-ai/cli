@@ -16,14 +16,12 @@ func TestSyncTransportDescriptorResolvesDeclaredApplyStrategy(t *testing.T) {
 			EligibleStreams: []string{"records"},
 			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 			Delivery:        closedTestDeliveryGuarantees(),
-			Conformance:     closedTestConformanceReference(),
 		},
 		Destination: &DestinationTransportDescriptor{
 			Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
 			EligibleActions: []string{"stage_append"},
 			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 			Delivery:        closedTestDeliveryGuarantees(),
-			Conformance:     closedTestConformanceReference(),
 			Acknowledgement: TransportAcknowledgementDurableWarehouse,
 			ApplyStrategies: []DestinationApplyStrategy{{
 				Mode:     synccontract.ModeFullAppend,
@@ -58,7 +56,6 @@ func TestSourceTransportDescriptorRejectsSingleAttemptDelivery(t *testing.T) {
 			Ordering:    DeliveryOrderingUnordered,
 			Deletes:     DeliveryDeletesUnavailable,
 		},
-		Conformance: closedTestConformanceReference(),
 	}
 	if err := descriptor.Validate(); err == nil || !strings.Contains(err.Error(), "source transport cannot declare single_attempt") {
 		t.Fatalf("single-attempt source delivery error = %v, want source-role refusal", err)
@@ -71,7 +68,6 @@ func TestDestinationTransportDescriptorSelectsPersistedActionWithinMode(t *testi
 		EligibleActions: []string{"append_widget", "replace_widget"},
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 		Delivery:        closedTestDeliveryGuarantees(),
-		Conformance:     closedTestConformanceReference(),
 		Acknowledgement: TransportAcknowledgementDurableWarehouse,
 		ApplyStrategies: []DestinationApplyStrategy{
 			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "append_widget"},
@@ -139,7 +135,6 @@ func TestDestinationTransportDescriptorRequiresExactActionClosure(t *testing.T) 
 		EligibleActions: []string{"apply_record", "ghost_action"},
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 		Delivery:        closedTestDeliveryGuarantees(),
-		Conformance:     closedTestConformanceReference(),
 		Acknowledgement: TransportAcknowledgementDurableWarehouse,
 		ApplyStrategies: []DestinationApplyStrategy{{
 			Mode:     synccontract.ModeFullAppend,
@@ -173,7 +168,6 @@ func TestSyncTransportDescriptorRejectsGenericExecutorReference(t *testing.T) {
 		EligibleStreams: []string{"records"},
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 		Delivery:        closedTestDeliveryGuarantees(),
-		Conformance:     closedTestConformanceReference(),
 	}}
 
 	err := descriptor.Validate()
@@ -188,7 +182,6 @@ func TestSyncTransportDescriptorRejectsHyphenatedGenericExecutorReference(t *tes
 		EligibleStreams: []string{"records"},
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 		Delivery:        closedTestDeliveryGuarantees(),
-		Conformance:     closedTestConformanceReference(),
 	}}
 
 	err := descriptor.Validate()
@@ -203,7 +196,6 @@ func TestDestinationTransportDescriptorRejectsStrategyOutsideDeclaredModes(t *te
 		EligibleActions: []string{"stage_append"},
 		Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 		Delivery:        closedTestDeliveryGuarantees(),
-		Conformance:     closedTestConformanceReference(),
 		Acknowledgement: TransportAcknowledgementDurableWarehouse,
 		ApplyStrategies: []DestinationApplyStrategy{
 			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "stage_append"},
@@ -223,7 +215,6 @@ func TestDestinationTransportDescriptorRefusesChangeCaptureDestinationMode(t *te
 		EligibleActions: []string{"stage_change_capture"},
 		Modes:           []synccontract.Mode{synccontract.ModeChangeCapture},
 		Delivery:        closedTestDeliveryGuarantees(),
-		Conformance:     closedTestConformanceReference(),
 		Acknowledgement: TransportAcknowledgementDurableWarehouse,
 		ApplyStrategies: []DestinationApplyStrategy{{
 			Mode:     synccontract.ModeChangeCapture,
@@ -243,7 +234,6 @@ func TestDestinationTransportDescriptorRefusesChangeCaptureDestinationModeRegard
 		EligibleActions: []string{"stage_change_capture"},
 		Modes:           []synccontract.Mode{synccontract.ModeChangeCapture},
 		Delivery:        closedTestDeliveryGuarantees(),
-		Conformance:     closedTestConformanceReference(),
 		Acknowledgement: TransportAcknowledgementDurableWarehouse,
 		ApplyStrategies: []DestinationApplyStrategy{{
 			Mode:     synccontract.ModeChangeCapture,
@@ -257,21 +247,19 @@ func TestDestinationTransportDescriptorRefusesChangeCaptureDestinationModeRegard
 	}
 }
 
-func TestSyncTransportGuideProjectsDeclaredRolesWithoutCertificationClaim(t *testing.T) {
+func TestSyncTransportGuideProjectsDeclaredRoles(t *testing.T) {
 	descriptor := &SyncTransportDescriptor{
 		Source: &SourceTransportDescriptor{
 			Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeAPI, ID: "fake_api_source"},
 			EligibleStreams: []string{"records"},
 			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 			Delivery:        closedTestDeliveryGuarantees(),
-			Conformance:     closedTestConformanceReference(),
 		},
 		Destination: &DestinationTransportDescriptor{
 			Executor:        TransportExecutorReference{Family: TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"},
 			EligibleActions: []string{"stage_append"},
 			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 			Delivery:        closedTestDeliveryGuarantees(),
-			Conformance:     closedTestConformanceReference(),
 			Acknowledgement: TransportAcknowledgementDurableWarehouse,
 			ApplyStrategies: []DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "stage_append"}},
 		},
@@ -282,7 +270,6 @@ func TestSyncTransportGuideProjectsDeclaredRolesWithoutCertificationClaim(t *tes
 		"SYNC TRANSPORT",
 		"Source transport: declared",
 		"Destination transport: declared",
-		"not a certification claim",
 	} {
 		if !strings.Contains(manual, want) {
 			t.Fatalf("manual missing %q:\n%s", want, manual)
@@ -301,7 +288,6 @@ func TestSyncTransportEligibilityProjectsDeclaredNoneAcknowledgement(t *testing.
 				EligibleActions: []string{"stage_append"},
 				Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 				Delivery:        closedTestDeliveryGuarantees(),
-				Conformance:     closedTestConformanceReference(),
 				Acknowledgement: acknowledgement,
 				ApplyStrategies: []DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "stage_append"}},
 			}
@@ -334,7 +320,6 @@ func TestSyncTransportEligibilityProjectsValidRolesIndependently(t *testing.T) {
 			EligibleStreams: []string{"records"},
 			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 			Delivery:        closedTestDeliveryGuarantees(),
-			Conformance:     closedTestConformanceReference(),
 		}
 	}
 	validDestination := func() *DestinationTransportDescriptor {
@@ -343,7 +328,6 @@ func TestSyncTransportEligibilityProjectsValidRolesIndependently(t *testing.T) {
 			EligibleActions: []string{"stage_append"},
 			Modes:           []synccontract.Mode{synccontract.ModeFullAppend},
 			Delivery:        closedTestDeliveryGuarantees(),
-			Conformance:     closedTestConformanceReference(),
 			Acknowledgement: TransportAcknowledgementNone,
 			ApplyStrategies: []DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: "stage_append"}},
 		}
@@ -418,8 +402,4 @@ func closedTestDeliveryGuarantees() DeliveryGuarantees {
 		Ordering:    DeliveryOrderingSource,
 		Deletes:     DeliveryDeletesTombstone,
 	}
-}
-
-func closedTestConformanceReference() ConformanceEvidenceReference {
-	return ConformanceEvidenceReference{Suite: "external_transport_test", RunID: "verified_run_1"}
 }

@@ -43,12 +43,6 @@ func hookConfig(cfg connectors.RuntimeConfig, rt *engine.Runtime) connectors.Run
 		out.Config[key] = value
 	}
 	out.Config["base_url"] = rt.Requester.BaseURL
-	if out.Config["page_size"] == "synthetic-conformance-value" {
-		out.Config["page_size"] = "100"
-	}
-	if out.Config["max_pages"] == "synthetic-conformance-value" {
-		out.Config["max_pages"] = "1"
-	}
 	return out
 }
 

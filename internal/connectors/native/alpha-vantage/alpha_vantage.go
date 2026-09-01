@@ -250,7 +250,7 @@ func apiError(body []byte) error {
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise alpha-vantage credential-free.
+// fixture tests can exercise alpha-vantage credential-free.
 func (c Connector) readFixture(ctx context.Context, stream string, spec streamSpec, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	symbol := alphaVantageSymbol(req.Config)
 	if spec.seriesKey == "" && spec.objectKey != "" {

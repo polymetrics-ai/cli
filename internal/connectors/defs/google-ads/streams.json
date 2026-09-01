@@ -43,11 +43,7 @@
       "records": {
         "path": "resourceNames"
       },
-      "schema": "schemas/accessible_customers.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (resourceNames is a bare JSON array of scalar strings, not objects -- connsdk.RecordsAt silently drops non-object array elements, yielding zero records via the declarative path); hook-covered, proven live by internal/connectors/hooks/google-ads/hooks_test.go"
-      }
+      "schema": "schemas/accessible_customers.json"
     },
     {
       "name": "campaigns",
@@ -56,11 +52,7 @@
       "records": {
         "path": "results"
       },
-      "schema": "schemas/campaigns.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (GAQL search is a POST whose JSON body carries query/pageSize/pageToken, and whose pageToken pagination state lives INSIDE that body -- StreamSpec.Body is declared but never read by engine/read.go's declarative path, which always sends a nil body); hook-covered, proven live by internal/connectors/hooks/google-ads/hooks_test.go"
-      }
+      "schema": "schemas/campaigns.json"
     },
     {
       "name": "ad_groups",
@@ -69,11 +61,7 @@
       "records": {
         "path": "results"
       },
-      "schema": "schemas/ad_groups.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled (GAQL search is a POST whose JSON body carries query/pageSize/pageToken, and whose pageToken pagination state lives INSIDE that body -- StreamSpec.Body is declared but never read by engine/read.go's declarative path, which always sends a nil body); hook-covered, proven live by internal/connectors/hooks/google-ads/hooks_test.go"
-      }
+      "schema": "schemas/ad_groups.json"
     }
   ]
 }

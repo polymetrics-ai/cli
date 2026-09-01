@@ -55,11 +55,10 @@ func (r *DriverRegistry) ResolveWriteDriver(ctx context.Context, definition Defi
 	return writeDriver, nil
 }
 
-// DatabaseNativeAdmission binds shared native evidence to one sealed database
+// DatabaseNativeAdmission binds one native descriptor to a sealed database
 // warehouse leg.
 type DatabaseNativeAdmission struct {
 	descriptor synccontract.NativeSyncExecutorDescriptor
-	evidence   synccontract.ConformanceEvidence
 	leg        databaseWarehouseLeg
 }
 
@@ -82,14 +81,12 @@ func newDatabaseNativeAdmission(leg databaseWarehouseLeg, admission synccontract
 		return DatabaseNativeAdmission{}, errors.New("database native admission is required")
 	}
 	descriptor := admission.NativeSyncExecutorDescriptor()
-	evidence := admission.NativeSyncConformanceEvidence()
-	contract := databaseNativeCommandContract(descriptor, evidence)
+	contract := databaseNativeCommandContract(descriptor)
 	if err := contract.Validate(); err != nil {
 		return DatabaseNativeAdmission{}, err
 	}
 	return DatabaseNativeAdmission{
 		descriptor: cloneNativeExecutorDescriptor(descriptor),
-		evidence:   cloneConformanceEvidence(evidence),
 		leg:        leg,
 	}, nil
 }
@@ -98,18 +95,13 @@ func (a DatabaseNativeAdmission) NativeSyncExecutorDescriptor() synccontract.Nat
 	return cloneNativeExecutorDescriptor(a.descriptor)
 }
 
-func (a DatabaseNativeAdmission) NativeSyncConformanceEvidence() synccontract.ConformanceEvidence {
-	return cloneConformanceEvidence(a.evidence)
-}
-
 func (a DatabaseNativeAdmission) nativeCommandContract() synccontract.NativeCommandContract {
-	return databaseNativeCommandContract(a.descriptor, a.evidence)
+	return databaseNativeCommandContract(a.descriptor)
 }
 
 func (a DatabaseNativeAdmission) clone() DatabaseNativeAdmission {
 	return DatabaseNativeAdmission{
 		descriptor: cloneNativeExecutorDescriptor(a.descriptor),
-		evidence:   cloneConformanceEvidence(a.evidence),
 		leg:        a.leg,
 	}
 }
@@ -127,12 +119,6 @@ func cloneNativeExecutorDescriptor(descriptor synccontract.NativeSyncExecutorDes
 	return clone
 }
 
-func cloneConformanceEvidence(evidence synccontract.ConformanceEvidence) synccontract.ConformanceEvidence {
-	clone := evidence
-	clone.FixtureIDs = append([]string(nil), evidence.FixtureIDs...)
-	return clone
-}
-
 func cloneDatabaseNativeAdmissions(admissions []DatabaseNativeAdmission) []DatabaseNativeAdmission {
 	clone := make([]DatabaseNativeAdmission, len(admissions))
 	for index := range admissions {
@@ -141,14 +127,13 @@ func cloneDatabaseNativeAdmissions(admissions []DatabaseNativeAdmission) []Datab
 	return clone
 }
 
-func databaseNativeCommandContract(descriptor synccontract.NativeSyncExecutorDescriptor, evidence synccontract.ConformanceEvidence) synccontract.NativeCommandContract {
+func databaseNativeCommandContract(descriptor synccontract.NativeSyncExecutorDescriptor) synccontract.NativeCommandContract {
 	return synccontract.NativeCommandContract{
 		ContractVersion: synccontract.NativeCommandContractVersion,
 		Protocol:        descriptor.Protocol,
 		Command:         descriptor.Command,
 		Executor:        descriptor.Executor,
 		Modes:           append([]synccontract.Mode(nil), descriptor.Modes...),
-		Conformance:     cloneConformanceEvidence(evidence),
 	}
 }
 

@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "subject_digests": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 1024,
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "required": [
+    "org",
+    "subject_digests"
+  ],
+  "type": "object"
+}

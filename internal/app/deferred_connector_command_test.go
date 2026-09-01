@@ -14,10 +14,6 @@ import (
 func TestPlanConnectorCommandPreflightsDeferredCommandBeforeCredentialResolution(t *testing.T) {
 	bundle := engine.Bundle{
 		Name: "deferred-plan-fixture",
-		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
-			Method: "POST", Path: "/widgets",
-			Operation: &engine.SurfaceOperation{Model: "sensitive_reverse_etl", Status: "blocked", BlockedByDefault: true, Reason: "runtime executor is pending"},
-		}}},
 		CLISurface: &engine.CLISurface{Commands: []engine.CLICommand{{
 			Path: "widget create", Intent: "reverse_etl", Availability: "deferred",
 			APISurface: []engine.CLISurfaceEndpointRef{{Method: "POST", Path: "/widgets"}},
@@ -37,11 +33,14 @@ func TestPlanConnectorCommandPreflightsDeferredCommandBeforeCredentialResolution
 		Path:      []string{"widget", "create"},
 	})
 	var blocked *commandrunner.BlockedCommandError
-	if !errors.As(err, &blocked) || blocked.Failure == nil {
+	if !errors.As(err, &blocked) {
 		t.Fatalf("PlanConnectorCommand error = %v, want typed deferred preflight refusal before missing credential", err)
 	}
-	if blocked.Failure.Code() != "missing_foundation" {
-		t.Fatalf("PlanConnectorCommand code = %q, want missing_foundation", blocked.Failure.Code())
+	if blocked.Failure != nil {
+		t.Fatalf("PlanConnectorCommand legacy classified failure = %v, want execution-binding error only", blocked.Failure)
+	}
+	if !strings.Contains(blocked.Error(), "deferred command foundation target requires one execution binding") {
+		t.Fatalf("PlanConnectorCommand error = %v, want missing execution-binding refusal", blocked)
 	}
 }
 

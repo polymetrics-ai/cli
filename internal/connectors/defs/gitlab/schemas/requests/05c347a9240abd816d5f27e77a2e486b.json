@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "allow_author_approval": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allow_committer_approval": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allow_overrides_to_approver_list_per_merge_request": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "require_password_to_approve": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "require_reauthentication_to_approve": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "retain_approvals_on_push": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "selective_code_owner_removals": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "type": "object"
+}

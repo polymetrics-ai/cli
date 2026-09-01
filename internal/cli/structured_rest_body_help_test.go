@@ -45,13 +45,6 @@ func TestStructuredRESTBodyCommandHelpAndManualExposeOnlyDeclaredTypedFields(t *
 				BodySchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"required":["settings","targets"],"properties":{"settings":{"type":"object","additionalProperties":false,"properties":{}},"targets":{"type":"array","maxItems":2,"items":{"type":"object","additionalProperties":false,"properties":{}}}}}`),
 			},
 		}},
-		Surface: &engine.APISurface{Endpoints: []engine.SurfaceEndpoint{{
-			Method: http.MethodPost,
-			Path:   "/widgets/{id}/configure",
-			Operation: &engine.SurfaceOperation{
-				Model: "destructive_action", Status: "blocked", Risk: "high", BlockedByDefault: true, Reason: "fixture typed write",
-			},
-		}}},
 		CLISurface: &engine.CLISurface{Usage: "pm acme <command> [flags]", Commands: []engine.CLICommand{command}},
 	}
 	connector := engine.New(bundle, nil)

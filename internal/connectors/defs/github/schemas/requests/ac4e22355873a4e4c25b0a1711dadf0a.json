@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "stack_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "stack_number"
+  ],
+  "type": "object"
+}

@@ -1,12 +1,6 @@
 {
   "tagline": "Inspect, read, and safely plan typed Gong operations.",
   "usage": "pm gong <command> [flags]",
-  "source_cli": {
-    "name": "Gong API",
-    "docs": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-    "reference": "Public OpenAPI 3.0.1",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "calls",

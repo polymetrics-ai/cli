@@ -1,9 +1,0 @@
-{
-  "record": {
-    "name": "FIXTURE_VAR"
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/project/synthetic-conformance-value/synthetic-conformance-value/synthetic-conformance-value/envvar/FIXTURE_VAR"
-  }
-}

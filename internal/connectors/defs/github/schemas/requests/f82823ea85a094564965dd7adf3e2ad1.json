@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "max_cache_size_gb": {
+      "type": "integer"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

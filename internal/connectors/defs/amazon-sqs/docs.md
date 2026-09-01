@@ -14,7 +14,7 @@ Official sources re-audited for this parity slice:
 The complete operation ledger covers all 23 documented operations: 1 bounded
 message stream (`ReceiveMessage`), 6 typed direct-read operations, and 16 typed
 reverse-ETL write/admin actions. Fixture-only/local evidence is not a live AWS
-certification claim.
+validation claim.
 
 ## Auth setup
 
@@ -116,11 +116,11 @@ previews/errors where they may carry sensitive payload or control data.
 
 ## Known limits
 
-- This is a Tier-3 native SigV4/XML connector. Declarative dynamic conformance
+- This is a Tier-3 native SigV4/XML connector. Declarative dynamic execution-contract
   replay is explicitly skipped with native httptest fixtures as substitute
-  evidence; `api_surface.json`, `fixtures/**`, and native tests are the
+  evidence; `execution bundle`, `fixtures/**`, and native tests are the
   operation-level proof for fixture-only/local validation.
-- No live AWS call, credentialed check, certification claim, release claim, or
+- No live AWS call, credentialed check, validation claim, release claim, or
   provider write was made by this parity implementation.
 - Batch write actions chunk records into SQS-supported batches of 10. SQS can
   return per-entry batch failures in a 200 response; the connector reports

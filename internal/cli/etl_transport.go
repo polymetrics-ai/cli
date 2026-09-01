@@ -152,7 +152,7 @@ DESCRIPTION
 
   The connector definition owns the typed action, request method, route,
   record mapping, source-executor allowlist, acknowledgement, delivery
-  contract, per-mode apply strategy, and conformance evidence. Shared Go only
+  contract and per-mode apply strategy. Shared Go only
   validates and dispatches that sealed declaration through the warehouse
   workset. It cannot write an arbitrary HTTP request.
 

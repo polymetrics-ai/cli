@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "languages": {
+      "items": {
+        "enum": [
+          "actions",
+          "c-cpp",
+          "csharp",
+          "go",
+          "java-kotlin",
+          "javascript-typescript",
+          "python",
+          "ruby",
+          "swift"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "query_suite": {
+      "enum": [
+        "default",
+        "extended"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "runner_label": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runner_type": {
+      "enum": [
+        "standard",
+        "labeled"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "configured",
+        "not-configured"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "threat_model": {
+      "enum": [
+        "remote",
+        "remote_and_local"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

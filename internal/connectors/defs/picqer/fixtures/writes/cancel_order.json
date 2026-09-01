@@ -1,5 +1,0 @@
-{
-  "record": { "idorder": 301 },
-  "expect": { "method": "DELETE", "path": "/orders/301" },
-  "response": { "status": 200, "body": {} }
-}

@@ -391,52 +391,6 @@ func TestWriteRejectsUnknownAction(t *testing.T) {
 	}
 }
 
-func TestAPISurfaceCoversAllOfficialSQSOperations(t *testing.T) {
-	_, thisFile, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("runtime.Caller(0) failed")
-	}
-	raw, err := os.ReadFile(filepath.Join(filepath.Dir(thisFile), "..", "..", "defs", "amazon-sqs", "api_surface.json"))
-	if err != nil {
-		t.Fatalf("Read api_surface.json: %v", err)
-	}
-	var surface struct {
-		Endpoints []struct {
-			Method    string         `json:"method"`
-			Path      string         `json:"path"`
-			CoveredBy map[string]any `json:"covered_by"`
-		} `json:"endpoints"`
-	}
-	if err := json.Unmarshal(raw, &surface); err != nil {
-		t.Fatalf("Unmarshal api_surface.json: %v", err)
-	}
-	want := []string{
-		"SQS.AddPermission", "SQS.CancelMessageMoveTask", "SQS.ChangeMessageVisibility", "SQS.ChangeMessageVisibilityBatch",
-		"SQS.CreateQueue", "SQS.DeleteMessage", "SQS.DeleteMessageBatch", "SQS.DeleteQueue", "SQS.GetQueueAttributes",
-		"SQS.GetQueueUrl", "SQS.ListDeadLetterSourceQueues", "SQS.ListMessageMoveTasks", "SQS.ListQueues", "SQS.ListQueueTags",
-		"SQS.PurgeQueue", "SQS.ReceiveMessage", "SQS.RemovePermission", "SQS.SendMessage", "SQS.SendMessageBatch",
-		"SQS.SetQueueAttributes", "SQS.StartMessageMoveTask", "SQS.TagQueue", "SQS.UntagQueue",
-	}
-	got := map[string]int{}
-	for _, ep := range surface.Endpoints {
-		if ep.Method != http.MethodPost {
-			t.Fatalf("endpoint %s method = %s, want POST", ep.Path, ep.Method)
-		}
-		if len(ep.CoveredBy) != 1 {
-			t.Fatalf("endpoint %s covered_by = %#v, want exactly one implemented classifier", ep.Path, ep.CoveredBy)
-		}
-		got[ep.Path]++
-	}
-	if len(got) != len(want) {
-		t.Fatalf("covered operation count = %d, want %d (%v)", len(got), len(want), got)
-	}
-	for _, op := range want {
-		if got[op] != 1 {
-			t.Fatalf("operation %s covered %d times, want once", op, got[op])
-		}
-	}
-}
-
 func TestCLIReverseExamplesContainRequiredFlags(t *testing.T) {
 	_, thisFile, _, ok := runtime.Caller(0)
 	if !ok {

@@ -98,11 +98,6 @@ func binaryBundle(srv *httptest.Server, spec *BinaryOperationSpec) Bundle {
 			OutputPolicy: "binary_file_bounded",
 			Binary:       spec,
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method:    http.MethodGet,
-			Path:      spec.Path,
-			Operation: &SurfaceOperation{},
-		}}},
 	}
 }
 
@@ -494,17 +489,6 @@ func TestBinaryDownloadRejectsAbsoluteEndpoint(t *testing.T) {
 	}
 }
 
-// TestBinaryDownloadRequiresDeclaredEndpoint: an endpoint absent from
-// api_surface is not downloadable.
-func TestBinaryDownloadRequiresDeclaredEndpoint(t *testing.T) {
-	srv := binaryServer(t, []byte("x"), nil)
-	b := binaryBundle(srv, &BinaryOperationSpec{})
-	b.Surface.Endpoints = nil
-	if _, err := OperationBinaryDownload(context.Background(), b, downloadReq(t.TempDir()), nil); err == nil {
-		t.Fatal("undeclared endpoint must be refused")
-	}
-}
-
 // TestBinaryDownloadFilenameSanitized: provider-supplied names are never
 // trusted. RFC 6266 counts BOTH / and \ as separators, and filepath.Base on
 // Linux happily returns `..\..\etc\passwd` unchanged.
@@ -729,7 +713,7 @@ func TestBinaryDownloadRecordIsFlatAndSurvivesRedaction(t *testing.T) {
 	}
 	for _, want := range []string{
 		"file_path", "file_name", "file_size_bytes", "file_sha256",
-		"content_type", "content_type_sniffed", "source_operation",
+		"content_type", "content_type_sniffed", "operation",
 		"source_ref", "downloaded_at", "truncated",
 	} {
 		if _, ok := res.Record[want]; !ok {

@@ -35,23 +35,8 @@ type cliError struct {
 	message  string
 	err      error
 
-	// exitOverride, when non-nil, replaces the category-derived exit code in
-	// exitCodeFor. Used exclusively by certify's typed exit-code contract
-	// (certify.ExitError, wired via certifyErrorf in certify_cli.go): the
-	// certification design's own exit codes (0 pass / 1 usage-internal / 2
-	// certification failures / 3 leaked resources) are unrelated to every
-	// other command's category-based mapping below, so this field is never
-	// set by any other error constructor in this package.
-	exitOverride *int
-
-	// alreadyReported suppresses writeError's own stdout/stderr output. Set
-	// only by certifyExitErrorf: `pm connectors certify` writes its
-	// ConnectorCertification/BatchCertification report envelope (or
-	// human-readable rendering) to stdout itself BEFORE returning this
-	// error, so writeError must not also emit a second, conflicting "Error"
-	// JSON envelope — cli.Run's one-envelope-per-invocation contract
-	// (json_contract stage, THREAT-MODEL.md) would otherwise be violated.
-	// writeError still returns the correct exit code either way.
+	// alreadyReported suppresses writeError's own stdout/stderr output after a
+	// command has emitted a terminal result envelope.
 	alreadyReported bool
 }
 
@@ -73,28 +58,6 @@ func usageErrorf(format string, args ...any) error {
 
 func validationErrorf(format string, args ...any) error {
 	return &cliError{category: categoryValidation, code: "validation_error", message: fmt.Sprintf(format, args...)}
-}
-
-// certifyExitErrorf builds the non-nil-error result `pm connectors certify`
-// returns whenever it must exit non-zero, per certification design §A:
-// "Exit codes: 0 pass · 1 usage/internal · 2 certification failures · 3
-// leaked resources (dominates everything)". The caller is expected to have
-// already written the report (JSON envelope or human-readable rendering) to
-// stdout itself; this constructor's message is used only for the plain-text
-// stderr summary line, never re-emitted as a second JSON envelope (see
-// cliError.alreadyReported). A passing run (exit 0) instead writes its
-// output and returns a nil error, exactly like every other successful
-// command in this package — this constructor is only ever called with code
-// 1, 2, or 3.
-func certifyExitErrorf(code int, format string, args ...any) error {
-	c := code
-	return &cliError{
-		category:        categoryInternal,
-		code:            "certify_exit",
-		message:         fmt.Sprintf(format, args...),
-		exitOverride:    &c,
-		alreadyReported: true,
-	}
 }
 
 // alreadyReportedExecutionError preserves the original categorized exit while
@@ -173,9 +136,6 @@ func classifyError(err error) *cliError {
 }
 
 func exitCodeFor(err *cliError) int {
-	if err.exitOverride != nil {
-		return *err.exitOverride
-	}
 	switch err.category {
 	case categoryUsage:
 		return 2

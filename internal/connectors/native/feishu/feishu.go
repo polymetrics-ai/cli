@@ -199,7 +199,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, resource s
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise feishu credential-free (mirrors stripe's
+// fixture tests can exercise feishu credential-free (mirrors stripe's
 // fixture intent).
 func (c Connector) readFixture(ctx context.Context, stream string, emit func(connectors.Record) error) error {
 	endpoint := feishuStreamEndpoints[stream]

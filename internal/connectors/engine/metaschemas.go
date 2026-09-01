@@ -19,9 +19,6 @@ var pollingWatermarkSchemaJSON string
 //go:embed schema/sync_transport.schema.json
 var syncTransportSchemaJSON string
 
-//go:embed schema/enabled_connector_contract.schema.json
-var enabledConnectorContractSchemaJSON string
-
 //go:embed schema/spec.schema.json
 var specSchemaJSON string
 
@@ -31,35 +28,11 @@ var streamsSchemaJSON string
 //go:embed schema/writes.schema.json
 var writesSchemaJSON string
 
-//go:embed schema/api_surface.schema.json
-var apiSurfaceSchemaJSON string
-
-//go:embed schema/composite_provider_path_identity.schema.json
-var compositeProviderPathIdentitySchemaJSON string
-
 //go:embed schema/operations.schema.json
 var operationsSchemaJSON string
 
 //go:embed schema/cli_surface.schema.json
 var cliSurfaceSchemaJSON string
-
-//go:embed schema/declaration_admission.schema.json
-var declarationAdmissionSchemaJSON string
-
-//go:embed schema/declaration_admission_sources.schema.json
-var declarationAdmissionSourcesSchemaJSON string
-
-//go:embed schema/declaration_admission_inventory.schema.json
-var declarationAdmissionInventorySchemaJSON string
-
-//go:embed schema/source_operation_mapping.schema.json
-var sourceOperationMappingSchemaJSON string
-
-//go:embed schema/source_operation_mapping_cohort.schema.json
-var sourceOperationMappingCohortSchemaJSON string
-
-//go:embed schema/certification.schema.json
-var certificationSchemaJSON string
 
 //go:embed schema/rate_limits.schema.json
 var rateLimitsSchemaJSON string

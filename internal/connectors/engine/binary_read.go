@@ -153,11 +153,11 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, spec.Path, op.SourceURL)
+	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, spec.Path)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
-	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, spec.Path, op.SourceURL)
+	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, spec.Path)
 	if err != nil {
 		return BinaryDownloadResult{}, err
 	}
@@ -244,7 +244,7 @@ func OperationBinaryDownload(ctx context.Context, b Bundle, req BinaryDownloadRe
 		// from the URL path. One provider serves CSV bytes from a path
 		// ending .json. The mismatch is surfaced, not rejected.
 		"content_type_sniffed": sniffed,
-		"source_operation":     op.ID,
+		"operation":            op.ID,
 		// The connector-relative source reference carries no signed-URL
 		// credentials and remains stable across public receipt projection.
 		"source_ref":    resolvedPath,
@@ -306,7 +306,7 @@ func operationBinaryDownloadSpec(b Bundle, operation string) (OperationSpec, err
 	if (op.Kind != "binary_download" && op.Kind != "text_export") || op.Binary == nil {
 		return OperationSpec{}, fmt.Errorf("file download requires binary_download or text_export operation, got %q", op.Kind)
 	}
-	if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.Binary.Path, op.SourceURL); err != nil {
+	if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.Binary.Path); err != nil {
 		return OperationSpec{}, err
 	}
 	spec := op.Binary
@@ -335,9 +335,6 @@ func operationBinaryDownloadSpec(b Bundle, operation string) (OperationSpec, err
 	}
 	if isAbsoluteHTTPURL(spec.Path) {
 		return OperationSpec{}, fmt.Errorf("binary download endpoint must be connector-relative, got absolute URL")
-	}
-	if err := requireOperationSurfaceEndpoint(b, http.MethodGet, spec.Path); err != nil {
-		return OperationSpec{}, err
 	}
 	return op, nil
 }

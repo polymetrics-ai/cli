@@ -19,9 +19,5 @@
   "risk": {
     "read": "external NetSuite REST Record API read of customer, vendor, item, and sales order data",
     "approval": "none; read-only, no reverse-ETL write surface"
-  },
-  "conformance": {
-    "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); the OAuth 1.0a HMAC-SHA256 signature is computed over the live request method/URL/query/timestamp/nonce and conformance's synthetic non-secret config can never populate a real consumer_secret/token_secret, so every auth-resolving dynamic check would fail identically and uninformatively -- hook-covered, proven live by internal/connectors/hooks/netsuite's own unit tests (the AuthHook's real OAuth1 signing path) and internal/connectors/netsuite's pre-existing legacy parity coverage"
   }
 }

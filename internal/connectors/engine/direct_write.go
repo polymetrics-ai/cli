@@ -1836,7 +1836,7 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		if op.REST == nil {
 			return OperationSpec{}, "", fmt.Errorf("operation direct write rest_write operation has no REST declaration")
 		}
-		if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.REST.Path, op.SourceURL); err != nil {
+		if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.REST.Path); err != nil {
 			return OperationSpec{}, "", err
 		}
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
@@ -1871,7 +1871,7 @@ func operationDirectWriteSpec(b Bundle, id string) (OperationSpec, string, error
 		if op.GraphQL == nil {
 			return OperationSpec{}, "", fmt.Errorf("operation direct write graphql_mutation operation has no GraphQL declaration")
 		}
-		if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.GraphQL.Path, op.SourceURL); err != nil {
+		if err := validateOperationRouteForOperation(b, op.Route, op.ID, op.GraphQL.Path); err != nil {
 			return OperationSpec{}, "", err
 		}
 		if err := validateGraphQLOperationDirectContract(op, "mutation"); err != nil {
@@ -1913,32 +1913,30 @@ func isOperationDirectWriteMethod(method string) bool {
 }
 
 func requireOperationDirectWriteEndpoint(b Bundle, method, endpointPath, operation string) error {
-	surface := b.Surface
-	if surface == nil {
-		// defs.FS omits api_surface.json. The runtime fallback is the endpoint
-		// projection derived from its own shipped rest_write declarations.
-		surface = b.directWriteSurface
+	endpoints := b.directWriteEndpoints
+	if len(endpoints) == 0 {
+		endpoints = deriveDirectWriteEndpoints(b.Operations)
 	}
-	if surface == nil {
-		return fmt.Errorf("api_surface is required for direct-write endpoint %s %s", method, endpointPath)
+	if len(endpoints) == 0 {
+		return fmt.Errorf("execution bundle does not declare direct-write endpoint %s %s", method, endpointPath)
 	}
-	for _, endpoint := range surface.Endpoints {
+	for _, endpoint := range endpoints {
 		if strings.EqualFold(endpoint.Method, method) && endpoint.Path == endpointPath {
 			if operation != "" {
-				for _, target := range endpoint.CoveredBy.OperationTargets() {
+				for _, target := range endpoint.GraphQLOperations {
 					if target == operation {
 						return nil
 					}
 				}
-				return fmt.Errorf("api_surface endpoint %s %s does not cover GraphQL operation %q", method, endpointPath, operation)
+				return fmt.Errorf("execution endpoint %s %s does not cover GraphQL operation %q", method, endpointPath, operation)
 			}
-			if endpoint.Operation == nil {
-				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation", method, endpointPath)
+			if !endpoint.RESTWrite {
+				return fmt.Errorf("execution endpoint %s %s is not declared as an operation", method, endpointPath)
 			}
 			return nil
 		}
 	}
-	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
+	return fmt.Errorf("execution endpoint %s %s not found", method, endpointPath)
 }
 
 func operationWriteBody(op OperationSpec, overrides map[string]any) (map[string]any, error) {
@@ -2273,7 +2271,7 @@ func operationDirectWriteIdentity(b Bundle, op OperationSpec, method string) str
 
 func operationDirectWriteBaseURL(b Bundle, cfg connectors.RuntimeConfig, op OperationSpec, identity string) (string, error) {
 	if strings.TrimSpace(op.Route) != "" {
-		return resolveOperationRoute(b, cfg, op.Route, op.ID, operationRoutePath(op), op.SourceURL)
+		return resolveOperationRoute(b, cfg, op.Route, op.ID, operationRoutePath(op))
 	}
 	if err := validateOperationDirectWriteBaseURLTemplate(b.HTTP.URL); err != nil {
 		return "", operationDirectWriteInterpolationError(identity, "base URL", b.HTTP.URL)

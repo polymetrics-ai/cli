@@ -1,11 +1,28 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
         "mode": "bearer",
         "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/users/me"
+    },
+    "error_map": [
+      {
+        "hint": "asana access token is missing or invalid; re-run pm credentials add asana",
+        "status": 401
+      },
+      {
+        "hint": "asana account lacks access for this request",
+        "status": 403
+      },
+      {
+        "class": "rate_limited",
+        "hint": "asana rate limit exceeded; the connector will retry with backoff",
+        "status": 429
       }
     ],
     "pagination": {
@@ -16,25 +33,8 @@
       "size_param": "limit",
       "type": "next_url"
     },
-    "check": {
-      "method": "GET",
-      "path": "/users/me"
-    },
-    "error_map": [
-      {
-        "status": 401,
-        "hint": "asana access token is missing or invalid; re-run pm credentials add asana"
-      },
-      {
-        "status": 403,
-        "hint": "asana account lacks access for this request"
-      },
-      {
-        "status": 429,
-        "class": "rate_limited",
-        "hint": "asana rate limit exceeded; the connector will retry with backoff"
-      }
-    ]
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
@@ -56,8 +56,8 @@
         "limit": "100",
         "opt_fields": "gid,name,resource_type,created_at,modified_at",
         "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -69,19 +69,19 @@
       "name": "tasks",
       "path": "/tasks",
       "query": {
+        "assignee": {
+          "omit_when_absent": true,
+          "template": "{{ config.assignee }}"
+        },
         "limit": "100",
         "opt_fields": "gid,name,resource_type,created_at,modified_at,completed",
-        "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
-        },
         "project": {
-          "template": "{{ config.project_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.project_id }}"
         },
-        "assignee": {
-          "template": "{{ config.assignee }}",
-          "omit_when_absent": true
+        "workspace": {
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -95,8 +95,8 @@
       "query": {
         "opt_fields": "gid,name,resource_type,email",
         "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -121,8 +121,8 @@
       "query": {
         "opt_fields": "gid,name,resource_type,color,notes,created_at",
         "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -131,6 +131,19 @@
       "schema": "schemas/tags.json"
     },
     {
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "gid",
+            "path": "/projects",
+            "records_path": "data"
+          }
+        },
+        "into": {
+          "path_var": "project_gid"
+        },
+        "stamp_field": "project_gid"
+      },
       "name": "sections",
       "path": "/projects/{{ fanout.id }}/sections",
       "query": {
@@ -139,22 +152,22 @@
       "records": {
         "path": "data"
       },
-      "fan_out": {
-        "ids_from": {
-          "request": {
-            "path": "/projects",
-            "records_path": "data",
-            "id_field": "gid"
-          }
-        },
-        "into": {
-          "path_var": "project_gid"
-        },
-        "stamp_field": "project_gid"
-      },
       "schema": "schemas/sections.json"
     },
     {
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "gid",
+            "path": "/tasks",
+            "records_path": "data"
+          }
+        },
+        "into": {
+          "path_var": "task_gid"
+        },
+        "stamp_field": "task_gid"
+      },
       "name": "stories",
       "path": "/tasks/{{ fanout.id }}/stories",
       "query": {
@@ -162,19 +175,6 @@
       },
       "records": {
         "path": "data"
-      },
-      "fan_out": {
-        "ids_from": {
-          "request": {
-            "path": "/tasks",
-            "records_path": "data",
-            "id_field": "gid"
-          }
-        },
-        "into": {
-          "path_var": "task_gid"
-        },
-        "stamp_field": "task_gid"
       },
       "schema": "schemas/stories.json"
     },
@@ -190,6 +190,19 @@
       "schema": "schemas/custom_fields.json"
     },
     {
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "gid",
+            "path": "/projects",
+            "records_path": "data"
+          }
+        },
+        "into": {
+          "path_var": "project_gid"
+        },
+        "stamp_field": "project_gid"
+      },
       "name": "project_statuses",
       "path": "/projects/{{ fanout.id }}/project_statuses",
       "query": {
@@ -197,19 +210,6 @@
       },
       "records": {
         "path": "data"
-      },
-      "fan_out": {
-        "ids_from": {
-          "request": {
-            "path": "/projects",
-            "records_path": "data",
-            "id_field": "gid"
-          }
-        },
-        "into": {
-          "path_var": "project_gid"
-        },
-        "stamp_field": "project_gid"
       },
       "schema": "schemas/project_statuses.json"
     },
@@ -219,12 +219,12 @@
       "query": {
         "opt_fields": "gid,resource_type,is_guest,is_admin,is_limited_access,user.gid,user.name,team.gid,team.name",
         "team": {
-          "template": "{{ config.team_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.team_id }}"
         },
         "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -585,8 +585,8 @@
       "name": "reactions_on_object",
       "path": "/reactions",
       "query": {
-        "limit": "100",
         "emoji_base": "{{ config.emoji_base }}",
+        "limit": "100",
         "target": "{{ config.target_id }}"
       },
       "records": {

@@ -11,9 +11,9 @@ Official source inventory:
 - Declared interactive lanes: `direct_read=119` (107 bounded operation-backed + 12 stream-backed commands with a shared one-provider-request budget), `direct_write=131` across all 130 mutation endpoints (129 one-to-one actions + 2 attachment request variants sharing `POST /attachments`)
 - Additional command rows: one implemented `binary_upload` alias and one planned legacy attachment operation alias; neither adds a provider operation
 
-## Source-operation lane matrix
+## Provider-operation lane matrix
 
-The connector-local `TestEveryLockedOperationHasOneAccountedCommandLane` constructs this matrix from the immutable 249-operation source lock, `api_surface.json`, and `cli_surface.json`. It counts provider operations once; command aliases are accounted separately.
+The connector-local `TestEveryLockedOperationHasOneAccountedCommandLane` constructs this matrix from the immutable 249-operation source lock, `execution bundle`, and `cli_surface.json`. It counts provider operations once; command aliases are accounted separately.
 
 | Locked provider operations | Current lane/accounting | Actual execution status |
 | ---: | --- | --- |
@@ -47,7 +47,7 @@ Default configuration values: `base_url=https://app.asana.com/api/1.0`.
 
 Authentication behavior: bearer token authentication using `secrets.access_token`.
 
-Connection checks call GET `/users/me`. That identity alias is documented by Asana and already used by this connector, but it is not present in the pinned OpenAPI `paths` map and is therefore intentionally not counted in `api_surface.json`'s 249 official operation ledger.
+Connection checks call GET `/users/me`. That identity alias is documented by Asana and already used by this connector, but it is not present in the pinned OpenAPI `paths` map and is therefore intentionally not counted in `execution bundle`'s 249 official operation ledger.
 
 ## Streams notes
 
@@ -59,7 +59,7 @@ Implemented streams remain intentionally bounded and fixture-backed:
 
 The 107 operation-backed direct reads are deliberately distinct from stream-backed reads: each operation read returns one response-capped provider page and reports only the completeness its declared pagination can prove. The 12 stream-backed interactive commands, including `pm asana workspaces list`, apply one aggregate provider-send and page budget across pagination, retries, redirects, discovery, and fan-out. Saved connections leave that interactive budget unset so warehouse-backed full-refresh ETL remains exhaustive. An interactive stream command is still a bounded `direct_read`; it is not an ETL run.
 
-`event_source_contract.json` is the machine-readable source-evidence projection for the project-scoped `tasks` incremental lane. Its closed schema binds `sync_transport.json`'s exact `asana_event_token_source` executor/conformance reference to the immutable lock and cites `asana.rest.getEvents`, the `resource`/`sync` parameters, first/expired 412 rebootstrap, `data`/`sync`/`has_more`, project-to-task scope, `EventResponse` actions and resource `gid`/type, `asana.rest.getTask` hydration, the project-filtered `asana.rest.getTasks` snapshot, pagination, and auth. It explicitly records `event_total_order=not_documented`. The file is evidence, not a runtime lifecycle: retry, page caps, window coalescing, checkpoint acknowledgement, and request execution remain owned by the registered Asana executor.
+`event_source_contract.json` is the machine-readable source-evidence projection for the project-scoped `tasks` incremental lane. Its closed schema binds `sync_transport.json`'s exact `asana_event_token_source` executor/execution-contract reference to the immutable lock and cites `asana.rest.getEvents`, the `resource`/`sync` parameters, first/expired 412 rebootstrap, `data`/`sync`/`has_more`, project-to-task scope, `EventResponse` actions and resource `gid`/type, `asana.rest.getTask` hydration, the project-filtered `asana.rest.getTasks` snapshot, pagination, and auth. It explicitly records `event_total_order=not_documented`. The file is evidence, not a runtime lifecycle: retry, page caps, window coalescing, checkpoint acknowledgement, and request execution remain owned by the registered Asana executor.
 
 - `projects`: GET `/projects`; optional `workspace` query from `workspace_id`.
 - `tasks`: GET `/tasks`; optional `workspace`, `project`, and `assignee` query values.
@@ -90,7 +90,7 @@ Sixty-nine actions retain historical source-partial disposition metadata where t
 ## Known limits
 
 - Static source availability is computed from pinned declarations: no credential or live-provider account is required to determine whether a declared operation has its complete shared foundation.
-- `api_surface.json` uses `operation_ledger_version: 1`: non-executable operation rows are the source of truth for the remaining foundation gaps.
+- `execution bundle` uses `operation_ledger_version: 1`: non-executable operation rows are the source of truth for the remaining foundation gaps.
 - `/batch` is executable only as the closed `create_batch_request` action. A record supplies 1..10 named, explicitly allow-listed existing actions; the engine derives every subrequest method/path/body, rejects unsupported/nested/query-bearing actions before provider I/O, preserves preview/approval, and fails closed on partial or malformed provider results. Callers never supply raw HTTP fields.
 - Provider-route coverage is 12 bounded stream reads + 107 bounded operation reads + all 130 mutation endpoints. Interactive presentation declares 119 direct reads and 131 direct writes; the attachment operation has two source-backed request variants. All 249 locked provider rows therefore have an executable `covered_by` route.
 - Full-refresh overwrite/append remains available for all 12 saved ETL streams. Provider-token incremental append/upsert/dedupe is admitted only for project-scoped `tasks`, using Asana Events tokens, complete `has_more` windows, durable checkpoint acknowledgement, stable `gid` coalescing/hydration, and `deleted` tombstones. The other 11 stream scopes and ordered history/change capture remain unproven and are not admitted as incremental modes.

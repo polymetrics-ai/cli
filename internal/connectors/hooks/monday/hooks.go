@@ -61,7 +61,7 @@ const itemSelection = "id name state created_at updated_at group { id title } bo
 // ReadStream implements engine.StreamHook, handling every declared stream
 // (boards, items, users, teams, tags) with handled=true always — the
 // declarative streams.json fallback is a structural "shadow" path exercised
-// only by conformance's dynamic checks (Hooks=nil there), never here (docs.md
+// only by fixture execution checks (Hooks=nil there), never here (docs.md
 // "Known limits").
 func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
 	name := stream.Name

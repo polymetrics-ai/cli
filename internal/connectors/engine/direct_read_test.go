@@ -56,110 +56,6 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 	}
 }
 
-func TestPreflightSourceBoundReadRejectsIdentityAndRouteSubstitution(t *testing.T) {
-	bundle := Bundle{
-		Name: "asana",
-		Operations: []OperationSpec{{
-			ID: "get_agent", Kind: "rest_read", OutputPolicy: "json_redacted",
-			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getAgent", Method: http.MethodGet, Path: "/agents/{agent_gid}"},
-			REST:            &RESTOperationSpec{Method: http.MethodGet, Path: "/agents/{agent_gid}", MaxBytes: 1024},
-		}},
-		directReadLedger: &operationEndpointLedger{entries: []OperationEndpointLedgerEntry{{Method: http.MethodGet, Path: "/agents/{agent_gid}", Kind: "rest_read", MaxBytes: 1024}}},
-	}
-	if err := PreflightSourceBoundRead(bundle, "get_agent", "asana.rest.getAgent", http.MethodGet, "/agents/{agent_gid}"); err != nil {
-		t.Fatalf("valid source-bound read preflight: %v", err)
-	}
-	for _, test := range []struct {
-		name            string
-		sourceOperation string
-		method          string
-		path            string
-		want            string
-	}{
-		{name: "identity", sourceOperation: "asana.rest.getUsers", method: http.MethodGet, path: "/agents/{agent_gid}", want: "does not match command source operation"},
-		{name: "method", sourceOperation: "asana.rest.getAgent", method: http.MethodPost, path: "/agents/{agent_gid}", want: "does not match command method"},
-		{name: "path", sourceOperation: "asana.rest.getAgent", method: http.MethodGet, path: "/users/{user_gid}", want: "does not match command path"},
-	} {
-		t.Run(test.name, func(t *testing.T) {
-			err := PreflightSourceBoundRead(bundle, "get_agent", test.sourceOperation, test.method, test.path)
-			if err == nil || !strings.Contains(err.Error(), test.want) {
-				t.Fatalf("PreflightSourceBoundRead error = %v, want %q", err, test.want)
-			}
-		})
-	}
-}
-
-func TestPreflightSourceBoundStreamReadRequiresDeclaredRecordAndPaginationSemantics(t *testing.T) {
-	bundle := Bundle{
-		Operations: []OperationSpec{{
-			ID: "get_workspaces", Kind: "stream_etl",
-			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getWorkspaces", Method: http.MethodGet, Path: "/workspaces"},
-			Composite:       &CompositeOperationSpec{Steps: []string{"stream:workspaces"}},
-		}},
-		HTTP:    HTTPBase{Pagination: &PaginationSpec{Type: "next_url", NextURLPath: "next_page.uri"}},
-		Streams: []StreamSpec{{Name: "workspaces", Path: "/workspaces", Records: RecordsSpec{Path: "data"}, SchemaRef: "schemas/workspaces.json"}},
-	}
-	if err := PreflightSourceBoundStreamRead(bundle, "workspaces", "asana.rest.getWorkspaces", http.MethodGet, "/workspaces"); err != nil {
-		t.Fatalf("valid source-bound stream preflight: %v", err)
-	}
-	bundle.Streams[0].SchemaRef = ""
-	err := PreflightSourceBoundStreamRead(bundle, "workspaces", "asana.rest.getWorkspaces", http.MethodGet, "/workspaces")
-	if err == nil || !strings.Contains(err.Error(), "record semantics") {
-		t.Fatalf("missing stream schema error = %v, want record semantics rejection", err)
-	}
-}
-
-func TestReadRejectsSourceBoundStreamDriftBeforeOriginOrAuthentication(t *testing.T) {
-	base := Bundle{
-		Operations: []OperationSpec{{
-			ID: "get_workspaces", Kind: "stream_etl",
-			SourceOperation: &SourceOperationBinding{ID: "asana.rest.getWorkspaces", Method: http.MethodGet, Path: "/workspaces"},
-			Composite:       &CompositeOperationSpec{Steps: []string{"stream:workspaces"}},
-		}},
-		HTTP:    HTTPBase{Pagination: &PaginationSpec{Type: "next_url", NextURLPath: "next_page.uri"}},
-		Streams: []StreamSpec{{Name: "workspaces", Path: "/workspaces", Records: RecordsSpec{Path: "data"}, SchemaRef: "schemas/workspaces.json"}},
-	}
-	for _, test := range []struct {
-		name   string
-		mutate func(*Bundle)
-		want   string
-	}{
-		{name: "path", mutate: func(b *Bundle) { b.Streams[0].Path = "/users" }, want: "does not match locked source endpoint"},
-		{name: "method", mutate: func(b *Bundle) { b.Streams[0].Method = http.MethodPost }, want: "does not match locked source endpoint"},
-		{name: "records", mutate: func(b *Bundle) { b.Streams[0].Records.Path = "" }, want: "lacks declared record semantics"},
-		{name: "pagination", mutate: func(b *Bundle) { b.HTTP.Pagination = nil }, want: "lacks declared pagination semantics"},
-	} {
-		t.Run(test.name, func(t *testing.T) {
-			bundle := base
-			bundle.Streams = append([]StreamSpec(nil), base.Streams...)
-			test.mutate(&bundle)
-			err := Read(context.Background(), bundle, connectors.ReadRequest{Stream: "workspaces"}, nil, func(connectors.Record) error { return nil })
-			if err == nil || !strings.Contains(err.Error(), test.want) {
-				t.Fatalf("direct Read source-bound drift error = %v, want %q before route/authentication", err, test.want)
-			}
-		})
-	}
-}
-
-func TestSourceBoundStreamPathMatchesDeclaredFanOutSegmentOnly(t *testing.T) {
-	for _, tc := range []struct {
-		name       string
-		streamPath string
-		lockedPath string
-		want       bool
-	}{
-		{name: "declared fan out", streamPath: "/projects/{{ fanout.id }}/sections", lockedPath: "/projects/{project_gid}/sections", want: true},
-		{name: "fan out cannot substitute route", streamPath: "/projects/{{ fanout.id }}/stories", lockedPath: "/projects/{project_gid}/sections", want: false},
-		{name: "arbitrary record interpolation is not accepted", streamPath: "/projects/{{ record.path }}/sections", lockedPath: "/projects/{project_gid}/sections", want: false},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			if got := sourceBoundStreamPathMatchesLockedPath(tc.streamPath, tc.lockedPath); got != tc.want {
-				t.Fatalf("sourceBoundStreamPathMatchesLockedPath(%q, %q) = %t, want %t", tc.streamPath, tc.lockedPath, got, tc.want)
-			}
-		})
-	}
-}
-
 func TestDirectReadAllowsSlashBearingRefPathVariables(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path != "/repos/octo/hello/git/ref/heads/main" {
@@ -448,17 +344,8 @@ func TestDirectReadRepositoryContentsPolicyIsConnectorNeutral(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	b := Bundle{
-		Name: "artifact-host",
-		HTTP: HTTPBase{URL: srv.URL},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method: http.MethodGet,
-			Path:   "/projects/{project}/repository/files/{path}",
-			CoveredBy: &SurfaceCoverage{
-				DirectRead: "repository file read",
-			},
-		}}},
-	}
+	b := directReadBundle(srv.URL, http.MethodGet, "/projects/{project}/repository/files/{path}")
+	b.Name = "artifact-host"
 
 	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
 		Method:       http.MethodGet,
@@ -707,17 +594,6 @@ func TestOperationDirectReadAppliesDeclaredSensitiveRedactFields(t *testing.T) {
 				Parameters: []OperationParameter{{Name: "q", In: "query", Type: "string"}},
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method: http.MethodGet,
-			Path:   "/ws/rest/v1/bahmni/search/patient",
-			Operation: &SurfaceOperation{
-				Model:            "direct_read",
-				Status:           "blocked",
-				Risk:             "high",
-				BlockedByDefault: true,
-				Reason:           "typed operation metadata",
-			},
-		}}},
 	}
 
 	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
@@ -784,17 +660,6 @@ func TestOperationDirectReadPOSTJSONBodyValidatesAndPreservesUndeclaredProviderV
 				BodySchema:  json.RawMessage(`{"type":"object","required":["emails"],"properties":{"emails":{"type":"array","items":{"type":"string"},"maxItems":100}},"additionalProperties":false}`),
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method: http.MethodPost,
-			Path:   "/v2/meetings/integration/status",
-			Operation: &SurfaceOperation{
-				Model:            "direct_read",
-				Status:           "blocked",
-				Risk:             "medium",
-				BlockedByDefault: true,
-				Reason:           "typed operation metadata",
-			},
-		}}},
 	}
 
 	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
@@ -927,17 +792,6 @@ func statusTextReadBundle(baseURL, id, method, endpointPath, outputPolicy, conte
 				MaxBytes:    maxBytes,
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method: method,
-			Path:   endpointPath,
-			Operation: &SurfaceOperation{
-				Model:            "direct_read",
-				Status:           "blocked",
-				Risk:             "low",
-				BlockedByDefault: true,
-				Reason:           "typed operation metadata",
-			},
-		}}},
 	}
 }
 
@@ -1136,7 +990,6 @@ func TestOperationDirectReadPreservesDeclaredResponseFieldsAndMasksKnownSecrets(
 				}},
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v1/result", Operation: &SurfaceOperation{Model: "direct_read"}}}},
 	}
 
 	result, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.result"}, nil)
@@ -1193,7 +1046,6 @@ func TestOperationDirectReadPreservesConfiguredEqualResponseHeaderValues(t *test
 				}},
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/v1/result", Operation: &SurfaceOperation{Model: "direct_read"}}}},
 	}
 
 	result, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{
@@ -1372,18 +1224,10 @@ func directReadBundle(baseURL, method, endpointPath string) Bundle {
 	return Bundle{
 		Name: "code-host",
 		HTTP: HTTPBase{URL: baseURL},
-		Surface: &APISurface{
-			OperationLedgerVersion: 1,
-			Endpoints: []SurfaceEndpoint{
-				{
-					Method: method,
-					Path:   endpointPath,
-					CoveredBy: &SurfaceCoverage{
-						DirectRead: "repo read-file",
-					},
-				},
-			},
-		},
+		CLISurface: &CLISurface{Commands: []CLICommand{{
+			Path: "fixture direct read", Intent: "direct_read", Availability: "implemented",
+			APISurface: []CLISurfaceEndpointRef{{Method: method, Path: endpointPath}},
+		}}},
 	}
 }
 
@@ -1418,11 +1262,6 @@ func TestOperationDirectReadBodySchemaMinItems(t *testing.T) {
 				}`),
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method:    http.MethodPost,
-			Path:      "/v1/search",
-			Operation: &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "typed operation metadata"},
-		}}},
 	}
 
 	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
@@ -1463,7 +1302,6 @@ func TestOperationDirectReadHTTPErrorKeepsProviderQueryAndBodyPrivate(t *testing
 			ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted",
 			REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024, Parameters: []OperationParameter{{Name: "trace", In: "query", Type: "string"}}},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
 	}
 
 	_, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
@@ -1497,7 +1335,6 @@ func TestDirectReadCompleteReceiptOnSuccessAndProviderError(t *testing.T) {
 			b := Bundle{
 				Name: "acme", HTTP: HTTPBase{URL: srv.URL},
 				Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024}}},
-				Surface:    &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
 			}
 			result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.lookup"}, nil)
 			if status >= 400 && err == nil {
@@ -1534,7 +1371,6 @@ func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesWithConfiguredEqualValu
 		b := Bundle{
 			Name: "acme", HTTP: HTTPBase{URL: srv.URL},
 			Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024}}},
-			Surface:    &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
 		}
 		result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: "acme.lookup"}, nil)
 		if err == nil {
@@ -1557,7 +1393,6 @@ func TestDirectReadReceiptPreservesAbsentAndInvalidBodiesWithConfiguredEqualValu
 		b := Bundle{
 			Name: "acme", HTTP: HTTPBase{URL: srv.URL},
 			Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/items", MaxBytes: 1024}}},
-			Surface:    &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/items", Operation: &SurfaceOperation{Model: "direct_read"}}}},
 		}
 		result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
 			Operation: "acme.lookup",
@@ -1644,11 +1479,6 @@ func requiredQueryBundle(srv *httptest.Server, issued *bool) Bundle {
 				RequiredQuery: []RequiredQueryGroup{{AnyOf: []string{"email", "id"}}},
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method:    http.MethodGet,
-			Path:      "/v1/users",
-			Operation: &SurfaceOperation{Model: "direct_read", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "typed operation metadata"},
-		}}},
 	}
 }
 

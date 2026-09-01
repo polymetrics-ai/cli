@@ -1,7 +1,0 @@
-{
-  "api_version": "polymetrics.ai/v1",
-  "kind": "ConnectorImplementationScope",
-  "connectors": [
-    "hubspot"
-  ]
-}

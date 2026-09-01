@@ -22,7 +22,6 @@ type Definition struct {
 	Changefeed       *ChangefeedDescriptor       `json:"changefeed,omitempty"`
 	PollingWatermark *PollingWatermarkDescriptor `json:"polling_watermark,omitempty"`
 	SyncTransport    *SyncTransportDescriptor    `json:"sync_transport,omitempty"`
-	EnabledContract  *EnabledConnectorContract   `json:"enabled_connector_contract,omitempty"`
 	Spec             json.RawMessage             `json:"spec"`
 	Streams          []StreamSummary             `json:"streams"`
 	WriteActions     []WriteActionInfo           `json:"write_actions,omitempty"`
@@ -100,7 +99,7 @@ func (i WriteActionInfo) IsBatchable() bool {
 
 // DefinitionProvider is implemented by engine-backed and Tier-3 connectors in
 // wave0; the method joins the core Connector interface in wave6 (design
-// §C.1). Callers that need a Definition today (e.g. certify and connector
+// §C.1). Callers that need a Definition today (for example, connector
 // inspection JSON) must type-assert for this interface rather than assume every
 // Connector implements it, mirroring the existing ManifestProvider pattern.
 type DefinitionProvider interface {
@@ -121,9 +120,6 @@ func DefinitionOf(c Connector) (Definition, bool) {
 	}
 	if def.SyncTransport != nil {
 		def.SyncTransport = def.SyncTransport.Clone()
-	}
-	if def.EnabledContract != nil {
-		def.EnabledContract = def.EnabledContract.Clone()
 	}
 	def.WriteActions = cloneWriteActionInfos(def.WriteActions)
 	def.Capabilities.CDC = HasImplementedChangefeed(c, def.Changefeed)

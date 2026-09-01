@@ -31,7 +31,7 @@
 //     canned catalog/rows.
 //
 // Still ships a defs bundle (internal/connectors/defs/tally-prime/
-// {metadata.json,spec.json,api_surface.json,docs.md}) so identity/spec/docs
+// {metadata.json,spec.json,docs.md}) so identity/spec/docs
 // stay uniform with every other connector; metadata.json sets
 // capabilities.dynamic_schema: true and the bundle ships no streams.json
 // (bundle.go's loadStreams only tolerates a missing streams.json when
@@ -39,7 +39,7 @@
 // matching native/postgres's and native/amazon-sqs's identical precedent.
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
-// network access so the conformance harness and unit tests can run with no
+// network access so the fixture tests and unit tests can run with no
 // live TallyPrime instance: in fixture mode Check succeeds, Catalog returns
 // canned streams, and Read emits canned rows.
 //

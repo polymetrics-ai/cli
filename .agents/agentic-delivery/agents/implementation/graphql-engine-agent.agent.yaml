@@ -66,7 +66,7 @@ guardrails:
 verification:
   required:
   - go test ./internal/connectors/engine/...
-  - go test ./internal/connectors/conformance -run relevant connector when migrating
+  - go test ./internal/connectors/engine -run relevant connector when migrating
 adapters:
   pi:
     note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive

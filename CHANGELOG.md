@@ -19,7 +19,6 @@
 
 * **app:** add secret-free credential coordination identities ([#3875](https://github.com/polymetrics-ai/cli/issues/3875)) ([bf54aa4](https://github.com/polymetrics-ai/cli/commit/bf54aa4d48542552a9cea6c5eb54cd67495c96f7))
 * batch compatible connector and website updates ([#3891](https://github.com/polymetrics-ai/cli/issues/3891)) ([8a2971a](https://github.com/polymetrics-ai/cli/commit/8a2971a0c88ac5e980413c48529f714cccbb0a44))
-* **certification:** generate proof-bearing connector matrix ([#3999](https://github.com/polymetrics-ai/cli/issues/3999)) ([815dc1a](https://github.com/polymetrics-ai/cli/commit/815dc1ab65380e03f6e0c078ba36030baaec21ea))
 * **connectorgen:** add connector boundary guard ([#605](https://github.com/polymetrics-ai/cli/issues/605)) ([787547a](https://github.com/polymetrics-ai/cli/commit/787547a78d10e36a86c52d5417c517e8a80770dd))
 * **connectors:** add API-surface provenance evidence ([#3869](https://github.com/polymetrics-ai/cli/issues/3869)) ([5da7555](https://github.com/polymetrics-ai/cli/commit/5da7555964a87f4921013fded59df83a67a78e56))
 * **connectors:** add Asana documented operation parity ([#3538](https://github.com/polymetrics-ai/cli/issues/3538)) ([fc07dc8](https://github.com/polymetrics-ai/cli/commit/fc07dc8303427b781b86f942f2bc8fe756bd8d45))
@@ -54,8 +53,6 @@
 * **connectors:** expose Zoom read commands ([#3759](https://github.com/polymetrics-ai/cli/issues/3759)) ([02b0f32](https://github.com/polymetrics-ai/cli/commit/02b0f3267c2dd37647b8c6321fdefff018d3466a))
 * **connectors:** extract seven completed connector surfaces ([#3961](https://github.com/polymetrics-ai/cli/issues/3961)) ([0600dfe](https://github.com/polymetrics-ai/cli/commit/0600dfefba4fc5c1c274755c8a8c6a5e1221a9bb))
 * **connectors:** genericize repository read policies ([#609](https://github.com/polymetrics-ai/cli/issues/609)) ([7f4b9f3](https://github.com/polymetrics-ai/cli/commit/7f4b9f31189ba68221a9b70347cd0f3702f889a3))
-* **connectors:** land production MVP certification and parity ([#4250](https://github.com/polymetrics-ai/cli/issues/4250)) ([e8baeb3](https://github.com/polymetrics-ai/cli/commit/e8baeb353180ee533fc9bb840c3bddb7ed600396))
-* **connectors:** load certification contracts from definitions ([#610](https://github.com/polymetrics-ai/cli/issues/610)) ([c85740b](https://github.com/polymetrics-ai/cli/commit/c85740b6f52ff53abbf521b631ed9d10209d567b))
 * **connectors:** require preview-bound approval for destructive writes ([#3730](https://github.com/polymetrics-ai/cli/issues/3730)) ([451a21d](https://github.com/polymetrics-ai/cli/commit/451a21da0e4cdcc2fa1db5254aa48f4ce0a9d85a))
 * **connectors:** restore Google Calendar documented operation parity ([#3725](https://github.com/polymetrics-ai/cli/issues/3725)) ([c0d95ce](https://github.com/polymetrics-ai/cli/commit/c0d95ce1282fd66b12bcc9a006b80cd03c070b8b))
 * **connectors:** restore YouTube Analytics operation parity ([#3726](https://github.com/polymetrics-ai/cli/issues/3726)) ([09ecec8](https://github.com/polymetrics-ai/cli/commit/09ecec8f6ab90a305a7fe25e41ea325a2f9a03a4))
@@ -73,7 +70,6 @@
 
 * **agents:** reject drifted clean-project worker projections ([#3742](https://github.com/polymetrics-ai/cli/issues/3742)) ([7d34a07](https://github.com/polymetrics-ai/cli/commit/7d34a07949146d2b099667d8214209312f9166d2))
 * **app:** preserve sync state and warehouse durability ([#3885](https://github.com/polymetrics-ai/cli/issues/3885)) ([b06230d](https://github.com/polymetrics-ai/cli/commit/b06230d2e5a7c3458c1e64129188a2aef9821811))
-* **certify:** bound certification harness cost ([#3878](https://github.com/polymetrics-ai/cli/issues/3878)) ([2afd1a5](https://github.com/polymetrics-ai/cli/commit/2afd1a529a8fc24375bb0f7cf92b951133088874))
 * **ci:** pin immutable build dependencies ([#4000](https://github.com/polymetrics-ai/cli/issues/4000)) ([07e35e1](https://github.com/polymetrics-ai/cli/commit/07e35e1fe105fd1a2129929eb8e8cafed592ce7d))
 * **cli:** reject unresolved connector help paths ([#3964](https://github.com/polymetrics-ai/cli/issues/3964)) ([f96a47e](https://github.com/polymetrics-ai/cli/commit/f96a47e801b89f25386c33951a53a93d1a4c7c8d))
 * **commandrunner:** preserve connector command content ([#3868](https://github.com/polymetrics-ai/cli/issues/3868)) ([50deaad](https://github.com/polymetrics-ai/cli/commit/50deaade988f777a519e1b6cceec550d5ab7f64e))

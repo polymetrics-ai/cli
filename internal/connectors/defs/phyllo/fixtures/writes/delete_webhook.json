@@ -1,8 +1,0 @@
-{
-  "record": { "id": "webhook_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/v1/webhooks/webhook_fixture_1"
-  },
-  "response": { "status": 200, "body": {} }
-}

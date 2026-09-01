@@ -140,20 +140,6 @@ func multipartRestWriteDemoBundle() engine.Bundle {
 				},
 			},
 		}},
-		Surface: &engine.APISurface{
-			API: "multipart-restwrite-demo fixture",
-			Endpoints: []engine.SurfaceEndpoint{{
-				Method: http.MethodPost,
-				Path:   "/api/attachments",
-				Operation: &engine.SurfaceOperation{
-					Model:            "destructive_action",
-					Status:           "blocked",
-					Risk:             "high",
-					BlockedByDefault: true,
-					Reason:           "Bound by the typed multipart rest_write executor.",
-				},
-			}},
-		},
 		CLISurface: &engine.CLISurface{
 			Tagline: "Multipart REST write test fixture command.",
 			Usage:   "pm multipart-restwrite-demo attachment create [flags]",
@@ -778,15 +764,6 @@ func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(
 		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
 		if err == nil || !strings.Contains(err.Error(), "not executable") {
 			t.Fatalf("Preflight missing multipart contract = %v, want executable-claim rejection", err)
-		}
-	})
-
-	t.Run("missing api surface endpoint remains blocked", func(t *testing.T) {
-		bundle := multipartRestWriteDemoBundle()
-		bundle.Surface = nil
-		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
-		if err == nil || !strings.Contains(err.Error(), "api_surface") {
-			t.Fatalf("Preflight missing api_surface = %v, want endpoint provenance rejection", err)
 		}
 	})
 

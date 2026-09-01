@@ -15,30 +15,6 @@ import (
 	"polymetrics.ai/internal/synccontract"
 )
 
-// ConformanceVerification asks an authority outside a descriptor or executor
-// whether an evidence reference was accepted. The source and destination
-// executors cannot self-admit by returning fixture IDs or a digest.
-type ConformanceVerification struct {
-	Role          connectors.TransportRole
-	ConnectorName string
-	Executor      connectors.TransportExecutorReference
-	Evidence      connectors.ConformanceEvidenceReference
-}
-
-// ConformanceVerifier is intentionally small and read-only. A future #3810
-// evidence runner can implement it without moving checkpoint semantics into
-// this package. Until then the default verifier keeps real transport admission
-// closed.
-type ConformanceVerifier interface {
-	VerifyTransportConformance(ConformanceVerification) error
-}
-
-type unavailableConformanceVerifier struct{}
-
-func (unavailableConformanceVerifier) VerifyTransportConformance(ConformanceVerification) error {
-	return fmt.Errorf("external transport conformance verification is unavailable")
-}
-
 // SourceExecutor is the narrow source role. It emits #3810-owned page
 // candidates; the orchestrator neither parses their opaque positions nor
 // invents tombstone/history/recovery semantics.

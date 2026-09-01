@@ -199,7 +199,7 @@ func (c Connector) harvest(ctx context.Context, r *connsdk.Requester, ep streamE
 }
 
 // readFixture emits deterministic records without any network access so the
-// conformance harness can exercise apify-dataset credential-free (mirrors the
+// fixture tests can exercise apify-dataset credential-free (mirrors the
 // stripe fixture intent).
 func (c Connector) readFixture(ctx context.Context, stream string, ep streamEndpoint, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	datasetID := strings.TrimSpace(req.Config.Config["dataset_id"])

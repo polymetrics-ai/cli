@@ -17,9 +17,5 @@
     "write": "unsupported",
     "approval": "none; read-only"
   },
-  "conformance": {
-    "skip_dynamic": true,
-    "reason": "Tier-2 hook-owned quarantine migration: internal/connectors/hooks/google-classroom delegates Check/Read to legacy internal/connectors/google-classroom, so conformance dynamic replay of the declarative shadow path is intentionally skipped. Static schema/docs/surface checks still run; behavior is covered by the hook unit tests and the existing legacy connector tests during the pre-cutover period."
-  },
   "docs_url": "https://developers.google.com/classroom/reference/rest"
 }

@@ -7,30 +7,27 @@
       "summary": "Declared Pipedrive read: GET /activityFields.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
       "api_surface": [
         {
           "method": "GET",
           "path": "/activityFields"
         }
       ],
-      "notes": "Blocked: locked source operation pipedrive.provider.getactivityfields-1 has no declaration-owned executable stream, direct-read, binary, or status route."
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation."
     },
     {
       "path": "operations get-activity-types",
       "summary": "Declared etl: GET /activityTypes.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getactivitytypes-2 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-activity-types",
       "summary": "Declared direct write: POST /activityTypes.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addactivitytype-3 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /activityTypes.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -39,8 +36,7 @@
       "summary": "Declared direct write: DELETE /activityTypes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteactivitytype-4 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /activityTypes/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -49,8 +45,7 @@
       "summary": "Declared direct write: PUT /activityTypes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updateactivitytype-5 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /activityTypes/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -59,8 +54,7 @@
       "summary": "Declared direct read: GET /billing/subscriptions/addons.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getcompanyaddons-6 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -73,8 +67,7 @@
       "summary": "Declared direct read: GET /callLogs.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getusercalllogs-7 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -87,8 +80,7 @@
       "summary": "Declared direct write: POST /callLogs.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addcalllog-8 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a call-log entry; same telephony-integration-feature deprioritization as the list endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -97,8 +89,7 @@
       "summary": "Declared direct write: DELETE /callLogs/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletecalllog-9 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a call-log entry; same telephony-integration-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -107,8 +98,7 @@
       "summary": "Declared direct read: GET /callLogs/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getcalllog-10 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -121,8 +111,7 @@
       "summary": "Declared direct write: POST /callLogs/{id}/recordings.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addcalllogaudiofile-11 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "attaches a binary audio recording file to a call log; binary-attachment management, out of scope",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -131,8 +120,7 @@
       "summary": "Declared direct write: POST /channels.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addchannel-12 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "registers a messaging-app integration channel (Pipedrive's Messaging Apps Extension feature), a developer-platform integration primitive rather than CRM business data",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -141,8 +129,7 @@
       "summary": "Declared direct write: DELETE /channels/{channel-id}/conversations/{conversation-id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteconversation-13 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a messaging-channel conversation thread; same integration-primitive reasoning as channel registration",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -151,8 +138,7 @@
       "summary": "Declared direct write: DELETE /channels/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletechannel-14 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deregisters a messaging-app integration channel; same integration-primitive reasoning as channel creation",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -161,8 +147,7 @@
       "summary": "Declared direct write: POST /channels/messages/receive.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.receivemessage-15 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "webhook-style inbound-message receiver for a registered messaging channel; a push-delivery endpoint, not a syncable record read",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -171,16 +156,14 @@
       "summary": "Declared etl: GET /currencies.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getcurrencies-16 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations delete-deal-fields",
       "summary": "Declared direct write: DELETE /dealFields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletedealfields-17 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "bulk delete of multiple deal-field definitions by an id-list request body; deleting a field definition removes its data from every deal, no bulk-destructive action added",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -189,16 +172,14 @@
       "summary": "Declared etl: GET /dealFields.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealfields-18 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-deal-fields",
       "summary": "Declared direct write: POST /dealFields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.adddealfield-19 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a new custom deal field definition; schema/metadata-authoring mutation, out of scope for this pass (the field-definition streams are read-only reference data in this bundle)",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -207,8 +188,7 @@
       "summary": "Declared direct write: DELETE /dealFields/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletedealfield-20 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "irreversibly deletes a custom field definition and its data from every deal; out of scope for this pass, no safer covered alternative",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -217,8 +197,7 @@
       "summary": "Declared direct read: GET /dealFields/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealfield-21 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -231,8 +210,7 @@
       "summary": "Declared direct write: PUT /dealFields/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatedealfield-22 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a custom deal field's definition (name/options); schema-authoring mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -241,8 +219,7 @@
       "summary": "Declared direct read: GET /deals/{id}/changelog.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealchangelog-23 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -255,8 +232,7 @@
       "summary": "Declared direct write: POST /deals/{id}/duplicate.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.duplicatedeal-24 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "clones an existing deal server-side; a convenience action, not a data-shape create_deal write this pass models (the deals resource's create/update/delete live on v2, out of scope per the scope note)",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -265,8 +241,7 @@
       "summary": "Declared direct read: GET /deals/{id}/files.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealfiles-25 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -279,8 +254,7 @@
       "summary": "Declared direct read: GET /deals/{id}/flow.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealupdates-26 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -293,8 +267,7 @@
       "summary": "Declared direct read: GET /deals/{id}/followers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealfollowers-27 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -307,8 +280,7 @@
       "summary": "Declared direct write: POST /deals/{id}/followers.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.adddealfollower-28 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "adds a follower to one deal; fine-grained edit of an already-covered parent record",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -317,8 +289,7 @@
       "summary": "Declared direct write: DELETE /deals/{id}/followers/{follower_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletedealfollower-29 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes a follower from one deal; same fine-grained-edit reasoning as the add-follower endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -327,8 +298,7 @@
       "summary": "Declared direct read: GET /deals/{id}/mailMessages.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealmailmessages-30 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -341,8 +311,7 @@
       "summary": "Declared direct write: PUT /deals/{id}/merge.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.mergedeals-31 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "merges two deals into one, an irreversible structural operation rather than an ordinary field-level update; out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -351,8 +320,7 @@
       "summary": "Declared direct read: GET /deals/{id}/participants.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealparticipants-32 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -365,8 +333,7 @@
       "summary": "Declared direct write: POST /deals/{id}/participants.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.adddealparticipant-33 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "adds a participant to one deal; fine-grained edit of an already-covered parent record",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -375,8 +342,7 @@
       "summary": "Declared direct write: DELETE /deals/{id}/participants/{deal_participant_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletedealparticipant-34 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes a participant from one deal; same fine-grained-edit reasoning as the add-participant endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -385,8 +351,7 @@
       "summary": "Declared direct read: GET /deals/{id}/participantsChangelog.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealparticipantschangelog-35 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -399,8 +364,7 @@
       "summary": "Declared direct read: GET /deals/{id}/permittedUsers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealusers-36 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -413,8 +377,7 @@
       "summary": "Declared direct read: GET /deals/archived.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getarchiveddeals-37 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -427,8 +390,7 @@
       "summary": "Declared direct read: GET /deals/summary.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealssummary-38 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -441,8 +403,7 @@
       "summary": "Declared direct read: GET /deals/summary/archived.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getarchiveddealssummary-39 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -455,8 +416,7 @@
       "summary": "Declared direct read: GET /deals/timeline.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getdealstimeline-40 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -469,8 +429,7 @@
       "summary": "Declared direct read: GET /deals/timeline/archived.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getarchiveddealstimeline-41 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -483,8 +442,7 @@
       "summary": "Declared direct read: GET /files.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getfiles-42 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -497,8 +455,7 @@
       "summary": "Declared direct write: POST /files.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addfile-43 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "uploads a new file attachment (multipart file upload); binary-attachment management, out of scope",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -507,8 +464,7 @@
       "summary": "Declared direct write: DELETE /files/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletefile-44 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a file attachment; binary-attachment management, out of scope",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -517,8 +473,7 @@
       "summary": "Declared direct read: GET /files/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getfile-45 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -531,8 +486,7 @@
       "summary": "Declared direct write: PUT /files/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatefile-46 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a file's name/description; binary-attachment management, out of scope",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -541,8 +495,7 @@
       "summary": "Declared direct read: GET /files/{id}/download.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.downloadfile-47 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -555,8 +508,7 @@
       "summary": "Declared direct write: POST /files/remote.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addfileandlinkit-48 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a file reference to an external cloud-storage document; binary-attachment management, out of scope",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -565,8 +517,7 @@
       "summary": "Declared direct write: POST /files/remoteLink.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.linkfiletoitem-49 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "links an existing remote file to an item; binary-attachment management, out of scope",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -575,8 +526,7 @@
       "summary": "Declared direct write: DELETE /filters.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletefilters-50 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "bulk delete of multiple saved filters by an id-list request body; delete_filter already covers the safer per-filter equivalent",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -585,16 +535,14 @@
       "summary": "Declared etl: GET /filters.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getfilters-51 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-filters",
       "summary": "Declared direct write: POST /filters.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addfilter-52 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /filters.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -603,8 +551,7 @@
       "summary": "Declared direct write: DELETE /filters/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletefilter-53 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /filters/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -613,8 +560,7 @@
       "summary": "Declared direct read: GET /filters/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getfilter-54 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -627,8 +573,7 @@
       "summary": "Declared direct write: PUT /filters/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatefilter-55 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /filters/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -637,8 +582,7 @@
       "summary": "Declared direct read: GET /filters/helpers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getfilterhelpers-56 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -651,8 +595,7 @@
       "summary": "Declared direct write: POST /goals.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addgoal-57 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a sales goal; same goal-tracking-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -661,8 +604,7 @@
       "summary": "Declared direct write: DELETE /goals/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletegoal-58 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a sales goal; same goal-tracking-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -671,8 +613,7 @@
       "summary": "Declared direct write: PUT /goals/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updategoal-59 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a sales goal; same goal-tracking-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -681,8 +622,7 @@
       "summary": "Declared direct read: GET /goals/{id}/results.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getgoalresult-60 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -695,8 +635,7 @@
       "summary": "Declared direct read: GET /goals/find.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getgoals-61 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -709,24 +648,21 @@
       "summary": "Declared etl: GET /leadFields.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleadfields-62 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-lead-labels",
       "summary": "Declared etl: GET /leadLabels.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleadlabels-63 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-lead-labels",
       "summary": "Declared direct write: POST /leadLabels.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addleadlabel-64 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /leadLabels.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -735,8 +671,7 @@
       "summary": "Declared direct write: DELETE /leadLabels/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteleadlabel-65 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /leadLabels/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -745,8 +680,7 @@
       "summary": "Declared direct write: PATCH /leadLabels/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updateleadlabel-66 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /leadLabels/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -755,16 +689,14 @@
       "summary": "Declared etl: GET /leads.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleads-67 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-leads",
       "summary": "Declared direct write: POST /leads.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addlead-68 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /leads.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -773,8 +705,7 @@
       "summary": "Declared direct write: DELETE /leads/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletelead-69 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /leads/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -783,8 +714,7 @@
       "summary": "Declared direct read: GET /leads/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getlead-70 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -797,8 +727,7 @@
       "summary": "Declared direct write: PATCH /leads/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatelead-71 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /leads/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -807,8 +736,7 @@
       "summary": "Declared direct read: GET /leads/{id}/permittedUsers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleadusers-72 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -821,8 +749,7 @@
       "summary": "Declared direct read: GET /leads/archived.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getarchivedleads-73 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -835,8 +762,7 @@
       "summary": "Declared direct read: GET /leads/search.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.searchleads-74 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -849,24 +775,21 @@
       "summary": "Declared etl: GET /leadSources.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getleadsources-75 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-legacy-teams",
       "summary": "Declared etl: GET /legacyTeams.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getteams-76 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-legacy-teams",
       "summary": "Declared direct write: POST /legacyTeams.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addteam-77 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a new legacy team; Pipedrive documents this resource as 'legacy' in favor of the newer role/permission-set model, deprioritized for write coverage in this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -875,8 +798,7 @@
       "summary": "Declared direct read: GET /legacyTeams/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getteam-78 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -889,8 +811,7 @@
       "summary": "Declared direct write: PUT /legacyTeams/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updateteam-79 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a legacy team's name/manager; same legacy-resource deprioritization as its create counterpart",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -899,8 +820,7 @@
       "summary": "Declared direct write: DELETE /legacyTeams/{id}/users.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteteamuser-80 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes users from a legacy team's membership; same fine-grained-edit reasoning as the add-users endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -909,8 +829,7 @@
       "summary": "Declared direct read: GET /legacyTeams/{id}/users.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getteamusers-81 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -923,8 +842,7 @@
       "summary": "Declared direct write: POST /legacyTeams/{id}/users.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addteamuser-82 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "adds users to a legacy team's membership; fine-grained membership edit of an already-covered parent record",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -933,8 +851,7 @@
       "summary": "Declared direct read: GET /legacyTeams/user/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getuserteams-83 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -947,8 +864,7 @@
       "summary": "Declared direct read: GET /mailbox/mailMessages/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getmailmessage-84 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -961,8 +877,7 @@
       "summary": "Declared direct read: GET /mailbox/mailThreads.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getmailthreads-85 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -975,8 +890,7 @@
       "summary": "Declared direct write: DELETE /mailbox/mailThreads/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletemailthread-86 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a linked email thread; same Mailbox-feature-area deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -985,8 +899,7 @@
       "summary": "Declared direct read: GET /mailbox/mailThreads/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getmailthread-87 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -999,8 +912,7 @@
       "summary": "Declared direct write: PUT /mailbox/mailThreads/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatemailthreaddetails-88 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a mail thread's read/archived state; same Mailbox-feature-area deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1009,8 +921,7 @@
       "summary": "Declared direct read: GET /mailbox/mailThreads/{id}/mailMessages.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getmailthreadmessages-89 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1023,8 +934,7 @@
       "summary": "Declared direct write: POST /meetings/userProviderLinks.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.saveuserproviderlink-90 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "links a user's video-call-provider account for the Meetings scheduling feature; an integration-configuration mutation, not CRM business data",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1033,8 +943,7 @@
       "summary": "Declared direct write: DELETE /meetings/userProviderLinks/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteuserproviderlink-91 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "unlinks a user's video-call-provider account; same integration-configuration reasoning as linking",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1043,8 +952,7 @@
       "summary": "Declared direct read: GET /noteFields.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getnotefields-92 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1057,16 +965,14 @@
       "summary": "Declared etl: GET /notes.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getnotes-93 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-notes",
       "summary": "Declared direct write: POST /notes.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addnote-94 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /notes.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1075,8 +981,7 @@
       "summary": "Declared direct write: DELETE /notes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletenote-95 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /notes/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1085,8 +990,7 @@
       "summary": "Declared direct read: GET /notes/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getnote-96 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1099,8 +1003,7 @@
       "summary": "Declared direct write: PUT /notes/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatenote-97 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /notes/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1109,8 +1012,7 @@
       "summary": "Declared direct read: GET /notes/{id}/comments.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getnotecomments-98 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1123,8 +1025,7 @@
       "summary": "Declared direct write: POST /notes/{id}/comments.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addnotecomment-99 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "adds a comment to one note's comment thread; narrower than the note-level create/update/delete actions already covered",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1133,8 +1034,7 @@
       "summary": "Declared direct write: DELETE /notes/{id}/comments/{commentId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletecomment-100 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes one comment on a note's comment thread; same out-of-scope reasoning as the parent comments list",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1143,8 +1043,7 @@
       "summary": "Declared direct read: GET /notes/{id}/comments/{commentId}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getcomment-101 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1157,8 +1056,7 @@
       "summary": "Declared direct write: PUT /notes/{id}/comments/{commentId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatecommentfornote-102 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates one comment on a note's comment thread; same out-of-scope reasoning as the parent comments list",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1167,8 +1065,7 @@
       "summary": "Declared direct read: GET /oauth/authorize.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.authorize-103 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1181,8 +1078,7 @@
       "summary": "Declared direct write: POST /oauth/token.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.get-tokens-104 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "OAuth2 token-exchange endpoint; an auth-flow artifact, not a data endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1191,8 +1087,7 @@
       "summary": "Declared direct write: POST /oauth/token/.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.refresh-tokens-105 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "OAuth2 token-refresh endpoint; an auth-flow artifact, not a data endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1201,8 +1096,7 @@
       "summary": "Declared direct write: DELETE /organizationFields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteorganizationfields-106 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "bulk delete of multiple organization-field definitions by an id-list request body; same reasoning as dealFields' bulk delete",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1211,16 +1105,14 @@
       "summary": "Declared etl: GET /organizationFields.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationfields-107 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-organization-fields",
       "summary": "Declared direct write: POST /organizationFields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addorganizationfield-108 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a new custom organization field definition; same schema-authoring-mutation reasoning as dealFields' POST",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1229,8 +1121,7 @@
       "summary": "Declared direct write: DELETE /organizationFields/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteorganizationfield-109 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "irreversibly deletes a custom field definition and its data from every organization; out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1239,8 +1130,7 @@
       "summary": "Declared direct read: GET /organizationFields/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationfield-110 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1253,8 +1143,7 @@
       "summary": "Declared direct write: PUT /organizationFields/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updateorganizationfield-111 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a custom organization field's definition; schema-authoring mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1263,8 +1152,7 @@
       "summary": "Declared direct read: GET /organizationRelationships.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationrelationships-112 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1277,8 +1165,7 @@
       "summary": "Declared direct write: POST /organizationRelationships.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addorganizationrelationship-113 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a relationship between two organizations; deprioritized alongside the list endpoint's fan_out requirement",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1287,8 +1174,7 @@
       "summary": "Declared direct write: DELETE /organizationRelationships/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteorganizationrelationship-114 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes an organization relationship; deprioritized alongside the list endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1297,8 +1183,7 @@
       "summary": "Declared direct read: GET /organizationRelationships/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationrelationship-115 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1311,8 +1196,7 @@
       "summary": "Declared direct write: PUT /organizationRelationships/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updateorganizationrelationship-116 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates an organization relationship; deprioritized alongside the list endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1321,8 +1205,7 @@
       "summary": "Declared direct read: GET /organizations/{id}/changelog.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationchangelog-117 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1335,8 +1218,7 @@
       "summary": "Declared direct read: GET /organizations/{id}/files.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationfiles-118 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1349,8 +1231,7 @@
       "summary": "Declared direct read: GET /organizations/{id}/flow.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationupdates-119 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1363,8 +1244,7 @@
       "summary": "Declared direct read: GET /organizations/{id}/followers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationfollowers-120 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1377,8 +1257,7 @@
       "summary": "Declared direct write: POST /organizations/{id}/followers.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addorganizationfollower-121 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "adds a follower to one organization; fine-grained edit of an already-covered parent record",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1387,8 +1266,7 @@
       "summary": "Declared direct write: DELETE /organizations/{id}/followers/{follower_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteorganizationfollower-122 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes a follower from one organization; same fine-grained-edit reasoning as the add-follower endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1397,8 +1275,7 @@
       "summary": "Declared direct read: GET /organizations/{id}/mailMessages.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationmailmessages-123 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1411,8 +1288,7 @@
       "summary": "Declared direct write: PUT /organizations/{id}/merge.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.mergeorganizations-124 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "merges two organizations into one, an irreversible structural operation; same reasoning as deals/{id}/merge",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1421,8 +1297,7 @@
       "summary": "Declared direct read: GET /organizations/{id}/permittedUsers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getorganizationusers-125 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1435,8 +1310,7 @@
       "summary": "Declared direct read: GET /permissionSets.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpermissionsets-126 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1449,8 +1323,7 @@
       "summary": "Declared direct read: GET /permissionSets/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpermissionset-127 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1463,8 +1336,7 @@
       "summary": "Declared direct read: GET /permissionSets/{id}/assignments.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpermissionsetassignments-128 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1477,8 +1349,7 @@
       "summary": "Declared direct write: DELETE /personFields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletepersonfields-129 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "bulk delete of multiple person-field definitions by an id-list request body; same reasoning as dealFields' bulk delete",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1487,16 +1358,14 @@
       "summary": "Declared etl: GET /personFields.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonfields-130 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-person-fields",
       "summary": "Declared direct write: POST /personFields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addpersonfield-131 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a new custom person field definition; same schema-authoring-mutation reasoning as dealFields' POST",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1505,8 +1374,7 @@
       "summary": "Declared direct write: DELETE /personFields/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletepersonfield-132 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "irreversibly deletes a custom field definition and its data from every person; out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1515,8 +1383,7 @@
       "summary": "Declared direct read: GET /personFields/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonfield-133 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1529,8 +1396,7 @@
       "summary": "Declared direct write: PUT /personFields/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatepersonfield-134 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a custom person field's definition; schema-authoring mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1539,8 +1405,7 @@
       "summary": "Declared direct read: GET /persons/{id}/changelog.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonchangelog-135 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1553,8 +1418,7 @@
       "summary": "Declared direct read: GET /persons/{id}/files.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonfiles-136 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1567,8 +1431,7 @@
       "summary": "Declared direct read: GET /persons/{id}/flow.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonupdates-137 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1581,8 +1444,7 @@
       "summary": "Declared direct read: GET /persons/{id}/followers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonfollowers-138 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1595,8 +1457,7 @@
       "summary": "Declared direct write: POST /persons/{id}/followers.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addpersonfollower-139 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "adds a follower to one person; fine-grained edit of an already-covered parent record",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1605,8 +1466,7 @@
       "summary": "Declared direct write: DELETE /persons/{id}/followers/{follower_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletepersonfollower-140 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes a follower from one person; same fine-grained-edit reasoning as the add-follower endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1615,8 +1475,7 @@
       "summary": "Declared direct read: GET /persons/{id}/mailMessages.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonmailmessages-141 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1629,8 +1488,7 @@
       "summary": "Declared direct write: PUT /persons/{id}/merge.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.mergepersons-142 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "merges two persons into one, an irreversible structural operation; same reasoning as deals/{id}/merge",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1639,8 +1497,7 @@
       "summary": "Declared direct read: GET /persons/{id}/permittedUsers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonusers-143 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1653,8 +1510,7 @@
       "summary": "Declared direct write: DELETE /persons/{id}/picture.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletepersonpicture-144 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes a person's profile picture image; binary-image management, out of scope for a record-sync connector",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1663,8 +1519,7 @@
       "summary": "Declared direct write: POST /persons/{id}/picture.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addpersonpicture-145 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "uploads a person's profile picture image (multipart file upload); binary-image management, out of scope for a record-sync connector",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1673,8 +1528,7 @@
       "summary": "Declared direct read: GET /persons/{id}/products.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpersonproducts-146 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1687,8 +1541,7 @@
       "summary": "Declared direct read: GET /pipelines/{id}/conversion_statistics.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpipelineconversionstatistics-147 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1701,8 +1554,7 @@
       "summary": "Declared direct read: GET /pipelines/{id}/deals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpipelinedeals-148 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1715,8 +1567,7 @@
       "summary": "Declared direct read: GET /pipelines/{id}/movement_statistics.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getpipelinemovementstatistics-149 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1729,8 +1580,7 @@
       "summary": "Declared direct write: DELETE /productFields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteproductfields-150 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "bulk delete of multiple product-field definitions by an id-list request body; same reasoning as dealFields' bulk delete",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1739,16 +1589,14 @@
       "summary": "Declared etl: GET /productFields.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getproductfields-151 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-product-fields",
       "summary": "Declared direct write: POST /productFields.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addproductfield-152 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a new custom product field definition; same schema-authoring-mutation reasoning as dealFields' POST",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1757,8 +1605,7 @@
       "summary": "Declared direct write: DELETE /productFields/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteproductfield-153 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "irreversibly deletes a custom field definition and its data from every product; out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1767,8 +1614,7 @@
       "summary": "Declared direct read: GET /productFields/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getproductfield-154 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1781,8 +1627,7 @@
       "summary": "Declared direct write: PUT /productFields/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updateproductfield-155 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a custom product field's definition; schema-authoring mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1791,8 +1636,7 @@
       "summary": "Declared direct read: GET /products/{id}/deals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getproductdeals-156 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1805,8 +1649,7 @@
       "summary": "Declared direct read: GET /products/{id}/files.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getproductfiles-157 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1819,8 +1662,7 @@
       "summary": "Declared direct read: GET /products/{id}/followers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getproductfollowers-158 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1833,8 +1675,7 @@
       "summary": "Declared direct write: POST /products/{id}/followers.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addproductfollower-159 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "adds a follower to one product; fine-grained edit of an already-covered parent record",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1843,8 +1684,7 @@
       "summary": "Declared direct write: DELETE /products/{id}/followers/{follower_id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteproductfollower-160 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes a follower from one product; same fine-grained-edit reasoning as the add-follower endpoint",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1853,8 +1693,7 @@
       "summary": "Declared direct read: GET /products/{id}/permittedUsers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getproductusers-161 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1867,8 +1706,7 @@
       "summary": "Declared direct read: GET /projects.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojects-162 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1881,8 +1719,7 @@
       "summary": "Declared direct write: POST /projects.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addproject-163 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a project; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1891,8 +1728,7 @@
       "summary": "Declared direct write: DELETE /projects/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteproject-164 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a project; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1901,8 +1737,7 @@
       "summary": "Declared direct read: GET /projects/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getproject-165 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1915,8 +1750,7 @@
       "summary": "Declared direct write: PUT /projects/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updateproject-166 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a project; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1925,8 +1759,7 @@
       "summary": "Declared direct read: GET /projects/{id}/activities.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojectactivities-167 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1939,8 +1772,7 @@
       "summary": "Declared direct write: POST /projects/{id}/archive.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.archiveproject-168 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "archives a project; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1949,8 +1781,7 @@
       "summary": "Declared direct read: GET /projects/{id}/groups.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojectgroups-169 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1963,8 +1794,7 @@
       "summary": "Declared direct read: GET /projects/{id}/plan.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojectplan-170 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1977,8 +1807,7 @@
       "summary": "Declared direct write: PUT /projects/{id}/plan/activities/{activityId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.putprojectplanactivity-171 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates one activity's position within a project plan; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1987,8 +1816,7 @@
       "summary": "Declared direct write: PUT /projects/{id}/plan/tasks/{taskId}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.putprojectplantask-172 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates one task's position within a project plan; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1997,8 +1825,7 @@
       "summary": "Declared direct read: GET /projects/{id}/tasks.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojecttasks-173 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2011,8 +1838,7 @@
       "summary": "Declared direct read: GET /projects/boards.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojectsboards-174 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2025,8 +1851,7 @@
       "summary": "Declared direct read: GET /projects/boards/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojectsboard-175 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2039,8 +1864,7 @@
       "summary": "Declared direct read: GET /projects/phases.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojectsphases-176 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2053,8 +1877,7 @@
       "summary": "Declared direct read: GET /projects/phases/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojectsphase-177 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2067,8 +1890,7 @@
       "summary": "Declared direct read: GET /projectTemplates.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojecttemplates-178 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2081,8 +1903,7 @@
       "summary": "Declared direct read: GET /projectTemplates/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getprojecttemplate-179 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2095,8 +1916,7 @@
       "summary": "Declared direct read: GET /recents.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getrecents-180 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2109,16 +1929,14 @@
       "summary": "Declared etl: GET /roles.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getroles-181 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-roles",
       "summary": "Declared direct write: POST /roles.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addrole-182 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a new permission role; account-permission-structure authoring, out of scope for this pass (the roles stream is read-only reference data in this bundle)",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2127,8 +1945,7 @@
       "summary": "Declared direct write: DELETE /roles/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleterole-183 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "irreversibly deletes a permission role affecting every assigned user's access; out of scope for this pass, no safer covered alternative",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -2137,8 +1954,7 @@
       "summary": "Declared direct read: GET /roles/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getrole-184 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2151,8 +1967,7 @@
       "summary": "Declared direct write: PUT /roles/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updaterole-185 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a permission role's name/parent; account-permission-structure authoring, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2161,8 +1976,7 @@
       "summary": "Declared direct write: DELETE /roles/{id}/assignments.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deleteroleassignment-186 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes a user's role assignment, altering their account permissions; out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -2171,8 +1985,7 @@
       "summary": "Declared direct read: GET /roles/{id}/assignments.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getroleassignments-187 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2185,8 +1998,7 @@
       "summary": "Declared direct write: POST /roles/{id}/assignments.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addroleassignment-188 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "assigns a user to a role; account-permission-structure mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2195,8 +2007,7 @@
       "summary": "Declared direct read: GET /roles/{id}/pipelines.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getrolepipelines-189 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2209,8 +2020,7 @@
       "summary": "Declared direct write: PUT /roles/{id}/pipelines.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updaterolepipelines-190 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "sets which pipelines a role can see; account-permission-structure mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2219,8 +2029,7 @@
       "summary": "Declared direct read: GET /roles/{id}/settings.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getrolesettings-191 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2233,8 +2042,7 @@
       "summary": "Declared direct write: POST /roles/{id}/settings.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addorupdaterolesetting-192 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "sets a per-role visibility/access setting; account-permission-structure mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2243,8 +2051,7 @@
       "summary": "Declared direct read: GET /stages/{id}/deals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getstagedeals-193 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2257,8 +2064,7 @@
       "summary": "Declared direct read: GET /tasks.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.gettasks-194 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2271,8 +2077,7 @@
       "summary": "Declared direct write: POST /tasks.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addtask-195 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a project task; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2281,8 +2086,7 @@
       "summary": "Declared direct write: DELETE /tasks/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletetask-196 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a project task; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -2291,8 +2095,7 @@
       "summary": "Declared direct read: GET /tasks/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.gettask-197 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2305,8 +2108,7 @@
       "summary": "Declared direct write: PUT /tasks/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updatetask-198 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a project task; same Projects-add-on-feature deprioritization",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2315,8 +2117,7 @@
       "summary": "Declared direct read: GET /userConnections.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getuserconnections-199 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2329,16 +2130,14 @@
       "summary": "Declared etl: GET /users.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getusers-200 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-users",
       "summary": "Declared direct write: POST /users.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.adduser-201 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "invites/creates a new Pipedrive account user; account-provisioning mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2347,8 +2146,7 @@
       "summary": "Declared direct read: GET /users/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getuser-202 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2361,8 +2159,7 @@
       "summary": "Declared direct write: PUT /users/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.updateuser-203 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a user's account settings (active state, admin flag); account-administration mutation, out of scope for this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2371,8 +2168,7 @@
       "summary": "Declared direct read: GET /users/{id}/followers.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getuserfollowers-204 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2385,8 +2181,7 @@
       "summary": "Declared direct read: GET /users/{id}/permissions.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getuserpermissions-205 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2399,8 +2194,7 @@
       "summary": "Declared direct read: GET /users/{id}/roleAssignments.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getuserroleassignments-206 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2413,8 +2207,7 @@
       "summary": "Declared direct read: GET /users/{id}/roleSettings.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getuserrolesettings-207 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2427,8 +2220,7 @@
       "summary": "Declared direct read: GET /users/find.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.findusersbyname-208 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2441,8 +2233,7 @@
       "summary": "Declared direct read: GET /users/me.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getcurrentuser-209 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2455,8 +2246,7 @@
       "summary": "Declared direct read: GET /userSettings.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getusersettings-210 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -2469,16 +2259,14 @@
       "summary": "Declared etl: GET /webhooks.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.getwebhooks-211 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-webhooks",
       "summary": "Declared direct write: POST /webhooks.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.addwebhook-212 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /webhooks.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -2487,8 +2275,7 @@
       "summary": "Declared direct write: DELETE /webhooks/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.provider.deletewebhook-213 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /webhooks/{id}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -2497,40 +2284,35 @@
       "summary": "Declared etl: GET /deals.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-deals-214 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-persons",
       "summary": "Declared etl: GET /persons.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-persons-215 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-organizations",
       "summary": "Declared etl: GET /organizations.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-organizations-216 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-activities",
       "summary": "Declared etl: GET /activities.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-activities-217 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-products",
       "summary": "Declared etl: GET /products.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://developers.pipedrive.com/docs/api/v1/openapi.yaml",
-      "notes": "Blocked: locked source operation pipedrive.local-api-surface.get-products-218 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     }
   ]
 }

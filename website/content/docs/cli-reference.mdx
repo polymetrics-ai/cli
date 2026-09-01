@@ -77,7 +77,7 @@ schedule:
 ```
 
 <Callout type="warning">
-  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat.
+  Configuration is not a secret store. User-named credential variables passed to `--from-env`, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat.
 </Callout>
 
 ## Command map
@@ -85,7 +85,7 @@ schedule:
 | Command | Subcommands | Primary docs |
 |---|---|---|
 | `pm init` | workspace creation | [/docs/quickstart](/docs/quickstart) |
-| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help`, `pm connectors certify` | [/docs/connectors](/docs/connectors) |
+| `pm connectors` | `pm connectors list`, `pm connectors catalog`, `pm connectors port-plan`, `pm connectors inspect`, `pm connectors help` | [/docs/connectors](/docs/connectors) |
 | `pm credentials` | `pm credentials add`, `pm credentials link`, `pm credentials list`, `pm credentials inspect`, `pm credentials test`, `pm credentials remove` | this page |
 | `pm connections` | `pm connections create`, `pm connections list` | this page |
 | `pm catalog` | `pm catalog refresh`, `pm catalog show` | this page |
@@ -245,98 +245,25 @@ Catalog commands discover and cache stream metadata. Catalog output includes sch
 pm connectors list --json
 pm connectors list --all --json
 pm connectors catalog --capability read --json
-pm connectors catalog --stage generally_available --json
-pm connectors port-plan --all --json
-pm connectors port-plan postgres --json
-pm connectors inspect 100ms --json
-pm connectors help 100ms
-pm connectors certify sample --full --json
-pm connectors certify github --direct-read-only --resume --from-env token=GITHUB_TOKEN --json
+pm connectors inspect github --json
+pm connectors help github
 ```
 
-`pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
+`pm connectors list` shows runtime bundle-backed connectors. `--all` and
+`catalog` expose the complete local catalog. `inspect` reports execution JSON
+metadata, streams, actions, command bindings, request limits, rate-limit
+coordination, and configured sync roles without resolving credentials or
+contacting a provider.
 
-`pm connectors inspect <name>` also shows the generated certification quality
-signal: either **CERTIFIED** or **COMMUNITY BUILD, UNCERTIFIED**. The latter is
-a visible warning, not an availability gate; users can still run the connector.
-Certification is based on proof-bearing live records, not whether a command is
-reachable or a legacy certification filename exists.
+The embedded runtime inventory contains execution JSON only. Source locks and
+provider citations are authoring input. A command executes only with one
+unambiguous binding and a registered encoder/executor; malformed invocation,
+route/schema, approval, or auth fails before provider I/O.
 
-For connectors with a declared rate-limit policy, inspection reports rate-limit coordination
-provenance. `process_local` protects requests inside the current `pm` process only; it is not a
-cross-process claim. A policy explicitly declared `require_shared` refuses before sending a request
-if its optional shared coordinator is unavailable. A connector with both ordinary policies reports
-`mixed` policy-scoped provenance. A certification-only `require_shared` overlay preserves the
-`process_local` default label and explicitly states the certification boundary. Neither human nor JSON
-inspection exposes a scope, coordinator address, or credential.
-
-From a source checkout, `pm connectors certify <connector> --full --json` runs the legacy test
-harness and includes an API-surface
-inventory. Its `capabilities.surface.provenance` block reports provider-artifact evidence separately
-from endpoint coverage and connector capabilities: ledger version, artifact count, endpoint count,
-cited endpoint count, and a status. Existing version-1 and pre-ledger inventories report
-`legacy_unverified` during the staged migration; invalid version-2 provenance fails certification.
-Provenance never supplies a `covered_by` binding, enables a command, or sets
-the generated certification quality signal.
-
-`--direct-read-only` is the bounded direct-command certification mode. It
-retains preflight, live credential validation, serialized rate-limit handling,
-declaration-owned output assertions, and secret scans, but does not run
-unrelated stream/ETL stages. After an admitted rate-limit stop, `--resume`
-reuses only matching credential-free checkpoints and marks those rows as
-resumed; it never represents them as fresh provider calls. A direct-read pass
-states its candidate count and does not claim the connector's entire command or
-stream surface. This mode cannot be combined with `--write`; with
-`--external-proof`, it produces an observed-operations proof rather than a
-full-parity claim.
-
-For a full-fidelity live HTTPS proof, add `--external-proof` and supply
-credentials only with `--from-env` or `--value-stdin`. This source-checkout
-mode builds a fresh `pm` child binary, keeps the credential session in memory,
-and writes only salted fingerprints of the observed process transcript and
-complete bounded exchanges. Its schema-v2 credential scope is derived from
-the completed report and transcript: a verified `--full-parity` run claims
-`full_parity`; any other completed run claims only
-`observed_operations` with `protocol_exchanges` as its scope proof. A bounded
-artifact preserves the certification run's actual exit and requires an
-observed successful provider response; it never turns a failed stage into pass
-coverage. It refuses an incomplete or truncated exchange before creating a
-proof artifact.
-
-`--write-only` is a bounded GitHub repository-fixture wave rather than a
-full-parity claim. It is restricted to the captain-approved run-owned fixture
-`Polymetrics-Cert/pm-cert-3993-20260810-wz0fru` and reports any unavailable
-action distinctly. In the current boundary, commit-comment
-actions need GitHub's **Metadata — Read-only** repository permission for their
-item read-back; without it they are `blocked`, not `pass`.
-After that permission is granted, enable their bounded re-run explicitly with
-`--config certification_commit_comment_item_read=enabled`; the default avoids
-creating a further unverified commit comment while the permission remains
-missing.
-
-```bash
-pm connectors certify github --direct-read-only --external-proof \
-  --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
-```
-
-For connectors with coordinated provider budgets, the JSON report may include
-`rate_limit_events`. These report safe attempt, wait, reset, and not-sent
-outcomes so a stopped request is distinguishable from a provider response. They
-never include credentials, rendered requests, or rate-scope subjects.
-
-PostgreSQL's full database proof requires `--write` plus an explicit
-`--stream schema.table` and `cursor_field` configuration. It certifies live
-catalog discovery, one bounded typed relation read, and PostgreSQL's six
-declared polling-to-managed-target modes with independent target read-back. It
-does not claim every relation in a dynamic database or a direct `writes.json`
-action surface.
-
-```bash
-pm connectors certify postgres --full --write --stream public.events \
-  --config host=DB_HOST --config port=5432 --config database=DB_NAME \
-  --config username=DB_USER --config schema=public --config cursor_field=sequence \
-  --from-env password=POSTGRES_PASSWORD --json
-```
+For declared rate-limit policies, `process_local` protects requests in the
+current process and `require_shared` refuses before sending when its configured
+coordinator is unavailable. Inspection exposes neither secrets nor coordinator
+subjects.
 
 ## Extract, query, and write
 
