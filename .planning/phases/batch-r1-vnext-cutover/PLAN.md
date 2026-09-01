@@ -3,12 +3,12 @@
 ## Task Delivery Header
 
 - Issue: Refs #4283 — chore(connectors): pin and declare daily-use public API cohort
-- Base branch: `fm/cli-top100-declaration-batch-r1`
-- Merges into: `fm/cli-batch1-vnext-legacy-cutover-r1` → `fm/cli-top100-declaration-batch-r1` → `main` through the existing PR #4294
-- Delivery: push only green commits to the existing `origin/fm/cli-top100-declaration-batch-r1` head; do not open another PR and do not merge.
-- Working branch: `fm/cli-batch1-vnext-legacy-cutover-r1`
-- Task: replace legacy source import, projection, certification, evidence-ledger, and retention-only admission with one compact immutable vNext source-lock authoring model whose deterministic output is the existing runtime execution JSON bundle.
-- Verification: focused projector/loader/preflight/commandrunner tests, definition validation, generated-output checks, broader connector/CLI tests, builds, and connector-local all-lane assertions.
+- Base branch: `origin/fm/cli-top100-declaration-batch-r1`
+- Merges into: `fm/cli-top100-declaration-batch-r1` → `main` through the existing PR #4294
+- Delivery: push only independently green commits to the existing `origin/fm/cli-top100-declaration-batch-r1` head; do not open another PR and do not merge.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`
+- Task: independently finish the vNext legacy cleanup without recovering the excluded local work, then migrate Bitbucket, CircleCI, Docker Hub, Jira, Notion, Sentry, Stripe, and Vercel one source lock at a time through the one permitted execution route.
+- Verification: record truthful RED/GREEN evidence before every production slice; run focused reference/native/engine/CLI/build checks, broader engine/app/CLI checks, deterministic reference and migrated-lock renders, generated docs/skills/website checks, residual and secret/local-state scans, and the exact-SHA review procedure in `VERIFICATION.md` and `REVIEW-CONVERGENCE.md`.
 
 ## Non-negotiable architecture
 
@@ -46,10 +46,11 @@
 
 ## Lifecycle record
 
-- `scripts/gsd doctor` and `scripts/gsd sources` for discuss, plan, execute, verify, and code-review passed before planning.
-- Generated GSD discuss/plan prompts are being executed inline because the task is assigned to one isolated CLI worktree and prohibits borrowing another worktree. This is the repository's manual-GSD fallback, not a lifecycle waiver.
-- Loaded skills: `gsd-ns-workflow`, `golang-how-to`, `go-engineering`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-graphql`, and `no-mistakes`.
-- Architecture inputs reviewed: the compact-JSON research report, connector canon, migration conventions, v2 architecture, declaration admission/evidence procedures, and Foundation Atlas. Historical source/certification rules are deletion inventory, not current architecture authority.
+- Restarted from the authoritative remote checkpoint `0b214b79eeb871238ce8454cd7b896e71e2746a7`, proved reachable from `origin/fm/cli-top100-declaration-batch-r1` before any edit. The excluded `/private/tmp/cli-batch1-vnext-legacy-cutover-r1` worktree is neither a source nor a recovery target.
+- The prior TDD ledger's pending rows conflict with the claimed reference-cohort green checkpoint. Those claims are not carried forward as executable evidence: this continuation starts with a new native fixture-bypass RED proof and records its matching GREEN result before production cleanup.
+- `scripts/gsd doctor` was run at restart and exited 1 solely because `.gsd/prompts/issue-122-rebootstrap.md` is absent. `scripts/gsd sources` resolved `discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review`; `go run ./cmd/agentcontractgen check` passed. The generated `discuss-phase` and `plan-phase --tdd` prompts require `.planning/ROADMAP.md`, which this established custom phase does not contain. The documented inline/manual-GSD fallback therefore records discussion, plan, TDD, execution, verification, and review evidence in this phase directory; it is not a lifecycle waiver.
+- Loaded guidance: repository skill routing; project and Firstmate `connector-lane-build-order`; `go-engineering` and its ETL/security guidance; `tdd`; Firstmate `firstmate-exhaustive-review`; GSD Pi adapter; and CLI help/docs/website parity. `skill://golang-how-to` and the repo-named task-specific Go skills are unavailable in this session, so the available `go-engineering` guidance is the recorded substitute rather than a false claim that those skills were loaded.
+- Architecture inputs: `docs/connector-canon/SOURCE-LOCK-VNEXT.md`, current vNext loader/renderer tests, reference locks, the connector lane contract, this plan, and `VERIFICATION.md`. Historical source/certification/retention rules are deletion inventory, not current runtime authority.
 
 ## Commit checkpoints
 
