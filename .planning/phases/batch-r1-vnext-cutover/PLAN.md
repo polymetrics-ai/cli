@@ -2,10 +2,11 @@
 
 ## Task Delivery Header
 
-- Issue: Refs #4283 — chore(connectors): pin and declare daily-use public API cohort
+- Parent issue: Refs #4325 — Batch R1 scalable synchronization execution amendment
+- Current child: Refs #4423 — N1 executable proof baseline
 - Base branch: `main` (API-confirmed PR #4294 base)
 - Merges into: `main` through the existing PR #4294
-- Delivery: push only independently green commits to the existing `origin/fm/cli-top100-declaration-batch-r1` head; do not open another PR and do not merge.
+- Delivery: one writer pushes only independently green, ordinary fast-forward commits to the existing `origin/fm/cli-top100-declaration-batch-r1` head; do not open a per-slice PR, force-push, or merge.
 - Working branch: `fm/cli-batch1-vnext-cutover-r2`
 - Task: independently finish the vNext legacy cleanup without recovering the excluded local work, then migrate Bitbucket, CircleCI, Docker Hub, Jira, Notion, Sentry, Stripe, and Vercel one source lock at a time through the one permitted execution route.
 - Verification: record truthful RED/GREEN evidence before every production slice; run focused reference/native/engine/CLI/build checks, broader engine/app/CLI checks, deterministic reference and migrated-lock renders, generated docs/skills/website checks, residual and secret/local-state scans, and the exact-SHA review procedure in `VERIFICATION.md` and `REVIEW-CONVERGENCE.md`.
@@ -38,11 +39,19 @@
 
 ## Rollout order
 
-1. Commit characterization tests red-first for GitHub, GitLab, and Asana.
-2. Implement the vNext canonical descriptor/renderer and remove every legacy runtime/admission dependency locally.
-3. Materialize and verify GitHub, GitLab, and Asana; commit and push the green reference cohort.
-4. Migrate green connector-local cohorts in order: Bitbucket, CircleCI, Docker Hub, Jira, Notion, Sentry, Stripe, Vercel. Push normally after each verified cohort.
-5. Preserve source mapping if an actual shared executor is absent and report the exact gap before implementing any new genuine shared runtime foundation.
+1. G0: freeze the direct-parent delivery amendment, parent/base/denominator, and local certification-tree disposition; commit and normally push the planning-only checkpoint.
+2. #4423 N1: commit characterization tests red-first for GitHub, GitLab, and Asana, then restore the executable proof baseline without a runtime behavior change.
+3. Implement the vNext canonical descriptor/renderer and remove every legacy runtime/admission dependency locally only through the later authorized child sequence.
+4. Materialize and verify GitHub, GitLab, and Asana; commit and push the green reference cohort only when its later child gate is reached.
+5. Migrate green connector-local cohorts in order: Bitbucket, CircleCI, Docker Hub, Jira, Notion, Sentry, Stripe, Vercel only after the prerequisite children are green.
+6. Preserve source mapping if an actual shared executor is absent and report the exact gap before implementing any new genuine shared runtime foundation.
+
+## G0 direct-parent delivery amendment
+
+- Authority: #4325 comment `5500153864` (2026-09-01T20:41:45Z) requires the full issue lifecycle and exactly one code writer, with ordinary fast-forward commits directly to the existing Batch R1 parent branch. #4294 comment `5500165004` records that routing correction; the PR body was not changed after `gh-axi pr edit` failed before mutation on deprecated `projectCards`.
+- Immutable delivery denominator: **4,341 primary retained source operations**, as published on #4325. N1 is a proof-baseline repair only; it neither changes that denominator nor re-pins a source lock, execution manifest, generated connector artifact, or runtime behavior.
+- Immutable delivery base: after `git fetch origin fm/cli-top100-declaration-batch-r1`, both `HEAD` and `origin/fm/cli-top100-declaration-batch-r1` resolve to `d260b725ce6f53403961d7af1ef48ea6651cdd66`; its merge base with `origin/main` is `813f457a925f7ee3fe3bea101a43e445992c8552`. This continuation does not rebase or recreate any excluded local work.
+- Certification-tree disposition: `HEAD` and the index contain no `internal/connectors/certifications/` path. The frozen checkpoint `0b214b79eeb871238ce8454cd7b896e71e2746a7` deleted the former tracked legacy certification tree. The sole current untracked item, `internal/connectors/certifications/.fingerprint-salt`, has no Git history and is not ignored; its opaque local provenance is not repository ownership. It remains unstaged, unread, unmodified, and out of scope for G0 and N1. No certification route is restored or retained.
 
 ## Lifecycle record
 
@@ -54,9 +63,9 @@
 
 ## Commit checkpoints
 
-1. Tracked plan and TDD ledger.
-2. Characterization/red-test contract.
-3. Legacy removal plus vNext renderer green.
-4. GitHub, GitLab, and Asana rendered bundles and proof green; normal push to the existing remote head.
-5. Deterministic connector-local rollout commits and pushes for the remaining Batch R1 cohort.
+1. G0 planning-only direct-parent amendment and local-state disposition; ordinary push to the existing remote head.
+2. #4423 N1 characterization/red-test contract and green executable proof baseline, with no runtime behavior change.
+3. Later authorized legacy removal plus vNext renderer green.
+4. Later GitHub, GitLab, and Asana rendered bundles and proof green; normal push to the existing remote head.
+5. Later deterministic connector-local rollout commits and pushes for the remaining Batch R1 cohort.
 6. Final verification, code review, generated docs/help checks, and no-legacy dependency audit.

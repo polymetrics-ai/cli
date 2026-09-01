@@ -62,5 +62,7 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 
 ## Results
 
-- Planning state: recorded before production edits.
-- RED/GREEN, render, generation, focused/broad checks, residual scan, secret/local-state scan, and review results: pending execution in the ordered cleanup/migration slices.
+- G0 direct-parent amendment: `git fetch origin fm/cli-top100-declaration-batch-r1` refreshed the parent. `HEAD` and `origin/fm/cli-top100-declaration-batch-r1` both resolved to `d260b725ce6f53403961d7af1ef48ea6651cdd66`; `HEAD` is an ancestor of that remote tip. The immutable `main` merge base is `813f457a925f7ee3fe3bea101a43e445992c8552`, and #4325 fixes the delivery denominator at 4,341 primary retained source operations.
+- G0 routing/local-state: #4325 comment `5500153864` and #4294 comment `5500165004` were read directly. The former certification tree was deleted at the frozen checkpoint. The untracked opaque `internal/connectors/certifications/.fingerprint-salt` has no tracked/index/history entry and is not ignored; it remains unread, unstaged, unmodified, and excluded from this work. It is recorded as local-state residue, never a retained certification path.
+- G0 green gate: pending `git diff --check`, planning-only commit, normal push, and remote SHA read-back. N1 does not begin until this gate is satisfied.
+- #4423 N1 RED/GREEN, render, generation, focused/broad checks, residual scan, secret/local-state scan, and exact-SHA review: pending execution after the G0 push.
