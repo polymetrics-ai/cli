@@ -3,8 +3,8 @@
 ## Task Delivery Header
 
 - Issue: Refs #4283 — chore(connectors): pin and declare daily-use public API cohort
-- Base branch: `origin/fm/cli-top100-declaration-batch-r1`
-- Merges into: `fm/cli-top100-declaration-batch-r1` → `main` through the existing PR #4294
+- Base branch: `main` (API-confirmed PR #4294 base)
+- Merges into: `main` through the existing PR #4294
 - Delivery: push only independently green commits to the existing `origin/fm/cli-top100-declaration-batch-r1` head; do not open another PR and do not merge.
 - Working branch: `fm/cli-batch1-vnext-cutover-r2`
 - Task: independently finish the vNext legacy cleanup without recovering the excluded local work, then migrate Bitbucket, CircleCI, Docker Hub, Jira, Notion, Sentry, Stripe, and Vercel one source lock at a time through the one permitted execution route.
