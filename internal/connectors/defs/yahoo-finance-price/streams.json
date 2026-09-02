@@ -90,6 +90,10 @@
       "records": {
         "path": "chart.result"
       },
+      "response_error": {
+        "message_field": "description",
+        "path": "chart.error"
+      },
       "schema": "schemas/prices.json"
     }
   ]

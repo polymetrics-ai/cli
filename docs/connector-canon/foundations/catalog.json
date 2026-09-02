@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 25,
+  "catalog_revision": 26,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -2426,6 +2426,106 @@
       "update_conditions": [
         "The array-zip selector, equal-length validation, owner symbol, or proof changes.",
         "A connector proposes a new declared scalar or array mapping."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.declared-response-error.v1",
+      "layer": "declarative_response_projection",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Rejects a source-declared JSON error object before record extraction and emits a typed declared-response error.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/errors.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "ResponseErrorSpec"
+          },
+          {
+            "file": "internal/connectors/engine/errors.go",
+            "name": "DeclaredResponseError"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "declaredResponseError"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST JSON responses"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "a source-declared JSON error object path",
+          "an optional declared non-empty string message field"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the declared error object is checked after a successful HTTP response and before records are extracted",
+          "an error object produces a typed DeclaredResponseError and zero emitted records",
+          "only declared object and message paths participate, with provider text redacted by the engine error boundary"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].response_error.path",
+          "streams[].response_error.message_field"
+        ],
+        "notes": "The selector recognizes one closed response error object. It is not a generic response transformation or an arbitrary error hook."
+      },
+      "constraints": [
+        "The source path must be non-empty, normalized, and free of traversal segments.",
+        "When declared, the message field must resolve to a non-empty string.",
+        "The foundation cannot alter status handling, authentication, origins, request encoding, or emitted records."
+      ],
+      "non_goals": [
+        "Provider-specific code branches, callbacks, generic JSON transforms, retries, or raw error-body exposure.",
+        "Direct writes, reverse ETL, binary transfers, or database behavior."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Yahoo Finance chart errors",
+          "files": [
+            "internal/connectors/defs/yahoo-finance-price/source.lock.json",
+            "internal/connectors/defs/yahoo-finance-price/streams.json"
+          ],
+          "notes": "The prices stream turns chart.error.description into a typed error before any OHLCV array is extracted."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionYahooFinancePriceRejectsChartErrorBeforeEmit"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The response-error shape, pre-emission ordering, owner symbol, or proof changes.",
+        "A connector selects a declared response-error object."
       ],
       "supersedes": []
     }

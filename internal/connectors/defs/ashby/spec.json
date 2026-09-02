@@ -6,18 +6,9 @@
       "type": "string",
       "x-secret": true
     },
-    "base_url": {
-      "default": "https://api.ashbyhq.com",
-      "description": "Ashby API base URL; override only for local tests.",
-      "type": "string"
-    },
     "max_pages": {
       "default": "0",
       "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent.",
-      "type": "string"
-    },
-    "mode": {
-      "description": "Set to fixture for credential-free native tests.",
       "type": "string"
     },
     "page_size": {
@@ -30,5 +21,6 @@
     "api_key"
   ],
   "title": "Ashby Connection Specification",
-  "type": "object"
+  "type": "object",
+  "x-reject-unknown-config": true
 }

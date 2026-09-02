@@ -377,7 +377,7 @@
 - [postgres](postgres/MANUAL.md): Reads PostgreSQL tables, supports PostgreSQL 14+ logical-replication CDC into the local warehouse, and delivers managed PostgreSQL targets through the warehouse-mediated transport. Direct Connector.Write remains unavailable; query is not implemented.
 - [posthog](posthog/MANUAL.md): Reads PostHog events and persons for a project via the PostHog REST API. Read-only.
 - [postmarkapp](postmarkapp/MANUAL.md): Reads Postmark server-token API resources including messages, bounces, templates, message streams, stats, webhooks, suppressions, and inbound rules; exposes server-token write actions for sends and resource mutations.
-- [prestashop](prestashop/MANUAL.md): Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+- [prestashop](prestashop/MANUAL.md): Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API.
 - [pretix](pretix/MANUAL.md): Reads pretix organizers, events, items, and orders through the pretix REST API.
 - [primetric](primetric/MANUAL.md): Reads Primetric employees, projects, clients, and roles through OAuth-authenticated REST list endpoints.
 - [printify](printify/MANUAL.md): Reads and writes Printify shops, catalog resources, products, orders, uploads, and webhooks through the Printify public API.

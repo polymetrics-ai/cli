@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector prestashop [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API.
 
 ICON
   id: prestashop
@@ -57,7 +57,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external PrestaShop API reads performed by the legacy connector via a Tier-2 hook
+  read risk: external PrestaShop Webservice API reads through the declaration-bound tenant origin
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

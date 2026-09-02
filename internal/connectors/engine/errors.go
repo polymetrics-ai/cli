@@ -64,6 +64,20 @@ func (e *Error) Unwrap() error {
 	return e.Err
 }
 
+// DeclaredResponseError reports a source-declared provider error object before
+// any response records are extracted or emitted.
+type DeclaredResponseError struct {
+	Path    string
+	Message string
+}
+
+func (e *DeclaredResponseError) Error() string {
+	if e.Message == "" {
+		return fmt.Sprintf("declared response error at %q", e.Path)
+	}
+	return fmt.Sprintf("declared response error at %q: %s", e.Path, safety.RedactErrorText(e.Message))
+}
+
 // applyErrorMap evaluates rules in declared order against err (typically a
 // *connsdk.HTTPError) and returns the class/hint from the first rule whose
 // status matches AND, if match_body is set, whose body substring matches

@@ -19,7 +19,7 @@
   "release_stage": "alpha",
   "risk": {
     "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute",
-    "read": "bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures",
+    "read": "external Ashby API reads through fixed declaration-bound routes",
     "write": "named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation"
   }
 }

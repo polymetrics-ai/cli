@@ -348,6 +348,7 @@ type StreamSpec struct {
 	ComputedFields           map[string]string              `json:"computed_fields,omitempty"`
 	ResponseFields           map[string]string              `json:"response_fields,omitempty"`
 	ResponseHeaderProjection []ResponseHeaderProjectionSpec `json:"response_header_projection,omitempty"`
+	ResponseError            *ResponseErrorSpec             `json:"response_error,omitempty"`
 	ArrayZipProjection       *ArrayZipProjectionSpec        `json:"array_zip_projection,omitempty"`
 	Headers                  map[string]string              `json:"headers,omitempty"`
 	Projection               string                         `json:"projection,omitempty"` // "schema" (default) | "passthrough"
@@ -379,6 +380,13 @@ type ResponseHeaderProjectionSpec struct {
 	HeaderName     string   `json:"header_name,omitempty"`
 	ValueField     string   `json:"value_field,omitempty"`
 	AllowedHeaders []string `json:"allowed_headers"`
+}
+
+// ResponseErrorSpec names one declared JSON error object that prevents page
+// extraction and record emission when present.
+type ResponseErrorSpec struct {
+	Path         string `json:"path"`
+	MessageField string `json:"message_field,omitempty"`
 }
 
 // ArrayZipProjectionSpec maps one extracted response object into records by
@@ -1703,6 +1711,9 @@ func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []Stre
 	if err := validateArrayZipProjections(doc.Streams); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
+	if err := validateResponseErrors(doc.Streams); err != nil {
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
+	}
 	if err := validateStaticStreamHeaders(doc.Streams); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
@@ -1841,6 +1852,22 @@ func validateArrayZipProjections(streams []StreamSpec) error {
 				}
 				seen[field.Field] = struct{}{}
 			}
+		}
+	}
+	return nil
+}
+
+func validateResponseErrors(streams []StreamSpec) error {
+	for streamIndex, stream := range streams {
+		spec := stream.ResponseError
+		if spec == nil {
+			continue
+		}
+		if strings.TrimSpace(spec.Path) == "" || strings.TrimSpace(spec.Path) != spec.Path || strings.Contains(spec.Path, "..") {
+			return fmt.Errorf("stream %d (%q) response_error has an invalid path", streamIndex, stream.Name)
+		}
+		if strings.TrimSpace(spec.MessageField) == "" && spec.MessageField != "" {
+			return fmt.Errorf("stream %d (%q) response_error has a blank message_field", streamIndex, stream.Name)
 		}
 	}
 	return nil

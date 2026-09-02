@@ -18,7 +18,7 @@
     "pagination": {
       "type": "none"
     },
-    "url": "{{ config.base_url }}",
+    "url": "https://api.ashbyhq.com",
     "user_agent": "polymetrics-go-cli"
   },
   "streams": [

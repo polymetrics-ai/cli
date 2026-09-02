@@ -655,6 +655,9 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 			}
 		}
+		if err := declaredResponseError(resp.Body, stream.ResponseError); err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
 
 		rawRecords, err := extractRecords(resp.Body, stream.Records)
 		if err != nil {
@@ -2010,6 +2013,37 @@ func applyArrayZipProjection(records []connsdk.Record, projection *ArrayZipProje
 		}
 	}
 	return zipped, nil
+}
+
+func declaredResponseError(body []byte, spec *ResponseErrorSpec) error {
+	if spec == nil {
+		return nil
+	}
+	root, err := decodeJSONKeyed(body)
+	if err != nil {
+		return fmt.Errorf("response_error decode: %w", err)
+	}
+	node := selectPathKeyed(root, spec.Path)
+	if node == nil {
+		return nil
+	}
+	object, ok := node.(map[string]any)
+	if !ok {
+		return fmt.Errorf("response_error path %q is not an object", spec.Path)
+	}
+	message := ""
+	if spec.MessageField != "" {
+		value, present := object[spec.MessageField]
+		if !present {
+			return fmt.Errorf("response_error path %q is missing %q", spec.Path, spec.MessageField)
+		}
+		var ok bool
+		message, ok = value.(string)
+		if !ok || strings.TrimSpace(message) == "" {
+			return fmt.Errorf("response_error path %q field %q is not a non-empty string", spec.Path, spec.MessageField)
+		}
+	}
+	return &DeclaredResponseError{Path: spec.Path, Message: message}
 }
 
 func mergeResponseFields(raw map[string]any, fields map[string]any) map[string]any {

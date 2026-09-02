@@ -1653,6 +1653,33 @@ func TestProductionAshbyGenericCheckAndReadPreservesCommandSurface(t *testing.T)
 	}
 }
 
+func TestProductionAshbyRejectsCallerOriginAndFixtureBeforeIO(t *testing.T) {
+	previousTransport := http.DefaultTransport
+	t.Cleanup(func() { http.DefaultTransport = previousTransport })
+
+	var requests atomic.Int64
+	http.DefaultTransport = roundTripFunc(func(*http.Request) (*http.Response, error) {
+		requests.Add(1)
+		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"results":[]}`))}, nil
+	})
+
+	connector, ok := New().Get("ashby")
+	if !ok {
+		t.Fatal("production registry missing ashby")
+	}
+	for _, config := range []connectors.RuntimeConfig{
+		{Config: map[string]string{"base_url": "https://hostile.example"}, Secrets: map[string]string{"api_key": "test-key"}},
+		{Config: map[string]string{"mode": "fixture"}, Secrets: map[string]string{"api_key": "test-key"}},
+	} {
+		if err := connector.Check(context.Background(), config); err == nil {
+			t.Fatal("Ashby accepted caller-controlled legacy configuration")
+		}
+	}
+	if got := requests.Load(); got != 0 {
+		t.Fatalf("Ashby hostile configuration requests = %d, want zero before credential or transport", got)
+	}
+}
+
 func TestProductionPrestaShopTenantOriginRejectsLegacyConfigBeforeIO(t *testing.T) {
 	previousTransport := http.DefaultTransport
 	t.Cleanup(func() { http.DefaultTransport = previousTransport })
@@ -1682,6 +1709,60 @@ func TestProductionPrestaShopTenantOriginRejectsLegacyConfigBeforeIO(t *testing.
 	}
 	if got := requests.Load(); got != 1 {
 		t.Fatalf("PrestaShop requests = %d, want one local tenant check only", got)
+	}
+}
+
+func TestProductionPrestaShopGenericCheckAndRead(t *testing.T) {
+	previousTransport := http.DefaultTransport
+	t.Cleanup(func() { http.DefaultTransport = previousTransport })
+
+	var requests atomic.Int64
+	http.DefaultTransport = roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		requests.Add(1)
+		if request.URL.Host != "127.0.0.1:8443" || request.URL.Path != "/api/customers" || request.Method != http.MethodGet {
+			t.Fatalf("PrestaShop request = %s %s, want declared customers route", request.Method, request.URL)
+		}
+		username, password, ok := request.BasicAuth()
+		if !ok || username != "test-key" || password != "" {
+			t.Fatal("PrestaShop request omitted declared Basic access-key authentication")
+		}
+		if request.URL.Query().Get("output_format") != "JSON" || request.URL.Query().Get("display") != "full" {
+			t.Fatalf("PrestaShop query = %s, want declared JSON full-resource query", request.URL.RawQuery)
+		}
+		switch request.URL.Query().Get("limit") {
+		case "1":
+			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"customers":{"customer":[]}}`)), Request: request}, nil
+		case "100":
+			if request.URL.Query().Get("offset") != "0" {
+				t.Fatalf("PrestaShop offset = %q, want first declared window", request.URL.Query().Get("offset"))
+			}
+			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"customers":{"customer":[{"id":1,"firstname":"Ada","date_upd":"2026-01-02T00:00:00Z"}]}}`)), Request: request}, nil
+		default:
+			t.Fatalf("PrestaShop limit = %q, want declared check or first read window", request.URL.Query().Get("limit"))
+			return nil, nil
+		}
+	})
+
+	connector, ok := New().Get("prestashop")
+	if !ok {
+		t.Fatal("production registry missing prestashop")
+	}
+	config := connectors.RuntimeConfig{Config: map[string]string{"url": "http://127.0.0.1:8443", "start_date": "2026-01-01T00:00:00Z"}, Secrets: map[string]string{"access_key": "test-key"}}
+	if err := connector.Check(context.Background(), config); err != nil {
+		t.Fatalf("production PrestaShop Check() error = %v", err)
+	}
+	var records []connectors.Record
+	if err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "customers", Config: config}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	}); err != nil {
+		t.Fatalf("production PrestaShop Read() error = %v", err)
+	}
+	if len(records) != 1 || fmt.Sprint(records[0]["id"]) != "1" || records[0]["firstname"] != "Ada" {
+		t.Fatalf("production PrestaShop records = %#v, want declared customer record", records)
+	}
+	if got := requests.Load(); got != 2 {
+		t.Fatalf("PrestaShop requests = %d, want one declared check and read", got)
 	}
 }
 
@@ -1799,5 +1880,37 @@ func TestProductionYahooFinancePriceArrayZipCheckAndRead(t *testing.T) {
 	}
 	if got := requests.Load(); got != 2 {
 		t.Fatalf("Yahoo Finance requests = %d, want one bounded check plus one read", got)
+	}
+}
+
+func TestProductionYahooFinancePriceRejectsChartErrorBeforeEmit(t *testing.T) {
+	previousTransport := http.DefaultTransport
+	t.Cleanup(func() { http.DefaultTransport = previousTransport })
+
+	http.DefaultTransport = roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		if request.URL.Host != "query1.finance.yahoo.com" || request.URL.Path != "/v8/finance/chart/AAPL" {
+			t.Fatalf("Yahoo Finance error request = %s, want declared chart route", request.URL)
+		}
+		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"chart":{"result":null,"error":{"description":"symbol unavailable"}}}`)), Request: request}, nil
+	})
+
+	connector, ok := New().Get("yahoo-finance-price")
+	if !ok {
+		t.Fatal("production registry missing yahoo-finance-price")
+	}
+	emitted := 0
+	err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "prices", Config: connectors.RuntimeConfig{Config: map[string]string{"symbol": "AAPL"}}}, func(connectors.Record) error {
+		emitted++
+		return nil
+	})
+	var responseErr *engine.DeclaredResponseError
+	if !errors.As(err, &responseErr) {
+		t.Fatalf("Yahoo Finance chart error = %T %v, want DeclaredResponseError", err, err)
+	}
+	if responseErr.Path != "chart.error" || responseErr.Message != "symbol unavailable" {
+		t.Fatalf("Yahoo Finance response error = %#v, want declared chart error", responseErr)
+	}
+	if emitted != 0 {
+		t.Fatalf("Yahoo Finance emitted %d records after chart error, want zero", emitted)
 	}
 }

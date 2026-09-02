@@ -7,7 +7,7 @@ description: PrestaShop connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API.
 
 ## Icon
 
@@ -61,7 +61,7 @@ Reads PrestaShop customers, orders, products, addresses, and carts through the P
 
 ## Security
 
-- read risk: external PrestaShop API reads performed by the legacy connector via a Tier-2 hook
+- read risk: external PrestaShop Webservice API reads through the declaration-bound tenant origin
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

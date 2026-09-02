@@ -2,13 +2,16 @@
   "base": {
     "auth": [
       {
-        "mode": "none"
+        "mode": "basic",
+        "password": "",
+        "username": "{{ secrets.access_key }}"
       }
     ],
     "check": {
       "method": "GET",
       "path": "/customers",
       "query": {
+        "display": "full",
         "limit": "1",
         "output_format": "JSON"
       }
@@ -29,65 +32,125 @@
     {
       "incremental": {
         "client_filtered": true,
-        "cursor_field": "date_upd"
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
       },
       "method": "GET",
       "name": "customers",
-      "path": "/__legacy_hook/customers",
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "offset_param": "offset",
+        "page_size": 100,
+        "type": "offset_limit"
+      },
+      "path": "/customers",
+      "query": {
+        "display": "full",
+        "output_format": "JSON"
+      },
       "records": {
-        "path": "data"
+        "path": "customers.customer"
       },
       "schema": "schemas/customers.json"
     },
     {
       "incremental": {
         "client_filtered": true,
-        "cursor_field": "date_upd"
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
       },
       "method": "GET",
       "name": "orders",
-      "path": "/__legacy_hook/orders",
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "offset_param": "offset",
+        "page_size": 100,
+        "type": "offset_limit"
+      },
+      "path": "/orders",
+      "query": {
+        "display": "full",
+        "output_format": "JSON"
+      },
       "records": {
-        "path": "data"
+        "path": "orders.order"
       },
       "schema": "schemas/orders.json"
     },
     {
       "incremental": {
         "client_filtered": true,
-        "cursor_field": "date_upd"
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
       },
       "method": "GET",
       "name": "products",
-      "path": "/__legacy_hook/products",
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "offset_param": "offset",
+        "page_size": 100,
+        "type": "offset_limit"
+      },
+      "path": "/products",
+      "query": {
+        "display": "full",
+        "output_format": "JSON"
+      },
       "records": {
-        "path": "data"
+        "path": "products.product"
       },
       "schema": "schemas/products.json"
     },
     {
       "incremental": {
         "client_filtered": true,
-        "cursor_field": "date_upd"
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
       },
       "method": "GET",
       "name": "addresses",
-      "path": "/__legacy_hook/addresses",
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "offset_param": "offset",
+        "page_size": 100,
+        "type": "offset_limit"
+      },
+      "path": "/addresses",
+      "query": {
+        "display": "full",
+        "output_format": "JSON"
+      },
       "records": {
-        "path": "data"
+        "path": "addresses.address"
       },
       "schema": "schemas/addresses.json"
     },
     {
       "incremental": {
         "client_filtered": true,
-        "cursor_field": "date_upd"
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
       },
       "method": "GET",
       "name": "carts",
-      "path": "/__legacy_hook/carts",
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "offset_param": "offset",
+        "page_size": 100,
+        "type": "offset_limit"
+      },
+      "path": "/carts",
+      "query": {
+        "display": "full",
+        "output_format": "JSON"
+      },
       "records": {
-        "path": "data"
+        "path": "carts.cart"
       },
       "schema": "schemas/carts.json"
     }

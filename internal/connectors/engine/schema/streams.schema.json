@@ -268,6 +268,15 @@
               "max_requests": { "type": "integer", "minimum": 1 }
             }
           },
+          "response_error": {
+            "type": "object",
+            "required": ["path"],
+            "additionalProperties": false,
+            "properties": {
+              "path": {"type": "string"},
+              "message_field": {"type": "string"}
+            }
+          },
           "array_zip_projection": {
             "type": "object",
             "required": ["array_fields"],

@@ -201,6 +201,10 @@
         "incremental": {
           "cursor_field": "timestamp",
           "client_filtered": true
+        },
+        "response_error": {
+          "path": "chart.error",
+          "message_field": "description"
         }
       }
     }

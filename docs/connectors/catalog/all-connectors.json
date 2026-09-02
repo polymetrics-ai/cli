@@ -10175,18 +10175,9 @@
           "type": "string",
           "x-secret": true
         },
-        "base_url": {
-          "default": "https://api.ashbyhq.com",
-          "description": "Ashby API base URL; override only for local tests.",
-          "type": "string"
-        },
         "max_pages": {
           "default": "0",
           "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent.",
-          "type": "string"
-        },
-        "mode": {
-          "description": "Set to fixture for credential-free native tests.",
           "type": "string"
         },
         "page_size": {
@@ -10199,7 +10190,8 @@
         "api_key"
       ],
       "title": "Ashby Connection Specification",
-      "type": "object"
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -11639,7 +11631,7 @@
       }
     ],
     "risk": {
-      "read": "bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures",
+      "read": "external Ashby API reads through fixed declaration-bound routes",
       "write": "named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation",
       "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute"
     },
@@ -126671,7 +126663,7 @@
   {
     "name": "prestashop",
     "display_name": "PrestaShop",
-    "description": "Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads PrestaShop customers, orders, products, addresses, and carts through the PrestaShop Webservice REST API.",
     "integration_type": "api",
     "docs_url": "https://devdocs.prestashop-project.org/9/webservice/",
     "release_stage": "alpha",
@@ -126780,7 +126772,7 @@
       }
     ],
     "risk": {
-      "read": "external PrestaShop API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "external PrestaShop Webservice API reads through the declaration-bound tenant origin",
       "write": "unsupported",
       "approval": "none; read-only"
     },

@@ -22,8 +22,8 @@ func resolveTenantOrigin(spec TenantOriginSpec, config map[string]string) (strin
 	}
 	raw := strings.TrimSpace(config[spec.ConfigKey])
 	parsed, err := url.Parse(raw)
-	if err != nil || parsed.Host == "" || parsed.RawQuery != "" || parsed.Fragment != "" {
-		return "", fmt.Errorf("tenant origin %q must be an origin without query or fragment", spec.ConfigKey)
+	if err != nil || parsed.Host == "" || parsed.RawPath != "" || parsed.RawQuery != "" || parsed.Fragment != "" {
+		return "", fmt.Errorf("tenant origin %q must be an origin without encoded path, query, or fragment", spec.ConfigKey)
 	}
 	if parsed.Scheme != "https" && (!spec.AllowLoopbackHTTP || parsed.Scheme != "http" || !isLoopbackHost(parsed.Hostname())) {
 		return "", fmt.Errorf("tenant origin %q must use HTTPS or declared loopback HTTP", spec.ConfigKey)
@@ -31,15 +31,18 @@ func resolveTenantOrigin(spec TenantOriginSpec, config map[string]string) (strin
 	if parsed.User != nil {
 		return "", fmt.Errorf("tenant origin %q must not contain user info", spec.ConfigKey)
 	}
+	appendPath := ""
 	if spec.AppendPath != "" {
-		if !strings.HasPrefix(spec.AppendPath, "/") || strings.Contains(spec.AppendPath, "..") {
+		appendPath = path.Clean(spec.AppendPath)
+		if !strings.HasPrefix(spec.AppendPath, "/") || appendPath != spec.AppendPath || appendPath == "/" {
 			return "", fmt.Errorf("tenant origin append_path is unsafe")
 		}
-		if !strings.HasSuffix(strings.TrimRight(parsed.Path, "/"), spec.AppendPath) {
-			parsed.Path = path.Join(parsed.Path, spec.AppendPath)
-		}
 	}
-	parsed.RawPath = ""
+	configuredPath := strings.TrimRight(parsed.Path, "/")
+	if configuredPath != "" && configuredPath != appendPath {
+		return "", fmt.Errorf("tenant origin %q must not contain an undeclared path prefix", spec.ConfigKey)
+	}
+	parsed.Path = appendPath
 	return strings.TrimRight(parsed.String(), "/"), nil
 }
 

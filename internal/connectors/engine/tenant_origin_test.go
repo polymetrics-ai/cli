@@ -41,6 +41,29 @@ func TestResolveTenantOriginPermitsOnlyDeclaredLoopbackHTTP(t *testing.T) {
 	}
 }
 
+func TestResolveTenantOriginRejectsUnexpectedPathPrefix(t *testing.T) {
+	spec := TenantOriginSpec{ConfigKey: "origin", AppendPath: "/api"}
+	for _, raw := range []string{
+		"https://tenant.example/admin",
+		"https://tenant.example/api/v1",
+	} {
+		if _, err := resolveTenantOrigin(spec, map[string]string{"origin": raw}); err == nil {
+			t.Fatalf("tenant origin path prefix %q was accepted", raw)
+		}
+	}
+	for _, raw := range []string{
+		"https://tenant.example",
+		"https://tenant.example/",
+		"https://tenant.example/api",
+		"https://tenant.example/api/",
+	} {
+		origin, err := resolveTenantOrigin(spec, map[string]string{"origin": raw})
+		if err != nil || origin != "https://tenant.example/api" {
+			t.Fatalf("tenant origin %q = %q, %v; want normalized declared API path", raw, origin, err)
+		}
+	}
+}
+
 func TestTenantOriginSchemaRejectsMissingOrUnknownDescriptorFields(t *testing.T) {
 	for _, raw := range []string{
 		`{"base":{"url":"https://unused.example","tenant_origin":{}},"streams":[]}`,

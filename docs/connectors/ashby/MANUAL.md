@@ -27,9 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
   max_pages
-  mode
   page_size
   api_key (secret) (required)
 
@@ -647,7 +645,7 @@ REVERSE ETL ACTIONS
     risk: Executes Ashby interviewerPool.removeUser through the documented POST /interviewerPool.removeUser endpoint; reverse ETL plan, preview, approval, and execute are required.
 
 SECURITY
-  read risk: bounded Ashby POST reads using documented endpoints, Basic API-key auth, page-size and max-pages bounds, and sanitized replay fixtures
+  read risk: external Ashby API reads through fixed declaration-bound routes
   write risk: named reverse-ETL actions only; no generic HTTP method/path/body; destructive actions require typed confirmation
   approval: reverse ETL writes require plan -> preview -> explicit approval -> execute
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
