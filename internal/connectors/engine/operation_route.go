@@ -165,6 +165,13 @@ func operationRoutePath(operation OperationSpec) string {
 func resolveOperationRoute(b Bundle, cfg connectors.RuntimeConfig, selection, operation, path string) (string, error) {
 	selection = strings.TrimSpace(selection)
 	if selection == "" {
+		if b.HTTP.TenantOrigin != nil {
+			baseURL, err := resolveTenantOrigin(*b.HTTP.TenantOrigin, cfg.Config)
+			if err != nil {
+				return "", operationRouteFailure(b, operation, "", "resolve declared tenant origin")
+			}
+			return baseURL, nil
+		}
 		baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
 		if err != nil {
 			return "", operationRouteFailure(b, operation, "", "resolve declared default base URL")

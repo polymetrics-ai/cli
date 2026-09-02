@@ -7,7 +7,7 @@ description: My Hours connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads My Hours clients, projects, team members, tags, and bounded time-log windows through fixed REST routes.
 
 ## Icon
 
@@ -28,10 +28,9 @@ Reads My Hours clients, projects, team members, tags, and time log activity thro
 
 ## Configuration
 
-- base_url
 - email (required)
+- end_date (required)
 - logs_batch_size
-- mode
 - start_date (required)
 - password (secret) (required)
 
@@ -56,11 +55,11 @@ Reads My Hours clients, projects, team members, tags, and time log activity thro
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Security
 
-- read risk: external My Hours API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded My Hours reads use a fixed password-token exchange, fixed origin, static API version header, and at most 600 declared UTC date windows.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

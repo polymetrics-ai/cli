@@ -1,25 +1,92 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "sequence_info",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for this candidate's sequence enrollment"
-    },
-    "candidateId": {
-      "type": "string",
-      "description": "The candidate enrolled in the sequence"
-    },
     "applicationId": {
       "type": "string"
     },
+    "candidateId": {
+      "description": "The candidate enrolled in the sequence",
+      "type": "string"
+    },
+    "createdAt": {
+      "description": "When the sequence enrollment was created",
+      "format": "date-time",
+      "type": "string"
+    },
+    "id": {
+      "description": "The unique identifier for this candidate's sequence enrollment",
+      "type": "string"
+    },
     "sequenceTemplateId": {
-      "type": "string",
-      "description": "The reusable sequence template used for enrollment"
+      "description": "The reusable sequence template used for enrollment",
+      "type": "string"
+    },
+    "stages": {
+      "description": "The stages in sequence order",
+      "items": {
+        "properties": {
+          "bodyHtml": {
+            "description": "The editable HTML body for a not-started email stage. Ashby token markers must be preserved when editing.",
+            "type": "string"
+          },
+          "from": {
+            "properties": {
+              "displayName": {
+                "type": "string"
+              },
+              "email": {
+                "description": "The address used to send this stage",
+                "format": "email",
+                "type": "string"
+              }
+            },
+            "required": [
+              "email",
+              "displayName"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "The unique identifier for this sequence stage",
+            "type": "string"
+          },
+          "sendAfter": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "NoDelay"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "type": "object"
+          },
+          "subject": {
+            "description": "The resolved subject for an editable, not-started email stage",
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "Email",
+              "InMail",
+              "LinkedInConnection"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "sendAfter"
+        ],
+        "type": "object"
+      },
+      "type": "array"
     },
     "status": {
-      "type": "string",
       "enum": [
         "NotStarted",
         "Running",
@@ -27,79 +94,12 @@
         "Completed",
         "Cancelled",
         "Unsubscribed"
-      ]
-    },
-    "createdAt": {
-      "type": "string",
-      "description": "When the sequence enrollment was created",
-      "format": "date-time"
-    },
-    "stages": {
-      "type": "array",
-      "description": "The stages in sequence order",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for this sequence stage"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "Email",
-              "InMail",
-              "LinkedInConnection"
-            ]
-          },
-          "from": {
-            "type": "object",
-            "properties": {
-              "email": {
-                "type": "string",
-                "description": "The address used to send this stage",
-                "format": "email"
-              },
-              "displayName": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "email",
-              "displayName"
-            ]
-          },
-          "subject": {
-            "type": "string",
-            "description": "The resolved subject for an editable, not-started email stage"
-          },
-          "bodyHtml": {
-            "type": "string",
-            "description": "The editable HTML body for a not-started email stage. Ashby token markers must be preserved when editing."
-          },
-          "sendAfter": {
-            "type": "object",
-            "properties": {
-              "kind": {
-                "type": "string",
-                "enum": [
-                  "NoDelay"
-                ]
-              }
-            },
-            "required": [
-              "kind"
-            ]
-          }
-        },
-        "required": [
-          "id",
-          "type",
-          "sendAfter"
-        ]
-      }
+      ],
+      "type": "string"
     }
   },
+  "title": "sequence_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

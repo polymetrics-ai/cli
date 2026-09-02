@@ -7,7 +7,7 @@ description: Yahoo Finance Price connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads public Yahoo Finance chart prices as declaration-bound OHLCV records. Read-only.
 
 ## Icon
 
@@ -28,9 +28,7 @@ Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Re
 
 ## Configuration
 
-- base_url
 - interval
-- mode
 - range
 - symbol
 
@@ -47,7 +45,7 @@ Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Re
 
 ## Security
 
-- read risk: external Yahoo Finance Price API reads performed by the legacy connector via a Tier-2 hook
+- read risk: external Yahoo Finance chart API reads through a fixed declared route
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

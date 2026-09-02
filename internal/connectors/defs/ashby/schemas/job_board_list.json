@@ -1,21 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "job_board_list",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The job board's unique identifier"
-    },
-    "title": {
-      "type": "string",
-      "description": "The title of the job board"
+      "description": "The job board's unique identifier",
+      "type": "string"
     },
     "isInternal": {
-      "type": "boolean",
-      "description": "Whether the job board is an internal board."
+      "description": "Whether the job board is an internal board.",
+      "type": "boolean"
+    },
+    "title": {
+      "description": "The title of the job board",
+      "type": "string"
     }
   },
+  "title": "job_board_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

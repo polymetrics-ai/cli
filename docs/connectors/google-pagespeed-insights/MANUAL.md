@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector google-pagespeed-insights [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Lighthouse PageSpeed Insights reports for a bounded Cartesian product of configured HTTPS URLs and mobile or desktop strategies through the fixed PageSpeed Insights v5 API.
 
 ICON
   id: google-pagespeed-insights
@@ -27,9 +27,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  categories (required)
-  mode
   strategies (required)
   urls (required)
   api_key (secret)
@@ -43,7 +40,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: external Google PageSpeed Insights API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Each sync sends at most twenty bounded GET requests to the fixed PageSpeed Insights API origin; one report is emitted per configured URL and strategy pair.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

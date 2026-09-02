@@ -1,259 +1,50 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "interviewer_pool_info",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The pool's id"
-    },
-    "title": {
-      "type": "string",
-      "description": "The pool's title"
+      "description": "The pool's id",
+      "type": "string"
     },
     "isArchived": {
-      "type": "boolean",
-      "description": "Whether the pool is archived"
-    },
-    "trainingPath": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The training path's id"
-        },
-        "enabled": {
-          "type": "boolean",
-          "description": "Whether the training path is enabled"
-        },
-        "trainingStages": {
-          "type": "array",
-          "description": "The training stages in this path",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "The training stage's id"
-              },
-              "interviewerRole": {
-                "type": "string",
-                "description": "The role of the interviewer for this stage",
-                "enum": [
-                  "Shadow",
-                  "ReverseShadow"
-                ]
-              },
-              "interviewsRequired": {
-                "type": "integer",
-                "description": "The number of interviews required for this stage"
-              },
-              "isArchived": {
-                "type": "boolean",
-                "description": "Whether the training stage is archived"
-              },
-              "approvalRequired": {
-                "type": "boolean",
-                "description": "Whether approval is required for this stage"
-              },
-              "approvers": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "description": "The unique identifier for the user"
-                    },
-                    "firstName": {
-                      "type": "string",
-                      "description": "The user's first name"
-                    },
-                    "lastName": {
-                      "type": "string",
-                      "description": "The user's last name"
-                    },
-                    "email": {
-                      "type": "string",
-                      "format": "email"
-                    },
-                    "globalRole": {
-                      "type": "string",
-                      "description": "The user's global role in the organization",
-                      "enum": [
-                        "Organization Admin",
-                        "Elevated Access",
-                        "Limited Access",
-                        "External Recruiter"
-                      ]
-                    },
-                    "isEnabled": {
-                      "type": "boolean",
-                      "description": "Whether the user is enabled (not deactivated)"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "description": "The timestamp when the user was last updated (ISO 8601 format)"
-                    },
-                    "managerId": {
-                      "type": "string",
-                      "description": "The unique identifier for the user's manager"
-                    },
-                    "customFields": {
-                      "type": "array",
-                      "description": "Custom fields associated with the user (only included when requested)",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "string",
-                            "description": "The unique identifier for the custom field definition"
-                          },
-                          "isPrivate": {
-                            "type": "boolean",
-                            "description": "Whether the custom field is private"
-                          },
-                          "title": {
-                            "type": "string",
-                            "description": "The title of the custom field"
-                          },
-                          "value": {
-                            "type": "object",
-                            "properties": {
-                              "value": {
-                                "type": "number",
-                                "description": "The currency amount"
-                              },
-                              "currencyCode": {
-                                "type": "string",
-                                "description": "The currency code"
-                              }
-                            },
-                            "required": [
-                              "value",
-                              "currencyCode"
-                            ]
-                          },
-                          "valueLabel": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "id",
-                          "isPrivate",
-                          "title",
-                          "value"
-                        ]
-                      }
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "firstName",
-                    "lastName",
-                    "email",
-                    "globalRole",
-                    "isEnabled",
-                    "updatedAt"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "id",
-              "interviewerRole",
-              "interviewsRequired",
-              "isArchived",
-              "approvalRequired",
-              "approvers"
-            ]
-          }
-        }
-      },
-      "required": [
-        "id",
-        "enabled",
-        "trainingStages"
-      ]
+      "description": "Whether the pool is archived",
+      "type": "boolean"
     },
     "qualifiedMembers": {
-      "type": "array",
       "description": "Qualified members of the interviewer pool",
       "items": {
-        "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the user"
-          },
-          "firstName": {
-            "type": "string",
-            "description": "The user's first name"
-          },
-          "lastName": {
-            "type": "string",
-            "description": "The user's last name"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "globalRole": {
-            "type": "string",
-            "description": "The user's global role in the organization",
-            "enum": [
-              "Organization Admin",
-              "Elevated Access",
-              "Limited Access",
-              "External Recruiter"
-            ]
-          },
-          "isEnabled": {
-            "type": "boolean",
-            "description": "Whether the user is enabled (not deactivated)"
-          },
-          "updatedAt": {
-            "type": "string",
-            "description": "The timestamp when the user was last updated (ISO 8601 format)"
-          },
-          "managerId": {
-            "type": "string",
-            "description": "The unique identifier for the user's manager"
-          },
           "customFields": {
-            "type": "array",
             "description": "Custom fields associated with the user (only included when requested)",
             "items": {
-              "type": "object",
               "properties": {
                 "id": {
-                  "type": "string",
-                  "description": "The unique identifier for the custom field definition"
+                  "description": "The unique identifier for the custom field definition",
+                  "type": "string"
                 },
                 "isPrivate": {
-                  "type": "boolean",
-                  "description": "Whether the custom field is private"
+                  "description": "Whether the custom field is private",
+                  "type": "boolean"
                 },
                 "title": {
-                  "type": "string",
-                  "description": "The title of the custom field"
+                  "description": "The title of the custom field",
+                  "type": "string"
                 },
                 "value": {
-                  "type": "object",
                   "properties": {
-                    "value": {
-                      "type": "number",
-                      "description": "The currency amount"
-                    },
                     "currencyCode": {
-                      "type": "string",
-                      "description": "The currency code"
+                      "description": "The currency code",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "The currency amount",
+                      "type": "number"
                     }
                   },
                   "required": [
                     "value",
                     "currencyCode"
-                  ]
+                  ],
+                  "type": "object"
                 },
                 "valueLabel": {
                   "type": "string"
@@ -264,12 +55,52 @@
                 "isPrivate",
                 "title",
                 "value"
-              ]
-            }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "firstName": {
+            "description": "The user's first name",
+            "type": "string"
+          },
+          "globalRole": {
+            "description": "The user's global role in the organization",
+            "enum": [
+              "Organization Admin",
+              "Elevated Access",
+              "Limited Access",
+              "External Recruiter"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for the user",
+            "type": "string"
+          },
+          "isEnabled": {
+            "description": "Whether the user is enabled (not deactivated)",
+            "type": "boolean"
           },
           "isPaused": {
-            "type": "boolean",
-            "description": "Whether the user is currently paused in this pool"
+            "description": "Whether the user is currently paused in this pool",
+            "type": "boolean"
+          },
+          "lastName": {
+            "description": "The user's last name",
+            "type": "string"
+          },
+          "managerId": {
+            "description": "The unique identifier for the user's manager",
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "The timestamp when the user was last updated (ISO 8601 format)",
+            "type": "string"
           }
         },
         "required": [
@@ -281,87 +112,73 @@
           "isEnabled",
           "updatedAt",
           "isPaused"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "title": {
+      "description": "The pool's title",
+      "type": "string"
     },
     "trainees": {
-      "type": "array",
       "description": "Trainees in the interviewer pool",
       "items": {
-        "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the user"
-          },
-          "firstName": {
-            "type": "string",
-            "description": "The user's first name"
-          },
-          "lastName": {
-            "type": "string",
-            "description": "The user's last name"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "globalRole": {
-            "type": "string",
-            "description": "The user's global role in the organization",
-            "enum": [
-              "Organization Admin",
-              "Elevated Access",
-              "Limited Access",
-              "External Recruiter"
-            ]
-          },
-          "isEnabled": {
-            "type": "boolean",
-            "description": "Whether the user is enabled (not deactivated)"
-          },
-          "updatedAt": {
-            "type": "string",
-            "description": "The timestamp when the user was last updated (ISO 8601 format)"
-          },
-          "managerId": {
-            "type": "string",
-            "description": "The unique identifier for the user's manager"
+          "currentProgress": {
+            "properties": {
+              "interviewsCompleted": {
+                "description": "The number of interviews the user has completed in the current stage",
+                "type": "integer"
+              },
+              "trainingPathId": {
+                "description": "The id of the training path the user is currently on",
+                "type": "string"
+              },
+              "trainingPathStageId": {
+                "description": "The id of the training stage the user is currently in",
+                "type": "string"
+              }
+            },
+            "required": [
+              "trainingPathId",
+              "trainingPathStageId",
+              "interviewsCompleted"
+            ],
+            "type": "object"
           },
           "customFields": {
-            "type": "array",
             "description": "Custom fields associated with the user (only included when requested)",
             "items": {
-              "type": "object",
               "properties": {
                 "id": {
-                  "type": "string",
-                  "description": "The unique identifier for the custom field definition"
+                  "description": "The unique identifier for the custom field definition",
+                  "type": "string"
                 },
                 "isPrivate": {
-                  "type": "boolean",
-                  "description": "Whether the custom field is private"
+                  "description": "Whether the custom field is private",
+                  "type": "boolean"
                 },
                 "title": {
-                  "type": "string",
-                  "description": "The title of the custom field"
+                  "description": "The title of the custom field",
+                  "type": "string"
                 },
                 "value": {
-                  "type": "object",
                   "properties": {
-                    "value": {
-                      "type": "number",
-                      "description": "The currency amount"
-                    },
                     "currencyCode": {
-                      "type": "string",
-                      "description": "The currency code"
+                      "description": "The currency code",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "The currency amount",
+                      "type": "number"
                     }
                   },
                   "required": [
                     "value",
                     "currencyCode"
-                  ]
+                  ],
+                  "type": "object"
                 },
                 "valueLabel": {
                   "type": "string"
@@ -372,34 +189,52 @@
                 "isPrivate",
                 "title",
                 "value"
-              ]
-            }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "firstName": {
+            "description": "The user's first name",
+            "type": "string"
+          },
+          "globalRole": {
+            "description": "The user's global role in the organization",
+            "enum": [
+              "Organization Admin",
+              "Elevated Access",
+              "Limited Access",
+              "External Recruiter"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for the user",
+            "type": "string"
+          },
+          "isEnabled": {
+            "description": "Whether the user is enabled (not deactivated)",
+            "type": "boolean"
           },
           "isPaused": {
-            "type": "boolean",
-            "description": "Whether the user is currently paused in this pool"
+            "description": "Whether the user is currently paused in this pool",
+            "type": "boolean"
           },
-          "currentProgress": {
-            "type": "object",
-            "properties": {
-              "trainingPathId": {
-                "type": "string",
-                "description": "The id of the training path the user is currently on"
-              },
-              "trainingPathStageId": {
-                "type": "string",
-                "description": "The id of the training stage the user is currently in"
-              },
-              "interviewsCompleted": {
-                "type": "integer",
-                "description": "The number of interviews the user has completed in the current stage"
-              }
-            },
-            "required": [
-              "trainingPathId",
-              "trainingPathStageId",
-              "interviewsCompleted"
-            ]
+          "lastName": {
+            "description": "The user's last name",
+            "type": "string"
+          },
+          "managerId": {
+            "description": "The unique identifier for the user's manager",
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "The timestamp when the user was last updated (ISO 8601 format)",
+            "type": "string"
           }
         },
         "required": [
@@ -412,10 +247,175 @@
           "updatedAt",
           "isPaused",
           "currentProgress"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "trainingPath": {
+      "properties": {
+        "enabled": {
+          "description": "Whether the training path is enabled",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "The training path's id",
+          "type": "string"
+        },
+        "trainingStages": {
+          "description": "The training stages in this path",
+          "items": {
+            "properties": {
+              "approvalRequired": {
+                "description": "Whether approval is required for this stage",
+                "type": "boolean"
+              },
+              "approvers": {
+                "items": {
+                  "properties": {
+                    "customFields": {
+                      "description": "Custom fields associated with the user (only included when requested)",
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "description": "The unique identifier for the custom field definition",
+                            "type": "string"
+                          },
+                          "isPrivate": {
+                            "description": "Whether the custom field is private",
+                            "type": "boolean"
+                          },
+                          "title": {
+                            "description": "The title of the custom field",
+                            "type": "string"
+                          },
+                          "value": {
+                            "properties": {
+                              "currencyCode": {
+                                "description": "The currency code",
+                                "type": "string"
+                              },
+                              "value": {
+                                "description": "The currency amount",
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "value",
+                              "currencyCode"
+                            ],
+                            "type": "object"
+                          },
+                          "valueLabel": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "isPrivate",
+                          "title",
+                          "value"
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "email": {
+                      "format": "email",
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "description": "The user's first name",
+                      "type": "string"
+                    },
+                    "globalRole": {
+                      "description": "The user's global role in the organization",
+                      "enum": [
+                        "Organization Admin",
+                        "Elevated Access",
+                        "Limited Access",
+                        "External Recruiter"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The unique identifier for the user",
+                      "type": "string"
+                    },
+                    "isEnabled": {
+                      "description": "Whether the user is enabled (not deactivated)",
+                      "type": "boolean"
+                    },
+                    "lastName": {
+                      "description": "The user's last name",
+                      "type": "string"
+                    },
+                    "managerId": {
+                      "description": "The unique identifier for the user's manager",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "description": "The timestamp when the user was last updated (ISO 8601 format)",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "firstName",
+                    "lastName",
+                    "email",
+                    "globalRole",
+                    "isEnabled",
+                    "updatedAt"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "id": {
+                "description": "The training stage's id",
+                "type": "string"
+              },
+              "interviewerRole": {
+                "description": "The role of the interviewer for this stage",
+                "enum": [
+                  "Shadow",
+                  "ReverseShadow"
+                ],
+                "type": "string"
+              },
+              "interviewsRequired": {
+                "description": "The number of interviews required for this stage",
+                "type": "integer"
+              },
+              "isArchived": {
+                "description": "Whether the training stage is archived",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "interviewerRole",
+              "interviewsRequired",
+              "isArchived",
+              "approvalRequired",
+              "approvers"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "enabled",
+        "trainingStages"
+      ],
+      "type": "object"
     }
   },
+  "title": "interviewer_pool_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

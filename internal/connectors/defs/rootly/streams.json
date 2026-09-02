@@ -1,44 +1,74 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/v1/incidents",
+      "query": {
+        "page[size]": "1"
+      }
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "max_pages": 100,
+      "next_url_path": "links.next",
+      "type": "next_url"
+    },
+    "url": "https://api.rootly.com",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "incidents",
+      "computed_fields": {
+        "status": "{{ record.attributes.status }}",
+        "title": "{{ record.attributes.title }}"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/incidents",
+      "name": "incidents",
+      "path": "/v1/incidents",
+      "query": {
+        "page[number]": "1",
+        "page[size]": "100"
+      },
       "records": {
         "path": "data"
       },
       "schema": "schemas/incidents.json"
     },
     {
-      "name": "services",
+      "computed_fields": {
+        "status": "{{ record.attributes.status }}",
+        "title": "{{ record.attributes.title }}"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/services",
+      "name": "services",
+      "path": "/v1/services",
+      "query": {
+        "page[number]": "1",
+        "page[size]": "100"
+      },
       "records": {
         "path": "data"
       },
       "schema": "schemas/services.json"
     },
     {
-      "name": "users",
+      "computed_fields": {
+        "status": "{{ record.attributes.status }}",
+        "title": "{{ record.attributes.title }}"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/users",
+      "name": "users",
+      "path": "/v1/users",
+      "query": {
+        "page[number]": "1",
+        "page[size]": "100"
+      },
       "records": {
         "path": "data"
       },

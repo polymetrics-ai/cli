@@ -1,0 +1,200 @@
+{
+  "schema_version": 4,
+  "connector": "feishu",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview"
+      }
+    ]
+  },
+  "metadata": {
+    "name": "feishu",
+    "display_name": "Feishu / Lark",
+    "description": "Reads Feishu/Lark Bitable records, tables, and field schemas through declared Bitable REST routes and a bounded tenant token exchange.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "Bounded Feishu/Lark Bitable reads use a source-declared provider host and tenant token exchange.",
+      "write": "unsupported",
+      "approval": "none; read-only"
+    },
+    "docs_url": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Feishu / Lark Connection Specification",
+    "type": "object",
+    "x-reject-unknown-config": true,
+    "required": ["app_id", "app_secret", "app_token", "table_id"],
+    "properties": {
+      "region": {
+        "type": "string",
+        "enum": ["feishu.cn", "larksuite.com"],
+        "default": "feishu.cn",
+        "description": "Declared Feishu/Lark provider host suffix."
+      },
+      "app_id": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Feishu/Lark app ID used only for the tenant token exchange."
+      },
+      "app_secret": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Feishu/Lark app secret used only for the tenant token exchange."
+      },
+      "app_token": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Feishu/Lark Bitable app token."
+      },
+      "table_id": {
+        "type": "string",
+        "description": "Bitable table identifier for records and fields streams."
+      }
+    }
+  },
+  "http": {
+    "url": "https://open.{{ config.region }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "custom",
+        "hook": "feishu"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "page_token",
+      "token_path": "data.page_token",
+      "stop_path": "data.has_more",
+      "size_param": "page_size",
+      "page_size": 100,
+      "max_pages": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/open-apis/bitable/v1/apps/{{ secrets.app_token }}/tables",
+      "query": {
+        "page_size": "1"
+      }
+    },
+    "error_map": []
+  },
+  "schemas": {
+    "schemas/records.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "records",
+      "type": "object",
+      "properties": {
+        "record_id": {"type": "string"},
+        "fields": {"type": "object"}
+      },
+      "x-primary-key": ["record_id"]
+    },
+    "schemas/tables.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "tables",
+      "type": "object",
+      "properties": {
+        "table_id": {"type": "string"},
+        "name": {"type": "string"},
+        "revision": {"type": "integer"}
+      },
+      "x-primary-key": ["table_id"]
+    },
+    "schemas/fields.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "fields",
+      "type": "object",
+      "properties": {
+        "field_id": {"type": "string"},
+        "field_name": {"type": "string"},
+        "type": {"type": "integer"},
+        "ui_type": {"type": "string"},
+        "is_primary": {"type": "boolean"},
+        "is_hidden": {"type": "boolean"},
+        "property": {"type": "object"}
+      },
+      "x-primary-key": ["field_id"]
+    }
+  },
+  "operations": [
+    {
+      "id": "feishu.records",
+      "source": {
+        "operation": "GET /open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records",
+        "method": "GET",
+        "path": "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/records",
+        "url": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-record/get"
+      },
+      "schema_refs": {"record": "schemas/records.json"},
+      "stream_order": 1,
+      "stream": {
+        "name": "records",
+        "method": "GET",
+        "path": "/open-apis/bitable/v1/apps/{{ secrets.app_token }}/tables/{{ config.table_id }}/records",
+        "records": {"path": "data.items"},
+        "schema": "schemas/records.json",
+        "projection": "passthrough"
+      }
+    },
+    {
+      "id": "feishu.tables",
+      "source": {
+        "operation": "GET /open-apis/bitable/v1/apps/{app_token}/tables",
+        "method": "GET",
+        "path": "/open-apis/bitable/v1/apps/{app_token}/tables",
+        "url": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-table/list"
+      },
+      "schema_refs": {"record": "schemas/tables.json"},
+      "stream_order": 2,
+      "stream": {
+        "name": "tables",
+        "method": "GET",
+        "path": "/open-apis/bitable/v1/apps/{{ secrets.app_token }}/tables",
+        "records": {"path": "data.items"},
+        "schema": "schemas/tables.json",
+        "projection": "passthrough"
+      }
+    },
+    {
+      "id": "feishu.fields",
+      "source": {
+        "operation": "GET /open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields",
+        "method": "GET",
+        "path": "/open-apis/bitable/v1/apps/{app_token}/tables/{table_id}/fields",
+        "url": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-field/list"
+      },
+      "schema_refs": {"record": "schemas/fields.json"},
+      "stream_order": 3,
+      "stream": {
+        "name": "fields",
+        "method": "GET",
+        "path": "/open-apis/bitable/v1/apps/{{ secrets.app_token }}/tables/{{ config.table_id }}/fields",
+        "records": {"path": "data.items"},
+        "schema": "schemas/fields.json",
+        "projection": "passthrough"
+      }
+    }
+  ]
+}

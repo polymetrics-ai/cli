@@ -1,24 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "time_logs",
-  "type": "object",
   "properties": {
-    "logId": {
-      "type": "integer"
+    "amount": {
+      "type": "number"
     },
-    "user_id": {
-      "type": "integer"
+    "billable": {
+      "type": "boolean"
     },
-    "user_name": {
-      "type": "string"
+    "billable_amount": {
+      "type": "number"
     },
-    "date": {
-      "type": "string"
+    "billable_hours": {
+      "type": "number"
     },
     "client_id": {
       "type": "integer"
     },
     "client_name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "invoiced": {
+      "type": "boolean"
+    },
+    "labor_hours": {
+      "type": "number"
+    },
+    "logId": {
+      "type": "integer"
+    },
+    "log_duration": {
+      "type": "number"
+    },
+    "note": {
       "type": "string"
     },
     "project_id": {
@@ -27,45 +43,29 @@
     "project_name": {
       "type": "string"
     },
+    "rate": {
+      "type": "number"
+    },
+    "tags": {
+      "type": "string"
+    },
     "task_id": {
       "type": "integer"
     },
     "task_name": {
       "type": "string"
     },
-    "tags": {
+    "user_id": {
+      "type": "integer"
+    },
+    "user_name": {
       "type": "string"
-    },
-    "note": {
-      "type": "string"
-    },
-    "billable": {
-      "type": "boolean"
-    },
-    "invoiced": {
-      "type": "boolean"
-    },
-    "rate": {
-      "type": "number"
-    },
-    "amount": {
-      "type": "number"
-    },
-    "billable_amount": {
-      "type": "number"
-    },
-    "log_duration": {
-      "type": "number"
-    },
-    "labor_hours": {
-      "type": "number"
-    },
-    "billable_hours": {
-      "type": "number"
     }
   },
+  "title": "time_logs",
+  "type": "object",
+  "x-cursor-field": "date",
   "x-primary-key": [
     "logId"
-  ],
-  "x-cursor-field": "date"
+  ]
 }

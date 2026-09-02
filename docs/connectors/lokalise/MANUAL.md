@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector lokalise [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Lokalise project keys, languages, translations, contributors, and comments through fixed API v2 routes.
 
 ICON
   id: lokalise
@@ -27,8 +27,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  mode
   project_id (required)
   api_key (secret) (required)
 
@@ -55,7 +53,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external Lokalise API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded GET reads use the fixed Lokalise API v2 origin and declared project-scoped API-key authentication.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

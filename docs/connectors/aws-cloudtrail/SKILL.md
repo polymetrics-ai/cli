@@ -7,7 +7,7 @@ description: AWS CloudTrail connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads CloudTrail management events through fixed, declaration-bound LookupEvents requests signed with AWS Signature Version 4.
 
 ## Icon
 
@@ -27,13 +27,9 @@ Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API u
 
 ## Configuration
 
-- aws_region_name (required)
-- base_url
-- lookup_attributes_filter
-- mode
-- start_date
 - aws_key_id (secret) (required)
 - aws_secret_key (secret) (required)
+- aws_session_token (secret)
 
 ## ETL Streams
 
@@ -60,7 +56,7 @@ Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API u
 
 ## Security
 
-- read risk: external AWS CloudTrail API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded CloudTrail LookupEvents requests are signed by the declaration-bound generic SigV4 authenticator against the fixed CloudTrail us-east-1 origin.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

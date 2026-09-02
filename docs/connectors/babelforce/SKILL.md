@@ -7,7 +7,7 @@ description: Babelforce connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Babelforce call reporting, recordings, numbers, and users through fixed Babelforce v2 REST routes.
 
 ## Icon
 
@@ -28,36 +28,32 @@ Reads Babelforce call reporting, recordings, numbers, and users through the Babe
 
 ## Configuration
 
-- base_url
-- date_created_from
-- date_created_to
-- mode
-- region (required)
-- access_key_id (secret) (required)
-- access_token (secret) (required)
+- region
+- access_key_id (secret)
+- access_token (secret)
 
 ## ETL Streams
 
 - calls:
   - primary key: id
   - cursor: dateCreated
-  - fields: anonymous(boolean), conversationId(string), dateCreated(string), dateEstablished(string), dateFinished(string), domain(string), duration(integer), finishReason(string), from(string), id(string), lastUpdated(string), parentId(string), sessionId(string), source(string), state(string), to(string), type(string)
+  - fields: dateCreated(string), id(string)
 - calls_extended:
   - primary key: id
   - cursor: dateCreated
-  - fields: anonymous(boolean), conversationId(string), dateCreated(string), dateEstablished(string), dateFinished(string), domain(string), duration(integer), finishReason(string), from(string), id(string), lastUpdated(string), parentId(string), sessionId(string), source(string), state(string), to(string), type(string)
+  - fields: dateCreated(string), id(string)
 - recordings:
   - primary key: id
   - cursor: dateCreated
-  - fields: dateCreated(string), duration(integer), id(string), lastUpdated(string), state(string), url(string)
+  - fields: dateCreated(string), id(string)
 - numbers:
   - primary key: id
   - cursor: dateCreated
-  - fields: dateCreated(string), id(string), lastUpdated(string), name(string), number(string), state(string)
+  - fields: dateCreated(string), id(string)
 - users:
   - primary key: id
   - cursor: dateCreated
-  - fields: dateCreated(string), id(string), lastUpdated(string), name(string), number(string), state(string)
+  - fields: dateCreated(string), id(string)
 
 ## Sync Modes
 
@@ -65,7 +61,7 @@ Reads Babelforce call reporting, recordings, numbers, and users through the Babe
 
 ## Security
 
-- read risk: external Babelforce API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded Babelforce v2 reads use a source-declared regional provider origin and dual-header authentication.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

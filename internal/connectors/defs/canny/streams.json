@@ -1,86 +1,119 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
         "mode": "none"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
+      "body": {
+        "apiKey": "{{ secrets.api_key }}"
+      },
+      "body_type": "form",
+      "method": "POST",
+      "path": "/boards/list"
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "limit_param": "limit",
+      "max_pages": 100,
+      "offset_param": "skip",
+      "page_size": 100,
+      "type": "offset_limit"
+    },
+    "url": "https://canny.io/api/v1",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "body": {
+        "apiKey": "{{ secrets.api_key }}"
+      },
+      "body_type": "form",
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "created"
+      },
+      "method": "POST",
       "name": "boards",
-      "method": "GET",
-      "path": "/__legacy_hook/boards",
+      "path": "/boards/list",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "boards"
       },
-      "schema": "schemas/boards.json",
-      "incremental": {
-        "cursor_field": "created",
-        "client_filtered": true
-      }
+      "schema": "schemas/boards.json"
     },
     {
+      "body": {
+        "apiKey": "{{ secrets.api_key }}"
+      },
+      "body_type": "form",
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "created"
+      },
+      "method": "POST",
       "name": "posts",
-      "method": "GET",
-      "path": "/__legacy_hook/posts",
+      "path": "/posts/list",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "posts"
       },
-      "schema": "schemas/posts.json",
-      "incremental": {
-        "cursor_field": "created",
-        "client_filtered": true
-      }
+      "schema": "schemas/posts.json"
     },
     {
+      "body": {
+        "apiKey": "{{ secrets.api_key }}"
+      },
+      "body_type": "form",
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "created"
+      },
+      "method": "POST",
       "name": "comments",
-      "method": "GET",
-      "path": "/__legacy_hook/comments",
+      "path": "/comments/list",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "comments"
       },
-      "schema": "schemas/comments.json",
-      "incremental": {
-        "cursor_field": "created",
-        "client_filtered": true
-      }
+      "schema": "schemas/comments.json"
     },
     {
+      "body": {
+        "apiKey": "{{ secrets.api_key }}"
+      },
+      "body_type": "form",
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "created"
+      },
+      "method": "POST",
       "name": "categories",
-      "method": "GET",
-      "path": "/__legacy_hook/categories",
+      "path": "/categories/list",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "categories"
       },
-      "schema": "schemas/categories.json",
-      "incremental": {
-        "cursor_field": "created",
-        "client_filtered": true
-      }
+      "schema": "schemas/categories.json"
     },
     {
-      "name": "companies",
-      "method": "GET",
-      "path": "/__legacy_hook/companies",
-      "records": {
-        "path": "data"
+      "body": {
+        "apiKey": "{{ secrets.api_key }}"
       },
-      "schema": "schemas/companies.json",
+      "body_type": "form",
       "incremental": {
-        "cursor_field": "created",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "created"
+      },
+      "method": "POST",
+      "name": "companies",
+      "path": "/companies/list",
+      "projection": "passthrough",
+      "records": {
+        "path": "companies"
+      },
+      "schema": "schemas/companies.json"
     }
   ]
 }

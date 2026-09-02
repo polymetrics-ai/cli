@@ -1,0 +1,349 @@
+{
+  "schema_version": 4,
+  "connector": "bunny-inc",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://docs.bunny.com/"
+      }
+    ]
+  },
+  "metadata": {
+    "name": "bunny-inc",
+    "display_name": "Bunny, Inc.",
+    "description": "Reads Bunny subscription-billing data through declared per-tenant GraphQL connection routes.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "Bounded declared Bunny GraphQL reads use a source-validated tenant subdomain and bearer API key.",
+      "write": "unsupported",
+      "approval": "none; read-only"
+    },
+    "docs_url": "https://docs.bunny.com/"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Bunny Connection Specification",
+    "type": "object",
+    "x-reject-unknown-config": true,
+    "required": [
+      "subdomain",
+      "apikey"
+    ],
+    "properties": {
+      "subdomain": {
+        "type": "string",
+        "pattern": "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$",
+        "description": "Bunny tenant subdomain."
+      },
+      "apikey": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Bunny GraphQL API key."
+      }
+    }
+  },
+  "http": {
+    "url": "https://{{ config.subdomain }}.bunny.com",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.apikey }}"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "after",
+      "token_path": "data.pageInfo.endCursor",
+      "stop_path": "data.pageInfo.hasNextPage",
+      "page_size": 100,
+      "max_pages": 100
+    },
+    "check": {
+      "method": "POST",
+      "path": "/graphql",
+      "body": {
+        "query": "query { accounts(first: 1) { nodes { id } } }"
+      }
+    },
+    "error_map": []
+  },
+  "schemas": {
+    "schemas/accounts.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "accounts",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "updatedAt"
+    },
+    "schemas/contacts.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "contacts",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "updatedAt"
+    },
+    "schemas/invoices.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "invoices",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "updatedAt"
+    },
+    "schemas/payments.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "payments",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "updatedAt"
+    },
+    "schemas/subscriptions.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "subscriptions",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "id"
+      ],
+      "x-cursor-field": "updatedAt"
+    }
+  },
+  "operations": [
+    {
+      "id": "bunny.accounts",
+      "source": {
+        "operation": "accounts GraphQL connection",
+        "method": "POST",
+        "path": "/graphql",
+        "url": "https://docs.bunny.com/"
+      },
+      "schema_refs": {
+        "record": "schemas/accounts.json"
+      },
+      "stream_order": 1,
+      "stream": {
+        "name": "accounts",
+        "method": "POST",
+        "path": "/graphql",
+        "graphql": {
+          "document": "query Accounts($after: String) { accounts(first: 100, after: $after) { nodes { id accountTypeId annualRevenue billingCity billingContactId billingCountry billingDay billingState billingStreet billingZip code createdAt currencyId description employees entityId groupId industryId invoiceTemplateId name netPaymentDays ownerUserId payingStatus phone taxNumber timezone updatedAt website } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "after": "{{ cursor }}"
+          },
+          "operation_name": "Accounts"
+        },
+        "records": {
+          "path": "data.accounts.nodes"
+        },
+        "schema": "schemas/accounts.json",
+        "projection": "passthrough",
+        "incremental": {
+          "cursor_field": "updatedAt",
+          "client_filtered": true
+        }
+      }
+    },
+    {
+      "id": "bunny.contacts",
+      "source": {
+        "operation": "contacts GraphQL connection",
+        "method": "POST",
+        "path": "/graphql",
+        "url": "https://docs.bunny.com/"
+      },
+      "schema_refs": {
+        "record": "schemas/contacts.json"
+      },
+      "stream_order": 2,
+      "stream": {
+        "name": "contacts",
+        "method": "POST",
+        "path": "/graphql",
+        "graphql": {
+          "document": "query Contacts($after: String) { contacts(first: 100, after: $after) { nodes { id accountId code createdAt description email entityId firstName fullName lastName linkedinUrl mailingCity mailingCountry mailingState mailingStreet mailingZip mobile phone portalAccess salutation title updatedAt } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "after": "{{ cursor }}"
+          },
+          "operation_name": "Contacts"
+        },
+        "records": {
+          "path": "data.contacts.nodes"
+        },
+        "schema": "schemas/contacts.json",
+        "projection": "passthrough",
+        "incremental": {
+          "cursor_field": "updatedAt",
+          "client_filtered": true
+        }
+      }
+    },
+    {
+      "id": "bunny.invoices",
+      "source": {
+        "operation": "invoices GraphQL connection",
+        "method": "POST",
+        "path": "/graphql",
+        "url": "https://docs.bunny.com/"
+      },
+      "schema_refs": {
+        "record": "schemas/invoices.json"
+      },
+      "stream_order": 3,
+      "stream": {
+        "name": "invoices",
+        "method": "POST",
+        "path": "/graphql",
+        "graphql": {
+          "document": "query Invoices($after: String) { invoices(first: 100, after: $after) { nodes { id accountId amount amountDue amountPaid createdAt credits currencyId description dueAt netPaymentDays number paidAt payableId poNumber portalUrl quoteId smallUnitAmountDue subtotal taxAmount updatedAt url uuid } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "after": "{{ cursor }}"
+          },
+          "operation_name": "Invoices"
+        },
+        "records": {
+          "path": "data.invoices.nodes"
+        },
+        "schema": "schemas/invoices.json",
+        "projection": "passthrough",
+        "incremental": {
+          "cursor_field": "updatedAt",
+          "client_filtered": true
+        }
+      }
+    },
+    {
+      "id": "bunny.payments",
+      "source": {
+        "operation": "payments GraphQL connection",
+        "method": "POST",
+        "path": "/graphql",
+        "url": "https://docs.bunny.com/"
+      },
+      "schema_refs": {
+        "record": "schemas/payments.json"
+      },
+      "stream_order": 4,
+      "stream": {
+        "name": "payments",
+        "method": "POST",
+        "path": "/graphql",
+        "graphql": {
+          "document": "query Payments($after: String) { payments(first: 100, after: $after) { nodes { id accountId amount amountUnapplied baseCurrencyCash baseCurrencyId createdAt currencyId description isLegacy memo receivedAt updatedAt } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "after": "{{ cursor }}"
+          },
+          "operation_name": "Payments"
+        },
+        "records": {
+          "path": "data.payments.nodes"
+        },
+        "schema": "schemas/payments.json",
+        "projection": "passthrough",
+        "incremental": {
+          "cursor_field": "updatedAt",
+          "client_filtered": true
+        }
+      }
+    },
+    {
+      "id": "bunny.subscriptions",
+      "source": {
+        "operation": "subscriptions GraphQL connection",
+        "method": "POST",
+        "path": "/graphql",
+        "url": "https://docs.bunny.com/"
+      },
+      "schema_refs": {
+        "record": "schemas/subscriptions.json"
+      },
+      "stream_order": 5,
+      "stream": {
+        "name": "subscriptions",
+        "method": "POST",
+        "path": "/graphql",
+        "graphql": {
+          "document": "query Subscriptions($after: String) { subscriptions(first: 100, after: $after) { nodes { id accountId cancelationDate createdAt currencyId endDate name period priceListId rampIntervalMonths startDate trialEndDate trialPeriod trialStartDate updatedAt } pageInfo { endCursor hasNextPage } } }",
+          "variables": {
+            "after": "{{ cursor }}"
+          },
+          "operation_name": "Subscriptions"
+        },
+        "records": {
+          "path": "data.subscriptions.nodes"
+        },
+        "schema": "schemas/subscriptions.json",
+        "projection": "passthrough",
+        "incremental": {
+          "cursor_field": "updatedAt",
+          "client_filtered": true
+        }
+      }
+    }
+  ]
+}

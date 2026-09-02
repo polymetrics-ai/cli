@@ -1,79 +1,49 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "job_interview_plan_info",
-  "type": "object",
   "properties": {
-    "jobId": {
-      "type": "string",
-      "description": "The id of the job this interview plan belongs to"
-    },
     "interviewPlanId": {
-      "type": "string",
-      "description": "The id of the interview plan"
+      "description": "The id of the interview plan",
+      "type": "string"
+    },
+    "jobId": {
+      "description": "The id of the job this interview plan belongs to",
+      "type": "string"
     },
     "stages": {
-      "type": "array",
       "description": "The stages that make up the interview plan, in plan order",
       "items": {
-        "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the interview stage"
-          },
-          "title": {
-            "type": "string",
-            "description": "The title of the interview stage"
-          },
-          "type": {
-            "type": "string",
-            "description": "The type of the interview stage (e.g. Lead, PreInterviewScreen, Active, Offer, Archived, Hired)"
-          },
-          "orderInInterviewPlan": {
-            "type": "integer",
-            "description": "The order of this stage within its interview plan (zero-indexed)"
-          },
-          "interviewStageGroupId": {
-            "type": "string"
-          },
           "activities": {
-            "type": "array",
             "description": "Activities to perform at this stage",
             "items": {
-              "type": "object",
               "properties": {
                 "id": {
-                  "type": "string",
-                  "description": "The unique identifier for the activity"
-                },
-                "title": {
+                  "description": "The unique identifier for the activity",
                   "type": "string"
                 },
                 "interviews": {
-                  "type": "array",
                   "description": "The interviews to be scheduled by this activity",
                   "items": {
-                    "type": "object",
                     "properties": {
                       "id": {
-                        "type": "string",
-                        "description": "The unique identifier for the activity interview"
-                      },
-                      "title": {
-                        "type": "string",
-                        "description": "The title of the interview to be scheduled"
-                      },
-                      "interviewId": {
-                        "type": "string",
-                        "description": "The id of the interview to be scheduled"
+                        "description": "The unique identifier for the activity interview",
+                        "type": "string"
                       },
                       "interviewDurationMinutes": {
-                        "type": "number",
-                        "description": "The duration of the interview, in minutes"
+                        "description": "The duration of the interview, in minutes",
+                        "type": "number"
+                      },
+                      "interviewId": {
+                        "description": "The id of the interview to be scheduled",
+                        "type": "string"
                       },
                       "isSchedulable": {
-                        "type": "boolean",
-                        "description": "Whether the interview can be scheduled"
+                        "description": "Whether the interview can be scheduled",
+                        "type": "boolean"
+                      },
+                      "title": {
+                        "description": "The title of the interview to be scheduled",
+                        "type": "string"
                       }
                     },
                     "required": [
@@ -82,15 +52,41 @@
                       "interviewId",
                       "interviewDurationMinutes",
                       "isSchedulable"
-                    ]
-                  }
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "title": {
+                  "type": "string"
                 }
               },
               "required": [
                 "id",
                 "interviews"
-              ]
-            }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "id": {
+            "description": "The unique identifier for the interview stage",
+            "type": "string"
+          },
+          "interviewStageGroupId": {
+            "type": "string"
+          },
+          "orderInInterviewPlan": {
+            "description": "The order of this stage within its interview plan (zero-indexed)",
+            "type": "integer"
+          },
+          "title": {
+            "description": "The title of the interview stage",
+            "type": "string"
+          },
+          "type": {
+            "description": "The type of the interview stage (e.g. Lead, PreInterviewScreen, Active, Offer, Archived, Hired)",
+            "type": "string"
           }
         },
         "required": [
@@ -99,10 +95,14 @@
           "type",
           "orderInInterviewPlan",
           "activities"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
     }
   },
+  "title": "job_interview_plan_info",
+  "type": "object",
   "x-primary-key": [
     "jobId"
   ]

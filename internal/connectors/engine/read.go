@@ -117,6 +117,18 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 }
 
 func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error, trackPaginationOutcome bool) error {
+	if stream.DateWindowFanOut != nil {
+		if trackPaginationOutcome && (req.MaxPages > 0 || req.Continuation != nil) {
+			return fmt.Errorf("engine: tracked pagination outcome does not support date-window fan-out stream %q", stream.Name)
+		}
+		return readDateWindowFanOut(ctx, b, stream, req, rt, h, emit)
+	}
+	if stream.CartesianConfigFanOut != nil {
+		if trackPaginationOutcome && (req.MaxPages > 0 || req.Continuation != nil) {
+			return fmt.Errorf("engine: tracked pagination outcome does not support cartesian config fan-out stream %q", stream.Name)
+		}
+		return readCartesianConfigFanOut(ctx, b, stream, req, rt, h, emit)
+	}
 	if stream.FanOut != nil {
 		if trackPaginationOutcome && (req.MaxPages > 0 || req.Continuation != nil) {
 			return fmt.Errorf("engine: tracked pagination outcome does not support fan-out stream %q", stream.Name)
@@ -132,9 +144,12 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 // readOneSequence's behavior is byte-for-byte identical to the pre-fan-out
 // implementation when a stream declares no fan_out block at all.
 type fanoutContext struct {
-	id         string
-	queryParam string // FanOutInto.QueryParam, "" when unused
-	stampField string // FanOutSpec.StampField, "" when unset
+	id          string
+	queryParam  string // FanOutInto.QueryParam, "" when unused
+	stampField  string // FanOutSpec.StampField, "" when unset
+	queryParams map[string]string
+	queryLists  map[string][]string
+	stampFields map[string]string
 }
 
 // readFanOut resolves the fan-out id list EXACTLY ONCE (config CSV or one
@@ -161,6 +176,139 @@ func readFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors
 		if err := readOneSequence(ctx, b, stream, req, rt, h, emit, fc, false); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+const dateWindowLayout = "2006-01-02"
+
+func readDateWindowFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error) error {
+	spec := stream.DateWindowFanOut
+	start, err := time.Parse(dateWindowLayout, req.Config.Config[spec.StartDateConfigKey])
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %s must be YYYY-MM-DD", spec.StartDateConfigKey)}
+	}
+	end, err := time.Parse(dateWindowLayout, req.Config.Config[spec.EndDateConfigKey])
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %s must be YYYY-MM-DD", spec.EndDateConfigKey)}
+	}
+	if end.Before(start) {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: errors.New("date_window_fan_out: terminal date precedes start date")}
+	}
+	batchDays, err := strconv.Atoi(req.Config.Config[spec.BatchSizeConfigKey])
+	if err != nil || batchDays < 1 || batchDays > spec.MaxBatchDays {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %s must be an integer between 1 and %d", spec.BatchSizeConfigKey, spec.MaxBatchDays)}
+	}
+	windows := int(end.Sub(start).Hours()/24)/batchDays + 1
+	if windows > spec.MaxWindows {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %d windows exceed declared maximum %d", windows, spec.MaxWindows)}
+	}
+	windowedStream := stream
+	windowedStream.DateWindowFanOut = nil
+	for windowStart := start; !windowStart.After(end); windowStart = windowStart.AddDate(0, 0, batchDays) {
+		windowEnd := windowStart.AddDate(0, 0, batchDays-1)
+		if windowEnd.After(end) {
+			windowEnd = end
+		}
+		fc := fanoutContext{queryParams: map[string]string{
+			spec.DateFromQueryParam: windowStart.Format(dateWindowLayout),
+			spec.DateToQueryParam:   windowEnd.Format(dateWindowLayout),
+		}}
+		if err := readOneSequence(ctx, b, windowedStream, req, rt, h, emit, fc, false); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func readCartesianConfigFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error) error {
+	spec := stream.CartesianConfigFanOut
+	urls, err := cartesianURLs(req.Config.Config[spec.URLConfigKey])
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	strategies, err := cartesianStrategies(req.Config.Config[spec.StrategyConfigKey])
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	if err := validateCartesianCategories(spec.Categories); err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	product := len(urls) * len(strategies)
+	if product > spec.MaxCombinations || product > spec.MaxRequests {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("cartesian_config_fan_out: %d requests exceed declared bounds", product)}
+	}
+	for _, analyzedURL := range urls {
+		for _, strategy := range strategies {
+			fc := fanoutContext{
+				queryParams: map[string]string{spec.URLQueryParam: analyzedURL, spec.StrategyQueryParam: strategy},
+				queryLists:  map[string][]string{spec.CategoryQueryParam: spec.Categories},
+				stampFields: map[string]string{"url": analyzedURL, "strategy": strategy},
+			}
+			if err := readOneSequence(ctx, b, stream, req, rt, h, emit, fc, false); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func cartesianURLs(raw string) ([]string, error) {
+	values, err := cartesianList(raw)
+	if err != nil {
+		return nil, err
+	}
+	for _, value := range values {
+		parsed, err := url.Parse(value)
+		if err != nil || parsed.Scheme != "https" || parsed.Host == "" {
+			return nil, fmt.Errorf("cartesian_config_fan_out: invalid HTTPS URL %q", value)
+		}
+	}
+	return values, nil
+}
+
+func cartesianStrategies(raw string) ([]string, error) {
+	values, err := cartesianList(raw)
+	if err != nil {
+		return nil, err
+	}
+	for _, value := range values {
+		if value != "mobile" && value != "desktop" {
+			return nil, fmt.Errorf("cartesian_config_fan_out: invalid strategy %q", value)
+		}
+	}
+	return values, nil
+}
+
+func cartesianList(raw string) ([]string, error) {
+	parts := strings.Split(raw, ",")
+	seen := make(map[string]struct{}, len(parts))
+	values := make([]string, 0, len(parts))
+	for _, part := range parts {
+		value := strings.TrimSpace(part)
+		if value == "" {
+			return nil, errors.New("cartesian_config_fan_out: empty list entry")
+		}
+		if _, duplicate := seen[value]; duplicate {
+			return nil, fmt.Errorf("cartesian_config_fan_out: duplicate list entry %q", value)
+		}
+		seen[value] = struct{}{}
+		values = append(values, value)
+	}
+	return values, nil
+}
+
+func validateCartesianCategories(categories []string) error {
+	seen := make(map[string]struct{}, len(categories))
+	for _, category := range categories {
+		category = strings.TrimSpace(category)
+		if category == "" {
+			return errors.New("cartesian_config_fan_out: empty category")
+		}
+		if _, duplicate := seen[category]; duplicate {
+			return fmt.Errorf("cartesian_config_fan_out: duplicate category %q", category)
+		}
+		seen[category] = struct{}{}
 	}
 	return nil
 }
@@ -305,6 +453,30 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 // bundle author never declares twice, applied via the exact same
 // applyComputedFields code path as any other computed_fields entry.
 func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error, fc fanoutContext, trackPaginationOutcome bool) error {
+	if len(stream.Headers) != 0 {
+		baseRequester := rt.baseRequester
+		if baseRequester == nil {
+			baseRequester = rt.Requester
+		}
+		requester := *baseRequester
+		headers := cloneResolvedHeaders(requester.DefaultHeaders)
+		if headers == nil {
+			headers = make(map[string]string, len(stream.Headers))
+		}
+		for name, value := range stream.Headers {
+			for existing := range headers {
+				if strings.EqualFold(existing, name) {
+					delete(headers, existing)
+				}
+			}
+			headers[name] = value
+		}
+		requester.DefaultHeaders = headers
+		runtime := *rt
+		runtime.baseRequester = &requester
+		runtime.Requester = &requester
+		rt = &runtime
+	}
 	schema := b.Schemas[stream.Name]
 
 	pag := stream.Pagination
@@ -334,6 +506,15 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 	if fc.id != "" && fc.queryParam != "" {
 		baseQuery = cloneAndSetQuery(baseQuery, fc.queryParam, fc.id)
+	}
+	for name, value := range fc.queryParams {
+		baseQuery = cloneAndSetQuery(baseQuery, name, value)
+	}
+	for name, values := range fc.queryLists {
+		baseQuery.Del(name)
+		for _, value := range values {
+			baseQuery.Add(name, value)
+		}
 	}
 
 	rateLimit := b.HTTP.RateLimit
@@ -404,7 +585,41 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			}
 			reqPath = resolved
 		}
-		query := mergeQuery(baseQuery, page.Query)
+		pageQuery := page.Query
+		queryCloned := false
+		if specForPaginator.BodyCursorField != "" && specForPaginator.CursorParam != "" {
+			pageQuery = url.Values{}
+			for key, values := range page.Query {
+				for _, value := range values {
+					pageQuery.Add(key, value)
+				}
+			}
+			queryCloned = true
+			pageQuery.Del(specForPaginator.CursorParam)
+		}
+		if specForPaginator.BodyPageField != "" && specForPaginator.PageParam != "" {
+			if !queryCloned {
+				pageQuery = url.Values{}
+				for key, values := range page.Query {
+					for _, value := range values {
+						pageQuery.Add(key, value)
+					}
+				}
+			}
+			pageQuery.Del(specForPaginator.PageParam)
+		}
+		if specForPaginator.BodyOffsetField != "" && specForPaginator.OffsetParam != "" {
+			if !queryCloned {
+				pageQuery = url.Values{}
+				for key, values := range page.Query {
+					for _, value := range values {
+						pageQuery.Add(key, value)
+					}
+				}
+			}
+			pageQuery.Del(specForPaginator.OffsetParam)
+		}
+		query := mergeQuery(baseQuery, pageQuery)
 		body, err := buildStreamRequestBody(stream, req.Config, req.Query, page, specForPaginator, formattedLowerBound, fc)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
@@ -417,7 +632,17 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		}
 		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
 		pageStarted := time.Now()
-		resp, err := requester.Do(pageCtx, method, reqPath, query, body)
+		var resp *connsdk.Response
+		if stream.BodyType == "form" {
+			form, formErr := streamBodyForm(body)
+			if formErr != nil {
+				cancelPage()
+				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: formErr}
+			}
+			resp, err = requester.DoForm(pageCtx, method, reqPath, query, form)
+		} else {
+			resp, err = requester.Do(pageCtx, method, reqPath, query, body)
+		}
 		elapsed := time.Since(pageStarted)
 		cancelPage()
 		recordReadPageFetch(req, elapsed)
@@ -435,6 +660,18 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
+		rawRecords, err = applyArrayZipProjection(rawRecords, stream.ArrayZipProjection)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
+		resolvedHeaderProjections, err := resolveResponseHeaderProjections(resp.Body, stream.ResponseHeaderProjection)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
+		rawRecords, err = applyResponseHeaderProjections(rawRecords, resolvedHeaderProjections)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
 		if pageNum < skippedPages {
 			page = paginator.Next(resp, len(rawRecords))
 			continue
@@ -449,6 +686,9 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 				return err
 			}
 			raw = mergeResponseFields(raw, responseFields)
+			if stream.Records.WrapField != "" {
+				raw = map[string]any{stream.Records.WrapField: raw}
+			}
 			if !passesFilter(raw, stream.Records.Filter) {
 				continue
 			}
@@ -464,6 +704,9 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			}
 			if fc.id != "" && fc.stampField != "" {
 				projected[fc.stampField] = fc.id
+			}
+			for name, value := range fc.stampFields {
+				projected[name] = value
 			}
 
 			out := connectors.Record(projected)
@@ -586,17 +829,99 @@ func readContinuationDefinitionDigest(b Bundle, stream StreamSpec) string {
 }
 
 func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, query map[string]string, page *connsdk.NextPage, pag PaginationSpec, formattedLowerBound string, fc fanoutContext) (any, error) {
-	if stream.GraphQL == nil {
+	if stream.GraphQL != nil {
+		var cursor string
+		if page != nil && pag.CursorParam != "" {
+			cursor = page.Query.Get(pag.CursorParam)
+		}
+		vars := requestVars(cfg, nil, cursor, query)
+		vars.IncrementalLowerBound = formattedLowerBound
+		vars.FanoutID = fc.id
+		return buildGraphQLPayload(stream.GraphQL, vars)
+	}
+	if len(stream.Body) == 0 {
 		return nil, nil
 	}
-	var cursor string
-	if page != nil && pag.CursorParam != "" {
-		cursor = page.Query.Get(pag.CursorParam)
-	}
-	vars := requestVars(cfg, nil, cursor, query)
+	vars := requestVars(cfg, nil, "", query)
 	vars.IncrementalLowerBound = formattedLowerBound
 	vars.FanoutID = fc.id
-	return buildGraphQLPayload(stream.GraphQL, vars)
+	body, err := resolveStreamBodyMap(stream.Body, vars)
+	if err != nil {
+		return nil, err
+	}
+	if page != nil && pag.BodyCursorField != "" && pag.CursorParam != "" {
+		if cursor := page.Query.Get(pag.CursorParam); cursor != "" {
+			body[pag.BodyCursorField] = cursor
+		}
+	}
+	if page != nil && pag.BodyPageField != "" && pag.PageParam != "" {
+		if number := page.Query.Get(pag.PageParam); number != "" {
+			body[pag.BodyPageField] = number
+		}
+	}
+	if page != nil && pag.BodyOffsetField != "" && pag.OffsetParam != "" {
+		if offset := page.Query.Get(pag.OffsetParam); offset != "" {
+			body[pag.BodyOffsetField] = offset
+		}
+	}
+	return body, nil
+}
+
+func resolveStreamBodyMap(body map[string]any, vars Vars) (map[string]any, error) {
+	resolved := make(map[string]any, len(body))
+	for key, value := range body {
+		copied, err := resolveStreamBodyValue(value, vars)
+		if err != nil {
+			return nil, fmt.Errorf("resolve stream body %q: %w", key, err)
+		}
+		resolved[key] = copied
+	}
+	return resolved, nil
+}
+
+func resolveStreamBodyValue(value any, vars Vars) (any, error) {
+	switch typed := value.(type) {
+	case string:
+		return Interpolate(typed, vars)
+	case map[string]any:
+		return resolveStreamBodyMap(typed, vars)
+	case []any:
+		resolved := make([]any, len(typed))
+		for index, item := range typed {
+			copied, err := resolveStreamBodyValue(item, vars)
+			if err != nil {
+				return nil, err
+			}
+			resolved[index] = copied
+		}
+		return resolved, nil
+	default:
+		return value, nil
+	}
+}
+
+func streamBodyForm(body any) (url.Values, error) {
+	values := url.Values{}
+	if body == nil {
+		return values, nil
+	}
+	fields, ok := body.(map[string]any)
+	if !ok {
+		return nil, errors.New("declared form stream body must be an object")
+	}
+	for key, value := range fields {
+		switch typed := value.(type) {
+		case string:
+			values.Set(key, typed)
+		case json.Number:
+			values.Set(key, typed.String())
+		case float64, float32, int, int64, int32, bool:
+			values.Set(key, fmt.Sprint(typed))
+		default:
+			return nil, fmt.Errorf("declared form stream body field %q must be scalar", key)
+		}
+	}
+	return values, nil
 }
 
 // cloneAndSetQuery returns a copy of base with key set to value — used to
@@ -681,6 +1006,12 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
 	if err != nil {
 		return nil, fmt.Errorf("engine: resolve base url: %w", err)
+	}
+	if b.HTTP.TenantOrigin != nil {
+		baseURL, err = resolveTenantOrigin(*b.HTTP.TenantOrigin, cfg.Config)
+		if err != nil {
+			return nil, fmt.Errorf("engine: resolve tenant origin: %w", err)
+		}
 	}
 	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
 	if err != nil {
@@ -1531,6 +1862,156 @@ func extractResponseFields(body []byte, fields map[string]string) (map[string]an
 	return out, nil
 }
 
+type resolvedResponseHeaderProjection struct {
+	valuesPath string
+	valueField string
+	headers    []string
+}
+
+func resolveResponseHeaderProjections(body []byte, specs []ResponseHeaderProjectionSpec) ([]resolvedResponseHeaderProjection, error) {
+	if len(specs) == 0 {
+		return nil, nil
+	}
+	root, err := decodeJSONKeyed(body)
+	if err != nil {
+		return nil, err
+	}
+	resolved := make([]resolvedResponseHeaderProjection, 0, len(specs))
+	for index, spec := range specs {
+		headers, ok := selectPathKeyed(root, spec.HeadersPath).([]any)
+		if !ok {
+			return nil, fmt.Errorf("response_header_projection %d headers_path %q is not an array", index, spec.HeadersPath)
+		}
+		headerName := spec.HeaderName
+		if headerName == "" {
+			headerName = "name"
+		}
+		valueField := spec.ValueField
+		if valueField == "" {
+			valueField = "value"
+		}
+		allowed := make(map[string]struct{}, len(spec.AllowedHeaders))
+		for _, name := range spec.AllowedHeaders {
+			allowed[name] = struct{}{}
+		}
+		names := make([]string, len(headers))
+		seen := make(map[string]struct{}, len(headers))
+		for headerIndex, header := range headers {
+			object, ok := header.(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("response_header_projection %d header %d is not an object", index, headerIndex)
+			}
+			name, ok := object[headerName].(string)
+			if !ok || strings.TrimSpace(name) == "" {
+				return nil, fmt.Errorf("response_header_projection %d header %d is missing %q", index, headerIndex, headerName)
+			}
+			if _, allowed := allowed[name]; !allowed {
+				return nil, fmt.Errorf("response_header_projection %d has unknown response header %q", index, name)
+			}
+			if _, duplicate := seen[name]; duplicate {
+				return nil, fmt.Errorf("response_header_projection %d repeats response header %q", index, name)
+			}
+			seen[name] = struct{}{}
+			names[headerIndex] = name
+		}
+		if len(seen) != len(allowed) {
+			return nil, fmt.Errorf("response_header_projection %d response headers do not match declared headers", index)
+		}
+		resolved = append(resolved, resolvedResponseHeaderProjection{valuesPath: spec.ValuesPath, valueField: valueField, headers: names})
+	}
+	return resolved, nil
+
+}
+func applyResponseHeaderProjections(records []connsdk.Record, projections []resolvedResponseHeaderProjection) ([]connsdk.Record, error) {
+	if len(projections) == 0 {
+		return records, nil
+	}
+	projected := make([]connsdk.Record, len(records))
+	for recordIndex, raw := range records {
+		out := make(connsdk.Record, len(raw))
+		for key, value := range raw {
+			out[key] = value
+		}
+		for projectionIndex, projection := range projections {
+			values, ok := selectPathKeyed(map[string]any(raw), projection.valuesPath).([]any)
+			if !ok {
+				return nil, fmt.Errorf("response_header_projection %d record %d values_path %q is not an array", projectionIndex, recordIndex, projection.valuesPath)
+			}
+			if len(values) != len(projection.headers) {
+				return nil, fmt.Errorf("response_header_projection %d record %d has %d values for %d headers", projectionIndex, recordIndex, len(values), len(projection.headers))
+			}
+			for valueIndex, value := range values {
+				object, ok := value.(map[string]any)
+				if !ok {
+					return nil, fmt.Errorf("response_header_projection %d record %d value %d is not an object", projectionIndex, recordIndex, valueIndex)
+				}
+				fieldValue, present := object[projection.valueField]
+				if !present || fieldValue == nil {
+					return nil, fmt.Errorf("response_header_projection %d record %d value %d is missing %q", projectionIndex, recordIndex, valueIndex, projection.valueField)
+				}
+				header := projection.headers[valueIndex]
+				if _, exists := out[header]; exists {
+					return nil, fmt.Errorf("response_header_projection %d record %d would overwrite field %q", projectionIndex, recordIndex, header)
+				}
+				out[header] = fieldValue
+			}
+		}
+		projected[recordIndex] = out
+	}
+	return projected, nil
+}
+
+func applyArrayZipProjection(records []connsdk.Record, projection *ArrayZipProjectionSpec) ([]connsdk.Record, error) {
+	if projection == nil {
+		return records, nil
+	}
+	zipped := make([]connsdk.Record, 0, len(records))
+	for recordIndex, raw := range records {
+		static := make(connsdk.Record, len(projection.StaticFields))
+		for _, field := range projection.StaticFields {
+			value, ok := selectArrayZipPath(map[string]any(raw), field.Path)
+			if !ok || value == nil {
+				return nil, fmt.Errorf("array_zip_projection record %d static field %q is missing", recordIndex, field.Field)
+			}
+			switch value.(type) {
+			case map[string]any, []any:
+				return nil, fmt.Errorf("array_zip_projection record %d static field %q is not scalar", recordIndex, field.Field)
+			}
+			static[field.Field] = value
+		}
+
+		arrays := make([][]any, len(projection.ArrayFields))
+		length := -1
+		for fieldIndex, field := range projection.ArrayFields {
+			value, found := selectArrayZipPath(map[string]any(raw), field.Path)
+			if !found {
+				return nil, fmt.Errorf("array_zip_projection record %d array field %q is missing", recordIndex, field.Field)
+			}
+			array, ok := value.([]any)
+			if !ok {
+				return nil, fmt.Errorf("array_zip_projection record %d array field %q is not an array", recordIndex, field.Field)
+			}
+			if length == -1 {
+				length = len(array)
+			} else if len(array) != length {
+				return nil, fmt.Errorf("array_zip_projection record %d array field %q has %d values, want %d", recordIndex, field.Field, len(array), length)
+			}
+			arrays[fieldIndex] = array
+		}
+		for index := range length {
+			row := make(connsdk.Record, len(static)+len(projection.ArrayFields))
+			for field, value := range static {
+				row[field] = value
+			}
+			for fieldIndex, field := range projection.ArrayFields {
+				row[field.Field] = arrays[fieldIndex][index]
+			}
+			zipped = append(zipped, row)
+		}
+	}
+	return zipped, nil
+}
+
 func mergeResponseFields(raw map[string]any, fields map[string]any) map[string]any {
 	if len(fields) == 0 {
 		return raw
@@ -1637,6 +2118,36 @@ func selectPathKeyed(root any, path string) any {
 		}
 	}
 	return cur
+}
+
+func selectArrayZipPath(root any, path string) (any, bool) {
+	path = strings.TrimSpace(path)
+	if path == "" || path == "." {
+		return root, true
+	}
+	current := root
+	for _, segment := range strings.Split(path, ".") {
+		if segment == "" {
+			return nil, false
+		}
+		switch value := current.(type) {
+		case map[string]any:
+			var ok bool
+			current, ok = value[segment]
+			if !ok {
+				return nil, false
+			}
+		case []any:
+			index, err := strconv.Atoi(segment)
+			if err != nil || index < 0 || index >= len(value) {
+				return nil, false
+			}
+			current = value[index]
+		default:
+			return nil, false
+		}
+	}
+	return current, true
 }
 
 // passesFilter applies filter.field_absent / filter.field_equals to a raw
@@ -2031,6 +2542,14 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
+	var checkBody any
+	if len(b.HTTP.Check.Body) > 0 {
+		resolved, err := resolveStreamBodyMap(b.HTTP.Check.Body, requestVars(cfg, nil, ""))
+		if err != nil {
+			return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("resolve check body: %w", err)}
+		}
+		checkBody = resolved
+	}
 	method := methodOrDefault(b.HTTP.Check.Method)
 	requester, err := rt.requesterFor(method, b.HTTP.Check.Path)
 	if err != nil {
@@ -2044,13 +2563,19 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("check max_bytes must be between 1 and %d when declared", connsdk.DefaultMaxResponseBody)}
 	}
 	if b.HTTP.Check.MaxBytes > 0 {
-		response, requestErr := requester.DoLimited(ctx, method, checkPath, checkQuery, nil, b.HTTP.Check.MaxBytes)
+		response, requestErr := requester.DoLimited(ctx, method, checkPath, checkQuery, checkBody, b.HTTP.Check.MaxBytes)
 		if requestErr == nil && len(response.Body) > b.HTTP.Check.MaxBytes {
 			return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("check response body exceeds declared max_bytes %d", b.HTTP.Check.MaxBytes)}
 		}
 		err = requestErr
+	} else if b.HTTP.Check.BodyType == "form" {
+		form, formErr := streamBodyForm(checkBody)
+		if formErr != nil {
+			return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: formErr}
+		}
+		_, err = requester.DoForm(ctx, method, checkPath, checkQuery, form)
 	} else {
-		_, err = requester.Do(ctx, method, checkPath, checkQuery, nil)
+		_, err = requester.Do(ctx, method, checkPath, checkQuery, checkBody)
 	}
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)

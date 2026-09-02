@@ -7,7 +7,7 @@ description: Pocket connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads saved Pocket items through the v3 retrieve API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads saved Pocket items through the fixed v3 retrieve API.
 
 ## Icon
 
@@ -27,13 +27,9 @@ Reads saved Pocket items through the v3 retrieve API. In architecture v2 this qu
 
 ## Configuration
 
-- base_url
-- content_type
+- contentType
 - detail_type
-- domain
 - favorite
-- mode
-- search
 - since
 - sort
 - state
@@ -50,11 +46,11 @@ Reads saved Pocket items through the v3 retrieve API. In architecture v2 this qu
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Security
 
-- read risk: external Pocket API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded POST reads use the fixed Pocket origin and source-declared request credentials.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

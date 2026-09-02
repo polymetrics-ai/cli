@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector less-annoying-crm [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Less Annoying CRM users, contacts, tasks, notes, and events through fixed v2 RPC requests.
 
 ICON
   id: less-annoying-crm
@@ -27,8 +27,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  mode
   start_date (required)
   api_key (secret) (required)
 
@@ -55,7 +53,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external Less Annoying CRM API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded POST reads use the fixed Less Annoying CRM v2 origin and declared API-key header authentication.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

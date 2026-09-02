@@ -7,7 +7,7 @@ description: Canny connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Canny boards, posts, comments, categories, and companies through the Canny REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Canny boards, posts, comments, categories, and companies through fixed Canny REST form requests.
 
 ## Icon
 
@@ -28,8 +28,6 @@ Reads Canny boards, posts, comments, categories, and companies through the Canny
 
 ## Configuration
 
-- base_url
-- mode
 - api_key (secret) (required)
 
 ## ETL Streams
@@ -37,23 +35,23 @@ Reads Canny boards, posts, comments, categories, and companies through the Canny
 - boards:
   - primary key: id
   - cursor: created
-  - fields: created(string), id(string), isPrivate(boolean), name(string), postCount(integer), url(string)
+  - fields: created(string), id(string)
 - posts:
   - primary key: id
   - cursor: created
-  - fields: commentCount(integer), created(string), details(string), eta(string), id(string), score(integer), status(string), statusChangedAt(string), title(string), url(string)
+  - fields: created(string), id(string)
 - comments:
   - primary key: id
   - cursor: created
-  - fields: created(string), id(string), internal(boolean), likeCount(integer), parentID(string), private(boolean), value(string)
+  - fields: created(string), id(string)
 - categories:
   - primary key: id
   - cursor: created
-  - fields: created(string), id(string), name(string), parentID(string), postCount(integer), url(string)
+  - fields: created(string), id(string)
 - companies:
   - primary key: id
   - cursor: created
-  - fields: created(string), domain(string), id(string), memberCount(integer), monthlySpend(number), name(string)
+  - fields: created(string), id(string)
 
 ## Sync Modes
 
@@ -61,7 +59,7 @@ Reads Canny boards, posts, comments, categories, and companies through the Canny
 
 ## Security
 
-- read risk: external Canny API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded Canny list requests carry the declared API key only in typed form bodies.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

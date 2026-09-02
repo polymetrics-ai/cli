@@ -99,7 +99,7 @@ func TestVNextReferenceLockClosedSetRejectsUnrenderedArtifact(t *testing.T) {
 	}
 }
 
-func TestVNextFoundationProofSelectorsResolve(t *testing.T) {
+func TestFoundationAtlasSelectorsResolve(t *testing.T) {
 	root, err := repoRoot()
 	if err != nil {
 		t.Fatalf("repoRoot(): %v", err)
@@ -111,7 +111,21 @@ func TestVNextFoundationProofSelectorsResolve(t *testing.T) {
 	}
 	var catalog struct {
 		Foundations []struct {
-			ID         string `json:"id"`
+			ID    string `json:"id"`
+			Owner struct {
+				Files   []string `json:"files"`
+				Symbols []struct {
+					File string `json:"file"`
+					Name string `json:"name"`
+				} `json:"symbols"`
+			} `json:"owner"`
+			SupportedContracts struct {
+				Guarantees []string `json:"guarantees"`
+			} `json:"supported_contracts"`
+			Selection struct {
+				DefinitionFiles []string `json:"definition_files"`
+				Selectors       []string `json:"selectors"`
+			} `json:"selection"`
 			ProofTests []struct {
 				File string `json:"file"`
 				Name string `json:"name"`
@@ -122,26 +136,53 @@ func TestVNextFoundationProofSelectorsResolve(t *testing.T) {
 		t.Fatalf("Unmarshal(%s): %v", catalogPath, err)
 	}
 	for _, foundation := range catalog.Foundations {
-		if foundation.ID != "authoring.source-lock-vnext.v1" {
-			continue
-		}
-		if len(foundation.ProofTests) == 0 {
-			t.Fatal("source-lock-vnext foundation declares zero proof tests")
-		}
-		for _, proof := range foundation.ProofTests {
-			filePath := filepath.Join(root, proof.File)
-			fileSet := token.NewFileSet()
-			parsed, err := parser.ParseFile(fileSet, filePath, nil, 0)
-			if err != nil {
-				t.Fatalf("parse proof file %s: %v", proof.File, err)
+		t.Run(foundation.ID, func(t *testing.T) {
+			if len(foundation.Owner.Files) == 0 || len(foundation.Owner.Symbols) == 0 {
+				t.Fatal("Foundation Atlas owner must declare files and symbols")
 			}
-			if !declaresTestFunction(parsed, proof.Name) {
-				t.Errorf("Foundation Atlas proof %s in %s does not declare an executable test function", proof.Name, proof.File)
+			if len(foundation.SupportedContracts.Guarantees) == 0 {
+				t.Fatal("Foundation Atlas supported contract must declare guarantees")
 			}
-		}
-		return
+			if len(foundation.Selection.Selectors) == 0 {
+				t.Fatal("Foundation Atlas selection must declare selectors")
+			}
+			if len(foundation.ProofTests) == 0 {
+				t.Fatal("Foundation Atlas foundation declares zero proof tests")
+			}
+			for _, owner := range foundation.Owner.Symbols {
+				filePath := filepath.Join(root, owner.File)
+				fileSet := token.NewFileSet()
+				parsed, err := parser.ParseFile(fileSet, filePath, nil, 0)
+				if err != nil {
+					t.Fatalf("parse owner file %s: %v", owner.File, err)
+				}
+				if !declaresSymbol(parsed, owner.Name) {
+					t.Errorf("Foundation Atlas owner symbol %s in %s does not resolve", owner.Name, owner.File)
+				}
+			}
+			for _, guarantee := range foundation.SupportedContracts.Guarantees {
+				if strings.TrimSpace(guarantee) == "" {
+					t.Error("Foundation Atlas guarantee is blank")
+				}
+			}
+			for _, selector := range foundation.Selection.Selectors {
+				if strings.TrimSpace(selector) == "" {
+					t.Error("Foundation Atlas selector is blank")
+				}
+			}
+			for _, proof := range foundation.ProofTests {
+				filePath := filepath.Join(root, proof.File)
+				fileSet := token.NewFileSet()
+				parsed, err := parser.ParseFile(fileSet, filePath, nil, 0)
+				if err != nil {
+					t.Fatalf("parse proof file %s: %v", proof.File, err)
+				}
+				if !declaresTestFunction(parsed, proof.Name) {
+					t.Errorf("Foundation Atlas proof %s in %s does not declare an executable test function", proof.Name, proof.File)
+				}
+			}
+		})
 	}
-	t.Fatal("source-lock-vnext foundation is absent from the Foundation Atlas")
 }
 
 func readVNextSourceLockForTest(t *testing.T, lockPath string) vNextSourceLock {
@@ -225,6 +266,64 @@ func declaresTestFunction(file *ast.File, name string) bool {
 		}
 	}
 	return false
+}
+
+func declaresSymbol(file *ast.File, name string) bool {
+	receiverName, declaredName := splitAtlasSymbol(name)
+	for _, declaration := range file.Decls {
+		switch declaration := declaration.(type) {
+		case *ast.FuncDecl:
+			if declaration.Name.Name != declaredName {
+				continue
+			}
+			if receiverName == "" || receiverTypeName(declaration.Recv) == receiverName {
+				return true
+			}
+		case *ast.GenDecl:
+			if receiverName != "" {
+				continue
+			}
+			for _, spec := range declaration.Specs {
+				switch spec := spec.(type) {
+				case *ast.TypeSpec:
+					if spec.Name.Name == declaredName {
+						return true
+					}
+				case *ast.ValueSpec:
+					for _, declared := range spec.Names {
+						if declared.Name == declaredName {
+							return true
+						}
+					}
+				}
+			}
+		}
+	}
+	return false
+}
+
+func splitAtlasSymbol(name string) (receiverName, declaredName string) {
+	receiverEnd := strings.LastIndex(name, ".")
+	if receiverEnd < 0 {
+		return "", name
+	}
+	receiverName = strings.Trim(name[:receiverEnd], "()*")
+	return receiverName, name[receiverEnd+1:]
+}
+
+func receiverTypeName(receivers *ast.FieldList) string {
+	if receivers == nil || len(receivers.List) != 1 {
+		return ""
+	}
+	switch typ := receivers.List[0].Type.(type) {
+	case *ast.Ident:
+		return typ.Name
+	case *ast.StarExpr:
+		if identifier, ok := typ.X.(*ast.Ident); ok {
+			return identifier.Name
+		}
+	}
+	return ""
 }
 
 func hasTestingTParameter(function *ast.FuncDecl) bool {

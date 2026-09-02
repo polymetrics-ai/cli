@@ -408,6 +408,11 @@ func resolveRecordPathValue(record map[string]any, path []string) (any, error) {
 	}
 	var cur any = record
 	for i, seg := range path {
+		if m, ok := cur.(map[string]any); ok {
+			if value, ok := m[strings.Join(path[i:], ".")]; ok {
+				return value, nil
+			}
+		}
 		m, ok := cur.(map[string]any)
 		if !ok {
 			return nil, &unresolvedKeyError{Namespace: "record", Key: strings.Join(path[:i+1], ".")}
@@ -956,6 +961,11 @@ func ResolveCheckAuthSpec(spec AuthSpec, specKeys map[string]bool) error {
 		{"client_secret", spec.ClientSecret},
 		{"scopes", spec.Scopes},
 		{"refresh_token", spec.RefreshToken},
+		{"access_key_id", spec.AccessKeyID},
+		{"secret_access_key", spec.SecretAccessKey},
+		{"session_token", spec.SessionToken},
+		{"aws_service", spec.AWSService},
+		{"aws_region", spec.AWSRegion},
 	}
 	for _, f := range fields {
 		if f.tmpl == "" {

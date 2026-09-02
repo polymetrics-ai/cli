@@ -17,6 +17,9 @@ func (s *Schema) HasConfigurationConstraints() bool {
 	if s == nil || s.node == nil {
 		return false
 	}
+	if s.node.rejectUnknownConfig {
+		return true
+	}
 	for _, property := range s.node.properties {
 		if property.hasConfigurationConstraints() {
 			return true
@@ -35,7 +38,7 @@ func (n *schemaNode) hasConfigurationConstraints() bool {
 // accepted as a flat string map, and changing those existing semantics is not
 // part of configuration-constraint validation.
 func (s *Schema) ValidateConfiguration(config map[string]string) error {
-	if s == nil || s.node == nil || len(config) == 0 || len(s.node.properties) == 0 {
+	if s == nil || s.node == nil || len(config) == 0 {
 		return nil
 	}
 
@@ -47,7 +50,13 @@ func (s *Schema) ValidateConfiguration(config map[string]string) error {
 
 	for _, key := range keys {
 		property, declared := s.node.properties[key]
-		if !declared || !property.hasConfigurationConstraints() {
+		if !declared {
+			if s.node.rejectUnknownConfig {
+				return configurationFailure("unknown_field", "configuration field is not declared", jsonPointerForKey(key), fmt.Errorf("%s: field is not declared", displayPath(jsonPointerForKey(key))))
+			}
+			continue
+		}
+		if !property.hasConfigurationConstraints() {
 			continue
 		}
 		if err := property.validateConfigurationString(config[key], jsonPointerForKey(key)); err != nil {

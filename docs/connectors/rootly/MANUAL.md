@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector rootly [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Rootly incidents, services, and users through the Rootly API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Rootly incidents, services, and users through fixed JSON:API routes.
 
 ICON
   id: pm-sample
@@ -27,8 +27,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  mode
   start_date (required)
   api_key (secret) (required)
 
@@ -47,7 +45,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: external Rootly API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded Rootly JSON:API reads use the fixed provider origin and declared bearer authentication.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

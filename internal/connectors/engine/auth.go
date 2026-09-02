@@ -190,12 +190,19 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		}
 		return connsdk.APIKeyQuery(spec.Param, value), nil
 
+	case "aws_sigv4":
+		return buildCloudTrailSigV4Authenticator(spec, vars)
+
 	case "oauth2_client_credentials":
 		return buildOAuth2ClientCredentials(spec, vars)
 
 	case "oauth2_refresh_token":
 		return buildOAuth2RefreshToken(cfg, spec, vars)
 
+	case "declared_password_token":
+		return buildDeclaredPasswordTokenAuthenticator(spec, vars)
+	case "declared_session":
+		return buildDeclaredSessionAuthenticator(spec, vars, requester)
 	case "custom":
 		return buildCustomAuthWithDeclaredRoute(ctx, cfg, spec, h, requester)
 
@@ -344,6 +351,7 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 		ClientID:             clientID,
 		ClientSecret:         clientSecret,
 		ClientSecretRequired: spec.ClientSecret != "",
+		ClientAuthentication: spec.ClientAuthentication,
 		RefreshToken:         refreshToken,
 		Scopes:               scopes,
 		ExtraParams:          extraParams,

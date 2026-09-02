@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector yahoo-finance-price [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads public Yahoo Finance chart prices as declaration-bound OHLCV records. Read-only.
 
 ICON
   id: yahoo-finance-price
@@ -27,9 +27,7 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  base_url
   interval
-  mode
   range
   symbol
 
@@ -43,7 +41,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external Yahoo Finance Price API reads performed by the legacy connector via a Tier-2 hook
+  read risk: external Yahoo Finance chart API reads through a fixed declared route
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

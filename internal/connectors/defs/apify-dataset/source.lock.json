@@ -1,0 +1,73 @@
+{
+  "schema_version": 4,
+  "connector": "apify-dataset",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [{"role": "provider_reference", "url": "https://docs.apify.com/api/v2"}]
+  },
+  "metadata": {
+    "name": "apify-dataset",
+    "display_name": "Apify Dataset",
+    "description": "Reads Apify dataset items and dataset metadata through fixed Apify API v2 routes.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {"check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false},
+    "risk": {"read": "Bounded read-only Apify API v2 requests use the fixed provider origin and declared bearer authentication.", "write": "unsupported", "approval": "none; read-only"},
+    "docs_url": "https://docs.apify.com/api/v2"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Apify Dataset Connection Specification",
+    "type": "object",
+    "x-reject-unknown-config": true,
+    "required": ["dataset_id", "token"],
+    "properties": {
+      "dataset_id": {"type": "string", "description": "Apify dataset identifier."},
+      "token": {"type": "string", "x-secret": true, "description": "Apify API token."}
+    }
+  },
+  "http": {
+    "url": "https://api.apify.com/v2",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [{"mode": "bearer", "token": "{{ secrets.token }}"}],
+    "pagination": {"type": "offset_limit", "offset_param": "offset", "limit_param": "limit", "page_size": 1000, "max_pages": 100},
+    "check": {"method": "GET", "path": "/datasets", "query": {"limit": "1"}},
+    "error_map": []
+  },
+  "schemas": {
+    "schemas/item_collection.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "item_collection", "type": "object", "properties": {"data": {"type": "object"}}},
+    "schemas/dataset_collection.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "dataset_collection", "type": "object", "properties": {"id": {"type": "string"}, "name": {"type": "string"}, "userId": {"type": "string"}, "createdAt": {"type": ["string", "null"]}, "modifiedAt": {"type": ["string", "null"]}, "accessedAt": {"type": ["string", "null"]}, "itemCount": {"type": "integer"}, "cleanItemCount": {"type": "integer"}, "actId": {"type": "string"}, "actRunId": {"type": "string"}}, "x-primary-key": ["id"], "x-cursor-field": "createdAt"},
+    "schemas/dataset.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "dataset", "type": "object", "properties": {"id": {"type": "string"}, "name": {"type": "string"}, "userId": {"type": "string"}, "createdAt": {"type": ["string", "null"]}, "modifiedAt": {"type": ["string", "null"]}, "accessedAt": {"type": ["string", "null"]}, "itemCount": {"type": "integer"}, "cleanItemCount": {"type": "integer"}, "actId": {"type": "string"}, "actRunId": {"type": "string"}}, "x-primary-key": ["id"], "x-cursor-field": "modifiedAt"}
+  },
+  "operations": [
+    {
+      "id": "apify-dataset.items",
+      "source": {"operation": "GET /datasets/{datasetId}/items", "method": "GET", "path": "/datasets/{datasetId}/items", "url": "https://docs.apify.com/api/v2/dataset-items-get"},
+      "schema_refs": {"record": "schemas/item_collection.json"},
+      "stream_order": 1,
+      "stream": {"name": "item_collection", "method": "GET", "path": "/datasets/{{ config.dataset_id }}/items", "records": {"path": ".", "wrap_field": "data"}, "schema": "schemas/item_collection.json", "projection": "passthrough"}
+    },
+    {
+      "id": "apify-dataset.list",
+      "source": {"operation": "GET /datasets", "method": "GET", "path": "/datasets", "url": "https://docs.apify.com/api/v2/datasets-get"},
+      "schema_refs": {"record": "schemas/dataset_collection.json"},
+      "stream_order": 2,
+      "stream": {"name": "dataset_collection", "method": "GET", "path": "/datasets", "records": {"path": "data.items"}, "schema": "schemas/dataset_collection.json", "incremental": {"cursor_field": "createdAt", "client_filtered": true}}
+    },
+    {
+      "id": "apify-dataset.get",
+      "source": {"operation": "GET /datasets/{datasetId}", "method": "GET", "path": "/datasets/{datasetId}", "url": "https://docs.apify.com/api/v2/dataset-get"},
+      "schema_refs": {"record": "schemas/dataset.json"},
+      "stream_order": 3,
+      "stream": {"name": "dataset", "method": "GET", "path": "/datasets/{{ config.dataset_id }}", "records": {"path": "data", "single_object": true}, "schema": "schemas/dataset.json", "incremental": {"cursor_field": "modifiedAt", "client_filtered": true}}
+    }
+  ]
+}

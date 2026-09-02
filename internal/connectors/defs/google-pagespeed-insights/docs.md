@@ -1,7 +1,6 @@
 # Overview
 
-Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA
-scores) for the configured URLs and strategies via the PageSpeed Insights v5 API.
+Reads Lighthouse PageSpeed Insights reports for each configured HTTPS URL and mobile or desktop strategy through the fixed PageSpeed Insights v5 API. Every request repeats the declared Lighthouse categories: accessibility, best-practices, performance, PWA, and SEO.
 
 Readable streams: `pagespeed_reports`.
 
@@ -13,32 +12,21 @@ Service API documentation: https://developers.google.com/speed/docs/insights/v5/
 
 Connection fields:
 
-- `api_key` (optional, secret, string); Google PageSpeed API Key. See <a
-  href="https://developers.google.com/speed/docs/insights/v5/get-started#APIKey">here</a>. The key
-  is optional - however the API is heavily rate limited when using without API Key. Creating and
-  using the API key therefore is recommended. The key is case sensitive.
-- `base_url` (optional, string).
-- `categories` (required, string); Defines which Lighthouse category to run. One or many of:
-  "accessibility", "best-practices", "performance", "pwa", "seo".
-- `mode` (optional, string).
-- `strategies` (required, string); The analyses strategy to use. Either "desktop" or "mobile".
-- `urls` (required, string); The URLs to retrieve pagespeed information from. The connector will
-  attempt to sync PageSpeed reports for all the defined URLs. Format: https://(www.)url.domain.
+- `api_key` (optional, secret, string); optional PageSpeed API key sent only as the declared `key` query parameter.
+- `strategies` (required, string); comma-separated, unique strategies: `mobile` and/or `desktop`.
+- `urls` (required, string); comma-separated, unique HTTPS URLs to analyse.
 
 Secret fields are redacted in logs and write previews: `api_key`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+The runtime applies only the source-declared optional API-key query authentication. It does not accept caller-provided origins, fixture modes, or category overrides.
 
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Connection checks make one bounded request to the fixed PageSpeed origin.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+Default pagination: single report request; no pagination.
 
-- `pagespeed_reports`: GET connector-managed request path - records path `data`.
+- `pagespeed_reports`: GET `/runPagespeed`; emits one flattened report for every URL and strategy pair.
 
 ## Write actions & risks
 
@@ -46,4 +34,5 @@ This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- API coverage includes 1 stream-backed endpoint group(s).
+- The source lock permits at most twenty URL-and-strategy report requests per read.
+- API coverage includes 1 stream-backed endpoint group.

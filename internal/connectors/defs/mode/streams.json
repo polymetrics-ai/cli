@@ -1,86 +1,93 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "mode": "basic",
+        "password": "{{ secrets.api_secret }}",
+        "username": "{{ secrets.api_token }}"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/{{ config.workspace }}/spaces"
     },
-    "error_map": []
+    "error_map": [],
+    "headers": {
+      "Accept": "application/hal+json"
+    },
+    "pagination": {
+      "max_pages": 1000,
+      "next_url_path": "_links.next.href",
+      "type": "next_url"
+    },
+    "url": "https://app.mode.com/api",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updated_at"
+      },
+      "method": "GET",
       "name": "spaces",
-      "method": "GET",
-      "path": "/__legacy_hook/spaces",
+      "path": "/{{ config.workspace }}/spaces",
       "records": {
-        "path": "data"
+        "path": "_embedded.spaces"
       },
-      "schema": "schemas/spaces.json",
-      "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
-      }
+      "schema": "schemas/spaces.json"
     },
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updated_at"
+      },
+      "method": "GET",
       "name": "reports",
-      "method": "GET",
-      "path": "/__legacy_hook/reports",
+      "path": "/{{ config.workspace }}/reports",
       "records": {
-        "path": "data"
+        "path": "_embedded.reports"
       },
-      "schema": "schemas/reports.json",
-      "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
-      }
+      "schema": "schemas/reports.json"
     },
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updated_at"
+      },
+      "method": "GET",
       "name": "data_sources",
-      "method": "GET",
-      "path": "/__legacy_hook/data_sources",
+      "path": "/{{ config.workspace }}/data_sources",
       "records": {
-        "path": "data"
+        "path": "_embedded.data_sources"
       },
-      "schema": "schemas/data_sources.json",
-      "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
-      }
+      "schema": "schemas/data_sources.json"
     },
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "updated_at"
+      },
+      "method": "GET",
       "name": "groups",
-      "method": "GET",
-      "path": "/__legacy_hook/groups",
+      "path": "/{{ config.workspace }}/groups",
       "records": {
-        "path": "data"
+        "path": "_embedded.groups"
       },
-      "schema": "schemas/groups.json",
-      "incremental": {
-        "cursor_field": "updated_at",
-        "client_filtered": true
-      }
+      "schema": "schemas/groups.json"
     },
     {
-      "name": "memberships",
-      "method": "GET",
-      "path": "/__legacy_hook/memberships",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/memberships.json",
       "incremental": {
-        "cursor_field": "created_at",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "created_at"
+      },
+      "method": "GET",
+      "name": "memberships",
+      "path": "/{{ config.workspace }}/memberships",
+      "records": {
+        "path": "_embedded.memberships"
+      },
+      "schema": "schemas/memberships.json"
     }
   ]
 }

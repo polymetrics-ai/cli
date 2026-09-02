@@ -1,21 +1,21 @@
 {
-  "name": "lokalise",
-  "display_name": "Lokalise",
-  "description": "Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
-  "integration_type": "api",
-  "release_stage": "alpha",
   "capabilities": {
-    "check": true,
-    "read": true,
-    "write": false,
-    "query": false,
     "cdc": false,
-    "dynamic_schema": false
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": false
   },
+  "description": "Reads Lokalise project keys, languages, translations, contributors, and comments through fixed API v2 routes.",
+  "display_name": "Lokalise",
+  "docs_url": "https://developers.lokalise.com/reference/api-overview",
+  "integration_type": "api",
+  "name": "lokalise",
+  "release_stage": "alpha",
   "risk": {
-    "read": "external Lokalise API reads performed by the legacy connector via a Tier-2 hook",
-    "write": "unsupported",
-    "approval": "none; read-only"
-  },
-  "docs_url": "https://developers.lokalise.com/reference/api-introduction"
+    "approval": "none; read-only",
+    "read": "Bounded GET reads use the fixed Lokalise API v2 origin and declared project-scoped API-key authentication.",
+    "write": "unsupported"
+  }
 }

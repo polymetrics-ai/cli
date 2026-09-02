@@ -7,7 +7,7 @@ description: Google PageSpeed Insights connector knowledge and safe action guide
 
 ## Purpose
 
-Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Lighthouse PageSpeed Insights reports for a bounded Cartesian product of configured HTTPS URLs and mobile or desktop strategies through the fixed PageSpeed Insights v5 API.
 
 ## Icon
 
@@ -28,9 +28,6 @@ Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-pr
 
 ## Configuration
 
-- base_url
-- categories (required)
-- mode
 - strategies (required)
 - urls (required)
 - api_key (secret)
@@ -47,7 +44,7 @@ Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-pr
 
 ## Security
 
-- read risk: external Google PageSpeed Insights API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Each sync sends at most twenty bounded GET requests to the fixed PageSpeed Insights API origin; one report is emitted per configured URL and strategy pair.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

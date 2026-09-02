@@ -1,72 +1,82 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "header": "X-Api-Token",
+        "mode": "api_key_header",
+        "value": "{{ secrets.api_key }}"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/projects/{{ config.project_id }}/languages",
+      "query": {
+        "limit": "1"
+      }
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "max_pages": 10000,
+      "page_param": "page",
+      "page_size": 100,
+      "size_param": "limit",
+      "start_page": 1,
+      "type": "page_number"
+    },
+    "url": "https://api.lokalise.com/api2",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "keys",
-      "method": "GET",
-      "path": "/__legacy_hook/keys",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/keys.json",
       "incremental": {
-        "cursor_field": "modified_at_timestamp",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "modified_at_timestamp"
+      },
+      "method": "GET",
+      "name": "keys",
+      "path": "/projects/{{ config.project_id }}/keys",
+      "records": {
+        "path": "keys"
+      },
+      "schema": "schemas/keys.json"
     },
     {
-      "name": "languages",
       "method": "GET",
-      "path": "/__legacy_hook/languages",
+      "name": "languages",
+      "path": "/projects/{{ config.project_id }}/languages",
       "records": {
-        "path": "data"
+        "path": "languages"
       },
       "schema": "schemas/languages.json"
     },
     {
-      "name": "translations",
-      "method": "GET",
-      "path": "/__legacy_hook/translations",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/translations.json",
       "incremental": {
-        "cursor_field": "modified_at_timestamp",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "modified_at_timestamp"
+      },
+      "method": "GET",
+      "name": "translations",
+      "path": "/projects/{{ config.project_id }}/translations",
+      "records": {
+        "path": "translations"
+      },
+      "schema": "schemas/translations.json"
     },
     {
-      "name": "contributors",
       "method": "GET",
-      "path": "/__legacy_hook/contributors",
+      "name": "contributors",
+      "path": "/projects/{{ config.project_id }}/contributors",
       "records": {
-        "path": "data"
+        "path": "contributors"
       },
       "schema": "schemas/contributors.json"
     },
     {
-      "name": "comments",
       "method": "GET",
-      "path": "/__legacy_hook/comments",
+      "name": "comments",
+      "path": "/projects/{{ config.project_id }}/comments",
       "records": {
-        "path": "data"
+        "path": "comments"
       },
       "schema": "schemas/comments.json"
     }

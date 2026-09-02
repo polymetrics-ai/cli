@@ -1,21 +1,15 @@
 {
   "operations": [
     {
+      "approval": "none",
+      "description": "Searches for candidates by email and/or name.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.**",
       "id": "ashby.direct.candidate.search",
       "kind": "rest_read",
-      "summary": "candidate.search",
-      "description": "Searches for candidates by email and/or name.\n\n**Requires the [`candidatesRead`](authentication#permissions-candidatesearch) permission.**",
-      "risk": "low",
-      "approval": "none",
       "output_policy": "json_redacted",
       "rest": {
-        "method": "POST",
-        "path": "/candidate.search",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "email": {
               "type": "string"
@@ -24,255 +18,261 @@
               "type": "string"
             }
           },
-          "additionalProperties": false
-        }
-      }
-    },
-    {
-      "id": "ashby.direct.job.search",
-      "kind": "rest_read",
-      "summary": "job.search",
-      "description": "Searches jobs by title or custom requisition id. At least one of `title` or `requisitionId` must be provided.\n\n**Requires the [`jobsRead`](authentication#permissions-jobsearch) permission.**",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/job.search",
+          "type": "object"
+        },
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/candidate.search"
+      },
+      "risk": "low",
+      "summary": "candidate.search"
+    },
+    {
+      "approval": "none",
+      "description": "Searches jobs by title or custom requisition id. At least one of `title` or `requisitionId` must be provided.\n\n**Requires the [`jobsRead`](authentication#permissions-jobsearch) permission.**",
+      "id": "ashby.direct.job.search",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
           "properties": {
-            "title": {
+            "requisitionId": {
               "type": "string"
             },
-            "requisitionId": {
+            "title": {
               "type": "string"
             }
           },
-          "additionalProperties": false,
-          "minProperties": 1
-        }
-      }
-    },
-    {
-      "id": "ashby.direct.notetaker.transcript.info",
-      "kind": "rest_read",
-      "summary": "notetakerTranscript.info",
-      "description": "Fetches metadata and a pre-signed download URL for an AI\nNotetaker transcript recording.\n\n**Prerequisites:**\n- Your organization must have the **AI Notetaker add-on**. If your organization does not have\n  the add-on, requests will fail with the `notetaker_transcript_not_enabled` error.\n\nThe response includes a signed URL with the transcript JSON. Download the file promptly after calling\n  this endpoint. If the URL has expired, call the endpoint again to get a fresh one.\n\nOn the free tier, transcripts expire after a retention period. Requesting an expired\ntranscript returns the `notetaker_transcript_expired` error. Organizations with unlimited\nAI Notetaker access are not subject to this expiry.\n\nUse the `notetakerTranscriptId` field from\n[`interviewEvent.list`](ref:intervieweventlist) or [`interviewSchedule.list`](ref:interviewschedulelist) to discover\ntranscript IDs for interview events.\n\n**Error codes:**\n\n| Code | Description |\n|---|---|\n| `notetaker_transcript_not_enabled` | Your org",
-      "risk": "medium",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/notetakerTranscript.info",
+          "type": "object"
+        },
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/job.search"
+      },
+      "risk": "low",
+      "summary": "job.search"
+    },
+    {
+      "approval": "none",
+      "description": "Fetches metadata and a pre-signed download URL for an AI\nNotetaker transcript recording.\n\n**Prerequisites:**\n- Your organization must have the **AI Notetaker add-on**. If your organization does not have\n  the add-on, requests will fail with the `notetaker_transcript_not_enabled` error.\n\nThe response includes a signed URL with the transcript JSON. Download the file promptly after calling\n  this endpoint. If the URL has expired, call the endpoint again to get a fresh one.\n\nOn the free tier, transcripts expire after a retention period. Requesting an expired\ntranscript returns the `notetaker_transcript_expired` error. Organizations with unlimited\nAI Notetaker access are not subject to this expiry.\n\nUse the `notetakerTranscriptId` field from\n[`interviewEvent.list`](ref:intervieweventlist) or [`interviewSchedule.list`](ref:interviewschedulelist) to discover\ntranscript IDs for interview events.\n\n**Error codes:**\n\n| Code | Description |\n|---|---|\n| `notetaker_transcript_not_enabled` | Your org",
+      "id": "ashby.direct.notetaker.transcript.info",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "notetakerTranscriptId": {
-              "type": "string",
-              "description": "The unique id of the notetaker transcript to fetch"
+              "description": "The unique id of the notetaker transcript to fetch",
+              "type": "string"
             }
           },
           "required": [
             "notetakerTranscriptId"
           ],
-          "additionalProperties": false
-        }
-      }
-    },
-    {
-      "id": "ashby.direct.opening.search",
-      "kind": "rest_read",
-      "summary": "opening.search",
-      "description": "Searches for openings by identifier.\n\n**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.**",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/opening.search",
+          "type": "object"
+        },
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/notetakerTranscript.info"
+      },
+      "risk": "medium",
+      "summary": "notetakerTranscript.info"
+    },
+    {
+      "approval": "none",
+      "description": "Searches for openings by identifier.\n\n**Requires the [`jobsRead`](authentication#permissions-openingsearch) permission.**",
+      "id": "ashby.direct.opening.search",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "identifier": {
-              "type": "string",
-              "description": "The identifier of the opening you want to search for"
+              "description": "The identifier of the opening you want to search for",
+              "type": "string"
             }
           },
           "required": [
             "identifier"
           ],
-          "additionalProperties": false
-        }
-      }
-    },
-    {
-      "id": "ashby.direct.project.search",
-      "kind": "rest_read",
-      "summary": "project.search",
-      "description": "Search for projects by title.\n\nResponses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if you approach this limit. This API is for use cases where you intend to operate on a final small set of projects, like building a project autocomplete.\n\n**Requires the [`candidatesRead`](authentication#permissions-projectsearch) permission.**",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/project.search",
+          "type": "object"
+        },
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/opening.search"
+      },
+      "risk": "low",
+      "summary": "opening.search"
+    },
+    {
+      "approval": "none",
+      "description": "Search for projects by title.\n\nResponses are limited to 100 results. Consider refining your search or using /project.list to paginate through all projects, if you approach this limit. This API is for use cases where you intend to operate on a final small set of projects, like building a project autocomplete.\n\n**Requires the [`candidatesRead`](authentication#permissions-projectsearch) permission.**",
+      "id": "ashby.direct.project.search",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "title": {
-              "type": "string",
-              "description": "The project's title"
+              "description": "The project's title",
+              "type": "string"
             }
           },
           "required": [
             "title"
           ],
-          "additionalProperties": false
-        }
-      }
-    },
-    {
-      "id": "ashby.direct.user.search",
-      "kind": "rest_read",
-      "summary": "user.search",
-      "description": "Searches for users by email address.\n\nReturns an array containing the user if found, or an empty array if no user with the given email exists.\n\n**Requires the [`organizationRead`](authentication#permissions-usersearch) permission.**",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/user.search",
+          "type": "object"
+        },
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/project.search"
+      },
+      "risk": "low",
+      "summary": "project.search"
+    },
+    {
+      "approval": "none",
+      "description": "Searches for users by email address.\n\nReturns an array containing the user if found, or an empty array if no user with the given email exists.\n\n**Requires the [`organizationRead`](authentication#permissions-usersearch) permission.**",
+      "id": "ashby.direct.user.search",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "email": {
-              "type": "string",
               "description": "The email address to search for",
-              "format": "email"
+              "format": "email",
+              "type": "string"
             }
           },
           "required": [
             "email"
           ],
-          "additionalProperties": false
-        }
-      }
-    },
-    {
-      "id": "ashby.direct.file.info",
-      "kind": "rest_read",
-      "summary": "file.info",
-      "description": "Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).\n\n**Please note** that running this with Ashby-generated demo data in an Ashby demo account can result in errors. We would recommend manually creating a test candidate in Ashby when trying out this endpoint.\n\n**Requires the [`candidatesRead`](authentication#permissions-fileinfo) permission.**",
-      "risk": "medium",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/file.info",
+          "type": "object"
+        },
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/user.search"
+      },
+      "risk": "low",
+      "summary": "user.search"
+    },
+    {
+      "approval": "none",
+      "description": "Retrieve the URL for a file referenced by a public API file handle (candidate files, resumes, offer letters, and signature-request files).\n\n**Please note** that running this with Ashby-generated demo data in an Ashby demo account can result in errors. We would recommend manually creating a test candidate in Ashby when trying out this endpoint.\n\n**Requires the [`candidatesRead`](authentication#permissions-fileinfo) permission.**",
+      "id": "ashby.direct.file.info",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "fileHandle": {
-              "type": "string",
-              "description": "A file handle retrieved from the public API"
+              "description": "A file handle retrieved from the public API",
+              "type": "string"
             }
           },
           "required": [
             "fileHandle"
           ],
-          "additionalProperties": false
-        }
-      }
-    },
-    {
-      "id": "ashby.direct.user.interviewer.settings",
-      "kind": "rest_read",
-      "summary": "user.interviewerSettings",
-      "description": "Get interviewer settings for a user.",
-      "risk": "low",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/user.interviewerSettings",
+          "type": "object"
+        },
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/file.info"
+      },
+      "risk": "medium",
+      "summary": "file.info"
+    },
+    {
+      "approval": "none",
+      "description": "Get interviewer settings for a user.",
+      "id": "ashby.direct.user.interviewer.settings",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
             "userId": {
-              "type": "string",
-              "description": "The id of the user to get interviewer settings for"
+              "description": "The id of the user to get interviewer settings for",
+              "type": "string"
             }
           },
           "required": [
             "userId"
           ],
-          "additionalProperties": false
-        }
-      }
-    },
-    {
-      "id": "ashby.direct.report.generate",
-      "kind": "rest_read",
-      "summary": "report.generate",
-      "description": "Generates a new report or polls the status of an existing report generation.",
-      "risk": "medium",
-      "approval": "none",
-      "output_policy": "json_redacted",
-      "rest": {
-        "method": "POST",
-        "path": "/report.generate",
+          "type": "object"
+        },
         "content_type": "application/json",
         "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/user.interviewerSettings"
+      },
+      "risk": "low",
+      "summary": "user.interviewerSettings"
+    },
+    {
+      "approval": "none",
+      "description": "Generates a new report or polls the status of an existing report generation.",
+      "id": "ashby.direct.report.generate",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
         "body": {},
         "body_schema": {
-          "type": "object",
+          "additionalProperties": false,
           "properties": {
-            "reportId": {
-              "type": "string",
-              "description": "The ID of the report"
-            },
             "includeHeadersInData": {
               "type": "boolean"
             },
+            "reportId": {
+              "description": "The ID of the report",
+              "type": "string"
+            },
+            "requestId": {
+              "type": "string"
+            },
             "resultStyle": {
-              "type": "string",
               "enum": [
                 "inline",
                 "url"
-              ]
-            },
-            "requestId": {
+              ],
               "type": "string"
             }
           },
           "required": [
             "reportId"
           ],
-          "additionalProperties": false
-        }
-      }
+          "type": "object"
+        },
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/report.generate"
+      },
+      "risk": "medium",
+      "summary": "report.generate"
     }
   ]
 }

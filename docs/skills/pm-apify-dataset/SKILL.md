@@ -7,7 +7,7 @@ description: Apify Dataset connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Apify dataset items and dataset metadata (item_collection, dataset_collection, dataset) through the Apify API v2. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Apify dataset items and dataset metadata through fixed Apify API v2 routes.
 
 ## Icon
 
@@ -28,9 +28,7 @@ Reads Apify dataset items and dataset metadata (item_collection, dataset_collect
 
 ## Configuration
 
-- base_url
 - dataset_id (required)
-- mode
 - token (secret) (required)
 
 ## ETL Streams
@@ -52,7 +50,7 @@ Reads Apify dataset items and dataset metadata (item_collection, dataset_collect
 
 ## Security
 
-- read risk: external Apify Dataset API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded read-only Apify API v2 requests use the fixed provider origin and declared bearer authentication.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

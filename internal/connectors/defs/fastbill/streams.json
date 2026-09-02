@@ -1,64 +1,101 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "mode": "basic",
+        "password": "{{ secrets.api_key }}",
+        "username": "{{ config.username }}"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
+      "body": {
+        "LIMIT": 1,
+        "OFFSET": 0,
+        "SERVICE": "customer.get"
+      },
+      "method": "POST",
+      "path": ""
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "body_offset_field": "OFFSET",
+      "limit_param": "LIMIT",
+      "max_pages": 100,
+      "offset_param": "OFFSET",
+      "page_size": 100,
+      "type": "offset_limit"
+    },
+    "url": "https://my.fastbill.com/api/1.0/api.php",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "body": {
+        "LIMIT": 100,
+        "SERVICE": "customer.get"
+      },
+      "method": "POST",
       "name": "customers",
-      "method": "GET",
-      "path": "/__legacy_hook/customers",
+      "path": "",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "RESPONSE.CUSTOMERS"
       },
       "schema": "schemas/customers.json"
     },
     {
+      "body": {
+        "LIMIT": 100,
+        "SERVICE": "invoice.get"
+      },
+      "method": "POST",
       "name": "invoices",
-      "method": "GET",
-      "path": "/__legacy_hook/invoices",
+      "path": "",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "RESPONSE.INVOICES"
       },
       "schema": "schemas/invoices.json"
     },
     {
+      "body": {
+        "LIMIT": 100,
+        "SERVICE": "article.get"
+      },
+      "method": "POST",
       "name": "products",
-      "method": "GET",
-      "path": "/__legacy_hook/products",
+      "path": "",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "RESPONSE.ARTICLES"
       },
       "schema": "schemas/products.json"
     },
     {
+      "body": {
+        "LIMIT": 100,
+        "SERVICE": "recurring.get"
+      },
+      "method": "POST",
       "name": "recurring_invoices",
-      "method": "GET",
-      "path": "/__legacy_hook/recurring_invoices",
+      "path": "",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "RESPONSE.INVOICES"
       },
       "schema": "schemas/recurring_invoices.json"
     },
     {
+      "body": {
+        "LIMIT": 100,
+        "SERVICE": "revenue.get"
+      },
+      "method": "POST",
       "name": "revenues",
-      "method": "GET",
-      "path": "/__legacy_hook/revenues",
+      "path": "",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "RESPONSE.REVENUES"
       },
       "schema": "schemas/revenues.json"
     }

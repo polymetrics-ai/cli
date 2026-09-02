@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector google-classroom [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Classroom courses and course-scoped resources through fixed REST routes and OAuth2 refresh-token authentication.
 
 ICON
   id: simple-icons-googleclassroom
@@ -33,8 +33,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  mode
   client_id (secret) (required)
   client_refresh_token (secret) (required)
   client_secret (secret) (required)
@@ -43,7 +41,7 @@ ETL STREAMS
   courses:
     primary key: id
     cursor: updateTime
-    fields: alternateLink(string), calendarId(string), courseGroupEmail(string), courseState(string), creationTime(string), description(string), descriptionHeading(string), enrollmentCode(string), guardiansEnabled(boolean), id(string), name(string), ownerId(string), room(string), section(string), teacherGroupEmail(string), updateTime(string)
+    fields: alternateLink(string), courseState(string), creationTime(string), description(string), id(string), name(string), ownerId(string), section(string), updateTime(string)
   teachers:
     primary key: courseId, userId
     fields: courseId(string), emailAddress(string), fullName(string), photoUrl(string), userId(string)
@@ -53,17 +51,17 @@ ETL STREAMS
   course_work:
     primary key: id
     cursor: updateTime
-    fields: alternateLink(string), courseId(string), creationTime(string), description(string), dueDate(string), id(string), maxPoints(number), state(string), title(string), updateTime(string), workType(string)
+    fields: alternateLink(string), courseId(string), creationTime(string), description(string), id(string), maxPoints(number), state(string), title(string), updateTime(string), workType(string)
   announcements:
     primary key: id
     cursor: updateTime
     fields: alternateLink(string), courseId(string), creationTime(string), creatorUserId(string), id(string), state(string), text(string), updateTime(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: external Google Classroom API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded Classroom reads use fixed OAuth2 and REST routes.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

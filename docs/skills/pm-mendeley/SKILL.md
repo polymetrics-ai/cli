@@ -7,7 +7,7 @@ description: Mendeley connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads documents, folders, groups, and annotations through fixed Mendeley REST routes and OAuth refresh-token authentication.
 
 ## Icon
 
@@ -34,8 +34,6 @@ Reads documents, folders, groups, and annotations from the Mendeley reference ma
 
 ## Configuration
 
-- base_url
-- mode
 - name_for_institution (required)
 - query_for_catalog (required)
 - start_date (required)
@@ -67,7 +65,7 @@ Reads documents, folders, groups, and annotations from the Mendeley reference ma
 
 ## Security
 
-- read risk: external Mendeley API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded Mendeley REST reads use fixed routes, declared OAuth refresh-token authentication, and source-declared static vendor media types.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

@@ -1,21 +1,21 @@
 {
-  "name": "google-pagespeed-insights",
-  "display_name": "Google PageSpeed Insights",
-  "description": "Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
-  "integration_type": "api",
-  "release_stage": "alpha",
   "capabilities": {
-    "check": true,
-    "read": true,
-    "write": false,
-    "query": false,
     "cdc": false,
-    "dynamic_schema": false
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": false
   },
+  "description": "Reads Lighthouse PageSpeed Insights reports for a bounded Cartesian product of configured HTTPS URLs and mobile or desktop strategies through the fixed PageSpeed Insights v5 API.",
+  "display_name": "Google PageSpeed Insights",
+  "docs_url": "https://developers.google.com/speed/docs/insights/v5/get-started",
+  "integration_type": "api",
+  "name": "google-pagespeed-insights",
+  "release_stage": "alpha",
   "risk": {
-    "read": "external Google PageSpeed Insights API reads performed by the legacy connector via a Tier-2 hook",
-    "write": "unsupported",
-    "approval": "none; read-only"
-  },
-  "docs_url": "https://developers.google.com/speed/docs/insights/v5/get-started"
+    "approval": "none; read-only",
+    "read": "Each sync sends at most twenty bounded GET requests to the fixed PageSpeed Insights API origin; one report is emitted per configured URL and strategy pair.",
+    "write": "unsupported"
+  }
 }

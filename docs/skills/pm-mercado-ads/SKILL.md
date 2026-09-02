@@ -7,7 +7,7 @@ description: Mercado Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Mercado Ads advertiser and campaign metrics through fixed Advertising API routes.
 
 ## Icon
 
@@ -28,10 +28,10 @@ Reads Mercado Ads brand, display, and product advertisers and daily campaign met
 
 ## Configuration
 
-- base_url
+- advertiser_id
+- campaign_id
 - end_date
 - lookback_days (required)
-- mode
 - start_date
 - client_id (secret) (required)
 - client_refresh_token (secret) (required)
@@ -67,7 +67,7 @@ Reads Mercado Ads brand, display, and product advertisers and daily campaign met
 
 ## Security
 
-- read risk: external Mercado Ads API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded fixed-origin Advertising API reads use declared OAuth refresh-token authentication.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

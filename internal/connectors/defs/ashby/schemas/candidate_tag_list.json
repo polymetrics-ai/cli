@@ -1,21 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "candidate_tag_list",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The candidate tag's unique identifier"
-    },
-    "title": {
-      "type": "string",
-      "description": "The tag's title"
+      "description": "The candidate tag's unique identifier",
+      "type": "string"
     },
     "isArchived": {
-      "type": "boolean",
-      "description": "Whether the tag has been archived"
+      "description": "Whether the tag has been archived",
+      "type": "boolean"
+    },
+    "title": {
+      "description": "The tag's title",
+      "type": "string"
     }
   },
+  "title": "candidate_tag_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

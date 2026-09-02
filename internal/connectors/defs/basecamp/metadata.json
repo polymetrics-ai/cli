@@ -1,21 +1,21 @@
 {
-  "name": "basecamp",
-  "display_name": "Basecamp",
-  "description": "Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
-  "integration_type": "api",
-  "release_stage": "alpha",
   "capabilities": {
-    "check": true,
-    "read": true,
-    "write": false,
-    "query": false,
     "cdc": false,
-    "dynamic_schema": false
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": false
   },
+  "description": "Reads Basecamp 3 projects, people, and account events through fixed account-bound REST routes.",
+  "display_name": "Basecamp",
+  "docs_url": "https://github.com/basecamp/bc3-api",
+  "integration_type": "api",
+  "name": "basecamp",
+  "release_stage": "alpha",
   "risk": {
-    "read": "external Basecamp API reads performed by the legacy connector via a Tier-2 hook",
-    "write": "unsupported",
-    "approval": "none; read-only"
-  },
-  "docs_url": "https://github.com/basecamp/bc3-api"
+    "approval": "none; read-only",
+    "read": "Bounded Basecamp account reads use a declared account path and bearer or refresh-token authentication.",
+    "write": "unsupported"
+  }
 }

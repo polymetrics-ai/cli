@@ -3675,7 +3675,7 @@
   {
     "name": "alpha-vantage",
     "display_name": "Alpha Vantage",
-    "description": "Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads daily, weekly, monthly, and intraday OHLCV time series plus latest global quotes through fixed Alpha Vantage query operations.",
     "integration_type": "api",
     "docs_url": "https://www.alphavantage.co/documentation/",
     "release_stage": "alpha",
@@ -3688,44 +3688,39 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Alpha Vantage Connection Specification",
-      "type": "object",
+      "properties": {
+        "adjusted": {
+          "default": "false",
+          "description": "Intraday adjusted-series selector.",
+          "type": "string"
+        },
+        "api_key": {
+          "description": "Alpha Vantage API key.",
+          "type": "string",
+          "x-secret": true
+        },
+        "interval": {
+          "default": "1min",
+          "description": "Intraday interval.",
+          "type": "string"
+        },
+        "outputsize": {
+          "default": "compact",
+          "description": "Time-series response window.",
+          "type": "string"
+        },
+        "symbol": {
+          "description": "Stock symbol with exchange code.",
+          "type": "string"
+        }
+      },
       "required": [
         "api_key",
         "symbol"
       ],
-      "properties": {
-        "adjusted": {
-          "type": "string",
-          "description": "Whether to return adjusted data. Only applicable to intraday endpoints."
-        },
-        "api_key": {
-          "type": "string",
-          "x-secret": true,
-          "description": "API Key"
-        },
-        "interval": {
-          "type": "string",
-          "description": "Time-series data point interval. Required for intraday endpoints."
-        },
-        "outputsize": {
-          "type": "string",
-          "description": "Whether to return full or compact data (the last 100 data points)."
-        },
-        "symbol": {
-          "type": "string",
-          "description": "Stock symbol (with exchange code)"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Alpha Vantage Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -3805,7 +3800,7 @@
       }
     ],
     "risk": {
-      "read": "external Alpha Vantage API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Alpha Vantage query reads use the fixed provider origin and declared API-key query authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -6949,7 +6944,7 @@
   {
     "name": "apify-dataset",
     "display_name": "Apify Dataset",
-    "description": "Reads Apify dataset items and dataset metadata (item_collection, dataset_collection, dataset) through the Apify API v2. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Apify dataset items and dataset metadata through fixed Apify API v2 routes.",
     "integration_type": "api",
     "docs_url": "https://docs.apify.com/api/v2",
     "release_stage": "alpha",
@@ -6962,32 +6957,24 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Apify Dataset Connection Specification",
-      "type": "object",
+      "properties": {
+        "dataset_id": {
+          "description": "Apify dataset identifier.",
+          "type": "string"
+        },
+        "token": {
+          "description": "Apify API token.",
+          "type": "string",
+          "x-secret": true
+        }
+      },
       "required": [
         "dataset_id",
         "token"
       ],
-      "properties": {
-        "dataset_id": {
-          "type": "string",
-          "description": "manual intervention needed"
-        },
-        "token": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Personal API token of your Apify account. In Apify Console, you can find your API token in the \u003ca href=\"https://console.apify.com/account/integrations\"\u003eSettings section under the Integrations tab\u003c/a\u003e after you login. See the \u003ca href=\"https://docs.apify.com/platform/integrations/api#api-token\"\u003eApify Docs\u003c/a\u003e for more information."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Apify Dataset Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -7027,7 +7014,7 @@
       }
     ],
     "risk": {
-      "read": "external Apify Dataset API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded read-only Apify API v2 requests use the fixed provider origin and declared bearer authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -10182,37 +10169,37 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Ashby Connection Specification",
-      "type": "object",
+      "properties": {
+        "api_key": {
+          "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs.",
+          "type": "string",
+          "x-secret": true
+        },
+        "base_url": {
+          "default": "https://api.ashbyhq.com",
+          "description": "Ashby API base URL; override only for local tests.",
+          "type": "string"
+        },
+        "max_pages": {
+          "default": "0",
+          "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent.",
+          "type": "string"
+        },
+        "mode": {
+          "description": "Set to fixture for credential-free native tests.",
+          "type": "string"
+        },
+        "page_size": {
+          "default": "100",
+          "description": "Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector.",
+          "type": "string"
+        }
+      },
       "required": [
         "api_key"
       ],
-      "properties": {
-        "api_key": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://api.ashbyhq.com",
-          "description": "Ashby API base URL; override only for local tests."
-        },
-        "page_size": {
-          "type": "string",
-          "default": "100",
-          "description": "Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."
-        },
-        "max_pages": {
-          "type": "string",
-          "default": "0",
-          "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free native tests."
-        }
-      }
+      "title": "Ashby Connection Specification",
+      "type": "object"
     },
     "streams": [
       {
@@ -12435,9 +12422,9 @@
   {
     "name": "aws-cloudtrail",
     "display_name": "AWS CloudTrail",
-    "description": "Reads AWS CloudTrail management events (last 90 days) via the LookupEvents API using AWS Signature V4 authentication. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads CloudTrail management events through fixed, declaration-bound LookupEvents requests signed with AWS Signature Version 4.",
     "integration_type": "api",
-    "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
+    "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -12448,45 +12435,30 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "AWS CloudTrail Connection Specification",
-      "type": "object",
-      "required": [
-        "aws_key_id",
-        "aws_region_name",
-        "aws_secret_key"
-      ],
       "properties": {
         "aws_key_id": {
+          "description": "AWS access key ID.",
           "type": "string",
-          "x-secret": true,
-          "description": "manual intervention needed"
-        },
-        "aws_region_name": {
-          "type": "string",
-          "description": "The default AWS Region to use, for example, us-west-1 or us-west-2. When specifying a Region inline during client initialization, this property is named region_name."
+          "x-secret": true
         },
         "aws_secret_key": {
+          "description": "AWS secret access key.",
           "type": "string",
-          "x-secret": true,
-          "description": "manual intervention needed"
+          "x-secret": true
         },
-        "lookup_attributes_filter": {
-          "type": "string"
-        },
-        "start_date": {
+        "aws_session_token": {
+          "description": "Optional AWS session token.",
           "type": "string",
-          "description": "The date you would like to replicate data. Data in AWS CloudTrail is available for last 90 days only. Format: YYYY-MM-DD."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "x-secret": true
         }
-      }
+      },
+      "required": [
+        "aws_key_id",
+        "aws_secret_key"
+      ],
+      "title": "AWS CloudTrail Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -12547,7 +12519,7 @@
       }
     ],
     "risk": {
-      "read": "external AWS CloudTrail API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded CloudTrail LookupEvents requests are signed by the declaration-bound generic SigV4 authenticator against the fixed CloudTrail us-east-1 origin.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -12561,9 +12533,9 @@
   {
     "name": "babelforce",
     "display_name": "Babelforce",
-    "description": "Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Babelforce call reporting, recordings, numbers, and users through fixed Babelforce v2 REST routes.",
     "integration_type": "api",
-    "docs_url": "https://api.babelforce.com/",
+    "docs_url": "https://docs.babelforce.com/",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -12574,46 +12546,31 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Babelforce Connection Specification",
-      "type": "object",
-      "required": [
-        "access_key_id",
-        "access_token",
-        "region"
-      ],
       "properties": {
         "access_key_id": {
+          "description": "Babelforce access key ID.",
           "type": "string",
-          "x-secret": true,
-          "description": "The Babelforce access key ID"
+          "x-secret": true
         },
         "access_token": {
+          "description": "Babelforce access token.",
           "type": "string",
-          "x-secret": true,
-          "description": "The Babelforce access token"
-        },
-        "date_created_from": {
-          "type": "string",
-          "description": "Timestamp in Unix the replication from Babelforce API will start from. For example 1651363200 which corresponds to 2022-05-01 00:00:00."
-        },
-        "date_created_to": {
-          "type": "string",
-          "description": "Timestamp in Unix the replication from Babelforce will be up to. For example 1651363200 which corresponds to 2022-05-01 00:00:00."
+          "x-secret": true
         },
         "region": {
-          "type": "string",
-          "description": "Babelforce region"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "default": "services",
+          "description": "Declared Babelforce regional provider host.",
+          "enum": [
+            "services",
+            "us-east",
+            "ap-southeast"
+          ],
+          "type": "string"
         }
-      }
+      },
+      "title": "Babelforce Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -12688,7 +12645,7 @@
       }
     ],
     "risk": {
-      "read": "external Babelforce API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Babelforce v2 reads use a source-declared regional provider origin and dual-header authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -14724,7 +14681,7 @@
   {
     "name": "basecamp",
     "display_name": "Basecamp",
-    "description": "Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Basecamp 3 projects, people, and account events through fixed account-bound REST routes.",
     "integration_type": "api",
     "docs_url": "https://github.com/basecamp/bc3-api",
     "release_stage": "alpha",
@@ -14737,44 +14694,38 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Basecamp Connection Specification",
-      "type": "object",
-      "required": [
-        "account_id",
-        "client_id",
-        "client_refresh_token_2",
-        "client_secret",
-        "start_date"
-      ],
       "properties": {
-        "account_id": {
-          "type": "string"
-        },
-        "client_id": {
+        "access_token": {
+          "description": "Basecamp bearer access token.",
           "type": "string",
           "x-secret": true
         },
-        "client_refresh_token_2": {
+        "account_id": {
+          "description": "Basecamp account ID.",
+          "type": "string"
+        },
+        "client_id": {
+          "description": "OAuth client ID.",
           "type": "string",
           "x-secret": true
         },
         "client_secret": {
+          "description": "OAuth client secret.",
           "type": "string",
           "x-secret": true
         },
-        "start_date": {
-          "type": "string"
-        },
-        "base_url": {
+        "refresh_token": {
+          "description": "OAuth refresh token.",
           "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "x-secret": true
         }
-      }
+      },
+      "required": [
+        "account_id"
+      ],
+      "title": "Basecamp Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -14821,7 +14772,7 @@
       }
     ],
     "risk": {
-      "read": "external Basecamp API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Basecamp account reads use a declared account path and bearer or refresh-token authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -21179,9 +21130,9 @@
   {
     "name": "bunny-inc",
     "display_name": "Bunny, Inc.",
-    "description": "Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from the per-tenant Bunny GraphQL API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Bunny subscription-billing data through declared per-tenant GraphQL connection routes.",
     "integration_type": "api",
-    "docs_url": "https://docs.bunny.net/reference/bunnynet-api-overview",
+    "docs_url": "https://docs.bunny.com/",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -21192,34 +21143,25 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Bunny, Inc. Connection Specification",
-      "type": "object",
-      "required": [
-        "apikey",
-        "subdomain"
-      ],
       "properties": {
         "apikey": {
+          "description": "Bunny GraphQL API key.",
           "type": "string",
           "x-secret": true
         },
-        "start_date": {
-          "type": "string"
-        },
         "subdomain": {
-          "type": "string",
-          "description": "The subdomain specific to your Bunny account or service."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "description": "Bunny tenant subdomain.",
+          "pattern": "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$",
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "subdomain",
+        "apikey"
+      ],
+      "title": "Bunny Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -21294,7 +21236,7 @@
       }
     ],
     "risk": {
-      "read": "external Bunny, Inc. API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded declared Bunny GraphQL reads use a source-validated tenant subdomain and bearer API key.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -22822,7 +22764,7 @@
   {
     "name": "canny",
     "display_name": "Canny",
-    "description": "Reads Canny boards, posts, comments, categories, and companies through the Canny REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Canny boards, posts, comments, categories, and companies through fixed Canny REST form requests.",
     "integration_type": "api",
     "docs_url": "https://developers.canny.io/api-reference",
     "release_stage": "alpha",
@@ -22835,27 +22777,19 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Canny Connection Specification",
-      "type": "object",
+      "properties": {
+        "api_key": {
+          "description": "Canny API key.",
+          "type": "string",
+          "x-secret": true
+        }
+      },
       "required": [
         "api_key"
       ],
-      "properties": {
-        "api_key": {
-          "type": "string",
-          "x-secret": true,
-          "description": "You can find your secret API key in Your Canny Subdomain \u003e Settings \u003e API"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Canny Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -22930,7 +22864,7 @@
       }
     ],
     "risk": {
-      "read": "external Canny API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Canny list requests carry the declared API key only in typed form bodies.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -33160,7 +33094,7 @@
   {
     "name": "copper",
     "display_name": "Copper",
-    "description": "Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Copper CRM records through fixed typed search routes.",
     "integration_type": "api",
     "docs_url": "https://developer.copper.com/",
     "release_stage": "alpha",
@@ -33173,32 +33107,24 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Copper Connection Specification",
-      "type": "object",
+      "properties": {
+        "api_key": {
+          "description": "Copper API key.",
+          "type": "string",
+          "x-secret": true
+        },
+        "user_email": {
+          "description": "Copper user email.",
+          "type": "string"
+        }
+      },
       "required": [
         "api_key",
         "user_email"
       ],
-      "properties": {
-        "api_key": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Copper API key"
-        },
-        "user_email": {
-          "type": "string",
-          "description": "user email used to login in to Copper"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Copper Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -33273,7 +33199,7 @@
       }
     ],
     "risk": {
-      "read": "external Copper API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Copper search requests use fixed API routes and declared three-header authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -36502,9 +36428,9 @@
   {
     "name": "dixa",
     "display_name": "Dixa",
-    "description": "Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Dixa conversation export records through fixed bearer-authenticated export routes.",
     "integration_type": "api",
-    "docs_url": "https://docs.dixa.io/openapi/",
+    "docs_url": "https://docs.dixa.io/",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -36515,36 +36441,26 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Dixa Connection Specification",
-      "type": "object",
-      "required": [
-        "api_token",
-        "start_date"
-      ],
       "properties": {
         "api_token": {
+          "description": "Dixa API token.",
           "type": "string",
-          "x-secret": true,
-          "description": "Dixa API token"
+          "x-secret": true
         },
-        "batch_size": {
-          "type": "string",
-          "description": "Number of days to batch into one request. Max 31."
+        "updated_after": {
+          "default": "0",
+          "description": "Inclusive export lower bound in milliseconds.",
+          "type": "string"
         },
-        "start_date": {
-          "type": "string",
-          "description": "The connector pulls records updated from this date onwards."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+        "updated_before": {
+          "default": "1",
+          "description": "Exclusive export upper bound in milliseconds.",
+          "type": "string"
         }
-      }
+      },
+      "title": "Dixa Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -36605,7 +36521,7 @@
       }
     ],
     "risk": {
-      "read": "external Dixa API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Dixa conversation export reads use a fixed provider origin and declared bearer authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -42944,9 +42860,9 @@
   {
     "name": "fastbill",
     "display_name": "FastBill",
-    "description": "Reads FastBill customers, invoices, products, recurring invoices, and revenues through the FastBill JSON API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads FastBill billing records through fixed JSON SERVICE envelopes.",
     "integration_type": "api",
-    "docs_url": "https://apidocs.fastbill.com/",
+    "docs_url": "https://www.fastbill.com/api/",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -42957,38 +42873,30 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "FastBill Connection Specification",
-      "type": "object",
-      "required": [
-        "api_key",
-        "username"
-      ],
       "properties": {
         "api_key": {
+          "description": "FastBill API key.",
           "type": "string",
-          "x-secret": true,
-          "description": "Fastbill API key"
+          "x-secret": true
         },
         "username": {
-          "type": "string",
-          "description": "Username for Fastbill account"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "description": "FastBill username.",
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "username",
+        "api_key"
+      ],
+      "title": "FastBill Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
         "name": "customers",
         "primary_key": [
-          "customer_id"
+          "CUSTOMER_ID"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -42998,7 +42906,7 @@
       {
         "name": "invoices",
         "primary_key": [
-          "invoice_id"
+          "INVOICE_ID"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -43008,7 +42916,7 @@
       {
         "name": "products",
         "primary_key": [
-          "article_number"
+          "ARTICLE_NUMBER"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -43018,7 +42926,7 @@
       {
         "name": "recurring_invoices",
         "primary_key": [
-          "invoice_id"
+          "INVOICE_ID"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -43028,7 +42936,7 @@
       {
         "name": "revenues",
         "primary_key": [
-          "invoice_id"
+          "REVENUE_ID"
         ],
         "sync_modes": [
           "full_refresh_append",
@@ -43037,7 +42945,7 @@
       }
     ],
     "risk": {
-      "read": "external FastBill API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded FastBill JSON API requests use fixed origin and declared Basic authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -43167,7 +43075,7 @@
   {
     "name": "feishu",
     "display_name": "Feishu / Lark",
-    "description": "Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API using a tenant_access_token exchange. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Feishu/Lark Bitable records, tables, and field schemas through declared Bitable REST routes and a bounded tenant token exchange.",
     "integration_type": "api",
     "docs_url": "https://open.feishu.cn/document/server-docs/docs/bitable-v1/bitable-overview",
     "release_stage": "alpha",
@@ -43180,53 +43088,45 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Feishu / Lark Connection Specification",
-      "type": "object",
+      "properties": {
+        "app_id": {
+          "description": "Feishu/Lark app ID used only for the tenant token exchange.",
+          "type": "string",
+          "x-secret": true
+        },
+        "app_secret": {
+          "description": "Feishu/Lark app secret used only for the tenant token exchange.",
+          "type": "string",
+          "x-secret": true
+        },
+        "app_token": {
+          "description": "Feishu/Lark Bitable app token.",
+          "type": "string",
+          "x-secret": true
+        },
+        "region": {
+          "default": "feishu.cn",
+          "description": "Declared Feishu/Lark provider host suffix.",
+          "enum": [
+            "feishu.cn",
+            "larksuite.com"
+          ],
+          "type": "string"
+        },
+        "table_id": {
+          "description": "Bitable table identifier for records and fields streams.",
+          "type": "string"
+        }
+      },
       "required": [
         "app_id",
         "app_secret",
         "app_token",
-        "lark_host",
         "table_id"
       ],
-      "properties": {
-        "app_id": {
-          "type": "string",
-          "x-secret": true,
-          "description": "The unique identifier for your application. Found in the Feishu/Lark Developer Console under \"Credentials \u0026 Basic Info\"."
-        },
-        "app_secret": {
-          "type": "string",
-          "x-secret": true,
-          "description": "The secret key used to verify your application's identity. Found alongside the App ID."
-        },
-        "app_token": {
-          "type": "string",
-          "x-secret": true,
-          "description": "The unique identifier of the Bitable (Base). Found in the URL: /base/{app_token}."
-        },
-        "lark_host": {
-          "type": "string",
-          "description": "Base URL of the Feishu/Lark Open Platform. Use https://open.feishu.cn for Feishu (China mainland) accounts and https://open.larksuite.com for Lark (international) accounts."
-        },
-        "page_size": {
-          "type": "string",
-          "description": "Number of records per request. Max: 500. Default: 100."
-        },
-        "table_id": {
-          "type": "string",
-          "description": "The unique identifier of the table. Found in the URL query parameter table={table_id}."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Feishu / Lark Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -43261,7 +43161,7 @@
       }
     ],
     "risk": {
-      "read": "external Feishu / Lark API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Feishu/Lark Bitable reads use a source-declared provider host and tenant token exchange.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -48741,7 +48641,7 @@
   {
     "name": "free-agent-connector",
     "display_name": "FreeAgent",
-    "description": "Reads FreeAgent contacts, invoices, bills, projects, and tasks through the FreeAgent v2 REST API using OAuth2 refresh-token authentication. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads FreeAgent contacts, invoices, bills, projects, and tasks through fixed FreeAgent v2 REST routes and OAuth2 refresh-token authentication.",
     "integration_type": "api",
     "docs_url": "https://dev.freeagent.com/",
     "release_stage": "alpha",
@@ -48754,42 +48654,36 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "FreeAgent Connection Specification",
-      "type": "object",
-      "required": [
-        "client_id",
-        "client_refresh_token_2",
-        "client_secret"
-      ],
       "properties": {
         "client_id": {
+          "description": "FreeAgent OAuth client ID.",
           "type": "string",
           "x-secret": true
         },
         "client_refresh_token_2": {
+          "description": "FreeAgent OAuth refresh token.",
           "type": "string",
           "x-secret": true
         },
         "client_secret": {
+          "description": "FreeAgent OAuth client secret.",
           "type": "string",
           "x-secret": true
         },
-        "payroll_year": {
-          "type": "string"
-        },
         "updated_since": {
+          "description": "Optional FreeAgent update lower bound.",
+          "format": "date-time",
           "type": "string"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
         }
-      }
+      },
+      "required": [
+        "client_id",
+        "client_secret",
+        "client_refresh_token_2"
+      ],
+      "title": "FreeAgent Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -48864,7 +48758,7 @@
       }
     ],
     "risk": {
-      "read": "external FreeAgent API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded FreeAgent v2 reads use declared OAuth2 refresh-token authentication and fixed provider routes.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -48879,7 +48773,7 @@
   {
     "name": "freightview",
     "display_name": "Freightview",
-    "description": "Reads Freightview shipments, quotes, and tracking events through the Freightview v2.0 REST API using the client-credentials session-token flow. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Freightview shipments, quotes, and tracking events through fixed Freightview v2.0 REST routes using client-credentials authentication.",
     "integration_type": "api",
     "docs_url": "https://docs.freightview.com/",
     "release_stage": "alpha",
@@ -48892,31 +48786,25 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Freightview Connection Specification",
-      "type": "object",
-      "required": [
-        "client_id",
-        "client_secret"
-      ],
       "properties": {
         "client_id": {
+          "description": "Freightview client ID.",
           "type": "string",
           "x-secret": true
         },
         "client_secret": {
+          "description": "Freightview client secret.",
           "type": "string",
           "x-secret": true
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
         }
-      }
+      },
+      "required": [
+        "client_id",
+        "client_secret"
+      ],
+      "title": "Freightview Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -48951,7 +48839,7 @@
       }
     ],
     "risk": {
-      "read": "external Freightview API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Freightview v2.0 reads use declared client-credentials authentication and fixed provider routes.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -71354,9 +71242,9 @@
   {
     "name": "google-analytics-data-api",
     "display_name": "Google Analytics 4 (GA4)",
-    "description": "Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads fixed Google Analytics 4 reports from the Analytics Data API runReport endpoint through declared response-header projection.",
     "integration_type": "api",
-    "docs_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/changelog",
+    "docs_url": "https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -71367,62 +71255,35 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Google Analytics 4 (GA4) Connection Specification",
-      "type": "object",
-      "required": [
-        "property_ids"
-      ],
       "properties": {
-        "convert_conversions_event": {
+        "access_token": {
+          "description": "Google Analytics OAuth2 access token.",
           "type": "string",
-          "description": "Enables conversion of `conversions:*` event metrics from integers to floats. This is beneficial for preventing data rounding when the API returns float values for any `conversions:*` fields."
+          "x-secret": true
         },
-        "credentials": {
-          "type": "string",
-          "description": "Credentials for the service"
-        },
-        "custom_reports_array": {
-          "type": "string",
-          "description": "You can add your Custom Analytics report by creating one."
-        },
-        "date_ranges_end_date": {
-          "type": "string",
-          "description": "The end date from which to replicate report data in the format YYYY-MM-DD. Data generated after this date will not be included in the report. Not applied to custom Cohort reports. When no date is provided or the date is in the future, the date from today is used."
-        },
-        "date_ranges_start_date": {
-          "type": "string",
-          "description": "The start date from which to replicate report data in the format YYYY-MM-DD. Data generated before this date will not be included in the report. Not applied to custom Cohort reports."
-        },
-        "keep_empty_rows": {
-          "type": "string",
-          "description": "If false, each row with all metrics equal to 0 will not be returned. If true, these rows will be returned if they are not separately removed by a filter. More information is available in \u003ca href=\"https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport#request-body\"\u003ethe documentation\u003c/a\u003e."
-        },
-        "lookback_window": {
-          "type": "string",
-          "description": "Since attribution changes after the event date, and Google Analytics has a data processing latency, we should specify how many days in the past we should refresh the data in every run. So if you set it at 5 days, in every sync it will fetch the last bookmark date minus 5 days."
+        "end_date": {
+          "default": "today",
+          "description": "GA4 report end date or relative date token.",
+          "type": "string"
         },
         "property_ids": {
-          "type": "string",
-          "description": "A list of your Property IDs. The Property ID is a unique number assigned to each property in Google Analytics, found in your GA4 property URL. This ID allows the connector to track the specific events associated with your property. Refer to the \u003ca href='https://developers.google.com/analytics/devguides/reporting/data/v1/property-id#what_is_my_property_id'\u003eGoogle Analytics documentation\u003c/a\u003e to locate your property ID."
+          "description": "One numeric Google Analytics property ID.",
+          "pattern": "^[0-9]+$",
+          "type": "string"
         },
-        "subscription_tier": {
-          "type": "string",
-          "description": "Quota tier of the Google Analytics 4 properties being queried. Determines the per-property rate-limit policy applied locally once the tier-aware rate-limit budget is activated. Select \"Analytics 360 Property\" only if all configured property IDs belong to an Analytics 360 subscription. See https://developers.google.com/analytics/devguides/reporting/data/v1/quotas."
-        },
-        "window_in_days": {
-          "type": "string",
-          "description": "manual intervention needed"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+        "start_date": {
+          "default": "30daysAgo",
+          "description": "GA4 report start date or relative date token.",
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "property_ids",
+        "access_token"
+      ],
+      "title": "Google Analytics 4 (GA4) Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -71435,9 +71296,7 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -71450,9 +71309,7 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -71467,9 +71324,7 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -71485,9 +71340,7 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -71502,14 +71355,12 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
     "risk": {
-      "read": "external Google Analytics 4 (GA4) API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded GA4 reports use a fixed provider route and bearer token; response headers may map only source-declared positional values.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -71947,9 +71798,9 @@
   {
     "name": "google-classroom",
     "display_name": "Google Classroom",
-    "description": "Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Classroom courses and course-scoped resources through fixed REST routes and OAuth2 refresh-token authentication.",
     "integration_type": "api",
-    "docs_url": "https://developers.google.com/classroom/reference/rest",
+    "docs_url": "https://developers.google.com/workspace/classroom/reference/rest",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -71960,13 +71811,6 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Google Classroom Connection Specification",
-      "type": "object",
-      "required": [
-        "client_id",
-        "client_refresh_token",
-        "client_secret"
-      ],
       "properties": {
         "client_id": {
           "type": "string",
@@ -71979,17 +71823,16 @@
         "client_secret": {
           "type": "string",
           "x-secret": true
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
         }
-      }
+      },
+      "required": [
+        "client_id",
+        "client_secret",
+        "client_refresh_token"
+      ],
+      "title": "Google Classroom Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -72001,9 +71844,7 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -72037,9 +71878,7 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -72051,14 +71890,12 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
     "risk": {
-      "read": "external Google Classroom API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Classroom reads use fixed OAuth2 and REST routes.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -72312,7 +72149,7 @@
   {
     "name": "google-pagespeed-insights",
     "display_name": "Google PageSpeed Insights",
-    "description": "Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Lighthouse PageSpeed Insights reports for a bounded Cartesian product of configured HTTPS URLs and mobile or desktop strategies through the fixed PageSpeed Insights v5 API.",
     "integration_type": "api",
     "docs_url": "https://developers.google.com/speed/docs/insights/v5/get-started",
     "release_stage": "alpha",
@@ -72325,41 +72162,28 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Google PageSpeed Insights Connection Specification",
-      "type": "object",
+      "properties": {
+        "api_key": {
+          "description": "Optional PageSpeed API key sent only as the declared key query parameter.",
+          "type": "string",
+          "x-secret": true
+        },
+        "strategies": {
+          "description": "Comma-separated, unique PageSpeed strategies: mobile and/or desktop.",
+          "type": "string"
+        },
+        "urls": {
+          "description": "Comma-separated, unique HTTPS URLs to analyse. The declared URL and strategy product is capped at twenty requests.",
+          "type": "string"
+        }
+      },
       "required": [
-        "categories",
         "strategies",
         "urls"
       ],
-      "properties": {
-        "api_key": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Google PageSpeed API Key. See \u003ca href=\"https://developers.google.com/speed/docs/insights/v5/get-started#APIKey\"\u003ehere\u003c/a\u003e. The key is optional - however the API is heavily rate limited when using without API Key. Creating and using the API key therefore is recommended. The key is case sensitive."
-        },
-        "categories": {
-          "type": "string",
-          "description": "Defines which Lighthouse category to run. One or many of: \"accessibility\", \"best-practices\", \"performance\", \"pwa\", \"seo\"."
-        },
-        "strategies": {
-          "type": "string",
-          "description": "The analyses strategy to use. Either \"desktop\" or \"mobile\"."
-        },
-        "urls": {
-          "type": "string",
-          "description": "The URLs to retrieve pagespeed information from. The connector will attempt to sync PageSpeed reports for all the defined URLs. Format: https://(www.)url.domain"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Google PageSpeed Insights Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -72375,7 +72199,7 @@
       }
     ],
     "risk": {
-      "read": "external Google PageSpeed Insights API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Each sync sends at most twenty bounded GET requests to the fixed PageSpeed Insights API origin; one report is emitted per configured URL and strategy pair.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -87170,7 +86994,7 @@
   {
     "name": "less-annoying-crm",
     "display_name": "Less Annoying CRM",
-    "description": "Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Less Annoying CRM users, contacts, tasks, notes, and events through fixed v2 RPC requests.",
     "integration_type": "api",
     "docs_url": "https://www.lessannoyingcrm.com/help/topic/API",
     "release_stage": "alpha",
@@ -87182,32 +87006,25 @@
       "query": false
     },
     "spec": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Less Annoying CRM Connection Specification",
-      "type": "object",
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "properties": {
+        "api_key": {
+          "description": "Less Annoying CRM Programmer API key.",
+          "type": "string",
+          "x-secret": true
+        },
+        "start_date": {
+          "description": "Initial ETL lower-bound configuration retained for connection compatibility.",
+          "type": "string"
+        }
+      },
       "required": [
         "api_key",
         "start_date"
       ],
-      "properties": {
-        "api_key": {
-          "type": "string",
-          "x-secret": true,
-          "description": "API key to use. Manage and create your API keys on the Programmer API settings page at https://account.lessannoyingcrm.com/app/Settings/Api."
-        },
-        "start_date": {
-          "type": "string"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Less Annoying CRM Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -87270,7 +87087,7 @@
       }
     ],
     "risk": {
-      "read": "external Less Annoying CRM API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded POST reads use the fixed Less Annoying CRM v2 origin and declared API-key header authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -88415,9 +88232,9 @@
   {
     "name": "lokalise",
     "display_name": "Lokalise",
-    "description": "Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Lokalise project keys, languages, translations, contributors, and comments through fixed API v2 routes.",
     "integration_type": "api",
-    "docs_url": "https://developers.lokalise.com/reference/api-introduction",
+    "docs_url": "https://developers.lokalise.com/reference/api-overview",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -88428,32 +88245,24 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Lokalise Connection Specification",
-      "type": "object",
+      "properties": {
+        "api_key": {
+          "description": "Lokalise read-access API token.",
+          "type": "string",
+          "x-secret": true
+        },
+        "project_id": {
+          "description": "Lokalise project identifier.",
+          "type": "string"
+        }
+      },
       "required": [
         "api_key",
         "project_id"
       ],
-      "properties": {
-        "api_key": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Lokalise API Key with read-access. Available at Profile settings \u003e API tokens. See \u003ca href=\"https://docs.lokalise.com/en/articles/1929556-api-tokens\"\u003ehere\u003c/a\u003e."
-        },
-        "project_id": {
-          "type": "string",
-          "description": "Lokalise project ID. Available at Project Settings \u003e General."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Lokalise Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -88516,7 +88325,7 @@
       }
     ],
     "risk": {
-      "read": "external Lokalise API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded GET reads use the fixed Lokalise API v2 origin and declared project-scoped API-key authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -95052,9 +94861,9 @@
   {
     "name": "mendeley",
     "display_name": "Mendeley",
-    "description": "Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads documents, folders, groups, and annotations through fixed Mendeley REST routes and OAuth refresh-token authentication.",
     "integration_type": "api",
-    "docs_url": "https://dev.mendeley.com/",
+    "docs_url": "https://dev.mendeley.com/reference",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -95065,8 +94874,35 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Mendeley Connection Specification",
-      "type": "object",
+      "properties": {
+        "client_id": {
+          "description": "Mendeley OAuth client identifier.",
+          "type": "string",
+          "x-secret": true
+        },
+        "client_refresh_token": {
+          "description": "Mendeley OAuth refresh token.",
+          "type": "string",
+          "x-secret": true
+        },
+        "client_secret": {
+          "description": "Mendeley OAuth client secret.",
+          "type": "string",
+          "x-secret": true
+        },
+        "name_for_institution": {
+          "description": "Retained Mendeley institution query configuration.",
+          "type": "string"
+        },
+        "query_for_catalog": {
+          "description": "Retained Mendeley catalog query configuration.",
+          "type": "string"
+        },
+        "start_date": {
+          "description": "Initial incremental lower bound.",
+          "type": "string"
+        }
+      },
       "required": [
         "client_id",
         "client_refresh_token",
@@ -95075,43 +94911,9 @@
         "query_for_catalog",
         "start_date"
       ],
-      "properties": {
-        "client_id": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Could be found at `https://dev.mendeley.com/myapps.html`"
-        },
-        "client_refresh_token": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Use cURL or Postman with the OAuth 2.0 Authorization tab. Set the Auth URL to https://api.mendeley.com/oauth/authorize, the Token URL to https://api.mendeley.com/oauth/token, and use all as the scope."
-        },
-        "client_secret": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Could be found at `https://dev.mendeley.com/myapps.html`"
-        },
-        "name_for_institution": {
-          "type": "string",
-          "description": "The name parameter for institutions search"
-        },
-        "query_for_catalog": {
-          "type": "string",
-          "description": "Query for catalog search"
-        },
-        "start_date": {
-          "type": "string"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Mendeley Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -95168,7 +94970,7 @@
       }
     ],
     "risk": {
-      "read": "external Mendeley API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Mendeley REST reads use fixed routes, declared OAuth refresh-token authentication, and source-declared static vendor media types.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -95334,7 +95136,7 @@
   {
     "name": "mercado-ads",
     "display_name": "Mercado Ads",
-    "description": "Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Mercado Ads advertiser and campaign metrics through fixed Advertising API routes.",
     "integration_type": "api",
     "docs_url": "https://developers.mercadolibre.com.ar/en_us/advertising",
     "release_stage": "alpha",
@@ -95347,15 +95149,13 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Mercado Ads Connection Specification",
-      "type": "object",
-      "required": [
-        "client_id",
-        "client_refresh_token",
-        "client_secret",
-        "lookback_days"
-      ],
       "properties": {
+        "advertiser_id": {
+          "type": "string"
+        },
+        "campaign_id": {
+          "type": "string"
+        },
         "client_id": {
           "type": "string",
           "x-secret": true
@@ -95369,26 +95169,24 @@
           "x-secret": true
         },
         "end_date": {
-          "type": "string",
-          "description": "Cannot exceed 90 days from current day for Product Ads"
+          "type": "string"
         },
         "lookback_days": {
           "type": "string"
         },
         "start_date": {
-          "type": "string",
-          "description": "Cannot exceed 90 days from current day for Product Ads, and 90 days from \"End Date\" on Brand and Display Ads"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "client_id",
+        "client_refresh_token",
+        "client_secret",
+        "lookback_days"
+      ],
+      "title": "Mercado Ads Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -95471,7 +95269,7 @@
       }
     ],
     "risk": {
-      "read": "external Mercado Ads API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded fixed-origin Advertising API reads use declared OAuth refresh-token authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -95638,7 +95436,7 @@
   {
     "name": "metabase",
     "display_name": "Metabase",
-    "description": "Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using session-token authentication. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using a declared session token.",
     "integration_type": "api",
     "docs_url": "https://www.metabase.com/docs/latest/api-documentation",
     "release_stage": "alpha",
@@ -95651,39 +95449,32 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Metabase Connection Specification",
-      "type": "object",
-      "required": [
-        "instance_api_url",
-        "username"
-      ],
       "properties": {
         "instance_api_url": {
-          "type": "string",
-          "description": "URL to your metabase instance API"
+          "description": "Required Metabase instance HTTPS origin, or declared loopback HTTP for local testing.",
+          "type": "string"
         },
         "password": {
+          "description": "Metabase password used only for the fixed declared session exchange when session_token is absent.",
           "type": "string",
           "x-secret": true
         },
         "session_token": {
+          "description": "Existing Metabase session token sent only as X-Metabase-Session.",
           "type": "string",
-          "x-secret": true,
-          "description": "To generate your session token, you need to run the following command: ``` curl -X POST \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"username\": \"person@metabase.com\", \"password\": \"fakepassword\"}' \\\n  http://localhost:3000/api/session\n``` Then copy the value of the `id` field returned by a successful call to that API.\nNote that by default, sessions are good for 14 days and needs to be regenerated."
+          "x-secret": true
         },
         "username": {
           "type": "string"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
         }
-      }
+      },
+      "required": [
+        "instance_api_url",
+        "username"
+      ],
+      "title": "Metabase Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -95738,7 +95529,7 @@
       }
     ],
     "risk": {
-      "read": "external Metabase API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "external Metabase API reads through a declaration-bound tenant origin and session authentication",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -98516,7 +98307,7 @@
   {
     "name": "mode",
     "display_name": "Mode",
-    "description": "Reads Mode collections (spaces), reports, data sources, groups, and memberships through the Mode REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Mode workspace collections through fixed HAL+JSON REST routes.",
     "integration_type": "api",
     "docs_url": "https://mode.com/developer/api-reference/",
     "release_stage": "alpha",
@@ -98529,37 +98320,27 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Mode Connection Specification",
-      "type": "object",
-      "required": [
-        "api_secret",
-        "api_token",
-        "workspace"
-      ],
       "properties": {
         "api_secret": {
           "type": "string",
-          "x-secret": true,
-          "description": "API secret to use as the password for Basic Authentication."
+          "x-secret": true
         },
         "api_token": {
           "type": "string",
-          "x-secret": true,
-          "description": "API token to use as the username for Basic Authentication."
+          "x-secret": true
         },
         "workspace": {
           "type": "string"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
         }
-      }
+      },
+      "required": [
+        "api_token",
+        "api_secret",
+        "workspace"
+      ],
+      "title": "Mode Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -98634,7 +98415,7 @@
       }
     ],
     "risk": {
-      "read": "external Mode API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded HAL+JSON reads use the fixed Mode origin and declared Basic authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -98876,9 +98657,9 @@
   {
     "name": "my-hours",
     "display_name": "My Hours",
-    "description": "Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads My Hours clients, projects, team members, tags, and bounded time-log windows through fixed REST routes.",
     "integration_type": "api",
-    "docs_url": "https://myhours.com/api",
+    "docs_url": "https://developers.myhours.com/",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -98889,41 +98670,39 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "My Hours Connection Specification",
-      "type": "object",
+      "properties": {
+        "email": {
+          "description": "My Hours login email.",
+          "type": "string"
+        },
+        "end_date": {
+          "description": "UTC date window terminal date, YYYY-MM-DD.",
+          "type": "string"
+        },
+        "logs_batch_size": {
+          "default": "30",
+          "description": "Declared time-log window width in days, 1 through 365.",
+          "type": "string"
+        },
+        "password": {
+          "description": "My Hours login password.",
+          "type": "string",
+          "x-secret": true
+        },
+        "start_date": {
+          "description": "UTC date window start, YYYY-MM-DD.",
+          "type": "string"
+        }
+      },
       "required": [
         "email",
         "password",
-        "start_date"
+        "start_date",
+        "end_date"
       ],
-      "properties": {
-        "email": {
-          "type": "string",
-          "description": "Your My Hours username"
-        },
-        "logs_batch_size": {
-          "type": "string",
-          "description": "Pagination size used for retrieving logs in days"
-        },
-        "password": {
-          "type": "string",
-          "x-secret": true,
-          "description": "The password associated to the username"
-        },
-        "start_date": {
-          "type": "string",
-          "description": "Start date for collecting time logs"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "My Hours Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -98975,14 +98754,12 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
     "risk": {
-      "read": "external My Hours API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded My Hours reads use a fixed password-token exchange, fixed origin, static API version header, and at most 600 declared UTC date windows.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -124553,9 +124330,9 @@
   {
     "name": "pocket",
     "display_name": "Pocket",
-    "description": "Reads saved Pocket items through the v3 retrieve API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads saved Pocket items through the fixed v3 retrieve API.",
     "integration_type": "api",
-    "docs_url": "manual intervention needed",
+    "docs_url": "https://getpocket.com/developer/docs/v3/retrieve",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -124566,69 +124343,45 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Pocket Connection Specification",
-      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "x-secret": true
+        },
+        "consumer_key": {
+          "type": "string",
+          "x-secret": true
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "detail_type": {
+          "default": "complete",
+          "type": "string"
+        },
+        "favorite": {
+          "type": "string"
+        },
+        "since": {
+          "type": "string"
+        },
+        "sort": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        }
+      },
       "required": [
         "access_token",
         "consumer_key"
       ],
-      "properties": {
-        "access_token": {
-          "type": "string",
-          "x-secret": true,
-          "description": "The user's Pocket access token."
-        },
-        "consumer_key": {
-          "type": "string",
-          "x-secret": true,
-          "description": "Your application's Consumer Key."
-        },
-        "content_type": {
-          "type": "string",
-          "description": "Select the content type of the items to retrieve."
-        },
-        "detail_type": {
-          "type": "string",
-          "description": "Select the granularity of the information about each item."
-        },
-        "domain": {
-          "type": "string",
-          "description": "Only return items from a particular `domain`."
-        },
-        "favorite": {
-          "type": "string",
-          "description": "Retrieve only favorited items."
-        },
-        "search": {
-          "type": "string",
-          "description": "Only return items whose title or url contain the `search` string."
-        },
-        "since": {
-          "type": "string",
-          "description": "Only return items modified since the given timestamp."
-        },
-        "sort": {
-          "type": "string",
-          "description": "Sort retrieved items by the given criteria."
-        },
-        "state": {
-          "type": "string",
-          "description": "Select the state of the items to retrieve."
-        },
-        "tag": {
-          "type": "string",
-          "description": "Return only items tagged with this tag name. Use _untagged_ for retrieving only untagged items."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
-        }
-      }
+      "title": "Pocket Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -124640,14 +124393,12 @@
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
     "risk": {
-      "read": "external Pocket API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded POST reads use the fixed Pocket origin and source-declared request credentials.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -126933,37 +126684,28 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "PrestaShop Connection Specification",
-      "type": "object",
-      "required": [
-        "access_key",
-        "start_date",
-        "url"
-      ],
       "properties": {
         "access_key": {
+          "description": "Your PrestaShop access key. See \u003ca href=\"https://devdocs.prestashop.com/1.7/webservice/tutorials/creating-access/#create-an-access-key\"\u003e the docs \u003c/a\u003e for info on how to obtain this.",
           "type": "string",
-          "x-secret": true,
-          "description": "Your PrestaShop access key. See \u003ca href=\"https://devdocs.prestashop.com/1.7/webservice/tutorials/creating-access/#create-an-access-key\"\u003e the docs \u003c/a\u003e for info on how to obtain this."
+          "x-secret": true
         },
         "start_date": {
-          "type": "string",
-          "description": "The Start date in the format YYYY-MM-DD."
+          "description": "The Start date in the format YYYY-MM-DD.",
+          "type": "string"
         },
         "url": {
-          "type": "string",
-          "description": "Shop URL without trailing slash."
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+          "description": "Required PrestaShop shop HTTPS origin.",
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "access_key",
+        "url"
+      ],
+      "title": "PrestaShop Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -138030,9 +137772,9 @@
   {
     "name": "rootly",
     "display_name": "Rootly",
-    "description": "Reads Rootly incidents, services, and users through the Rootly API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads Rootly incidents, services, and users through fixed JSON:API routes.",
     "integration_type": "api",
-    "docs_url": "https://rootly.com/api",
+    "docs_url": "https://docs.rootly.com/api-reference",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -138043,30 +137785,24 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Rootly Connection Specification",
-      "type": "object",
-      "required": [
-        "api_key",
-        "start_date"
-      ],
       "properties": {
         "api_key": {
+          "description": "Rootly API token.",
           "type": "string",
           "x-secret": true
         },
         "start_date": {
+          "description": "Retained initial ETL lower-bound configuration.",
           "type": "string"
-        },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
         }
-      }
+      },
+      "required": [
+        "api_key",
+        "start_date"
+      ],
+      "title": "Rootly Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -138101,7 +137837,7 @@
       }
     ],
     "risk": {
-      "read": "external Rootly API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded Rootly JSON:API reads use the fixed provider origin and declared bearer authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -138268,9 +138004,9 @@
   {
     "name": "safetyculture",
     "display_name": "SafetyCulture",
-    "description": "Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads SafetyCulture audits, templates, and users through fixed REST routes.",
     "integration_type": "api",
-    "docs_url": "https://developer.safetyculture.com/",
+    "docs_url": "https://developers.safetyculture.com/",
     "release_stage": "alpha",
     "capabilities": {
       "check": true,
@@ -138281,26 +138017,22 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "SafetyCulture Connection Specification",
-      "type": "object",
-      "required": [
-        "api_key"
-      ],
       "properties": {
-        "api_key": {
+        "access_token": {
           "type": "string",
           "x-secret": true
         },
-        "base_url": {
-          "type": "string",
-          "default": "https://example.invalid",
-          "description": "Placeholder base URL used only to construct the engine runtime before the Tier-2 hook delegates to the legacy connector."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+        "start_date": {
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "access_token",
+        "start_date"
+      ],
+      "title": "SafetyCulture Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -138335,7 +138067,7 @@
       }
     ],
     "risk": {
-      "read": "external SafetyCulture API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "Bounded GET reads use the fixed SafetyCulture origin and declared bearer authentication.",
       "write": "unsupported",
       "approval": "none; read-only"
     },
@@ -173954,7 +173686,7 @@
   {
     "name": "yahoo-finance-price",
     "display_name": "Yahoo Finance Price",
-    "description": "Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
+    "description": "Reads public Yahoo Finance chart prices as declaration-bound OHLCV records. Read-only.",
     "integration_type": "api",
     "docs_url": "https://www.yahoofinanceapi.com/",
     "release_stage": "alpha",
@@ -173967,32 +173699,24 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Yahoo Finance Price Connection Specification",
-      "type": "object",
       "properties": {
-        "symbol": {
-          "type": "string",
-          "default": "AAPL",
-          "description": "Ticker symbol to query. Defaults to AAPL, matching the legacy connector."
-        },
         "interval": {
-          "type": "string",
-          "description": "The interval of between prices queried."
+          "description": "The interval of between prices queried.",
+          "type": "string"
         },
         "range": {
-          "type": "string",
-          "description": "The range of prices to be queried."
+          "description": "The range of prices to be queried.",
+          "type": "string"
         },
-        "base_url": {
-          "type": "string",
-          "default": "https://query1.finance.yahoo.com",
-          "description": "Yahoo Finance chart API base URL. Defaults to the legacy connector's public endpoint; override only for tests or proxies."
-        },
-        "mode": {
-          "type": "string",
-          "description": "Set to fixture for credential-free legacy fixture tests."
+        "symbol": {
+          "default": "AAPL",
+          "description": "Ticker symbol to query through the fixed Yahoo Finance chart route.",
+          "type": "string"
         }
-      }
+      },
+      "title": "Yahoo Finance Price Connection Specification",
+      "type": "object",
+      "x-reject-unknown-config": true
     },
     "streams": [
       {
@@ -174012,7 +173736,7 @@
       }
     ],
     "risk": {
-      "read": "external Yahoo Finance Price API reads performed by the legacy connector via a Tier-2 hook",
+      "read": "external Yahoo Finance chart API reads through a fixed declared route",
       "write": "unsupported",
       "approval": "none; read-only"
     },

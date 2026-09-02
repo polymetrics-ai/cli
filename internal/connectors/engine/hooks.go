@@ -113,6 +113,7 @@ func (r declaredRouteRequester) DoJSON(ctx context.Context, request DeclaredRout
 		return nil, err
 	}
 	clone := *requester
+	clone.Auth = nil
 	headers := make(map[string]string, len(requester.DefaultHeaders)+len(request.Headers))
 	for key, value := range requester.DefaultHeaders {
 		headers[key] = value

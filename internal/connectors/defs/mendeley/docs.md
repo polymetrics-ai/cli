@@ -1,55 +1,38 @@
 # Overview
 
-Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API.
+Reads documents, folders, groups, and annotations from fixed Mendeley REST routes.
 
 Readable streams: `documents`, `folders`, `groups`, `annotations`.
 
 This connector is read-only; no write actions are declared.
 
-Service API documentation: https://dev.mendeley.com/.
+Service API documentation: https://dev.mendeley.com/reference.
 
 ## Auth setup
 
 Connection fields:
 
-- `base_url` (optional, string).
-- `client_id` (required, secret, string); Could be found at `https://dev.mendeley.com/myapps.html`.
-- `client_refresh_token` (required, secret, string); Use cURL or Postman with the OAuth 2.0
-  Authorization tab. Set the Auth URL to https://api.mendeley.com/oauth/authorize, the Token URL to
-  https://api.mendeley.com/oauth/token, and use all as the scope.
-- `client_secret` (required, secret, string); Could be found at
-  `https://dev.mendeley.com/myapps.html`.
-- `mode` (optional, string).
-- `name_for_institution` (required, string); The name parameter for institutions search.
-- `query_for_catalog` (required, string); Query for catalog search.
-- `start_date` (required, string).
+- `client_id` (required, secret, string); Mendeley OAuth client identifier.
+- `client_refresh_token` (required, secret, string); refresh token for the declared OAuth grant.
+- `client_secret` (required, secret, string); Mendeley OAuth client secret.
+- `name_for_institution`, `query_for_catalog`, `start_date` (required, string); retained declared connection configuration.
 
-Secret fields are redacted in logs and write previews: `client_id`, `client_refresh_token`,
-`client_secret`.
+Secret fields are redacted in logs and write previews: `client_id`, `client_refresh_token`, `client_secret`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+The runtime exchanges the refresh token only with the fixed Mendeley token endpoint and reads only the fixed `https://api.mendeley.com` origin. It does not accept caller-provided origins or fixture modes.
 
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Connection checks make one bounded documents request.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+Default pagination: Link-header navigation with `limit=100`.
 
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
+Incremental streams use their declared cursor fields and client-side lower-bound filtering when a lower bound is available.
 
-- `documents`: GET connector-managed request path - records path `data`; incremental cursor
-  `last_modified`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `folders`: GET connector-managed request path - records path `data`; incremental cursor
-  `modified`; formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
-- `groups`: GET connector-managed request path - records path `data`.
-- `annotations`: GET connector-managed request path - records path `data`; incremental cursor
-  `last_modified`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
+- `documents`: GET `/documents`; `Accept: application/vnd.mendeley-document.1+json`; incremental cursor `last_modified`.
+- `folders`: GET `/folders`; `Accept: application/vnd.mendeley-folder.1+json`; incremental cursor `modified`.
+- `groups`: GET `/groups`; `Accept: application/vnd.mendeley-group.1+json`.
+- `annotations`: GET `/annotations`; `Accept: application/vnd.mendeley-annotation.1+json`; incremental cursor `last_modified`.
 
 ## Write actions & risks
 
@@ -57,5 +40,4 @@ This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- API coverage includes 4 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `documents`, `folders`, `annotations`.
+- API coverage includes 4 stream-backed endpoint groups.

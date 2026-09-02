@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector copper [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Copper CRM records through fixed typed search routes.
 
 ICON
   id: copper
@@ -27,8 +27,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  mode
   user_email (required)
   api_key (secret) (required)
 
@@ -36,29 +34,29 @@ ETL STREAMS
   people:
     primary key: id
     cursor: date_modified
-    fields: assignee_id(integer), company_id(integer), company_name(string), contact_type_id(integer), date_created(integer), date_modified(integer), emails(array), first_name(string), id(integer), last_name(string), name(string), phone_numbers(array), prefix(string), title(string)
+    fields: date_modified(integer), id(integer)
   companies:
     primary key: id
     cursor: date_modified
-    fields: address(object), assignee_id(integer), date_created(integer), date_modified(integer), details(string), email_domain(string), id(integer), name(string), phone_numbers(array), websites(array)
+    fields: date_modified(integer), id(integer)
   opportunities:
     primary key: id
     cursor: date_modified
-    fields: assignee_id(integer), close_date(string), company_id(integer), company_name(string), date_created(integer), date_modified(integer), id(integer), monetary_value(number), name(string), pipeline_id(integer), pipeline_stage_id(integer), primary_contact_id(integer), status(string), win_probability(number)
+    fields: date_modified(integer), id(integer)
   leads:
     primary key: id
     cursor: date_modified
-    fields: assignee_id(integer), company_name(string), date_created(integer), date_modified(integer), email(object), id(integer), monetary_value(number), name(string), phone_numbers(array), status(string), status_id(integer), title(string)
+    fields: date_modified(integer), id(integer)
   tasks:
     primary key: id
     cursor: date_modified
-    fields: assignee_id(integer), completed_date(integer), date_created(integer), date_modified(integer), details(string), due_date(integer), id(integer), name(string), priority(string), related_resource(object), reminder_date(integer), status(string)
+    fields: date_modified(integer), id(integer)
 
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external Copper API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded Copper search requests use fixed API routes and declared three-header authentication.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

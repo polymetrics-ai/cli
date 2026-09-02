@@ -123,6 +123,25 @@ func TestSchemaValidateConfigurationReturnsSharedClassification(t *testing.T) {
 	}
 }
 
+func TestSchemaValidateConfigurationRejectsUnknownWhenDeclared(t *testing.T) {
+	schema, err := CompileSchema(json.RawMessage(`{
+		"type": "object",
+		"x-reject-unknown-config": true,
+		"properties": {"symbol": {"type": "string"}}
+	}`))
+	if err != nil {
+		t.Fatalf("CompileSchema() error = %v", err)
+	}
+	if !schema.HasConfigurationConstraints() {
+		t.Fatal("HasConfigurationConstraints() = false, want strict unknown-field validation")
+	}
+	err = schema.ValidateConfiguration(map[string]string{"base_url": "https://untrusted.invalid"})
+	var classification *failures.Classification
+	if !errors.As(err, &classification) || classification.Code() != "unknown_field" || classification.FieldPath() != "/base_url" {
+		t.Fatalf("ValidateConfiguration() error = %v, want unknown /base_url classification", err)
+	}
+}
+
 func TestJSONPointerForKeyEscapesRFC6901Segments(t *testing.T) {
 	if got, want := jsonPointerForKey("client/id~primary"), "/client~1id~0primary"; got != want {
 		t.Fatalf("jsonPointerForKey() = %q, want %q", got, want)

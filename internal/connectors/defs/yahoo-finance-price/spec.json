@@ -1,29 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Yahoo Finance Price Connection Specification",
-  "type": "object",
   "properties": {
-    "symbol": {
-      "type": "string",
-      "default": "AAPL",
-      "description": "Ticker symbol to query. Defaults to AAPL, matching the legacy connector."
-    },
     "interval": {
-      "type": "string",
-      "description": "The interval of between prices queried."
+      "description": "The interval of between prices queried.",
+      "type": "string"
     },
     "range": {
-      "type": "string",
-      "description": "The range of prices to be queried."
+      "description": "The range of prices to be queried.",
+      "type": "string"
     },
-    "base_url": {
-      "type": "string",
-      "default": "https://query1.finance.yahoo.com",
-      "description": "Yahoo Finance chart API base URL. Defaults to the legacy connector's public endpoint; override only for tests or proxies."
-    },
-    "mode": {
-      "type": "string",
-      "description": "Set to fixture for credential-free legacy fixture tests."
+    "symbol": {
+      "default": "AAPL",
+      "description": "Ticker symbol to query through the fixed Yahoo Finance chart route.",
+      "type": "string"
     }
-  }
+  },
+  "title": "Yahoo Finance Price Connection Specification",
+  "type": "object",
+  "x-reject-unknown-config": true
 }

@@ -135,19 +135,16 @@ type RiskSpec struct {
 // HTTPBase is streams.json's "base" section: shared HTTP configuration for
 // every stream in the bundle.
 type HTTPBase struct {
-	URL string `json:"url"`
-	// Routes are named, connector-definition-owned alternate HTTP origins.
-	// An executor may select one only by its declaration's Route field; callers
-	// never supply either a route name or URL. Versioned routes keep the public
-	// operation path source-locked while resolving against the provider origin.
-	Routes     []OperationRouteSpec `json:"routes,omitempty"`
-	UserAgent  string               `json:"user_agent,omitempty"`
-	Headers    map[string]string    `json:"headers,omitempty"`
-	Auth       []AuthSpec           `json:"auth,omitempty"`
-	Pagination *PaginationSpec      `json:"pagination,omitempty"`
-	Check      *RequestSpec         `json:"check,omitempty"`
-	ErrorMap   []ErrorRule          `json:"error_map,omitempty"`
-	RateLimit  *RateLimitSpec       `json:"rate_limit,omitempty"`
+	URL          string               `json:"url"`
+	UserAgent    string               `json:"user_agent,omitempty"`
+	Headers      map[string]string    `json:"headers,omitempty"`
+	Auth         []AuthSpec           `json:"auth,omitempty"`
+	Pagination   *PaginationSpec      `json:"pagination,omitempty"`
+	Check        *RequestSpec         `json:"check,omitempty"`
+	ErrorMap     []ErrorRule          `json:"error_map,omitempty"`
+	RateLimit    *RateLimitSpec       `json:"rate_limit,omitempty"`
+	Routes       []OperationRouteSpec `json:"routes,omitempty"`
+	TenantOrigin *TenantOriginSpec    `json:"tenant_origin,omitempty"`
 }
 
 // OperationRouteSpec is one named, declaration-owned provider route. BaseURL
@@ -177,6 +174,8 @@ type RequestSpec struct {
 	Method          string                `json:"method"`
 	Path            string                `json:"path"`
 	Query           map[string]QueryParam `json:"query,omitempty"`
+	Body            map[string]any        `json:"body,omitempty"`
+	BodyType        string                `json:"body_type,omitempty"`
 	SuccessStatuses []string              `json:"success_statuses,omitempty"`
 	MaxBytes        int                   `json:"max_bytes,omitempty"`
 }
@@ -184,7 +183,7 @@ type RequestSpec struct {
 // AuthSpec describes one candidate authenticator, selected by "when" (first
 // match wins).
 type AuthSpec struct {
-	Mode  string `json:"mode"` // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|oauth2_refresh_token|custom
+	Mode  string `json:"mode"` // none|bearer|basic|api_key_header|api_key_query|oauth2_client_credentials|oauth2_refresh_token|aws_sigv4|custom
 	Token string `json:"token,omitempty"`
 
 	Username string `json:"username,omitempty"`
@@ -194,6 +193,12 @@ type AuthSpec struct {
 	Prefix string `json:"prefix,omitempty"`
 	Param  string `json:"param,omitempty"`
 	Value  string `json:"value,omitempty"`
+
+	AccessKeyID     string `json:"access_key_id,omitempty"`
+	SecretAccessKey string `json:"secret_access_key,omitempty"`
+	SessionToken    string `json:"session_token,omitempty"`
+	AWSService      string `json:"aws_service,omitempty"`
+	AWSRegion       string `json:"aws_region,omitempty"`
 
 	TokenURL     string `json:"token_url,omitempty"`
 	ClientID     string `json:"client_id,omitempty"`
@@ -210,6 +215,9 @@ type AuthSpec struct {
 	// ExtraParams url.Values field; this is the engine-side dialect that
 	// populates it (connsdk itself needed no change).
 	ExtraParams map[string]string `json:"extra_params,omitempty"`
+	// ClientAuthentication controls whether a refresh-token client's declared
+	// credentials use the standard form-body or HTTP Basic authentication.
+	ClientAuthentication string `json:"client_authentication,omitempty"`
 
 	// RefreshToken is the templated initial refresh token for the
 	// oauth2_refresh_token mode (normally "{{ secrets.refresh_token }}"). It is
@@ -265,6 +273,9 @@ type PaginationSpec struct {
 
 	LimitParam  string `json:"limit_param,omitempty"`
 	OffsetParam string `json:"offset_param,omitempty"`
+	// BodyOffsetField moves an offset paginator value into the declared JSON
+	// request body instead of sending it as a query parameter.
+	BodyOffsetField string `json:"body_offset_field,omitempty"`
 
 	CursorParam     string `json:"cursor_param,omitempty"`
 	TokenPath       string `json:"token_path,omitempty"`        // cursor: token from body
@@ -272,6 +283,12 @@ type PaginationSpec struct {
 	StopPath        string `json:"stop_path,omitempty"`         // cursor: falsy body value stops (stripe)
 
 	NextURLPath string `json:"next_url_path,omitempty"` // next_url type
+	// BodyCursorField moves a cursor paginator token into the declared JSON
+	// request body instead of sending it as a query parameter.
+	BodyCursorField string `json:"body_cursor_field,omitempty"`
+	// BodyPageField moves a page-number paginator value into the declared JSON
+	// request body instead of sending it as a query parameter.
+	BodyPageField string `json:"body_page_field,omitempty"`
 
 	// start_index type — 1-based index pagination that carries its own total,
 	// the shape SCIM 2.0 list responses use (RFC 7644 §3.4.2.4):
@@ -317,21 +334,78 @@ type RateLimitSpec struct {
 
 // StreamSpec is one entry in streams.json's "streams" array.
 type StreamSpec struct {
-	Name           string                `json:"name"`
-	Route          string                `json:"route,omitempty"`
-	Method         string                `json:"method,omitempty"` // default GET
-	Path           string                `json:"path"`
-	Query          map[string]QueryParam `json:"query,omitempty"`
-	Body           map[string]any        `json:"body,omitempty"` // POST-body streams
-	GraphQL        *GraphQLRequestSpec   `json:"graphql,omitempty"`
-	Records        RecordsSpec           `json:"records"`
-	Pagination     *PaginationSpec       `json:"pagination,omitempty"` // overrides base
-	Incremental    *IncrementalSpec      `json:"incremental,omitempty"`
-	ComputedFields map[string]string     `json:"computed_fields,omitempty"`
-	ResponseFields map[string]string     `json:"response_fields,omitempty"`
-	Projection     string                `json:"projection,omitempty"` // "schema" (default) | "passthrough"
-	SchemaRef      string                `json:"schema"`
-	FanOut         *FanOutSpec           `json:"fan_out,omitempty"`
+	Name                     string                         `json:"name"`
+	Route                    string                         `json:"route,omitempty"`
+	Method                   string                         `json:"method,omitempty"` // default GET
+	Path                     string                         `json:"path"`
+	Query                    map[string]QueryParam          `json:"query,omitempty"`
+	Body                     map[string]any                 `json:"body,omitempty"` // POST-body streams
+	BodyType                 string                         `json:"body_type,omitempty"`
+	GraphQL                  *GraphQLRequestSpec            `json:"graphql,omitempty"`
+	Records                  RecordsSpec                    `json:"records"`
+	Pagination               *PaginationSpec                `json:"pagination,omitempty"` // overrides base
+	Incremental              *IncrementalSpec               `json:"incremental,omitempty"`
+	ComputedFields           map[string]string              `json:"computed_fields,omitempty"`
+	ResponseFields           map[string]string              `json:"response_fields,omitempty"`
+	ResponseHeaderProjection []ResponseHeaderProjectionSpec `json:"response_header_projection,omitempty"`
+	ArrayZipProjection       *ArrayZipProjectionSpec        `json:"array_zip_projection,omitempty"`
+	Headers                  map[string]string              `json:"headers,omitempty"`
+	Projection               string                         `json:"projection,omitempty"` // "schema" (default) | "passthrough"
+	SchemaRef                string                         `json:"schema"`
+	FanOut                   *FanOutSpec                    `json:"fan_out,omitempty"`
+	CartesianConfigFanOut    *CartesianConfigFanOutSpec     `json:"cartesian_config_fan_out,omitempty"`
+	DateWindowFanOut         *DateWindowFanOutSpec          `json:"date_window_fan_out,omitempty"`
+}
+
+// DateWindowFanOutSpec schedules closed UTC date windows from source-declared
+// configuration keys. It is not a transform language or response paginator.
+type DateWindowFanOutSpec struct {
+	StartDateConfigKey string `json:"start_date_config_key"`
+	EndDateConfigKey   string `json:"end_date_config_key"`
+	BatchSizeConfigKey string `json:"batch_size_config_key"`
+	DateFromQueryParam string `json:"date_from_query_param"`
+	DateToQueryParam   string `json:"date_to_query_param"`
+	MaxBatchDays       int    `json:"max_batch_days"`
+	MaxWindows         int    `json:"max_windows"`
+}
+
+// ResponseHeaderProjection binds response-level header names to positional
+// values on every extracted row. Each declared mapping is closed: a response
+// header must appear exactly once in AllowedHeaders, and its corresponding row
+// value must be present before any record can emit.
+type ResponseHeaderProjectionSpec struct {
+	HeadersPath    string   `json:"headers_path"`
+	ValuesPath     string   `json:"values_path"`
+	HeaderName     string   `json:"header_name,omitempty"`
+	ValueField     string   `json:"value_field,omitempty"`
+	AllowedHeaders []string `json:"allowed_headers"`
+}
+
+// ArrayZipProjectionSpec maps one extracted response object into records by
+// copying source-declared scalar fields and zipping source-declared arrays at
+// equal indexes. It is a closed projection, not a general transform language.
+type ArrayZipProjectionSpec struct {
+	StaticFields []ArrayZipFieldSpec `json:"static_fields,omitempty"`
+	ArrayFields  []ArrayZipFieldSpec `json:"array_fields"`
+}
+
+// ArrayZipFieldSpec names one emitted field and its source-declared path.
+type ArrayZipFieldSpec struct {
+	Field string `json:"field"`
+	Path  string `json:"path"`
+}
+
+// CartesianConfigFanOutSpec expands only the two closed PageSpeed-style config
+// axes into declared query parameters. It is not a general transform language.
+type CartesianConfigFanOutSpec struct {
+	URLConfigKey       string   `json:"url_config_key"`
+	StrategyConfigKey  string   `json:"strategy_config_key"`
+	URLQueryParam      string   `json:"url_query_param"`
+	StrategyQueryParam string   `json:"strategy_query_param"`
+	Categories         []string `json:"categories"`
+	CategoryQueryParam string   `json:"category_query_param"`
+	MaxCombinations    int      `json:"max_combinations"`
+	MaxRequests        int      `json:"max_requests"`
 }
 
 // FanOutSpec declares a sub-resource fan-out read (S4 engine mini-wave item
@@ -470,6 +544,10 @@ type RecordsSpec struct {
 	// it participates in schema projection/computed_fields exactly like any
 	// other raw field. Ignored when KeyedObject is false.
 	KeyField string `json:"key_field,omitempty"`
+	// WrapField replaces each extracted record with an object that carries the
+	// raw provider record under this field before projection. It preserves APIs
+	// whose stable contract is one opaque provider object per record.
+	WrapField string `json:"wrap_field,omitempty"`
 }
 
 // FilterSpec is one of field_absent / field_equals (mutually exclusive by
@@ -1619,6 +1697,15 @@ func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []Stre
 	if err := validateStreamGraphQL(doc.Streams); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
+	if err := validateResponseHeaderProjections(doc.Streams); err != nil {
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
+	}
+	if err := validateArrayZipProjections(doc.Streams); err != nil {
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
+	}
+	if err := validateStaticStreamHeaders(doc.Streams); err != nil {
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
+	}
 	return doc.Base, doc.Streams, nil
 }
 
@@ -1672,6 +1759,88 @@ func validateStreamGraphQL(streams []StreamSpec) error {
 		}
 		if err := validateGraphQLSpec(stream.GraphQL, "query"); err != nil {
 			return fmt.Errorf("stream %d (%q): %w", i, stream.Name, err)
+		}
+	}
+	return nil
+}
+
+const maxStaticStreamHeaders = 8
+
+func validateStaticStreamHeaders(streams []StreamSpec) error {
+	for streamIndex, stream := range streams {
+		if len(stream.Headers) > maxStaticStreamHeaders {
+			return fmt.Errorf("stream %d (%q) has %d headers, maximum is %d", streamIndex, stream.Name, len(stream.Headers), maxStaticStreamHeaders)
+		}
+		for name, value := range stream.Headers {
+			if name != "Accept" {
+				return fmt.Errorf("stream %d (%q) header %q is not permitted; only fixed Accept headers are supported", streamIndex, stream.Name, name)
+			}
+			if strings.Contains(value, "{{") || strings.Contains(value, "}}") {
+				return fmt.Errorf("stream %d (%q) Accept header must be static", streamIndex, stream.Name)
+			}
+			mediaType, parameters, err := mime.ParseMediaType(value)
+			if err != nil || len(parameters) != 0 || !strings.HasPrefix(strings.ToLower(mediaType), "application/vnd.") || !strings.HasSuffix(strings.ToLower(mediaType), "+json") {
+				return fmt.Errorf("stream %d (%q) Accept header %q must be one fixed vendor JSON media type", streamIndex, stream.Name, value)
+			}
+		}
+	}
+	return nil
+}
+
+func validateResponseHeaderProjections(streams []StreamSpec) error {
+	for streamIndex, stream := range streams {
+		seenHeaders := make(map[string]struct{})
+		for projectionIndex, projection := range stream.ResponseHeaderProjection {
+			if strings.TrimSpace(projection.HeadersPath) == "" || strings.TrimSpace(projection.ValuesPath) == "" {
+				return fmt.Errorf("stream %d (%q) response_header_projection %d requires headers_path and values_path", streamIndex, stream.Name, projectionIndex)
+			}
+			if strings.TrimSpace(projection.HeaderName) == "" && projection.HeaderName != "" {
+				return fmt.Errorf("stream %d (%q) response_header_projection %d header_name is blank", streamIndex, stream.Name, projectionIndex)
+			}
+			if strings.TrimSpace(projection.ValueField) == "" && projection.ValueField != "" {
+				return fmt.Errorf("stream %d (%q) response_header_projection %d value_field is blank", streamIndex, stream.Name, projectionIndex)
+			}
+			if len(projection.AllowedHeaders) == 0 {
+				return fmt.Errorf("stream %d (%q) response_header_projection %d requires allowed_headers", streamIndex, stream.Name, projectionIndex)
+			}
+			for _, header := range projection.AllowedHeaders {
+				header = strings.TrimSpace(header)
+				if header == "" {
+					return fmt.Errorf("stream %d (%q) response_header_projection %d has a blank allowed header", streamIndex, stream.Name, projectionIndex)
+				}
+				if _, duplicate := seenHeaders[header]; duplicate {
+					return fmt.Errorf("stream %d (%q) response_header_projection duplicates allowed header %q", streamIndex, stream.Name, header)
+				}
+				seenHeaders[header] = struct{}{}
+			}
+		}
+	}
+	return nil
+}
+
+func validateArrayZipProjections(streams []StreamSpec) error {
+	for streamIndex, stream := range streams {
+		projection := stream.ArrayZipProjection
+		if projection == nil {
+			continue
+		}
+		if len(projection.ArrayFields) == 0 {
+			return fmt.Errorf("stream %d (%q) array_zip_projection requires array_fields", streamIndex, stream.Name)
+		}
+		seen := make(map[string]struct{}, len(projection.StaticFields)+len(projection.ArrayFields))
+		for _, fields := range [][]ArrayZipFieldSpec{projection.StaticFields, projection.ArrayFields} {
+			for _, field := range fields {
+				if strings.TrimSpace(field.Field) == "" || strings.TrimSpace(field.Field) != field.Field {
+					return fmt.Errorf("stream %d (%q) array_zip_projection has an invalid field name", streamIndex, stream.Name)
+				}
+				if strings.TrimSpace(field.Path) == "" || strings.TrimSpace(field.Path) != field.Path || strings.Contains(field.Path, "..") {
+					return fmt.Errorf("stream %d (%q) array_zip_projection field %q has an invalid path", streamIndex, stream.Name, field.Field)
+				}
+				if _, duplicate := seen[field.Field]; duplicate {
+					return fmt.Errorf("stream %d (%q) array_zip_projection duplicates field %q", streamIndex, stream.Name, field.Field)
+				}
+				seen[field.Field] = struct{}{}
+			}
 		}
 	}
 	return nil

@@ -27,9 +27,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  mode
-  start_date (required)
+  start_date
   url (required)
   access_key (secret) (required)
 

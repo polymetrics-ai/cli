@@ -1,34 +1,96 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
         "mode": "none"
       }
     ],
+    "check": {
+      "method": "GET",
+      "path": "/v8/finance/chart/{{ config.symbol }}",
+      "query": {
+        "interval": {
+          "omit_when_absent": true,
+          "template": "{{ config.interval }}"
+        },
+        "range": {
+          "omit_when_absent": true,
+          "template": "{{ config.range }}"
+        }
+      }
+    },
+    "error_map": [],
     "pagination": {
       "type": "none"
     },
-    "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
-    },
-    "error_map": []
+    "url": "https://query1.finance.yahoo.com",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "prices",
-      "method": "GET",
-      "path": "/__legacy_hook/prices",
-      "records": {
-        "path": "data"
+      "array_zip_projection": {
+        "array_fields": [
+          {
+            "field": "timestamp",
+            "path": "timestamp"
+          },
+          {
+            "field": "open",
+            "path": "indicators.quote.0.open"
+          },
+          {
+            "field": "high",
+            "path": "indicators.quote.0.high"
+          },
+          {
+            "field": "low",
+            "path": "indicators.quote.0.low"
+          },
+          {
+            "field": "close",
+            "path": "indicators.quote.0.close"
+          },
+          {
+            "field": "volume",
+            "path": "indicators.quote.0.volume"
+          },
+          {
+            "field": "adjclose",
+            "path": "indicators.adjclose.0.adjclose"
+          }
+        ],
+        "static_fields": [
+          {
+            "field": "symbol",
+            "path": "meta.symbol"
+          },
+          {
+            "field": "currency",
+            "path": "meta.currency"
+          }
+        ]
       },
-      "schema": "schemas/prices.json",
       "incremental": {
-        "cursor_field": "timestamp",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "timestamp"
+      },
+      "method": "GET",
+      "name": "prices",
+      "path": "/v8/finance/chart/{{ config.symbol }}",
+      "query": {
+        "interval": {
+          "omit_when_absent": true,
+          "template": "{{ config.interval }}"
+        },
+        "range": {
+          "omit_when_absent": true,
+          "template": "{{ config.range }}"
+        }
+      },
+      "records": {
+        "path": "chart.result"
+      },
+      "schema": "schemas/prices.json"
     }
   ]
 }

@@ -7,7 +7,7 @@ description: Google Analytics 4 (GA4) connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Google Analytics 4 reports (active users, traffic sources, devices, pages) from the Analytics Data API runReport endpoint. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads fixed Google Analytics 4 reports from the Analytics Data API runReport endpoint through declared response-header projection.
 
 ## Icon
 
@@ -24,22 +24,14 @@ Reads Google Analytics 4 reports (active users, traffic sources, devices, pages)
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- base_url
-- convert_conversions_event
-- credentials
-- custom_reports_array
-- date_ranges_end_date
-- date_ranges_start_date
-- keep_empty_rows
-- lookback_window
-- mode
+- end_date
 - property_ids (required)
-- subscription_tier
-- window_in_days
+- start_date
+- access_token (secret) (required)
 
 ## ETL Streams
 
@@ -66,11 +58,11 @@ Reads Google Analytics 4 reports (active users, traffic sources, devices, pages)
 
 ## Sync Modes
 
-- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Security
 
-- read risk: external Google Analytics 4 (GA4) API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded GA4 reports use a fixed provider route and bearer token; response headers may map only source-declared positional values.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

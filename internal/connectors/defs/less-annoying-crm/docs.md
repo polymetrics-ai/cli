@@ -1,7 +1,6 @@
 # Overview
 
-Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2
-API.
+Reads Less Annoying CRM users, contacts, tasks, notes, and events through fixed v2 RPC requests.
 
 Readable streams: `users`, `contacts`, `tasks`, `notes`, `events`.
 
@@ -13,37 +12,26 @@ Service API documentation: https://www.lessannoyingcrm.com/help/topic/API.
 
 Connection fields:
 
-- `api_key` (required, secret, string); API key to use. Manage and create your API keys on the
-  Programmer API settings page at https://account.lessannoyingcrm.com/app/Settings/Api.
-- `base_url` (optional, string).
-- `mode` (optional, string).
-- `start_date` (required, string).
+- `api_key` (required, secret, string); Programmer API key sent in the declared `Authorization` header.
+- `start_date` (required, string); retained initial ETL lower-bound configuration.
 
 Secret fields are redacted in logs and write previews: `api_key`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+The runtime uses only the fixed `https://api.lessannoyingcrm.com/v2` origin and the declared API-key header authentication. It does not accept caller-provided origins or fixture modes.
 
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Connection checks send a bounded `GetUsers` request.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+Default pagination: numbered `Page` requests with `MaxNumberOfResults=500`.
 
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
+Incremental streams use their declared cursor fields and client-side lower-bound filtering when a lower bound is available.
 
-- `users`: GET connector-managed request path - records path `data`.
-- `contacts`: GET connector-managed request path - records path `data`.
-- `tasks`: GET connector-managed request path - records path `data`; incremental cursor
-  `DateCreated`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `notes`: GET connector-managed request path - records path `data`.
-- `events`: GET connector-managed request path - records path `data`; incremental cursor
-  `DateUpdated`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
+- `users`: POST `GetUsers`; records at the response root.
+- `contacts`: POST `GetContacts`; records at `Results`.
+- `tasks`: POST `GetTasks`; records at `Results`; incremental cursor `DateCreated`.
+- `notes`: POST `GetNotes`; records at `Results`.
+- `events`: POST `GetEvents`; records at `Results`; incremental cursor `DateUpdated`.
 
 ## Write actions & risks
 
@@ -51,5 +39,4 @@ This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- API coverage includes 5 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `tasks`, `events`.
+- API coverage includes 5 stream-backed endpoint groups.

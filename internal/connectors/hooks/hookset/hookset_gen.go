@@ -15,6 +15,7 @@ import (
 	_ "polymetrics.ai/internal/connectors/hooks/chift"
 	_ "polymetrics.ai/internal/connectors/hooks/ebay-fulfillment"
 	_ "polymetrics.ai/internal/connectors/hooks/elasticsearch"
+	_ "polymetrics.ai/internal/connectors/hooks/feishu"
 	_ "polymetrics.ai/internal/connectors/hooks/github"
 	_ "polymetrics.ai/internal/connectors/hooks/gmail"
 	_ "polymetrics.ai/internal/connectors/hooks/google-ads"

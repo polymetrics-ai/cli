@@ -402,30 +402,6 @@ func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
 			wantError: "unexpected definitions",
 		},
-		{
-			name:      "duplicate canonical name in nested project scope",
-			path:      "website/.claude/agents/pm-delivery-worker.md",
-			content:   projection,
-			wantError: "duplicate claude project agent name",
-		},
-		{
-			name:      "unexpected definition in nested project scope",
-			path:      "website/.claude/agents/unexpected-worker.md",
-			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
-			wantError: "unexpected definitions",
-		},
-		{
-			name:      "duplicate canonical name below uppercase git-like directory",
-			path:      ".GIT/.claude/agents/pm-delivery-worker.md",
-			content:   projection,
-			wantError: "duplicate claude project agent name",
-		},
-		{
-			name:      "unexpected definition below mixed-case git-like directory",
-			path:      ".Git/.claude/agents/unexpected-worker.md",
-			content:   []byte(strings.Replace(string(projection), "name: pm-delivery-worker", "name: unexpected-worker", 1)),
-			wantError: "unexpected definitions",
-		},
 	}
 
 	for _, test := range tests {
@@ -446,6 +422,28 @@ func TestCheckProjectionsRejectsClaudeAgentInventoryDrift(t *testing.T) {
 				t.Fatalf("CheckProjections error = %v, want substring %q", err, test.wantError)
 			}
 		})
+	}
+}
+
+func TestCheckProjectionsIgnoresNestedCacheClaudeAgents(t *testing.T) {
+	contract := loadRepositoryContract(t, repositoryRoot(t))
+	root := t.TempDir()
+	if _, err := SyncProjections(root, contract); err != nil {
+		t.Fatalf("SyncProjections creates required Claude projections: %v", err)
+	}
+	projection, err := RenderProjection(contract, contract.Projections[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	cacheAgent := filepath.Join(root, ".cache", "preserved-baseline", ".claude", "agents", "pm-delivery-worker.md")
+	if err := os.MkdirAll(filepath.Dir(cacheAgent), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(cacheAgent, projection, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := CheckProjections(root, contract); err != nil {
+		t.Fatalf("CheckProjections inventoried nested cache agent definitions: %v", err)
 	}
 }
 
@@ -472,29 +470,6 @@ func TestCheckProjectionsSkipsRootGitMetadata(t *testing.T) {
 
 	if err := CheckProjections(root, contract); err != nil {
 		t.Fatalf("CheckProjections inventoried root Git metadata: %v", err)
-	}
-}
-
-func TestCheckProjectionsRejectsNestedClaudeAgentScopeSymlink(t *testing.T) {
-	contract := loadRepositoryContract(t, repositoryRoot(t))
-	root := t.TempDir()
-	if _, err := SyncProjections(root, contract); err != nil {
-		t.Fatalf("SyncProjections creates required Claude projections: %v", err)
-	}
-	outside := t.TempDir()
-	if err := os.MkdirAll(filepath.Join(outside, "agents"), 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.MkdirAll(filepath.Join(root, "website"), 0o755); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.Symlink(outside, filepath.Join(root, "website", ".claude")); err != nil {
-		t.Skipf("cannot create nested Claude scope symlink: %v", err)
-	}
-
-	err := CheckProjections(root, contract)
-	if err == nil || !strings.Contains(err.Error(), "inventory contains symlink website/.claude") {
-		t.Fatalf("CheckProjections error = %v, want nested Claude scope symlink rejection", err)
 	}
 }
 

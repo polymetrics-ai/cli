@@ -7,7 +7,7 @@ description: Metabase connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using session-token authentication. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using a declared session token.
 
 ## Icon
 
@@ -28,9 +28,7 @@ Reads Metabase cards, dashboards, collections, databases, and users through the 
 
 ## Configuration
 
-- base_url
 - instance_api_url (required)
-- mode
 - username (required)
 - password (secret)
 - session_token (secret)
@@ -59,7 +57,7 @@ Reads Metabase cards, dashboards, collections, databases, and users through the 
 
 ## Security
 
-- read risk: external Metabase API reads performed by the legacy connector via a Tier-2 hook
+- read risk: external Metabase API reads through a declaration-bound tenant origin and session authentication
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

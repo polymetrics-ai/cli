@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector mercado-ads [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads Mercado Ads advertiser and campaign metrics through fixed Advertising API routes.
 
 ICON
   id: pm-sample
@@ -27,10 +27,10 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
+  advertiser_id
+  campaign_id
   end_date
   lookback_days (required)
-  mode
   start_date
   client_id (secret) (required)
   client_refresh_token (secret) (required)
@@ -63,7 +63,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external Mercado Ads API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded fixed-origin Advertising API reads use declared OAuth refresh-token authentication.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

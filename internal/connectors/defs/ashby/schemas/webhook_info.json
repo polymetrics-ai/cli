@@ -1,23 +1,20 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "webhook_info",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the webhook"
-    },
     "enabled": {
-      "type": "boolean",
-      "description": "Whether or not the webhook setting is enabled"
+      "description": "Whether or not the webhook setting is enabled",
+      "type": "boolean"
+    },
+    "id": {
+      "description": "The unique identifier for the webhook",
+      "type": "string"
     },
     "requestUrl": {
-      "type": "string",
       "description": "The URL the webhook will send requests to",
-      "format": "uri"
+      "format": "uri",
+      "type": "string"
     },
     "webhookType": {
-      "type": "string",
       "description": "The type of webhook",
       "enum": [
         "applicationSubmit",
@@ -46,9 +43,12 @@
         "takeHomeAssignmentCompleted",
         "takeHomeAssignmentSubmitted",
         "signatureRequestUpdate"
-      ]
+      ],
+      "type": "string"
     }
   },
+  "title": "webhook_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

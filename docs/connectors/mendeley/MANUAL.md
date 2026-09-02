@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector mendeley [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads documents, folders, groups, and annotations through fixed Mendeley REST routes and OAuth refresh-token authentication.
 
 ICON
   id: simple-icons-mendeley
@@ -33,8 +33,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  mode
   name_for_institution (required)
   query_for_catalog (required)
   start_date (required)
@@ -63,7 +61,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external Mendeley API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded Mendeley REST reads use fixed routes, declared OAuth refresh-token authentication, and source-declared static vendor media types.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

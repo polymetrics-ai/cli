@@ -1,21 +1,21 @@
 {
-  "name": "safetyculture",
-  "display_name": "SafetyCulture",
-  "description": "Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
-  "integration_type": "api",
-  "release_stage": "alpha",
   "capabilities": {
-    "check": true,
-    "read": true,
-    "write": false,
-    "query": false,
     "cdc": false,
-    "dynamic_schema": false
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": false
   },
+  "description": "Reads SafetyCulture audits, templates, and users through fixed REST routes.",
+  "display_name": "SafetyCulture",
+  "docs_url": "https://developers.safetyculture.com/",
+  "integration_type": "api",
+  "name": "safetyculture",
+  "release_stage": "alpha",
   "risk": {
-    "read": "external SafetyCulture API reads performed by the legacy connector via a Tier-2 hook",
-    "write": "unsupported",
-    "approval": "none; read-only"
-  },
-  "docs_url": "https://developer.safetyculture.com/"
+    "approval": "none; read-only",
+    "read": "Bounded GET reads use the fixed SafetyCulture origin and declared bearer authentication.",
+    "write": "unsupported"
+  }
 }

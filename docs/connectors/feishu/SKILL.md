@@ -7,7 +7,7 @@ description: Feishu / Lark connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open Platform REST API using a tenant_access_token exchange. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Feishu/Lark Bitable records, tables, and field schemas through declared Bitable REST routes and a bounded tenant token exchange.
 
 ## Icon
 
@@ -28,10 +28,7 @@ Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open
 
 ## Configuration
 
-- base_url
-- lark_host (required)
-- mode
-- page_size
+- region
 - table_id (required)
 - app_id (secret) (required)
 - app_secret (secret) (required)
@@ -55,7 +52,7 @@ Reads Feishu/Lark Bitable (Base) records, tables, and field schemas via the Open
 
 ## Security
 
-- read risk: external Feishu / Lark API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded Feishu/Lark Bitable reads use a source-declared provider host and tenant token exchange.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

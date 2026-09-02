@@ -1,33 +1,33 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "databases",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "integer"
-    },
-    "name": {
+    "created_at": {
       "type": "string"
     },
     "engine": {
       "type": "string"
     },
-    "is_sample": {
-      "type": "boolean"
+    "id": {
+      "type": "integer"
     },
     "is_on_demand": {
       "type": "boolean"
     },
-    "timezone": {
+    "is_sample": {
+      "type": "boolean"
+    },
+    "name": {
       "type": "string"
     },
-    "created_at": {
+    "timezone": {
       "type": "string"
     },
     "updated_at": {
       "type": "string"
     }
   },
+  "title": "databases",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

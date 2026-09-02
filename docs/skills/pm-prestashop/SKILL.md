@@ -28,9 +28,7 @@ Reads PrestaShop customers, orders, products, addresses, and carts through the P
 
 ## Configuration
 
-- base_url
-- mode
-- start_date (required)
+- start_date
 - url (required)
 - access_key (secret) (required)
 

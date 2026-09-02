@@ -192,6 +192,40 @@ func TestBundleLoadHappyPathFullBundle(t *testing.T) {
 	}
 }
 
+func TestBundleLoadAcceptsDeclaredStaticVendorStreamHeaders(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(strings.Replace(validStreams, `"schema": "schemas/widgets.json"`, `"headers": {"Accept": "application/vnd.acme-widget.1+json"}, "schema": "schemas/widgets.json"`, 1))}
+
+	bundle, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if got := bundle.Streams[0].Headers["Accept"]; got != "application/vnd.acme-widget.1+json" {
+		t.Fatalf("stream headers = %#v, want declared static vendor Accept header", bundle.Streams[0].Headers)
+	}
+}
+
+func TestBundleLoadRejectsUnsafeStaticStreamHeaders(t *testing.T) {
+	for _, testCase := range []struct {
+		name    string
+		headers string
+		want    string
+	}{
+		{name: "authorization", headers: `{"Authorization":"forbidden"}`, want: "only fixed Accept headers"},
+		{name: "interpolation", headers: `{"Accept":"{{ config.accept }}"}`, want: "must be static"},
+		{name: "generic media", headers: `{"Accept":"application/json"}`, want: "vendor JSON media type"},
+		{name: "parameters", headers: `{"Accept":"application/vnd.acme-widget.1+json; q=1"}`, want: "vendor JSON media type"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			fsys := fullValidBundleFS("acme")
+			fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(strings.Replace(validStreams, `"schema": "schemas/widgets.json"`, `"headers": `+testCase.headers+`, "schema": "schemas/widgets.json"`, 1))}
+			if _, err := Load(fsys, "acme"); err == nil || !strings.Contains(err.Error(), testCase.want) {
+				t.Fatalf("Load error = %v, want %q", err, testCase.want)
+			}
+		})
+	}
+}
+
 func TestBundleLoadRejectsDuplicateWriteActionNames(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/writes.json"] = &fstest.MapFile{Data: []byte(`{

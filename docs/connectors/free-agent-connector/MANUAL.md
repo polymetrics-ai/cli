@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector free-agent-connector [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads FreeAgent contacts, invoices, bills, projects, and tasks through the FreeAgent v2 REST API using OAuth2 refresh-token authentication. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads FreeAgent contacts, invoices, bills, projects, and tasks through fixed FreeAgent v2 REST routes and OAuth2 refresh-token authentication.
 
 ICON
   id: pm-sample
@@ -27,9 +27,6 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
-  mode
-  payroll_year
   updated_since
   client_id (secret) (required)
   client_refresh_token_2 (secret) (required)
@@ -61,7 +58,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external FreeAgent API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded FreeAgent v2 reads use declared OAuth2 refresh-token authentication and fixed provider routes.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

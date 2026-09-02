@@ -1,40 +1,20 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "contacts",
-  "type": "object",
   "properties": {
-    "ContactId": {
+    "Address": {
+      "type": "array"
+    },
+    "AssignedTo": {
+      "type": "number"
+    },
+    "Company Name": {
       "type": "string"
     },
     "CompanyId": {
       "type": "string"
     },
-    "Name": {
+    "ContactId": {
       "type": "string"
-    },
-    "Company Name": {
-      "type": "string"
-    },
-    "Job Title": {
-      "type": "string"
-    },
-    "Email": {
-      "type": "array"
-    },
-    "Phone": {
-      "type": "array"
-    },
-    "Address": {
-      "type": "array"
-    },
-    "Website": {
-      "type": "string"
-    },
-    "AssignedTo": {
-      "type": "number"
-    },
-    "IsCompany": {
-      "type": "boolean"
     },
     "DateCreated": {
       "type": [
@@ -47,6 +27,15 @@
         "null"
       ]
     },
+    "Email": {
+      "type": "array"
+    },
+    "IsCompany": {
+      "type": "boolean"
+    },
+    "Job Title": {
+      "type": "string"
+    },
     "LastUpdate": {
       "type": [
         "string",
@@ -57,8 +46,19 @@
         "array",
         "null"
       ]
+    },
+    "Name": {
+      "type": "string"
+    },
+    "Phone": {
+      "type": "array"
+    },
+    "Website": {
+      "type": "string"
     }
   },
+  "title": "contacts",
+  "type": "object",
   "x-primary-key": [
     "ContactId"
   ]

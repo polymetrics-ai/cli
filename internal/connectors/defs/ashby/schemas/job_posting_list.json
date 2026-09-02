@@ -1,103 +1,103 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "job_posting_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The job posting's id"
+    "applicationDeadline": {
+      "type": "string"
     },
-    "title": {
-      "type": "string",
-      "description": "The job posting's title"
+    "applyLink": {
+      "description": "The link to apply to the job posting. Will be to the public job board if the job posting is on an external job board, or to the internal job board if the job posting is on an internal job board.",
+      "format": "uri",
+      "type": "string"
     },
-    "jobId": {
-      "type": "string",
-      "description": "The id of the job associated with the job posting"
-    },
-    "status": {
-      "type": "string",
-      "enum": [
-        "Draft",
-        "Published"
-      ]
+    "compensationTierSummary": {
+      "type": "string"
     },
     "departmentName": {
-      "type": "string",
-      "description": "The name of the department associated with the job posting"
+      "description": "The name of the department associated with the job posting",
+      "type": "string"
     },
-    "teamName": {
-      "type": "string",
-      "description": "The name of the team associated with the job posting. `teamName` and `departmentName` will be the same if the team does not have a parent team specified."
+    "employmentType": {
+      "description": "The employment type for the job posting",
+      "type": "string"
     },
-    "locationName": {
-      "type": "string",
-      "description": "The name of the primary location associated with the job posting"
+    "externalLink": {
+      "format": "uri",
+      "type": "string"
+    },
+    "id": {
+      "description": "The job posting's id",
+      "type": "string"
+    },
+    "isListed": {
+      "description": "Whether or not the job posting is listed",
+      "type": "boolean"
+    },
+    "jobId": {
+      "description": "The id of the job associated with the job posting",
+      "type": "string"
     },
     "locationIds": {
-      "type": "object",
       "properties": {
         "primaryLocationId": {
           "type": "string"
         },
         "secondaryLocationIds": {
-          "type": "array",
           "description": "The secondary location ids for the job posting",
           "items": {
             "type": "string"
-          }
+          },
+          "type": "array"
         }
       },
       "required": [
         "primaryLocationId",
         "secondaryLocationIds"
-      ]
+      ],
+      "type": "object"
+    },
+    "locationName": {
+      "description": "The name of the primary location associated with the job posting",
+      "type": "string"
+    },
+    "publishedDate": {
+      "format": "date",
+      "type": "string"
+    },
+    "shouldDisplayCompensationOnJobBoard": {
+      "description": "Whether the job posting's settings specify that compensation should be shown to applicants when the posting is listed among other job postings",
+      "type": "boolean"
+    },
+    "status": {
+      "enum": [
+        "Draft",
+        "Published"
+      ],
+      "type": "string"
+    },
+    "teamName": {
+      "description": "The name of the team associated with the job posting. `teamName` and `departmentName` will be the same if the team does not have a parent team specified.",
+      "type": "string"
+    },
+    "title": {
+      "description": "The job posting's title",
+      "type": "string"
+    },
+    "updatedAt": {
+      "description": "The date and time when the job posting was last updated",
+      "format": "date-time",
+      "type": "string"
     },
     "workplaceType": {
-      "type": "string",
       "enum": [
         "OnSite",
         "Hybrid",
         "Remote"
-      ]
-    },
-    "employmentType": {
-      "type": "string",
-      "description": "The employment type for the job posting"
-    },
-    "isListed": {
-      "type": "boolean",
-      "description": "Whether or not the job posting is listed"
-    },
-    "publishedDate": {
-      "type": "string",
-      "format": "date"
-    },
-    "applicationDeadline": {
+      ],
       "type": "string"
-    },
-    "externalLink": {
-      "type": "string",
-      "format": "uri"
-    },
-    "applyLink": {
-      "type": "string",
-      "description": "The link to apply to the job posting. Will be to the public job board if the job posting is on an external job board, or to the internal job board if the job posting is on an internal job board.",
-      "format": "uri"
-    },
-    "compensationTierSummary": {
-      "type": "string"
-    },
-    "shouldDisplayCompensationOnJobBoard": {
-      "type": "boolean",
-      "description": "Whether the job posting's settings specify that compensation should be shown to applicants when the posting is listed among other job postings"
-    },
-    "updatedAt": {
-      "type": "string",
-      "description": "The date and time when the job posting was last updated",
-      "format": "date-time"
     }
   },
+  "title": "job_posting_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

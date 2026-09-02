@@ -1,68 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "take_home_assignment_info",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the take-home assignment"
-    },
     "applicationId": {
-      "type": "string",
-      "description": "The id of the associated application"
-    },
-    "candidateId": {
-      "type": "string",
-      "description": "The id of the associated candidate"
-    },
-    "interviewStageId": {
+      "description": "The id of the associated application",
       "type": "string"
     },
-    "interviewId": {
-      "type": "string",
-      "description": "The id of the linked interview definition for this take-home"
+    "candidateId": {
+      "description": "The id of the associated candidate",
+      "type": "string"
+    },
+    "createdAt": {
+      "description": "The timestamp when the take-home was created",
+      "format": "date-time",
+      "type": "string"
+    },
+    "feedbackFormDefinitionId": {
+      "description": "The feedback form definition reviewers use for this take-home",
+      "type": "string"
+    },
+    "id": {
+      "description": "The unique identifier for the take-home assignment",
+      "type": "string"
     },
     "interview": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the interview"
-        },
-        "title": {
-          "type": "string",
-          "description": "The internal title of the interview"
-        },
         "externalTitle": {
-          "type": "string",
-          "description": "The title of the interview shown to candidates"
+          "description": "The title of the interview shown to candidates",
+          "type": "string"
         },
-        "type": {
-          "type": "string",
-          "description": "The interview definition type, such as Interview, TakeHome, or Debrief",
-          "enum": [
-            "Assessment",
-            "Interview",
-            "InterviewWithoutSchedule",
-            "TakeHome",
-            "Debrief"
-          ]
+        "feedbackFormDefinitionId": {
+          "description": "The unique identifier for the feedback form definition used by this interview",
+          "type": "string"
         },
-        "isArchived": {
-          "type": "boolean",
-          "description": "Whether the interview is archived"
-        },
-        "isDebrief": {
-          "type": "boolean",
-          "description": "Whether the interview is a debrief"
-        },
-        "isFeedbackRequired": {
-          "type": "boolean",
-          "description": "Whether feedback is required for this interview"
-        },
-        "isFeedbackRequested": {
-          "type": "boolean",
-          "description": "Whether feedback is requested for this interview"
+        "id": {
+          "description": "The unique identifier for the interview",
+          "type": "string"
         },
         "instructionsHtml": {
           "type": "string"
@@ -70,12 +42,39 @@
         "instructionsPlain": {
           "type": "string"
         },
+        "isArchived": {
+          "description": "Whether the interview is archived",
+          "type": "boolean"
+        },
+        "isDebrief": {
+          "description": "Whether the interview is a debrief",
+          "type": "boolean"
+        },
+        "isFeedbackRequested": {
+          "description": "Whether feedback is requested for this interview",
+          "type": "boolean"
+        },
+        "isFeedbackRequired": {
+          "description": "Whether feedback is required for this interview",
+          "type": "boolean"
+        },
         "jobId": {
           "type": "string"
         },
-        "feedbackFormDefinitionId": {
-          "type": "string",
-          "description": "The unique identifier for the feedback form definition used by this interview"
+        "title": {
+          "description": "The internal title of the interview",
+          "type": "string"
+        },
+        "type": {
+          "description": "The interview definition type, such as Interview, TakeHome, or Debrief",
+          "enum": [
+            "Assessment",
+            "Interview",
+            "InterviewWithoutSchedule",
+            "TakeHome",
+            "Debrief"
+          ],
+          "type": "string"
         }
       },
       "required": [
@@ -88,111 +87,40 @@
         "isFeedbackRequired",
         "isFeedbackRequested",
         "feedbackFormDefinitionId"
-      ]
+      ],
+      "type": "object"
     },
-    "status": {
-      "type": "string",
-      "description": "The current lifecycle status of the take-home assignment",
-      "enum": [
-        "WaitingOnSubmission",
-        "WaitingOnFeedback",
-        "Complete",
-        "Cancelled"
-      ]
+    "interviewId": {
+      "description": "The id of the linked interview definition for this take-home",
+      "type": "string"
     },
-    "createdAt": {
-      "type": "string",
-      "description": "The timestamp when the take-home was created",
-      "format": "date-time"
-    },
-    "updatedAt": {
-      "type": "string",
-      "description": "The timestamp when the take-home was last updated",
-      "format": "date-time"
-    },
-    "submission": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the take-home submission"
-        },
-        "submittedAt": {
-          "type": "string",
-          "description": "The timestamp when the candidate submitted",
-          "format": "date-time"
-        },
-        "notesHtml": {
-          "type": "string"
-        },
-        "notesPlain": {
-          "type": "string"
-        },
-        "fileHandles": {
-          "type": "array",
-          "description": "The files submitted by the candidate",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "The unique identifier for the file"
-              },
-              "name": {
-                "type": "string",
-                "description": "The file name"
-              },
-              "handle": {
-                "type": "string",
-                "description": "The file handle, which can be used with the file.info endpoint"
-              }
-            },
-            "required": [
-              "id",
-              "name",
-              "handle"
-            ]
-          }
-        }
-      },
-      "required": [
-        "id",
-        "submittedAt",
-        "notesHtml",
-        "notesPlain",
-        "fileHandles"
-      ]
-    },
-    "feedbackFormDefinitionId": {
-      "type": "string",
-      "description": "The feedback form definition reviewers use for this take-home"
+    "interviewStageId": {
+      "type": "string"
     },
     "reviewers": {
-      "type": "array",
       "description": "The assigned take-home reviewers",
       "items": {
-        "type": "object",
         "properties": {
-          "userId": {
-            "type": "string",
-            "description": "The id of the assigned reviewer"
-          },
-          "interviewEventId": {
-            "type": "string",
-            "description": "The interview event id used for interview briefings and feedback submission"
-          },
           "feedbackLink": {
-            "type": "string",
             "description": "The Ashby app link for submitting reviewer feedback",
-            "format": "uri"
-          },
-          "hasSubmittedFeedback": {
-            "type": "boolean",
-            "description": "Whether this reviewer has submitted take-home feedback"
+            "format": "uri",
+            "type": "string"
           },
           "feedbackSubmittedAt": {
-            "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "type": "string"
+          },
+          "hasSubmittedFeedback": {
+            "description": "Whether this reviewer has submitted take-home feedback",
+            "type": "boolean"
+          },
+          "interviewEventId": {
+            "description": "The interview event id used for interview briefings and feedback submission",
+            "type": "string"
+          },
+          "userId": {
+            "description": "The id of the assigned reviewer",
+            "type": "string"
           }
         },
         "required": [
@@ -201,10 +129,82 @@
           "feedbackLink",
           "hasSubmittedFeedback",
           "feedbackSubmittedAt"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "status": {
+      "description": "The current lifecycle status of the take-home assignment",
+      "enum": [
+        "WaitingOnSubmission",
+        "WaitingOnFeedback",
+        "Complete",
+        "Cancelled"
+      ],
+      "type": "string"
+    },
+    "submission": {
+      "properties": {
+        "fileHandles": {
+          "description": "The files submitted by the candidate",
+          "items": {
+            "properties": {
+              "handle": {
+                "description": "The file handle, which can be used with the file.info endpoint",
+                "type": "string"
+              },
+              "id": {
+                "description": "The unique identifier for the file",
+                "type": "string"
+              },
+              "name": {
+                "description": "The file name",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "handle"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "id": {
+          "description": "The unique identifier for the take-home submission",
+          "type": "string"
+        },
+        "notesHtml": {
+          "type": "string"
+        },
+        "notesPlain": {
+          "type": "string"
+        },
+        "submittedAt": {
+          "description": "The timestamp when the candidate submitted",
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "submittedAt",
+        "notesHtml",
+        "notesPlain",
+        "fileHandles"
+      ],
+      "type": "object"
+    },
+    "updatedAt": {
+      "description": "The timestamp when the take-home was last updated",
+      "format": "date-time",
+      "type": "string"
     }
   },
+  "title": "take_home_assignment_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

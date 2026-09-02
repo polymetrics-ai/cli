@@ -7,7 +7,7 @@ description: Mode connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Mode collections (spaces), reports, data sources, groups, and memberships through the Mode REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Mode workspace collections through fixed HAL+JSON REST routes.
 
 ## Icon
 
@@ -28,8 +28,6 @@ Reads Mode collections (spaces), reports, data sources, groups, and memberships 
 
 ## Configuration
 
-- base_url
-- mode
 - workspace (required)
 - api_secret (secret) (required)
 - api_token (secret) (required)
@@ -63,7 +61,7 @@ Reads Mode collections (spaces), reports, data sources, groups, and memberships 
 
 ## Security
 
-- read risk: external Mode API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded HAL+JSON reads use the fixed Mode origin and declared Basic authentication.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

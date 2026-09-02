@@ -7,7 +7,7 @@ description: Basecamp connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Basecamp 3 projects, people, and account events through fixed account-bound REST routes.
 
 ## Icon
 
@@ -35,27 +35,25 @@ Reads Basecamp 3 projects, people, and account activity events through the Basec
 ## Configuration
 
 - account_id (required)
-- base_url
-- mode
-- start_date (required)
-- client_id (secret) (required)
-- client_refresh_token_2 (secret) (required)
-- client_secret (secret) (required)
+- access_token (secret)
+- client_id (secret)
+- client_secret (secret)
+- refresh_token (secret)
 
 ## ETL Streams
 
 - projects:
   - primary key: id
   - cursor: updated_at
-  - fields: app_url(string), bookmark_url(string), created_at(string), description(string), id(integer), name(string), purpose(string), status(string), updated_at(string), url(string)
+  - fields: id(integer), updated_at(string)
 - people:
   - primary key: id
   - cursor: updated_at
-  - fields: admin(boolean), client(boolean), created_at(string), email_address(string), id(integer), name(string), owner(boolean), personable_type(string), time_zone(string), title(string), updated_at(string)
+  - fields: id(integer), updated_at(string)
 - events:
   - primary key: id
   - cursor: created_at
-  - fields: action(string), created_at(string), id(integer), kind(string), recording_id(integer), summary(string)
+  - fields: created_at(string), id(integer)
 
 ## Sync Modes
 
@@ -63,7 +61,7 @@ Reads Basecamp 3 projects, people, and account activity events through the Basec
 
 ## Security
 
-- read risk: external Basecamp API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded Basecamp account reads use a declared account path and bearer or refresh-token authentication.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

@@ -71,9 +71,10 @@ type schemaNode struct {
 	hasMaximum bool
 
 	// extensions
-	secret      bool     // x-secret
-	primaryKey  []string // x-primary-key (only meaningful at the root)
-	cursorField string   // x-cursor-field (only meaningful at the root)
+	secret              bool     // x-secret
+	primaryKey          []string // x-primary-key (only meaningful at the root)
+	cursorField         string   // x-cursor-field (only meaningful at the root)
+	rejectUnknownConfig bool     // x-reject-unknown-config (only meaningful at the root)
 
 	// defaultVal/hasDefault capture the "default" annotation keyword's raw
 	// decoded value (gap-loop cycle-1 item 6, REVIEW-A.md C3): "default" was
@@ -119,26 +120,27 @@ var annotationKeywords = map[string]bool{
 // structuralKeywords are the only keywords this dialect understands
 // structurally.
 var structuralKeywords = map[string]bool{
-	"type":                 true,
-	"required":             true,
-	"properties":           true,
-	"patternProperties":    true,
-	"items":                true,
-	"oneOf":                true,
-	"enum":                 true,
-	"pattern":              true,
-	"minLength":            true,
-	"maxLength":            true,
-	"minProperties":        true,
-	"maxProperties":        true,
-	"minItems":             true,
-	"maxItems":             true,
-	"minimum":              true,
-	"maximum":              true,
-	"additionalProperties": true,
-	"x-secret":             true,
-	"x-primary-key":        true,
-	"x-cursor-field":       true,
+	"type":                    true,
+	"required":                true,
+	"properties":              true,
+	"patternProperties":       true,
+	"items":                   true,
+	"oneOf":                   true,
+	"enum":                    true,
+	"pattern":                 true,
+	"minLength":               true,
+	"maxLength":               true,
+	"minProperties":           true,
+	"maxProperties":           true,
+	"minItems":                true,
+	"maxItems":                true,
+	"minimum":                 true,
+	"maximum":                 true,
+	"additionalProperties":    true,
+	"x-secret":                true,
+	"x-primary-key":           true,
+	"x-cursor-field":          true,
+	"x-reject-unknown-config": true,
 	// Dynamic catalog schemas retain these provider-derived annotations. The
 	// engine's executable static sync contract remains x-primary-key and
 	// x-cursor-field, while the additional fields let catalog consumers keep
@@ -394,6 +396,13 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 			return nil, fmt.Errorf("compile schema: x-secret: %w", err)
 		}
 		n.secret = secret
+	}
+	if raw, ok := m["x-reject-unknown-config"]; ok {
+		var reject bool
+		if err := json.Unmarshal(raw, &reject); err != nil {
+			return nil, fmt.Errorf("compile schema: x-reject-unknown-config: %w", err)
+		}
+		n.rejectUnknownConfig = reject
 	}
 
 	if raw, ok := m["x-primary-key"]; ok {

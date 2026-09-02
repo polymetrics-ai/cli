@@ -1,0 +1,208 @@
+{
+  "schema_version": 4,
+  "connector": "yahoo-finance-price",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "implemented",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://www.yahoofinanceapi.com/"
+      }
+    ]
+  },
+  "metadata": {
+    "name": "yahoo-finance-price",
+    "display_name": "Yahoo Finance Price",
+    "description": "Reads public Yahoo Finance chart prices as declaration-bound OHLCV records. Read-only.",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "external Yahoo Finance chart API reads through a fixed declared route",
+      "write": "unsupported",
+      "approval": "none; read-only"
+    },
+    "docs_url": "https://www.yahoofinanceapi.com/"
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Yahoo Finance Price Connection Specification",
+    "type": "object",
+    "properties": {
+      "symbol": {
+        "type": "string",
+        "default": "AAPL",
+        "description": "Ticker symbol to query through the fixed Yahoo Finance chart route."
+      },
+      "interval": {
+        "type": "string",
+        "description": "The interval of between prices queried."
+      },
+      "range": {
+        "type": "string",
+        "description": "The range of prices to be queried."
+      }
+    },
+    "x-reject-unknown-config": true
+  },
+  "http": {
+    "url": "https://query1.finance.yahoo.com",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/v8/finance/chart/{{ config.symbol }}",
+      "query": {
+        "interval": {
+          "template": "{{ config.interval }}",
+          "omit_when_absent": true
+        },
+        "range": {
+          "template": "{{ config.range }}",
+          "omit_when_absent": true
+        }
+      }
+    },
+    "error_map": []
+  },
+  "schemas": {
+    "schemas/prices.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "prices",
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string"
+        },
+        "currency": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "number"
+        },
+        "open": {
+          "type": "number"
+        },
+        "high": {
+          "type": "number"
+        },
+        "low": {
+          "type": "number"
+        },
+        "close": {
+          "type": "number"
+        },
+        "volume": {
+          "type": "number"
+        },
+        "adjclose": {
+          "type": "number"
+        }
+      },
+      "x-primary-key": [
+        "symbol",
+        "timestamp"
+      ],
+      "x-cursor-field": "timestamp"
+    }
+  },
+  "operations": [
+    {
+      "id": "yahoo-finance-price.chart",
+      "source": {
+        "provider_reference": "https://www.yahoofinanceapi.com/"
+      },
+      "schema_refs": {
+        "record": "schemas/prices.json"
+      },
+      "stream_order": 1,
+      "stream": {
+        "name": "prices",
+        "method": "GET",
+        "path": "/v8/finance/chart/{{ config.symbol }}",
+        "query": {
+          "interval": {
+            "template": "{{ config.interval }}",
+            "omit_when_absent": true
+          },
+          "range": {
+            "template": "{{ config.range }}",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "chart.result"
+        },
+        "array_zip_projection": {
+          "static_fields": [
+            {
+              "field": "symbol",
+              "path": "meta.symbol"
+            },
+            {
+              "field": "currency",
+              "path": "meta.currency"
+            }
+          ],
+          "array_fields": [
+            {
+              "field": "timestamp",
+              "path": "timestamp"
+            },
+            {
+              "field": "open",
+              "path": "indicators.quote.0.open"
+            },
+            {
+              "field": "high",
+              "path": "indicators.quote.0.high"
+            },
+            {
+              "field": "low",
+              "path": "indicators.quote.0.low"
+            },
+            {
+              "field": "close",
+              "path": "indicators.quote.0.close"
+            },
+            {
+              "field": "volume",
+              "path": "indicators.quote.0.volume"
+            },
+            {
+              "field": "adjclose",
+              "path": "indicators.adjclose.0.adjclose"
+            }
+          ]
+        },
+        "schema": "schemas/prices.json",
+        "incremental": {
+          "cursor_field": "timestamp",
+          "client_filtered": true
+        }
+      }
+    }
+  ]
+}

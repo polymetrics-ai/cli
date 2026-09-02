@@ -139,6 +139,9 @@ func (c *Connector) ValidateConfiguration(config map[string]string) error {
 }
 
 func (c *Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
+	if err := c.ValidateConfiguration(cfg.Config); err != nil {
+		return err
+	}
 	return executeWithAuthCohort(ctx, cfg, func(admitted context.Context) error {
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, Check(admitted, c.bundle, cfg, c.hooks))
 	})
@@ -159,6 +162,9 @@ func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (
 }
 
 func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	if err := c.ValidateConfiguration(req.Config.Config); err != nil {
+		return err
+	}
 	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, Read(admitted, c.bundle, req, c.hooks, emit))
 	})
@@ -168,6 +174,9 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 // the normal authentication boundary while making a known page budget stop
 // distinguishable from provider exhaustion for a durable continuation.
 func (c *Connector) ReadWithOutcome(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
+	if err := c.ValidateConfiguration(req.Config.Config); err != nil {
+		return err
+	}
 	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		return markDeclaredAuthenticationFailure(c.bundle.HTTP.ErrorMap, ReadWithOutcome(admitted, c.bundle, req, c.hooks, emit))
 	})

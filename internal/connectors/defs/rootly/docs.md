@@ -1,38 +1,33 @@
 # Overview
 
-Reads Rootly incidents, services, and users through the Rootly API. Read-only.
+Reads Rootly incidents, services, and users through fixed JSON:API routes. Read-only.
 
 Readable streams: `incidents`, `services`, `users`.
 
 This connector is read-only; no write actions are declared.
 
-Service API documentation: https://rootly.com/api.
+Service API documentation: https://docs.rootly.com/api-reference.
 
 ## Auth setup
 
 Connection fields:
 
-- `api_key` (required, secret, string).
-- `base_url` (optional, string).
-- `mode` (optional, string).
-- `start_date` (required, string).
+- `api_key` (required, secret, string); Rootly bearer token.
+- `start_date` (required, string); retained initial ETL lower-bound configuration.
 
 Secret fields are redacted in logs and write previews: `api_key`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+The runtime uses only the fixed `https://api.rootly.com` origin and declared bearer authentication. It does not accept caller-provided origins or fixture modes.
 
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Connection checks read one incidents page.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+Default pagination follows the provider-declared `links.next` URL with a 100-page maximum.
 
-- `incidents`: GET connector-managed request path - records path `data`.
-- `services`: GET connector-managed request path - records path `data`.
-- `users`: GET connector-managed request path - records path `data`.
+- `incidents`: GET `/v1/incidents`; JSON:API attributes are projected to `title` and `status`.
+- `services`: GET `/v1/services`; JSON:API attributes are projected to `title` and `status`.
+- `users`: GET `/v1/users`; JSON:API attributes are projected to `title` and `status`.
 
 ## Write actions & risks
 
@@ -40,4 +35,4 @@ This connector is read-only; no reverse-ETL write actions are declared.
 
 ## Known limits
 
-- API coverage includes 3 stream-backed endpoint group(s).
+- API coverage includes 3 stream-backed endpoint groups.

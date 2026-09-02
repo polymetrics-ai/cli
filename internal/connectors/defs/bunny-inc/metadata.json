@@ -1,21 +1,21 @@
 {
-  "name": "bunny-inc",
-  "display_name": "Bunny, Inc.",
-  "description": "Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from the per-tenant Bunny GraphQL API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.",
-  "integration_type": "api",
-  "release_stage": "alpha",
   "capabilities": {
-    "check": true,
-    "read": true,
-    "write": false,
-    "query": false,
     "cdc": false,
-    "dynamic_schema": false
+    "check": true,
+    "dynamic_schema": false,
+    "query": false,
+    "read": true,
+    "write": false
   },
+  "description": "Reads Bunny subscription-billing data through declared per-tenant GraphQL connection routes.",
+  "display_name": "Bunny, Inc.",
+  "docs_url": "https://docs.bunny.com/",
+  "integration_type": "api",
+  "name": "bunny-inc",
+  "release_stage": "alpha",
   "risk": {
-    "read": "external Bunny, Inc. API reads performed by the legacy connector via a Tier-2 hook",
-    "write": "unsupported",
-    "approval": "none; read-only"
-  },
-  "docs_url": "https://docs.bunny.net/reference/bunnynet-api-overview"
+    "approval": "none; read-only",
+    "read": "Bounded declared Bunny GraphQL reads use a source-validated tenant subdomain and bearer API key.",
+    "write": "unsupported"
+  }
 }

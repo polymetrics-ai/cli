@@ -1,31 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "products",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "integer"
-    },
-    "id_manufacturer": {
-      "type": "integer"
-    },
-    "id_supplier": {
-      "type": "integer"
-    },
-    "id_category_default": {
-      "type": "integer"
-    },
-    "reference": {
-      "type": "string"
-    },
-    "price": {
-      "type": "string"
-    },
     "active": {
       "type": "boolean"
-    },
-    "quantity": {
-      "type": "integer"
     },
     "date_add": {
       "type": [
@@ -48,10 +25,33 @@
         "array",
         "null"
       ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "id_category_default": {
+      "type": "integer"
+    },
+    "id_manufacturer": {
+      "type": "integer"
+    },
+    "id_supplier": {
+      "type": "integer"
+    },
+    "price": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "reference": {
+      "type": "string"
     }
   },
+  "title": "products",
+  "type": "object",
+  "x-cursor-field": "date_upd",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "date_upd"
+  ]
 }

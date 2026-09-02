@@ -148,17 +148,17 @@ func checkClaudeAgentInventory(projectionRoot *os.Root, contract *Contract) erro
 	found := make(map[string]bool, len(expected))
 	seenNames := make(map[string]string, len(expected))
 	unexpected := make([]string, 0)
-	walkErr := fs.WalkDir(projectionRoot.FS(), ".", func(agentPath string, entry fs.DirEntry, visitErr error) error {
+	walkErr := fs.WalkDir(projectionRoot.FS(), agentDirectory, func(agentPath string, entry fs.DirEntry, visitErr error) error {
 		if visitErr != nil {
 			return visitErr
 		}
-		if entry.IsDir() && agentPath == ".git" {
-			return fs.SkipDir
+		if agentPath == agentDirectory {
+			return nil
 		}
-		if entry.Type()&fs.ModeSymlink != 0 && isClaudeAgentInventoryPath(agentPath) {
+		if entry.Type()&fs.ModeSymlink != 0 {
 			return fmt.Errorf("claude project agent inventory contains symlink %s", agentPath)
 		}
-		if entry.IsDir() || !isClaudeAgentDefinitionPath(agentPath) {
+		if entry.IsDir() || !strings.EqualFold(pathpkg.Ext(agentPath), ".md") {
 			return nil
 		}
 		if !entry.Type().IsRegular() {
@@ -200,29 +200,6 @@ func checkClaudeAgentInventory(projectionRoot *os.Root, contract *Contract) erro
 		}
 	}
 	return nil
-}
-
-func isClaudeAgentDefinitionPath(agentPath string) bool {
-	components := strings.Split(agentPath, "/")
-	for index := 0; index+2 < len(components); index++ {
-		if strings.EqualFold(components[index], ".claude") && strings.EqualFold(components[index+1], "agents") {
-			return strings.EqualFold(pathpkg.Ext(agentPath), ".md")
-		}
-	}
-	return false
-}
-
-func isClaudeAgentInventoryPath(agentPath string) bool {
-	components := strings.Split(agentPath, "/")
-	for index, component := range components {
-		if !strings.EqualFold(component, ".claude") {
-			continue
-		}
-		if index == len(components)-1 || strings.EqualFold(components[index+1], "agents") {
-			return true
-		}
-	}
-	return false
 }
 
 func CheckProjection(want, got []byte) error {

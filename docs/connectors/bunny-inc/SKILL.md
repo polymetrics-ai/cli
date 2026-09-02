@@ -7,7 +7,7 @@ description: Bunny, Inc. connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from the per-tenant Bunny GraphQL API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Bunny subscription-billing data through declared per-tenant GraphQL connection routes.
 
 ## Icon
 
@@ -28,9 +28,6 @@ Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, s
 
 ## Configuration
 
-- base_url
-- mode
-- start_date
 - subdomain (required)
 - apikey (secret) (required)
 
@@ -39,23 +36,23 @@ Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, s
 - accounts:
   - primary key: id
   - cursor: updatedAt
-  - fields: accountTypeId(string), annualRevenue(number), billingCountry(string), code(string), createdAt(string), currencyId(string), employees(integer), entityId(string), id(string), name(string), netPaymentDays(integer), ownerUserId(string), payingStatus(string), phone(string), updatedAt(string), website(string)
+  - fields: id(string), updatedAt(string)
 - contacts:
   - primary key: id
   - cursor: updatedAt
-  - fields: accountId(string), code(string), createdAt(string), email(string), entityId(string), firstName(string), fullName(string), id(string), lastName(string), mobile(string), phone(string), portalAccess(boolean), title(string), updatedAt(string)
+  - fields: id(string), updatedAt(string)
 - invoices:
   - primary key: id
   - cursor: updatedAt
-  - fields: accountId(string), amount(number), amountDue(number), amountPaid(number), createdAt(string), credits(number), currencyId(string), dueAt(string), id(string), netPaymentDays(integer), number(string), paidAt(string), quoteId(string), subtotal(number), taxAmount(number), updatedAt(string), url(string), uuid(string)
+  - fields: id(string), updatedAt(string)
 - payments:
   - primary key: id
   - cursor: updatedAt
-  - fields: accountId(string), amount(number), amountUnapplied(number), baseCurrencyCash(number), baseCurrencyId(string), createdAt(string), currencyId(string), description(string), id(string), isLegacy(boolean), memo(string), receivedAt(string), updatedAt(string)
+  - fields: id(string), updatedAt(string)
 - subscriptions:
   - primary key: id
   - cursor: updatedAt
-  - fields: accountId(string), cancelationDate(string), createdAt(string), currencyId(string), endDate(string), id(string), name(string), period(string), priceListId(string), rampIntervalMonths(integer), startDate(string), trialEndDate(string), trialPeriod(integer), trialStartDate(string), updatedAt(string)
+  - fields: id(string), updatedAt(string)
 
 ## Sync Modes
 
@@ -63,7 +60,7 @@ Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, s
 
 ## Security
 
-- read risk: external Bunny, Inc. API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded declared Bunny GraphQL reads use a source-validated tenant subdomain and bearer API key.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

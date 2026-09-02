@@ -1,7 +1,5 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "fields",
-  "type": "object",
   "properties": {
     "field_id": {
       "type": "string"
@@ -9,22 +7,24 @@
     "field_name": {
       "type": "string"
     },
+    "is_hidden": {
+      "type": "boolean"
+    },
+    "is_primary": {
+      "type": "boolean"
+    },
+    "property": {
+      "type": "object"
+    },
     "type": {
       "type": "integer"
     },
     "ui_type": {
       "type": "string"
-    },
-    "is_primary": {
-      "type": "boolean"
-    },
-    "is_hidden": {
-      "type": "boolean"
-    },
-    "property": {
-      "type": "object"
     }
   },
+  "title": "fields",
+  "type": "object",
   "x-primary-key": [
     "field_id"
   ]

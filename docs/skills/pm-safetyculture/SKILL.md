@@ -7,7 +7,7 @@ description: SafetyCulture connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads SafetyCulture audits, templates, and users through fixed REST routes.
 
 ## Icon
 
@@ -28,9 +28,8 @@ Reads SafetyCulture audits, templates, and users through the SafetyCulture API. 
 
 ## Configuration
 
-- base_url
-- mode
-- api_key (secret) (required)
+- start_date (required)
+- access_token (secret) (required)
 
 ## ETL Streams
 
@@ -50,7 +49,7 @@ Reads SafetyCulture audits, templates, and users through the SafetyCulture API. 
 
 ## Security
 
-- read risk: external SafetyCulture API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded GET reads use the fixed SafetyCulture origin and declared bearer authentication.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

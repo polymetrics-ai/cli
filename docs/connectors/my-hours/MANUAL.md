@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector my-hours [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads My Hours clients, projects, team members, tags, and bounded time-log windows through fixed REST routes.
 
 ICON
   id: my-hours
@@ -27,10 +27,9 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  base_url
   email (required)
+  end_date (required)
   logs_batch_size
-  mode
   start_date (required)
   password (secret) (required)
 
@@ -53,10 +52,10 @@ ETL STREAMS
     fields: amount(number), billable(boolean), billable_amount(number), billable_hours(number), client_id(integer), client_name(string), date(string), invoiced(boolean), labor_hours(number), logId(integer), log_duration(number), note(string), project_id(integer), project_name(string), rate(number), tags(string), task_id(integer), task_name(string), user_id(integer), user_name(string)
 
 SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: external My Hours API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded My Hours reads use a fixed password-token exchange, fixed origin, static API version header, and at most 600 declared UTC date windows.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

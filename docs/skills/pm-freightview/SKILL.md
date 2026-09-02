@@ -7,7 +7,7 @@ description: Freightview connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Freightview shipments, quotes, and tracking events through the Freightview v2.0 REST API using the client-credentials session-token flow. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+Reads Freightview shipments, quotes, and tracking events through fixed Freightview v2.0 REST routes using client-credentials authentication.
 
 ## Icon
 
@@ -28,8 +28,6 @@ Reads Freightview shipments, quotes, and tracking events through the Freightview
 
 ## Configuration
 
-- base_url
-- mode
 - client_id (secret) (required)
 - client_secret (secret) (required)
 
@@ -51,7 +49,7 @@ Reads Freightview shipments, quotes, and tracking events through the Freightview
 
 ## Security
 
-- read risk: external Freightview API reads performed by the legacy connector via a Tier-2 hook
+- read risk: Bounded Freightview v2.0 reads use declared client-credentials authentication and fixed provider routes.
 - write risk: unsupported
 - approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

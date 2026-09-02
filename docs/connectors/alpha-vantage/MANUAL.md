@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector alpha-vantage [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Alpha Vantage daily, weekly, monthly, and intraday OHLCV time series plus the latest global quote for a configured stock symbol. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
+  Reads daily, weekly, monthly, and intraday OHLCV time series plus latest global quotes through fixed Alpha Vantage query operations.
 
 ICON
   id: alpha-vantage
@@ -27,9 +27,7 @@ AUTHENTICATION
 
 CONFIGURATION
   adjusted
-  base_url
   interval
-  mode
   outputsize
   symbol (required)
   api_key (secret) (required)
@@ -60,7 +58,7 @@ SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: external Alpha Vantage API reads performed by the legacy connector via a Tier-2 hook
+  read risk: Bounded Alpha Vantage query reads use the fixed provider origin and declared API-key query authentication.
   write risk: unsupported
   approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.

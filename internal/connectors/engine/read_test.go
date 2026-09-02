@@ -1703,6 +1703,73 @@ func TestReadResponseFieldsCopiesTopLevelSiblings(t *testing.T) {
 	}
 }
 
+func TestReadResponseHeaderProjectionMapsDeclaredHeadersToPositionalValues(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write([]byte(`{
+			"dimensionHeaders":[{"name":"date"}],
+			"metricHeaders":[{"name":"activeUsers"}],
+			"rows":[{"dimensionValues":[{"value":"20260102"}],"metricValues":[{"value":"42"}]}]
+		}`))
+	})
+	bundle := newTestBundle(t, srv, StreamSpec{
+		Records:    RecordsSpec{Path: "rows"},
+		Projection: "passthrough",
+		ResponseHeaderProjection: []ResponseHeaderProjectionSpec{
+			{HeadersPath: "dimensionHeaders", ValuesPath: "dimensionValues", AllowedHeaders: []string{"date"}},
+			{HeadersPath: "metricHeaders", ValuesPath: "metricValues", AllowedHeaders: []string{"activeUsers"}},
+		},
+	})
+
+	records, err := readAll(t, context.Background(), bundle, connectors.ReadRequest{Stream: "widgets"}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if len(records) != 1 || records[0]["date"] != "20260102" || records[0]["activeUsers"] != "42" {
+		t.Fatalf("records = %#v, want source-declared response-header projection", records)
+	}
+}
+
+func TestReadResponseHeaderProjectionRejectsInvalidResponseBeforeEmit(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		body string
+	}{
+		{
+			name: "unknown header",
+			body: `{"dimensionHeaders":[{"name":"unknown"}],"rows":[{"dimensionValues":[{"value":"20260102"}]}]}`,
+		},
+		{
+			name: "mismatched counts",
+			body: `{"dimensionHeaders":[{"name":"date"}],"rows":[{"dimensionValues":[]}]}`,
+		},
+		{
+			name: "missing value",
+			body: `{"dimensionHeaders":[{"name":"date"}],"rows":[{"dimensionValues":[{}]}]}`,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv := jsonServer(t, func(w http.ResponseWriter, _ *http.Request) {
+				_, _ = w.Write([]byte(tc.body))
+			})
+			bundle := newTestBundle(t, srv, StreamSpec{
+				Records:    RecordsSpec{Path: "rows"},
+				Projection: "passthrough",
+				ResponseHeaderProjection: []ResponseHeaderProjectionSpec{
+					{HeadersPath: "dimensionHeaders", ValuesPath: "dimensionValues", AllowedHeaders: []string{"date"}},
+				},
+			})
+
+			records, err := readAll(t, context.Background(), bundle, connectors.ReadRequest{Stream: "widgets"}, nil)
+			if err == nil {
+				t.Fatal("Read() accepted an invalid response-header projection")
+			}
+			if len(records) != 0 {
+				t.Fatalf("Read() emitted records before rejection: %#v", records)
+			}
+		})
+	}
+}
+
 // TestReadComputedFieldsFilteredOrMixedTemplateKeepsStringSemantics locks in
 // the OTHER half of A1's ruling: a template with a filter stage (join:,
 // unix_seconds, etc.) or with more than a single bare {{ record.path }}
@@ -3521,5 +3588,161 @@ func TestReadKeyedObjectStreamEmitsFlattenedProjectedRecords(t *testing.T) {
 	}
 	if records[1]["id"] != "222" || records[1]["name"] != "widget-b" {
 		t.Fatalf("records[1] = %+v, want id=222 name=widget-b", records[1])
+	}
+}
+
+func TestReadCartesianConfigFanOutRunsDeclaredProductDeterministically(t *testing.T) {
+	var requests []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		requests = append(requests, r.URL.Query().Get("url")+"|"+r.URL.Query().Get("strategy")+"|"+strings.Join(r.URL.Query()["category"], ","))
+		_, _ = w.Write([]byte(`{"data":[{"id":"report"}]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Records: RecordsSpec{Path: "data"},
+		CartesianConfigFanOut: &CartesianConfigFanOutSpec{
+			URLConfigKey:       "urls",
+			StrategyConfigKey:  "strategies",
+			URLQueryParam:      "url",
+			StrategyQueryParam: "strategy",
+			Categories:         []string{"accessibility", "performance"},
+			CategoryQueryParam: "category",
+			MaxCombinations:    4,
+			MaxRequests:        4,
+		},
+	})
+
+	records, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"urls":       "https://one.example,https://two.example",
+			"strategies": "mobile,desktop",
+		}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	wantRequests := []string{
+		"https://one.example|mobile|accessibility,performance",
+		"https://one.example|desktop|accessibility,performance",
+		"https://two.example|mobile|accessibility,performance",
+		"https://two.example|desktop|accessibility,performance",
+	}
+	if !reflect.DeepEqual(requests, wantRequests) {
+		t.Fatalf("requests = %#v, want %#v", requests, wantRequests)
+	}
+	if len(records) != 4 {
+		t.Fatalf("records = %#v, want one record per declared URL/strategy pair", records)
+	}
+	for i, record := range records {
+		if record["url"] == nil || record["strategy"] == nil {
+			t.Fatalf("records[%d] = %#v, want PageSpeed fan-out stamps", i, record)
+		}
+	}
+}
+
+func TestReadCartesianConfigFanOutRejectsBudgetBeforeProviderIO(t *testing.T) {
+	var requests int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		t.Fatalf("cartesian fan-out exceeded its declared budget before provider I/O")
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		CartesianConfigFanOut: &CartesianConfigFanOutSpec{
+			URLConfigKey:       "urls",
+			StrategyConfigKey:  "strategies",
+			URLQueryParam:      "url",
+			StrategyQueryParam: "strategy",
+			Categories:         []string{"performance"},
+			CategoryQueryParam: "category",
+			MaxCombinations:    4,
+			MaxRequests:        4,
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"urls":       "https://one.example,https://two.example,https://three.example",
+			"strategies": "mobile,desktop",
+		}},
+	}, nil)
+	if err == nil || !strings.Contains(err.Error(), "exceed declared bounds") {
+		t.Fatalf("Read error = %v, want declared cartesian budget refusal", err)
+	}
+	if requests != 0 {
+		t.Fatalf("provider requests = %d, want no I/O after budget refusal", requests)
+	}
+}
+
+func TestReadStaticStreamHeadersOverrideGlobalHeaderDeterministically(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		if got := r.Header.Get("Accept"); got != "application/vnd.acme-widget.1+json" {
+			t.Fatalf("Accept = %q, want static stream vendor media type", got)
+		}
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Headers: map[string]string{"Accept": "application/vnd.acme-widget.1+json"},
+	})
+	b.HTTP.Headers = map[string]string{"Accept": "application/vnd.acme-global.1+json"}
+
+	if _, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets"}, nil); err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+}
+
+func TestReadDateWindowFanOutSchedulesContiguousUTCWindows(t *testing.T) {
+	var windows []string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		windows = append(windows, r.URL.Query().Get("DateFrom")+".."+r.URL.Query().Get("DateTo"))
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		DateWindowFanOut: &DateWindowFanOutSpec{
+			StartDateConfigKey: "start_date",
+			EndDateConfigKey:   "end_date",
+			BatchSizeConfigKey: "logs_batch_size",
+			DateFromQueryParam: "DateFrom",
+			DateToQueryParam:   "DateTo",
+			MaxBatchDays:       30,
+			MaxWindows:         3,
+		},
+	})
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{
+		"start_date":      "2026-01-01",
+		"end_date":        "2026-01-05",
+		"logs_batch_size": "2",
+	}}}, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	want := []string{"2026-01-01..2026-01-02", "2026-01-03..2026-01-04", "2026-01-05..2026-01-05"}
+	if !reflect.DeepEqual(windows, want) {
+		t.Fatalf("windows = %#v, want %#v", windows, want)
+	}
+}
+
+func TestReadDateWindowFanOutRejectsOverBudgetBeforeProviderIO(t *testing.T) {
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		t.Fatal("date window budget must be refused before provider I/O")
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		DateWindowFanOut: &DateWindowFanOutSpec{
+			StartDateConfigKey: "start_date",
+			EndDateConfigKey:   "end_date",
+			BatchSizeConfigKey: "logs_batch_size",
+			DateFromQueryParam: "DateFrom",
+			DateToQueryParam:   "DateTo",
+			MaxBatchDays:       30,
+			MaxWindows:         2,
+		},
+	})
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: map[string]string{
+		"start_date":      "2026-01-01",
+		"end_date":        "2026-01-05",
+		"logs_batch_size": "2",
+	}}}, nil)
+	if err == nil || !strings.Contains(err.Error(), "exceed declared maximum") {
+		t.Fatalf("Read error = %v, want declared window cap refusal", err)
 	}
 }
