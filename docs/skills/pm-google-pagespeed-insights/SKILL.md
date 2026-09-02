@@ -7,7 +7,7 @@ description: Google PageSpeed Insights connector knowledge and safe action guide
 
 ## Purpose
 
-Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API.
+Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-practices, SEO, PWA scores) for the configured URLs and strategies via the PageSpeed Insights v5 API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ## Icon
 
@@ -24,17 +24,32 @@ Reads Lighthouse PageSpeed Insights reports (performance, accessibility, best-pr
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- categories (required)
+- mode
+- strategies (required)
+- urls (required)
+- api_key (secret)
+
+## ETL Streams
+
+- pagespeed_reports:
+  - primary key: url, strategy
+  - fields: accessibility_score(number), analysis_utc_timestamp(string), best_practices_score(number), fetch_time(string), final_url(string), id(string), kind(string), lighthouse_version(string), overall_loading_experience(string), performance_score(number), pwa_score(number), requested_url(string), seo_score(number), strategy(string), url(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Google PageSpeed Insights API reads performed by the legacy connector via a Tier-2 hook
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

@@ -24,17 +24,51 @@ Reads Microsoft Advertising (Bing Ads) accounts, users, campaigns, ad groups, an
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- account_id
+- account_ids
+- ad_group_id
+- base_url
+- campaign_base_url
+- campaign_id
+- customer_account_id
+- customer_id
+- token_url
+- client_id (secret) (required)
+- client_secret (secret)
+- developer_token (secret) (required)
+- refresh_token (secret) (required)
+- tenant_id (secret)
+
+## ETL Streams
+
+- accounts:
+  - primary key: Id
+  - fields: AccountLifeCycleStatus(string), Id(string), Name(string), Number(string), PauseReason(string)
+- users:
+  - primary key: Id
+  - fields: CustomerId(string), Id(string), JobTitle(string), LastModifiedTime(string), UserLifeCycleStatus(string), UserName(string)
+- campaigns:
+  - primary key: Id
+  - fields: BudgetType(string), CampaignType(string), DailyBudget(number), Id(string), Name(string), Status(string), TimeZone(string)
+- ad_groups:
+  - primary key: Id
+  - fields: AdRotation(string), EndDate(string), Id(string), Name(string), Network(string), StartDate(string), Status(string)
+- ads:
+  - primary key: Id
+  - fields: DevicePreference(string), EditorialStatus(string), Id(string), Status(string), Type(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Microsoft Advertising REST API read of account/user/campaign/ad-group/ad metadata
+- approval: none; read-only, no reverse-ETL write surface
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

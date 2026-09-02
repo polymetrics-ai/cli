@@ -2,37 +2,39 @@ package nativeset
 
 import (
 	"polymetrics.ai/internal/connectors"
-	amazonsqs "polymetrics.ai/internal/connectors/native/amazon-sqs"
-	bingads "polymetrics.ai/internal/connectors/native/bing-ads"
-	"polymetrics.ai/internal/connectors/native/dynamodb"
-	"polymetrics.ai/internal/connectors/native/faker"
-	"polymetrics.ai/internal/connectors/native/hubspot"
-	"polymetrics.ai/internal/connectors/native/mysql"
-	"polymetrics.ai/internal/connectors/native/postgres"
-	tallyprime "polymetrics.ai/internal/connectors/native/tally-prime"
+	nativedynamodb "polymetrics.ai/internal/connectors/native/dynamodb"
+	nativemysql "polymetrics.ai/internal/connectors/native/mysql"
+	nativepostgres "polymetrics.ai/internal/connectors/native/postgres"
 )
 
-type Factory struct {
-	Name string
-	New  func() connectors.Connector
+type databaseFactory struct {
+	name string
+	new  func() connectors.Connector
 }
 
-func Factories() []Factory {
-	factories := []Factory{
-		{Name: "amazon-sqs", New: func() connectors.Connector { return amazonsqs.New() }},
-		{Name: "bing-ads", New: func() connectors.Connector { return bingads.New() }},
-		{Name: "dynamodb", New: func() connectors.Connector { return dynamodb.New() }},
-		{Name: "faker", New: func() connectors.Connector { return faker.New() }},
-		{Name: "hubspot", New: func() connectors.Connector { return hubspot.New() }},
-		{Name: "mysql", New: func() connectors.Connector { return mysql.New() }},
-		{Name: "postgres", New: func() connectors.Connector { return postgres.New() }},
-		{Name: "tally-prime", New: func() connectors.Connector { return tallyprime.New() }},
-	}
-	return append(factories, promotedFactories()...)
+var protectedDatabaseFactories = []databaseFactory{
+	{
+		name: "dynamodb",
+		new:  func() connectors.Connector { return nativedynamodb.New() },
+	},
+	{
+		name: "mysql",
+		new:  func() connectors.Connector { return nativemysql.New() },
+	},
+	{
+		name: "postgres",
+		new:  func() connectors.Connector { return nativepostgres.New() },
+	},
 }
 
-func RegisterInto(registry *connectors.Registry) {
-	for _, factory := range Factories() {
-		registry.Register(factory.New())
+// DatabaseConnectorFor preserves the three existing native database
+// registrations. All other connectors execute through their rendered engine
+// bundle, so API registrations cannot overwrite a declarative executor.
+func DatabaseConnectorFor(name string) (connectors.Connector, bool) {
+	for _, factory := range protectedDatabaseFactories {
+		if factory.name == name {
+			return factory.new(), true
+		}
 	}
+	return nil, false
 }

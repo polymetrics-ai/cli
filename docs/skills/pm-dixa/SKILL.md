@@ -7,7 +7,7 @@ description: Dixa connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API.
+Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa conversation_export API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ## Icon
 
@@ -24,17 +24,44 @@ Reads Dixa conversations (and their queue, rating, and assignment projections) f
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- batch_size
+- mode
+- start_date (required)
+- api_token (secret) (required)
+
+## ETL Streams
+
+- conversations:
+  - primary key: id
+  - cursor: updated_at
+  - fields: closed_at(integer), created_at(integer), direction(string), handling_duration(integer), id(integer), initial_channel(string), last_message_created_at(integer), originating_country(string), requester_email(string), requester_id(string), requester_name(string), status(string), subject(string), total_duration(integer), updated_at(integer)
+- conversation_queue:
+  - primary key: id
+  - cursor: updated_at
+  - fields: direction(string), id(integer), initial_channel(string), queue_id(string), queue_name(string), queued_at(integer), updated_at(integer)
+- conversation_rating:
+  - primary key: id
+  - cursor: updated_at
+  - fields: id(integer), rating_message(string), rating_score(integer), status(string), updated_at(integer)
+- conversation_assignment:
+  - primary key: id
+  - cursor: updated_at
+  - fields: assigned_at(integer), assignee_email(string), assignee_id(string), assignee_name(string), id(integer), transfer_time(integer), transferee_name(string), updated_at(integer)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Dixa API reads performed by the legacy connector via a Tier-2 hook
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

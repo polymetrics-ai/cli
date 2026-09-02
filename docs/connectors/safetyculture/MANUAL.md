@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector safetyculture [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only.
+  Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
   id: pm-sample
@@ -24,15 +24,31 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  api_key (secret) (required)
+
+ETL STREAMS
+  audits:
+    primary key: id
+    fields: id(string), modified_at(string), name(string)
+  templates:
+    primary key: id
+    fields: id(string), modified_at(string), name(string)
+  users:
+    primary key: id
+    fields: id(string), modified_at(string), name(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external SafetyCulture API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

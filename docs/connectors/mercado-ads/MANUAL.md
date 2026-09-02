@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector mercado-ads [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API.
+  Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
   id: pm-sample
@@ -24,15 +24,48 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  end_date
+  lookback_days (required)
+  mode
+  start_date
+  client_id (secret) (required)
+  client_refresh_token (secret) (required)
+  client_secret (secret) (required)
+
+ETL STREAMS
+  brand_advertisers:
+    primary key: advertiser_id
+    fields: account_name(string), advertiser_id(integer), advertiser_name(string), site_id(string)
+  display_advertisers:
+    primary key: advertiser_id
+    fields: account_name(string), advertiser_id(integer), advertiser_name(string), site_id(string)
+  product_advertisers:
+    primary key: advertiser_id
+    fields: account_name(string), advertiser_id(integer), advertiser_name(string), site_id(string)
+  brand_campaigns_metrics:
+    primary key: date, advertiser_id, campaign_id
+    cursor: date
+    fields: acos(number), advertiser_id(string), campaign_id(string), clicks(number), cost(number), cpc(number), ctr(number), date(string), direct_amount(number), indirect_amount(number), prints(number), total_amount(number), units_quantity(number)
+  display_campaigns_metrics:
+    primary key: date, advertiser_id, campaign_id
+    cursor: date
+    fields: acos(number), advertiser_id(string), campaign_id(string), clicks(number), cost(number), cpc(number), ctr(number), date(string), direct_amount(number), indirect_amount(number), prints(number), total_amount(number), units_quantity(number)
+  product_campaigns_metrics:
+    primary key: date, advertiser_id, campaign_id
+    cursor: date
+    fields: acos(number), advertiser_id(string), campaign_id(string), clicks(number), cost(number), cpc(number), ctr(number), date(string), direct_amount(number), indirect_amount(number), prints(number), total_amount(number), units_quantity(number)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Mercado Ads API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

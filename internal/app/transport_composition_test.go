@@ -1342,7 +1342,11 @@ func TestDeclarativeTypedDestinationRejectsActionDefinitionDriftBeforePreviewAnd
 		t.Fatalf("apply drift error = %v, want pre-I/O definition drift refusal", err)
 	}
 
-	application.registry.Register(drifted)
+	replacement := connectors.NewEmptyRegistry()
+	if err := replacement.Register(drifted); err != nil {
+		t.Fatalf("register drifted typed destination: %v", err)
+	}
+	application.registry = replacement
 	if err := application.composeTransportRegistry(); err != nil {
 		t.Fatalf("compose drifted typed destination: %v", err)
 	}
@@ -1425,7 +1429,11 @@ func TestDeclarativeTypedDestinationRejectsEffectiveRequestDefinitionDriftBefore
 	if driftDigest == initialDigest {
 		t.Fatal("changed user agent and default preserved the typed action digest")
 	}
-	application.registry.Register(drifted)
+	replacement := connectors.NewEmptyRegistry()
+	if err := replacement.Register(drifted); err != nil {
+		t.Fatalf("register drifted request definition: %v", err)
+	}
+	application.registry = replacement
 	if err := application.composeTransportRegistry(); err != nil {
 		t.Fatalf("compose drifted typed destination: %v", err)
 	}

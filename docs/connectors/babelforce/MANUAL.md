@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector babelforce [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API.
+  Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
   id: babelforce
@@ -24,15 +24,46 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  date_created_from
+  date_created_to
+  mode
+  region (required)
+  access_key_id (secret) (required)
+  access_token (secret) (required)
+
+ETL STREAMS
+  calls:
+    primary key: id
+    cursor: dateCreated
+    fields: anonymous(boolean), conversationId(string), dateCreated(string), dateEstablished(string), dateFinished(string), domain(string), duration(integer), finishReason(string), from(string), id(string), lastUpdated(string), parentId(string), sessionId(string), source(string), state(string), to(string), type(string)
+  calls_extended:
+    primary key: id
+    cursor: dateCreated
+    fields: anonymous(boolean), conversationId(string), dateCreated(string), dateEstablished(string), dateFinished(string), domain(string), duration(integer), finishReason(string), from(string), id(string), lastUpdated(string), parentId(string), sessionId(string), source(string), state(string), to(string), type(string)
+  recordings:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(string), duration(integer), id(string), lastUpdated(string), state(string), url(string)
+  numbers:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(string), id(string), lastUpdated(string), name(string), number(string), state(string)
+  users:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(string), id(string), lastUpdated(string), name(string), number(string), state(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Babelforce API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

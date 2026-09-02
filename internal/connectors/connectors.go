@@ -2980,9 +2980,14 @@ func (r *Registry) RegisterBuiltins() {
 	r.Register(Outbox{})
 }
 
-func (r *Registry) Register(c Connector) {
-	r.connectors[c.Name()] = c
+func (r *Registry) Register(c Connector) error {
+	name := c.Name()
+	if _, exists := r.connectors[name]; exists {
+		return fmt.Errorf("connector %q is already registered", name)
+	}
+	r.connectors[name] = c
 	r.iconCoverageValidated = false
+	return nil
 }
 
 func (r *Registry) Get(name string) (Connector, bool) {

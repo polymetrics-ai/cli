@@ -33,12 +33,13 @@ AUTHENTICATION
   No secret authentication is required for this connector.
 
 CONFIGURATION
-  No connector-specific config fields.
+  count
+  seed
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: none; in-process synthetic data generation, no network access
+  write risk: n/a (read-only source)
+  approval: none required; no external data is read or written
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

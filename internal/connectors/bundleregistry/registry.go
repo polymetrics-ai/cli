@@ -40,9 +40,14 @@ func New() *connectors.Registry {
 	registry := connectors.NewEmptyRegistry()
 	registry.RegisterBuiltins()
 	for _, bundle := range bundles {
-		registry.Register(engine.New(bundle, engine.HooksFor(bundle.Name)))
+		connector, selected := nativeset.DatabaseConnectorFor(bundle.Name)
+		if !selected {
+			connector = engine.New(bundle, engine.HooksFor(bundle.Name))
+		}
+		if err := registry.Register(connector); err != nil {
+			panic("register connector " + connector.Name() + ": " + err.Error())
+		}
 	}
-	nativeset.RegisterInto(registry)
 	registry.MustValidateIconCoverage()
 	return registry
 }

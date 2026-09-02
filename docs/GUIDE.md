@@ -141,9 +141,7 @@ pm credentials add gh-app --connector github \
   --value-stdin private_key < app-private-key.pem
 ```
 
-Many connectors also accept `--config mode=fixture` for a deterministic,
-network-free, credential-free path — handy for trying a connector or running
-execution-contract tests.
+Connector runtime commands use declared execution JSON and ordinary credential or approval boundaries. Deterministic test fixtures are test-harness inputs, not a generic user-facing fixture-valued connector configuration.
 
 ---
 
@@ -278,7 +276,7 @@ capabilities. A few examples:
 - Most SaaS connectors are read-first; they add approval-gated writes where the upstream
   API has safe, well-defined mutations.
 
-Every connector supports `--config mode=fixture` for a credential-free smoke test.
+Use `pm connectors inspect <name> --json` to discover the connector's declared executable surfaces; do not rely on a credential-free connector simulation.
 
 ---
 

@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector mendeley [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API.
+  Reads documents, folders, groups, and annotations from the Mendeley reference manager REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
   id: simple-icons-mendeley
@@ -30,15 +30,42 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  name_for_institution (required)
+  query_for_catalog (required)
+  start_date (required)
+  client_id (secret) (required)
+  client_refresh_token (secret) (required)
+  client_secret (secret) (required)
+
+ETL STREAMS
+  documents:
+    primary key: id
+    cursor: last_modified
+    fields: abstract(string), created(string), group_id(string), id(string), last_modified(string), profile_id(string), source(string), title(string), type(string), year(integer)
+  folders:
+    primary key: id
+    cursor: modified
+    fields: created(string), group_id(string), id(string), modified(string), name(string), parent_id(string)
+  groups:
+    primary key: id
+    fields: access_level(string), created(string), description(string), id(string), name(string), owning_profile_id(string), role(string), webpage(string)
+  annotations:
+    primary key: id
+    cursor: last_modified
+    fields: created(string), document_id(string), filehash(string), id(string), last_modified(string), privacy_level(string), profile_id(string), text(string), type(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Mendeley API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

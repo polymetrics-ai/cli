@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector lokalise [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API.
+  Reads Lokalise project keys, languages, translations, contributors, and comments through the Lokalise REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
   id: lokalise
@@ -24,15 +24,40 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  project_id (required)
+  api_key (secret) (required)
+
+ETL STREAMS
+  keys:
+    primary key: key_id
+    cursor: modified_at_timestamp
+    fields: created_at(string), created_at_timestamp(integer), description(string), is_archived(boolean), is_hidden(boolean), is_plural(boolean), key_id(integer), key_name(object), modified_at(string), modified_at_timestamp(integer), platforms(array), tags(array)
+  languages:
+    primary key: lang_id
+    fields: is_rtl(boolean), lang_id(integer), lang_iso(string), lang_name(string), plural_forms(array)
+  translations:
+    primary key: translation_id
+    cursor: modified_at_timestamp
+    fields: is_reviewed(boolean), is_unverified(boolean), key_id(integer), language_iso(string), modified_at(string), modified_at_timestamp(integer), modified_by(integer), modified_by_email(string), reviewed_by(integer), translation(string), translation_id(integer)
+  contributors:
+    primary key: user_id
+    fields: created_at(string), created_at_timestamp(integer), email(string), fullname(string), is_admin(boolean), is_reviewer(boolean), languages(array), role_id(integer), user_id(integer)
+  comments:
+    primary key: comment_id
+    fields: added_at(string), added_at_timestamp(integer), added_by(integer), added_by_email(string), comment(string), comment_id(integer), key_id(integer)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Lokalise API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

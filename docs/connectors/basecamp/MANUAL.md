@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector basecamp [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API.
+  Reads Basecamp 3 projects, people, and account activity events through the Basecamp REST API. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
   id: simple-icons-basecamp
@@ -30,15 +30,38 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  account_id (required)
+  base_url
+  mode
+  start_date (required)
+  client_id (secret) (required)
+  client_refresh_token_2 (secret) (required)
+  client_secret (secret) (required)
+
+ETL STREAMS
+  projects:
+    primary key: id
+    cursor: updated_at
+    fields: app_url(string), bookmark_url(string), created_at(string), description(string), id(integer), name(string), purpose(string), status(string), updated_at(string), url(string)
+  people:
+    primary key: id
+    cursor: updated_at
+    fields: admin(boolean), client(boolean), created_at(string), email_address(string), id(integer), name(string), owner(boolean), personable_type(string), time_zone(string), title(string), updated_at(string)
+  events:
+    primary key: id
+    cursor: created_at
+    fields: action(string), created_at(string), id(integer), kind(string), recording_id(integer), summary(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Basecamp API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

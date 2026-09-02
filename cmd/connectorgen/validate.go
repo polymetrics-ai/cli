@@ -548,7 +548,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 }
 
 func checkCLISurfaceFoundation(b engine.Bundle, index int, command engine.CLICommand) []Finding {
-	if command.Availability == "unsupported" {
+	if command.Availability == "unsupported_with_provider_evidence" {
 		if command.Unsupported == nil || strings.TrimSpace(command.Unsupported.Reason) == "" ||
 			strings.TrimSpace(command.Unsupported.Target.SourceID) == "" || strings.TrimSpace(command.Unsupported.Target.Method) == "" ||
 			strings.TrimSpace(command.Unsupported.Target.Path) == "" || command.Foundation != nil {

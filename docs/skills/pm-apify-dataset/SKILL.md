@@ -7,7 +7,7 @@ description: Apify Dataset connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Apify dataset items and dataset metadata (item_collection, dataset_collection, dataset) through the Apify API v2.
+Reads Apify dataset items and dataset metadata (item_collection, dataset_collection, dataset) through the Apify API v2. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ## Icon
 
@@ -24,17 +24,37 @@ Reads Apify dataset items and dataset metadata (item_collection, dataset_collect
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- dataset_id (required)
+- mode
+- token (secret) (required)
+
+## ETL Streams
+
+- item_collection:
+  - fields: data(object)
+- dataset_collection:
+  - primary key: id
+  - cursor: createdAt
+  - fields: accessedAt(string), actId(string), actRunId(string), cleanItemCount(integer), createdAt(string), id(string), itemCount(integer), modifiedAt(string), name(string), userId(string)
+- dataset:
+  - primary key: id
+  - cursor: modifiedAt
+  - fields: accessedAt(string), actId(string), actRunId(string), cleanItemCount(integer), createdAt(string), id(string), itemCount(integer), modifiedAt(string), name(string), userId(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Apify Dataset API reads performed by the legacy connector via a Tier-2 hook
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

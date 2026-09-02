@@ -34,13 +34,14 @@ Generates deterministic sample users, purchases, and products without network ac
 
 ## Configuration
 
-- No connector-specific config fields.
+- count
+- seed
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: none; in-process synthetic data generation, no network access
+- write risk: n/a (read-only source)
+- approval: none required; no external data is read or written
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

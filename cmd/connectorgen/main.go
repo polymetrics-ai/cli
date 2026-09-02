@@ -12,8 +12,7 @@
 //	                           outside definition-owned locations
 //	ownership [repo] [--json] [--base <ref>] [--scope-file <path>]
 //	                           validates changed paths for exactly one target connector
-//	gen                        regenerates hooks/hookset/hookset_gen.go and
-//	                           native/nativeset/nativeset_gen.go
+//	gen                        regenerates hooks/hookset/hookset_gen.go
 //	lock-render <connector>    projects immutable schema-v4 source.lock.json
 //	                           through the canonical operation descriptor into
 //	                           the sole runtime execution JSON bundle
@@ -21,7 +20,7 @@
 //	                           records independent candidate validation and
 //	                           runtime-preflight results
 //
-// It owns bundle validation plus generated hook/native import sets for the
+// It owns bundle validation plus generated hook imports for the
 // connector-architecture-v2 runtime.
 package main
 

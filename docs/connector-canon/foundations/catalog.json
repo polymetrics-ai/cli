@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 16,
+  "catalog_revision": 17,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -91,7 +91,7 @@
         "guarantees": [
           "all seven lanes are explicit",
           "provider evidence is absent from the canonical runtime descriptor",
-          "rendering is deterministic and atomically materialized",
+          "rendering is deterministic",
           "execution objects reject authoring-evidence fields"
         ]
       },
@@ -163,7 +163,18 @@
           "name": "TestRuntimeEmbedContainsExecutionJSONOnly"
         }
       ],
-      "known_gap_refs": [],
+      "known_gap_refs": [
+        {
+          "id": "R1-05",
+          "reference": ".planning/phases/batch-r1-vnext-cutover/REVIEW-CONVERGENCE.md",
+          "notes": "Current rendering writes per file and does not reject stale artifacts or provide staged, locked, atomic, durable, rollback-capable whole-bundle publication."
+        },
+        {
+          "id": "R1-13",
+          "reference": ".planning/phases/batch-r1-vnext-cutover/REVIEW-CONVERGENCE.md",
+          "notes": "Current source-lock decoding does not reject trailing JSON documents or duplicate members; deterministic rendering is not strict immutable-authoring admission."
+        }
+      ],
       "update_conditions": [
         "The source-lock schema, canonical descriptor, lane inference, output set, rendering, or runtime inventory boundary changes."
       ],

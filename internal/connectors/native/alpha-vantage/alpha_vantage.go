@@ -64,14 +64,10 @@ func (Connector) Metadata() connectors.Metadata {
 	}
 }
 
-// Check verifies the connector is configured well enough to talk to Alpha
-// Vantage. In fixture mode it short-circuits without a network call.
+// Check verifies the connector is configured well enough to talk to Alpha Vantage.
 func (c Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
 	if err := ctx.Err(); err != nil {
 		return err
-	}
-	if fixtureMode(cfg) {
-		return nil
 	}
 	if _, err := alphaVantageBaseURL(cfg); err != nil {
 		return err
@@ -125,10 +121,6 @@ func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit fu
 	spec, ok := alphaVantageStreamSpecs[stream]
 	if !ok {
 		return fmt.Errorf("alpha-vantage stream %q not found", stream)
-	}
-
-	if fixtureMode(req.Config) {
-		return c.readFixture(ctx, stream, spec, req, emit)
 	}
 
 	r, err := c.requester(req.Config)
@@ -249,53 +241,6 @@ func apiError(body []byte) error {
 	return nil
 }
 
-// readFixture emits deterministic records without any network access so the
-// fixture tests can exercise alpha-vantage credential-free.
-func (c Connector) readFixture(ctx context.Context, stream string, spec streamSpec, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	symbol := alphaVantageSymbol(req.Config)
-	if spec.seriesKey == "" && spec.objectKey != "" {
-		if err := ctx.Err(); err != nil {
-			return err
-		}
-		rec := globalQuoteRecord(map[string]any{
-			"01. symbol":             symbol,
-			"02. open":               "100.0000",
-			"03. high":               "110.0000",
-			"04. low":                "99.0000",
-			"05. price":              "105.0000",
-			"06. volume":             "12345",
-			"07. latest trading day": "2026-01-02",
-			"08. previous close":     "104.0000",
-			"09. change":             "1.0000",
-			"10. change percent":     "0.9615%",
-		})
-		return emit(rec)
-	}
-
-	// Two deterministic dated bars per time-series stream.
-	dates := []string{"2026-01-02", "2026-01-01"}
-	for i, date := range dates {
-		if err := ctx.Err(); err != nil {
-			return err
-		}
-		entry := map[string]any{
-			"1. open":   fmt.Sprintf("%d.0000", 100+i),
-			"2. high":   fmt.Sprintf("%d.0000", 110+i),
-			"3. low":    fmt.Sprintf("%d.0000", 99+i),
-			"4. close":  fmt.Sprintf("%d.0000", 105+i),
-			"5. volume": fmt.Sprintf("%d", 12345+i),
-		}
-		rec := ohlcvRecord(symbol, date, entry)
-		if cursor := req.State["cursor"]; cursor != "" {
-			rec["previous_cursor"] = cursor
-		}
-		if err := emit(rec); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // requester builds a connsdk.Requester wired with api-key query auth and the
 // resolved base URL. The secret only ever flows into connsdk.APIKeyQuery; it is
 // never logged.
@@ -341,32 +286,14 @@ func alphaVantageInterval(cfg connectors.RuntimeConfig) string {
 	return alphaVantageDefaultInterval
 }
 
-// alphaVantageBaseURL resolves and validates the base URL. The default is
-// www.alphavantage.co; any override must be an absolute https (or http for local
-// test servers) URL with a host to bound SSRF risk.
+// alphaVantageBaseURL uses the provider's declared API origin. Connector
+// configuration cannot select another origin because query authentication must
+// never be sent to a caller-controlled host.
 func alphaVantageBaseURL(cfg connectors.RuntimeConfig) (string, error) {
-	base := strings.TrimSpace(cfg.Config["base_url"])
-	if base == "" {
-		return alphaVantageDefaultBaseURL, nil
+	if strings.TrimSpace(cfg.Config["base_url"]) != "" {
+		return "", errors.New("alpha-vantage config cannot override base_url")
 	}
-	parsed, err := url.Parse(base)
-	if err != nil {
-		return "", fmt.Errorf("alpha-vantage config base_url is invalid: %w", err)
-	}
-	if parsed.Scheme != "https" && parsed.Scheme != "http" {
-		return "", fmt.Errorf("alpha-vantage config base_url must use http or https, got %q", parsed.Scheme)
-	}
-	if parsed.Host == "" {
-		return "", errors.New("alpha-vantage config base_url must include a host")
-	}
-	return strings.TrimRight(base, "/"), nil
-}
-
-func fixtureMode(cfg connectors.RuntimeConfig) bool {
-	if cfg.Config == nil {
-		return false
-	}
-	return strings.EqualFold(strings.TrimSpace(cfg.Config["mode"]), "fixture")
+	return alphaVantageDefaultBaseURL, nil
 }
 
 // Write is unsupported: Alpha Vantage is a read-only market-data API.

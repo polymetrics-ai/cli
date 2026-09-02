@@ -1,25 +1,21 @@
 {
-  "name": "amazon-sqs",
-  "display_name": "Amazon SQS",
-  "description": "Reads Amazon SQS queues and executes typed, approval-gated SQS message and queue actions through fixed AWS Query API operations.",
-  "integration_type": "queue",
-  "docs_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
-  "release_stage": "ga",
   "capabilities": {
-    "check": true,
-    "read": true,
-    "write": true,
-    "query": false,
     "cdc": false,
-    "dynamic_schema": true
+    "check": false,
+    "dynamic_schema": false,
+    "query": false,
+    "read": false,
+    "write": false
   },
-  "batch": {
-    "read_page_size": 10,
-    "write_batch_size": 10
-  },
+  "description": "Retains evidence-backed visibility for DeleteQueue and PurgeQueue while their configured-queue actions lack a schema-4 typed record binding. No Amazon SQS provider action is executable from this bundle.",
+  "display_name": "Amazon SQS",
+  "docs_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
+  "integration_type": "queue",
+  "name": "amazon-sqs",
+  "release_stage": "ga",
   "risk": {
-    "read": "signed, bounded Amazon SQS Query API reads against the configured queue or derived regional endpoint; ReceiveMessage can change message visibility per SQS semantics",
-    "write": "typed SendMessage, queue administration, permission, tag, visibility, delete, purge, and dead-letter redrive operations against fixed SQS targets only",
-    "approval": "all reverse ETL/provider write commands require plan, preview, explicit approval, and destructive confirmation for delete/purge/cancel/remove operations"
+    "approval": "No write can reach planning, approval, or provider I/O from this bundle.",
+    "read": "No provider read is executable from this bounded disposition bundle.",
+    "write": "DeleteQueue and PurgeQueue remain visible with evidence-backed unsupported typed-binding gaps; the runtime never sends a request for either command."
   }
 }

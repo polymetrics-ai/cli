@@ -30,10 +30,6 @@ func assertConnectorContract(t *testing.T, c connectors.Connector, wantName stri
 	if caps.Write {
 		t.Fatalf("%s is read-only; Write capability must be false", wantName)
 	}
-	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
-	if err := c.Check(context.Background(), cfg); err != nil {
-		t.Fatalf("Check(fixture): %v", err)
-	}
 	cat, err := c.Catalog(context.Background(), connectors.RuntimeConfig{})
 	if err != nil {
 		t.Fatalf("Catalog: %v", err)

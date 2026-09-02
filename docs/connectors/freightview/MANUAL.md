@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector freightview [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Freightview shipments, quotes, and tracking events through the Freightview v2.0 REST API using the client-credentials session-token flow.
+  Reads Freightview shipments, quotes, and tracking events through the Freightview v2.0 REST API using the client-credentials session-token flow. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ICON
   id: pm-sample
@@ -24,15 +24,32 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  base_url
+  mode
+  client_id (secret) (required)
+  client_secret (secret) (required)
+
+ETL STREAMS
+  shipments:
+    primary key: shipmentId
+    fields: billTo(object), bol(object), bookedBy(string), bookedDate(string), createdDate(string), direction(string), documents(array), equipment(object), isArchived(boolean), isLiveLoad(boolean), items(array), locations(array), pickup(object), pickupDate(string), quotedBy(string), refNums(array), selectedQuote(object), shipmentId(string), status(string), tracking(object)
+  quotes:
+    primary key: quoteId
+    fields: amount(number), carrierId(string), createdDate(string), currency(string), equipmentType(string), method(string), mode(string), paymentTerms(string), pricingMethod(string), pricingType(string), providerCode(string), providerName(string), quoteId(string), quoteNum(string), serviceId(string), source(string), status(string)
+  tracking:
+    primary key: createdDate
+    fields: createdDate(string), eventDate(string), eventTime(string), eventType(string), summary(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: external Freightview API reads performed by the legacy connector via a Tier-2 hook
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

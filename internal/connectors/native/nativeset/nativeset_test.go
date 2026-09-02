@@ -1,104 +1,34 @@
 package nativeset
 
 import (
-	"encoding/json"
 	"testing"
 
-	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func TestFactoriesExposeDefinitions(t *testing.T) {
-	want := map[string]bool{
-		"alpha-vantage":             false,
-		"amazon-sqs":                false,
-		"apify-dataset":             false,
-		"ashby":                     false,
-		"aws-cloudtrail":            false,
-		"babelforce":                false,
-		"basecamp":                  false,
-		"bing-ads":                  false,
-		"bunny-inc":                 false,
-		"canny":                     false,
-		"copper":                    false,
-		"dixa":                      false,
-		"dynamodb":                  false,
-		"faker":                     false,
-		"fastbill":                  false,
-		"feishu":                    false,
-		"free-agent-connector":      false,
-		"freightview":               false,
-		"google-analytics-data-api": false,
-		"google-calendar":           false,
-		"google-classroom":          false,
-		"google-pagespeed-insights": false,
-		"less-annoying-crm":         false,
-		"lokalise":                  false,
-		"mendeley":                  false,
-		"mercado-ads":               false,
-		"metabase":                  false,
-		"mode":                      false,
-		"my-hours":                  false,
-		"mysql":                     false,
-		"pocket":                    false,
-		"postgres":                  false,
-		"prestashop":                false,
-		"rootly":                    false,
-		"safetyculture":             false,
-		"tally-prime":               false,
-		"yahoo-finance-price":       false,
-	}
-
-	for _, factory := range Factories() {
-		if factory.New == nil {
-			t.Fatalf("factory %q New = nil", factory.Name)
+func TestDatabaseConnectorForPreservesProtectedRegistrations(t *testing.T) {
+	for _, name := range []string{"dynamodb", "mysql", "postgres"} {
+		bundle, err := engine.Load(defs.FS, name)
+		if err != nil {
+			t.Fatalf("Load(%q): %v", name, err)
 		}
-		c := factory.New()
-		if c.Name() != factory.Name {
-			t.Fatalf("factory %q New().Name() = %q", factory.Name, c.Name())
-		}
-		def, ok := connectors.DefinitionOf(c)
+		connector, ok := DatabaseConnectorFor(bundle.Name)
 		if !ok {
-			t.Fatalf("factory %q connector does not implement DefinitionProvider", factory.Name)
+			t.Fatalf("DatabaseConnectorFor(%q) = no connector", name)
 		}
-		if def.Name != factory.Name {
-			t.Fatalf("factory %q Definition().Name = %q", factory.Name, def.Name)
-		}
-		if _, tracked := want[factory.Name]; tracked {
-			want[factory.Name] = true
-		}
-	}
-
-	for name, seen := range want {
-		if !seen {
-			t.Fatalf("Factories() missing %q", name)
+		if got := connector.Name(); got != name {
+			t.Fatalf("DatabaseConnectorFor(%q).Name() = %q", name, got)
 		}
 	}
 }
 
-func TestDefinitionConnectorForwardsDeclaredConfigurationConstraints(t *testing.T) {
-	spec, err := engine.CompileSchema(json.RawMessage(`{
-		"type": "object",
-		"properties": {
-			"environment": {"type": "string", "enum": ["production", "sandbox"]}
-		}
-	}`))
+func TestDatabaseConnectorForLeavesAPIBundlesDeclarative(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "github")
 	if err != nil {
-		t.Fatalf("CompileSchema() error = %v", err)
+		t.Fatalf("Load(github): %v", err)
 	}
-
-	wrapped := definitionConnector{
-		Connector: connectors.Sample{},
-		base:      engine.NewBase(engine.Bundle{Spec: spec}),
-	}
-	validator, ok := any(wrapped).(connectors.ConfigurationConstraintValidator)
-	if !ok {
-		t.Fatal("definitionConnector does not expose ConfigurationConstraintValidator")
-	}
-	if !validator.HasConfigurationConstraints() {
-		t.Fatal("HasConfigurationConstraints() = false, want true for the wrapped bundle")
-	}
-	if err := connectors.ValidateConfiguration(wrapped, map[string]string{"environment": "preview"}); err == nil {
-		t.Fatal("ValidateConfiguration() error = nil, want wrapped enum rejection")
+	if connector, ok := DatabaseConnectorFor(bundle.Name); ok || connector != nil {
+		t.Fatalf("DatabaseConnectorFor(github) = %T, %t; want nil, false", connector, ok)
 	}
 }

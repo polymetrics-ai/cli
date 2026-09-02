@@ -11,14 +11,6 @@ import (
 
 const modulePath = "polymetrics.ai"
 
-// nativeSupportPackages are helper libraries below native/, not connector
-// implementations. They must be available to native connectors but have no
-// package-level registration side effect to wire into production binaries.
-var nativeSupportPackages = map[string]struct{}{
-	"dbtest": {},
-	"sqltls": {},
-}
-
 // genHookset regenerates hooks/hookset/hookset_gen.go under hooksRoot: a
 // blank import for every internal/connectors/hooks/<name> package except
 // hookset itself. Deterministic and byte-stable across reruns for the same
@@ -37,29 +29,9 @@ func genHookset(hooksRoot string) error {
 	return writeGenFile(filepath.Join(hooksRoot, "hookset", "hookset_gen.go"), src)
 }
 
-// genNativeset regenerates native/nativeset/nativeset_gen.go under
-// nativeRoot: a blank import for every runtime internal/connectors/native/<name>
-// package except nativeset itself.
-func genNativeset(nativeRoot string) error {
-	pkgs, err := wiringPackageNames(nativeRoot, "nativeset", nativeSupportPackages)
-	if err != nil {
-		return fmt.Errorf("gen nativeset: %w", err)
-	}
-	src := renderWiringFile(wiringFileSpec{
-		Package:     "nativeset",
-		ImportsDoc:  "Package nativeset blank-imports every runtime internal/connectors/native/<name>\n// Tier-3 component package so any package-level side effects (e.g. a\n// future documented registration) run in the built binary. In wave0 no\n// native package registers itself (see API-CONTRACT.md §6); this file is\n// pure wiring, regenerated deterministically as packages are added.",
-		ImportsRoot: modulePath + "/internal/connectors/native",
-		Packages:    pkgs,
-	})
-	return writeGenFile(filepath.Join(nativeRoot, "nativeset", "nativeset_gen.go"), src)
-}
-
-// wiringPackageNames returns the sorted directory names under root that are
-// neither selfName nor excluded and are plain directories (package declaration
-// sniffing is unnecessary for wave0's empty-or-single-package trees and would
-// only add a false sense of precision — a directory without a .go file simply
-// produces an import that fails to build, which is the correct, loud failure
-// mode for a malformed hooks/native tree).
+// wiringPackageNames returns the sorted plain package directories under root.
+// A directory without a Go package still produces an import that fails to build,
+// which makes a malformed hook tree fail loudly.
 func wiringPackageNames(root, selfName string, excluded map[string]struct{}) ([]string, error) {
 	entries, err := os.ReadDir(root)
 	if err != nil {
@@ -79,7 +51,7 @@ func wiringPackageNames(root, selfName string, excluded map[string]struct{}) ([]
 	return names, nil
 }
 
-// wiringFileSpec parametrizes the two near-identical generated wiring files.
+// wiringFileSpec describes a generated hook wiring file.
 type wiringFileSpec struct {
 	Package     string
 	ImportsDoc  string
@@ -130,23 +102,16 @@ func runGen(args []string, stdout, stderr io.Writer) int {
 		logln(stderr, "connectorgen gen:", err)
 		return 1
 	}
-	return runGenAt(args, stdout, stderr,
-		filepath.Join(root, "internal/connectors/hooks"),
-		filepath.Join(root, "internal/connectors/native"),
-	)
+	return runGenAt(args, stdout, stderr, filepath.Join(root, "internal/connectors/hooks"))
 }
 
-// runGenAt is runGen with explicit hooks/native roots, used directly by
-// tests against scratch trees.
-func runGenAt(_ []string, stdout, stderr io.Writer, hooksRoot, nativeRoot string) int {
+// runGenAt is runGen with an explicit hooks root, used directly by tests
+// against scratch trees.
+func runGenAt(_ []string, stdout, stderr io.Writer, hooksRoot string) int {
 	if err := genHookset(hooksRoot); err != nil {
 		logln(stderr, "connectorgen gen:", err)
 		return 1
 	}
-	if err := genNativeset(nativeRoot); err != nil {
-		logln(stderr, "connectorgen gen:", err)
-		return 1
-	}
-	logln(stdout, "connectorgen gen: wrote hookset_gen.go and nativeset_gen.go")
+	logln(stdout, "connectorgen gen: wrote hookset_gen.go")
 	return 0
 }

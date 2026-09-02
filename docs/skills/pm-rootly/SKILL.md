@@ -7,7 +7,7 @@ description: Rootly connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Rootly incidents, services, and users through the Rootly API. Read-only.
+Reads Rootly incidents, services, and users through the Rootly API. Read-only. In architecture v2 this quarantine bundle dispatches live reads through a Tier-2 hook that delegates to the legacy connector until the wave 6 cutover.
 
 ## Icon
 
@@ -24,17 +24,36 @@ Reads Rootly incidents, services, and users through the Rootly API. Read-only.
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- base_url
+- mode
+- start_date (required)
+- api_key (secret) (required)
+
+## ETL Streams
+
+- incidents:
+  - primary key: id
+  - fields: id(string), status(string), title(string)
+- services:
+  - primary key: id
+  - fields: id(string), status(string), title(string)
+- users:
+  - primary key: id
+  - fields: id(string), status(string), title(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Rootly API reads performed by the legacy connector via a Tier-2 hook
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

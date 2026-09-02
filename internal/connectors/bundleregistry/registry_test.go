@@ -9,6 +9,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
+	nativedynamodb "polymetrics.ai/internal/connectors/native/dynamodb"
 	nativemysql "polymetrics.ai/internal/connectors/native/mysql"
 	nativepostgres "polymetrics.ai/internal/connectors/native/postgres"
 )
@@ -53,7 +54,7 @@ func TestLoadDefinitionsCachesEmbeddedBundleSnapshot(t *testing.T) {
 	}
 }
 
-func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
+func TestNewLoadsDeclarativeBundlesWithProtectedNativeDatabases(t *testing.T) {
 	bundles, err := engine.LoadAll(defs.FS)
 	if err != nil {
 		t.Fatalf("LoadAll(defs): %v", err)
@@ -93,14 +94,8 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	if !ok || len(googleCalendarDefinition.WriteActions) != 26 {
 		t.Fatalf("google-calendar definition = %+v, want 26 engine-backed write actions", googleCalendarDefinition)
 	}
-	foundFixtureMode := false
-	for _, field := range connectors.ManifestOf(googleCalendar).ConfigFields {
-		if field.Name == "mode" {
-			foundFixtureMode = true
-		}
-	}
-	if !foundFixtureMode {
-		t.Fatal("google-calendar manifest is missing fixture mode configuration")
+	if _, ok := googleCalendar.(*engine.Connector); !ok {
+		t.Fatalf("google-calendar registry type = %T, want engine-backed API connector", googleCalendar)
 	}
 	googleCalendarSurface, ok := googleCalendar.(connectors.CommandSurfaceProvider)
 	if !ok || googleCalendarSurface.CommandSurface() == nil {
@@ -124,14 +119,14 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 		t.Fatal("registry missing postgres")
 	}
 	if _, ok := postgresConnector.(nativepostgres.Connector); !ok {
-		t.Fatalf("postgres registry type = %T, want Tier-3 native override", postgresConnector)
+		t.Fatalf("postgres registry type = %T, want protected native database connector", postgresConnector)
 	}
 	mysqlConnector, ok := registry.Get("mysql")
 	if !ok {
 		t.Fatal("registry missing mysql")
 	}
 	if _, ok := mysqlConnector.(nativemysql.Connector); !ok {
-		t.Fatalf("mysql registry type = %T, want Tier-3 native override", mysqlConnector)
+		t.Fatalf("mysql registry type = %T, want protected native database connector", mysqlConnector)
 	}
 	mysqlDefinition, ok := connectors.DefinitionOf(mysqlConnector)
 	if !ok || mysqlDefinition.Changefeed != nil || mysqlDefinition.Capabilities.CDC {
@@ -139,6 +134,34 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	}
 	if _, ok := mysqlConnector.(connectors.ChangefeedExecutor); ok {
 		t.Fatal("mysql registry connector must not expose an internal CDC reader as a changefeed executor")
+	}
+}
+
+func TestProtectedNativeDatabasesRemainRegistered(t *testing.T) {
+	registry := New()
+
+	dynamoDB, ok := registry.Get("dynamodb")
+	if !ok {
+		t.Fatal("registry missing dynamodb")
+	}
+	if _, ok := dynamoDB.(nativedynamodb.Connector); !ok {
+		t.Fatalf("dynamodb registry type = %T, want protected native database connector", dynamoDB)
+	}
+
+	mysql, ok := registry.Get("mysql")
+	if !ok {
+		t.Fatal("registry missing mysql")
+	}
+	if _, ok := mysql.(nativemysql.Connector); !ok {
+		t.Fatalf("mysql registry type = %T, want protected native database connector", mysql)
+	}
+
+	postgres, ok := registry.Get("postgres")
+	if !ok {
+		t.Fatal("registry missing postgres")
+	}
+	if _, ok := postgres.(nativepostgres.Connector); !ok {
+		t.Fatalf("postgres registry type = %T, want protected native database connector", postgres)
 	}
 }
 
