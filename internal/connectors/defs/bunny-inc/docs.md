@@ -19,6 +19,8 @@ Authentication uses declared mode(s): `bearer`.
 
 ## Execution contract
 
+Default stream pagination: `cursor`.
+
 Connection check: `POST /graphql`
 Check JSON body: `query`=query { accounts(first: 1) { nodes { id } } }.
 

@@ -19,6 +19,8 @@ Authentication uses declared mode(s): `bearer`.
 
 ## Execution contract
 
+Default stream pagination: `next_url`.
+
 Connection check: `GET /v1/incidents`
 Check query: `page[size]`=`1`.
 

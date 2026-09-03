@@ -22,6 +22,8 @@ Authentication uses declared mode(s): `custom`.
 
 ## Execution contract
 
+Default stream pagination: `cursor`.
+
 Connection check: `GET /open-apis/bitable/v1/apps/{{ secrets.app_token }}/tables`
 Check query: `page_size`=`1`.
 

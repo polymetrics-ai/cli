@@ -273,9 +273,12 @@ type PaginationSpec struct {
 
 	LimitParam  string `json:"limit_param,omitempty"`
 	OffsetParam string `json:"offset_param,omitempty"`
-	// BodyOffsetField moves an offset paginator value into the declared JSON
-	// request body instead of sending it as a query parameter.
+	// BodyOffsetField moves an offset paginator value into the declared request
+	// body instead of sending it as a query parameter.
 	BodyOffsetField string `json:"body_offset_field,omitempty"`
+	// BodyLimitField moves an offset paginator limit into the declared request
+	// body instead of sending it as a query parameter.
+	BodyLimitField string `json:"body_limit_field,omitempty"`
 
 	CursorParam     string `json:"cursor_param,omitempty"`
 	TokenPath       string `json:"token_path,omitempty"`        // cursor: token from body
@@ -1684,10 +1687,10 @@ func loadSpec(sub fs.FS, dirName string) (*Schema, json.RawMessage, error) {
 func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []StreamSpec, error) {
 	exists := fileExists(sub, "streams.json")
 	if !exists {
-		if metadata.Capabilities.DynamicSchema {
+		if metadata.Capabilities.DynamicSchema || !metadata.Capabilities.Read {
 			return HTTPBase{}, nil, nil
 		}
-		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: missing required file streams.json (required unless capabilities.dynamic_schema is true)", dirName)
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: missing required file streams.json for a readable connector", dirName)
 	}
 
 	raw, err := readFile(sub, "streams.json")
@@ -1896,7 +1899,7 @@ func validateOffsetCountPagination(base *PaginationSpec, streams []StreamSpec) e
 			"size_param": spec.SizeParam, "page_param": spec.PageParam, "offset_param": spec.OffsetParam,
 			"cursor_param": spec.CursorParam, "token_path": spec.TokenPath, "last_record_field": spec.LastRecordField,
 			"next_url_path": spec.NextURLPath, "body_cursor_field": spec.BodyCursorField, "body_page_field": spec.BodyPageField,
-			"body_offset_field": spec.BodyOffsetField, "start_index_param": spec.StartIndexParam, "count_param": spec.CountParam,
+			"body_offset_field": spec.BodyOffsetField, "body_limit_field": spec.BodyLimitField, "start_index_param": spec.StartIndexParam, "count_param": spec.CountParam,
 			"total_path": spec.TotalPath, "start_index_path": spec.StartIndexPath,
 		} {
 			if strings.TrimSpace(value) != "" {

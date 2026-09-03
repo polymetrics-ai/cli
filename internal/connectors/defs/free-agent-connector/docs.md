@@ -21,6 +21,8 @@ Authentication uses declared mode(s): `oauth2_refresh_token`.
 
 ## Execution contract
 
+Default stream pagination: `page_number`.
+
 Connection check: `GET /contacts`
 Check query: `per_page`=`1`.
 

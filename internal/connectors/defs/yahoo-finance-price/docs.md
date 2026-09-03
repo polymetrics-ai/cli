@@ -20,6 +20,8 @@ Authentication uses declared mode(s): `none`.
 
 ## Execution contract
 
+Default stream pagination: `none`.
+
 Connection check: `GET /v8/finance/chart/{{ config.symbol }}`
 Check query: `interval`=`{{ config.interval }}`; `range`=`{{ config.range }}`.
 

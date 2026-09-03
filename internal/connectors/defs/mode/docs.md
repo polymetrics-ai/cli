@@ -20,6 +20,8 @@ Authentication uses declared mode(s): `basic`.
 
 ## Execution contract
 
+Default stream pagination: `next_url`.
+
 Connection check: `GET /{{ config.workspace }}/spaces`
 
 ## Streams notes

@@ -26,6 +26,8 @@ Authentication uses declared mode(s): `none`.
 
 ## Execution contract
 
+Default stream pagination: `offset_limit`.
+
 Connection check: `POST /get`
 Check JSON body: `access_token`={{ secrets.access_token }}, `consumer_key`={{ secrets.consumer_key }}, `count`=1, `detailType`={{ config.detail_type }}, `offset`=0.
 

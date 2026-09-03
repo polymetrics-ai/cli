@@ -178,3 +178,36 @@
 - F2/F3: PrestaShop emits its documented server filter/sort and combined page values with no client-scan truncation. CloudTrail writes StartTime to every stream body and returns an opaque budget continuation at a known cap rather than success.
 - F4/F5/F6: token redirects are non-following; date-window limits count calendar windows without duration saturation; malformed offset-count specs are rejected at both load and paginator boundaries.
 - F7/F8: Ashby fixture-only wording is absent from source and all generated surfaces under semantic parity. The Atlas proves literal owner files, declared owner membership, repaired native owner paths, CloudTrail SigV4 selection, declared-session malformed-response coverage, response envelope, and offset-count foundations.
+
+### 2026-09-03 — terminal review correction B3
+
+- Foundation Atlas discovery: **constrained extension** of the existing generic direct-execution pagination contract. Canny needs a declared `POST` form-body `skip`/`limit` window and an authoritative `hasMore` stop; no connector branch, hook, caller query channel, native executor, or new foundation is introduced. The shared owner is `internal/connectors/engine/{bundle.go,paginate.go,read.go}`.
+- RED: `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestNewPaginatorOffsetLimitHonorsDeclaredStopPath$'` requested offset `4` after a full second page declared `hasMore:false`; `go test -count=1 -timeout 20m ./internal/connectors/bundleregistry -run '^TestProductionCannyGenericCheckAndRead$'` observed `limit=100&skip=0` in the read URL instead of the declared form.
+- GREEN: Canny’s schema-4 lock selects body-bound `skip`/`limit` and `hasMore`; the generic offset paginator stops on a declared falsy stop path even for a full page. The focused engine and production-registry fake-transport tests pass, read exactly two 100-record pages with form-only pagination, and `lock-render canny --check` is deterministic.
+
+### 2026-09-03 — terminal review correction B4
+
+- Foundation Atlas discovery: **constrained extension** of the existing engine pagination contract. The engine-owned opaque durable continuation must resume the exact generated provider cursor, offset window, or same-origin next URL; it does not admit caller pagination state, replay an acknowledged page, or add a connector-specific reader.
+- RED: `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^TestReadContinuationResumesExactProviderCursor$'` requested the empty cursor twice before requesting `page-two`, proving that the prior `skipped_pages` continuation replayed acknowledged provider state.
+- GREEN: `engine_pagination_v2` binds the definition digest and persists only the next engine-generated request state. Resumable paginators validate declared cursor/window/query state and reapply URL origin guards. `TestReadContinuationResumesExactProviderCursor`, `TestReadContinuationResumesExactProviderOffset`, `TestReadContinuationResumesExactProviderURL`, and the durable transport continuation proof pass with only the initial then exact continuation request observed.
+
+### 2026-09-03 — terminal review correction B5
+
+- Foundation Atlas discovery: **constrained extension** of `authoring.source-lock-vnext.v1`. Immutable schema-4 authoring requires one complete JSON document with no duplicate object members before canonicalization or any generated-file replacement; this is authoring admission only and never a runtime reader.
+- RED: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestDecodeVNextSourceLockRejectsTrailingAndDuplicateJSON$'` did not compile because the strict source-lock decoder was absent.
+- GREEN: `decodeVNextSourceLock` walks every object before typed decode, rejects trailing values and duplicate root or nested keys, then applies unknown-field rejection. `TestRunLockRenderRejectsNonCanonicalSourceBeforeWriting` proves a rejected source leaves an existing generated artifact byte-for-byte untouched; the decoder tests and `lock-render canny --check` pass.
+
+### 2026-09-03 — terminal review correction B6
+
+- RED: the strengthened `TestS1ASourceParentContractMatrixMatchesExecution` failed at `ashby.stream.hiring_team_role_list`: its matrix omitted the source-declared `namesOnly:true` body fact. The strengthened docs parity test also found every base-pagination fact and Canny’s form body absent or mislabeled.
+- GREEN: the matrix now rejects unknown/trailing/duplicate JSON, has the exact 28-family/operation/stream bidirectional denominator, and compares lock and execution auth plus every recorded stream method, path, body, body type, required field list, records, incremental, and response-error fact. Ashby records and documents `namesOnly=true`. All 28 docs now state their inherited default pagination, while Canny documents typed form-body `skip`/`limit` windows and `hasMore=false` termination. The matrix/docs selector passes.
+
+### 2026-09-03 — terminal corrections B3–B6 verification
+
+- Required skill route: `connector-lane-build-order` and `go-engineering` were loaded. The repository-named `golang-*` skills and `firstmate-exhaustive-review` remain unavailable in this session; the recorded `go-engineering` substitute and the existing inline/manual-GSD fallback remain authoritative.
+- Red: the B3–B6 RED commands and their observable failures are recorded immediately above, before their production changes. They were not re-created by mutating the preserved green worktree.
+- Green: `go test -count=1 -timeout 20m ./internal/connectors/engine -run '^(TestNewPaginatorOffsetLimitHonorsDeclaredStopPath|TestReadContinuationResumesExactProviderCursor|TestReadContinuationResumesExactProviderOffset|TestReadContinuationResumesExactProviderURL)$'`, `go test -count=1 -timeout 20m ./internal/connectors/bundleregistry -run '^TestProductionCannyGenericCheckAndRead$'`, and `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestDecodeVNextSourceLockRejectsTrailingAndDuplicateJSON|TestRunLockRenderRejectsNonCanonicalSourceBeforeWriting|TestS1ASourceParentContractMatrixMatchesExecution|TestMigratedAPIDocsDescribeRenderedStreams)$'` all passed.
+- Broader Green: complete `cmd/connectorgen`, `internal/connectors/defs`, `internal/connectors/bundleregistry`, `internal/connectors/commandrunner`, and `internal/connectors/engine` suites passed with `-count=1 -timeout 20m`.
+- Baseline only: complete `internal/app` and `internal/cli` suites retain the already-recorded typed-destination approval/I-O and polling-help/source-origin failures; CLI also logs its expected local Redis connection refusals. These paths are outside B3–B6 and were not changed.
+- Render and documentation checks passed: `go build ./cmd/pm`; `lock-render --check` for GitHub, GitLab, Asana, and Canny; full `connectorgen validate internal/connectors/defs` (553 connectors, 0 findings); and `./pm docs validate --connectors-dir docs/connectors`.
+- Audit: `git diff --check` passed. The complete 57-path tracked diff, including full generated website JSON artifacts, was scanned programmatically for private keys, GitHub tokens, OpenAI tokens, and AWS access keys with no matches. The protected local certification residue was not read, modified, or staged. Free disk was 213 GiB.

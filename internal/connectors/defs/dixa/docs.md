@@ -20,6 +20,8 @@ Authentication uses declared mode(s): `bearer`.
 
 ## Execution contract
 
+Default stream pagination: `none`.
+
 Connection check: `GET /conversation_export`
 Check query: `updated_after`=`{{ config.updated_after }}`; `updated_before`=`{{ config.updated_before }}`.
 

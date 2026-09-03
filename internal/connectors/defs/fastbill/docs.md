@@ -19,6 +19,8 @@ Authentication uses declared mode(s): `basic`.
 
 ## Execution contract
 
+Default stream pagination: `offset_limit`.
+
 Connection check: `POST `
 Check JSON body: `LIMIT`=1, `OFFSET`=0, `SERVICE`=customer.get.
 

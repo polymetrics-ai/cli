@@ -80,6 +80,7 @@
             "offset_param": { "type": "string" },
             "cursor_param": { "type": "string" },
             "body_offset_field": { "type": "string" },
+            "body_limit_field": { "type": "string" },
             "token_path": { "type": "string" },
             "last_record_field": { "type": "string" },
             "stop_path": { "type": "string" },
@@ -185,6 +186,7 @@
             "properties": {
               "type": { "type": "string" },
               "body_offset_field": { "type": "string" },
+              "body_limit_field": { "type": "string" },
               "size_param": { "type": "string" },
               "page_param": { "type": "string" },
               "start_page": { "type": "integer" },

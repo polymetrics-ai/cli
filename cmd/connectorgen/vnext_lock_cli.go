@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
 	"io"
 	"os"
 	"path/filepath"
@@ -21,10 +20,8 @@ func runLockRender(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen lock-render: read source lock: %v\n", err)
 		return 1
 	}
-	decoder := json.NewDecoder(bytes.NewReader(raw))
-	decoder.DisallowUnknownFields()
-	var lock vNextSourceLock
-	if err := decoder.Decode(&lock); err != nil {
+	lock, err := decodeVNextSourceLock(raw)
+	if err != nil {
 		logf(stderr, "connectorgen lock-render: parse source lock: %v\n", err)
 		return 1
 	}

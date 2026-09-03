@@ -18,6 +18,8 @@ Authentication uses declared mode(s): `basic`.
 
 ## Execution contract
 
+Default stream pagination: `none`.
+
 Connection check: `POST /candidate.list`
 Check JSON body: `limit`=1.
 
@@ -145,7 +147,7 @@ Check JSON body: `limit`=1.
 - `custom_field_info`: `POST /customField.info`; records `results`
   - JSON body: `customFieldId`={{ query.customFieldId }}.
 - `hiring_team_role_list`: `POST /hiringTeamRole.list`; records `results`
-  - JSON body: `limit`=100.
+  - JSON body: `limit`=100, `namesOnly`=true.
   - Pagination: `cursor`.
 - `user_info`: `POST /user.info`; records `results`
   - JSON body: `userId`={{ query.userId }}.

@@ -20,6 +20,8 @@ Authentication uses declared mode(s): `api_key_query`, `none`.
 
 ## Execution contract
 
+Default stream pagination: `none`.
+
 Connection check: `GET /runPagespeed`
 Check query: `category`=`performance`; `strategy`=`desktop`; `url`=`https://example.com`.
 

@@ -1230,7 +1230,8 @@
           "path": "/hiringTeamRole.list",
           "method": "POST",
           "body": {
-            "limit": 100
+            "limit": 100,
+            "namesOnly": true
           },
           "body_type": "json",
           "required_body_fields": [],

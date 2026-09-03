@@ -19,6 +19,8 @@ Authentication uses declared mode(s): `oauth2_client_credentials`.
 
 ## Execution contract
 
+Default stream pagination: `cursor`.
+
 Connection check: `GET /shipments`
 Check query: `limit`=`1`.
 

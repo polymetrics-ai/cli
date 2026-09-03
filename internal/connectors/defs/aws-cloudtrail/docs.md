@@ -21,6 +21,8 @@ Authentication uses declared mode(s): `aws_sigv4`, `aws_sigv4`.
 
 ## Execution contract
 
+Default stream pagination: `cursor`.
+
 Connection check: `POST /`
 Check JSON body: `MaxResults`=1.
 

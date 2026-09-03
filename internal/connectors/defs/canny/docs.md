@@ -18,26 +18,28 @@ Authentication uses declared mode(s): `none`.
 
 ## Execution contract
 
+Default stream pagination: `offset_limit`.
+
 Connection check: `POST /boards/list`
-Check JSON body: `apiKey`={{ secrets.api_key }}.
+Check Form body: `apiKey`={{ secrets.api_key }}.
 
 ## Streams notes
 
 - `boards`: `POST /boards/list`; records `boards`
-  - JSON body: `apiKey`={{ secrets.api_key }}.
-  - Incremental cursor: `created`.
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
 - `posts`: `POST /posts/list`; records `posts`
-  - JSON body: `apiKey`={{ secrets.api_key }}.
-  - Incremental cursor: `created`.
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
 - `comments`: `POST /comments/list`; records `comments`
-  - JSON body: `apiKey`={{ secrets.api_key }}.
-  - Incremental cursor: `created`.
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
 - `categories`: `POST /categories/list`; records `categories`
-  - JSON body: `apiKey`={{ secrets.api_key }}.
-  - Incremental cursor: `created`.
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
 - `companies`: `POST /companies/list`; records `companies`
-  - JSON body: `apiKey`={{ secrets.api_key }}.
-  - Incremental cursor: `created`.
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
 
 ## Write actions & risks
 

@@ -19,6 +19,8 @@ Authentication uses declared mode(s): `none`.
 
 ## Execution contract
 
+Default stream pagination: `page_number`.
+
 Connection check: `POST /people/search`
 Check JSON body: `page_number`=1, `page_size`=1.
 

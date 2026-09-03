@@ -19,6 +19,8 @@ Authentication uses declared mode(s): `api_key_header`.
 
 ## Execution contract
 
+Default stream pagination: `page_number`.
+
 Connection check: `POST /`
 Check JSON body: `Function`=GetUsers.
 

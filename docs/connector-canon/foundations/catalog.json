@@ -45,6 +45,10 @@
             "name": "renderVNextExecutionBundle"
           },
           {
+            "file": "cmd/connectorgen/vnext_lock.go",
+            "name": "decodeVNextSourceLock"
+          },
+          {
             "file": "cmd/connectorgen/vnext_lock_cli.go",
             "name": "runLockRender"
           },
@@ -104,6 +108,7 @@
           "all seven lanes are explicit",
           "provider evidence is absent from the canonical runtime descriptor",
           "rendering is deterministic",
+          "source locks are one complete JSON document with no duplicate object members before canonicalization or file replacement",
           "execution objects reject authoring-evidence fields"
         ]
       },
@@ -123,6 +128,7 @@
       },
       "constraints": [
         "Unknown root fields fail decoding.",
+        "Trailing JSON values and duplicate object members fail before canonicalization or generated-file replacement.",
         "Lane state must match authored execution content.",
         "Schema references must resolve to safe registry paths.",
         "Runtime cannot read source.lock.json."
@@ -186,6 +192,21 @@
           "package": "./internal/connectors/connsdk",
           "file": "internal/connectors/connsdk/refresh_token_test.go",
           "name": "TestOAuth2RefreshTokenBasicClientAuthentication"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestDecodeVNextSourceLockRejectsTrailingAndDuplicateJSON"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestRunLockRenderRejectsNonCanonicalSourceBeforeWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/s1a_contract_matrix_test.go",
+          "name": "TestS1ASourceParentContractMatrixMatchesExecution"
         }
       ],
       "known_gap_refs": [
@@ -193,11 +214,6 @@
           "id": "R1-05",
           "reference": ".planning/phases/batch-r1-vnext-cutover/REVIEW-CONVERGENCE.md",
           "notes": "Current rendering writes per file and does not reject stale artifacts or provide staged, locked, atomic, durable, rollback-capable whole-bundle publication."
-        },
-        {
-          "id": "R1-13",
-          "reference": ".planning/phases/batch-r1-vnext-cutover/REVIEW-CONVERGENCE.md",
-          "notes": "Current source-lock decoding does not reject trailing JSON documents or duplicate members; deterministic rendering is not strict immutable-authoring admission."
         }
       ],
       "update_conditions": [
@@ -296,6 +312,7 @@
           "closed schema validation before registration",
           "embedded immutable definition snapshot",
           "declared batches can select only their source-backed allow-listed actions and methods",
+          "a connector with read disabled may omit streams.json while readable connectors still require it",
           "unrestricted upload media is available only through an explicit typed provider policy",
           "one registry combines declarative connectors with sanctioned hook and native overlays"
         ]
@@ -346,6 +363,14 @@
             "internal/connectors/defs/postgres/sync_transport.json"
           ],
           "notes": "Definitions remain the selected contracts while the native package supplies protocol execution."
+        },
+        {
+          "name": "Amazon SQS unsupported disposition",
+          "files": [
+            "internal/connectors/defs/amazon-sqs/cli_surface.json",
+            "internal/connectors/defs/amazon-sqs/metadata.json"
+          ],
+          "notes": "An all-lanes-unsupported, non-readable bundle has no stream artifact and exposes only its declared non-executable command dispositions."
         }
       ],
       "proof_tests": [
@@ -378,6 +403,11 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/multipart_media_test.go",
           "name": "TestValidateMultipartMediaTypes"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/amazon_sqs_disposition_test.go",
+          "name": "TestAmazonSQSDispositionBundleLoads"
         }
       ],
       "known_gap_refs": [],
@@ -414,8 +444,10 @@
           "internal/connectors/engine/declared_batch.go",
           "internal/connectors/engine/direct_read.go",
           "internal/connectors/engine/direct_read_paginate.go",
+          "internal/connectors/engine/paginate.go",
           "internal/connectors/engine/read.go",
           "internal/connectors/engine/read_request_budget.go",
+          "internal/connectors/engine/schema/streams.schema.json",
           "internal/connectors/engine/direct_write.go",
           "internal/connectors/engine/structured_rest_body.go",
           "internal/connectors/engine/write.go",
@@ -452,11 +484,19 @@
           },
           {
             "file": "internal/connectors/engine/read.go",
+            "name": "ReadWithOutcome"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
             "name": "Check"
           },
           {
             "file": "internal/connectors/engine/read.go",
             "name": "requesterWithCheckSuccessStatuses"
+          },
+          {
+            "file": "internal/connectors/engine/paginate.go",
+            "name": "newPaginator"
           },
           {
             "file": "internal/connectors/connsdk/http.go",
@@ -504,7 +544,9 @@
           "fixed GraphQL operation bindings",
           "fixed REST reads and writes",
           "base check requests with optional exact accepted 2xx statuses and bounded response bytes",
+          "source-declared offset windows in query or typed JSON/form bodies with an optional authoritative response stop path",
           "stream-backed bounded direct reads",
+          "tracked source reads that persist only the next generated provider cursor, offset window, or same-origin URL",
           "structured nested REST request bodies"
         ],
         "sync_modes": [],
@@ -513,6 +555,8 @@
           "action-backed structured JSON is decoded only for declared record fields and validated against the write schema",
           "declared batches derive every method, path, and body from an existing allow-listed typed action",
           "interactive stream reads share one caller request budget across fan-out discovery, child sequences, retries, and redirects while saved ETL keeps its established unbounded zero value",
+          "declared form/JSON offset windows never duplicate their pagination fields in the request query and a declared false stop path terminates a full final page",
+          "known tracked-read caps return an opaque continuation that resumes the exact generated provider cursor, offset window, or origin-checked URL without replaying acknowledged pages",
           "one bounded provider-facing command invocation",
           "preview and approval binding for mutation paths",
           "declared base-check success statuses are normalized from unambiguous numeric spellings that resolve to 2xx and enforced as an exact allowed set when present",
@@ -572,6 +616,14 @@
             "internal/connectors/defs/github/writes.json"
           ],
           "notes": "One bundle exercises several common direct executor kinds without creating a GitHub-only command runtime."
+        },
+        {
+          "name": "Canny form-paginated stream",
+          "files": [
+            "internal/connectors/defs/canny/source.lock.json",
+            "internal/connectors/defs/canny/streams.json"
+          ],
+          "notes": "The Canny stream selects form-body skip/limit windows and an authoritative hasMore stop through the common reader."
         }
       ],
       "proof_tests": [
@@ -634,6 +686,36 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/read_test.go",
           "name": "TestCheck_ResponseMaxBytesPreservesDeclaredBound"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/paginate_test.go",
+          "name": "TestNewPaginatorOffsetLimitHonorsDeclaredStopPath"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/continuation_cap_test.go",
+          "name": "TestReadContinuationResumesExactProviderCursor"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/continuation_cap_test.go",
+          "name": "TestReadContinuationResumesExactProviderOffset"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/continuation_cap_test.go",
+          "name": "TestReadContinuationResumesExactProviderURL"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/transport_composition_test.go",
+          "name": "TestDeclarativeTransport_PageBudgetIsNotEOF"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionCannyGenericCheckAndRead"
         }
       ],
       "known_gap_refs": [

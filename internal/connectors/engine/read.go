@@ -29,11 +29,16 @@ const defaultPageSize = 100
 const maxReadContinuationPages = 1_000_000
 
 type readContinuationPayload struct {
-	Version          int    `json:"version"`
-	Connector        string `json:"connector"`
-	Stream           string `json:"stream"`
-	DefinitionSHA256 string `json:"definition_sha256"`
-	SkippedPages     int    `json:"skipped_pages"`
+	Version          int               `json:"version"`
+	Connector        string            `json:"connector"`
+	Stream           string            `json:"stream"`
+	DefinitionSHA256 string            `json:"definition_sha256"`
+	Next             persistedNextPage `json:"next"`
+}
+
+type persistedNextPage struct {
+	URL   string     `json:"url,omitempty"`
+	Query url.Values `json:"query,omitempty"`
 }
 
 // Read executes a declarative stream read against b per design §B.4: resolve
@@ -536,7 +541,7 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	maxPages := effectiveReadMaxPages(specForPaginator.MaxPages, req.MaxPages)
-	skippedPages, err := readContinuationSkippedPages(b, stream, req.Continuation)
+	resumePage, err := readContinuationPage(b, stream, req.Continuation)
 	if err != nil {
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
@@ -545,6 +550,12 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	pathVars.FanoutID = fc.id
 
 	page := paginator.Start()
+	if resumePage != nil {
+		if err := resumePaginator(paginator, resumePage); err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+		}
+		page = resumePage
+	}
 	for pageNum := 0; page != nil; pageNum++ {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -553,9 +564,9 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		// Hard request-count cap, independent of page fullness: mirrors
 		// connsdk.Harvest's own maxPages parameter (paginate.go:201), checked
 		// before issuing the request for this page number. maxPages<=0 (the
-		if maxPages > 0 && pageNum-skippedPages >= maxPages {
+		if maxPages > 0 && pageNum >= maxPages {
 			if trackPaginationOutcome || specForPaginator.RequireContinuationOnCap {
-				continuation, err := newReadContinuation(b, stream, pageNum)
+				continuation, err := newReadContinuation(b, stream, page)
 				if err != nil {
 					return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 				}
@@ -619,7 +630,27 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			}
 			pageQuery.Del(specForPaginator.OffsetParam)
 		}
+		if specForPaginator.BodyLimitField != "" && specForPaginator.LimitParam != "" {
+			if !queryCloned {
+				pageQuery = url.Values{}
+				for key, values := range page.Query {
+					for _, value := range values {
+						pageQuery.Add(key, value)
+					}
+				}
+			}
+			pageQuery.Del(specForPaginator.LimitParam)
+		}
 		query := mergeQuery(baseQuery, pageQuery)
+		// Body-bound pagination owns its declared parameter names. Removing
+		// those keys after the final merge prevents inherited or caller query
+		// values from duplicating a form/JSON pagination field on the wire.
+		if specForPaginator.BodyOffsetField != "" && specForPaginator.OffsetParam != "" {
+			query.Del(specForPaginator.OffsetParam)
+		}
+		if specForPaginator.BodyLimitField != "" && specForPaginator.LimitParam != "" {
+			query.Del(specForPaginator.LimitParam)
+		}
 		body, err := buildStreamRequestBody(stream, req.Config, req.Query, page, specForPaginator, formattedLowerBound, fc)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
@@ -674,10 +705,6 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		rawRecords, err = applyResponseHeaderProjections(rawRecords, resolvedHeaderProjections)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
-		}
-		if pageNum < skippedPages {
-			page = paginator.Next(resp, len(rawRecords))
-			continue
 		}
 		responseFields, err := extractResponseFields(resp.Body, stream.ResponseFields)
 		if err != nil {
@@ -761,16 +788,19 @@ func effectiveReadMaxPages(declared, requested int) int {
 	return declared
 }
 
-func newReadContinuation(b Bundle, stream StreamSpec, skippedPages int) (connectors.ReadContinuation, error) {
-	if skippedPages < 1 || skippedPages > maxReadContinuationPages {
-		return connectors.ReadContinuation{}, fmt.Errorf("engine: source continuation page count is out of bounds")
+func newReadContinuation(b Bundle, stream StreamSpec, next *connsdk.NextPage) (connectors.ReadContinuation, error) {
+	if next == nil {
+		return connectors.ReadContinuation{}, fmt.Errorf("engine: source continuation has no next provider page")
 	}
 	payload := readContinuationPayload{
-		Version:          1,
+		Version:          2,
 		Connector:        b.Name,
 		Stream:           stream.Name,
 		DefinitionSHA256: readContinuationDefinitionDigest(b, stream),
-		SkippedPages:     skippedPages,
+		Next: persistedNextPage{
+			URL:   next.URL,
+			Query: cloneContinuationQuery(next.Query),
+		},
 	}
 	encoded, err := json.Marshal(payload)
 	if err != nil {
@@ -779,29 +809,53 @@ func newReadContinuation(b Bundle, stream StreamSpec, skippedPages int) (connect
 	if len(encoded) > 4096 {
 		return connectors.ReadContinuation{}, fmt.Errorf("engine: source continuation exceeds its byte bound")
 	}
-	return connectors.ReadContinuation{Kind: "engine_pagination_v1", Token: encoded}, nil
+	return connectors.ReadContinuation{Kind: "engine_pagination_v2", Token: encoded}, nil
 }
 
-func readContinuationSkippedPages(b Bundle, stream StreamSpec, continuation *connectors.ReadContinuation) (int, error) {
-	if continuation == nil {
-		return 0, nil
+func cloneContinuationQuery(query url.Values) url.Values {
+	if len(query) == 0 {
+		return nil
 	}
-	if continuation.Kind != "engine_pagination_v1" || len(continuation.Token) == 0 || len(continuation.Token) > 4096 {
-		return 0, fmt.Errorf("engine: source continuation is invalid")
+	cloned := make(url.Values, len(query))
+	for name, values := range query {
+		cloned[name] = append([]string(nil), values...)
+	}
+	return cloned
+}
+
+func readContinuationPage(b Bundle, stream StreamSpec, continuation *connectors.ReadContinuation) (*connsdk.NextPage, error) {
+	if continuation == nil {
+		return nil, nil
+	}
+	if continuation.Kind != "engine_pagination_v2" || len(continuation.Token) == 0 || len(continuation.Token) > 4096 {
+		return nil, fmt.Errorf("engine: source continuation is invalid")
 	}
 	decoder := json.NewDecoder(bytes.NewReader(continuation.Token))
 	decoder.DisallowUnknownFields()
 	var payload readContinuationPayload
 	if err := decoder.Decode(&payload); err != nil {
-		return 0, fmt.Errorf("engine: decode source continuation: %w", err)
+		return nil, fmt.Errorf("engine: decode source continuation: %w", err)
 	}
 	if err := ensureReadContinuationEOF(decoder); err != nil {
-		return 0, err
+		return nil, err
 	}
-	if payload.Version != 1 || payload.Connector != b.Name || payload.Stream != stream.Name || payload.DefinitionSHA256 != readContinuationDefinitionDigest(b, stream) || payload.SkippedPages < 1 || payload.SkippedPages > maxReadContinuationPages {
-		return 0, fmt.Errorf("engine: source continuation does not match the declared stream")
+	if payload.Version != 2 || payload.Connector != b.Name || payload.Stream != stream.Name || payload.DefinitionSHA256 != readContinuationDefinitionDigest(b, stream) {
+		return nil, fmt.Errorf("engine: source continuation does not match the declared stream")
 	}
-	return payload.SkippedPages, nil
+	if payload.Next.URL == "" && len(payload.Next.Query) == 0 {
+		return nil, fmt.Errorf("engine: source continuation has no next provider page")
+	}
+	return &connsdk.NextPage{URL: payload.Next.URL, Query: cloneContinuationQuery(payload.Next.Query)}, nil
+}
+
+func resumePaginator(paginator connsdk.Paginator, next *connsdk.NextPage) error {
+	resumer, ok := paginator.(interface {
+		Resume(*connsdk.NextPage) error
+	})
+	if !ok {
+		return fmt.Errorf("engine: pagination strategy cannot resume a provider continuation")
+	}
+	return resumer.Resume(next)
 }
 
 func ensureReadContinuationEOF(decoder *json.Decoder) error {
@@ -871,6 +925,11 @@ func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, que
 	if page != nil && pag.BodyOffsetField != "" && pag.OffsetParam != "" {
 		if offset := page.Query.Get(pag.OffsetParam); offset != "" {
 			body[pag.BodyOffsetField] = offset
+		}
+	}
+	if page != nil && pag.BodyLimitField != "" && pag.LimitParam != "" {
+		if limit := page.Query.Get(pag.LimitParam); limit != "" {
+			body[pag.BodyLimitField] = limit
 		}
 	}
 	if err := validateRequiredStreamBodyFields(stream.RequiredBodyFields, body); err != nil {

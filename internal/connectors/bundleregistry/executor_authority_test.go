@@ -441,7 +441,7 @@ func TestProductionCannyGenericCheckAndRead(t *testing.T) {
 
 	var requests atomic.Int64
 	http.DefaultTransport = roundTripFunc(func(request *http.Request) (*http.Response, error) {
-		requests.Add(1)
+		requestNumber := requests.Add(1)
 		if request.URL.Host != "canny.io" {
 			t.Fatal("Canny request did not use the fixed provider origin")
 		}
@@ -455,11 +455,26 @@ func TestProductionCannyGenericCheckAndRead(t *testing.T) {
 			t.Fatal("Canny request omitted declared API key form field")
 		}
 		body := `{"boards":[]}`
-		if requests.Load() == 2 {
+		if requestNumber > 1 {
 			if request.URL.Path != "/api/v1/boards/list" {
 				t.Fatal("Canny read did not use boards list route")
 			}
-			body = `{"boards":[{"id":"board-1","created":"2026-01-02T00:00:00Z"}],"hasMore":false}`
+			if request.URL.RawQuery != "" {
+				t.Fatalf("Canny pagination leaked into query %q", request.URL.RawQuery)
+			}
+			wantSkip := fmt.Sprintf("%d", (requestNumber-2)*100)
+			if request.Form.Get("skip") != wantSkip || request.Form.Get("limit") != "100" {
+				t.Fatalf("Canny form pagination = skip=%q limit=%q, want skip=%q limit=100", request.Form.Get("skip"), request.Form.Get("limit"), wantSkip)
+			}
+			boards := make([]map[string]string, 100)
+			for i := range boards {
+				boards[i] = map[string]string{"id": fmt.Sprintf("board-%d", int(requestNumber-2)*100+i), "created": "2026-01-02T00:00:00Z"}
+			}
+			encoded, err := json.Marshal(map[string]any{"boards": boards, "hasMore": requestNumber == 2})
+			if err != nil {
+				t.Fatalf("marshal Canny page: %v", err)
+			}
+			body = string(encoded)
 		}
 		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(body)), Request: request}, nil
 	})
@@ -479,11 +494,11 @@ func TestProductionCannyGenericCheckAndRead(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("production canny Read() error = %v", err)
 	}
-	if len(records) != 1 || records[0]["id"] != "board-1" {
-		t.Fatalf("production canny records = %#v, want one provider board", records)
+	if len(records) != 200 || records[0]["id"] != "board-0" || records[199]["id"] != "board-199" {
+		t.Fatalf("production canny records = %#v, want two complete provider pages", records)
 	}
-	if got := requests.Load(); got != 2 {
-		t.Fatalf("production canny requests = %d, want check plus read", got)
+	if got := requests.Load(); got != 3 {
+		t.Fatalf("production canny requests = %d, want check plus two hasMore-bounded reads", got)
 	}
 }
 

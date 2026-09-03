@@ -20,6 +20,8 @@ Authentication uses declared mode(s): `none`.
 
 ## Execution contract
 
+Default stream pagination: `page_number`.
+
 Connection check: `GET /calls/reporting/simple`
 Check query: `max`=`1`.
 

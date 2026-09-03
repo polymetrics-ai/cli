@@ -21,6 +21,8 @@ Authentication uses declared mode(s): `api_key_header`, `declared_session`.
 
 ## Execution contract
 
+Default stream pagination: `none`.
+
 Connection check: `GET /card`
 
 ## Streams notes

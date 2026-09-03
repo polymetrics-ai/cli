@@ -19,6 +19,8 @@ Authentication uses declared mode(s): `bearer`.
 
 ## Execution contract
 
+Default stream pagination: `offset_limit`.
+
 Connection check: `GET /datasets`
 Check query: `limit`=`1`.
 

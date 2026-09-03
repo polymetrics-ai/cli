@@ -25,6 +25,8 @@ Authentication uses declared mode(s): `oauth2_refresh_token`.
 
 ## Execution contract
 
+Default stream pagination: `offset_limit`.
+
 Connection check: `GET /advertising/advertisers`
 Check query: `product_id`=`BADS`.
 

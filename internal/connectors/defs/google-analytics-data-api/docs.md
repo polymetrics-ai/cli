@@ -21,6 +21,8 @@ Authentication uses declared mode(s): `bearer`.
 
 ## Execution contract
 
+Default stream pagination: `offset_limit`.
+
 Connection check: `POST /v1beta/properties/{{ config.property_ids }}:runReport`
 Check JSON body: `dateRanges`=[{'endDate': '{{ config.end_date }}', 'startDate': '{{ config.start_date }}'}], `dimensions`=[{'name': 'date'}], `keepEmptyRows`=false, `limit`=1, `metrics`=[{'name': 'activeUsers'}, {'name': 'newUsers'}, {'name': 'sessions'}], `offset`=0.
 

@@ -22,6 +22,8 @@ Authentication uses declared mode(s): `bearer`, `oauth2_refresh_token`.
 
 ## Execution contract
 
+Default stream pagination: `link_header`.
+
 Connection check: `GET /projects.json`
 
 ## Streams notes

@@ -204,16 +204,67 @@ func TestFoundationAtlasSelectorsResolve(t *testing.T) {
 	}
 }
 
+func TestDecodeVNextSourceLockRejectsTrailingAndDuplicateJSON(t *testing.T) {
+	raw, err := json.Marshal(minimalVNextLockForTest())
+	if err != nil {
+		t.Fatalf("marshal minimal lock: %v", err)
+	}
+	tests := []struct {
+		name string
+		raw  []byte
+	}{
+		{name: "trailing document", raw: append(append([]byte(nil), raw...), []byte("\n{}")...)},
+		{name: "duplicate root member", raw: bytes.Replace(raw, []byte(`"connector":"acme"`), []byte(`"connector":"acme","connector":"other"`), 1)},
+		{name: "duplicate nested member", raw: bytes.Replace(raw, []byte(`"metadata":{"name":"acme"}`), []byte(`"metadata":{"name":"acme","name":"other"}`), 1)},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if _, err := decodeVNextSourceLock(test.raw); err == nil {
+				t.Fatal("decodeVNextSourceLock accepted non-canonical JSON")
+			}
+		})
+	}
+}
+
+func TestRunLockRenderRejectsNonCanonicalSourceBeforeWriting(t *testing.T) {
+	root := t.TempDir()
+	connectorRoot := filepath.Join(root, "acme")
+	if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(minimalVNextLockForTest())
+	if err != nil {
+		t.Fatalf("marshal minimal lock: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), append(raw, []byte("\n{}")...), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	const sentinel = "must not be replaced"
+	outputPath := filepath.Join(connectorRoot, "metadata.json")
+	if err := os.WriteFile(outputPath, []byte(sentinel), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := runLockRender([]string{"lock-render", "acme", "--defs", root}, &stdout, &stderr); code != 1 {
+		t.Fatalf("runLockRender() = %d, want parse failure; stderr=%s", code, stderr.String())
+	}
+	got, err := os.ReadFile(outputPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(got) != sentinel {
+		t.Fatalf("lock render overwrote output before rejecting non-canonical source: %q", got)
+	}
+}
+
 func readVNextSourceLockForTest(t *testing.T, lockPath string) vNextSourceLock {
 	t.Helper()
 	raw, err := os.ReadFile(lockPath)
 	if err != nil {
 		t.Fatalf("ReadFile(%s): %v", lockPath, err)
 	}
-	decoder := json.NewDecoder(bytes.NewReader(raw))
-	decoder.DisallowUnknownFields()
-	var lock vNextSourceLock
-	if err := decoder.Decode(&lock); err != nil {
+	lock, err := decodeVNextSourceLock(raw)
+	if err != nil {
 		t.Fatalf("decode %s: %v", lockPath, err)
 	}
 	return lock

@@ -22,6 +22,8 @@ Authentication uses declared mode(s): `declared_password_token`.
 
 ## Execution contract
 
+Default stream pagination: `none`.
+
 Connection check: `GET /Clients`
 
 ## Streams notes

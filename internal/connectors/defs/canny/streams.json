@@ -15,10 +15,13 @@
     },
     "error_map": [],
     "pagination": {
+      "body_limit_field": "limit",
+      "body_offset_field": "skip",
       "limit_param": "limit",
       "max_pages": 100,
       "offset_param": "skip",
       "page_size": 100,
+      "stop_path": "hasMore",
       "type": "offset_limit"
     },
     "url": "https://canny.io/api/v1",

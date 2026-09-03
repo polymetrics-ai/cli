@@ -3690,8 +3690,8 @@ func TestDeclarativeTransport_PageBudgetIsNotEOF(t *testing.T) {
 			t.Fatalf("resumed records include an acknowledged-prefix value %q", sha)
 		}
 	}
-	if got, want := requestedPages, []int{1, 2}; !reflect.DeepEqual(got, want) {
-		t.Fatalf("resumed provider traversal = %v, want engine-owned replay through %v", got, want)
+	if got, want := requestedPages, []int{2}; !reflect.DeepEqual(got, want) {
+		t.Fatalf("resumed provider traversal = %v, want exact continuation page %v without replay", got, want)
 	}
 
 	// The continuation is an engine-owned, definition-bound capability. A

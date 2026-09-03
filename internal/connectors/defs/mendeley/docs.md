@@ -23,6 +23,8 @@ Authentication uses declared mode(s): `oauth2_refresh_token`.
 
 ## Execution contract
 
+Default stream pagination: `link_header`.
+
 Connection check: `GET /documents`
 Check query: `limit`=`1`.
 
