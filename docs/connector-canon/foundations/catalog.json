@@ -341,6 +341,7 @@
           "closed schema validation before selected construction",
           "embedded immutable execution snapshot",
           "generated and loaded connector, generation, digest, and byte charge match before cache or factory admission",
+          "retained bundles plus distinct in-flight bundle loads never exceed the configured entry limit",
           "metadata listing decodes no bundle and named resolution decodes one selected bundle",
           "declared batches can select only their source-backed allow-listed actions and methods",
           "a connector with read disabled may omit streams.json while readable connectors still require it",
@@ -417,6 +418,11 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/bundle_test.go",
           "name": "TestBundleLoadSyncTransportProjectsIndependentDefinition"
+        },
+        {
+          "package": "./internal/connectors/manifeststore",
+          "file": "internal/connectors/manifeststore/bundle_store_test.go",
+          "name": "TestBundleStoreReservesEntryCapacityAcrossDistinctFlights"
         },
         {
           "package": "./internal/connectors/bundleregistry",

@@ -198,3 +198,18 @@ The required role-separated discovery was requested through the worker task fan-
 | Broad suites | Recorded, not waived. Full App and CLI reruns reproduce only the existing typed-destination and polling/help/source-origin baselines listed in `VERIFICATION.md`; engine passes. |
 
 - Local result: no remaining A1-01/A1-02/A1-03 finding after the dead-helper cleanup. `git diff --check`, scoped vet, build, agent-contract, generation, safe gates, and focused/race suites pass. The external final exact-SHA A1 re-review remains mandatory; do not begin CP09.
+
+## 2026-09-04 — A1 entry-capacity correction local self-review
+
+- Review subject: the uncommitted narrow correction based on exact reviewed candidate `701a0b45175f308400c938322fd1634a28efdaef`.
+- Workflow: generated `scripts/gsd prompt verify-work batch-r1-vnext-cutover` and `scripts/gsd prompt code-review batch-r1-vnext-cutover` paths were followed inline. The current runner cannot spawn the GSD reviewer role, so no second local reviewer was fabricated; Firstmate's mandatory fresh independent exact-SHA review remains the controlling gate.
+
+| Lens | Disposition |
+| --- | --- |
+| Entry capacity and eviction | Pass. `reservedEntries` is incremented in the existing mutex-held distinct-flight reservation, participates in the same capacity/eviction loop as retained cache entries, and decrements in the matching terminal loader path. No same-key waiter consumes a second slot. |
+| Cancellation and retry | Pass. `releaseWaiter` still cancels an abandoned loader but does not free byte or entry reservation; the loader terminal path frees both together. The barrier regression proves B is refused before and after A's caller cancellation, then B and A retry only after capacity becomes available. |
+| Identity, rate, and construction | Pass. The diff touches no identity comparison, loader result, factory, rate, connector, App, or CLI path. Existing affected identity/index/registry suites and full manifeststore race suite pass. |
+| Foundation/documentation | Pass. `definitions.bundle-loader.v1` declares the strengthened retained-plus-flight entry guarantee and names the executable regression proof; JSON/unique-ID and Atlas selector validation pass. |
+| Safety and scope | Pass. No provider, credential, source lock, rendered JSON, release, cache residue, or certification path is read or changed. `go vet`, build, agent-contract, and `git diff --check` pass. |
+
+- Findings: none. Commit this reviewed correction locally, report its exact SHA to Firstmate, and do not start CP09 or push the parent branch before Firstmate relays a fresh independent review disposition.

@@ -325,6 +325,139 @@ func TestBundleHandlePinsGenerationAfterCacheRelease(t *testing.T) {
 	}
 }
 
+func TestBundleStoreReservesEntryCapacityAcrossDistinctFlights(t *testing.T) {
+	alpha := manifestindex.Entry{Connector: "alpha", Generation: "g", Digest: "a", Executor: "api_engine.v1", Bytes: 1}
+	bravo := manifestindex.Entry{Connector: "bravo", Generation: "g", Digest: "b", Executor: "api_engine.v1", Bytes: 1}
+	alphaStarted := make(chan struct{})
+	alphaRelease := make(chan struct{})
+	var alphaCalls atomic.Int32
+	var bravoCalls atomic.Int32
+	store, err := NewBundleStore(bundleIndex(t, alpha, bravo), Limits{Entries: 1, Bytes: 2}, func(ctx context.Context, selected manifestindex.Entry) (LoadedBundle, error) {
+		switch selected.Connector {
+		case alpha.Connector:
+			if alphaCalls.Add(1) == 1 {
+				close(alphaStarted)
+				<-alphaRelease
+				return LoadedBundle{}, ctx.Err()
+			}
+		case bravo.Connector:
+			bravoCalls.Add(1)
+		default:
+			return LoadedBundle{}, errors.New("unexpected bundle selection")
+		}
+		return loadedFor(selected), nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	type acquireResult struct {
+		handle *BundleHandle
+		err    error
+	}
+	alphaCtx, cancelAlpha := context.WithCancel(context.Background())
+	defer cancelAlpha()
+	alphaResult := make(chan acquireResult, 1)
+	go func() {
+		handle, err := store.Acquire(alphaCtx, alpha.Connector)
+		alphaResult <- acquireResult{handle: handle, err: err}
+	}()
+	<-alphaStarted
+
+	store.mu.Lock()
+	pending := store.flights[identityFor(alpha)]
+	store.mu.Unlock()
+	if pending == nil {
+		t.Fatal("alpha load was not tracked as a flight")
+	}
+	assertBound := func(stage string) {
+		t.Helper()
+		store.mu.Lock()
+		cached := len(store.cache)
+		reservedEntries := store.reservedEntries
+		reservedBytes := store.reserved // Every fixture bundle has a one-byte charge.
+		store.mu.Unlock()
+		if reservedEntries != reservedBytes {
+			t.Errorf("%s reserved entry slots = %d, want %d one-byte reservations", stage, reservedEntries, reservedBytes)
+		}
+		if got := cached + reservedEntries; got > 1 {
+			t.Errorf("%s retained plus reserved entries = %d, want at most 1", stage, got)
+		}
+	}
+	requireBravoCapacity := func(stage string) bool {
+		handle, err := store.Acquire(context.Background(), bravo.Connector)
+		if handle != nil {
+			handle.Release()
+		}
+		if !errors.Is(err, ErrBundleCapacity) {
+			t.Errorf("%s Acquire(bravo) error = %v, want ErrBundleCapacity", stage, err)
+			assertBound(stage)
+			return false
+		}
+		if got := bravoCalls.Load(); got != 0 {
+			t.Errorf("%s bravo loader calls = %d, want 0", stage, got)
+			return false
+		}
+		assertBound(stage)
+		return true
+	}
+
+	assertBound("first flight")
+	if !requireBravoCapacity("while alpha is loading") {
+		cancelAlpha()
+		result := <-alphaResult
+		if result.handle != nil {
+			result.handle.Release()
+		}
+		close(alphaRelease)
+		<-pending.done
+		return
+	}
+
+	cancelAlpha()
+	result := <-alphaResult
+	if result.handle != nil {
+		result.handle.Release()
+	}
+	if !errors.Is(result.err, context.Canceled) {
+		t.Errorf("canceled Acquire(alpha) error = %v, want context.Canceled", result.err)
+	}
+	if result.handle != nil {
+		t.Error("canceled Acquire(alpha) returned a handle")
+	}
+	assertBound("after alpha cancellation")
+	if !requireBravoCapacity("while canceled alpha loader remains live") {
+		close(alphaRelease)
+		<-pending.done
+		return
+	}
+
+	close(alphaRelease)
+	<-pending.done
+	assertBound("after canceled alpha completion")
+
+	bravoHandle, err := store.Acquire(context.Background(), bravo.Connector)
+	if err != nil {
+		t.Fatalf("retry Acquire(bravo): %v", err)
+	}
+	assertBound("after bravo retry")
+	bravoHandle.Release()
+
+	alphaHandle, err := store.Acquire(context.Background(), alpha.Connector)
+	if err != nil {
+		t.Fatalf("retry Acquire(alpha): %v", err)
+	}
+	alphaHandle.Release()
+	assertBound("after alpha retry")
+
+	if got := alphaCalls.Load(); got != 2 {
+		t.Fatalf("alpha loader calls = %d, want 2 after cancellation and retry", got)
+	}
+	if got := bravoCalls.Load(); got != 1 {
+		t.Fatalf("bravo loader calls = %d, want 1 after capacity becomes available", got)
+	}
+}
+
 func loadedFor(entry manifestindex.Entry) LoadedBundle {
 	identity := manifestidentity.Identity{Connector: entry.Connector, Generation: entry.Generation, Digest: entry.Digest, Bytes: entry.Bytes}
 	bundle := &engine.Bundle{Name: entry.Connector, Identity: identity}

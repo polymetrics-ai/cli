@@ -297,3 +297,29 @@
 - A1-03 complete locally: root-run construction has explicit production vs test override mode. The normal router, dynamic help, App, reverse App, connector docs, and skills reuse the one preflight registry. Skills generation traverses a lazy registry once rather than resolving the fleet twice.
 - Local green gates are complete: closed-plan table/fuzz, identity/store/factory race, normal router ownership, rate/reference/hook/native witnesses, command preflight, renderer/definition/Atlas/docs/help/smoke/boundary, scoped vet/build, and frozen self-review. The known full-App/full-CLI/lint results are classified in `VERIFICATION.md`; none is repaired or reclassified by this wave.
 - Pending only: candidate commit, then the Firstmate-managed final exact-SHA A1 re-review. CP09 remains prohibited.
+
+## A1-04 entry-capacity correction — review disposition 118
+
+- Review parent/candidate: `346200f659e9ae22d0be42a83ee10f75d658f0b6..701a0b45175f308400c938322fd1634a28efdaef`.
+- Authority: Firstmate inbox `118.msg`. The independent review BLOCK found a concrete resource-bound violation. This is one narrow A1-02 correction, not CP09, a connector migration, a source-lock/render change, or a rate/CLI/factory redesign.
+- Atlas disposition: **constrained_extension** of `definitions.bundle-loader.v1`. Update its supported guarantee and proof list in the same change because the existing BundleStore contract gains an in-flight entry-capacity invariant. No captain approval is needed for the declared seam; no new foundation is introduced.
+- Owner and allowed production paths: `internal/connectors/manifeststore/bundle_store.go` only. The likely state is a count-reservation field paired with the existing byte reservation, reserved under `mu` when a distinct `bundleFlight` is installed and released exactly once in its terminal loader path. Same-key waiters consume no additional count capacity.
+- Red: add a deterministic barrier-based two-identity test using `Limits{Entries: 1, Bytes: 2}`. While identity A's loader is held, identity B must fail with `ErrBundleCapacity` and the locked snapshot must show retained plus reserved entries at most one. After A's caller cancels but the loader remains held, B must still fail. Once A terminally exits, B retry must load and retain one entry; retrying A after B is releasable must preserve the same bound.
+- Green: reserve one entry slot atomically with every newly installed distinct flight; release that slot exactly once with the matching byte reservation, including canceled and failed loaders. Preserve eviction, handle refs, generation leases, exact identity validation, and same-key flight sharing.
+- Refactor/review: keep the reservation accounting local to BundleStore; do not export diagnostics, add goroutines, alter loader cancellation semantics, or touch connector, rate, generation/digest, factory, App, or CLI paths. Read the post-change diff against the exact candidate and rerun the focus set before reporting the new SHA for Firstmate's fresh independent review.
+
+| Acceptance criterion | RED observable | GREEN observable |
+| --- | --- | --- |
+| Distinct in-flight loads honor `Limits.Entries` | Two one-byte identities begin concurrently under `Entries: 1, Bytes: 2`. | B is refused before its loader starts while A owns the only reserved entry slot. |
+| Cancellation cannot create an overlapping distinct flight | Canceling A removes its waiter while its blocked loader remains live, and B can start. | B remains refused until A's loader terminally releases its reservation. |
+| Completion and retry restore exactly one slot | A completion leaves a leaked reservation or B retry inserts beyond the cap. | B retry succeeds after A finishes, and every snapshot has cached plus reserved entries no greater than one. |
+| Existing A1 contracts stay intact | Any focused retained witness changes. | Identity, rate, construction, connector, and CLI focused tests remain green without production-surface changes. |
+
+- Planned verification: exact RED/GREEN selector in `./internal/connectors/manifeststore`; package race suite; focused `manifestindex`/`bundleregistry` construction and identity tests; `go vet ./internal/connectors/manifeststore ./internal/connectors/bundleregistry`; Atlas JSON/proof validation; `git diff --check`; read-only exact-candidate self-review. No broad parent push or CP09 start.
+
+### A1-04 implementation status
+
+- RED was observed exactly as the review predicted: with A barrier-held, B loaded under `Entries: 1, Bytes: 2`, producing a retained-plus-reserved count of two.
+- GREEN reserves `reservedEntries` under the existing store mutex at distinct-flight admission, includes it in the entry-capacity eviction/refusal loop, and releases it in the matching terminal load path beside the byte charge. Last-waiter cancellation still cancels the loader but cannot release capacity before that terminal path.
+- The exact barrier regression, full manifeststore race suite, affected identity/index/registry suites, scoped vet, Atlas JSON/selector proof, CLI build, and agent-contract check are green. No source lock, rendered execution JSON, rate, connector, factory, App, or CLI behavior changed.
+- Frozen local self-review is complete. Pending only: commit the reviewed correction, then report its new exact candidate to Firstmate for one fresh independent review. CP09 and parent publication remain blocked.
