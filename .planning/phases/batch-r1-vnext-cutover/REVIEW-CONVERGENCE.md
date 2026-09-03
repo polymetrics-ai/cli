@@ -213,3 +213,10 @@ The required role-separated discovery was requested through the worker task fan-
 | Safety and scope | Pass. No provider, credential, source lock, rendered JSON, release, cache residue, or certification path is read or changed. `go vet`, build, agent-contract, and `git diff --check` pass. |
 
 - Findings: none. Commit this reviewed correction locally, report its exact SHA to Firstmate, and do not start CP09 or push the parent branch before Firstmate relays a fresh independent review disposition.
+
+## 2026-09-04 — A1-04 independent exact-SHA review PASS
+
+- Authority: Firstmate instruction `120.msg`.
+- Reviewed candidate: `c761e7e6f2d042c7560ab0c520dc9aa182110e6e`.
+- Disposition: **PASS — zero blockers.** The candidate closes A1-04. Its exact reviewed content remains immutable; publish it only as a normal non-force update to the declared continuation parent `fm/cli-top100-declaration-batch-r1`.
+- Release boundary: no reset or rebase to `main`; `main` remains only PR #4294's eventual merge base. CP09 strict source parsing is authorized only after the normal parent update.
