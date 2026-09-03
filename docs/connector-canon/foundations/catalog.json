@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 28,
+  "catalog_revision": 29,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -1213,7 +1213,7 @@
         "files": [
           "internal/connectors/engine/hooks.go",
           "internal/connectors/hooks/hookset/hookset_gen.go",
-          "internal/connectors/native/nativeset/nativeset_gen.go",
+          "internal/connectors/native/nativeset/factories.go",
           "internal/app/declarative_single_attempt_destination.go",
           "internal/synctransport/definition_composition.go"
         ],
@@ -2642,6 +2642,107 @@
       "update_conditions": [
         "The combined provider window format, stop condition, owner symbol, or proof changes.",
         "A connector selects offset_count pagination."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.declared-aws-sigv4.v1",
+      "layer": "declarative_authentication",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Applies declaration-bound AWS Signature Version 4 authentication only for fixed CloudTrail us-east-1 requests.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/auth.go",
+          "internal/connectors/engine/auth_aws_sigv4.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/auth.go",
+            "name": "buildAuthenticatorWithDeclaredRoute"
+          },
+          {
+            "file": "internal/connectors/engine/auth_aws_sigv4.go",
+            "name": "buildCloudTrailSigV4Authenticator"
+          },
+          {
+            "file": "internal/connectors/engine/auth_aws_sigv4.go",
+            "name": "cloudTrailSigV4Authenticator"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "AWS Signature Version 4"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "CloudTrail POST JSON request signed for cloudtrail/us-east-1"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "only declared AWS credential fields are read",
+          "service and region are fixed to CloudTrail us-east-1 before provider I/O",
+          "the signer emits deterministic canonical request headers and never selects a caller origin"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/aws-cloudtrail/streams.json"
+        ],
+        "selectors": [
+          "base.auth[].mode=aws_sigv4",
+          "base.auth[].aws_service=cloudtrail",
+          "base.auth[].aws_region=us-east-1"
+        ],
+        "notes": "The mode is a closed CloudTrail-only signer, not a generic AWS request executor."
+      },
+      "constraints": [
+        "Caller service, region, endpoint, session route, and signing algorithm selection are unavailable.",
+        "Missing or empty credential fields fail before a request is signed or sent."
+      ],
+      "non_goals": [
+        "Generic AWS service support, arbitrary SigV4 regions, native execution, or provider mutation."
+      ],
+      "consumer_examples": [
+        {
+          "name": "AWS CloudTrail LookupEvents",
+          "files": [
+            "internal/connectors/defs/aws-cloudtrail/source.lock.json",
+            "internal/connectors/defs/aws-cloudtrail/streams.json"
+          ],
+          "notes": "CloudTrail ETL streams select fixed signer identity while the generic body-cursor reader owns LookupEvents pagination."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/auth_aws_sigv4_test.go",
+          "name": "TestCloudTrailSigV4AuthenticatorDeterministicVector"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionCloudTrailGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The fixed service/region signer contract, owner symbols, selector, or proof changes.",
+        "A connector proposes AWS SigV4 authentication."
       ],
       "supersedes": []
     }

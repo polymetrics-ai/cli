@@ -19,3 +19,20 @@ func TestOffsetCountPaginatorUsesCombinedProviderWindow(t *testing.T) {
 		t.Fatalf("short provider page produced %#v, want stop", next)
 	}
 }
+
+func TestOffsetCountPaginatorRejectsMalformedDeclarationBeforeIO(t *testing.T) {
+	for _, spec := range []PaginationSpec{
+		{Type: "offset_count", PageSize: 100},
+		{Type: "offset_count", LimitParam: "limit"},
+	} {
+		if _, err := newPaginator(spec, 0, "customers.customer"); err == nil {
+			t.Fatalf("offset_count declaration %#v was accepted", spec)
+		}
+	}
+}
+
+func TestOffsetCountDeclarationRejectedAtLoadBoundary(t *testing.T) {
+	if err := validateOffsetCountPagination(nil, []StreamSpec{{Name: "customers", Pagination: &PaginationSpec{Type: "offset_count", LimitParam: "limit"}}}); err == nil {
+		t.Fatal("malformed offset_count stream passed load validation")
+	}
+}

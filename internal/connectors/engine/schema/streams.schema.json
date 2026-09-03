@@ -93,7 +93,8 @@
             "start_index_base": { "type": "integer" },
             "page_size": { "type": "integer" },
             "max_pages": { "type": "integer" },
-            "allow_cross_host": { "type": "boolean" }
+            "allow_cross_host": { "type": "boolean" },
+            "require_continuation_on_cap": { "type": "boolean" }
           }
         },
         "check": {
@@ -202,7 +203,8 @@
               "start_index_base": { "type": "integer" },
               "page_size": { "type": "integer" },
               "max_pages": { "type": "integer" },
-              "allow_cross_host": { "type": "boolean" }
+              "allow_cross_host": { "type": "boolean" },
+              "require_continuation_on_cap": { "type": "boolean" }
             }
           },
           "incremental": {

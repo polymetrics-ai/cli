@@ -31,7 +31,6 @@
   "streams": [
     {
       "incremental": {
-        "client_filtered": true,
         "cursor_field": "date_upd",
         "start_config_key": "start_date"
       },
@@ -46,7 +45,12 @@
       "path": "/customers",
       "query": {
         "display": "full",
-        "output_format": "JSON"
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
       },
       "records": {
         "path": "customers.customer"
@@ -55,7 +59,6 @@
     },
     {
       "incremental": {
-        "client_filtered": true,
         "cursor_field": "date_upd",
         "start_config_key": "start_date"
       },
@@ -70,7 +73,12 @@
       "path": "/orders",
       "query": {
         "display": "full",
-        "output_format": "JSON"
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
       },
       "records": {
         "path": "orders.order"
@@ -79,7 +87,6 @@
     },
     {
       "incremental": {
-        "client_filtered": true,
         "cursor_field": "date_upd",
         "start_config_key": "start_date"
       },
@@ -94,7 +101,12 @@
       "path": "/products",
       "query": {
         "display": "full",
-        "output_format": "JSON"
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
       },
       "records": {
         "path": "products.product"
@@ -103,7 +115,6 @@
     },
     {
       "incremental": {
-        "client_filtered": true,
         "cursor_field": "date_upd",
         "start_config_key": "start_date"
       },
@@ -118,7 +129,12 @@
       "path": "/addresses",
       "query": {
         "display": "full",
-        "output_format": "JSON"
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
       },
       "records": {
         "path": "addresses.address"
@@ -127,7 +143,6 @@
     },
     {
       "incremental": {
-        "client_filtered": true,
         "cursor_field": "date_upd",
         "start_config_key": "start_date"
       },
@@ -142,7 +157,12 @@
       "path": "/carts",
       "query": {
         "display": "full",
-        "output_format": "JSON"
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
       },
       "records": {
         "path": "carts.cart"

@@ -10,15 +10,33 @@
     "reverse_etl": "unsupported",
     "sync_transport": "unsupported"
   },
-  "provider_evidence": {"documentation": [{"role": "provider_reference", "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"}]},
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"
+      }
+    ]
+  },
   "metadata": {
     "name": "aws-cloudtrail",
     "display_name": "AWS CloudTrail",
     "description": "Reads CloudTrail management events through fixed, declaration-bound LookupEvents requests signed with AWS Signature Version 4.",
     "integration_type": "api",
     "release_stage": "alpha",
-    "capabilities": {"check": true, "read": true, "write": false, "query": false, "cdc": false, "dynamic_schema": false},
-    "risk": {"read": "Bounded CloudTrail LookupEvents requests are signed by the declaration-bound generic SigV4 authenticator against the fixed CloudTrail us-east-1 origin.", "write": "unsupported", "approval": "none; read-only"},
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "Bounded CloudTrail LookupEvents requests are signed by the declaration-bound generic SigV4 authenticator against the fixed CloudTrail us-east-1 origin.",
+      "write": "unsupported",
+      "approval": "none; read-only"
+    },
     "docs_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"
   },
   "config_schema": {
@@ -26,35 +44,379 @@
     "title": "AWS CloudTrail Connection Specification",
     "type": "object",
     "x-reject-unknown-config": true,
-    "required": ["aws_key_id", "aws_secret_key"],
+    "required": [
+      "aws_key_id",
+      "aws_secret_key"
+    ],
     "properties": {
-      "aws_key_id": {"type": "string", "x-secret": true, "description": "AWS access key ID."},
-      "aws_secret_key": {"type": "string", "x-secret": true, "description": "AWS secret access key."},
-      "aws_session_token": {"type": "string", "x-secret": true, "description": "Optional AWS session token."}
+      "aws_key_id": {
+        "type": "string",
+        "x-secret": true,
+        "description": "AWS access key ID."
+      },
+      "aws_secret_key": {
+        "type": "string",
+        "x-secret": true,
+        "description": "AWS secret access key."
+      },
+      "aws_session_token": {
+        "type": "string",
+        "x-secret": true,
+        "description": "Optional AWS session token."
+      },
+      "start_date": {
+        "type": "string",
+        "description": "Optional RFC3339 StartTime lower bound sent in every CloudTrail LookupEvents request."
+      }
     }
   },
   "http": {
     "url": "https://cloudtrail.us-east-1.amazonaws.com",
     "user_agent": "polymetrics-go-cli",
-    "headers": {"Content-Type": "application/x-amz-json-1.1", "X-Amz-Target": "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.LookupEvents"},
+    "headers": {
+      "Content-Type": "application/x-amz-json-1.1",
+      "X-Amz-Target": "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.LookupEvents"
+    },
     "auth": [
-      {"mode": "aws_sigv4", "access_key_id": "{{ secrets.aws_key_id }}", "secret_access_key": "{{ secrets.aws_secret_key }}", "session_token": "{{ secrets.aws_session_token }}", "aws_service": "cloudtrail", "aws_region": "us-east-1", "when": "{{ secrets.aws_session_token }}"},
-      {"mode": "aws_sigv4", "access_key_id": "{{ secrets.aws_key_id }}", "secret_access_key": "{{ secrets.aws_secret_key }}", "aws_service": "cloudtrail", "aws_region": "us-east-1"}
+      {
+        "mode": "aws_sigv4",
+        "access_key_id": "{{ secrets.aws_key_id }}",
+        "secret_access_key": "{{ secrets.aws_secret_key }}",
+        "session_token": "{{ secrets.aws_session_token }}",
+        "aws_service": "cloudtrail",
+        "aws_region": "us-east-1",
+        "when": "{{ secrets.aws_session_token }}"
+      },
+      {
+        "mode": "aws_sigv4",
+        "access_key_id": "{{ secrets.aws_key_id }}",
+        "secret_access_key": "{{ secrets.aws_secret_key }}",
+        "aws_service": "cloudtrail",
+        "aws_region": "us-east-1"
+      }
     ],
-    "pagination": {"type": "cursor", "cursor_param": "NextToken", "token_path": "NextToken", "body_cursor_field": "NextToken", "page_size": 50, "max_pages": 100},
-    "check": {"method": "POST", "path": "/", "body": {"MaxResults": 1}},
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "NextToken",
+      "token_path": "NextToken",
+      "body_cursor_field": "NextToken",
+      "page_size": 50,
+      "max_pages": 100,
+      "require_continuation_on_cap": true
+    },
+    "check": {
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "MaxResults": 1
+      }
+    },
     "error_map": []
   },
   "schemas": {
-    "schemas/management_events.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "management_events", "type": "object", "properties": {"EventId": {"type": "string"}, "EventName": {"type": "string"}, "EventSource": {"type": "string"}, "EventTime": {"type": "integer"}, "Username": {"type": "string"}, "AccessKeyId": {"type": "string"}, "ReadOnly": {"type": "string"}, "Resources": {"type": "array"}, "CloudTrailEvent": {"type": "string"}}, "x-primary-key": ["EventId"], "x-cursor-field": "EventTime"},
-    "schemas/read_only_events.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "read_only_events", "type": "object", "properties": {"EventId": {"type": "string"}, "EventName": {"type": "string"}, "EventSource": {"type": "string"}, "EventTime": {"type": "integer"}, "Username": {"type": "string"}, "AccessKeyId": {"type": "string"}, "ReadOnly": {"type": "string"}, "Resources": {"type": "array"}, "CloudTrailEvent": {"type": "string"}}, "x-primary-key": ["EventId"], "x-cursor-field": "EventTime"},
-    "schemas/write_only_events.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "write_only_events", "type": "object", "properties": {"EventId": {"type": "string"}, "EventName": {"type": "string"}, "EventSource": {"type": "string"}, "EventTime": {"type": "integer"}, "Username": {"type": "string"}, "AccessKeyId": {"type": "string"}, "ReadOnly": {"type": "string"}, "Resources": {"type": "array"}, "CloudTrailEvent": {"type": "string"}}, "x-primary-key": ["EventId"], "x-cursor-field": "EventTime"},
-    "schemas/console_logins.json": {"$schema": "http://json-schema.org/draft-07/schema#", "title": "console_logins", "type": "object", "properties": {"EventId": {"type": "string"}, "EventName": {"type": "string"}, "EventSource": {"type": "string"}, "EventTime": {"type": "integer"}, "Username": {"type": "string"}, "AccessKeyId": {"type": "string"}, "ReadOnly": {"type": "string"}, "Resources": {"type": "array"}, "CloudTrailEvent": {"type": "string"}}, "x-primary-key": ["EventId"], "x-cursor-field": "EventTime"}
+    "schemas/management_events.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "management_events",
+      "type": "object",
+      "properties": {
+        "EventId": {
+          "type": "string"
+        },
+        "EventName": {
+          "type": "string"
+        },
+        "EventSource": {
+          "type": "string"
+        },
+        "EventTime": {
+          "type": "integer"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "AccessKeyId": {
+          "type": "string"
+        },
+        "ReadOnly": {
+          "type": "string"
+        },
+        "Resources": {
+          "type": "array"
+        },
+        "CloudTrailEvent": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "EventId"
+      ],
+      "x-cursor-field": "EventTime"
+    },
+    "schemas/read_only_events.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "read_only_events",
+      "type": "object",
+      "properties": {
+        "EventId": {
+          "type": "string"
+        },
+        "EventName": {
+          "type": "string"
+        },
+        "EventSource": {
+          "type": "string"
+        },
+        "EventTime": {
+          "type": "integer"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "AccessKeyId": {
+          "type": "string"
+        },
+        "ReadOnly": {
+          "type": "string"
+        },
+        "Resources": {
+          "type": "array"
+        },
+        "CloudTrailEvent": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "EventId"
+      ],
+      "x-cursor-field": "EventTime"
+    },
+    "schemas/write_only_events.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "write_only_events",
+      "type": "object",
+      "properties": {
+        "EventId": {
+          "type": "string"
+        },
+        "EventName": {
+          "type": "string"
+        },
+        "EventSource": {
+          "type": "string"
+        },
+        "EventTime": {
+          "type": "integer"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "AccessKeyId": {
+          "type": "string"
+        },
+        "ReadOnly": {
+          "type": "string"
+        },
+        "Resources": {
+          "type": "array"
+        },
+        "CloudTrailEvent": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "EventId"
+      ],
+      "x-cursor-field": "EventTime"
+    },
+    "schemas/console_logins.json": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "console_logins",
+      "type": "object",
+      "properties": {
+        "EventId": {
+          "type": "string"
+        },
+        "EventName": {
+          "type": "string"
+        },
+        "EventSource": {
+          "type": "string"
+        },
+        "EventTime": {
+          "type": "integer"
+        },
+        "Username": {
+          "type": "string"
+        },
+        "AccessKeyId": {
+          "type": "string"
+        },
+        "ReadOnly": {
+          "type": "string"
+        },
+        "Resources": {
+          "type": "array"
+        },
+        "CloudTrailEvent": {
+          "type": "string"
+        }
+      },
+      "x-primary-key": [
+        "EventId"
+      ],
+      "x-cursor-field": "EventTime"
+    }
   },
   "operations": [
-    {"id": "cloudtrail.management-events", "source": {"operation": "LookupEvents", "method": "POST", "path": "/", "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"}, "schema_refs": {"record": "schemas/management_events.json"}, "stream_order": 1, "stream": {"name": "management_events", "method": "POST", "path": "/", "body": {"MaxResults": 50}, "records": {"path": "Events"}, "schema": "schemas/management_events.json", "incremental": {"cursor_field": "EventTime", "client_filtered": true}}},
-    {"id": "cloudtrail.read-only-events", "source": {"operation": "LookupEvents ReadOnly", "method": "POST", "path": "/", "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"}, "schema_refs": {"record": "schemas/read_only_events.json"}, "stream_order": 2, "stream": {"name": "read_only_events", "method": "POST", "path": "/", "body": {"MaxResults": 50, "LookupAttributes": [{"AttributeKey": "ReadOnly", "AttributeValue": "true"}]}, "records": {"path": "Events"}, "schema": "schemas/read_only_events.json", "incremental": {"cursor_field": "EventTime", "client_filtered": true}}},
-    {"id": "cloudtrail.write-only-events", "source": {"operation": "LookupEvents WriteOnly", "method": "POST", "path": "/", "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"}, "schema_refs": {"record": "schemas/write_only_events.json"}, "stream_order": 3, "stream": {"name": "write_only_events", "method": "POST", "path": "/", "body": {"MaxResults": 50, "LookupAttributes": [{"AttributeKey": "ReadOnly", "AttributeValue": "false"}]}, "records": {"path": "Events"}, "schema": "schemas/write_only_events.json", "incremental": {"cursor_field": "EventTime", "client_filtered": true}}},
-    {"id": "cloudtrail.console-logins", "source": {"operation": "LookupEvents ConsoleLogin", "method": "POST", "path": "/", "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"}, "schema_refs": {"record": "schemas/console_logins.json"}, "stream_order": 4, "stream": {"name": "console_logins", "method": "POST", "path": "/", "body": {"MaxResults": 50, "LookupAttributes": [{"AttributeKey": "EventName", "AttributeValue": "ConsoleLogin"}]}, "records": {"path": "Events"}, "schema": "schemas/console_logins.json", "incremental": {"cursor_field": "EventTime", "client_filtered": true}}}
+    {
+      "id": "cloudtrail.management-events",
+      "source": {
+        "operation": "LookupEvents",
+        "method": "POST",
+        "path": "/",
+        "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"
+      },
+      "schema_refs": {
+        "record": "schemas/management_events.json"
+      },
+      "stream_order": 1,
+      "stream": {
+        "name": "management_events",
+        "method": "POST",
+        "path": "/",
+        "body": {
+          "MaxResults": 50,
+          "StartTime": {
+            "template": "{{ incremental.lower_bound }}",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "Events"
+        },
+        "schema": "schemas/management_events.json",
+        "incremental": {
+          "cursor_field": "EventTime",
+          "start_config_key": "start_date"
+        }
+      }
+    },
+    {
+      "id": "cloudtrail.read-only-events",
+      "source": {
+        "operation": "LookupEvents ReadOnly",
+        "method": "POST",
+        "path": "/",
+        "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"
+      },
+      "schema_refs": {
+        "record": "schemas/read_only_events.json"
+      },
+      "stream_order": 2,
+      "stream": {
+        "name": "read_only_events",
+        "method": "POST",
+        "path": "/",
+        "body": {
+          "MaxResults": 50,
+          "LookupAttributes": [
+            {
+              "AttributeKey": "ReadOnly",
+              "AttributeValue": "true"
+            }
+          ],
+          "StartTime": {
+            "template": "{{ incremental.lower_bound }}",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "Events"
+        },
+        "schema": "schemas/read_only_events.json",
+        "incremental": {
+          "cursor_field": "EventTime",
+          "start_config_key": "start_date"
+        }
+      }
+    },
+    {
+      "id": "cloudtrail.write-only-events",
+      "source": {
+        "operation": "LookupEvents WriteOnly",
+        "method": "POST",
+        "path": "/",
+        "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"
+      },
+      "schema_refs": {
+        "record": "schemas/write_only_events.json"
+      },
+      "stream_order": 3,
+      "stream": {
+        "name": "write_only_events",
+        "method": "POST",
+        "path": "/",
+        "body": {
+          "MaxResults": 50,
+          "LookupAttributes": [
+            {
+              "AttributeKey": "ReadOnly",
+              "AttributeValue": "false"
+            }
+          ],
+          "StartTime": {
+            "template": "{{ incremental.lower_bound }}",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "Events"
+        },
+        "schema": "schemas/write_only_events.json",
+        "incremental": {
+          "cursor_field": "EventTime",
+          "start_config_key": "start_date"
+        }
+      }
+    },
+    {
+      "id": "cloudtrail.console-logins",
+      "source": {
+        "operation": "LookupEvents ConsoleLogin",
+        "method": "POST",
+        "path": "/",
+        "url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html"
+      },
+      "schema_refs": {
+        "record": "schemas/console_logins.json"
+      },
+      "stream_order": 4,
+      "stream": {
+        "name": "console_logins",
+        "method": "POST",
+        "path": "/",
+        "body": {
+          "MaxResults": 50,
+          "LookupAttributes": [
+            {
+              "AttributeKey": "EventName",
+              "AttributeValue": "ConsoleLogin"
+            }
+          ],
+          "StartTime": {
+            "template": "{{ incremental.lower_bound }}",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "Events"
+        },
+        "schema": "schemas/console_logins.json",
+        "incremental": {
+          "cursor_field": "EventTime",
+          "start_config_key": "start_date"
+        }
+      }
+    }
   ]
 }

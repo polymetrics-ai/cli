@@ -149,7 +149,26 @@ func TestFoundationAtlasSelectorsResolve(t *testing.T) {
 			if len(foundation.ProofTests) == 0 {
 				t.Fatal("Foundation Atlas foundation declares zero proof tests")
 			}
+			ownerFiles := make(map[string]struct{}, len(foundation.Owner.Files))
+			for _, ownerFile := range foundation.Owner.Files {
+				if strings.TrimSpace(ownerFile) == "" {
+					t.Error("Foundation Atlas owner has a blank file")
+					continue
+				}
+				info, err := os.Stat(filepath.Join(root, ownerFile))
+				if err != nil {
+					t.Errorf("Foundation Atlas owner file %s does not resolve: %v", ownerFile, err)
+					continue
+				}
+				if !info.Mode().IsRegular() {
+					t.Errorf("Foundation Atlas owner file %s is not regular", ownerFile)
+				}
+				ownerFiles[ownerFile] = struct{}{}
+			}
 			for _, owner := range foundation.Owner.Symbols {
+				if _, declared := ownerFiles[owner.File]; !declared {
+					t.Errorf("Foundation Atlas owner symbol %s names undeclared owner file %s", owner.Name, owner.File)
+				}
 				filePath := filepath.Join(root, owner.File)
 				fileSet := token.NewFileSet()
 				parsed, err := parser.ParseFile(fileSet, filePath, nil, 0)

@@ -199,9 +199,12 @@ func readDateWindowFanOut(ctx context.Context, b Bundle, stream StreamSpec, req 
 	if err != nil || batchDays < 1 || batchDays > spec.MaxBatchDays {
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %s must be an integer between 1 and %d", spec.BatchSizeConfigKey, spec.MaxBatchDays)}
 	}
-	windows := int(end.Sub(start).Hours()/24)/batchDays + 1
-	if windows > spec.MaxWindows {
-		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %d windows exceed declared maximum %d", windows, spec.MaxWindows)}
+	windows := 0
+	for windowStart := start; !windowStart.After(end); windowStart = windowStart.AddDate(0, 0, batchDays) {
+		windows++
+		if windows > spec.MaxWindows {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %d windows exceed declared maximum %d", windows, spec.MaxWindows)}
+		}
 	}
 	windowedStream := stream
 	windowedStream.DateWindowFanOut = nil
@@ -550,11 +553,8 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		// Hard request-count cap, independent of page fullness: mirrors
 		// connsdk.Harvest's own maxPages parameter (paginate.go:201), checked
 		// before issuing the request for this page number. maxPages<=0 (the
-		// zero value, i.e. absent/unset) means unbounded — pagination is
-		// bounded only by the paginator's own short/empty-page stop signal,
-		// same as before this cap existed.
 		if maxPages > 0 && pageNum-skippedPages >= maxPages {
-			if trackPaginationOutcome {
+			if trackPaginationOutcome || specForPaginator.RequireContinuationOnCap {
 				continuation, err := newReadContinuation(b, stream, pageNum)
 				if err != nil {
 					return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
@@ -842,7 +842,13 @@ func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, que
 		vars.FanoutID = fc.id
 		return buildGraphQLPayload(stream.GraphQL, vars)
 	}
+	if stream.Body == nil {
+		return nil, nil
+	}
 	if len(stream.Body) == 0 {
+		if stream.BodyType == "json" {
+			return map[string]any{}, nil
+		}
 		return nil, nil
 	}
 	vars := requestVars(cfg, nil, "", query)
@@ -873,7 +879,7 @@ func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, que
 func resolveStreamBodyMap(body map[string]any, vars Vars) (map[string]any, error) {
 	resolved := make(map[string]any, len(body))
 	for key, value := range body {
-		if template, omitWhenAbsent, isOptional := optionalStreamBodyTemplate(value); isOptional {
+		if template, omitWhenAbsent, valueType, isOptional := optionalStreamBodyTemplate(value); isOptional {
 			copied, err := Interpolate(template, vars)
 			if err != nil {
 				if omitWhenAbsent {
@@ -881,7 +887,11 @@ func resolveStreamBodyMap(body map[string]any, vars Vars) (map[string]any, error
 				}
 				return nil, fmt.Errorf("resolve stream body %q: %w", key, err)
 			}
-			resolved[key] = copied
+			typed, err := coerceDeclaredBodyValue(copied, valueType)
+			if err != nil {
+				return nil, fmt.Errorf("resolve stream body %q: %w", key, err)
+			}
+			resolved[key] = typed
 			continue
 		}
 		copied, err := resolveStreamBodyValue(value, vars)
@@ -914,17 +924,51 @@ func resolveStreamBodyValue(value any, vars Vars) (any, error) {
 	}
 }
 
-func optionalStreamBodyTemplate(value any) (template string, omitWhenAbsent bool, ok bool) {
+func optionalStreamBodyTemplate(value any) (template string, omitWhenAbsent bool, valueType string, ok bool) {
 	object, ok := value.(map[string]any)
-	if !ok || len(object) != 2 {
-		return "", false, false
+	if !ok || len(object) < 2 || len(object) > 3 {
+		return "", false, "", false
 	}
 	template, templateOK := object["template"].(string)
 	omitWhenAbsent, omitOK := object["omit_when_absent"].(bool)
 	if !templateOK || !omitOK {
-		return "", false, false
+		return "", false, "", false
 	}
-	return template, omitWhenAbsent, true
+	if rawType, present := object["type"]; present {
+		var typeOK bool
+		valueType, typeOK = rawType.(string)
+		if !typeOK {
+			return "", false, "", false
+		}
+	}
+	return template, omitWhenAbsent, valueType, true
+}
+
+func coerceDeclaredBodyValue(value, valueType string) (any, error) {
+	switch valueType {
+	case "", "string", "enum":
+		return value, nil
+	case "integer":
+		integer, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return nil, fmt.Errorf("expected integer")
+		}
+		return integer, nil
+	case "number":
+		number, err := strconv.ParseFloat(value, 64)
+		if err != nil {
+			return nil, fmt.Errorf("expected number")
+		}
+		return number, nil
+	case "boolean":
+		boolean, err := strconv.ParseBool(value)
+		if err != nil {
+			return nil, fmt.Errorf("expected boolean")
+		}
+		return boolean, nil
+	default:
+		return nil, fmt.Errorf("unsupported declared body value type %q", valueType)
+	}
 }
 
 func streamBodyForm(body any) (url.Values, error) {

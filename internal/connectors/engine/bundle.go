@@ -310,8 +310,9 @@ type PaginationSpec struct {
 	// means "not declared", defaulting to 1 — SCIM's first index.
 	StartIndexBase *int `json:"start_index_base,omitempty"`
 
-	PageSize int `json:"page_size,omitempty"`
-	MaxPages int `json:"max_pages,omitempty"`
+	PageSize                 int  `json:"page_size,omitempty"`
+	MaxPages                 int  `json:"max_pages,omitempty"`
+	RequireContinuationOnCap bool `json:"require_continuation_on_cap,omitempty"`
 
 	// AllowCrossHost opts a next_url/Link-header follow out of the same-host
 	// SSRF guard (THREAT-MODEL §3). Defaults to false; none of the wave0
@@ -1715,6 +1716,9 @@ func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []Stre
 	if err := validateResponseErrors(doc.Streams); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
+	if err := validateOffsetCountPagination(doc.Base.Pagination, doc.Streams); err != nil {
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
+	}
 	if err := validateStaticStreamHeaders(doc.Streams); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
@@ -1874,6 +1878,27 @@ func validateResponseErrors(streams []StreamSpec) error {
 		}
 		if strings.TrimSpace(spec.MessageField) == "" && spec.MessageField != "" {
 			return fmt.Errorf("stream %d (%q) response_error has a blank message_field", streamIndex, stream.Name)
+		}
+	}
+	return nil
+}
+
+func validateOffsetCountPagination(base *PaginationSpec, streams []StreamSpec) error {
+	validate := func(name string, spec *PaginationSpec) error {
+		if spec == nil || spec.Type != "offset_count" {
+			return nil
+		}
+		if strings.TrimSpace(spec.LimitParam) == "" || spec.PageSize <= 0 {
+			return fmt.Errorf("%s offset_count requires limit_param and positive page_size", name)
+		}
+		return nil
+	}
+	if err := validate("base", base); err != nil {
+		return err
+	}
+	for _, stream := range streams {
+		if err := validate(fmt.Sprintf("stream %q", stream.Name), stream.Pagination); err != nil {
+			return err
 		}
 	}
 	return nil

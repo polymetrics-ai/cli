@@ -15,6 +15,10 @@
       "description": "Optional AWS session token.",
       "type": "string",
       "x-secret": true
+    },
+    "start_date": {
+      "description": "Optional RFC3339 StartTime lower bound sent in every CloudTrail LookupEvents request.",
+      "type": "string"
     }
   },
   "required": [

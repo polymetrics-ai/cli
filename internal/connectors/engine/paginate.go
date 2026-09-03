@@ -68,6 +68,9 @@ func newPaginator(spec PaginationSpec, pageSize int, recordsPath string) (connsd
 		}, nil
 
 	case "offset_count":
+		if strings.TrimSpace(spec.LimitParam) == "" || size <= 0 {
+			return nil, fmt.Errorf("new paginator: offset_count requires limit_param and positive page_size")
+		}
 		return &offsetCountPaginator{limitParam: spec.LimitParam, pageSize: size}, nil
 	case "cursor":
 		return newCursorPaginator(spec, recordsPath)

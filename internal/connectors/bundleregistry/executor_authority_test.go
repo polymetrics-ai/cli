@@ -245,13 +245,13 @@ func TestProductionCloudTrailGenericCheckAndRead(t *testing.T) {
 			}
 			response = `{"Events":[]}`
 		case 2:
-			if body["MaxResults"] != float64(50) {
-				t.Fatalf("CloudTrail first read body = %#v, want MaxResults=50", body)
+			if body["MaxResults"] != float64(50) || body["StartTime"] != "2026-01-01T00:00:00Z" {
+				t.Fatalf("CloudTrail first read body = %#v, want MaxResults and declared StartTime", body)
 			}
 			response = `{"Events":[{"EventId":"one","EventTime":1}],"NextToken":"cursor-1"}`
 		case 3:
-			if body["NextToken"] != "cursor-1" {
-				t.Fatalf("CloudTrail continuation body = %#v, want cursor-1", body)
+			if body["NextToken"] != "cursor-1" || body["StartTime"] != "2026-01-01T00:00:00Z" {
+				t.Fatalf("CloudTrail continuation body = %#v, want cursor and preserved StartTime", body)
 			}
 			response = `{"Events":[{"EventId":"two","EventTime":2}]}`
 		default:
@@ -269,10 +269,13 @@ func TestProductionCloudTrailGenericCheckAndRead(t *testing.T) {
 	if !ok {
 		t.Fatal("production registry missing aws-cloudtrail")
 	}
-	config := connectors.RuntimeConfig{Secrets: map[string]string{
-		"aws_key_id":     "test-access-key",
-		"aws_secret_key": "test-secret-key",
-	}}
+	config := connectors.RuntimeConfig{
+		Config: map[string]string{"start_date": "2026-01-01T00:00:00Z"},
+		Secrets: map[string]string{
+			"aws_key_id":     "test-access-key",
+			"aws_secret_key": "test-secret-key",
+		},
+	}
 	if err := connector.Check(context.Background(), config); err != nil {
 		t.Fatalf("production aws-cloudtrail Check() error = %v", err)
 	}
@@ -1729,17 +1732,16 @@ func TestProductionPrestaShopGenericCheckAndRead(t *testing.T) {
 		if request.URL.Query().Get("output_format") != "JSON" || request.URL.Query().Get("display") != "full" {
 			t.Fatalf("PrestaShop query = %s, want declared JSON full-resource query", request.URL.RawQuery)
 		}
+		if request.URL.Query().Get("limit") != "1" && (request.URL.Query().Get("sort") != "[date_upd_ASC]" || request.URL.Query().Get("filter[date_upd]") != "[2026-01-01T00:00:00Z,]") {
+			t.Fatalf("PrestaShop incremental query = %s, want declared date filter and sort", request.URL.RawQuery)
+		}
 		switch request.URL.Query().Get("limit") {
 		case "1":
 			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"customers":{"customer":[]}}`)), Request: request}, nil
 		case "0,100":
 			customers := make([]map[string]any, 100)
 			for index := range customers {
-				dateUpdated := "2026-01-02T00:00:00Z"
-				if index == 0 {
-					dateUpdated = "2025-12-31T00:00:00Z"
-				}
-				customers[index] = map[string]any{"id": index + 1, "firstname": fmt.Sprintf("Customer-%d", index), "date_upd": dateUpdated}
+				customers[index] = map[string]any{"id": index + 1, "firstname": fmt.Sprintf("Customer-%d", index), "date_upd": "2026-01-02T00:00:00Z"}
 			}
 			payload, err := json.Marshal(map[string]any{"customers": map[string]any{"customer": customers}})
 			if err != nil {
@@ -1769,8 +1771,8 @@ func TestProductionPrestaShopGenericCheckAndRead(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("production PrestaShop Read() error = %v", err)
 	}
-	if len(records) != 100 || fmt.Sprint(records[0]["id"]) != "2" || records[len(records)-1]["firstname"] != "Ada" {
-		t.Fatalf("production PrestaShop records = %#v, want two windows with the pre-start record client-filtered", records)
+	if len(records) != 101 || fmt.Sprint(records[0]["id"]) != "1" || records[len(records)-1]["firstname"] != "Ada" {
+		t.Fatalf("production PrestaShop records = %#v, want two server-filtered provider windows without client-scan loss", records)
 	}
 	if got := requests.Load(); got != 3 {
 		t.Fatalf("PrestaShop requests = %d, want one declared check plus two combined-limit reads", got)
@@ -2052,11 +2054,15 @@ func TestAshbyRenderedStreamsUseClosedBodyCursorContracts(t *testing.T) {
 		t.Fatalf("Ashby streams = %d, want 71", len(bundle.Streams))
 	}
 	for _, stream := range bundle.Streams {
-		if stream.Method != http.MethodPost || stream.Body["limit"] != float64(100) {
-			t.Fatalf("Ashby stream %q body = %#v, want fixed POST JSON limit", stream.Name, stream.Body)
+		if stream.Method != http.MethodPost || stream.Body == nil || stream.BodyType != "json" {
+			t.Fatalf("Ashby stream %q body = %#v type=%q, want closed POST JSON body", stream.Name, stream.Body, stream.BodyType)
 		}
-		if stream.Pagination == nil || stream.Pagination.Type != "cursor" || stream.Pagination.CursorParam != "cursor" || stream.Pagination.BodyCursorField != "cursor" || stream.Pagination.TokenPath != "nextCursor" || stream.Pagination.StopPath != "moreDataAvailable" {
-			t.Fatalf("Ashby stream %q pagination = %#v, want declared body cursor", stream.Name, stream.Pagination)
+		if strings.Contains(stream.Path, ".list") {
+			if stream.Body["limit"] != float64(100) || stream.Pagination == nil || stream.Pagination.Type != "cursor" || stream.Pagination.CursorParam != "cursor" || stream.Pagination.BodyCursorField != "cursor" || stream.Pagination.TokenPath != "nextCursor" || stream.Pagination.StopPath != "moreDataAvailable" {
+				t.Fatalf("Ashby list stream %q contract = body=%#v pagination=%#v, want declared body cursor", stream.Name, stream.Body, stream.Pagination)
+			}
+		} else if stream.Pagination != nil {
+			t.Fatalf("Ashby non-list stream %q pagination = %#v, want no invented cursor", stream.Name, stream.Pagination)
 		}
 		if stream.ResponseError == nil || stream.ResponseError.SuccessPath != "success" || stream.ResponseError.Path != "errors" {
 			t.Fatalf("Ashby stream %q response error = %#v, want declared success envelope", stream.Name, stream.ResponseError)
@@ -2074,5 +2080,44 @@ func TestAshbyRenderedStreamsUseClosedBodyCursorContracts(t *testing.T) {
 				t.Fatalf("Ashby ETL command %q flag %q maps to %q, want declared body field", command.Path, flag.Name, flag.MapsTo)
 			}
 		}
+	}
+}
+
+func TestProductionAshbyRejectsRepeatedBodyCursor(t *testing.T) {
+	previousTransport := http.DefaultTransport
+	t.Cleanup(func() { http.DefaultTransport = previousTransport })
+
+	var requests atomic.Int64
+	http.DefaultTransport = roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		requests.Add(1)
+		var body map[string]any
+		if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+			t.Fatalf("decode Ashby body: %v", err)
+		}
+		switch requests.Load() {
+		case 1:
+			if _, present := body["cursor"]; present {
+				t.Fatalf("first Ashby body = %#v, want no cursor", body)
+			}
+		case 2:
+			if body["cursor"] != "cursor-1" {
+				t.Fatalf("second Ashby body = %#v, want cursor-1", body)
+			}
+		default:
+			t.Fatalf("Ashby repeated cursor sent provider request %d", requests.Load())
+		}
+		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"success":true,"results":[{"id":"candidate"}],"moreDataAvailable":true,"nextCursor":"cursor-1"}`)), Request: request}, nil
+	})
+
+	connector, ok := New().Get("ashby")
+	if !ok {
+		t.Fatal("production registry missing ashby")
+	}
+	err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "candidates", Config: connectors.RuntimeConfig{Secrets: map[string]string{"api_key": "test-key"}}}, func(connectors.Record) error { return nil })
+	if err == nil || !strings.Contains(err.Error(), "loop detected") {
+		t.Fatalf("Ashby repeated cursor error = %v, want typed loop refusal", err)
+	}
+	if got := requests.Load(); got != 2 {
+		t.Fatalf("Ashby repeated cursor requests = %d, want two then pre-I/O refusal", got)
 	}
 }

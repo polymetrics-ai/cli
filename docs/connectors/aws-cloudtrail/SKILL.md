@@ -27,6 +27,7 @@ Reads CloudTrail management events through fixed, declaration-bound LookupEvents
 
 ## Configuration
 
+- start_date
 - aws_key_id (secret) (required)
 - aws_secret_key (secret) (required)
 - aws_session_token (secret)

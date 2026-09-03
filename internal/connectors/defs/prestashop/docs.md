@@ -26,23 +26,23 @@ Check query: `display`=`full`; `limit`=`1`; `output_format`=`JSON`.
 ## Streams notes
 
 - `customers`: `GET /customers`; records `customers.customer`
-  - Query: `display`=`full`; `output_format`=`JSON`.
+  - Query: `display`=`full`; `filter[date_upd]`=`[{{ incremental.lower_bound }},]`; `output_format`=`JSON`; `sort`=`[date_upd_ASC]`.
   - Pagination: `offset_count`.
   - Incremental cursor: `date_upd`.
 - `orders`: `GET /orders`; records `orders.order`
-  - Query: `display`=`full`; `output_format`=`JSON`.
+  - Query: `display`=`full`; `filter[date_upd]`=`[{{ incremental.lower_bound }},]`; `output_format`=`JSON`; `sort`=`[date_upd_ASC]`.
   - Pagination: `offset_count`.
   - Incremental cursor: `date_upd`.
 - `products`: `GET /products`; records `products.product`
-  - Query: `display`=`full`; `output_format`=`JSON`.
+  - Query: `display`=`full`; `filter[date_upd]`=`[{{ incremental.lower_bound }},]`; `output_format`=`JSON`; `sort`=`[date_upd_ASC]`.
   - Pagination: `offset_count`.
   - Incremental cursor: `date_upd`.
 - `addresses`: `GET /addresses`; records `addresses.address`
-  - Query: `display`=`full`; `output_format`=`JSON`.
+  - Query: `display`=`full`; `filter[date_upd]`=`[{{ incremental.lower_bound }},]`; `output_format`=`JSON`; `sort`=`[date_upd_ASC]`.
   - Pagination: `offset_count`.
   - Incremental cursor: `date_upd`.
 - `carts`: `GET /carts`; records `carts.cart`
-  - Query: `display`=`full`; `output_format`=`JSON`.
+  - Query: `display`=`full`; `filter[date_upd]`=`[{{ incremental.lower_bound }},]`; `output_format`=`JSON`; `sort`=`[date_upd_ASC]`.
   - Pagination: `offset_count`.
   - Incremental cursor: `date_upd`.
 

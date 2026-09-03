@@ -26,6 +26,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
+  start_date
   aws_key_id (secret) (required)
   aws_secret_key (secret) (required)
   aws_session_token (secret)

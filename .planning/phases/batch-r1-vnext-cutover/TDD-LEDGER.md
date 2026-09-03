@@ -163,3 +163,18 @@
 - RR3 shared configuration RED: the hostile Ashby direct operation accepted removed `base_url` configuration and reached the local transport. Every network-capable `engine.Connector` method now calls the shared configuration validator before auth admission or requester construction; the direct-operation witness observes zero request.
 - RR4 docs RED: all 21 migrated API `docs.md` inputs plus Ashby retained obsolete connector-managed ownership and/or stale request facts. `TestMigratedAPIDocsDescribeRenderedStreams` now compares every rendered check, stream route, records path, body, pagination, and response-error fact against these docs, and rejects the stale owner language and Ashby `base_url`/`mode`.
 - Declared-session response regressions: malformed JSON and a missing session `id` both fail after exactly one exchange, set no session header, and do not replay.
+
+### 2026-09-03 — final exact-SHA review remediation
+
+- F1 Ashby RED/GREEN: the blanket body/cursor shape omitted operation-specific fields and typed values. All 71 streams now declare JSON bodies from their own command facts; list endpoints alone declare cursor bodies, info/synchronous endpoints never invent cursors, typed optional values are coerced before encoding, and success=false envelopes stop before emit. The two-page test proves 100+1 records, no query cursor, and no failure-envelope records.
+- F2 PrestaShop RED/GREEN: client filtering could lose records against capped pages. Streams now send `filter[date_upd]` plus `sort=[date_upd_ASC]` and the provider's `limit=offset,count` windows. The two-page witness proves exact filter/sort/combined queries and 101 server-filtered records.
+- F3 CloudTrail RED/GREEN: each stream now carries declared `StartTime` from `start_date`; a cap with a known cursor raises `ReadBudgetStoppedError` with an opaque continuation rather than returning success. The production witness proves StartTime on both body-cursor pages.
+- F4/F5/F6: password-token redirects stop at the 307/308 response before any destination request; date-window budget counting now iterates calendar windows and rejects an extreme range before I/O; offset-count declarations fail at both load and paginator boundaries when parameter or size is malformed.
+- F7/F8: Ashby fixture-only metadata and generated claims are removed under semantic docs parity. The Atlas now carries a fixed CloudTrail SigV4 contract, response-envelope selectors, offset-count ownership, real owner files, and proof membership checks; the deleted nativeset owner path is repaired.
+
+### 2026-09-03 — final architecture authority remediation
+
+- F1: all 71 Ashby streams now derive their closed JSON bodies from operation command facts; list endpoints alone carry typed body cursors, non-list operations never receive invented cursors, success=false is typed and pre-emission, and repeated cursors fail before a third send.
+- F2/F3: PrestaShop emits its documented server filter/sort and combined page values with no client-scan truncation. CloudTrail writes StartTime to every stream body and returns an opaque budget continuation at a known cap rather than success.
+- F4/F5/F6: token redirects are non-following; date-window limits count calendar windows without duration saturation; malformed offset-count specs are rejected at both load and paginator boundaries.
+- F7/F8: Ashby fixture-only wording is absent from source and all generated surfaces under semantic parity. The Atlas proves literal owner files, declared owner membership, repaired native owner paths, CloudTrail SigV4 selection, declared-session malformed-response coverage, response envelope, and offset-count foundations.

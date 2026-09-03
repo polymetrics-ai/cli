@@ -21,7 +21,7 @@
   "metadata": {
     "name": "ashby",
     "display_name": "Ashby",
-    "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.",
+    "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI.",
     "integration_type": "api",
     "release_stage": "alpha",
     "capabilities": {
@@ -14136,11 +14136,13 @@
           "limit": 100,
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "createdBefore": {
             "template": "{{ query.createdBefore }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           }
         },
         "pagination": {
@@ -14155,7 +14157,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14211,27 +14214,33 @@
           "limit": 100,
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "openedAfter": {
             "template": "{{ query.openedAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "openedBefore": {
             "template": "{{ query.openedBefore }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "closedAfter": {
             "template": "{{ query.closedAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "closedBefore": {
             "template": "{{ query.closedBefore }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "includeUnpublishedJobPostingsIds": {
             "template": "{{ query.includeUnpublishedJobPostingsIds }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -14246,7 +14255,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14322,11 +14332,13 @@
           "limit": 100,
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "createdBefore": {
             "template": "{{ query.createdBefore }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "status": {
             "template": "{{ query.status }}",
@@ -14349,7 +14361,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14417,7 +14430,8 @@
           "limit": 100,
           "includeDeactivated": {
             "template": "{{ query.includeDeactivated }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -14432,7 +14446,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14480,22 +14495,12 @@
         },
         "schema": "schemas/api_key_info.json",
         "projection": "passthrough",
-        "body": {
-          "limit": 100
-        },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
+        "body": {},
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14559,7 +14564,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14618,7 +14624,6 @@
         "schema": "schemas/application_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "applicationId": {
             "template": "{{ query.applicationId }}",
             "omit_when_absent": true
@@ -14628,19 +14633,11 @@
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14709,7 +14706,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14769,7 +14767,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14838,7 +14837,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14896,7 +14896,8 @@
           },
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           }
         },
         "pagination": {
@@ -14911,7 +14912,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -14965,7 +14967,6 @@
         "schema": "schemas/candidate_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "id": {
             "template": "{{ query.id }}",
             "omit_when_absent": true
@@ -14975,19 +14976,11 @@
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15060,7 +15053,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15129,7 +15123,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15198,7 +15193,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15267,7 +15263,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15321,7 +15318,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -15336,7 +15334,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15398,7 +15397,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15443,7 +15443,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -15458,7 +15459,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15506,25 +15508,16 @@
         "schema": "schemas/feedback_form_definition_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "feedbackFormDefinitionId": {
             "template": "{{ query.feedbackFormDefinitionId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15586,11 +15579,13 @@
           },
           "listedOnly": {
             "template": "{{ query.listedOnly }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           },
           "includeUnpublishedJobPostings": {
             "template": "{{ query.includeUnpublishedJobPostings }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           },
           "jobBoardId": {
             "template": "{{ query.jobBoardId }}",
@@ -15609,7 +15604,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15680,7 +15676,6 @@
         "schema": "schemas/job_posting_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "jobPostingId": {
             "template": "{{ query.jobPostingId }}",
             "omit_when_absent": true
@@ -15691,22 +15686,15 @@
           },
           "includeUnpublishedJobPostings": {
             "template": "{{ query.includeUnpublishedJobPostings }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
-        },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
         },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15768,29 +15756,21 @@
         "schema": "schemas/job_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "id": {
             "template": "{{ query.id }}",
             "omit_when_absent": true
           },
           "includeUnpublishedJobPostingsIds": {
             "template": "{{ query.includeUnpublishedJobPostingsIds }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
-        },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
         },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15860,7 +15840,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15902,25 +15883,16 @@
         "schema": "schemas/job_interview_plan_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "jobId": {
             "template": "{{ query.jobId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -15985,7 +15957,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16027,25 +16000,16 @@
         "schema": "schemas/department_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "departmentId": {
             "template": "{{ query.departmentId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16099,7 +16063,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -16114,7 +16079,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16165,11 +16131,13 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           },
           "includeLocationHierarchy": {
             "template": "{{ query.includeLocationHierarchy }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -16184,7 +16152,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16237,25 +16206,16 @@
         "schema": "schemas/location_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "locationId": {
             "template": "{{ query.locationId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16309,7 +16269,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -16324,7 +16285,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16390,7 +16352,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16455,7 +16418,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16500,7 +16464,8 @@
           "limit": 100,
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           },
           "applicationId": {
             "template": "{{ query.applicationId }}",
@@ -16519,7 +16484,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16573,29 +16539,21 @@
         "schema": "schemas/offer_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "offerId": {
             "template": "{{ query.offerId }}",
             "omit_when_absent": true
           },
           "excludeFormDefinition": {
             "template": "{{ query.excludeFormDefinition }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
-        },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
         },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16651,25 +16609,16 @@
         "schema": "schemas/opening_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "openingId": {
             "template": "{{ query.openingId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16723,7 +16672,8 @@
           "limit": 100,
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           }
         },
         "pagination": {
@@ -16738,7 +16688,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16786,25 +16737,16 @@
         "schema": "schemas/project_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "projectId": {
             "template": "{{ query.projectId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16858,7 +16800,8 @@
           "limit": 100,
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           }
         },
         "pagination": {
@@ -16873,7 +16816,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16924,7 +16868,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -16939,7 +16884,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -16990,7 +16936,8 @@
           "limit": 100,
           "includeDisabled": {
             "template": "{{ query.includeDisabled }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           },
           "sourceId": {
             "template": "{{ query.sourceId }}",
@@ -17009,7 +16956,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17066,7 +17014,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -17081,7 +17030,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17143,7 +17093,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17188,7 +17139,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -17203,7 +17155,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17251,25 +17204,16 @@
         "schema": "schemas/custom_field_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "customFieldId": {
             "template": "{{ query.customFieldId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17334,7 +17278,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17376,25 +17321,16 @@
         "schema": "schemas/user_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "userId": {
             "template": "{{ query.userId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17463,7 +17399,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17528,7 +17465,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17570,25 +17508,16 @@
         "schema": "schemas/sequence_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "sequenceId": {
             "template": "{{ query.sequenceId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17657,7 +17586,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17707,25 +17637,16 @@
         "schema": "schemas/sequence_template_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "sequenceTemplateId": {
             "template": "{{ query.sequenceTemplateId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17779,7 +17700,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -17794,7 +17716,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17854,7 +17777,8 @@
           },
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           }
         },
         "pagination": {
@@ -17869,7 +17793,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -17951,7 +17876,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18006,25 +17932,16 @@
         "schema": "schemas/take_home_assignment_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "takeHomeAssignmentId": {
             "template": "{{ query.takeHomeAssignmentId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18082,7 +17999,8 @@
           },
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           }
         },
         "pagination": {
@@ -18097,7 +18015,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18153,25 +18072,16 @@
         "schema": "schemas/interview_briefing_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "interviewEventId": {
             "template": "{{ query.interviewEventId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18222,25 +18132,16 @@
         "schema": "schemas/interview_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "id": {
             "template": "{{ query.id }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18294,15 +18195,18 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           },
           "includeNonSharedInterviews": {
             "template": "{{ query.includeNonSharedInterviews }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           },
           "excludeArchivedScheduleTemplateInterviews": {
             "template": "{{ query.excludeArchivedScheduleTemplateInterviews }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -18317,7 +18221,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18375,25 +18280,16 @@
         "schema": "schemas/interview_stage_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "interviewStageId": {
             "template": "{{ query.interviewStageId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18444,25 +18340,16 @@
         "schema": "schemas/survey_form_definition_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "surveyFormDefinitionId": {
             "template": "{{ query.surveyFormDefinitionId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18527,7 +18414,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18572,7 +18460,8 @@
           "limit": 100,
           "surveyType": {
             "template": "{{ query.surveyType }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "enum"
           },
           "applicationId": {
             "template": "{{ query.applicationId }}",
@@ -18584,7 +18473,8 @@
           },
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           }
         },
         "pagination": {
@@ -18599,7 +18489,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18672,11 +18563,13 @@
           "limit": 100,
           "surveyType": {
             "template": "{{ query.surveyType }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "enum"
           },
           "createdAfter": {
             "template": "{{ query.createdAfter }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "integer"
           }
         },
         "pagination": {
@@ -18691,7 +18584,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18751,25 +18645,16 @@
         "schema": "schemas/webhook_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "webhookId": {
             "template": "{{ query.webhookId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18823,11 +18708,13 @@
           "limit": 100,
           "includeArchivedPools": {
             "template": "{{ query.includeArchivedPools }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           },
           "includeArchivedTrainingStages": {
             "template": "{{ query.includeArchivedTrainingStages }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -18842,7 +18729,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18895,25 +18783,16 @@
         "schema": "schemas/interviewer_pool_info.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "interviewerPoolId": {
             "template": "{{ query.interviewerPoolId }}",
             "omit_when_absent": true
           }
         },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
-        },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -18967,7 +18846,8 @@
           "limit": 100,
           "includeArchived": {
             "template": "{{ query.includeArchived }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           }
         },
         "pagination": {
@@ -18982,7 +18862,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -19030,33 +18911,26 @@
         "schema": "schemas/report_synchronous.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100,
           "reportId": {
             "template": "{{ query.reportId }}",
             "omit_when_absent": true
           },
           "includeHeadersInData": {
             "template": "{{ query.includeHeadersInData }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "boolean"
           },
           "resultStyle": {
             "template": "{{ query.resultStyle }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "enum"
           }
-        },
-        "pagination": {
-          "type": "cursor",
-          "cursor_param": "cursor",
-          "token_path": "nextCursor",
-          "stop_path": "moreDataAvailable",
-          "body_cursor_field": "cursor",
-          "page_size": 100,
-          "max_pages": 100
         },
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {
@@ -19124,7 +18998,8 @@
           "limit": 100,
           "entityType": {
             "template": "{{ query.entityType }}",
-            "omit_when_absent": true
+            "omit_when_absent": true,
+            "type": "enum"
           },
           "entityId": {
             "template": "{{ query.entityId }}",
@@ -19143,7 +19018,8 @@
         "response_error": {
           "path": "errors",
           "success_path": "success"
-        }
+        },
+        "body_type": "json"
       },
       "commands": [
         {

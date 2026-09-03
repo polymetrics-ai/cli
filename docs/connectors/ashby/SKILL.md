@@ -7,7 +7,7 @@ description: Ashby connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.
+Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI.
 
 ## Icon
 

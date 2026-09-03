@@ -6,7 +6,7 @@ func TestResolveStreamBodyMapOmitsAbsentDeclaredInput(t *testing.T) {
 	body := map[string]any{
 		"limit": 100,
 		"createdAfter": map[string]any{
-			"template":          "{{ query.createdAfter }}",
+			"template":         "{{ query.createdAfter }}",
 			"omit_when_absent": true,
 		},
 	}
@@ -23,5 +23,27 @@ func TestResolveStreamBodyMapOmitsAbsentDeclaredInput(t *testing.T) {
 	}
 	if withInput["createdAfter"] != "2026-01-01" {
 		t.Fatalf("present body input = %#v, want declared field", withInput)
+	}
+}
+
+func TestResolveStreamBodyMapCoercesDeclaredTypedInput(t *testing.T) {
+	body := map[string]any{
+		"createdAfter": map[string]any{
+			"template":         "{{ query.createdAfter }}",
+			"omit_when_absent": true,
+			"type":             "integer",
+		},
+		"includeArchived": map[string]any{
+			"template":         "{{ query.includeArchived }}",
+			"omit_when_absent": true,
+			"type":             "boolean",
+		},
+	}
+	resolved, err := resolveStreamBodyMap(body, Vars{Query: map[string]string{"createdAfter": "1700000000", "includeArchived": "true"}})
+	if err != nil {
+		t.Fatalf("resolve typed body: %v", err)
+	}
+	if resolved["createdAfter"] != int64(1700000000) || resolved["includeArchived"] != true {
+		t.Fatalf("typed body = %#v, want integer and boolean values", resolved)
 	}
 }

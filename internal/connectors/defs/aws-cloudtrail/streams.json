@@ -35,6 +35,7 @@
       "cursor_param": "NextToken",
       "max_pages": 100,
       "page_size": 50,
+      "require_continuation_on_cap": true,
       "token_path": "NextToken",
       "type": "cursor"
     },
@@ -44,11 +45,15 @@
   "streams": [
     {
       "body": {
-        "MaxResults": 50
+        "MaxResults": 50,
+        "StartTime": {
+          "omit_when_absent": true,
+          "template": "{{ incremental.lower_bound }}"
+        }
       },
       "incremental": {
-        "client_filtered": true,
-        "cursor_field": "EventTime"
+        "cursor_field": "EventTime",
+        "start_config_key": "start_date"
       },
       "method": "POST",
       "name": "management_events",
@@ -66,11 +71,15 @@
             "AttributeValue": "true"
           }
         ],
-        "MaxResults": 50
+        "MaxResults": 50,
+        "StartTime": {
+          "omit_when_absent": true,
+          "template": "{{ incremental.lower_bound }}"
+        }
       },
       "incremental": {
-        "client_filtered": true,
-        "cursor_field": "EventTime"
+        "cursor_field": "EventTime",
+        "start_config_key": "start_date"
       },
       "method": "POST",
       "name": "read_only_events",
@@ -88,11 +97,15 @@
             "AttributeValue": "false"
           }
         ],
-        "MaxResults": 50
+        "MaxResults": 50,
+        "StartTime": {
+          "omit_when_absent": true,
+          "template": "{{ incremental.lower_bound }}"
+        }
       },
       "incremental": {
-        "client_filtered": true,
-        "cursor_field": "EventTime"
+        "cursor_field": "EventTime",
+        "start_config_key": "start_date"
       },
       "method": "POST",
       "name": "write_only_events",
@@ -110,11 +123,15 @@
             "AttributeValue": "ConsoleLogin"
           }
         ],
-        "MaxResults": 50
+        "MaxResults": 50,
+        "StartTime": {
+          "omit_when_absent": true,
+          "template": "{{ incremental.lower_bound }}"
+        }
       },
       "incremental": {
-        "client_filtered": true,
-        "cursor_field": "EventTime"
+        "cursor_field": "EventTime",
+        "start_config_key": "start_date"
       },
       "method": "POST",
       "name": "console_logins",

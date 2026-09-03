@@ -69,8 +69,8 @@ func TestMigratedAPIDocsDescribeRenderedStreams(t *testing.T) {
 					}
 				}
 			}
-			if connector == "ashby" && (strings.Contains(content, "`base_url`") || strings.Contains(content, "`mode`")) {
-				t.Fatal("Ashby docs retain removed caller-origin or fixture configuration")
+			if connector == "ashby" && (strings.Contains(content, "`base_url`") || strings.Contains(content, "`mode`") || strings.Contains(strings.ToLower(content), "fixture-only") || strings.Contains(strings.ToLower(bundle.Metadata.Description), "fixture-only")) {
+				t.Fatal("Ashby docs or metadata retain removed caller-origin or fixture configuration")
 			}
 		})
 	}

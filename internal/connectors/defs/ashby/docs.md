@@ -2,7 +2,7 @@
 
 ## Overview
 
-Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.
+Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI.
 
 Readable streams: `candidates`, `jobs`, `applications`, `users`, `api_key_info`, `audit_log_list`, `application_info`, `application_hiring_team_role_list`, `application_list_history`, `application_list_criteria_evaluations`, `application_feedback_list`, `candidate_info`, `candidate_list_client_info`, `candidate_list_fraud_checks`, `candidate_list_notes`, `candidate_list_projects`, `candidate_tag_list`, `communication_template_list`, `feedback_form_definition_list`, `feedback_form_definition_info`, `job_posting_list`, `job_posting_info`, `job_info`, `job_board_list`, `job_interview_plan_info`, `job_template_list`, `department_info`, `department_list`, `location_list`, `location_info`, `interview_plan_list`, `interview_stage_list`, `interview_stage_group_list`, `offer_list`, `offer_info`, `opening_info`, `opening_list`, `project_info`, `project_list`, `source_list`, `source_tracking_link_list`, `archive_reason_list`, `brand_list`, `custom_field_list`, `custom_field_info`, `hiring_team_role_list`, `user_info`, `user_list_interviewer_pauses`, `email_sender_list`, `sequence_info`, `sequence_list`, `sequence_template_info`, `sequence_template_list`, `interview_schedule_list`, `take_home_assignment_list`, `take_home_assignment_info`, `interview_event_list`, `interview_briefing_info`, `interview_info`, `interview_list`, `interview_stage_info`, `survey_form_definition_info`, `survey_form_definition_list`, `survey_request_list`, `survey_submission_list`, `webhook_info`, `interviewer_pool_list`, `interviewer_pool_info`, `close_reason_list`, `report_synchronous`, `approval_list`.
 
@@ -36,14 +36,11 @@ Check JSON body: `limit`=1.
   - JSON body: `includeDeactivated`={{ query.includeDeactivated }}, `limit`=100.
   - Pagination: `cursor`.
 - `api_key_info`: `POST /apiKey.info`; records `results`
-  - JSON body: `limit`=100.
-  - Pagination: `cursor`.
 - `audit_log_list`: `POST /auditLog.list`; records `results`
   - JSON body: `endDate`={{ query.endDate }}, `limit`=100, `startDate`={{ query.startDate }}.
   - Pagination: `cursor`.
 - `application_info`: `POST /application.info`; records `results`
-  - JSON body: `applicationId`={{ query.applicationId }}, `limit`=100, `submittedFormInstanceId`={{ query.submittedFormInstanceId }}.
-  - Pagination: `cursor`.
+  - JSON body: `applicationId`={{ query.applicationId }}, `submittedFormInstanceId`={{ query.submittedFormInstanceId }}.
 - `application_hiring_team_role_list`: `POST /applicationHiringTeamRole.list`; records `results`
   - JSON body: `limit`=100.
   - Pagination: `cursor`.
@@ -57,8 +54,7 @@ Check JSON body: `limit`=1.
   - JSON body: `applicationId`={{ query.applicationId }}, `createdAfter`={{ query.createdAfter }}, `limit`=100.
   - Pagination: `cursor`.
 - `candidate_info`: `POST /candidate.info`; records `results`
-  - JSON body: `externalMappingId`={{ query.externalMappingId }}, `id`={{ query.id }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `externalMappingId`={{ query.externalMappingId }}, `id`={{ query.id }}.
 - `candidate_list_client_info`: `POST /candidate.listClientInfo`; records `results`
   - JSON body: `candidateId`={{ query.candidateId }}, `limit`=100.
   - Pagination: `cursor`.
@@ -81,29 +77,24 @@ Check JSON body: `limit`=1.
   - JSON body: `includeArchived`={{ query.includeArchived }}, `limit`=100.
   - Pagination: `cursor`.
 - `feedback_form_definition_info`: `POST /feedbackFormDefinition.info`; records `results`
-  - JSON body: `feedbackFormDefinitionId`={{ query.feedbackFormDefinitionId }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `feedbackFormDefinitionId`={{ query.feedbackFormDefinitionId }}.
 - `job_posting_list`: `POST /jobPosting.list`; records `results`
   - JSON body: `department`={{ query.department }}, `includeUnpublishedJobPostings`={{ query.includeUnpublishedJobPostings }}, `jobBoardId`={{ query.jobBoardId }}, `limit`=100, `listedOnly`={{ query.listedOnly }}, `location`={{ query.location }}.
   - Pagination: `cursor`.
 - `job_posting_info`: `POST /jobPosting.info`; records `results`
-  - JSON body: `includeUnpublishedJobPostings`={{ query.includeUnpublishedJobPostings }}, `jobBoardId`={{ query.jobBoardId }}, `jobPostingId`={{ query.jobPostingId }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `includeUnpublishedJobPostings`={{ query.includeUnpublishedJobPostings }}, `jobBoardId`={{ query.jobBoardId }}, `jobPostingId`={{ query.jobPostingId }}.
 - `job_info`: `POST /job.info`; records `results`
-  - JSON body: `id`={{ query.id }}, `includeUnpublishedJobPostingsIds`={{ query.includeUnpublishedJobPostingsIds }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `id`={{ query.id }}, `includeUnpublishedJobPostingsIds`={{ query.includeUnpublishedJobPostingsIds }}.
 - `job_board_list`: `POST /jobBoard.list`; records `results`
   - JSON body: `limit`=100.
   - Pagination: `cursor`.
 - `job_interview_plan_info`: `POST /jobInterviewPlan.info`; records `results`
-  - JSON body: `jobId`={{ query.jobId }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `jobId`={{ query.jobId }}.
 - `job_template_list`: `POST /jobTemplate.list`; records `results`
   - JSON body: `limit`=100.
   - Pagination: `cursor`.
 - `department_info`: `POST /department.info`; records `results`
-  - JSON body: `departmentId`={{ query.departmentId }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `departmentId`={{ query.departmentId }}.
 - `department_list`: `POST /department.list`; records `results`
   - JSON body: `includeArchived`={{ query.includeArchived }}, `limit`=100.
   - Pagination: `cursor`.
@@ -111,8 +102,7 @@ Check JSON body: `limit`=1.
   - JSON body: `includeArchived`={{ query.includeArchived }}, `includeLocationHierarchy`={{ query.includeLocationHierarchy }}, `limit`=100.
   - Pagination: `cursor`.
 - `location_info`: `POST /location.info`; records `results`
-  - JSON body: `limit`=100, `locationId`={{ query.locationId }}.
-  - Pagination: `cursor`.
+  - JSON body: `locationId`={{ query.locationId }}.
 - `interview_plan_list`: `POST /interviewPlan.list`; records `results`
   - JSON body: `includeArchived`={{ query.includeArchived }}, `limit`=100.
   - Pagination: `cursor`.
@@ -126,17 +116,14 @@ Check JSON body: `limit`=1.
   - JSON body: `applicationId`={{ query.applicationId }}, `createdAfter`={{ query.createdAfter }}, `limit`=100.
   - Pagination: `cursor`.
 - `offer_info`: `POST /offer.info`; records `results`
-  - JSON body: `excludeFormDefinition`={{ query.excludeFormDefinition }}, `limit`=100, `offerId`={{ query.offerId }}.
-  - Pagination: `cursor`.
+  - JSON body: `excludeFormDefinition`={{ query.excludeFormDefinition }}, `offerId`={{ query.offerId }}.
 - `opening_info`: `POST /opening.info`; records `results`
-  - JSON body: `limit`=100, `openingId`={{ query.openingId }}.
-  - Pagination: `cursor`.
+  - JSON body: `openingId`={{ query.openingId }}.
 - `opening_list`: `POST /opening.list`; records `results`
   - JSON body: `createdAfter`={{ query.createdAfter }}, `limit`=100.
   - Pagination: `cursor`.
 - `project_info`: `POST /project.info`; records `results`
-  - JSON body: `limit`=100, `projectId`={{ query.projectId }}.
-  - Pagination: `cursor`.
+  - JSON body: `projectId`={{ query.projectId }}.
 - `project_list`: `POST /project.list`; records `results`
   - JSON body: `createdAfter`={{ query.createdAfter }}, `limit`=100.
   - Pagination: `cursor`.
@@ -156,14 +143,12 @@ Check JSON body: `limit`=1.
   - JSON body: `includeArchived`={{ query.includeArchived }}, `limit`=100.
   - Pagination: `cursor`.
 - `custom_field_info`: `POST /customField.info`; records `results`
-  - JSON body: `customFieldId`={{ query.customFieldId }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `customFieldId`={{ query.customFieldId }}.
 - `hiring_team_role_list`: `POST /hiringTeamRole.list`; records `results`
   - JSON body: `limit`=100.
   - Pagination: `cursor`.
 - `user_info`: `POST /user.info`; records `results`
-  - JSON body: `limit`=100, `userId`={{ query.userId }}.
-  - Pagination: `cursor`.
+  - JSON body: `userId`={{ query.userId }}.
 - `user_list_interviewer_pauses`: `POST /user.listInterviewerPauses`; records `results`
   - JSON body: `limit`=100, `userId`={{ query.userId }}.
   - Pagination: `cursor`.
@@ -171,14 +156,12 @@ Check JSON body: `limit`=1.
   - JSON body: `limit`=100.
   - Pagination: `cursor`.
 - `sequence_info`: `POST /sequence.info`; records `results`
-  - JSON body: `limit`=100, `sequenceId`={{ query.sequenceId }}.
-  - Pagination: `cursor`.
+  - JSON body: `sequenceId`={{ query.sequenceId }}.
 - `sequence_list`: `POST /sequence.list`; records `results`
   - JSON body: `candidateId`={{ query.candidateId }}, `limit`=100.
   - Pagination: `cursor`.
 - `sequence_template_info`: `POST /sequenceTemplate.info`; records `results`
-  - JSON body: `limit`=100, `sequenceTemplateId`={{ query.sequenceTemplateId }}.
-  - Pagination: `cursor`.
+  - JSON body: `sequenceTemplateId`={{ query.sequenceTemplateId }}.
 - `sequence_template_list`: `POST /sequenceTemplate.list`; records `results`
   - JSON body: `includeArchived`={{ query.includeArchived }}, `limit`=100.
   - Pagination: `cursor`.
@@ -189,26 +172,21 @@ Check JSON body: `limit`=1.
   - JSON body: `applicationId`={{ query.applicationId }}, `candidateId`={{ query.candidateId }}, `limit`=100.
   - Pagination: `cursor`.
 - `take_home_assignment_info`: `POST /takeHomeAssignment.info`; records `results`
-  - JSON body: `limit`=100, `takeHomeAssignmentId`={{ query.takeHomeAssignmentId }}.
-  - Pagination: `cursor`.
+  - JSON body: `takeHomeAssignmentId`={{ query.takeHomeAssignmentId }}.
 - `interview_event_list`: `POST /interviewEvent.list`; records `results`
   - JSON body: `createdAfter`={{ query.createdAfter }}, `interviewScheduleId`={{ query.interviewScheduleId }}, `limit`=100.
   - Pagination: `cursor`.
 - `interview_briefing_info`: `POST /interviewBriefing.info`; records `results`
-  - JSON body: `interviewEventId`={{ query.interviewEventId }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `interviewEventId`={{ query.interviewEventId }}.
 - `interview_info`: `POST /interview.info`; records `results`
-  - JSON body: `id`={{ query.id }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `id`={{ query.id }}.
 - `interview_list`: `POST /interview.list`; records `results`
   - JSON body: `excludeArchivedScheduleTemplateInterviews`={{ query.excludeArchivedScheduleTemplateInterviews }}, `includeArchived`={{ query.includeArchived }}, `includeNonSharedInterviews`={{ query.includeNonSharedInterviews }}, `limit`=100.
   - Pagination: `cursor`.
 - `interview_stage_info`: `POST /interviewStage.info`; records `results`
-  - JSON body: `interviewStageId`={{ query.interviewStageId }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `interviewStageId`={{ query.interviewStageId }}.
 - `survey_form_definition_info`: `POST /surveyFormDefinition.info`; records `results`
-  - JSON body: `limit`=100, `surveyFormDefinitionId`={{ query.surveyFormDefinitionId }}.
-  - Pagination: `cursor`.
+  - JSON body: `surveyFormDefinitionId`={{ query.surveyFormDefinitionId }}.
 - `survey_form_definition_list`: `POST /surveyFormDefinition.list`; records `results`
   - JSON body: `limit`=100.
   - Pagination: `cursor`.
@@ -219,20 +197,17 @@ Check JSON body: `limit`=1.
   - JSON body: `createdAfter`={{ query.createdAfter }}, `limit`=100, `surveyType`={{ query.surveyType }}.
   - Pagination: `cursor`.
 - `webhook_info`: `POST /webhook.info`; records `results`
-  - JSON body: `limit`=100, `webhookId`={{ query.webhookId }}.
-  - Pagination: `cursor`.
+  - JSON body: `webhookId`={{ query.webhookId }}.
 - `interviewer_pool_list`: `POST /interviewerPool.list`; records `results`
   - JSON body: `includeArchivedPools`={{ query.includeArchivedPools }}, `includeArchivedTrainingStages`={{ query.includeArchivedTrainingStages }}, `limit`=100.
   - Pagination: `cursor`.
 - `interviewer_pool_info`: `POST /interviewerPool.info`; records `results`
-  - JSON body: `interviewerPoolId`={{ query.interviewerPoolId }}, `limit`=100.
-  - Pagination: `cursor`.
+  - JSON body: `interviewerPoolId`={{ query.interviewerPoolId }}.
 - `close_reason_list`: `POST /closeReason.list`; records `results`
   - JSON body: `includeArchived`={{ query.includeArchived }}, `limit`=100.
   - Pagination: `cursor`.
 - `report_synchronous`: `POST /report.synchronous`; records `results`
-  - JSON body: `includeHeadersInData`={{ query.includeHeadersInData }}, `limit`=100, `reportId`={{ query.reportId }}, `resultStyle`={{ query.resultStyle }}.
-  - Pagination: `cursor`.
+  - JSON body: `includeHeadersInData`={{ query.includeHeadersInData }}, `reportId`={{ query.reportId }}, `resultStyle`={{ query.resultStyle }}.
 - `approval_list`: `POST /approval.list`; records `results`
   - JSON body: `entityId`={{ query.entityId }}, `entityType`={{ query.entityType }}, `limit`=100.
   - Pagination: `cursor`.

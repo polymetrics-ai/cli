@@ -11,7 +11,7 @@
     "read": true,
     "write": true
   },
-  "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.",
+  "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI.",
   "display_name": "Ashby",
   "docs_url": "https://developers.ashbyhq.com/",
   "integration_type": "api",

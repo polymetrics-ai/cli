@@ -10156,7 +10156,7 @@
   {
     "name": "ashby",
     "display_name": "Ashby",
-    "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI. Fixture-only; not live-certified.",
+    "description": "Reads Ashby applicant-tracking REST resources and exposes reviewed reverse-ETL/direct-read surfaces from the official Ashby OpenAPI.",
     "integration_type": "api",
     "docs_url": "https://developers.ashbyhq.com/",
     "release_stage": "alpha",
@@ -12432,6 +12432,10 @@
           "description": "Optional AWS session token.",
           "type": "string",
           "x-secret": true
+        },
+        "start_date": {
+          "description": "Optional RFC3339 StartTime lower bound sent in every CloudTrail LookupEvents request.",
+          "type": "string"
         }
       },
       "required": [

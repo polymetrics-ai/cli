@@ -83,11 +83,15 @@ func (a *declaredPasswordTokenAuthenticator) token(ctx context.Context) (string,
 	}
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
-	response, err := http.DefaultClient.Do(request)
+	response, err := (&http.Client{
+		CheckRedirect: func(*http.Request, []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
+	}).Do(request)
 	if err != nil {
 		return "", fmt.Errorf("declared_password_token: request token")
 	}
-	defer response.Body.Close()
+	defer func() { _ = response.Body.Close() }()
 	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
 		return "", fmt.Errorf("declared_password_token: token endpoint returned %s", response.Status)
 	}

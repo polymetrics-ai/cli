@@ -403,12 +403,16 @@
         "schema": "schemas/customers.json",
         "incremental": {
           "cursor_field": "date_upd",
-          "start_config_key": "start_date",
-          "client_filtered": true
+          "start_config_key": "start_date"
         },
         "query": {
           "output_format": "JSON",
-          "display": "full"
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
         },
         "pagination": {
           "type": "offset_count",
@@ -434,12 +438,16 @@
         "schema": "schemas/orders.json",
         "incremental": {
           "cursor_field": "date_upd",
-          "start_config_key": "start_date",
-          "client_filtered": true
+          "start_config_key": "start_date"
         },
         "query": {
           "output_format": "JSON",
-          "display": "full"
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
         },
         "pagination": {
           "type": "offset_count",
@@ -465,12 +473,16 @@
         "schema": "schemas/products.json",
         "incremental": {
           "cursor_field": "date_upd",
-          "start_config_key": "start_date",
-          "client_filtered": true
+          "start_config_key": "start_date"
         },
         "query": {
           "output_format": "JSON",
-          "display": "full"
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
         },
         "pagination": {
           "type": "offset_count",
@@ -496,12 +508,16 @@
         "schema": "schemas/addresses.json",
         "incremental": {
           "cursor_field": "date_upd",
-          "start_config_key": "start_date",
-          "client_filtered": true
+          "start_config_key": "start_date"
         },
         "query": {
           "output_format": "JSON",
-          "display": "full"
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
         },
         "pagination": {
           "type": "offset_count",
@@ -527,12 +543,16 @@
         "schema": "schemas/carts.json",
         "incremental": {
           "cursor_field": "date_upd",
-          "start_config_key": "start_date",
-          "client_filtered": true
+          "start_config_key": "start_date"
         },
         "query": {
           "output_format": "JSON",
-          "display": "full"
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
         },
         "pagination": {
           "type": "offset_count",
