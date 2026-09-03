@@ -145,6 +145,7 @@
           "path": { "type": "string" },
           "query": { "type": "object" },
           "body": { "type": "object" },
+          "required_body_fields": { "type": "array", "items": { "type": "string" } },
           "body_type": { "type": "string", "enum": ["json", "form"] },
           "graphql": {
             "type": "object",

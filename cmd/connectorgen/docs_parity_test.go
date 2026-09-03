@@ -12,7 +12,7 @@ import (
 )
 
 var migratedAPIDocs = []string{
-	"apify-dataset", "ashby", "aws-cloudtrail", "babelforce", "basecamp", "bunny-inc", "canny", "copper", "dixa", "fastbill", "feishu", "free-agent-connector", "freightview", "google-analytics-data-api", "google-classroom", "mercado-ads", "metabase", "mode", "pocket", "prestashop", "safetyculture", "yahoo-finance-price",
+	"apify-dataset", "ashby", "aws-cloudtrail", "babelforce", "basecamp", "bunny-inc", "canny", "copper", "dixa", "fastbill", "feishu", "free-agent-connector", "freightview", "google-analytics-data-api", "google-classroom", "google-pagespeed-insights", "less-annoying-crm", "lokalise", "mendeley", "mercado-ads", "metabase", "mode", "my-hours", "pocket", "prestashop", "rootly", "safetyculture", "yahoo-finance-price",
 }
 
 func TestMigratedAPIDocsDescribeRenderedStreams(t *testing.T) {

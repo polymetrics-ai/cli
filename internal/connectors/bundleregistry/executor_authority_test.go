@@ -245,13 +245,13 @@ func TestProductionCloudTrailGenericCheckAndRead(t *testing.T) {
 			}
 			response = `{"Events":[]}`
 		case 2:
-			if body["MaxResults"] != float64(50) || body["StartTime"] != "2026-01-01T00:00:00Z" {
-				t.Fatalf("CloudTrail first read body = %#v, want MaxResults and declared StartTime", body)
+			if body["MaxResults"] != float64(50) || body["StartTime"] != float64(1704067200) {
+				t.Fatalf("CloudTrail first read body = %#v, want MaxResults and typed Unix StartTime", body)
 			}
 			response = `{"Events":[{"EventId":"one","EventTime":1}],"NextToken":"cursor-1"}`
 		case 3:
-			if body["NextToken"] != "cursor-1" || body["StartTime"] != "2026-01-01T00:00:00Z" {
-				t.Fatalf("CloudTrail continuation body = %#v, want cursor and preserved StartTime", body)
+			if body["NextToken"] != "cursor-1" || body["StartTime"] != float64(1704067200) {
+				t.Fatalf("CloudTrail continuation body = %#v, want cursor and typed Unix StartTime", body)
 			}
 			response = `{"Events":[{"EventId":"two","EventTime":2}]}`
 		default:
@@ -270,7 +270,7 @@ func TestProductionCloudTrailGenericCheckAndRead(t *testing.T) {
 		t.Fatal("production registry missing aws-cloudtrail")
 	}
 	config := connectors.RuntimeConfig{
-		Config: map[string]string{"start_date": "2026-01-01T00:00:00Z"},
+		Config: map[string]string{"start_date": "2024-01-01T00:00:00Z"},
 		Secrets: map[string]string{
 			"aws_key_id":     "test-access-key",
 			"aws_secret_key": "test-secret-key",

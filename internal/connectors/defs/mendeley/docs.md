@@ -1,10 +1,10 @@
-# Overview
+# Mendeley Connector
 
-Reads documents, folders, groups, and annotations from fixed Mendeley REST routes.
+## Overview
+
+Reads documents, folders, groups, and annotations through fixed Mendeley REST routes and OAuth refresh-token authentication.
 
 Readable streams: `documents`, `folders`, `groups`, `annotations`.
-
-This connector is read-only; no write actions are declared.
 
 Service API documentation: https://dev.mendeley.com/reference.
 
@@ -13,31 +13,33 @@ Service API documentation: https://dev.mendeley.com/reference.
 Connection fields:
 
 - `client_id` (required, secret, string); Mendeley OAuth client identifier.
-- `client_refresh_token` (required, secret, string); refresh token for the declared OAuth grant.
+- `client_refresh_token` (required, secret, string); Mendeley OAuth refresh token.
 - `client_secret` (required, secret, string); Mendeley OAuth client secret.
-- `name_for_institution`, `query_for_catalog`, `start_date` (required, string); retained declared connection configuration.
+- `name_for_institution` (required, string); Retained Mendeley institution query configuration.
+- `query_for_catalog` (required, string); Retained Mendeley catalog query configuration.
+- `start_date` (required, string); Initial incremental lower bound.
 
-Secret fields are redacted in logs and write previews: `client_id`, `client_refresh_token`, `client_secret`.
+Authentication uses declared mode(s): `oauth2_refresh_token`.
 
-The runtime exchanges the refresh token only with the fixed Mendeley token endpoint and reads only the fixed `https://api.mendeley.com` origin. It does not accept caller-provided origins or fixture modes.
+## Execution contract
 
-Connection checks make one bounded documents request.
+Connection check: `GET /documents`
+Check query: `limit`=`1`.
 
 ## Streams notes
 
-Default pagination: Link-header navigation with `limit=100`.
-
-Incremental streams use their declared cursor fields and client-side lower-bound filtering when a lower bound is available.
-
-- `documents`: GET `/documents`; `Accept: application/vnd.mendeley-document.1+json`; incremental cursor `last_modified`.
-- `folders`: GET `/folders`; `Accept: application/vnd.mendeley-folder.1+json`; incremental cursor `modified`.
-- `groups`: GET `/groups`; `Accept: application/vnd.mendeley-group.1+json`.
-- `annotations`: GET `/annotations`; `Accept: application/vnd.mendeley-annotation.1+json`; incremental cursor `last_modified`.
+- `documents`: `GET /documents`; records ``
+  - Query: `order`=`asc`.
+  - Incremental cursor: `last_modified`.
+- `folders`: `GET /folders`; records ``
+  - Query: `order`=`asc`.
+  - Incremental cursor: `modified`.
+- `groups`: `GET /groups`; records ``
+  - Query: `order`=`asc`.
+- `annotations`: `GET /annotations`; records ``
+  - Query: `order`=`asc`.
+  - Incremental cursor: `last_modified`.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 4 stream-backed endpoint groups.
+This connector's write surface is declared separately in the rendered execution bundle.

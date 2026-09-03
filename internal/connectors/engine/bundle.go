@@ -342,6 +342,7 @@ type StreamSpec struct {
 	Query                    map[string]QueryParam          `json:"query,omitempty"`
 	Body                     map[string]any                 `json:"body,omitempty"` // POST-body streams
 	BodyType                 string                         `json:"body_type,omitempty"`
+	RequiredBodyFields       []string                       `json:"required_body_fields,omitempty"`
 	GraphQL                  *GraphQLRequestSpec            `json:"graphql,omitempty"`
 	Records                  RecordsSpec                    `json:"records"`
 	Pagination               *PaginationSpec                `json:"pagination,omitempty"` // overrides base

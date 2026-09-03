@@ -15,7 +15,7 @@ Connection fields:
 - `aws_key_id` (required, secret, string); AWS access key ID.
 - `aws_secret_key` (required, secret, string); AWS secret access key.
 - `aws_session_token` (optional, secret, string); Optional AWS session token.
-- `start_date` (optional, string); Optional RFC3339 StartTime lower bound sent in every CloudTrail LookupEvents request.
+- `start_date` (optional, string); Optional RFC3339 lower bound encoded as numeric Unix seconds in the CloudTrail StartTime JSON body.
 
 Authentication uses declared mode(s): `aws_sigv4`, `aws_sigv4`.
 

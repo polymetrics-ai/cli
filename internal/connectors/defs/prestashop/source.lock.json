@@ -418,7 +418,8 @@
           "type": "offset_count",
           "limit_param": "limit",
           "page_size": 100,
-          "max_pages": 100
+          "max_pages": 100,
+          "require_continuation_on_cap": true
         }
       },
       "schema_refs": {
@@ -453,7 +454,8 @@
           "type": "offset_count",
           "limit_param": "limit",
           "page_size": 100,
-          "max_pages": 100
+          "max_pages": 100,
+          "require_continuation_on_cap": true
         }
       },
       "schema_refs": {
@@ -488,7 +490,8 @@
           "type": "offset_count",
           "limit_param": "limit",
           "page_size": 100,
-          "max_pages": 100
+          "max_pages": 100,
+          "require_continuation_on_cap": true
         }
       },
       "schema_refs": {
@@ -523,7 +526,8 @@
           "type": "offset_count",
           "limit_param": "limit",
           "page_size": 100,
-          "max_pages": 100
+          "max_pages": 100,
+          "require_continuation_on_cap": true
         }
       },
       "schema_refs": {
@@ -558,7 +562,8 @@
           "type": "offset_count",
           "limit_param": "limit",
           "page_size": 100,
-          "max_pages": 100
+          "max_pages": 100,
+          "require_continuation_on_cap": true
         }
       },
       "schema_refs": {

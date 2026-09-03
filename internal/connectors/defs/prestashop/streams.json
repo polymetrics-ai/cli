@@ -40,6 +40,7 @@
         "limit_param": "limit",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "type": "offset_count"
       },
       "path": "/customers",
@@ -68,6 +69,7 @@
         "limit_param": "limit",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "type": "offset_count"
       },
       "path": "/orders",
@@ -96,6 +98,7 @@
         "limit_param": "limit",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "type": "offset_count"
       },
       "path": "/products",
@@ -124,6 +127,7 @@
         "limit_param": "limit",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "type": "offset_count"
       },
       "path": "/addresses",
@@ -152,6 +156,7 @@
         "limit_param": "limit",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "type": "offset_count"
       },
       "path": "/carts",

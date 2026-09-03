@@ -28,3 +28,19 @@ func TestCloudTrailSigV4AuthenticatorDeterministicVector(t *testing.T) {
 		t.Fatalf("Authorization = %q", got)
 	}
 }
+
+func TestCloudTrailSigV4AuthenticatorRejectsHostileRouteBeforeHeaders(t *testing.T) {
+	request, err := http.NewRequest(http.MethodPost, "https://hostile.example/", bytes.NewReader([]byte(`{"MaxResults":1}`)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	authenticator := &cloudTrailSigV4Authenticator{accessKeyID: "AKIDEXAMPLE", secretAccessKey: "test-signing-secret"}
+	if err := authenticator.Apply(context.Background(), request); err == nil {
+		t.Fatal("hostile SigV4 route was accepted")
+	}
+	for _, header := range []string{"Authorization", "X-Amz-Date", "X-Amz-Content-Sha256", "X-Amz-Security-Token"} {
+		if value := request.Header.Get(header); value != "" {
+			t.Fatalf("hostile request received credential-bearing header %s=%q", header, value)
+		}
+	}
+}

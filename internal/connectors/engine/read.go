@@ -873,6 +873,9 @@ func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, que
 			body[pag.BodyOffsetField] = offset
 		}
 	}
+	if err := validateRequiredStreamBodyFields(stream.RequiredBodyFields, body); err != nil {
+		return nil, err
+	}
 	return body, nil
 }
 
@@ -969,6 +972,16 @@ func coerceDeclaredBodyValue(value, valueType string) (any, error) {
 	default:
 		return nil, fmt.Errorf("unsupported declared body value type %q", valueType)
 	}
+}
+
+func validateRequiredStreamBodyFields(required []string, body map[string]any) error {
+	for _, field := range required {
+		value, present := body[field]
+		if !present || value == nil || (fmt.Sprint(value) == "") {
+			return fmt.Errorf("declared stream body requires %q", field)
+		}
+	}
+	return nil
 }
 
 func streamBodyForm(body any) (url.Values, error) {

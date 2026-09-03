@@ -47,6 +47,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -104,6 +105,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -149,6 +151,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -181,6 +184,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -232,6 +236,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -284,6 +289,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -315,6 +321,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -324,6 +331,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "applicationId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -346,6 +356,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -355,6 +366,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "applicationId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -382,6 +396,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -438,6 +453,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -447,6 +463,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "candidateId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -469,6 +488,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -478,6 +498,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "candidateId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -500,6 +523,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -509,6 +533,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "candidateId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -531,6 +558,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -540,6 +568,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "candidateId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -563,6 +594,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -590,6 +622,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -622,6 +655,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -652,6 +686,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "feedbackFormDefinitionId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -692,6 +729,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -731,6 +769,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "jobPostingId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -757,6 +798,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "id"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -775,6 +819,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -805,6 +850,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "jobId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -823,6 +871,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -853,6 +902,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "departmentId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -876,6 +928,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -913,6 +966,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -943,6 +997,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "locationId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -966,6 +1023,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -997,6 +1055,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1006,6 +1065,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "interviewPlanId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1024,6 +1086,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1060,6 +1123,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1095,6 +1159,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "offerId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1116,6 +1183,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "openingId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1139,6 +1209,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1169,6 +1240,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "projectId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1192,6 +1266,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1224,6 +1299,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1260,6 +1336,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1292,6 +1369,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1319,6 +1397,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1351,6 +1430,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1381,6 +1461,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "customFieldId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1399,6 +1482,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1429,6 +1513,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "userId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1451,6 +1538,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1460,6 +1548,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "userId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1478,6 +1569,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1508,6 +1600,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "sequenceId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1530,6 +1625,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1560,6 +1656,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "sequenceTemplateId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1583,6 +1682,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1623,6 +1723,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1658,6 +1759,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1688,6 +1790,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "takeHomeAssignmentId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1715,6 +1820,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1724,6 +1830,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "interviewScheduleId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1745,6 +1854,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "interviewEventId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1766,6 +1878,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "id"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1799,6 +1914,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1829,6 +1945,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "interviewStageId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1850,6 +1969,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "surveyFormDefinitionId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1868,6 +1990,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1913,6 +2036,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1922,6 +2046,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "surveyType"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1950,6 +2077,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -1959,6 +2087,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "surveyType"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -1980,6 +2111,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "webhookId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -2008,6 +2142,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -2038,6 +2173,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "interviewerPoolId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -2061,6 +2199,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"
@@ -2101,6 +2240,9 @@
       "records": {
         "path": "results"
       },
+      "required_body_fields": [
+        "reportId"
+      ],
       "response_error": {
         "path": "errors",
         "success_path": "success"
@@ -2128,6 +2270,7 @@
         "cursor_param": "cursor",
         "max_pages": 100,
         "page_size": 100,
+        "require_continuation_on_cap": true,
         "stop_path": "moreDataAvailable",
         "token_path": "nextCursor",
         "type": "cursor"

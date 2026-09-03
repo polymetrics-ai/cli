@@ -48,11 +48,13 @@
         "MaxResults": 50,
         "StartTime": {
           "omit_when_absent": true,
-          "template": "{{ incremental.lower_bound }}"
+          "template": "{{ incremental.lower_bound }}",
+          "type": "integer"
         }
       },
       "incremental": {
         "cursor_field": "EventTime",
+        "param_format": "unix_seconds",
         "start_config_key": "start_date"
       },
       "method": "POST",
@@ -74,11 +76,13 @@
         "MaxResults": 50,
         "StartTime": {
           "omit_when_absent": true,
-          "template": "{{ incremental.lower_bound }}"
+          "template": "{{ incremental.lower_bound }}",
+          "type": "integer"
         }
       },
       "incremental": {
         "cursor_field": "EventTime",
+        "param_format": "unix_seconds",
         "start_config_key": "start_date"
       },
       "method": "POST",
@@ -100,11 +104,13 @@
         "MaxResults": 50,
         "StartTime": {
           "omit_when_absent": true,
-          "template": "{{ incremental.lower_bound }}"
+          "template": "{{ incremental.lower_bound }}",
+          "type": "integer"
         }
       },
       "incremental": {
         "cursor_field": "EventTime",
+        "param_format": "unix_seconds",
         "start_config_key": "start_date"
       },
       "method": "POST",
@@ -126,11 +132,13 @@
         "MaxResults": 50,
         "StartTime": {
           "omit_when_absent": true,
-          "template": "{{ incremental.lower_bound }}"
+          "template": "{{ incremental.lower_bound }}",
+          "type": "integer"
         }
       },
       "incremental": {
         "cursor_field": "EventTime",
+        "param_format": "unix_seconds",
         "start_config_key": "start_date"
       },
       "method": "POST",

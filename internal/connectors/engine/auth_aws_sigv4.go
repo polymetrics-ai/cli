@@ -74,6 +74,9 @@ func buildCloudTrailSigV4Authenticator(spec AuthSpec, vars Vars) (connsdk.Authen
 }
 
 func (a *cloudTrailSigV4Authenticator) Apply(_ context.Context, request *http.Request) error {
+	if request.Method != http.MethodPost || request.URL.Scheme != "https" || request.URL.Host != "cloudtrail.us-east-1.amazonaws.com" || request.URL.Path != "/" || request.URL.RawQuery != "" {
+		return fmt.Errorf("aws_sigv4: request must be the fixed CloudTrail HTTPS POST route")
+	}
 	now := time.Now().UTC()
 	if a.now != nil {
 		now = a.now().UTC()

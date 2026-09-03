@@ -1,10 +1,10 @@
-# Overview
+# My Hours Connector
 
-Reads My Hours clients, projects, users, tags, and bounded time-log activity through fixed REST routes.
+## Overview
+
+Reads My Hours clients, projects, team members, tags, and bounded time-log windows through fixed REST routes.
 
 Readable streams: `clients`, `projects`, `users`, `tags`, `time_logs`.
-
-This connector is read-only; no write actions are declared.
 
 Service API documentation: https://developers.myhours.com/.
 
@@ -13,26 +13,25 @@ Service API documentation: https://developers.myhours.com/.
 Connection fields:
 
 - `email` (required, string); My Hours login email.
-- `password` (required, secret, string); password sent only to the fixed declared login route.
-- `start_date`, `end_date` (required, string); UTC time-log window bounds in `YYYY-MM-DD`.
-- `logs_batch_size` (optional, string); window width in days, default `30`, maximum `365`.
+- `end_date` (required, string); UTC date window terminal date, YYYY-MM-DD.
+- `logs_batch_size` (optional, string); Declared time-log window width in days, 1 through 365.
+- `password` (required, secret, string); My Hours login password.
+- `start_date` (required, string); UTC date window start, YYYY-MM-DD.
 
-Secret fields are redacted in logs and write previews: `password`.
+Authentication uses declared mode(s): `declared_password_token`.
 
-The runtime uses only the fixed My Hours login and API origins. It does not accept caller-provided origins, credential controls, fixture modes, refresh, or replay.
+## Execution contract
+
+Connection check: `GET /Clients`
 
 ## Streams notes
 
-- `clients`: GET `/Clients`.
-- `projects`: GET `/Projects/getAll`.
-- `users`: GET `/Users/getAll`.
-- `tags`: GET `/Tags`.
-- `time_logs`: GET `/Reports/activity` in contiguous, non-overlapping UTC `DateFrom`/`DateTo` windows, capped at 600 windows.
+- `clients`: `GET /Clients`; records ``
+- `projects`: `GET /Projects/getAll`; records ``
+- `users`: `GET /Users/getAll`; records ``
+- `tags`: `GET /Tags`; records ``
+- `time_logs`: `GET /Reports/activity`; records ``
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 5 stream-backed endpoint groups.
+This connector's write surface is declared separately in the rendered execution bundle.

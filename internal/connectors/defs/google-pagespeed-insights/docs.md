@@ -1,10 +1,10 @@
-# Overview
+# Google PageSpeed Insights Connector
 
-Reads Lighthouse PageSpeed Insights reports for each configured HTTPS URL and mobile or desktop strategy through the fixed PageSpeed Insights v5 API. Every request repeats the declared Lighthouse categories: accessibility, best-practices, performance, PWA, and SEO.
+## Overview
+
+Reads Lighthouse PageSpeed Insights reports for a bounded Cartesian product of configured HTTPS URLs and mobile or desktop strategies through the fixed PageSpeed Insights v5 API.
 
 Readable streams: `pagespeed_reports`.
-
-This connector is read-only; no write actions are declared.
 
 Service API documentation: https://developers.google.com/speed/docs/insights/v5/get-started.
 
@@ -12,27 +12,21 @@ Service API documentation: https://developers.google.com/speed/docs/insights/v5/
 
 Connection fields:
 
-- `api_key` (optional, secret, string); optional PageSpeed API key sent only as the declared `key` query parameter.
-- `strategies` (required, string); comma-separated, unique strategies: `mobile` and/or `desktop`.
-- `urls` (required, string); comma-separated, unique HTTPS URLs to analyse.
+- `api_key` (optional, secret, string); Optional PageSpeed API key sent only as the declared key query parameter.
+- `strategies` (required, string); Comma-separated, unique PageSpeed strategies: mobile and/or desktop.
+- `urls` (required, string); Comma-separated, unique HTTPS URLs to analyse. The declared URL and strategy product is capped at twenty requests.
 
-Secret fields are redacted in logs and write previews: `api_key`.
+Authentication uses declared mode(s): `api_key_query`, `none`.
 
-The runtime applies only the source-declared optional API-key query authentication. It does not accept caller-provided origins, fixture modes, or category overrides.
+## Execution contract
 
-Connection checks make one bounded request to the fixed PageSpeed origin.
+Connection check: `GET /runPagespeed`
+Check query: `category`=`performance`; `strategy`=`desktop`; `url`=`https://example.com`.
 
 ## Streams notes
 
-Default pagination: single report request; no pagination.
-
-- `pagespeed_reports`: GET `/runPagespeed`; emits one flattened report for every URL and strategy pair.
+- `pagespeed_reports`: `GET /runPagespeed`; records `.`
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- The source lock permits at most twenty URL-and-strategy report requests per read.
-- API coverage includes 1 stream-backed endpoint group.
+This connector's write surface is declared separately in the rendered execution bundle.

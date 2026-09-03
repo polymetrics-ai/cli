@@ -12434,7 +12434,7 @@
           "x-secret": true
         },
         "start_date": {
-          "description": "Optional RFC3339 StartTime lower bound sent in every CloudTrail LookupEvents request.",
+          "description": "Optional RFC3339 lower bound encoded as numeric Unix seconds in the CloudTrail StartTime JSON body.",
           "type": "string"
         }
       },
