@@ -873,6 +873,17 @@ func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, que
 func resolveStreamBodyMap(body map[string]any, vars Vars) (map[string]any, error) {
 	resolved := make(map[string]any, len(body))
 	for key, value := range body {
+		if template, omitWhenAbsent, isOptional := optionalStreamBodyTemplate(value); isOptional {
+			copied, err := Interpolate(template, vars)
+			if err != nil {
+				if omitWhenAbsent {
+					continue
+				}
+				return nil, fmt.Errorf("resolve stream body %q: %w", key, err)
+			}
+			resolved[key] = copied
+			continue
+		}
 		copied, err := resolveStreamBodyValue(value, vars)
 		if err != nil {
 			return nil, fmt.Errorf("resolve stream body %q: %w", key, err)
@@ -901,6 +912,19 @@ func resolveStreamBodyValue(value any, vars Vars) (any, error) {
 	default:
 		return value, nil
 	}
+}
+
+func optionalStreamBodyTemplate(value any) (template string, omitWhenAbsent bool, ok bool) {
+	object, ok := value.(map[string]any)
+	if !ok || len(object) != 2 {
+		return "", false, false
+	}
+	template, templateOK := object["template"].(string)
+	omitWhenAbsent, omitOK := object["omit_when_absent"].(bool)
+	if !templateOK || !omitOK {
+		return "", false, false
+	}
+	return template, omitWhenAbsent, true
 }
 
 func streamBodyForm(body any) (url.Values, error) {
@@ -2023,27 +2047,55 @@ func declaredResponseError(body []byte, spec *ResponseErrorSpec) error {
 	if err != nil {
 		return fmt.Errorf("response_error decode: %w", err)
 	}
+	if spec.SuccessPath != "" {
+		success, ok := selectPathKeyed(root, spec.SuccessPath).(bool)
+		if !ok {
+			return fmt.Errorf("response_error success_path %q is not a boolean", spec.SuccessPath)
+		}
+		if success {
+			return nil
+		}
+		message, err := declaredResponseErrorMessage(root, spec)
+		if err != nil {
+			return err
+		}
+		path := spec.Path
+		if path == "" {
+			path = spec.SuccessPath
+		}
+		return &DeclaredResponseError{Path: path, Message: message}
+	}
 	node := selectPathKeyed(root, spec.Path)
 	if node == nil {
 		return nil
 	}
-	object, ok := node.(map[string]any)
-	if !ok {
-		return fmt.Errorf("response_error path %q is not an object", spec.Path)
-	}
-	message := ""
-	if spec.MessageField != "" {
-		value, present := object[spec.MessageField]
-		if !present {
-			return fmt.Errorf("response_error path %q is missing %q", spec.Path, spec.MessageField)
-		}
-		var ok bool
-		message, ok = value.(string)
-		if !ok || strings.TrimSpace(message) == "" {
-			return fmt.Errorf("response_error path %q field %q is not a non-empty string", spec.Path, spec.MessageField)
-		}
+	message, err := declaredResponseErrorMessage(root, spec)
+	if err != nil {
+		return err
 	}
 	return &DeclaredResponseError{Path: spec.Path, Message: message}
+}
+
+func declaredResponseErrorMessage(root any, spec *ResponseErrorSpec) (string, error) {
+	if spec.MessageField == "" {
+		return "", nil
+	}
+	if spec.Path == "" {
+		return "", fmt.Errorf("response_error message_field %q requires path", spec.MessageField)
+	}
+	object, ok := selectPathKeyed(root, spec.Path).(map[string]any)
+	if !ok {
+		return "", fmt.Errorf("response_error path %q is not an object", spec.Path)
+	}
+	value, present := object[spec.MessageField]
+	if !present {
+		return "", fmt.Errorf("response_error path %q is missing %q", spec.Path, spec.MessageField)
+	}
+	message, ok := value.(string)
+	if !ok || strings.TrimSpace(message) == "" {
+		return "", fmt.Errorf("response_error path %q field %q is not a non-empty string", spec.Path, spec.MessageField)
+	}
+	return message, nil
 }
 
 func mergeResponseFields(raw map[string]any, fields map[string]any) map[string]any {

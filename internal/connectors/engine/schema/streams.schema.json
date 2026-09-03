@@ -270,11 +270,11 @@
           },
           "response_error": {
             "type": "object",
-            "required": ["path"],
             "additionalProperties": false,
             "properties": {
               "path": {"type": "string"},
-              "message_field": {"type": "string"}
+              "message_field": {"type": "string"},
+              "success_path": {"type": "string"}
             }
           },
           "array_zip_projection": {

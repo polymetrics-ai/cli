@@ -67,6 +67,8 @@ func newPaginator(spec PaginationSpec, pageSize int, recordsPath string) (connsd
 			PageSize:    size,
 		}, nil
 
+	case "offset_count":
+		return &offsetCountPaginator{limitParam: spec.LimitParam, pageSize: size}, nil
 	case "cursor":
 		return newCursorPaginator(spec, recordsPath)
 
@@ -79,6 +81,36 @@ func newPaginator(spec PaginationSpec, pageSize int, recordsPath string) (connsd
 	default:
 		return nil, fmt.Errorf("new paginator: unknown pagination type %q", spec.Type)
 	}
+}
+
+// offsetCountPaginator sends one provider-declared query value containing the
+// zero-based offset and count, for APIs such as PrestaShop that reject split
+// offset/limit parameters.
+type offsetCountPaginator struct {
+	limitParam string
+	pageSize   int
+	offset     int
+}
+
+func (p *offsetCountPaginator) Start() *connsdk.NextPage {
+	p.offset = 0
+	return p.page()
+}
+
+func (p *offsetCountPaginator) Next(_ *connsdk.Response, recordCount int) *connsdk.NextPage {
+	if p.pageSize <= 0 || recordCount < p.pageSize {
+		return nil
+	}
+	p.offset += p.pageSize
+	return p.page()
+}
+
+func (p *offsetCountPaginator) page() *connsdk.NextPage {
+	query := url.Values{}
+	if p.limitParam != "" && p.pageSize > 0 {
+		query.Set(p.limitParam, fmt.Sprintf("%d,%d", p.offset, p.pageSize))
+	}
+	return &connsdk.NextPage{Query: query}
 }
 
 // newCursorPaginator builds the paginator for pagination.type == "cursor",

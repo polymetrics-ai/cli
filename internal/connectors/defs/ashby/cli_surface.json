@@ -10,12 +10,12 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         },
         {
-          "maps_to": "query.createdBefore",
+          "maps_to": "body.createdBefore",
           "name": "created-before",
           "type": "integer"
         }
@@ -36,32 +36,32 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         },
         {
-          "maps_to": "query.openedAfter",
+          "maps_to": "body.openedAfter",
           "name": "opened-after",
           "type": "integer"
         },
         {
-          "maps_to": "query.openedBefore",
+          "maps_to": "body.openedBefore",
           "name": "opened-before",
           "type": "integer"
         },
         {
-          "maps_to": "query.closedAfter",
+          "maps_to": "body.closedAfter",
           "name": "closed-after",
           "type": "integer"
         },
         {
-          "maps_to": "query.closedBefore",
+          "maps_to": "body.closedBefore",
           "name": "closed-before",
           "type": "integer"
         },
         {
-          "maps_to": "query.includeUnpublishedJobPostingsIds",
+          "maps_to": "body.includeUnpublishedJobPostingsIds",
           "name": "include-unpublished-job-postings-ids",
           "type": "boolean"
         }
@@ -82,24 +82,24 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         },
         {
-          "maps_to": "query.createdBefore",
+          "maps_to": "body.createdBefore",
           "name": "created-before",
           "type": "integer"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.status",
+          "maps_to": "body.status",
           "name": "status",
           "type": "string"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.jobId",
+          "maps_to": "body.jobId",
           "name": "job-id",
           "type": "string"
         }
@@ -120,7 +120,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeDeactivated",
+          "maps_to": "body.includeDeactivated",
           "name": "include-deactivated",
           "summary": "Whether to include deactivated users in the results. Defaults to false.",
           "type": "boolean"
@@ -159,7 +159,7 @@
         {
           "allow_empty": false,
           "format": "date-time",
-          "maps_to": "query.startDate",
+          "maps_to": "body.startDate",
           "name": "start-date",
           "summary": "ISO 8601 start of the date window (UTC). When omitted, defaults to 24 hours before endDate. When only startDate is supplied, endDate defaults to startDate plus 24 hours (not until ",
           "type": "string"
@@ -167,7 +167,7 @@
         {
           "allow_empty": false,
           "format": "date-time",
-          "maps_to": "query.endDate",
+          "maps_to": "body.endDate",
           "name": "end-date",
           "summary": "ISO 8601 end of the date window (UTC). When omitted with startDate, defaults to startDate plus 24 hours; when both are omitted, defaults to the current time.",
           "type": "string"
@@ -348,13 +348,13 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.applicationId",
+          "maps_to": "body.applicationId",
           "name": "application-id",
           "type": "string"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.submittedFormInstanceId",
+          "maps_to": "body.submittedFormInstanceId",
           "name": "submitted-form-instance-id",
           "type": "string"
         }
@@ -743,7 +743,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.applicationId",
+          "maps_to": "body.applicationId",
           "name": "application-id",
           "required": true,
           "summary": "The id of the application to fetch.",
@@ -767,7 +767,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.applicationId",
+          "maps_to": "body.applicationId",
           "name": "application-id",
           "required": true,
           "summary": "The id of the application to fetch criteria evaluations for.",
@@ -791,12 +791,12 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.applicationId",
+          "maps_to": "body.applicationId",
           "name": "application-id",
           "type": "string"
         },
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         }
@@ -1010,13 +1010,13 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.id",
+          "maps_to": "body.id",
           "name": "id",
           "type": "string"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.externalMappingId",
+          "maps_to": "body.externalMappingId",
           "name": "external-mapping-id",
           "type": "string"
         }
@@ -1365,7 +1365,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.candidateId",
+          "maps_to": "body.candidateId",
           "name": "candidate-id",
           "required": true,
           "summary": "The id of the candidate to fetch client info for",
@@ -1389,7 +1389,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.candidateId",
+          "maps_to": "body.candidateId",
           "name": "candidate-id",
           "required": true,
           "summary": "The id of the candidate to fetch fraud checks for",
@@ -1452,7 +1452,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.candidateId",
+          "maps_to": "body.candidateId",
           "name": "candidate-id",
           "required": true,
           "summary": "The id of the candidate to fetch notes for",
@@ -1758,7 +1758,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.candidateId",
+          "maps_to": "body.candidateId",
           "name": "candidate-id",
           "required": true,
           "summary": "The id of the candidate to fetch projects for",
@@ -1898,7 +1898,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         }
@@ -1934,7 +1934,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         }
@@ -1956,7 +1956,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.feedbackFormDefinitionId",
+          "maps_to": "body.feedbackFormDefinitionId",
           "name": "feedback-form-definition-id",
           "required": true,
           "summary": "The unique id of the feedback form you'd like to fetch.",
@@ -1980,29 +1980,29 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.location",
+          "maps_to": "body.location",
           "name": "location",
           "type": "string"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.department",
+          "maps_to": "body.department",
           "name": "department",
           "type": "string"
         },
         {
-          "maps_to": "query.listedOnly",
+          "maps_to": "body.listedOnly",
           "name": "listed-only",
           "type": "boolean"
         },
         {
-          "maps_to": "query.includeUnpublishedJobPostings",
+          "maps_to": "body.includeUnpublishedJobPostings",
           "name": "include-unpublished-job-postings",
           "type": "boolean"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.jobBoardId",
+          "maps_to": "body.jobBoardId",
           "name": "job-board-id",
           "type": "string"
         }
@@ -2024,7 +2024,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.jobPostingId",
+          "maps_to": "body.jobPostingId",
           "name": "job-posting-id",
           "required": true,
           "summary": "The id of the job posting to return",
@@ -2032,12 +2032,12 @@
         },
         {
           "allow_empty": false,
-          "maps_to": "query.jobBoardId",
+          "maps_to": "body.jobBoardId",
           "name": "job-board-id",
           "type": "string"
         },
         {
-          "maps_to": "query.includeUnpublishedJobPostings",
+          "maps_to": "body.includeUnpublishedJobPostings",
           "name": "include-unpublished-job-postings",
           "type": "boolean"
         }
@@ -2228,14 +2228,14 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.id",
+          "maps_to": "body.id",
           "name": "id",
           "required": true,
           "summary": "The id of the job to fetch",
           "type": "string"
         },
         {
-          "maps_to": "query.includeUnpublishedJobPostingsIds",
+          "maps_to": "body.includeUnpublishedJobPostingsIds",
           "name": "include-unpublished-job-postings-ids",
           "type": "boolean"
         }
@@ -2558,7 +2558,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.jobId",
+          "maps_to": "body.jobId",
           "name": "job-id",
           "required": true,
           "summary": "The id of the job to fetch an interview plan for",
@@ -2695,7 +2695,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.departmentId",
+          "maps_to": "body.departmentId",
           "name": "department-id",
           "required": true,
           "summary": "The unique id of the department whose details will be fetched",
@@ -2718,7 +2718,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         }
@@ -2940,12 +2940,12 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         },
         {
-          "maps_to": "query.includeLocationHierarchy",
+          "maps_to": "body.includeLocationHierarchy",
           "name": "include-location-hierarchy",
           "type": "boolean"
         }
@@ -2967,7 +2967,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.locationId",
+          "maps_to": "body.locationId",
           "name": "location-id",
           "required": true,
           "summary": "The id of the location to fetch",
@@ -3163,7 +3163,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         }
@@ -3185,7 +3185,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.interviewPlanId",
+          "maps_to": "body.interviewPlanId",
           "name": "interview-plan-id",
           "required": true,
           "summary": "The id of the interview plan to list stages for",
@@ -3345,13 +3345,13 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.applicationId",
+          "maps_to": "body.applicationId",
           "name": "application-id",
           "type": "string"
         }
@@ -3373,14 +3373,14 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.offerId",
+          "maps_to": "body.offerId",
           "name": "offer-id",
           "required": true,
           "summary": "The id of the offer to fetch",
           "type": "string"
         },
         {
-          "maps_to": "query.excludeFormDefinition",
+          "maps_to": "body.excludeFormDefinition",
           "name": "exclude-form-definition",
           "type": "boolean"
         }
@@ -3623,7 +3623,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.openingId",
+          "maps_to": "body.openingId",
           "name": "opening-id",
           "required": true,
           "summary": "The id of the opening",
@@ -4044,7 +4044,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         }
@@ -4093,7 +4093,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.projectId",
+          "maps_to": "body.projectId",
           "name": "project-id",
           "required": true,
           "summary": "The id of the project",
@@ -4116,7 +4116,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         }
@@ -4164,7 +4164,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         }
@@ -4185,13 +4185,13 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeDisabled",
+          "maps_to": "body.includeDisabled",
           "name": "include-disabled",
           "type": "boolean"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.sourceId",
+          "maps_to": "body.sourceId",
           "name": "source-id",
           "type": "string"
         }
@@ -4212,7 +4212,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         }
@@ -4248,7 +4248,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         }
@@ -4409,7 +4409,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.customFieldId",
+          "maps_to": "body.customFieldId",
           "name": "custom-field-id",
           "required": true,
           "summary": "The id of the custom field to fetch",
@@ -4832,7 +4832,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.userId",
+          "maps_to": "body.userId",
           "name": "user-id",
           "required": true,
           "summary": "The unique identifier for the user",
@@ -4996,7 +4996,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.userId",
+          "maps_to": "body.userId",
           "name": "user-id",
           "required": true,
           "summary": "The id of the user to list pauses for.",
@@ -5299,7 +5299,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.sequenceId",
+          "maps_to": "body.sequenceId",
           "name": "sequence-id",
           "required": true,
           "summary": "The unique identifier for the sequence enrollment",
@@ -5323,7 +5323,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.candidateId",
+          "maps_to": "body.candidateId",
           "name": "candidate-id",
           "summary": "Only return sequence enrollments for this candidate",
           "type": "string"
@@ -5424,7 +5424,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.sequenceTemplateId",
+          "maps_to": "body.sequenceTemplateId",
           "name": "sequence-template-id",
           "required": true,
           "summary": "The unique identifier for the sequence template",
@@ -5447,7 +5447,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "summary": "Whether to include archived templates. Defaults to false.",
           "type": "boolean"
@@ -5470,18 +5470,18 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.applicationId",
+          "maps_to": "body.applicationId",
           "name": "application-id",
           "type": "string"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.interviewStageId",
+          "maps_to": "body.interviewStageId",
           "name": "interview-stage-id",
           "type": "string"
         },
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         }
@@ -5625,13 +5625,13 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.applicationId",
+          "maps_to": "body.applicationId",
           "name": "application-id",
           "type": "string"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.candidateId",
+          "maps_to": "body.candidateId",
           "name": "candidate-id",
           "type": "string"
         }
@@ -5653,7 +5653,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.takeHomeAssignmentId",
+          "maps_to": "body.takeHomeAssignmentId",
           "name": "take-home-assignment-id",
           "required": true,
           "summary": "The id of the take-home assignment",
@@ -5677,14 +5677,14 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.interviewScheduleId",
+          "maps_to": "body.interviewScheduleId",
           "name": "interview-schedule-id",
           "required": true,
           "summary": "The unique ID of the interview schedule, for which to list interview events",
           "type": "string"
         },
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         }
@@ -5706,7 +5706,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.interviewEventId",
+          "maps_to": "body.interviewEventId",
           "name": "interview-event-id",
           "required": true,
           "summary": "The id of the interview event whose briefing should be returned.",
@@ -5730,7 +5730,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.id",
+          "maps_to": "body.id",
           "name": "id",
           "required": true,
           "summary": "The unique id of the interview whose details will be fetched",
@@ -5753,17 +5753,17 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         },
         {
-          "maps_to": "query.includeNonSharedInterviews",
+          "maps_to": "body.includeNonSharedInterviews",
           "name": "include-non-shared-interviews",
           "type": "boolean"
         },
         {
-          "maps_to": "query.excludeArchivedScheduleTemplateInterviews",
+          "maps_to": "body.excludeArchivedScheduleTemplateInterviews",
           "name": "exclude-archived-schedule-template-interviews",
           "type": "boolean"
         }
@@ -5785,7 +5785,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.interviewStageId",
+          "maps_to": "body.interviewStageId",
           "name": "interview-stage-id",
           "required": true,
           "summary": "The id of the interview stage to retrieve",
@@ -5836,7 +5836,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.surveyFormDefinitionId",
+          "maps_to": "body.surveyFormDefinitionId",
           "name": "survey-form-definition-id",
           "required": true,
           "summary": "The unique identifier of the survey form definition to fetch",
@@ -5918,7 +5918,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.surveyType",
+          "maps_to": "body.surveyType",
           "name": "survey-type",
           "required": true,
           "summary": "Returns only the survey requests of the given type. Currently, only `CandidateExperience` is supported.",
@@ -5929,18 +5929,18 @@
         },
         {
           "allow_empty": false,
-          "maps_to": "query.applicationId",
+          "maps_to": "body.applicationId",
           "name": "application-id",
           "type": "string"
         },
         {
           "allow_empty": false,
-          "maps_to": "query.candidateId",
+          "maps_to": "body.candidateId",
           "name": "candidate-id",
           "type": "string"
         },
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         }
@@ -6005,7 +6005,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.surveyType",
+          "maps_to": "body.surveyType",
           "name": "survey-type",
           "required": true,
           "summary": "The survey types supported by surveySubmission.list. Supported values: CandidateExperience, Questionnaire, HiringManagerExperience.",
@@ -6017,7 +6017,7 @@
           ]
         },
         {
-          "maps_to": "query.createdAfter",
+          "maps_to": "body.createdAfter",
           "name": "created-after",
           "type": "integer"
         }
@@ -6109,7 +6109,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.webhookId",
+          "maps_to": "body.webhookId",
           "name": "webhook-id",
           "required": true,
           "summary": "The id of the webhook setting to retrieve",
@@ -6209,12 +6209,12 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchivedPools",
+          "maps_to": "body.includeArchivedPools",
           "name": "include-archived-pools",
           "type": "boolean"
         },
         {
-          "maps_to": "query.includeArchivedTrainingStages",
+          "maps_to": "body.includeArchivedTrainingStages",
           "name": "include-archived-training-stages",
           "type": "boolean"
         }
@@ -6236,7 +6236,7 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.interviewerPoolId",
+          "maps_to": "body.interviewerPoolId",
           "name": "interviewer-pool-id",
           "required": true,
           "summary": "The id of the interviewer pool",
@@ -6464,7 +6464,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.includeArchived",
+          "maps_to": "body.includeArchived",
           "name": "include-archived",
           "type": "boolean"
         }
@@ -6533,19 +6533,19 @@
       "flags": [
         {
           "allow_empty": false,
-          "maps_to": "query.reportId",
+          "maps_to": "body.reportId",
           "name": "report-id",
           "required": true,
           "summary": "The ID of the report",
           "type": "string"
         },
         {
-          "maps_to": "query.includeHeadersInData",
+          "maps_to": "body.includeHeadersInData",
           "name": "include-headers-in-data",
           "type": "boolean"
         },
         {
-          "maps_to": "query.resultStyle",
+          "maps_to": "body.resultStyle",
           "name": "result-style",
           "type": "enum",
           "values": [
@@ -6570,7 +6570,7 @@
       "availability": "implemented",
       "flags": [
         {
-          "maps_to": "query.entityType",
+          "maps_to": "body.entityType",
           "name": "entity-type",
           "type": "enum",
           "values": [
@@ -6581,7 +6581,7 @@
         },
         {
           "allow_empty": false,
-          "maps_to": "query.entityId",
+          "maps_to": "body.entityId",
           "name": "entity-id",
           "type": "string"
         }

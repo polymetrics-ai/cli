@@ -55,16 +55,6 @@
         "type": "string",
         "x-secret": true,
         "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs."
-      },
-      "page_size": {
-        "type": "string",
-        "default": "100",
-        "description": "Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector."
-      },
-      "max_pages": {
-        "type": "string",
-        "default": "0",
-        "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent."
       }
     },
     "x-reject-unknown-config": true
@@ -85,7 +75,10 @@
     ],
     "check": {
       "method": "POST",
-      "path": "/candidate.list"
+      "path": "/candidate.list",
+      "body": {
+        "limit": 1
+      }
     },
     "pagination": {
       "type": "none"
@@ -14138,7 +14131,31 @@
           "path": "results"
         },
         "schema": "schemas/candidates.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          },
+          "createdBefore": {
+            "template": "{{ query.createdBefore }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14153,12 +14170,12 @@
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               },
               {
                 "name": "created-before",
                 "type": "integer",
-                "maps_to": "query.createdBefore"
+                "maps_to": "body.createdBefore"
               }
             ],
             "api_surface": [
@@ -14173,6 +14190,9 @@
       ],
       "schema_refs": {
         "record": "schemas/candidates.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14186,7 +14206,47 @@
           "path": "results"
         },
         "schema": "schemas/jobs.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          },
+          "openedAfter": {
+            "template": "{{ query.openedAfter }}",
+            "omit_when_absent": true
+          },
+          "openedBefore": {
+            "template": "{{ query.openedBefore }}",
+            "omit_when_absent": true
+          },
+          "closedAfter": {
+            "template": "{{ query.closedAfter }}",
+            "omit_when_absent": true
+          },
+          "closedBefore": {
+            "template": "{{ query.closedBefore }}",
+            "omit_when_absent": true
+          },
+          "includeUnpublishedJobPostingsIds": {
+            "template": "{{ query.includeUnpublishedJobPostingsIds }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14201,32 +14261,32 @@
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               },
               {
                 "name": "opened-after",
                 "type": "integer",
-                "maps_to": "query.openedAfter"
+                "maps_to": "body.openedAfter"
               },
               {
                 "name": "opened-before",
                 "type": "integer",
-                "maps_to": "query.openedBefore"
+                "maps_to": "body.openedBefore"
               },
               {
                 "name": "closed-after",
                 "type": "integer",
-                "maps_to": "query.closedAfter"
+                "maps_to": "body.closedAfter"
               },
               {
                 "name": "closed-before",
                 "type": "integer",
-                "maps_to": "query.closedBefore"
+                "maps_to": "body.closedBefore"
               },
               {
                 "name": "include-unpublished-job-postings-ids",
                 "type": "boolean",
-                "maps_to": "query.includeUnpublishedJobPostingsIds"
+                "maps_to": "body.includeUnpublishedJobPostingsIds"
               }
             ],
             "api_surface": [
@@ -14241,6 +14301,9 @@
       ],
       "schema_refs": {
         "record": "schemas/jobs.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14254,7 +14317,39 @@
           "path": "results"
         },
         "schema": "schemas/applications.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          },
+          "createdBefore": {
+            "template": "{{ query.createdBefore }}",
+            "omit_when_absent": true
+          },
+          "status": {
+            "template": "{{ query.status }}",
+            "omit_when_absent": true
+          },
+          "jobId": {
+            "template": "{{ query.jobId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14269,23 +14364,23 @@
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               },
               {
                 "name": "created-before",
                 "type": "integer",
-                "maps_to": "query.createdBefore"
+                "maps_to": "body.createdBefore"
               },
               {
                 "name": "status",
                 "type": "string",
-                "maps_to": "query.status",
+                "maps_to": "body.status",
                 "allow_empty": false
               },
               {
                 "name": "job-id",
                 "type": "string",
-                "maps_to": "query.jobId",
+                "maps_to": "body.jobId",
                 "allow_empty": false
               }
             ],
@@ -14301,6 +14396,9 @@
       ],
       "schema_refs": {
         "record": "schemas/applications.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14314,7 +14412,27 @@
           "path": "results"
         },
         "schema": "schemas/users.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeDeactivated": {
+            "template": "{{ query.includeDeactivated }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14329,7 +14447,7 @@
               {
                 "name": "include-deactivated",
                 "type": "boolean",
-                "maps_to": "query.includeDeactivated",
+                "maps_to": "body.includeDeactivated",
                 "summary": "Whether to include deactivated users in the results. Defaults to false."
               }
             ],
@@ -14345,6 +14463,9 @@
       ],
       "schema_refs": {
         "record": "schemas/users.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14358,7 +14479,23 @@
           "path": "results"
         },
         "schema": "schemas/api_key_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14382,6 +14519,9 @@
       ],
       "schema_refs": {
         "record": "schemas/api_key_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14395,7 +14535,31 @@
           "path": "results"
         },
         "schema": "schemas/audit_log_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "startDate": {
+            "template": "{{ query.startDate }}",
+            "omit_when_absent": true
+          },
+          "endDate": {
+            "template": "{{ query.endDate }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14410,7 +14574,7 @@
               {
                 "name": "start-date",
                 "type": "string",
-                "maps_to": "query.startDate",
+                "maps_to": "body.startDate",
                 "summary": "ISO 8601 start of the date window (UTC). When omitted, defaults to 24 hours before endDate. When only startDate is supplied, endDate defaults to startDate plus 24 hours (not until ",
                 "format": "date-time",
                 "allow_empty": false
@@ -14418,7 +14582,7 @@
               {
                 "name": "end-date",
                 "type": "string",
-                "maps_to": "query.endDate",
+                "maps_to": "body.endDate",
                 "summary": "ISO 8601 end of the date window (UTC). When omitted with startDate, defaults to startDate plus 24 hours; when both are omitted, defaults to the current time.",
                 "format": "date-time",
                 "allow_empty": false
@@ -14436,6 +14600,9 @@
       ],
       "schema_refs": {
         "record": "schemas/audit_log_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14449,7 +14616,31 @@
           "path": "results"
         },
         "schema": "schemas/application_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "applicationId": {
+            "template": "{{ query.applicationId }}",
+            "omit_when_absent": true
+          },
+          "submittedFormInstanceId": {
+            "template": "{{ query.submittedFormInstanceId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14464,13 +14655,13 @@
               {
                 "name": "application-id",
                 "type": "string",
-                "maps_to": "query.applicationId",
+                "maps_to": "body.applicationId",
                 "allow_empty": false
               },
               {
                 "name": "submitted-form-instance-id",
                 "type": "string",
-                "maps_to": "query.submittedFormInstanceId",
+                "maps_to": "body.submittedFormInstanceId",
                 "allow_empty": false
               }
             ],
@@ -14486,6 +14677,9 @@
       ],
       "schema_refs": {
         "record": "schemas/application_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14499,7 +14693,23 @@
           "path": "results"
         },
         "schema": "schemas/application_hiring_team_role_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14523,6 +14733,9 @@
       ],
       "schema_refs": {
         "record": "schemas/application_hiring_team_role_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14536,7 +14749,27 @@
           "path": "results"
         },
         "schema": "schemas/application_list_history.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "applicationId": {
+            "template": "{{ query.applicationId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14551,7 +14784,7 @@
               {
                 "name": "application-id",
                 "type": "string",
-                "maps_to": "query.applicationId",
+                "maps_to": "body.applicationId",
                 "summary": "The id of the application to fetch.",
                 "allow_empty": false,
                 "required": true
@@ -14569,6 +14802,9 @@
       ],
       "schema_refs": {
         "record": "schemas/application_list_history.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14582,7 +14818,27 @@
           "path": "results"
         },
         "schema": "schemas/application_list_criteria_evaluations.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "applicationId": {
+            "template": "{{ query.applicationId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14597,7 +14853,7 @@
               {
                 "name": "application-id",
                 "type": "string",
-                "maps_to": "query.applicationId",
+                "maps_to": "body.applicationId",
                 "summary": "The id of the application to fetch criteria evaluations for.",
                 "allow_empty": false,
                 "required": true
@@ -14615,6 +14871,9 @@
       ],
       "schema_refs": {
         "record": "schemas/application_list_criteria_evaluations.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14628,7 +14887,31 @@
           "path": "results"
         },
         "schema": "schemas/application_feedback_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "applicationId": {
+            "template": "{{ query.applicationId }}",
+            "omit_when_absent": true
+          },
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14643,13 +14926,13 @@
               {
                 "name": "application-id",
                 "type": "string",
-                "maps_to": "query.applicationId",
+                "maps_to": "body.applicationId",
                 "allow_empty": false
               },
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               }
             ],
             "api_surface": [
@@ -14664,6 +14947,9 @@
       ],
       "schema_refs": {
         "record": "schemas/application_feedback_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14677,7 +14963,31 @@
           "path": "results"
         },
         "schema": "schemas/candidate_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "id": {
+            "template": "{{ query.id }}",
+            "omit_when_absent": true
+          },
+          "externalMappingId": {
+            "template": "{{ query.externalMappingId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14692,13 +15002,13 @@
               {
                 "name": "id",
                 "type": "string",
-                "maps_to": "query.id",
+                "maps_to": "body.id",
                 "allow_empty": false
               },
               {
                 "name": "external-mapping-id",
                 "type": "string",
-                "maps_to": "query.externalMappingId",
+                "maps_to": "body.externalMappingId",
                 "allow_empty": false
               }
             ],
@@ -14714,6 +15024,9 @@
       ],
       "schema_refs": {
         "record": "schemas/candidate_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14727,7 +15040,27 @@
           "path": "results"
         },
         "schema": "schemas/candidate_list_client_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "candidateId": {
+            "template": "{{ query.candidateId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14742,7 +15075,7 @@
               {
                 "name": "candidate-id",
                 "type": "string",
-                "maps_to": "query.candidateId",
+                "maps_to": "body.candidateId",
                 "summary": "The id of the candidate to fetch client info for",
                 "allow_empty": false,
                 "required": true
@@ -14760,6 +15093,9 @@
       ],
       "schema_refs": {
         "record": "schemas/candidate_list_client_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14773,7 +15109,27 @@
           "path": "results"
         },
         "schema": "schemas/candidate_list_fraud_checks.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "candidateId": {
+            "template": "{{ query.candidateId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14788,7 +15144,7 @@
               {
                 "name": "candidate-id",
                 "type": "string",
-                "maps_to": "query.candidateId",
+                "maps_to": "body.candidateId",
                 "summary": "The id of the candidate to fetch fraud checks for",
                 "allow_empty": false,
                 "required": true
@@ -14806,6 +15162,9 @@
       ],
       "schema_refs": {
         "record": "schemas/candidate_list_fraud_checks.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14819,7 +15178,27 @@
           "path": "results"
         },
         "schema": "schemas/candidate_list_notes.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "candidateId": {
+            "template": "{{ query.candidateId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14834,7 +15213,7 @@
               {
                 "name": "candidate-id",
                 "type": "string",
-                "maps_to": "query.candidateId",
+                "maps_to": "body.candidateId",
                 "summary": "The id of the candidate to fetch notes for",
                 "allow_empty": false,
                 "required": true
@@ -14852,6 +15231,9 @@
       ],
       "schema_refs": {
         "record": "schemas/candidate_list_notes.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14865,7 +15247,27 @@
           "path": "results"
         },
         "schema": "schemas/candidate_list_projects.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "candidateId": {
+            "template": "{{ query.candidateId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14880,7 +15282,7 @@
               {
                 "name": "candidate-id",
                 "type": "string",
-                "maps_to": "query.candidateId",
+                "maps_to": "body.candidateId",
                 "summary": "The id of the candidate to fetch projects for",
                 "allow_empty": false,
                 "required": true
@@ -14898,6 +15300,9 @@
       ],
       "schema_refs": {
         "record": "schemas/candidate_list_projects.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14911,7 +15316,27 @@
           "path": "results"
         },
         "schema": "schemas/candidate_tag_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14926,7 +15351,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               }
             ],
             "api_surface": [
@@ -14941,6 +15366,9 @@
       ],
       "schema_refs": {
         "record": "schemas/candidate_tag_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14954,7 +15382,23 @@
           "path": "results"
         },
         "schema": "schemas/communication_template_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -14978,6 +15422,9 @@
       ],
       "schema_refs": {
         "record": "schemas/communication_template_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -14991,7 +15438,27 @@
           "path": "results"
         },
         "schema": "schemas/feedback_form_definition_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15006,7 +15473,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               }
             ],
             "api_surface": [
@@ -15021,6 +15488,9 @@
       ],
       "schema_refs": {
         "record": "schemas/feedback_form_definition_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15034,7 +15504,27 @@
           "path": "results"
         },
         "schema": "schemas/feedback_form_definition_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "feedbackFormDefinitionId": {
+            "template": "{{ query.feedbackFormDefinitionId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15049,7 +15539,7 @@
               {
                 "name": "feedback-form-definition-id",
                 "type": "string",
-                "maps_to": "query.feedbackFormDefinitionId",
+                "maps_to": "body.feedbackFormDefinitionId",
                 "summary": "The unique id of the feedback form you'd like to fetch.",
                 "allow_empty": false,
                 "required": true
@@ -15067,6 +15557,9 @@
       ],
       "schema_refs": {
         "record": "schemas/feedback_form_definition_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15080,7 +15573,43 @@
           "path": "results"
         },
         "schema": "schemas/job_posting_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "location": {
+            "template": "{{ query.location }}",
+            "omit_when_absent": true
+          },
+          "department": {
+            "template": "{{ query.department }}",
+            "omit_when_absent": true
+          },
+          "listedOnly": {
+            "template": "{{ query.listedOnly }}",
+            "omit_when_absent": true
+          },
+          "includeUnpublishedJobPostings": {
+            "template": "{{ query.includeUnpublishedJobPostings }}",
+            "omit_when_absent": true
+          },
+          "jobBoardId": {
+            "template": "{{ query.jobBoardId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15095,29 +15624,29 @@
               {
                 "name": "location",
                 "type": "string",
-                "maps_to": "query.location",
+                "maps_to": "body.location",
                 "allow_empty": false
               },
               {
                 "name": "department",
                 "type": "string",
-                "maps_to": "query.department",
+                "maps_to": "body.department",
                 "allow_empty": false
               },
               {
                 "name": "listed-only",
                 "type": "boolean",
-                "maps_to": "query.listedOnly"
+                "maps_to": "body.listedOnly"
               },
               {
                 "name": "include-unpublished-job-postings",
                 "type": "boolean",
-                "maps_to": "query.includeUnpublishedJobPostings"
+                "maps_to": "body.includeUnpublishedJobPostings"
               },
               {
                 "name": "job-board-id",
                 "type": "string",
-                "maps_to": "query.jobBoardId",
+                "maps_to": "body.jobBoardId",
                 "allow_empty": false
               }
             ],
@@ -15133,6 +15662,9 @@
       ],
       "schema_refs": {
         "record": "schemas/job_posting_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15146,7 +15678,35 @@
           "path": "results"
         },
         "schema": "schemas/job_posting_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "jobPostingId": {
+            "template": "{{ query.jobPostingId }}",
+            "omit_when_absent": true
+          },
+          "jobBoardId": {
+            "template": "{{ query.jobBoardId }}",
+            "omit_when_absent": true
+          },
+          "includeUnpublishedJobPostings": {
+            "template": "{{ query.includeUnpublishedJobPostings }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15161,7 +15721,7 @@
               {
                 "name": "job-posting-id",
                 "type": "string",
-                "maps_to": "query.jobPostingId",
+                "maps_to": "body.jobPostingId",
                 "summary": "The id of the job posting to return",
                 "allow_empty": false,
                 "required": true
@@ -15169,13 +15729,13 @@
               {
                 "name": "job-board-id",
                 "type": "string",
-                "maps_to": "query.jobBoardId",
+                "maps_to": "body.jobBoardId",
                 "allow_empty": false
               },
               {
                 "name": "include-unpublished-job-postings",
                 "type": "boolean",
-                "maps_to": "query.includeUnpublishedJobPostings"
+                "maps_to": "body.includeUnpublishedJobPostings"
               }
             ],
             "api_surface": [
@@ -15190,6 +15750,9 @@
       ],
       "schema_refs": {
         "record": "schemas/job_posting_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15203,7 +15766,31 @@
           "path": "results"
         },
         "schema": "schemas/job_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "id": {
+            "template": "{{ query.id }}",
+            "omit_when_absent": true
+          },
+          "includeUnpublishedJobPostingsIds": {
+            "template": "{{ query.includeUnpublishedJobPostingsIds }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15218,7 +15805,7 @@
               {
                 "name": "id",
                 "type": "string",
-                "maps_to": "query.id",
+                "maps_to": "body.id",
                 "summary": "The id of the job to fetch",
                 "allow_empty": false,
                 "required": true
@@ -15226,7 +15813,7 @@
               {
                 "name": "include-unpublished-job-postings-ids",
                 "type": "boolean",
-                "maps_to": "query.includeUnpublishedJobPostingsIds"
+                "maps_to": "body.includeUnpublishedJobPostingsIds"
               }
             ],
             "api_surface": [
@@ -15241,6 +15828,9 @@
       ],
       "schema_refs": {
         "record": "schemas/job_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15254,7 +15844,23 @@
           "path": "results"
         },
         "schema": "schemas/job_board_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15278,6 +15884,9 @@
       ],
       "schema_refs": {
         "record": "schemas/job_board_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15291,7 +15900,27 @@
           "path": "results"
         },
         "schema": "schemas/job_interview_plan_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "jobId": {
+            "template": "{{ query.jobId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15306,7 +15935,7 @@
               {
                 "name": "job-id",
                 "type": "string",
-                "maps_to": "query.jobId",
+                "maps_to": "body.jobId",
                 "summary": "The id of the job to fetch an interview plan for",
                 "allow_empty": false,
                 "required": true
@@ -15324,6 +15953,9 @@
       ],
       "schema_refs": {
         "record": "schemas/job_interview_plan_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15337,7 +15969,23 @@
           "path": "results"
         },
         "schema": "schemas/job_template_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15361,6 +16009,9 @@
       ],
       "schema_refs": {
         "record": "schemas/job_template_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15374,7 +16025,27 @@
           "path": "results"
         },
         "schema": "schemas/department_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "departmentId": {
+            "template": "{{ query.departmentId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15389,7 +16060,7 @@
               {
                 "name": "department-id",
                 "type": "string",
-                "maps_to": "query.departmentId",
+                "maps_to": "body.departmentId",
                 "summary": "The unique id of the department whose details will be fetched",
                 "allow_empty": false,
                 "required": true
@@ -15407,6 +16078,9 @@
       ],
       "schema_refs": {
         "record": "schemas/department_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15420,7 +16094,27 @@
           "path": "results"
         },
         "schema": "schemas/department_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15435,7 +16129,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               }
             ],
             "api_surface": [
@@ -15450,6 +16144,9 @@
       ],
       "schema_refs": {
         "record": "schemas/department_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15463,7 +16160,31 @@
           "path": "results"
         },
         "schema": "schemas/location_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          },
+          "includeLocationHierarchy": {
+            "template": "{{ query.includeLocationHierarchy }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15478,12 +16199,12 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               },
               {
                 "name": "include-location-hierarchy",
                 "type": "boolean",
-                "maps_to": "query.includeLocationHierarchy"
+                "maps_to": "body.includeLocationHierarchy"
               }
             ],
             "api_surface": [
@@ -15498,6 +16219,9 @@
       ],
       "schema_refs": {
         "record": "schemas/location_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15511,7 +16235,27 @@
           "path": "results"
         },
         "schema": "schemas/location_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "locationId": {
+            "template": "{{ query.locationId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15526,7 +16270,7 @@
               {
                 "name": "location-id",
                 "type": "string",
-                "maps_to": "query.locationId",
+                "maps_to": "body.locationId",
                 "summary": "The id of the location to fetch",
                 "allow_empty": false,
                 "required": true
@@ -15544,6 +16288,9 @@
       ],
       "schema_refs": {
         "record": "schemas/location_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15557,7 +16304,27 @@
           "path": "results"
         },
         "schema": "schemas/interview_plan_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15572,7 +16339,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               }
             ],
             "api_surface": [
@@ -15587,6 +16354,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_plan_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15600,7 +16370,27 @@
           "path": "results"
         },
         "schema": "schemas/interview_stage_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "interviewPlanId": {
+            "template": "{{ query.interviewPlanId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15615,7 +16405,7 @@
               {
                 "name": "interview-plan-id",
                 "type": "string",
-                "maps_to": "query.interviewPlanId",
+                "maps_to": "body.interviewPlanId",
                 "summary": "The id of the interview plan to list stages for",
                 "allow_empty": false,
                 "required": true
@@ -15633,6 +16423,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_stage_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15646,7 +16439,23 @@
           "path": "results"
         },
         "schema": "schemas/interview_stage_group_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15670,6 +16479,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_stage_group_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15683,7 +16495,31 @@
           "path": "results"
         },
         "schema": "schemas/offer_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          },
+          "applicationId": {
+            "template": "{{ query.applicationId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15698,12 +16534,12 @@
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               },
               {
                 "name": "application-id",
                 "type": "string",
-                "maps_to": "query.applicationId",
+                "maps_to": "body.applicationId",
                 "allow_empty": false
               }
             ],
@@ -15719,6 +16555,9 @@
       ],
       "schema_refs": {
         "record": "schemas/offer_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15732,7 +16571,31 @@
           "path": "results"
         },
         "schema": "schemas/offer_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "offerId": {
+            "template": "{{ query.offerId }}",
+            "omit_when_absent": true
+          },
+          "excludeFormDefinition": {
+            "template": "{{ query.excludeFormDefinition }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15747,7 +16610,7 @@
               {
                 "name": "offer-id",
                 "type": "string",
-                "maps_to": "query.offerId",
+                "maps_to": "body.offerId",
                 "summary": "The id of the offer to fetch",
                 "allow_empty": false,
                 "required": true
@@ -15755,7 +16618,7 @@
               {
                 "name": "exclude-form-definition",
                 "type": "boolean",
-                "maps_to": "query.excludeFormDefinition"
+                "maps_to": "body.excludeFormDefinition"
               }
             ],
             "api_surface": [
@@ -15770,6 +16633,9 @@
       ],
       "schema_refs": {
         "record": "schemas/offer_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15783,7 +16649,27 @@
           "path": "results"
         },
         "schema": "schemas/opening_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "openingId": {
+            "template": "{{ query.openingId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15798,7 +16684,7 @@
               {
                 "name": "opening-id",
                 "type": "string",
-                "maps_to": "query.openingId",
+                "maps_to": "body.openingId",
                 "summary": "The id of the opening",
                 "allow_empty": false,
                 "required": true
@@ -15816,6 +16702,9 @@
       ],
       "schema_refs": {
         "record": "schemas/opening_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15829,7 +16718,27 @@
           "path": "results"
         },
         "schema": "schemas/opening_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15844,7 +16753,7 @@
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               }
             ],
             "api_surface": [
@@ -15859,6 +16768,9 @@
       ],
       "schema_refs": {
         "record": "schemas/opening_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15872,7 +16784,27 @@
           "path": "results"
         },
         "schema": "schemas/project_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "projectId": {
+            "template": "{{ query.projectId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15887,7 +16819,7 @@
               {
                 "name": "project-id",
                 "type": "string",
-                "maps_to": "query.projectId",
+                "maps_to": "body.projectId",
                 "summary": "The id of the project",
                 "allow_empty": false,
                 "required": true
@@ -15905,6 +16837,9 @@
       ],
       "schema_refs": {
         "record": "schemas/project_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15918,7 +16853,27 @@
           "path": "results"
         },
         "schema": "schemas/project_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15933,7 +16888,7 @@
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               }
             ],
             "api_surface": [
@@ -15948,6 +16903,9 @@
       ],
       "schema_refs": {
         "record": "schemas/project_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -15961,7 +16919,27 @@
           "path": "results"
         },
         "schema": "schemas/source_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -15976,7 +16954,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               }
             ],
             "api_surface": [
@@ -15991,6 +16969,9 @@
       ],
       "schema_refs": {
         "record": "schemas/source_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16004,7 +16985,31 @@
           "path": "results"
         },
         "schema": "schemas/source_tracking_link_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeDisabled": {
+            "template": "{{ query.includeDisabled }}",
+            "omit_when_absent": true
+          },
+          "sourceId": {
+            "template": "{{ query.sourceId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16019,12 +17024,12 @@
               {
                 "name": "include-disabled",
                 "type": "boolean",
-                "maps_to": "query.includeDisabled"
+                "maps_to": "body.includeDisabled"
               },
               {
                 "name": "source-id",
                 "type": "string",
-                "maps_to": "query.sourceId",
+                "maps_to": "body.sourceId",
                 "allow_empty": false
               }
             ],
@@ -16040,6 +17045,9 @@
       ],
       "schema_refs": {
         "record": "schemas/source_tracking_link_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16053,7 +17061,27 @@
           "path": "results"
         },
         "schema": "schemas/archive_reason_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16068,7 +17096,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               }
             ],
             "api_surface": [
@@ -16083,6 +17111,9 @@
       ],
       "schema_refs": {
         "record": "schemas/archive_reason_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16096,7 +17127,23 @@
           "path": "results"
         },
         "schema": "schemas/brand_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16120,6 +17167,9 @@
       ],
       "schema_refs": {
         "record": "schemas/brand_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16133,7 +17183,27 @@
           "path": "results"
         },
         "schema": "schemas/custom_field_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16148,7 +17218,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               }
             ],
             "api_surface": [
@@ -16163,6 +17233,9 @@
       ],
       "schema_refs": {
         "record": "schemas/custom_field_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16176,7 +17249,27 @@
           "path": "results"
         },
         "schema": "schemas/custom_field_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "customFieldId": {
+            "template": "{{ query.customFieldId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16191,7 +17284,7 @@
               {
                 "name": "custom-field-id",
                 "type": "string",
-                "maps_to": "query.customFieldId",
+                "maps_to": "body.customFieldId",
                 "summary": "The id of the custom field to fetch",
                 "allow_empty": false,
                 "required": true
@@ -16209,6 +17302,9 @@
       ],
       "schema_refs": {
         "record": "schemas/custom_field_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16222,7 +17318,23 @@
           "path": "results"
         },
         "schema": "schemas/hiring_team_role_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16246,6 +17358,9 @@
       ],
       "schema_refs": {
         "record": "schemas/hiring_team_role_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16259,7 +17374,27 @@
           "path": "results"
         },
         "schema": "schemas/user_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "userId": {
+            "template": "{{ query.userId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16274,7 +17409,7 @@
               {
                 "name": "user-id",
                 "type": "string",
-                "maps_to": "query.userId",
+                "maps_to": "body.userId",
                 "summary": "The unique identifier for the user",
                 "allow_empty": false,
                 "required": true
@@ -16292,6 +17427,9 @@
       ],
       "schema_refs": {
         "record": "schemas/user_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16305,7 +17443,27 @@
           "path": "results"
         },
         "schema": "schemas/user_list_interviewer_pauses.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "userId": {
+            "template": "{{ query.userId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16320,7 +17478,7 @@
               {
                 "name": "user-id",
                 "type": "string",
-                "maps_to": "query.userId",
+                "maps_to": "body.userId",
                 "summary": "The id of the user to list pauses for.",
                 "allow_empty": false,
                 "required": true
@@ -16338,6 +17496,9 @@
       ],
       "schema_refs": {
         "record": "schemas/user_list_interviewer_pauses.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16351,7 +17512,23 @@
           "path": "results"
         },
         "schema": "schemas/email_sender_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16375,6 +17552,9 @@
       ],
       "schema_refs": {
         "record": "schemas/email_sender_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16388,7 +17568,27 @@
           "path": "results"
         },
         "schema": "schemas/sequence_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "sequenceId": {
+            "template": "{{ query.sequenceId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16403,7 +17603,7 @@
               {
                 "name": "sequence-id",
                 "type": "string",
-                "maps_to": "query.sequenceId",
+                "maps_to": "body.sequenceId",
                 "summary": "The unique identifier for the sequence enrollment",
                 "allow_empty": false,
                 "required": true
@@ -16421,6 +17621,9 @@
       ],
       "schema_refs": {
         "record": "schemas/sequence_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16434,7 +17637,27 @@
           "path": "results"
         },
         "schema": "schemas/sequence_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "candidateId": {
+            "template": "{{ query.candidateId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16449,7 +17672,7 @@
               {
                 "name": "candidate-id",
                 "type": "string",
-                "maps_to": "query.candidateId",
+                "maps_to": "body.candidateId",
                 "summary": "Only return sequence enrollments for this candidate",
                 "allow_empty": false
               }
@@ -16466,6 +17689,9 @@
       ],
       "schema_refs": {
         "record": "schemas/sequence_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16479,7 +17705,27 @@
           "path": "results"
         },
         "schema": "schemas/sequence_template_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "sequenceTemplateId": {
+            "template": "{{ query.sequenceTemplateId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16494,7 +17740,7 @@
               {
                 "name": "sequence-template-id",
                 "type": "string",
-                "maps_to": "query.sequenceTemplateId",
+                "maps_to": "body.sequenceTemplateId",
                 "summary": "The unique identifier for the sequence template",
                 "allow_empty": false,
                 "required": true
@@ -16512,6 +17758,9 @@
       ],
       "schema_refs": {
         "record": "schemas/sequence_template_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16525,7 +17774,27 @@
           "path": "results"
         },
         "schema": "schemas/sequence_template_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16540,7 +17809,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived",
+                "maps_to": "body.includeArchived",
                 "summary": "Whether to include archived templates. Defaults to false."
               }
             ],
@@ -16556,6 +17825,9 @@
       ],
       "schema_refs": {
         "record": "schemas/sequence_template_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16569,7 +17841,35 @@
           "path": "results"
         },
         "schema": "schemas/interview_schedule_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "applicationId": {
+            "template": "{{ query.applicationId }}",
+            "omit_when_absent": true
+          },
+          "interviewStageId": {
+            "template": "{{ query.interviewStageId }}",
+            "omit_when_absent": true
+          },
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16584,19 +17884,19 @@
               {
                 "name": "application-id",
                 "type": "string",
-                "maps_to": "query.applicationId",
+                "maps_to": "body.applicationId",
                 "allow_empty": false
               },
               {
                 "name": "interview-stage-id",
                 "type": "string",
-                "maps_to": "query.interviewStageId",
+                "maps_to": "body.interviewStageId",
                 "allow_empty": false
               },
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               }
             ],
             "api_surface": [
@@ -16611,6 +17911,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_schedule_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16624,7 +17927,31 @@
           "path": "results"
         },
         "schema": "schemas/take_home_assignment_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "applicationId": {
+            "template": "{{ query.applicationId }}",
+            "omit_when_absent": true
+          },
+          "candidateId": {
+            "template": "{{ query.candidateId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16639,13 +17966,13 @@
               {
                 "name": "application-id",
                 "type": "string",
-                "maps_to": "query.applicationId",
+                "maps_to": "body.applicationId",
                 "allow_empty": false
               },
               {
                 "name": "candidate-id",
                 "type": "string",
-                "maps_to": "query.candidateId",
+                "maps_to": "body.candidateId",
                 "allow_empty": false
               }
             ],
@@ -16661,6 +17988,9 @@
       ],
       "schema_refs": {
         "record": "schemas/take_home_assignment_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16674,7 +18004,27 @@
           "path": "results"
         },
         "schema": "schemas/take_home_assignment_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "takeHomeAssignmentId": {
+            "template": "{{ query.takeHomeAssignmentId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16689,7 +18039,7 @@
               {
                 "name": "take-home-assignment-id",
                 "type": "string",
-                "maps_to": "query.takeHomeAssignmentId",
+                "maps_to": "body.takeHomeAssignmentId",
                 "summary": "The id of the take-home assignment",
                 "allow_empty": false,
                 "required": true
@@ -16707,6 +18057,9 @@
       ],
       "schema_refs": {
         "record": "schemas/take_home_assignment_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16720,7 +18073,31 @@
           "path": "results"
         },
         "schema": "schemas/interview_event_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "interviewScheduleId": {
+            "template": "{{ query.interviewScheduleId }}",
+            "omit_when_absent": true
+          },
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16735,7 +18112,7 @@
               {
                 "name": "interview-schedule-id",
                 "type": "string",
-                "maps_to": "query.interviewScheduleId",
+                "maps_to": "body.interviewScheduleId",
                 "summary": "The unique ID of the interview schedule, for which to list interview events",
                 "allow_empty": false,
                 "required": true
@@ -16743,7 +18120,7 @@
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               }
             ],
             "api_surface": [
@@ -16758,6 +18135,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_event_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16771,7 +18151,27 @@
           "path": "results"
         },
         "schema": "schemas/interview_briefing_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "interviewEventId": {
+            "template": "{{ query.interviewEventId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16786,7 +18186,7 @@
               {
                 "name": "interview-event-id",
                 "type": "string",
-                "maps_to": "query.interviewEventId",
+                "maps_to": "body.interviewEventId",
                 "summary": "The id of the interview event whose briefing should be returned.",
                 "allow_empty": false,
                 "required": true
@@ -16804,6 +18204,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_briefing_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16817,7 +18220,27 @@
           "path": "results"
         },
         "schema": "schemas/interview_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "id": {
+            "template": "{{ query.id }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16832,7 +18255,7 @@
               {
                 "name": "id",
                 "type": "string",
-                "maps_to": "query.id",
+                "maps_to": "body.id",
                 "summary": "The unique id of the interview whose details will be fetched",
                 "allow_empty": false,
                 "required": true
@@ -16850,6 +18273,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16863,7 +18289,35 @@
           "path": "results"
         },
         "schema": "schemas/interview_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          },
+          "includeNonSharedInterviews": {
+            "template": "{{ query.includeNonSharedInterviews }}",
+            "omit_when_absent": true
+          },
+          "excludeArchivedScheduleTemplateInterviews": {
+            "template": "{{ query.excludeArchivedScheduleTemplateInterviews }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16878,17 +18332,17 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               },
               {
                 "name": "include-non-shared-interviews",
                 "type": "boolean",
-                "maps_to": "query.includeNonSharedInterviews"
+                "maps_to": "body.includeNonSharedInterviews"
               },
               {
                 "name": "exclude-archived-schedule-template-interviews",
                 "type": "boolean",
-                "maps_to": "query.excludeArchivedScheduleTemplateInterviews"
+                "maps_to": "body.excludeArchivedScheduleTemplateInterviews"
               }
             ],
             "api_surface": [
@@ -16903,6 +18357,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16916,7 +18373,27 @@
           "path": "results"
         },
         "schema": "schemas/interview_stage_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "interviewStageId": {
+            "template": "{{ query.interviewStageId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16931,7 +18408,7 @@
               {
                 "name": "interview-stage-id",
                 "type": "string",
-                "maps_to": "query.interviewStageId",
+                "maps_to": "body.interviewStageId",
                 "summary": "The id of the interview stage to retrieve",
                 "allow_empty": false,
                 "required": true
@@ -16949,6 +18426,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interview_stage_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -16962,7 +18442,27 @@
           "path": "results"
         },
         "schema": "schemas/survey_form_definition_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "surveyFormDefinitionId": {
+            "template": "{{ query.surveyFormDefinitionId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -16977,7 +18477,7 @@
               {
                 "name": "survey-form-definition-id",
                 "type": "string",
-                "maps_to": "query.surveyFormDefinitionId",
+                "maps_to": "body.surveyFormDefinitionId",
                 "summary": "The unique identifier of the survey form definition to fetch",
                 "allow_empty": false,
                 "required": true
@@ -16995,6 +18495,9 @@
       ],
       "schema_refs": {
         "record": "schemas/survey_form_definition_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17008,7 +18511,23 @@
           "path": "results"
         },
         "schema": "schemas/survey_form_definition_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17032,6 +18551,9 @@
       ],
       "schema_refs": {
         "record": "schemas/survey_form_definition_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17045,7 +18567,39 @@
           "path": "results"
         },
         "schema": "schemas/survey_request_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "surveyType": {
+            "template": "{{ query.surveyType }}",
+            "omit_when_absent": true
+          },
+          "applicationId": {
+            "template": "{{ query.applicationId }}",
+            "omit_when_absent": true
+          },
+          "candidateId": {
+            "template": "{{ query.candidateId }}",
+            "omit_when_absent": true
+          },
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17060,7 +18614,7 @@
               {
                 "name": "survey-type",
                 "type": "enum",
-                "maps_to": "query.surveyType",
+                "maps_to": "body.surveyType",
                 "summary": "Returns only the survey requests of the given type. Currently, only `CandidateExperience` is supported.",
                 "values": [
                   "CandidateExperience"
@@ -17070,19 +18624,19 @@
               {
                 "name": "application-id",
                 "type": "string",
-                "maps_to": "query.applicationId",
+                "maps_to": "body.applicationId",
                 "allow_empty": false
               },
               {
                 "name": "candidate-id",
                 "type": "string",
-                "maps_to": "query.candidateId",
+                "maps_to": "body.candidateId",
                 "allow_empty": false
               },
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               }
             ],
             "api_surface": [
@@ -17097,6 +18651,9 @@
       ],
       "schema_refs": {
         "record": "schemas/survey_request_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17110,7 +18667,31 @@
           "path": "results"
         },
         "schema": "schemas/survey_submission_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "surveyType": {
+            "template": "{{ query.surveyType }}",
+            "omit_when_absent": true
+          },
+          "createdAfter": {
+            "template": "{{ query.createdAfter }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17125,7 +18706,7 @@
               {
                 "name": "survey-type",
                 "type": "enum",
-                "maps_to": "query.surveyType",
+                "maps_to": "body.surveyType",
                 "summary": "The survey types supported by surveySubmission.list. Supported values: CandidateExperience, Questionnaire, HiringManagerExperience.",
                 "values": [
                   "CandidateExperience",
@@ -17137,7 +18718,7 @@
               {
                 "name": "created-after",
                 "type": "integer",
-                "maps_to": "query.createdAfter"
+                "maps_to": "body.createdAfter"
               }
             ],
             "api_surface": [
@@ -17152,6 +18733,9 @@
       ],
       "schema_refs": {
         "record": "schemas/survey_submission_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17165,7 +18749,27 @@
           "path": "results"
         },
         "schema": "schemas/webhook_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "webhookId": {
+            "template": "{{ query.webhookId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17180,7 +18784,7 @@
               {
                 "name": "webhook-id",
                 "type": "string",
-                "maps_to": "query.webhookId",
+                "maps_to": "body.webhookId",
                 "summary": "The id of the webhook setting to retrieve",
                 "allow_empty": false,
                 "required": true
@@ -17198,6 +18802,9 @@
       ],
       "schema_refs": {
         "record": "schemas/webhook_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17211,7 +18818,31 @@
           "path": "results"
         },
         "schema": "schemas/interviewer_pool_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchivedPools": {
+            "template": "{{ query.includeArchivedPools }}",
+            "omit_when_absent": true
+          },
+          "includeArchivedTrainingStages": {
+            "template": "{{ query.includeArchivedTrainingStages }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17226,12 +18857,12 @@
               {
                 "name": "include-archived-pools",
                 "type": "boolean",
-                "maps_to": "query.includeArchivedPools"
+                "maps_to": "body.includeArchivedPools"
               },
               {
                 "name": "include-archived-training-stages",
                 "type": "boolean",
-                "maps_to": "query.includeArchivedTrainingStages"
+                "maps_to": "body.includeArchivedTrainingStages"
               }
             ],
             "api_surface": [
@@ -17246,6 +18877,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interviewer_pool_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17259,7 +18893,27 @@
           "path": "results"
         },
         "schema": "schemas/interviewer_pool_info.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "interviewerPoolId": {
+            "template": "{{ query.interviewerPoolId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17274,7 +18928,7 @@
               {
                 "name": "interviewer-pool-id",
                 "type": "string",
-                "maps_to": "query.interviewerPoolId",
+                "maps_to": "body.interviewerPoolId",
                 "summary": "The id of the interviewer pool",
                 "allow_empty": false,
                 "required": true
@@ -17292,6 +18946,9 @@
       ],
       "schema_refs": {
         "record": "schemas/interviewer_pool_info.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17305,7 +18962,27 @@
           "path": "results"
         },
         "schema": "schemas/close_reason_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "includeArchived": {
+            "template": "{{ query.includeArchived }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17320,7 +18997,7 @@
               {
                 "name": "include-archived",
                 "type": "boolean",
-                "maps_to": "query.includeArchived"
+                "maps_to": "body.includeArchived"
               }
             ],
             "api_surface": [
@@ -17335,6 +19012,9 @@
       ],
       "schema_refs": {
         "record": "schemas/close_reason_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17348,7 +19028,35 @@
           "path": "results"
         },
         "schema": "schemas/report_synchronous.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "reportId": {
+            "template": "{{ query.reportId }}",
+            "omit_when_absent": true
+          },
+          "includeHeadersInData": {
+            "template": "{{ query.includeHeadersInData }}",
+            "omit_when_absent": true
+          },
+          "resultStyle": {
+            "template": "{{ query.resultStyle }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17363,7 +19071,7 @@
               {
                 "name": "report-id",
                 "type": "string",
-                "maps_to": "query.reportId",
+                "maps_to": "body.reportId",
                 "summary": "The ID of the report",
                 "allow_empty": false,
                 "required": true
@@ -17371,12 +19079,12 @@
               {
                 "name": "include-headers-in-data",
                 "type": "boolean",
-                "maps_to": "query.includeHeadersInData"
+                "maps_to": "body.includeHeadersInData"
               },
               {
                 "name": "result-style",
                 "type": "enum",
-                "maps_to": "query.resultStyle",
+                "maps_to": "body.resultStyle",
                 "values": [
                   "inline",
                   "url"
@@ -17395,6 +19103,9 @@
       ],
       "schema_refs": {
         "record": "schemas/report_synchronous.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {
@@ -17408,7 +19119,31 @@
           "path": "results"
         },
         "schema": "schemas/approval_list.json",
-        "projection": "passthrough"
+        "projection": "passthrough",
+        "body": {
+          "limit": 100,
+          "entityType": {
+            "template": "{{ query.entityType }}",
+            "omit_when_absent": true
+          },
+          "entityId": {
+            "template": "{{ query.entityId }}",
+            "omit_when_absent": true
+          }
+        },
+        "pagination": {
+          "type": "cursor",
+          "cursor_param": "cursor",
+          "token_path": "nextCursor",
+          "stop_path": "moreDataAvailable",
+          "body_cursor_field": "cursor",
+          "page_size": 100,
+          "max_pages": 100
+        },
+        "response_error": {
+          "path": "errors",
+          "success_path": "success"
+        }
       },
       "commands": [
         {
@@ -17423,7 +19158,7 @@
               {
                 "name": "entity-type",
                 "type": "enum",
-                "maps_to": "query.entityType",
+                "maps_to": "body.entityType",
                 "values": [
                   "offer",
                   "job",
@@ -17433,7 +19168,7 @@
               {
                 "name": "entity-id",
                 "type": "string",
-                "maps_to": "query.entityId",
+                "maps_to": "body.entityId",
                 "allow_empty": false
               }
             ],
@@ -17449,6 +19184,9 @@
       ],
       "schema_refs": {
         "record": "schemas/approval_list.json"
+      },
+      "source": {
+        "provider_reference": "https://developers.ashbyhq.com/docs"
       }
     },
     {

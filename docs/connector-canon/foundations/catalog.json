@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 26,
+  "catalog_revision": 28,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -2434,7 +2434,7 @@
       "layer": "declarative_response_projection",
       "status": "available",
       "kind": "generic",
-      "summary": "Rejects a source-declared JSON error object before record extraction and emits a typed declared-response error.",
+      "summary": "Rejects a source-declared JSON error object or false success envelope before record extraction and emits a typed declared-response error.",
       "owner": {
         "primary_package": "polymetrics.ai/internal/connectors/engine",
         "supporting_packages": [
@@ -2474,13 +2474,14 @@
         ],
         "request_response_shapes": [
           "a source-declared JSON error object path",
-          "an optional declared non-empty string message field"
+          "an optional declared non-empty string message field",
+          "an optional source-declared boolean success path whose false value is an error"
         ],
         "sync_modes": [],
         "guarantees": [
-          "the declared error object is checked after a successful HTTP response and before records are extracted",
-          "an error object produces a typed DeclaredResponseError and zero emitted records",
-          "only declared object and message paths participate, with provider text redacted by the engine error boundary"
+          "the declared error object or false success envelope is checked after a successful HTTP response and before records are extracted",
+          "a declared failure produces a typed DeclaredResponseError and zero emitted records",
+          "only declared object, message, and success paths participate, with provider text redacted by the engine error boundary"
         ]
       },
       "selection": {
@@ -2492,13 +2493,14 @@
         ],
         "selectors": [
           "streams[].response_error.path",
-          "streams[].response_error.message_field"
+          "streams[].response_error.message_field",
+          "streams[].response_error.success_path"
         ],
-        "notes": "The selector recognizes one closed response error object. It is not a generic response transformation or an arbitrary error hook."
+        "notes": "The selector recognizes one closed response error object or boolean success envelope. It is not a generic response transformation or an arbitrary error hook."
       },
       "constraints": [
-        "The source path must be non-empty, normalized, and free of traversal segments.",
-        "When declared, the message field must resolve to a non-empty string.",
+        "At least one normalized, traversal-free error-object path or success path is required.",
+        "When declared, the message field must resolve to a non-empty string from the declared error object.",
         "The foundation cannot alter status handling, authentication, origins, request encoding, or emitted records."
       ],
       "non_goals": [
@@ -2513,6 +2515,14 @@
             "internal/connectors/defs/yahoo-finance-price/streams.json"
           ],
           "notes": "The prices stream turns chart.error.description into a typed error before any OHLCV array is extracted."
+        },
+        {
+          "name": "Ashby success envelopes",
+          "files": [
+            "internal/connectors/defs/ashby/source.lock.json",
+            "internal/connectors/defs/ashby/streams.json"
+          ],
+          "notes": "Every Ashby ETL stream treats success=false and its declared errors envelope as a pre-emission typed failure."
         }
       ],
       "proof_tests": [
@@ -2520,12 +2530,118 @@
           "package": "./internal/connectors/bundleregistry",
           "file": "internal/connectors/bundleregistry/executor_authority_test.go",
           "name": "TestProductionYahooFinancePriceRejectsChartErrorBeforeEmit"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionAshbyRejectsFailureEnvelopeBeforeEmit"
         }
       ],
       "known_gap_refs": [],
       "update_conditions": [
-        "The response-error shape, pre-emission ordering, owner symbol, or proof changes.",
-        "A connector selects a declared response-error object."
+        "The response-error or success-envelope shape, pre-emission ordering, owner symbol, or proof changes.",
+        "A connector selects a declared response-error object or success path."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.offset-count-pagination.v1",
+      "layer": "declarative_pagination",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Advances a source-declared zero-based provider window encoded as one combined offset,count query value until a short page ends the stream.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/paginate.go",
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/paginate.go",
+            "name": "offsetCountPaginator"
+          },
+          {
+            "file": "internal/connectors/engine/paginate.go",
+            "name": "newPaginator"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST query pagination"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "one declared query parameter containing offset,count",
+          "a short extracted provider page as the only completion signal"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the first request is exactly 0,page_size and each full page advances by page_size",
+          "the offset and count cannot be split into caller-selected parameters",
+          "a short extracted page stops without inferring totals or inventing a cursor"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].pagination.type=offset_count",
+          "streams[].pagination.limit_param",
+          "streams[].pagination.page_size"
+        ],
+        "notes": "This is a closed provider window encoding, not an alternate generic offset dialect."
+      },
+      "constraints": [
+        "Only the source-declared limit parameter receives the combined value.",
+        "The provider window begins at zero and uses a positive declared page size.",
+        "Direct-read numeric navigation is unavailable unless separately implemented and declared."
+      ],
+      "non_goals": [
+        "Arbitrary offset arithmetic, total-count inference, cursors, or caller pagination parameters.",
+        "Direct writes, reverse ETL, binary transfers, or database behavior."
+      ],
+      "consumer_examples": [
+        {
+          "name": "PrestaShop resources",
+          "files": [
+            "internal/connectors/defs/prestashop/source.lock.json",
+            "internal/connectors/defs/prestashop/streams.json"
+          ],
+          "notes": "Each resource declares PrestaShop's limit=offset,count query form with resource-keyed records."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/offset_count_pagination_test.go",
+          "name": "TestOffsetCountPaginatorUsesCombinedProviderWindow"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionPrestaShopGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The combined provider window format, stop condition, owner symbol, or proof changes.",
+        "A connector selects offset_count pagination."
       ],
       "supersedes": []
     }

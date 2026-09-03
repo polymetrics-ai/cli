@@ -1394,6 +1394,16 @@ func streamOverrides(cmd connectors.CommandSurfaceCommand, cfg connectors.Runtim
 				return connectors.RuntimeConfig{}, nil, err
 			}
 			query[target] = value
+		case strings.HasPrefix(flag.MapsTo, "body."):
+			target := strings.TrimPrefix(flag.MapsTo, "body.")
+			if err := safety.ValidateIdentifier(target, "body field"); err != nil {
+				return connectors.RuntimeConfig{}, nil, err
+			}
+			// Stream request bodies resolve declared {{ query.<field> }}
+			// templates after command flags are admitted. Keeping this
+			// transport-neutral map internal prevents an ETL command from
+			// acquiring a raw body escape hatch.
+			query[target] = value
 		case strings.HasPrefix(flag.MapsTo, "config."):
 			target := strings.TrimPrefix(flag.MapsTo, "config.")
 			if err := safety.ValidateIdentifier(target, "config parameter"); err != nil {

@@ -1,11 +1,10 @@
-# Overview
+# Freightview Connector
 
-Reads Freightview shipments, quotes, and tracking events through the Freightview v2.0 REST API using
-the client-credentials session-token flow.
+## Overview
+
+Reads Freightview shipments, quotes, and tracking events through fixed Freightview v2.0 REST routes using client-credentials authentication.
 
 Readable streams: `shipments`, `quotes`, `tracking`.
-
-This connector is read-only; no write actions are declared.
 
 Service API documentation: https://docs.freightview.com/.
 
@@ -13,32 +12,22 @@ Service API documentation: https://docs.freightview.com/.
 
 Connection fields:
 
-- `base_url` (optional, string).
-- `client_id` (required, secret, string).
-- `client_secret` (required, secret, string).
-- `mode` (optional, string).
+- `client_id` (required, secret, string); Freightview client ID.
+- `client_secret` (required, secret, string); Freightview client secret.
 
-Secret fields are redacted in logs and write previews: `client_id`, `client_secret`.
+Authentication uses declared mode(s): `oauth2_client_credentials`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+## Execution contract
 
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Connection check: `GET /shipments`
+Check query: `limit`=`1`.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-- `shipments`: GET connector-managed request path - records path `data`.
-- `quotes`: GET connector-managed request path - records path `data`.
-- `tracking`: GET connector-managed request path - records path `data`.
+- `shipments`: `GET /shipments`; records `shipments`
+- `quotes`: `GET /shipments/{{ fanout.id }}/quotes`; records `quotes`
+- `tracking`: `GET /shipments/{{ fanout.id }}/tracking`; records `.`
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 3 stream-backed endpoint group(s).
+This connector's write surface is declared separately in the rendered execution bundle.

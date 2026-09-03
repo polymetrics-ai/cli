@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 func TestDeclaredSessionAuthRejectsDynamicTokenRoute(t *testing.T) {
@@ -75,5 +76,57 @@ func TestDeclaredSessionAuthUsesResolvedTenantOrigin(t *testing.T) {
 	}
 	if requests != 2 {
 		t.Fatalf("requests = %d, want one session exchange plus card request", requests)
+	}
+}
+
+type declaredSessionRequesterFunc func(context.Context, DeclaredRouteRequest) (*connsdk.Response, error)
+
+func (f declaredSessionRequesterFunc) DoJSON(ctx context.Context, request DeclaredRouteRequest) (*connsdk.Response, error) {
+	return f(ctx, request)
+}
+
+func TestDeclaredSessionAuthRejectsMalformedOrMissingSessionID(t *testing.T) {
+	tests := []struct {
+		name string
+		body string
+	}{
+		{name: "malformed response", body: `not json`},
+		{name: "missing id", body: `{}`},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			requests := 0
+			auth, err := buildDeclaredSessionAuthenticator(AuthSpec{
+				Mode:     "declared_session",
+				TokenURL: "https://unused.invalid/session",
+				Username: "{{ config.username }}",
+				Password: "{{ secrets.password }}",
+			}, Vars{
+				Config:  map[string]string{"username": "person@example.test"},
+				Secrets: map[string]string{"password": "test-password"},
+			}, declaredSessionRequesterFunc(func(_ context.Context, request DeclaredRouteRequest) (*connsdk.Response, error) {
+				requests++
+				if request.Method != http.MethodPost || request.Path != "/session" {
+					t.Fatalf("session request = %#v, want declared POST /session", request)
+				}
+				return &connsdk.Response{Status: http.StatusOK, Body: []byte(test.body)}, nil
+			}))
+			if err != nil {
+				t.Fatalf("buildDeclaredSessionAuthenticator: %v", err)
+			}
+			request, err := http.NewRequest(http.MethodGet, "https://tenant.example/api/card", nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := auth.Apply(context.Background(), request); err == nil {
+				t.Fatal("malformed declared session response was accepted")
+			}
+			if got := request.Header.Get("X-Metabase-Session"); got != "" {
+				t.Fatalf("session header = %q, want no header after rejected response", got)
+			}
+			if requests != 1 {
+				t.Fatalf("session requests = %d, want one failed exchange without replay", requests)
+			}
+		})
 	}
 }

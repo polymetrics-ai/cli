@@ -1,10 +1,10 @@
-# Overview
+# Yahoo Finance Price Connector
 
-Reads public Yahoo Finance chart prices and flattens them into OHLCV records. Read-only.
+## Overview
+
+Reads public Yahoo Finance chart prices as declaration-bound OHLCV records. Read-only.
 
 Readable streams: `prices`.
-
-This connector is read-only; no write actions are declared.
 
 Service API documentation: https://www.yahoofinanceapi.com/.
 
@@ -12,39 +12,28 @@ Service API documentation: https://www.yahoofinanceapi.com/.
 
 Connection fields:
 
-- `base_url` (optional, string); default `https://query1.finance.yahoo.com`; Yahoo Finance chart API
-  base URL.
 - `interval` (optional, string); The interval of between prices queried.
-- `mode` (optional, string).
 - `range` (optional, string); The range of prices to be queried.
-- `symbol` (optional, string); default `AAPL`; Ticker symbol to query.
+- `symbol` (optional, string); Ticker symbol to query through the fixed Yahoo Finance chart route.
 
-Default configuration values: `base_url=https://query1.finance.yahoo.com`, `symbol=AAPL`.
+Authentication uses declared mode(s): `none`.
 
-Authentication behavior:
+## Execution contract
 
-- No authentication.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Connection check: `GET /v8/finance/chart/{{ config.symbol }}`
+Check query: `interval`=`{{ config.interval }}`; `range`=`{{ config.range }}`.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `prices`: GET connector-managed request path - records path `data`; incremental cursor
-  `timestamp`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
+- `prices`: `GET /v8/finance/chart/{{ config.symbol }}`; records `chart.result`
+  - Query: `interval`=`{{ config.interval }}`; `range`=`{{ config.range }}`.
+  - Incremental cursor: `timestamp`.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
+This connector's write surface is declared separately in the rendered execution bundle.
 
-## Known limits
 
-- API coverage includes 1 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `prices`.
+## Declared response errors
+
+- `prices`: `message_field`=`description`, `path`=`chart.error`.

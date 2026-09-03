@@ -10174,16 +10174,6 @@
           "description": "Ashby API key. Provide from an environment variable or stdin; never inline in prompts or docs.",
           "type": "string",
           "x-secret": true
-        },
-        "max_pages": {
-          "default": "0",
-          "description": "Maximum pages to read per stream. Defaults to 0 for an exhaustive read; 0, all, and unlimited are equivalent.",
-          "type": "string"
-        },
-        "page_size": {
-          "default": "100",
-          "description": "Per-page body limit for Ashby list endpoints; bounded to 1..100 by the native connector.",
-          "type": "string"
         }
       },
       "required": [

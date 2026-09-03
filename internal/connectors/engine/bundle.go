@@ -382,11 +382,12 @@ type ResponseHeaderProjectionSpec struct {
 	AllowedHeaders []string `json:"allowed_headers"`
 }
 
-// ResponseErrorSpec names one declared JSON error object that prevents page
-// extraction and record emission when present.
+// ResponseErrorSpec names a source-declared error object or failure envelope
+// that prevents page extraction and record emission.
 type ResponseErrorSpec struct {
-	Path         string `json:"path"`
+	Path         string `json:"path,omitempty"`
 	MessageField string `json:"message_field,omitempty"`
+	SuccessPath  string `json:"success_path,omitempty"`
 }
 
 // ArrayZipProjectionSpec maps one extracted response object into records by
@@ -1863,8 +1864,13 @@ func validateResponseErrors(streams []StreamSpec) error {
 		if spec == nil {
 			continue
 		}
-		if strings.TrimSpace(spec.Path) == "" || strings.TrimSpace(spec.Path) != spec.Path || strings.Contains(spec.Path, "..") {
-			return fmt.Errorf("stream %d (%q) response_error has an invalid path", streamIndex, stream.Name)
+		if strings.TrimSpace(spec.Path) == "" && strings.TrimSpace(spec.SuccessPath) == "" {
+			return fmt.Errorf("stream %d (%q) response_error requires path or success_path", streamIndex, stream.Name)
+		}
+		for _, path := range []string{spec.Path, spec.SuccessPath} {
+			if path != "" && (strings.TrimSpace(path) != path || strings.Contains(path, "..")) {
+				return fmt.Errorf("stream %d (%q) response_error has an invalid path", streamIndex, stream.Name)
+			}
 		}
 		if strings.TrimSpace(spec.MessageField) == "" && spec.MessageField != "" {
 			return fmt.Errorf("stream %d (%q) response_error has a blank message_field", streamIndex, stream.Name)

@@ -138,8 +138,12 @@ func (c *Connector) ValidateConfiguration(config map[string]string) error {
 	return c.bundle.Spec.ValidateConfiguration(config)
 }
 
+func (c *Connector) validateNetworkConfiguration(cfg connectors.RuntimeConfig) error {
+	return c.ValidateConfiguration(cfg.Config)
+}
+
 func (c *Connector) Check(ctx context.Context, cfg connectors.RuntimeConfig) error {
-	if err := c.ValidateConfiguration(cfg.Config); err != nil {
+	if err := c.validateNetworkConfiguration(cfg); err != nil {
 		return err
 	}
 	return executeWithAuthCohort(ctx, cfg, func(admitted context.Context) error {
@@ -162,7 +166,7 @@ func (c *Connector) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (
 }
 
 func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	if err := c.ValidateConfiguration(req.Config.Config); err != nil {
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
 		return err
 	}
 	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
@@ -174,7 +178,7 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 // the normal authentication boundary while making a known page budget stop
 // distinguishable from provider exhaustion for a durable continuation.
 func (c *Connector) ReadWithOutcome(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
-	if err := c.ValidateConfiguration(req.Config.Config); err != nil {
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
 		return err
 	}
 	return executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
@@ -213,6 +217,9 @@ func (c *Connector) RateLimitParkingScope(ctx context.Context, cfg connectors.Ru
 }
 
 func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	var result connectors.DirectReadResult
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		var err error
@@ -223,6 +230,9 @@ func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadReq
 }
 
 func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	var result connectors.DirectReadResult
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		var err error
@@ -292,6 +302,9 @@ func (c *Connector) PreflightOperationDirectReadBindings(operation string, pathF
 // the engine. It remains distinct from direct reads so a status declaration
 // cannot gain JSON response behavior through the connector adapter.
 func (c *Connector) OperationStatusCheck(ctx context.Context, req connectors.OperationStatusCheckRequest) (connectors.OperationStatusCheckResult, error) {
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
+		return connectors.OperationStatusCheckResult{}, err
+	}
 	var result connectors.OperationStatusCheckResult
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		var err error
@@ -347,6 +360,9 @@ func (c *Connector) ResolveOperationDirectWriteBodyValue(operation string, body 
 }
 
 func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.WritePreview, error) {
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
+		return connectors.WritePreview{}, err
+	}
 	var result connectors.WritePreview
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		var err error
@@ -357,6 +373,9 @@ func (c *Connector) PreviewOperationDirectWrite(ctx context.Context, req connect
 }
 
 func (c *Connector) OperationDirectWrite(ctx context.Context, req connectors.OperationDirectWriteRequest) (connectors.OperationDirectWriteResult, error) {
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
+		return connectors.OperationDirectWriteResult{}, err
+	}
 	var result connectors.OperationDirectWriteResult
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		var err error
@@ -375,6 +394,9 @@ func (c *Connector) OperationDirectWriteMetadata(operation string) (connectors.O
 // the executor's own contract; this adapter is the seam that lets a CLI command
 // reach it without the connectors package depending on engine internals.
 func (c *Connector) OperationBinaryDownload(ctx context.Context, req connectors.OperationBinaryDownloadRequest) (connectors.OperationBinaryDownloadResult, error) {
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
+		return connectors.OperationBinaryDownloadResult{}, err
+	}
 	var result BinaryDownloadResult
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {
 		var err error
@@ -422,6 +444,9 @@ func (c *Connector) InitialState(ctx context.Context, stream string, cfg connect
 func (c *Connector) Write(ctx context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
 	if len(c.bundle.Writes) == 0 {
 		return connectors.WriteResult{RecordsFailed: len(records)}, connectors.ErrUnsupportedOperation
+	}
+	if err := c.validateNetworkConfiguration(req.Config); err != nil {
+		return connectors.WriteResult{RecordsFailed: len(records)}, err
 	}
 	var result connectors.WriteResult
 	err := executeWithAuthCohort(ctx, req.Config, func(admitted context.Context) error {

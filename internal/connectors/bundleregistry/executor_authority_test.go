@@ -1620,7 +1620,7 @@ func TestProductionAshbyGenericCheckAndReadPreservesCommandSurface(t *testing.T)
 		if request.Header.Get("Authorization") == "" || request.Header.Get("Accept") != "application/json; version=1" {
 			t.Fatal("Ashby request omitted declared Basic authentication or versioned Accept header")
 		}
-		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"results":[{"id":"candidate-1","name":"Example"}],"moreDataAvailable":false}`)), Request: request}, nil
+		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"success":true,"results":[{"id":"candidate-1","name":"Example"}],"moreDataAvailable":false}`)), Request: request}, nil
 	})
 
 	bundle, err := engine.Load(defs.FS, "ashby")
@@ -1732,13 +1732,24 @@ func TestProductionPrestaShopGenericCheckAndRead(t *testing.T) {
 		switch request.URL.Query().Get("limit") {
 		case "1":
 			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"customers":{"customer":[]}}`)), Request: request}, nil
-		case "100":
-			if request.URL.Query().Get("offset") != "0" {
-				t.Fatalf("PrestaShop offset = %q, want first declared window", request.URL.Query().Get("offset"))
+		case "0,100":
+			customers := make([]map[string]any, 100)
+			for index := range customers {
+				dateUpdated := "2026-01-02T00:00:00Z"
+				if index == 0 {
+					dateUpdated = "2025-12-31T00:00:00Z"
+				}
+				customers[index] = map[string]any{"id": index + 1, "firstname": fmt.Sprintf("Customer-%d", index), "date_upd": dateUpdated}
 			}
-			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"customers":{"customer":[{"id":1,"firstname":"Ada","date_upd":"2026-01-02T00:00:00Z"}]}}`)), Request: request}, nil
+			payload, err := json.Marshal(map[string]any{"customers": map[string]any{"customer": customers}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(string(payload))), Request: request}, nil
+		case "100,100":
+			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"customers":{"customer":[{"id":101,"firstname":"Ada","date_upd":"2026-01-03T00:00:00Z"}]}}`)), Request: request}, nil
 		default:
-			t.Fatalf("PrestaShop limit = %q, want declared check or first read window", request.URL.Query().Get("limit"))
+			t.Fatalf("PrestaShop limit = %q, want declared check or provider-conforming read windows", request.URL.Query().Get("limit"))
 			return nil, nil
 		}
 	})
@@ -1758,11 +1769,11 @@ func TestProductionPrestaShopGenericCheckAndRead(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("production PrestaShop Read() error = %v", err)
 	}
-	if len(records) != 1 || fmt.Sprint(records[0]["id"]) != "1" || records[0]["firstname"] != "Ada" {
-		t.Fatalf("production PrestaShop records = %#v, want declared customer record", records)
+	if len(records) != 100 || fmt.Sprint(records[0]["id"]) != "2" || records[len(records)-1]["firstname"] != "Ada" {
+		t.Fatalf("production PrestaShop records = %#v, want two windows with the pre-start record client-filtered", records)
 	}
-	if got := requests.Load(); got != 2 {
-		t.Fatalf("PrestaShop requests = %d, want one declared check and read", got)
+	if got := requests.Load(); got != 3 {
+		t.Fatalf("PrestaShop requests = %d, want one declared check plus two combined-limit reads", got)
 	}
 }
 
@@ -1912,5 +1923,156 @@ func TestProductionYahooFinancePriceRejectsChartErrorBeforeEmit(t *testing.T) {
 	}
 	if emitted != 0 {
 		t.Fatalf("Yahoo Finance emitted %d records after chart error, want zero", emitted)
+	}
+}
+
+func TestProductionAshbyBodyCursorPaginationAvoidsQuery(t *testing.T) {
+	previousTransport := http.DefaultTransport
+	t.Cleanup(func() { http.DefaultTransport = previousTransport })
+
+	var requests atomic.Int64
+	http.DefaultTransport = roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		requests.Add(1)
+		if request.URL.Host != "api.ashbyhq.com" || request.URL.Path != "/candidate.list" || request.Method != http.MethodPost || request.URL.RawQuery != "" {
+			t.Fatalf("Ashby request = %s %s, want fixed body-paginated candidate route without query", request.Method, request.URL)
+		}
+		if request.Body == nil {
+			t.Fatal("Ashby request omitted its declared JSON body")
+		}
+		var body map[string]any
+		if err := json.NewDecoder(request.Body).Decode(&body); err != nil {
+			t.Fatalf("decode Ashby request body: %v", err)
+		}
+		if body["limit"] != float64(100) {
+			t.Fatalf("Ashby body = %#v, want source-declared limit", body)
+		}
+		if cursor, present := body["cursor"]; !present {
+			results := make([]map[string]any, 100)
+			for index := range results {
+				results[index] = map[string]any{"id": fmt.Sprintf("candidate-%d", index)}
+			}
+			payload, err := json.Marshal(map[string]any{"success": true, "results": results, "moreDataAvailable": true, "nextCursor": "cursor-1"})
+			if err != nil {
+				t.Fatal(err)
+			}
+			return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(string(payload))), Request: request}, nil
+		} else if cursor != "cursor-1" {
+			t.Fatalf("Ashby body cursor = %#v, want declared next cursor", cursor)
+		}
+		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"success":true,"results":[{"id":"candidate-100"}],"moreDataAvailable":false}`)), Request: request}, nil
+	})
+
+	connector, ok := New().Get("ashby")
+	if !ok {
+		t.Fatal("production registry missing ashby")
+	}
+	var records []connectors.Record
+	if err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "candidates", Config: connectors.RuntimeConfig{Secrets: map[string]string{"api_key": "test-key"}}}, func(record connectors.Record) error {
+		records = append(records, record)
+		return nil
+	}); err != nil {
+		t.Fatalf("production Ashby Read() error = %v", err)
+	}
+	if len(records) != 101 {
+		t.Fatalf("Ashby records = %d, want known-larger two-page result", len(records))
+	}
+	if got := requests.Load(); got != 2 {
+		t.Fatalf("Ashby requests = %d, want two declared body-cursor pages", got)
+	}
+}
+
+func TestProductionAshbyRejectsFailureEnvelopeBeforeEmit(t *testing.T) {
+	previousTransport := http.DefaultTransport
+	t.Cleanup(func() { http.DefaultTransport = previousTransport })
+
+	http.DefaultTransport = roundTripFunc(func(request *http.Request) (*http.Response, error) {
+		if request.URL.Host != "api.ashbyhq.com" || request.URL.Path != "/candidate.list" || request.Method != http.MethodPost {
+			t.Fatalf("Ashby request = %s %s, want fixed candidate route", request.Method, request.URL)
+		}
+		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"success":false,"errors":[{"message":"denied"}]}`)), Request: request}, nil
+	})
+
+	connector, ok := New().Get("ashby")
+	if !ok {
+		t.Fatal("production registry missing ashby")
+	}
+	emitted := 0
+	err := connector.Read(context.Background(), connectors.ReadRequest{Stream: "candidates", Config: connectors.RuntimeConfig{Secrets: map[string]string{"api_key": "test-key"}}}, func(connectors.Record) error {
+		emitted++
+		return nil
+	})
+	var responseErr *engine.DeclaredResponseError
+	if !errors.As(err, &responseErr) {
+		t.Fatalf("Ashby failure envelope error = %T %v, want DeclaredResponseError", err, err)
+	}
+	if emitted != 0 {
+		t.Fatalf("Ashby emitted %d records after failure envelope, want zero", emitted)
+	}
+}
+
+func TestProductionAshbyDirectReadRejectsHostileConfigBeforeIO(t *testing.T) {
+	previousTransport := http.DefaultTransport
+	t.Cleanup(func() { http.DefaultTransport = previousTransport })
+
+	var requests atomic.Int64
+	http.DefaultTransport = roundTripFunc(func(*http.Request) (*http.Response, error) {
+		requests.Add(1)
+		return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"success":true,"results":[]}`))}, nil
+	})
+
+	connector, ok := New().Get("ashby")
+	if !ok {
+		t.Fatal("production registry missing ashby")
+	}
+	reader, supported := connector.(connectors.OperationDirectReader)
+	if !supported {
+		t.Fatalf("production Ashby connector = %T, want operation direct reader", connector)
+	}
+	_, err := reader.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
+		Operation: "ashby.direct.candidate.search",
+		Config: connectors.RuntimeConfig{
+			Config:  map[string]string{"base_url": "https://hostile.example"},
+			Secrets: map[string]string{"api_key": "test-key"},
+		},
+	})
+	if err == nil {
+		t.Fatal("Ashby direct operation accepted hostile configuration")
+	}
+	if got := requests.Load(); got != 0 {
+		t.Fatalf("Ashby hostile direct operation requests = %d, want zero", got)
+	}
+}
+
+func TestAshbyRenderedStreamsUseClosedBodyCursorContracts(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "ashby")
+	if err != nil {
+		t.Fatalf("load Ashby bundle: %v", err)
+	}
+	if len(bundle.Streams) != 71 {
+		t.Fatalf("Ashby streams = %d, want 71", len(bundle.Streams))
+	}
+	for _, stream := range bundle.Streams {
+		if stream.Method != http.MethodPost || stream.Body["limit"] != float64(100) {
+			t.Fatalf("Ashby stream %q body = %#v, want fixed POST JSON limit", stream.Name, stream.Body)
+		}
+		if stream.Pagination == nil || stream.Pagination.Type != "cursor" || stream.Pagination.CursorParam != "cursor" || stream.Pagination.BodyCursorField != "cursor" || stream.Pagination.TokenPath != "nextCursor" || stream.Pagination.StopPath != "moreDataAvailable" {
+			t.Fatalf("Ashby stream %q pagination = %#v, want declared body cursor", stream.Name, stream.Pagination)
+		}
+		if stream.ResponseError == nil || stream.ResponseError.SuccessPath != "success" || stream.ResponseError.Path != "errors" {
+			t.Fatalf("Ashby stream %q response error = %#v, want declared success envelope", stream.Name, stream.ResponseError)
+		}
+	}
+	if bundle.CLISurface == nil {
+		t.Fatal("Ashby bundle has no CLI surface")
+	}
+	for _, command := range bundle.CLISurface.Commands {
+		if command.Intent != "etl" || command.Stream == "" {
+			continue
+		}
+		for _, flag := range command.Flags {
+			if strings.HasPrefix(flag.MapsTo, "query.") || !strings.HasPrefix(flag.MapsTo, "body.") {
+				t.Fatalf("Ashby ETL command %q flag %q maps to %q, want declared body field", command.Path, flag.Name, flag.MapsTo)
+			}
+		}
 	}
 }

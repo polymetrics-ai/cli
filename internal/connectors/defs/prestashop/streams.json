@@ -40,9 +40,8 @@
       "pagination": {
         "limit_param": "limit",
         "max_pages": 100,
-        "offset_param": "offset",
         "page_size": 100,
-        "type": "offset_limit"
+        "type": "offset_count"
       },
       "path": "/customers",
       "query": {
@@ -65,9 +64,8 @@
       "pagination": {
         "limit_param": "limit",
         "max_pages": 100,
-        "offset_param": "offset",
         "page_size": 100,
-        "type": "offset_limit"
+        "type": "offset_count"
       },
       "path": "/orders",
       "query": {
@@ -90,9 +88,8 @@
       "pagination": {
         "limit_param": "limit",
         "max_pages": 100,
-        "offset_param": "offset",
         "page_size": 100,
-        "type": "offset_limit"
+        "type": "offset_count"
       },
       "path": "/products",
       "query": {
@@ -115,9 +112,8 @@
       "pagination": {
         "limit_param": "limit",
         "max_pages": 100,
-        "offset_param": "offset",
         "page_size": 100,
-        "type": "offset_limit"
+        "type": "offset_count"
       },
       "path": "/addresses",
       "query": {
@@ -140,9 +136,8 @@
       "pagination": {
         "limit_param": "limit",
         "max_pages": 100,
-        "offset_param": "offset",
         "page_size": 100,
-        "type": "offset_limit"
+        "type": "offset_count"
       },
       "path": "/carts",
       "query": {
