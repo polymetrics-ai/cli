@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 	"sync"
+	"time"
 
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/credential"
@@ -83,7 +84,11 @@ func (a *declaredPasswordTokenAuthenticator) token(ctx context.Context) (string,
 	}
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
+	if err := connsdk.CheckRequestAdmission(ctx); err != nil {
+		return "", fmt.Errorf("declared_password_token: request admission: %w", err)
+	}
 	response, err := (&http.Client{
+		Timeout: 30 * time.Second,
 		CheckRedirect: func(*http.Request, []*http.Request) error {
 			return http.ErrUseLastResponse
 		},
