@@ -862,6 +862,30 @@ func TestOperationDirectReadUsesOnlyDeclaredTypedHeaders(t *testing.T) {
 	}
 }
 
+func TestOperationDirectReadQueryMergesDeclaredAndRequestedValues(t *testing.T) {
+	op := OperationSpec{
+		ID:   "acme.query",
+		Kind: "rest_read",
+		REST: &RESTOperationSpec{
+			Query: map[string]string{"fixed": "source-value"},
+			Parameters: []OperationParameter{{
+				Name: "requested",
+				In:   "query",
+				Type: "string",
+			}},
+		},
+	}
+
+	got, err := operationDirectReadQuery(op, map[string]string{"requested": "caller-value"}, nil)
+	if err != nil {
+		t.Fatalf("operationDirectReadQuery: %v", err)
+	}
+	want := map[string]string{"fixed": "source-value", "requested": "caller-value"}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("query = %#v, want %#v", got, want)
+	}
+}
+
 func TestOperationDirectReadRejectsHeaderEscapeHatchesBeforeNetwork(t *testing.T) {
 	var issued int
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {

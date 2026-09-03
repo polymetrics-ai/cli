@@ -682,7 +682,9 @@ func operationDirectReadQuery(op OperationSpec, requested map[string]string, com
 	if err := validateOperationDirectReadQueryFields(op, requestedNames, commandFields); err != nil {
 		return nil, err
 	}
-	query := make(map[string]string, len(op.REST.Query)+len(requested))
+	// Allocate only source-declared entries. Requested cardinality is caller
+	// supplied and is validated as each value is merged.
+	query := make(map[string]string, len(op.REST.Query))
 	for name, value := range op.REST.Query {
 		parameter, declared := parameters[name]
 		if !declared {
