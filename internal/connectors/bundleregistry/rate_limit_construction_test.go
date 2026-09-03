@@ -9,6 +9,8 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/manifestindex"
 )
 
 func TestLazyConstructionSharesGitHubRateAdmission(t *testing.T) {
@@ -59,6 +61,36 @@ func TestLazyConstructionSharesGitHubRateAdmission(t *testing.T) {
 	check(second, "198.51.100.11")
 	if got := sends.Load(); got != 2 {
 		t.Fatalf("different GitHub rate scope sent %d requests, want 2", got)
+	}
+}
+
+func TestGitHubReferenceUsesManifestSelectedAPIEngine(t *testing.T) {
+	index, err := manifestindex.New(manifestindex.GeneratedEntries(), len(manifestindex.GeneratedEntries()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	entry, ok := index.Lookup("github")
+	if !ok {
+		t.Fatal("generated index is missing github")
+	}
+	if entry.Executor != "api_engine.v1" || entry.Extension != "hook/github.v1" {
+		t.Fatalf("github generated selection = executor %q extension %q, want api_engine.v1 and hook/github.v1", entry.Executor, entry.Extension)
+	}
+
+	registry, err := NewRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	connector, ok := registry.Get("github")
+	if !ok {
+		t.Fatal("production registry did not resolve github")
+	}
+	if _, ok := connector.(*engine.Connector); !ok {
+		t.Fatalf("github production connector = %T, want *engine.Connector", connector)
+	}
+	coordination, ok := connectors.RateLimitCoordinationOf(connector)
+	if !ok || coordination.Mode != connectors.RateLimitCoordinationProcessLocal {
+		t.Fatalf("github rate coordination = %#v, %t; want declared process-local", coordination, ok)
 	}
 }
 

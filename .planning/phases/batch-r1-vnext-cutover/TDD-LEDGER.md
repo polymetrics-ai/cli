@@ -310,3 +310,11 @@
 - Actual RED/GREEN [P1 metadata parity]: generated GitHub metadata first exposed `Catalog:false`; `TestGeneratedMetadataPreservesCatalogProjection` now passes with generated catalog capability and PostgreSQL native CDC parity.
 - Actual RED/GREEN [P2 builtin collision]: a generated `sample` entry first built a registry with no refusal. `TestConstructionRejectsBuiltinIdentityBeforeLoading` now passes: reserved builtin identities fail before loader/factory work.
 - Actual GREEN [generated ownership]: the initial whole-tree boundary scan reported handwritten generator literal branches and unclassified `manifestindex/index_gen.go`. Native/compat manifest selections now live in `nativeset`, runtime executor syntax is generic, and the generated-index classifier/ownership tests pass; the whole-tree boundary scan returns zero findings.
+
+### 2026-09-03 — CP07 GitHub reference selection
+
+- Base: `843a32de5f927b1235cc00883fa0c5e0f5ea8c5b`, the normally pushed CP06 parent checkpoint.
+- Manual RED disposition: CP06 already generated GitHub's `api_engine.v1` / `hook/github.v1` entry, so no truthful fresh failing state remains. A test asserting another selection would be false. The CP07 witness is therefore a characterization-to-non-regression proof, recorded as the repository-approved manual-TDD fallback rather than a fabricated RED.
+- GREEN contract: the production registry returns GitHub as `*engine.Connector`, its entry selects exactly `api_engine.v1` and `hook/github.v1`, and `RateLimitCoordinationOf` remains declared process-local. A native/compatibility return, missing/extra extension, or lost rate bundle fails the witness.
+
+- Actual GREEN: `go test -count=1 -timeout 20m ./internal/connectors/bundleregistry -run '^TestGitHubReferenceUsesManifestSelectedAPIEngine$'` passed. It proves generated GitHub `api_engine.v1`/`hook/github.v1`, returned `*engine.Connector`, and declared process-local coordination from the production registry.

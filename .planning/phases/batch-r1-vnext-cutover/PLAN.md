@@ -237,3 +237,21 @@
 - Still required before any candidate checkpoint: finish the scoped smoke/build/docs/renderer checks, frozen self-review, and all delivery gates. Do not commit or push until that work is complete.
 
 - Generated-output guardrail: `internal/connectors/boundary/{classify,ownership}.go` and its focused test now recognize `manifestindex/index_gen.go` as a literal generated shared index. This is required to keep provider literals out of handwritten generator/runtime code; the full connector-boundary scan is the proof.
+
+## CP07 — GitHub manifest-selected API engine reference
+
+## Task Delivery Header
+
+- Issue: Refs #4425 — A1 manifest-selected executor registry; parent Refs #4325.
+- Base branch: `fm/cli-top100-declaration-batch-r1` at `843a32de5f927b1235cc00883fa0c5e0f5ea8c5b`.
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through existing PR #4294.
+- Delivery: one ordinary fast-forward reference-proof checkpoint on the existing parent branch; no per-slice PR.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: prove GitHub's generated entry selects `api_engine.v1` plus only its explicit `hook/github.v1` extension, constructs `*engine.Connector` through the production registry, retains declared rate coordination, and cannot fall back to a native/compatibility connector.
+- Verification: exact selector discovery, focused production-registry test, generated-index/render checks, existing GitHub rate admission proof, commandrunner preflight, local CLI help/inspect smoke, and frozen local self-review.
+
+### Scope and TDD disposition
+
+- No source lock, rendered connector artifact, provider route, credential, rate declaration, or provider call may change. CP07 consumes CP06's generated-index foundation; it does not migrate GitHub.
+- Starting state is already structurally selected by CP06: `GeneratedEntries()` contains GitHub `api_engine.v1` and `hook/github.v1`. A new RED that claims the opposite would be fabricated. Record this as an explicit manual-TDD fallback, then add a production-registry witness whose assertion would fail if a native/compatibility fallback reappeared.
+- Expected paths: the CP07 witness test plus these phase artifacts only, unless its RED reveals a direct CP06 invariant regression. Any other source path is a stop.

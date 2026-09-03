@@ -177,3 +177,11 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - Generated/authoring passes: `connectorgen gen`; GitHub/GitLab/Asana `lock-render --check`; 553-definition validation; Atlas JSON/unique-ID validation; Atlas selector test; connector canon; implemented-command preflight; and whole-tree connector boundary returned zero findings.
 - Surface passes: `pm help`, `pm connectors`, `pm github --help`, and GitHub text/JSON inspection exited successfully without credentials or provider I/O; docs validation passed.
 - Recorded inherited failures, not CP06 green evidence: full `internal/app` retains the named typed-destination approval/I-O baseline; full `internal/cli` retains polling/help/source-origin baselines with local Redis refusal logs; full boundary-package test retains `TestScanFailsClosedWhenConnectorMetadataCannotLoad/invalid_cli_surface`; `make lint` retains unrelated existing engine and obsolete connectorgen/boundary helper findings after CP06's generator cleanup.
+
+## CP07 GitHub reference verification
+
+- Starting parent: `843a32de5f927b1235cc00883fa0c5e0f5ea8c5b` is both local and remote parent after PR #4294 API read-back.
+- Scope: production-registry characterization only. No source lock/rendered GitHub execution JSON/provider request/credential mutation is permitted.
+- Required witness: generated index → `NewRegistry` → GitHub `*engine.Connector`, exact executor/extension selection, process-local rate coordination, and no native/compatibility fallback.
+
+- `TestGitHubReferenceUsesManifestSelectedAPIEngine` was listed exactly once and passed against the production registry. No CP07 source/definition/provider mutation was needed.

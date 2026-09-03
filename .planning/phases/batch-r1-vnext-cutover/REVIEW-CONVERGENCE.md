@@ -147,3 +147,17 @@ The required role-separated discovery was requested through the worker task fan-
 
 - Findings: no new CP06 finding. The self-review found and corrected three in-scope issues before this freeze: missing generated Catalog/CDC metadata parity, reserved-builtin index acceptance, and handwritten provider-literal generator/boundary classification.
 - Frozen-diff result: zero unresolved CP06 blocker. Candidate commit and ordinary parent push remain separate delivery steps; no external review was requested or performed.
+
+## 2026-09-03 — CP07 GitHub reference local self-review
+
+- Review subject: the five-file uncommitted CP07 proof diff on parent `843a32de5f927b1235cc00883fa0c5e0f5ea8c5b`.
+- Scope: GitHub generated-index / production-registry characterization plus phase evidence. It adds no production route, source lock, rendered JSON, credential, provider call, rate policy, database behavior, or release surface.
+
+| Lens | Disposition |
+| --- | --- |
+| Selection/data flow | Pass. The witness follows generated entry → `NewRegistry` → `*engine.Connector`, asserting the exact engine and hook IDs rather than connector-name fallback behavior. |
+| Security/rate | Pass. It observes only safe declared process-local coordination; it does not create a credential or send a request. |
+| CLI/App/provider parity | Pass. Existing CP06 built-binary help/inspect and command-preflight evidence remains applicable because CP07 changes no runtime surface. |
+| Tests/evidence | Pass. Exact witness, race registry suite, GitHub render check, commandrunner preflight, and build passed. Manual-TDD fallback is explicit because CP06 already supplied the selected state. |
+
+- Findings: none. No external review is required for this microcheckpoint; Firstmate's CP08 coherent A1 review gate remains controlling.
