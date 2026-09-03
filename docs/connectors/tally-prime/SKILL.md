@@ -28,19 +28,13 @@ Reads TallyPrime accounting data (companies, ledgers, groups, stock items, vouch
 
 ## Configuration
 
-- company (required)
-- envelope_format
-- from_date
-- gateway_url (required)
-- http_timeout_seconds
-- mode
-- to_date
+- No connector-specific config fields.
 
 ## Security
 
-- read risk: local TallyPrime Gateway Server read of accounting masters (companies/ledgers/groups/stock items) and transactional vouchers via TDL Export/Collection envelopes over HTTP POST to a locally-running TallyPrime instance (no public network egress)
-- write risk: n/a (read-only source)
-- approval: none required for read-only sync
+- read risk: connector-specific
+- write risk: connector-specific
+- approval: external mutations require preview and approval
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

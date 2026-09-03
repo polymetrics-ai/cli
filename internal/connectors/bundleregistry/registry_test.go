@@ -9,9 +9,13 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
+	bingads "polymetrics.ai/internal/connectors/native/bing-ads"
 	nativedynamodb "polymetrics.ai/internal/connectors/native/dynamodb"
+	nativefaker "polymetrics.ai/internal/connectors/native/faker"
+	nativehubspot "polymetrics.ai/internal/connectors/native/hubspot"
 	nativemysql "polymetrics.ai/internal/connectors/native/mysql"
 	nativepostgres "polymetrics.ai/internal/connectors/native/postgres"
+	tallyprime "polymetrics.ai/internal/connectors/native/tally-prime"
 )
 
 func TestRegistryDirectWriteMetadataUsesEmbeddedOperationSurface(t *testing.T) {
@@ -162,6 +166,39 @@ func TestProtectedNativeDatabasesRemainRegistered(t *testing.T) {
 	}
 	if _, ok := postgres.(nativepostgres.Connector); !ok {
 		t.Fatalf("postgres registry type = %T, want protected native database connector", postgres)
+	}
+}
+
+func TestProtectedCompatibilityConnectorsRemainNative(t *testing.T) {
+	registry := New()
+	for name, want := range map[string]any{
+		"bing-ads":    bingads.Connector{},
+		"faker":       nativefaker.Connector{},
+		"hubspot":     &nativehubspot.Connector{},
+		"tally-prime": tallyprime.Connector{},
+	} {
+		connector, ok := registry.Get(name)
+		if !ok {
+			t.Fatalf("registry missing protected compatibility connector %q", name)
+		}
+		switch want.(type) {
+		case bingads.Connector:
+			if _, ok := connector.(bingads.Connector); !ok {
+				t.Fatalf("%s registry type = %T, want historical native compatibility connector", name, connector)
+			}
+		case nativefaker.Connector:
+			if _, ok := connector.(nativefaker.Connector); !ok {
+				t.Fatalf("%s registry type = %T, want historical native compatibility connector", name, connector)
+			}
+		case *nativehubspot.Connector:
+			if _, ok := connector.(*nativehubspot.Connector); !ok {
+				t.Fatalf("%s registry type = %T, want historical native compatibility connector", name, connector)
+			}
+		case tallyprime.Connector:
+			if _, ok := connector.(tallyprime.Connector); !ok {
+				t.Fatalf("%s registry type = %T, want historical native compatibility connector", name, connector)
+			}
+		}
 	}
 }
 

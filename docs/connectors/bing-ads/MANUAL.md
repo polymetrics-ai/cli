@@ -24,47 +24,15 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  Use pm credentials add with --from-env or --value-stdin for secret fields.
+  No secret authentication is required for this connector.
 
 CONFIGURATION
-  account_id
-  account_ids
-  ad_group_id
-  base_url
-  campaign_base_url
-  campaign_id
-  customer_account_id
-  customer_id
-  token_url
-  client_id (secret) (required)
-  client_secret (secret)
-  developer_token (secret) (required)
-  refresh_token (secret) (required)
-  tenant_id (secret)
-
-ETL STREAMS
-  accounts:
-    primary key: Id
-    fields: AccountLifeCycleStatus(string), Id(string), Name(string), Number(string), PauseReason(string)
-  users:
-    primary key: Id
-    fields: CustomerId(string), Id(string), JobTitle(string), LastModifiedTime(string), UserLifeCycleStatus(string), UserName(string)
-  campaigns:
-    primary key: Id
-    fields: BudgetType(string), CampaignType(string), DailyBudget(number), Id(string), Name(string), Status(string), TimeZone(string)
-  ad_groups:
-    primary key: Id
-    fields: AdRotation(string), EndDate(string), Id(string), Name(string), Network(string), StartDate(string), Status(string)
-  ads:
-    primary key: Id
-    fields: DevicePreference(string), EditorialStatus(string), Id(string), Status(string), Type(string)
-
-SYNC MODES
-  ETL sync modes: full_refresh_append, full_refresh_overwrite
+  No connector-specific config fields.
 
 SECURITY
-  read risk: external Microsoft Advertising REST API read of account/user/campaign/ad-group/ad metadata
-  approval: none; read-only, no reverse-ETL write surface
+  read risk: connector-specific
+  write risk: connector-specific
+  approval: external mutations require preview and approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES
