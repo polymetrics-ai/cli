@@ -175,3 +175,9 @@ The required role-separated discovery was requested through the worker task fan-
 | Tests/evidence | Pass. Exact witness, race registry/native suites, commandrunner preflight, and build passed. The manual-TDD fallback is explicit because CP06 already supplied the selected state. |
 
 - Findings: none. CP08 completes the coherent A1 reference-proof pair; request Firstmate's controlling A1 review disposition before a CP08 parent push.
+
+## 2026-09-03 — A1 coherent exact-SHA review request
+
+- Requested range: `9f96054ed85d6470306bc5b033e805b89b36c7c6..62e04650f44878da013a893bbeccc22c3b9b690c` (CP02 through CP08), published normally on `fm/cli-top100-declaration-batch-r1`.
+- Required reviewer context: independently review the entire CP02–CP08 range, not only CP08; validate the closed sync contracts/resolver, generated index/store identity, explicit factory and hook fan-in, App/CLI pre-I/O/lazy construction, GitHub API-engine reference/rate admission, PostgreSQL native reference/no-rate claim, generated boundary ownership, and all recorded inherited baselines.
+- Worker disposition: Firstmate must launch and record the independent exact-SHA phase review. This worker must not start CP09 or create a second reviewer path until the review disposition is handled.
