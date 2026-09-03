@@ -255,3 +255,20 @@
 - No source lock, rendered connector artifact, provider route, credential, rate declaration, or provider call may change. CP07 consumes CP06's generated-index foundation; it does not migrate GitHub.
 - Starting state is already structurally selected by CP06: `GeneratedEntries()` contains GitHub `api_engine.v1` and `hook/github.v1`. A new RED that claims the opposite would be fabricated. Record this as an explicit manual-TDD fallback, then add a production-registry witness whose assertion would fail if a native/compatibility fallback reappeared.
 - Expected paths: the CP07 witness test plus these phase artifacts only, unless its RED reveals a direct CP06 invariant regression. Any other source path is a stop.
+
+## CP08 — PostgreSQL manifest-selected native database reference
+
+## Task Delivery Header
+
+- Issue: Refs #4425 — A1 manifest-selected executor registry; parent Refs #4325.
+- Base branch: `fm/cli-top100-declaration-batch-r1` at `c267f6ccb6988c6d0132f264e963c6701b8134f1`.
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through existing PR #4294.
+- Delivery: one ordinary fast-forward PostgreSQL reference-proof checkpoint, then the Firstmate-controlled coherent A1 review gate.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: prove PostgreSQL's generated entry selects exactly `native_database/postgres.v1` with no extension; the production registry returns the protected native adapter from the selected bundle, keeps `rate_limits.json` explicitly not applicable, and has no API/compatibility fallback.
+- Verification: exact selector discovery, production-registry witness, native/nativeset suite, generated index/render check, implemented-command preflight, and local self-review.
+
+### Scope and TDD disposition
+
+- No PostgreSQL definition, source lock, rate declaration, database protocol, credential, container harness, provider action, or other connector may change. This is selection proof only.
+- As with CP07, CP06 already generated the selected state. The manual-TDD fallback records no fabricated RED; the witness would fail on an API/compatibility fallback, an unexpected extension, or a false rate coordination claim.

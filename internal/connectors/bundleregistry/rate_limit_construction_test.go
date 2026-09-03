@@ -11,6 +11,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/connectors/manifestindex"
+	nativepostgres "polymetrics.ai/internal/connectors/native/postgres"
 )
 
 func TestLazyConstructionSharesGitHubRateAdmission(t *testing.T) {
@@ -91,6 +92,35 @@ func TestGitHubReferenceUsesManifestSelectedAPIEngine(t *testing.T) {
 	coordination, ok := connectors.RateLimitCoordinationOf(connector)
 	if !ok || coordination.Mode != connectors.RateLimitCoordinationProcessLocal {
 		t.Fatalf("github rate coordination = %#v, %t; want declared process-local", coordination, ok)
+	}
+}
+
+func TestPostgresReferenceUsesManifestSelectedNativeDatabase(t *testing.T) {
+	index, err := manifestindex.New(manifestindex.GeneratedEntries(), len(manifestindex.GeneratedEntries()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	entry, ok := index.Lookup("postgres")
+	if !ok {
+		t.Fatal("generated index is missing postgres")
+	}
+	if entry.Executor != "native_database/postgres.v1" || entry.Extension != "" {
+		t.Fatalf("postgres generated selection = executor %q extension %q, want native_database/postgres.v1 and no extension", entry.Executor, entry.Extension)
+	}
+
+	registry, err := NewRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	connector, ok := registry.Get("postgres")
+	if !ok {
+		t.Fatal("production registry did not resolve postgres")
+	}
+	if _, ok := connector.(nativepostgres.Connector); !ok {
+		t.Fatalf("postgres production connector = %T, want nativepostgres.Connector", connector)
+	}
+	if coordination, ok := connectors.RateLimitCoordinationOf(connector); ok {
+		t.Fatalf("postgres rate coordination = %#v, want no claim for not_applicable declaration", coordination)
 	}
 }
 

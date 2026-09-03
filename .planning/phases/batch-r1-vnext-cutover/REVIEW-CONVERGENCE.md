@@ -161,3 +161,17 @@ The required role-separated discovery was requested through the worker task fan-
 | Tests/evidence | Pass. Exact witness, race registry suite, GitHub render check, commandrunner preflight, and build passed. Manual-TDD fallback is explicit because CP06 already supplied the selected state. |
 
 - Findings: none. No external review is required for this microcheckpoint; Firstmate's CP08 coherent A1 review gate remains controlling.
+
+## 2026-09-03 — CP08 PostgreSQL reference local self-review
+
+- Review subject: the five-file uncommitted CP08 proof diff on parent `c267f6ccb6988c6d0132f264e963c6701b8134f1`.
+- Scope: generated-index / production-registry PostgreSQL characterization and evidence only. It adds no source lock, execution artifact, native database protocol, container, credential, provider action, rate declaration, or release behavior.
+
+| Lens | Disposition |
+| --- | --- |
+| Selection/data flow | Pass. The witness follows generated entry → `NewRegistry` → `nativepostgres.Connector` and asserts no extension/API/compatibility selection. |
+| Security/rate | Pass. PostgreSQL's explicit not-applicable rate declaration yields no coordination claim; no credential or network action occurs. |
+| Native boundary | Pass. Existing CP06 selected-bundle native constructor proof remains applicable; the CP08 witness does not restore a second bundle load. |
+| Tests/evidence | Pass. Exact witness, race registry/native suites, commandrunner preflight, and build passed. The manual-TDD fallback is explicit because CP06 already supplied the selected state. |
+
+- Findings: none. CP08 completes the coherent A1 reference-proof pair; request Firstmate's controlling A1 review disposition before a CP08 parent push.

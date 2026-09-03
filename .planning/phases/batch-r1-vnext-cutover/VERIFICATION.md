@@ -185,3 +185,11 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - Required witness: generated index → `NewRegistry` → GitHub `*engine.Connector`, exact executor/extension selection, process-local rate coordination, and no native/compatibility fallback.
 
 - `TestGitHubReferenceUsesManifestSelectedAPIEngine` was listed exactly once and passed against the production registry. No CP07 source/definition/provider mutation was needed.
+
+## CP08 PostgreSQL reference verification
+
+- Starting parent: `c267f6ccb6988c6d0132f264e963c6701b8134f1` is local, remote, and PR #4294 API head.
+- Scope: production-registry characterization only. PostgreSQL execution JSON/source lock/rate declaration and database behavior remain unchanged.
+- Required witness: exact native executor/no extension, protected native adapter type, no rate coordination claim, and no API/compatibility fallback.
+
+- `TestPostgresReferenceUsesManifestSelectedNativeDatabase` was listed exactly once and passed against the production registry. No CP08 definition, protocol, rate, credential, or provider mutation was needed.

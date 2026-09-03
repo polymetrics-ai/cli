@@ -318,3 +318,11 @@
 - GREEN contract: the production registry returns GitHub as `*engine.Connector`, its entry selects exactly `api_engine.v1` and `hook/github.v1`, and `RateLimitCoordinationOf` remains declared process-local. A native/compatibility return, missing/extra extension, or lost rate bundle fails the witness.
 
 - Actual GREEN: `go test -count=1 -timeout 20m ./internal/connectors/bundleregistry -run '^TestGitHubReferenceUsesManifestSelectedAPIEngine$'` passed. It proves generated GitHub `api_engine.v1`/`hook/github.v1`, returned `*engine.Connector`, and declared process-local coordination from the production registry.
+
+### 2026-09-03 — CP08 PostgreSQL reference selection
+
+- Base: `c267f6ccb6988c6d0132f264e963c6701b8134f1`, the normally pushed CP07 reference checkpoint.
+- Manual RED disposition: CP06 already generated PostgreSQL `native_database/postgres.v1` with no extension. A fresh opposite-state test would be fabricated; record the proof-only fallback explicitly.
+- GREEN contract: generated PostgreSQL selection is exactly native database; production registry returns `nativepostgres.Connector`; no compatibility/API fallback or extension applies; rate coordination is absent because the selected rate declaration is explicitly not applicable.
+
+- Actual GREEN: `go test -count=1 -timeout 20m ./internal/connectors/bundleregistry -run '^TestPostgresReferenceUsesManifestSelectedNativeDatabase$'` passed. It proves exact PostgreSQL native selection/no extension, `nativepostgres.Connector`, and no false rate coordination claim.
