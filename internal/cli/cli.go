@@ -29,13 +29,23 @@ type envelope map[string]any
 
 const maxConnectorCommandLimit = 10000
 
+type appOpenerMode uint8
+
+const (
+	appOpenerProduction appOpenerMode = iota
+	appOpenerTestOverride
+)
+
 type appOpeners struct {
-	open    func(string) (*app.App, error)
-	reverse func(string) (*app.App, error)
+	open           func(string) (*app.App, error)
+	reverse        func(string) (*app.App, error)
+	registry       *connectors.Registry
+	approvalReader io.Reader
+	mode           appOpenerMode
 }
 
 func defaultAppOpeners() appOpeners {
-	return appOpeners{open: app.Open, reverse: app.OpenForReverseExecution}
+	return appOpeners{open: app.Open, reverse: app.OpenForReverseExecution, mode: appOpenerProduction}
 }
 
 func selectAppOpeners(candidates ...appOpeners) appOpeners {
@@ -53,7 +63,24 @@ func runWithAppOpeners(args []string, stdout, stderr io.Writer, open, reverse fu
 	if open == nil || reverse == nil {
 		return writeError(stdout, stderr, errors.New("app opener is required"), false)
 	}
-	return run(args, stdout, stderr, appOpeners{open: open, reverse: reverse})
+	return run(args, stdout, stderr, appOpeners{open: open, reverse: reverse, mode: appOpenerTestOverride})
+}
+
+func runWithPreflightRegistry(args []string, stdout, stderr io.Writer, registry *connectors.Registry) int {
+	return runWithPreflightRegistryAndApprovalReader(args, stdout, stderr, registry, nil)
+}
+
+func runWithPreflightRegistryAndApprovalReader(args []string, stdout, stderr io.Writer, registry *connectors.Registry, approvalReader io.Reader) int {
+	if registry == nil {
+		return writeError(stdout, stderr, errors.New("connector registry is required"), false)
+	}
+	return run(args, stdout, stderr, appOpeners{
+		open:           app.Open,
+		reverse:        app.OpenForReverseExecution,
+		registry:       registry,
+		approvalReader: approvalReader,
+		mode:           appOpenerProduction,
+	})
 }
 
 func run(args []string, stdout, stderr io.Writer, openers appOpeners) int {
@@ -85,6 +112,13 @@ func run(args []string, stdout, stderr io.Writer, openers appOpeners) int {
 		return writeError(stdout, stderr, err, cfg.JSON)
 	}
 	engine.ConfigureSharedRateLimitRegistry(coordination.OpenSharedRateLimitRegistry(cfg.Runtime.DragonflyAddr))
+	if openers.mode == appOpenerProduction && openers.registry == nil {
+		registry, registryErr := bundleregistry.NewRegistry()
+		if registryErr != nil {
+			return writeError(stdout, stderr, fmt.Errorf("construct connector registry: %w", registryErr), cfg.JSON)
+		}
+		openers.registry = registry
+	}
 	cmd := newRootCmd(ctx, cfg, stdout, stderr, openers)
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
 		return writeError(stdout, stderr, mapCobraErr(err), cfg.JSON)
@@ -113,7 +147,11 @@ func globalConfigFlags(args []string, root string, jsonOut bool) map[string]conf
 }
 
 func writeRootManual(stdout io.Writer, jsonOut bool) error {
-	manual := rootManual()
+	return writeRootManualWithRegistry(stdout, jsonOut, appRegistry())
+}
+
+func writeRootManualWithRegistry(stdout io.Writer, jsonOut bool, registry *connectors.Registry) error {
+	manual := rootManualWithRegistry(registry)
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": "pm", "manual": manual})
 	}
@@ -122,7 +160,11 @@ func writeRootManual(stdout io.Writer, jsonOut bool) error {
 }
 
 func rootManual() string {
-	section := dynamicConnectorCommandsSection(appRegistry())
+	return rootManualWithRegistry(appRegistry())
+}
+
+func rootManualWithRegistry(registry *connectors.Registry) string {
+	section := dynamicConnectorCommandsSection(registry)
 	if section == "" {
 		return rootHelp
 	}
@@ -177,6 +219,10 @@ func runInit(root string, stdout io.Writer, jsonOut bool) error {
 }
 
 func runHelp(args []string, stdout io.Writer, jsonOut bool) error {
+	return runHelpWithRegistry(args, stdout, jsonOut, appRegistry())
+}
+
+func runHelpWithRegistry(args []string, stdout io.Writer, jsonOut bool, registry *connectors.Registry) error {
 	if len(args) >= 2 && args[0] == "etl" && args[1] == "transport" {
 		return writeETLTransportManual(stdout, jsonOut, "etl transport")
 	}
@@ -184,7 +230,7 @@ func runHelp(args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) > 0 {
 		topic = args[0]
 	}
-	return writeManual(topic, stdout, jsonOut)
+	return writeManualWithRegistry(topic, stdout, jsonOut, registry)
 }
 
 func isManualCommand(cmd string) bool {
@@ -196,9 +242,13 @@ func isManualCommand(cmd string) bool {
 }
 
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
+	return writeManualWithRegistry(topic, stdout, jsonOut, appRegistry())
+}
+
+func writeManualWithRegistry(topic string, stdout io.Writer, jsonOut bool, registry *connectors.Registry) error {
 	text, ok := docs[topic]
 	if !ok {
-		text, ok = dynamicConnectorManual(topic)
+		text, ok = dynamicConnectorManualWithRegistry(topic, registry)
 	}
 	if !ok {
 		return fmt.Errorf("help topic %q not found", topic)
@@ -211,7 +261,11 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 }
 
 func dynamicConnectorManual(name string) (string, bool) {
-	connector, ok := dynamicConnectorWithCommandSurface(name)
+	return dynamicConnectorManualWithRegistry(name, appRegistry())
+}
+
+func dynamicConnectorManualWithRegistry(name string, registry *connectors.Registry) (string, bool) {
+	connector, ok := dynamicConnectorWithCommandSurfaceWithRegistry(name, registry)
 	if !ok {
 		return "", false
 	}
@@ -219,15 +273,23 @@ func dynamicConnectorManual(name string) (string, bool) {
 }
 
 func isDynamicConnectorCommand(name string) bool {
-	_, ok := dynamicConnectorWithCommandSurface(name)
+	return isDynamicConnectorCommandWithRegistry(name, appRegistry())
+}
+
+func isDynamicConnectorCommandWithRegistry(name string, registry *connectors.Registry) bool {
+	_, ok := dynamicConnectorWithCommandSurfaceWithRegistry(name, registry)
 	return ok
 }
 
 func dynamicConnectorWithCommandSurface(name string) (connectors.Connector, bool) {
-	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+	return dynamicConnectorWithCommandSurfaceWithRegistry(name, appRegistry())
+}
+
+func dynamicConnectorWithCommandSurfaceWithRegistry(name string, registry *connectors.Registry) (connectors.Connector, bool) {
+	if registry == nil || safety.ValidateIdentifier(name, "connector") != nil {
 		return nil, false
 	}
-	connector, ok := appRegistry().Get(name)
+	connector, ok := registry.Get(name)
 	if !ok {
 		return nil, false
 	}
@@ -239,7 +301,13 @@ func dynamicConnectorWithCommandSurface(name string) (connectors.Connector, bool
 }
 
 func runConnectors(ctx context.Context, root string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
-	registry := appRegistry()
+	return runConnectorsWithRegistry(ctx, root, args, stdout, stderr, jsonOut, appRegistry())
+}
+
+func runConnectorsWithRegistry(ctx context.Context, root string, args []string, stdout, stderr io.Writer, jsonOut bool, registry *connectors.Registry) error {
+	if registry == nil {
+		return errors.New("connector registry is required")
+	}
 	if len(args) == 0 {
 		return errUsage
 	}
@@ -831,12 +899,17 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 }
 
 func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool, candidates ...appOpeners) error {
-	return runMaybeConnectorCommandWithRegistry(ctx, root, connectorName, args, stdout, stderr, jsonOut, appRegistry(), candidates...)
+	openers := selectAppOpeners(candidates...)
+	registry := openers.registry
+	if registry == nil {
+		registry = appRegistry()
+	}
+	return runMaybeConnectorCommandWithRegistry(ctx, root, connectorName, args, stdout, stderr, jsonOut, registry, openers)
 }
 
 func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool, registry *connectors.Registry, candidates ...appOpeners) error {
 	openers := selectAppOpeners(candidates...)
-	usePreflightRegistry := len(candidates) == 0
+	usePreflightRegistry := openers.mode == appOpenerProduction
 	if err := safety.ValidateIdentifier(connectorName, "connector"); err != nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
@@ -925,7 +998,11 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 	if credential == "" {
 		credential = flags.first("connection")
 	}
-	approval, err := prepareReverseApprovalCarrier(flags, os.Stdin)
+	approvalReader := openers.approvalReader
+	if approvalReader == nil {
+		approvalReader = os.Stdin
+	}
+	approval, err := prepareReverseApprovalCarrier(flags, approvalReader)
 	if err != nil {
 		return err
 	}
@@ -1625,10 +1702,17 @@ func resolveConnectorCommandEnvironmentOnlyFlags(surface *connectors.CommandSurf
 }
 
 func resolveReversePlanEnvironmentOnlyFlags(plan app.ReversePlan, values map[string][]string) (map[string][]string, error) {
+	return resolveReversePlanEnvironmentOnlyFlagsWithRegistry(plan, values, appRegistry())
+}
+
+func resolveReversePlanEnvironmentOnlyFlagsWithRegistry(plan app.ReversePlan, values map[string][]string, registry *connectors.Registry) (map[string][]string, error) {
 	if plan.ConnectorCommand == "" {
 		return values, nil
 	}
-	connector, ok := appRegistry().Get(plan.DestinationConnector)
+	if registry == nil {
+		return nil, fmt.Errorf("connector registry is required")
+	}
+	connector, ok := registry.Get(plan.DestinationConnector)
 	if !ok {
 		return nil, fmt.Errorf("unknown connector %q", plan.DestinationConnector)
 	}
@@ -1905,7 +1989,7 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 	if err != nil {
 		return err
 	}
-	connector, ok := appRegistry().Get(connectorName)
+	connector, ok := a.Registry().Get(connectorName)
 	if !ok {
 		return fmt.Errorf("unknown connector %q", connectorName)
 	}
@@ -2228,7 +2312,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, approval reverse
 			return err
 		}
 		flags := parseFlags(args[2:])
-		resolvedFlags, err := resolveReversePlanEnvironmentOnlyFlags(plan, flags.values)
+		resolvedFlags, err := resolveReversePlanEnvironmentOnlyFlagsWithRegistry(plan, flags.values, a.Registry())
 		if err != nil {
 			return err
 		}
@@ -2271,7 +2355,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, approval reverse
 		if err != nil {
 			return err
 		}
-		resolvedFlags, err := resolveReversePlanEnvironmentOnlyFlags(plan, flags.values)
+		resolvedFlags, err := resolveReversePlanEnvironmentOnlyFlagsWithRegistry(plan, flags.values, a.Registry())
 		if err != nil {
 			return err
 		}
@@ -2348,11 +2432,18 @@ func runAgent(ctx context.Context, cfg config.Config, root string, args []string
 }
 
 func runDocs(args []string, stdout io.Writer) error {
+	return runDocsWithRegistry(args, stdout, appRegistry())
+}
+
+func runDocsWithRegistry(args []string, stdout io.Writer, registry *connectors.Registry) error {
+	if registry == nil {
+		return errors.New("connector registry is required")
+	}
 	if len(args) == 0 {
 		return errUsage
 	}
 	if args[0] == "connector" {
-		return runDocsConnector(args[1:], stdout)
+		return runDocsConnectorWithRegistry(args[1:], stdout, registry)
 	}
 	flags := parseFlags(args[1:])
 	switch args[0] {
@@ -2374,14 +2465,14 @@ func runDocs(args []string, stdout io.Writer) error {
 			}
 		}
 		connectorsDir := valueOr(flags.first("connectors-dir"), filepath.Join(filepath.Dir(dir), "connectors"))
-		if err := writeConnectorDocs(connectorsDir, appRegistry()); err != nil {
+		if err := writeConnectorDocs(connectorsDir, registry); err != nil {
 			return err
 		}
 		_, _ = fmt.Fprintf(stdout, "Generated docs in %s and connector docs in %s\n", dir, connectorsDir)
 		return nil
 	case "validate":
 		dir := valueOr(flags.first("connectors-dir"), valueOr(flags.first("dir"), "docs/connectors"))
-		if err := validateConnectorDocs(dir, appRegistry()); err != nil {
+		if err := validateConnectorDocs(dir, registry); err != nil {
 			return err
 		}
 		_, _ = fmt.Fprintf(stdout, "Validated connector docs in %s\n", dir)
@@ -2423,6 +2514,13 @@ type docsConnectorOptions struct {
 }
 
 func runDocsConnector(args []string, stdout io.Writer) error {
+	return runDocsConnectorWithRegistry(args, stdout, appRegistry())
+}
+
+func runDocsConnectorWithRegistry(args []string, stdout io.Writer, registry *connectors.Registry) error {
+	if registry == nil {
+		return errors.New("connector registry is required")
+	}
 	if len(args) == 0 {
 		_, _ = fmt.Fprint(stdout, docsConnectorHelp)
 		return nil
@@ -2436,13 +2534,13 @@ func runDocsConnector(args []string, stdout io.Writer) error {
 
 	switch action {
 	case "generate":
-		if err := writeSelectedConnectorDocs(opts.dir, opts.connector, appRegistry()); err != nil {
+		if err := writeSelectedConnectorDocs(opts.dir, opts.connector, registry); err != nil {
 			return err
 		}
 		_, _ = fmt.Fprintf(stdout, "Generated connector docs for %s in %s\n", opts.connector, opts.dir)
 		return nil
 	case "validate":
-		if err := validateSelectedConnectorDocs(opts.dir, opts.connector, appRegistry()); err != nil {
+		if err := validateSelectedConnectorDocs(opts.dir, opts.connector, registry); err != nil {
 			return err
 		}
 		_, _ = fmt.Fprintf(stdout, "Validated connector docs for %s in %s\n", opts.connector, opts.dir)
@@ -2590,7 +2688,14 @@ func printPerfResult(stdout io.Writer, result perf.Result) {
 	)
 }
 
+func appRegistry() *connectors.Registry {
+	return bundleregistry.New()
+}
+
 func withApp(openers appOpeners, root string, fn func(*app.App) error) error {
+	if openers.mode == appOpenerProduction && openers.registry != nil {
+		return withAppRegistry(root, openers.registry, fn)
+	}
 	a, err := openers.open(root)
 	if err != nil {
 		return err
@@ -2599,6 +2704,9 @@ func withApp(openers appOpeners, root string, fn func(*app.App) error) error {
 }
 
 func withReverseExecutionApp(openers appOpeners, root string, fn func(*app.App) error) error {
+	if openers.mode == appOpenerProduction && openers.registry != nil {
+		return withReverseExecutionAppRegistry(root, openers.registry, fn)
+	}
 	a, err := openers.reverse(root)
 	if err != nil {
 		return err
@@ -2639,10 +2747,6 @@ func validateCredentialConfig(a *app.App, connector string, config map[string]st
 		}
 	}
 	return nil
-}
-
-func appRegistry() *connectors.Registry {
-	return bundleregistry.New()
 }
 
 // writeDirectReadPageNotice tells a human reader when the page they just

@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/manifestidentity"
 	"polymetrics.ai/internal/connectors/manifestindex"
 )
 
@@ -57,8 +58,15 @@ func (l *GenerationLease) Release() {
 	l.once.Do(l.release)
 }
 
+// LoadedBundle is the identity-bearing result of loading one immutable
+// execution generation. Bundle.Identity and Identity must agree exactly.
+type LoadedBundle struct {
+	Bundle   *engine.Bundle
+	Identity manifestidentity.Identity
+}
+
 // BundleLoader loads one immutable execution bundle selected by an index entry.
-type BundleLoader func(context.Context, manifestindex.Entry) (*engine.Bundle, error)
+type BundleLoader func(context.Context, manifestindex.Entry) (LoadedBundle, error)
 
 // BundleHandle pins one acquired immutable bundle until Release.
 type BundleHandle struct {
@@ -260,9 +268,10 @@ func (s *BundleStore) oldestUnheldLocked() *list.Element {
 }
 
 func (s *BundleStore) load(key bundleIdentity, entry manifestindex.Entry, pending *bundleFlight) {
-	bundle, err := s.loader(pending.ctx, entry)
-	if err == nil && (bundle == nil || bundle.Name != entry.Connector) {
-		err = fmt.Errorf("manifest loader returned the wrong connector for %q", entry.Connector)
+	loaded, err := s.loader(pending.ctx, entry)
+	bundle := loaded.Bundle
+	if err == nil && !loadedIdentityMatches(entry, loaded) {
+		err = fmt.Errorf("%w: loaded generation for %q", ErrBundleIdentityMismatch, entry.Connector)
 	}
 
 	s.mu.Lock()
@@ -279,6 +288,19 @@ func (s *BundleStore) load(key bundleIdentity, entry manifestindex.Entry, pendin
 	pending.err = err
 	close(pending.done)
 	s.mu.Unlock()
+}
+
+func loadedIdentityMatches(entry manifestindex.Entry, loaded LoadedBundle) bool {
+	if loaded.Bundle == nil || loaded.Bundle.Name != entry.Connector {
+		return false
+	}
+	want := manifestidentity.Identity{
+		Connector:  entry.Connector,
+		Generation: entry.Generation,
+		Digest:     entry.Digest,
+		Bytes:      entry.Bytes,
+	}
+	return loaded.Identity == want && loaded.Bundle.Identity == want
 }
 
 func (s *BundleStore) handleLocked(key bundleIdentity, cached *bundleCacheEntry) *BundleHandle {

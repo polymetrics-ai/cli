@@ -193,3 +193,22 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - Required witness: exact native executor/no extension, protected native adapter type, no rate coordination claim, and no API/compatibility fallback.
 
 - `TestPostgresReferenceUsesManifestSelectedNativeDatabase` was listed exactly once and passed against the production registry. No CP08 definition, protocol, rate, credential, or provider mutation was needed.
+
+## A1 correction-wave verification
+
+- A1-01: exact table/fuzz matrix over seven modes and every closed axis; C3 real-axis classification, C4 gap, canonical digest serialization, and no-I/O dependency boundary.
+- A1-02: generator/loader identity parity; same-name loaded mismatch; exact byte charge; factory/rate resolver non-invocation on mismatch; race/cancellation/lease regression.
+- A1-03: real `cli.Run` root-router normal, reverse, and help paths use exactly one preflighted registry identity/decode; injected opener behavior remains explicit and separate.
+- Final wave proof repeats rate, GitHub/PostgreSQL, hooks/3+4, credentials, render/validate/preflight, docs/help, smoke, boundary, vet/build, frozen self-review, and one final A1 exact-SHA re-review.
+
+## A1 consolidated correction results
+
+- A1-01: `go test -count=1 -timeout 20m ./internal/synccontract ./internal/syncplan ./internal/syncrun` passed; `go test -run '^$' -fuzz '^FuzzResolveNeverExecutesContradictoryModeAxes$' -fuzztime=5s -timeout 20m ./internal/syncplan` passed after 1.4M+ executions; `go list -deps ./internal/synccontract` contains no project dependency beyond the leaf package.
+- A1-02: `go test -count=1 -timeout 20m -race ./internal/connectors/manifestidentity ./internal/connectors/manifeststore ./internal/connectors/manifestindex ./internal/connectors/bundleregistry` passed, including actual `engine.Load` identity parity, same-name loaded generation/digest/charge mismatch refusal, no factory call, cancellation, bounded cache, and generation-lease checks.
+- A1-03: focused normal router/normal/help/reverse approval ownership, Cobra router, connector preflight, and tracked skill-generation tests pass; race variants pass. Full CLI remains red only on its recorded polling/help/source-origin baseline plus local Redis connection-refused logs, with no new registry-ownership failure.
+- Retained rate/reference checks passed: generated rate-file identity test; GitHub same-scope fake 429/reset admission; GitHub declared rate contract; parked resume/rearm; GitHub API-engine and PostgreSQL native reference witnesses.
+- Generated/structural checks passed: `connectorgen gen`; GitHub/GitLab/Asana renders; 553-definition validation; Atlas selector and JSON/unique-ID checks; commandrunner implemented preflight; whole-tree boundary (zero findings); agent contract; scoped vet; build; help/connectors/GitHub inspect smoke; docs validation; local warehouse/reverse smoke.
+- Full App remains red only on the recorded typed-destination approval/I-O baseline. No source lock, rendered definition JSON, rate declaration, credential, provider, release, or certification residue changed.
+- Current scoped gates passed: `make tidy-check`, `make docs-check`, `make smoke-no-build`, `make agent-contract-check`, `make connectorgen-validate`, `make connectorgen-vnext-locks`, `make connector-runtime-preflight`, `make connector-boundary`, `make connector-canon-check`, `make release-workflow-check`, `make vet`, `go build ./cmd/pm`, and `git diff --check`. The boundary report is clean with its existing documentation exceptions only.
+- Current broad baselines: `go test -count=1 -timeout 20m ./internal/app` failed only the five named typed-destination approval/I-O controls recorded above; `go test -count=1 -timeout 20m ./internal/cli` failed only `TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility`, `TestSourceBoundOriginRejectsBeforeAppOrCredential`, `TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault`, and `TestETLHelpListsAllSyncModes`, with expected local Redis refused-connection logs. Neither package failure is resolved or called green by this wave.
+- Current lint baseline: after removing two stale now-unused helpers from the changed engine loader, `make lint` reports 20 diagnostics only in unmodified `polling_watermark_test.go`, `continuation_cap_test.go`, `read.go`, boundary lexicon, and obsolete connectorgen helper files. No A1-changed path appears in the output; the unrelated lint debt remains outside this correction scope.

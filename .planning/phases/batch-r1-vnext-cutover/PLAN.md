@@ -272,3 +272,28 @@
 
 - No PostgreSQL definition, source lock, rate declaration, database protocol, credential, container harness, provider action, or other connector may change. This is selection proof only.
 - As with CP07, CP06 already generated the selected state. The manual-TDD fallback records no fabricated RED; the witness would fail on an API/compatibility fallback, an unexpected extension, or a false rate coordination claim.
+
+## A1 consolidated correction wave — review disposition 114
+
+- Review base/candidate: `9f96054ed85d6470306bc5b033e805b89b36c7c6..62e04650f44878da013a893bbeccc22c3b9b690c`; corrected parent is `346200f659e9ae22d0be42a83ee10f75d658f0b6`.
+- Authority: Firstmate inbox `114.msg` and `data/cli-a1-62e-phase-review-r1/report.md`. One Terra-max correction wave only; no CP09, connector migration, provider/release work, rate declaration change, or per-micro review.
+- A1-01: complete #4424's pure closed plan/resolver input and result contract. Add all seven mode mappings, retry/idempotency/receipt/acknowledgement/checkpoint axes, exact generation/artifact/executor/foundation/evidence digests, typed real-axis C3 classification, C4 foundation gaps, canonical serialization, exhaustive table matrix, and fuzz coverage. `synccontract` remains a dependency leaf.
+- A1-02: add one shared immutable execution-identity helper used by generator and `engine.Load`; loaded bundles expose connector/generation/digest/byte charge. Store compares loaded identity before cache/handle/factory, rejects same-name mismatch with `ErrBundleIdentityMismatch`, and retains exact-key flights/cancellation/leases/rate behavior.
+- A1-03: make `cli.Run` construct one explicit registry and thread it through root manual, dynamic help, connector preflight, normal App open, and reverse App open. Injection is an explicit test-only opener mode; variadic length must not decide construction ownership.
+- Required retained invariants: RL-03/04/06/07/09; 49 generated hooks; 3+4 native/compat inventory; source-lock execution-only boundary; credential/approval/provider-I/O rejection; existing docs/help/manual parity.
+
+| Correction | RED oracle | GREEN observable |
+| --- | --- | --- |
+| A1-01 | `incremental_upsert` with append and incomplete identity/durability axes is accepted. | Every legal seven-mode row resolves exactly once; every incompatible row is C3 with its true axis; digest bytes survive canonical JSON; fuzz finds no executable contradiction. |
+| A1-02 | Index A accepts same-name loader result B and labels it identity A. | Loader B produces typed mismatch, zero handle/factory/rate resolver; loaded identity equals generated A before engine/native/compat construction. |
+| A1-03 | Normal `cli.Run` gets preflight registry A then default `app.Open` registry B; `--help` re-resolves. | Production-equivalent normal/reverse/help routes observe one constructor/decode identity and preserve credential/approval boundaries. |
+
+- Focused end gate: report-prescribed synccontract/syncplan/syncrun matrices+fuzz; identity/store/factory race tests; normal CLI identity/decode tests; GitHub/PostgreSQL references and rate admission; hooks/3+4; commandrunner; generated/Atlas/docs/help/smoke/boundary; one frozen self-review then one Firstmate-managed exact-SHA A1 re-review.
+
+### A1 correction implementation status
+
+- A1-01 complete locally: version-2 pure plan model has separate source/destination bindings, exactly one executor per role, all required digest bindings, seven canonical mode axes, and C3/C4 result discriminants. The resolver is deterministic and fuzzed; it remains a leaf with no runtime wiring.
+- A1-02 complete locally: generator and engine share one execution-identity algorithm. Store accepts only identity-bearing loaded bundles that exactly match generated connector/generation/digest/charge; mismatch occurs before cache, handle, factory, or rate resolution.
+- A1-03 complete locally: root-run construction has explicit production vs test override mode. The normal router, dynamic help, App, reverse App, connector docs, and skills reuse the one preflight registry. Skills generation traverses a lazy registry once rather than resolving the fleet twice.
+- Local green gates are complete: closed-plan table/fuzz, identity/store/factory race, normal router ownership, rate/reference/hook/native witnesses, command preflight, renderer/definition/Atlas/docs/help/smoke/boundary, scoped vet/build, and frozen self-review. The known full-App/full-CLI/lint results are classified in `VERIFICATION.md`; none is repaired or reclassified by this wave.
+- Pending only: candidate commit, then the Firstmate-managed final exact-SHA A1 re-review. CP09 remains prohibited.

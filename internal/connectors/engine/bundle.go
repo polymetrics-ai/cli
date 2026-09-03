@@ -21,6 +21,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/database"
+	"polymetrics.ai/internal/connectors/manifestidentity"
 )
 
 // namePattern is the shared connector/stream/action naming rule (design §A,
@@ -32,6 +33,7 @@ var httpHeaderNamePattern = regexp.MustCompile("^[!#$%&'*+.^_`|~0-9A-Za-z-]+$")
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
 	Name                 string
+	Identity             manifestidentity.Identity
 	Metadata             Metadata
 	Changefeed           *connectors.ChangefeedDescriptor       // changefeed.json; nil when a connector has not been surveyed
 	PollingWatermark     *connectors.PollingWatermarkDescriptor // polling_watermark.json; nil until a native database declaration exists
@@ -42,7 +44,7 @@ type Bundle struct {
 	HTTP                 HTTPBase                               // streams.json "base"; zero value when no streams.json
 	Streams              []StreamSpec                           // streams.json "streams"
 	Writes               []WriteAction                          // writes.json "actions"; nil when writes.json absent
-	Operations           []OperationSpec                        // operations.json "operations"; nil when operations.json absent
+	Operations           []OperationSpec                        // operations.json "operations"
 	RawOperations        json.RawMessage                        // verbatim operations.json bytes for validation/audit scanning
 	Schemas              map[string]*StreamSchema               // stream name -> compiled schema + PK/cursor
 	directWriteEndpoints []directWriteEndpoint                  // runtime projection from shipped rest_write declarations
@@ -1388,6 +1390,10 @@ func loadBundle(fsys fs.FS, dirName string) (Bundle, error) {
 	if err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
+	identity, err := manifestidentity.ForFS(fsys, dirName, manifestidentity.EmbeddedGeneration)
+	if err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s identity: %w", dirName, err)
+	}
 
 	for _, f := range requiredFiles {
 		if _, err := fs.Stat(sub, f); err != nil {
@@ -1462,6 +1468,7 @@ func loadBundle(fsys fs.FS, dirName string) (Bundle, error) {
 
 	return Bundle{
 		Name:                 dirName,
+		Identity:             identity,
 		Metadata:             metadata,
 		Changefeed:           changefeed,
 		PollingWatermark:     pollingWatermark,
@@ -3258,22 +3265,9 @@ func readFile(fsys fs.FS, name string) ([]byte, error) {
 	return data, nil
 }
 
-func readFileString(fsys fs.FS, name string) (string, error) {
-	data, err := readFile(fsys, name)
-	if err != nil {
-		return "", err
-	}
-	return string(data), nil
-}
-
 func fileExists(fsys fs.FS, name string) bool {
 	info, err := fs.Stat(fsys, name)
 	return err == nil && !info.IsDir()
-}
-
-func dirExists(fsys fs.FS, name string) bool {
-	info, err := fs.Stat(fsys, name)
-	return err == nil && info.IsDir()
 }
 
 // strictDecode decodes raw into dst via encoding/json with

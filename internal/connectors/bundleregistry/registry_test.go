@@ -11,6 +11,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/manifestidentity"
 	"polymetrics.ai/internal/connectors/manifestindex"
 	"polymetrics.ai/internal/connectors/manifeststore"
 	bingads "polymetrics.ai/internal/connectors/native/bing-ads"
@@ -50,16 +51,15 @@ func TestConstructionBuildsLazyRegistryWithoutDecodingList(t *testing.T) {
 	construction := testConstruction(t, []manifestindex.Entry{
 		{Connector: "github", Generation: "g", Digest: "github-digest", Executor: "api_engine.v1", Metadata: connectors.Metadata{Name: "github", DisplayName: "GitHub", IntegrationType: "api"}, Bytes: 1},
 		{Connector: "gitlab", Generation: "g", Digest: "gitlab-digest", Executor: "api_engine.v1", Metadata: connectors.Metadata{Name: "gitlab", DisplayName: "GitLab", IntegrationType: "api"}, Bytes: 1},
-	}, func(_ context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	}, func(_ context.Context, entry manifestindex.Entry) (manifeststore.LoadedBundle, error) {
 		loads.Add(1)
-		return &engine.Bundle{
-			Name: entry.Connector,
-			Metadata: engine.Metadata{
-				Name:            entry.Connector,
-				DisplayName:     entry.Connector,
-				IntegrationType: "api",
-			},
-		}, nil
+		loaded := loadedBundleForTest(entry)
+		loaded.Bundle.Metadata = engine.Metadata{
+			Name:            entry.Connector,
+			DisplayName:     entry.Connector,
+			IntegrationType: "api",
+		}
+		return loaded, nil
 	})
 
 	registry, err := construction.BuildRegistry()
@@ -105,9 +105,9 @@ func TestConstructionRejectsUnknownExtensionBeforeLoading(t *testing.T) {
 		Extension:  "hook/unknown.v1",
 		Metadata:   connectors.Metadata{Name: "github", DisplayName: "GitHub", IntegrationType: "api"},
 		Bytes:      1,
-	}}, func(_ context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	}}, func(_ context.Context, entry manifestindex.Entry) (manifeststore.LoadedBundle, error) {
 		loads.Add(1)
-		return &engine.Bundle{Name: entry.Connector, Metadata: engine.Metadata{Name: entry.Connector}}, nil
+		return loadedBundleForTest(entry), nil
 	})
 
 	_, err := construction.BuildRegistry()
@@ -128,9 +128,9 @@ func TestConstructionRejectsBuiltinIdentityBeforeLoading(t *testing.T) {
 		Executor:   "api_engine.v1",
 		Metadata:   connectors.Metadata{Name: "sample", DisplayName: "Sample", IntegrationType: "api"},
 		Bytes:      1,
-	}}, func(_ context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	}}, func(_ context.Context, entry manifestindex.Entry) (manifeststore.LoadedBundle, error) {
 		loads.Add(1)
-		return &engine.Bundle{Name: entry.Connector, Metadata: engine.Metadata{Name: entry.Connector}}, nil
+		return loadedBundleForTest(entry), nil
 	})
 
 	_, err := construction.BuildRegistry()
@@ -139,6 +139,41 @@ func TestConstructionRejectsBuiltinIdentityBeforeLoading(t *testing.T) {
 	}
 	if got := loads.Load(); got != 0 {
 		t.Fatalf("BuildRegistry() decoded %d bundles before reserved builtin refusal, want 0", got)
+	}
+}
+
+func TestConstructionRejectsSameNameLoadedIdentityBeforeFactory(t *testing.T) {
+	indexed := manifestindex.Entry{Connector: "github", Generation: "g1", Digest: "sha256:index", Executor: "api_engine.v1", Metadata: connectors.Metadata{Name: "github", IntegrationType: "api"}, Bytes: 1}
+	loaded := indexed
+	loaded.Digest = "sha256:loaded"
+	construction := testConstruction(t, []manifestindex.Entry{indexed}, func(_ context.Context, _ manifestindex.Entry) (manifeststore.LoadedBundle, error) {
+		return loadedBundleForTest(loaded), nil
+	})
+	var factoryCalls atomic.Int32
+	factories, err := NewExecutorFactories(ExecutorFactory{
+		ID: "api_engine.v1",
+		Construct: func(bundle engine.Bundle) (connectors.Connector, error) {
+			factoryCalls.Add(1)
+			return engine.New(bundle, nil), nil
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	construction.factories = factories
+	registry, err := construction.BuildRegistry()
+	if err != nil {
+		t.Fatal(err)
+	}
+	connector, err := registry.Resolve(context.Background(), indexed.Connector)
+	if !errors.Is(err, manifeststore.ErrBundleIdentityMismatch) {
+		t.Fatalf("Resolve() = %T %v, want ErrBundleIdentityMismatch", err, err)
+	}
+	if connector != nil {
+		t.Fatalf("Resolve() returned %T after loaded identity mismatch", connector)
+	}
+	if got := factoryCalls.Load(); got != 0 {
+		t.Fatalf("factory calls = %d, want 0 after loaded identity mismatch", got)
 	}
 }
 
@@ -151,8 +186,10 @@ func TestConstructionHoldsSelectedGenerationUntilClose(t *testing.T) {
 		Metadata:   connectors.Metadata{Name: "github", DisplayName: "GitHub", IntegrationType: "api"},
 		Bytes:      1,
 	}
-	construction := testConstruction(t, []manifestindex.Entry{entry}, func(_ context.Context, selected manifestindex.Entry) (*engine.Bundle, error) {
-		return &engine.Bundle{Name: selected.Connector, Metadata: engine.Metadata{Name: selected.Connector, IntegrationType: "api"}}, nil
+	construction := testConstruction(t, []manifestindex.Entry{entry}, func(_ context.Context, selected manifestindex.Entry) (manifeststore.LoadedBundle, error) {
+		loaded := loadedBundleForTest(selected)
+		loaded.Bundle.Metadata = engine.Metadata{Name: selected.Connector, IntegrationType: "api"}
+		return loaded, nil
 	})
 	registry, err := construction.BuildRegistry()
 	if err != nil {
@@ -190,6 +227,12 @@ func testConstruction(t *testing.T, entries []manifestindex.Entry, loader manife
 		t.Fatal(err)
 	}
 	return &Construction{index: index, factories: factories, store: store}
+}
+
+func loadedBundleForTest(entry manifestindex.Entry) manifeststore.LoadedBundle {
+	identity := manifestidentity.Identity{Connector: entry.Connector, Generation: entry.Generation, Digest: entry.Digest, Bytes: entry.Bytes}
+	bundle := &engine.Bundle{Name: entry.Connector, Identity: identity}
+	return manifeststore.LoadedBundle{Bundle: bundle, Identity: identity}
 }
 
 func TestNewLoadsDeclarativeBundlesWithProtectedNativeDatabases(t *testing.T) {

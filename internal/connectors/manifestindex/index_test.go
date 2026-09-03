@@ -3,6 +3,9 @@ package manifestindex
 import (
 	"errors"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestIndexIsSortedUniqueAndBounded(t *testing.T) {
@@ -101,5 +104,23 @@ func TestGeneratedMetadataPreservesCatalogProjection(t *testing.T) {
 	postgres, ok := index.Lookup("postgres")
 	if !ok || !postgres.Metadata.Capabilities.Catalog || !postgres.Metadata.Capabilities.CDC {
 		t.Fatalf("postgres generated metadata = %#v, want catalog and native CDC capabilities", postgres.Metadata)
+	}
+}
+
+func TestGeneratedEntryMatchesLoadedExecutionIdentity(t *testing.T) {
+	index, err := New(GeneratedEntries(), len(GeneratedEntries()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	entry, ok := index.Lookup("github")
+	if !ok {
+		t.Fatal("generated index is missing github")
+	}
+	bundle, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if bundle.Identity.Connector != entry.Connector || bundle.Identity.Generation != entry.Generation || bundle.Identity.Digest != entry.Digest || bundle.Identity.Bytes != entry.Bytes {
+		t.Fatalf("loaded identity = %#v, want generated entry %#v", bundle.Identity, entry)
 	}
 }

@@ -8,15 +8,16 @@ import (
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/manifestidentity"
 	"polymetrics.ai/internal/connectors/manifestindex"
 )
 
 func TestBundleStoreRejectsOversizeBeforeLoading(t *testing.T) {
 	index := bundleIndex(t, manifestindex.Entry{Connector: "alpha", Generation: "g", Digest: "d", Executor: "api_engine.v1", Bytes: 3})
 	var calls atomic.Int32
-	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 2}, func(context.Context, manifestindex.Entry) (*engine.Bundle, error) {
+	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 2}, func(_ context.Context, entry manifestindex.Entry) (LoadedBundle, error) {
 		calls.Add(1)
-		return &engine.Bundle{Name: "alpha"}, nil
+		return loadedFor(entry), nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -35,9 +36,9 @@ func TestBundleStoreDoesNotEvictHeldBundle(t *testing.T) {
 		manifestindex.Entry{Connector: "bravo", Generation: "g", Digest: "b", Executor: "api_engine.v1", Bytes: 1},
 	)
 	var calls atomic.Int32
-	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 1}, func(_ context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 1}, func(_ context.Context, entry manifestindex.Entry) (LoadedBundle, error) {
 		calls.Add(1)
-		return &engine.Bundle{Name: entry.Connector}, nil
+		return loadedFor(entry), nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -67,19 +68,20 @@ func TestBundleStoreDoesNotEvictHeldBundle(t *testing.T) {
 }
 
 func TestBundleStoreSharesConcurrentAcquire(t *testing.T) {
-	index := bundleIndex(t, manifestindex.Entry{Connector: "alpha", Generation: "g", Digest: "d", Executor: "api_engine.v1", Bytes: 1})
+	entry := manifestindex.Entry{Connector: "alpha", Generation: "g", Digest: "d", Executor: "api_engine.v1", Bytes: 1}
+	index := bundleIndex(t, entry)
 	started := make(chan struct{})
 	release := make(chan struct{})
 	var calls atomic.Int32
-	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 1}, func(ctx context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 1}, func(ctx context.Context, selected manifestindex.Entry) (LoadedBundle, error) {
 		if calls.Add(1) == 1 {
 			close(started)
 		}
 		select {
 		case <-release:
-			return &engine.Bundle{Name: entry.Connector}, nil
+			return loadedFor(selected), nil
 		case <-ctx.Done():
-			return nil, ctx.Err()
+			return LoadedBundle{}, ctx.Err()
 		}
 	})
 	if err != nil {
@@ -128,13 +130,13 @@ func TestBundleStoreCancelsAbandonedLoadAndAllowsRetry(t *testing.T) {
 	index := bundleIndex(t, entry)
 	started := make(chan struct{})
 	var calls atomic.Int32
-	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 1}, func(ctx context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 1}, func(ctx context.Context, selected manifestindex.Entry) (LoadedBundle, error) {
 		if calls.Add(1) == 1 {
 			close(started)
 			<-ctx.Done()
-			return nil, ctx.Err()
+			return LoadedBundle{}, ctx.Err()
 		}
-		return &engine.Bundle{Name: entry.Connector}, nil
+		return loadedFor(selected), nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -183,11 +185,11 @@ func TestBundleStoreReturnsCanonicalEntryIdentity(t *testing.T) {
 		Bytes:      1,
 	}
 	index := bundleIndex(t, want)
-	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 1}, func(_ context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	store, err := NewBundleStore(index, Limits{Entries: 1, Bytes: 1}, func(_ context.Context, entry manifestindex.Entry) (LoadedBundle, error) {
 		if entry.Generation != want.Generation || entry.Digest != want.Digest || entry.Extension != want.Extension {
 			t.Fatalf("loader entry = %#v, want canonical identity %#v", entry, want)
 		}
-		return &engine.Bundle{Name: entry.Connector}, nil
+		return loadedFor(entry), nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -206,9 +208,9 @@ func TestBundleStoreSeparatesConnectorGenerations(t *testing.T) {
 	first := manifestindex.Entry{Connector: "alpha", Generation: "g1", Digest: "sha256:first", Executor: "api_engine.v1", Bytes: 1}
 	second := manifestindex.Entry{Connector: "alpha", Generation: "g2", Digest: "sha256:second", Executor: "api_engine.v1", Bytes: 1}
 	var calls atomic.Int32
-	store, err := NewBundleStore(bundleIndex(t, first), Limits{Entries: 2, Bytes: 2}, func(_ context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	store, err := NewBundleStore(bundleIndex(t, first), Limits{Entries: 2, Bytes: 2}, func(_ context.Context, entry manifestindex.Entry) (LoadedBundle, error) {
 		calls.Add(1)
-		return &engine.Bundle{Name: entry.Connector}, nil
+		return loadedFor(entry), nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -239,9 +241,9 @@ func TestBundleStoreSeparatesConnectorGenerations(t *testing.T) {
 func TestBundleStoreRejectsGenerationOrDigestMismatch(t *testing.T) {
 	canonical := manifestindex.Entry{Connector: "alpha", Generation: "g1", Digest: "sha256:one", Executor: "api_engine.v1", Bytes: 1}
 	var calls atomic.Int32
-	store, err := NewBundleStore(bundleIndex(t, canonical), Limits{Entries: 1, Bytes: 1}, func(_ context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	store, err := NewBundleStore(bundleIndex(t, canonical), Limits{Entries: 1, Bytes: 1}, func(_ context.Context, entry manifestindex.Entry) (LoadedBundle, error) {
 		calls.Add(1)
-		return &engine.Bundle{Name: entry.Connector}, nil
+		return loadedFor(entry), nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -259,10 +261,45 @@ func TestBundleStoreRejectsGenerationOrDigestMismatch(t *testing.T) {
 	}
 }
 
+func TestBundleStoreRejectsSameNameLoadedIdentityMismatch(t *testing.T) {
+	indexed := manifestindex.Entry{Connector: "alpha", Generation: "g1", Digest: "sha256:index", Executor: "api_engine.v1", Bytes: 1}
+	for _, test := range []struct {
+		name string
+		edit func(*manifestindex.Entry)
+	}{
+		{"generation", func(entry *manifestindex.Entry) { entry.Generation = "g2" }},
+		{"digest", func(entry *manifestindex.Entry) { entry.Digest = "sha256:loaded" }},
+		{"charge", func(entry *manifestindex.Entry) { entry.Bytes = 2 }},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			loaded := indexed
+			test.edit(&loaded)
+			var calls atomic.Int32
+			store, err := NewBundleStore(bundleIndex(t, indexed), Limits{Entries: 1, Bytes: 2}, func(_ context.Context, _ manifestindex.Entry) (LoadedBundle, error) {
+				calls.Add(1)
+				return loadedFor(loaded), nil
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			handle, err := store.Acquire(context.Background(), indexed.Connector)
+			if !errors.Is(err, ErrBundleIdentityMismatch) {
+				t.Fatalf("Acquire() error = %v, want ErrBundleIdentityMismatch", err)
+			}
+			if handle != nil {
+				t.Fatal("same-name loaded identity mismatch returned a handle")
+			}
+			if got := calls.Load(); got != 1 {
+				t.Fatalf("loader calls = %d, want 1", got)
+			}
+		})
+	}
+}
+
 func TestBundleHandlePinsGenerationAfterCacheRelease(t *testing.T) {
 	entry := manifestindex.Entry{Connector: "alpha", Generation: "g1", Digest: "sha256:one", Executor: "api_engine.v1", Bytes: 1}
-	store, err := NewBundleStore(bundleIndex(t, entry), Limits{Entries: 1, Bytes: 1}, func(_ context.Context, selected manifestindex.Entry) (*engine.Bundle, error) {
-		return &engine.Bundle{Name: selected.Connector}, nil
+	store, err := NewBundleStore(bundleIndex(t, entry), Limits{Entries: 1, Bytes: 1}, func(_ context.Context, selected manifestindex.Entry) (LoadedBundle, error) {
+		return loadedFor(selected), nil
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -286,6 +323,12 @@ func TestBundleHandlePinsGenerationAfterCacheRelease(t *testing.T) {
 	if store.GenerationHeld(entry) {
 		t.Fatal("generation hold remained after lease release")
 	}
+}
+
+func loadedFor(entry manifestindex.Entry) LoadedBundle {
+	identity := manifestidentity.Identity{Connector: entry.Connector, Generation: entry.Generation, Digest: entry.Digest, Bytes: entry.Bytes}
+	bundle := &engine.Bundle{Name: entry.Connector, Identity: identity}
+	return LoadedBundle{Bundle: bundle, Identity: identity}
 }
 
 func bundleIndex(t *testing.T, entries ...manifestindex.Entry) manifestindex.Index {

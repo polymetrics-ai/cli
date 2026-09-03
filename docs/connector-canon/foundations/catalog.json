@@ -234,6 +234,7 @@
           "polymetrics.ai/internal/app",
           "polymetrics.ai/internal/connectors/defs",
           "polymetrics.ai/internal/connectors/engine",
+          "polymetrics.ai/internal/connectors/manifestidentity",
           "polymetrics.ai/internal/connectors/manifestindex",
           "polymetrics.ai/internal/connectors/manifeststore"
         ],
@@ -250,6 +251,7 @@
           "internal/connectors/hooks/hookset/hookset_gen.go",
           "internal/connectors/manifestindex/index.go",
           "internal/connectors/manifestindex/index_gen.go",
+          "internal/connectors/manifestidentity/identity.go",
           "internal/connectors/manifeststore/bundle_store.go"
         ],
         "symbols": [
@@ -264,6 +266,10 @@
           {
             "file": "internal/connectors/manifestindex/index_gen.go",
             "name": "GeneratedEntries"
+          },
+          {
+            "file": "internal/connectors/manifestidentity/identity.go",
+            "name": "ForFS"
           },
           {
             "file": "internal/connectors/manifeststore/bundle_store.go",
@@ -334,6 +340,7 @@
         "guarantees": [
           "closed schema validation before selected construction",
           "embedded immutable execution snapshot",
+          "generated and loaded connector, generation, digest, and byte charge match before cache or factory admission",
           "metadata listing decodes no bundle and named resolution decodes one selected bundle",
           "declared batches can select only their source-backed allow-listed actions and methods",
           "a connector with read disabled may omit streams.json while readable connectors still require it",
@@ -358,7 +365,7 @@
           "hookset.Factories",
           "engine.Load"
         ],
-        "notes": "The generated index supplies safe metadata plus exactly one closed executor and optional exact extension ID per bundle. Construction validates all selections before a connector constructor or project I/O; hook package init registration is not consulted. Runtime reads embedded execution JSON only; source.lock.json is excluded."
+        "notes": "The generated index supplies safe metadata plus exactly one closed executor and optional exact extension ID per bundle. Generator and engine compute the same closed execution identity; the loader must match connector, generation, digest, and byte charge before construction. Hook package init registration is not consulted. Runtime reads embedded execution JSON only; source.lock.json is excluded."
       },
       "constraints": [
         "Unknown fields, duplicate identities, unsafe references, and invalid cross-file bindings fail bundle loading.",

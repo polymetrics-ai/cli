@@ -1,7 +1,6 @@
 package main
 
 import (
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"go/ast"
@@ -9,13 +8,13 @@ import (
 	"go/parser"
 	"go/token"
 	"io"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
 
+	"polymetrics.ai/internal/connectors/manifestidentity"
 	"polymetrics.ai/internal/connectors/native/nativeset"
 )
 
@@ -142,8 +141,6 @@ func renderHooksetFile(specs []hookFactorySpec) (string, error) {
 	b.WriteString("\t}\n}\n")
 	return b.String(), nil
 }
-
-const generatedManifestGeneration = "embedded-v1"
 
 type generatedManifestIndexEntry struct {
 	Connector      string
@@ -275,11 +272,7 @@ func generateManifestIndexEntry(dir string, extensions, executors map[string]str
 	if connector != filepath.Base(dir) {
 		return generatedManifestIndexEntry{}, fmt.Errorf("%s name %q does not match directory %q", metadataPath, connector, filepath.Base(dir))
 	}
-	files, err := renderedExecutionJSONFiles(dir)
-	if err != nil {
-		return generatedManifestIndexEntry{}, err
-	}
-	digest, bytes, err := renderedExecutionDigest(dir, files)
+	identity, err := manifestidentity.ForFS(os.DirFS(filepath.Dir(dir)), connector, manifestidentity.EmbeddedGeneration)
 	if err != nil {
 		return generatedManifestIndexEntry{}, err
 	}
@@ -293,14 +286,14 @@ func generateManifestIndexEntry(dir string, extensions, executors map[string]str
 	}
 	return generatedManifestIndexEntry{
 		Connector:      connector,
-		Generation:     generatedManifestGeneration,
-		Digest:         digest,
+		Generation:     identity.Generation,
+		Digest:         identity.Digest,
 		Executor:       executor,
 		Extension:      extensions[connector],
 		CommandUsage:   commandUsage,
 		CommandTagline: commandTagline,
 		Metadata:       metadata,
-		Bytes:          bytes,
+		Bytes:          identity.Bytes,
 	}, nil
 }
 func generatedCommandSurfaceSummary(dir string) (string, string, error) {
@@ -319,66 +312,6 @@ func generatedCommandSurfaceSummary(dir string) (string, string, error) {
 		return "", "", fmt.Errorf("cli surface tagline has no usage")
 	}
 	return summary.Usage, summary.Tagline, nil
-}
-
-func renderedExecutionJSONFiles(root string) ([]string, error) {
-	var files []string
-	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if entry.IsDir() || !entry.Type().IsRegular() {
-			return nil
-		}
-		relative, err := filepath.Rel(root, path)
-		if err != nil {
-			return err
-		}
-		relative = filepath.ToSlash(relative)
-		if renderedExecutionJSONFile(relative) {
-			files = append(files, relative)
-		}
-		return nil
-	})
-	if err != nil {
-		return nil, fmt.Errorf("list execution JSON under %s: %w", root, err)
-	}
-	sort.Strings(files)
-	return files, nil
-}
-
-func renderedExecutionJSONFile(name string) bool {
-	switch name {
-	case "metadata.json", "changefeed.json", "polling_watermark.json", "sync_transport.json", "spec.json", "streams.json", "writes.json", "operations.json", "cli_surface.json", "rate_limits.json", "database.json":
-		return true
-	default:
-		return strings.HasPrefix(name, "schemas/") && strings.HasSuffix(name, ".json")
-	}
-}
-
-func renderedExecutionDigest(root string, files []string) (string, int, error) {
-	hash := sha256.New()
-	bytes := 0
-	for _, name := range files {
-		if _, err := io.WriteString(hash, name); err != nil {
-			return "", 0, err
-		}
-		if _, err := hash.Write([]byte{0}); err != nil {
-			return "", 0, err
-		}
-		data, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(name)))
-		if err != nil {
-			return "", 0, fmt.Errorf("read %s: %w", name, err)
-		}
-		bytes += len(data)
-		if _, err := hash.Write(data); err != nil {
-			return "", 0, err
-		}
-		if _, err := hash.Write([]byte{0}); err != nil {
-			return "", 0, err
-		}
-	}
-	return "sha256:" + fmt.Sprintf("%x", hash.Sum(nil)), bytes, nil
 }
 
 func generatedMetadataCDC(entry generatedManifestIndexEntry) bool {

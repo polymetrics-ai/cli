@@ -1,57 +1,66 @@
 package syncplan
 
 import (
-	"fmt"
+	"errors"
 
 	"polymetrics.ai/internal/synccontract"
 )
 
-// Resolve is a pure CP03 resolver. It classifies only immutable contract facts;
-// executor and foundation lookup remain later checkpoints.
+// Resolve is a pure deterministic resolver over immutable plan facts. It
+// returns exactly one executable plan, C3 incompatibility, or C4 foundation
+// gap without constructing an executor or crossing an I/O boundary.
 func Resolve(plan Plan, caller synccontract.Budget) Result {
 	if err := plan.Validate(); err != nil {
-		return Result{Kind: ResultKindIncompatible, Incompatibility: &Incompatibility{Axis: axisFor(err), Code: "invalid_contract"}}
+		return incompatibleResult(axisFor(err), codeFor(err, "invalid_contract"))
 	}
-	if err := caller.Validate(); err != nil || widens(caller, plan.Axes.Budget) {
-		return Result{Kind: ResultKindIncompatible, Incompatibility: &Incompatibility{Axis: "budget", Code: "caller_budget_widens_declaration"}}
+	if err := caller.Validate(); err != nil {
+		return incompatibleResult(axisFor(err), codeFor(err, "invalid_budget"))
 	}
-	if code := incompatible(plan.Axes); code != "" {
-		return Result{Kind: ResultKindIncompatible, Incompatibility: &Incompatibility{Axis: code, Code: "incompatible_axes"}}
+	if widens(caller, plan.Axes.Budget) {
+		return incompatibleResult("budget", "caller_budget_widens_declaration")
+	}
+	if !plan.Foundation.Available {
+		return Result{Kind: ResultKindFoundationGap, FoundationGap: &FoundationGap{FoundationID: plan.Foundation.ID, Reference: plan.Foundation.Reference}}
+	}
+	if !hasExactlyOneExecutorPerRole(plan.Executors) {
+		return incompatibleResult("executor", "ambiguous_executor_selection")
+	}
+	if err := plan.ValidateExecutable(); err != nil {
+		return incompatibleResult(axisFor(err), codeFor(err, "incompatible_axes"))
 	}
 	sealed := plan
 	sealed.Axes.Budget = reduce(plan.Axes.Budget, caller)
 	return Result{Kind: ResultKindExecutable, Plan: &sealed}
 }
 
+func incompatibleResult(axis, code string) Result {
+	return Result{Kind: ResultKindIncompatible, Incompatibility: &Incompatibility{Axis: axis, Code: code}}
+}
+
 func axisFor(err error) string {
-	var axis *synccontract.UnknownAxisValueError
-	if fmt.Errorf("%w", err) != nil && errorAs(err, &axis) {
-		return axis.Axis
+	var axis interface{ SyncAxis() string }
+	if errors.As(err, &axis) && axis.SyncAxis() != "" {
+		return axis.SyncAxis()
 	}
-	return "budget"
+	return "identity"
 }
 
-func errorAs(err error, target **synccontract.UnknownAxisValueError) bool {
-	if typed, ok := err.(*synccontract.UnknownAxisValueError); ok {
-		*target = typed
-		return true
+func codeFor(err error, fallback string) string {
+	var validation *ValidationError
+	if errors.As(err, &validation) && validation.Code != "" {
+		return validation.Code
 	}
-	return false
-}
-
-func incompatible(a synccontract.ExecutionAxes) string {
-	if a.Progression == synccontract.SourceProgressionSnapshot && a.Apply != synccontract.DestinationApplyReplace {
-		return "apply"
+	var axis *synccontract.AxisError
+	if errors.As(err, &axis) && axis.Code != "" {
+		return axis.Code
 	}
-	if a.Progression == synccontract.SourceProgressionChangeCapture && (a.Apply != synccontract.DestinationApplyChangeApply || a.Delete != synccontract.DeletePolicyTombstone) {
-		return "delete"
-	}
-	return ""
+	return fallback
 }
 
 func widens(caller, declared synccontract.Budget) bool {
 	return (declared.MaxRecords > 0 && caller.MaxRecords > declared.MaxRecords) || (declared.MaxBytes > 0 && caller.MaxBytes > declared.MaxBytes) || (declared.MaxBatches > 0 && caller.MaxBatches > declared.MaxBatches)
 }
+
 func reduce(declared, caller synccontract.Budget) synccontract.Budget {
 	if caller.MaxRecords > 0 && (declared.MaxRecords == 0 || caller.MaxRecords < declared.MaxRecords) {
 		declared.MaxRecords = caller.MaxRecords

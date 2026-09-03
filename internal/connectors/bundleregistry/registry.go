@@ -70,15 +70,15 @@ func NewConstruction() (*Construction, error) {
 	if err := construction.validateEntries(index.List()); err != nil {
 		return nil, err
 	}
-	store, err := manifeststore.NewBundleStore(index, manifeststore.Limits{Entries: 16, Bytes: 64 << 20}, func(ctx context.Context, entry manifestindex.Entry) (*engine.Bundle, error) {
+	store, err := manifeststore.NewBundleStore(index, manifeststore.Limits{Entries: 16, Bytes: 64 << 20}, func(ctx context.Context, entry manifestindex.Entry) (manifeststore.LoadedBundle, error) {
 		if err := ctx.Err(); err != nil {
-			return nil, err
+			return manifeststore.LoadedBundle{}, err
 		}
 		bundle, err := engine.Load(defs.FS, entry.Connector)
 		if err != nil {
-			return nil, fmt.Errorf("load execution bundle %q: %w", entry.Connector, err)
+			return manifeststore.LoadedBundle{}, fmt.Errorf("load execution bundle %q: %w", entry.Connector, err)
 		}
-		return &bundle, nil
+		return manifeststore.LoadedBundle{Bundle: &bundle, Identity: bundle.Identity}, nil
 	})
 	if err != nil {
 		return nil, err

@@ -181,3 +181,20 @@ The required role-separated discovery was requested through the worker task fan-
 - Requested range: `9f96054ed85d6470306bc5b033e805b89b36c7c6..62e04650f44878da013a893bbeccc22c3b9b690c` (CP02 through CP08), published normally on `fm/cli-top100-declaration-batch-r1`.
 - Required reviewer context: independently review the entire CP02–CP08 range, not only CP08; validate the closed sync contracts/resolver, generated index/store identity, explicit factory and hook fan-in, App/CLI pre-I/O/lazy construction, GitHub API-engine reference/rate admission, PostgreSQL native reference/no-rate claim, generated boundary ownership, and all recorded inherited baselines.
 - Worker disposition: Firstmate must launch and record the independent exact-SHA phase review. This worker must not start CP09 or create a second reviewer path until the review disposition is handled.
+
+## 2026-09-04 — A1 correction-wave local self-review
+
+- Review subject: the uncommitted A1 correction wave based on reviewed parent `346200f659e9ae22d0be42a83ee10f75d658f0b6`; review authority is Firstmate report `data/cli-a1-62e-phase-review-r1/report.md`.
+- Scope: A1-01 pure `synccontract`/`syncplan` closure, A1-02 generator/engine/store loaded-identity binding, A1-03 one production CLI registry construction, focused tests, Atlas ownership, and GSD evidence. No source lock, rendered definition JSON, rate declaration, provider route, credential, release artifact, `.cache`, or certification residue changed.
+
+| Lens | Disposition |
+| --- | --- |
+| Closed resolver model | Pass. Seven canonical mode rows bind the progression/apply/object/key/delete/retry/idempotency/receipt/acknowledgement/checkpoint axes. `Resolve` returns an executable plan, C3 with the actual invalid axis, or C4 with the declared foundation reference before construction or I/O. |
+| Loaded identity and bounds | Pass. Generator and `engine.Load` share `manifestidentity.ForFS`; the store requires generated and loaded connector/generation/digest/byte charge equality before cache insertion or handle exposure. Same-name mismatches cannot reach factories or rate resolution; flight, cancellation, eviction, and lease tests pass under race detection. |
+| CLI/App ownership | Pass. Production mode owns one registry from `cli.Run` through root manual, dynamic help, direct preflight, normal App, and reverse App. Test override mode is explicit rather than inferred from variadic candidates. The normal/help/reverse counter witness resolves one selected connector. |
+| Rate, factory, and native safety | Pass. GitHub local fake 429/reset admission, GitHub API-engine, PostgreSQL native/no-rate, 49-hook, and closed 3+4 compatibility controls pass. No rate declaration, provider request, native protocol, or compatibility fallback changed. |
+| Generated and public surfaces | Pass. Generation, reference lock checks, 553-definition validation, Atlas JSON/proof checks, commandrunner preflight, docs validation, built help/namespace/inspect, local warehouse/reverse smoke, and whole-tree boundary check pass. |
+| Error and lint review | Corrected during review: moving execution identity out of `engine/bundle.go` left `readFileString` and `dirExists` dead; they were removed and the engine/identity/store/index/registry suites rerun. The remaining 20 lint diagnostics are confined to unmodified historical files and remain a recorded baseline. |
+| Broad suites | Recorded, not waived. Full App and CLI reruns reproduce only the existing typed-destination and polling/help/source-origin baselines listed in `VERIFICATION.md`; engine passes. |
+
+- Local result: no remaining A1-01/A1-02/A1-03 finding after the dead-helper cleanup. `git diff --check`, scoped vet, build, agent-contract, generation, safe gates, and focused/race suites pass. The external final exact-SHA A1 re-review remains mandatory; do not begin CP09.
