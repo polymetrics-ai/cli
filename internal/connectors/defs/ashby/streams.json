@@ -1472,7 +1472,8 @@
     },
     {
       "body": {
-        "limit": 100
+        "limit": 100,
+        "namesOnly": true
       },
       "body_type": "json",
       "method": "POST",

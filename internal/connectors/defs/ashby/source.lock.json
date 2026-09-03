@@ -1510,7 +1510,8 @@
         "method": "POST",
         "path": "/hiringTeamRole.list",
         "body": {
-          "limit": 100
+          "limit": 100,
+          "namesOnly": true
         },
         "body_type": "json",
         "required_body_fields": [],
@@ -19673,7 +19674,8 @@
         "schema": "schemas/hiring_team_role_list.json",
         "projection": "passthrough",
         "body": {
-          "limit": 100
+          "limit": 100,
+          "namesOnly": true
         },
         "pagination": {
           "type": "cursor",
@@ -19715,7 +19717,7 @@
         "record": "schemas/hiring_team_role_list.json"
       },
       "source": {
-        "provider_reference": "https://developers.ashbyhq.com/docs"
+        "provider_reference": "https://developers.ashbyhq.com/reference/hiring-team-role-list"
       }
     },
     {
