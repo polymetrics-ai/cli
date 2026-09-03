@@ -1892,6 +1892,20 @@ func validateOffsetCountPagination(base *PaginationSpec, streams []StreamSpec) e
 		if strings.TrimSpace(spec.LimitParam) == "" || spec.PageSize <= 0 {
 			return fmt.Errorf("%s offset_count requires limit_param and positive page_size", name)
 		}
+		for field, value := range map[string]string{
+			"size_param": spec.SizeParam, "page_param": spec.PageParam, "offset_param": spec.OffsetParam,
+			"cursor_param": spec.CursorParam, "token_path": spec.TokenPath, "last_record_field": spec.LastRecordField,
+			"next_url_path": spec.NextURLPath, "body_cursor_field": spec.BodyCursorField, "body_page_field": spec.BodyPageField,
+			"body_offset_field": spec.BodyOffsetField, "start_index_param": spec.StartIndexParam, "count_param": spec.CountParam,
+			"total_path": spec.TotalPath, "start_index_path": spec.StartIndexPath,
+		} {
+			if strings.TrimSpace(value) != "" {
+				return fmt.Errorf("%s offset_count conflicts with %s", name, field)
+			}
+		}
+		if spec.StartPage != nil || spec.StartIndexBase != nil {
+			return fmt.Errorf("%s offset_count conflicts with page or start-index selection", name)
+		}
 		return nil
 	}
 	if err := validate("base", base); err != nil {
