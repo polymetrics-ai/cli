@@ -41,10 +41,6 @@ const (
 	maxPageSize     = 1000
 )
 
-func init() {
-	engine.RegisterHooks("apple-search-ads", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is apple-search-ads's Tier-2 hook set: StreamHook only (auth stays
 // fully declarative oauth2_client_credentials; Check stays the declarative
 // base.check GET /campaigns request).

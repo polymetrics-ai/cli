@@ -55,7 +55,7 @@ type commandRuntimeEndpoint struct {
 // admission. It is the sole lane-to-declaration resolver; diagnostics must
 // not copy its own incomplete stream/write/operation switch.
 func ResolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCommand) (ResolvedCommandBinding, error) {
-	return resolveImplementedCommandBinding(b, cmd, HooksFor(b.Name))
+	return resolveImplementedCommandBinding(b, cmd, nil)
 }
 
 func resolveImplementedCommandBinding(b Bundle, cmd connectors.CommandSurfaceCommand, hooks Hooks) (ResolvedCommandBinding, error) {

@@ -50,7 +50,7 @@ func doRequest(t *testing.T, auth interface {
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderNexusDatasets(t *testing.T) {
-	h := engine.HooksFor("nexus-datasets")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"nexus-datasets\") = nil, want registered hooks (hooks/nexus-datasets's init() must call engine.RegisterHooks)")
 	}

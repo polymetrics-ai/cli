@@ -1,4 +1,4 @@
-package cli_test
+package cli
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ import (
 	"testing"
 	"time"
 
-	"polymetrics.ai/internal/cli"
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
@@ -25,20 +25,19 @@ import (
 const durableParkingCLIHelperEnv = "POLYMETRICS_DURABLE_PARKING_CLI_HELPER"
 const durableParkingCLIConnectorName = "github"
 
-func init() {
-	if os.Getenv(durableParkingCLIHelperEnv) == "" {
-		return
+func durableParkingCLIRegistry() *connectors.Registry {
+	registry := connectors.NewEmptyRegistry()
+	if err := registry.Register(durableParkingCLIEngineConnector()); err != nil {
+		panic(err)
 	}
-	connectors.RegisterDefaultRegistryBuilder(func() *connectors.Registry {
-		registry := connectors.NewEmptyRegistry()
-		if err := registry.Register(durableParkingCLIEngineConnector()); err != nil {
-			panic(err)
-		}
-		if err := registry.Register(connectors.Warehouse{}); err != nil {
-			panic(err)
-		}
-		return registry
-	})
+	if err := registry.Register(connectors.Warehouse{}); err != nil {
+		panic(err)
+	}
+	return registry
+}
+
+func durableParkingCLIOpen(root string) (*app.App, error) {
+	return app.OpenWithRegistry(root, durableParkingCLIRegistry())
 }
 
 func durableParkingCLIEngineConnector() connectors.Connector {
@@ -180,7 +179,7 @@ func runDurableParkingCLIHelper(t *testing.T, mode string) {
 	runID := os.Getenv("POLYMETRICS_DURABLE_PARKING_CLI_RUN")
 	run := func(args ...string) (int, string) {
 		var stdout, stderr bytes.Buffer
-		code := cli.Run(args, &stdout, &stderr)
+		code := runWithAppOpeners(args, &stdout, &stderr, durableParkingCLIOpen, durableParkingCLIOpen)
 		return code, stdout.String() + stderr.String()
 	}
 	switch mode {

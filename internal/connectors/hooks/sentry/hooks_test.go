@@ -214,7 +214,7 @@ func TestConnectorNameAndRegistration(t *testing.T) {
 	if New().ConnectorName() != "sentry" {
 		t.Fatalf("ConnectorName() = %q, want %q", New().ConnectorName(), "sentry")
 	}
-	hooks := engine.HooksFor("sentry")
+	hooks := ExplicitFactory()
 	if hooks == nil {
 		t.Fatal("engine.HooksFor(\"sentry\") = nil, want a registered hook set (init() must call engine.RegisterHooks)")
 	}

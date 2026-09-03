@@ -25,20 +25,15 @@ const (
 	productionParkingResetDelay    = 30 * time.Second
 )
 
-func init() {
-	if os.Getenv(productionParkingHelperEnv) == "" {
-		return
+func productionParkingRegistry() (*connectors.Registry, error) {
+	registry := connectors.NewEmptyRegistry()
+	if err := registry.Register(&productionParkingSource{}); err != nil {
+		return nil, err
 	}
-	connectors.RegisterDefaultRegistryBuilder(func() *connectors.Registry {
-		registry := connectors.NewEmptyRegistry()
-		if err := registry.Register(&productionParkingSource{}); err != nil {
-			panic(err)
-		}
-		if err := registry.Register(connectors.Warehouse{}); err != nil {
-			panic(err)
-		}
-		return registry
-	})
+	if err := registry.Register(connectors.Warehouse{}); err != nil {
+		return nil, err
+	}
+	return registry, nil
 }
 
 // TestProductionParkingCompositionSurvivesProcessKill drives app.Open,
@@ -134,7 +129,7 @@ func runProductionParkingHelper(t *testing.T, mode string) {
 		if err := InitProject(root); err != nil {
 			t.Fatal(err)
 		}
-		a, err := Open(root)
+		a, err := openWithRegistry(root, false, productionParkingRegistry)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -163,7 +158,7 @@ func runProductionParkingHelper(t *testing.T, mode string) {
 		fmt.Printf("parked:%s\n", parked.ID)
 		select {}
 	case "admission":
-		a, err := Open(root)
+		a, err := openWithRegistry(root, false, productionParkingRegistry)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -177,7 +172,7 @@ func runProductionParkingHelper(t *testing.T, mode string) {
 			t.Fatal("parked-scope refusal advanced the checkpoint")
 		}
 	case "resume":
-		a, err := Open(root)
+		a, err := openWithRegistry(root, false, productionParkingRegistry)
 		if err != nil {
 			t.Fatal(err)
 		}

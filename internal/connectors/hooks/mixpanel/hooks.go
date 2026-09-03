@@ -28,10 +28,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("mixpanel", func() engine.Hooks { return New() })
-}
-
 // Hooks is the mixpanel hook set. It implements engine.AuthHook and
 // engine.RecordHook only.
 type Hooks struct{}

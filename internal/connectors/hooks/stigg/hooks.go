@@ -24,10 +24,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("stigg", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is stigg's Tier-2 hook set: StreamHook only (auth is fully
 // declarative via streams.json's bearer mode -- see docs.md "Auth setup").
 type Hooks struct{}

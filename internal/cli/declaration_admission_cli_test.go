@@ -4,9 +4,11 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
@@ -108,7 +110,14 @@ func TestFreshchatConfiguredEnumValidatesBeforeCredentialResolution(t *testing.T
 func TestConnectorCommandInputDefectsFailBeforeWithApp(t *testing.T) {
 	minimum := connectors.ExactNumber("2")
 	bundle := engine.Bundle{
-		Name:    "input-ordering",
+		Name: "input-ordering",
+		Metadata: engine.Metadata{
+			Name:        "input-ordering",
+			DisplayName: "Input ordering",
+			Capabilities: engine.Capabilities{
+				Read: true,
+			},
+		},
 		Streams: []engine.StreamSpec{{Name: "widgets", Method: "GET", Path: "/widgets"}},
 		CLISurface: &engine.CLISurface{
 			Tagline: "Input ordering fixture", Usage: "pm input-ordering widgets list",
@@ -156,5 +165,32 @@ func TestConnectorCommandInputDefectsFailBeforeWithApp(t *testing.T) {
 	var helpOut, helpErr bytes.Buffer
 	if err := runMaybeConnectorCommandWithRegistry(context.Background(), t.TempDir(), "input-ordering", []string{"widgets", "list", "--help"}, &helpOut, &helpErr, false, registry); err != nil {
 		t.Fatalf("help should return before request validation: %v", err)
+	}
+
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatal(err)
+	}
+	err = runMaybeConnectorCommandWithRegistry(context.Background(), root, "input-ordering", []string{"widgets", "list", "--state", "open"}, io.Discard, io.Discard, false, registry)
+	if err == nil || !strings.Contains(err.Error(), "missing --credential") {
+		t.Fatalf("valid command error = %v, want the preflight registry to reach its credential boundary", err)
+	}
+
+	fixture, err := app.OpenWithRegistry(root, registry)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := fixture.AddCredential(context.Background(), app.AddCredentialRequest{
+		Name:      "input-ordering",
+		Connector: "input-ordering",
+	}); err != nil {
+		t.Fatal(err)
+	}
+	err = runMaybeConnectorCommandWithRegistry(context.Background(), root, "input-ordering", []string{"widgets", "list", "--state", "open", "--credential", "input-ordering"}, io.Discard, io.Discard, false, registry)
+	if err == nil {
+		t.Fatal("valid fixture command unexpectedly succeeded")
+	}
+	if strings.Contains(err.Error(), `connector "input-ordering" not found`) {
+		t.Fatalf("direct command rebuilt a different App registry: %v", err)
 	}
 }

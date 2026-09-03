@@ -144,26 +144,6 @@ type RateLimitParkingScopeResolver interface {
 	RateLimitParkingScope(context.Context, RuntimeConfig, string, error) (RateLimitScopeKey, error)
 }
 
-var defaultRegistryBuilder = struct {
-	mu sync.RWMutex
-	fn func() *Registry
-}{}
-
-// RegisterDefaultRegistryBuilder installs the process default registry builder.
-// Wave 6 uses this to let the bundle-backed registry live in a package that can
-// import engine/defs without creating a connectors<->engine cycle.
-func RegisterDefaultRegistryBuilder(fn func() *Registry) {
-	defaultRegistryBuilder.mu.Lock()
-	defer defaultRegistryBuilder.mu.Unlock()
-	defaultRegistryBuilder.fn = fn
-}
-
-func registeredDefaultRegistryBuilder() func() *Registry {
-	defaultRegistryBuilder.mu.RLock()
-	defer defaultRegistryBuilder.mu.RUnlock()
-	return defaultRegistryBuilder.fn
-}
-
 type Record map[string]any
 
 type Capabilities struct {
@@ -2950,21 +2930,77 @@ type LocalWarehouseMaterializer interface {
 	MaterializesLocalWarehouse() bool
 }
 
+// RegistryResolver constructs one connector selected by a registry-owned
+// immutable metadata entry. It is never used for an unlisted name.
+type RegistryResolver func(context.Context, string) (Connector, error)
+
+// CommandSummary is the index-owned root-help projection of one declared
+// connector command surface. It contains no executable request details.
+type CommandSummary struct {
+	Connector string
+	Usage     string
+	Tagline   string
+}
+
+type registryFlight struct {
+	done chan struct{}
+	err  error
+}
+
 type Registry struct {
+	mu                    sync.RWMutex
 	connectors            map[string]Connector
+	metadata              map[string]Metadata
+	commandSummaries      map[string]CommandSummary
+	resolver              RegistryResolver
+	flights               map[string]*registryFlight
 	iconCoverageValidated bool
 }
 
 func NewEmptyRegistry() *Registry {
-	return &Registry{connectors: make(map[string]Connector)}
+	return &Registry{
+		connectors:       make(map[string]Connector),
+		metadata:         make(map[string]Metadata),
+		commandSummaries: make(map[string]CommandSummary),
+		flights:          make(map[string]*registryFlight),
+	}
+}
+
+// NewLazyRegistry records a closed metadata inventory without constructing its
+// connector implementations. Resolve constructs only a named listed connector.
+func NewLazyRegistry(metadata []Metadata, resolver RegistryResolver, commandSummaries ...CommandSummary) (*Registry, error) {
+	if resolver == nil {
+		return nil, errors.New("lazy registry resolver is required")
+	}
+	registry := NewEmptyRegistry()
+	registry.resolver = resolver
+	for _, meta := range metadata {
+		name := strings.TrimSpace(meta.Name)
+		if name == "" || name != meta.Name || hasLegacyIconConnectorPrefix(name) {
+			return nil, fmt.Errorf("lazy registry metadata name %q is invalid", meta.Name)
+		}
+		if _, exists := registry.metadata[name]; exists {
+			return nil, fmt.Errorf("duplicate lazy registry metadata %q", name)
+		}
+		meta.Name = name
+		registry.metadata[name] = MetadataWithIcon(meta)
+	}
+	for _, summary := range commandSummaries {
+		if summary.Connector == "" || strings.TrimSpace(summary.Connector) != summary.Connector || strings.TrimSpace(summary.Usage) == "" {
+			return nil, fmt.Errorf("lazy registry command summary is incomplete for %q", summary.Connector)
+		}
+		if _, exists := registry.metadata[summary.Connector]; !exists {
+			return nil, fmt.Errorf("lazy registry command summary %q has no metadata entry", summary.Connector)
+		}
+		if _, exists := registry.commandSummaries[summary.Connector]; exists {
+			return nil, fmt.Errorf("duplicate lazy registry command summary %q", summary.Connector)
+		}
+		registry.commandSummaries[summary.Connector] = summary
+	}
+	return registry, nil
 }
 
 func NewRegistry() *Registry {
-	if builder := registeredDefaultRegistryBuilder(); builder != nil {
-		registry := builder()
-		registry.MustValidateIconCoverage()
-		return registry
-	}
 	r := NewEmptyRegistry()
 	r.RegisterBuiltins()
 	r.MustValidateIconCoverage()
@@ -2974,34 +3010,139 @@ func NewRegistry() *Registry {
 // RegisterBuiltins adds the primitive local connectors that are implemented in
 // this package rather than in defs/. They are not legacy per-connector packages.
 func (r *Registry) RegisterBuiltins() {
-	r.Register(Sample{})
-	r.Register(File{})
-	r.Register(Warehouse{})
-	r.Register(Outbox{})
+	_ = r.Register(Sample{})
+	_ = r.Register(File{})
+	_ = r.Register(Warehouse{})
+	_ = r.Register(Outbox{})
 }
 
 func (r *Registry) Register(c Connector) error {
+	if c == nil {
+		return errors.New("connector is required")
+	}
 	name := c.Name()
-	if _, exists := r.connectors[name]; exists {
+	metadata := MetadataOf(c)
+	if metadata.Name == "" {
+		metadata.Name = name
+	}
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if _, exists := r.metadata[name]; exists {
 		return fmt.Errorf("connector %q is already registered", name)
 	}
 	r.connectors[name] = c
+	r.metadata[name] = metadata
 	r.iconCoverageValidated = false
 	return nil
 }
 
+// Resolve returns the selected connector or its construction error. Concurrent
+// callers for one name share one synchronous construction flight.
+func (r *Registry) Resolve(ctx context.Context, name string) (Connector, error) {
+	if ctx == nil {
+		return nil, errors.New("connector resolve context is required")
+	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	r.mu.Lock()
+	if connector, ok := r.connectors[name]; ok {
+		r.mu.Unlock()
+		return connector, nil
+	}
+	if _, ok := r.metadata[name]; !ok {
+		r.mu.Unlock()
+		return nil, fmt.Errorf("connector %q not found", name)
+	}
+	if r.resolver == nil {
+		r.mu.Unlock()
+		return nil, fmt.Errorf("connector %q is not constructible", name)
+	}
+	if pending, ok := r.flights[name]; ok {
+		r.mu.Unlock()
+		select {
+		case <-pending.done:
+			r.mu.RLock()
+			connector := r.connectors[name]
+			err := pending.err
+			r.mu.RUnlock()
+			if err != nil {
+				return nil, err
+			}
+			if connector == nil {
+				return nil, fmt.Errorf("connector %q resolver returned nil connector", name)
+			}
+			return connector, nil
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		}
+	}
+	pending := &registryFlight{done: make(chan struct{})}
+	r.flights[name] = pending
+	resolver := r.resolver
+	r.mu.Unlock()
+
+	connector, err := resolver(ctx, name)
+	if err == nil && connector == nil {
+		err = fmt.Errorf("connector %q resolver returned nil connector", name)
+	}
+	if err == nil && connector.Name() != name {
+		err = fmt.Errorf("connector resolver returned %q for %q", connector.Name(), name)
+	}
+	if err == nil && MetadataOf(connector).Name != name {
+		err = fmt.Errorf("connector %q metadata name does not match resolver selection", name)
+	}
+
+	r.mu.Lock()
+	if err == nil {
+		r.connectors[name] = connector
+	}
+	pending.err = err
+	delete(r.flights, name)
+	close(pending.done)
+	r.mu.Unlock()
+	if err != nil {
+		return nil, err
+	}
+	return connector, nil
+}
+
 func (r *Registry) Get(name string) (Connector, bool) {
-	c, ok := r.connectors[name]
-	return c, ok
+	connector, err := r.Resolve(context.Background(), name)
+	return connector, err == nil
 }
 
 func (r *Registry) List() []Metadata {
-	out := make([]Metadata, 0, len(r.connectors))
-	for _, connector := range r.connectors {
-		out = append(out, MetadataOf(connector))
+	r.mu.RLock()
+	out := make([]Metadata, 0, len(r.metadata))
+	for _, metadata := range r.metadata {
+		out = append(out, cloneRegistryMetadata(metadata))
 	}
+	r.mu.RUnlock()
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
+}
+
+// CommandSummaries returns the generated root-help summaries without resolving
+// their connector implementations.
+func (r *Registry) CommandSummaries() []CommandSummary {
+	r.mu.RLock()
+	out := make([]CommandSummary, 0, len(r.commandSummaries))
+	for _, summary := range r.commandSummaries {
+		out = append(out, summary)
+	}
+	r.mu.RUnlock()
+	sort.Slice(out, func(i, j int) bool { return out[i].Connector < out[j].Connector })
+	return out
+}
+
+func cloneRegistryMetadata(metadata Metadata) Metadata {
+	if metadata.Icon != nil {
+		icon := *metadata.Icon
+		metadata.Icon = &icon
+	}
+	return metadata
 }
 
 func (r *Registry) CatalogEntries() []Definition {

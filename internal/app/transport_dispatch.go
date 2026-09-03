@@ -59,7 +59,15 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 	if !hasDeclaredSyncTransport(source, destination) {
 		return false, transportRouteDeclarationAbsent, nil
 	}
-	if a == nil || a.transports == nil {
+	if a == nil {
+		return false, transportRouteDeclared, fmt.Errorf("closed transport registry is unavailable")
+	}
+	if a.transports == nil && a.transportRegistry != nil {
+		if err := a.ensureTransportRegistry(); err != nil {
+			return false, transportRouteDeclared, err
+		}
+	}
+	if a.transports == nil {
 		return false, transportRouteDeclared, fmt.Errorf("closed transport registry is unavailable")
 	}
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)

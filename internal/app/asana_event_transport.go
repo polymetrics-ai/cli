@@ -104,8 +104,11 @@ func (a *App) validateEndpointStreamSyncConfig(source, destination connectors.Co
 	if !declared || descriptor.Executor != asanaEventSourceReference || !transportContainsName(descriptor.EligibleStreams, streamName) || !transportContainsMode(descriptor.Modes, mode.ContractMode) {
 		return ValidateStreamSyncConfig(stream)
 	}
-	if a == nil || a.transports == nil {
+	if a == nil {
 		return fmt.Errorf("Asana event-token transport registry is unavailable")
+	}
+	if err := a.ensureTransportRegistry(); err != nil {
+		return err
 	}
 	if _, err := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: stream.DestinationAction}); err != nil {
 		return err

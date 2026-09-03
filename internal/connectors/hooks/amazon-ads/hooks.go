@@ -56,10 +56,6 @@ const defaultTokenURL = "https://api.amazon.com/auth/o2/token"
 // legacy's amazonAdsStreamEndpoints["profiles"].scoped == false.
 const unscopedPath = "v2/profiles"
 
-func init() {
-	engine.RegisterHooks("amazon-ads", func() engine.Hooks { return New() })
-}
-
 // Hooks is the amazon-ads bundle's stateless Tier-2 hook set.
 type Hooks struct {
 	// Client overrides the HTTP client used for the LWA token exchange. Left

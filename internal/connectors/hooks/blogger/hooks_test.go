@@ -92,7 +92,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderBlogger(t *testing.T) {
-	h := engine.HooksFor("blogger")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"blogger\") = nil, want registered hooks (hooks/blogger's init() must call engine.RegisterHooks)")
 	}

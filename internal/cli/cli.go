@@ -29,7 +29,34 @@ type envelope map[string]any
 
 const maxConnectorCommandLimit = 10000
 
+type appOpeners struct {
+	open    func(string) (*app.App, error)
+	reverse func(string) (*app.App, error)
+}
+
+func defaultAppOpeners() appOpeners {
+	return appOpeners{open: app.Open, reverse: app.OpenForReverseExecution}
+}
+
+func selectAppOpeners(candidates ...appOpeners) appOpeners {
+	if len(candidates) == 1 && candidates[0].open != nil && candidates[0].reverse != nil {
+		return candidates[0]
+	}
+	return defaultAppOpeners()
+}
+
 func Run(args []string, stdout, stderr io.Writer) int {
+	return run(args, stdout, stderr, defaultAppOpeners())
+}
+
+func runWithAppOpeners(args []string, stdout, stderr io.Writer, open, reverse func(string) (*app.App, error)) int {
+	if open == nil || reverse == nil {
+		return writeError(stdout, stderr, errors.New("app opener is required"), false)
+	}
+	return run(args, stdout, stderr, appOpeners{open: open, reverse: reverse})
+}
+
+func run(args []string, stdout, stderr io.Writer, openers appOpeners) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
 	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
@@ -58,7 +85,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		return writeError(stdout, stderr, err, cfg.JSON)
 	}
 	engine.ConfigureSharedRateLimitRegistry(coordination.OpenSharedRateLimitRegistry(cfg.Runtime.DragonflyAddr))
-	cmd := newRootCmd(ctx, cfg, stdout, stderr)
+	cmd := newRootCmd(ctx, cfg, stdout, stderr, openers)
 	if err := executeRootCmd(cmd, cleanArgs); err != nil {
 		return writeError(stdout, stderr, mapCobraErr(err), cfg.JSON)
 	}
@@ -106,22 +133,22 @@ func dynamicConnectorCommandsSection(registry *connectors.Registry) string {
 	if registry == nil {
 		return ""
 	}
+	metadata := make(map[string]connectors.Metadata, len(registry.List()))
+	for _, item := range registry.List() {
+		metadata[item.Name] = item
+	}
 	lines := []string{}
-	for _, meta := range registry.List() {
-		connector, ok := registry.Get(meta.Name)
-		if !ok {
+	for _, summary := range registry.CommandSummaries() {
+		meta, ok := metadata[summary.Connector]
+		if !ok || strings.TrimSpace(summary.Usage) == "" {
 			continue
 		}
-		provider, ok := connector.(connectors.CommandSurfaceProvider)
-		if !ok || provider.CommandSurface() == nil || strings.TrimSpace(provider.CommandSurface().Usage) == "" {
-			continue
-		}
-		line := fmt.Sprintf("  pm %s <command>", meta.Name)
+		line := fmt.Sprintf("  pm %s <command>", summary.Connector)
 		if meta.DisplayName != "" {
 			line += " - " + meta.DisplayName
 		}
-		if provider.CommandSurface().Tagline != "" {
-			line += ": " + provider.CommandSurface().Tagline
+		if summary.Tagline != "" {
+			line += ": " + summary.Tagline
 		}
 		lines = append(lines, line)
 	}
@@ -803,11 +830,13 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 	}
 }
 
-func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool) error {
-	return runMaybeConnectorCommandWithRegistry(ctx, root, connectorName, args, stdout, stderr, jsonOut, appRegistry())
+func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool, candidates ...appOpeners) error {
+	return runMaybeConnectorCommandWithRegistry(ctx, root, connectorName, args, stdout, stderr, jsonOut, appRegistry(), candidates...)
 }
 
-func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool, registry *connectors.Registry) error {
+func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorName string, args []string, stdout, stderr io.Writer, jsonOut bool, registry *connectors.Registry, candidates ...appOpeners) error {
+	openers := selectAppOpeners(candidates...)
+	usePreflightRegistry := len(candidates) == 0
 	if err := safety.ValidateIdentifier(connectorName, "connector"); err != nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
@@ -901,11 +930,21 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 		return err
 	}
 	if approval.supplied {
-		return withReverseExecutionApp(root, func(a *app.App) error {
+		if usePreflightRegistry {
+			return withReverseExecutionAppRegistry(root, registry, func(a *app.App) error {
+				return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
+			})
+		}
+		return withReverseExecutionApp(openers, root, func(a *app.App) error {
 			return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
 		})
 	}
-	return withApp(root, func(a *app.App) error {
+	if usePreflightRegistry {
+		return withAppRegistry(root, registry, func(a *app.App) error {
+			return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
+		})
+	}
+	return withApp(openers, root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
 	})
 }
@@ -2551,16 +2590,32 @@ func printPerfResult(stdout io.Writer, result perf.Result) {
 	)
 }
 
-func withApp(root string, fn func(*app.App) error) error {
-	a, err := app.Open(root)
+func withApp(openers appOpeners, root string, fn func(*app.App) error) error {
+	a, err := openers.open(root)
 	if err != nil {
 		return err
 	}
 	return fn(a)
 }
 
-func withReverseExecutionApp(root string, fn func(*app.App) error) error {
-	a, err := app.OpenForReverseExecution(root)
+func withReverseExecutionApp(openers appOpeners, root string, fn func(*app.App) error) error {
+	a, err := openers.reverse(root)
+	if err != nil {
+		return err
+	}
+	return fn(a)
+}
+
+func withAppRegistry(root string, registry *connectors.Registry, fn func(*app.App) error) error {
+	a, err := app.OpenWithRegistry(root, registry)
+	if err != nil {
+		return err
+	}
+	return fn(a)
+}
+
+func withReverseExecutionAppRegistry(root string, registry *connectors.Registry, fn func(*app.App) error) error {
+	a, err := app.OpenForReverseExecutionWithRegistry(root, registry)
 	if err != nil {
 		return err
 	}

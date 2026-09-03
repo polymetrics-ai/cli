@@ -7,28 +7,42 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func TestDatabaseConnectorForPreservesProtectedRegistrations(t *testing.T) {
-	for _, name := range []string{"dynamodb", "mysql", "postgres"} {
-		bundle, err := engine.Load(defs.FS, name)
+func TestDatabaseAdapterPreservesProtectedRegistrations(t *testing.T) {
+	adapter := NewDatabaseAdapter()
+	for executor, wantName := range map[string]string{
+		"native_database/dynamodb.v1": "dynamodb",
+		"native_database/mysql.v1":    "mysql",
+		"native_database/postgres.v1": "postgres",
+	} {
+		bundle, err := engine.Load(defs.FS, wantName)
 		if err != nil {
-			t.Fatalf("Load(%q): %v", name, err)
+			t.Fatal(err)
 		}
-		connector, ok := DatabaseConnectorFor(bundle.Name)
-		if !ok {
-			t.Fatalf("DatabaseConnectorFor(%q) = no connector", name)
+		connector, selected, err := adapter.Construct(executor, bundle)
+		if err != nil {
+			t.Fatalf("Construct(%q): %v", executor, err)
 		}
-		if got := connector.Name(); got != name {
-			t.Fatalf("DatabaseConnectorFor(%q).Name() = %q", name, got)
+		if !selected {
+			t.Fatalf("Construct(%q) = no connector", executor)
+		}
+		if got := connector.Name(); got != wantName {
+			t.Fatalf("Construct(%q).Name() = %q, want %q", executor, got, wantName)
 		}
 	}
 }
 
-func TestDatabaseConnectorForLeavesAPIBundlesDeclarative(t *testing.T) {
-	bundle, err := engine.Load(defs.FS, "github")
-	if err != nil {
-		t.Fatalf("Load(github): %v", err)
+func TestCompatibilityAdapterExcludesNativeDatabases(t *testing.T) {
+	adapter := NewCompatibilityAdapter()
+	for _, executor := range []string{"native_database/dynamodb.v1", "native_database/mysql.v1", "native_database/postgres.v1"} {
+		if connector, selected, err := adapter.Construct(executor, engine.Bundle{}); err != nil || selected || connector != nil {
+			t.Fatalf("Construct(%q) = %T, %t, %v; native database must not be compatibility", executor, connector, selected, err)
+		}
 	}
-	if connector, ok := DatabaseConnectorFor(bundle.Name); ok || connector != nil {
-		t.Fatalf("DatabaseConnectorFor(github) = %T, %t; want nil, false", connector, ok)
+}
+
+func TestCompatibilityAdapterLeavesAPIBundlesDeclarative(t *testing.T) {
+	adapter := NewCompatibilityAdapter()
+	if connector, selected, err := adapter.Construct("api_engine.v1", engine.Bundle{}); err != nil || selected || connector != nil {
+		t.Fatalf("Construct(api_engine.v1) = %T, %t, %v; want nil, false, nil", connector, selected, err)
 	}
 }

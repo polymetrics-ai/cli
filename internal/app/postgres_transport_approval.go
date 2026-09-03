@@ -379,6 +379,9 @@ func (a *App) preparePostgresManagedTargetApproval(ctx context.Context, connecti
 	if err != nil {
 		return Connection{}, StreamConfig{}, SyncMode{}, connectors.RuntimeConfig{}, postgresManagedTargetApprovalBinding{}, err
 	}
+	if err := a.ensureTransportRegistry(); err != nil {
+		return Connection{}, StreamConfig{}, SyncMode{}, connectors.RuntimeConfig{}, postgresManagedTargetApprovalBinding{}, err
+	}
 	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
 		Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode,
 	})

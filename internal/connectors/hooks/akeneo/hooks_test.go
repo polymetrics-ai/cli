@@ -104,7 +104,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderAkeneo(t *testing.T) {
-	h := engine.HooksFor("akeneo")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"akeneo\") = nil, want registered hooks (hooks/akeneo's init() must call engine.RegisterHooks)")
 	}

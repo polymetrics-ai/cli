@@ -34,10 +34,6 @@ const (
 	maxPageSize     = 100
 )
 
-func init() {
-	engine.RegisterHooks("sentry", func() engine.Hooks { return New() })
-}
-
 // Hooks implements engine.StreamHook for the sentry bundle. It has no
 // state of its own; every method is a pure function of its arguments.
 type Hooks struct{}

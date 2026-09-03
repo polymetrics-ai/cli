@@ -32,10 +32,6 @@ const (
 	defaultMaxPages = 3
 )
 
-func init() {
-	engine.RegisterHooks("plaid", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is plaid's Tier-2 hook set: StreamHook (both reads) + CheckHook.
 type Hooks struct{}
 

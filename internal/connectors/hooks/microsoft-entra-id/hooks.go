@@ -53,10 +53,6 @@ var graphResource = map[string]string{
 	"directoryroles":    "/directoryRoles",
 }
 
-func init() {
-	engine.RegisterHooks("microsoft-entra-id", func() engine.Hooks { return New() })
-}
-
 // Hooks implements engine.StreamHook for the microsoft-entra-id bundle. It
 // has no state of its own; every method is a pure function of its
 // arguments.

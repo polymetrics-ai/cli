@@ -8,10 +8,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
@@ -46,6 +48,8 @@ type App struct {
 	vault                   *vault.Vault
 	approval                *projectWriteApprovalAuthority
 	registry                *connectors.Registry
+	transportRegistry       *connectors.Registry
+	transportMu             sync.Mutex
 	transports              *synctransport.Registry
 	transportStage          synctransport.WarehouseStage
 	sqlEngine               sqlQueryEngine
@@ -148,19 +152,46 @@ func InitProject(root string) error {
 }
 
 func Open(root string) (*App, error) {
-	return open(root, false)
+	return openWithRegistry(root, false, bundleregistry.NewRegistry)
 }
 
 func OpenForReverseExecution(root string) (*App, error) {
-	return open(root, true)
+	return openWithRegistry(root, true, bundleregistry.NewRegistry)
 }
 
-func open(root string, deferNormalization bool) (*App, error) {
+// OpenWithRegistry constructs an App with an explicitly supplied immutable registry.
+func OpenWithRegistry(root string, registry *connectors.Registry) (*App, error) {
+	return openWithRegistry(root, false, func() (*connectors.Registry, error) { return registry, nil })
+}
+
+// OpenForReverseExecutionWithRegistry constructs a read-only reverse-execution App with registry.
+func OpenForReverseExecutionWithRegistry(root string, registry *connectors.Registry) (*App, error) {
+	return openWithRegistry(root, true, func() (*connectors.Registry, error) { return registry, nil })
+}
+
+func openWithRegistry(root string, deferNormalization bool, newRegistry func() (*connectors.Registry, error)) (*App, error) {
+	return openWithRegistryWithStat(root, deferNormalization, newRegistry, os.Stat)
+}
+
+func openWithRegistryWithStat(root string, deferNormalization bool, newRegistry func() (*connectors.Registry, error), stat func(string) (fs.FileInfo, error)) (*App, error) {
+	if newRegistry == nil {
+		return nil, errors.New("connector registry factory is required")
+	}
+	if stat == nil {
+		return nil, errors.New("project stat function is required")
+	}
+	registry, err := newRegistry()
+	if err != nil {
+		return nil, fmt.Errorf("construct connector registry: %w", err)
+	}
+	if registry == nil {
+		return nil, errors.New("connector registry factory returned nil")
+	}
 	if root == "" {
 		root = "."
 	}
 	projectDir := filepath.Join(root, ".polymetrics")
-	info, err := os.Stat(projectDir)
+	info, err := stat(projectDir)
 	if err != nil {
 		return nil, fmt.Errorf("open project at %s: %w", projectDir, err)
 	}
@@ -180,6 +211,7 @@ func open(root string, deferNormalization bool) (*App, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	statePath := filepath.Join(projectDir, "state", "state.json")
 	a := &App{
 		root:                    root,
@@ -189,11 +221,12 @@ func open(root string, deferNormalization bool) (*App, error) {
 		deferStateNormalization: deferNormalization,
 		vault:                   v,
 		approval:                approval,
-		registry:                connectors.NewRegistry(),
-		transports:              synctransport.NewRegistry(),
+		registry:                registry,
+		transportRegistry:       registry,
 		catalogs:                newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
+	a.transportStage = newConnectionWarehouseStage(a)
 	// state.json is atomically replaced by writers, so opening a current project
 	// can take a coherent read-only snapshot without contending on their legacy
 	// O_EXCL writer marker. This lets a second CLI construct its durable parking
@@ -214,9 +247,8 @@ func open(root string, deferNormalization bool) (*App, error) {
 		Store:  parkingStore,
 		Resume: a.resumeParkedRateLimitRun,
 	})
-	if err := a.composeTransportRegistry(); err != nil {
-		return nil, err
-	}
+	// Transport composition is deferred until a saved transport path needs it.
+	// Listing metadata and opening an App must not decode every connector bundle.
 	if err := a.rateParking.Start(context.Background()); err != nil {
 		return nil, fmt.Errorf("start durable rate parking: %w", err)
 	}
@@ -236,7 +268,11 @@ type IssueLabelTransportIdentity struct {
 // definition as the production composition root. Keeping this lookup here
 // prevents shared CLI code from carrying a provider name or endpoint policy.
 func DefaultIssueLabelTransportIdentity() (IssueLabelTransportIdentity, error) {
-	connector, _, err := issueLabelTransportEngine(bundleregistry.New())
+	registry, err := bundleregistry.NewRegistry()
+	if err != nil {
+		return IssueLabelTransportIdentity{}, err
+	}
+	connector, _, err := issueLabelTransportEngine(registry)
 	if err != nil {
 		return IssueLabelTransportIdentity{}, err
 	}
@@ -1124,8 +1160,8 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 			return Connection{}, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", name, destination.Name())
 		}
 		if declared && isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor) {
-			if a.transports == nil {
-				return Connection{}, fmt.Errorf("declarative typed destination transport registry is unavailable")
+			if err := a.ensureTransportRegistry(); err != nil {
+				return Connection{}, err
 			}
 			resolved, preflightErr := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: name, Mode: mode.ContractMode, DestinationAction: stream.DestinationAction})
 			if preflightErr != nil {

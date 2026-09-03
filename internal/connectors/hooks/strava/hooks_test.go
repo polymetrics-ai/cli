@@ -9,7 +9,7 @@ import (
 )
 
 func TestHooksRegistered(t *testing.T) {
-	h := engine.HooksFor("strava")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("registered hooks = nil")
 	}

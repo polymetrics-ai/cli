@@ -216,18 +216,10 @@ func (r *Registry) ValidateIconCoverage() error {
 	if err != nil {
 		return err
 	}
-	names := make([]string, 0, len(r.connectors))
-	for name := range r.connectors {
-		names = append(names, name)
-	}
-	sort.Strings(names)
-	for _, name := range names {
+	for _, metadata := range r.List() {
+		name := metadata.Name
 		if name == "" || name != strings.TrimSpace(name) || hasLegacyIconConnectorPrefix(name) {
 			return fmt.Errorf("connector registry name %q must be a bare connector identifier", name)
-		}
-		metadataName := strings.TrimSpace(r.connectors[name].Metadata().Name)
-		if metadataName != name {
-			return fmt.Errorf("connector %q metadata name %q must match registry name", name, metadataName)
 		}
 		if _, ok := icons[name]; !ok {
 			return fmt.Errorf("missing explicit icon registry entry for connector %q", name)
@@ -243,13 +235,18 @@ func (r *Registry) ValidateIconCoverage() error {
 // constructors may each enforce it: a registry that has not been mutated since
 // its last successful validation is already covered, so repeat calls are free.
 func (r *Registry) MustValidateIconCoverage() {
-	if r.iconCoverageValidated {
+	r.mu.RLock()
+	validated := r.iconCoverageValidated
+	r.mu.RUnlock()
+	if validated {
 		return
 	}
 	if err := r.ValidateIconCoverage(); err != nil {
 		panic("validate connector icon coverage: " + err.Error() + "; regenerate internal/connectors/icon_data.json with `make icons-generate`")
 	}
+	r.mu.Lock()
 	r.iconCoverageValidated = true
+	r.mu.Unlock()
 }
 
 func ValidateConnectorIcons(connectorsDir string, defs []Definition, metas []Metadata) error {

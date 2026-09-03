@@ -227,19 +227,30 @@
       "layer": "declarative_bundle_loading",
       "status": "available",
       "kind": "generic",
-      "summary": "Loads closed execution JSON bundles from the embedded definition filesystem, validates typed streams, writes, operations, CLI surfaces, transports, and database inputs, then composes declarative and registered native executors into one runtime registry.",
+      "summary": "Indexes safe metadata and closed executor/extension identities from embedded execution JSON without decoding bundles, then lazily loads one selected bundle through explicit factories and sealed native compatibility adapters.",
       "owner": {
-        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "primary_package": "polymetrics.ai/internal/connectors/bundleregistry",
         "supporting_packages": [
-          "polymetrics.ai/internal/connectors/bundleregistry",
-          "polymetrics.ai/internal/connectors/defs"
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/connectors/defs",
+          "polymetrics.ai/internal/connectors/engine",
+          "polymetrics.ai/internal/connectors/manifestindex",
+          "polymetrics.ai/internal/connectors/manifeststore"
         ],
         "files": [
+          "cmd/connectorgen/gen.go",
+          "internal/app/app.go",
+          "internal/connectors/bundleregistry/factories.go",
+          "internal/connectors/bundleregistry/hooks.go",
           "internal/connectors/bundleregistry/registry.go",
           "internal/connectors/defs/defs.go",
           "internal/connectors/engine/bundle.go",
           "internal/connectors/engine/schema/operations.schema.json",
-          "internal/connectors/engine/schema/writes.schema.json"
+          "internal/connectors/engine/schema/writes.schema.json",
+          "internal/connectors/hooks/hookset/hookset_gen.go",
+          "internal/connectors/manifestindex/index.go",
+          "internal/connectors/manifestindex/index_gen.go",
+          "internal/connectors/manifeststore/bundle_store.go"
         ],
         "symbols": [
           {
@@ -248,19 +259,31 @@
           },
           {
             "file": "internal/connectors/engine/bundle.go",
-            "name": "LoadAll"
-          },
-          {
-            "file": "internal/connectors/engine/bundle.go",
             "name": "Load"
           },
           {
-            "file": "internal/connectors/bundleregistry/registry.go",
-            "name": "loadDefinitions"
+            "file": "internal/connectors/manifestindex/index_gen.go",
+            "name": "GeneratedEntries"
+          },
+          {
+            "file": "internal/connectors/manifeststore/bundle_store.go",
+            "name": "BundleStore.Acquire"
           },
           {
             "file": "internal/connectors/bundleregistry/registry.go",
-            "name": "New"
+            "name": "NewConstruction"
+          },
+          {
+            "file": "internal/connectors/bundleregistry/registry.go",
+            "name": "Construction.BuildRegistry"
+          },
+          {
+            "file": "internal/connectors/bundleregistry/factories.go",
+            "name": "NewExecutorFactories"
+          },
+          {
+            "file": "internal/app/app.go",
+            "name": "Open"
           },
           {
             "file": "internal/connectors/engine/bundle.go",
@@ -309,29 +332,33 @@
           "incremental_upsert"
         ],
         "guarantees": [
-          "closed schema validation before registration",
-          "embedded immutable definition snapshot",
+          "closed schema validation before selected construction",
+          "embedded immutable execution snapshot",
+          "metadata listing decodes no bundle and named resolution decodes one selected bundle",
           "declared batches can select only their source-backed allow-listed actions and methods",
           "a connector with read disabled may omit streams.json while readable connectors still require it",
           "unrestricted upload media is available only through an explicit typed provider policy",
-          "one registry combines declarative connectors with sanctioned hook and native overlays"
+          "one registry combines declarative connectors with generated explicit extension factories and sealed native compatibility adapters"
         ]
       },
       "selection": {
         "mechanisms": [
           "definition_field",
-          "interface_registration"
+          "explicit_factory"
         ],
         "definition_files": [
           "internal/connectors/defs/<connector>/*.json",
           "internal/connectors/defs/<connector>/schemas/*.json"
         ],
         "selectors": [
-          "bundleregistry.New",
-          "engine.LoadAll(defs.FS)",
+          "app.Open",
+          "bundleregistry.NewConstruction",
+          "Construction.BuildRegistry",
+          "ExecutorFactories.Construct",
+          "hookset.Factories",
           "engine.Load"
         ],
-        "notes": "Bundle directory identity and closed execution fields select runtime contracts; source.lock.json is excluded from the embedded filesystem."
+        "notes": "The generated index supplies safe metadata plus exactly one closed executor and optional exact extension ID per bundle. Construction validates all selections before a connector constructor or project I/O; hook package init registration is not consulted. Runtime reads embedded execution JSON only; source.lock.json is excluded."
       },
       "constraints": [
         "Unknown fields, duplicate identities, unsafe references, and invalid cross-file bindings fail bundle loading.",
@@ -387,12 +414,32 @@
         {
           "package": "./internal/connectors/bundleregistry",
           "file": "internal/connectors/bundleregistry/registry_test.go",
-          "name": "TestLoadDefinitionsCachesEmbeddedBundleSnapshot"
+          "name": "TestConstructionBuildsLazyRegistryWithoutDecodingList"
         },
         {
           "package": "./internal/connectors/bundleregistry",
           "file": "internal/connectors/bundleregistry/executor_authority_test.go",
           "name": "TestEveryImplementedCommandHasProductionRuntimeSurface"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/factories_test.go",
+          "name": "TestNewExecutorFactoriesRejectsDuplicateIDsBeforeConstruction"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/registry_test.go",
+          "name": "TestConstructionRejectsUnknownExtensionBeforeLoading"
+        },
+        {
+          "package": "./internal/connectors/hooks/hookset",
+          "file": "internal/connectors/hooks/hookset/hookset_gen_test.go",
+          "name": "TestGeneratedHooksetConstructsRepresentativeHooks"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/app_test.go",
+          "name": "TestOpenConstructsTheExplicitProductionRegistry"
         },
         {
           "package": "./internal/connectors/engine",
@@ -1288,11 +1335,13 @@
       "owner": {
         "primary_package": "polymetrics.ai/internal/connectors/engine",
         "supporting_packages": [
+          "polymetrics.ai/internal/connectors/bundleregistry",
           "polymetrics.ai/internal/connectors/hooks/hookset",
           "polymetrics.ai/internal/connectors/native/nativeset",
           "polymetrics.ai/internal/synctransport"
         ],
         "files": [
+          "internal/connectors/bundleregistry/registry.go",
           "internal/connectors/engine/hooks.go",
           "internal/connectors/hooks/hookset/hookset_gen.go",
           "internal/connectors/native/nativeset/factories.go",
@@ -1305,8 +1354,12 @@
             "name": "Hooks"
           },
           {
-            "file": "internal/connectors/engine/hooks.go",
-            "name": "RegisterHooks"
+            "file": "internal/connectors/bundleregistry/registry.go",
+            "name": "NewConstruction"
+          },
+          {
+            "file": "internal/connectors/hooks/hookset/hookset_gen.go",
+            "name": "Factories"
           },
           {
             "file": "internal/connectors/engine/hooks.go",
@@ -1345,7 +1398,7 @@
           "provider-specific record and request transforms"
         ],
         "source_forms": [
-          "projected definition plus registered implementation seam"
+          "projected definition plus generated explicit implementation factory"
         ],
         "request_response_shapes": [
           "authentication and declared route authorization",
@@ -1359,21 +1412,22 @@
         ],
         "guarantees": [
           "explicit interface ownership",
-          "generated registration sets keep extension discovery deterministic",
+          "generated explicit factory catalogs close extension discovery without import-time registration",
           "transport factories bind exact executor and mode references"
         ]
       },
       "selection": {
         "mechanisms": [
-          "interface_registration"
+          "definition_field",
+          "explicit_factory"
         ],
         "definition_files": [],
         "selectors": [
-          "engine.RegisterHooks(connector name, factory)",
-          "generated hookset and nativeset imports",
+          "bundleregistry.NewConstruction",
+          "hookset.Factories",
           "synctransport.DefinitionFactoryProvider"
         ],
-        "notes": "Use the narrowest existing interface and keep the reusable behavior in its generic owner; definition-selected transport factories must not branch on connector name."
+        "notes": "Use the narrowest existing interface and generated explicit factory catalog; definition-selected transport factories must not branch on connector name or import/registration order."
       },
       "constraints": [
         "Extensions may implement provider-specific behavior only through a declared interface or exact executor reference.",
@@ -1390,9 +1444,10 @@
         {
           "name": "GitHub HTTP hooks",
           "files": [
-            "internal/connectors/hooks/github/hooks.go"
+            "internal/connectors/hooks/github/hooks.go",
+            "internal/connectors/hooks/github/factory_gen.go"
           ],
-          "notes": "The connector registers provider-specific hooks while retaining the common declarative engine."
+          "notes": "The connector exposes an explicit provider-specific hook factory while retaining the common declarative engine."
         },
         {
           "name": "Feishu declared tenant authentication hook",
@@ -1412,19 +1467,24 @@
       ],
       "proof_tests": [
         {
-          "package": "./internal/connectors/engine",
-          "file": "internal/connectors/engine/hooks_test.go",
-          "name": "TestRegisterHooksAndHooksForRoundTrip"
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/gen_test.go",
+          "name": "TestHookPackagesDoNotRegisterGlobalHooks"
         },
         {
           "package": "./internal/connectors/hooks/hookset",
           "file": "internal/connectors/hooks/hookset/hookset_gen_test.go",
-          "name": "TestGeneratedHooksetRegistersRepresentativeHooks"
+          "name": "TestGeneratedHooksetConstructsRepresentativeHooks"
         },
         {
           "package": "./internal/connectors/native/nativeset",
           "file": "internal/connectors/native/nativeset/nativeset_test.go",
-          "name": "TestDatabaseConnectorForPreservesProtectedRegistrations"
+          "name": "TestDatabaseAdapterPreservesProtectedRegistrations"
+        },
+        {
+          "package": "./internal/connectors/native/nativeset",
+          "file": "internal/connectors/native/nativeset/nativeset_test.go",
+          "name": "TestCompatibilityAdapterExcludesNativeDatabases"
         },
         {
           "package": "./internal/connectors/native/postgres",

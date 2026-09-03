@@ -27,10 +27,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("appsflyer", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is appsflyer's Tier-2 hook set: StreamHook only.
 type Hooks struct{}
 

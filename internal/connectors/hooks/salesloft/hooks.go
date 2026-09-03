@@ -47,10 +47,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("salesloft", func() engine.Hooks { return New() })
-}
-
 // Hooks is the salesloft hook set. It implements engine.AuthHook only.
 type Hooks struct {
 	// Now is injectable for tests; nil uses time.Now.

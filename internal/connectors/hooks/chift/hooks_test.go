@@ -85,14 +85,14 @@ func TestAuthenticator_MissingSecretsErrors(t *testing.T) {
 	}
 }
 
-// TestConnectorNameAndRegistration asserts the hook set self-registers under
-// "chift" and reports the matching ConnectorName.
-func TestConnectorNameAndRegistration(t *testing.T) {
+// TestConnectorNameAndExplicitFactory asserts the hook package exposes its
+// matching factory without import-time registration.
+func TestConnectorNameAndExplicitFactory(t *testing.T) {
 	h := chifthooks.New()
 	if h.ConnectorName() != "chift" {
 		t.Fatalf("ConnectorName() = %q, want chift", h.ConnectorName())
 	}
-	if hooks := engine.HooksFor("chift"); hooks == nil {
-		t.Fatal("engine.HooksFor(\"chift\") returned nil; hook did not self-register")
+	if hooks := chifthooks.ExplicitFactory(); hooks == nil {
+		t.Fatal("ExplicitFactory returned nil")
 	}
 }

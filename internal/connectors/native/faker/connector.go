@@ -58,11 +58,16 @@ type Connector struct {
 // panics if the bundle fails to load — a broken build, not a runtime error
 // (mirrors native/postgres.New's identical contract).
 func New() Connector {
-	b, err := engine.Load(defs.FS, "faker")
+	bundle, err := engine.Load(defs.FS, "faker")
 	if err != nil {
 		panic("native/faker: failed to load defs/faker bundle: " + err.Error())
 	}
-	return Connector{Base: engine.NewBase(b)}
+	return NewFromBundle(bundle)
+}
+
+// NewFromBundle constructs Faker from the manifest-selected execution bundle.
+func NewFromBundle(bundle engine.Bundle) Connector {
+	return Connector{Base: engine.NewBase(bundle)}
 }
 
 // Check always succeeds (subject to context cancellation): this connector

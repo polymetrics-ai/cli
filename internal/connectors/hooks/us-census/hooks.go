@@ -30,10 +30,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("us-census", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is the us-census hook set. It implements engine.StreamHook only.
 type Hooks struct{}
 

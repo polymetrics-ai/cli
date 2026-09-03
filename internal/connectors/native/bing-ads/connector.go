@@ -79,11 +79,16 @@ type Connector struct {
 // "build-time guaranteed" invariant (a bundle that fails to load here
 // indicates a broken build, not a runtime/user error).
 func New() Connector {
-	b, err := engine.Load(defs.FS, connectorName)
+	bundle, err := engine.Load(defs.FS, connectorName)
 	if err != nil {
 		panic("native/bing-ads: failed to load defs/bing-ads bundle: " + err.Error())
 	}
-	return Connector{Base: engine.NewBase(b)}
+	return NewFromBundle(bundle)
+}
+
+// NewFromBundle constructs Bing Ads from the manifest-selected execution bundle.
+func NewFromBundle(bundle engine.Bundle) Connector {
+	return Connector{Base: engine.NewBase(bundle)}
 }
 
 // Metadata overrides engine.Base's bundle-synthesized Metadata with the

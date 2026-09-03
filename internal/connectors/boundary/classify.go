@@ -125,6 +125,7 @@ func isLegacyConnectorPackage(rel string, lx lexicon) bool {
 func isKnownGeneratedGo(rel string) bool {
 	switch rel {
 	case "internal/connectors/hooks/hookset/hookset_gen.go",
+		"internal/connectors/manifestindex/index_gen.go",
 		"internal/connectors/native/nativeset/nativeset_gen.go":
 		return true
 	default:

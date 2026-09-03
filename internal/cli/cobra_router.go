@@ -42,7 +42,8 @@ func markCobraLegacyError(err error) error {
 	return &cobraLegacyError{err: err}
 }
 
-func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer) *cobra.Command {
+func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, candidates ...appOpeners) *cobra.Command {
+	openers := selectAppOpeners(candidates...)
 	root := cfg.Root
 	jsonOut := cfg.JSON
 	cmd := &cobra.Command{
@@ -58,11 +59,11 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 			}
 			if len(args) > 1 && isHelpArg(args[1]) {
 				if isDynamicConnectorCommand(args[0]) {
-					return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, stderr, jsonOut))
+					return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, stderr, jsonOut, openers))
 				}
 				return markCobraLegacyError(usageErrorf("unknown command %q", args[0]))
 			}
-			return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, stderr, jsonOut))
+			return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, stderr, jsonOut, openers))
 		},
 	}
 	cmd.SetOut(stdout)
@@ -70,7 +71,7 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.PersistentFlags().String("root", root, "project root (parsed by the legacy global parser)")
 	cmd.PersistentFlags().Bool("json", jsonOut, "write machine-readable JSON output (parsed by the legacy global parser)")
 	setManualHelp(cmd, "", stdout, jsonOut)
-	for _, spec := range cobraLegacyCommands(cfg, stderr) {
+	for _, spec := range cobraLegacyCommands(cfg, openers, stderr) {
 		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec))
 	}
 	return cmd
@@ -88,7 +89,7 @@ func executeRootCmd(cmd *cobra.Command, args []string) error {
 	return err
 }
 
-func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraLegacyCommand {
+func cobraLegacyCommands(cfg config.Config, openers appOpeners, stderrWriters ...io.Writer) []cobraLegacyCommand {
 	stderr := io.Discard
 	if len(stderrWriters) > 0 && stderrWriters[0] != nil {
 		stderr = stderrWriters[0]
@@ -103,19 +104,19 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 			return runConnectors(ctx, root, args, stdout, stderr, jsonOut)
 		}},
 		{name: "credentials", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runCredentials(ctx, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runCredentials(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "connections", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runConnections(ctx, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runConnections(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "catalog", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runCatalog(ctx, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runCatalog(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "etl", manualResolver: etlTransportManualCommand, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
+			return withApp(openers, root, func(a *app.App) error { return runETL(ctx, a, args, stdout, jsonOut, cfg) })
 		}},
 		{name: "query", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runQuery(ctx, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runQuery(ctx, a, args, stdout, jsonOut) })
 		}},
 		{name: "reverse", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			approval, err := prepareReverseRunApproval(args, os.Stdin)
@@ -123,9 +124,9 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 				return err
 			}
 			if approval.supplied {
-				return withReverseExecutionApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
+				return withReverseExecutionApp(openers, root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
 			}
-			return withApp(root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runReverse(ctx, a, args, approval, stdout, jsonOut) })
 		}},
 		{name: "agent", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runAgent(ctx, cfg, root, args, stdout, jsonOut)
@@ -134,10 +135,10 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 			return runRuntime(ctx, cfg, args, stdout, jsonOut)
 		}},
 		{name: "flow", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runFlow(ctx, cfg, a, args, stdout, jsonOut) })
 		}},
 		{name: "extract", hidden: true, handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return withApp(root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
+			return withApp(openers, root, func(a *app.App) error { return runExtract(ctx, a, cfg, root, args, stdout, jsonOut) })
 		}},
 		{name: "perf", handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runPerf(ctx, cfg, args, stdout, jsonOut)
@@ -155,7 +156,7 @@ func cobraLegacyCommands(cfg config.Config, stderrWriters ...io.Writer) []cobraL
 			return runRLM(ctx, cfg, root, args, stdout, jsonOut)
 		}},
 		{name: "schedule", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
-			return runSchedule(ctx, cfg, root, args, stdout, jsonOut)
+			return runSchedule(ctx, cfg, root, args, stdout, jsonOut, openers)
 		}},
 		{name: "worker", hidden: true, handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runWorker(ctx, cfg, args, stdout, jsonOut)

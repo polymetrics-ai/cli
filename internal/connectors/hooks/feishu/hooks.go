@@ -18,10 +18,6 @@ import (
 
 const tenantAccessTokenPath = "/open-apis/auth/v3/tenant_access_token/internal"
 
-func init() {
-	engine.RegisterHooks("feishu", func() engine.Hooks { return New() })
-}
-
 // Hooks owns only the source-declared Feishu tenant token exchange; the shared
 // engine owns Bitable request construction, pagination, and record handling.
 type Hooks struct{}

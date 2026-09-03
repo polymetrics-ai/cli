@@ -17,10 +17,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("google-calendar", func() engine.Hooks { return New() })
-}
-
 // Hooks implements the custom OAuth2 refresh-token AuthHook required by
 // Google Calendar's declarative HTTP bundle. It intentionally does not
 // override Check or ReadStream; fixture replay and live reads use the engine's

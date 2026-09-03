@@ -115,3 +115,65 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - Final architecture gates: lock checks, full definition validation, full `cmd/connectorgen`/`defs`/`bundleregistry`/`commandrunner`, vet, build, agentcontract, diff, docs, preflight, boundary, canon, release, and website scripts pass. The inherited engine/app/CLI/agentcontract-hash/lint baseline failures remain unchanged and recorded.
 
 - Terminal B3–B6 correction validation: Canny’s generic production proof and deterministic render check passed; the generic paginator proof passed for authoritative full-page `hasMore=false` termination and exact cursor/offset/URL continuation resumes; strict source-lock duplicate/trailing-document and no-write-on-rejection proofs passed; the 28-family source-parent matrix and semantic docs proof passed. Complete generator, definitions, bundle-registry, commandrunner, and engine suites passed. The pre-existing app typed-destination and CLI polling/help/source-origin plus local Redis failures reoccurred unchanged and are not B3–B6 regressions. `go build ./cmd/pm`, GitHub/GitLab/Asana/Canny render checks, 553-definition validation, docs validation, `git diff --check`, and the full changed-artifact secret scan passed. No release automation was run.
+
+## CP06 explicit construction verification
+
+- Preflight base: local `HEAD`, remote parent, and PR #4294 API head are `cb33f2ef2584c7307f3c88b869c474796698b0fb`; API base is `main`; frozen checkpoint `0b214b79eeb871238ce8454cd7b896e71e2746a7` is reachable. CodeGraph is absent; Go LSP is unavailable; built-in fallback searches, scoped `go list -deps -test`, and selector discovery were used instead.
+- Lifecycle/skill evidence: `scripts/gsd doctor` resolved the adapter except for its recorded missing `issue-122-rebootstrap.md`; all lifecycle sources resolved, `go run ./cmd/agentcontractgen check` passed, and the CP06 Go/connector/review skill route is recorded in the TDD ledger. The named phase artifacts remain the inline/manual-GSD fallback.
+- Preflight controls actually listed: factory controls `TestNewExecutorFactoriesRejectsDuplicateIDsBeforeConstruction|TestExecutorFactoriesRejectUnknownOrEmptySelectionBeforeConstruction`; registry/authority/compatibility controls; App controls `TestDefaultRegistryContainsOnlyBuiltins|TestOpenConstructsTheExplicitProductionRegistry`; and CLI `TestSentrySeerModelsCommandStopsBeforeProviderIOWithoutCredential`. `TestDefaultRegistryDoesNotUseProcessGlobalBuilder` selected zero tests and is explicitly retired as a verification selector.
+- Reconciled READY contract: P1 generated index/store bridge must prove zero-decode list/lookup, one exact digest decode, bounded held identity, cancellation, and mismatch refusal; P2 must prove only the sealed executor/extension identities; P3/P5 must prove App/direct CLI identity plus zero filesystem/vault/approval/auth/request/constructor work on invalid selection; P4 must prove all 49 explicit hooks and disjoint 3+4 native/compatibility inventories. No CP06 Green result is recorded yet.
+- Required focused GREEN commands after the individual RED slices: exact `go test -list` before each selector; `go test -count=1 -timeout 20m -race` for manifest index/store/factory construction; exact App/CLI counter selectors; `go test -count=1 -timeout 20m ./internal/connectors/commandrunner -run '^TestEveryImplementedCommandPassesRuntimePreflight$'`; `go vet` for changed packages; `go build ./cmd/pm`; generator byte-stability/check; `lock-render --check` for GitHub/GitLab/Asana; `connectorgen validate internal/connectors/defs`; Atlas JSON/schema/proof checks; and CLI implemented/missing-credential, partial, and unknown command witnesses.
+- Baseline-only broad results observed before the block: full `internal/app` fails the typed-destination approval/I-O expectations named in `TestFoundationRollupPreservesMultiActionReverseETLComposition`, `TestPersistedConnectionSelectsDeclarativeTypedDestinationAction`, `TestDeclarativeTypedDestinationPersistsProviderResultsAfterPostSuccessLocalFailure`, `TestDeclarativeTypedDestinationReopensRepeatedFullAppendWorksetAfterLocalReceiptFailure`, and `TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBackAbsence`. Full `internal/cli` repeats `TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility`, `TestSourceBoundOriginRejectsBeforeAppOrCredential`, `TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault`, and `TestETLHelpListsAllSyncModes`, plus expected local Redis refusal logs. These are not CP06 green evidence and receive no repair in this blocked preflight.
+
+## CP06 retrofitted impact verification — 2026-09-03
+
+- Parent identity was re-read locally and through `gh-axi api repos/polymetrics-ai/cli/pulls/4294`: base `main`, head `fm/cli-top100-declaration-batch-r1`, head SHA `cb33f2ef2584c7307f3c88b869c474796698b0fb`, open. The frozen checkpoint remains an ancestor.
+- Read-only/current-state checks: `go test -count=1 -timeout 20m -race ./internal/connectors/manifestindex ./internal/connectors/manifeststore` passed; `go test -count=1 -timeout 20m ./internal/connectors/hooks/...` reported 49 passing packages; `go test -list ... ./internal/connectors/bundleregistry ./internal/connectors/native/nativeset` failed because `registry_test.go` refers to deleted `loadDefinitions`. This is executable RED evidence, not a waived baseline.
+
+| Impact lens | Verification result | Required proof before GREEN |
+| --- | --- | --- |
+| Architecture/data flow | `BuildRegistry` visibly loops all entries and calls `Acquire`. | Decode counter: list `0`, named lookup/execution `1`. |
+| Affected callers | CLI metadata and App/identity have separate production construction calls. | One construction identity across CLI/App, including no duplicate full build. |
+| Interfaces/configuration | Entry/handle lack metadata and generation/digest identity. | Typed mismatch/unknown/duplicate refusal before constructors. |
+| Generated/docs surfaces | Generator and Atlas do not describe the current lazy-selection contract. | Check-mode byte equality plus Atlas/docs/skills parity proof. |
+| Compatibility | 3 database + 4 compatibility IDs exist; stale registry test blocks package. | Exact disjoint inventory and selected-ID factory proof. |
+| Security | Only pre-`os.Stat` closure ordering is tested. | Zero filesystem/vault/approval/auth/request/constructor counters on invalid selection. |
+| Concurrency/bounds | Production `BundleStore` lacks cancellation/retry/identity coverage. | Race-safe shared-cancel, abandoned-retry, byte/count, digest/generation tests. |
+| CLI/App reachability | Direct command injection improved; list/help/docs remain eager. | Implemented, partial, unknown, list, and named-entry behavioral witnesses. |
+| Provider semantics | No execution JSON/source-lock diff was found. | Preserve engine-only declared request behavior; no provider activity. |
+| Tests/evidence | Only partial focused suites are green; registry package does not compile. | Exact selector counts and all P1–P5 focused tests must pass. |
+
+| Prerequisite | Current disposition |
+| --- | --- |
+| CP06-P1 production bridge | `blocked`: eager full decode and no verified held identity. |
+| CP06-P2 selection ownership | `blocked`: no full row-to-factory/extension validation proof. |
+| CP06-P3 construction root | `blocked`: duplicate/eager App and CLI paths remain. |
+| CP06-P4 hook/compatibility fan-in | `blocked`: stale registry/Atlas proof references remain. |
+| CP06-P5 before-I/O ordering | `blocked`: invalid-selection zero-I/O proof is absent. |
+
+- Overall: `BLOCKED_PRE_IMPLEMENTATION`. Firstmate `impact-ready` is required before any CP06 production edit, test addition, generator write, commit, review, or push.
+
+- CP06-P1 RED: `TestConstructionBuildsLazyRegistryWithoutDecodingList` was listed exactly once, then failed with `BuildRegistry() decoded 2 bundles ... want 0`. This is the required list-path behavioral failure; it replaces the obsolete deleted-`loadDefinitions` compile failure as the first implementation oracle.
+
+## CP06 rate-limit preservation verification
+
+- Required static identity: GitHub's declared rate execution JSON and PostgreSQL's explicit `not_applicable` JSON remain unchanged; no other connector receives a policy by inference.
+- Required Harness A: mutate only a temporary `rate_limits.json` fixture and prove generated digest, byte charge, and closed-set output change deterministically.
+- Required Harness B: construct generated GitHub through the production index/store/factory path, use a local fake 429/reset/admission witness, prove same-scope process-budget sharing and distinct-scope admission, and prove no provider endpoint/credential is used.
+- Required Harness C: generation/digest mismatch refuses before factory execution; held handles retain the exact selected identity through construction.
+- Required focused regressions: manifestindex/manifeststore/bundleregistry race tests; existing engine rate request-path tests; existing parking/resume tests; built `pm connectors inspect github --json` plus text output. No rate policy, source lock, provider state, release artifact, or live certification check may change.
+
+## CP06 implemented-control results
+
+- P1/P2/P4: `go test -count=1 -timeout 20m -race ./internal/connectors/bundleregistry ./internal/connectors/manifestindex ./internal/connectors/manifeststore ./internal/connectors/hooks/hookset ./internal/connectors/native/nativeset` passed.
+- P3/P5: focused App controls for zero metadata decode, lazy transport composition, invalid-selection-before-stat, and zero phase measurement passed; `go test -count=1 -timeout 20m ./internal/cli -run '^TestDynamicConnectorCommandsUseLazyMetadata$'` passed.
+- Rate Harness A: `go test -count=1 -timeout 20m ./cmd/connectorgen` passed, including `TestGeneratedManifestIndexDigestIncludesRateLimits` and Atlas selector resolution.
+- Rate Harness B: `go test -count=1 -timeout 20m ./internal/connectors/bundleregistry -run '^TestLazyConstructionSharesGitHubRateAdmission$'` passed with local fake 429/reset only.
+- Rate Harness C: `go test -count=1 -timeout 20m -race ./internal/connectors/manifeststore` passed, including generation/digest mismatch, generation separation, cancellation/retry, and held-identity controls.
+- Existing rate regressions passed: `TestGitHubDeclaredRateLimits`, `TestGitHubRateLimitAdmissionPrecedesProviderAndIsolatesScope`, `TestParkedFullAppendRateResumePreservesCheckpointAndBatchSize`, and `TestParkedFullAppendRateResumeRearmsLatestCheckpoint`.
+- Scoped broad App result: only the previously recorded typed-destination approval/I-O baseline failures remain (`TestFoundationRollupPreservesMultiActionReverseETLComposition`, `TestPersistedConnectionSelectsDeclarativeTypedDestinationAction`, `TestDeclarativeTypedDestinationPersistsProviderResultsAfterPostSuccessLocalFailure`, `TestDeclarativeTypedDestinationReopensRepeatedFullAppendWorksetAfterLocalReceiptFailure`, and `TestDeclarativeTypedDestinationTombstoneAppliesOnlyDeclaredDeleteAndReadsBackAbsence`). No lazy-construction/transport failure remains.
+
+- Final scoped passes: `go vet` for CP06 packages; `go build ./cmd/pm`; `make smoke-no-build`; full `cmd/connectorgen`, `defs`, `engine`, `bundleregistry`, `manifestindex`, `manifeststore`, `nativeset`, and focused CLI/App suites passed.
+- Generated/authoring passes: `connectorgen gen`; GitHub/GitLab/Asana `lock-render --check`; 553-definition validation; Atlas JSON/unique-ID validation; Atlas selector test; connector canon; implemented-command preflight; and whole-tree connector boundary returned zero findings.
+- Surface passes: `pm help`, `pm connectors`, `pm github --help`, and GitHub text/JSON inspection exited successfully without credentials or provider I/O; docs validation passed.
+- Recorded inherited failures, not CP06 green evidence: full `internal/app` retains the named typed-destination approval/I-O baseline; full `internal/cli` retains polling/help/source-origin baselines with local Redis refusal logs; full boundary-package test retains `TestScanFailsClosedWhenConnectorMetadataCannotLoad/invalid_cli_surface`; `make lint` retains unrelated existing engine and obsolete connectorgen/boundary helper findings after CP06's generator cleanup.

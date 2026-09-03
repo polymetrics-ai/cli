@@ -557,6 +557,7 @@ func isNarrowSharedOwnershipOutput(rel string) bool {
 	switch rel {
 	case "internal/connectors/defs/defs.go",
 		"internal/connectors/hooks/hookset/hookset_gen.go",
+		"internal/connectors/manifestindex/index_gen.go",
 		"internal/connectors/native/nativeset/nativeset_gen.go",
 		"internal/connectors/icons.go",
 		"docs/cli/connectors.md",

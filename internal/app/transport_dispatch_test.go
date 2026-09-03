@@ -632,6 +632,7 @@ func TestRunETLTransportDoesNotParkDestinationRateLimit(t *testing.T) {
 func TestRunETLTransportPersistsZeroPhaseMeasurementWhenRefusedBeforeSourceIO(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
 	fixture.app.transports = nil
+	fixture.app.transportRegistry = nil
 
 	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
 		Connection: fixture.connection, Stream: "records", BatchSize: 1,

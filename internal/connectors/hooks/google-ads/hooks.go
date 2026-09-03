@@ -49,10 +49,6 @@ const (
 	maxPageSize     = 10000
 )
 
-func init() {
-	engine.RegisterHooks("google-ads", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is the google-ads bundle's Tier-2 hook set: StreamHook only (auth is
 // fully declarative via streams.json's bearer mode + base.headers -- see
 // docs.md "Auth setup").

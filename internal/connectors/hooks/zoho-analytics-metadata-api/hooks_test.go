@@ -103,7 +103,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderZohoAnalyticsMetadataAPI(t *testing.T) {
-	h := engine.HooksFor("zoho-analytics-metadata-api")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"zoho-analytics-metadata-api\") = nil, want registered hooks (hooks/zoho-analytics-metadata-api's init() must call engine.RegisterHooks)")
 	}

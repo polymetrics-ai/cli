@@ -28,10 +28,6 @@ const (
 	mondayDefaultPageSize = 50
 )
 
-func init() {
-	engine.RegisterHooks("monday", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is monday's Tier-2 hook set: StreamHook (all reads) + CheckHook.
 type Hooks struct{}
 

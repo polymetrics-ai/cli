@@ -41,10 +41,6 @@ const (
 	defaultTokenURL  = "https://login.keka.com/connect/token"
 )
 
-func init() {
-	engine.RegisterHooks("keka", func() engine.Hooks { return New() })
-}
-
 // Hooks implements engine.AuthHook for the keka bundle. Its only state is
 // test-injection overrides (mirrors hooks/gmail's Hooks shape); every method
 // is otherwise a pure function of its arguments (the returned Authenticator

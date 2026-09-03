@@ -19,7 +19,7 @@ func newRuntime(baseURL string) *engine.Runtime {
 // --- registration ---
 
 func TestInit_RegistersHooks(t *testing.T) {
-	h := engine.HooksFor("us-census")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"us-census\") = nil, want a registered hook set (init() must call engine.RegisterHooks)")
 	}

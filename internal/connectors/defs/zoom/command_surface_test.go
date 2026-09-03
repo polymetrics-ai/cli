@@ -40,7 +40,7 @@ func loadZoomBundle(t *testing.T) engine.Bundle {
 // cannot resolve the existing streams.
 func TestCoveredStreamsHaveReachableCommands(t *testing.T) {
 	bundle := loadZoomBundle(t)
-	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	connector := engine.New(bundle, nil)
 	surface := connector.CommandSurface()
 	if surface == nil {
 		t.Fatal("Zoom has no cli_surface.json; its stream-backed provider operations are unreachable as pm zoom commands")
@@ -184,7 +184,7 @@ func TestCoveredStreamCommandsExecuteWithLocalServer(t *testing.T) {
 	defer server.Close()
 
 	bundle := loadZoomBundle(t)
-	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	connector := engine.New(bundle, nil)
 	config := connectors.RuntimeConfig{
 		Config: map[string]string{
 			"base_url":  server.URL,

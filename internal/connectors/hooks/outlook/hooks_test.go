@@ -96,7 +96,7 @@ func doAuthenticatedRequest(t *testing.T, auth connsdk.Authenticator) *http.Requ
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderOutlook(t *testing.T) {
-	h := engine.HooksFor("outlook")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"outlook\") = nil, want registered hooks (hooks/outlook's init() must call engine.RegisterHooks)")
 	}

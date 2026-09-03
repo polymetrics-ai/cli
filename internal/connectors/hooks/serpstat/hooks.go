@@ -37,10 +37,6 @@ const (
 	defaultMaxPages = 1
 )
 
-func init() {
-	engine.RegisterHooks("serpstat", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is serpstat's Tier-2 hook set: StreamHook only (auth is fully
 // declarative via streams.json's api_key_query "token" param -- see docs.md
 // "Auth setup").

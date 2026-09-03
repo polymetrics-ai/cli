@@ -53,6 +53,7 @@ package postgres
 
 import (
 	"context"
+	"errors"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/database"
@@ -102,14 +103,26 @@ var postgresCapabilityOverrides = []postgresCapabilityOverride{
 // its own bundle loading (design §C.2), since a bundle that fails to load
 // here indicates a broken build, not a runtime/user error.
 func New() Connector {
-	b, err := engine.Load(defs.FS, "postgres")
+	bundle, err := engine.Load(defs.FS, "postgres")
 	if err != nil {
 		panic("native/postgres: failed to load defs/postgres bundle: " + err.Error())
 	}
-	if b.Database == nil {
-		panic("native/postgres: defs/postgres bundle is missing database.json")
+	connector, err := NewFromBundle(bundle)
+	if err != nil {
+		panic("native/postgres: invalid selected bundle: " + err.Error())
 	}
-	return Connector{Base: engine.NewBase(b), databaseDefinition: *b.Database}
+	return connector
+}
+
+// NewFromBundle constructs PostgreSQL from the manifest-selected execution bundle.
+func NewFromBundle(bundle engine.Bundle) (Connector, error) {
+	if bundle.Name != "postgres" {
+		return Connector{}, errors.New("selected bundle is not postgres")
+	}
+	if bundle.Database == nil {
+		return Connector{}, errors.New("selected postgres bundle is missing database.json")
+	}
+	return Connector{Base: engine.NewBase(bundle), databaseDefinition: *bundle.Database}, nil
 }
 
 // managedTargetHistorySourceDefinition supplies the sealed source driver for

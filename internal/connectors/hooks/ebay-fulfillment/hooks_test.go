@@ -9,7 +9,7 @@ import (
 )
 
 func TestHooksRegistered(t *testing.T) {
-	h := engine.HooksFor("ebay-fulfillment")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("registered hooks = nil")
 	}

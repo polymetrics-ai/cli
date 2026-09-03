@@ -9,7 +9,7 @@ import (
 )
 
 func TestHooksRegistered(t *testing.T) {
-	h := engine.HooksFor("uptick")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("registered hooks = nil")
 	}

@@ -21,7 +21,7 @@ func (testNoAuthHooks) Authenticator(context.Context, connectors.RuntimeConfig, 
 }
 
 func TestHooksRegistered(t *testing.T) {
-	h := engine.HooksFor("google-calendar")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("registered hooks = nil")
 	}

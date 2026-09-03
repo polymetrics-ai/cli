@@ -308,8 +308,8 @@ func (a *App) prepareDeclarativeTypedDestinationTransport(ctx context.Context, c
 	if err != nil {
 		return preparedDeclarativeTypedDestinationTransport{}, err
 	}
-	if a.transports == nil {
-		return preparedDeclarativeTypedDestinationTransport{}, fmt.Errorf("declarative typed destination transport registry is unavailable")
+	if err := a.ensureTransportRegistry(); err != nil {
+		return preparedDeclarativeTypedDestinationTransport{}, err
 	}
 	resolved, err := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: streamName, Mode: mode.ContractMode, DestinationAction: stream.DestinationAction})
 	if err != nil {

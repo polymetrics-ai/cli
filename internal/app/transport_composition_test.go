@@ -25,13 +25,19 @@ import (
 	"polymetrics.ai/internal/warehouse"
 )
 
-func TestOpenRegistersDefinitionOwnedProductionTransports(t *testing.T) {
+func TestOpenLazilyRegistersDefinitionOwnedProductionTransports(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
 		t.Fatal(err)
 	}
 	a, err := Open(root)
 	if err != nil {
+		t.Fatal(err)
+	}
+	if a.transports != nil {
+		t.Fatal("Open eagerly composed definition-owned transports")
+	}
+	if err := a.ensureTransportRegistry(); err != nil {
 		t.Fatal(err)
 	}
 	postgres, ok := a.registry.Get("postgres")
@@ -3128,6 +3134,9 @@ func TestOpenPreflightsEveryDeclaredPostgresDestinationMode(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if err := a.ensureTransportRegistry(); err != nil {
+		t.Fatal(err)
+	}
 	postgres, ok := a.registry.Get("postgres")
 	if !ok {
 		t.Fatal("PostgreSQL connector is not registered")
@@ -3195,6 +3204,9 @@ func TestOpenPostgresHistoryModeResolvesRegisteredExecutors(t *testing.T) {
 	}
 	a, err := Open(root)
 	if err != nil {
+		t.Fatal(err)
+	}
+	if err := a.ensureTransportRegistry(); err != nil {
 		t.Fatal(err)
 	}
 	postgres, ok := a.registry.Get("postgres")
@@ -3327,6 +3339,9 @@ func TestOpenComposedGitHubCommitsSourceEmitsEveryUnlimitedPageInBoundedBatches(
 	}
 	a, err := Open(root)
 	if err != nil {
+		t.Fatal(err)
+	}
+	if err := a.ensureTransportRegistry(); err != nil {
 		t.Fatal(err)
 	}
 	github, ok := a.registry.Get("github")
@@ -3485,6 +3500,9 @@ func TestOpenComposedGitHubCommitsHonorsTransportMaxPages(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
+			if err := a.ensureTransportRegistry(); err != nil {
+				t.Fatal(err)
+			}
 			github, _ := a.registry.Get("github")
 			postgres, _ := a.registry.Get("postgres")
 			resolved, err := a.transports.Preflight(synctransport.PreflightRequest{
@@ -3568,6 +3586,9 @@ func TestDeclarativeTransport_PageBudgetIsNotEOF(t *testing.T) {
 	}
 	a, err := Open(root)
 	if err != nil {
+		t.Fatal(err)
+	}
+	if err := a.ensureTransportRegistry(); err != nil {
 		t.Fatal(err)
 	}
 	github, _ := a.registry.Get("github")
@@ -3736,6 +3757,9 @@ func TestOpenComposedGitHubCommitsTimesOutOneProviderPageWithoutCancellingTheRun
 	}
 	a, err := Open(root)
 	if err != nil {
+		t.Fatal(err)
+	}
+	if err := a.ensureTransportRegistry(); err != nil {
 		t.Fatal(err)
 	}
 	github, _ := a.registry.Get("github")

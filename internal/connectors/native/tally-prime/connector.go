@@ -81,11 +81,16 @@ type Connector struct {
 // (mirrors native/postgres.New's and native/amazon-sqs.New's identical
 // contract).
 func New() Connector {
-	b, err := engine.Load(defs.FS, "tally-prime")
+	bundle, err := engine.Load(defs.FS, "tally-prime")
 	if err != nil {
 		panic("native/tally-prime: failed to load defs/tally-prime bundle: " + err.Error())
 	}
-	return Connector{Base: engine.NewBase(b)}
+	return NewFromBundle(bundle)
+}
+
+// NewFromBundle constructs TallyPrime from the manifest-selected execution bundle.
+func NewFromBundle(bundle engine.Bundle) Connector {
+	return Connector{Base: engine.NewBase(bundle)}
 }
 
 // Metadata overrides engine.Base's bundle-synthesized Metadata with a

@@ -60,10 +60,6 @@ const (
 	safetyMaxPages  = 10000
 )
 
-func init() {
-	engine.RegisterHooks("quickbooks", func() engine.Hooks { return New() })
-}
-
 // Hooks is the quickbooks hook set: AuthHook + StreamHook.
 type Hooks struct {
 	// Now is injectable for tests; nil uses time.Now (mirrors gmail's Hooks.Now).
