@@ -224,3 +224,8 @@
 - Scope: first half of #4424/S1A only. `synccontract` now owns closed progression, apply, object, binding, key, delete, and budget axes; `syncplan` owns immutable exactly-one result shapes; `syncrun` owns the additive version-one run-transition record. No resolver, app/CLI, connector, warehouse, credential, executor, filesystem, network, SQL, or clock wiring is included.
 - Baseline gap: the prior mode-only contract could not distinguish snapshot replacement from cursor event append, history dedupe with composite keys/history-close, or change-capture tombstone apply; its persisted checkpoint envelope is unchanged.
 - Green: four valid controls, every unknown closed discriminant, invalid budget, exactly-one result selection, canonical JSON round trips, and valid/invalid additive run transitions pass through pure validators. `go test -count=1 -timeout 20m ./internal/synccontract ./internal/syncplan ./internal/syncrun`, `go vet` on those packages, and `git diff --check` pass.
+
+### 2026-09-03 — CP03: deterministic pure resolver
+
+- Scope: `syncplan.Resolve` consumes only immutable plan axes and caller budgets. It returns a sealed reduced-budget plan or a stable typed incompatibility; it constructs no executor, credential, provider, database, warehouse, clock, or filesystem resource.
+- Green: focused resolver proof asserts budget reduction, widening refusal, and incompatible snapshot/apply classification. `go test -count=1 -timeout 20m ./internal/syncplan`, `go vet ./internal/syncplan`, and `git diff --check` passed.
