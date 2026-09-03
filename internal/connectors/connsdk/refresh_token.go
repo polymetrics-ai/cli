@@ -328,12 +328,16 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 	if err := CheckRequestAdmission(ctx); err != nil {
 		return "", fmt.Errorf("oauth2 refresh: request admission: %w", err)
 	}
-	resp, err := a.httpClient().Do(req)
+	clientCopy := *a.httpClient()
+	clientCopy.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	resp, err := clientCopy.Do(req)
 	if err != nil {
 		// url.Error embeds the request URL, which may itself carry a query.
 		return "", redact("oauth2 refresh: token request", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		// Status code only. A token endpoint's error body routinely echoes the

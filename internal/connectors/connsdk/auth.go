@@ -218,14 +218,18 @@ func (a *OAuth2ClientCredentials) accessToken(ctx context.Context) (string, erro
 	if client == nil {
 		client = &http.Client{Timeout: 30 * time.Second}
 	}
+	clientCopy := *client
+	clientCopy.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
 	if err := CheckRequestAdmission(ctx); err != nil {
 		return "", fmt.Errorf("oauth2: request admission: %w", err)
 	}
-	resp, err := client.Do(req)
+	resp, err := clientCopy.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("oauth2: token request: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return "", fmt.Errorf("oauth2: token endpoint returned %s", resp.Status)
 	}
