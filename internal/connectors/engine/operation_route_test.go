@@ -25,8 +25,8 @@ func TestOperationRoutesFailClosedBeforeProviderIO(t *testing.T) {
 	if !errors.As(err, &missing) {
 		t.Fatalf("OperationDirectRead missing route error = %v, want MissingOperationRouteError", err)
 	}
-	if !strings.Contains(err.Error(), "source=https://provider.example.test/read") || !strings.Contains(err.Error(), "is blocked: missing route foundation") {
-		t.Fatalf("missing route diagnostic = %q, want source-traced blocked foundation", err)
+	if missing.Connector != "acme" || missing.Operation != "acme.read" || missing.Route != "absent" || missing.Reason != "route is not declared by streams.base.routes" {
+		t.Fatalf("missing route fields = %#v, want structured runtime route refusal", missing)
 	}
 	if got := hits.Load(); got != 0 {
 		t.Fatalf("missing route provider hits = %d, want 0", got)
@@ -35,8 +35,8 @@ func TestOperationRoutesFailClosedBeforeProviderIO(t *testing.T) {
 	base = routedOperationBundle(srv.URL)
 	base.Operations[0].REST.Path = "/v2/read"
 	_, err = OperationDirectRead(context.Background(), base, routedReadRequest(srv.URL), nil)
-	if !errors.As(err, &missing) || !strings.Contains(err.Error(), "does not match declared path") {
-		t.Fatalf("version mismatch error = %v, want source-traced missing foundation", err)
+	if !errors.As(err, &missing) || missing.Connector != "acme" || missing.Operation != "acme.read" || missing.Route != "v3" || missing.Reason != `version "v3" does not match declared path "/v2/read"` {
+		t.Fatalf("version mismatch fields = %#v, want structured runtime route refusal", missing)
 	}
 	if got := hits.Load(); got != 0 {
 		t.Fatalf("version mismatch provider hits = %d, want 0", got)

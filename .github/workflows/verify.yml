@@ -50,11 +50,9 @@ jobs:
       - name: Check generated files
         run: git diff --exit-code
 
-  # Hermetic GitHub fixture proofs start fresh pm binaries, including the
-  # exhaustive 97 generated candidates and the released read surface. They
-  # are intentionally isolated from `make verify`'s shared internal/cli
-  # deadline; every behavioral assertion remains mandatory in this 45-minute
-  # job while the ordinary Verify job keeps its fixed 20-minute package budget.
+  # Hermetic GitHub fixture proofs retain the two executable warehouse
+  # lifecycle tests after the retired certification-generated direct-read
+  # sweep was removed from vNext runtime proof.
   github-generated-direct-read-fixture:
     name: github-generated-direct-read-fixture
     runs-on: ubuntu-latest
@@ -80,10 +78,10 @@ jobs:
           fi
           redis-server --version
 
-      - name: Exhaustive hermetic GitHub fresh-binary fixtures
+      - name: Hermetic GitHub warehouse lifecycle fixtures
         run: >-
           go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli
-          -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'
+          -run '^(TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'
 
   # pm embeds DuckDB, so every release target must actually link cgo against
   # go-duckdb's bundled library. That is verifiable only on a native runner:

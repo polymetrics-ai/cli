@@ -16,6 +16,153 @@
         "role": "provider_reference",
         "url": "https://devdocs.prestashop-project.org/9/webservice/"
       }
+    ],
+    "operation_facts": [
+      {
+        "operation_id": "prestashop.customers",
+        "stream": "customers",
+        "method": "GET",
+        "path": "/customers",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "customers.customer"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      },
+      {
+        "operation_id": "prestashop.orders",
+        "stream": "orders",
+        "method": "GET",
+        "path": "/orders",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "orders.order"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      },
+      {
+        "operation_id": "prestashop.products",
+        "stream": "products",
+        "method": "GET",
+        "path": "/products",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "products.product"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      },
+      {
+        "operation_id": "prestashop.addresses",
+        "stream": "addresses",
+        "method": "GET",
+        "path": "/addresses",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "addresses.address"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      },
+      {
+        "operation_id": "prestashop.carts",
+        "stream": "carts",
+        "method": "GET",
+        "path": "/carts",
+        "query": {
+          "output_format": "JSON",
+          "display": "full",
+          "sort": "[date_upd_ASC]",
+          "filter[date_upd]": {
+            "template": "[{{ incremental.lower_bound }},]",
+            "omit_when_absent": true
+          }
+        },
+        "records": {
+          "path": "carts.cart"
+        },
+        "pagination": {
+          "type": "offset_count",
+          "limit_param": "limit",
+          "page_size": 100,
+          "max_pages": 100,
+          "require_continuation_on_cap": true
+        },
+        "incremental": {
+          "cursor_field": "date_upd",
+          "start_config_key": "start_date"
+        }
+      }
     ]
   },
   "metadata": {
