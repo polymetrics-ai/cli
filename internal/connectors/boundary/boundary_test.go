@@ -97,6 +97,26 @@ const modeReadQueryFallbackValue = "definition-owned"
 	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "modeReadQueryFallbackValue")
 }
 
+func TestScanMatchesCompactIdentifierAliasesOnlyAtComponentBoundaries(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/defs/cal-com/metadata.json": `{"name":"cal-com","display_name":"Cal.com","integration_type":"api","docs_url":"https://cal.com/docs"}`,
+		"internal/connectors/commandrunner/compact_alias.go": `package commandrunner
+
+type vNextCanonicalCommand struct{}
+type calComOutputPolicy struct{}
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleProviderPolicy, "cal-com", "internal/connectors/commandrunner/compact_alias.go", "calComOutputPolicy")
+	if hasFinding(report, RuleProviderPolicy, "cal-com", "vNextCanonicalCommand") {
+		t.Fatalf("compact Cal.com alias matched an interior canonical substring: %+v", report.Findings)
+	}
+}
+
 func TestScanKeepsWeakConnectorMatchesConservative(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"internal/connectors/defs/box/metadata.json":   `{"name":"box","display_name":"Box","integration_type":"api","docs_url":"https://developer.box.com/reference/","capabilities":{"write":true}}`,

@@ -17,6 +17,77 @@ import (
 
 var vNextReferenceLockConnectors = []string{"asana", "github", "gitlab"}
 
+type vNextPublicationGuaranteeProof struct {
+	Guarantees []string `json:"guarantees"`
+	Positive   string   `json:"positive"`
+	Negative   string   `json:"negative"`
+}
+
+func validateVNextPublicationProofContract(publicationGuarantees, proofNames []string, mappings []vNextPublicationGuaranteeProof) error {
+	if len(publicationGuarantees) == 0 {
+		return fmt.Errorf("source-lock Foundation Atlas publication contract declares zero guarantees")
+	}
+	declared := make(map[string]struct{}, len(publicationGuarantees))
+	for _, guarantee := range publicationGuarantees {
+		if strings.TrimSpace(guarantee) == "" {
+			return fmt.Errorf("Foundation Atlas publication guarantee is blank")
+		}
+		if _, exists := declared[guarantee]; exists {
+			return fmt.Errorf("Foundation Atlas publication guarantee %q is duplicated", guarantee)
+		}
+		declared[guarantee] = struct{}{}
+	}
+	knownProofs := make(map[string]struct{}, len(proofNames))
+	for _, proof := range proofNames {
+		knownProofs[proof] = struct{}{}
+	}
+	mapped := make(map[string]int, len(declared))
+	for _, mapping := range mappings {
+		if len(mapping.Guarantees) == 0 {
+			return fmt.Errorf("Foundation Atlas publication proof mapping declares zero guarantees")
+		}
+		if mapping.Positive == "" || mapping.Negative == "" {
+			return fmt.Errorf("Foundation Atlas publication proof mapping omits its positive or negative proof")
+		}
+		if mapping.Positive == mapping.Negative {
+			return fmt.Errorf("Foundation Atlas publication proof mapping reuses %q for positive and negative proof", mapping.Positive)
+		}
+		if _, found := knownProofs[mapping.Positive]; !found {
+			return fmt.Errorf("Foundation Atlas positive proof %q is not registered", mapping.Positive)
+		}
+		if _, found := knownProofs[mapping.Negative]; !found {
+			return fmt.Errorf("Foundation Atlas negative proof %q is not registered", mapping.Negative)
+		}
+		for _, guarantee := range mapping.Guarantees {
+			if _, found := declared[guarantee]; !found {
+				return fmt.Errorf("Foundation Atlas mapped undeclared publication guarantee %q", guarantee)
+			}
+			mapped[guarantee]++
+		}
+	}
+	for _, guarantee := range publicationGuarantees {
+		if mapped[guarantee] != 1 {
+			return fmt.Errorf("Foundation Atlas publication guarantee %q has %d positive/negative proof mappings, want exactly one", guarantee, mapped[guarantee])
+		}
+	}
+	return nil
+}
+
+func TestVNextPublicationProofContractRejectsOmittedGuarantee(t *testing.T) {
+	err := validateVNextPublicationProofContract(
+		[]string{"closed publication", "durable journal"},
+		[]string{"TestPositive", "TestNegative"},
+		[]vNextPublicationGuaranteeProof{{
+			Guarantees: []string{"closed publication"},
+			Positive:   "TestPositive",
+			Negative:   "TestNegative",
+		}},
+	)
+	if err == nil || !strings.Contains(err.Error(), `publication guarantee "durable journal" has 0`) {
+		t.Fatalf("validateVNextPublicationProofContract() error = %v, want omitted guarantee refusal", err)
+	}
+}
+
 func TestVNextSourceLockProjectsMinimalExecutionBundleDeterministically(t *testing.T) {
 	lock := minimalVNextLockForTest()
 	lock.Lanes["direct_read"] = "implemented"
@@ -157,7 +228,8 @@ func TestFoundationAtlasSelectorsResolve(t *testing.T) {
 				} `json:"symbols"`
 			} `json:"owner"`
 			SupportedContracts struct {
-				Guarantees []string `json:"guarantees"`
+				Guarantees            []string `json:"guarantees"`
+				PublicationGuarantees []string `json:"publication_guarantees"`
 			} `json:"supported_contracts"`
 			Selection struct {
 				DefinitionFiles []string `json:"definition_files"`
@@ -167,6 +239,7 @@ func TestFoundationAtlasSelectorsResolve(t *testing.T) {
 				File string `json:"file"`
 				Name string `json:"name"`
 			} `json:"proof_tests"`
+			PublicationGuaranteeProofs []vNextPublicationGuaranteeProof `json:"publication_guarantee_proofs"`
 		} `json:"foundations"`
 	}
 	if err := json.Unmarshal(raw, &catalog); err != nil {
@@ -237,6 +310,16 @@ func TestFoundationAtlasSelectorsResolve(t *testing.T) {
 					t.Errorf("Foundation Atlas proof %s in %s does not declare an executable test function", proof.Name, proof.File)
 				}
 			}
+			if foundation.ID != "authoring.source-lock-vnext.v1" {
+				return
+			}
+			proofNames := make([]string, 0, len(foundation.ProofTests))
+			for _, proof := range foundation.ProofTests {
+				proofNames = append(proofNames, proof.Name)
+			}
+			if err := validateVNextPublicationProofContract(foundation.SupportedContracts.PublicationGuarantees, proofNames, foundation.PublicationGuaranteeProofs); err != nil {
+				t.Error(err)
+			}
 		})
 	}
 }
@@ -291,6 +374,17 @@ func TestRunLockRenderRejectsNonCanonicalSourceBeforeWriting(t *testing.T) {
 	}
 	if string(got) != sentinel {
 		t.Fatalf("lock render overwrote output before rejecting non-canonical source: %q", got)
+	}
+	entries, err := os.ReadDir(connectorRoot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	names := make([]string, 0, len(entries))
+	for _, entry := range entries {
+		names = append(names, entry.Name())
+	}
+	if !reflect.DeepEqual(names, []string{"metadata.json", "source.lock.json"}) {
+		t.Fatalf("lock render created publication state before rejecting non-canonical source: %q", names)
 	}
 }
 

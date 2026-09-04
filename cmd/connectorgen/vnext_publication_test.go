@@ -227,6 +227,178 @@ func TestVNextGenerationPublisherRefusesSymlinkedStaleEntryWithoutDeletion(t *te
 	}
 }
 
+func TestVNextGenerationPublisherRetainsDescriptorsAcrossConnectorReplacement(t *testing.T) {
+	type operation struct {
+		name string
+		run  func(t *testing.T, root string, publisher *vNextGenerationPublisher, replacement *vNextGenerationPublisher) error
+	}
+	operations := []operation{
+		{
+			name: "Publish",
+			run: func(t *testing.T, _ string, publisher *vNextGenerationPublisher, replacement *vNextGenerationPublisher) error {
+				t.Helper()
+				if _, err := publisher.Publish(vNextPublicationArtifactsForTest("old", false)); err != nil {
+					return err
+				}
+				_, err := replacement.Publish(vNextPublicationArtifactsForTest("new", false))
+				return err
+			},
+		},
+		{
+			name: "Recover",
+			run: func(t *testing.T, root string, publisher *vNextGenerationPublisher, replacement *vNextGenerationPublisher) error {
+				t.Helper()
+				pointer, err := publisher.Publish(vNextPublicationArtifactsForTest("active", false))
+				if err != nil {
+					return err
+				}
+				return vNextCreateOwnedStageForTest(root, pointer, ".stage-original", replacement.Recover)
+			},
+		},
+		{
+			name: "Prune",
+			run: func(t *testing.T, _ string, publisher *vNextGenerationPublisher, replacement *vNextGenerationPublisher) error {
+				t.Helper()
+				old, err := publisher.Publish(vNextPublicationArtifactsForTest("old", false))
+				if err != nil {
+					return err
+				}
+				handle, err := publisher.Open(context.Background())
+				if err != nil {
+					return err
+				}
+				if _, err := publisher.Publish(vNextPublicationArtifactsForTest("new", false)); err != nil {
+					handle.Release()
+					return err
+				}
+				handle.Release()
+				if !publisher.GenerationExists(old.Generation) {
+					return errors.New("fixture did not retain held old generation")
+				}
+				return replacement.Prune(context.Background())
+			},
+		},
+	}
+	for _, operation := range operations {
+		t.Run(operation.name, func(t *testing.T) {
+			root := t.TempDir()
+			publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			external := t.TempDir()
+			hookHit := false
+			stageName := ".stage-external"
+			if operation.name == "Recover" {
+				stageName = ".stage-original"
+			}
+			replacement, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				want := vNextPublicationBeforePrune
+				if operation.name == "Recover" {
+					want = vNextPublicationBeforeStageCleanup
+				}
+				if point != want || hookHit {
+					return nil
+				}
+				hookHit = true
+				return vNextReplaceConnectorRootForTest(root, external, stageName)
+			}})
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			runErr := operation.run(t, root, publisher, replacement)
+			if !hookHit {
+				t.Fatalf("%s() did not reach root-replacement hook", operation.name)
+			}
+			sentinel := filepath.Join(external, vNextPublicationGenerationDirectory, stageName, "sentinel.txt")
+			if got, err := os.ReadFile(sentinel); err != nil || string(got) != "keep" {
+				t.Fatalf("%s() touched replacement-root sentinel: err=%v got=%q operation_err=%v", operation.name, err, got, runErr)
+			}
+			if runErr != nil {
+				t.Fatalf("%s() error after retained-root replacement = %v", operation.name, runErr)
+			}
+		})
+	}
+}
+
+func TestRunLockRenderRetainsSourceDescriptorAcrossConnectorReplacement(t *testing.T) {
+	root := t.TempDir()
+	lock := minimalVNextLockForTest()
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	connectorRoot := filepath.Join(root, lock.Connector)
+	if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	external := t.TempDir()
+	hookHit := false
+	var stdout, stderr bytes.Buffer
+	code := runLockRenderContextWithHooks(context.Background(), []string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr, vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point != vNextPublicationAfterLockAcquire || hookHit {
+			return nil
+		}
+		hookHit = true
+		return vNextReplaceConnectorRootForTest(root, external, ".stage-external")
+	}})
+	if code != 0 {
+		t.Fatalf("runLockRenderContextWithHooks() = %d; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if !hookHit {
+		t.Fatal("lock render did not reach connector-replacement hook")
+	}
+	sentinel := filepath.Join(external, vNextPublicationGenerationDirectory, ".stage-external", "sentinel.txt")
+	if got, err := os.ReadFile(sentinel); err != nil || string(got) != "keep" {
+		t.Fatalf("lock render touched replacement-root sentinel: err=%v got=%q", err, got)
+	}
+	movedGenerationRoot := filepath.Join(root, lock.Connector+"-moved", vNextPublicationGenerationDirectory)
+	entries, err := os.ReadDir(movedGenerationRoot)
+	if err != nil {
+		t.Fatalf("read published moved generation root: %v", err)
+	}
+	for _, entry := range entries {
+		if vNextPublicationGenerationIDValid(entry.Name()) {
+			return
+		}
+	}
+	t.Fatalf("lock render did not publish through retained connector descriptor: %#v", entries)
+}
+
+func TestRunLockRenderRejectsSourceMutationBeforeGenerationCreation(t *testing.T) {
+	root := t.TempDir()
+	lock := minimalVNextLockForTest()
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	connectorRoot := filepath.Join(root, lock.Connector)
+	if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	sourcePath := filepath.Join(connectorRoot, "source.lock.json")
+	if err := os.WriteFile(sourcePath, raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	code := runLockRenderContextWithHooks(context.Background(), []string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr, vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point != vNextPublicationAfterLockAcquire {
+			return nil
+		}
+		return os.WriteFile(sourcePath, append(append([]byte(nil), raw...), '\n'), 0o600)
+	}})
+	if code != 1 || !strings.Contains(stderr.String(), "source lock changed during admission") {
+		t.Fatalf("runLockRenderContextWithHooks() = %d; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if _, err := os.Stat(filepath.Join(connectorRoot, vNextPublicationGenerationDirectory)); !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("source mutation created a generation root: %v", err)
+	}
+}
+
 func TestVNextGenerationPublisherRefusesSymlinkedConnectorRootWithoutTouchingTarget(t *testing.T) {
 	operations := []struct {
 		name string
@@ -801,6 +973,82 @@ func TestVNextGenerationPublisherContextCancelsContendedLockWithoutStateChange(t
 	}
 }
 
+func TestVNextGenerationPublisherCancelsAfterLockAcquireBeforeMutationAndRetries(t *testing.T) {
+	root := t.TempDir()
+	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	oldPointer, err := baseline.Publish(vNextPublicationArtifactsForTest("old", true))
+	if err != nil {
+		t.Fatalf("Publish(old) error = %v", err)
+	}
+	currentPath := filepath.Join(root, "acme", vNextPublicationCurrentFile)
+	currentBefore, err := os.ReadFile(currentPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	acquired := make(chan struct{})
+	release := make(chan struct{})
+	stageEntered := make(chan struct{}, 1)
+	blocked, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		switch point {
+		case vNextPublicationAfterLockAcquire:
+			close(acquired)
+			<-release
+		case vNextPublicationBeforeStageDirectory:
+			stageEntered <- struct{}{}
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	result := make(chan error, 1)
+	newSet := vNextPublicationArtifactsForTest("new", false)
+	go func() {
+		_, err := blocked.PublishContext(ctx, newSet)
+		result <- err
+	}()
+	select {
+	case <-acquired:
+	case <-time.After(5 * time.Second):
+		t.Fatal("publication did not acquire its nonblocking lock")
+	}
+	cancel()
+	close(release)
+	select {
+	case err := <-result:
+		if !errors.Is(err, context.Canceled) {
+			t.Fatalf("PublishContext() error = %v, want context cancellation", err)
+		}
+	case <-time.After(5 * time.Second):
+		t.Fatal("publication did not return after post-lock cancellation")
+	}
+	select {
+	case <-stageEntered:
+		t.Fatal("publication entered staged-tree mutation after post-lock cancellation")
+	default:
+	}
+	if currentAfter, err := os.ReadFile(currentPath); err != nil || !bytes.Equal(currentAfter, currentBefore) {
+		t.Fatalf("cancelled publication changed CURRENT: err=%v current=%q", err, currentAfter)
+	}
+	if _, err := os.Lstat(filepath.Join(root, "acme", vNextPublicationJournalFile)); !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("cancelled publication changed JOURNAL: %v", err)
+	}
+	entries, err := os.ReadDir(filepath.Join(root, "acme", vNextPublicationGenerationDirectory))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(entries) != 1 || entries[0].Name() != oldPointer.Generation {
+		t.Fatalf("cancelled publication changed generation tree: %#v", entries)
+	}
+	if _, err := baseline.Publish(newSet); err != nil {
+		t.Fatalf("Publish(new) retry error = %v", err)
+	}
+}
+
 func vNextPublicationHoldLockForTest(t *testing.T, root string) *os.File {
 	t.Helper()
 	lockPath := filepath.Join(root, "acme", vNextPublicationLockFile)
@@ -828,7 +1076,7 @@ func TestVNextGenerationPublisherRollsBackFailedActiveValidationWithoutOrphan(t 
 	newSet := vNextPublicationArtifactsForTest("new", false)
 	validationCalls := 0
 	activeFailure := errors.New("active validation failure")
-	newSet.Validate = func(string) error {
+	newSet.Validate = func(fs.FS) error {
 		validationCalls++
 		if validationCalls == 2 {
 			return activeFailure
@@ -1175,7 +1423,7 @@ func TestRunLockRenderContextCancelsContendedPublicationAndRetries(t *testing.T)
 	}
 }
 
-func TestVNextGenerationPublisherRecoversOrphanBeforeJournalCommit(t *testing.T) {
+func TestVNextGenerationPublisherRecoversStagedOrphanBeforePreparedJournal(t *testing.T) {
 	root := t.TempDir()
 	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
 	if err != nil {
@@ -1223,6 +1471,142 @@ func TestVNextGenerationPublisherRecoversOrphanBeforeJournalCommit(t *testing.T)
 	assertVNextPublicationMarker(t, active, "old")
 }
 
+func TestVNextGenerationPublisherWritesPreparedJournalBeforeFinalRename(t *testing.T) {
+	root := t.TempDir()
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	oldPointer, err := publisher.Publish(vNextPublicationArtifactsForTest("old", true))
+	if err != nil {
+		t.Fatalf("Publish(old) error = %v", err)
+	}
+	crash := errors.New("injected crash")
+	failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point == vNextPublicationBeforeStageRename {
+			return crash
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	newSet := vNextPublicationArtifactsForTest("new", false)
+	newGeneration := vNextPublicationGenerationID(newSet.Files)
+	if _, err := failing.Publish(newSet); !errors.Is(err, crash) {
+		t.Fatalf("Publish(new) error = %v, want injected crash", err)
+	}
+	connectorRoot := filepath.Join(root, "acme")
+	journalPayload, err := os.ReadFile(filepath.Join(connectorRoot, vNextPublicationJournalFile))
+	if err != nil {
+		t.Fatalf("read prepared JOURNAL: %v", err)
+	}
+	var journal vNextGenerationJournal
+	if err := vNextPublicationDecode(journalPayload, &journal); err != nil {
+		t.Fatalf("decode prepared JOURNAL: %v", err)
+	}
+	if journal.State != "prepared" || journal.New.Generation != newGeneration {
+		t.Fatalf("prepared JOURNAL = %#v, want new generation %q", journal, newGeneration)
+	}
+	if _, err := os.Stat(filepath.Join(connectorRoot, vNextPublicationGenerationDirectory, newGeneration)); !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("final generation exists before final rename: %v", err)
+	}
+	entries, err := os.ReadDir(filepath.Join(connectorRoot, vNextPublicationGenerationDirectory))
+	if err != nil {
+		t.Fatal(err)
+	}
+	hasStage := false
+	for _, entry := range entries {
+		if strings.HasPrefix(entry.Name(), ".stage-") {
+			hasStage = true
+			break
+		}
+	}
+	if !hasStage {
+		t.Fatalf("prepared journal left no owned stage: %#v", entries)
+	}
+	if err := publisher.Recover(context.Background()); err != nil {
+		t.Fatalf("Recover() error = %v", err)
+	}
+	active, err := publisher.Open(context.Background())
+	if err != nil {
+		t.Fatalf("Open() after recovery error = %v", err)
+	}
+	defer active.Release()
+	if active.pointer != oldPointer {
+		t.Fatalf("active pointer after recovery = %#v, want %#v", active.pointer, oldPointer)
+	}
+	assertVNextPublicationMarker(t, active, "old")
+}
+
+func TestVNextGenerationPublisherRecoversPreparedJournalAfterFinalRename(t *testing.T) {
+	root := t.TempDir()
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	oldPointer, err := publisher.Publish(vNextPublicationArtifactsForTest("old", true))
+	if err != nil {
+		t.Fatalf("Publish(old) error = %v", err)
+	}
+	crash := errors.New("injected crash")
+	failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point == vNextPublicationAfterStageRename {
+			return crash
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	newSet := vNextPublicationArtifactsForTest("new", false)
+	newGeneration := vNextPublicationGenerationID(newSet.Files)
+	if _, err := failing.Publish(newSet); !errors.Is(err, crash) {
+		t.Fatalf("Publish(new) error = %v, want injected crash", err)
+	}
+	connectorRoot := filepath.Join(root, "acme")
+	journalPayload, err := os.ReadFile(filepath.Join(connectorRoot, vNextPublicationJournalFile))
+	if err != nil {
+		t.Fatalf("read prepared JOURNAL: %v", err)
+	}
+	var journal vNextGenerationJournal
+	if err := vNextPublicationDecode(journalPayload, &journal); err != nil {
+		t.Fatalf("decode prepared JOURNAL: %v", err)
+	}
+	if journal.State != "prepared" || journal.New.Generation != newGeneration {
+		t.Fatalf("prepared JOURNAL = %#v, want new generation %q", journal, newGeneration)
+	}
+	if _, err := os.Stat(filepath.Join(connectorRoot, vNextPublicationGenerationDirectory, newGeneration)); err != nil {
+		t.Fatalf("final generation missing after final rename: %v", err)
+	}
+	currentPayload, err := os.ReadFile(filepath.Join(connectorRoot, vNextPublicationCurrentFile))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var current vNextGenerationPointer
+	if err := vNextPublicationDecode(currentPayload, &current); err != nil {
+		t.Fatal(err)
+	}
+	if current != oldPointer {
+		t.Fatalf("CURRENT after final rename = %#v, want prior %#v", current, oldPointer)
+	}
+	if err := publisher.Recover(context.Background()); err != nil {
+		t.Fatalf("Recover() error = %v", err)
+	}
+	if publisher.GenerationExists(newGeneration) {
+		t.Fatalf("Recover() retained rejected generation %q", newGeneration)
+	}
+	active, err := publisher.Open(context.Background())
+	if err != nil {
+		t.Fatalf("Open() after recovery error = %v", err)
+	}
+	defer active.Release()
+	if active.pointer != oldPointer {
+		t.Fatalf("active pointer after recovery = %#v, want %#v", active.pointer, oldPointer)
+	}
+	assertVNextPublicationMarker(t, active, "old")
+}
+
 func TestVNextGenerationPublisherRecoversEveryDurableCutPoint(t *testing.T) {
 	points := []vNextPublicationFaultPoint{
 		vNextPublicationBeforeFileSync,
@@ -1231,6 +1615,8 @@ func TestVNextGenerationPublisherRecoversEveryDurableCutPoint(t *testing.T) {
 		vNextPublicationAfterStageDirectory,
 		vNextPublicationBeforeJournalSync,
 		vNextPublicationAfterJournalSync,
+		vNextPublicationBeforeStageRename,
+		vNextPublicationAfterStageRename,
 		vNextPublicationBeforeCurrentTempSync,
 		vNextPublicationAfterCurrentTempSync,
 		vNextPublicationBeforeCurrentRename,
@@ -1475,6 +1861,7 @@ func vNextRewriteGenerationIdentityForTest(t *testing.T, root string, pointer vN
 	}
 
 	current, err := vNextPublicationJSON(renamed)
+
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1564,4 +1951,50 @@ func sameStrings(got, want []string) bool {
 		}
 	}
 	return true
+}
+func vNextCreateOwnedStageForTest(root string, pointer vNextGenerationPointer, stageName string, recover func(context.Context) error) error {
+	stage := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, stageName)
+	if err := os.Mkdir(stage, 0o755); err != nil {
+		return err
+	}
+	marker, err := vNextPublicationJSON(vNextPublicationStageOwner{
+		Version:    1,
+		Connector:  "acme",
+		Generation: pointer.Generation,
+		Stage:      stageName,
+	})
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(filepath.Join(stage, vNextPublicationStageOwnerFile), marker, 0o600); err != nil {
+		return err
+	}
+	return recover(context.Background())
+}
+
+func vNextReplaceConnectorRootForTest(root, external, stageName string) error {
+	stage := filepath.Join(external, vNextPublicationGenerationDirectory, stageName)
+	if err := os.MkdirAll(stage, 0o755); err != nil {
+		return err
+	}
+	marker, err := vNextPublicationJSON(vNextPublicationStageOwner{
+		Version:    1,
+		Connector:  "acme",
+		Generation: "g-" + strings.Repeat("a", 64),
+		Stage:      stageName,
+	})
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(filepath.Join(stage, vNextPublicationStageOwnerFile), marker, 0o600); err != nil {
+		return err
+	}
+	if err := os.WriteFile(filepath.Join(stage, "sentinel.txt"), []byte("keep"), 0o600); err != nil {
+		return err
+	}
+	connectorRoot := filepath.Join(root, "acme")
+	if err := os.Rename(connectorRoot, connectorRoot+"-moved"); err != nil {
+		return err
+	}
+	return os.Symlink(external, connectorRoot)
 }

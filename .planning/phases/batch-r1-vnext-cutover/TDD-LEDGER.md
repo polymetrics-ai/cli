@@ -558,3 +558,87 @@
   → `ok`.
 - Broader changed-package GREEN:
   `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (59.779s).
+
+### 2026-09-04 — CP11 correction-review repair TDD plan (instruction 127)
+
+- Authority/base: Firstmate accepts the review block as five further bounded
+  repairs from immutable
+  `4fedb3875cbe7071799aed0e9b6ce1e34257f95e`. CP12, checked-in source-lock
+  materialization, rendered outputs, runtime routing, provider/credential I/O,
+  certification, cross-connector transactions, author-owned deletion, `.cache`,
+  and certification residue remain prohibited.
+- RED 1 — descriptor lifetime/no-follow: use a publisher mutation hook to
+  rename the verified connector and replace its original pathname with an
+  external tree containing a valid-looking owned stage and sentinel. Existing
+  absolute-path cleanup can delete that external sentinel. GREEN retains
+  connector/generations descriptors and expresses all actions through atomic
+  no-follow descriptor-relative operations.
+- RED 2 — component boundary: scan a real fixture containing
+  `vNextCanonicalCommand`; the compact `cal-com` identifier alias crosses
+  `Canonical`/`Command` and currently produces a false policy finding. GREEN
+  rejects that accidental join while retaining a real `calCom...Policy`
+  finding.
+- RED 3 — cancellation acquisition race: coordinate cancellation with release
+  of the competing connector lock after the nonblocking attempt begins.
+  Existing code can acquire and mutate after cancellation. GREEN rechecks
+  context, unlocks, reaches no mutation hook, preserves pointer/journal/tree,
+  and permits a later retry.
+- RED 4 — journal order: assert a durable prepared journal exists before final
+  rename and inject faults at prepared-journal-before-rename and
+  final-rename-before-CURRENT. Existing code activates the final directory
+  first. GREEN follows the binding canon and recovers both cuts to a valid
+  old/new complete selection.
+- RED 5 — Atlas proof mapping: mutate an Atlas guarantee mapping to remove its
+  positive or negative proof. Existing selector validation accepts a nonempty
+  unrelated proof list. GREEN requires exactly one known mapping per guarantee
+  and resolving positive/negative test symbols.
+- Refactor condition: finish each red/green vertical slice before extracting the
+  descriptor helper. Do not use a pathname fallback, generic filesystem route,
+  runtime reader, or connector-specific bypass.
+
+### 2026-09-04 — CP11 correction-review repair actual RED/GREEN (instructions 127–129)
+
+- Scope: correction starts from immutable
+  `4fedb3875cbe7071799aed0e9b6ce1e34257f95e`; CP12, checked-in connector
+  materialization, provider/credential/database I/O, runtime routing,
+  `.cache/`, and certification residue remain untouched.
+- RED 1 observed: replacing `<defs>/acme` after operation setup redirected
+  absolute-path Publish and Recover cleanup into an external sentinel tree; the
+  prior Prune path could delete that sentinel while returning success. GREEN
+  `TestVNextGenerationPublisherRetainsDescriptorsAcrossConnectorReplacement`
+  retains the original inode across Publish, Recover, and Prune. The
+  lock-render-specific
+  `TestRunLockRenderRetainsSourceDescriptorAcrossConnectorReplacement` proves
+  that its source reread and publish use that same retained connector
+  descriptor.
+- RED 2 observed: `TestScanMatchesCompactIdentifierAliasesOnlyAtComponentBoundaries`
+  found a `cal-com` policy match inside `vNextCanonicalCommand`. GREEN preserves
+  `calComOutputPolicy` while rejecting that interior accidental join.
+- RED 3 review defect: acquisition could win after cancellation and enter
+  caller mutation. GREEN
+  `TestVNextGenerationPublisherCancelsAfterLockAcquireBeforeMutationAndRetries`
+  uses the post-acquire barrier, observes `context.Canceled`, no staging hook,
+  unchanged CURRENT/JOURNAL/generation tree, and a successful retry.
+- RED 4 review defect: final rename preceded the durable prepared journal.
+  GREEN `TestVNextGenerationPublisherWritesPreparedJournalBeforeFinalRename`
+  observes a prepared journal and owned stage before final generation
+  visibility; `TestVNextGenerationPublisherRecoversPreparedJournalAfterFinalRename`
+  observes old CURRENT and restores the old complete generation after the
+  renamed/pre-CURRENT cut.
+- RED 5 review defect: Atlas selector validation accepted publication
+  guarantees without one resolving positive/refusal pair. GREEN
+  `TestVNextPublicationProofContractRejectsOmittedGuarantee` rejects the
+  omission, while `TestFoundationAtlasSelectorsResolve` checks the real
+  source-lock publication record. Per instruction 128, this enforcement is
+  source-lock-only rather than a catalog-wide migration.
+- Additional admission regression: a source change after lock acquisition is
+  refused before creating a generation directory by
+  `TestRunLockRenderRejectsSourceMutationBeforeGenerationCreation`; it prevents
+  a correction-induced no-write-before-admission regression.
+- GREEN commands: focused source/Atlas tests → `ok` (1.357s);
+  `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (61.431s);
+  `go test -race -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (325.701s);
+  `go test -count=1 -timeout 20m ./internal/connectors/boundary -run
+  '^TestScanMatchesCompactIdentifierAliasesOnlyAtComponentBoundaries$'` →
+  `ok` (0.411s); and the real boundary scanner returned
+  `"outcome":"clean"` for 553 connectors and 280 checked files.

@@ -133,7 +133,9 @@ with `unsupported`.
 
 `go run ./cmd/connectorgen lock-render <connector>` performs these steps:
 
-1. Decode the root with unknown fields rejected.
+1. Open the definitions root and target connector through no-follow descriptors,
+   retain the connector descriptor, and decode `source.lock.json` through it
+   with unknown fields rejected.
 2. Validate version, connector identity, all seven lane declarations, JSON
    object shapes, unique operation IDs, schema paths/references, optional
    execution filenames, and lane/content consistency.
@@ -161,11 +163,17 @@ with `unsupported`.
    file plus `manifest.json`, `provenance.json`, `atlas.json`, `index.json`,
    and `proof.json`. The author-owned `source.lock.json` is never a candidate
    member.
-9. Acquire only the target connector's publication lock through a
-   descriptor-relative root; connector roots and lock files must be real,
-   non-symlinked entries. The CLI's signal context makes contended acquisition
-   cancellable. Recover any interrupted prior publication from its typed journal
-   before staging a new candidate. Publication never spans connectors.
+9. After the entire candidate has been admitted in memory, acquire only the
+   target connector's publication lock through that same retained connector
+   descriptor, then reread the source lock through it under the lock. If the
+   bytes changed during admission, refuse the operation and require a retry.
+   Only then open or create the `generations/` directory and retain its verified
+   descriptor for the rest of the operation. Read lock/control files, stages,
+   leases, and every cleanup target through these descriptors only. After a
+   successful nonblocking lock acquisition, recheck the signal context and
+   unlock before any mutation when it was cancelled. Recover any interrupted
+   prior publication from its typed journal before staging a new candidate.
+   Publication never spans connectors.
 10. Create a same-filesystem temporary directory directly below that connector's
     `generations/` directory. First write and fsync a typed stage-ownership
     marker binding its version, connector, content generation, and stage name.
@@ -180,13 +188,15 @@ with `unsupported`.
     content-generation address from the closed artifact bytes, requires the
     exact declared directory/member set and empty lease, and performs no
     credential, provider, or transport I/O.
-13. Record and fsync a recovery journal `{old,new,state}`; atomically rename
-    the completed stage to `generations/<content-digest>/`; atomically replace
-    `CURRENT` with the new generation and its integrity digest; and fsync the
-    containing directory after each durable rename. `CURRENT`, the journal,
-    `integrity.json` (including each file entry), and the stage marker are
-    bounded, no-follow, strict JSON documents: duplicate members and trailing
-    values are invalid.
+13. Persist and fsync a typed `state:"prepared"` recovery journal
+    `{old,new,state}` **before** the same-directory rename that activates the
+    completed stage as `generations/<content-digest>/`; no final-generation
+    rename is allowed before that journal is durable. Fsync the `generations/`
+    descriptor after the rename, then atomically replace `CURRENT` with the new
+    generation and integrity digest and fsync its containing descriptor.
+    `CURRENT`, the journal, `integrity.json` (including each file entry), and
+    the stage marker are bounded, no-follow, strict JSON documents: duplicate
+    members and trailing values are invalid.
 14. Revalidate the selected `CURRENT` generation, including its recomputed
     content address, mark the journal committed, and clear it only after the
     active generation is complete. A failed active validation restores the old
@@ -200,10 +210,14 @@ with `unsupported`.
 The `CURRENT` pointer is the only generation selection authority for a
 publication root. A reader observes either the prior complete generation or the
 new complete generation—never an index from one generation with an artifact
-from another. Recovery treats an interrupted stage as stale only after its
-durable ownership proof; it never accepts an incomplete, renamed,
-self-consistent, symlinked, or otherwise non-exact tree. Optional files are
-members of the closed set: a generation that retains an optional file absent
+from another. The prepared journal and typed stage marker form one recovery
+state machine: a crash before final rename removes the owned stage and restores
+the old selection; a crash after final rename but before `CURRENT` restores the
+old selection and removes the new generation; a valid `CURRENT` pointing at the
+new generation completes recovery. Recovery treats an interrupted stage as
+stale only after its durable ownership proof; it never accepts an incomplete,
+renamed, self-consistent, symlinked, or otherwise non-exact tree. Optional files
+are members of the closed set: a generation that retains an optional file absent
 from the candidate fails validation rather than silently inheriting it.
 
 The outputs inside a published generation are:

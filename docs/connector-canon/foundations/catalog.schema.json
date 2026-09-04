@@ -55,7 +55,8 @@
         "source_forms": {"$ref": "#/$defs/strings"},
         "request_response_shapes": {"$ref": "#/$defs/strings"},
         "sync_modes": {"$ref": "#/$defs/strings"},
-        "guarantees": {"$ref": "#/$defs/strings"}
+        "guarantees": {"$ref": "#/$defs/strings"},
+        "publication_guarantees": {"$ref": "#/$defs/strings"}
       }
     },
     "selection": {
@@ -81,6 +82,16 @@
       "required": ["package", "file", "name"],
       "properties": {"package": {"type": "string", "minLength": 1}, "file": {"type": "string", "minLength": 1}, "name": {"type": "string", "pattern": "^Test[A-Za-z0-9_]+$"}}
     },
+    "publicationGuaranteeProof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["guarantees", "positive", "negative"],
+      "properties": {
+        "guarantees": {"$ref": "#/$defs/strings", "minItems": 1},
+        "positive": {"type": "string", "pattern": "^Test[A-Za-z0-9_]+$"},
+        "negative": {"type": "string", "pattern": "^Test[A-Za-z0-9_]+$"}
+      }
+    },
     "gap": {
       "type": "object",
       "additionalProperties": false,
@@ -104,6 +115,7 @@
         "non_goals": {"$ref": "#/$defs/strings"},
         "consumer_examples": {"type": "array", "items": {"$ref": "#/$defs/consumerExample"}},
         "proof_tests": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/proofTest"}},
+        "publication_guarantee_proofs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/publicationGuaranteeProof"}},
         "known_gap_refs": {"type": "array", "items": {"$ref": "#/$defs/gap"}},
         "update_conditions": {"$ref": "#/$defs/strings"},
         "supersedes": {"$ref": "#/$defs/strings"}

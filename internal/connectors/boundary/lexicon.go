@@ -432,9 +432,12 @@ func (lx lexicon) identifierMatches(identifier string) []literalMatch {
 }
 
 func (c connectorLexeme) matchesIdentifier(identifier, lowerIdentifier string) bool {
-	for _, alias := range c.identifierContains {
-		if strings.Contains(lowerIdentifier, alias) {
-			return true
+	if len(c.identifierContains) > 0 {
+		components := identifierTailComponents(identifier)
+		for _, alias := range c.identifierContains {
+			if identifierHasCompactAlias(components, alias) {
+				return true
+			}
 		}
 	}
 	for _, prefix := range c.identifierPrefixes {
@@ -522,6 +525,22 @@ func identifierTailComponents(tail string) []string {
 		components = append(components, strings.ToLower(tail[startIdx:]))
 	}
 	return components
+}
+
+func identifierHasCompactAlias(components []string, alias string) bool {
+	for start := range components {
+		offset := 0
+		for _, component := range components[start:] {
+			if len(alias)-offset < len(component) || alias[offset:offset+len(component)] != component {
+				break
+			}
+			offset += len(component)
+			if offset == len(alias) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func weakIdentifierTailLooksLikePolicy(components []string) bool {

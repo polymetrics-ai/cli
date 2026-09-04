@@ -578,3 +578,120 @@
   `connector-migration-exact-sha-review`, `frontend-design`, and
   `vercel-react-best-practices`; required unavailable names
   `golang-how-to` and `web-design-guidelines` are not claimed.
+
+## CP11 correction-review repairs — Firstmate instruction 127
+
+## Task Delivery Header
+
+- Issue: Refs #4427 — transactional connector-generation publication correction; parent Refs #4325.
+- Base branch: `main` (existing draft PR #4294 base; read back through GitHub API after delivery).
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through draft PR #4294.
+- Delivery: one normal non-force correction push from
+  `fm/cli-batch1-vnext-cutover-r2` to
+  `fm/cli-top100-declaration-batch-r1`, API-confirmed PR base/head/SHA, then
+  a frozen candidate awaiting a fresh Firstmate exact-SHA CP11 review.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: from immutable correction parent
+  `4fedb3875cbe7071799aed0e9b6ce1e34257f95e`, repair the five review blockers:
+  whole-operation descriptor confinement, component-boundary scanner matching,
+  post-acquisition cancellation, prepared-journal-before-rename recovery, and
+  complete Atlas guarantee-to-positive/negative-proof mapping.
+- Verification: truthful RED/GREEN per repair; deterministic root-replacement,
+  journal-cut, cancellation-acquisition, and scanner tests; race/full changed
+  package checks; boundary/canon/Atlas/static checks; inline manual GSD review;
+  normal push and PR API read-back.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Publication mutation stays in the original connector inode after pathname replacement | fake | A hermetic temporary definitions root is necessary because instruction 127 forbids checked-in connector materialization. A hook replaces `<defs>/acme` with an external sentinel tree while the publisher holds descriptors; every destructive path must leave the sentinel byte-for-byte intact and mutate/recover only the moved original inode. |
+| Connector policy scanning respects identifier components | live | A real scanner fixture rejects the accidental `vNextCanonicalCommand`/`cal-com` match while finding a real `calCom...Policy` identifier; the repository boundary command then has no reviewed-range false positive. |
+| Cancellation wins if it races a successful advisory-lock acquisition | fake | A barrier-controlled temporary lock releases and cancels at acquisition; the canceled call must not reach the mutation hook or alter CURRENT, JOURNAL, or the generation tree, and a later retry must succeed. |
+| Recovery persists prepared journal before final stage rename | fake | Faults at prepared-journal-before-rename and final-rename-before-CURRENT cuts recover a complete old or new selection with no unowned deletion. Temporary roots are required because the checkpoint never materializes the real corpus. |
+| Every changed publication guarantee names positive and negative proof | live | Atlas schema/validator tests mutate the real catalog fixture to omit either mapping and fail; the committed source-lock publication entry maps every declared guarantee to resolving positive and negative test symbols. |
+
+### Discussion, design, and impact disposition
+
+- Firstmate's report fixes the decision boundaries: the existing binding canon
+  wins over the implementation, so the durable `prepared` journal is synced
+  before the final stage rename. No alternate publication state machine is
+  introduced.
+- Foundation Atlas classification: **constrained_extension** of
+  `authoring.source-lock-vnext.v1`. The repair deepens its existing publication
+  owner and its proof authority only; it adds no connector-specific runtime
+  route, source-lock reader, provider call, credential access, or transaction.
+- Descriptor design: retain one no-follow definitions/connector/generations
+  descriptor set and connector lock for each public operation. A small
+  descriptor-relative Unix filesystem helper opens each final component
+  atomically with no-follow semantics; all publication reads, file creation,
+  tree walks, renames, leases, syncs, cleanup, and pruning use those retained
+  descriptors. This is required by the existing Darwin/Linux release surface;
+  Windows is not a release target.
+- Boundary design: replace unrestricted compact-alias substring matching with
+  component-aware matching at the shared lexicon root. Do not rename
+  `vNextCanonicalCommand` to hide the finding.
+- Cancellation design: after a successful nonblocking `Flock`, immediately
+  recheck `ctx.Err()`, unlock if canceled, and return before the caller can
+  execute a hook or mutate any durable state.
+- Atlas design: add an explicit per-guarantee mapping with one resolving
+  positive and one resolving negative proof. The schema requires the mapping,
+  and `TestFoundationAtlasSelectorsResolve` rejects missing, duplicate,
+  unknown, or nonresolving mappings.
+- Scope: source locks, rendered execution artifacts, `defs.FS`, PM/runtime
+  routing, provider/credential/database I/O, cross-connector transactions,
+  author-owned files, `.cache/`, and certification residue remain untouched.
+  `lock-render` syntax/help, PM help, manual, and website surfaces are
+  unchanged; authoring canon/Atlas claims change only after their corresponding
+  behavior exists.
+- GSD/manual fallback: `scripts/gsd doctor` retains only the known missing
+  `issue-122-rebootstrap.md`; command sources and generated
+  `discuss-phase`/`plan-phase --tdd` prompts resolved. No compatible isolated
+  Pi/GSD worker exists, so the required discussion, TDD plan, execution,
+  verification, and review run inline and are recorded in this phase.
+- Skills: loaded `go-engineering` (advanced and production), `tdd`,
+  `connector-lane-build-order`, and `connector-migration-exact-sha-review`.
+  Required names `golang-how-to` and the listed Go-specialist skills are not
+  installed in this runtime and are not claimed. CLI parity, GSD adapter,
+  task-header, source-lock canon, and Atlas maintenance references were read;
+  no website/UI work is applicable.
+
+### TDD execution order
+
+1. Add a root-replacement destructive-path regression; observe the existing
+   absolute-path escape; replace publication filesystem access with retained,
+   atomic no-follow descriptors until GREEN.
+2. Add the component-boundary scanner regression; observe the false
+   `cal-com` finding; repair the shared lexicon matcher until genuine policy
+   identifiers still match.
+3. Add a lock-release/cancel acquisition-barrier regression; observe the
+   cancellation loss; recheck context and unlock after successful `Flock`.
+4. Change the journal-cut recovery proof to the binding order; observe the
+   pre-rename journal expectation fail; move prepared-journal sync before the
+   final rename and prove both recovery cuts.
+5. Add failing Atlas mapping validation for an omitted positive/negative proof;
+   extend schema, catalog, and validator, then resolve every source-lock
+   publication guarantee before GREEN.
+
+### CP11 correction-review repair execution record — instructions 127–129
+
+- Intake: Firstmate instructions `127.msg`, `128.msg`, and `129.msg` were read
+  in numeric order. `128.msg` bounds the Atlas change to
+  `authoring.source-lock-vnext.v1` publication guarantees only; unrelated Atlas
+  records remain unchanged. `129.msg` confirms that this correction proceeds
+  without a new planning detour.
+- Descriptor confinement: one operation retains no-follow connector and
+  generations descriptors through publication, recovery, opening, and pruning.
+  The lock-render path first admits its source lock through the retained
+  connector descriptor without publisher state, then acquires the connector
+  lock, rereads the same source bytes through that descriptor, and refuses a
+  mutation before it creates `generations/`.
+- Recovery order: `prepared` is written and fsynced before the same-directory
+  stage-to-generation rename. Recovery handles both a pre-rename owned stage
+  and a renamed generation before `CURRENT` by restoring the complete old
+  selection or clearing a first publication.
+- Boundary scope: compact display aliases now match one or more complete
+  identifier components. `calCom...Policy` remains a policy match; the
+  incidental `cal`/`com` characters inside `Canonical`/`Command` do not.
+- Atlas scope: `publication_guarantees` and their one-to-one positive/refusal
+  mappings are optional at the catalog schema level and enforced only for
+  `authoring.source-lock-vnext.v1`. No other foundation was migrated to that
+  convention.

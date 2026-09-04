@@ -409,3 +409,69 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - Delivery gate: correction commit/push, PR #4294 API base/head/SHA read-back,
   Firstmate-state update, and a new independent exact-SHA review remain pending;
   CP12 remains prohibited.
+
+## CP11 correction-review repair verification plan (instruction 127)
+
+- Scope/no-I/O: operate only on temporary publication roots and the shared
+  connector-boundary/Atlas authoring code. No checked-in connector generation,
+  source lock, rendered artifact, provider, credential, database,
+  certification, runtime route, or CP12 behavior is exercised.
+- RED/GREEN: record each observed descriptor-replacement, component-boundary,
+  acquisition-cancellation, journal-order, and Atlas-map failure before its
+  minimal repair; no former test is relabeled as a RED result.
+- Focused proof: run the new destructive-path sentinel test, scanner
+  positive/negative fixture, cancellation barrier, both journal-cut recovery
+  tests, and Atlas mutation/resolution validator. Run their package suites and
+  the publisher race selector after refactor.
+- Affected static gates: `go run ./cmd/connectorgen boundary . --json` must
+  clear the reviewed-range false positive; run `go vet` for
+  `./cmd/connectorgen` and `./internal/connectors/boundary`, PM build,
+  connector-canon/Atlas schema checks, Foundation Atlas selectors, definition
+  validation, vNext lock checks, docs/agent-contract checks, diff/secret scan.
+- Parity: `connectorgen lock-render` flags/output remain unchanged. Exercise
+  `go run ./cmd/connectorgen --help`; PM CLI/manual/website changes are not
+  applicable unless a user-visible surface changes unexpectedly.
+- Delivery: update review evidence with an inline/manual GSD disposition,
+  normal non-force push only, API-read PR #4294 base/head/SHA, record Firstmate
+  state, archive the instruction only after all work, and pause for fresh
+  exact-SHA CP11 review.
+
+## CP11 correction-review repair verification — instructions 127–129
+
+- Focused publication/lock-render/Atlas Green: source-descriptor replacement,
+  source-mutation refusal before generation creation, prepared-journal cuts,
+  post-acquisition cancellation, and Atlas selector mapping tests passed.
+- Changed package Green:
+  `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (61.431s);
+  `go test -race -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (325.701s).
+- Boundary Green: the focused Cal.com component test passed, and
+  `go run ./cmd/connectorgen boundary . --json` returned `outcome: clean`,
+  `connectors_loaded: 553`, `checked_files: 280`, zero findings, and only the
+  six pre-existing declared exceptions.
+- Authoring/documentation Green: `make connectorgen-vnext-locks` → `ok`
+  (30.213s); definition validation reported 553 connectors and zero findings;
+  `go vet ./cmd/connectorgen ./internal/connectors/boundary`, PM build,
+  agent-contract validation, `make docs-check`, Atlas JSON/schema checks,
+  `go mod tidy -diff`, help rendering, scoped secret scans, and `git diff
+  --check` passed. `make docs-check`'s generated `pm` binary was removed.
+- Module closure: direct descriptor-relative Unix calls make the already-pinned
+  `golang.org/x/sys v0.47.0` a direct dependency. `go mod tidy` also corrected
+  the existing `golang.org/x/text` checksum/version closure to its selected
+  `v0.38.0`, which was necessary for the race suite to resolve.
+- Required unaffected-package baselines remain non-green and were not repaired:
+  `go test -count=1 -timeout 20m ./internal/connectors/boundary` fails only
+  `TestScanFailsClosedWhenConnectorMetadataCannotLoad/invalid_cli_surface`
+  because the fixture expects `cli_surface.json` decoding although
+  `loadLexicon` reads metadata only; the actual scanner is clean. The required
+  `internal/cli` package fails only its recorded polling-help, source-bound
+  origin, ETL-help, and local Redis-refusal baselines. No changed CP11 path
+  reaches either failure.
+- Manual GSD fallback: the adapter sources and all five generated prompts were
+  resolved; its known missing `issue-122-rebootstrap.md`, absent phase roadmap,
+  and unavailable compatible isolated reviewer require inline execution,
+  verification, and review. This remains evidence only, not a replacement for
+  Firstmate's fresh exact-SHA review.
+- Delivery gate: commit, ordinary push to
+  `fm/cli-top100-declaration-batch-r1`, PR #4294 API base/head/SHA read-back,
+  state update, archive `127.msg`, then pause for Firstmate review. CP12
+  remains prohibited.

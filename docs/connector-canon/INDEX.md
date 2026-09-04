@@ -32,12 +32,16 @@ document conflicts with the source-lock vNext architecture, vNext controls.
 - The sole transformation is source lock → canonical per-operation descriptor
   with shared schemas → deterministic execution JSON.
 - Runtime and runtime validation read execution JSON only.
-- Authoring publication is connector-local and descriptor-confined: a complete
-  deterministic generation is staged under a durable typed ownership marker,
-  semantically revalidated by its recomputed content address and exact closed
-  tree, fsynced, selected through atomic `CURRENT`, recovered from a strict
-  bounded journal, and pruned only after integrity proves publisher ownership
-  and readers release their leases. Contended lock acquisition is cancellable.
+- Authoring publication is connector-local and descriptor-confined: verified
+  connector and generation descriptors remain no-follow for the complete
+  operation; a complete deterministic generation is staged under a durable
+  typed ownership marker, semantically revalidated by its recomputed content
+  address and exact closed tree, then recorded in a durable prepared journal
+  before the same-directory final-generation rename and atomic `CURRENT`
+  selection. Recovery uses that one journal/stage state machine; pruning starts
+  only after integrity proves publisher ownership and readers release their
+  leases. Contended lock acquisition rechecks cancellation after successful
+  nonblocking acquisition before mutation.
   This checkpoint does not materialize the checked-in corpus or add a runtime
   `CURRENT` reader.
 - Every connector explicitly declares direct read, direct write, binary

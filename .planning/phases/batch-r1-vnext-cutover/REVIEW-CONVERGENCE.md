@@ -329,3 +329,33 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 - Findings: no new local CP11 correction blocker. The remaining mandatory gate is
   a fresh Firstmate independent exact-SHA review after the ordinary correction
   push; do not begin CP12 or amend the reviewed candidate beforehand.
+
+## 2026-09-04 — CP11 correction-review repair local self-review
+
+- Review subject: instruction 127's five accepted corrections and instruction
+  128's source-lock-only Atlas scope: descriptor-relative publication,
+  lock-render source admission, component-boundary matching, cancellation,
+  journal ordering, proof mapping, canon, and evidence. CP12 and all runtime,
+  connector, provider, credential, and local-residue paths were excluded.
+- Workflow: `execute-phase`, `verify-work`, and `code-review` prompts were
+  generated and performed inline. No compatible isolated Pi reviewer is
+  available; this read-only review is not independent review and does not
+  replace the required Firstmate exact-SHA gate.
+
+| Lens | Disposition |
+| --- | --- |
+| Descriptor confinement and source admission | Pass. Root, connector, generation, lock, control, lease, stage, rename, pruning, and cleanup paths are no-follow descriptor-relative. Lock-render admits through the retained connector descriptor, rereads under its acquired lock, rejects mutation before `generations/`, and preserves the original inode if the visible connector pathname is replaced. |
+| Transaction and recovery order | Pass. The durable prepared journal precedes final rename, the generation descriptor is synced after rename, and both durable cuts recover a complete old or new selection without an unowned deletion. |
+| Cancellation and ownership | Pass. Successful nonblocking Flock rechecks cancellation and unlocks before hooks or generation state; owned markers and integrity/lease checks remain prerequisites for removal. |
+| Boundary correctness and cost | Pass. Compact aliases are assembled only from complete identifier components, avoiding `canonical` substring matches. Component splitting runs only for lexemes that declare a compact contains alias, avoiding an allocation across the common path. |
+| Atlas and documentation scope | Pass. Only `authoring.source-lock-vnext.v1` received publication guarantee mappings. The schema permits the field without imposing it on other Atlas records; the source-lock selector test enforces exact one-to-one resolving pairs. Canon text matches the pre-admission reread and journal ordering. |
+| Runtime, secret, and parity boundary | Pass. No source lock is added to runtime, no PM/CLI flag/help/output changes, no provider/credential/database I/O, no connector materialization, and no local residue access occurred. `connectorgen --help` still reports the existing lock-render syntax; canonical authoring docs changed because the authoring behavior changed. |
+
+- Findings: no remaining local blocker. Full generator normal/race suites, vNext
+  publication gate, definition validation, actual boundary scan, vet/build,
+  docs, contract, Atlas, module-tidy, whitespace, and scoped secret checks
+  support this disposition. The two documented unrelated package baselines are
+  not called green.
+- Required next gate: commit and normally push the exact candidate, API-read
+  PR #4294 base/head/SHA, then pause unchanged for Firstmate's independent
+  exact-SHA CP11 review. Do not start CP12.

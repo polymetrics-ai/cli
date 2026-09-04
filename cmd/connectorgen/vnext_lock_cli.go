@@ -1,24 +1,42 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"io"
 	"path/filepath"
 	"sort"
 	"strings"
+	"syscall"
 )
 
 func runLockRenderContext(ctx context.Context, args []string, stdout, stderr io.Writer) int {
+	return runLockRenderContextWithHooks(ctx, args, stdout, stderr, vNextPublicationHooks{})
+}
+
+func runLockRenderContextWithHooks(ctx context.Context, args []string, stdout, stderr io.Writer, hooks vNextPublicationHooks) int {
 	connector, defsRoot, check, code := parseVNextLockArgs("lock-render", args, stderr)
 	if code != 0 {
 		return code
 	}
-	publisher, err := newVNextGenerationPublisher(defsRoot, connector, vNextPublicationHooks{})
+	publisher, err := newVNextGenerationPublisher(defsRoot, connector, hooks)
 	if err != nil {
 		logf(stderr, "connectorgen lock-render: initialize publisher: %v\n", err)
 		return 1
 	}
-	raw, err := publisher.readSourceLock()
+	mode, create := syscall.LOCK_EX, true
+	if check {
+		mode, create = syscall.LOCK_SH, false
+	}
+	operation, err := publisher.openOperationRoot(ctx, false)
+	if err != nil {
+		logf(stderr, "connectorgen lock-render: open publication root: %v\n", err)
+		return 1
+	}
+	defer operation.close()
+	// Admit before creating publication state, then reject a source mutation
+	// when the same retained operation rereads it under the publication lock.
+	raw, err := publisher.readSourceLock(operation)
 	if err != nil {
 		logf(stderr, "connectorgen lock-render: read source lock: %v\n", err)
 		return 1
@@ -42,15 +60,32 @@ func runLockRenderContext(ctx context.Context, args []string, stdout, stderr io.
 		logf(stderr, "connectorgen lock-render: stage publication artifacts: %v\n", err)
 		return 1
 	}
+	if err := publisher.acquireOperation(ctx, operation, mode, create); err != nil {
+		logf(stderr, "connectorgen lock-render: acquire publication operation: %v\n", err)
+		return 1
+	}
+	lockedRaw, err := publisher.readSourceLock(operation)
+	if err != nil {
+		logf(stderr, "connectorgen lock-render: reread source lock: %v\n", err)
+		return 1
+	}
+	if !bytes.Equal(raw, lockedRaw) {
+		logf(stderr, "connectorgen lock-render: source lock changed during admission; retry\n")
+		return 1
+	}
+	if err := operation.openGenerations(ctx, create); err != nil {
+		logf(stderr, "connectorgen lock-render: open generation root: %v\n", err)
+		return 1
+	}
 	if check {
-		if err := publisher.CheckContext(ctx, artifacts); err != nil {
+		if err := publisher.checkLocked(operation, artifacts.Files, artifacts.Validate); err != nil {
 			logf(stderr, "connectorgen lock-render: check published generation: %v\n", err)
 			return 1
 		}
 		logf(stdout, "vNext execution generation is current: %s\n", connector)
 		return 0
 	}
-	pointer, err := publisher.PublishContext(ctx, artifacts)
+	pointer, err := publisher.publishLocked(operation, artifacts.Files, artifacts.Validate)
 	if err != nil {
 		logf(stderr, "connectorgen lock-render: publish generation: %v\n", err)
 		return 1
