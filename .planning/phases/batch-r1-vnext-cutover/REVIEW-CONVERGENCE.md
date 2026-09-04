@@ -236,3 +236,4 @@ The required role-separated discovery was requested through the worker task fan-
 | Tests and static gates | Pass. Focused rejection/admission/determinism/corpus controls, full `cmd/connectorgen`, reference check-only renders, 553-definition validation, vet, build, agent contract, docs check, and `git diff --check` pass. |
 
 - Findings: none after the structural-role scope correction. Do not start CP10, alter source locks/rendered artifacts, or publish before processing the inbox/current-state gate.
+- Publication: the inbox/current-state gate was empty before commit. The reviewed checkpoint was committed as `d11277378abe556323226e3f6998ce3caf6033dc` and normally pushed to `fm/cli-top100-declaration-batch-r1`; PR #4294 API read-back reports that exact draft parent head over `main`. No external review was requested or fabricated, and no CP10 work follows from this checkpoint.
