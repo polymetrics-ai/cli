@@ -359,3 +359,45 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 - Required next gate: commit and normally push the exact candidate, API-read
   PR #4294 base/head/SHA, then pause unchanged for Firstmate's independent
   exact-SHA CP11 review. Do not start CP12.
+
+## 2026-09-04 — CP11 final repair review intake (instructions 130–131)
+
+- Immutable review subject: `f7a325aec3594635acbd27e39099640283ca3663`;
+  Firstmate's fresh repair review is **BLOCK**. Only F1 temporary-control
+  identity, F2 validated-object cleanup identity, F3 lock-inode serialization,
+  and F4 behavior-granular source-lock Atlas proofs are authorized.
+- The review report is
+  `data/cli-batch1-cp11-repair-final-review-r1/report.md`. Its explicit
+  regressions—not a replacement design inferred before intake—are the test
+  contract. `130.msg` was fully read and archived under the `131.msg` stop
+  instruction before this record.
+- Required next disposition: exact RED/GREEN witnesses, a narrow self-review,
+  one normal candidate push, and another Firstmate-managed independent
+  exact-SHA review. No CP12, review-role spawning, rebase, force push, or
+  release action is allowed.
+
+## 2026-09-04 — CP11 final repair manual self-review (F1–F4)
+
+- Review mode: inline/manual fallback after the generated `execute-phase`,
+  `verify-work`, and `code-review` prompts. Firstmate prohibits review-role
+  spawning and no compatible isolated reviewer is available. This is self-review
+  only; a new Firstmate exact-SHA review remains required after push.
+
+| Lens | Disposition |
+| --- | --- |
+| F1 temporary controls | Pass. `writeAtomicLocked` retains the temporary descriptor through `renameBound`; a failed rename cleanup is itself identity-bound, so a replacement cannot be unlinked. |
+| F2 destructive cleanup | Pass. Stage and generation roots remain open through ownership/integrity/lease validation and `removeTreeBound`; controls retain/load an exact identity through validation and `removeRegularBound`. The obsolete unbound regular-removal path was deleted. |
+| F3 serialization | Pass after self-review correction. The companion anchor is linked only with `O_EXCL` lock creation; reconstructing it for an existing pathname would allow a replacement inode to establish a second domain. The post-acquisition test covers a removed anchor as well as a visible lock replacement. |
+| F4 Atlas and staged preflight | Pass. The one-guarantee validator remains gated to `authoring.source-lock-vnext.v1`; valid owned-stage and unowned-generation tests map only to their corresponding claims. The physical fixture reaches real `commandrunner.Preflight` for an implemented command without provider or credential I/O. |
+| Boundary and maintenance | Pass. Publication-local descriptor helpers add no generic framework or dependency. Canon/Atlas/README language names the anchor lifecycle, temporary/control cleanup identities, and behavior-granular proof rule. No CLI/help/runtime/provider scope widened. |
+
+- Findings fixed during review: (1) an existing lock without an anchor must
+  refuse instead of reconstructing an anchor for a possible replacement inode;
+  (2) `removeRegular` was obsolete after all cleanup moved to
+  `removeRegularBound`. No remaining local finding.
+- Evidence: focused F1–F4/Atlas tests, full normal generator suite, final full
+  race generator suite, vNext corpus gate, 553-definition validation, docs,
+  vet, tidy, and agent-contract checks are recorded in `VERIFICATION.md`.
+- Required next gate: one ordinary commit and push of this exact candidate,
+  PR #4294 API base/head/SHA read-back, status update, then pause unchanged for
+  Firstmate's independent exact-SHA review. CP12 remains prohibited.

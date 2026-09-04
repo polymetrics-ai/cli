@@ -38,12 +38,15 @@ document conflicts with the source-lock vNext architecture, vNext controls.
   typed ownership marker, semantically revalidated by its recomputed content
   address and exact closed tree, then recorded in a durable prepared journal
   before the same-directory final-generation rename and atomic `CURRENT`
-  selection. Recovery uses that one journal/stage state machine; pruning starts
-  only after integrity proves publisher ownership and readers release their
-  leases. Contended lock acquisition rechecks cancellation after successful
-  nonblocking acquisition before mutation.
-  This checkpoint does not materialize the checked-in corpus or add a runtime
-  `CURRENT` reader.
+  selection. The publication lock and its companion anchor stay bound to one
+  acquired inode; temporary controls and validated cleanup targets retain their
+  verified identities through rename or removal, so pathname replacement
+  refuses rather than opening a second lock domain or deleting a replacement.
+  Recovery uses that one journal/stage state machine; pruning starts only after
+  integrity proves publisher ownership and readers release their leases.
+  Contended lock acquisition rechecks cancellation after successful nonblocking
+  acquisition before mutation. This checkpoint does not materialize the
+  checked-in corpus or add a runtime `CURRENT` reader.
 - Every connector explicitly declares direct read, direct write, binary
   download, binary upload, ETL, reverse ETL, and sync transport as
   `implemented` or `unsupported`.

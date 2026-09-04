@@ -695,3 +695,47 @@
   mappings are optional at the catalog schema level and enforced only for
   `authoring.source-lock-vnext.v1`. No other foundation was migrated to that
   convention.
+
+## CP11 final repair disposition — Firstmate instructions 130–131
+
+## Task Delivery Header
+
+- Issue: Refs #4427 — transactional connector-generation publication repair; parent Refs #4325.
+- Base branch: `main` (the existing draft PR #4294 target; the API base/head/SHA will be read after the normal push).
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through draft PR #4294.
+- Delivery: one ordinary non-force correction candidate from immutable parent `f7a325aec3594635acbd27e39099640283ca3663`, pushed only to `fm/cli-top100-declaration-batch-r1`, followed by API read-back and an unchanged pause for another Firstmate exact-SHA review.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: repair only F1–F4: bind temporary `CURRENT`/`JOURNAL` control files through atomic replacement; bind validated stage, generation, lease, and control identities through cleanup; retain one lock inode as the complete-operation serialization domain; and make the source-lock-only Atlas claims map to behavior-specific witnesses.
+- Verification: deterministic temporary-root RED/GREEN tests for both controls, stage/generation/control cleanup, and post-acquisition lock replacement; a physical staged implemented-command preflight refusal; full and race `cmd/connectorgen`; source-lock/Atlas, documentation, static, and PR API checks.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A replaced control temporary never changes `CURRENT` or `JOURNAL` | fake | A temporary root and deterministic publisher hook replace the temporary inode after fsync. The call must refuse, retain the prior control bytes, and preserve both the moved original and unrelated replacement; the instruction forbids checked-in materialization. |
+| Cleanup removes only the validated stage, generation, lease, or control object | fake | Barrier tests replace each named temporary-root object after ownership/integrity/lease/control validation. Recover, prune, and rollback must refuse without deleting either object. |
+| A renamed lock pathname cannot open a second publication domain | fake | A post-acquisition barrier replaces `.connectorgen.lock` while the first operation retains its inode. A second operation must refuse while the first is held; the original state remains unchanged and a restored bound lock permits retry. |
+| Atlas claims name exact physical publication behavior | fake | A local staged bundle with an implemented command is deliberately altered after semantic admission so only physical `commandrunner.Preflight` can reject it; no provider, credential, or checked-in connector input is used. |
+
+### Scope, lifecycle, and TDD order
+
+- Intake: `130.msg` was read completely before any new design or production edit. Per `131.msg`, it was acknowledged in the external status record and moved to `handled/` before this planning record. CP12 remains prohibited.
+- Scope is limited to `cmd/connectorgen`, source-lock authoring canon/Atlas evidence, and this phase's GSD records. Do not alter source locks, generated execution JSON, runtime routing, PM CLI surface, provider/credential/database behavior, `.cache/`, or certification residue.
+- Foundation Atlas classification: constrained extension of `authoring.source-lock-vnext.v1`. Publication-proof rules remain exclusive to that entry; no whole-catalog migration or generic locking framework is introduced.
+- Lifecycle: `scripts/gsd doctor` has only the established missing `issue-122-rebootstrap.md`; all five command sources resolve. `discuss-phase` and `plan-phase --tdd` prompts were generated and executed inline. No compatible isolated worker/reviewer is authorized, so execution, verification, and code review will be recorded as the required manual fallback.
+- Skills: `go-engineering` (advanced and production), `tdd`, `diagnose`, and `connector-migration-exact-sha-review` were loaded. Required `golang-how-to` is unavailable in this runtime and is not claimed. CodeGraph has no repository index and Go LSP is unavailable.
+- RED 1 / F1: replace each fsynced `CURRENT` and `JOURNAL` temporary entry before its final rename; observe prior controls and both objects can be changed by the current pathname-based rename.
+- GREEN 1: retain the file descriptor identity until a descriptor-relative identity-checked rename succeeds; cleanup verifies the same identity and never removes a replacement.
+- RED 2 / F2: replace a marker-proven stage, integrity/lease-proven generation, and validated control between validation and removal; observe the current cleanup can reopen and remove a later pathname object.
+- GREEN 2: retain the validated descriptor and identity through removal, revalidate the exact parent entry immediately before destructive unlink, and refuse a replacement without touching either object.
+- RED 3 / F3: replace `.connectorgen.lock` after the first `Flock`; observe a second operation can lock the new inode independently.
+- GREEN 3: bind the lock pathname to a publication-local stable inode identity for the complete operation, reject a discontinuity before mutation, and prove a second operation cannot enter a parallel transaction.
+- RED 4 / F4: show the old compound Atlas mappings neither name the valid-stage/unowned-generation witnesses nor reach staged implemented-command preflight.
+- GREEN 4: one guarantee per mapping, exact valid/refusal witnesses, and a staged malformed implemented-command refusal that reaches the physical preflight boundary.
+
+### CP11 final repair execution — F1–F4
+
+- F1 RED: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestVNextGenerationPublisherRefusesReplacedAtomicControlTemporary$'` failed with both `CURRENT` and `JOURNAL` replacement paths returning `<nil>`. GREEN: the same test passed after retaining the temporary descriptor through `renameBound` (1.219s).
+- F2 RED: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup|TestVNextGenerationPublisherRefusesReplacedValidatedGenerationCleanup|TestVNextGenerationPublisherRefusesReplacedCommittedJournalCleanup)$'` failed because Recover, Prune, and committed-journal cleanup returned `<nil>` after post-validation replacement (1.494s). GREEN: the same three tests passed (1.525s), and `TestVNextGenerationPublisherRefusesReplacedRollbackGenerationCleanup` passed (1.234s).
+- F3 RED: with predecessor anchor reconstruction temporarily restored, `TestVNextPublicationOpenLockRefusesExistingLockWithoutAnchor` failed because an existing unanchored lock opened successfully. GREEN: the anchor is created only with `O_EXCL` lock creation; the restored test passed (1.005s). `TestVNextGenerationPublisherRefusesReplacedLockAfterAcquisition` additionally removes the anchor, replaces the visible lock while the first inode remains held, proves the second publisher refuses, then restores the original hard-link pair before a serial retry.
+- F4 RED: with predecessor compound-mapping acceptance temporarily restored, `TestVNextPublicationProofContractRejectsCompoundMapping` failed because a two-guarantee mapping returned `<nil>` (4.11s). GREEN: one-guarantee enforcement and the real source-lock-only catalog selector test passed. The staged physical witnesses use `operationDirectReadLockForSemanticAdmissionTest`: the unmodified implemented `widgets get` command publishes/checks, while a post-admission `unsupported.bogus` flag reaches and fails `preflight staged command "widgets get"` with no `CURRENT`, `JOURNAL`, or generation member.
+- The F3 companion hard link is publication-local, is never rebuilt for an existing lock, and does not create a generic locking framework. No connector source lock, generated execution JSON, PM CLI surface, provider/credential/database path, `.cache/`, or certification residue was touched.
+- Lifecycle execution prompt: `scripts/gsd prompt execute-phase batch-r1-vnext-cutover` was generated and followed as the required inline/manual fallback. The adapter still cannot provide an authorized compatible isolated worker; this does not replace the required Firstmate exact-SHA review.

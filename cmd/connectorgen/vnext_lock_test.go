@@ -43,8 +43,8 @@ func validateVNextPublicationProofContract(publicationGuarantees, proofNames []s
 	}
 	mapped := make(map[string]int, len(declared))
 	for _, mapping := range mappings {
-		if len(mapping.Guarantees) == 0 {
-			return fmt.Errorf("Foundation Atlas publication proof mapping declares zero guarantees")
+		if len(mapping.Guarantees) != 1 {
+			return fmt.Errorf("Foundation Atlas publication proof mapping maps %d guarantees, want exactly one", len(mapping.Guarantees))
 		}
 		if mapping.Positive == "" || mapping.Negative == "" {
 			return fmt.Errorf("Foundation Atlas publication proof mapping omits its positive or negative proof")
@@ -85,6 +85,21 @@ func TestVNextPublicationProofContractRejectsOmittedGuarantee(t *testing.T) {
 	)
 	if err == nil || !strings.Contains(err.Error(), `publication guarantee "durable journal" has 0`) {
 		t.Fatalf("validateVNextPublicationProofContract() error = %v, want omitted guarantee refusal", err)
+	}
+}
+
+func TestVNextPublicationProofContractRejectsCompoundMapping(t *testing.T) {
+	err := validateVNextPublicationProofContract(
+		[]string{"closed publication", "durable journal"},
+		[]string{"TestPositive", "TestNegative"},
+		[]vNextPublicationGuaranteeProof{{
+			Guarantees: []string{"closed publication", "durable journal"},
+			Positive:   "TestPositive",
+			Negative:   "TestNegative",
+		}},
+	)
+	if err == nil || !strings.Contains(err.Error(), "maps 2 guarantees, want exactly one") {
+		t.Fatalf("validateVNextPublicationProofContract() error = %v, want compound mapping refusal", err)
 	}
 }
 

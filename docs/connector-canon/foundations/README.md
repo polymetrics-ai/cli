@@ -44,11 +44,11 @@ replacement changes. Add an entry only for a real shared owner or closed
 connector-specific adapter, not for another consumer.
 
 `authoring.source-lock-vnext.v1` additionally records its bounded
-`publication_guarantees` separately from general authoring guarantees. Each
-publication claim has exactly one registered positive proof and one distinct
-refusal proof in `publication_guarantee_proofs`; the Atlas validator rejects an
-omission, duplicate, undeclared claim, or unregistered proof. This is a
-source-lock publication contract, not a whole-catalog proof migration.
+`publication_guarantees` separately from general authoring guarantees. Every
+mapping names exactly one behavior-granular claim, one registered positive
+proof, and one distinct refusal proof; the Atlas validator rejects a compound,
+omitted, duplicate, undeclared, or unregistered mapping. This is a
+source-lock publication contract only, not a whole-catalog proof migration.
 
 Keep stable IDs while ownership moves. Retired IDs remain only in a current
 entry's `supersedes` list; their old commands, files, and procedures do not

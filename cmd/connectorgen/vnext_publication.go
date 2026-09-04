@@ -32,6 +32,7 @@ const (
 	vNextPublicationCurrentFile         = "CURRENT"
 	vNextPublicationJournalFile         = "JOURNAL"
 	vNextPublicationLockFile            = ".connectorgen.lock"
+	vNextPublicationLockAnchorFile      = ".connectorgen.lock.anchor"
 	vNextPublicationIntegrityFile       = "integrity.json"
 	vNextPublicationControlMaxBytes     = 1 << 20
 	vNextPublicationLeaseFile           = ".lease"
@@ -41,28 +42,31 @@ const (
 type vNextPublicationFaultPoint string
 
 const (
-	vNextPublicationBeforeFileSync        vNextPublicationFaultPoint = "before_file_sync"
-	vNextPublicationAfterFileSync         vNextPublicationFaultPoint = "after_file_sync"
-	vNextPublicationBeforeStageDirectory  vNextPublicationFaultPoint = "before_stage_directory_sync"
-	vNextPublicationAfterStageDirectory   vNextPublicationFaultPoint = "after_stage_directory_sync"
-	vNextPublicationBeforeJournalSync     vNextPublicationFaultPoint = "before_journal_sync"
-	vNextPublicationAfterJournalSync      vNextPublicationFaultPoint = "after_journal_sync"
-	vNextPublicationBeforeCurrentTempSync vNextPublicationFaultPoint = "before_current_temp_sync"
-	vNextPublicationAfterCurrentTempSync  vNextPublicationFaultPoint = "after_current_temp_sync"
-	vNextPublicationBeforeCurrentRename   vNextPublicationFaultPoint = "before_current_rename"
-	vNextPublicationAfterCurrentRename    vNextPublicationFaultPoint = "after_current_rename"
-	vNextPublicationBeforeCurrentParent   vNextPublicationFaultPoint = "before_current_parent_sync"
-	vNextPublicationAfterCurrentParent    vNextPublicationFaultPoint = "after_current_parent_sync"
-	vNextPublicationBeforeActiveValidate  vNextPublicationFaultPoint = "before_active_validation"
-	vNextPublicationAfterActiveValidate   vNextPublicationFaultPoint = "after_active_validation"
-	vNextPublicationBeforeCommitSync      vNextPublicationFaultPoint = "before_commit_sync"
-	vNextPublicationAfterCommitSync       vNextPublicationFaultPoint = "after_commit_sync"
-	vNextPublicationBeforePrune           vNextPublicationFaultPoint = "before_prune"
-	vNextPublicationAfterPrune            vNextPublicationFaultPoint = "after_prune"
-	vNextPublicationBeforeStageCleanup    vNextPublicationFaultPoint = "before_stage_cleanup"
-	vNextPublicationAfterLockAcquire      vNextPublicationFaultPoint = "after_lock_acquire"
-	vNextPublicationBeforeStageRename     vNextPublicationFaultPoint = "before_stage_rename"
-	vNextPublicationAfterStageRename      vNextPublicationFaultPoint = "after_stage_rename"
+	vNextPublicationBeforeFileSync          vNextPublicationFaultPoint = "before_file_sync"
+	vNextPublicationAfterFileSync           vNextPublicationFaultPoint = "after_file_sync"
+	vNextPublicationBeforeStageDirectory    vNextPublicationFaultPoint = "before_stage_directory_sync"
+	vNextPublicationAfterStageDirectory     vNextPublicationFaultPoint = "after_stage_directory_sync"
+	vNextPublicationBeforeJournalSync       vNextPublicationFaultPoint = "before_journal_sync"
+	vNextPublicationAfterJournalSync        vNextPublicationFaultPoint = "after_journal_sync"
+	vNextPublicationBeforeCurrentTempSync   vNextPublicationFaultPoint = "before_current_temp_sync"
+	vNextPublicationAfterCurrentTempSync    vNextPublicationFaultPoint = "after_current_temp_sync"
+	vNextPublicationBeforeCurrentRename     vNextPublicationFaultPoint = "before_current_rename"
+	vNextPublicationAfterCurrentRename      vNextPublicationFaultPoint = "after_current_rename"
+	vNextPublicationBeforeCurrentParent     vNextPublicationFaultPoint = "before_current_parent_sync"
+	vNextPublicationAfterCurrentParent      vNextPublicationFaultPoint = "after_current_parent_sync"
+	vNextPublicationBeforeActiveValidate    vNextPublicationFaultPoint = "before_active_validation"
+	vNextPublicationAfterActiveValidate     vNextPublicationFaultPoint = "after_active_validation"
+	vNextPublicationBeforeCommitSync        vNextPublicationFaultPoint = "before_commit_sync"
+	vNextPublicationAfterCommitSync         vNextPublicationFaultPoint = "after_commit_sync"
+	vNextPublicationBeforePrune             vNextPublicationFaultPoint = "before_prune"
+	vNextPublicationAfterPrune              vNextPublicationFaultPoint = "after_prune"
+	vNextPublicationBeforeStageCleanup      vNextPublicationFaultPoint = "before_stage_cleanup"
+	vNextPublicationAfterLockAcquire        vNextPublicationFaultPoint = "after_lock_acquire"
+	vNextPublicationBeforeStageRename       vNextPublicationFaultPoint = "before_stage_rename"
+	vNextPublicationAfterStageRename        vNextPublicationFaultPoint = "after_stage_rename"
+	vNextPublicationBeforeStageRemoval      vNextPublicationFaultPoint = "before_stage_removal"
+	vNextPublicationBeforeGenerationRemoval vNextPublicationFaultPoint = "before_generation_removal"
+	vNextPublicationBeforeControlRemoval    vNextPublicationFaultPoint = "before_control_removal"
 )
 
 // vNextPublicationHooks is test-only fault instrumentation for durable state
@@ -116,9 +120,34 @@ type vNextGenerationPublisher struct {
 }
 
 type vNextPublicationOperation struct {
-	connector   *vNextPublicationDirectory
-	generations *vNextPublicationDirectory
-	lock        *os.File
+	connector    *vNextPublicationDirectory
+	generations  *vNextPublicationDirectory
+	lock         *os.File
+	lockIdentity vNextPublicationIdentity
+	controls     map[string]vNextPublicationIdentity
+}
+
+func (operation *vNextPublicationOperation) bindControl(name string, identity vNextPublicationIdentity) {
+	if operation.controls == nil {
+		operation.controls = make(map[string]vNextPublicationIdentity)
+	}
+	operation.controls[name] = identity
+}
+
+func (operation *vNextPublicationOperation) controlIdentity(name string) (vNextPublicationIdentity, bool) {
+	identity, found := operation.controls[name]
+	return identity, found
+}
+
+func (operation *vNextPublicationOperation) clearControl(name string) {
+	delete(operation.controls, name)
+}
+
+func (operation *vNextPublicationOperation) assertLockBound() error {
+	if operation == nil || operation.connector == nil || operation.lock == nil {
+		return fs.ErrClosed
+	}
+	return vNextPublicationAssertLockBound(operation.connector, operation.lock, operation.lockIdentity)
 }
 
 type vNextGenerationHandle struct {
@@ -172,21 +201,33 @@ func (p *vNextGenerationPublisher) acquireOperation(ctx context.Context, operati
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	lock, err := vNextPublicationOpenLock(operation.connector, create)
+	lock, identity, err := vNextPublicationOpenLock(operation.connector, create)
 	if err != nil {
 		return err
 	}
 	if err := vNextPublicationAcquireLock(ctx, lock, mode, "connector publication", func() error {
-		return p.hit(vNextPublicationAfterLockAcquire)
+		if err := p.hit(vNextPublicationAfterLockAcquire); err != nil {
+			return err
+		}
+		return vNextPublicationAssertLockBound(operation.connector, lock, identity)
 	}); err != nil {
 		_ = lock.Close()
 		return err
 	}
 	if err := ctx.Err(); err != nil {
 		unlockVNextPublicationFile(lock)
+		_ = lock.Close()
 		return err
 	}
 	operation.lock = lock
+	operation.lockIdentity = identity
+	if err := operation.assertLockBound(); err != nil {
+		unlockVNextPublicationFile(lock)
+		_ = lock.Close()
+		operation.lock = nil
+		operation.lockIdentity = vNextPublicationIdentity{}
+		return err
+	}
 	return nil
 }
 
@@ -195,6 +236,9 @@ func (operation *vNextPublicationOperation) openGenerations(ctx context.Context,
 		return fs.ErrClosed
 	}
 	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if err := operation.assertLockBound(); err != nil {
 		return err
 	}
 	if operation.generations != nil {
@@ -238,6 +282,7 @@ func (operation *vNextPublicationOperation) close() {
 	}
 	unlockVNextPublicationFile(operation.lock)
 	operation.lock = nil
+	operation.lockIdentity = vNextPublicationIdentity{}
 	_ = operation.generations.Close()
 	operation.generations = nil
 	_ = operation.connector.Close()
@@ -269,6 +314,9 @@ func (p *vNextGenerationPublisher) PublishContext(ctx context.Context, artifacts
 }
 
 func (p *vNextGenerationPublisher) publishLocked(operation *vNextPublicationOperation, files map[string][]byte, validate func(fs.FS) error) (vNextGenerationPointer, error) {
+	if err := operation.assertLockBound(); err != nil {
+		return vNextGenerationPointer{}, err
+	}
 	if err := p.recoverLocked(operation); err != nil {
 		return vNextGenerationPointer{}, err
 	}
@@ -336,6 +384,9 @@ func (p *vNextGenerationPublisher) CheckContext(ctx context.Context, artifacts v
 }
 
 func (p *vNextGenerationPublisher) checkLocked(operation *vNextPublicationOperation, files map[string][]byte, validate func(fs.FS) error) error {
+	if err := operation.assertLockBound(); err != nil {
+		return err
+	}
 	if err := p.assertNoPendingJournalLocked(operation); err != nil {
 		return err
 	}
@@ -498,6 +549,9 @@ func (h *vNextGenerationHandle) Release() {
 }
 
 func (p *vNextGenerationPublisher) stageLocked(operation *vNextPublicationOperation, files map[string][]byte, validate func(fs.FS) error) (string, vNextGenerationPointer, error) {
+	if err := operation.assertLockBound(); err != nil {
+		return "", vNextGenerationPointer{}, err
+	}
 	generation := vNextPublicationGenerationID(files)
 	existing, err := operation.generations.openDirectory(generation, fmt.Sprintf("generation %q", generation))
 	if err == nil {
@@ -519,12 +573,17 @@ func (p *vNextGenerationPublisher) stageLocked(operation *vNextPublicationOperat
 	if err != nil {
 		return "", vNextGenerationPointer{}, err
 	}
+	stageIdentity, err := vNextPublicationIdentityFromFile(stage.file, "publication stage")
+	if err != nil {
+		_ = stage.Close()
+		return "", vNextGenerationPointer{}, err
+	}
 	retained := false
 	defer func() {
-		_ = stage.Close()
 		if !retained {
-			_ = p.removeStageLocked(operation, stageName)
+			_ = p.removeStageBoundLocked(operation, stageName, stage, stageIdentity)
 		}
+		_ = stage.Close()
 	}()
 	marker, err := vNextPublicationJSON(vNextPublicationStageOwner{
 		Version:    1,
@@ -587,6 +646,9 @@ func (p *vNextGenerationPublisher) stageLocked(operation *vNextPublicationOperat
 }
 
 func (p *vNextGenerationPublisher) activateStageLocked(operation *vNextPublicationOperation, stageName, generation string) error {
+	if err := operation.assertLockBound(); err != nil {
+		return err
+	}
 	if err := p.hit(vNextPublicationBeforeStageRename); err != nil {
 		return err
 	}
@@ -712,46 +774,54 @@ func (p *vNextGenerationPublisher) writeCurrentLocked(operation *vNextPublicatio
 }
 
 func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublicationOperation, target string, payload []byte, beforeSync, afterSync, beforeRename, afterRename, beforeParent, afterParent vNextPublicationFaultPoint) error {
+	if err := operation.assertLockBound(); err != nil {
+		return err
+	}
 	temporaryName, temporary, err := vNextPublicationCreateTemp(operation.connector)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = operation.connector.removeRegular(temporaryName, "publication temporary") }()
-	if err := temporary.Chmod(0o644); err != nil {
+	identity, err := vNextPublicationIdentityFromFile(temporary, "publication temporary")
+	if err != nil {
 		_ = temporary.Close()
 		return err
 	}
-	if _, err := temporary.Write(payload); err != nil {
+	renamed := false
+	defer func() {
+		if !renamed {
+			_ = operation.connector.removeRegularBound(temporaryName, "publication temporary", identity)
+		}
 		_ = temporary.Close()
+	}()
+	if err := temporary.Chmod(0o644); err != nil {
+		return err
+	}
+	if _, err := temporary.Write(payload); err != nil {
 		return err
 	}
 	if beforeSync != "" {
 		if err := p.hit(beforeSync); err != nil {
-			_ = temporary.Close()
 			return err
 		}
 	}
 	if err := temporary.Sync(); err != nil {
-		_ = temporary.Close()
 		return err
 	}
 	if afterSync != "" {
 		if err := p.hit(afterSync); err != nil {
-			_ = temporary.Close()
 			return err
 		}
-	}
-	if err := temporary.Close(); err != nil {
-		return err
 	}
 	if beforeRename != "" {
 		if err := p.hit(beforeRename); err != nil {
 			return err
 		}
 	}
-	if err := operation.connector.rename(temporaryName, target); err != nil {
+	if err := operation.connector.renameBound(temporaryName, target, "publication temporary", identity); err != nil {
 		return err
 	}
+	renamed = true
+	operation.bindControl(target, identity)
 	if afterRename != "" {
 		if err := p.hit(afterRename); err != nil {
 			return err
@@ -792,7 +862,10 @@ func vNextPublicationCreateTemp(root *vNextPublicationDirectory) (string, *os.Fi
 }
 
 func (p *vNextGenerationPublisher) readCurrentLocked(operation *vNextPublicationOperation) (vNextGenerationPointer, bool, error) {
-	payload, found, err := vNextPublicationReadControl(operation.connector, vNextPublicationCurrentFile, "CURRENT")
+	if err := operation.assertLockBound(); err != nil {
+		return vNextGenerationPointer{}, false, err
+	}
+	payload, found, identity, err := vNextPublicationReadControlBound(operation.connector, vNextPublicationCurrentFile, "CURRENT")
 	if err != nil {
 		return vNextGenerationPointer{}, false, err
 	}
@@ -806,6 +879,7 @@ func (p *vNextGenerationPublisher) readCurrentLocked(operation *vNextPublication
 	if err := vNextPublicationPointerValid(pointer); err != nil {
 		return vNextGenerationPointer{}, false, fmt.Errorf("invalid CURRENT: %w", err)
 	}
+	operation.bindControl(vNextPublicationCurrentFile, identity)
 	return pointer, true, nil
 }
 
@@ -818,6 +892,10 @@ func (p *vNextGenerationPublisher) pointerForGenerationLocked(operation *vNextPu
 		return vNextGenerationPointer{}, err
 	}
 	defer generationRoot.Close()
+	return p.pointerForGenerationRootLocked(generationRoot, generation)
+}
+
+func (p *vNextGenerationPublisher) pointerForGenerationRootLocked(generationRoot *vNextPublicationDirectory, generation string) (vNextGenerationPointer, error) {
 	payload, found, err := vNextPublicationReadControl(generationRoot, vNextPublicationIntegrityFile, "generation integrity")
 	if err != nil {
 		return vNextGenerationPointer{}, fmt.Errorf("read generation %q integrity: %w", generation, err)
@@ -833,29 +911,46 @@ func (p *vNextGenerationPublisher) pointerForGenerationLocked(operation *vNextPu
 }
 
 func vNextPublicationReadControl(root *vNextPublicationDirectory, name, label string) ([]byte, bool, error) {
+	payload, found, _, err := vNextPublicationReadControlBound(root, name, label)
+	return payload, found, err
+}
+
+func vNextPublicationReadControlBound(root *vNextPublicationDirectory, name, label string) ([]byte, bool, vNextPublicationIdentity, error) {
 	handle, err := root.openRegular(name, label, unix.O_RDONLY)
 	if errors.Is(err, fs.ErrNotExist) {
-		return nil, false, nil
+		return nil, false, vNextPublicationIdentity{}, nil
 	}
 	if err != nil {
-		return nil, true, err
+		return nil, true, vNextPublicationIdentity{}, err
 	}
 	defer handle.Close()
+	identity, err := vNextPublicationIdentityFromFile(handle, label)
+	if err != nil {
+		return nil, true, vNextPublicationIdentity{}, err
+	}
+	payload, err := vNextPublicationReadOpenControl(handle, label)
+	if err != nil {
+		return nil, true, vNextPublicationIdentity{}, err
+	}
+	return payload, true, identity, nil
+}
+
+func vNextPublicationReadOpenControl(handle *os.File, label string) ([]byte, error) {
 	info, err := handle.Stat()
 	if err != nil {
-		return nil, true, fmt.Errorf("stat %s: %w", label, err)
+		return nil, fmt.Errorf("stat %s: %w", label, err)
 	}
 	if info.Size() < 0 || info.Size() > vNextPublicationControlMaxBytes {
-		return nil, true, fmt.Errorf("%s exceeds %d-byte limit", label, vNextPublicationControlMaxBytes)
+		return nil, fmt.Errorf("%s exceeds %d-byte limit", label, vNextPublicationControlMaxBytes)
 	}
 	payload, err := io.ReadAll(io.LimitReader(handle, vNextPublicationControlMaxBytes+1))
 	if err != nil {
-		return nil, true, fmt.Errorf("read %s: %w", label, err)
+		return nil, fmt.Errorf("read %s: %w", label, err)
 	}
 	if len(payload) > vNextPublicationControlMaxBytes {
-		return nil, true, fmt.Errorf("%s exceeds %d-byte limit", label, vNextPublicationControlMaxBytes)
+		return nil, fmt.Errorf("%s exceeds %d-byte limit", label, vNextPublicationControlMaxBytes)
 	}
-	return payload, true, nil
+	return payload, nil
 }
 
 func (p *vNextGenerationPublisher) validatePointerLocked(operation *vNextPublicationOperation, pointer vNextGenerationPointer, expected map[string][]byte, validate func(fs.FS) error) (vNextGenerationIntegrity, error) {
@@ -922,9 +1017,15 @@ func (p *vNextGenerationPublisher) validateGenerationLocked(operation *vNextPubl
 }
 
 func (p *vNextGenerationPublisher) recoverLocked(operation *vNextPublicationOperation) error {
-	payload, foundJournal, err := vNextPublicationReadControl(operation.connector, vNextPublicationJournalFile, "publication journal")
+	if err := operation.assertLockBound(); err != nil {
+		return err
+	}
+	payload, foundJournal, journalIdentity, err := vNextPublicationReadControlBound(operation.connector, vNextPublicationJournalFile, "publication journal")
 	if err != nil {
 		return err
+	}
+	if foundJournal {
+		operation.bindControl(vNextPublicationJournalFile, journalIdentity)
 	}
 	if !foundJournal {
 		if err := p.removeStagesLocked(operation); err != nil {
@@ -1020,9 +1121,42 @@ func (p *vNextGenerationPublisher) removeJournalLocked(operation *vNextPublicati
 }
 
 func (p *vNextGenerationPublisher) removeControlLocked(operation *vNextPublicationOperation, name string) error {
-	if err := operation.connector.removeRegular(name, "publication control"); err != nil {
+	if err := operation.assertLockBound(); err != nil {
 		return err
 	}
+	file, err := operation.connector.openRegular(name, "publication control", unix.O_RDONLY)
+	if errors.Is(err, fs.ErrNotExist) {
+		if _, bound := operation.controlIdentity(name); bound {
+			return fmt.Errorf("publication control %q disappeared after validation", name)
+		}
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	identity, err := vNextPublicationIdentityFromFile(file, "publication control")
+	if err != nil {
+		return err
+	}
+	if expected, bound := operation.controlIdentity(name); bound && identity != expected {
+		return fmt.Errorf("publication control %q identity changed after validation", name)
+	}
+	operation.bindControl(name, identity)
+	payload, err := vNextPublicationReadOpenControl(file, "publication control")
+	if err != nil {
+		return err
+	}
+	if err := vNextPublicationValidateControl(name, payload); err != nil {
+		return err
+	}
+	if err := p.hit(vNextPublicationBeforeControlRemoval); err != nil {
+		return err
+	}
+	if err := operation.connector.removeRegularBound(name, "publication control", identity); err != nil {
+		return err
+	}
+	operation.clearControl(name)
 	return operation.connector.Sync()
 }
 
@@ -1035,6 +1169,9 @@ func (p *vNextGenerationPublisher) pruneRecoveredLocked(operation *vNextPublicat
 }
 
 func (p *vNextGenerationPublisher) pruneWithFaultsLocked(operation *vNextPublicationOperation, active string, injectFaults bool) error {
+	if err := operation.assertLockBound(); err != nil {
+		return err
+	}
 	if injectFaults {
 		if err := p.hit(vNextPublicationBeforePrune); err != nil {
 			return err
@@ -1087,6 +1224,9 @@ func (p *vNextGenerationPublisher) removeStagesLocked(operation *vNextPublicatio
 }
 
 func (p *vNextGenerationPublisher) removeStageLocked(operation *vNextPublicationOperation, name string) error {
+	if err := operation.assertLockBound(); err != nil {
+		return err
+	}
 	if !vNextPublicationStageNameValid(name) {
 		return fmt.Errorf("invalid staging directory %q", name)
 	}
@@ -1100,17 +1240,22 @@ func (p *vNextGenerationPublisher) removeStageLocked(operation *vNextPublication
 	if err != nil {
 		return err
 	}
+	defer stage.Close()
+	identity, err := vNextPublicationIdentityFromFile(stage.file, fmt.Sprintf("stale staging directory %q", name))
+	if err != nil {
+		return err
+	}
+	return p.removeStageBoundLocked(operation, name, stage, identity)
+}
+
+func (p *vNextGenerationPublisher) removeStageBoundLocked(operation *vNextPublicationOperation, name string, stage *vNextPublicationDirectory, identity vNextPublicationIdentity) error {
 	if err := p.validateStageOwnerLocked(stage, name, ""); err != nil {
-		_ = stage.Close()
 		return fmt.Errorf("refuse remove stale staging directory %q without ownership proof: %w", name, err)
 	}
-	if err := stage.Close(); err != nil {
+	if err := p.hit(vNextPublicationBeforeStageRemoval); err != nil {
 		return err
 	}
-	if err := operation.generations.removeTree(name, fmt.Sprintf("stale staging directory %q", name)); err != nil {
-		return err
-	}
-	return nil
+	return operation.generations.removeTreeBound(name, fmt.Sprintf("stale staging directory %q", name), stage, identity)
 }
 
 func (p *vNextGenerationPublisher) validateStageOwnerLocked(root *vNextPublicationDirectory, stage, generation string) error {
@@ -1150,6 +1295,9 @@ func vNextPublicationStageNameValid(name string) bool {
 }
 
 func (p *vNextGenerationPublisher) removeGenerationLocked(operation *vNextPublicationOperation, generation string) error {
+	if err := operation.assertLockBound(); err != nil {
+		return err
+	}
 	if !vNextPublicationGenerationIDValid(generation) {
 		return fmt.Errorf("invalid generation %q", generation)
 	}
@@ -1160,36 +1308,40 @@ func (p *vNextGenerationPublisher) removeGenerationLocked(operation *vNextPublic
 	if err != nil {
 		return err
 	}
-	pointer, err := p.pointerForGenerationLocked(operation, generation)
+	defer generationRoot.Close()
+	identity, err := vNextPublicationIdentityFromFile(generationRoot.file, fmt.Sprintf("generation %q", generation))
 	if err != nil {
-		_ = generationRoot.Close()
+		return err
+	}
+	pointer, err := p.pointerForGenerationRootLocked(generationRoot, generation)
+	if err != nil {
 		return fmt.Errorf("refuse prune generation %q without validated publication ownership: %w", generation, err)
 	}
-	if _, err := p.validatePointerLocked(operation, pointer, nil, nil); err != nil {
-		_ = generationRoot.Close()
+	if _, err := p.validateGenerationLocked(operation, generationRoot, pointer); err != nil {
 		return fmt.Errorf("refuse prune generation %q without validated publication ownership: %w", generation, err)
 	}
 	lease, err := generationRoot.openRegular(vNextPublicationLeaseFile, fmt.Sprintf("generation lease %q", generation), unix.O_RDWR)
 	if err != nil {
-		_ = generationRoot.Close()
+		return err
+	}
+	defer unlockVNextPublicationFile(lease)
+	leaseIdentity, err := vNextPublicationIdentityFromFile(lease, fmt.Sprintf("generation lease %q", generation))
+	if err != nil {
 		return err
 	}
 	if err := syscall.Flock(int(lease.Fd()), syscall.LOCK_EX|syscall.LOCK_NB); err != nil {
-		_ = lease.Close()
-		_ = generationRoot.Close()
 		if errors.Is(err, syscall.EWOULDBLOCK) || errors.Is(err, syscall.EAGAIN) {
 			return nil
 		}
 		return fmt.Errorf("lock generation lease %q: %w", generation, err)
 	}
-	defer unlockVNextPublicationFile(lease)
-	if err := generationRoot.Close(); err != nil {
+	if err := p.hit(vNextPublicationBeforeGenerationRemoval); err != nil {
 		return err
 	}
-	if err := operation.generations.removeTree(generation, fmt.Sprintf("generation %q", generation)); err != nil {
+	if err := generationRoot.assertIdentity(vNextPublicationLeaseFile, fmt.Sprintf("generation lease %q", generation), leaseIdentity); err != nil {
 		return err
 	}
-	return nil
+	return operation.generations.removeTreeBound(generation, fmt.Sprintf("generation %q", generation), generationRoot, identity)
 }
 
 func (p *vNextGenerationPublisher) assertNoOrphansLocked(operation *vNextPublicationOperation, active string) error {
@@ -1264,24 +1416,83 @@ func vNextPublicationAcquireLock(ctx context.Context, lock *os.File, mode int, l
 	}
 }
 
-func vNextPublicationOpenLock(root *vNextPublicationDirectory, create bool) (*os.File, error) {
+func vNextPublicationOpenLock(root *vNextPublicationDirectory, create bool) (*os.File, vNextPublicationIdentity, error) {
 	if create {
 		lock, err := root.openFile(vNextPublicationLockFile, "connector publication lock", unix.O_CREAT|unix.O_EXCL|unix.O_RDWR, 0o600, false)
 		if err == nil {
-			return lock, nil
+			identity, identityErr := vNextPublicationIdentityFromFile(lock, "connector publication lock")
+			if identityErr != nil {
+				_ = lock.Close()
+				return nil, vNextPublicationIdentity{}, identityErr
+			}
+			if err := vNextPublicationEnsureLockAnchor(root, identity, true); err != nil {
+				_ = lock.Close()
+				return nil, vNextPublicationIdentity{}, err
+			}
+			return lock, identity, nil
 		}
 		if !errors.Is(err, fs.ErrExist) {
-			return nil, err
+			return nil, vNextPublicationIdentity{}, err
 		}
 	}
 	lock, err := root.openRegular(vNextPublicationLockFile, "connector publication lock", unix.O_RDWR)
 	if errors.Is(err, fs.ErrNotExist) && !create {
-		return nil, fmt.Errorf("open existing connector publication lock: %w", err)
+		return nil, vNextPublicationIdentity{}, fmt.Errorf("open existing connector publication lock: %w", err)
 	}
 	if err != nil {
-		return nil, err
+		return nil, vNextPublicationIdentity{}, err
 	}
-	return lock, nil
+	identity, err := vNextPublicationIdentityFromFile(lock, "connector publication lock")
+	if err != nil {
+		_ = lock.Close()
+		return nil, vNextPublicationIdentity{}, err
+	}
+	if err := vNextPublicationEnsureLockAnchor(root, identity, false); err != nil {
+		_ = lock.Close()
+		return nil, vNextPublicationIdentity{}, err
+	}
+	return lock, identity, nil
+}
+
+// vNextPublicationEnsureLockAnchor creates the companion only with a newly
+// created lock. Reconstructing a missing companion for an existing pathname
+// could turn a replacement inode into a second lock domain.
+
+func vNextPublicationEnsureLockAnchor(root *vNextPublicationDirectory, identity vNextPublicationIdentity, create bool) error {
+	anchor, err := root.identityAt(vNextPublicationLockAnchorFile, "connector publication lock anchor")
+	if errors.Is(err, fs.ErrNotExist) {
+		if !create {
+			return fmt.Errorf("open existing connector publication lock anchor: %w", err)
+		}
+		if err := root.linkBound(vNextPublicationLockFile, vNextPublicationLockAnchorFile, "connector publication lock anchor", identity); err != nil && !errors.Is(err, fs.ErrExist) {
+			return err
+		}
+		anchor, err = root.identityAt(vNextPublicationLockAnchorFile, "connector publication lock anchor")
+	}
+	if err != nil {
+		return err
+	}
+	if anchor != identity {
+		return fmt.Errorf("connector publication lock anchor identity changed")
+	}
+	return nil
+}
+
+// vNextPublicationAssertLockBound verifies the descriptor and both directory
+// entries still name the one inode protected by the acquired Flock.
+
+func vNextPublicationAssertLockBound(root *vNextPublicationDirectory, lock *os.File, identity vNextPublicationIdentity) error {
+	actual, err := vNextPublicationIdentityFromFile(lock, "connector publication lock")
+	if err != nil {
+		return err
+	}
+	if actual != identity {
+		return fmt.Errorf("connector publication lock identity changed")
+	}
+	if err := root.assertIdentity(vNextPublicationLockFile, "connector publication lock", identity); err != nil {
+		return err
+	}
+	return root.assertIdentity(vNextPublicationLockAnchorFile, "connector publication lock anchor", identity)
 }
 
 func (p *vNextGenerationPublisher) hit(point vNextPublicationFaultPoint) error {
@@ -1565,6 +1776,28 @@ func vNextPublicationJournalValid(journal vNextGenerationJournal) error {
 		}
 	}
 	return nil
+}
+
+func vNextPublicationValidateControl(name string, payload []byte) error {
+	switch name {
+	case vNextPublicationCurrentFile:
+		var pointer vNextGenerationPointer
+		if err := vNextPublicationDecode(payload, &pointer); err != nil {
+			return fmt.Errorf("decode CURRENT: %w", err)
+		}
+		if err := vNextPublicationPointerValid(pointer); err != nil {
+			return fmt.Errorf("invalid CURRENT: %w", err)
+		}
+		return nil
+	case vNextPublicationJournalFile:
+		var journal vNextGenerationJournal
+		if err := vNextPublicationDecode(payload, &journal); err != nil {
+			return fmt.Errorf("decode publication journal: %w", err)
+		}
+		return vNextPublicationJournalValid(journal)
+	default:
+		return fmt.Errorf("unknown publication control %q", name)
+	}
 }
 
 func vNextPublicationDecode(payload []byte, destination any) error {

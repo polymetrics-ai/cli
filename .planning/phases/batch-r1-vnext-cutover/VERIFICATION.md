@@ -475,3 +475,47 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
   `fm/cli-top100-declaration-batch-r1`, PR #4294 API base/head/SHA read-back,
   state update, archive `127.msg`, then pause for Firstmate review. CP12
   remains prohibited.
+
+## CP11 final repair verification plan — instructions 130–131
+
+- F1: separate `CURRENT` and `JOURNAL` temporary-replacement tests must prove
+  identity comparison occurs after the fault barrier and before rename. The
+  retained prior control bytes, moved original, and replacement are observable
+  fixtures; a refusal without those assertions is insufficient.
+- F2: run stage, generation/lease, rollback, and control-cleanup replacement
+  tests through Recover, Prune, and Publish rollback. Each asserts the original
+  validated object and the replacement survive intact.
+- F3: run a post-acquisition two-publisher barrier. While the first holds its
+  original inode, the second must not mutate through a replacement lock path;
+  after restoring the bound path and releasing the first, retry must pass.
+- F4: run a physical staged implemented-command positive witness and a modified
+  staged command negative witness that fails specifically at
+  `preflight staged command`, then run Atlas selector/mapping validation.
+- Gates: focused `cmd/connectorgen` selectors, full and race package suites,
+  vNext lock target, source-lock definition validation, documentation/Atlas
+  JSON checks, `go vet`, PM build, agent contract check, module tidy/diff
+  checks, and the documented actual boundary scanner. The inherited boundary
+  fixture and `internal/cli` baselines remain background-only unless a changed
+  path proves causal connection.
+- Delivery: self-review the exact candidate, ordinary push, PR #4294 API
+  base/head/SHA read-back, external status update, archive each instruction,
+  then pause unchanged for a new Firstmate exact-SHA review. CP12 remains
+  prohibited.
+
+## CP11 final repair verification — F1–F4
+
+- Scope: only `cmd/connectorgen` publication/Atlas proof code, source-lock authoring canon/Atlas documentation, and this phase evidence changed. No provider, credential, database, runtime, source-lock payload, generated execution JSON, PM CLI contract, `.cache/`, or certification-residue path was read or modified.
+- F1 Green: `TestVNextGenerationPublisherRefusesReplacedAtomicControlTemporary` passed for both temporary `CURRENT` and `JOURNAL` identity barriers. The failure path retains prior control bytes plus both moved-original and replacement fixtures.
+- F2 Green: post-validation stage, generation/lease, and committed-control replacement tests passed; the rollback-specific generation replacement test passed. Recover, Prune, Publish rollback, and control cleanup all refuse without removing either object.
+- F3 Green: `TestVNextGenerationPublisherRefusesReplacedLockAfterAcquisition` covers an original held inode, deleted companion anchor, visible replacement lock, second-operation refusal, unchanged `CURRENT`/journal/generation transaction, restored hard-link pair, and serial retry. `TestVNextPublicationOpenLockRefusesExistingLockWithoutAnchor` had an executable RED against the predecessor anchor-bootstrap behavior and passes with the fixed no-reconstruction rule.
+- F4 Green: `TestVNextPublicationProofContractRejectsCompoundMapping` had an executable RED against predecessor behavior and passes with exactly-one guarantee enforcement. Atlas selector resolution accepts only the source-lock-vNext record. Physical publication witnesses pass for a valid implemented `widgets get` command and refuse the post-admission invalid staged command specifically at `preflight staged command "widgets get"` before selection state exists.
+- Final focused/corpus gates:
+  - `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestFoundationAtlasSelectorsResolve|TestVNextPublicationProofContractRejectsCompoundMapping|TestVNextGenerationPublisherPhysicallyPreflightsImplementedStagedCommand|TestVNextGenerationPublisherRefusesPhysicallyStagedCommandPreflight|TestVNextGenerationPublisherRefusesReplacedAtomicControlTemporary|TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup|TestVNextGenerationPublisherRefusesReplacedValidatedGenerationCleanup|TestVNextGenerationPublisherRefusesReplacedRollbackGenerationCleanup|TestVNextGenerationPublisherRefusesReplacedCommittedJournalCleanup|TestVNextGenerationPublisherRefusesReplacedLockAfterAcquisition|TestVNextPublicationOpenLockRefusesExistingLockWithoutAnchor)$'` → `ok` (3.235s).
+  - `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (60.036s).
+  - `go test -race -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (328.097s).
+  - `make connectorgen-vnext-locks` → `ok` (30.882s); it includes all `TestVNextGenerationPublisher.*` witnesses and deterministic reference-lock rendering.
+  - `go run ./cmd/connectorgen validate internal/connectors/defs` → `connectorgen validate: 553 connector(s) checked, 0 findings`.
+  - `make docs-check` → `ok`; `go run ./cmd/connectorgen --help` retained the existing lock-render syntax.
+  - `go vet ./cmd/connectorgen`, `go mod tidy -diff`, and `go run ./cmd/agentcontractgen check` → `ok`.
+- CLI help/manual/website parity: not applicable because no PM or connectorgen command, flag, output, namespace, generated manual, or website surface changed. The existing generator help was exercised as a regression check; source-lock canon and Atlas documentation changed because the authoring publication behavior changed.
+- Manual GSD verification fallback: `verify-work` and `code-review` prompts were generated after the earlier discuss/plan/execute prompts. The adapter has no compatible authorized isolated worker/reviewer, so deterministic tests and this inline self-review are the local evidence; they do not substitute for Firstmate's required fresh exact-SHA review after the normal push.

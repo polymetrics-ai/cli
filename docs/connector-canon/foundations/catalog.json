@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 35,
+  "catalog_revision": 36,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -15,7 +15,7 @@
       "layer": "source_lock_authoring",
       "status": "available",
       "kind": "generic",
-      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through operation-lifetime no-follow descriptor confinement, recomputed content addresses, prepared-journal recovery, atomic selection, cancellable locking, and lease-safe pruning.",
+      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through operation-lifetime no-follow descriptor confinement, recomputed content addresses, prepared-journal recovery, atomic selection, inode-bound locking, and lease-safe pruning.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [
@@ -183,11 +183,19 @@
         ],
         "publication_guarantees": [
           "each connector publication is a closed digest-addressed set with no inherited optional artifacts; every validation recomputes that address from the exact artifact tree",
-          "a durable typed stage marker binds connector, stage, and content generation; unknown or malformed staging directories are preserved and refuse recovery",
-          "connector, generation, lock, control, and stage paths are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect reads, writes, renames, leases, pruning, or cleanup",
+          "a durable typed stage marker binds connector, stage, and content generation; unknown or malformed staging directories are preserved and recovery refuses rather than deleting them",
+          "connector and generation roots are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect publication reads or writes",
+          "each temporary CURRENT or JOURNAL file remains bound to its verified identity through its final atomic rename; a replacement is refused without changing the prior control",
+          "a validated stage remains bound to its verified identity through cleanup; a replacement is refused without deleting either object",
+          "a validated generation and lease remain bound to their verified identities through pruning; a replacement is refused without deleting either object",
+          "a validated generation and lease remain bound to their verified identities through rollback cleanup; a replacement is refused without deleting either object",
+          "a validated CURRENT or JOURNAL control remains bound to its verified identity through destructive cleanup; a replacement is refused without deleting either object",
+          "the connector lock and its companion anchor, created together, remain bound to the acquired inode for the operation; a replaced pathname or missing anchor cannot create a second publication lock domain",
           "the source lock is read through the retained no-follow connector descriptor before and after lock acquisition; a source mutation during admission is refused before generation state is created",
           "a durable prepared journal is fsynced before its same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation",
-          "a reader-held generation lease prevents pruning that generation, an unvalidated generation is never treated as publisher-owned, and cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state",
+          "a reader-held generation lease prevents pruning that generation",
+          "an unvalidated generation is never treated as publisher-owned",
+          "cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state",
           "publication validates staged physical bytes through the existing loader, selected runtime identity, manifest/index construction, and command preflight without credential or provider I/O"
         ]
       },
@@ -366,6 +374,11 @@
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherDefersHeldGenerationPrune"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
           "name": "TestVNextGenerationPublisherStagesDirectlyUnderGenerationRoot"
         },
         {
@@ -447,6 +460,61 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_test.go",
           "name": "TestVNextGenerationPublisherCancelsAfterLockAcquireBeforeMutationAndRetries"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRecoversDurablyOwnedStage"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesReplacedAtomicControlTemporary"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesReplacedValidatedGenerationCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRollsBackFailedActiveValidationWithoutOrphan"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesReplacedRollbackGenerationCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesReplacedCommittedJournalCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesReplacedLockAfterAcquisition"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextPublicationOpenLockRefusesExistingLockWithoutAnchor"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherPhysicallyPreflightsImplementedStagedCommand"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesPhysicallyStagedCommandPreflight"
         }
       ],
       "publication_guarantee_proofs": [
@@ -459,17 +527,59 @@
         },
         {
           "guarantees": [
-            "a durable typed stage marker binds connector, stage, and content generation; unknown or malformed staging directories are preserved and refuse recovery"
+            "a durable typed stage marker binds connector, stage, and content generation; unknown or malformed staging directories are preserved and recovery refuses rather than deleting them"
           ],
-          "positive": "TestVNextGenerationPublisherStagesDirectlyUnderGenerationRoot",
+          "positive": "TestVNextGenerationPublisherRecoversDurablyOwnedStage",
           "negative": "TestVNextGenerationPublisherPreservesUnownedStageAcrossMutations"
         },
         {
           "guarantees": [
-            "connector, generation, lock, control, and stage paths are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect reads, writes, renames, leases, pruning, or cleanup"
+            "connector and generation roots are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect publication reads or writes"
           ],
           "positive": "TestVNextGenerationPublisherRetainsDescriptorsAcrossConnectorReplacement",
-          "negative": "TestVNextGenerationPublisherRefusesSymlinkedLockWithoutTouchingTarget"
+          "negative": "TestVNextGenerationPublisherRefusesSymlinkedConnectorRootWithoutTouchingTarget"
+        },
+        {
+          "guarantees": [
+            "each temporary CURRENT or JOURNAL file remains bound to its verified identity through its final atomic rename; a replacement is refused without changing the prior control"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversEveryDurableCutPoint",
+          "negative": "TestVNextGenerationPublisherRefusesReplacedAtomicControlTemporary"
+        },
+        {
+          "guarantees": [
+            "a validated stage remains bound to its verified identity through cleanup; a replacement is refused without deleting either object"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversDurablyOwnedStage",
+          "negative": "TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup"
+        },
+        {
+          "guarantees": [
+            "a validated generation and lease remain bound to their verified identities through pruning; a replacement is refused without deleting either object"
+          ],
+          "positive": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune",
+          "negative": "TestVNextGenerationPublisherRefusesReplacedValidatedGenerationCleanup"
+        },
+        {
+          "guarantees": [
+            "a validated generation and lease remain bound to their verified identities through rollback cleanup; a replacement is refused without deleting either object"
+          ],
+          "positive": "TestVNextGenerationPublisherRollsBackFailedActiveValidationWithoutOrphan",
+          "negative": "TestVNextGenerationPublisherRefusesReplacedRollbackGenerationCleanup"
+        },
+        {
+          "guarantees": [
+            "a validated CURRENT or JOURNAL control remains bound to its verified identity through destructive cleanup; a replacement is refused without deleting either object"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversEveryDurableCutPoint",
+          "negative": "TestVNextGenerationPublisherRefusesReplacedCommittedJournalCleanup"
+        },
+        {
+          "guarantees": [
+            "the connector lock and its companion anchor, created together, remain bound to the acquired inode for the operation; a replaced pathname or missing anchor cannot create a second publication lock domain"
+          ],
+          "positive": "TestVNextGenerationPublisherSerializesWritersAndReadersSeeWholeGeneration",
+          "negative": "TestVNextGenerationPublisherRefusesReplacedLockAfterAcquisition"
         },
         {
           "guarantees": [
@@ -487,17 +597,31 @@
         },
         {
           "guarantees": [
-            "a reader-held generation lease prevents pruning that generation, an unvalidated generation is never treated as publisher-owned, and cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state"
+            "a reader-held generation lease prevents pruning that generation"
           ],
           "positive": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune",
+          "negative": "TestVNextGenerationPublisherDefersHeldGenerationPrune"
+        },
+        {
+          "guarantees": [
+            "an unvalidated generation is never treated as publisher-owned"
+          ],
+          "positive": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune",
+          "negative": "TestVNextGenerationPublisherRefusesToPruneUnownedGeneration"
+        },
+        {
+          "guarantees": [
+            "cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state"
+          ],
+          "positive": "TestRunLockRenderContextCancelsContendedPublicationAndRetries",
           "negative": "TestVNextGenerationPublisherCancelsAfterLockAcquireBeforeMutationAndRetries"
         },
         {
           "guarantees": [
             "publication validates staged physical bytes through the existing loader, selected runtime identity, manifest/index construction, and command preflight without credential or provider I/O"
           ],
-          "positive": "TestRunLockRenderPublishesOnlyClosedGeneration",
-          "negative": "TestRunLockRenderRejectsInvalidCanonicalGraphBeforeWriting"
+          "positive": "TestVNextGenerationPublisherPhysicallyPreflightsImplementedStagedCommand",
+          "negative": "TestVNextGenerationPublisherRefusesPhysicallyStagedCommandPreflight"
         }
       ],
       "known_gap_refs": [],

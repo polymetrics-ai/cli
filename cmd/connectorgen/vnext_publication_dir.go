@@ -20,6 +20,31 @@ type vNextPublicationDirectory struct {
 	label string
 }
 
+type vNextPublicationIdentity struct {
+	device uint64
+	inode  uint64
+	mode   uint32
+}
+
+func vNextPublicationIdentityFromStat(stat unix.Stat_t) vNextPublicationIdentity {
+	return vNextPublicationIdentity{
+		device: uint64(stat.Dev),
+		inode:  uint64(stat.Ino),
+		mode:   uint32(stat.Mode) & unix.S_IFMT,
+	}
+}
+
+func vNextPublicationIdentityFromFile(file *os.File, label string) (vNextPublicationIdentity, error) {
+	if file == nil {
+		return vNextPublicationIdentity{}, fs.ErrClosed
+	}
+	var stat unix.Stat_t
+	if err := unix.Fstat(int(file.Fd()), &stat); err != nil {
+		return vNextPublicationIdentity{}, fmt.Errorf("stat %s: %w", label, err)
+	}
+	return vNextPublicationIdentityFromStat(stat), nil
+}
+
 func vNextPublicationOpenDirectory(path, label string) (*vNextPublicationDirectory, error) {
 	fd, err := unix.Open(path, unix.O_RDONLY|unix.O_DIRECTORY|unix.O_CLOEXEC|unix.O_NOFOLLOW, 0)
 	if err != nil {
@@ -214,6 +239,58 @@ func (d *vNextPublicationDirectory) lstat(name, label string) (unix.Stat_t, erro
 	return stat, nil
 }
 
+func (d *vNextPublicationDirectory) identityAt(name, label string) (vNextPublicationIdentity, error) {
+	stat, err := d.lstat(name, label)
+	if err != nil {
+		return vNextPublicationIdentity{}, err
+	}
+	return vNextPublicationIdentityFromStat(stat), nil
+}
+
+func (d *vNextPublicationDirectory) assertIdentity(name, label string, expected vNextPublicationIdentity) error {
+	actual, err := d.identityAt(name, label)
+	if err != nil {
+		return err
+	}
+	if actual != expected {
+		return fmt.Errorf("%s identity changed", label)
+	}
+	return nil
+}
+
+func (d *vNextPublicationDirectory) renameBound(oldName, newName, label string, identity vNextPublicationIdentity) error {
+	if err := d.assertIdentity(oldName, label, identity); err != nil {
+		return err
+	}
+	if err := d.rename(oldName, newName); err != nil {
+		return err
+	}
+	return d.assertIdentity(newName, label, identity)
+}
+
+func (d *vNextPublicationDirectory) linkBound(oldName, newName, label string, identity vNextPublicationIdentity) error {
+	if err := d.assertIdentity(oldName, label, identity); err != nil {
+		return err
+	}
+	if !vNextPublicationDirectNameValid(newName) {
+		return fmt.Errorf("invalid %s name %q", label, newName)
+	}
+	if err := unix.Linkat(int(d.file.Fd()), oldName, int(d.file.Fd()), newName, 0); err != nil {
+		return fmt.Errorf("link %s: %w", label, err)
+	}
+	return d.assertIdentity(newName, label, identity)
+}
+
+func (d *vNextPublicationDirectory) removeRegularBound(name, label string, identity vNextPublicationIdentity) error {
+	if err := d.assertIdentity(name, label, identity); err != nil {
+		return err
+	}
+	if err := unix.Unlinkat(int(d.file.Fd()), name, 0); err != nil {
+		return fmt.Errorf("remove %s: %w", label, err)
+	}
+	return nil
+}
+
 func vNextPublicationStatIsDir(stat unix.Stat_t) bool {
 	return stat.Mode&unix.S_IFMT == unix.S_IFDIR
 }
@@ -236,63 +313,68 @@ func (d *vNextPublicationDirectory) rename(oldName, newName string) error {
 	return nil
 }
 
-func (d *vNextPublicationDirectory) removeRegular(name, label string) error {
-	file, err := d.openRegular(name, label, unix.O_RDONLY)
-	if errors.Is(err, fs.ErrNotExist) {
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	if err := file.Close(); err != nil {
-		return fmt.Errorf("close %s before removal: %w", label, err)
-	}
-	if err := unix.Unlinkat(int(d.file.Fd()), name, 0); err != nil && !errors.Is(err, fs.ErrNotExist) {
-		return fmt.Errorf("remove %s: %w", label, err)
-	}
-	return nil
-}
-
 func (d *vNextPublicationDirectory) removeTree(name, label string) error {
-	stat, err := d.lstat(name, label)
+	identity, err := d.identityAt(name, label)
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
 	}
 	if err != nil {
 		return err
 	}
-	if vNextPublicationStatIsSymlink(stat) {
+	if identity.mode == unix.S_IFLNK {
 		return fmt.Errorf("%s is a symlink", label)
 	}
-	if vNextPublicationStatIsRegular(stat) {
-		if err := unix.Unlinkat(int(d.file.Fd()), name, 0); err != nil && !errors.Is(err, fs.ErrNotExist) {
-			return fmt.Errorf("remove %s: %w", label, err)
-		}
-		return nil
+	if identity.mode == unix.S_IFREG {
+		return d.removeRegularBound(name, label, identity)
 	}
-	if !vNextPublicationStatIsDir(stat) {
+	if identity.mode != unix.S_IFDIR {
 		return fmt.Errorf("%s is not a regular file or directory", label)
 	}
 	child, err := d.openDirectory(name, label)
 	if err != nil {
 		return err
 	}
-	entries, err := child.readDir()
-	if err == nil {
-		for _, entry := range entries {
-			if err = child.removeTree(entry.Name(), label+"/"+entry.Name()); err != nil {
-				break
-			}
-		}
-	}
-	closeErr := child.Close()
+	defer child.Close()
+	actual, err := vNextPublicationIdentityFromFile(child.file, label)
 	if err != nil {
 		return err
 	}
-	if closeErr != nil {
-		return fmt.Errorf("close %s: %w", label, closeErr)
+	if actual != identity {
+		return fmt.Errorf("%s identity changed", label)
 	}
-	if err := unix.Unlinkat(int(d.file.Fd()), name, unix.AT_REMOVEDIR); err != nil && !errors.Is(err, fs.ErrNotExist) {
+	return d.removeTreeBound(name, label, child, identity)
+}
+
+func (d *vNextPublicationDirectory) removeTreeBound(name, label string, root *vNextPublicationDirectory, identity vNextPublicationIdentity) error {
+	if root == nil || root.file == nil {
+		return fs.ErrClosed
+	}
+	actual, err := vNextPublicationIdentityFromFile(root.file, label)
+	if err != nil {
+		return err
+	}
+	if actual != identity {
+		return fmt.Errorf("%s identity changed", label)
+	}
+	if err := d.assertIdentity(name, label, identity); err != nil {
+		return err
+	}
+	entries, err := root.readDir()
+	if err != nil {
+		return err
+	}
+	for _, entry := range entries {
+		if err := d.assertIdentity(name, label, identity); err != nil {
+			return err
+		}
+		if err := root.removeTree(entry.Name(), label+"/"+entry.Name()); err != nil {
+			return err
+		}
+	}
+	if err := d.assertIdentity(name, label, identity); err != nil {
+		return err
+	}
+	if err := unix.Unlinkat(int(d.file.Fd()), name, unix.AT_REMOVEDIR); err != nil {
 		return fmt.Errorf("remove directory %s: %w", label, err)
 	}
 	return nil

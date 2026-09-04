@@ -642,3 +642,37 @@
   '^TestScanMatchesCompactIdentifierAliasesOnlyAtComponentBoundaries$'` →
   `ok` (0.411s); and the real boundary scanner returned
   `"outcome":"clean"` for 553 connectors and 280 checked files.
+
+### 2026-09-04 — CP11 final repair plan (instructions 130–131)
+
+- Authority/base: Firstmate instruction `130.msg` BLOCKs immutable
+  `f7a325aec3594635acbd27e39099640283ca3663` and authorizes only F1–F4;
+  instruction `131.msg` required full reading, explicit status acknowledgement,
+  and archival of `130.msg` before further work. CP12 remains prohibited.
+- Red 1: deterministic hooks replace the fsynced temporary entry for each
+  `CURRENT` and `JOURNAL` atomic control write. The test must observe that the
+  old control bytes, original temporary inode, and replacement remain intact
+  after refusal.
+- Red 2: stage, generation/lease, rollback, and control-cleanup barriers
+  replace the exact named entry after marker/integrity/lease/control validation.
+  Recover, Prune, and rollback must refuse rather than remove either object.
+- Red 3: a held first operation loses the visible lock pathname at its
+  post-acquisition barrier; a second operation must refuse or wait rather than
+  enter a separate `Flock` domain, and a restored bound lock must retry.
+- Red 4: a real implemented command is made preflight-invalid only in the
+  physical staged bundle after semantic admission. Its refusal must include the
+  staged preflight boundary; Atlas mappings must use the valid-stage and
+  unowned-generation tests and reject multi-guarantee mappings.
+- Green: add only publication-local descriptor identity binding and proof
+  mappings under `authoring.source-lock-vnext.v1`; then run focused selectors,
+  full/race `cmd/connectorgen`, source-lock/Atlas checks, static/docs checks,
+  and read-only review. No provider, credential, database, or checked-in
+  materialization path is permitted.
+
+### 2026-09-04 — CP11 final repair actual RED/GREEN (instructions 130–131)
+
+- **F1 RED:** `TestVNextGenerationPublisherRefusesReplacedAtomicControlTemporary` replaced each fsynced temporary `CURRENT`/`JOURNAL` entry and observed `<nil>` before the fix. **GREEN:** it now passes with the original temporary descriptor held through `renameBound`; prior control bytes, moved original, and replacement survive refusal.
+- **F2 RED:** the three post-validation stage, generation/lease, and committed-control cleanup tests observed `<nil>` from Recover, Prune, and Publish (1.494s). **GREEN:** retained directory/control descriptors plus identity checks make all three pass (1.525s); `TestVNextGenerationPublisherRefusesReplacedRollbackGenerationCleanup` separately passes the rollback path (1.234s).
+- **F3 RED:** temporarily allowing an existing lock to create a missing anchor made `TestVNextPublicationOpenLockRefusesExistingLockWithoutAnchor` fail with a successful open. **GREEN:** existing unanchored state refuses; `TestVNextGenerationPublisherRefusesReplacedLockAfterAcquisition` covers the held first inode, removed anchor, visible replacement, second-operation refusal, restored original hard-link pair, unchanged closed transaction, and successful serial retry.
+- **F4 RED:** temporarily restoring predecessor mapping behavior made `TestVNextPublicationProofContractRejectsCompoundMapping` fail because a two-guarantee mapping was accepted. **GREEN:** the source-lock-only validator now requires exactly one guarantee. `TestVNextGenerationPublisherPhysicallyPreflightsImplementedStagedCommand` and `TestVNextGenerationPublisherRefusesPhysicallyStagedCommandPreflight` prove actual physical `commandrunner.Preflight` success/refusal for an implemented command after semantic admission.
+- Focused GREEN commands so far: F1 (1.219s), F2 cleanup trio (1.525s), F2 rollback (1.234s), F3 replacement (1.220s), F3 missing anchor (1.005s), F4 mapping/physical witnesses (1.268s), exact lease/Atlas witnesses (1.711s), and `make connectorgen-vnext-locks` (31.096s). Final normal/race package, vet, definition, docs, contract, tidy, and review evidence is recorded in `VERIFICATION.md`.
