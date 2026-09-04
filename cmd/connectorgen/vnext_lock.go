@@ -69,6 +69,7 @@ type vNextSchemaReferences struct {
 
 type vNextCanonicalDescriptor struct {
 	Connector    string
+	Lanes        map[string]string
 	Metadata     json.RawMessage
 	ConfigSchema json.RawMessage
 	HTTP         json.RawMessage
@@ -77,6 +78,7 @@ type vNextCanonicalDescriptor struct {
 	CLI          json.RawMessage
 	Execution    map[string]json.RawMessage
 	Graph        vNextCanonicalGraph
+	Staged       vNextStagedGeneration
 }
 
 func decodeVNextSourceLock(raw []byte) (vNextSourceLock, error) {
@@ -335,8 +337,12 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		delete(cli, "destination_cli")
 		lock.CLI, _ = json.Marshal(cli)
 	}
+	lanes := make(map[string]string, len(vNextLaneNames))
+	for _, lane := range vNextLaneNames {
+		lanes[lane] = lock.Lanes[lane]
+	}
 	descriptor := vNextCanonicalDescriptor{
-		Connector: lock.Connector, Metadata: cloneRawJSON(lock.Metadata), ConfigSchema: cloneRawJSON(lock.ConfigSchema), HTTP: cloneRawJSON(lock.HTTP),
+		Connector: lock.Connector, Lanes: lanes, Metadata: cloneRawJSON(lock.Metadata), ConfigSchema: cloneRawJSON(lock.ConfigSchema), HTTP: cloneRawJSON(lock.HTTP),
 		Schemas: schemas, Operations: operations, CLI: cloneRawJSON(lock.CLI), Execution: execution,
 	}
 	graph, err := buildVNextCanonicalGraph(descriptor, lock.ProviderEvidence, authoredCLI)

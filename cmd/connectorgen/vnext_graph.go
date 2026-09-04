@@ -16,11 +16,13 @@ import (
 )
 
 // vNextCanonicalGraph is the typed authoring graph built from one strict
-// schema-4 source lock. It is authoring-only: no connector, credential,
-// transport, resolver, or provider operation is constructed from it.
+// schema-4 source lock. It supports in-memory semantic admission only; it
+// never constructs a registry connection, credential, transport, or provider
+// request.
 type vNextCanonicalGraph struct {
 	ProviderEvidence json.RawMessage
 	AuthoredCLI      json.RawMessage
+	Lanes            map[string]string
 	Metadata         engine.Metadata
 	HTTP             *engine.HTTPBase
 	Config           *engine.Schema
@@ -70,7 +72,10 @@ type vNextCanonicalCommand struct {
 }
 
 func buildVNextCanonicalGraph(descriptor vNextCanonicalDescriptor, providerEvidence, authoredCLI json.RawMessage) (vNextCanonicalGraph, error) {
-	graph := vNextCanonicalGraph{Schemas: make(map[string]*engine.Schema, len(descriptor.Schemas))}
+	graph := vNextCanonicalGraph{Lanes: make(map[string]string, len(descriptor.Lanes)), Schemas: make(map[string]*engine.Schema, len(descriptor.Schemas))}
+	for lane, state := range descriptor.Lanes {
+		graph.Lanes[lane] = state
+	}
 	if len(authoredCLI) != 0 {
 		if err := validateRawJSONObject("cli", authoredCLI); err != nil {
 			return vNextCanonicalGraph{}, vNextGraphError("/cli", err)
@@ -246,15 +251,12 @@ func vNextCommandAlias(value string) string {
 }
 
 func validateVNextCanonicalGraph(descriptor *vNextCanonicalDescriptor) error {
-	outputs, err := renderVNextExecutionBundle(*descriptor)
+	stage, err := admitVNextCanonicalDescriptor(*descriptor, vNextSemanticAdmissionInput{})
 	if err != nil {
 		return err
 	}
-	bundle, err := engine.Load(newVNextExecutionFS(descriptor.Connector, outputs), descriptor.Connector)
-	if err != nil {
-		return vNextGraphError(vNextStaticValidationPointer(*descriptor, err.Error()), fmt.Errorf("static execution validation: %w", err))
-	}
-	descriptor.Graph.Identity = bundle.Identity
+	descriptor.Graph.Identity = stage.Identity
+	descriptor.Staged = stage
 	return nil
 }
 

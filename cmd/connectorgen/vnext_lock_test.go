@@ -20,7 +20,7 @@ func TestVNextSourceLockProjectsMinimalExecutionBundleDeterministically(t *testi
 	lock := minimalVNextLockForTest()
 	lock.Lanes["direct_read"] = "implemented"
 	lock.Operations[0].Operation = json.RawMessage(`{"id":"widgets.list","kind":"rest_read","summary":"List widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/widgets","max_bytes":1024,"response":{"success_statuses":["200"]},"parameters":[]}}`)
-	lock.Operations[0].Commands = []vNextCommandDescriptor{{Order: 0, Command: json.RawMessage(`{"path":"widgets list","summary":"List widgets","intent":"direct_read","availability":"implemented","operation":"widgets.list","flags":[]}`)}}
+	lock.Operations[0].Commands = []vNextCommandDescriptor{{Order: 0, Command: json.RawMessage(`{"path":"widgets list","summary":"List widgets","intent":"direct_read","availability":"implemented","operation":"widgets.list","api_surface":[{"method":"GET","path":"/widgets"}],"output_policy":"json_redacted","flags":[]}`)}}
 	lock.CLI = json.RawMessage(`{"usage":"pm acme <command> [flags]","tagline":"Acme commands"}`)
 	canonical, err := canonicalizeVNextSourceLock(lock)
 	if err != nil {
@@ -400,7 +400,7 @@ func TestVNextCanonicalGraphAllowsDirectOperationSchemaRoles(t *testing.T) {
 		Operation:  json.RawMessage(`{"id":"widgets.get","kind":"rest_read","summary":"Get widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/widgets","max_bytes":1024,"response":{"success_statuses":["200"]},"parameters":[]}}`),
 		Commands: []vNextCommandDescriptor{{
 			Order:   0,
-			Command: json.RawMessage(`{"path":"widgets get","summary":"Get widgets","intent":"direct_read","availability":"implemented","operation":"widgets.get","flags":[]}`),
+			Command: json.RawMessage(`{"path":"widgets get","summary":"Get widgets","intent":"direct_read","availability":"implemented","operation":"widgets.get","api_surface":[{"method":"GET","path":"/widgets"}],"output_policy":"json_redacted","flags":[]}`),
 		}},
 	}}
 	lock.CLI = json.RawMessage(`{"usage":"pm acme <command>","tagline":"Acme"}`)

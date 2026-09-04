@@ -40,3 +40,22 @@ Ranked hypotheses to test before production edits:
 1. Existing `decodeStrictJSON` already handles one root and duplicate JSON tokens but `json.RawMessage` lets unknown nested execution fields pass. A no-write sentinel should currently survive only because the malformed fragment is accepted or fails later.
 2. `canonicalizeVNextSourceLock` verifies referenced schema existence but does not verify schema role, encoder vocabulary, command aliases, or all required structural cross-references. A compact in-memory lock should expose each admission gap without a provider or runtime executor.
 3. Existing map serialization sorts object keys, but operation/command input order can still influence output. Equivalent deliberately reordered locks should reveal whether canonical ordering is missing while preserving IDs.
+
+## 2026-09-04 CP10 semantic source-execution admission decision record
+
+Firstmate instruction `122.msg` closes the CP09 gate and leaves no product choice open. CP10 is the second #4426/N2 half: admit one canonical graph into an in-memory staged generation, then publish one normal parent checkpoint only after its focused RED/GREEN proof and inline/manual review.
+
+Resolved scope:
+
+1. The CP09 graph remains the sole source-lock representation. Semantic admission consumes its retained immutable source operation IDs and raw provider facts; it neither reparses a lock nor normalizes away unknown provider facts.
+2. Runtime authority stays in existing packages. The staging layer must call the real loader and commandrunner preflight, construct only a no-I/O engine connector, and use the sealed native selection/index and syncplan resolver APIs rather than reproduce their validation.
+3. A command's source operation binding is exact. Matching REST/GraphQL paths is supplementary evidence only; two GraphQL operations sharing `/graphql` remain different nodes and a cross-operation command target must fail at its source field.
+4. An incomplete single-connector sync declaration is not a saved plan. The staged admission API accepts complete externally supplied source/destination/Atlas facts for real resolver validation, but does not invent a target, executor, foundation, or digest.
+5. CP10 produces no filesystem stage or global output. CP11 owns filesystem durability/activation; connector migrations and schema-4 source authoring remain out of scope.
+
+Ranked hypotheses to test before production edits:
+
+1. The CP09 loader check can accept a command bound to a different existing GraphQL operation because both have the same valid route. A two-operation `/graphql` fixture should expose that identity gap without provider I/O.
+2. Rendering can produce correct runtime JSON while losing the immutable source-to-runtime correspondence needed by CP11. A staged provenance/index comparison should detect a missing, duplicate, cross-connector, or stale identity before any write.
+3. A rate declaration can be structurally rendered but omitted from identity/index data. Adding, changing, and removing only `rate_limits.json` should alter and restore the closed staged identity through the real loader, not a copied rate validator.
+4. A source-only transport declaration lacks the destination/foundation facts required by `syncplan.Resolve`. Synthesizing those facts would be a false executable claim; explicit supplied facts must be the only resolver input.

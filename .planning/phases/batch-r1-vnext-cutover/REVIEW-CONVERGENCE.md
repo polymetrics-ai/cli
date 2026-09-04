@@ -237,3 +237,20 @@ The required role-separated discovery was requested through the worker task fan-
 
 - Findings: none after the structural-role scope correction. Do not start CP10, alter source locks/rendered artifacts, or publish before processing the inbox/current-state gate.
 - Publication: the inbox/current-state gate was empty before commit. The reviewed checkpoint was committed as `d11277378abe556323226e3f6998ce3caf6033dc` and normally pushed to `fm/cli-top100-declaration-batch-r1`; PR #4294 API read-back reports that exact draft parent head over `main`. No external review was requested or fabricated, and no CP10 work follows from this checkpoint.
+
+## 2026-09-04 — CP10 semantic source-execution admission local self-review
+
+- Review subject: the uncommitted CP10 authoring-side admission, tests, source-lock canon/Atlas documentation, and GSD evidence change based on normally published parent `85c28e70e4c8f811ea342a1f1054e09759cde1c1`.
+- Workflow: generated `execute-phase`, `verify-work`, and `code-review` prompts were resolved and fulfilled inline. The established phase cannot meet the adapter's ROADMAP prerequisite and the configured runtime cannot provide its isolated GSD worker/reviewer; no counterfeit reviewer was spawned. Firstmate instruction `122.msg` explicitly defers independent review to the coherent phase boundary.
+
+| Lens | Disposition |
+| --- | --- |
+| Authoring/runtime data flow | Pass. The CP09 graph remains the only source-lock representation. Admission renders bytes into the existing read-only virtual FS, calls `engine.Load` and a no-I/O `engine.New`, then returns only an in-memory staged value. It neither registers a connector nor reads source locks from runtime dispatch. |
+| Exact semantic joins | Pass. Schemas, stream/write/operation nodes, command surfaces, implemented binding resolution, and source known facts are matched against the loaded bundle. Same-route GraphQL commands require the owning immutable source operation, not route equality. Unknown provider fields remain raw. |
+| Manifest and sync identity | Pass after self-review correction. A supplied sync plan now requires both its source executor/digest and `GenerationDigest` to equal the staged manifest identity before `syncplan.Resolve`; the stage does not fabricate a destination, Foundation Atlas fact, target, or digest. |
+| Boundary and security | Pass. `commandrunner.Preflight` runs only against the no-I/O engine connector; no credential, transport, provider request, filesystem staging, activation, or generated global index path is added. Rate validation comes only from the existing loader and is covered by a no-write sentinel. |
+| Determinism and output integrity | Pass. Output bytes are loader-identified, staged provenance is sorted and duplicate-refused, and the one-entry manifest index retains the exact loaded identity. The failing GraphQL, malformed-rate, resolver, and preflight controls leave the pre-existing output sentinel unchanged. |
+| Documentation and Atlas | Pass. The source-lock canon describes the semantic boundary without granting runtime source-lock access. Catalog revision 31 names the existing authoring foundation, real owner APIs, constraints, no-goals, and all CP10 proof selectors; no shared runtime foundation is claimed. |
+| Tests and scoped gates | Pass. Focused RED/GREEN controls, full `cmd/connectorgen`, reference `--check` renders, 553-definition validation, Atlas selector resolution, vet, build, docs check, and agent-contract check passed. The required full `internal/cli` re-run reproduces only its recorded polling/source-origin/ETL-help baseline failures and local Redis connection-refused logs. |
+
+- Findings: no remaining CP10 blocker. The review corrected the source-graph comment to describe its now-authorized in-memory admission role and added generation-digest equality for supplied-sync identity closure before final validation. No connector source lock, rendered execution artifact, provider behavior, credential path, release path, `.cache`, or certification residue changed.

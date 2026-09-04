@@ -355,3 +355,43 @@
 - Structural-only boundary: request and response references may legitimately belong to a direct operation; only record references require the stream's exact schema. CP09 does not compare provider citation routes or invent semantic source-to-execution joins; those remain CP10 work.
 - Atlas and canonical source documentation are updated in the same change. The complete `cmd/connectorgen` package, all-lock graph corpus, three CLI check-only renders, 553-definition validation, catalog/docs checks, vet, CLI build, and agent-contract check are green; exact commands/results are recorded in `TDD-LEDGER.md` and `VERIFICATION.md`.
 - Publication: committed as `d11277378abe556323226e3f6998ce3caf6033dc` (`feat(connectorgen): canonicalize source locks strictly`) and normally pushed to `origin/fm/cli-top100-declaration-batch-r1`. PR #4294 API read-back confirms `base=main`, `head=fm/cli-top100-declaration-batch-r1`, `draft=true`, and the same head SHA. No reset, rebase, source-lock artifact publication, or CP10 work occurred.
+
+## CP10 — N2 semantic source-execution admission
+
+## Task Delivery Header
+
+- Issue: Refs #4426 — N2 semantic source-lock admission; parent Refs #4325.
+- Base branch: `fm/cli-top100-declaration-batch-r1` at `85c28e70e4c8f811ea342a1f1054e09759cde1c1`.
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through existing draft PR #4294.
+- Delivery: one ordinary non-force semantic-admission green checkpoint published to the declared parent after focused verification and inline/manual code review; the independent review remains at the coherent phase boundary.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: turn the CP09 canonical graph into a complete in-memory staged generation with exact source-to-schema, stream, action, operation, command, manifest/index, rate-file, and supplied sync/Atlas admission facts. Reuse the real engine loader, commandrunner preflight, manifest index, native selection inventory, and syncplan resolver; refuse broken joins with the immutable source operation ID and JSON field path before any output replacement.
+- Verification: RED-GREEN semantic-admission tests with no-write sentinels; deterministic staged-set and rate-identity controls; exact GraphQL same-route operation-binding control; affected `cmd/connectorgen` suite, in-memory loader/preflight/resolver controls, Atlas proof, scoped vet/build, `agentcontractgen check`, `git diff --check`, and a goal-backward code review.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A source node has one exact runtime schema, stream, action, operation, and command binding | live | A one-fact-at-a-time mutation returns the source operation ID plus JSON field path and leaves the output sentinel unchanged; valid bindings retain an ordered provenance row for every projected node. |
+| Source command identity cannot drift across same-route GraphQL operations | live | Two fixed GraphQL operations share `/graphql`; swapping one command's operation ID is refused at that command field rather than admitted by route equality. |
+| Staged execution/manifest/index identity is closed and deterministic | live | Two admissions of the same graph yield equal file bytes, digest/byte charge, manifest entry, index lookup, and provenance; adding/removing/changing only `rate_limits.json` changes/restores the closed identity. |
+| Runtime and synchronization admission reuse existing authority | live | Every implemented command is passed through `engine.Load` and `commandrunner.Preflight`; supplied source/destination/Atlas facts are accepted only when the real `syncplan.Resolve` result is executable. |
+
+### CP10 scope, Atlas, and lifecycle disposition
+
+- Authority: Firstmate instruction `122.msg` accepts CP09 and authorizes immediate serial CP10 in #4426/N2. It explicitly preserves CP09 boundaries: no connector work, schema-4 lock authoring, rendered-artifact/global-output publication, provider I/O, credential path, publication algorithm, or source migration.
+- Foundation Atlas classification: **constrained_extension** of `authoring.source-lock-vnext.v1` through its declared canonical-descriptor, staged-generation, and proof seams. Reuse real runtime admission APIs; do not add a shared runtime foundation, connector-specific fallback, opaque wrapper, second reader, or copied encoder/resolver rule.
+- GSD lifecycle: `scripts/gsd sources` resolved `discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review`. The generated `discuss-phase` prompt is recorded and the remaining prompts will be fulfilled inline because the established phase lacks the adapter's required ROADMAP and the known doctor blocker remains `.gsd/prompts/issue-122-rebootstrap.md`. No compatible isolated worker/reviewer is authorized.
+- Required skills: `go-engineering`, `tdd`, `connector-lane-build-order`, and `connector-migration-exact-sha-review` are loaded. Repository-mandated `golang-how-to` is unavailable; it is not claimed. CodeGraph has no repository index and Go LSP is unavailable.
+
+### CP10 plan
+
+1. Retain the one strict decoder and CP09 graph. Add only an in-memory semantic staging value: rendered bytes, loaded bundle identity, manifest/index input, deterministic source-to-execution provenance, and optional supplied sync/Atlas admission facts.
+2. Bind source operation IDs to loaded execution identities, not route text: schemas by exact registry path, streams/actions/operations by their declared names, commands by normalized path and exact stream/write/operation target. Preserve arbitrary provider source facts raw; validate only their declared bindings without inventing or deleting facts.
+3. Use `engine.Load`, an in-memory `engine.New`, `commandrunner.Preflight`, `manifestindex.New`, `nativeset.ManifestSelections`, and `syncplan.Resolve` rather than local approximations. A source lock with only one endpoint must not synthesize a saved-sync counterpart; sync resolution receives explicit supplied endpoint and Atlas facts.
+4. Keep the staged set in memory. CP11 alone owns filesystem staging, activation, recovery, and global publication.
+
+### CP10 implementation status
+
+- `vNextStagedGeneration` retains the exact rendered byte set, loader identity, selected manifest/index entry, deterministic provenance, and only explicitly supplied sync results. It has no filesystem staging or activation path.
+- Semantic admission now uses the real in-memory `engine.Load`/`engine.New`, `engine.ResolveImplementedCommandBinding`, `commandrunner.Preflight`, shared generator executor selection, `manifestindex.New`, and `syncplan.Resolve`. It does not read a global generated manifest, connector credential, provider, or transport.
+- Exact parent-operation binding rejects a source command that crosses to a same-route GraphQL operation. Known source facts validate only their declared GraphQL/transport or unsupported-target counterpart; unknown fields stay raw. Declared `rate_limits.json` is accepted solely through the runtime loader and changes the staged identity.
+- Focused RED/GREEN and complete package results are recorded in `TDD-LEDGER.md`; pending cleanup verification, inline/manual `verify-work`, and code review are recorded only after observation.
