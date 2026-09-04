@@ -1495,6 +1495,106 @@ func TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary(t *t
 	}
 }
 
+func TestVNextGenerationPublisherRecoversInterruptedReplacedControlBeforeDecode(t *testing.T) {
+	tests := []struct {
+		name   string
+		target string
+		write  func(*vNextGenerationPublisher, *vNextPublicationOperation, vNextGenerationPointer) error
+	}{
+		{
+			name:   "CURRENT",
+			target: vNextPublicationCurrentFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeCurrentLocked(operation, pointer)
+			},
+		},
+		{
+			name:   "JOURNAL",
+			target: vNextPublicationJournalFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+			if err != nil {
+				t.Fatal(err)
+			}
+			targetPath := filepath.Join(root, "acme", test.target)
+			if test.target == vNextPublicationJournalFile {
+				payload, err := vNextPublicationJSON(vNextGenerationJournal{New: pointer, State: "prepared"})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(targetPath, payload, 0o600); err != nil {
+					t.Fatal(err)
+				}
+			}
+
+			crash := errors.New("injected crash after substituted control install")
+			swapped := false
+			failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				switch point {
+				case vNextPublicationAfterFinalControlSourceIdentity:
+					if !swapped {
+						swapped = true
+						vNextReplacePublicationTemporaryForTest(t, root, []byte("interrupted substituted control"))
+					}
+				case vNextPublicationAfterControlRepairInstall:
+					return crash
+				}
+				return nil
+			}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
+			if err != nil {
+				t.Fatal(err)
+			}
+			err = test.write(failing, operation, pointer)
+			operation.close()
+			if !errors.Is(err, crash) {
+				t.Fatalf("write %s error = %v, want injected crash", test.target, err)
+			}
+			if !swapped {
+				t.Fatal("write did not replace the final private control source")
+			}
+			if got, readErr := os.ReadFile(targetPath); readErr != nil || string(got) != "interrupted substituted control" {
+				t.Fatalf("interrupted %s = %q, %v; want substituted control", test.target, got, readErr)
+			}
+			if _, statErr := os.Stat(filepath.Join(root, "acme", vNextPublicationControlRepairFile)); statErr != nil {
+				t.Fatalf("interrupted %s repair authority error = %v, want pending authority", test.target, statErr)
+			}
+
+			recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := recovered.Recover(context.Background()); err != nil {
+				t.Fatalf("Recover() after interrupted substituted %s error = %v", test.target, err)
+			}
+			replacementPath := vNextFindPublicationPrivatePayloadForTest(t, root, []byte("interrupted substituted control"))
+			if filepath.Base(replacementPath) != vNextPublicationControlReplacementMember {
+				t.Fatalf("interrupted %s replacement path = %q, want repair replacement member", test.target, replacementPath)
+			}
+			active, err := recovered.Open(context.Background())
+			if err != nil {
+				t.Fatalf("Open() after interrupted substituted %s error = %v", test.target, err)
+			}
+			defer active.Release()
+			assertVNextPublicationMarker(t, active, "active")
+		})
+	}
+}
+
 func vNextReplacePublicationTemporaryForTest(t *testing.T, root string, replacement []byte) (string, string) {
 	t.Helper()
 	connectorRoot := filepath.Join(root, "acme")

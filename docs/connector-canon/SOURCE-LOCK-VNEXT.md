@@ -198,17 +198,25 @@ with `unsupported`.
     rename is allowed before that journal is durable. A `CURRENT` or `JOURNAL`
     temporary is the `control` child of a retained private
     `.connectorgen-publication-*` directory directly below the connector root.
-    Before final installation, a verified hard-link backup of the prior control
-    is retained in a private quarantine. The source child is rechecked
+    Before final installation, retain and fsync a verified hard-link backup of
+    the prior control in a private quarantine, then atomically persist and fsync
+    a bounded strict typed `.connectorgen-control-repair.json` authority. That
+    authority binds the `CURRENT` or `JOURNAL` target, intended temporary,
+    optional prior, observed replacement, quarantine name/identity, and repair
+    phase. It is durable before exposure. The source child is rechecked
     immediately before the descriptor-relative transition; the installed inode
-    must then equal the retained temporary identity. A mismatch hard-links the
-    installed replacement into quarantine, rechecks it, and atomically restores
-    the prior control without deleting either object. Fsync the
-    `generations/` descriptor after the rename, then atomically replace
-    `CURRENT` with the new generation and integrity digest and fsync its
-    containing descriptor. `CURRENT`, the journal, `integrity.json` (including
-    each file entry), and the stage marker are bounded, no-follow, strict JSON
-    documents: duplicate members and trailing values are invalid.
+    must then equal the retained temporary identity. A mismatch retains and
+    fsyncs the installed replacement, records that identity, restores and fsyncs
+    the prior control (or the valid absent first-publication namespace), and
+    clears the repair authority only after that durable resolution. Recovery
+    reads a pending repair authority before it decodes ordinary `CURRENT` or
+    `JOURNAL`; it never treats a pending substituted public control as selection
+    authority. Fsync the `generations/` descriptor after the rename, then
+    atomically replace `CURRENT` with the new generation and integrity digest
+    and fsync its containing descriptor. `CURRENT`, the journal, repair
+    authority, `integrity.json` (including each file entry), and the stage
+    marker are bounded, no-follow, strict JSON documents: duplicate members and
+    trailing values are invalid.
 14. Revalidate the selected `CURRENT` generation, mark the journal committed,
     and clear it only after the active generation is complete. A failed active
     validation restores the old `CURRENT` (or removes it for a first publish)
@@ -223,15 +231,17 @@ with `unsupported`.
     reader holds that lease from reading `CURRENT` until it releases its handle,
     so an in-use old generation—and any unowned directory—remains intact.
 
-The `CURRENT` pointer is the only generation selection authority for a
-publication root. A reader observes either the prior complete generation or the
-new complete generation—never an index from one generation with an artifact
-from another. The prepared journal and typed stage marker form one recovery
-state machine: a crash before final rename removes the owned stage and restores
-the old selection; a crash after final rename but before `CURRENT` restores the
-old selection and removes the new generation; a valid `CURRENT` pointing at the
-new generation completes recovery. Recovery treats an interrupted stage as
-stale only after its durable ownership proof; it never accepts an incomplete,
+Once no typed control-repair authority remains, the `CURRENT` pointer is the
+only generation selection authority for a publication root. While a repair
+authority is pending, recovery resolves it before interpreting either public
+control. A reader observes either the prior complete generation or the new
+complete generation—never an index from one generation with an artifact from
+another. The prepared journal and typed stage marker form one recovery state
+machine: a crash before final rename removes the owned stage and restores the
+old selection; a crash after final rename but before `CURRENT` restores the old
+selection and removes the new generation; a valid `CURRENT` pointing at the new
+generation completes recovery. Recovery treats an interrupted stage as stale
+only after its durable ownership proof; it never accepts an incomplete,
 renamed, self-consistent, symlinked, or otherwise non-exact tree. Optional files
 are members of the closed set: a generation that retains an optional file absent
 from the candidate fails validation rather than silently inheriting it.

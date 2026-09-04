@@ -807,3 +807,29 @@
 - **F1 RED:** `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary$'` failed for both `CURRENT` and `JOURNAL`: after the new final-source-validation barrier swapped `control`, the predecessor installed `"final unrelated replacement"` over the prior control.
 - **F1 GREEN:** a pre-transition verified hard-link backup holds the prior control in a private quarantine. The final barrier now precedes the namespace installation, which verifies the installed inode. A mismatched installed replacement is hard-linked into quarantine before an atomic prior-control restore; the test proves prior bytes and inode, original temporary, and quarantined replacement for both controls.
 - **F4 GREEN:** only the F1 source-lock-vNext guarantee/mapping changed to `TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary`; the focused old/new control, durable-cut, and Atlas selector suite passed in 5.657s.
+
+## CP11 durable F1 repair continuation — Firstmate instruction 134
+
+## Task Delivery Header
+
+- Issue: Refs #4427 — transactional connector-generation publication repair; parent Refs #4325.
+- Base branch: `main` (existing draft PR #4294 target, verified through the GitHub API after normal push).
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main`.
+- Delivery: one normal non-force F1-only durable-repair candidate over immutable review subject `2f381433f95fb180b00eb258539fc71bf6256737`, API-confirmed on draft PR #4294, then a fresh Firstmate exact-SHA-review pause.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: make the final `CURRENT`/`JOURNAL` source-substitution repair a typed, fsynced, restart-recoverable control transaction; update only its dependent source-lock-vNext durable witness/canon. F2/F3 remain accepted and untouched; CP12 remains prohibited.
+- Verification: a bounded durable-cut matrix; test-only source/fault barriers and restart recovery for existing and no-prior controls; focused/full/race `cmd/connectorgen`; corpus, definition, docs/Atlas, static, contract, build, exact-diff, crash-cut self-review, and PR API gates.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A restart before repair resolution cannot accept a substituted public control | fake | Repository publication generations are temporary-root-only. An existing suite uses real local descriptor/fsync/rename state, injects a replacement and crash at each durable repair cut, restarts a new publisher, and asserts prior control or valid no-prior state—not the substitute. |
+| Recovery retains an observed replacement and durably restores a prior control | fake | The same temporary-root suite asserts the prior inode or valid absent state, the forensic replacement, cleared repair authority, and successful ordinary recovery after a fresh publisher process model. |
+| The Atlas durable guarantee names restart-capable proofs only | live | `TestFoundationAtlasSelectorsResolve` rejects an unregistered or non-mapped durable witness; its resolved mapping must name restart tests rather than the synchronous-only fault test. |
+
+### Discussed scope, protocol classification, and TDD order
+
+- Intake: `134.msg` and `data/cli-batch1-cp11-repair-r4-final-review-r1/report.md` were read in full. The exact review accepts F2/F3 and blocks only the F1 crash interval plus its F4 durable witness. No CP12, source-lock/rendered-output materialization, provider, credential, database, `.cache`, certification residue, reset, rebase, force push, or broader Atlas work is permitted.
+- Atlas classification: **constrained extension** of `authoring.source-lock-vnext.v1`, owner `cmd/connectorgen/vnext_publication.go`. The existing publication guarantee/owner/proof seam is extended with one typed control-repair protocol and its real restart witnesses; no new shared foundation or runtime route is introduced.
+- Lifecycle: `scripts/gsd doctor` retains only the known missing `issue-122-rebootstrap.md`; all five command sources resolved. `discuss-phase` and `plan-phase --tdd` prompts were generated and executed inline. Firstmate forbids role spawning and the adapter cannot provide an authorized compatible isolated worker/reviewer, so the remaining lifecycle uses the required inline/manual fallback without replacing the required external exact-SHA review.
+- Skills: `go-engineering`, advanced Go guidance, `diagnose`, `tdd`, and `connector-migration-exact-sha-review` were loaded. Required `golang-how-to` and specialist `golang-*` skills are unavailable in this runtime and are not claimed.
+- RED/GREEN vertical order: first record and exercise a restart after the pre-exposure authority cut; then the mismatched-install/replacement-retention/restoration cuts for each control; then no-prior paths; finally remap the Atlas guarantee only after every listed durable witness is green.

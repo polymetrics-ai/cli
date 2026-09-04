@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 37,
+  "catalog_revision": 38,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -15,7 +15,7 @@
       "layer": "source_lock_authoring",
       "status": "available",
       "kind": "generic",
-      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through operation-lifetime no-follow descriptor confinement, connector-directory inode locking, recomputed content addresses, prepared-journal recovery, atomic selection, private temporary controls, quarantine-bound cleanup, and lease-safe pruning.",
+      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through operation-lifetime no-follow descriptor confinement, connector-directory inode locking, recomputed content addresses, prepared-journal recovery, typed fsynced control-repair authority, atomic selection, private temporary controls, quarantine-bound cleanup, and lease-safe pruning.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [
@@ -34,6 +34,7 @@
           "cmd/connectorgen/vnext_admission.go",
           "cmd/connectorgen/vnext_lock_cli.go",
           "cmd/connectorgen/vnext_publication.go",
+          "cmd/connectorgen/vnext_publication_repair.go",
           "cmd/connectorgen/vnext_publication_dir.go",
           "internal/connectors/defs/defs.go",
           "internal/connectors/engine/bundle.go",
@@ -103,6 +104,10 @@
           {
             "file": "cmd/connectorgen/vnext_publication.go",
             "name": "vNextGenerationPublisher"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "(*vNextGenerationPublisher).recoverControlRepairLocked"
           },
           {
             "file": "cmd/connectorgen/vnext_publication_dir.go",
@@ -185,7 +190,7 @@
           "each published generation is a physically closed digest-addressed artifact tree with no inherited optional member; validation recomputes that address from the on-disk members",
           "a publisher-written and fsynced typed stage marker binds connector, stage, and content generation; recovery removes that owned stage, while unknown or malformed stages are preserved and refused",
           "connector and generation roots are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect publication reads or writes",
-          "CURRENT and JOURNAL atomic writes preserve the prior control across durable cuts; after final private-source validation, a late source replacement is verified at the installed inode, quarantined, and the prior control is restored while the original source and replacement remain intact",
+          "CURRENT and JOURNAL final-control transitions persist a typed fsynced repair authority before exposure, with a phase plus bound target, intended, optional prior, observed replacement, and quarantine identities; restart recovery reads that authority before ordinary control decoding, retains any substitute, syncs restoration of the prior or valid no-prior namespace, and clears authority only after durable resolution",
           "recovery removes a validated publisher-owned staged tree only after quarantining its descriptor-bound target; a late stage replacement preserves both original and replacement",
           "pruning removes a validated stale generation only after quarantining its descriptor-bound root; a late generation replacement preserves both original and replacement",
           "the generation lease that authorizes a prune is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object",
@@ -485,6 +490,21 @@
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRecoversInterruptedReplacedControlBeforeDecode"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRecoversEveryControlRepairDurableCut"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRecoversEveryRetainedReplacementCut"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
           "name": "TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup"
         },
         {
@@ -552,10 +572,10 @@
         },
         {
           "guarantees": [
-            "CURRENT and JOURNAL atomic writes preserve the prior control across durable cuts; after final private-source validation, a late source replacement is verified at the installed inode, quarantined, and the prior control is restored while the original source and replacement remain intact"
+            "CURRENT and JOURNAL final-control transitions persist a typed fsynced repair authority before exposure, with a phase plus bound target, intended, optional prior, observed replacement, and quarantine identities; restart recovery reads that authority before ordinary control decoding, retains any substitute, syncs restoration of the prior or valid no-prior namespace, and clears authority only after durable resolution"
           ],
-          "positive": "TestVNextGenerationPublisherRecoversEveryDurableCutPoint",
-          "negative": "TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary"
+          "positive": "TestVNextGenerationPublisherRecoversEveryControlRepairDurableCut",
+          "negative": "TestVNextGenerationPublisherRecoversInterruptedReplacedControlBeforeDecode"
         },
         {
           "guarantees": [
