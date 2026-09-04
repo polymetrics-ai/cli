@@ -220,3 +220,19 @@ The required role-separated discovery was requested through the worker task fan-
 - Reviewed candidate: `c761e7e6f2d042c7560ab0c520dc9aa182110e6e`.
 - Disposition: **PASS — zero blockers.** The candidate closes A1-04. Its exact reviewed content remains immutable; publish it only as a normal non-force update to the declared continuation parent `fm/cli-top100-declaration-batch-r1`.
 - Release boundary: no reset or rebase to `main`; `main` remains only PR #4294's eventual merge base. CP09 strict source parsing is authorized only after the normal parent update.
+
+## 2026-09-04 — CP09 strict source parsing local self-review
+
+- Review subject: the uncommitted #4426/N2 CP09 parser/graph, test, source-canon documentation, Atlas, and GSD evidence change based on normally published parent `988dd16c3d206a28d3e7b16f8a0d805c4163f7ca`.
+- Workflow: `scripts/gsd prompt execute-phase`, `verify-work`, and `code-review` were resolved and completed inline. The configured runtime cannot supply the canonical isolated GSD worker/reviewer, so no counterfeit second reviewer was spawned; the manual fallback is recorded in the phase evidence.
+
+| Lens | Disposition |
+| --- | --- |
+| Decoder and publication boundary | Pass. `decodeStrictJSON` remains the one duplicate/trailing/unknown-field decoder. Graph construction and `engine.Load` complete before `runLockRender` reaches a write; sentinel tests prove refusal preserves existing output. |
+| Role semantics | Pass after review correction. CP09 enforces only structural lane compatibility: record→matching stream, request→write or direct operation, response→stream or direct operation. The initially considered source-route comparison and direct-operation schema rejection were removed because they are CP10 semantic admission, not parser work; the direct-role regression now protects that boundary. |
+| Determinism and identity | Pass. Same-rank lane/command rendering orders by immutable source identity. Equivalent operation ordering produces equal execution bytes and graph digest while graph-retained provider, CLI, and operation facts remain absent from execution identity. |
+| In-memory validation safety | Pass. The read-only virtual filesystem carries rendered byte slices into `engine.Load`; it invokes no connector construction, credential, transport, resolver, preflight, provider request, or filesystem publication. Every committed schema-4 lock builds successfully through that path. |
+| Documentation and Atlas | Pass. `authoring.source-lock-vnext.v1` revision 30 names the graph owner, constraints, non-goal, and proofs; `SOURCE-LOCK-VNEXT.md` describes structural role placement without overstating CP10 joins. Catalog schema/unique-ID, Atlas selector, and docs checks pass. |
+| Tests and static gates | Pass. Focused rejection/admission/determinism/corpus controls, full `cmd/connectorgen`, reference check-only renders, 553-definition validation, vet, build, agent contract, docs check, and `git diff --check` pass. |
+
+- Findings: none after the structural-role scope correction. Do not start CP10, alter source locks/rendered artifacts, or publish before processing the inbox/current-state gate.

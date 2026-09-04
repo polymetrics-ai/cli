@@ -323,3 +323,34 @@
 - GREEN reserves `reservedEntries` under the existing store mutex at distinct-flight admission, includes it in the entry-capacity eviction/refusal loop, and releases it in the matching terminal load path beside the byte charge. Last-waiter cancellation still cancels the loader but cannot release capacity before that terminal path.
 - The exact barrier regression, full manifeststore race suite, affected identity/index/registry suites, scoped vet, Atlas JSON/selector proof, CLI build, and agent-contract check are green. No source lock, rendered execution JSON, rate, connector, factory, App, or CLI behavior changed.
 - Independent exact-SHA review PASS: Firstmate instruction `120.msg` accepts `c761e7e6f2d042c7560ab0c520dc9aa182110e6e` with zero blockers and closes A1-04. Preserve that candidate; normal non-force publication to `fm/cli-top100-declaration-batch-r1` is authorized. CP09 starts only after this parent update, without reset or rebase to `main`.
+
+## CP09 — N2 strict source parsing and canonical graph
+
+## Task Delivery Header
+
+- Issue: Refs #4426 — N2 semantic source-lock admission; parent Refs #4325.
+- Base branch: `fm/cli-top100-declaration-batch-r1` at `988dd16c3d206a28d3e7b16f8a0d805c4163f7ca`.
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through existing draft PR #4294.
+- Delivery: one ordinary non-force strict-parser green checkpoint published to the declared parent after focused verification and code review; CP10 semantic admission remains separate and unstarted.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: extend the sole schema-4 source-lock decoder into one strict typed canonical source graph. It must reject trailing roots, duplicate members, unknown execution fields, wrong schema roles, invalid encoders, alias collisions, and missing structural bindings before any rendered-file replacement; preserve every valid source identity and deterministic render bytes under irrelevant input ordering.
+- Verification: parser/graph RED-GREEN tests with no-write sentinels; deterministic equivalent-lock render comparison; affected `cmd/connectorgen` suite, source-lock validation/check-only render, Atlas proof, scoped vet/build, `agentcontractgen check`, `git diff --check`, and a goal-backward code review.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Non-canonical and structurally invalid source locks are refused before output replacement | live | Table-driven decoder/render tests preserve a sentinel generated file after each rejected trailing, duplicate, unknown, role, encoder, alias, or binding case. |
+| A valid lock becomes one typed canonical graph without losing source identity | live | Equivalent valid input orderings yield canonical descriptors and rendered closed sets with equal bytes and retain every operation/source identifier. |
+| CP09 keeps the execution boundary closed | live | Check-only render/validation uses the source decoder without provider I/O or a runtime executor; no source lock or rendered execution artifact is published by this checkpoint. |
+
+### CP09 scope, Atlas, and lifecycle disposition
+
+- Authority: Firstmate instruction `120.msg`; A1-04 exact review PASS is published at the declared parent head above. CP09 is the first half of #4426 only; CP10 owns source-to-execution/resolver/preflight semantic admission.
+- Foundation Atlas classification: **constrained_extension** of `authoring.source-lock-vnext.v1`, through its declared canonical-descriptor and rendering seam. Its owner, contract guarantee, constraints, and proof list must be maintained in this change if the canonical graph contract changes; no new shared runtime foundation, runtime source-lock reader, connector branch, executor, provider source fetch/re-pin, or generated-file publication is allowed.
+- GSD lifecycle: `scripts/gsd doctor` has the recorded repository blocker for missing `.gsd/prompts/issue-122-rebootstrap.md`; resolve the required commands and run the documented inline/manual fallback in order (`discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, `code-review`). No compatible isolated worker is authorized by the canonical contract.
+- Required skills: `go-engineering`, `tdd`, and `connector-lane-build-order` are loaded. The repository-mandated `golang-how-to` skill is unavailable in this runtime; record that fact rather than claiming its use. CodeGraph has no repository index and Go LSP is unavailable.
+
+### CP09 implementation status
+
+- The existing `decodeStrictJSON` remains the sole decoder. Canonicalization now retains an authoring-only typed graph, validates typed execution nodes and source identity shapes, verifies structural role placement, enforces normalized command alias uniqueness, and invokes the existing loader against a read-only in-memory rendered view before a renderer can replace output.
+- Structural-only boundary: request and response references may legitimately belong to a direct operation; only record references require the stream's exact schema. CP09 does not compare provider citation routes or invent semantic source-to-execution joins; those remain CP10 work.
+- Atlas and canonical source documentation are updated in the same change. The complete `cmd/connectorgen` package, all-lock graph corpus, three CLI check-only renders, 553-definition validation, catalog/docs checks, vet, CLI build, and agent-contract check are green; exact commands/results are recorded in `TDD-LEDGER.md` and `VERIFICATION.md`.

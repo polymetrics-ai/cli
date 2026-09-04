@@ -23,3 +23,20 @@ Ranked diagnosis record:
 3. Same-key joining must remain unchanged. Prediction: the existing concurrent same-identity test still invokes one loader after count reservation is added.
 
 The regression will use the existing package-private store state only to assert the bounded resource invariant; its acceptance behavior is distinct-identity admission/rejection/retry. No public debug API or capacity knob is added.
+
+## 2026-09-04 CP09 strict source parsing decision record
+
+Firstmate instruction `120.msg` leaves no product choice open: after recording and normally publishing the A1-04 exact-SHA PASS, begin CP09 as the narrow first #4426 checkpoint. The existing parent head is `988dd16c3d206a28d3e7b16f8a0d805c4163f7ca`; `main` remains only the eventual PR merge base.
+
+Resolved scope:
+
+1. Reuse and extend the sole `decodeVNextSourceLock` → canonical-descriptor route. A second parser, runtime reader, provider call, re-pin, generated-file publication, executor construction, or connector migration is out of scope.
+2. Promote raw execution fragments into a typed canonical graph sufficiently to reject unknown execution fields, role mismatches, invalid encoders, alias collisions, and missing structural bindings before render. CP10 alone will join that valid graph to the S1A resolver and runtime preflight.
+3. Canonicalize irrelevant object/list ordering without discarding source identities; a semantically equivalent valid lock must render the same closed byte set.
+4. The Atlas extension stays authoring-only. Its owner, guarantees, constraints, and proof list change in the same commit only if this graph contract changes.
+
+Ranked hypotheses to test before production edits:
+
+1. Existing `decodeStrictJSON` already handles one root and duplicate JSON tokens but `json.RawMessage` lets unknown nested execution fields pass. A no-write sentinel should currently survive only because the malformed fragment is accepted or fails later.
+2. `canonicalizeVNextSourceLock` verifies referenced schema existence but does not verify schema role, encoder vocabulary, command aliases, or all required structural cross-references. A compact in-memory lock should expose each admission gap without a provider or runtime executor.
+3. Existing map serialization sorts object keys, but operation/command input order can still influence output. Equivalent deliberately reordered locks should reveal whether canonical ordering is missing while preserving IDs.

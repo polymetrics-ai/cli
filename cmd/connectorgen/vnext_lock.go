@@ -22,8 +22,8 @@ var vNextLaneNames = []string{
 	"sync_transport",
 }
 
-// vNextSourceLock is immutable authoring input. ProviderEvidence is deliberately
-// absent from canonicalDescriptor and therefore cannot affect runtime output.
+// vNextSourceLock is immutable authoring input. Provider evidence remains
+// authoring-only in the canonical graph and cannot affect runtime output.
 // Execution facts are authored once per operation; commands and lanes project
 // into the engine's existing execution JSON files.
 type vNextSourceLock struct {
@@ -76,6 +76,7 @@ type vNextCanonicalDescriptor struct {
 	Operations   []vNextOperationDescriptor
 	CLI          json.RawMessage
 	Execution    map[string]json.RawMessage
+	Graph        vNextCanonicalGraph
 }
 
 func decodeVNextSourceLock(raw []byte) (vNextSourceLock, error) {
@@ -202,7 +203,12 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 			return vNextCanonicalDescriptor{}, fmt.Errorf("source lock lane %q is %s but its authored execution content says implemented=%t", lane, state, observedLanes[lane])
 		}
 	}
+	declaredLanes := make([]string, 0, len(lock.Lanes))
 	for lane := range lock.Lanes {
+		declaredLanes = append(declaredLanes, lane)
+	}
+	sort.Strings(declaredLanes)
+	for _, lane := range declaredLanes {
 		if !slicesContains(vNextLaneNames, lane) {
 			return vNextCanonicalDescriptor{}, fmt.Errorf("source lock declares unknown lane %q", lane)
 		}
@@ -218,8 +224,14 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 			return vNextCanonicalDescriptor{}, err
 		}
 	}
+	schemaNames := make([]string, 0, len(lock.Schemas))
+	for name := range lock.Schemas {
+		schemaNames = append(schemaNames, name)
+	}
+	sort.Strings(schemaNames)
 	schemas := make(map[string]json.RawMessage, len(lock.Schemas))
-	for name, schema := range lock.Schemas {
+	for _, name := range schemaNames {
+		schema := lock.Schemas[name]
 		if !validVNextSchemaPath(name) {
 			return vNextCanonicalDescriptor{}, fmt.Errorf("shared schema path %q is invalid", name)
 		}
@@ -242,24 +254,37 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		if len(descriptor.Stream) == 0 && len(descriptor.Write) == 0 && len(descriptor.Operation) == 0 && len(descriptor.Commands) == 0 {
 			return vNextCanonicalDescriptor{}, fmt.Errorf("operation %q has no execution lane", descriptor.ID)
 		}
-		for role, reference := range map[string]string{
-			"request": descriptor.SchemaRefs.Request, "response": descriptor.SchemaRefs.Response, "record": descriptor.SchemaRefs.Record,
+		for _, schemaRef := range []struct {
+			role      string
+			reference string
+		}{
+			{role: "request", reference: descriptor.SchemaRefs.Request},
+			{role: "response", reference: descriptor.SchemaRefs.Response},
+			{role: "record", reference: descriptor.SchemaRefs.Record},
 		} {
-			if reference == "" {
+			if schemaRef.reference == "" {
 				continue
 			}
-			if _, ok := schemas[reference]; !ok {
-				return vNextCanonicalDescriptor{}, fmt.Errorf("operation %q %s schema reference %q is missing", descriptor.ID, role, reference)
+			if _, ok := schemas[schemaRef.reference]; !ok {
+				return vNextCanonicalDescriptor{}, fmt.Errorf("operation %q %s schema reference %q is missing", descriptor.ID, schemaRef.role, schemaRef.reference)
 			}
 		}
-		for lane, raw := range map[string]json.RawMessage{"stream": descriptor.Stream, "write": descriptor.Write, "operation": descriptor.Operation} {
-			if len(raw) != 0 {
-				if err := validateRawJSONObject("operation "+descriptor.ID+" "+lane, raw); err != nil {
-					return vNextCanonicalDescriptor{}, err
-				}
-				if err := rejectVNextLegacyExecutionEvidence("operation "+descriptor.ID+" "+lane, raw); err != nil {
-					return vNextCanonicalDescriptor{}, err
-				}
+		for _, lane := range []struct {
+			name string
+			raw  json.RawMessage
+		}{
+			{name: "stream", raw: descriptor.Stream},
+			{name: "write", raw: descriptor.Write},
+			{name: "operation", raw: descriptor.Operation},
+		} {
+			if len(lane.raw) == 0 {
+				continue
+			}
+			if err := validateRawJSONObject("operation "+descriptor.ID+" "+lane.name, lane.raw); err != nil {
+				return vNextCanonicalDescriptor{}, err
+			}
+			if err := rejectVNextLegacyExecutionEvidence("operation "+descriptor.ID+" "+lane.name, lane.raw); err != nil {
+				return vNextCanonicalDescriptor{}, err
 			}
 		}
 		for commandIndex := range descriptor.Commands {
@@ -276,8 +301,14 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		descriptor.Write = cloneRawJSON(descriptor.Write)
 		descriptor.Operation = cloneRawJSON(descriptor.Operation)
 	}
+	executionNames := make([]string, 0, len(lock.Execution))
+	for name := range lock.Execution {
+		executionNames = append(executionNames, name)
+	}
+	sort.Strings(executionNames)
 	execution := make(map[string]json.RawMessage, len(lock.Execution))
-	for name, raw := range lock.Execution {
+	for _, name := range executionNames {
+		raw := lock.Execution[name]
 		if !isVNextOptionalExecutionFile(name) {
 			return vNextCanonicalDescriptor{}, fmt.Errorf("unsupported execution artifact %q", name)
 		}
@@ -289,6 +320,7 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		}
 		execution[name] = cloneRawJSON(raw)
 	}
+	authoredCLI := cloneRawJSON(lock.CLI)
 	if len(lock.CLI) != 0 {
 		if err := validateRawJSONObject("cli", lock.CLI); err != nil {
 			return vNextCanonicalDescriptor{}, err
@@ -303,10 +335,19 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		delete(cli, "destination_cli")
 		lock.CLI, _ = json.Marshal(cli)
 	}
-	return vNextCanonicalDescriptor{
+	descriptor := vNextCanonicalDescriptor{
 		Connector: lock.Connector, Metadata: cloneRawJSON(lock.Metadata), ConfigSchema: cloneRawJSON(lock.ConfigSchema), HTTP: cloneRawJSON(lock.HTTP),
 		Schemas: schemas, Operations: operations, CLI: cloneRawJSON(lock.CLI), Execution: execution,
-	}, nil
+	}
+	graph, err := buildVNextCanonicalGraph(descriptor, lock.ProviderEvidence, authoredCLI)
+	if err != nil {
+		return vNextCanonicalDescriptor{}, err
+	}
+	descriptor.Graph = graph
+	if err := validateVNextCanonicalGraph(&descriptor); err != nil {
+		return vNextCanonicalDescriptor{}, err
+	}
+	return descriptor, nil
 }
 
 func renderVNextExecutionBundle(descriptor vNextCanonicalDescriptor) (map[string][]byte, error) {
@@ -347,12 +388,32 @@ func renderVNextExecutionBundle(descriptor vNextCanonicalDescriptor) (map[string
 			return nil, err
 		}
 	}
-	commands := make([]vNextCommandDescriptor, 0)
+	type commandItem struct {
+		order    int
+		sourceID string
+		path     string
+		raw      json.RawMessage
+	}
+	commands := make([]commandItem, 0)
 	for _, operation := range descriptor.Operations {
-		commands = append(commands, operation.Commands...)
+		for _, command := range operation.Commands {
+			commandPath, err := vNextRawString(command.Command, "path")
+			if err != nil {
+				return nil, fmt.Errorf("operation %q command path: %w", operation.ID, err)
+			}
+			commands = append(commands, commandItem{order: command.Order, sourceID: operation.ID, path: vNextCommandAlias(commandPath), raw: command.Command})
+		}
 	}
 	if len(descriptor.CLI) != 0 || len(commands) != 0 {
-		sort.SliceStable(commands, func(left, right int) bool { return commands[left].Order < commands[right].Order })
+		sort.Slice(commands, func(left, right int) bool {
+			if commands[left].order != commands[right].order {
+				return commands[left].order < commands[right].order
+			}
+			if commands[left].path != commands[right].path {
+				return commands[left].path < commands[right].path
+			}
+			return commands[left].sourceID < commands[right].sourceID
+		})
 		var cli map[string]any
 		if len(descriptor.CLI) != 0 {
 			if err := json.Unmarshal(descriptor.CLI, &cli); err != nil {
@@ -363,7 +424,7 @@ func renderVNextExecutionBundle(descriptor vNextCanonicalDescriptor) (map[string
 		}
 		commandValues := make([]any, 0, len(commands))
 		for _, command := range commands {
-			commandValues = append(commandValues, rawJSONValue(command.Command))
+			commandValues = append(commandValues, rawJSONValue(command.raw))
 		}
 		cli["commands"] = commandValues
 		if outputs["cli_surface.json"], err = renderJSONObject(cli); err != nil {
@@ -408,17 +469,23 @@ func slicesContains(values []string, candidate string) bool {
 
 func orderedVNextLane(operations []vNextOperationDescriptor, lane func(vNextOperationDescriptor) (int, json.RawMessage)) []json.RawMessage {
 	type item struct {
-		order int
-		raw   json.RawMessage
+		order    int
+		sourceID string
+		raw      json.RawMessage
 	}
 	items := make([]item, 0, len(operations))
 	for _, operation := range operations {
 		order, raw := lane(operation)
 		if len(raw) != 0 {
-			items = append(items, item{order: order, raw: raw})
+			items = append(items, item{order: order, sourceID: operation.ID, raw: raw})
 		}
 	}
-	sort.SliceStable(items, func(left, right int) bool { return items[left].order < items[right].order })
+	sort.Slice(items, func(left, right int) bool {
+		if items[left].order != items[right].order {
+			return items[left].order < items[right].order
+		}
+		return items[left].sourceID < items[right].sourceID
+	})
 	out := make([]json.RawMessage, 0, len(items))
 	for _, item := range items {
 		out = append(out, item.raw)

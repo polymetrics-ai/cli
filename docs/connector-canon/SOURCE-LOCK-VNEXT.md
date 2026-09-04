@@ -82,6 +82,13 @@ Writes use closed request schemas. Direct operations may use request and
 response references appropriate to their REST, GraphQL, multipart, or binary
 encoder contract.
 
+Canonicalization rejects structurally impossible role placement before any
+rendered-file replacement: a record reference requires a stream whose schema
+matches it; a request reference requires a write or direct operation; and a
+response reference requires a stream or direct operation. It does not infer or
+validate semantic source-to-execution joins; that is a separate admission
+phase.
+
 The renderer copies each shared schema byte-deterministically to the same path
 in the execution bundle. Shared references prevent command, stream, write, and
 operation variants from silently drifting into incompatible shapes.

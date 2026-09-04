@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 29,
+  "catalog_revision": 30,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -15,7 +15,7 @@
       "layer": "source_lock_authoring",
       "status": "available",
       "kind": "generic",
-      "summary": "Validates immutable schema-4 source locks, canonicalizes per-operation execution descriptors with shared schema references, and deterministically renders the execution JSON consumed by the existing runtime.",
+      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph that retains authoring identities, validates the generated execution shape in memory, and deterministically renders the execution JSON consumed by the existing runtime.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [
@@ -25,6 +25,7 @@
         ],
         "files": [
           "cmd/connectorgen/vnext_lock.go",
+          "cmd/connectorgen/vnext_graph.go",
           "cmd/connectorgen/vnext_lock_cli.go",
           "internal/connectors/defs/defs.go",
           "internal/connectors/engine/bundle.go",
@@ -47,6 +48,18 @@
           {
             "file": "cmd/connectorgen/vnext_lock.go",
             "name": "decodeVNextSourceLock"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "vNextCanonicalGraph"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "buildVNextCanonicalGraph"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "validateVNextCanonicalGraph"
           },
           {
             "file": "cmd/connectorgen/vnext_lock_cli.go",
@@ -107,6 +120,8 @@
         "guarantees": [
           "all seven lanes are explicit",
           "provider evidence is absent from the canonical runtime descriptor",
+          "the authoring graph retains provider evidence, CLI source facts, and operation source identities without projecting them to runtime JSON",
+          "execution-shape and binding validation occurs before output replacement",
           "rendering is deterministic",
           "source locks are one complete JSON document with no duplicate object members before canonicalization or file replacement",
           "execution objects reject authoring-evidence fields"
@@ -127,8 +142,10 @@
         "notes": "The schema-4 lock is the sole mutable authoring input; rendered JSON is the sole runtime input."
       },
       "constraints": [
-        "Unknown root fields fail decoding.",
+        "Unknown root and execution fields fail strict decoding.",
         "Trailing JSON values and duplicate object members fail before canonicalization or generated-file replacement.",
+        "Typed graph validation rejects invalid encoders, wrong schema roles, missing bindings, and normalized command alias collisions before output replacement.",
+        "Static execution validation reads only an in-memory rendered view and never constructs a runtime executor, credential, transport, resolver, or provider operation.",
         "Lane state must match authored execution content.",
         "Schema references must resolve to safe registry paths.",
         "Runtime cannot read source.lock.json."
@@ -136,7 +153,8 @@
       "non_goals": [
         "Executing provider I/O.",
         "Granting runtime capability from citations.",
-        "Providing a second runtime or diagnostic reader."
+        "Providing a second runtime or diagnostic reader.",
+        "Source-to-execution semantic joins or runtime binding construction."
       ],
       "consumer_examples": [
         {
@@ -207,6 +225,26 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/s1a_contract_matrix_test.go",
           "name": "TestS1ASourceParentContractMatrixMatchesExecution"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestRunLockRenderRejectsInvalidCanonicalGraphBeforeWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestVNextCanonicalGraphIgnoresIrrelevantOperationOrdering"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestEverySourceLockBuildsCanonicalGraph"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestVNextCanonicalGraphAllowsDirectOperationSchemaRoles"
         }
       ],
       "known_gap_refs": [

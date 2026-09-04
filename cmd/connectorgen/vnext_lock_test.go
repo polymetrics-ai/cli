@@ -84,6 +84,42 @@ func TestVNextSourceLockDeterministicallyRendersReferenceConnectors(t *testing.T
 	}
 }
 
+// TestEverySourceLockBuildsCanonicalGraph proves that every committed schema-4
+// authoring input is accepted by the strict, no-I/O canonical graph builder.
+func TestEverySourceLockBuildsCanonicalGraph(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("repoRoot(): %v", err)
+	}
+	defsRoot := filepath.Join(root, "internal", "connectors", "defs")
+	entries, err := os.ReadDir(defsRoot)
+	if err != nil {
+		t.Fatalf("ReadDir(%s): %v", defsRoot, err)
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		connector := entry.Name()
+		lockPath := filepath.Join(defsRoot, connector, "source.lock.json")
+		if _, err := os.Stat(lockPath); os.IsNotExist(err) {
+			continue
+		} else if err != nil {
+			t.Fatalf("Stat(%s): %v", lockPath, err)
+		}
+		t.Run(connector, func(t *testing.T) {
+			lock := readVNextSourceLockForTest(t, lockPath)
+			canonical, err := canonicalizeVNextSourceLock(lock)
+			if err != nil {
+				t.Fatalf("canonicalizeVNextSourceLock(%s): %v", connector, err)
+			}
+			if canonical.Graph.Identity.Digest == "" {
+				t.Fatal("canonical graph did not retain its loaded execution identity")
+			}
+		})
+	}
+}
+
 // This negative assertion keeps the closed-set comparison honest: a rendered
 // bundle cannot silently admit a known execution artifact that the lock did not
 // render. The production publication defect itself remains separately frozen
@@ -215,7 +251,7 @@ func TestDecodeVNextSourceLockRejectsTrailingAndDuplicateJSON(t *testing.T) {
 	}{
 		{name: "trailing document", raw: append(append([]byte(nil), raw...), []byte("\n{}")...)},
 		{name: "duplicate root member", raw: bytes.Replace(raw, []byte(`"connector":"acme"`), []byte(`"connector":"acme","connector":"other"`), 1)},
-		{name: "duplicate nested member", raw: bytes.Replace(raw, []byte(`"metadata":{"name":"acme"}`), []byte(`"metadata":{"name":"acme","name":"other"}`), 1)},
+		{name: "duplicate nested member", raw: bytes.Replace(raw, []byte(`"metadata":{"name":"acme","display_name":"Acme"`), []byte(`"metadata":{"name":"acme","name":"other","display_name":"Acme"`), 1)},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -255,6 +291,186 @@ func TestRunLockRenderRejectsNonCanonicalSourceBeforeWriting(t *testing.T) {
 	if string(got) != sentinel {
 		t.Fatalf("lock render overwrote output before rejecting non-canonical source: %q", got)
 	}
+}
+
+func TestRunLockRenderRejectsInvalidCanonicalGraphBeforeWriting(t *testing.T) {
+	tests := []struct {
+		name     string
+		wantPath string
+		mutate   func(*vNextSourceLock)
+	}{
+		{
+			name:     "unknown stream execution field",
+			wantPath: "/operations/0/stream",
+			mutate: func(lock *vNextSourceLock) {
+				lock.Operations[0].Stream = replaceVNextRaw(t, lock.Operations[0].Stream, `"schema":"schemas/widgets.json"`, `"schema":"schemas/widgets.json","unknown_execution":true`)
+			},
+		},
+		{
+			name:     "wrong request schema role",
+			wantPath: "/operations/0/schema_refs/request",
+			mutate: func(lock *vNextSourceLock) {
+				lock.Operations[0].SchemaRefs.Request = "schemas/widgets.json"
+			},
+		},
+		{
+			name:     "unsupported stream body encoder",
+			wantPath: "/operations/0/stream",
+			mutate: func(lock *vNextSourceLock) {
+				lock.Operations[0].Stream = replaceVNextRaw(t, lock.Operations[0].Stream, `"path":"/widgets"`, `"path":"/widgets","body_type":"opaque"`)
+			},
+		},
+		{
+			name:     "normalized command alias collision",
+			wantPath: "/operations/0/commands/1/path",
+			mutate: func(lock *vNextSourceLock) {
+				lock.Lanes["direct_read"] = "implemented"
+				lock.Operations[0].Operation = json.RawMessage(`{"id":"widgets.list","kind":"rest_read","summary":"List widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/widgets","max_bytes":1024,"response":{"success_statuses":["200"]},"parameters":[]}}`)
+				lock.Operations[0].Commands = []vNextCommandDescriptor{
+					{Order: 0, Command: json.RawMessage(`{"path":"widgets list","summary":"List widgets","intent":"direct_read","availability":"implemented","operation":"widgets.list","flags":[]}`)},
+					{Order: 1, Command: json.RawMessage(`{"path":"widgets  list","summary":"Alias","intent":"direct_read","availability":"implemented","operation":"widgets.list","flags":[]}`)},
+				}
+				lock.CLI = json.RawMessage(`{"usage":"pm acme <command>","tagline":"Acme"}`)
+			},
+		},
+		{
+			name:     "missing record schema binding",
+			wantPath: "/operations/0/schema_refs/record",
+			mutate: func(lock *vNextSourceLock) {
+				lock.Schemas["schemas/other.json"] = json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"}},"x-primary-key":["id"]}`)
+				lock.Operations[0].Stream = replaceVNextRaw(t, lock.Operations[0].Stream, `"schema":"schemas/widgets.json"`, `"schema":"schemas/other.json"`)
+			},
+		},
+		{
+			name:     "non-object source identity",
+			wantPath: "/operations/0/source",
+			mutate: func(lock *vNextSourceLock) {
+				lock.Operations[0].Source = json.RawMessage(`["source-widgets"]`)
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			connectorRoot := filepath.Join(root, "acme")
+			if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+				t.Fatal(err)
+			}
+			lock := minimalVNextLockForTest()
+			test.mutate(&lock)
+			raw, err := json.Marshal(lock)
+			if err != nil {
+				t.Fatalf("marshal source lock: %v", err)
+			}
+			if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+				t.Fatal(err)
+			}
+			outputPath := filepath.Join(connectorRoot, "metadata.json")
+			const sentinel = "must not be replaced"
+			if err := os.WriteFile(outputPath, []byte(sentinel), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			var stdout, stderr bytes.Buffer
+			if code := runLockRender([]string{"lock-render", "acme", "--defs", root}, &stdout, &stderr); code != 1 {
+				t.Fatalf("runLockRender() = %d, want canonical-graph refusal; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(stderr.String(), test.wantPath) {
+				t.Fatalf("refusal %q lacks source path %q: %s", test.name, test.wantPath, stderr.String())
+			}
+			got, err := os.ReadFile(outputPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if string(got) != sentinel {
+				t.Fatalf("lock render replaced output after rejecting %s: %q", test.name, got)
+			}
+		})
+	}
+}
+
+func TestVNextCanonicalGraphAllowsDirectOperationSchemaRoles(t *testing.T) {
+	lock := minimalVNextLockForTest()
+	lock.Lanes["etl"] = "unsupported"
+	lock.Lanes["direct_read"] = "implemented"
+	lock.Schemas["schemas/widgets-request.json"] = json.RawMessage(`{"type":"object","properties":{"limit":{"type":"integer"}}}`)
+	lock.Schemas["schemas/widgets-response.json"] = json.RawMessage(`{"type":"object","properties":{"data":{"type":"array"}}}`)
+	lock.Operations = []vNextOperationDescriptor{{
+		ID:         "operation:widgets.get",
+		SchemaRefs: vNextSchemaReferences{Request: "schemas/widgets-request.json", Response: "schemas/widgets-response.json"},
+		Operation:  json.RawMessage(`{"id":"widgets.get","kind":"rest_read","summary":"Get widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/widgets","max_bytes":1024,"response":{"success_statuses":["200"]},"parameters":[]}}`),
+		Commands: []vNextCommandDescriptor{{
+			Order:   0,
+			Command: json.RawMessage(`{"path":"widgets get","summary":"Get widgets","intent":"direct_read","availability":"implemented","operation":"widgets.get","flags":[]}`),
+		}},
+	}}
+	lock.CLI = json.RawMessage(`{"usage":"pm acme <command>","tagline":"Acme"}`)
+
+	if _, err := canonicalizeVNextSourceLock(lock); err != nil {
+		t.Fatalf("canonicalizeVNextSourceLock() rejected direct operation schema roles: %v", err)
+	}
+}
+
+func TestVNextCanonicalGraphIgnoresIrrelevantOperationOrdering(t *testing.T) {
+	first := minimalVNextLockForTest()
+	first.Operations[0].Source = json.RawMessage(`{"provider_operation":"widgets.list","reference":"https://provider.example/widgets"}`)
+	first.Operations[0].StreamOrder = 0
+	first.Schemas["schemas/gadgets.json"] = json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"}},"x-primary-key":["id"]}`)
+	first.Operations = append(first.Operations, vNextOperationDescriptor{
+		ID:          "stream:gadgets",
+		Source:      json.RawMessage(`{"provider_operation":"gadgets.list","reference":"https://provider.example/gadgets"}`),
+		StreamOrder: 0,
+		SchemaRefs:  vNextSchemaReferences{Record: "schemas/gadgets.json"},
+		Stream:      json.RawMessage(`{"name":"gadgets","path":"/gadgets","records":{"path":"data"},"schema":"schemas/gadgets.json"}`),
+	})
+	second := first
+	second.Operations = []vNextOperationDescriptor{first.Operations[1], first.Operations[0]}
+
+	firstCanonical, err := canonicalizeVNextSourceLock(first)
+	if err != nil {
+		t.Fatalf("canonicalize first source lock: %v", err)
+	}
+	secondCanonical, err := canonicalizeVNextSourceLock(second)
+	if err != nil {
+		t.Fatalf("canonicalize reordered source lock: %v", err)
+	}
+	firstOutput, err := renderVNextExecutionBundle(firstCanonical)
+	if err != nil {
+		t.Fatalf("render first source lock: %v", err)
+	}
+	secondOutput, err := renderVNextExecutionBundle(secondCanonical)
+	if err != nil {
+		t.Fatalf("render reordered source lock: %v", err)
+	}
+	if !executionBundlesEqual(firstOutput, secondOutput) {
+		t.Fatalf("irrelevant source operation order changed rendered bytes:\nfirst=%s\nsecond=%s", firstOutput["streams.json"], secondOutput["streams.json"])
+	}
+	if firstCanonical.Graph.Identity.Digest == "" || firstCanonical.Graph.Identity.Digest != secondCanonical.Graph.Identity.Digest {
+		t.Fatalf("irrelevant source operation order changed graph digest: %q != %q", firstCanonical.Graph.Identity.Digest, secondCanonical.Graph.Identity.Digest)
+	}
+	seen := map[string]json.RawMessage{}
+	for _, operation := range firstCanonical.Graph.Operations {
+		seen[operation.ID] = operation.Source
+	}
+	for _, id := range []string{"stream:widgets", "stream:gadgets"} {
+		if _, exists := seen[id]; !exists {
+			t.Fatalf("canonical graph lost source identity %q", id)
+		}
+	}
+	if !sameJSON(seen["stream:widgets"], first.Operations[0].Source) {
+		t.Fatalf("canonical graph changed widgets source identity: %s", seen["stream:widgets"])
+	}
+	if !sameJSON(seen["stream:gadgets"], first.Operations[1].Source) {
+		t.Fatalf("canonical graph changed gadgets source identity: %s", seen["stream:gadgets"])
+	}
+}
+
+func replaceVNextRaw(t *testing.T, raw json.RawMessage, old, replacement string) json.RawMessage {
+	t.Helper()
+	updated := strings.Replace(string(raw), old, replacement, 1)
+	if updated == string(raw) {
+		t.Fatalf("source fixture did not contain %q", old)
+	}
+	return json.RawMessage(updated)
 }
 
 func readVNextSourceLockForTest(t *testing.T, lockPath string) vNextSourceLock {
@@ -415,6 +631,7 @@ func hasTestingTParameter(function *ast.FuncDecl) bool {
 func TestVNextSourceLockEvidenceCannotChangeExecution(t *testing.T) {
 	lock := minimalVNextLockForTest()
 	lock.CLI = json.RawMessage(`{"usage":"pm acme <command>","tagline":"Acme","source_cli":{"name":"acmectl","reference":"https://example.test/v1"}}`)
+	firstCLI := cloneRawJSON(lock.CLI)
 	first, err := canonicalizeVNextSourceLock(lock)
 	if err != nil {
 		t.Fatal(err)
@@ -435,6 +652,21 @@ func TestVNextSourceLockEvidenceCannotChangeExecution(t *testing.T) {
 	}
 	if !executionBundlesEqual(firstBundle, secondBundle) {
 		t.Fatal("provider evidence changed projected execution JSON")
+	}
+	if first.Graph.Identity.Digest == "" || first.Graph.Identity.Digest != second.Graph.Identity.Digest {
+		t.Fatalf("provider evidence changed graph execution digest: %q != %q", first.Graph.Identity.Digest, second.Graph.Identity.Digest)
+	}
+	if len(first.Graph.ProviderEvidence) != 0 {
+		t.Fatalf("canonical graph retained absent provider evidence: %s", first.Graph.ProviderEvidence)
+	}
+	if !sameJSON(second.Graph.ProviderEvidence, lock.ProviderEvidence) {
+		t.Fatalf("canonical graph did not retain provider evidence: %s", second.Graph.ProviderEvidence)
+	}
+	if !sameJSON(first.Graph.AuthoredCLI, firstCLI) {
+		t.Fatalf("canonical graph did not retain source CLI evidence: %s", first.Graph.AuthoredCLI)
+	}
+	if !sameJSON(second.Graph.AuthoredCLI, lock.CLI) {
+		t.Fatalf("canonical graph did not retain changed source CLI evidence: %s", second.Graph.AuthoredCLI)
 	}
 }
 
@@ -474,12 +706,14 @@ func minimalVNextLockForTest() vNextSourceLock {
 			"direct_read": "unsupported", "direct_write": "unsupported", "binary_download": "unsupported", "binary_upload": "unsupported",
 			"etl": "implemented", "reverse_etl": "unsupported", "sync_transport": "unsupported",
 		},
-		Metadata:     json.RawMessage(`{"name":"acme"}`),
-		ConfigSchema: json.RawMessage(`{"type":"object"}`),
-		HTTP:         json.RawMessage(`{"url":"https://api.acme.example"}`),
-		Schemas:      map[string]json.RawMessage{"schemas/widgets.json": json.RawMessage(`{"type":"object"}`)},
+		Metadata:     json.RawMessage(`{"name":"acme","display_name":"Acme","description":"Test connector","integration_type":"api","release_stage":"ga","capabilities":{"check":true,"read":true,"write":false,"query":false,"cdc":false,"dynamic_schema":false}}`),
+		ConfigSchema: json.RawMessage(`{"type":"object","properties":{}}`),
+		HTTP:         json.RawMessage(`{"url":"https://api.acme.example","headers":{},"auth":[],"pagination":{"type":"none"},"check":{"method":"GET","path":"/check"},"error_map":[]}`),
+		Schemas: map[string]json.RawMessage{
+			"schemas/widgets.json": json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"}},"x-primary-key":["id"]}`),
+		},
 		Operations: []vNextOperationDescriptor{{
-			ID: "stream:widgets", Stream: json.RawMessage(`{"name":"widgets","path":"/widgets","schema":"schemas/widgets.json"}`),
+			ID: "stream:widgets", Stream: json.RawMessage(`{"name":"widgets","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}`),
 			SchemaRefs: vNextSchemaReferences{Record: "schemas/widgets.json"},
 		}},
 	}
