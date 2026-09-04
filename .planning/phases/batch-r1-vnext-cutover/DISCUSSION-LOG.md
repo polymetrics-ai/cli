@@ -59,3 +59,20 @@ Ranked hypotheses to test before production edits:
 2. Rendering can produce correct runtime JSON while losing the immutable source-to-runtime correspondence needed by CP11. A staged provenance/index comparison should detect a missing, duplicate, cross-connector, or stale identity before any write.
 3. A rate declaration can be structurally rendered but omitted from identity/index data. Adding, changing, and removing only `rate_limits.json` should alter and restore the closed staged identity through the real loader, not a copied rate validator.
 4. A source-only transport declaration lacks the destination/foundation facts required by `syncplan.Resolve`. Synthesizing those facts would be a false executable claim; explicit supplied facts must be the only resolver input.
+
+## 2026-09-04 N2 boundary-review correction decision record
+
+Firstmate instruction `124.msg` accepts the independent N2 BLOCK as a closed three-defect correction set. No product or architecture choice remains; CP11 remains blocked.
+
+Resolved scope:
+
+1. Schema references are runtime claims, not inventory labels. Request and response references must resolve to the exact schema consumed by a loaded write, direct operation, or stream. A direct form with no typed runtime counterpart cannot retain that role as a provenance-only claim.
+2. The in-memory stage must match production selection. Reuse the closed generated hook factory and native selection authorities; GitHub's `hook/github.v1` is behavior-bearing and must be retained in both staged entry and in-memory engine construction.
+3. Canonical staged provenance represents the semantic descriptor, so it uses canonical source-ID order. Original operation positions remain error-only diagnostics and must not influence staged identity.
+4. Tests are hermetic local authoring tests: source-lock temp roots/no-write sentinels, in-memory loader/connector/preflight, and the generated production manifest entry. No provider, credential, global-output, or CP11 staging action is allowed.
+
+Ranked hypotheses to test before production edits:
+
+1. Replacing a request or response reference with a second valid registry schema leaves current admission green because it checks existence rather than the loaded consumer. Prediction: a sentinel `lock-render` test reaches the existing write/stream output unless semantic equivalence is added.
+2. GitHub's staged entry lacks its required extension because admission selects only native executors. Prediction: the staged entry differs from `manifestindex.GeneratedEntries()` at `Extension`, and supplying the real entry fails the current binding check.
+3. Reordering operations preserves bytes/digest but changes provenance because paths retain authored source indexes. Prediction: the existing CP09 reorder fixture has equal rendered bytes and different `Staged.Provenance`; using a canonical index only for provenance removes that difference without changing diagnostic paths.

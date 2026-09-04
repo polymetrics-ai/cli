@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 31,
+  "catalog_revision": 32,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -15,13 +15,14 @@
       "layer": "source_lock_authoring",
       "status": "available",
       "kind": "generic",
-      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits exact source-to-execution joins through the existing in-memory runtime loader/resolver/preflight, and deterministically renders the execution JSON consumed by the existing runtime.",
+      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection through the existing in-memory loader/resolver/preflight, and deterministically renders the execution JSON consumed by the existing runtime.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [
           "polymetrics.ai/internal/connectors/commandrunner",
           "polymetrics.ai/internal/connectors/defs",
           "polymetrics.ai/internal/connectors/engine",
+          "polymetrics.ai/internal/connectors/hooks/hookset",
           "polymetrics.ai/internal/connectors/manifestindex",
           "polymetrics.ai/internal/connectors/native/nativeset",
           "polymetrics.ai/internal/connectors/connsdk",
@@ -36,6 +37,7 @@
           "internal/connectors/engine/bundle.go",
           "internal/connectors/engine/command_binding.go",
           "internal/connectors/engine/connector.go",
+          "internal/connectors/hooks/hookset/hookset_gen.go",
           "internal/connectors/commandrunner/runner.go",
           "internal/connectors/manifestindex/index.go",
           "internal/connectors/native/nativeset/factories.go",
@@ -67,6 +69,22 @@
           {
             "file": "cmd/connectorgen/vnext_graph.go",
             "name": "buildVNextCanonicalGraph"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "vNextCanonicalOperation"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_admission.go",
+            "name": "vNextValidateSourceSchemas"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_admission.go",
+            "name": "vNextSelectedRuntime"
+          },
+          {
+            "file": "internal/connectors/hooks/hookset/hookset_gen.go",
+            "name": "Factories"
           },
           {
             "file": "cmd/connectorgen/vnext_graph.go",
@@ -116,11 +134,11 @@
           "schema-4 source.lock.json"
         ],
         "request_response_shapes": [
-          "shared request schemas",
-          "shared response schemas",
+          "shared request schemas bound to effective loaded write or direct-operation request schemas",
+          "shared response schemas bound to effective loaded stream schemas",
           "shared record schemas",
           "canonical per-operation stream, write, operation, and command descriptors",
-          "deterministic source-to-execution provenance with a staged loaded identity and manifest-index entry",
+          "canonical-order source-to-execution provenance with a staged loaded identity and complete manifest-index entry",
           "optional database, changefeed, polling, rate-limit, and sync-transport execution objects",
           "declaration-selected OAuth2 refresh-token client authentication"
         ],
@@ -137,10 +155,11 @@
           "all seven lanes are explicit",
           "provider evidence is absent from the canonical runtime descriptor",
           "the authoring graph retains provider evidence, CLI source facts, and operation source identities without projecting them to runtime JSON",
-          "semantic admission joins each source operation to loaded schemas, stream/write/operation, command, runtime binding, staged manifest, and optional supplied sync plan",
+          "semantic admission joins each request/response schema role to its effective loaded runtime schema, then joins each source operation to its stream/write/operation, command, runtime binding, staged manifest, and optional supplied sync plan",
           "implemented commands use the existing exact binding resolver and commandrunner preflight before output replacement",
+          "closed native executor and generated hook selection construct the staged in-memory runtime and retain the complete manifest extension",
           "declared rate-limit JSON is admitted only through the existing loader and participates in the staged identity",
-          "rendering and source-to-execution provenance are deterministic",
+          "rendering and staged provenance are deterministic under semantically irrelevant operation reordering; authored operation positions remain diagnostics only",
           "source locks are one complete JSON document with no duplicate object members before canonicalization or file replacement",
           "execution objects reject authoring-evidence fields"
         ]
@@ -163,7 +182,10 @@
         "Unknown root and execution fields fail strict decoding.",
         "Trailing JSON values and duplicate object members fail before canonicalization or generated-file replacement.",
         "Typed graph validation rejects invalid encoders, wrong schema roles, missing bindings, and normalized command alias collisions before output replacement.",
-        "Semantic admission reads only an in-memory rendered view; it uses engine.Load, engine.New, the exact command resolver, commandrunner preflight, sealed executor selection, manifestindex.New, and supplied syncplan.Resolve without provider I/O, credential resolution, transport, filesystem staging, or activation.",
+        "Semantic admission reads only an in-memory rendered view; it uses engine.Load, engine.New, the exact command resolver, commandrunner preflight, sealed executor and generated hook selection, manifestindex.New, and supplied syncplan.Resolve without provider I/O, credential resolution, transport, filesystem staging, or activation.",
+        "Every admitted request/response schema reference must semantically equal an effective loaded runtime schema; a direct role with no typed runtime schema is rejected.",
+        "Generated hook extensions are selected only through hookset.Factories and retained in the staged manifest/index entry.",
+        "Canonical source-ID order governs staged provenance; an authored operation index is retained only for diagnostics.",
         "Known source facts may be checked against their exact declared target; unknown source fields remain opaque and preserved.",
         "Lane state must match authored execution content.",
         "Schema references must resolve to safe registry paths.",
@@ -183,7 +205,7 @@
             "internal/connectors/defs/github/source.lock.json",
             "internal/connectors/defs/github/operations.json"
           ],
-          "notes": "One lock renders the GitHub execution bundle."
+          "notes": "One lock renders the GitHub execution bundle and stages its generated hook extension through the closed production hook authority."
         },
         {
           "name": "GitLab vNext bundle",
@@ -220,6 +242,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_admission_test.go",
           "name": "TestVNextSemanticAdmissionRejectsSwappedGraphQLOperationBeforeWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_admission_test.go",
+          "name": "TestVNextSemanticAdmissionRejectsSwappedEffectiveSchemaBeforeWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_admission_test.go",
+          "name": "TestVNextSemanticAdmissionStagesGitHubProductionHookEntry"
         },
         {
           "package": "./cmd/connectorgen",
@@ -279,7 +311,7 @@
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_lock_test.go",
-          "name": "TestVNextCanonicalGraphAllowsDirectOperationSchemaRoles"
+          "name": "TestVNextSemanticAdmissionRejectsUnboundDirectOperationSchemaRoles"
         }
       ],
       "known_gap_refs": [
@@ -290,7 +322,8 @@
         }
       ],
       "update_conditions": [
-        "The source-lock schema, canonical descriptor, lane inference, output set, rendering, or runtime inventory boundary changes.",
+        "The source-lock schema, canonical descriptor, lane inference, output set, rendering, runtime inventory, or hook extension selection boundary changes.",
+        "An effective request/response schema binding rule, canonical staged provenance identity, or its executable proof changes.",
         "A source-selected authentication shape, its generic engine binding, or its executable proof changes."
       ],
       "supersedes": []

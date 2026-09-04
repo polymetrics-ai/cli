@@ -395,3 +395,35 @@
 - Semantic admission now uses the real in-memory `engine.Load`/`engine.New`, `engine.ResolveImplementedCommandBinding`, `commandrunner.Preflight`, shared generator executor selection, `manifestindex.New`, and `syncplan.Resolve`. It does not read a global generated manifest, connector credential, provider, or transport.
 - Exact parent-operation binding rejects a source command that crosses to a same-route GraphQL operation. Known source facts validate only their declared GraphQL/transport or unsupported-target counterpart; unknown fields stay raw. Declared `rate_limits.json` is accepted solely through the runtime loader and changes the staged identity.
 - Focused RED/GREEN and complete package results are recorded in `TDD-LEDGER.md`; pending cleanup verification, inline/manual `verify-work`, and code review are recorded only after observation.
+
+## N2 boundary-review correction — CP09/CP10
+
+## Task Delivery Header
+
+- Issue: Refs #4426 — N2 exact-SHA admission correction; parent Refs #4325.
+- Base branch: `fm/cli-top100-declaration-batch-r1` at `56ec3d9d7dc1d726203b0ef0c03ddec3209b8dde`.
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through existing draft PR #4294.
+- Delivery: one ordinary non-force correction checkpoint published to the declared parent, with the exact review-block contracts proved and an inline/manual self-review recorded; a new Firstmate-managed exact-SHA review then controls CP11 authorization.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: close only the N2 review's three authoring-admission defects: bind every admitted request/response schema reference to the loaded runtime schema that consumes it; derive a complete in-memory production manifest entry including a selected hook extension; and canonicalize provenance independently of irrelevant authored operation ordering while retaining authored positions for diagnostics.
+- Verification: one RED-GREEN no-write schema-swap test per request/response role; a GitHub local complete-manifest/hook/preflight witness; reordered-operation byte/digest/provenance equality plus authored diagnostic location; full affected generator suite, check-only reference renders, definition validation, Atlas/docs checks, scoped static gates, and goal-backward self-review.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Every admitted request/response reference joins its effective runtime schema | live | Swapping either role to a different existing shared schema makes `lock-render` reject at the immutable source operation's authored `/schema_refs/<role>` path while leaving a generated-file sentinel byte-identical. |
+| Staged manifest matches production hook selection | live | GitHub's source lock stages an entry exactly equal to its closed generated manifest entry, including `hook/github.v1`; construction and preflight use that selected local hook without provider or credential I/O. |
+| Provenance is independent of irrelevant source operation ordering | live | Reversing same-rank source operations retains equal rendered bytes, identity, complete provenance, manifest, and index, while a malformed reordered input still names its authored source-array pointer in the error. |
+
+### N2 correction scope, Atlas, and lifecycle disposition
+
+- Authority: Firstmate instruction `124.msg` accepts the independent N2 boundary-review BLOCK at `56ec3d9d7dc1d726203b0ef0c03ddec3209b8dde` as three bounded CP09/CP10 corrections. CP11 remains prohibited until the follow-up exact-SHA review returns and Firstmate explicitly authorizes it.
+- Foundation Atlas classification: **constrained_extension** of `authoring.source-lock-vnext.v1`. Reuse the current `engine.Load`, engine connector, `hookset.Factories`, native selection inventory, manifest index, commandrunner preflight, and sync resolver. No runtime foundation, connector-specific branch, second selection source, source-lock reader, or generated global manifest publication is authorized.
+- GSD/manual fallback: `scripts/gsd doctor` reports only the established missing `.gsd/prompts/issue-122-rebootstrap.md`; all five lifecycle command sources and `discuss-phase`/`plan-phase --tdd` prompts resolved. The custom phase has no adapter ROADMAP, and no compatible isolated worker/reviewer is authorized, so the equivalent TDD, verification, and review procedures are recorded inline.
+- Required skills: `go-engineering` (fundamentals and production), `tdd`, `diagnose`, `connector-lane-build-order`, and `connector-migration-exact-sha-review` are loaded. Required `golang-how-to` and `golang-testing` are unavailable in this runtime and are not claimed; CodeGraph has no repository index and Go LSP is unavailable.
+
+### N2 correction plan
+
+1. Add one real runtime-schema counterpart for every admitted schema role. A request reference must equal the loaded write record schema or a direct operation's declared runtime request schema; a response reference must equal the loaded stream schema. A role with no actual consumer is refused rather than recorded as provenance-only.
+2. Model production selection once from the closed hook factory and native executor inventories. Use the selected hook to construct the in-memory engine connector and record its exact extension in the staged manifest/index. Do not read or synthesize a global manifest.
+3. Retain each source operation's authored index exclusively for errors. Assign canonical order after source-ID sorting and use it for every staged provenance field path, then prove reordered inputs have identical staged provenance.
+4. Keep all work in authoring-time memory and preserve `runLockRender`'s no-write-before-admission boundary. CP11 continues to own physical staging, activation, recovery, and publication.

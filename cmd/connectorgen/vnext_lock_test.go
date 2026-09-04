@@ -10,6 +10,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -388,25 +389,36 @@ func TestRunLockRenderRejectsInvalidCanonicalGraphBeforeWriting(t *testing.T) {
 	}
 }
 
-func TestVNextCanonicalGraphAllowsDirectOperationSchemaRoles(t *testing.T) {
-	lock := minimalVNextLockForTest()
-	lock.Lanes["etl"] = "unsupported"
-	lock.Lanes["direct_read"] = "implemented"
-	lock.Schemas["schemas/widgets-request.json"] = json.RawMessage(`{"type":"object","properties":{"limit":{"type":"integer"}}}`)
-	lock.Schemas["schemas/widgets-response.json"] = json.RawMessage(`{"type":"object","properties":{"data":{"type":"array"}}}`)
-	lock.Operations = []vNextOperationDescriptor{{
-		ID:         "operation:widgets.get",
-		SchemaRefs: vNextSchemaReferences{Request: "schemas/widgets-request.json", Response: "schemas/widgets-response.json"},
-		Operation:  json.RawMessage(`{"id":"widgets.get","kind":"rest_read","summary":"Get widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/widgets","max_bytes":1024,"response":{"success_statuses":["200"]},"parameters":[]}}`),
-		Commands: []vNextCommandDescriptor{{
-			Order:   0,
-			Command: json.RawMessage(`{"path":"widgets get","summary":"Get widgets","intent":"direct_read","availability":"implemented","operation":"widgets.get","api_surface":[{"method":"GET","path":"/widgets"}],"output_policy":"json_redacted","flags":[]}`),
-		}},
-	}}
-	lock.CLI = json.RawMessage(`{"usage":"pm acme <command>","tagline":"Acme"}`)
+func TestVNextSemanticAdmissionRejectsUnboundDirectOperationSchemaRoles(t *testing.T) {
+	for _, test := range []struct {
+		name  string
+		refs  vNextSchemaReferences
+		field string
+	}{
+		{name: "request", refs: vNextSchemaReferences{Request: "schemas/widgets-request.json"}, field: "/operations/0/schema_refs/request"},
+		{name: "response", refs: vNextSchemaReferences{Response: "schemas/widgets-response.json"}, field: "/operations/0/schema_refs/response"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			lock := minimalVNextLockForTest()
+			lock.Lanes["etl"] = "unsupported"
+			lock.Lanes["direct_read"] = "implemented"
+			lock.Schemas["schemas/widgets-request.json"] = json.RawMessage(`{"type":"object","properties":{"limit":{"type":"integer"}}}`)
+			lock.Schemas["schemas/widgets-response.json"] = json.RawMessage(`{"type":"object","properties":{"data":{"type":"array"}}}`)
+			lock.Operations = []vNextOperationDescriptor{{
+				ID:         "operation:widgets.get",
+				SchemaRefs: test.refs,
+				Operation:  json.RawMessage(`{"id":"widgets.get","kind":"rest_read","summary":"Get widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/widgets","max_bytes":1024,"response":{"success_statuses":["200"]},"parameters":[]}}`),
+				Commands: []vNextCommandDescriptor{{
+					Order:   0,
+					Command: json.RawMessage(`{"path":"widgets get","summary":"Get widgets","intent":"direct_read","availability":"implemented","operation":"widgets.get","api_surface":[{"method":"GET","path":"/widgets"}],"output_policy":"json_redacted","flags":[]}`),
+				}},
+			}}
+			lock.CLI = json.RawMessage(`{"usage":"pm acme <command>","tagline":"Acme"}`)
 
-	if _, err := canonicalizeVNextSourceLock(lock); err != nil {
-		t.Fatalf("canonicalizeVNextSourceLock() rejected direct operation schema roles: %v", err)
+			if _, err := canonicalizeVNextSourceLock(lock); err == nil || !strings.Contains(err.Error(), test.field) {
+				t.Fatalf("canonicalizeVNextSourceLock() error = %v, want unbound direct %s schema at %s", err, test.name, test.field)
+			}
+		})
 	}
 }
 
@@ -447,6 +459,17 @@ func TestVNextCanonicalGraphIgnoresIrrelevantOperationOrdering(t *testing.T) {
 	if firstCanonical.Graph.Identity.Digest == "" || firstCanonical.Graph.Identity.Digest != secondCanonical.Graph.Identity.Digest {
 		t.Fatalf("irrelevant source operation order changed graph digest: %q != %q", firstCanonical.Graph.Identity.Digest, secondCanonical.Graph.Identity.Digest)
 	}
+	firstStage, err := admitVNextCanonicalDescriptor(firstCanonical, vNextSemanticAdmissionInput{})
+	if err != nil {
+		t.Fatalf("admit first source lock: %v", err)
+	}
+	secondStage, err := admitVNextCanonicalDescriptor(secondCanonical, vNextSemanticAdmissionInput{})
+	if err != nil {
+		t.Fatalf("admit reordered source lock: %v", err)
+	}
+	if !reflect.DeepEqual(firstStage.Provenance, secondStage.Provenance) {
+		t.Fatalf("irrelevant source operation order changed staged provenance:\nfirst=%#v\nsecond=%#v", firstStage.Provenance, secondStage.Provenance)
+	}
 	seen := map[string]json.RawMessage{}
 	for _, operation := range firstCanonical.Graph.Operations {
 		seen[operation.ID] = operation.Source
@@ -461,6 +484,15 @@ func TestVNextCanonicalGraphIgnoresIrrelevantOperationOrdering(t *testing.T) {
 	}
 	if !sameJSON(seen["stream:gadgets"], first.Operations[1].Source) {
 		t.Fatalf("canonical graph changed gadgets source identity: %s", seen["stream:gadgets"])
+	}
+	invalid := second
+	invalid.Operations[0].SchemaRefs.Record = "schemas/widgets.json"
+	_, err = canonicalizeVNextSourceLock(invalid)
+	if err == nil {
+		t.Fatal("canonicalize reordered malformed source lock succeeded")
+	}
+	if want := `/operations/0/schema_refs/record`; !strings.Contains(err.Error(), want) {
+		t.Fatalf("reordered malformed source lock error = %v, want authored diagnostic %q", err, want)
 	}
 }
 

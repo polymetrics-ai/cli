@@ -61,8 +61,8 @@ forms remain explicit.
 | --- | --- |
 | `id` | Stable authoring identity within this lock. |
 | `source` | Optional operation-local provider citation/facts; authoring-only. |
-| `schema_refs.request` | Shared request schema reference. |
-| `schema_refs.response` | Shared response schema reference. |
+| `schema_refs.request` | Shared request schema reference; semantic admission binds it to the effective loaded write or direct-operation request schema. |
+| `schema_refs.response` | Shared response schema reference; semantic admission binds it to the effective loaded stream response schema. |
 | `schema_refs.record` | Shared record schema reference. |
 | `stream` / `stream_order` | One ETL stream entry and its deterministic position in `streams.json`. |
 | `write` / `write_order` | One typed write action and its deterministic position in `writes.json`. |
@@ -78,20 +78,26 @@ commands must be JSON objects and must not contain authoring evidence.
 Schema keys start with `schemas/`, end in `.json`, remain path-clean, and may
 not traverse directories. A request, response, or record reference is valid
 only when its exact key exists. Streams normally point at record schemas.
-Writes use closed request schemas. Direct operations may use request and
-response references appropriate to their REST, GraphQL, multipart, or binary
-encoder contract.
+Writes use closed request schemas. A request reference must semantically equal
+the loaded write `record_schema` or a rendered REST `body_schema` / GraphQL
+`variables_schema`. A response reference must semantically equal the loaded
+stream schema. The current direct-operation contract has no typed response
+schema, so a direct-only response role is rejected rather than admitted as
+provenance-only.
 
 Canonicalization rejects structurally impossible role placement before any
 rendered-file replacement: a record reference requires a stream whose schema
 matches it; a request reference requires a write or direct operation; and a
 response reference requires a stream or direct operation. Semantic admission
 then renders one in-memory execution view, loads it with the existing engine,
-and uses the runtime's exact binding resolver and command preflight. It binds
-each source operation to its rendered schemas, stream/write/operation and
-commands; GraphQL bindings remain operation-identity based even when routes
-match. Unknown provider facts remain opaque authoring data. A failed join names
-the source operation and JSON field path, and occurs before output replacement.
+and proves every request/response role against the effective runtime schema
+before binding each source operation to its rendered stream/write/operation and
+commands. It constructs the in-memory connector through the closed native
+executor and generated hook authorities, then binds the complete staged
+manifest/index entry. GraphQL bindings remain operation-identity based even
+when routes match. Unknown provider facts remain opaque authoring data. A
+failed join names the source operation and JSON field path, and occurs before
+output replacement.
 
 The renderer copies each shared schema byte-deterministically to the same path
 in the execution bundle. Shared references prevent command, stream, write, and
@@ -138,14 +144,17 @@ with `unsupported`.
    surface is rendered, so changing a citation cannot change runtime bytes.
 4. Clone execution-relevant content into a canonical descriptor while retaining
    raw operation-local source facts only for authoring admission.
-5. Render the closed execution set in memory; call `engine.Load`, construct its
-   in-memory connector, resolve every implemented command through the shared
-   binding resolver and `commandrunner.Preflight`, and build the selected
+5. Render the closed execution set in memory; call `engine.Load`, select the
+   closed native executor and generated hook extension, construct its in-memory
+   connector, resolve every implemented command through the shared binding
+   resolver and `commandrunner.Preflight`, and build the complete selected
    manifest-index input. A supplied complete sync plan is resolved through
    `syncplan.Resolve`; a lock never invents its missing destination or
    Foundation Atlas fact.
 6. Sort streams, writes, operations, commands, and source-to-execution
-   provenance deterministically.
+   provenance deterministically. Canonical source-ID order owns staged
+   provenance; authored operation-array positions are retained only for
+   diagnostics.
 7. Render indented JSON with a trailing newline.
 8. Atomically replace destination files through a same-directory temporary
    file only after every earlier step succeeds.
@@ -204,10 +213,13 @@ unknown root fields, missing/extra/invalid lanes, lane/content contradiction,
 duplicate/empty operation IDs, operation with no execution form, invalid JSON
 object, unsafe/missing schema reference, unsupported optional artifact, and
 evidence leakage into execution content. Semantic admission additionally
-rejects a missing or cross-source schema/stream/write/operation/command join,
-an invalid runtime route or encoder, a mismatched staged identity or executor,
+rejects an existing-but-swapped request/response schema, a request/response
+role with no effective runtime schema, a missing or cross-source
+stream/write/operation/command join, an invalid runtime route or encoder, an
+incomplete staged executor/extension identity, a mismatched staged identity,
 and malformed `rate_limits.json`; each fails `lock-render` before any file
-replacement.
+replacement. Reordering semantically equivalent operations cannot change staged
+provenance; malformed inputs still report their authored operation positions.
 
 Runtime errors remain typed at the closest execution boundary. The authoring
 admission uses the same in-memory loader, exact binding resolver, and command

@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors/manifestindex"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/syncplan"
 )
@@ -50,6 +51,143 @@ func TestVNextSemanticAdmissionRejectsSwappedGraphQLOperationBeforeWriting(t *te
 	}
 	if string(got) != sentinel {
 		t.Fatalf("lock render replaced output after semantic refusal: %q", got)
+	}
+}
+
+func TestVNextSemanticAdmissionRejectsSwappedEffectiveSchemaBeforeWriting(t *testing.T) {
+	tests := []struct {
+		name     string
+		lock     func() vNextSourceLock
+		mutate   func(*vNextSourceLock)
+		sourceID string
+		field    string
+	}{
+		{
+			name: "request",
+			lock: vNextRequestSchemaLockForSemanticAdmissionTest,
+			mutate: func(lock *vNextSourceLock) {
+				lock.Schemas["schemas/other-request.json"] = json.RawMessage(`{"type":"object","properties":{"count":{"type":"integer"}},"required":["count"],"additionalProperties":false}`)
+				lock.Operations[0].SchemaRefs.Request = "schemas/other-request.json"
+			},
+			sourceID: "write:widgets.create",
+			field:    "/operations/0/schema_refs/request",
+		},
+		{
+			name: "response",
+			lock: vNextResponseSchemaLockForSemanticAdmissionTest,
+			mutate: func(lock *vNextSourceLock) {
+				lock.Schemas["schemas/other-response.json"] = json.RawMessage(`{"type":"object","properties":{"count":{"type":"integer"}},"required":["count"],"additionalProperties":false}`)
+				lock.Operations[0].SchemaRefs.Response = "schemas/other-response.json"
+			},
+			sourceID: "stream:widgets",
+			field:    "/operations/0/schema_refs/response",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			lock := test.lock()
+			test.mutate(&lock)
+
+			root := t.TempDir()
+			connectorRoot := filepath.Join(root, lock.Connector)
+			if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+				t.Fatal(err)
+			}
+			raw, err := json.Marshal(lock)
+			if err != nil {
+				t.Fatalf("marshal source lock: %v", err)
+			}
+			if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+				t.Fatal(err)
+			}
+			const sentinel = "must not be replaced"
+			outputPath := filepath.Join(connectorRoot, "metadata.json")
+			if err := os.WriteFile(outputPath, []byte(sentinel), 0o600); err != nil {
+				t.Fatal(err)
+			}
+
+			var stdout, stderr bytes.Buffer
+			if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr); code != 1 {
+				t.Fatalf("runLockRender() = %d, want schema-admission refusal; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+			}
+			for _, want := range []string{`source operation "` + test.sourceID + `"`, test.field} {
+				if !strings.Contains(stderr.String(), want) {
+					t.Fatalf("schema-admission refusal lacks %q: %s", want, stderr.String())
+				}
+			}
+			got, err := os.ReadFile(outputPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if string(got) != sentinel {
+				t.Fatalf("lock render replaced output after %s schema refusal: %q", test.name, got)
+			}
+		})
+	}
+}
+
+func vNextRequestSchemaLockForSemanticAdmissionTest() vNextSourceLock {
+	lock := minimalVNextLockForTest()
+	lock.Lanes["etl"] = "unsupported"
+	lock.Schemas["schemas/request.json"] = json.RawMessage(`{"type":"object","properties":{"name":{"type":"string"}},"required":["name"],"additionalProperties":false}`)
+	lock.Operations = []vNextOperationDescriptor{{
+		ID:         "write:widgets.create",
+		SchemaRefs: vNextSchemaReferences{Request: "schemas/request.json"},
+		Write:      json.RawMessage(`{"name":"create_widget","kind":"create","method":"POST","path":"/widgets","body_type":"json","body_fields":["name"],"record_schema":{"type":"object","properties":{"name":{"type":"string"}},"required":["name"],"additionalProperties":false},"risk":"low"}`),
+	}}
+	return lock
+}
+
+func vNextResponseSchemaLockForSemanticAdmissionTest() vNextSourceLock {
+	lock := minimalVNextLockForTest()
+	lock.Operations[0].SchemaRefs.Response = "schemas/widgets.json"
+	return lock
+}
+
+func TestVNextSemanticAdmissionStagesGitHubProductionHookEntry(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatalf("repoRoot(): %v", err)
+	}
+	lock := readVNextSourceLockForTest(t, filepath.Join(root, "internal", "connectors", "defs", "github", "source.lock.json"))
+	canonical, err := canonicalizeVNextSourceLock(lock)
+	if err != nil {
+		t.Fatalf("canonicalize GitHub source lock: %v", err)
+	}
+	var expected manifestindex.Entry
+	for _, entry := range manifestindex.GeneratedEntries() {
+		if entry.Connector == "github" {
+			expected = entry
+			break
+		}
+	}
+	if expected.Connector == "" {
+		t.Fatal("generated production manifest has no GitHub entry")
+	}
+
+	stage, err := admitVNextCanonicalDescriptor(canonical, vNextSemanticAdmissionInput{Manifest: &expected})
+	if err != nil {
+		t.Fatalf("admit GitHub source lock: %v", err)
+	}
+	if !reflect.DeepEqual(stage.Manifest, expected) {
+		t.Fatalf("staged GitHub manifest = %#v, want exact production entry %#v", stage.Manifest, expected)
+	}
+	indexed, found := stage.Index.Lookup("github")
+	if !found || !reflect.DeepEqual(indexed, expected) {
+		t.Fatalf("staged GitHub manifest index = %#v, found=%t, want exact production entry %#v", indexed, found, expected)
+	}
+	if stage.Manifest.Extension != "hook/github.v1" {
+		t.Fatalf("staged GitHub extension = %q, want hook/github.v1", stage.Manifest.Extension)
+	}
+	selection, err := vNextSelectedRuntime("github")
+	if err != nil {
+		t.Fatalf("select GitHub runtime: %v", err)
+	}
+	if selection.Executor != expected.Executor || selection.Extension != expected.Extension {
+		t.Fatalf("selected GitHub runtime = %#v, want executor/extension from %#v", selection, expected)
+	}
+	if selection.Hooks == nil || selection.Hooks.ConnectorName() != "github" {
+		t.Fatalf("selected GitHub hook = %#v, want closed github hook", selection.Hooks)
 	}
 }
 

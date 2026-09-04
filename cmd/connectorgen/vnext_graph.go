@@ -33,17 +33,19 @@ type vNextCanonicalGraph struct {
 	Identity   manifestidentity.Identity
 }
 
-// vNextCanonicalOperation keeps the immutable source identity separate from
-// typed lane nodes. CP10 owns joins from this graph to executor bindings.
+// vNextCanonicalOperation keeps immutable source identity separate from typed
+// lane nodes. Index is the authored array position for diagnostics;
+// CanonicalIndex is assigned after source-ID sorting for staged provenance.
 type vNextCanonicalOperation struct {
-	Index      int
-	ID         string
-	Source     json.RawMessage
-	SchemaRefs vNextSchemaReferences
-	Stream     *vNextCanonicalStream
-	Write      *vNextCanonicalWrite
-	Operation  *vNextCanonicalRuntimeOperation
-	Commands   []vNextCanonicalCommand
+	Index          int
+	CanonicalIndex int
+	ID             string
+	Source         json.RawMessage
+	SchemaRefs     vNextSchemaReferences
+	Stream         *vNextCanonicalStream
+	Write          *vNextCanonicalWrite
+	Operation      *vNextCanonicalRuntimeOperation
+	Commands       []vNextCanonicalCommand
 }
 
 type vNextCanonicalStream struct {
@@ -136,6 +138,9 @@ func buildVNextCanonicalGraph(descriptor vNextCanonicalDescriptor, providerEvide
 	sort.Slice(graph.Operations, func(left, right int) bool {
 		return graph.Operations[left].ID < graph.Operations[right].ID
 	})
+	for index := range graph.Operations {
+		graph.Operations[index].CanonicalIndex = index
+	}
 	if err := validateVNextCanonicalAliases(graph.Operations); err != nil {
 		return vNextCanonicalGraph{}, err
 	}

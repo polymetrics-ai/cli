@@ -11,6 +11,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/hooks/hookset"
 	"polymetrics.ai/internal/connectors/manifestidentity"
 	"polymetrics.ai/internal/connectors/manifestindex"
 	"polymetrics.ai/internal/synccontract"
@@ -29,8 +30,8 @@ type vNextStagedGeneration struct {
 	Sync       []vNextResolvedSyncAdmission
 }
 
-// vNextSourceExecutionProvenance preserves the exact source field responsible
-// for one rendered runtime identity. It is deterministic and authoring-only.
+// vNextSourceExecutionProvenance preserves source identity with a canonical,
+// order-stable field path for authoring-only staged identity.
 type vNextSourceExecutionProvenance struct {
 	SourceID   string
 	FieldPath  string
@@ -69,16 +70,16 @@ func admitVNextCanonicalDescriptor(descriptor vNextCanonicalDescriptor, input vN
 		return vNextStagedGeneration{}, vNextGraphError(vNextStaticValidationPointer(descriptor, err.Error()), fmt.Errorf("static execution validation: %w", err))
 	}
 
-	runtime := engine.New(bundle, nil)
+	selection, err := vNextSelectedRuntime(descriptor.Connector)
+	if err != nil {
+		return vNextStagedGeneration{}, vNextSemanticRootError(descriptor, "/connector", "select runtime: %v", err)
+	}
+	runtime := engine.New(bundle, selection.Hooks)
 	provenance, err := vNextBuildSemanticProvenance(descriptor, outputs, bundle, runtime)
 	if err != nil {
 		return vNextStagedGeneration{}, err
 	}
-	executor, err := vNextSelectedExecutor(descriptor.Connector)
-	if err != nil {
-		return vNextStagedGeneration{}, vNextSemanticRootError(descriptor, "/connector", "select executor: %v", err)
-	}
-	manifest := vNextManifestEntry(bundle, runtime, executor)
+	manifest := vNextManifestEntry(bundle, runtime, selection)
 	if input.Manifest != nil {
 		if err := vNextValidateManifestBinding(descriptor, *input.Manifest, manifest); err != nil {
 			return vNextStagedGeneration{}, err
@@ -157,7 +158,7 @@ func vNextBuildSemanticProvenance(descriptor vNextCanonicalDescriptor, outputs m
 		})
 	}
 	for _, source := range descriptor.Graph.Operations {
-		if err := vNextValidateSourceSchemas(descriptor, outputs, source, &provenance); err != nil {
+		if err := vNextValidateSourceSchemas(descriptor, outputs, bundle, streams, writes, operations, source, &provenance); err != nil {
 			return nil, err
 		}
 		if source.Stream != nil {
@@ -165,21 +166,21 @@ func vNextBuildSemanticProvenance(descriptor vNextCanonicalDescriptor, outputs m
 			if !found || !vNextJSONEquivalent(loaded, source.Stream.Spec) {
 				return nil, vNextSemanticOperationError(source, vNextOperationPointer(source.Index, "stream"), "stream %q does not exactly bind the loaded execution stream", source.Stream.Spec.Name)
 			}
-			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextOperationPointer(source.Index, "stream"), TargetKind: "stream", TargetID: source.Stream.Spec.Name})
+			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextProvenanceOperationPointer(source, "stream"), TargetKind: "stream", TargetID: source.Stream.Spec.Name})
 		}
 		if source.Write != nil {
 			loaded, found := writes[source.Write.Spec.Name]
 			if !found || !vNextJSONEquivalent(loaded, source.Write.Spec) {
 				return nil, vNextSemanticOperationError(source, vNextOperationPointer(source.Index, "write"), "write action %q does not exactly bind the loaded execution action", source.Write.Spec.Name)
 			}
-			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextOperationPointer(source.Index, "write"), TargetKind: "write", TargetID: source.Write.Spec.Name})
+			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextProvenanceOperationPointer(source, "write"), TargetKind: "write", TargetID: source.Write.Spec.Name})
 		}
 		if source.Operation != nil {
 			loaded, found := operations[source.Operation.Spec.ID]
 			if !found || !vNextJSONEquivalent(loaded, source.Operation.Spec) {
 				return nil, vNextSemanticOperationError(source, vNextOperationPointer(source.Index, "operation"), "operation %q does not exactly bind the loaded execution operation", source.Operation.Spec.ID)
 			}
-			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextOperationPointer(source.Index, "operation"), TargetKind: "operation", TargetID: source.Operation.Spec.ID})
+			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextProvenanceOperationPointer(source, "operation"), TargetKind: "operation", TargetID: source.Operation.Spec.ID})
 		}
 		sourceFacts, err := vNextDecodeSourceFacts(source)
 		if err != nil {
@@ -209,12 +210,12 @@ func vNextBuildSemanticProvenance(descriptor vNextCanonicalDescriptor, outputs m
 				if err := commandrunner.Preflight(runtime, strings.Fields(command.Spec.Path)); err != nil {
 					return nil, vNextSemanticOperationError(source, vNextOperationPointer(source.Index, "commands", fmt.Sprint(command.Index)), "runtime preflight for command %q: %v", command.Spec.Path, err)
 				}
-				provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextOperationPointer(source.Index, "commands", fmt.Sprint(command.Index), "binding"), TargetKind: "binding:" + resolved.Binding.Kind, TargetID: resolved.Binding.ID})
+				provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextProvenanceOperationPointer(source, "commands", fmt.Sprint(command.Index), "binding"), TargetKind: "binding:" + resolved.Binding.Kind, TargetID: resolved.Binding.ID})
 			}
 			if err := vNextValidateSourceCommandFacts(source, command, sourceFacts); err != nil {
 				return nil, err
 			}
-			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextOperationPointer(source.Index, "commands", fmt.Sprint(command.Index)), TargetKind: "command", TargetID: command.Spec.Path})
+			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextProvenanceOperationPointer(source, "commands", fmt.Sprint(command.Index)), TargetKind: "command", TargetID: command.Spec.Path})
 		}
 	}
 	sort.Slice(provenance, func(left, right int) bool {
@@ -232,7 +233,7 @@ func vNextBuildSemanticProvenance(descriptor vNextCanonicalDescriptor, outputs m
 	return provenance, nil
 }
 
-func vNextValidateSourceSchemas(descriptor vNextCanonicalDescriptor, outputs map[string][]byte, source vNextCanonicalOperation, provenance *[]vNextSourceExecutionProvenance) error {
+func vNextValidateSourceSchemas(descriptor vNextCanonicalDescriptor, outputs map[string][]byte, bundle engine.Bundle, streams map[string]engine.StreamSpec, writes map[string]engine.WriteAction, operations map[string]engine.OperationSpec, source vNextCanonicalOperation, provenance *[]vNextSourceExecutionProvenance) error {
 	for _, reference := range []struct {
 		role string
 		name string
@@ -244,15 +245,64 @@ func vNextValidateSourceSchemas(descriptor vNextCanonicalDescriptor, outputs map
 		if reference.name == "" {
 			continue
 		}
+		pointer := vNextOperationPointer(source.Index, "schema_refs", reference.role)
 		if _, exists := descriptor.Schemas[reference.name]; !exists {
-			return vNextSemanticOperationError(source, vNextOperationPointer(source.Index, "schema_refs", reference.role), "%s schema %q is absent from the canonical registry", reference.role, reference.name)
+			return vNextSemanticOperationError(source, pointer, "%s schema %q is absent from the canonical registry", reference.role, reference.name)
 		}
-		if _, exists := outputs[reference.name]; !exists {
-			return vNextSemanticOperationError(source, vNextOperationPointer(source.Index, "schema_refs", reference.role), "%s schema %q is absent from the staged execution set", reference.role, reference.name)
+		staged, exists := outputs[reference.name]
+		if !exists {
+			return vNextSemanticOperationError(source, pointer, "%s schema %q is absent from the staged execution set", reference.role, reference.name)
 		}
-		*provenance = append(*provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextOperationPointer(source.Index, "schema_refs", reference.role), TargetKind: "schema", TargetID: reference.name})
+		var effective []json.RawMessage
+		switch reference.role {
+		case "request":
+			if source.Write != nil {
+				if loaded, found := writes[source.Write.Spec.Name]; found && len(loaded.RecordSchema) > 0 {
+					effective = append(effective, loaded.RecordSchema)
+				}
+			}
+			if source.Operation != nil {
+				if loaded, found := operations[source.Operation.Spec.ID]; found {
+					effective = append(effective, vNextOperationRequestSchemas(loaded)...)
+				}
+			}
+		case "response", "record":
+			if source.Stream != nil {
+				if loaded, found := streams[source.Stream.Spec.Name]; found && loaded.SchemaRef != "" {
+					if schema, found := bundle.Schemas[loaded.Name]; found && len(schema.Raw) > 0 {
+						effective = append(effective, schema.Raw)
+					}
+				}
+			}
+		}
+		if reference.role != "record" {
+			if len(effective) == 0 {
+				return vNextSemanticOperationError(source, pointer, "%s schema %q has no effective runtime schema binding", reference.role, reference.name)
+			}
+			for _, runtimeSchema := range effective {
+				if !vNextJSONEquivalent(json.RawMessage(staged), runtimeSchema) {
+					return vNextSemanticOperationError(source, pointer, "%s schema %q does not match its effective runtime schema", reference.role, reference.name)
+				}
+			}
+		}
+		*provenance = append(*provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextProvenanceOperationPointer(source, "schema_refs", reference.role), TargetKind: "schema", TargetID: reference.name})
 	}
 	return nil
+}
+
+func vNextOperationRequestSchemas(operation engine.OperationSpec) []json.RawMessage {
+	var schemas []json.RawMessage
+	if operation.REST != nil && len(operation.REST.BodySchema) > 0 {
+		schemas = append(schemas, operation.REST.BodySchema)
+	}
+	if operation.GraphQL != nil && len(operation.GraphQL.VariablesSchema) > 0 {
+		schemas = append(schemas, operation.GraphQL.VariablesSchema)
+	}
+	return schemas
+}
+
+func vNextProvenanceOperationPointer(source vNextCanonicalOperation, segments ...string) string {
+	return vNextOperationPointer(source.CanonicalIndex, segments...)
 }
 
 func vNextValidateCommandParent(source vNextCanonicalOperation, command vNextCanonicalCommand) error {
@@ -390,6 +440,41 @@ func vNextSourcePath(value string) string {
 	return "/" + strings.TrimLeft(value, "/")
 }
 
+type vNextRuntimeSelection struct {
+	Executor  string
+	Extension string
+	Hooks     engine.Hooks
+}
+
+func vNextSelectedRuntime(connector string) (vNextRuntimeSelection, error) {
+	executor, err := vNextSelectedExecutor(connector)
+	if err != nil {
+		return vNextRuntimeSelection{}, err
+	}
+	selection := vNextRuntimeSelection{Executor: executor}
+	for _, factory := range hookset.Factories() {
+		if factory.Connector != connector {
+			continue
+		}
+		if selection.Extension != "" {
+			return vNextRuntimeSelection{}, fmt.Errorf("duplicate hook extension for connector %q", connector)
+		}
+		if factory.ID == "" || factory.New == nil {
+			return vNextRuntimeSelection{}, fmt.Errorf("hook extension for connector %q is incomplete", connector)
+		}
+		if executor != "api_engine.v1" {
+			return vNextRuntimeSelection{}, fmt.Errorf("hook extension %q cannot bind non-engine executor %q", factory.ID, executor)
+		}
+		hooks := factory.New()
+		if hooks == nil || hooks.ConnectorName() != connector {
+			return vNextRuntimeSelection{}, fmt.Errorf("hook extension %q does not construct connector %q", factory.ID, connector)
+		}
+		selection.Extension = factory.ID
+		selection.Hooks = hooks
+	}
+	return selection, nil
+}
+
 func vNextSelectedExecutor(connector string) (string, error) {
 	executors, err := generatedNativeExecutors()
 	if err != nil {
@@ -401,12 +486,13 @@ func vNextSelectedExecutor(connector string) (string, error) {
 	return "api_engine.v1", nil
 }
 
-func vNextManifestEntry(bundle engine.Bundle, runtime *engine.Connector, executor string) manifestindex.Entry {
+func vNextManifestEntry(bundle engine.Bundle, runtime *engine.Connector, selection vNextRuntimeSelection) manifestindex.Entry {
 	entry := manifestindex.Entry{
 		Connector:  bundle.Identity.Connector,
 		Generation: bundle.Identity.Generation,
 		Digest:     bundle.Identity.Digest,
-		Executor:   executor,
+		Executor:   selection.Executor,
+		Extension:  selection.Extension,
 		Metadata:   runtime.Metadata(),
 		Bytes:      bundle.Identity.Bytes,
 	}

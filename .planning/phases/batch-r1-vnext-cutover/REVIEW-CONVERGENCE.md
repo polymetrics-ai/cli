@@ -254,3 +254,17 @@ The required role-separated discovery was requested through the worker task fan-
 | Tests and scoped gates | Pass. Focused RED/GREEN controls, full `cmd/connectorgen`, reference `--check` renders, 553-definition validation, Atlas selector resolution, vet, build, docs check, and agent-contract check passed. The required full `internal/cli` re-run reproduces only its recorded polling/source-origin/ETL-help baseline failures and local Redis connection-refused logs. |
 
 - Findings: no remaining CP10 blocker. The review corrected the source-graph comment to describe its now-authorized in-memory admission role and added generation-digest equality for supplied-sync identity closure before final validation. No connector source lock, rendered execution artifact, provider behavior, credential path, release path, `.cache`, or certification residue changed.
+
+## 2026-09-04 — N2 boundary-review CP09/CP10 correction local self-review
+
+Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`, the focused admission/graph tests, `SOURCE-LOCK-VNEXT.md`, and the `authoring.source-lock-vnext.v1` Atlas entry.
+
+| Lens | Disposition |
+| --- | --- |
+| Effective schema authority | Pass. Request roles compare canonical staged JSON with every actual loaded write/direct request schema; response roles compare with the actual loaded stream schema. Existing-but-swapped schemas and direct-only roles with no typed consumer fail at the authored `schema_refs` pointer before `lock-render` replacement. |
+| Closed runtime selection | Pass. The existing native selection remains authoritative; the generated closed `hookset.Factories` inventory supplies at most one exact connector hook. The selected hook is passed to `engine.New`, and its exact extension is retained in the staged manifest/index. The GitHub real-lock test compares the full entry with `manifestindex.GeneratedEntries` without provider or credential work. |
+| Deterministic provenance | Pass. Source ID sort assigns `CanonicalIndex` only after structural validation. Every staged operation-derived provenance field uses it; all errors retain `Index`, the author-visible input position. The reorder proof checks full provenance equality and a malformed reordered input still identifies `/operations/0/...`. |
+| Boundary/no-write safety | Pass. Admission remains entirely in memory until `runLockRender` receives a successful stage. No second lock reader, manifest source, provider request, credential path, global output, certification, staging, activation, or CP11 path was added. |
+| Compatibility and documentation | Pass. Full generator tests and three current reference lock checks pass. The canon and Atlas name the current direct-response limitation rather than inventing a response executor, retain source-lock runtime isolation, and list executable focused proofs. CLI help/manual/website surface parity is not applicable: no user-facing command, flag, output, or connector contract changed. |
+
+- Findings: no remaining local correction blocker. The manual GSD fallback is used because no compatible Pi worker/reviewer runtime is available and the established adapter blockers remain recorded; it does not replace the required fresh Firstmate exact-SHA independent review. `.cache/` and certification residue were neither read nor changed.
