@@ -406,3 +406,73 @@
 
 - Actual GREEN — direct-role boundary and regression: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextSemanticAdmissionRejectsSwappedEffectiveSchemaBeforeWriting|TestVNextSemanticAdmissionStagesGitHubProductionHookEntry|TestVNextCanonicalGraphIgnoresIrrelevantOperationOrdering|TestVNextSemanticAdmissionRejectsUnboundDirectOperationSchemaRoles)$'` → `ok`; the direct-only request/response test proves that a structurally valid role with no typed effective runtime schema cannot become a provenance-only admission. Full `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` in 51.013s.
 - Actual GREEN — canon/Atlas: catalog revision `32` parsed and retained unique IDs; `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestFoundationAtlasSelectorsResolve$'` → `ok`; `make docs-check` built `pm` and validated connector docs. `SOURCE-LOCK-VNEXT.md` and the Atlas now state the effective request/response joins, closed hook extension staging, canonical provenance identity, and direct-role rejection boundary.
+
+### 2026-09-04 — CP11 B1 transactional publication impact-ready
+
+- Authority/base: Firstmate instruction `125.msg` records a fresh N2 correction-review PASS for immutable `36e4d980de0d51d92fe74a68306845643596a6cb` and authorizes #4427/B1 only from that exact head. CP12 remains prohibited. The refreshed ten-row map in `PLAN.md` is `READY` before the first production test or publisher edit.
+- Scope: CP11 consumes only CP10's already-admitted `vNextStagedGeneration`. It may add a connector-local generation publisher/resolver, journal, integrity metadata, and lock-render wiring over temporary roots. It must not materialize any real connector/source lock, modify `defs.FS`, App/CLI runtime routing, connector data, source locks, rendered execution JSON, provider/credential/database path, `.cache`, or certification residue.
+- RED planned — closed publication: a current per-file write permits an optional `rate_limits.json` to survive when the next closed set omits it; a reader can combine old index metadata with new execution bytes. A temporary-root test must first demonstrate this torn/stale state, then require one `CURRENT`-resolved generation to contain exact execution, manifest, provenance, Atlas-reference, compact-index, proof, and integrity files with no extra executable member.
+- RED planned — durability/recovery: inject an error immediately before and after every staged-file fsync, stage-directory fsync, journal write/fsync, pointer temp write/fsync/rename, pointer-parent fsync, active validation, commit record, and prune. Restart/recover after each cut point must yield a valid old or new complete set only; failed stage preserves old `CURRENT`, while failed active validation restores or durably completes one valid pointer.
+- RED planned — concurrency/pruning: barrier-held old readers and two marker-distinct publishers must prove that a writer cannot interleave, a reader observes one pointer-bound bundle/index pair, and stale generation pruning skips the old generation until its handle releases. Use barriers/channels and temporary roots; no sleep, provider, credential, source-lock materialization, or cross-connector transaction.
+- GREEN planned: reuse CP10 semantic admission as the sole pre-stage validator, write the exact artifact inventory beneath same-parent staging, fsync every durable boundary, atomically replace only `CURRENT`, recover journal state, and prune only generation directories proven unheld. The resolver accepts only `CURRENT`; it never falls back to flat artifacts.
+- Refactor boundary: consolidate only publication primitives after every state-machine test is green. Preserve source-lock canonicalization, execution renderer, `manifestidentity` digest algorithm, runtime embedded snapshot, and existing command arguments unless a test proves an in-allowlist contract change is necessary.
+- Required commands: list exact selectors before RED/GREEN; run focused publisher/lock-render tests including `-race`, affected `./cmd/connectorgen`, source-lock in-memory parity (not real publication), docs/Atlas checks, scoped vet/build, agent contract, diff check, secret scan, inline/manual execute/verify/review prompts, and normal PR read-back. Record only observed results below.
+
+
+### 2026-09-04 — CP11 B1 transactional publication actual RED/GREEN
+
+- Inline lifecycle: `scripts/gsd doctor` reported only the established missing
+  canonical issue prompt. `sources` and generated prompts for
+  `discuss-phase`, `plan-phase --tdd`, `execute-phase`, `verify-work`, and
+  `code-review` all resolved. With no adapter roadmap or compatible isolated
+  worker/reviewer, the command procedures are executed inline and recorded in
+  the plan, verification, and review ledgers.
+- Actual RED — orphan before journal: `go test -count=1 -timeout 20m
+  ./cmd/connectorgen -run '^TestVNextGenerationPublisherRecoversOrphanBeforeJournalCommit$'`
+  initially failed because `Recover()` retained two generation entries after a
+  crash before durable journal creation. GREEN removes only the abandoned
+  staged publisher generation and retains the exact old complete marker.
+- Actual RED — failed active validation: `go test -count=1 -timeout 20m
+  ./cmd/connectorgen -run '^TestVNextGenerationPublisherRollsBackFailedActiveValidationWithoutOrphan$'`
+  initially failed because post-switch validation left a rejected generation
+  beside old `CURRENT`. GREEN restores/removes the pointer as applicable,
+  removes the rejected validated generation, fsyncs its parent, and then clears
+  the journal.
+- Actual RED — repeat publish recovery: `go test -count=1 -timeout 20m
+  ./cmd/connectorgen -run '^TestVNextGenerationPublisherRepublishingActiveSetRemainsRecoverable$'`
+  failed with `journal old and new generation are equal` after an injected
+  repeated-set crash. GREEN treats an already exact active generation as a
+  no-op before writing a journal or `CURRENT`.
+- Actual RED — digest framing: `go test -count=1 -timeout 20m
+  ./cmd/connectorgen -run '^TestVNextPublicationGenerationIDDelimitsArtifactNamesAndBytes$'`
+  demonstrated two distinct artifact maps sharing the delimiter-based
+  generation input. GREEN length-prefixes every artifact name and payload
+  before SHA-256 input.
+- Actual RED — unsafe paths: `go test -count=1 -timeout 20m
+  ./cmd/connectorgen -run '^TestVNextGenerationPublisherRejectsUnsafeArtifactPathsBeforeWriting$'`
+  accepted `schemas/.hidden.json` and created a root for a NUL-bearing name.
+  GREEN rejects hidden path components, separators/traversal, reserved names,
+  backslashes, and control characters before creating the generation root.
+- Actual RED — unowned pruning: `go test -count=1 -timeout 20m
+  ./cmd/connectorgen -run '^TestVNextGenerationPublisherRefusesToPruneUnownedGeneration$'`
+  deleted a generation-shaped directory containing a regular lease and
+  author-owned sentinel. GREEN requires the candidate tree's own integrity and
+  closed-tree validation before it is publisher-owned enough to prune.
+- Actual RED — symlinked generation root: `go test -count=1 -timeout 20m
+  ./cmd/connectorgen -run '^TestVNextGenerationPublisherRefusesSymlinkedGenerationRootWithoutDeletingTarget$'`
+  followed `generations/` to an author-owned target and deleted its `.stage-*`
+  content during recovery. GREEN permits removal only beneath a non-symlink
+  publisher-owned generation root verified by `Lstat` before recovery, staging,
+  checking, opening, or pruning.
+- Actual GREEN — closed set/check/read-only security: the publisher tests
+  cover omitted `rate_limits.json`, exact `CURRENT` byte comparison, journal
+  refusal without recovery, source-lock/flat-artifact preservation,
+  symlinked-current/stale-stage/generation-root refusal, bounded control-file
+  reads, and no removal of an unowned directory. The staged real lock-render
+  test proves physical semantic revalidation through the existing
+  loader/selection/preflight without provider or credential I/O.
+- Actual GREEN — fault/concurrency: `go test -race -count=1 -timeout 20m
+  ./cmd/connectorgen -run '^(TestVNextGenerationPublisher.*|TestVNextPublicationGenerationIDDelimitsArtifactNamesAndBytes|TestRunLockRenderPublishesOnlyClosedGeneration)$'`
+  → `ok`. Every declared fsync/rename/validation/commit/prune cut point recovers
+  to an exact old or new complete generation; the barrier test rejects writer
+  interleave and mixed metadata/index reads; held leases defer stale prune.

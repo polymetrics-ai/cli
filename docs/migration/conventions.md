@@ -2,8 +2,9 @@
 
 The authoritative authoring procedure is
 [`SOURCE-LOCK-VNEXT.md`](../connector-canon/SOURCE-LOCK-VNEXT.md). Authors edit
-schema-4 `source.lock.json`; `connectorgen lock-render` materializes these
-execution files.
+schema-4 `source.lock.json`; `connectorgen lock-render` publishes a closed
+connector-local generation containing these execution files and publication
+metadata. It does not materialize the checked-in corpus or add a runtime reader.
 
 - `metadata.json`: identity, documentation URL, capability summary, release
   stage, and risk summary.
@@ -19,6 +20,11 @@ execution files.
 - `database.json`, `changefeed.json`, `polling_watermark.json`,
   `rate_limits.json`, `sync_transport.json`: optional execution contracts owned
   by their existing typed runtime paths.
+
+Published generations also contain `manifest.json`, `provenance.json`,
+`atlas.json`, `index.json`, `proof.json`, and `integrity.json`; those files bind
+the complete selected set, not provider facts, credentials, or a second runtime
+route.
 
 Generated JSON is reviewed but not independently authored. Provider evidence
 stays in the lock and does not appear in these files. A command binding must be

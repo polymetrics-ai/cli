@@ -41,9 +41,10 @@ require_text docs/connector-canon/REMOTE-REPRODUCIBILITY.md 'runtime admission'
 [[ ! -e docs/connector-canon/DECLARATION-ADMISSION.md ]] || fail 'obsolete declaration-admission procedure remains'
 [[ ! -e docs/connector-canon/OPERATION-EVIDENCE.md ]] || fail 'obsolete operation-evidence procedure remains'
 
-for connector in github gitlab asana; do
-	go run ./cmd/connectorgen lock-render "$connector" --check >/dev/null || \
-		fail "$connector vNext execution bundle differs from source.lock.json"
-done
+# The checked-in reference corpus remains unmaterialized. Prove source-lock
+# parity and the isolated closed-generation publisher without introducing a
+# flat-file fallback reader.
+go test -timeout 20m -run '^(TestVNextSourceLockDeterministicallyRendersReferenceConnectors|TestVNextGenerationPublisher.*|TestRunLockRenderPublishesOnlyClosedGeneration)$' ./cmd/connectorgen >/dev/null || \
+	fail 'vNext source-lock renderer or closed-generation publisher failed'
 
 printf 'connector canon check: ok\n'

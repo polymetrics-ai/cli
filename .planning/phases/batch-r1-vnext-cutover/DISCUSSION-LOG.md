@@ -76,3 +76,37 @@ Ranked hypotheses to test before production edits:
 1. Replacing a request or response reference with a second valid registry schema leaves current admission green because it checks existence rather than the loaded consumer. Prediction: a sentinel `lock-render` test reaches the existing write/stream output unless semantic equivalence is added.
 2. GitHub's staged entry lacks its required extension because admission selects only native executors. Prediction: the staged entry differs from `manifestindex.GeneratedEntries()` at `Extension`, and supplying the real entry fails the current binding check.
 3. Reordering operations preserves bytes/digest but changes provenance because paths retain authored source indexes. Prediction: the existing CP09 reorder fixture has equal rendered bytes and different `Staged.Provenance`; using a canonical index only for provenance removes that difference without changing diagnostic paths.
+
+## 2026-09-04 — CP11 B1 discussion resolution
+
+Firstmate instruction `125.msg` fixes the product and architectural choices:
+CP11 is a connector-local authoring publication foundation, not a runtime
+materialization checkpoint. The admitted CP10 stage is the sole input; no new
+source-lock reader, renderer, executor selector, provider request, credential
+path, database path, connector-specific branch, or distributed transaction is
+allowed.
+
+Resolved decisions:
+
+1. A generation is a closed set: admitted execution bytes plus manifest,
+   provenance, Atlas reference, compact index, proof, integrity, and a private
+   lease. Optional execution files are set members, never inherited from an old
+   generation.
+2. Stage directly below one connector's `generations/` parent, validate those
+   physical bytes through the existing loader/selection/preflight, fsync, then
+   select only through an atomic typed `CURRENT`. No flat-artifact reader or
+   fallback is allowed.
+3. A durable `{old,new,state}` journal recovers only a complete old or new
+   pointer. A reader holds a generation lease from pointer observation through
+   handle release; pruning requires both the lease and valid publisher-owned
+   integrity, preserving held and unowned directories.
+4. `--check` is read-only: it uses an existing shared lock, rejects pending
+   journal/stage state, and never recovers, prunes, creates, or rewrites.
+5. Existing source locks and flat execution artifacts are a deterministic
+   in-memory reference corpus only in B1. Tests use temporary roots; no real
+   connector/source-lock materialization or author-owned-file deletion occurs.
+
+No user decision remains. The inline manual-GSD fallback is necessary because
+the custom phase has no adapter roadmap and no compatible isolated worker; it
+does not waive RED/GREEN, scoped verification, read-only review, or the next
+Firstmate exact-SHA gate.

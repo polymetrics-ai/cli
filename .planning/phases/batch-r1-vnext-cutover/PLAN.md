@@ -427,3 +427,81 @@
 2. Model production selection once from the closed hook factory and native executor inventories. Use the selected hook to construct the in-memory engine connector and record its exact extension in the staged manifest/index. Do not read or synthesize a global manifest.
 3. Retain each source operation's authored index exclusively for errors. Assign canonical order after source-ID sorting and use it for every staged provenance field path, then prove reordered inputs have identical staged provenance.
 4. Keep all work in authoring-time memory and preserve `runLockRender`'s no-write-before-admission boundary. CP11 continues to own physical staging, activation, recovery, and publication.
+
+## CP11 — B1 transactional connector-generation publication
+
+## Task Delivery Header
+
+- Issue: Refs #4427 — B1 transactional connector-generation publication; parent Refs #4325.
+- Authorization / exact base: Firstmate instruction `125.msg` accepts the fresh N2 correction review PASS at immutable `36e4d980de0d51d92fe74a68306845643596a6cb`. CP11 starts only from that head; CP12 is not started.
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through existing draft PR #4294.
+- Delivery: one ordinary non-force CP11 checkpoint pushed only to `origin/fm/cli-top100-declaration-batch-r1`, then pause unchanged for a new Firstmate exact-SHA review. No per-slice PR, rebase, merge, or release action.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: publish one already semantically admitted connector generation as a closed, connector-local staged set. The set contains execution bytes plus manifest, provenance, Atlas-reference, compact-index, proof, and integrity metadata; it is validated, fsynced, activated through one `CURRENT` pointer, recovered through a durable journal, and pruned only when no generation handle holds it.
+- Verification: RED/GREEN fault-state, stale-optional-file, reader/writer, writer/writer, digest, journal-recovery, and held-generation prune tests using temporary local roots and barriers only; scoped generator/static checks; read-only self-review; normal push and PR API read-back.
+
+### CP11 SHA-bound ten-row impact map
+
+- Frozen identity: local `HEAD` is `36e4d980de0d51d92fe74a68306845643596a6cb`, the sole authorized CP11 start point. The retained checkpoint `0b214b79eeb871238ce8454cd7b896e71e2746a7` remains historical ancestry, not an alternate implementation base.
+- Authority: `125.msg` explicitly authorizes #4427/B1 only after the N2 exact-SHA PASS. It forbids CP12, cross-connector transactions, provider or credential I/O, actual connector/source-lock materialization, and deletion of author-owned files.
+- Foundation classification: constrained extension of `authoring.source-lock-vnext.v1`. CP10's `vNextStagedGeneration` is the sole semantic input; publication must not add another source-lock decoder, renderer, executor selection, or runtime request path.
+
+| Lens | State | Exact evidence | Intended/possible effect | Required control or behavioral test |
+| --- | --- | --- | --- | --- |
+| Architecture and data flow | direct | `cmd/connectorgen/vnext_lock_cli.go:runLockRender` currently replaces rendered files independently; CP10 exposes one complete in-memory `vNextStagedGeneration` in `vnext_admission.go`. | Per-file replacement can expose an old index beside a new optional rate file or bundle. | One connector-local publisher stages the CP10 closed set under a same-filesystem generation root, validates it from disk, writes integrity metadata, then swaps only durable `CURRENT`; a generation resolver reads exactly that pointer. |
+| Affected callers | direct | `runLockRender`, its temp-root tests, `Makefile:connectorgen-vnext-locks`, `scripts/tests/connector-canon.sh`, and canonical authoring docs name the current render/check contract. | A partial command/doc/check migration could retain flat per-file publication as an executable route. | Route generation publication and `--check` through the same publisher/checker; update only authoring command checks and docs. `defs.FS`, `bundleregistry`, App, CLI runtime routing, and CP12 projection remain unchanged in B1. |
+| Interfaces and configuration | direct | `parseVNextLockArgs` exposes connector, `--defs`, and `--check`; `manifestidentity.ForFS` already defines the closed execution digest. | An unsafe connector/file/generation name, symlink, cross-device stage, or ambiguous pointer can escape the closed set. | Strict connector-relative artifact paths and generation IDs; connector-scoped lock outside the generated set; same-parent staging; typed `CURRENT`, journal, integrity, and held-generation handle APIs; reject malformed pointers, nonregular files, symlinks, duplicate/stale members, and digest mismatch before activation or use. |
+| Generated, help, docs, skills, website artifacts | direct | `SOURCE-LOCK-VNEXT.md`, `INDEX.md`, `IMPLEMENTATION-PROCEDURE.md`, `REMOTE-REPRODUCIBILITY.md`, Foundation Atlas revision 33, Make target, and connector-canon script describe byte checks of flat outputs. | Documentation could claim atomic closed publication while scripts still check individual files, or expose a stale operator recipe. | Update the source-lock canon, Atlas owner/proof contract, and authoring verification references to the new staged-generation check. Public PM help, manuals, website docs, and skills are N/A unless command syntax/output changes; record the inspection result. |
+| Compatibility and migration | direct | Committed reference locks and flat execution JSON are currently a deterministic in-memory parity corpus; instruction `125.msg` forbids actual connector/source-lock materialization. | Moving existing connector artifacts or accepting their flat layout as a second active-generation reader would exceed B1 and reintroduce a fallback. | Publish only hermetic temporary test roots in this checkpoint. Preserve author-owned `source.lock.json` and checked-in execution data untouched; the new resolver accepts only `CURRENT`-named staged generations and has no flat fallback. |
+| Security and secret taint | direct | Source locks are authoring-only; current authoring path has no credential or provider call; generated roots may contain attacker-controlled filesystem names. | Unsafe paths or error strings could access outside the connector root or expose source/config contents. | Use fixed internal filenames, reject traversal/symlinks/nonregular files, never serialize secret/config values in journal/error output, and prove semantic/stage failures occur before any provider, credential, or source materialization action. |
+| Concurrency, cancellation, and resource bounds | direct | Current writer has no connector lock, generation lease, recovery journal, or directory durability protocol; `manifeststore.GenerationLease` documents the later executor hold concept. | Concurrent writers can interleave and pruning can remove an old generation held by a reader. | Connector-scoped advisory lock serializes writers; readers hold an OS-backed generation lease before releasing the shared pointer lock; pruning skips held generations. Barrier tests assert old-complete or new-complete reads only, no sleeps, unbounded retry, cross-connector lock, or background worker. |
+| CLI and App reachability | none_with_evidence | `defs.FS` embeds the immutable flat execution snapshot; `bundleregistry.NewConstruction` loads only that embedded snapshot. `125.msg` forbids actual connector/source-lock materialization. | Repointing App/CLI to an unmaterialized generation tree would create a second runtime route or alter connector behavior. | Limit B1 runtime proof to the new local generation resolver over temporary publication roots. Do not modify App, CLI executable routing, embedded defs, connector behavior, help surface, or credentials; later authorized work must integrate any real materialized generation through one route. |
+| Provider and connector semantics | none_with_evidence | CP11 consumes only CP10's already-admitted byte set and metadata; its allowed source has no HTTP/requester/credential path. | A semantic validator could accidentally re-render source locks, select provider origins, or invoke connector transport. | Validate staged bytes with the existing loader/admission facts only; fixture tests use no provider URL, credential, network, or database. No connector lock or rendered execution artifact in the repository is written. |
+| Focused behavioral tests and evidence | direct | #4427 requires RED stale-optional, per-file-mix, writer-interleave, and reader index/bundle mismatch controls; CP10 already supplies deterministic in-memory admission fixtures. | Exit-status-only checks can hide a torn active set or unsafe prune. | First create failing temp-root state-machine tests, then prove complete old/new reads, closed file-set/digest equality, every journal/durability cut point recovery, failed stage/active validation rollback, two-writer serialization, and an old handle blocking prune. Run selector listing, package/race tests, scoped vet/build, docs/Atlas/contract checks, and goal-backward self-review. |
+
+### CP11 impact-ready disposition
+
+- Tool/lifecycle evidence: CodeGraph is unavailable because this repository has no `.codegraph` index; Go LSP is unavailable. Targeted source reads cover the current writer, CP10 stage, manifest identity/index/store, embedded runtime boundary, authoring checks, and issue #4427. `scripts/gsd doctor` reports only the established missing `.gsd/prompts/issue-122-rebootstrap.md`; all five lifecycle sources plus `discuss-phase` and `plan-phase --tdd` prompts resolved. The custom phase has no adapter ROADMAP or compatible isolated worker, so the required GSD/TDD execution, verification, and review evidence is recorded inline.
+- Required skill route: `go-engineering` fundamentals/production/advanced, `tdd`, `connector-lane-build-order`, and `connector-migration-exact-sha-review` are loaded. Repository-required `golang-how-to` is unavailable and is not claimed; `go-engineering` is the documented replacement for the bounded filesystem, concurrency, error, and test work.
+- B1 implementation allowlist: new connector-generation publication/resolution code and tests under `cmd/connectorgen`, the lock-render command contract/tests, exact authoring docs/check callers, the `authoring.source-lock-vnext.v1` Atlas record, phase evidence, and no other production path unless the first RED proves an unavoidable in-allowlist owner omission. No `internal/connectors/defs`, App, CLI runtime, connector lock, source lock, or rendered execution JSON changes are authorized.
+- READY — all ten lenses are direct or `none_with_evidence`; the only active writer path has a bounded owner, artifact layout, recovery state machine, and observable RED/GREEN proof. This authorizes the first CP11 RED test only.
+
+### CP11 implementation design and inline GSD execution
+
+- Publication root: only `<defs>/<connector>/generations/` is publisher-owned.
+  A candidate writes below a direct `.stage-*` child, includes the admitted
+  execution bytes plus manifest/provenance/Atlas/index/proof metadata and
+  publisher-owned `integrity.json`/`.lease`, and is renamed to a
+  digest-addressed sibling only after staged semantic validation and fsync.
+  `source.lock.json`, existing flat execution artifacts, `defs.FS`, and every
+  App/CLI runtime path remain outside the writer.
+- Selection/recovery: typed `CURRENT` binds `{generation, integrity_digest}`.
+  Typed `JOURNAL` records `{old,new,state}` before selection; current and
+  journal replacement fsync their parent. Recovery accepts only a complete
+  validated old or new pointer, restores old on failed activation, and retains
+  malformed/unowned paths rather than deleting them.
+- Reader/pruning: `Open` validates `CURRENT`, acquires a shared generation
+  lease while holding the connector lock, then returns a pointer-bound handle.
+  Pruning is connector-local and requires both an integrity-validated
+  publisher-owned closed tree and a nonblocking exclusive lease; it cannot
+  remove a held or unowned generation. `Check` uses only a shared existing lock
+  and never recovers, prunes, creates, or rewrites publication state.
+- No broad transaction or materialization: locks never cross connector roots;
+  staging consumes the already-admitted CP10 value and uses no credential,
+  provider, transport, database, source-lock reparse, actual corpus render, or
+  runtime registration path.
+- GSD/manual fallback: `scripts/gsd doctor` reports the known missing
+  `issue-122-rebootstrap.md`; `sources` resolved all five mandatory commands
+  and generated `discuss-phase`, `plan-phase --tdd`, `execute-phase`,
+  `verify-work`, and `code-review` prompts. The custom phase has no adapter
+  `ROADMAP.md` and no compatible isolated GSD worker/reviewer, so the required
+  discussion, plan, execution, verification, and review are performed inline
+  and evidenced in this phase directory. This is a documented runtime fallback,
+  not a lifecycle waiver.
+- Skills: loaded `go-engineering`, `tdd`,
+  `connector-lane-build-order`, `connector-migration-exact-sha-review`,
+  `frontend-design`, and `vercel-react-best-practices`. The required
+  `golang-how-to`, Go-specialist skill names, and `web-design-guidelines` are
+  unavailable in this runtime; they are not claimed. The website integration
+  and CLI parity references were read; no React/UI implementation or PM CLI
+  surface is changed.

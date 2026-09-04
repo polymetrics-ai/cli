@@ -262,3 +262,76 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - Lifecycle/review: generated `execute-phase`, `verify-work`, and `code-review` prompts were fulfilled inline under the recorded unavailable Pi-worker/manual-GSD fallback. The read-only self-review is in `REVIEW-CONVERGENCE.md`; no local blocker remains. This does not satisfy or replace the fresh Firstmate exact-SHA review required before CP11.
 
 - Publication: correction commit `b4dd03e8c2e113f1e791f5844db253135cdb5c9e` was normally pushed as `HEAD` to `origin/fm/cli-top100-declaration-batch-r1`. GitHub API read-back for draft PR #4294 reports `base=main`, `head=fm/cli-top100-declaration-batch-r1`, `sha=b4dd03e8c2e113f1e791f5844db253135cdb5c9e`, and `state=open`. The final exact-SHA review candidate is recorded in Firstmate state after this evidence checkpoint; CP11 remains prohibited.
+
+## CP11 B1 transactional publication verification plan
+
+- Impact-ready: Firstmate instruction `125.msg` authorizes only #4427/B1 from immutable `36e4d980de0d51d92fe74a68306845643596a6cb`; the SHA-bound ten-row plan map is `READY` before production edits. CP12 is not started.
+- Bounded surface: CP11 will exercise only temporary connector publication roots through the existing semantic stage. It will prove a closed staged artifact set, integrity/digest equality, same-filesystem durable activation, journal recovery, old/new reader consistency, writer serialization, and generation-handle-safe pruning. It will not publish real source locks or connector artifacts, call a provider, resolve a credential, alter App/CLI runtime routing, or delete an author-owned file.
+- Evidence contract: a RED must expose stale optional output, a mixed old/new observation, journal interruption, writer interleave, or unsafe prune; GREEN must observe an exact old or new complete set after recovery rather than only exit status. Fault tests use explicit cut-point hooks and barriers, never wall-clock sleeps.
+- Planned local gates: selector-list proof; focused `cmd/connectorgen` tests and race run; package test; source-lock deterministic in-memory parity; Atlas/docs checks; `go vet ./cmd/connectorgen`; `go build ./cmd/pm`; `go run ./cmd/agentcontractgen check`; `git diff --check`; scoped changed-file secret scan; generated inline/manual `execute-phase`, `verify-work`, and `code-review` evidence; normal non-force push and GitHub PR base/head/SHA read-back.
+
+## 2026-09-04 — CP11 B1 transactional publication verification
+
+- Scope/no-I/O: publication consumes an already admitted CP10 staged value only
+  through hermetic temporary roots. It did not materialize a checked-in
+  connector/source lock or execution bundle; it made no provider, credential,
+  database, App/CLI-runtime, release, `.cache`, or certification access.
+- RED/GREEN: the TDD ledger records executable failures for orphan recovery,
+  rejected active validation, repeat-set journaling, ambiguous generation
+  identity, unsafe artifact paths, unowned pruning, and a symlinked
+  `generations/` root that deleted an author-owned target. Each is green under
+  an observed temporary-root control; the last requires a nonsymlink root
+  before recovery/staging/check/open/prune.
+- State-machine/concurrency proof:
+  `go test -race -count=1 -timeout 20m ./cmd/connectorgen -run
+  '^(TestVNextGenerationPublisher.*|TestVNextPublicationGenerationIDDelimitsArtifactNamesAndBytes|TestRunLockRenderPublishesOnlyClosedGeneration)$'`
+  → `ok` (7.547s). It covers all declared durable fault cut points, exact
+  old/new recovery, same-parent staging, stale optional artifact removal,
+  serialized writers, no mixed bundle/index view, and held-reader prune
+  deferral.
+- Package and authoring proof:
+  `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (52.811s);
+  `make connectorgen-vnext-locks` → `ok` (reference in-memory parity plus
+  temporary closed publisher); `bash scripts/tests/connector-canon.sh` →
+  `connector canon check: ok`; and
+  `go test -count=1 -timeout 20m ./cmd/connectorgen -run
+  '^TestFoundationAtlasSelectorsResolve$'` → `ok`. `jq empty
+  docs/connector-canon/foundations/catalog.json` also passed after the
+  revision-33 owner/proof update.
+- Affected runtime packages:
+  `go test -count=1 -timeout 20m ./internal/connectors/defs
+  ./internal/connectors/engine ./internal/connectors/manifestindex` → all
+  `ok`; those packages are read-only consumers and were not modified.
+- Static/documentation contract:
+  `go vet ./cmd/connectorgen`, `go build ./cmd/pm`, `make docs-check`,
+  `go run ./cmd/agentcontractgen check`, and
+  `go run ./cmd/connectorgen validate internal/connectors/defs` all passed;
+  definition validation reported `553 connector(s) checked, 0 findings`.
+  `go run ./cmd/connectorgen --help` retained
+  `lock-render <connector> [--defs <dir>] [--check]`. Website metadata was
+  regenerated with `node website/scripts/gen-docs-data.mjs`; its two-node test
+  suite passed.
+- CLI/manual/website parity: no PM user-facing command, flag, output, help
+  topic, or runtime behavior changed, so PM CLI manual parity is not
+  applicable. The unchanged `connectorgen` help was exercised; canonical
+  authoring docs, Guide, architecture/migration references, website install
+  and connector-delivery content, and generated website metadata were updated
+  for the closed-generation/check-only contract. No `docs/cli` connectorgen
+  manual exists.
+- Required unrelated integration baseline:
+  `go test -count=1 -timeout 20m ./internal/cli` failed only in its recorded
+  polling-help, source-bound-origin, ETL-help, and local Redis
+  connection-refused baselines. CP11 changes no `internal/cli` source; the
+  exact observed failures are retained in the command transcript and local
+  review.
+- Lifecycle/review: all resolved GSD command sources and generated
+  discuss/plan/execute/verify/review prompts were fulfilled inline under the
+  recorded unavailable-compatible-worker/roadmap fallback. The read-only
+  self-review is recorded in `REVIEW-CONVERGENCE.md`; it found and corrected
+  the symlinked-generation-root deletion before the final tests. This does not
+  replace the mandatory Firstmate exact-SHA independent review after push.
+- Patch hygiene: `git diff --check` passed. A scoped scan of every changed
+  source, test, script, canon, Atlas, documentation, website-generated, and
+  phase-evidence file found no private-key, GitHub-token, OpenAI-token, or
+  AWS-key signature. The scan deliberately excluded untouched untracked
+  `.cache/` and certification residue.

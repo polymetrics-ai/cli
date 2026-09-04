@@ -270,3 +270,35 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 - Findings: no remaining local correction blocker. The manual GSD fallback is used because no compatible Pi worker/reviewer runtime is available and the established adapter blockers remain recorded; it does not replace the required fresh Firstmate exact-SHA independent review. `.cache/` and certification residue were neither read nor changed.
 
 - Reviewed correction range: `56ec3d9d7dc1d726203b0ef0c03ddec3209b8dde..b4dd03e8c2e113f1e791f5844db253135cdb5c9e`. The independent review's F1/F2/F3 defects are covered by focused RED/GREEN proofs, the full generator package, affected runtime packages, reference lock checks, Atlas/docs checks, scoped static gates, and this read-only review. Fresh external exact-SHA review remains mandatory for the final published evidence checkpoint.
+
+## 2026-09-04 — CP11 B1 transactional publication local self-review
+
+- Review subject: the uncommitted #4427/B1 authoring-only publisher,
+  `runLockRender` wiring, temporary-root proofs, source-lock canon/Atlas/docs
+  parity, generated website metadata, and CP11 evidence. The permitted
+  production boundary is CP10's admitted in-memory staged generation; no
+  checked-in connector root was materialized.
+- Workflow: the resolved `execute-phase`, `verify-work`, and `code-review`
+  procedures were fulfilled inline. The established adapter has no compatible
+  isolated worker/reviewer or phase roadmap, so this is a recorded manual-GSD
+  fallback—not an independent review or a substitute for Firstmate's
+  exact-SHA gate.
+
+| Lens | Disposition |
+| --- | --- |
+| Transaction, durability, recovery | Pass. Per-connector exclusive publication locks serialize writers. A same-parent `.stage-*` tree fsyncs all files/directories, a typed old/new journal is durable before `CURRENT`, pointer replacement is atomic and parent-fsynced, and every injected cut point recovers to one validated old or new closed generation. |
+| Read/check and runtime boundary | Pass. `Check` acquires only an existing shared lock and rejects pending recovery rather than writing it. `Open` binds one validated `CURRENT` generation before a reader lease. Publication reuses the existing loader/selection/preflight only for physical staged validation; `defs.FS`, App/CLI routing, source-lock runtime reads, and connector behavior remain unchanged. |
+| Closed-set and metadata integrity | Pass. The immutable generation ID frames every name/payload, integrity binds sorted digests and byte counts, and closed-tree validation rejects missing, unexpected, nonregular, and symlinked members. Omitted optional artifacts cannot survive in the selected set, so readers cannot combine an old index with new execution bytes. |
+| Ownership, filesystem safety, and taint | Pass after one self-review correction. Recovery originally followed a symlinked `generations/` root and deleted an author-owned staged target; the new red/green control requires `Lstat`-verified nonsymlink generation roots before recovery, staging, check, open, or prune. Pruning additionally requires a closed-tree integrity proof and an exclusive generation lease, retaining unowned and held directories. No provider, credential, database, source-lock, `.cache`, or certification input was read. |
+| Concurrency and resource bounds | Pass. The barrier proof prevents writer interleave and mixed generation observation; the reader lease blocks stale prune. File digesting streams through a fixed buffer; control metadata has a 1 MiB limit; no cross-connector lock or transaction exists. |
+| CLI/docs/website parity | Pass. `connectorgen lock-render` syntax is unchanged and its observed help remains accurate. Canonical authoring docs, user guide, architecture/migration references, website delivery/install pages, and generated website docs all describe the closed generation/check-only contract. PM CLI help/manual parity is not applicable because no PM command, flag, output, or runtime behavior changed. |
+| Proof and baselines | Pass for the changed authoring path: full `cmd/connectorgen`, race state-machine suite, source-lock target, canon/Atlas checks, affected runtime packages, vet/build/docs/agent-contract/definition validation, and website generation/tests passed. The separately required `internal/cli` suite reproduces only the recorded polling-help, source-bound-origin, ETL-help, and local Redis-connection-refused baselines; CP11 does not modify that package. |
+
+- Findings: no remaining local CP11 blocker. The symlinked-generation-root defect
+  found during this self-review was converted into an executable red/green
+  regression before the final package/race checks. No actual connector/source
+  lock or flat execution artifact was materialized, and no author-owned file
+  is deleted by the publisher.
+- Required next gate: commit and normally push this exact candidate, verify PR
+  #4294 base/head/SHA through the API, then pause for Firstmate's independent
+  exact-SHA review. CP12 remains prohibited.

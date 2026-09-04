@@ -32,6 +32,11 @@ document conflicts with the source-lock vNext architecture, vNext controls.
 - The sole transformation is source lock → canonical per-operation descriptor
   with shared schemas → deterministic execution JSON.
 - Runtime and runtime validation read execution JSON only.
+- Authoring publication is connector-local: a complete deterministic generation
+  is staged, semantically revalidated, fsynced, selected through atomic
+  `CURRENT`, recovered from a typed journal, and pruned only after its integrity
+  proves publisher ownership and readers release their leases. This checkpoint
+  does not materialize the checked-in corpus or add a runtime `CURRENT` reader.
 - Every connector explicitly declares direct read, direct write, binary
   download, binary upload, ETL, reverse ETL, and sync transport as
   `implemented` or `unsupported`.
@@ -56,7 +61,10 @@ go build ./cmd/pm
 
 There is no command that reconstructs a lock from execution JSON. Migrations
 author the lock directly from provider facts, then review the first deterministic
-render as a replacement of the prior bundle.
+render as a closed generation. `lock-render --check` verifies an already
+published generation without writing; an intentionally unmaterialized reference
+corpus is covered by the in-memory renderer parity test rather than a flat-file
+fallback.
 
 ## Proof standard
 

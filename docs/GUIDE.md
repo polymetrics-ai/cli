@@ -368,9 +368,11 @@ Adding a connector is the highest-leverage contribution. The pattern:
    `internal/connectors/defs/<name>/source.lock.json` using schema version 4,
    shared request/response/record schemas, canonical operations, and all seven
    lane declarations.
-2. **Render the execution bundle** — use `connectorgen lock-render`; the engine
-   consumes metadata, spec, streams/schemas, writes, operations, CLI surface,
-   and optional typed execution files.
+2. **Publish a closed execution generation** — use `connectorgen lock-render`;
+   it stages and revalidates metadata, spec, streams/schemas, writes,
+   operations, CLI surface, optional typed execution files, and publication
+   metadata before atomically selecting one complete generation. Runtime still
+   consumes execution JSON only.
 3. **Use hooks only for real gaps** — add `internal/connectors/hooks/<name>/` when auth,
    pagination, fan-out, or write behavior cannot be represented declaratively.
 4. **Promote full protocols to native** — use `internal/connectors/native/<name>/` only when
@@ -388,13 +390,15 @@ Adding a connector is the highest-leverage contribution. The pattern:
    instead of hand-editing. Registry keys are bare connector identifiers —
    `source-*`/`destination-*` keys are rejected — and every connector needs its own entry; see
    `docs/migration/icon-registry-single-source.md`.
-7. **Validate generated output** — `lock-render --check` must match the lock and
-   `go run ./cmd/connectorgen validate internal/connectors/defs` must report zero
-   findings. Run `go run ./cmd/connectorgen gen` only if hook/native package
-   sets changed, then `make verify`.
+7. **Validate generated output** — run `lock-render`, then confirm
+   `lock-render --check` reads the exact selected generation without writing.
+   `go run ./cmd/connectorgen validate internal/connectors/defs` must report
+   zero findings. Run `go run ./cmd/connectorgen gen` only if hook/native
+   package sets changed, then `make verify`.
 
 ```bash
 PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate
+go run ./cmd/connectorgen lock-render <connector>
 go run ./cmd/connectorgen lock-render <connector> --check
 go run ./cmd/connectorgen validate internal/connectors/defs
 go run ./cmd/connectorgen gen            # only when hook/native package sets change

@@ -15,7 +15,8 @@
 //	gen                        regenerates hooks/hookset/hookset_gen.go
 //	lock-render <connector>    projects immutable schema-v4 source.lock.json
 //	                           through the canonical operation descriptor into
-//	                           the sole runtime execution JSON bundle
+//	                           a staged, closed authoring generation; --check
+//	                           verifies its selected generation without writing
 //	batch gate --manifest <path> --report <path>
 //	                           records independent candidate validation and
 //	                           runtime-preflight results

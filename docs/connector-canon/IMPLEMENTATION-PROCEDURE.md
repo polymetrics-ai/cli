@@ -50,9 +50,11 @@ go run ./cmd/connectorgen lock-render <connector>
 go run ./cmd/connectorgen lock-render <connector> --check
 ```
 
-Review both sides of the diff. Every rendered change must follow from the lock.
-No provider citation or authoring evidence may appear in execution JSON.
-`--check` must pass without writing and a repeated render must be byte-stable.
+Review the lock and the selected closed generation. Every rendered and
+publication-metadata change must follow from the lock. No provider citation or
+authoring evidence may appear in a generation member. `--check` must pass
+without writing after publication; a repeated render must select byte-stable
+generation content.
 
 For the first conversion of an existing connector, author
 `source.lock.json` directly from the retained provider facts. Review the first
@@ -80,6 +82,7 @@ go test ./cmd/connectorgen -run '^TestVNextSourceLock' -count=1
 go test ./internal/connectors/defs -count=1
 go test ./internal/connectors/engine -count=1
 go test ./internal/connectors/commandrunner -count=1
+go test ./cmd/connectorgen -run '^(TestVNextGenerationPublisher.*|TestRunLockRenderPublishesOnlyClosedGeneration)$' -count=1
 ```
 
 ## 5. Prove each implemented lane
@@ -141,5 +144,7 @@ non-interactive, separately authorized, and necessary. Never fetch mutable
 provider documentation as part of a deterministic render or test.
 
 Commit connector-local cohorts only after all required checks are green. Push
-normally; do not force-push. A changed lock, its complete rendered outputs, and
-the corresponding tests travel together.
+normally; do not force-push. A changed lock, its deterministic closed-generation
+publication proof, and the corresponding tests travel together. Do not
+materialize the checked-in corpus or add a flat-file fallback without separate
+approval.

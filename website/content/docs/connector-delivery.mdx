@@ -6,12 +6,15 @@ description: One immutable authoring input, deterministic execution JSON, and ex
 Connector authors use one pipeline:
 
 ```text
-source.lock.json -> canonical operation descriptors -> execution JSON -> runtime
+source.lock.json -> canonical operation descriptors -> closed published execution generation
 ```
 
-The schema-4 lock is immutable authoring/evidence input. Runtime reads only the
-rendered metadata, spec, streams/schemas, writes, operations, CLI surface, and
-optional typed execution files.
+The schema-4 lock is immutable authoring/evidence input. `connectorgen
+lock-render` stages a complete connector-local generation, semantically
+revalidates it, fsyncs it, and atomically selects it through `CURRENT`.
+`lock-render --check` verifies that selected generation without writing.
+Runtime remains execution-JSON-only; this authoring checkpoint neither
+materializes the checked-in corpus nor adds a runtime `CURRENT` reader.
 
 Every connector explicitly declares seven lanes: direct read, direct write,
 binary download, binary upload, ETL, reverse ETL, and sync transport. One
@@ -27,9 +30,11 @@ database -> DuckDB -> API
 database -> DuckDB -> database
 ```
 
-Before delivery, prove deterministic rendering, execution-only discovery,
-malformed-artifact rejection, unambiguous command bindings, real encoders and
-executors, fake-server wire behavior, and DuckDB saved flows.
+Before delivery, prove deterministic closed-generation publication,
+execution-only discovery, malformed-artifact rejection, unambiguous command
+bindings, real encoders and executors, fake-server wire behavior, and DuckDB
+saved flows. Publication proof includes fault recovery, reader/writer
+whole-generation visibility, and lease-safe pruning.
 
 ```bash
 make connectorgen-vnext-locks

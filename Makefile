@@ -88,12 +88,11 @@ agent-contract-check:
 connectorgen-validate:
 	go run ./cmd/connectorgen validate internal/connectors/defs
 
-# Source locks are authoring input; this gate proves the materialized reference
-# execution bundles are byte-for-byte deterministic.
+# Source locks are authoring input. The reference corpus intentionally remains
+# unmaterialized; this gate proves in-memory renderer parity plus isolated
+# closed-generation publication, recovery, and read-only check behavior.
 connectorgen-vnext-locks:
-	go run ./cmd/connectorgen lock-render github --check
-	go run ./cmd/connectorgen lock-render gitlab --check
-	go run ./cmd/connectorgen lock-render asana --check
+	go test -timeout 20m -run '^(TestVNextSourceLockDeterministicallyRendersReferenceConnectors|TestVNextGenerationPublisher.*|TestRunLockRenderPublishesOnlyClosedGeneration)$$' ./cmd/connectorgen
 
 # Structural runtime proof for every command that claims availability: implemented.
 # The test calls commandrunner.Preflight rather than a copied validator so newly

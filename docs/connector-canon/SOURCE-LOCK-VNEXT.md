@@ -13,10 +13,11 @@ immutable source.lock.json
 canonical per-operation descriptors + shared schema registry
         │ deterministic rendering
         ▼
-execution JSON bundle under internal/connectors/defs/<connector>/
-        │ engine.Load / engine.LoadAll
+closed published execution generation under
+internal/connectors/defs/<connector>/generations/<generation>/
+        │ selected through atomic CURRENT when publication is enabled
         ▼
-commandrunner, protocol encoders, approval/auth, warehouse, sync transport
+existing execution-only runtime boundary; commandrunner, protocol encoders, approval/auth, warehouse, sync transport
 ```
 
 `source.lock.json` is authoring and evidence input. It is never embedded in the
@@ -85,19 +86,19 @@ stream schema. The current direct-operation contract has no typed response
 schema, so a direct-only response role is rejected rather than admitted as
 provenance-only.
 
-Canonicalization rejects structurally impossible role placement before any
-rendered-file replacement: a record reference requires a stream whose schema
-matches it; a request reference requires a write or direct operation; and a
-response reference requires a stream or direct operation. Semantic admission
-then renders one in-memory execution view, loads it with the existing engine,
-and proves every request/response role against the effective runtime schema
-before binding each source operation to its rendered stream/write/operation and
-commands. It constructs the in-memory connector through the closed native
-executor and generated hook authorities, then binds the complete staged
-manifest/index entry. GraphQL bindings remain operation-identity based even
-when routes match. Unknown provider facts remain opaque authoring data. A
-failed join names the source operation and JSON field path, and occurs before
-output replacement.
+Canonicalization rejects structurally impossible role placement before candidate
+staging: a record reference requires a stream whose schema matches it; a request
+reference requires a write or direct operation; and a response reference
+requires a stream or direct operation. Semantic admission then renders one
+in-memory execution view, loads it with the existing engine, and proves every
+request/response role against the effective runtime schema before binding each
+source operation to its rendered stream/write/operation and commands. It
+constructs the in-memory connector through the closed native executor and
+generated hook authorities, then binds the complete staged manifest/index entry.
+GraphQL bindings remain operation-identity based even when routes match.
+Unknown provider facts remain opaque authoring data. A failed join names the
+source operation and JSON field path, and occurs before candidate staging or
+activation.
 
 The renderer copies each shared schema byte-deterministically to the same path
 in the execution bundle. Shared references prevent command, stream, write, and
@@ -128,7 +129,7 @@ Lane state is checked against authored content. A claimed implemented lane with
 no corresponding execution content fails, as does execution content paired
 with `unsupported`.
 
-## 3. Canonicalization and deterministic rendering
+## 3. Canonicalization, staged validation, and publication
 
 `go run ./cmd/connectorgen lock-render <connector>` performs these steps:
 
@@ -156,21 +157,60 @@ with `unsupported`.
    provenance; authored operation-array positions are retained only for
    diagnostics.
 7. Render indented JSON with a trailing newline.
-8. Atomically replace destination files through a same-directory temporary
-   file only after every earlier step succeeds.
+8. Build one closed publication candidate containing every rendered execution
+   file plus `manifest.json`, `provenance.json`, `atlas.json`, `index.json`,
+   and `proof.json`. The author-owned `source.lock.json` is never a candidate
+   member.
+9. Acquire the target connector's publication lock only. Recover any interrupted
+   prior publication from its typed journal before staging a new candidate.
+   Publication never spans connectors.
+10. Create a same-filesystem temporary directory directly below that connector's
+    `generations/` directory, write the entire candidate there, reject unsafe
+    paths and symlinks, write its file-digest `integrity.json`, then fsync every
+    file and the staged directory.
+11. Validate the physical staged files through the same in-memory loader,
+    selected runtime identity, manifest/index construction, and
+    `commandrunner.Preflight`. This validation performs no credential,
+    provider, or transport I/O.
+12. Record and fsync a recovery journal `{old,new,state}`; atomically rename
+    the completed stage to `generations/<content-digest>/`; atomically replace
+    `CURRENT` with the new generation and its integrity digest; and fsync the
+    containing directory after each durable rename.
+13. Revalidate the selected `CURRENT` generation, mark the journal committed,
+    and clear it only after the active generation is complete. A failed active
+    validation restores the old `CURRENT` (or removes it for a first publish)
+    and removes the rejected generation.
+14. Prune only stale generations whose closed tree and integrity prove publisher
+    ownership and whose per-generation lease can be acquired exclusively. A
+    reader holds that lease from reading `CURRENT` until it releases its handle,
+    so an in-use old generation—and any unowned directory—remains intact.
 
-The outputs are:
+The `CURRENT` pointer is the only generation selection authority for a
+publication root. A reader observes either the prior complete generation or the
+new complete generation—never an index from one generation with an artifact
+from another. Recovery treats an interrupted stage as stale, restores or
+validates a complete pointer, and never accepts an incomplete or symlinked
+tree. Optional files are members of the closed set: a generation that retains
+an optional file absent from the candidate fails validation rather than
+silently inheriting it.
+
+The outputs inside a published generation are:
 
 - `metadata.json` and `spec.json`;
 - `streams.json` and registry schemas when streams or HTTP configuration exist;
 - `writes.json` when write actions exist;
 - `operations.json` when direct/binary operations exist;
 - `cli_surface.json` when CLI root content or commands exist;
-- the explicitly allowed optional execution files.
+- the explicitly allowed optional execution files;
+- publication metadata: `manifest.json`, `provenance.json`, `atlas.json`,
+  `index.json`, `proof.json`, and `integrity.json`.
 
-`--check` performs the same canonicalization, semantic admission, and rendering
-in memory, then requires byte equality with every required output. It does not
-write. A second render of unchanged input must produce identical bytes.
+`--check` performs the same canonicalization, semantic admission, rendering,
+closed-set construction, and staged-file validation in memory. It then requires
+the selected `CURRENT` generation to contain exactly those bytes and integrity
+metadata; it never writes. A fresh reference corpus that intentionally has no
+published generation is proved by the in-memory deterministic renderer test,
+not by a flat-file fallback reader.
 
 Authors create schema-4 locks directly from immutable provider facts. There is
 no execution-JSON-to-lock importer: such a reverse path would create a second
@@ -181,6 +221,13 @@ source of truth and could silently preserve obsolete runtime fields.
 `internal/connectors/defs` embeds execution JSON only. Its inventory rejects
 `source.lock.json` and other evidence files. `engine.Load` and `engine.LoadAll`
 parse the execution bundle and construct the existing runtime objects.
+
+Generation publication is an authoring-only foundation in this checkpoint. It
+does not materialize the checked-in connector corpus, alter `defs.FS`, or add a
+runtime reader for `CURRENT`, the journal, leases, integrity metadata, or a
+source lock. A later runtime adoption may consume a selected generation only
+through `CURRENT`; it requires its own approved change and cannot introduce a
+flat-file fallback.
 
 The existing runtime remains responsible for:
 
@@ -217,9 +264,12 @@ rejects an existing-but-swapped request/response schema, a request/response
 role with no effective runtime schema, a missing or cross-source
 stream/write/operation/command join, an invalid runtime route or encoder, an
 incomplete staged executor/extension identity, a mismatched staged identity,
-and malformed `rate_limits.json`; each fails `lock-render` before any file
-replacement. Reordering semantically equivalent operations cannot change staged
-provenance; malformed inputs still report their authored operation positions.
+and malformed `rate_limits.json`; each fails before candidate staging or
+activation. Publication additionally rejects unsafe or reserved artifact paths,
+symlinks, an incomplete/digest-mismatched selected tree, an unexpected stale
+member, a malformed pointer or journal, and an unavailable stale-generation
+lease. A failed publication preserves or restores the prior complete
+generation.
 
 Runtime errors remain typed at the closest execution boundary. The authoring
 admission uses the same in-memory loader, exact binding resolver, and command
@@ -256,9 +306,10 @@ foundation without its own approved design.
    go run ./cmd/connectorgen validate internal/connectors/defs
    ```
 
-6. Review the diff in both the lock and rendered JSON. Execution changes must
-   be explainable by the lock; provider evidence must not appear in rendered
-   artifacts.
+6. Review the lock and the selected closed generation. Execution and
+   publication-metadata changes must be explainable by the lock; provider
+   evidence must not appear in any generation member. Confirm `--check` does
+   not write and observes the exact selected generation.
 7. Prove discovery without credentials or provider I/O, malformed-artifact
    rejection, lane reporting, binding preflight, and each configured runtime
    executor. Use a fake server for wire-shape/credential-boundary tests and
@@ -271,7 +322,12 @@ foundation without its own approved design.
 
 A reference connector is green only when all of the following are demonstrated:
 
-- `lock-render --check` is byte-stable;
+- a published connector's `lock-render --check` is byte-stable and read-only;
+- a deliberately unmaterialized reference corpus has in-memory renderer parity
+  proof rather than a flat-file fallback;
+- fault recovery yields the old complete or new complete generation only;
+- a held reader lease prevents stale-generation pruning, and concurrent readers
+  observe one complete selected generation;
 - runtime inventory contains execution JSON and excludes authoring evidence;
 - `engine.Load` discovers the connector without consulting a lock or external
   evidence;

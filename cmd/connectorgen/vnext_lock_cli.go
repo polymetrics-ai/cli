@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"io"
 	"os"
 	"path/filepath"
@@ -34,32 +33,30 @@ func runLockRender(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen lock-render: lock connector %q does not match target %q\n", canonical.Connector, connector)
 		return 1
 	}
-	outputs, err := renderVNextExecutionBundle(canonical)
+	artifacts, err := vNextPublicationArtifactsForStage(raw, connector, canonical.Staged)
 	if err != nil {
-		logf(stderr, "connectorgen lock-render: render execution bundle: %v\n", err)
+		logf(stderr, "connectorgen lock-render: stage publication artifacts: %v\n", err)
 		return 1
 	}
-	names := sortedOutputNames(outputs)
-	for _, name := range names {
-		outputPath := filepath.Join(defsRoot, connector, filepath.FromSlash(name))
-		if check {
-			current, readErr := os.ReadFile(outputPath)
-			if readErr != nil || !bytes.Equal(current, outputs[name]) {
-				logf(stderr, "connectorgen lock-render: %s differs from source.lock.json\n", filepath.ToSlash(outputPath))
-				return 1
-			}
-			continue
-		}
-		if err := writeGeneratedArtifact(outputPath, outputs[name]); err != nil {
-			logf(stderr, "connectorgen lock-render: write %s: %v\n", filepath.ToSlash(outputPath), err)
-			return 1
-		}
+	publisher, err := newVNextGenerationPublisher(defsRoot, connector, vNextPublicationHooks{})
+	if err != nil {
+		logf(stderr, "connectorgen lock-render: initialize publisher: %v\n", err)
+		return 1
 	}
 	if check {
-		logf(stdout, "vNext execution bundle is current: %s\n", connector)
-	} else {
-		logf(stdout, "rendered vNext execution bundle: %s (%d files)\n", connector, len(names))
+		if err := publisher.Check(artifacts); err != nil {
+			logf(stderr, "connectorgen lock-render: check published generation: %v\n", err)
+			return 1
+		}
+		logf(stdout, "vNext execution generation is current: %s\n", connector)
+		return 0
 	}
+	pointer, err := publisher.Publish(artifacts)
+	if err != nil {
+		logf(stderr, "connectorgen lock-render: publish generation: %v\n", err)
+		return 1
+	}
+	logf(stdout, "published vNext execution generation: %s (%d files, %s)\n", connector, len(artifacts.Files), pointer.Generation)
 	return 0
 }
 
@@ -110,32 +107,4 @@ func sortedOutputNames(outputs map[string][]byte) []string {
 	}
 	sort.Strings(names)
 	return names
-}
-
-func writeGeneratedArtifact(path string, payload []byte) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		return err
-	}
-	temporary, err := os.CreateTemp(filepath.Dir(path), ".connectorgen-vnext-*")
-	if err != nil {
-		return err
-	}
-	temporaryPath := temporary.Name()
-	defer func() { _ = os.Remove(temporaryPath) }()
-	if err := temporary.Chmod(0o644); err != nil {
-		_ = temporary.Close()
-		return err
-	}
-	if _, err := temporary.Write(payload); err != nil {
-		_ = temporary.Close()
-		return err
-	}
-	if err := temporary.Sync(); err != nil {
-		_ = temporary.Close()
-		return err
-	}
-	if err := temporary.Close(); err != nil {
-		return err
-	}
-	return os.Rename(temporaryPath, path)
 }

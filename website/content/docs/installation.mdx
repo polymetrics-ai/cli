@@ -114,7 +114,13 @@ Authoring inputs are intentionally left out of the shipping binary:
 | `source.lock.json` | Connector-dependent | Immutable provider facts used by `connectorgen lock-render`. |
 | Provider fixtures | Connector-dependent | Optional local test inputs; never a second runtime route. |
 
-`connectorgen lock-check` validates that a source lock deterministically renders the committed execution bundle. `connectorgen validate` then validates only the execution bundle that the runtime consumes. Release archives can be smaller or larger than the raw executable depending on operating system, architecture, and archive compression.
+`connectorgen lock-render` publishes a connector-local closed generation after
+semantic staging validation; `connectorgen lock-render --check` verifies its
+selected `CURRENT` generation without writing. This authoring foundation does
+not materialize the checked-in corpus or change the execution-only runtime
+reader. `connectorgen validate` validates only the execution bundle that the
+runtime consumes. Release archives can be smaller or larger than the raw
+executable depending on operating system, architecture, and archive compression.
 
 ## Release cadence
 

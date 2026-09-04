@@ -16,20 +16,20 @@ without provider credentials.
 
 ```bash
 go run ./cmd/agentcontractgen check
-go run ./cmd/connectorgen lock-render github --check
-go run ./cmd/connectorgen lock-render gitlab --check
-go run ./cmd/connectorgen lock-render asana --check
 go run ./cmd/connectorgen validate internal/connectors/defs
-go test ./cmd/connectorgen -run '^TestVNextSourceLock' -count=1
+go test ./cmd/connectorgen -run '^(TestVNextSourceLock.*|TestVNextGenerationPublisher.*|TestRunLockRenderPublishesOnlyClosedGeneration)$' -count=1
 go test ./internal/connectors/defs ./internal/connectors/engine ./internal/connectors/commandrunner -count=1
 go test ./internal/cli -count=1
 go build ./cmd/pm
 ```
 
 The runtime-inventory test proves source locks and authoring evidence are not
-embedded. Local fake servers prove request encoding and credential-boundary
-reachability. Temporary DuckDB paths prove ETL, reverse ETL, and configured
-sync transport without an external provider.
+embedded. The in-memory reference-render and temporary-root publication tests
+prove deterministic closed-generation construction, journal recovery, exact
+`CURRENT` selection, and lease-safe pruning without materializing the
+checked-in corpus. Local fake servers prove request encoding and
+credential-boundary reachability. Temporary DuckDB paths prove ETL,
+reverse ETL, and configured sync transport without an external provider.
 
 ## External provider tests
 

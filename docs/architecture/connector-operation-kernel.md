@@ -51,12 +51,14 @@ external evidence ledger.
 
 Authors declare the operation lane in immutable `source.lock.json`, including
 shared request/response schema references. The canonical descriptor validates
-and sorts it; the deterministic renderer writes `operations.json`, referenced
-schemas, and `cli_surface.json`.
+and sorts it; the deterministic renderer publishes a closed generation
+containing `operations.json`, referenced schemas, `cli_surface.json`, and
+integrity-bound publication metadata.
 
 Proof must include:
 
-1. deterministic `lock-render --check`;
+1. deterministic, read-only `lock-render --check` against the selected closed
+   generation;
 2. discovery from execution JSON with no source-lock read;
 3. fake-server reachability through credentials without live provider I/O;
 4. happy, malformed, ambiguous, approval/auth, and bounded-output cases; and

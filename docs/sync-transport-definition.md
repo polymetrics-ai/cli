@@ -117,8 +117,8 @@ named local stage and never replays provider I/O.
    the execution file.
 2. Name an existing registered executor and only modes, streams, actions,
    mappings, batches, and acknowledgement behavior it actually supports.
-3. Render with `connectorgen lock-render`, then verify byte-for-byte stability
-   with `connectorgen lock-render --check`.
+3. Publish with `connectorgen lock-render`, then verify the exact selected
+   closed generation without writing using `connectorgen lock-render --check`.
 4. Test happy execution, malformed/ambiguous definitions, incompatible modes,
    missing executors, refusal before I/O, approval/auth boundaries, durable
    acknowledgement, and recovery.
