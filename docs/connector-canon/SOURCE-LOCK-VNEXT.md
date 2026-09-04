@@ -195,38 +195,49 @@ with `unsupported`.
 13. Persist and fsync a typed `state:"prepared"` recovery journal
     `{old,new,state}` **before** the same-directory rename that activates the
     completed stage as `generations/<content-digest>/`; no final-generation
-    rename is allowed before that journal is durable. A `CURRENT` or `JOURNAL`
-    temporary is the `control` child of a retained private
-    `.connectorgen-publication-*` directory directly below the connector root.
-    Before final installation, create a unique connector-local
-    `.connectorgen-control-repair-<random>/` directory with `Mkdirat` exclusive
-    creation and retain its descriptor identity. Hard-link and fsync the prior
-    control in that private transaction when one exists, then create and fsync
-    its bounded strict `prepared.json` authority with exclusive creation. The
-    immutable prepared authority binds the `CURRENT` or `JOURNAL` target,
-    intended temporary, optional prior, and private transaction name/identity;
-    it is durable before exposure. No mutable root repair-authority pathname
-    exists. Every later recovery state is a new bounded `phase-*.json` member,
-    also exclusively created, that binds the prepared inode/digest and its
-    immediate predecessor identity/digest. The source child and private
-    transaction/prepared authority are rechecked immediately before the
-    descriptor-relative transition; the installed inode must then equal the
-    retained temporary identity. A mismatch retains and
-    fsyncs the installed replacement, appends its bound phase, restores and
-    fsyncs the prior control (or the valid absent first-publication namespace),
-    and appends a restored phase before clearing the private authority. Recovery
-    locates and verifies a pending private transaction and its contiguous phase
-    chain before it decodes ordinary `CURRENT` or `JOURNAL`; it never treats a
-    pending substituted public control as selection authority. Cleanup rechecks
-    public and private identities, then removes and fsyncs the prepared authority
-    before it deletes only private phase/backup garbage; a retained substitute
-    remains forensic private state. Fsync the
-    `generations/` descriptor after the rename, then atomically replace
-    `CURRENT` with the new generation and integrity digest and fsync its
-    containing descriptor. `CURRENT`, the journal, prepared authority, phase
-    records, `integrity.json` (including each file entry), and the stage marker
-    are bounded, no-follow, strict JSON documents: duplicate members and
-    trailing values are invalid.
+    rename is allowed before that journal is durable. `CURRENT` and `JOURNAL`
+    are then governed by a connector-local durable authority protocol. Bootstrap
+    under the exclusive publication lock creates a strict terminal head for the
+    observed state of each control before it creates the permanent
+    `.connectorgen-control-authority-v3.json` marker. Every later transition
+    creates and fsyncs a random
+    `.connectorgen-control-repair-<random>/prepared.json` successor that binds
+    its predecessor terminal, tagged prior and intended state, private
+    hard-link anchors, transaction identity, and the finite capture limit.
+    Phase records are append-only, strictly decoded, and bind their immutable
+    prepared identity/digest and immediate predecessor.
+
+    A public mutation first creates a bound private capture slot and durable
+    `capture_intent`, then uses descriptor-relative no-replace rename to move
+    whatever currently occupies `CURRENT` or `JOURNAL` into that slot.
+    Unsupported no-replace filesystems fail with a typed transition error; they
+    never fall back to a clobbering rename. After syncing both directories, the
+    publisher classifies the captured inode and uses create-only `linkat` from
+    the retained prior or intended anchor to select a present state. A late
+    public occupant is captured by another bounded attempt; selecting absence
+    never calls public `unlinkat`. The selected state and a terminal
+    `committed`, `rolled_back`, or `retry_required` phase are fsynced. Terminal
+    authority is never discarded automatically: a durable successor can make a
+    predecessor cleanup-eligible, but current publication retains predecessors
+    rather than risk weakening the authority graph.
+
+    Recovery first validates the marker, every repair-prefixed transaction,
+    immutable anchors, phase chain, predecessor graph, and unique terminal head
+    before it interprets either public control. Every transition and every
+    authorized public-control read revalidates the transaction, prepared, phase,
+    capture, and predecessor descriptor identities it depends on. A terminal
+    divergence creates a successor that restores the retained terminal
+    selection; a pending, retry-required, malformed, forked, missing, or
+    divergent graph fails closed. `lock-render --check` performs that graph
+    validation under its shared lock without writing or emitting a success line,
+    then decodes a public control only through the open descriptor whose
+    identity equals the terminal selection. The private namespace is
+    integrity protection against accidental and noncooperating public-name
+    races, not authentication against a same-UID actor able to
+    delete or replace every private authority member. `CURRENT`, the journal,
+    authority marker, prepared authority, phase records, `integrity.json`
+    (including each file entry), and the stage marker are bounded, no-follow,
+    strict JSON documents: duplicate members and trailing values are invalid.
 14. Revalidate the selected `CURRENT` generation, mark the journal committed,
     and clear it only after the active generation is complete. A failed active
     validation restores the old `CURRENT` (or removes it for a first publish)
@@ -241,20 +252,21 @@ with `unsupported`.
     reader holds that lease from reading `CURRENT` until it releases its handle,
     so an in-use old generation—and any unowned directory—remains intact.
 
-Once no typed control-repair authority remains, the `CURRENT` pointer is the
-only generation selection authority for a publication root. While a repair
-authority is pending, recovery resolves it before interpreting either public
-control. A reader observes either the prior complete generation or the new
-complete generation—never an index from one generation with an artifact from
-another. The prepared journal and typed stage marker form one recovery state
-machine: a crash before final rename removes the owned stage and restores the
-old selection; a crash after final rename but before `CURRENT` restores the old
-selection and removes the new generation; a valid `CURRENT` pointing at the new
-generation completes recovery. Recovery treats an interrupted stage as stale
-only after its durable ownership proof; it never accepts an incomplete,
-renamed, self-consistent, symlinked, or otherwise non-exact tree. Optional files
-are members of the closed set: a generation that retains an optional file absent
-from the candidate fails validation rather than silently inheriting it.
+Once the protected-mode marker exists, public controls are never sole
+selection authority: exactly one retained terminal head per target selects a
+present inode or logical absence. A reader observes only the recorded prior
+complete generation or new complete generation from a descriptor whose identity
+matches that terminal selection; pending or divergent authority is refused
+before public decode. The prepared journal and typed stage marker form one
+recovery state machine: a crash before final rename removes the owned stage and
+restores the old selection; a crash after final rename but before `CURRENT`
+restores the old selection and removes the new generation; a valid `CURRENT`
+pointing at the new generation completes recovery. Recovery treats an
+interrupted stage as stale only after its durable ownership proof; it never
+accepts an incomplete, renamed, self-consistent, symlinked, or otherwise
+non-exact tree. Optional files are members of the closed set: a generation that
+retains an optional file absent from the candidate fails validation rather than
+silently inheriting it.
 
 The outputs inside a published generation are:
 

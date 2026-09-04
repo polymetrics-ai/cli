@@ -880,3 +880,58 @@
 **Counterfactual/disconfirmation:** had the mutable root record been adequate, the real locked rename tests would have found one private authority and fresh recovery would not need a separate namespace. All four RED cases found zero such authorities. Conversely, the selected protocol is rejected if a source or target rename can change the private directory identity, prepared digest, or phase predecessor without recovery failing before public-control decoding.
 
 **GSD route actually used:** `scripts/gsd doctor` found every adapter component except the known absent `.gsd/prompts/issue-122-rebootstrap.md`; `scripts/gsd sources` resolved `discuss-phase`, `plan-phase`, `execute-phase`, `verify-work`, and `code-review` to `.gsd/commands.json`, `.gsd/upstream.lock.json`, and `.gsd/official-docs/COMMANDS.md`. The five corresponding `scripts/gsd prompt` invocations were generated. Firstmate prohibits the roles those prompts require, so this CP11 pass follows their documented inline/manual fallback and records each discuss/plan/TDD/execute/verify/review result here rather than claiming a spawned role.
+
+## CP11 F1 durable terminal-authority linearization — Firstmate instruction 139
+
+## Task Delivery Header
+
+- Issue: Refs #4427 — CP11-only F1 control-publication linearization correction; parent Refs #4325.
+- Base branch: `main` (existing draft PR #4294 target; API base will be read back after the normal candidate push).
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through existing draft PR #4294.
+- Delivery: one ordinary non-force Design B correction from immutable candidate `4fa9a5b8cdecdfc07afe54ee3eddb7d19719f5b8` and parent `f36b5d0a275ed27fd5f4da242ba192e43f8066d5`, normally pushed to the existing parent branch; then pause unchanged for a fresh Firstmate-managed OMP exact-SHA review. CP11 is not claimed complete and CP12 is not started.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: replace CP11's final authority-retirement and public-control check/use protocol with retained terminal authority heads, successor-bound append-only records, descriptor-relative no-clobber capture, create-only selection, and authority-first recovery/checking for `CURRENT` and `JOURNAL`.
+- Verification: candidate RED counterfactuals; temporary-root, descriptor-relative, lock-ignoring actor matrix; real CLI `lock-render --check` read-only refusal; focused/full/race `cmd/connectorgen`; source-lock corpus, Atlas/canon, static, contract, self-review, normal push, and PR API base/head/SHA read-back.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Every selected public control has one retained terminal authority | fake | CP11 forbids checked-in control materialization. Temporary roots use real descriptors, fsyncs, and transaction directories; fresh recovery must identify exactly one terminal head per protected target. |
+| A late public occupant is captured without clobbering | fake | A direct same-permission actor ignores the real `Flock`, mutates `CURRENT` or `JOURNAL` at post-validation barriers, and the test asserts each moved inode remains reachable in a distinct bound capture slot. |
+| Check never decodes pending or divergent public control state | fake | The real `lock-render --check` path runs against a temporary root; it must return nonzero without its success line or any filesystem mutation before public payload decoding. |
+| Unsupported no-replace filesystems never silently clobber | fake | Deterministic syscall-error injection asserts typed unsupported/concurrency errors, retained predecessor authority, and unchanged public occupant rather than a plain-rename fallback. |
+
+### Design B decision, trigger, mask, symptom, and TDD order
+
+- Authority: `139.msg` authorizes only this CP11 correction over `4fa9a5b8cdecdfc07afe54ee3eddb7d19719f5b8`; the authoritative design/evidence is `/Users/karthiksivadas/karthik-agent-workspace/data/cli-batch1-cp11-f1-linearization-research-r1/report.md`. No CP12, rebase/reset/force-push, source-lock/rendered-output materialization, provider/credential/database I/O, `.cache`, or certification residue work is authorized.
+- Trigger: a same-permission actor that ignores cooperative `Flock` replaces or unlinks `CURRENT`/`JOURNAL` after the final `fstatat` identity observation but before a clobbering `renameat` or public `unlinkat`, or after final public validation but before candidate retirement of sole `prepared.json` authority.
+- Mask/symptom: cooperating writers serialize; existing hooks precede a later validation; ordinary crash cuts omit late pathname mutation; authority counting ignores authority-less residue; and public-only `--check` masks no-prior `JOURNAL` behind old `CURRENT`. Candidate `4fa9a5b8…` can clobber/unlink a late occupant, retire the only authority, and let fresh recovery/check trust a schema-valid third inode or false-success the masked check.
+- Selected protocol: protected-mode marker after durable bootstrap heads; exactly one retained terminal head per target; successor `prepared.json` binds predecessor terminal identity/digest; append/fsync capture-intent, captured, selected, and terminal phases; platform no-replace public capture then post-move classification; create-only `linkat` selection; logical absence without public unlink; authority-first recover/read-only check; descriptor-authorized decode; four-attempt `retry_required`; successor-only cleanup.
+- Platform/error rule: Linux `Renameat2(..., RENAME_NOREPLACE)` and Darwin `RenameatxNp(..., RENAME_EXCL)` normalize `ENOSYS`, `EINVAL`, `ENOTSUP`/`EOPNOTSUPP`, and `EXDEV` to one typed unsupported-transition error; collisions are typed conflict/retry. No plain clobbering fallback.
+- RED first: candidate tests execute post-last-validation install rename, restore rename, no-prior public unlink, and final-public-validation→sole-authority-retirement counterfactuals with fresh recovery and real CLI check. GREEN then implements one vertical terminal-authority slice at a time. Atlas/canon map only actual post-validation and real-check witnesses.
+- Lifecycle/skills: `scripts/gsd doctor` has the known missing issue prompt; all lifecycle sources resolve and discussion/plan prompts were generated. Firstmate forbids role spawning, so documented inline/manual fallback applies. Loaded `go-engineering` fundamentals/advanced/production, `diagnose`, `tdd`, and exact-SHA connector review guidance; required `golang-how-to` was attempted but unavailable.
+
+## CP11 F1 Design B implementation result — instruction 139
+
+- Implemented the report's version-3 protected-mode protocol: bootstrap creates
+  terminal heads for both controls before the marker; every later transition
+  creates an immutable, random successor transaction with predecessor-bound
+  `prepared.json`, private anchors, bounded capture attempts, and
+  identity/digest-chained exclusive-create phase records.
+- `CURRENT` and `JOURNAL` public changes now use descriptor-relative
+  no-replace capture and create-only selection. A present control is linked from
+  a retained anchor; logical absence is observed rather than produced by public
+  `unlinkat`. Linux and Darwin use their native no-replace primitives and fail
+  closed on unsupported filesystems or collisions.
+- Recovery and `--check` are authority-first. They scan strict private state
+  before public parsing; every authorized public read revalidates retained
+  marker, transaction, prepared, phase, capture, and predecessor identities
+  after its graph scan and before decoding the selected descriptor.
+- Automatic predecessor retirement is intentionally absent. A durable successor
+  can supersede a predecessor, but the implementation retains prior authority
+  rather than introduce a same-UID-unsafe cleanup mutation. The cleanup
+  substitution proof therefore verifies retention and refusal, not an
+  unreachable deletion barrier.
+- Scope remains CP11-only: no CP12, source-lock/rendered corpus materialization,
+  runtime route, provider/credential/database I/O, `.cache`, or certification
+  residue access. Local implementation and verification are complete; the next
+  delivery action is the one ordinary push and fresh Firstmate exact-SHA review.

@@ -40,59 +40,57 @@ const (
 type vNextPublicationFaultPoint string
 
 const (
-	vNextPublicationBeforeFileSync                          vNextPublicationFaultPoint = "before_file_sync"
-	vNextPublicationAfterFileSync                           vNextPublicationFaultPoint = "after_file_sync"
-	vNextPublicationBeforeStageDirectory                    vNextPublicationFaultPoint = "before_stage_directory_sync"
-	vNextPublicationAfterStageDirectory                     vNextPublicationFaultPoint = "after_stage_directory_sync"
-	vNextPublicationBeforeJournalSync                       vNextPublicationFaultPoint = "before_journal_sync"
-	vNextPublicationAfterJournalSync                        vNextPublicationFaultPoint = "after_journal_sync"
-	vNextPublicationBeforeCurrentTempSync                   vNextPublicationFaultPoint = "before_current_temp_sync"
-	vNextPublicationAfterCurrentTempSync                    vNextPublicationFaultPoint = "after_current_temp_sync"
-	vNextPublicationBeforeCurrentRename                     vNextPublicationFaultPoint = "before_current_rename"
-	vNextPublicationAfterCurrentRename                      vNextPublicationFaultPoint = "after_current_rename"
-	vNextPublicationBeforeCurrentParent                     vNextPublicationFaultPoint = "before_current_parent_sync"
-	vNextPublicationAfterCurrentParent                      vNextPublicationFaultPoint = "after_current_parent_sync"
-	vNextPublicationBeforeActiveValidate                    vNextPublicationFaultPoint = "before_active_validation"
-	vNextPublicationAfterActiveValidate                     vNextPublicationFaultPoint = "after_active_validation"
-	vNextPublicationBeforeCommitSync                        vNextPublicationFaultPoint = "before_commit_sync"
-	vNextPublicationAfterCommitSync                         vNextPublicationFaultPoint = "after_commit_sync"
-	vNextPublicationBeforePrune                             vNextPublicationFaultPoint = "before_prune"
-	vNextPublicationAfterPrune                              vNextPublicationFaultPoint = "after_prune"
-	vNextPublicationBeforeStageCleanup                      vNextPublicationFaultPoint = "before_stage_cleanup"
-	vNextPublicationAfterLockAcquire                        vNextPublicationFaultPoint = "after_lock_acquire"
-	vNextPublicationBeforeStageRename                       vNextPublicationFaultPoint = "before_stage_rename"
-	vNextPublicationAfterStageRename                        vNextPublicationFaultPoint = "after_stage_rename"
-	vNextPublicationBeforeStageRemoval                      vNextPublicationFaultPoint = "before_stage_removal"
-	vNextPublicationBeforeGenerationRemoval                 vNextPublicationFaultPoint = "before_generation_removal"
-	vNextPublicationBeforeControlRemoval                    vNextPublicationFaultPoint = "before_control_removal"
-	vNextPublicationAfterControlSourceIdentity              vNextPublicationFaultPoint = "after_control_source_identity"
-	vNextPublicationAfterFinalControlSourceIdentity         vNextPublicationFaultPoint = "after_final_control_source_identity"
-	vNextPublicationAfterControlRepairBackupSync            vNextPublicationFaultPoint = "after_control_repair_backup_sync"
-	vNextPublicationAfterControlRepairPrepared              vNextPublicationFaultPoint = "after_control_repair_prepared"
-	vNextPublicationAfterControlRepairInstall               vNextPublicationFaultPoint = "after_control_repair_install"
-	vNextPublicationAfterControlRepairInstallSync           vNextPublicationFaultPoint = "after_control_repair_install_sync"
-	vNextPublicationAfterControlRepairInstalledPhaseSync    vNextPublicationFaultPoint = "after_control_repair_installed_phase_sync"
-	vNextPublicationAfterControlRepairReplacementRetainSync vNextPublicationFaultPoint = "after_control_repair_replacement_retain_sync"
-	vNextPublicationAfterControlRepairReplacementSync       vNextPublicationFaultPoint = "after_control_repair_replacement_sync"
-	vNextPublicationAfterControlRepairPublicRestoreSync     vNextPublicationFaultPoint = "after_control_repair_public_restore_sync"
-	vNextPublicationAfterControlRepairRestoreSync           vNextPublicationFaultPoint = "after_control_repair_restore_sync"
-	vNextPublicationBeforeControlRepairAuthorityClear       vNextPublicationFaultPoint = "before_control_repair_authority_clear"
-	vNextPublicationAfterControlRepairAuthorityRetireSync   vNextPublicationFaultPoint = "after_control_repair_authority_retire_sync"
-	vNextPublicationAfterControlRepairClearSync             vNextPublicationFaultPoint = "after_control_repair_clear_sync"
-	vNextPublicationAfterStageRemovalIdentity               vNextPublicationFaultPoint = "after_stage_removal_identity"
-	vNextPublicationAfterGenerationRemovalIdentity          vNextPublicationFaultPoint = "after_generation_removal_identity"
-	vNextPublicationAfterGenerationLeaseIdentity            vNextPublicationFaultPoint = "after_generation_lease_identity"
-	vNextPublicationAfterControlRemovalIdentity             vNextPublicationFaultPoint = "after_control_removal_identity"
+	vNextPublicationBeforeFileSync                         vNextPublicationFaultPoint = "before_file_sync"
+	vNextPublicationAfterFileSync                          vNextPublicationFaultPoint = "after_file_sync"
+	vNextPublicationBeforeStageDirectory                   vNextPublicationFaultPoint = "before_stage_directory_sync"
+	vNextPublicationAfterStageDirectory                    vNextPublicationFaultPoint = "after_stage_directory_sync"
+	vNextPublicationBeforeJournalSync                      vNextPublicationFaultPoint = "before_journal_sync"
+	vNextPublicationAfterJournalSync                       vNextPublicationFaultPoint = "after_journal_sync"
+	vNextPublicationBeforeCurrentTempSync                  vNextPublicationFaultPoint = "before_current_temp_sync"
+	vNextPublicationAfterCurrentTempSync                   vNextPublicationFaultPoint = "after_current_temp_sync"
+	vNextPublicationBeforeCurrentRename                    vNextPublicationFaultPoint = "before_current_rename"
+	vNextPublicationAfterCurrentRename                     vNextPublicationFaultPoint = "after_current_rename"
+	vNextPublicationBeforeCurrentParent                    vNextPublicationFaultPoint = "before_current_parent_sync"
+	vNextPublicationAfterCurrentParent                     vNextPublicationFaultPoint = "after_current_parent_sync"
+	vNextPublicationBeforeActiveValidate                   vNextPublicationFaultPoint = "before_active_validation"
+	vNextPublicationAfterActiveValidate                    vNextPublicationFaultPoint = "after_active_validation"
+	vNextPublicationBeforeCommitSync                       vNextPublicationFaultPoint = "before_commit_sync"
+	vNextPublicationAfterCommitSync                        vNextPublicationFaultPoint = "after_commit_sync"
+	vNextPublicationBeforePrune                            vNextPublicationFaultPoint = "before_prune"
+	vNextPublicationAfterPrune                             vNextPublicationFaultPoint = "after_prune"
+	vNextPublicationBeforeStageCleanup                     vNextPublicationFaultPoint = "before_stage_cleanup"
+	vNextPublicationAfterLockAcquire                       vNextPublicationFaultPoint = "after_lock_acquire"
+	vNextPublicationBeforeStageRename                      vNextPublicationFaultPoint = "before_stage_rename"
+	vNextPublicationAfterStageRename                       vNextPublicationFaultPoint = "after_stage_rename"
+	vNextPublicationBeforeStageRemoval                     vNextPublicationFaultPoint = "before_stage_removal"
+	vNextPublicationBeforeGenerationRemoval                vNextPublicationFaultPoint = "before_generation_removal"
+	vNextPublicationBeforeControlRemoval                   vNextPublicationFaultPoint = "before_control_removal"
+	vNextPublicationAfterControlSourceIdentity             vNextPublicationFaultPoint = "after_control_source_identity"
+	vNextPublicationAfterFinalControlSourceIdentity        vNextPublicationFaultPoint = "after_final_control_source_identity"
+	vNextPublicationAfterControlRepairPrepared             vNextPublicationFaultPoint = "after_control_repair_prepared"
+	vNextPublicationAfterControlRepairCaptureDirectory     vNextPublicationFaultPoint = "after_control_repair_capture_directory"
+	vNextPublicationBeforeControlRepairCapture             vNextPublicationFaultPoint = "before_control_repair_capture"
+	vNextPublicationAfterControlRepairCaptureRename        vNextPublicationFaultPoint = "after_control_repair_capture_rename"
+	vNextPublicationAfterControlRepairCaptureDirectorySync vNextPublicationFaultPoint = "after_control_repair_capture_directory_sync"
+	vNextPublicationAfterControlRepairCaptureRootSync      vNextPublicationFaultPoint = "after_control_repair_capture_root_sync"
+	vNextPublicationAfterControlRepairCaptured             vNextPublicationFaultPoint = "after_control_repair_captured"
+	vNextPublicationAfterControlRepairInstall              vNextPublicationFaultPoint = "after_control_repair_install"
+	vNextPublicationAfterControlRepairInstallSync          vNextPublicationFaultPoint = "after_control_repair_install_sync"
+	vNextPublicationAfterControlRepairSelected             vNextPublicationFaultPoint = "after_control_repair_selected"
+	vNextPublicationAfterFinalControlRepairValidation      vNextPublicationFaultPoint = "after_final_control_repair_validation"
+	vNextPublicationAfterControlAuthorityReadScan          vNextPublicationFaultPoint = "after_control_authority_read_scan"
+	vNextPublicationAfterStageRemovalIdentity              vNextPublicationFaultPoint = "after_stage_removal_identity"
+	vNextPublicationAfterGenerationRemovalIdentity         vNextPublicationFaultPoint = "after_generation_removal_identity"
+	vNextPublicationAfterGenerationLeaseIdentity           vNextPublicationFaultPoint = "after_generation_lease_identity"
+	vNextPublicationAfterControlRemovalIdentity            vNextPublicationFaultPoint = "after_control_removal_identity"
 )
 
 // vNextPublicationHooks is test-only fault instrumentation for durable state
 // boundaries. Production leaves At nil.
 type vNextPublicationHooks struct {
-	At func(vNextPublicationFaultPoint) error
+	At                   func(vNextPublicationFaultPoint) error
+	ControlCaptureRename func() error
 }
-
-// vNextPublicationArtifacts is one already-admitted, immutable generation.
-// Files excludes publication control files; the publisher writes those itself.
 type vNextPublicationArtifacts struct {
 	Files    map[string][]byte
 	Validate func(root fs.FS) error
@@ -809,11 +807,8 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 		_ = temporaryRoot.Close()
 		return err
 	}
-	moved := false
 	defer func() {
-		if !moved {
-			_ = p.removeRegularQuarantinedLocked(temporaryRoot, vNextPublicationTemporaryFile, "publication temporary", temporary, identity, "")
-		}
+		_ = p.removeRegularQuarantinedLocked(temporaryRoot, vNextPublicationTemporaryFile, "publication temporary", temporary, identity, "")
 		_ = temporary.Close()
 		_ = temporaryRoot.Close()
 		_ = operation.connector.removeEmptyDirectoryBound(temporaryName, "publication temporary root", temporaryRootIdentity)
@@ -848,37 +843,20 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 	if err := p.hit(vNextPublicationAfterControlSourceIdentity); err != nil {
 		return err
 	}
-	if err := temporaryRoot.assertIdentity(vNextPublicationTemporaryFile, "publication temporary", identity); err != nil {
-		return err
-	}
-	repair, repairErr := p.beginControlRepairLocked(operation, target, identity)
-	if repair != nil {
-		defer repair.close()
-	}
-	if repairErr != nil {
-		return repairErr
-	}
-	priorIdentity, hasPrior, err := vNextPublicationRepairPrior(repair)
-	if err != nil {
-		return err
-	}
-	if err := temporaryRoot.assertIdentity(vNextPublicationTemporaryFile, "publication temporary", identity); err != nil {
-		return err
-	}
 	if err := p.hit(vNextPublicationAfterFinalControlSourceIdentity); err != nil {
 		return err
 	}
-	if err := repair.assertPrivateIdentity(operation); err != nil {
-		return err
-	}
-	moved, mismatch, err := vNextPublicationInstallAtomicControl(operation.connector, temporaryRoot, target, "publication control", identity, priorIdentity, hasPrior, func() error {
-		return p.hit(vNextPublicationAfterControlRepairInstall)
+	intended := vNextPublicationPresentControlState(vNextPublicationControlReplacementMember, identity)
+	selected, err := p.transitionControlLocked(operation, target, intended, &vNextPublicationControlAnchorSource{
+		directory: temporaryRoot,
+		name:      vNextPublicationTemporaryFile,
+		identity:  identity,
 	})
 	if err != nil {
 		return err
 	}
-	if mismatch {
-		return p.refuseMismatchedControlInstallLocked(operation, repair)
+	if !selected.sameLogical(intended) {
+		return &vNextPublicationControlConflictError{target: target}
 	}
 	operation.bindControl(target, identity)
 	if afterRename != "" {
@@ -899,10 +877,7 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 			return err
 		}
 	}
-	if err := p.hit(vNextPublicationAfterControlRepairInstallSync); err != nil {
-		return err
-	}
-	return p.completeControlRepairLocked(operation, repair)
+	return nil
 }
 
 const vNextPublicationTemporaryFile = "control"
@@ -980,67 +955,8 @@ func vNextPublicationCreateQuarantine(root *vNextPublicationDirectory) (string, 
 const (
 	vNextPublicationControlBackupMember      = "prior"
 	vNextPublicationControlReplacementMember = "replacement"
+	vNextPublicationControlCaptureMember     = "candidate"
 )
-
-func vNextPublicationBackupControl(operation *vNextPublicationOperation, quarantine *vNextPublicationDirectory, name string) (vNextPublicationIdentity, bool, error) {
-	file, err := operation.connector.openRegular(name, "publication control", unix.O_RDONLY)
-	if errors.Is(err, fs.ErrNotExist) {
-		if _, bound := operation.controlIdentity(name); bound {
-			return vNextPublicationIdentity{}, false, fmt.Errorf("publication control %q disappeared after validation", name)
-		}
-		return vNextPublicationIdentity{}, false, nil
-	}
-	if err != nil {
-		return vNextPublicationIdentity{}, false, err
-	}
-	defer file.Close()
-	identity, err := vNextPublicationIdentityFromFile(file, "publication control")
-	if err != nil {
-		return vNextPublicationIdentity{}, false, err
-	}
-	if expected, bound := operation.controlIdentity(name); bound && identity != expected {
-		return vNextPublicationIdentity{}, false, fmt.Errorf("publication control %q identity changed after validation", name)
-	}
-	if err := quarantine.linkFromBound(operation.connector, name, vNextPublicationControlBackupMember, "publication control", identity); err != nil {
-		return vNextPublicationIdentity{}, false, err
-	}
-	return identity, true, nil
-}
-
-func vNextPublicationInstallAtomicControl(parent, source *vNextPublicationDirectory, name, label string, identity, prior vNextPublicationIdentity, hasPrior bool, afterInstall func() error) (bool, bool, error) {
-	if hasPrior {
-		if err := parent.assertIdentity(name, label, prior); err != nil {
-			return false, true, nil
-		}
-		if err := parent.renameFrom(source, vNextPublicationTemporaryFile, name); err != nil {
-			return false, false, err
-		}
-		if afterInstall != nil {
-			if err := afterInstall(); err != nil {
-				return true, false, err
-			}
-		}
-		if err := parent.assertIdentity(name, label, identity); err != nil {
-			return true, true, nil
-		}
-		return true, false, nil
-	}
-	if err := parent.linkFrom(source, vNextPublicationTemporaryFile, name, label); err != nil {
-		if errors.Is(err, fs.ErrExist) {
-			return false, true, nil
-		}
-		return false, false, err
-	}
-	if afterInstall != nil {
-		if err := afterInstall(); err != nil {
-			return false, false, err
-		}
-	}
-	if err := parent.assertIdentity(name, label, identity); err != nil {
-		return false, true, nil
-	}
-	return false, false, nil
-}
 
 func vNextPublicationAssertRemovalBindings(root *vNextPublicationDirectory, bindings []vNextPublicationRemovalBinding) error {
 	for _, binding := range bindings {
@@ -1167,7 +1083,12 @@ func (p *vNextGenerationPublisher) readCurrentLocked(operation *vNextPublication
 	if err := operation.assertLockBound(); err != nil {
 		return vNextGenerationPointer{}, false, err
 	}
-	payload, found, identity, err := vNextPublicationReadControlBound(operation.connector, vNextPublicationCurrentFile, "CURRENT")
+	graph, err := p.controlAuthorityForReadLocked(operation)
+	if err != nil {
+		return vNextGenerationPointer{}, false, err
+	}
+	defer graph.close()
+	payload, found, identity, err := vNextPublicationReadAuthorizedControlLocked(operation, graph, vNextPublicationCurrentFile, "CURRENT")
 	if err != nil {
 		return vNextGenerationPointer{}, false, err
 	}
@@ -1325,9 +1246,14 @@ func (p *vNextGenerationPublisher) recoverLocked(operation *vNextPublicationOper
 	if err := p.recoverControlRepairLocked(operation); err != nil {
 		return err
 	}
-	payload, foundJournal, journalIdentity, err := vNextPublicationReadControlBound(operation.connector, vNextPublicationJournalFile, "publication journal")
+	graph, err := p.controlAuthorityForReadLocked(operation)
 	if err != nil {
 		return err
+	}
+	payload, foundJournal, journalIdentity, readErr := vNextPublicationReadAuthorizedControlLocked(operation, graph, vNextPublicationJournalFile, "publication journal")
+	graph.close()
+	if readErr != nil {
+		return readErr
 	}
 	if foundJournal {
 		operation.bindControl(vNextPublicationJournalFile, journalIdentity)
@@ -1429,40 +1355,18 @@ func (p *vNextGenerationPublisher) removeControlLocked(operation *vNextPublicati
 	if err := operation.assertLockBound(); err != nil {
 		return err
 	}
-	file, err := operation.connector.openRegular(name, "publication control", unix.O_RDONLY)
-	if errors.Is(err, fs.ErrNotExist) {
-		if _, bound := operation.controlIdentity(name); bound {
-			return fmt.Errorf("publication control %q disappeared after validation", name)
-		}
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	identity, err := vNextPublicationIdentityFromFile(file, "publication control")
-	if err != nil {
-		return err
-	}
-	if expected, bound := operation.controlIdentity(name); bound && identity != expected {
-		return fmt.Errorf("publication control %q identity changed after validation", name)
-	}
-	operation.bindControl(name, identity)
-	payload, err := vNextPublicationReadOpenControl(file, "publication control")
-	if err != nil {
-		return err
-	}
-	if err := vNextPublicationValidateControl(name, payload); err != nil {
-		return err
-	}
 	if err := p.hit(vNextPublicationBeforeControlRemoval); err != nil {
 		return err
 	}
-	if err := p.removeRegularQuarantinedLocked(operation.connector, name, "publication control", file, identity, vNextPublicationAfterControlRemovalIdentity); err != nil {
+	selected, err := p.transitionControlLocked(operation, name, vNextPublicationAbsentControlState(), nil)
+	if err != nil {
 		return err
 	}
+	if selected.Present {
+		return &vNextPublicationControlConflictError{target: name}
+	}
 	operation.clearControl(name)
-	return operation.connector.Sync()
+	return nil
 }
 
 func (p *vNextGenerationPublisher) pruneLocked(operation *vNextPublicationOperation, active string) error {
@@ -1685,7 +1589,12 @@ func (p *vNextGenerationPublisher) assertNoOrphansLocked(operation *vNextPublica
 }
 
 func (p *vNextGenerationPublisher) assertNoPendingJournalLocked(operation *vNextPublicationOperation) error {
-	_, found, err := vNextPublicationReadControl(operation.connector, vNextPublicationJournalFile, "publication journal")
+	graph, err := p.controlAuthorityForReadLocked(operation)
+	if err != nil {
+		return err
+	}
+	defer graph.close()
+	_, found, _, err := vNextPublicationReadAuthorizedControlLocked(operation, graph, vNextPublicationJournalFile, "publication journal")
 	if err != nil {
 		return err
 	}

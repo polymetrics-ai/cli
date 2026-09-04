@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"io/fs"
 	"os"
@@ -9,265 +11,454 @@ import (
 	"strings"
 	"syscall"
 	"testing"
+	"time"
+
+	"golang.org/x/sys/unix"
 )
 
-type vNextPublicationControlRepairTestControl struct {
-	name    string
-	target  string
-	noPrior bool
-	write   func(*vNextGenerationPublisher, *vNextPublicationOperation, vNextGenerationPointer) error
-}
+func TestVNextGenerationPublisherBootstrapsRetainedTerminalAuthorities(t *testing.T) {
+	root := t.TempDir()
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := publisher.Publish(vNextPublicationArtifactsForTest("active", false)); err != nil {
+		t.Fatalf("Publish() error = %v", err)
+	}
+	marker := filepath.Join(root, "acme", vNextPublicationControlAuthorityMarkerFile)
+	if _, err := os.Stat(marker); err != nil {
+		t.Fatalf("authority marker = %v", err)
+	}
 
-func TestVNextGenerationPublisherRecoversEveryControlRepairDurableCut(t *testing.T) {
-	controls := []vNextPublicationControlRepairTestControl{
-		{
-			name:   "CURRENT/existing",
-			target: vNextPublicationCurrentFile,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeCurrentLocked(operation, pointer)
-			},
-		},
-		{
-			name:   "JOURNAL/existing",
-			target: vNextPublicationJournalFile,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
-			},
-		},
-		{
-			name:    "CURRENT/no-prior",
-			target:  vNextPublicationCurrentFile,
-			noPrior: true,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeCurrentLocked(operation, pointer)
-			},
-		},
-		{
-			name:    "JOURNAL/no-prior",
-			target:  vNextPublicationJournalFile,
-			noPrior: true,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
-			},
-		},
+	operation, err := publisher.openOperation(context.Background(), syscall.LOCK_SH, false)
+	if err != nil {
+		t.Fatal(err)
 	}
-	normalCuts := []vNextPublicationFaultPoint{
-		vNextPublicationAfterControlRepairBackupSync,
-		vNextPublicationAfterControlRepairPrepared,
-		vNextPublicationAfterControlRepairInstall,
-		vNextPublicationAfterControlRepairInstallSync,
-		vNextPublicationAfterControlRepairInstalledPhaseSync,
-		vNextPublicationAfterControlRepairAuthorityRetireSync,
-		vNextPublicationAfterControlRepairClearSync,
+	graph, err := publisher.controlAuthorityForReadLocked(operation)
+	operation.close()
+	if err != nil {
+		t.Fatal(err)
 	}
-	for _, control := range controls {
-		for _, cut := range normalCuts {
-			t.Run(control.name+"/"+string(cut), func(t *testing.T) {
-				vNextPublicationExerciseControlRepairCut(t, control, cut, nil)
-			})
+	defer graph.close()
+	if !graph.marker {
+		t.Fatal("authority graph did not retain protected-mode marker")
+	}
+	for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+		head := graph.heads[target]
+		if head == nil {
+			t.Fatalf("authority graph has no %s terminal head", target)
+		}
+		if _, _, _, terminal := head.state.terminal(); !terminal {
+			t.Fatalf("authority graph %s head is not terminal", target)
 		}
 	}
 }
 
-func TestVNextGenerationPublisherRecoversEveryRetainedReplacementCut(t *testing.T) {
-	controls := []vNextPublicationControlRepairTestControl{
-		{
-			name:   "CURRENT/existing",
-			target: vNextPublicationCurrentFile,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeCurrentLocked(operation, pointer)
-			},
-		},
-		{
-			name:   "JOURNAL/existing",
-			target: vNextPublicationJournalFile,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
-			},
-		},
-		{
-			name:    "CURRENT/no-prior",
-			target:  vNextPublicationCurrentFile,
-			noPrior: true,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeCurrentLocked(operation, pointer)
-			},
-		},
-		{
-			name:    "JOURNAL/no-prior",
-			target:  vNextPublicationJournalFile,
-			noPrior: true,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
-			},
-		},
+func TestVNextGenerationPublisherCheckRefusesMalformedPrivateTransactionBeforePublicDecode(t *testing.T) {
+	root := t.TempDir()
+	artifacts := vNextPublicationArtifactsForTest("active", false)
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
 	}
-	cuts := []vNextPublicationFaultPoint{
-		vNextPublicationAfterControlRepairReplacementRetainSync,
-		vNextPublicationAfterControlRepairReplacementSync,
-		vNextPublicationAfterControlRepairPublicRestoreSync,
-		vNextPublicationAfterControlRepairRestoreSync,
-		vNextPublicationAfterControlRepairAuthorityRetireSync,
-		vNextPublicationAfterControlRepairClearSync,
+	if _, err := publisher.Publish(artifacts); err != nil {
+		t.Fatal(err)
 	}
-	for _, control := range controls {
-		for _, cut := range cuts {
-			t.Run(control.name+"/"+string(cut), func(t *testing.T) {
-				vNextPublicationExerciseControlRepairCut(t, control, cut, func(pointer vNextGenerationPointer) []byte {
-					return vNextPublicationControlRepairReplacementForTest(t, control.target, pointer)
-				})
-			})
-		}
+	transaction := filepath.Join(root, "acme", vNextPublicationControlRepairDirectoryPrefix+strings.Repeat("a", 32))
+	if err := os.Mkdir(transaction, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := publisher.Check(artifacts); err == nil || !strings.Contains(err.Error(), "prepared authority") {
+		t.Fatalf("Check() after malformed private transaction = %v, want pre-decode authority refusal", err)
 	}
 }
 
-// A publisher's Flock serializes cooperative writers, but it does not stop a
-// same-permission actor from renaming a public control while that writer holds
-// the lock. The prepared recovery authority must therefore live outside both
-// public controls before either substitution can happen.
-func TestVNextGenerationPublisherPrivatePreparedAuthoritySurvivesPublicControlSubstitution(t *testing.T) {
-	controls := []vNextPublicationControlRepairTestControl{
-		{
-			name:   "CURRENT",
-			target: vNextPublicationCurrentFile,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeCurrentLocked(operation, pointer)
-			},
-		},
-		{
-			name:   "JOURNAL",
-			target: vNextPublicationJournalFile,
-			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
-			},
-		},
+func TestRunLockRenderCheckRefusesPendingPrivateAuthorityWithoutWriting(t *testing.T) {
+	root := t.TempDir()
+	lock := minimalVNextLockForTest()
+	connectorRoot := filepath.Join(root, lock.Connector)
+	if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+		t.Fatal(err)
 	}
-	attacks := []struct {
-		name string
-		run  func(t *testing.T, root string, target string, point vNextPublicationFaultPoint) error
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr); code != 0 {
+		t.Fatalf("runLockRender() = %d; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	baseline, err := newVNextGenerationPublisher(root, lock.Connector, vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	active, err := baseline.Open(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer := active.pointer
+	active.Release()
+
+	crash := errors.New("crash after durable private JOURNAL authority")
+	writer, err := newVNextGenerationPublisher(root, lock.Connector, vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point == vNextPublicationAfterControlRepairPrepared {
+			return crash
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := writer.openOperation(context.Background(), syscall.LOCK_EX, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = writer.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+	operation.close()
+	if !errors.Is(err, crash) {
+		t.Fatalf("writeJournalLocked() error = %v, want injected crash", err)
+	}
+	before := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
+	stdout.Reset()
+	stderr.Reset()
+	if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root, "--check"}, &stdout, &stderr); code != 1 {
+		t.Fatalf("runLockRender(--check) = %d, want 1; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if stdout.Len() != 0 || !strings.Contains(stderr.String(), "pending repair") {
+		t.Fatalf("pending --check output: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+	if after := vNextPublicationTreeSnapshotForTest(t, connectorRoot); !bytes.Equal(before, after) {
+		t.Fatal("lock-render --check changed a pending authority tree")
+	}
+}
+
+func TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting(t *testing.T) {
+	root := t.TempDir()
+	lock := minimalVNextLockForTest()
+	connectorRoot := filepath.Join(root, lock.Connector)
+	if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr); code != 0 {
+		t.Fatalf("runLockRender() = %d; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	before := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
+	stdout.Reset()
+	stderr.Reset()
+	if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root, "--check"}, &stdout, &stderr); code != 0 {
+		t.Fatalf("runLockRender(--check) = %d; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("successful --check stderr = %q, want empty", stderr.String())
+	}
+	if after := vNextPublicationTreeSnapshotForTest(t, connectorRoot); !bytes.Equal(before, after) {
+		t.Fatal("lock-render --check changed an authorized authority tree")
+	}
+}
+
+func TestRunLockRenderCheckRefusesDivergentTerminalAuthorityWithoutWriting(t *testing.T) {
+	root := t.TempDir()
+	lock := minimalVNextLockForTest()
+	connectorRoot := filepath.Join(root, lock.Connector)
+	if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	var stdout, stderr bytes.Buffer
+	if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr); code != 0 {
+		t.Fatalf("runLockRender() = %d; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	current := filepath.Join(connectorRoot, vNextPublicationCurrentFile)
+	payload, err := os.ReadFile(current)
+	if err != nil {
+		t.Fatal(err)
+	}
+	vNextReplacePublicationControlForTest(t, root, vNextPublicationCurrentFile, payload)
+	before := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
+	stdout.Reset()
+	stderr.Reset()
+	if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root, "--check"}, &stdout, &stderr); code != 1 {
+		t.Fatalf("runLockRender(--check) = %d, want 1; stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+	if stdout.Len() != 0 || !strings.Contains(stderr.String(), "diverges from terminal authority") {
+		t.Fatalf("divergent --check output: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+	if after := vNextPublicationTreeSnapshotForTest(t, connectorRoot); !bytes.Equal(before, after) {
+		t.Fatal("lock-render --check changed a divergent authority tree")
+	}
+}
+
+func TestVNextGenerationPublisherRecoversTerminalDivergenceThroughSuccessor(t *testing.T) {
+	root := t.TempDir()
+	artifacts := vNextPublicationArtifactsForTest("active", false)
+	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer, err := baseline.Publish(artifacts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	target := filepath.Join(root, "acme", vNextPublicationCurrentFile)
+	prior, err := os.ReadFile(target)
+	if err != nil {
+		t.Fatal(err)
+	}
+	vNextReplacePublicationControlForTest(t, root, vNextPublicationCurrentFile, []byte(`{"generation":"`+strings.Repeat("f", 64)+`","integrity_digest":"`+strings.Repeat("e", 64)+`"}`+"\n"))
+
+	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := fresh.Check(artifacts); err == nil || !strings.Contains(err.Error(), "diverges from terminal authority") {
+		t.Fatalf("Check() after terminal divergence = %v, want authority mismatch", err)
+	}
+	if err := fresh.Recover(context.Background()); err != nil {
+		t.Fatalf("Recover() after terminal divergence = %v", err)
+	}
+	if got, err := os.ReadFile(target); err != nil || !bytes.Equal(got, prior) {
+		t.Fatalf("CURRENT after successor recovery = %q, %v; want terminal %q", got, err, prior)
+	}
+	current, found, err := fresh.readCurrentForTest(pointer)
+	if err != nil || !found || current != pointer {
+		t.Fatalf("recovered CURRENT = %#v, found=%t, err=%v; want %#v", current, found, err, pointer)
+	}
+}
+
+func TestVNextGenerationPublisherRemoveControlCapturesLateOccupantInsteadOfUnlinking(t *testing.T) {
+	tests := []struct {
+		name   string
+		target string
+		action string
 	}{
-		{
-			name: "target-rename",
-			run: func(t *testing.T, root string, target string, point vNextPublicationFaultPoint) error {
-				if point != vNextPublicationAfterControlRepairPrepared {
-					return nil
+		{name: "CURRENT/replacement", target: vNextPublicationCurrentFile, action: "replace"},
+		{name: "CURRENT/unlink", target: vNextPublicationCurrentFile, action: "unlink"},
+		{name: "JOURNAL/replacement", target: vNextPublicationJournalFile, action: "replace"},
+		{name: "JOURNAL/unlink", target: vNextPublicationJournalFile, action: "unlink"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			artifacts := vNextPublicationArtifactsForTest("active", false)
+			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			pointer, err := baseline.Publish(artifacts)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if test.target == vNextPublicationJournalFile {
+				operation, openErr := baseline.openOperation(context.Background(), syscall.LOCK_EX, true)
+				if openErr != nil {
+					t.Fatal(openErr)
 				}
-				vNextReplacePublicationControlForTest(t, root, target, []byte("substituted public control"))
-				return errors.New("crash after target substitution")
-			},
-		},
-		{
-			name: "target-unlink",
-			run: func(t *testing.T, root string, target string, point vNextPublicationFaultPoint) error {
-				if point != vNextPublicationAfterControlRepairPrepared {
-					return nil
-				}
-				if err := os.Remove(filepath.Join(root, "acme", target)); err != nil {
+				err = baseline.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+				operation.close()
+				if err != nil {
 					t.Fatal(err)
 				}
-				return errors.New("crash after target unlink")
-			},
-		},
-		{
-			name: "source-rename",
-			run: func(t *testing.T, root string, target string, point vNextPublicationFaultPoint) error {
-				if point == vNextPublicationAfterFinalControlSourceIdentity {
-					vNextReplacePublicationTemporaryForTest(t, root, []byte("substituted private source"))
+			}
+			target := filepath.Join(root, "acme", test.target)
+			prior, err := os.ReadFile(target)
+			if err != nil {
+				t.Fatal(err)
+			}
+			replacement := []byte("late occupant before logical absence/" + test.name)
+			attacked := false
+			writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point != vNextPublicationBeforeControlRepairCapture || attacked {
+					return nil
 				}
-				if point == vNextPublicationAfterControlRepairInstall {
-					return errors.New("crash after source substitution")
+				attacked = true
+				switch test.action {
+				case "replace":
+					vNextReplacePublicationControlForTest(t, root, test.target, replacement)
+				case "unlink":
+					if err := os.Remove(target); err != nil {
+						t.Fatal(err)
+					}
+				default:
+					t.Fatalf("unknown actor action %q", test.action)
 				}
 				return nil
-			},
-		},
+			}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			operation, err := writer.openOperation(context.Background(), syscall.LOCK_EX, true)
+			if err != nil {
+				t.Fatal(err)
+			}
+			err = writer.removeControlLocked(operation, test.target)
+			operation.close()
+			if !attacked {
+				t.Fatal("removeControlLocked() did not reach capture boundary")
+			}
+			if !errors.Is(err, errVNextPublicationControlConflict) {
+				t.Fatalf("removeControlLocked() error = %v, want bounded conflict", err)
+			}
+			if got, readErr := os.ReadFile(target); readErr != nil || !bytes.Equal(got, prior) {
+				t.Fatalf("%s after rejected removal = %q, %v; want prior %q", test.target, got, readErr, prior)
+			}
+			if test.action == "replace" {
+				vNextPublicationFindPrivatePayloadForTest(t, root, replacement)
+			}
+			fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := fresh.Recover(context.Background()); err != nil {
+				t.Fatalf("fresh Recover() after %s = %v", test.name, err)
+			}
+			vNextPublicationAssertTerminalAuthoritiesMatchPublicForTest(t, fresh)
+		})
 	}
+}
 
-	for _, control := range controls {
-		for _, attack := range attacks {
-			t.Run(control.name+"/"+attack.name, func(t *testing.T) {
-				root := t.TempDir()
-				baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-				if err != nil {
-					t.Fatal(err)
-				}
-				pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
-				if err != nil {
-					t.Fatal(err)
-				}
-				vNextPublicationPrepareControlRepairTargetForTest(t, baseline, root, control, pointer)
-
-				failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-					return attack.run(t, root, control.target, point)
-				}})
-				if err != nil {
-					t.Fatal(err)
-				}
-				operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
-				if err != nil {
-					t.Fatal(err)
-				}
-				err = control.write(failing, operation, pointer)
-				operation.close()
-				if err == nil || !strings.Contains(err.Error(), "crash after") {
-					t.Fatalf("write after %s substitution error = %v, want injected crash", attack.name, err)
-				}
-
-				connectorRoot := filepath.Join(root, "acme")
-				entries, err := os.ReadDir(connectorRoot)
-				if err != nil {
-					t.Fatal(err)
-				}
-				privateAuthorities := 0
-				for _, entry := range entries {
-					if entry.IsDir() && strings.HasPrefix(entry.Name(), ".connectorgen-control-repair-") {
-						privateAuthorities++
-					}
-				}
-				if privateAuthorities != 1 {
-					t.Fatalf("private prepared recovery authorities = %d, want one after %s substitution", privateAuthorities, attack.name)
-				}
-				if _, err := os.Lstat(filepath.Join(connectorRoot, ".connectorgen-control-repair.json")); !errors.Is(err, fs.ErrNotExist) {
-					t.Fatalf("mutable root repair authority after %s substitution = %v, want absent", attack.name, err)
-				}
-
-				recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-				if err != nil {
-					t.Fatal(err)
-				}
-				if err := recovered.Recover(context.Background()); err != nil {
-					t.Fatalf("Recover() after %s substitution = %v", attack.name, err)
-				}
-				active, err := recovered.Open(context.Background())
-				if err != nil {
-					t.Fatalf("Open() after %s substitution = %v", attack.name, err)
-				}
-				assertVNextPublicationMarker(t, active, "active")
-				active.Release()
-			})
+func TestVNextGenerationPublisherRejectsSubstitutedIntendedSourceWithoutOrphaningAuthority(t *testing.T) {
+	root := t.TempDir()
+	artifacts := vNextPublicationArtifactsForTest("active", false)
+	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer, err := baseline.Publish(artifacts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	swapped := false
+	writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point == vNextPublicationAfterFinalControlSourceIdentity && !swapped {
+			swapped = true
+			vNextReplacePublicationTemporaryForTest(t, root, []byte("substituted intended source"))
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := writer.openOperation(context.Background(), syscall.LOCK_EX, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = writer.writeCurrentLocked(operation, pointer)
+	operation.close()
+	if !swapped {
+		t.Fatal("writer did not reach final intended-source boundary")
+	}
+	if err == nil || !strings.Contains(err.Error(), "intended anchor identity changed") {
+		t.Fatalf("writeCurrentLocked() error = %v, want intended-source identity refusal", err)
+	}
+	transactions, err := filepath.Glob(filepath.Join(root, "acme", vNextPublicationControlRepairDirectoryPrefix+"*"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(transactions) == 0 {
+		t.Fatal("rejected source removed every retained authority head")
+	}
+	for _, transaction := range transactions {
+		if _, statErr := os.Stat(filepath.Join(transaction, vNextPublicationControlRepairPreparedFile)); statErr != nil {
+			t.Fatalf("unprepared transaction %q survived rejected source: %v", transaction, statErr)
+		}
+	}
+	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := fresh.Recover(context.Background()); err != nil {
+		t.Fatalf("Recover() after rejected source = %v", err)
+	}
+}
+func TestVNextPublicationNoReplaceUnsupportedFilesystemIsTyped(t *testing.T) {
+	for _, cause := range []error{unix.ENOSYS, unix.EINVAL, unix.ENOTSUP, unix.EOPNOTSUPP, unix.EXDEV} {
+		err := vNextPublicationNoReplaceRenameError(cause)
+		if !errors.Is(err, errVNextPublicationUnsupportedNoReplace) || !errors.Is(err, cause) {
+			t.Fatalf("vNextPublicationNoReplaceRenameError(%v) = %v, want typed unsupported transition retaining the syscall cause", cause, err)
 		}
 	}
 }
 
-func TestVNextGenerationPublisherWritesBoundImmutableRecoveryPhaseChains(t *testing.T) {
-	cases := []struct {
-		name       string
-		cut        vNextPublicationFaultPoint
-		substitute bool
-		wantStates []string
+func TestVNextGenerationPublisherNoReplaceFailureRetainsAuthorityAndPublicControl(t *testing.T) {
+	tests := []struct {
+		name        string
+		target      string
+		write       func(*vNextGenerationPublisher, *vNextPublicationOperation, vNextGenerationPointer) error
+		cause       error
+		unsupported bool
 	}{
 		{
-			name:       "installed",
-			cut:        vNextPublicationAfterControlRepairInstalledPhaseSync,
-			wantStates: []string{vNextPublicationControlRepairInstalled},
+			name:   "CURRENT/unsupported",
+			target: vNextPublicationCurrentFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeCurrentLocked(operation, pointer)
+			},
+			cause:       unix.ENOSYS,
+			unsupported: true,
 		},
 		{
-			name:       "replacement-restored",
-			cut:        vNextPublicationAfterControlRepairRestoreSync,
-			substitute: true,
-			wantStates: []string{vNextPublicationControlRepairReplacementRetained, vNextPublicationControlRepairRestored},
+			name:   "JOURNAL/unsupported",
+			target: vNextPublicationJournalFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+			},
+			cause:       unix.EXDEV,
+			unsupported: true,
+		},
+		{
+			name:   "CURRENT/EINVAL",
+			target: vNextPublicationCurrentFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeCurrentLocked(operation, pointer)
+			},
+			cause:       unix.EINVAL,
+			unsupported: true,
+		},
+		{
+			name:   "JOURNAL/ENOTSUP",
+			target: vNextPublicationJournalFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+			},
+			cause:       unix.ENOTSUP,
+			unsupported: true,
+		},
+		{
+			name:   "CURRENT/EOPNOTSUPP",
+			target: vNextPublicationCurrentFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeCurrentLocked(operation, pointer)
+			},
+			cause:       unix.EOPNOTSUPP,
+			unsupported: true,
+		},
+		{
+			name:   "CURRENT/collision",
+			target: vNextPublicationCurrentFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeCurrentLocked(operation, pointer)
+			},
+			cause: fs.ErrExist,
 		},
 	}
-	for _, test := range cases {
+	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			root := t.TempDir()
 			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -278,15 +469,813 @@ func TestVNextGenerationPublisherWritesBoundImmutableRecoveryPhaseChains(t *test
 			if err != nil {
 				t.Fatal(err)
 			}
+			targetPath := filepath.Join(root, "acme", test.target)
+			before, err := os.ReadFile(targetPath)
+			if test.target == vNextPublicationJournalFile && errors.Is(err, fs.ErrNotExist) {
+				before = nil
+			} else if err != nil {
+				t.Fatal(err)
+			}
 
-			crash := errors.New("crash after durable recovery phase")
-			substituted := false
-			failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-				if test.substitute && point == vNextPublicationAfterFinalControlSourceIdentity && !substituted {
-					substituted = true
-					vNextReplacePublicationTemporaryForTest(t, root, []byte("phase-chain substitute"))
+			writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{
+				ControlCaptureRename: func() error { return test.cause },
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			operation, err := writer.openOperation(context.Background(), syscall.LOCK_EX, true)
+			if err != nil {
+				t.Fatal(err)
+			}
+			err = test.write(writer, operation, pointer)
+			operation.close()
+			if !errors.Is(err, test.cause) {
+				t.Fatalf("control transition error = %v, want %v", err, test.cause)
+			}
+			if test.unsupported != errors.Is(err, errVNextPublicationUnsupportedNoReplace) {
+				t.Fatalf("control transition unsupported classification = %t, want %t: %v", errors.Is(err, errVNextPublicationUnsupportedNoReplace), test.unsupported, err)
+			}
+			if before == nil {
+				if _, statErr := os.Lstat(targetPath); !errors.Is(statErr, fs.ErrNotExist) {
+					t.Fatalf("failed no-replace %s created public control: %v", test.target, statErr)
 				}
-				if point == test.cut {
+			} else if after, readErr := os.ReadFile(targetPath); readErr != nil || !bytes.Equal(after, before) {
+				t.Fatalf("failed no-replace %s changed public control: err=%v got=%q want=%q", test.target, readErr, after, before)
+			}
+
+			inspection, err := writer.openOperation(context.Background(), syscall.LOCK_SH, false)
+			if err != nil {
+				t.Fatal(err)
+			}
+			graph, err := writer.scanControlAuthorityLocked(inspection)
+			inspection.close()
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer graph.close()
+			head := graph.heads[test.target]
+			if head == nil || head.state.latestPhase() != vNextPublicationControlRepairCaptureIntent {
+				t.Fatalf("failed no-replace %s head = %#v, want pending capture intent", test.target, head)
+			}
+			if head.state.record.Predecessor == nil {
+				t.Fatalf("failed no-replace %s lost predecessor authority", test.target)
+			}
+			predecessor := graph.states[head.state.record.Predecessor.Transaction]
+			if predecessor == nil {
+				t.Fatalf("failed no-replace %s predecessor transaction is absent", test.target)
+			}
+			if _, _, _, terminal := predecessor.terminal(); !terminal {
+				t.Fatalf("failed no-replace %s predecessor is not terminal", test.target)
+			}
+		})
+	}
+}
+
+func TestVNextGenerationPublisherNoReplaceSourceAbsentDoesNotClobber(t *testing.T) {
+	root := t.TempDir()
+	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+	if err != nil {
+		t.Fatal(err)
+	}
+	targetPath := filepath.Join(root, "acme", vNextPublicationCurrentFile)
+	before, err := os.ReadFile(targetPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{
+		ControlCaptureRename: func() error { return fs.ErrNotExist },
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := writer.openOperation(context.Background(), syscall.LOCK_EX, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = writer.writeCurrentLocked(operation, pointer)
+	operation.close()
+	if !errors.Is(err, errVNextPublicationControlConflict) {
+		t.Fatalf("source-absent transition error = %v, want bounded conflict", err)
+	}
+	if after, readErr := os.ReadFile(targetPath); readErr != nil || !bytes.Equal(after, before) {
+		t.Fatalf("source-absent transition changed CURRENT: err=%v got=%q want=%q", readErr, after, before)
+	}
+	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := fresh.Recover(context.Background()); err != nil {
+		t.Fatalf("fresh Recover() after source-absent transition = %v", err)
+	}
+	vNextPublicationAssertTerminalAuthoritiesMatchPublicForTest(t, fresh)
+}
+
+func TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix(t *testing.T) {
+	tests := []struct {
+		name         string
+		target       string
+		priorPresent bool
+		operation    string
+		interfere    bool
+		wantPresent  bool
+		wantOutcome  string
+	}{
+		{
+			name:         "CURRENT/install-intended",
+			target:       vNextPublicationCurrentFile,
+			priorPresent: true,
+			operation:    "install",
+			wantPresent:  true,
+			wantOutcome:  vNextPublicationControlRepairCommitted,
+		},
+		{
+			name:        "CURRENT/install-without-prior",
+			target:      vNextPublicationCurrentFile,
+			operation:   "install",
+			wantPresent: true,
+			wantOutcome: vNextPublicationControlRepairCommitted,
+		},
+		{
+			name:        "CURRENT/restore-prior-absence",
+			target:      vNextPublicationCurrentFile,
+			operation:   "install",
+			interfere:   true,
+			wantOutcome: vNextPublicationControlRepairRolledBack,
+		},
+		{
+			name:         "CURRENT/restore-prior",
+			target:       vNextPublicationCurrentFile,
+			priorPresent: true,
+			operation:    "install",
+			interfere:    true,
+			wantPresent:  true,
+			wantOutcome:  vNextPublicationControlRepairRolledBack,
+		},
+		{
+			name:         "CURRENT/retire-to-absence",
+			target:       vNextPublicationCurrentFile,
+			priorPresent: true,
+			operation:    "remove",
+			wantOutcome:  vNextPublicationControlRepairCommitted,
+		},
+		{
+			name:        "JOURNAL/install-without-prior",
+			target:      vNextPublicationJournalFile,
+			operation:   "install",
+			wantPresent: true,
+			wantOutcome: vNextPublicationControlRepairCommitted,
+		},
+		{
+			name:         "JOURNAL/replace-prior",
+			target:       vNextPublicationJournalFile,
+			priorPresent: true,
+			operation:    "install",
+			wantPresent:  true,
+			wantOutcome:  vNextPublicationControlRepairCommitted,
+		},
+		{
+			name:        "JOURNAL/restore-prior-absence",
+			target:      vNextPublicationJournalFile,
+			operation:   "install",
+			interfere:   true,
+			wantOutcome: vNextPublicationControlRepairRolledBack,
+		},
+		{
+			name:         "JOURNAL/retire-to-absence",
+			target:       vNextPublicationJournalFile,
+			priorPresent: true,
+			operation:    "remove",
+			wantOutcome:  vNextPublicationControlRepairCommitted,
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if test.target == vNextPublicationJournalFile && test.priorPresent {
+				operation, openErr := baseline.openOperation(context.Background(), syscall.LOCK_EX, true)
+				if openErr != nil {
+					t.Fatal(openErr)
+				}
+				err = baseline.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+				operation.close()
+				if err != nil {
+					t.Fatalf("write initial JOURNAL: %v", err)
+				}
+			}
+			if test.target == vNextPublicationCurrentFile && !test.priorPresent {
+				operation, openErr := baseline.openOperation(context.Background(), syscall.LOCK_EX, true)
+				if openErr != nil {
+					t.Fatal(openErr)
+				}
+				err = baseline.removeCurrentLocked(operation)
+				operation.close()
+				if err != nil {
+					t.Fatalf("remove initial CURRENT: %v", err)
+				}
+			}
+
+			targetPath := filepath.Join(root, "acme", test.target)
+			before, readErr := os.ReadFile(targetPath)
+			if !test.priorPresent {
+				if !errors.Is(readErr, fs.ErrNotExist) {
+					t.Fatalf("initial absent %s read error = %v", test.target, readErr)
+				}
+			} else if readErr != nil {
+				t.Fatal(readErr)
+			}
+			replacement := []byte("unclassified public replacement for " + test.name)
+			interfered := false
+			writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point != vNextPublicationBeforeControlRepairCapture || !test.interfere || interfered {
+					return nil
+				}
+				interfered = true
+				if test.priorPresent {
+					vNextReplacePublicationControlForTest(t, root, test.target, replacement)
+					return nil
+				}
+				if err := os.WriteFile(targetPath, replacement, 0o600); err != nil {
+					t.Fatal(err)
+				}
+				return nil
+			}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			operation, err := writer.openOperation(context.Background(), syscall.LOCK_EX, true)
+			if err != nil {
+				t.Fatal(err)
+			}
+			switch test.operation {
+			case "install":
+				if test.target == vNextPublicationCurrentFile {
+					err = writer.writeCurrentLocked(operation, pointer)
+				} else {
+					err = writer.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+				}
+			case "remove":
+				err = writer.removeControlLocked(operation, test.target)
+			default:
+				t.Fatalf("unknown operation %q", test.operation)
+			}
+			operation.close()
+			if test.interfere {
+				if !interfered {
+					t.Fatal("lock-ignoring actor did not reach the capture barrier")
+				}
+				if !errors.Is(err, errVNextPublicationControlConflict) {
+					t.Fatalf("interfered %s transition error = %v, want conflict", test.target, err)
+				}
+				if got := vNextPublicationFindPrivatePayloadForTest(t, root, replacement); got == "" {
+					t.Fatalf("interfered %s replacement was not retained", test.target)
+				}
+			} else if err != nil {
+				t.Fatalf("%s transition error = %v", test.target, err)
+			}
+
+			inspection, err := writer.openOperation(context.Background(), syscall.LOCK_SH, false)
+			if err != nil {
+				t.Fatal(err)
+			}
+			graph, err := writer.controlAuthorityForReadLocked(inspection)
+			if err != nil {
+				t.Fatal(err)
+			}
+			head := graph.heads[test.target]
+			if head == nil {
+				graph.close()
+				t.Fatalf("%s has no terminal authority head", test.target)
+			}
+			if head.outcome != test.wantOutcome || head.selected.Present != test.wantPresent {
+				graph.close()
+				t.Fatalf("%s terminal = outcome %q present %t, want outcome %q present %t", test.target, head.outcome, head.selected.Present, test.wantOutcome, test.wantPresent)
+			}
+			if test.wantPresent {
+				_, found, identity, controlErr := vNextPublicationReadControlBound(inspection.connector, test.target, "public control")
+				expected, _, identityErr := head.selected.identity(head.selected.Member)
+				if controlErr != nil || identityErr != nil || !found || identity != expected {
+					graph.close()
+					t.Fatalf("%s terminal/public identity = found %t actual %#v expected %#v control=%v identity=%v", test.target, found, identity, expected, controlErr, identityErr)
+				}
+			} else if _, found, _, controlErr := vNextPublicationReadControlBound(inspection.connector, test.target, "public control"); controlErr != nil || found {
+				graph.close()
+				t.Fatalf("%s terminal/public absence = found %t error=%v", test.target, found, controlErr)
+			}
+			graph.close()
+			inspection.close()
+			if test.interfere && test.priorPresent {
+				if after, err := os.ReadFile(targetPath); err != nil || !bytes.Equal(after, before) {
+					t.Fatalf("rollback %s did not restore prior bytes: err=%v got=%q want=%q", test.target, err, after, before)
+				}
+			}
+
+			fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := fresh.Recover(context.Background()); err != nil {
+				t.Fatalf("fresh Recover() after %s = %v", test.name, err)
+			}
+			freshInspection, err := fresh.openOperation(context.Background(), syscall.LOCK_SH, false)
+			if err != nil {
+				t.Fatal(err)
+			}
+			freshGraph, err := fresh.controlAuthorityForReadLocked(freshInspection)
+			freshInspection.close()
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer freshGraph.close()
+			for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+				head := freshGraph.heads[target]
+				if head == nil || head.outcome == vNextPublicationControlRepairRetryRequired {
+					t.Fatalf("fresh recovery %s head = %#v", target, head)
+				}
+				if _, _, _, terminal := head.state.terminal(); !terminal {
+					t.Fatalf("fresh recovery %s head is not terminal", target)
+				}
+			}
+		})
+	}
+}
+
+func TestVNextGenerationPublisherRecoversEveryTerminalAuthorityDurableCut(t *testing.T) {
+	points := []vNextPublicationFaultPoint{
+		vNextPublicationAfterControlRepairPrepared,
+		vNextPublicationAfterControlRepairCaptureDirectory,
+		vNextPublicationBeforeControlRepairCapture,
+		vNextPublicationAfterControlRepairCaptureRename,
+		vNextPublicationAfterControlRepairCaptureDirectorySync,
+		vNextPublicationAfterControlRepairCaptureRootSync,
+		vNextPublicationAfterControlRepairCaptured,
+		vNextPublicationAfterControlRepairInstall,
+		vNextPublicationAfterControlRepairInstallSync,
+		vNextPublicationAfterControlRepairSelected,
+		vNextPublicationAfterFinalControlRepairValidation,
+	}
+	scenarios := []struct {
+		name         string
+		target       string
+		priorPresent bool
+	}{
+		{name: "CURRENT/prior-present", target: vNextPublicationCurrentFile, priorPresent: true},
+		{name: "CURRENT/prior-absent", target: vNextPublicationCurrentFile},
+		{name: "JOURNAL/prior-present", target: vNextPublicationJournalFile, priorPresent: true},
+		{name: "JOURNAL/prior-absent", target: vNextPublicationJournalFile},
+	}
+	for _, scenario := range scenarios {
+		for _, point := range points {
+			t.Run(scenario.name+"/"+string(point), func(t *testing.T) {
+				root := t.TempDir()
+				pointer := vNextPublicationPrepareTerminalAuthorityScenarioForTest(t, root, scenario.target, scenario.priorPresent)
+				crash := errors.New("crash at durable terminal authority cut")
+				failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(candidate vNextPublicationFaultPoint) error {
+					if candidate == point {
+						return crash
+					}
+					return nil
+				}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if scenario.target == vNextPublicationCurrentFile {
+					err = failing.writeCurrentLocked(operation, pointer)
+				} else {
+					err = failing.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+				}
+				operation.close()
+				if !errors.Is(err, crash) {
+					t.Fatalf("transition error = %v, want crash at %s", err, point)
+				}
+
+				fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := fresh.Recover(context.Background()); err != nil {
+					t.Fatalf("fresh Recover() after %s = %v", point, err)
+				}
+				vNextPublicationAssertTerminalAuthoritiesMatchPublicForTest(t, fresh)
+			})
+		}
+	}
+}
+
+func vNextPublicationPrepareTerminalAuthorityScenarioForTest(t *testing.T, root, target string, priorPresent bool) vNextGenerationPointer {
+	t.Helper()
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer, err := publisher.Publish(vNextPublicationArtifactsForTest("active", false))
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := publisher.openOperation(context.Background(), syscall.LOCK_EX, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	switch {
+	case target == vNextPublicationCurrentFile && !priorPresent:
+		err = publisher.removeCurrentLocked(operation)
+	case target == vNextPublicationJournalFile && priorPresent:
+		err = publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+	}
+	operation.close()
+	if err != nil {
+		t.Fatal(err)
+	}
+	return pointer
+}
+
+func vNextPublicationAssertTerminalAuthoritiesMatchPublicForTest(t *testing.T, publisher *vNextGenerationPublisher) {
+	t.Helper()
+	operation, err := publisher.openOperation(context.Background(), syscall.LOCK_SH, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer operation.close()
+	graph, err := publisher.controlAuthorityForReadLocked(operation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer graph.close()
+	for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+		head := graph.heads[target]
+		if head == nil || head.outcome == vNextPublicationControlRepairRetryRequired {
+			t.Fatalf("%s authority head = %#v", target, head)
+		}
+		if _, _, _, terminal := head.state.terminal(); !terminal {
+			t.Fatalf("%s authority head is not terminal", target)
+		}
+		if _, _, _, err := vNextPublicationReadAuthorizedControlLocked(operation, graph, target, target); err != nil {
+			t.Fatalf("%s authority/public read = %v", target, err)
+		}
+	}
+}
+
+func TestVNextGenerationPublisherCheckRefusesAuthorityTopologyBeforePublicDecode(t *testing.T) {
+	tests := []struct {
+		name     string
+		expected string
+		inject   func(*testing.T, *vNextGenerationPublisher, string)
+	}{
+		{
+			name:     "phase-gap",
+			expected: "phase chain has a gap",
+			inject: func(t *testing.T, publisher *vNextGenerationPublisher, root string) {
+				transaction := vNextPublicationAuthorityTransactionForTest(t, publisher, vNextPublicationCurrentFile)
+				missing := vNextPublicationFirstMissingControlPhaseForTest(t, filepath.Join(root, "acme", transaction))
+				if missing == vNextPublicationControlRepairMaxPhases {
+					t.Fatal("authority transaction has no room for a gapped phase")
+				}
+				if err := os.WriteFile(filepath.Join(root, "acme", transaction, vNextPublicationControlRepairPhaseName(missing+1)), []byte("{}\n"), 0o600); err != nil {
+					t.Fatal(err)
+				}
+			},
+		},
+		{
+			name:     "orphan-capture",
+			expected: "unreferenced publication control capture",
+			inject: func(t *testing.T, publisher *vNextGenerationPublisher, root string) {
+				transaction := vNextPublicationAuthorityTransactionForTest(t, publisher, vNextPublicationCurrentFile)
+				capture := vNextPublicationFirstMissingControlCaptureForTest(t, filepath.Join(root, "acme", transaction))
+				if err := os.Mkdir(filepath.Join(root, "acme", transaction, vNextPublicationControlCaptureName(capture)), 0o700); err != nil {
+					t.Fatal(err)
+				}
+			},
+		},
+		{
+			name:     "fork",
+			expected: "has multiple successors",
+			inject: func(t *testing.T, publisher *vNextGenerationPublisher, _ string) {
+				operation, err := publisher.openOperation(context.Background(), syscall.LOCK_EX, true)
+				if err != nil {
+					t.Fatal(err)
+				}
+				graph, err := publisher.scanControlAuthorityLocked(operation)
+				if err != nil {
+					operation.close()
+					t.Fatal(err)
+				}
+				head := graph.heads[vNextPublicationCurrentFile]
+				if head == nil {
+					graph.close()
+					operation.close()
+					t.Fatal("CURRENT has no authority head")
+				}
+				identity, present, err := head.state.anchor(head.selected, head.selected.Member)
+				if err != nil || !present {
+					graph.close()
+					operation.close()
+					t.Fatalf("CURRENT terminal anchor = identity %#v present %t error %v", identity, present, err)
+				}
+				intended := vNextPublicationControlStateWithMember(head.selected, vNextPublicationControlReplacementMember)
+				source := &vNextPublicationControlAnchorSource{directory: head.state.transaction, name: head.selected.Member, identity: identity}
+				first, err := publisher.createControlRepairLocked(operation, vNextPublicationCurrentFile, head, intended, source, false)
+				if err == nil {
+					first.close()
+				}
+				if err == nil {
+					second, secondErr := publisher.createControlRepairLocked(operation, vNextPublicationCurrentFile, head, intended, source, false)
+					if second != nil {
+						second.close()
+					}
+					err = secondErr
+				}
+				graph.close()
+				operation.close()
+				if err != nil {
+					t.Fatal(err)
+				}
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			artifacts := vNextPublicationArtifactsForTest("active", false)
+			publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := publisher.Publish(artifacts); err != nil {
+				t.Fatal(err)
+			}
+			test.inject(t, publisher, root)
+			if err := os.WriteFile(filepath.Join(root, "acme", vNextPublicationCurrentFile), []byte("not a CURRENT document\n"), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			before := vNextPublicationTreeSnapshotForTest(t, filepath.Join(root, "acme"))
+			err = publisher.Check(artifacts)
+			if err == nil || !strings.Contains(err.Error(), test.expected) {
+				t.Fatalf("Check() error = %v, want authority topology %q", err, test.expected)
+			}
+			if strings.Contains(err.Error(), "decode CURRENT") {
+				t.Fatalf("Check() decoded public CURRENT before authority topology refusal: %v", err)
+			}
+			if after := vNextPublicationTreeSnapshotForTest(t, filepath.Join(root, "acme")); !bytes.Equal(before, after) {
+				t.Fatal("Check() changed malformed authority topology")
+			}
+		})
+	}
+}
+
+func vNextPublicationAuthorityTransactionForTest(t *testing.T, publisher *vNextGenerationPublisher, target string) string {
+	t.Helper()
+	operation, err := publisher.openOperation(context.Background(), syscall.LOCK_SH, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer operation.close()
+	graph, err := publisher.controlAuthorityForReadLocked(operation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer graph.close()
+	head := graph.heads[target]
+	if head == nil {
+		t.Fatalf("authority graph has no %s head", target)
+	}
+	return head.state.transactionName
+}
+
+func vNextPublicationFirstMissingControlPhaseForTest(t *testing.T, transaction string) int {
+	t.Helper()
+	for sequence := 1; sequence <= vNextPublicationControlRepairMaxPhases; sequence++ {
+		_, err := os.Lstat(filepath.Join(transaction, vNextPublicationControlRepairPhaseName(sequence)))
+		if errors.Is(err, fs.ErrNotExist) {
+			return sequence
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Fatal("authority transaction has no missing phase")
+	return 0
+}
+
+func vNextPublicationFirstMissingControlCaptureForTest(t *testing.T, transaction string) int {
+	t.Helper()
+	for attempt := 1; attempt <= vNextPublicationControlRepairMaxCaptureAttempts; attempt++ {
+		_, err := os.Lstat(filepath.Join(transaction, vNextPublicationControlCaptureName(attempt)))
+		if errors.Is(err, fs.ErrNotExist) {
+			return attempt
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	t.Fatal("authority transaction has no missing capture")
+	return 0
+}
+
+func (p *vNextGenerationPublisher) readCurrentForTest(want vNextGenerationPointer) (vNextGenerationPointer, bool, error) {
+	operation, err := p.openOperation(context.Background(), syscall.LOCK_SH, false)
+	if err != nil {
+		return vNextGenerationPointer{}, false, err
+	}
+	defer operation.close()
+	return p.readCurrentLocked(operation)
+}
+
+func TestVNextGenerationPublisherRepeatedSubstitutionsRemainForensic(t *testing.T) {
+	root := t.TempDir()
+	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+	if err != nil {
+		t.Fatal(err)
+	}
+	targetPath := filepath.Join(root, "acme", vNextPublicationCurrentFile)
+	replacements := [][]byte{
+		[]byte("first unclassified replacement"),
+		[]byte("second unclassified replacement"),
+		[]byte("third unclassified replacement"),
+	}
+	stage := 0
+	writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		switch {
+		case point == vNextPublicationBeforeControlRepairCapture && stage == 0:
+			stage++
+			vNextReplacePublicationControlForTest(t, root, vNextPublicationCurrentFile, replacements[0])
+		case point == vNextPublicationAfterControlRepairCaptured && stage == 1:
+			stage++
+			if err := os.WriteFile(targetPath, replacements[1], 0o600); err != nil {
+				t.Fatal(err)
+			}
+		case point == vNextPublicationAfterControlRepairSelected && stage == 2:
+			stage++
+			if err := os.Rename(targetPath, targetPath+".third-moved"); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(targetPath, replacements[2], 0o600); err != nil {
+				t.Fatal(err)
+			}
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := writer.openOperation(context.Background(), syscall.LOCK_EX, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = writer.writeCurrentLocked(operation, pointer)
+	operation.close()
+	if !errors.Is(err, errVNextPublicationControlConflict) {
+		t.Fatalf("writeCurrentLocked() error = %v, want bounded conflict", err)
+	}
+	if stage != 3 {
+		t.Fatalf("substitution stage = %d, want all three barriers", stage)
+	}
+
+	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := fresh.Recover(context.Background()); err != nil {
+		t.Fatalf("fresh Recover() = %v", err)
+	}
+	paths := make([]string, len(replacements))
+	for index, replacement := range replacements {
+		paths[index] = vNextPublicationFindPrivatePayloadForTest(t, root, replacement)
+	}
+	for left := range paths {
+		leftInfo, err := os.Stat(paths[left])
+		if err != nil {
+			t.Fatal(err)
+		}
+		for right := left + 1; right < len(paths); right++ {
+			rightInfo, err := os.Stat(paths[right])
+			if err != nil {
+				t.Fatal(err)
+			}
+			if os.SameFile(leftInfo, rightInfo) {
+				t.Fatalf("replacements %d and %d share retained inode", left, right)
+			}
+		}
+	}
+
+	inspection, err := fresh.openOperation(context.Background(), syscall.LOCK_SH, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	graph, err := fresh.controlAuthorityForReadLocked(inspection)
+	if err != nil {
+		inspection.close()
+		t.Fatal(err)
+	}
+	defer graph.close()
+	defer inspection.close()
+	head := graph.heads[vNextPublicationCurrentFile]
+	if head == nil || head.outcome == vNextPublicationControlRepairRetryRequired {
+		t.Fatalf("CURRENT terminal head after recovery = %#v", head)
+	}
+	_, found, identity, err := vNextPublicationReadAuthorizedControlLocked(inspection, graph, vNextPublicationCurrentFile, "CURRENT")
+	if err != nil || !found {
+		t.Fatalf("authorized CURRENT after recovery = found %t identity %#v error %v", found, identity, err)
+	}
+	for _, state := range graph.states {
+		if state.record.Target != vNextPublicationCurrentFile {
+			continue
+		}
+		if err := state.validateAnchors(); err != nil {
+			t.Fatalf("CURRENT transaction %q anchors = %v", state.transactionName, err)
+		}
+		captures := 0
+		for _, phase := range state.phases {
+			if phase.record.State == vNextPublicationControlRepairCaptureIntent {
+				captures++
+			}
+		}
+		if captures > vNextPublicationControlRepairMaxCaptureAttempts {
+			t.Fatalf("CURRENT transaction %q used %d capture attempts", state.transactionName, captures)
+		}
+	}
+}
+
+func TestVNextGenerationPublisherRefusesPrivateAuthorityReplacementBeforePublicDecode(t *testing.T) {
+	tests := []struct {
+		name     string
+		point    vNextPublicationFaultPoint
+		expected string
+		replace  func(*testing.T, string, string)
+	}{
+		{
+			name:     "transaction",
+			point:    vNextPublicationAfterControlRepairCaptureDirectory,
+			expected: "transaction identity changed",
+			replace: func(t *testing.T, transaction, _ string) {
+				vNextPublicationReplacePrivateDirectoryForTest(t, transaction)
+			},
+		},
+		{
+			name:     "prepared",
+			point:    vNextPublicationAfterControlRepairCaptureDirectory,
+			expected: "prepared authority identity changed",
+			replace: func(t *testing.T, transaction, _ string) {
+				vNextPublicationReplacePrivateFileForTest(t, filepath.Join(transaction, vNextPublicationControlRepairPreparedFile))
+			},
+		},
+		{
+			name:     "capture",
+			point:    vNextPublicationAfterControlRepairCaptureDirectory,
+			expected: "capture identity changed",
+			replace: func(t *testing.T, transaction, _ string) {
+				vNextPublicationReplacePrivateDirectoryForTest(t, filepath.Join(transaction, vNextPublicationControlCaptureName(1)))
+			},
+		},
+		{
+			name:     "phase",
+			point:    vNextPublicationAfterControlRepairCaptured,
+			expected: "phase",
+			replace: func(t *testing.T, transaction, _ string) {
+				vNextPublicationReplacePrivateFileForTest(t, filepath.Join(transaction, vNextPublicationControlRepairPhaseName(2)))
+			},
+		},
+		{
+			name:     "predecessor",
+			point:    vNextPublicationAfterControlRepairCaptureDirectory,
+			expected: "predecessor transaction",
+			replace: func(t *testing.T, _, predecessor string) {
+				vNextPublicationReplacePrivateDirectoryForTest(t, predecessor)
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+			if err != nil {
+				t.Fatal(err)
+			}
+			crash := errors.New("crash after prepared authority")
+			crashed, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point == vNextPublicationAfterControlRepairPrepared {
 					return crash
 				}
 				return nil
@@ -294,96 +1283,195 @@ func TestVNextGenerationPublisherWritesBoundImmutableRecoveryPhaseChains(t *test
 			if err != nil {
 				t.Fatal(err)
 			}
-			operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
+			operation, err := crashed.openOperation(context.Background(), syscall.LOCK_EX, true)
 			if err != nil {
 				t.Fatal(err)
 			}
-			err = failing.writeCurrentLocked(operation, pointer)
+			err = crashed.writeCurrentLocked(operation, pointer)
 			operation.close()
 			if !errors.Is(err, crash) {
-				t.Fatalf("writeCurrentLocked() error = %v, want injected crash", err)
+				t.Fatalf("writeCurrentLocked() error = %v, want prepared crash", err)
 			}
-			if test.substitute && !substituted {
-				t.Fatal("replacement phase path did not replace the final source")
-			}
-
-			transactionPath := vNextPublicationPendingControlRepairTransactionPathForTest(t, root)
-			transaction, err := vNextPublicationOpenDirectory(transactionPath, "test control repair transaction")
+			transaction, predecessor := vNextPublicationPendingCurrentRepairPathsForTest(t, crashed, root)
+			vNextReplacePublicationControlForTest(t, root, vNextPublicationCurrentFile, []byte("malformed public control must not be decoded"))
+			attacked := false
+			fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point == test.point && !attacked {
+					attacked = true
+					test.replace(t, transaction, predecessor)
+				}
+				return nil
+			}})
 			if err != nil {
 				t.Fatal(err)
 			}
-			prepared, err := transaction.readFile(vNextPublicationControlRepairPreparedFile, "test control repair prepared authority")
-			if err != nil {
-				_ = transaction.Close()
-				t.Fatal(err)
+			err = fresh.Recover(context.Background())
+			if !attacked {
+				t.Fatal("private replacement barrier was not reached")
 			}
-			preparedIdentity, err := transaction.identityAt(vNextPublicationControlRepairPreparedFile, "test control repair prepared authority")
-			if err != nil {
-				_ = transaction.Close()
-				t.Fatal(err)
+			if err == nil || !strings.Contains(err.Error(), test.expected) {
+				t.Fatalf("Recover() error = %v, want private %s refusal", err, test.expected)
 			}
-			previous := vNextPublicationControlRepairPhaseReference{
-				Name:     vNextPublicationControlRepairPreparedFile,
-				Identity: vNextPublicationRecordIdentity(preparedIdentity),
-				Digest:   vNextPublicationDigest(prepared),
+			if strings.Contains(err.Error(), "decode CURRENT") {
+				t.Fatalf("Recover() decoded public CURRENT before private replacement refusal: %v", err)
 			}
-			for index, wantState := range test.wantStates {
-				name := vNextPublicationControlRepairPhaseName(index + 1)
-				payload, err := transaction.readFile(name, "test control repair phase")
-				if err != nil {
-					_ = transaction.Close()
-					t.Fatal(err)
-				}
-				var phase vNextPublicationControlRepairPhase
-				if err := vNextPublicationDecode(payload, &phase); err != nil {
-					_ = transaction.Close()
-					t.Fatal(err)
-				}
-				if phase.Sequence != index+1 || phase.State != wantState {
-					_ = transaction.Close()
-					t.Fatalf("phase %d = %#v, want state %q", index+1, phase, wantState)
-				}
-				if phase.PreparedDigest != vNextPublicationDigest(prepared) || phase.PreparedIdentity != vNextPublicationRecordIdentity(preparedIdentity) || phase.Previous != previous {
-					_ = transaction.Close()
-					t.Fatalf("phase %d is not bound to the immutable prepared authority", index+1)
-				}
-				phaseIdentity, err := transaction.identityAt(name, "test control repair phase")
-				if err != nil {
-					_ = transaction.Close()
-					t.Fatal(err)
-				}
-				previous = vNextPublicationControlRepairPhaseReference{
-					Name:     name,
-					Identity: vNextPublicationRecordIdentity(phaseIdentity),
-					Digest:   vNextPublicationDigest(payload),
-				}
+			replaced := transaction
+			if test.name == "prepared" {
+				replaced = filepath.Join(transaction, vNextPublicationControlRepairPreparedFile)
+			} else if test.name == "capture" {
+				replaced = filepath.Join(transaction, vNextPublicationControlCaptureName(1))
+			} else if test.name == "phase" {
+				replaced = filepath.Join(transaction, vNextPublicationControlRepairPhaseName(2))
+			} else if test.name == "predecessor" {
+				replaced = predecessor
 			}
-			after, err := transaction.readFile(vNextPublicationControlRepairPreparedFile, "test control repair prepared authority")
-			if err != nil {
-				_ = transaction.Close()
-				t.Fatal(err)
+			if _, statErr := os.Lstat(replaced); statErr != nil {
+				t.Fatalf("private replacement %q was removed: %v", replaced, statErr)
 			}
-			if string(after) != string(prepared) {
-				_ = transaction.Close()
-				t.Fatal("append-only phase persistence changed the prepared authority")
-			}
-			if err := transaction.Close(); err != nil {
-				t.Fatal(err)
-			}
-
-			recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-			if err != nil {
-				t.Fatal(err)
-			}
-			if err := recovered.Recover(context.Background()); err != nil {
-				t.Fatalf("Recover() after %s phase chain = %v", test.name, err)
+			if _, statErr := os.Lstat(replaced + ".attacker-moved"); statErr != nil {
+				t.Fatalf("original private authority %q was removed: %v", replaced, statErr)
 			}
 		})
 	}
 }
 
-func TestVNextGenerationPublisherFinalTargetSubstitutionCannotClearPrivateAuthority(t *testing.T) {
-	controls := []vNextPublicationControlRepairTestControl{
+func TestVNextGenerationPublisherCheckRevalidatesPrivateAuthorityBeforePublicDecode(t *testing.T) {
+	root := t.TempDir()
+	artifacts := vNextPublicationArtifactsForTest("active", false)
+	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := baseline.Publish(artifacts); err != nil {
+		t.Fatal(err)
+	}
+	transaction := vNextPublicationAuthorityTransactionForTest(t, baseline, vNextPublicationCurrentFile)
+	attacked := false
+	checker, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point == vNextPublicationAfterControlAuthorityReadScan && !attacked {
+			attacked = true
+			vNextPublicationReplacePrivateDirectoryForTest(t, filepath.Join(root, "acme", transaction))
+			vNextReplacePublicationControlForTest(t, root, vNextPublicationCurrentFile, []byte("malformed CURRENT must not be decoded"))
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = checker.Check(artifacts)
+	if !attacked {
+		t.Fatal("check did not reach authority-read scan boundary")
+	}
+	if err == nil || !strings.Contains(err.Error(), "transaction identity changed") {
+		t.Fatalf("Check() error = %v, want private transaction identity refusal", err)
+	}
+	if strings.Contains(err.Error(), "decode CURRENT") {
+		t.Fatalf("Check() decoded public CURRENT before private authority revalidation: %v", err)
+	}
+	before := vNextPublicationTreeSnapshotForTest(t, filepath.Join(root, "acme"))
+	err = checker.Check(artifacts)
+	if err == nil || strings.Contains(err.Error(), "decode CURRENT") {
+		t.Fatalf("second Check() error = %v, want private authority refusal before decode", err)
+	}
+	if after := vNextPublicationTreeSnapshotForTest(t, filepath.Join(root, "acme")); !bytes.Equal(before, after) {
+		t.Fatal("Check() changed a substituted private authority tree")
+	}
+}
+
+func vNextPublicationPendingCurrentRepairPathsForTest(t *testing.T, publisher *vNextGenerationPublisher, root string) (string, string) {
+	t.Helper()
+	operation, err := publisher.openOperation(context.Background(), syscall.LOCK_SH, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer operation.close()
+	graph, err := publisher.scanControlAuthorityLocked(operation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer graph.close()
+	head := graph.heads[vNextPublicationCurrentFile]
+	if head == nil || head.state.record.Predecessor == nil {
+		t.Fatalf("pending CURRENT authority head = %#v", head)
+	}
+	return filepath.Join(root, "acme", head.state.transactionName), filepath.Join(root, "acme", head.state.record.Predecessor.Transaction)
+}
+
+func vNextPublicationReplacePrivateDirectoryForTest(t *testing.T, path string) {
+	t.Helper()
+	if err := os.Rename(path, path+".attacker-moved"); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Mkdir(path, 0o700); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func vNextPublicationReplacePrivateFileForTest(t *testing.T, path string) {
+	t.Helper()
+	if err := os.Rename(path, path+".attacker-moved"); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(path, []byte("{}\n"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestVNextGenerationPublisherRetainsSupersededAuthorityWhenCleanupIsUnsafe(t *testing.T) {
+	root := t.TempDir()
+	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := baseline.openOperation(context.Background(), syscall.LOCK_EX, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = baseline.writeCurrentLocked(operation, pointer)
+	operation.close()
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, predecessor := vNextPublicationPendingCurrentRepairPathsForTest(t, baseline, root)
+	if _, err := os.Stat(predecessor); err != nil {
+		t.Fatalf("normal successor discarded predecessor authority: %v", err)
+	}
+	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := fresh.Recover(context.Background()); err != nil {
+		t.Fatalf("Recover() with valid successor = %v", err)
+	}
+	if _, err := os.Stat(predecessor); err != nil {
+		t.Fatalf("valid recovery discarded predecessor authority: %v", err)
+	}
+	vNextPublicationReplacePrivateDirectoryForTest(t, predecessor)
+	vNextReplacePublicationControlForTest(t, root, vNextPublicationCurrentFile, []byte("third control must not be decoded"))
+	if err := fresh.Recover(context.Background()); err == nil ||
+		(!strings.Contains(err.Error(), "predecessor transaction") &&
+			!strings.Contains(err.Error(), "publication control repair transaction")) ||
+		strings.Contains(err.Error(), "decode CURRENT") {
+		t.Fatalf("Recover() after predecessor substitution = %v, want private authority refusal before public decode", err)
+	}
+	if _, err := os.Stat(predecessor); err != nil {
+		t.Fatalf("substituted predecessor was removed: %v", err)
+	}
+	if _, err := os.Stat(predecessor + ".attacker-moved"); err != nil {
+		t.Fatalf("superseded predecessor was removed: %v", err)
+	}
+}
+
+func TestVNextGenerationPublisherCooperatingWritersSerializeAuthorityHeads(t *testing.T) {
+	tests := []struct {
+		name   string
+		target string
+		write  func(*vNextGenerationPublisher, *vNextPublicationOperation, vNextGenerationPointer) error
+	}{
 		{
 			name:   "CURRENT",
 			target: vNextPublicationCurrentFile,
@@ -399,8 +1487,8 @@ func TestVNextGenerationPublisherFinalTargetSubstitutionCannotClearPrivateAuthor
 			},
 		},
 	}
-	for _, control := range controls {
-		t.Run(control.name, func(t *testing.T) {
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
 			root := t.TempDir()
 			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
 			if err != nil {
@@ -410,353 +1498,89 @@ func TestVNextGenerationPublisherFinalTargetSubstitutionCannotClearPrivateAuthor
 			if err != nil {
 				t.Fatal(err)
 			}
-			vNextPublicationPrepareControlRepairTargetForTest(t, baseline, root, control, pointer)
-			replacement := []byte("final public control substitute")
-			swapped := false
-			failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-				if point == vNextPublicationBeforeControlRepairAuthorityClear && !swapped {
-					swapped = true
-					vNextReplacePublicationControlForTest(t, root, control.target, replacement)
+			firstAtCapture := make(chan struct{})
+			releaseFirst := make(chan struct{})
+			first, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point == vNextPublicationBeforeControlRepairCapture {
+					close(firstAtCapture)
+					<-releaseFirst
 				}
 				return nil
 			}})
 			if err != nil {
 				t.Fatal(err)
 			}
-			operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
-			if err != nil {
-				t.Fatal(err)
-			}
-			err = control.write(failing, operation, pointer)
-			operation.close()
-			if !swapped {
-				t.Fatal("final cleanup barrier did not permit the same-permission target replacement")
-			}
-			if err == nil || !strings.Contains(err.Error(), "final installed repair cleanup") {
-				t.Fatalf("write after final target substitution error = %v, want final cleanup refusal", err)
-			}
-			if got := vNextPublicationPendingControlRepairAuthoritiesForTest(t, root); got != 1 {
-				t.Fatalf("pending authority after final target substitution = %d, want one", got)
+			firstDone := make(chan error, 1)
+			go func() {
+				operation, err := first.openOperation(context.Background(), syscall.LOCK_EX, true)
+				if err == nil {
+					err = test.write(first, operation, pointer)
+					operation.close()
+				}
+				firstDone <- err
+			}()
+			select {
+			case <-firstAtCapture:
+			case <-time.After(5 * time.Second):
+				t.Fatal("first writer did not reach authority capture")
 			}
 
-			recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			second, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
 			if err != nil {
 				t.Fatal(err)
 			}
-			if err := recovered.Recover(context.Background()); err != nil {
-				t.Fatalf("Recover() after final target substitution = %v", err)
+			secondEntered := make(chan struct{})
+			secondDone := make(chan error, 1)
+			go func() {
+				close(secondEntered)
+				operation, err := second.openOperation(context.Background(), syscall.LOCK_EX, true)
+				if err == nil {
+					err = test.write(second, operation, pointer)
+					operation.close()
+				}
+				secondDone <- err
+			}()
+			<-secondEntered
+			select {
+			case err := <-secondDone:
+				t.Fatalf("second writer entered first authority transition: %v", err)
+			case <-time.After(100 * time.Millisecond):
 			}
-			vNextPublicationFindControlRepairReplacementForTest(t, root, replacement)
-			active, err := recovered.Open(context.Background())
+			close(releaseFirst)
+			select {
+			case err := <-firstDone:
+				if err != nil {
+					t.Fatalf("first writer error = %v", err)
+				}
+			case <-time.After(5 * time.Second):
+				t.Fatal("first writer did not finish")
+			}
+			select {
+			case err := <-secondDone:
+				if err != nil {
+					t.Fatalf("second writer error = %v", err)
+				}
+			case <-time.After(5 * time.Second):
+				t.Fatal("second writer did not finish")
+			}
+			inspection, err := baseline.openOperation(context.Background(), syscall.LOCK_SH, false)
 			if err != nil {
 				t.Fatal(err)
 			}
-			assertVNextPublicationMarker(t, active, "active")
-			active.Release()
+			graph, err := baseline.controlAuthorityForReadLocked(inspection)
+			inspection.close()
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer graph.close()
+			head := graph.heads[test.target]
+			if head == nil {
+				t.Fatalf("%s has no authority head", test.target)
+			}
+			if _, _, _, terminal := head.state.terminal(); !terminal {
+				t.Fatalf("%s head is not terminal", test.target)
+			}
 		})
-	}
-}
-
-func TestVNextGenerationPublisherFinalNoPriorTargetUnlinkCannotClearPrivateAuthority(t *testing.T) {
-	root := t.TempDir()
-	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
-	if err != nil {
-		t.Fatal(err)
-	}
-	control := vNextPublicationControlRepairTestControl{
-		target:  vNextPublicationCurrentFile,
-		noPrior: true,
-		write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
-			return publisher.writeCurrentLocked(operation, pointer)
-		},
-	}
-	vNextPublicationPrepareControlRepairTargetForTest(t, baseline, root, control, pointer)
-	unlinked := false
-	failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-		if point == vNextPublicationBeforeControlRepairAuthorityClear && !unlinked {
-			unlinked = true
-			if err := os.Remove(filepath.Join(root, "acme", vNextPublicationCurrentFile)); err != nil {
-				t.Fatal(err)
-			}
-		}
-		return nil
-	}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = control.write(failing, operation, pointer)
-	operation.close()
-	if !unlinked {
-		t.Fatal("final cleanup barrier did not permit the same-permission target unlink")
-	}
-	if err == nil || !strings.Contains(err.Error(), "final installed repair cleanup") {
-		t.Fatalf("write after final target unlink error = %v, want final cleanup refusal", err)
-	}
-	if got := vNextPublicationPendingControlRepairAuthoritiesForTest(t, root); got != 1 {
-		t.Fatalf("pending authority after final target unlink = %d, want one", got)
-	}
-	recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := recovered.Recover(context.Background()); err != nil {
-		t.Fatalf("Recover() after final target unlink = %v", err)
-	}
-	if _, err := os.Stat(filepath.Join(root, "acme", vNextPublicationCurrentFile)); !errors.Is(err, fs.ErrNotExist) {
-		t.Fatalf("CURRENT after final target unlink recovery = %v, want absent", err)
-	}
-}
-
-func TestVNextGenerationPublisherRefusesSubstitutedPreparedAuthorityBeforePublicControlExposure(t *testing.T) {
-	root := t.TempDir()
-	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
-	if err != nil {
-		t.Fatal(err)
-	}
-	targetPath := filepath.Join(root, "acme", vNextPublicationCurrentFile)
-	prior, err := os.Stat(targetPath)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	var moved string
-	substituted := false
-	failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-		if point != vNextPublicationAfterFinalControlSourceIdentity || substituted {
-			return nil
-		}
-		substituted = true
-		transaction := vNextPublicationPendingControlRepairTransactionPathForTest(t, root)
-		prepared := filepath.Join(transaction, vNextPublicationControlRepairPreparedFile)
-		payload, err := os.ReadFile(prepared)
-		if err != nil {
-			t.Fatal(err)
-		}
-		moved = prepared + ".moved"
-		if err := os.Rename(prepared, moved); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(prepared, payload, 0o600); err != nil {
-			t.Fatal(err)
-		}
-		return nil
-	}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = failing.writeCurrentLocked(operation, pointer)
-	operation.close()
-
-	if !substituted {
-		t.Fatal("final source-identity barrier did not run prepared-authority substitution")
-	}
-	if err == nil || !strings.Contains(err.Error(), "prepared authority identity changed") {
-		t.Fatalf("write after prepared authority substitution error = %v, want pre-exposure identity refusal", err)
-	}
-	after, statErr := os.Stat(targetPath)
-	if statErr != nil {
-		t.Fatal(statErr)
-	}
-	if !os.SameFile(prior, after) {
-		t.Fatal("prepared-authority substitution installed a public control before refusal")
-	}
-	if _, err := os.Stat(moved); err != nil {
-		t.Fatalf("prepared-authority substitution removed original authority: %v", err)
-	}
-	recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = recovered.Recover(context.Background())
-	if err == nil || !strings.Contains(err.Error(), "publication control repair") || strings.Contains(err.Error(), "decode CURRENT") {
-		t.Fatalf("Recover() after pre-exposure authority substitution error = %v, want private-authority refusal before public control decode", err)
-	}
-}
-
-func TestVNextGenerationPublisherRefusesSubstitutedPreparedAuthorityBeforePublicControlTrust(t *testing.T) {
-	root := t.TempDir()
-	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
-	if err != nil {
-		t.Fatal(err)
-	}
-	substituted := false
-	failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-		if point != vNextPublicationBeforeControlRepairAuthorityClear || substituted {
-			return nil
-		}
-		substituted = true
-		transaction := vNextPublicationPendingControlRepairTransactionPathForTest(t, root)
-		prepared := filepath.Join(transaction, vNextPublicationControlRepairPreparedFile)
-		payload, err := os.ReadFile(prepared)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if err := os.Rename(prepared, prepared+".moved"); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(prepared, payload, 0o600); err != nil {
-			t.Fatal(err)
-		}
-		vNextReplacePublicationControlForTest(t, root, vNextPublicationCurrentFile, []byte("untrusted CURRENT after authority substitution"))
-		return nil
-	}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = failing.writeCurrentLocked(operation, pointer)
-	operation.close()
-	if !substituted {
-		t.Fatal("final cleanup barrier did not run authority substitution")
-	}
-	if err == nil || !strings.Contains(err.Error(), "prepared authority identity changed") {
-		t.Fatalf("write after prepared authority substitution error = %v, want identity refusal", err)
-	}
-	recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = recovered.Recover(context.Background())
-	if err == nil || !strings.Contains(err.Error(), "publication control repair") || strings.Contains(err.Error(), "decode CURRENT") {
-		t.Fatalf("Recover() after prepared authority substitution error = %v, want private-authority refusal before public control decode", err)
-	}
-}
-
-func vNextPublicationExerciseControlRepairCut(t *testing.T, control vNextPublicationControlRepairTestControl, cut vNextPublicationFaultPoint, replacement func(vNextGenerationPointer) []byte) {
-	t.Helper()
-	root := t.TempDir()
-	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
-	if err != nil {
-		t.Fatal(err)
-	}
-	vNextPublicationPrepareControlRepairTargetForTest(t, baseline, root, control, pointer)
-
-	crash := errors.New("injected control repair crash")
-	swapped := false
-	var replacementPayload []byte
-	if replacement != nil {
-		replacementPayload = replacement(pointer)
-	}
-	failing, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-		if replacementPayload != nil && point == vNextPublicationAfterFinalControlSourceIdentity && !swapped {
-			swapped = true
-			vNextReplacePublicationTemporaryForTest(t, root, replacementPayload)
-		}
-		if point == cut {
-			return crash
-		}
-		return nil
-	}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	operation, err := failing.openOperation(context.Background(), syscall.LOCK_EX, true)
-	if err != nil {
-		t.Fatal(err)
-	}
-	err = control.write(failing, operation, pointer)
-	operation.close()
-	if !errors.Is(err, crash) {
-		t.Fatalf("write at %s error = %v, want injected crash", cut, err)
-	}
-	if replacementPayload != nil && !swapped {
-		t.Fatal("replacement scenario did not reach final source-identity barrier")
-	}
-	pendingAuthority := cut != vNextPublicationAfterControlRepairBackupSync && cut != vNextPublicationAfterControlRepairAuthorityRetireSync && cut != vNextPublicationAfterControlRepairClearSync
-	if got := vNextPublicationPendingControlRepairAuthoritiesForTest(t, root); pendingAuthority && got != 1 {
-		t.Fatalf("repair authority count at %s = %d, want one pending authority", cut, got)
-	} else if !pendingAuthority && got != 0 {
-		t.Fatalf("repair authority count at %s = %d, want absent", cut, got)
-	}
-
-	recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := recovered.Recover(context.Background()); err != nil {
-		t.Fatalf("Recover() after %s error = %v", cut, err)
-	}
-	if got := vNextPublicationPendingControlRepairAuthoritiesForTest(t, root); got != 0 {
-		t.Fatalf("repair authority count after recovery = %d, want absent", got)
-	}
-	if control.noPrior && control.target == vNextPublicationCurrentFile && (replacementPayload != nil || cut == vNextPublicationAfterControlRepairBackupSync || cut == vNextPublicationAfterControlRepairPrepared) {
-		if _, err := os.Stat(filepath.Join(root, "acme", control.target)); !errors.Is(err, fs.ErrNotExist) {
-			t.Fatalf("no-prior CURRENT after %s = %v, want absent", cut, err)
-		}
-	} else {
-		active, err := recovered.Open(context.Background())
-		if err != nil {
-			t.Fatalf("Open() after %s error = %v", cut, err)
-		}
-		assertVNextPublicationMarker(t, active, "active")
-		active.Release()
-	}
-	if replacementPayload != nil {
-		vNextPublicationFindControlRepairReplacementForTest(t, root, replacementPayload)
-	}
-}
-
-func vNextPublicationPrepareControlRepairTargetForTest(t *testing.T, publisher *vNextGenerationPublisher, root string, control vNextPublicationControlRepairTestControl, pointer vNextGenerationPointer) {
-	t.Helper()
-	if control.target == vNextPublicationJournalFile && !control.noPrior {
-		payload, err := vNextPublicationJSON(vNextGenerationJournal{New: pointer, State: "prepared"})
-		if err != nil {
-			t.Fatal(err)
-		}
-		path := filepath.Join(root, "acme", control.target)
-		file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o600)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if _, err := file.Write(payload); err != nil {
-			_ = file.Close()
-			t.Fatal(err)
-		}
-		if err := file.Sync(); err != nil {
-			_ = file.Close()
-			t.Fatal(err)
-		}
-		if err := file.Close(); err != nil {
-			t.Fatal(err)
-		}
-	}
-	if control.target == vNextPublicationCurrentFile && control.noPrior {
-		operation, err := publisher.openOperation(context.Background(), syscall.LOCK_EX, true)
-		if err != nil {
-			t.Fatal(err)
-		}
-		err = publisher.removeCurrentLocked(operation)
-		operation.close()
-		if err != nil {
-			t.Fatal(err)
-		}
 	}
 }
 
@@ -771,106 +1595,113 @@ func vNextReplacePublicationControlForTest(t *testing.T, root, name string, repl
 	}
 }
 
-func vNextPublicationPendingControlRepairAuthoritiesForTest(t *testing.T, root string) int {
+func vNextPublicationFindPrivatePayloadForTest(t *testing.T, root string, want []byte) string {
 	t.Helper()
 	connectorRoot := filepath.Join(root, "acme")
-	entries, err := os.ReadDir(connectorRoot)
+	transactions, err := filepath.Glob(filepath.Join(connectorRoot, vNextPublicationControlRepairDirectoryPrefix+"*"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	count := 0
-	for _, entry := range entries {
-		if !entry.IsDir() || !strings.HasPrefix(entry.Name(), vNextPublicationControlRepairDirectoryPrefix) {
-			continue
-		}
-		_, err := os.Stat(filepath.Join(connectorRoot, entry.Name(), vNextPublicationControlRepairPreparedFile))
-		if err == nil {
-			count++
-			continue
-		}
-		if !errors.Is(err, fs.ErrNotExist) {
-			t.Fatal(err)
-		}
-	}
-	return count
-}
-
-func vNextPublicationPendingControlRepairTransactionPathForTest(t *testing.T, root string) string {
-	t.Helper()
-	connectorRoot := filepath.Join(root, "acme")
-	entries, err := os.ReadDir(connectorRoot)
-	if err != nil {
-		t.Fatal(err)
-	}
-	transaction := ""
-	for _, entry := range entries {
-		if !entry.IsDir() || !strings.HasPrefix(entry.Name(), vNextPublicationControlRepairDirectoryPrefix) {
-			continue
-		}
-		path := filepath.Join(connectorRoot, entry.Name())
-		if _, err := os.Stat(filepath.Join(path, vNextPublicationControlRepairPreparedFile)); errors.Is(err, fs.ErrNotExist) {
-			continue
-		} else if err != nil {
-			t.Fatal(err)
-		}
-		if transaction != "" {
-			t.Fatalf("multiple pending control repair transactions: %q and %q", transaction, path)
-		}
-		transaction = path
-	}
-	if transaction == "" {
-		t.Fatal("no pending control repair transaction")
-	}
-	return transaction
-}
-
-func vNextPublicationFindControlRepairReplacementForTest(t *testing.T, root string, want []byte) string {
-	t.Helper()
-	connectorRoot := filepath.Join(root, "acme")
-	entries, err := os.ReadDir(connectorRoot)
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, entry := range entries {
-		if !entry.IsDir() || !strings.HasPrefix(entry.Name(), vNextPublicationControlRepairDirectoryPrefix) {
-			continue
-		}
-		path := filepath.Join(connectorRoot, entry.Name(), vNextPublicationControlReplacementMember)
-		payload, err := os.ReadFile(path)
-		if errors.Is(err, fs.ErrNotExist) {
-			continue
-		}
+	for _, transaction := range transactions {
+		entries, err := os.ReadDir(transaction)
 		if err != nil {
 			t.Fatal(err)
 		}
-		if string(payload) == string(want) {
-			return path
+		for _, entry := range entries {
+			candidate := filepath.Join(transaction, entry.Name())
+			if entry.IsDir() {
+				candidate = filepath.Join(candidate, vNextPublicationControlCaptureMember)
+			}
+			payload, err := os.ReadFile(candidate)
+			if errors.Is(err, fs.ErrNotExist) {
+				continue
+			}
+			if err != nil {
+				continue
+			}
+			if bytes.Equal(payload, want) {
+				return candidate
+			}
 		}
 	}
-	t.Fatalf("control repair does not retain replacement %q", want)
+	t.Fatalf("publication private authority does not retain %q", want)
 	return ""
 }
 
-func vNextPublicationControlRepairReplacementForTest(t *testing.T, target string, old vNextGenerationPointer) []byte {
+func vNextPublicationTreeSnapshotForTest(t *testing.T, root string) []byte {
 	t.Helper()
-	replacement := vNextGenerationPointer{
-		Generation:      strings.Repeat("a", 64),
-		IntegrityDigest: strings.Repeat("b", 64),
+	type entry struct {
+		Path      string `json:"path"`
+		Directory bool   `json:"directory"`
+		Payload   []byte `json:"payload,omitempty"`
 	}
-	var (
-		payload []byte
-		err     error
-	)
-	switch target {
-	case vNextPublicationCurrentFile:
-		payload, err = vNextPublicationJSON(replacement)
-	case vNextPublicationJournalFile:
-		payload, err = vNextPublicationJSON(vNextGenerationJournal{Old: &old, New: replacement, State: "prepared"})
-	default:
-		t.Fatalf("unsupported control repair target %q", target)
+	var entries []entry
+	var visit func(string, string)
+	visit = func(directory, relative string) {
+		children, err := os.ReadDir(directory)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, child := range children {
+			path := filepath.Join(directory, child.Name())
+			name := child.Name()
+			if relative != "" {
+				name = filepath.Join(relative, name)
+			}
+			if child.IsDir() {
+				entries = append(entries, entry{Path: name, Directory: true})
+				visit(path, name)
+				continue
+			}
+			payload, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			entries = append(entries, entry{Path: name, Payload: payload})
+		}
 	}
+	visit(root, "")
+	snapshot, err := json.Marshal(entries)
 	if err != nil {
 		t.Fatal(err)
 	}
-	return payload
+	return snapshot
+}
+func vNextPublicationPendingControlRepairAuthoritiesForTest(t *testing.T, root string) int {
+	t.Helper()
+	connectorRoot := filepath.Join(root, "acme")
+	transactions, err := filepath.Glob(filepath.Join(connectorRoot, vNextPublicationControlRepairDirectoryPrefix+"*"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	pending := 0
+	for _, transaction := range transactions {
+		prepared := filepath.Join(transaction, vNextPublicationControlRepairPreparedFile)
+		if _, err := os.Stat(prepared); err != nil {
+			if errors.Is(err, fs.ErrNotExist) {
+				pending++
+				continue
+			}
+			t.Fatal(err)
+		}
+		terminal := false
+		for sequence := 1; sequence <= vNextPublicationControlRepairMaxPhases; sequence++ {
+			payload, err := os.ReadFile(filepath.Join(transaction, vNextPublicationControlRepairPhaseName(sequence)))
+			if errors.Is(err, fs.ErrNotExist) {
+				break
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			var phase vNextPublicationControlRepairPhase
+			if err := vNextPublicationDecode(payload, &phase); err != nil {
+				t.Fatal(err)
+			}
+			terminal = phase.State == vNextPublicationControlRepairTerminal
+		}
+		if !terminal {
+			pending++
+		}
+	}
+	return pending
 }

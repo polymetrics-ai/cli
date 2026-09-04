@@ -471,3 +471,48 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 
 - **Findings resolved during this review:** (1) a substituted prepared inode could be detected only after public installation, so the final pre-install private identity assertion and regression were added; (2) phase/backup cleanup preceded durable authority retirement, so retirement was reordered and its crash cut added; (3) new close-error handling was made explicit after changed-line lint identified it.
 - **Conclusion:** no remaining CP11-local blocker found. Instruction 137 keeps CP12–CP16 and later connector proof work out of this candidate. Next step is a scoped ordinary commit/push and Firstmate-managed independent exact-SHA review; do not start CP12.
+
+## 2026-09-04 — CP11 F1 Design B linearization review intake (instruction 139)
+
+- **Review subject:** correction begins only from `4fa9a5b8cdecdfc07afe54ee3eddb7d19719f5b8`, parent `f36b5d0a275ed27fd5f4da242ba192e43f8066d5`. The authoritative report mandates Design B with Design A's no-clobber capture primitive.
+- **Root finding:** candidate final checks do not linearize later destructive public `renameat`/`unlinkat`, then delete sole prepared authority. A same-permission direct actor can destroy a late occupant or make recovery/check trust an authority-free third inode; public-only check masks pending no-prior `JOURNAL` behind old valid `CURRENT`.
+- **Review predicates:** no production clobbering rename over public control; no public unlink to select absence; protected mode never has zero terminal heads; successor durability precedes predecessor retirement; authority-first read-only check precedes public decode; malformed repair-prefix directory refuses; typed no-replace errors have no fallback; repeated substitutions retain distinct identities; cleanup cannot weaken current terminal; same-UID privilege boundary is documented.
+- **Proof standard:** candidate REDs execute after actual final validation. Green tests use real descriptor-relative operations, fresh publisher recovery, direct lock-ignoring actor, inode assertions, and production `lock-render --check`; exit status, bytes alone, authority counts, or test-only checker are insufficient.
+- **Process:** Firstmate forbids role spawning, so generated GSD workflow is recorded inline. This local intake cannot replace fresh Firstmate-managed OMP exact-SHA review after bounded correction push.
+
+## 2026-09-04 — CP11 F1 Design B local exact-range self-review
+
+- **Subject and method:** read-only review of
+  `4fa9a5b8cdecdfc07afe54ee3eddb7d19719f5b8..WORKTREE` across the publisher,
+  descriptor helpers, platform no-replace shims, adversarial tests, canon,
+  Atlas, and CP11 evidence. GSD sources and the generated discuss/plan/execute/
+  verify/review prompts were re-resolved; the established inline/manual fallback
+  remains necessary because Firstmate forbids role spawning. This is not the
+  required independent exact-SHA review.
+- **Authority and recovery:** protected mode cannot have a missing terminal
+  `CURRENT` or `JOURNAL` head. Every successor binds the predecessor's exact
+  terminal descriptor/digest/selection; fork, cycle, gap, malformed, pending,
+  retry-required, and divergent authority fails before public decoding.
+- **Namespace safety:** public mutation uses only no-replace capture and
+  create-only linking. The design does not retain a public clobbering rename or
+  public unlink path for controls. Captured inodes, prior/intended anchors, and
+  terminal authority remain reachable across fresh recovery.
+- **Read safety:** review found a post-scan private-state replacement window in
+  the first Design B reader. It was fixed by graph-wide private-identity
+  revalidation immediately before every authorized public read and covered by a
+  direct shared-check substitution witness. Public controls are decoded from
+  the already-open descriptor only after that check.
+- **Cleanup and privilege boundary:** no automatic predecessor deletion exists,
+  deliberately making the report's optional cleanup move/post-move barriers
+  unreachable rather than unsafe. The retained-predecessor substitution proof
+  verifies no authority is deleted. Canon documents that this is integrity
+  protection against public-name interference, not authentication against an
+  arbitrary same-UID private-state attacker.
+- **Verification and scope:** final normal/race package suites, corpus,
+  definition, Atlas/canon/docs, vet/build/tidy/contract, and boundary gates
+  pass as recorded in `VERIFICATION.md`. No runtime reader, source lock,
+  rendered execution artifact, provider/credential/database path, CP12 change,
+  `.cache`, certification residue, reset, rebase, or force-push entered scope.
+- **Conclusion:** no remaining CP11-local finding. Commit and ordinary push one
+  coherent candidate, read back PR #4294 base/head/SHA, archive the handled
+  instruction, and pause unchanged for Firstmate's fresh exact-SHA review.

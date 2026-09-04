@@ -35,20 +35,26 @@ document conflicts with the source-lock vNext architecture, vNext controls.
 - Authoring publication is connector-local and descriptor-confined: verified
   connector and generation descriptors remain no-follow for the complete
   operation; a complete deterministic generation is staged under a durable
-  typed ownership marker, semantically revalidated by its recomputed content
-  address and exact closed tree, then recorded in a durable prepared journal
-  before the same-directory final-generation rename and atomic `CURRENT`
-  selection. The operation `Flock` is held on a duplicate of the retained
-  connector-directory inode, so lock-file or anchor sibling replacement cannot
-  create a second domain. Atomic controls use a private temporary directory;
-  destructive cleanup moves verified targets into a private quarantine and
-  rechecks them before deletion. Pathname replacement therefore refuses rather
-  than deleting a replacement. Recovery uses that one journal/stage state
-  machine; pruning starts only after integrity proves publisher ownership and
-  readers release their leases.
-  Contended lock acquisition rechecks cancellation after successful nonblocking
-  acquisition before mutation. This checkpoint does not materialize the
-  checked-in corpus or add a runtime `CURRENT` reader.
+  typed ownership marker and semantically revalidated by its recomputed content
+  address and exact closed tree. `CURRENT` and `JOURNAL` are protected by
+  retained terminal authority heads. A successor binds its predecessor terminal,
+  captures the syscall-time public occupant into a private no-replace slot, and
+  selects only a retained prior or intended inode through create-only linking;
+  logical absence never unlinks a public control. Unsupported capture primitives
+  and collisions fail closed without an overwrite fallback. Recovery and a
+  shared `--check` revalidate the complete authority graph, including private
+  record identities, before decoding either public control; pending, malformed,
+  retry-required, or divergent state fails closed.
+  `Flock` is held on a duplicate of the retained connector-directory inode, so
+  lock-file or anchor sibling replacement cannot create a second domain.
+  Destructive generation cleanup moves verified targets into a private
+  quarantine and rechecks them before deletion. Pathname replacement therefore
+  refuses rather than deleting a replacement. Recovery uses that one
+  journal/stage state machine; pruning starts only after integrity proves
+  publisher ownership and readers release their leases. Contended lock
+  acquisition rechecks cancellation after successful nonblocking acquisition
+  before mutation. This checkpoint does not materialize the checked-in corpus
+  or add a runtime `CURRENT` reader.
 - Every connector explicitly declares direct read, direct write, binary
   download, binary upload, ETL, reverse ETL, and sync transport as
   `implemented` or `unsupported`.

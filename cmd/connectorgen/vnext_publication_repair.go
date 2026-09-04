@@ -13,22 +13,47 @@ import (
 )
 
 const (
-	vNextPublicationControlRepairVersion = 2
+	vNextPublicationControlRepairVersion = 3
 
-	vNextPublicationControlRepairDirectoryPrefix = ".connectorgen-control-repair-"
-	vNextPublicationControlRepairPreparedFile    = "prepared.json"
-	vNextPublicationControlRepairPhasePrefix     = "phase-"
-	vNextPublicationControlRepairPhaseSuffix     = ".json"
-	vNextPublicationControlRepairMaxPhases       = 3
+	vNextPublicationControlAuthorityMarkerFile      = ".connectorgen-control-authority-v3.json"
+	vNextPublicationControlRepairDirectoryPrefix    = ".connectorgen-control-repair-"
+	vNextPublicationControlRepairPreparedFile       = "prepared.json"
+	vNextPublicationControlRepairPhasePrefix        = "phase-"
+	vNextPublicationControlRepairPhaseSuffix        = ".json"
+	vNextPublicationControlRepairMaxCaptureAttempts = 4
+	vNextPublicationControlRepairMaxPhases          = vNextPublicationControlRepairMaxCaptureAttempts*2 + 2
 
-	vNextPublicationControlRepairInstalled           = "installed"
-	vNextPublicationControlRepairReplacementRetained = "replacement_retained"
-	vNextPublicationControlRepairRestored            = "restored"
+	vNextPublicationControlCapturePrefix = "capture-"
+
+	vNextPublicationControlRepairCaptureIntent = "capture_intent"
+	vNextPublicationControlRepairCaptured      = "captured"
+	vNextPublicationControlRepairSelected      = "selected"
+	vNextPublicationControlRepairTerminal      = "terminal"
+
+	vNextPublicationControlRepairCommitted     = "committed"
+	vNextPublicationControlRepairRolledBack    = "rolled_back"
+	vNextPublicationControlRepairRetryRequired = "retry_required"
 )
 
+var errVNextPublicationControlConflict = errors.New("publication control transition requires retry")
+
+// vNextPublicationControlConflictError means that the publisher retained every
+// object it observed but could not select an old-or-new public control after a
+// bounded number of no-replace captures.
+type vNextPublicationControlConflictError struct {
+	target string
+}
+
+func (err *vNextPublicationControlConflictError) Error() string {
+	return fmt.Sprintf("%s: %s", errVNextPublicationControlConflict, err.target)
+}
+
+func (err *vNextPublicationControlConflictError) Unwrap() error {
+	return errVNextPublicationControlConflict
+}
+
 // vNextPublicationRecordedIdentity is the stable on-disk binding for one
-// descriptor-relative publication member. It intentionally stores only the
-// identity needed to reject a substituted member during repair recovery.
+// descriptor-relative publication member.
 type vNextPublicationRecordedIdentity struct {
 	Device uint64 `json:"device"`
 	Inode  uint64 `json:"inode"`
@@ -47,29 +72,94 @@ func (identity vNextPublicationRecordedIdentity) publicationIdentity(mode uint32
 	if identity.Inode == 0 || identity.Mode != mode {
 		return vNextPublicationIdentity{}, fmt.Errorf("invalid recorded publication identity")
 	}
-	return vNextPublicationIdentity{
-		device: identity.Device,
-		inode:  identity.Inode,
-		mode:   identity.Mode,
-	}, nil
+	return vNextPublicationIdentity{device: identity.Device, inode: identity.Inode, mode: identity.Mode}, nil
 }
 
-// vNextPublicationControlRepair is immutable prepared recovery authority for
-// one public control transition. It lives only inside its own private,
-// identity-bound transaction directory. CURRENT and JOURNAL stay untrusted
-// until this record and every verified phase have resolved.
+// vNextPublicationControlState is deliberately a tagged union. An absent
+// public control is not represented by a synthetic zero inode.
+type vNextPublicationControlState struct {
+	Present  bool                              `json:"present"`
+	Identity *vNextPublicationRecordedIdentity `json:"identity,omitempty"`
+	Member   string                            `json:"member,omitempty"`
+}
+
+func vNextPublicationAbsentControlState() vNextPublicationControlState {
+	return vNextPublicationControlState{}
+}
+
+func vNextPublicationPresentControlState(member string, identity vNextPublicationIdentity) vNextPublicationControlState {
+	recorded := vNextPublicationRecordIdentity(identity)
+	return vNextPublicationControlState{Present: true, Identity: &recorded, Member: member}
+}
+
+func (state vNextPublicationControlState) identity(expectedMember string) (vNextPublicationIdentity, bool, error) {
+	if !state.Present {
+		if state.Identity != nil || state.Member != "" {
+			return vNextPublicationIdentity{}, false, fmt.Errorf("absent publication control state retains an identity")
+		}
+		return vNextPublicationIdentity{}, false, nil
+	}
+	if state.Identity == nil || state.Member != expectedMember {
+		return vNextPublicationIdentity{}, false, fmt.Errorf("invalid publication control state member %q", state.Member)
+	}
+	identity, err := state.Identity.publicationIdentity(unix.S_IFREG)
+	if err != nil {
+		return vNextPublicationIdentity{}, false, err
+	}
+	return identity, true, nil
+}
+
+func (state vNextPublicationControlState) sameLogical(other vNextPublicationControlState) bool {
+	if state.Present != other.Present {
+		return false
+	}
+	if !state.Present {
+		return true
+	}
+	return state.Identity != nil && other.Identity != nil && *state.Identity == *other.Identity
+}
+
+func vNextPublicationControlStateWithMember(state vNextPublicationControlState, member string) vNextPublicationControlState {
+	if !state.Present {
+		return vNextPublicationAbsentControlState()
+	}
+	return vNextPublicationControlState{Present: true, Identity: state.Identity, Member: member}
+}
+
+type vNextPublicationControlAuthorityMarker struct {
+	Version int      `json:"version"`
+	Targets []string `json:"targets"`
+}
+
+type vNextPublicationControlRepairPredecessor struct {
+	Transaction         string                                      `json:"transaction"`
+	TransactionIdentity vNextPublicationRecordedIdentity            `json:"transaction_identity"`
+	Terminal            vNextPublicationControlRepairPhaseReference `json:"terminal"`
+	Selected            vNextPublicationControlState                `json:"selected"`
+}
+
+// vNextPublicationControlRepair is immutable transaction authority. Its
+// predecessor binds the prior terminal, so an unrelated transaction cannot
+// become a second head merely by being present in the connector directory.
 type vNextPublicationControlRepair struct {
-	Version             int                               `json:"version"`
-	Target              string                            `json:"target"`
-	Transaction         string                            `json:"transaction"`
-	TransactionIdentity vNextPublicationRecordedIdentity  `json:"transaction_identity"`
-	Expected            vNextPublicationRecordedIdentity  `json:"expected"`
-	Prior               *vNextPublicationRecordedIdentity `json:"prior,omitempty"`
+	Version             int                                       `json:"version"`
+	Target              string                                    `json:"target"`
+	Transaction         string                                    `json:"transaction"`
+	TransactionIdentity vNextPublicationRecordedIdentity          `json:"transaction_identity"`
+	Predecessor         *vNextPublicationControlRepairPredecessor `json:"predecessor,omitempty"`
+	Prior               vNextPublicationControlState              `json:"prior"`
+	Intended            vNextPublicationControlState              `json:"intended"`
+	MaxCaptureAttempts  int                                       `json:"max_capture_attempts"`
 }
 
-// vNextPublicationControlRepairPhase is an append-only state transition. The
-// prepared record is immutable; each phase names and binds its immediate
-// predecessor so recovery can select only a contiguous verified chain.
+type vNextPublicationControlRepairCapture struct {
+	Attempt  int                              `json:"attempt"`
+	Name     string                           `json:"name"`
+	Identity vNextPublicationRecordedIdentity `json:"identity"`
+}
+
+// vNextPublicationControlRepairPhase remains append-only. Every phase binds
+// both the immutable prepared record and the immediately preceding record.
 type vNextPublicationControlRepairPhase struct {
 	Version          int                                         `json:"version"`
 	Sequence         int                                         `json:"sequence"`
@@ -77,7 +167,10 @@ type vNextPublicationControlRepairPhase struct {
 	PreparedDigest   string                                      `json:"prepared_digest"`
 	PreparedIdentity vNextPublicationRecordedIdentity            `json:"prepared_identity"`
 	Previous         vNextPublicationControlRepairPhaseReference `json:"previous"`
-	Control          *vNextPublicationRecordedIdentity           `json:"control,omitempty"`
+	Capture          *vNextPublicationControlRepairCapture       `json:"capture,omitempty"`
+	Candidate        *vNextPublicationControlState               `json:"candidate,omitempty"`
+	Selected         *vNextPublicationControlState               `json:"selected,omitempty"`
+	Outcome          string                                      `json:"outcome,omitempty"`
 }
 
 type vNextPublicationControlRepairPhaseReference struct {
@@ -101,7 +194,41 @@ type vNextPublicationControlRepairState struct {
 	transaction         *vNextPublicationDirectory
 	transactionIdentity vNextPublicationIdentity
 	phases              []vNextPublicationControlRepairPhaseState
-	authorityCleared    bool
+}
+
+type vNextPublicationControlAuthorityHead struct {
+	state    *vNextPublicationControlRepairState
+	terminal vNextPublicationControlRepairPhaseState
+	selected vNextPublicationControlState
+	outcome  string
+}
+
+type vNextPublicationControlAuthorityGraph struct {
+	marker         bool
+	markerIdentity vNextPublicationIdentity
+	states         map[string]*vNextPublicationControlRepairState
+	heads          map[string]*vNextPublicationControlAuthorityHead
+}
+
+func (graph *vNextPublicationControlAuthorityGraph) assertPrivateIdentity(operation *vNextPublicationOperation) error {
+	if graph == nil {
+		return fs.ErrClosed
+	}
+	if err := operation.assertLockBound(); err != nil {
+		return err
+	}
+	if !graph.marker {
+		return nil
+	}
+	if err := operation.connector.assertIdentity(vNextPublicationControlAuthorityMarkerFile, "publication control authority marker", graph.markerIdentity); err != nil {
+		return err
+	}
+	for _, state := range graph.states {
+		if err := state.assertPrivateIdentity(operation); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func vNextPublicationControlRepairTargetValid(target string) bool {
@@ -120,19 +247,23 @@ func vNextPublicationControlRepairTransactionNameValid(name string) bool {
 	return err == nil && len(decoded) == 16
 }
 
-func vNextPublicationControlRepairPhaseStateValid(state string) bool {
-	switch state {
-	case vNextPublicationControlRepairInstalled,
-		vNextPublicationControlRepairReplacementRetained,
-		vNextPublicationControlRepairRestored:
-		return true
-	default:
-		return false
-	}
-}
-
 func vNextPublicationControlRepairPhaseName(sequence int) string {
 	return fmt.Sprintf("%s%04d%s", vNextPublicationControlRepairPhasePrefix, sequence, vNextPublicationControlRepairPhaseSuffix)
+}
+
+func vNextPublicationControlCaptureName(attempt int) string {
+	return fmt.Sprintf("%s%04d", vNextPublicationControlCapturePrefix, attempt)
+}
+
+func vNextPublicationControlCaptureNameValid(name string) bool {
+	if !vNextPublicationDirectNameValid(name) || !strings.HasPrefix(name, vNextPublicationControlCapturePrefix) {
+		return false
+	}
+	var attempt int
+	if _, err := fmt.Sscanf(name, vNextPublicationControlCapturePrefix+"%04d", &attempt); err != nil {
+		return false
+	}
+	return attempt >= 1 && attempt <= vNextPublicationControlRepairMaxCaptureAttempts && name == vNextPublicationControlCaptureName(attempt)
 }
 
 func vNextPublicationControlRepairPhaseReferenceValid(reference vNextPublicationControlRepairPhaseReference) error {
@@ -144,6 +275,29 @@ func vNextPublicationControlRepairPhaseReferenceValid(reference vNextPublication
 	}
 	if !vNextPublicationDigestValid(reference.Digest) {
 		return fmt.Errorf("invalid publication control repair phase predecessor digest")
+	}
+	return nil
+}
+
+func vNextPublicationControlAuthorityMarkerValid(marker vNextPublicationControlAuthorityMarker) error {
+	if marker.Version != vNextPublicationControlRepairVersion || len(marker.Targets) != 2 {
+		return fmt.Errorf("invalid publication control authority marker")
+	}
+	seen := make(map[string]struct{}, len(marker.Targets))
+	for _, target := range marker.Targets {
+		if !vNextPublicationControlRepairTargetValid(target) {
+			return fmt.Errorf("invalid publication control authority target %q", target)
+		}
+		if _, duplicate := seen[target]; duplicate {
+			return fmt.Errorf("duplicate publication control authority target %q", target)
+		}
+		seen[target] = struct{}{}
+	}
+	if _, ok := seen[vNextPublicationCurrentFile]; !ok {
+		return fmt.Errorf("publication control authority marker omits CURRENT")
+	}
+	if _, ok := seen[vNextPublicationJournalFile]; !ok {
+		return fmt.Errorf("publication control authority marker omits JOURNAL")
 	}
 	return nil
 }
@@ -161,15 +315,58 @@ func vNextPublicationControlRepairValid(repair vNextPublicationControlRepair) er
 	if _, err := repair.TransactionIdentity.publicationIdentity(unix.S_IFDIR); err != nil {
 		return fmt.Errorf("invalid publication control repair transaction identity: %w", err)
 	}
-	if _, err := repair.Expected.publicationIdentity(unix.S_IFREG); err != nil {
-		return fmt.Errorf("invalid publication control repair expected identity: %w", err)
+	if _, _, err := repair.Prior.identity(vNextPublicationControlBackupMember); err != nil {
+		return fmt.Errorf("invalid publication control repair prior: %w", err)
 	}
-	if repair.Prior != nil {
-		if _, err := repair.Prior.publicationIdentity(unix.S_IFREG); err != nil {
-			return fmt.Errorf("invalid publication control repair prior identity: %w", err)
+	if _, _, err := repair.Intended.identity(vNextPublicationControlReplacementMember); err != nil {
+		return fmt.Errorf("invalid publication control repair intended: %w", err)
+	}
+	if repair.MaxCaptureAttempts != vNextPublicationControlRepairMaxCaptureAttempts {
+		return fmt.Errorf("invalid publication control repair capture limit %d", repair.MaxCaptureAttempts)
+	}
+	if repair.Predecessor == nil {
+		return nil
+	}
+	predecessor := repair.Predecessor
+	if !vNextPublicationControlRepairTransactionNameValid(predecessor.Transaction) {
+		return fmt.Errorf("invalid publication control repair predecessor transaction %q", predecessor.Transaction)
+	}
+	if _, err := predecessor.TransactionIdentity.publicationIdentity(unix.S_IFDIR); err != nil {
+		return fmt.Errorf("invalid publication control repair predecessor transaction identity: %w", err)
+	}
+	if err := vNextPublicationControlRepairPhaseReferenceValid(predecessor.Terminal); err != nil {
+		return fmt.Errorf("invalid publication control repair predecessor terminal: %w", err)
+	}
+	if predecessor.Selected.Present {
+		if _, _, err := predecessor.Selected.identity(predecessor.Selected.Member); err != nil {
+			return fmt.Errorf("invalid publication control repair predecessor selection: %w", err)
 		}
+	} else if _, _, err := predecessor.Selected.identity(""); err != nil {
+		return fmt.Errorf("invalid publication control repair predecessor absence: %w", err)
 	}
 	return nil
+}
+
+func vNextPublicationControlRepairCaptureValid(capture vNextPublicationControlRepairCapture) error {
+	if capture.Attempt < 1 || capture.Attempt > vNextPublicationControlRepairMaxCaptureAttempts || capture.Name != vNextPublicationControlCaptureName(capture.Attempt) {
+		return fmt.Errorf("invalid publication control capture %q", capture.Name)
+	}
+	if _, err := capture.Identity.publicationIdentity(unix.S_IFDIR); err != nil {
+		return fmt.Errorf("invalid publication control capture identity: %w", err)
+	}
+	return nil
+}
+
+func vNextPublicationControlRepairPhaseStateValid(state string) bool {
+	switch state {
+	case vNextPublicationControlRepairCaptureIntent,
+		vNextPublicationControlRepairCaptured,
+		vNextPublicationControlRepairSelected,
+		vNextPublicationControlRepairTerminal:
+		return true
+	default:
+		return false
+	}
 }
 
 func vNextPublicationControlRepairPhaseValid(phase vNextPublicationControlRepairPhase) error {
@@ -192,34 +389,47 @@ func vNextPublicationControlRepairPhaseValid(phase vNextPublicationControlRepair
 		return err
 	}
 	switch phase.State {
-	case vNextPublicationControlRepairInstalled, vNextPublicationControlRepairReplacementRetained:
-		if phase.Control == nil {
-			return fmt.Errorf("publication control repair phase %q has no control identity", phase.State)
+	case vNextPublicationControlRepairCaptureIntent:
+		if phase.Capture == nil || phase.Candidate != nil || phase.Selected != nil || phase.Outcome != "" {
+			return fmt.Errorf("invalid publication capture intent phase")
 		}
-		if _, err := phase.Control.publicationIdentity(unix.S_IFREG); err != nil {
-			return fmt.Errorf("invalid publication control repair phase control identity: %w", err)
+		return vNextPublicationControlRepairCaptureValid(*phase.Capture)
+	case vNextPublicationControlRepairCaptured:
+		if phase.Capture == nil || phase.Candidate == nil || phase.Selected != nil || phase.Outcome != "" {
+			return fmt.Errorf("invalid publication captured phase")
 		}
-	case vNextPublicationControlRepairRestored:
-		if phase.Control != nil {
-			if _, err := phase.Control.publicationIdentity(unix.S_IFREG); err != nil {
-				return fmt.Errorf("invalid publication control repair restored control identity: %w", err)
-			}
+		if err := vNextPublicationControlRepairCaptureValid(*phase.Capture); err != nil {
+			return err
 		}
+		_, _, err := phase.Candidate.identity(vNextPublicationControlCaptureMember)
+		return err
+	case vNextPublicationControlRepairSelected:
+		if phase.Capture != nil || phase.Candidate != nil || phase.Selected == nil || phase.Outcome != "" {
+			return fmt.Errorf("invalid publication selected phase")
+		}
+		if phase.Selected.Present {
+			_, _, err := phase.Selected.identity(phase.Selected.Member)
+			return err
+		}
+		_, _, err := phase.Selected.identity("")
+		return err
+	case vNextPublicationControlRepairTerminal:
+		if phase.Capture != nil || phase.Candidate != nil || phase.Selected == nil {
+			return fmt.Errorf("invalid publication terminal phase")
+		}
+		switch phase.Outcome {
+		case vNextPublicationControlRepairCommitted, vNextPublicationControlRepairRolledBack, vNextPublicationControlRepairRetryRequired:
+		default:
+			return fmt.Errorf("invalid publication terminal outcome %q", phase.Outcome)
+		}
+		if phase.Selected.Present {
+			_, _, err := phase.Selected.identity(phase.Selected.Member)
+			return err
+		}
+		_, _, err := phase.Selected.identity("")
+		return err
 	}
 	return nil
-}
-
-func vNextPublicationControlRepairPhaseTransitionValid(previous, next string) bool {
-	switch previous {
-	case "":
-		return next == vNextPublicationControlRepairInstalled || next == vNextPublicationControlRepairReplacementRetained || next == vNextPublicationControlRepairRestored
-	case vNextPublicationControlRepairInstalled:
-		return next == vNextPublicationControlRepairReplacementRetained || next == vNextPublicationControlRepairRestored
-	case vNextPublicationControlRepairReplacementRetained:
-		return next == vNextPublicationControlRepairRestored
-	default:
-		return false
-	}
 }
 
 func vNextPublicationCreateControlRepairTransaction(root *vNextPublicationDirectory) (string, *vNextPublicationDirectory, vNextPublicationIdentity, error) {
@@ -244,9 +454,6 @@ func vNextPublicationCreateControlRepairTransaction(root *vNextPublicationDirect
 			return name, transaction, identity, nil
 		}
 		_ = transaction.Close()
-		if rootIdentity, identityErr := root.identityAt(name, "publication control repair transaction"); identityErr == nil {
-			_ = root.removeEmptyDirectoryBound(name, "publication control repair transaction", rootIdentity)
-		}
 		return "", nil, vNextPublicationIdentity{}, err
 	}
 	return "", nil, vNextPublicationIdentity{}, fmt.Errorf("create publication control repair transaction: exhausted unique names")
@@ -283,18 +490,24 @@ func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirecto
 }
 
 func (state *vNextPublicationControlRepairState) close() {
-	if state == nil || state.transaction == nil {
+	if state != nil && state.transaction != nil {
+		_ = state.transaction.Close()
+		state.transaction = nil
+	}
+}
+
+func (graph *vNextPublicationControlAuthorityGraph) close() {
+	if graph == nil {
 		return
 	}
-	_ = state.transaction.Close()
-	state.transaction = nil
+	for _, state := range graph.states {
+		state.close()
+	}
 }
 
 func (state *vNextPublicationControlRepairState) preparedReference() vNextPublicationControlRepairPhaseReference {
 	return vNextPublicationControlRepairPhaseReference{
-		Name:     vNextPublicationControlRepairPreparedFile,
-		Identity: vNextPublicationRecordIdentity(state.preparedIdentity),
-		Digest:   state.preparedDigest,
+		Name: vNextPublicationControlRepairPreparedFile, Identity: vNextPublicationRecordIdentity(state.preparedIdentity), Digest: state.preparedDigest,
 	}
 }
 
@@ -303,11 +516,7 @@ func (state *vNextPublicationControlRepairState) latestReference() vNextPublicat
 		return state.preparedReference()
 	}
 	phase := state.phases[len(state.phases)-1]
-	return vNextPublicationControlRepairPhaseReference{
-		Name:     phase.name,
-		Identity: vNextPublicationRecordIdentity(phase.identity),
-		Digest:   phase.digest,
-	}
+	return vNextPublicationControlRepairPhaseReference{Name: phase.name, Identity: vNextPublicationRecordIdentity(phase.identity), Digest: phase.digest}
 }
 
 func (state *vNextPublicationControlRepairState) latestPhase() string {
@@ -317,15 +526,19 @@ func (state *vNextPublicationControlRepairState) latestPhase() string {
 	return state.phases[len(state.phases)-1].record.State
 }
 
-func (state *vNextPublicationControlRepairState) latestControl() *vNextPublicationRecordedIdentity {
+func (state *vNextPublicationControlRepairState) terminal() (vNextPublicationControlRepairPhaseState, vNextPublicationControlState, string, bool) {
 	if len(state.phases) == 0 {
-		return nil
+		return vNextPublicationControlRepairPhaseState{}, vNextPublicationControlState{}, "", false
 	}
-	return state.phases[len(state.phases)-1].record.Control
+	phase := state.phases[len(state.phases)-1]
+	if phase.record.State != vNextPublicationControlRepairTerminal || phase.record.Selected == nil {
+		return vNextPublicationControlRepairPhaseState{}, vNextPublicationControlState{}, "", false
+	}
+	return phase, *phase.record.Selected, phase.record.Outcome, true
 }
 
 func (state *vNextPublicationControlRepairState) assertPrivateIdentity(operation *vNextPublicationOperation) error {
-	if state == nil || state.transaction == nil || state.authorityCleared {
+	if state == nil || state.transaction == nil {
 		return fs.ErrClosed
 	}
 	if err := operation.assertLockBound(); err != nil {
@@ -334,219 +547,244 @@ func (state *vNextPublicationControlRepairState) assertPrivateIdentity(operation
 	if err := operation.connector.assertIdentity(state.transactionName, "publication control repair transaction", state.transactionIdentity); err != nil {
 		return err
 	}
-	actualTransactionIdentity, err := vNextPublicationIdentityFromFile(state.transaction.file, "publication control repair transaction")
+	actual, err := vNextPublicationIdentityFromFile(state.transaction.file, "publication control repair transaction")
 	if err != nil {
 		return err
 	}
-	if actualTransactionIdentity != state.transactionIdentity {
+	if actual != state.transactionIdentity {
 		return fmt.Errorf("publication control repair transaction identity changed")
 	}
-	return state.transaction.assertIdentity(vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", state.preparedIdentity)
-}
-
-func (p *vNextGenerationPublisher) beginControlRepairLocked(operation *vNextPublicationOperation, target string, expected vNextPublicationIdentity) (*vNextPublicationControlRepairState, error) {
-	if err := operation.assertLockBound(); err != nil {
-		return nil, err
-	}
-	transactionName, transaction, transactionIdentity, err := vNextPublicationCreateControlRepairTransaction(operation.connector)
+	prepared, found, identity, err := vNextPublicationReadControlBound(state.transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority")
 	if err != nil {
-		return nil, err
-	}
-	keepTransaction := false
-	defer func() {
-		if !keepTransaction {
-			_ = transaction.Close()
-			_ = operation.connector.removeEmptyDirectoryBound(transactionName, "publication control repair transaction", transactionIdentity)
-		}
-	}()
-
-	prior, hasPrior, err := vNextPublicationBackupControl(operation, transaction, target)
-	if err != nil {
-		return nil, err
-	}
-	if err := transaction.Sync(); err != nil {
-		return nil, fmt.Errorf("sync publication control repair backup: %w", err)
-	}
-	if err := p.hit(vNextPublicationAfterControlRepairBackupSync); err != nil {
-		return nil, err
-	}
-
-	repair := vNextPublicationControlRepair{
-		Version:             vNextPublicationControlRepairVersion,
-		Target:              target,
-		Transaction:         transactionName,
-		TransactionIdentity: vNextPublicationRecordIdentity(transactionIdentity),
-		Expected:            vNextPublicationRecordIdentity(expected),
-	}
-	if hasPrior {
-		priorRecord := vNextPublicationRecordIdentity(prior)
-		repair.Prior = &priorRecord
-	}
-	if err := vNextPublicationControlRepairValid(repair); err != nil {
-		return nil, err
-	}
-	payload, err := json.Marshal(repair)
-	if err != nil {
-		return nil, err
-	}
-	payload = append(payload, '\n')
-	preparedIdentity, err := vNextPublicationWriteControlRepairRecord(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", payload)
-	if err != nil {
-		return nil, err
-	}
-	if err := transaction.Sync(); err != nil {
-		return nil, fmt.Errorf("sync publication control repair prepared authority: %w", err)
-	}
-	if err := operation.connector.Sync(); err != nil {
-		return nil, fmt.Errorf("sync publication control repair transaction: %w", err)
-	}
-	state := &vNextPublicationControlRepairState{
-		record:              repair,
-		preparedIdentity:    preparedIdentity,
-		preparedDigest:      vNextPublicationDigest(payload),
-		transactionName:     transactionName,
-		transaction:         transaction,
-		transactionIdentity: transactionIdentity,
-	}
-	keepTransaction = true
-	if err := p.hit(vNextPublicationAfterControlRepairPrepared); err != nil {
-		return state, err
-	}
-	return state, nil
-}
-
-func (p *vNextGenerationPublisher) appendControlRepairPhaseLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, phaseState string, control *vNextPublicationRecordedIdentity) error {
-	if err := state.assertPrivateIdentity(operation); err != nil {
 		return err
 	}
-	previousState := state.latestPhase()
-	if !vNextPublicationControlRepairPhaseTransitionValid(previousState, phaseState) {
-		return fmt.Errorf("invalid publication control repair phase transition %q to %q", previousState, phaseState)
+	if !found || identity != state.preparedIdentity || vNextPublicationDigest(prepared) != state.preparedDigest {
+		return fmt.Errorf("publication control repair prepared authority identity changed")
 	}
-	sequence := len(state.phases) + 1
-	if sequence > vNextPublicationControlRepairMaxPhases {
-		return fmt.Errorf("publication control repair phase sequence exhausted")
+	if err := state.validateAnchors(); err != nil {
+		return err
 	}
-	phase := vNextPublicationControlRepairPhase{
-		Version:          vNextPublicationControlRepairVersion,
-		Sequence:         sequence,
-		State:            phaseState,
-		PreparedDigest:   state.preparedDigest,
-		PreparedIdentity: vNextPublicationRecordIdentity(state.preparedIdentity),
-		Previous:         state.latestReference(),
-		Control:          control,
+	for _, phase := range state.phases {
+		payload, found, identity, err := vNextPublicationReadControlBound(state.transaction, phase.name, "publication control repair phase")
+		if err != nil {
+			return err
+		}
+		if !found || identity != phase.identity || vNextPublicationDigest(payload) != phase.digest {
+			return fmt.Errorf("publication control repair phase %q identity changed", phase.name)
+		}
+		switch phase.record.State {
+		case vNextPublicationControlRepairCaptureIntent:
+			if err := vNextPublicationValidateCaptureLocked(state.transaction, *phase.record.Capture); err != nil {
+				return err
+			}
+		case vNextPublicationControlRepairCaptured:
+			if err := vNextPublicationValidateCapturedCandidateLocked(state.transaction, *phase.record.Capture, *phase.record.Candidate); err != nil {
+				return err
+			}
+		}
+	}
+	if err := state.assertPredecessorIdentity(operation); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (state *vNextPublicationControlRepairState) assertPredecessorIdentity(operation *vNextPublicationOperation) error {
+	predecessor := state.record.Predecessor
+	if predecessor == nil {
+		return nil
+	}
+	expectedTransaction, err := predecessor.TransactionIdentity.publicationIdentity(unix.S_IFDIR)
+	if err != nil {
+		return err
+	}
+	if err := operation.connector.assertIdentity(predecessor.Transaction, "publication control predecessor transaction", expectedTransaction); err != nil {
+		return err
+	}
+	transaction, err := operation.connector.openDirectory(predecessor.Transaction, "publication control predecessor transaction")
+	if err != nil {
+		return err
+	}
+	defer transaction.Close()
+	actualTransaction, err := vNextPublicationIdentityFromFile(transaction.file, "publication control predecessor transaction")
+	if err != nil {
+		return err
+	}
+	if actualTransaction != expectedTransaction {
+		return fmt.Errorf("publication control predecessor transaction identity changed")
+	}
+	expectedTerminal, err := predecessor.Terminal.Identity.publicationIdentity(unix.S_IFREG)
+	if err != nil {
+		return err
+	}
+	payload, found, identity, err := vNextPublicationReadControlBound(transaction, predecessor.Terminal.Name, "publication control predecessor terminal")
+	if err != nil {
+		return err
+	}
+	if !found || identity != expectedTerminal || vNextPublicationDigest(payload) != predecessor.Terminal.Digest {
+		return fmt.Errorf("publication control predecessor terminal identity changed")
+	}
+	var phase vNextPublicationControlRepairPhase
+	if err := vNextPublicationDecode(payload, &phase); err != nil {
+		return fmt.Errorf("decode publication control predecessor terminal: %w", err)
 	}
 	if err := vNextPublicationControlRepairPhaseValid(phase); err != nil {
 		return err
 	}
-	payload, err := json.Marshal(phase)
-	if err != nil {
-		return err
+	if phase.State != vNextPublicationControlRepairTerminal || phase.Selected == nil || !phase.Selected.sameLogical(predecessor.Selected) {
+		return fmt.Errorf("publication control predecessor terminal changed")
 	}
-	payload = append(payload, '\n')
-	name := vNextPublicationControlRepairPhaseName(sequence)
-	identity, err := vNextPublicationWriteControlRepairRecord(state.transaction, name, "publication control repair phase", payload)
-	if err != nil {
-		return err
-	}
-	if err := state.transaction.Sync(); err != nil {
-		return fmt.Errorf("sync publication control repair phase: %w", err)
-	}
-	state.phases = append(state.phases, vNextPublicationControlRepairPhaseState{
-		record:   phase,
-		name:     name,
-		identity: identity,
-		digest:   vNextPublicationDigest(payload),
-	})
 	return nil
 }
 
-func (p *vNextGenerationPublisher) readControlRepairLocked(operation *vNextPublicationOperation) (*vNextPublicationControlRepairState, bool, error) {
+func (state *vNextPublicationControlRepairState) anchor(control vNextPublicationControlState, member string) (vNextPublicationIdentity, bool, error) {
+	identity, present, err := control.identity(member)
+	if err != nil || !present {
+		return identity, present, err
+	}
+	if err := state.transaction.assertIdentity(member, "publication control anchor", identity); err != nil {
+		return vNextPublicationIdentity{}, false, err
+	}
+	return identity, true, nil
+}
+
+func vNextPublicationReadControlState(directory *vNextPublicationDirectory, name, label, member string) (vNextPublicationControlState, error) {
+	_, found, identity, err := vNextPublicationReadControlBound(directory, name, label)
+	if err != nil {
+		return vNextPublicationControlState{}, err
+	}
+	if !found {
+		return vNextPublicationAbsentControlState(), nil
+	}
+	return vNextPublicationPresentControlState(member, identity), nil
+}
+
+func vNextPublicationWriteAuthorityMarker(root *vNextPublicationDirectory) (vNextPublicationIdentity, error) {
+	marker := vNextPublicationControlAuthorityMarker{Version: vNextPublicationControlRepairVersion, Targets: []string{vNextPublicationCurrentFile, vNextPublicationJournalFile}}
+	payload, err := json.Marshal(marker)
+	if err != nil {
+		return vNextPublicationIdentity{}, err
+	}
+	payload = append(payload, '\n')
+	identity, err := vNextPublicationWriteControlRepairRecord(root, vNextPublicationControlAuthorityMarkerFile, "publication control authority marker", payload)
+	if err != nil {
+		return vNextPublicationIdentity{}, err
+	}
+	if err := root.Sync(); err != nil {
+		return vNextPublicationIdentity{}, fmt.Errorf("sync publication control authority marker: %w", err)
+	}
+	return identity, nil
+}
+
+func (p *vNextGenerationPublisher) scanControlAuthorityLocked(operation *vNextPublicationOperation) (*vNextPublicationControlAuthorityGraph, error) {
 	if err := operation.assertLockBound(); err != nil {
-		return nil, false, err
+		return nil, err
+	}
+	graph := &vNextPublicationControlAuthorityGraph{states: make(map[string]*vNextPublicationControlRepairState), heads: make(map[string]*vNextPublicationControlAuthorityHead)}
+	markerPayload, markerFound, markerIdentity, err := vNextPublicationReadControlBound(operation.connector, vNextPublicationControlAuthorityMarkerFile, "publication control authority marker")
+	if err != nil {
+		return nil, err
+	}
+	if markerFound {
+		var marker vNextPublicationControlAuthorityMarker
+		if err := vNextPublicationDecode(markerPayload, &marker); err != nil {
+			return nil, fmt.Errorf("decode publication control authority marker: %w", err)
+		}
+		if err := vNextPublicationControlAuthorityMarkerValid(marker); err != nil {
+			return nil, err
+		}
+		graph.marker = true
+		graph.markerIdentity = markerIdentity
 	}
 	entries, err := operation.connector.readDir()
 	if err != nil {
-		return nil, false, err
+		return nil, err
 	}
-	var recovered *vNextPublicationControlRepairState
 	for _, entry := range entries {
 		name := entry.Name()
 		if !strings.HasPrefix(name, vNextPublicationControlRepairDirectoryPrefix) {
 			continue
 		}
 		if !vNextPublicationControlRepairTransactionNameValid(name) {
-			return nil, false, fmt.Errorf("invalid publication control repair transaction entry %q", name)
+			graph.close()
+			return nil, fmt.Errorf("invalid publication control repair transaction entry %q", name)
 		}
-		transactionIdentity, err := operation.connector.identityAt(name, "publication control repair transaction")
+		state, err := p.readControlRepairStateLocked(operation, name)
 		if err != nil {
-			return nil, false, err
+			graph.close()
+			return nil, err
 		}
-		if transactionIdentity.mode != unix.S_IFDIR {
-			return nil, false, fmt.Errorf("publication control repair transaction is not a directory")
-		}
-		transaction, err := operation.connector.openDirectory(name, "publication control repair transaction")
-		if err != nil {
-			return nil, false, err
-		}
-		actualTransactionIdentity, err := vNextPublicationIdentityFromFile(transaction.file, "publication control repair transaction")
-		if err != nil {
-			_ = transaction.Close()
-			return nil, false, err
-		}
-		if actualTransactionIdentity != transactionIdentity {
-			_ = transaction.Close()
-			return nil, false, fmt.Errorf("publication control repair transaction identity changed")
-		}
-		payload, found, preparedIdentity, err := vNextPublicationReadControlBound(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority")
-		if err != nil {
-			_ = transaction.Close()
-			return nil, false, err
-		}
-		if !found {
-			_ = transaction.Close()
-			continue
-		}
-		var repair vNextPublicationControlRepair
-		if err := vNextPublicationDecode(payload, &repair); err != nil {
-			_ = transaction.Close()
-			return nil, false, fmt.Errorf("decode publication control repair prepared authority: %w", err)
-		}
-		if err := vNextPublicationControlRepairValid(repair); err != nil {
-			_ = transaction.Close()
-			return nil, false, err
-		}
-		recordedTransactionIdentity, err := repair.TransactionIdentity.publicationIdentity(unix.S_IFDIR)
-		if err != nil {
-			_ = transaction.Close()
-			return nil, false, err
-		}
-		if repair.Transaction != name || recordedTransactionIdentity != transactionIdentity {
-			_ = transaction.Close()
-			return nil, false, fmt.Errorf("publication control repair prepared authority does not bind its transaction")
-		}
-		state := &vNextPublicationControlRepairState{
-			record:              repair,
-			preparedIdentity:    preparedIdentity,
-			preparedDigest:      vNextPublicationDigest(payload),
-			transactionName:     name,
-			transaction:         transaction,
-			transactionIdentity: transactionIdentity,
-		}
-		if err := p.readControlRepairPhasesLocked(operation, state); err != nil {
-			state.close()
-			return nil, false, err
-		}
-		if recovered != nil {
-			state.close()
-			return nil, false, fmt.Errorf("multiple publication control repair authorities remain")
-		}
-		recovered = state
+		graph.states[name] = state
 	}
-	if recovered == nil {
-		return nil, false, nil
+	if err := vNextPublicationBuildAuthorityHeads(graph); err != nil {
+		graph.close()
+		return nil, err
 	}
-	return recovered, true, nil
+	return graph, nil
+}
+
+func (p *vNextGenerationPublisher) readControlRepairStateLocked(operation *vNextPublicationOperation, name string) (*vNextPublicationControlRepairState, error) {
+	transactionIdentity, err := operation.connector.identityAt(name, "publication control repair transaction")
+	if err != nil {
+		return nil, err
+	}
+	if transactionIdentity.mode != unix.S_IFDIR {
+		return nil, fmt.Errorf("publication control repair transaction is not a directory")
+	}
+	transaction, err := operation.connector.openDirectory(name, "publication control repair transaction")
+	if err != nil {
+		return nil, err
+	}
+	fail := func(err error) (*vNextPublicationControlRepairState, error) {
+		_ = transaction.Close()
+		return nil, err
+	}
+	actualTransactionIdentity, err := vNextPublicationIdentityFromFile(transaction.file, "publication control repair transaction")
+	if err != nil {
+		return fail(err)
+	}
+	if actualTransactionIdentity != transactionIdentity {
+		return fail(fmt.Errorf("publication control repair transaction identity changed"))
+	}
+	payload, found, preparedIdentity, err := vNextPublicationReadControlBound(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority")
+	if err != nil {
+		return fail(err)
+	}
+	if !found {
+		return fail(fmt.Errorf("publication control repair transaction %q has no prepared authority", name))
+	}
+	var repair vNextPublicationControlRepair
+	if err := vNextPublicationDecode(payload, &repair); err != nil {
+		return fail(fmt.Errorf("decode publication control repair prepared authority: %w", err))
+	}
+	if err := vNextPublicationControlRepairValid(repair); err != nil {
+		return fail(err)
+	}
+	if repair.Transaction != name || repair.TransactionIdentity != vNextPublicationRecordIdentity(transactionIdentity) {
+		return fail(fmt.Errorf("publication control repair prepared authority does not bind its transaction"))
+	}
+	state := &vNextPublicationControlRepairState{
+		record: repair, preparedIdentity: preparedIdentity, preparedDigest: vNextPublicationDigest(payload), transactionName: name, transaction: transaction, transactionIdentity: transactionIdentity,
+	}
+	if err := state.validateAnchors(); err != nil {
+		state.close()
+		return nil, err
+	}
+	if err := p.readControlRepairPhasesLocked(operation, state); err != nil {
+		state.close()
+		return nil, err
+	}
+	return state, nil
+}
+
+func (state *vNextPublicationControlRepairState) validateAnchors() error {
+	if _, _, err := state.anchor(state.record.Prior, vNextPublicationControlBackupMember); err != nil {
+		return fmt.Errorf("validate publication control repair prior anchor: %w", err)
+	}
+	if _, _, err := state.anchor(state.record.Intended, vNextPublicationControlReplacementMember); err != nil {
+		return fmt.Errorf("validate publication control repair intended anchor: %w", err)
+	}
+	return nil
 }
 
 func (p *vNextGenerationPublisher) readControlRepairPhasesLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
@@ -557,23 +795,34 @@ func (p *vNextGenerationPublisher) readControlRepairPhasesLocked(operation *vNex
 	if err != nil {
 		return err
 	}
-	allowed := map[string]struct{}{
-		vNextPublicationControlRepairPreparedFile: {},
-		vNextPublicationControlBackupMember:       {},
-		vNextPublicationControlReplacementMember:  {},
+	allowed := map[string]struct{}{vNextPublicationControlRepairPreparedFile: {}}
+	if state.record.Prior.Present {
+		allowed[vNextPublicationControlBackupMember] = struct{}{}
+	}
+	if state.record.Intended.Present {
+		allowed[vNextPublicationControlReplacementMember] = struct{}{}
 	}
 	for sequence := 1; sequence <= vNextPublicationControlRepairMaxPhases; sequence++ {
 		allowed[vNextPublicationControlRepairPhaseName(sequence)] = struct{}{}
 	}
 	for _, entry := range entries {
-		if _, ok := allowed[entry.Name()]; !ok {
-			return fmt.Errorf("unexpected publication control repair transaction member %q", entry.Name())
+		name := entry.Name()
+		if strings.HasPrefix(name, vNextPublicationControlCapturePrefix) {
+			if !vNextPublicationControlCaptureNameValid(name) {
+				return fmt.Errorf("invalid publication control capture entry %q", name)
+			}
+			continue
+		}
+		if _, ok := allowed[name]; !ok {
+			return fmt.Errorf("unexpected publication control repair transaction member %q", name)
 		}
 	}
 
 	previous := state.preparedReference()
-	previousState := ""
 	missing := false
+	captures := make(map[string]vNextPublicationControlRepairCapture)
+	lastCapture := ""
+	lastState := ""
 	for sequence := 1; sequence <= vNextPublicationControlRepairMaxPhases; sequence++ {
 		name := vNextPublicationControlRepairPhaseName(sequence)
 		payload, found, identity, err := vNextPublicationReadControlBound(state.transaction, name, "publication control repair phase")
@@ -595,434 +844,900 @@ func (p *vNextGenerationPublisher) readControlRepairPhasesLocked(operation *vNex
 			return err
 		}
 		if phase.Sequence != sequence || phase.PreparedDigest != state.preparedDigest || phase.PreparedIdentity != vNextPublicationRecordIdentity(state.preparedIdentity) || phase.Previous != previous {
-			return fmt.Errorf("publication control repair phase %q is not bound to its prepared predecessor", name)
+			return fmt.Errorf("publication control repair phase %q does not bind its predecessor", name)
 		}
-		if !vNextPublicationControlRepairPhaseTransitionValid(previousState, phase.State) {
-			return fmt.Errorf("invalid publication control repair phase chain transition %q to %q", previousState, phase.State)
-		}
-		if err := vNextPublicationValidateControlRepairPhaseSemanticLocked(state, phase); err != nil {
+		if err := vNextPublicationValidateControlRepairPhaseSemanticLocked(state, phase, lastState, captures, lastCapture); err != nil {
 			return err
 		}
-		phaseState := vNextPublicationControlRepairPhaseState{
-			record:   phase,
-			name:     name,
-			identity: identity,
-			digest:   vNextPublicationDigest(payload),
+		if phase.State == vNextPublicationControlRepairCaptureIntent {
+			captures[phase.Capture.Name] = *phase.Capture
+			lastCapture = phase.Capture.Name
 		}
-		state.phases = append(state.phases, phaseState)
-		previous = vNextPublicationControlRepairPhaseReference{
-			Name:     name,
-			Identity: vNextPublicationRecordIdentity(identity),
-			Digest:   phaseState.digest,
+		previous = vNextPublicationControlRepairPhaseReference{Name: name, Identity: vNextPublicationRecordIdentity(identity), Digest: vNextPublicationDigest(payload)}
+		state.phases = append(state.phases, vNextPublicationControlRepairPhaseState{record: phase, name: name, identity: identity, digest: vNextPublicationDigest(payload)})
+		lastState = phase.State
+	}
+	unrecordedCapture := ""
+	for _, entry := range entries {
+		if !strings.HasPrefix(entry.Name(), vNextPublicationControlCapturePrefix) {
+			continue
 		}
-		previousState = phase.State
+		capture, ok := captures[entry.Name()]
+		if !ok {
+			if unrecordedCapture != "" {
+				return fmt.Errorf("multiple unrecorded publication control captures %q and %q", unrecordedCapture, entry.Name())
+			}
+			unrecordedCapture = entry.Name()
+			continue
+		}
+		if err := vNextPublicationValidateCaptureLocked(state.transaction, capture); err != nil {
+			return err
+		}
+	}
+	if unrecordedCapture == "" {
+		return nil
+	}
+	if state.latestPhase() != "" && state.latestPhase() != vNextPublicationControlRepairCaptured {
+		return fmt.Errorf("unreferenced publication control capture %q follows %q", unrecordedCapture, state.latestPhase())
+	}
+	expected := vNextPublicationControlCaptureName(len(captures) + 1)
+	if unrecordedCapture != expected {
+		return fmt.Errorf("unreferenced publication control capture %q is not next expected %q", unrecordedCapture, expected)
+	}
+	_, err = vNextPublicationReadEmptyControlCaptureLocked(state.transaction, unrecordedCapture)
+	return err
+}
+
+func vNextPublicationValidateControlRepairPhaseSemanticLocked(state *vNextPublicationControlRepairState, phase vNextPublicationControlRepairPhase, previous string, captures map[string]vNextPublicationControlRepairCapture, lastCapture string) error {
+	if len(state.phases) == 0 && phase.State == vNextPublicationControlRepairTerminal {
+		if state.record.Predecessor != nil || !state.record.Prior.sameLogical(state.record.Intended) || phase.Selected == nil || !phase.Selected.sameLogical(state.record.Intended) || phase.Outcome != vNextPublicationControlRepairCommitted {
+			return fmt.Errorf("invalid publication control base terminal")
+		}
+		return nil
+	}
+	switch previous {
+	case "":
+		if phase.State != vNextPublicationControlRepairCaptureIntent {
+			return fmt.Errorf("publication control repair must begin with capture intent")
+		}
+	case vNextPublicationControlRepairCaptureIntent:
+		if phase.State != vNextPublicationControlRepairCaptured || phase.Capture == nil || phase.Capture.Name != lastCapture {
+			return fmt.Errorf("publication control capture intent is not followed by its capture")
+		}
+	case vNextPublicationControlRepairCaptured:
+		if phase.State == vNextPublicationControlRepairCaptureIntent || phase.State == vNextPublicationControlRepairSelected {
+			break
+		}
+		if phase.State == vNextPublicationControlRepairTerminal && phase.Outcome == vNextPublicationControlRepairRetryRequired && len(captures) == vNextPublicationControlRepairMaxCaptureAttempts {
+			break
+		}
+		return fmt.Errorf("invalid publication control transition after capture")
+	case vNextPublicationControlRepairSelected:
+		if phase.State != vNextPublicationControlRepairTerminal {
+			return fmt.Errorf("publication control selection is not terminalized")
+		}
+	default:
+		return fmt.Errorf("publication control repair phase follows terminal state")
+	}
+	switch phase.State {
+	case vNextPublicationControlRepairCaptureIntent:
+		if _, duplicate := captures[phase.Capture.Name]; duplicate || phase.Capture.Attempt != len(captures)+1 {
+			return fmt.Errorf("invalid publication control capture sequence")
+		}
+		return vNextPublicationValidateCaptureLocked(state.transaction, *phase.Capture)
+	case vNextPublicationControlRepairCaptured:
+		if _, ok := captures[phase.Capture.Name]; !ok {
+			return fmt.Errorf("publication capture phase has no prior intent")
+		}
+		return vNextPublicationValidateCapturedCandidateLocked(state.transaction, *phase.Capture, *phase.Candidate)
+	case vNextPublicationControlRepairSelected, vNextPublicationControlRepairTerminal:
+		if phase.Selected == nil || (!phase.Selected.sameLogical(state.record.Prior) && !phase.Selected.sameLogical(state.record.Intended)) {
+			return fmt.Errorf("publication control phase selects neither prior nor intended state")
+		}
+		if phase.State == vNextPublicationControlRepairTerminal {
+			switch phase.Outcome {
+			case vNextPublicationControlRepairCommitted:
+				if !phase.Selected.sameLogical(state.record.Intended) {
+					return fmt.Errorf("committed publication terminal does not select intended state")
+				}
+			case vNextPublicationControlRepairRolledBack, vNextPublicationControlRepairRetryRequired:
+				if !phase.Selected.sameLogical(state.record.Prior) {
+					return fmt.Errorf("rollback publication terminal does not select prior state")
+				}
+			}
+		}
 	}
 	return nil
 }
 
-func vNextPublicationValidateControlRepairPhaseSemanticLocked(state *vNextPublicationControlRepairState, phase vNextPublicationControlRepairPhase) error {
-	expected := state.record.Expected
-	prior, hasPrior, err := vNextPublicationRepairPrior(state)
+func vNextPublicationValidateCaptureLocked(transaction *vNextPublicationDirectory, capture vNextPublicationControlRepairCapture) error {
+	identity, err := transaction.identityAt(capture.Name, "publication control capture")
 	if err != nil {
 		return err
 	}
-	switch phase.State {
-	case vNextPublicationControlRepairInstalled:
-		if phase.Control == nil || *phase.Control != expected {
-			return fmt.Errorf("publication control repair installed phase does not bind the expected control")
+	expected, err := capture.Identity.publicationIdentity(unix.S_IFDIR)
+	if err != nil {
+		return err
+	}
+	if identity != expected {
+		return fmt.Errorf("publication control capture identity changed")
+	}
+	directory, err := transaction.openDirectory(capture.Name, "publication control capture")
+	if err != nil {
+		return err
+	}
+	defer directory.Close()
+	entries, err := directory.readDir()
+	if err != nil {
+		return err
+	}
+	for _, entry := range entries {
+		if entry.Name() != vNextPublicationControlCaptureMember {
+			return fmt.Errorf("unexpected publication control capture member %q", entry.Name())
 		}
-	case vNextPublicationControlRepairReplacementRetained:
-		if phase.Control == nil {
-			return fmt.Errorf("publication control repair replacement phase has no replacement")
+	}
+	return nil
+}
+
+func vNextPublicationReadEmptyControlCaptureLocked(transaction *vNextPublicationDirectory, name string) (vNextPublicationIdentity, error) {
+	identity, err := transaction.identityAt(name, "publication control capture")
+	if err != nil {
+		return vNextPublicationIdentity{}, err
+	}
+	if identity.mode != unix.S_IFDIR {
+		return vNextPublicationIdentity{}, fmt.Errorf("publication control capture is not a directory")
+	}
+	directory, err := transaction.openDirectory(name, "publication control capture")
+	if err != nil {
+		return vNextPublicationIdentity{}, err
+	}
+	defer directory.Close()
+	actual, err := vNextPublicationIdentityFromFile(directory.file, "publication control capture")
+	if err != nil {
+		return vNextPublicationIdentity{}, err
+	}
+	if actual != identity {
+		return vNextPublicationIdentity{}, fmt.Errorf("publication control capture identity changed")
+	}
+	entries, err := directory.readDir()
+	if err != nil {
+		return vNextPublicationIdentity{}, err
+	}
+	if len(entries) != 0 {
+		return vNextPublicationIdentity{}, fmt.Errorf("unrecorded publication control capture %q is not empty", name)
+	}
+	return identity, nil
+}
+
+func vNextPublicationValidateCapturedCandidateLocked(transaction *vNextPublicationDirectory, capture vNextPublicationControlRepairCapture, candidate vNextPublicationControlState) error {
+	if err := vNextPublicationValidateCaptureLocked(transaction, capture); err != nil {
+		return err
+	}
+	directory, err := transaction.openDirectory(capture.Name, "publication control capture")
+	if err != nil {
+		return err
+	}
+	defer directory.Close()
+	identity, present, err := candidate.identity(vNextPublicationControlCaptureMember)
+	if err != nil {
+		return err
+	}
+	actual, err := directory.identityAt(vNextPublicationControlCaptureMember, "publication control capture candidate")
+	if errors.Is(err, fs.ErrNotExist) {
+		if present {
+			return fmt.Errorf("publication control capture candidate is missing")
 		}
-		replacement, err := phase.Control.publicationIdentity(unix.S_IFREG)
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	if !present || actual != identity {
+		return fmt.Errorf("publication control capture candidate identity changed")
+	}
+	return nil
+}
+
+func vNextPublicationBuildAuthorityHeads(graph *vNextPublicationControlAuthorityGraph) error {
+	children := make(map[string]int, len(graph.states))
+	for name, state := range graph.states {
+		predecessor := state.record.Predecessor
+		if predecessor == nil {
+			continue
+		}
+		parent, ok := graph.states[predecessor.Transaction]
+		if !ok {
+			return fmt.Errorf("publication control repair %q references missing predecessor %q", name, predecessor.Transaction)
+		}
+		if parent.transactionIdentity != mustVNextPublicationRecordedDirectoryIdentity(predecessor.TransactionIdentity) || parent.record.Target != state.record.Target {
+			return fmt.Errorf("publication control repair %q predecessor does not bind target identity", name)
+		}
+		terminal, selected, _, ok := parent.terminal()
+		expectedTerminal := vNextPublicationControlRepairPhaseReference{Name: terminal.name, Identity: vNextPublicationRecordIdentity(terminal.identity), Digest: terminal.digest}
+		if !ok || predecessor.Terminal != expectedTerminal || !predecessor.Selected.sameLogical(selected) {
+			return fmt.Errorf("publication control repair %q predecessor is not the retained terminal", name)
+		}
+		children[predecessor.Transaction]++
+		if children[predecessor.Transaction] > 1 {
+			return fmt.Errorf("publication control repair predecessor %q has multiple successors", predecessor.Transaction)
+		}
+	}
+	for name := range graph.states {
+		seen := make(map[string]struct{})
+		current := name
+		for {
+			if _, repeated := seen[current]; repeated {
+				return fmt.Errorf("publication control repair predecessor cycle at %q", current)
+			}
+			seen[current] = struct{}{}
+			predecessor := graph.states[current].record.Predecessor
+			if predecessor == nil {
+				break
+			}
+			current = predecessor.Transaction
+		}
+	}
+	candidateHeads := make(map[string][]*vNextPublicationControlAuthorityHead)
+	for name, state := range graph.states {
+		if children[name] != 0 {
+			continue
+		}
+		terminal, selected, outcome, terminalized := state.terminal()
+		if !terminalized {
+			candidateHeads[state.record.Target] = append(candidateHeads[state.record.Target], &vNextPublicationControlAuthorityHead{state: state})
+			continue
+		}
+		candidateHeads[state.record.Target] = append(candidateHeads[state.record.Target], &vNextPublicationControlAuthorityHead{state: state, terminal: terminal, selected: selected, outcome: outcome})
+	}
+	for target, heads := range candidateHeads {
+		if len(heads) != 1 {
+			return fmt.Errorf("publication control %q has %d authority heads", target, len(heads))
+		}
+		graph.heads[target] = heads[0]
+	}
+	if graph.marker {
+		for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+			if _, ok := graph.heads[target]; !ok {
+				return fmt.Errorf("publication control authority marker has no %s head", target)
+			}
+		}
+	}
+	return nil
+}
+
+func mustVNextPublicationRecordedDirectoryIdentity(recorded vNextPublicationRecordedIdentity) vNextPublicationIdentity {
+	identity, err := recorded.publicationIdentity(unix.S_IFDIR)
+	if err != nil {
+		return vNextPublicationIdentity{}
+	}
+	return identity
+}
+
+func (p *vNextGenerationPublisher) ensureControlAuthorityLocked(operation *vNextPublicationOperation) error {
+	graph, err := p.scanControlAuthorityLocked(operation)
+	if err != nil {
+		return err
+	}
+	defer graph.close()
+	if graph.marker {
+		return nil
+	}
+	for _, state := range graph.states {
+		if state.record.Predecessor != nil {
+			return fmt.Errorf("publication control authority marker is missing from successor graph")
+		}
+		if _, _, _, terminal := state.terminal(); !terminal {
+			return fmt.Errorf("publication control authority marker is missing from pending repair")
+		}
+	}
+	for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+		if _, found := graph.heads[target]; found {
+			continue
+		}
+		state, err := p.createBaseControlAuthorityLocked(operation, target)
 		if err != nil {
 			return err
 		}
-		if err := state.transaction.assertIdentity(vNextPublicationControlReplacementMember, "publication control repair replacement", replacement); err != nil {
-			return err
-		}
-	case vNextPublicationControlRepairRestored:
-		if hasPrior {
-			if phase.Control == nil || *phase.Control != vNextPublicationRecordIdentity(prior) {
-				return fmt.Errorf("publication control repair restored phase does not bind the prior control")
-			}
-		} else if phase.Control != nil {
-			return fmt.Errorf("publication control repair restored no-prior phase retains a control identity")
-		}
+		state.close()
+	}
+	if _, err := vNextPublicationWriteAuthorityMarker(operation.connector); err != nil {
+		return err
 	}
 	return nil
 }
 
-func (p *vNextGenerationPublisher) recoverControlRepairLocked(operation *vNextPublicationOperation) error {
-	state, found, err := p.readControlRepairLocked(operation)
-	if err != nil || !found {
-		return err
-	}
-	defer state.close()
-	return p.resolveControlRepairLocked(operation, state, false)
-}
-
-func vNextPublicationRepairPrior(state *vNextPublicationControlRepairState) (vNextPublicationIdentity, bool, error) {
-	if state.record.Prior == nil {
-		return vNextPublicationIdentity{}, false, nil
-	}
-	identity, err := state.record.Prior.publicationIdentity(unix.S_IFREG)
+func (p *vNextGenerationPublisher) createBaseControlAuthorityLocked(operation *vNextPublicationOperation, target string) (*vNextPublicationControlRepairState, error) {
+	observed, err := vNextPublicationReadControlState(operation.connector, target, "publication control", vNextPublicationControlBackupMember)
 	if err != nil {
-		return vNextPublicationIdentity{}, false, err
+		return nil, err
 	}
-	return identity, true, nil
+	var source *vNextPublicationControlAnchorSource
+	if observed.Present {
+		identity, _, err := observed.identity(vNextPublicationControlBackupMember)
+		if err != nil {
+			return nil, err
+		}
+		source = &vNextPublicationControlAnchorSource{directory: operation.connector, name: target, identity: identity}
+	}
+	return p.createControlRepairLocked(operation, target, nil, observed, source, true)
 }
 
-func vNextPublicationRepairExpected(state *vNextPublicationControlRepairState) (vNextPublicationIdentity, error) {
-	return state.record.Expected.publicationIdentity(unix.S_IFREG)
+type vNextPublicationControlAnchorSource struct {
+	directory *vNextPublicationDirectory
+	name      string
+	identity  vNextPublicationIdentity
 }
 
-func vNextPublicationRepairTargetIdentity(root *vNextPublicationDirectory, target string) (vNextPublicationIdentity, bool, error) {
-	identity, err := root.identityAt(target, "publication control repair target")
-	if errors.Is(err, fs.ErrNotExist) {
-		return vNextPublicationIdentity{}, false, nil
+type vNextPublicationControlRepairAnchor struct {
+	name     string
+	identity vNextPublicationIdentity
+}
+
+func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPublicationOperation, target string, predecessor *vNextPublicationControlAuthorityHead, intended vNextPublicationControlState, intendedSource *vNextPublicationControlAnchorSource, base bool) (*vNextPublicationControlRepairState, error) {
+	if err := operation.assertLockBound(); err != nil {
+		return nil, err
 	}
+	transactionName, transaction, transactionIdentity, err := vNextPublicationCreateControlRepairTransaction(operation.connector)
 	if err != nil {
-		return vNextPublicationIdentity{}, false, err
+		return nil, err
 	}
-	if identity.mode != unix.S_IFREG {
-		return vNextPublicationIdentity{}, false, fmt.Errorf("publication control repair target is not a regular file")
+	keep := false
+	anchors := make([]vNextPublicationControlRepairAnchor, 0, 2)
+	defer func() {
+		if keep {
+			return
+		}
+		for index := len(anchors) - 1; index >= 0; index-- {
+			anchor := anchors[index]
+			_ = transaction.removeRegularBound(anchor.name, "unprepared publication control anchor", anchor.identity)
+		}
+		_ = transaction.Sync()
+		_ = transaction.Close()
+		_ = operation.connector.removeEmptyDirectoryBound(transactionName, "unprepared publication control repair transaction", transactionIdentity)
+		_ = operation.connector.Sync()
+	}()
+
+	prior := vNextPublicationAbsentControlState()
+	if predecessor != nil {
+		prior = vNextPublicationControlStateWithMember(predecessor.selected, vNextPublicationControlBackupMember)
+		if identity, present, err := prior.identity(vNextPublicationControlBackupMember); err != nil {
+			return nil, err
+		} else if present {
+			if err := transaction.linkFromBound(predecessor.state.transaction, predecessor.selected.Member, vNextPublicationControlBackupMember, "publication control prior anchor", identity); err != nil {
+				return nil, err
+			}
+			anchors = append(anchors, vNextPublicationControlRepairAnchor{name: vNextPublicationControlBackupMember, identity: identity})
+		}
 	}
-	return identity, true, nil
+	if base {
+		prior = vNextPublicationControlStateWithMember(intended, vNextPublicationControlBackupMember)
+		if identity, present, err := prior.identity(vNextPublicationControlBackupMember); err != nil {
+			return nil, err
+		} else if present {
+			if intendedSource == nil {
+				return nil, fmt.Errorf("publication control base authority has no source")
+			}
+			if err := transaction.linkFromBound(intendedSource.directory, intendedSource.name, vNextPublicationControlBackupMember, "publication control prior anchor", identity); err != nil {
+				return nil, err
+			}
+			anchors = append(anchors, vNextPublicationControlRepairAnchor{name: vNextPublicationControlBackupMember, identity: identity})
+		}
+	}
+
+	newIntended := vNextPublicationControlStateWithMember(intended, vNextPublicationControlReplacementMember)
+	if identity, present, err := newIntended.identity(vNextPublicationControlReplacementMember); err != nil {
+		return nil, err
+	} else if present {
+		if base {
+			if err := transaction.linkFromBound(transaction, vNextPublicationControlBackupMember, vNextPublicationControlReplacementMember, "publication control intended anchor", identity); err != nil {
+				return nil, err
+			}
+			anchors = append(anchors, vNextPublicationControlRepairAnchor{name: vNextPublicationControlReplacementMember, identity: identity})
+		} else {
+			if intendedSource == nil {
+				return nil, fmt.Errorf("publication control intended state has no source")
+			}
+			if err := transaction.linkFromBound(intendedSource.directory, intendedSource.name, vNextPublicationControlReplacementMember, "publication control intended anchor", identity); err != nil {
+				return nil, err
+			}
+			anchors = append(anchors, vNextPublicationControlRepairAnchor{name: vNextPublicationControlReplacementMember, identity: identity})
+		}
+	}
+	if err := transaction.Sync(); err != nil {
+		return nil, fmt.Errorf("sync publication control repair anchors: %w", err)
+	}
+
+	repair := vNextPublicationControlRepair{Version: vNextPublicationControlRepairVersion, Target: target, Transaction: transactionName, TransactionIdentity: vNextPublicationRecordIdentity(transactionIdentity), Prior: prior, Intended: newIntended, MaxCaptureAttempts: vNextPublicationControlRepairMaxCaptureAttempts}
+	if predecessor != nil {
+		repair.Predecessor = &vNextPublicationControlRepairPredecessor{Transaction: predecessor.state.transactionName, TransactionIdentity: vNextPublicationRecordIdentity(predecessor.state.transactionIdentity), Terminal: vNextPublicationControlRepairPhaseReference{Name: predecessor.terminal.name, Identity: vNextPublicationRecordIdentity(predecessor.terminal.identity), Digest: predecessor.terminal.digest}, Selected: predecessor.selected}
+	}
+	if err := vNextPublicationControlRepairValid(repair); err != nil {
+		return nil, err
+	}
+	payload, err := json.Marshal(repair)
+	if err != nil {
+		return nil, err
+	}
+	payload = append(payload, '\n')
+	preparedIdentity, err := vNextPublicationWriteControlRepairRecord(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", payload)
+	if err != nil {
+		return nil, err
+	}
+	if err := transaction.Sync(); err != nil {
+		return nil, fmt.Errorf("sync publication control repair prepared authority: %w", err)
+	}
+	if err := operation.connector.Sync(); err != nil {
+		return nil, fmt.Errorf("sync publication control repair transaction: %w", err)
+	}
+	state := &vNextPublicationControlRepairState{record: repair, preparedIdentity: preparedIdentity, preparedDigest: vNextPublicationDigest(payload), transactionName: transactionName, transaction: transaction, transactionIdentity: transactionIdentity}
+	keep = true
+	if base {
+		selected := newIntended
+		if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairPhase{State: vNextPublicationControlRepairTerminal, Selected: &selected, Outcome: vNextPublicationControlRepairCommitted}); err != nil {
+			state.close()
+			return nil, err
+		}
+		return state, nil
+	}
+	if err := p.hit(vNextPublicationAfterControlRepairPrepared); err != nil {
+		return state, err
+	}
+	return state, nil
 }
 
-func vNextPublicationRepairTargetMatchesDesired(actual vNextPublicationIdentity, found bool, prior vNextPublicationIdentity, hasPrior bool) bool {
-	if hasPrior {
-		return found && actual == prior
-	}
-	return !found
-}
-
-func (p *vNextGenerationPublisher) retainControlRepairReplacementLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, actual vNextPublicationIdentity, injectFaults bool) error {
+func (p *vNextGenerationPublisher) appendControlRepairPhaseLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, phase vNextPublicationControlRepairPhase) error {
 	if err := state.assertPrivateIdentity(operation); err != nil {
 		return err
 	}
-	replacement, err := state.transaction.identityAt(vNextPublicationControlReplacementMember, "publication control repair replacement")
-	if err == nil {
-		if replacement != actual {
-			return fmt.Errorf("publication control repair observed a second replacement")
+	phase.Version = vNextPublicationControlRepairVersion
+	phase.Sequence = len(state.phases) + 1
+	phase.PreparedDigest = state.preparedDigest
+	phase.PreparedIdentity = vNextPublicationRecordIdentity(state.preparedIdentity)
+	phase.Previous = state.latestReference()
+	if err := vNextPublicationControlRepairPhaseValid(phase); err != nil {
+		return err
+	}
+	payload, err := json.Marshal(phase)
+	if err != nil {
+		return err
+	}
+	payload = append(payload, '\n')
+	name := vNextPublicationControlRepairPhaseName(phase.Sequence)
+	identity, err := vNextPublicationWriteControlRepairRecord(state.transaction, name, "publication control repair phase", payload)
+	if err != nil {
+		return err
+	}
+	if err := state.transaction.Sync(); err != nil {
+		return fmt.Errorf("sync publication control repair phase: %w", err)
+	}
+	state.phases = append(state.phases, vNextPublicationControlRepairPhaseState{record: phase, name: name, identity: identity, digest: vNextPublicationDigest(payload)})
+	return nil
+}
+
+func (p *vNextGenerationPublisher) beginControlCaptureLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
+	attempt := 1
+	for _, phase := range state.phases {
+		if phase.record.State == vNextPublicationControlRepairCaptureIntent {
+			attempt++
 		}
-	} else if errors.Is(err, fs.ErrNotExist) {
-		if err := state.transaction.linkFromBound(operation.connector, state.record.Target, vNextPublicationControlReplacementMember, "publication control repair replacement", actual); err != nil {
+	}
+	if attempt > vNextPublicationControlRepairMaxCaptureAttempts {
+		return p.terminalizeRetryLocked(operation, state)
+	}
+	name := vNextPublicationControlCaptureName(attempt)
+	created := false
+	identity, err := state.transaction.identityAt(name, "publication control capture")
+	if errors.Is(err, fs.ErrNotExist) {
+		if err := unix.Mkdirat(int(state.transaction.file.Fd()), name, 0o700); err != nil {
+			return fmt.Errorf("create publication control capture: %w", err)
+		}
+		created = true
+		identity, err = state.transaction.identityAt(name, "publication control capture")
+	}
+	if err != nil {
+		return err
+	}
+	if identity.mode != unix.S_IFDIR {
+		return fmt.Errorf("publication control capture is not a directory")
+	}
+	capture, err := state.transaction.openDirectory(name, "publication control capture")
+	if err != nil {
+		return err
+	}
+	actual, err := vNextPublicationIdentityFromFile(capture.file, "publication control capture")
+	if err == nil && actual != identity {
+		err = fmt.Errorf("publication control capture identity changed")
+	}
+	if err == nil {
+		entries, readErr := capture.readDir()
+		if readErr != nil {
+			err = readErr
+		} else if len(entries) != 0 {
+			err = fmt.Errorf("unrecorded publication control capture %q is not empty", name)
+		}
+	}
+	if syncErr := capture.Sync(); syncErr != nil && err == nil {
+		err = fmt.Errorf("sync publication control capture: %w", syncErr)
+	}
+	if closeErr := capture.Close(); closeErr != nil && err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		return err
+	}
+	if err := state.transaction.Sync(); err != nil {
+		return fmt.Errorf("sync publication control capture parent: %w", err)
+	}
+	if created {
+		if err := p.hit(vNextPublicationAfterControlRepairCaptureDirectory); err != nil {
 			return err
 		}
-		if err := state.transaction.Sync(); err != nil {
-			return fmt.Errorf("sync publication control repair replacement: %w", err)
+	}
+	if err := state.transaction.assertIdentity(name, "publication control capture", identity); err != nil {
+		return err
+	}
+	captureRecord := vNextPublicationControlRepairCapture{Attempt: attempt, Name: name, Identity: vNextPublicationRecordIdentity(identity)}
+	if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairPhase{State: vNextPublicationControlRepairCaptureIntent, Capture: &captureRecord}); err != nil {
+		return err
+	}
+	return p.hit(vNextPublicationBeforeControlRepairCapture)
+}
+
+func (p *vNextGenerationPublisher) captureControlNoReplaceLocked(destination, source *vNextPublicationDirectory, sourceName, destinationName string) error {
+	if p.hooks.ControlCaptureRename != nil {
+		return vNextPublicationNoReplaceRenameError(p.hooks.ControlCaptureRename())
+	}
+	return destination.renameNoReplaceFrom(source, sourceName, destinationName)
+}
+
+func (p *vNextGenerationPublisher) completeControlCaptureLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
+	if state.latestPhase() != vNextPublicationControlRepairCaptureIntent {
+		return fmt.Errorf("publication control repair has no capture intent")
+	}
+	intent := state.phases[len(state.phases)-1].record
+	capture := *intent.Capture
+	if err := vNextPublicationValidateCaptureLocked(state.transaction, capture); err != nil {
+		return err
+	}
+	directory, err := state.transaction.openDirectory(capture.Name, "publication control capture")
+	if err != nil {
+		return err
+	}
+	defer directory.Close()
+	candidateIdentity, err := directory.identityAt(vNextPublicationControlCaptureMember, "publication control capture candidate")
+	candidate := vNextPublicationAbsentControlState()
+	if err == nil {
+		if candidateIdentity.mode != unix.S_IFREG {
+			return fmt.Errorf("publication control capture candidate is not a regular file")
 		}
-		if injectFaults {
-			if err := p.hit(vNextPublicationAfterControlRepairReplacementRetainSync); err != nil {
+		candidate = vNextPublicationPresentControlState(vNextPublicationControlCaptureMember, candidateIdentity)
+	} else if errors.Is(err, fs.ErrNotExist) {
+		if err := p.captureControlNoReplaceLocked(directory, operation.connector, state.record.Target, vNextPublicationControlCaptureMember); err != nil {
+			if !errors.Is(err, fs.ErrNotExist) {
 				return err
 			}
+		} else {
+			candidateIdentity, err = directory.identityAt(vNextPublicationControlCaptureMember, "publication control capture candidate")
+			if err != nil {
+				return err
+			}
+			if candidateIdentity.mode != unix.S_IFREG {
+				return fmt.Errorf("publication control capture candidate is not a regular file")
+			}
+			candidate = vNextPublicationPresentControlState(vNextPublicationControlCaptureMember, candidateIdentity)
 		}
 	} else {
 		return err
 	}
-	recorded := vNextPublicationRecordIdentity(actual)
-	if state.latestPhase() != vNextPublicationControlRepairReplacementRetained {
-		if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairReplacementRetained, &recorded); err != nil {
-			return err
-		}
-	}
-	if injectFaults {
-		if err := p.hit(vNextPublicationAfterControlRepairReplacementSync); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (p *vNextGenerationPublisher) restoreControlRepairLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, actual vNextPublicationIdentity, found bool, prior vNextPublicationIdentity, hasPrior bool) error {
-	if err := state.assertPrivateIdentity(operation); err != nil {
+	if err := p.hit(vNextPublicationAfterControlRepairCaptureRename); err != nil {
 		return err
 	}
-	if hasPrior {
-		if found && actual == prior {
-			return nil
-		}
-		if err := state.transaction.assertIdentity(vNextPublicationControlBackupMember, "publication control repair backup", prior); err != nil {
-			return err
-		}
-		if found {
-			if err := operation.connector.assertIdentity(state.record.Target, "publication control repair target", actual); err != nil {
-				return err
-			}
-			if err := operation.connector.renameFrom(state.transaction, vNextPublicationControlBackupMember, state.record.Target); err != nil {
-				return err
-			}
-		} else if err := operation.connector.linkFromBound(state.transaction, vNextPublicationControlBackupMember, state.record.Target, "publication control repair backup", prior); err != nil {
-			return err
-		}
-		return operation.connector.assertIdentity(state.record.Target, "publication control repair target", prior)
+	if err := directory.Sync(); err != nil {
+		return fmt.Errorf("sync publication control capture: %w", err)
 	}
-	if !found {
-		return nil
-	}
-	if err := operation.connector.removeRegularBound(state.record.Target, "publication control repair target", actual); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (p *vNextGenerationPublisher) appendRestoredControlRepairPhaseLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, prior vNextPublicationIdentity, hasPrior bool, injectFaults bool) error {
-	if state.latestPhase() != vNextPublicationControlRepairRestored {
-		var control *vNextPublicationRecordedIdentity
-		if hasPrior {
-			recorded := vNextPublicationRecordIdentity(prior)
-			control = &recorded
-		}
-		if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairRestored, control); err != nil {
-			return err
-		}
-	}
-	if injectFaults {
-		if err := p.hit(vNextPublicationAfterControlRepairRestoreSync); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (p *vNextGenerationPublisher) restoreAndRecordControlRepairLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, actual vNextPublicationIdentity, found bool, prior vNextPublicationIdentity, hasPrior bool, injectFaults bool) error {
-	if err := p.restoreControlRepairLocked(operation, state, actual, found, prior, hasPrior); err != nil {
+	if err := p.hit(vNextPublicationAfterControlRepairCaptureDirectorySync); err != nil {
 		return err
 	}
 	if err := operation.connector.Sync(); err != nil {
-		return fmt.Errorf("sync restored publication control: %w", err)
+		return fmt.Errorf("sync publication control after capture: %w", err)
 	}
-	if injectFaults {
-		if err := p.hit(vNextPublicationAfterControlRepairPublicRestoreSync); err != nil {
-			return err
-		}
-	}
-	if err := p.appendRestoredControlRepairPhaseLocked(operation, state, prior, hasPrior, injectFaults); err != nil {
+	if err := p.hit(vNextPublicationAfterControlRepairCaptureRootSync); err != nil {
 		return err
 	}
-	return p.finishControlRepairLocked(operation, state, injectFaults)
+	if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairPhase{State: vNextPublicationControlRepairCaptured, Capture: &capture, Candidate: &candidate}); err != nil {
+		return err
+	}
+	return p.hit(vNextPublicationAfterControlRepairCaptured)
 }
 
-func (p *vNextGenerationPublisher) resolveUnexpectedControlRepairLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, actual vNextPublicationIdentity, found bool, prior vNextPublicationIdentity, hasPrior bool, injectFaults bool) error {
-	if found {
-		if err := p.retainControlRepairReplacementLocked(operation, state, actual, injectFaults); err != nil {
-			return err
+func (p *vNextGenerationPublisher) selectControlStateLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, selected vNextPublicationControlState) (bool, error) {
+	if selected.Present {
+		identity, _, err := state.anchor(selected, selected.Member)
+		if err != nil {
+			return false, err
+		}
+		if err := operation.connector.linkFromBound(state.transaction, selected.Member, state.record.Target, "publication control selection", identity); err != nil {
+			if errors.Is(err, fs.ErrExist) {
+				return true, nil
+			}
+			return false, err
+		}
+	} else {
+		_, err := operation.connector.identityAt(state.record.Target, "publication control selection")
+		if err == nil {
+			return true, nil
+		}
+		if !errors.Is(err, fs.ErrNotExist) {
+			return false, err
 		}
 	}
-	return p.restoreAndRecordControlRepairLocked(operation, state, actual, found, prior, hasPrior, injectFaults)
+	if err := p.hit(vNextPublicationAfterControlRepairInstall); err != nil {
+		return false, err
+	}
+	if err := operation.connector.Sync(); err != nil {
+		return false, fmt.Errorf("sync publication control selection: %w", err)
+	}
+	if err := p.hit(vNextPublicationAfterControlRepairInstallSync); err != nil {
+		return false, err
+	}
+	copy := selected
+	if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairPhase{State: vNextPublicationControlRepairSelected, Selected: &copy}); err != nil {
+		return false, err
+	}
+	if err := p.hit(vNextPublicationAfterControlRepairSelected); err != nil {
+		return false, err
+	}
+	return false, nil
 }
 
-func (p *vNextGenerationPublisher) resolveControlRepairLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, injectFaults bool) error {
-	if err := state.assertPrivateIdentity(operation); err != nil {
+func (p *vNextGenerationPublisher) terminalizeRetryLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
+	if _, _, _, terminal := state.terminal(); terminal {
+		return &vNextPublicationControlConflictError{target: state.record.Target}
+	}
+	selected := state.record.Prior
+	if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairPhase{State: vNextPublicationControlRepairTerminal, Selected: &selected, Outcome: vNextPublicationControlRepairRetryRequired}); err != nil {
 		return err
 	}
-	prior, hasPrior, err := vNextPublicationRepairPrior(state)
-	if err != nil {
-		return err
-	}
-	expected, err := vNextPublicationRepairExpected(state)
-	if err != nil {
-		return err
-	}
-	actual, found, err := vNextPublicationRepairTargetIdentity(operation.connector, state.record.Target)
-	if err != nil {
-		return err
-	}
-	desired := vNextPublicationRepairTargetMatchesDesired(actual, found, prior, hasPrior)
+	return &vNextPublicationControlConflictError{target: state.record.Target}
+}
 
-	switch state.latestPhase() {
-	case "":
-		if found && actual == expected {
-			recorded := vNextPublicationRecordIdentity(expected)
-			if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairInstalled, &recorded); err != nil {
+func (p *vNextGenerationPublisher) resolveControlRepairLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
+	for {
+		if err := state.assertPrivateIdentity(operation); err != nil {
+			return err
+		}
+		switch state.latestPhase() {
+		case "":
+			if err := p.beginControlCaptureLocked(operation, state); err != nil {
 				return err
 			}
-			if injectFaults {
-				if err := p.hit(vNextPublicationAfterControlRepairInstalledPhaseSync); err != nil {
+		case vNextPublicationControlRepairCaptureIntent:
+			if err := p.completeControlCaptureLocked(operation, state); err != nil {
+				return err
+			}
+		case vNextPublicationControlRepairCaptured:
+			captured := state.phases[len(state.phases)-1].record
+			if captured.Candidate == nil {
+				return fmt.Errorf("publication control capture has no candidate")
+			}
+			selected := state.record.Intended
+			if !captured.Candidate.sameLogical(state.record.Prior) {
+				selected = state.record.Prior
+			}
+			late, err := p.selectControlStateLocked(operation, state, selected)
+			if err != nil {
+				return err
+			}
+			if late {
+				if err := p.beginControlCaptureLocked(operation, state); err != nil {
 					return err
 				}
 			}
-			return p.finishControlRepairLocked(operation, state, injectFaults)
-		}
-		if desired {
-			return p.restoreAndRecordControlRepairLocked(operation, state, actual, found, prior, hasPrior, injectFaults)
-		}
-		return p.resolveUnexpectedControlRepairLocked(operation, state, actual, found, prior, hasPrior, injectFaults)
-
-	case vNextPublicationControlRepairInstalled:
-		if found && actual == expected {
-			return p.finishControlRepairLocked(operation, state, injectFaults)
-		}
-		if desired {
-			return p.restoreAndRecordControlRepairLocked(operation, state, actual, found, prior, hasPrior, injectFaults)
-		}
-		return p.resolveUnexpectedControlRepairLocked(operation, state, actual, found, prior, hasPrior, injectFaults)
-
-	case vNextPublicationControlRepairReplacementRetained:
-		control := state.latestControl()
-		if control == nil {
-			return fmt.Errorf("publication control repair replacement phase has no control")
-		}
-		replacement, err := control.publicationIdentity(unix.S_IFREG)
-		if err != nil {
-			return err
-		}
-		if desired {
-			return p.restoreAndRecordControlRepairLocked(operation, state, actual, found, prior, hasPrior, injectFaults)
-		}
-		if !found || actual != replacement {
-			return fmt.Errorf("publication control repair observed a second replacement")
-		}
-		return p.restoreAndRecordControlRepairLocked(operation, state, actual, found, prior, hasPrior, injectFaults)
-
-	case vNextPublicationControlRepairRestored:
-		if !desired {
-			return fmt.Errorf("publication control changed after restored repair phase")
-		}
-		return p.finishControlRepairLocked(operation, state, injectFaults)
-	default:
-		return fmt.Errorf("invalid publication control repair phase %q", state.latestPhase())
-	}
-}
-
-func (p *vNextGenerationPublisher) finishControlRepairLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState, injectFaults bool) error {
-	if err := p.clearControlRepairLocked(operation, state); err != nil {
-		return err
-	}
-	if injectFaults {
-		if err := p.hit(vNextPublicationAfterControlRepairClearSync); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func (p *vNextGenerationPublisher) clearControlRepairLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
-	if err := state.assertPrivateIdentity(operation); err != nil {
-		return err
-	}
-	prior, hasPrior, err := vNextPublicationRepairPrior(state)
-	if err != nil {
-		return err
-	}
-	expected, err := vNextPublicationRepairExpected(state)
-	if err != nil {
-		return err
-	}
-	actual, found, err := vNextPublicationRepairTargetIdentity(operation.connector, state.record.Target)
-	if err != nil {
-		return err
-	}
-	switch state.latestPhase() {
-	case vNextPublicationControlRepairInstalled:
-		if !found || actual != expected {
-			return fmt.Errorf("publication control changed before installed repair cleanup")
-		}
-	case vNextPublicationControlRepairRestored:
-		if !vNextPublicationRepairTargetMatchesDesired(actual, found, prior, hasPrior) {
-			return fmt.Errorf("publication control changed before restored repair cleanup")
-		}
-	default:
-		return fmt.Errorf("publication control repair cannot clear phase %q", state.latestPhase())
-	}
-
-	for _, phase := range state.phases {
-		if phase.record.State != vNextPublicationControlRepairReplacementRetained || phase.record.Control == nil {
-			continue
-		}
-		replacement, err := phase.record.Control.publicationIdentity(unix.S_IFREG)
-		if err != nil {
-			return err
-		}
-		if err := state.transaction.assertIdentity(vNextPublicationControlReplacementMember, "publication control repair replacement", replacement); err != nil {
-			return err
-		}
-	}
-	if err := p.hit(vNextPublicationBeforeControlRepairAuthorityClear); err != nil {
-		return err
-	}
-	if err := state.assertPrivateIdentity(operation); err != nil {
-		return err
-	}
-	actual, found, err = vNextPublicationRepairTargetIdentity(operation.connector, state.record.Target)
-	if err != nil {
-		return err
-	}
-	switch state.latestPhase() {
-	case vNextPublicationControlRepairInstalled:
-		if !found || actual != expected {
-			return fmt.Errorf("publication control changed before final installed repair cleanup")
-		}
-	case vNextPublicationControlRepairRestored:
-		if !vNextPublicationRepairTargetMatchesDesired(actual, found, prior, hasPrior) {
-			return fmt.Errorf("publication control changed before final restored repair cleanup")
-		}
-	}
-
-	// Retire the sole recovery authority before deleting phase or backup data:
-	// a crash after this sync leaves a valid public control and only private
-	// garbage, never a pending authority whose restoration material is gone.
-	if err := state.transaction.removeRegularBound(vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", state.preparedIdentity); err != nil {
-		return err
-	}
-	if err := state.transaction.Sync(); err != nil {
-		return fmt.Errorf("sync cleared publication control repair authority: %w", err)
-	}
-	state.authorityCleared = true
-	if err := p.hit(vNextPublicationAfterControlRepairAuthorityRetireSync); err != nil {
-		return err
-	}
-
-	for _, phase := range state.phases {
-		if err := state.transaction.removeRegularBound(phase.name, "publication control repair phase", phase.identity); err != nil {
-			return err
-		}
-	}
-	if hasPrior {
-		backup, backupErr := state.transaction.identityAt(vNextPublicationControlBackupMember, "publication control repair backup")
-		if backupErr == nil {
-			if backup != prior {
-				return fmt.Errorf("publication control repair backup identity changed")
-			}
-			if err := state.transaction.removeRegularBound(vNextPublicationControlBackupMember, "publication control repair backup", prior); err != nil {
+		case vNextPublicationControlRepairSelected:
+			selected := *state.phases[len(state.phases)-1].record.Selected
+			matches, err := vNextPublicationControlStateMatchesPublic(operation.connector, state.record.Target, selected)
+			if err != nil {
 				return err
 			}
-		} else if !errors.Is(backupErr, fs.ErrNotExist) {
-			return backupErr
+			if !matches {
+				return p.terminalizeRetryLocked(operation, state)
+			}
+			outcome := vNextPublicationControlRepairRolledBack
+			if selected.sameLogical(state.record.Intended) {
+				outcome = vNextPublicationControlRepairCommitted
+			}
+			if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairPhase{State: vNextPublicationControlRepairTerminal, Selected: &selected, Outcome: outcome}); err != nil {
+				return err
+			}
+			if err := p.hit(vNextPublicationAfterFinalControlRepairValidation); err != nil {
+				return err
+			}
+		case vNextPublicationControlRepairTerminal:
+			_, selected, outcome, _ := state.terminal()
+			if outcome == vNextPublicationControlRepairRetryRequired {
+				return &vNextPublicationControlConflictError{target: state.record.Target}
+			}
+			matches, err := vNextPublicationControlStateMatchesPublic(operation.connector, state.record.Target, selected)
+			if err != nil {
+				return err
+			}
+			if !matches {
+				return &vNextPublicationControlConflictError{target: state.record.Target}
+			}
+			return nil
+		default:
+			return fmt.Errorf("invalid publication control repair phase %q", state.latestPhase())
 		}
 	}
-	if err := state.transaction.Sync(); err != nil {
-		return fmt.Errorf("sync cleaned publication control repair transaction: %w", err)
-	}
+}
 
-	entries, err := state.transaction.readDir()
+func vNextPublicationControlStateMatchesPublic(root *vNextPublicationDirectory, target string, selected vNextPublicationControlState) (bool, error) {
+	identity, present, err := selected.identity(selected.Member)
 	if err != nil {
+		return false, err
+	}
+	_, found, actual, err := vNextPublicationReadControlBound(root, target, "publication control")
+	if err != nil {
+		return false, err
+	}
+	if found != present {
+		return false, nil
+	}
+	return !present || actual == identity, nil
+}
+
+func (p *vNextGenerationPublisher) recoverControlRepairLocked(operation *vNextPublicationOperation) error {
+	if err := p.ensureControlAuthorityLocked(operation); err != nil {
 		return err
 	}
-	if len(entries) != 0 {
+	for range 16 {
+		graph, err := p.scanControlAuthorityLocked(operation)
+		if err != nil {
+			return err
+		}
+		if !graph.marker {
+			graph.close()
+			return fmt.Errorf("publication control authority bootstrap did not create marker")
+		}
+		var repair *vNextPublicationControlRepairState
+		var reconcile *vNextPublicationControlAuthorityHead
+		for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+			head := graph.heads[target]
+			if head == nil {
+				graph.close()
+				return fmt.Errorf("publication control authority has no %s head", target)
+			}
+			if _, _, _, terminal := head.state.terminal(); !terminal {
+				repair = head.state
+				break
+			}
+			matches, matchErr := vNextPublicationControlStateMatchesPublic(operation.connector, target, head.selected)
+			if matchErr != nil {
+				graph.close()
+				return matchErr
+			}
+			if head.outcome == vNextPublicationControlRepairRetryRequired || !matches {
+				reconcile = head
+				break
+			}
+		}
+		if repair != nil {
+			err = p.resolveControlRepairLocked(operation, repair)
+			graph.close()
+			if err != nil && !errors.Is(err, errVNextPublicationControlConflict) {
+				return err
+			}
+			continue
+		}
+		if reconcile != nil {
+			selected := reconcile.selected
+			var source *vNextPublicationControlAnchorSource
+			if selected.Present {
+				identity, _, identityErr := reconcile.state.anchor(selected, selected.Member)
+				if identityErr != nil {
+					graph.close()
+					return identityErr
+				}
+				source = &vNextPublicationControlAnchorSource{directory: reconcile.state.transaction, name: selected.Member, identity: identity}
+			}
+			state, createErr := p.createControlRepairLocked(operation, reconcile.state.record.Target, reconcile, selected, source, false)
+			graph.close()
+			if createErr != nil {
+				return createErr
+			}
+			err = p.resolveControlRepairLocked(operation, state)
+			state.close()
+			if err != nil && !errors.Is(err, errVNextPublicationControlConflict) {
+				return err
+			}
+			continue
+		}
+		graph.close()
 		return nil
 	}
-	if err := state.transaction.Close(); err != nil {
-		return err
-	}
-	state.transaction = nil
-	if err := operation.connector.removeEmptyDirectoryBound(state.transactionName, "publication control repair transaction", state.transactionIdentity); err != nil {
-		return err
-	}
-	return operation.connector.Sync()
+	return &vNextPublicationControlConflictError{target: "CURRENT/JOURNAL"}
 }
 
-func (p *vNextGenerationPublisher) refuseMismatchedControlInstallLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
-	cause := fmt.Errorf("publication control identity changed after namespace transition")
-	if err := p.resolveControlRepairLocked(operation, state, true); err != nil {
-		return fmt.Errorf("%w; durable control repair: %w", cause, err)
+func (p *vNextGenerationPublisher) transitionControlLocked(operation *vNextPublicationOperation, target string, intended vNextPublicationControlState, source *vNextPublicationControlAnchorSource) (vNextPublicationControlState, error) {
+	if err := p.recoverControlRepairLocked(operation); err != nil {
+		return vNextPublicationControlState{}, err
 	}
-	return cause
+	graph, err := p.scanControlAuthorityLocked(operation)
+	if err != nil {
+		return vNextPublicationControlState{}, err
+	}
+	head := graph.heads[target]
+	if head == nil || head.outcome == vNextPublicationControlRepairRetryRequired {
+		graph.close()
+		return vNextPublicationControlState{}, &vNextPublicationControlConflictError{target: target}
+	}
+	state, err := p.createControlRepairLocked(operation, target, head, intended, source, false)
+	graph.close()
+	if err != nil {
+		return vNextPublicationControlState{}, err
+	}
+	defer state.close()
+	if err := p.resolveControlRepairLocked(operation, state); err != nil {
+		return vNextPublicationControlState{}, err
+	}
+	_, selected, _, terminal := state.terminal()
+	if !terminal {
+		return vNextPublicationControlState{}, fmt.Errorf("publication control transition did not terminalize")
+	}
+	return selected, nil
 }
 
-func (p *vNextGenerationPublisher) completeControlRepairLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
-	return p.resolveControlRepairLocked(operation, state, true)
+func (p *vNextGenerationPublisher) controlAuthorityForReadLocked(operation *vNextPublicationOperation) (*vNextPublicationControlAuthorityGraph, error) {
+	graph, err := p.scanControlAuthorityLocked(operation)
+	if err != nil {
+		return nil, err
+	}
+	if !graph.marker {
+		if len(graph.states) != 0 {
+			graph.close()
+			return nil, fmt.Errorf("publication control repair exists before authority bootstrap")
+		}
+		return graph, nil
+	}
+	for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+		head := graph.heads[target]
+		if head == nil || head.outcome == vNextPublicationControlRepairRetryRequired {
+			graph.close()
+			return nil, &vNextPublicationControlConflictError{target: target}
+		}
+		if _, _, _, terminal := head.state.terminal(); !terminal {
+			graph.close()
+			return nil, fmt.Errorf("publication control %q has a pending repair", target)
+		}
+	}
+	if err := p.hit(vNextPublicationAfterControlAuthorityReadScan); err != nil {
+		graph.close()
+		return nil, err
+	}
+	return graph, nil
+}
+
+func vNextPublicationReadAuthorizedControlLocked(operation *vNextPublicationOperation, graph *vNextPublicationControlAuthorityGraph, target, label string) ([]byte, bool, vNextPublicationIdentity, error) {
+	if graph == nil || !graph.marker {
+		return vNextPublicationReadControlBound(operation.connector, target, label)
+	}
+	if err := graph.assertPrivateIdentity(operation); err != nil {
+		return nil, false, vNextPublicationIdentity{}, err
+	}
+	head := graph.heads[target]
+	if head == nil {
+		return nil, false, vNextPublicationIdentity{}, fmt.Errorf("publication control authority has no %s head", target)
+	}
+	payload, found, identity, err := vNextPublicationReadControlBound(operation.connector, target, label)
+	if err != nil {
+		return nil, false, vNextPublicationIdentity{}, err
+	}
+	expected, present, err := head.selected.identity(head.selected.Member)
+	if err != nil {
+		return nil, false, vNextPublicationIdentity{}, err
+	}
+	if found != present || (present && identity != expected) {
+		return nil, false, vNextPublicationIdentity{}, fmt.Errorf("publication control %q diverges from terminal authority", target)
+	}
+	return payload, found, identity, nil
 }

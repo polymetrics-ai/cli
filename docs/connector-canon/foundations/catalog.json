@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 39,
+  "catalog_revision": 41,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -15,7 +15,7 @@
       "layer": "source_lock_authoring",
       "status": "available",
       "kind": "generic",
-      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through operation-lifetime no-follow descriptor confinement, connector-directory inode locking, recomputed content addresses, prepared-journal recovery, immutable private control-repair authority with append-only bound phases, atomic selection, private temporary controls, quarantine-bound cleanup, and lease-safe pruning.",
+      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through operation-lifetime no-follow descriptor confinement, connector-directory inode locking, recomputed content addresses, retained terminal control authority, append-only successor repair, private-read revalidation, descriptor-relative no-replace capture, create-only selection, and lease-safe pruning.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [
@@ -36,6 +36,9 @@
           "cmd/connectorgen/vnext_publication.go",
           "cmd/connectorgen/vnext_publication_repair.go",
           "cmd/connectorgen/vnext_publication_dir.go",
+          "cmd/connectorgen/vnext_publication_rename.go",
+          "cmd/connectorgen/vnext_publication_rename_linux.go",
+          "cmd/connectorgen/vnext_publication_rename_darwin.go",
           "internal/connectors/defs/defs.go",
           "internal/connectors/engine/bundle.go",
           "internal/connectors/engine/command_binding.go",
@@ -111,15 +114,27 @@
           },
           {
             "file": "cmd/connectorgen/vnext_publication_repair.go",
-            "name": "(*vNextGenerationPublisher).beginControlRepairLocked"
+            "name": "(*vNextGenerationPublisher).ensureControlAuthorityLocked"
           },
           {
             "file": "cmd/connectorgen/vnext_publication_repair.go",
-            "name": "(*vNextGenerationPublisher).appendControlRepairPhaseLocked"
+            "name": "(*vNextGenerationPublisher).createControlRepairLocked"
           },
           {
             "file": "cmd/connectorgen/vnext_publication_repair.go",
-            "name": "(*vNextGenerationPublisher).clearControlRepairLocked"
+            "name": "(*vNextGenerationPublisher).resolveControlRepairLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "(*vNextGenerationPublisher).controlAuthorityForReadLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "vNextPublicationReadAuthorizedControlLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_dir.go",
+            "name": "(*vNextPublicationDirectory).renameNoReplaceFrom"
           },
           {
             "file": "cmd/connectorgen/vnext_publication_dir.go",
@@ -202,12 +217,21 @@
           "each published generation is a physically closed digest-addressed artifact tree with no inherited optional member; validation recomputes that address from the on-disk members",
           "a publisher-written and fsynced typed stage marker binds connector, stage, and content generation; recovery removes that owned stage, while unknown or malformed stages are preserved and refused",
           "connector and generation roots are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect publication reads or writes",
-          "CURRENT and JOURNAL final-control transitions create and fsync immutable prepared authority in a unique identity-bound private transaction before exposure; every later recovery state is a create-only prepared-identity/digest-predecessor-bound phase, restart recovery verifies that chain before ordinary control decoding, retains any substitute, syncs restoration of the prior or valid no-prior namespace, rechecks public/private identities, and fsyncs prepared-authority retirement before deleting only private phase/backup members",
+          "CURRENT and JOURNAL each retain one terminal authority head; every successor records and binds its predecessor terminal identity, digest, and selected state before that successor can become a head",
+          "a public CURRENT or JOURNAL transition captures its syscall-time occupant with descriptor-relative no-replace rename, classifies the moved inode afterward, and selects only a retained prior or intended inode through create-only linkat",
+          "unsupported no-replace primitives, capture destination collisions, and source absence never fall back to overwrite or public unlink; they retain prior authority and fail closed or converge through bounded recovery",
+          "recovery and check scan the complete marker and private authority graph before public-control decoding, refusing pending, retry-required, malformed, gapped, forked, or terminal-divergent state",
+          "private transaction, prepared, phase, capture, and predecessor identities are revalidated across every transition boundary; replacement fails before public-control decode",
+          "every authorized public-control read revalidates retained private authority identities after graph scan and before it decodes that control",
+          "cooperating writers serialize all control transitions under the retained connector-directory lock and leave one terminal authority head per target",
+          "superseded terminal authority remains retained when private cleanup is uncertain; a private-path substitution is refused without deleting either authority",
+          "lock-render --check is read-only: it validates the complete private authority graph before public-control decode and leaves an authorized connector tree unchanged",
+          "lock-render --check emits no success line and makes no write when terminal authority diverges from a public control",
           "recovery removes a validated publisher-owned staged tree only after quarantining its descriptor-bound target; a late stage replacement preserves both original and replacement",
           "pruning removes a validated stale generation only after quarantining its descriptor-bound root; a late generation replacement preserves both original and replacement",
           "the generation lease that authorizes a prune is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object",
           "rollback removes a rejected generation only after quarantining its descriptor-bound root; a late rollback replacement preserves both original and replacement",
-          "validated CURRENT and JOURNAL controls are removed only after quarantining their descriptor-bound file; a late control replacement preserves both original and replacement",
+          "CURRENT and JOURNAL removal is a terminal authority transition that captures any public occupant and selects logical absence without public unlinkat; a late replacement is retained and causes a bounded conflict rather than deletion",
           "the operation Flock is bound to the retained connector-directory inode, so a matched replacement .connectorgen.lock and anchor sibling pair cannot create a second publication lock domain",
           "the source lock is read through the retained no-follow connector descriptor before and after lock acquisition; a source mutation during admission is refused before generation state is created",
           "a durable prepared journal is fsynced before its same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation",
@@ -236,7 +260,7 @@
         "Trailing JSON values and duplicate object members fail before canonicalization or publication.",
         "Typed graph validation rejects invalid encoders, wrong schema roles, missing bindings, and normalized command alias collisions before staging.",
         "Semantic admission reads only an in-memory rendered view; it uses engine.Load, engine.New, the exact command resolver, commandrunner preflight, sealed executor and generated hook selection, manifestindex.New, and supplied syncplan.Resolve without provider I/O, credential resolution, or transport.",
-        "Publication retains a verified connector descriptor through in-memory admission, then rereads the source lock after it acquires the target connector lock; source mutation during admission is refused. It retains verified connector and generations directory descriptors for the rest of the operation; every source lock, connector, generation, lock, control, stage, lease, rename, pruning, and cleanup action is descriptor-relative and no-follow. It stages only below the target connector's generations directory under a durable typed marker, rejects unsafe paths and symlinks, requires the exact closed directory/member tree and empty lease, fsyncs files and directories, persists a prepared journal before the same-directory final-generation rename, revalidates the recomputed content address, atomically replaces CURRENT, and prunes only integrity-validated publisher-owned generations whose leases are exclusively available.",
+        "Publication retains a verified connector descriptor through in-memory admission, then rereads the source lock after it acquires the target connector lock; source mutation during admission is refused. It retains verified connector and generations directory descriptors for the rest of the operation; every source lock, connector, generation, lock, control, stage, lease, capture, rename, pruning, and cleanup action is descriptor-relative and no-follow. It stages only below the target connector's generations directory under a durable typed marker, rejects unsafe paths and symlinks, requires the exact closed directory/member tree and empty lease, fsyncs files and directories, persists a prepared journal before the same-directory final-generation rename, and revalidates the recomputed content address. Each CURRENT or JOURNAL transition creates a retained terminal-authority successor, captures any public occupant through descriptor-relative no-replace rename, and selects only a retained prior or intended inode through a create-only link; logical absence never unlinks a public control. Pruning remains limited to integrity-validated publisher-owned generations whose leases are exclusively available.",
         "Every admitted request/response schema reference must semantically equal an effective loaded runtime schema; a direct role with no typed runtime schema is rejected.",
         "Generated hook extensions are selected only through hookset.Factories and retained in the staged manifest/index entry.",
         "Canonical source-ID order governs staged provenance; an authored operation index is retained only for diagnostics.",
@@ -491,53 +515,103 @@
         },
         {
           "package": "./cmd/connectorgen",
-          "file": "cmd/connectorgen/vnext_publication_test.go",
-          "name": "TestVNextGenerationPublisherRefusesLateReplacedAtomicControlTemporary"
-        },
-        {
-          "package": "./cmd/connectorgen",
-          "file": "cmd/connectorgen/vnext_publication_test.go",
-          "name": "TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary"
-        },
-        {
-          "package": "./cmd/connectorgen",
-          "file": "cmd/connectorgen/vnext_publication_test.go",
-          "name": "TestVNextGenerationPublisherRecoversInterruptedReplacedControlBeforeDecode"
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherBootstrapsRetainedTerminalAuthorities"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_repair_test.go",
-          "name": "TestVNextGenerationPublisherRecoversEveryControlRepairDurableCut"
+          "name": "TestVNextGenerationPublisherCheckRefusesMalformedPrivateTransactionBeforePublicDecode"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_repair_test.go",
-          "name": "TestVNextGenerationPublisherRecoversEveryRetainedReplacementCut"
+          "name": "TestVNextGenerationPublisherRecoversTerminalDivergenceThroughSuccessor"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_repair_test.go",
-          "name": "TestVNextGenerationPublisherWritesBoundImmutableRecoveryPhaseChains"
+          "name": "TestVNextGenerationPublisherRemoveControlCapturesLateOccupantInsteadOfUnlinking"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_repair_test.go",
-          "name": "TestVNextGenerationPublisherFinalTargetSubstitutionCannotClearPrivateAuthority"
+          "name": "TestVNextGenerationPublisherNoReplaceFailureRetainsAuthorityAndPublicControl"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_repair_test.go",
-          "name": "TestVNextGenerationPublisherFinalNoPriorTargetUnlinkCannotClearPrivateAuthority"
+          "name": "TestVNextGenerationPublisherNoReplaceSourceAbsentDoesNotClobber"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_repair_test.go",
-          "name": "TestVNextGenerationPublisherRefusesSubstitutedPreparedAuthorityBeforePublicControlExposure"
+          "name": "TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix"
         },
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_repair_test.go",
-          "name": "TestVNextGenerationPublisherRefusesSubstitutedPreparedAuthorityBeforePublicControlTrust"
+          "name": "TestVNextGenerationPublisherRecoversEveryTerminalAuthorityDurableCut"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherCheckRefusesAuthorityTopologyBeforePublicDecode"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRepeatedSubstitutionsRemainForensic"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRefusesPrivateAuthorityReplacementBeforePublicDecode"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherCheckRevalidatesPrivateAuthorityBeforePublicDecode"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRetainsSupersededAuthorityWhenCleanupIsUnsafe"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherCooperatingWritersSerializeAuthorityHeads"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_linearization_test.go",
+          "name": "TestVNextGenerationPublisherCheckRefusesTerminalAuthorityFreeReplacement"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_linearization_test.go",
+          "name": "TestVNextGenerationPublisherCheckRefusesPendingPrivateAuthority"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestRunLockRenderCheckRefusesPendingPrivateAuthorityWithoutWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestRunLockRenderCheckRefusesDivergentTerminalAuthorityWithoutWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_linearization_test.go",
+          "name": "TestVNextGenerationPublisherCapturesLatePublicControlReplacementWithoutClobber"
         },
         {
           "package": "./cmd/connectorgen",
@@ -563,11 +637,6 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_test.go",
           "name": "TestVNextGenerationPublisherRefusesLateReplacedRollbackGenerationCleanup"
-        },
-        {
-          "package": "./cmd/connectorgen",
-          "file": "cmd/connectorgen/vnext_publication_test.go",
-          "name": "TestVNextGenerationPublisherRefusesLateReplacedControlCleanup"
         },
         {
           "package": "./cmd/connectorgen",
@@ -609,10 +678,73 @@
         },
         {
           "guarantees": [
-            "CURRENT and JOURNAL final-control transitions create and fsync immutable prepared authority in a unique identity-bound private transaction before exposure; every later recovery state is a create-only prepared-identity/digest-predecessor-bound phase, restart recovery verifies that chain before ordinary control decoding, retains any substitute, syncs restoration of the prior or valid no-prior namespace, rechecks public/private identities, and fsyncs prepared-authority retirement before deleting only private phase/backup members"
+            "CURRENT and JOURNAL each retain one terminal authority head; every successor records and binds its predecessor terminal identity, digest, and selected state before that successor can become a head"
           ],
-          "positive": "TestVNextGenerationPublisherRecoversEveryControlRepairDurableCut",
-          "negative": "TestVNextGenerationPublisherRefusesSubstitutedPreparedAuthorityBeforePublicControlExposure"
+          "positive": "TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix",
+          "negative": "TestVNextGenerationPublisherCheckRefusesTerminalAuthorityFreeReplacement"
+        },
+        {
+          "guarantees": [
+            "a public CURRENT or JOURNAL transition captures its syscall-time occupant with descriptor-relative no-replace rename, classifies the moved inode afterward, and selects only a retained prior or intended inode through create-only linkat"
+          ],
+          "positive": "TestVNextGenerationPublisherRepeatedSubstitutionsRemainForensic",
+          "negative": "TestVNextGenerationPublisherCapturesLatePublicControlReplacementWithoutClobber"
+        },
+        {
+          "guarantees": [
+            "unsupported no-replace primitives, capture destination collisions, and source absence never fall back to overwrite or public unlink; they retain prior authority and fail closed or converge through bounded recovery"
+          ],
+          "positive": "TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix",
+          "negative": "TestVNextGenerationPublisherNoReplaceFailureRetainsAuthorityAndPublicControl"
+        },
+        {
+          "guarantees": [
+            "recovery and check scan the complete marker and private authority graph before public-control decoding, refusing pending, retry-required, malformed, gapped, forked, or terminal-divergent state"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversEveryTerminalAuthorityDurableCut",
+          "negative": "TestVNextGenerationPublisherCheckRefusesAuthorityTopologyBeforePublicDecode"
+        },
+        {
+          "guarantees": [
+            "private transaction, prepared, phase, capture, and predecessor identities are revalidated across every transition boundary; replacement fails before public-control decode"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversEveryTerminalAuthorityDurableCut",
+          "negative": "TestVNextGenerationPublisherRefusesPrivateAuthorityReplacementBeforePublicDecode"
+        },
+        {
+          "guarantees": [
+            "every authorized public-control read revalidates retained private authority identities after graph scan and before it decodes that control"
+          ],
+          "positive": "TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting",
+          "negative": "TestVNextGenerationPublisherCheckRevalidatesPrivateAuthorityBeforePublicDecode"
+        },
+        {
+          "guarantees": [
+            "cooperating writers serialize all control transitions under the retained connector-directory lock and leave one terminal authority head per target"
+          ],
+          "positive": "TestVNextGenerationPublisherCooperatingWritersSerializeAuthorityHeads",
+          "negative": "TestVNextGenerationPublisherSerializesMatchedLockAnchorReplacement"
+        },
+        {
+          "guarantees": [
+            "superseded terminal authority remains retained when private cleanup is uncertain; a private-path substitution is refused without deleting either authority"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversTerminalDivergenceThroughSuccessor",
+          "negative": "TestVNextGenerationPublisherRetainsSupersededAuthorityWhenCleanupIsUnsafe"
+        },
+        {
+          "guarantees": [
+            "lock-render --check is read-only: it validates the complete private authority graph before public-control decode and leaves an authorized connector tree unchanged"
+          ],
+          "positive": "TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting",
+          "negative": "TestRunLockRenderCheckRefusesPendingPrivateAuthorityWithoutWriting"
+        },
+        {
+          "guarantees": [
+            "lock-render --check emits no success line and makes no write when terminal authority diverges from a public control"
+          ],
+          "positive": "TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting",
+          "negative": "TestRunLockRenderCheckRefusesDivergentTerminalAuthorityWithoutWriting"
         },
         {
           "guarantees": [
@@ -644,10 +776,10 @@
         },
         {
           "guarantees": [
-            "validated CURRENT and JOURNAL controls are removed only after quarantining their descriptor-bound file; a late control replacement preserves both original and replacement"
+            "CURRENT and JOURNAL removal is a terminal authority transition that captures any public occupant and selects logical absence without public unlinkat; a late replacement is retained and causes a bounded conflict rather than deletion"
           ],
-          "positive": "TestVNextGenerationPublisherRecoversEveryDurableCutPoint",
-          "negative": "TestVNextGenerationPublisherRefusesLateReplacedControlCleanup"
+          "positive": "TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix",
+          "negative": "TestVNextGenerationPublisherRemoveControlCapturesLateOccupantInsteadOfUnlinking"
         },
         {
           "guarantees": [

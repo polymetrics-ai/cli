@@ -586,3 +586,43 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - **Lint disposition:** full `make lint` reported 43 repository-wide diagnostics (20 `errcheck`, 5 `staticcheck`, 18 `unused`), including pre-existing lines in `vnext_publication.go` and unrelated packages, but no `vnext_publication_repair.go` or new-test finding. The exact changed-line check, `golangci-lint run --new-from-rev f36b5d0a275ed27fd5f4da242ba192e43f8066d5`, → `0 issues`; it caught and prompted repair of the new control-record close-error handling before that final pass.
 - **Intentional local exclusions:** `make smoke-no-build`, release-workflow checks, and the unrelated `internal/cli` suite were not run because their credential/database or release paths are expressly prohibited by instruction 136 and no `internal/cli` behavior changed. This is a scoped omission, not a green claim.
 - **Delivery gate:** instruction 137 confirms CP11 must receive fresh independent exact-SHA review before CP12. Remaining CP11 actions are read-only full-range self-review, whitespace/secret scan, scoped commit, ordinary push, PR #4294 API base/head/SHA read-back, status update, archive `136.msg`, then pause unchanged for that review.
+
+## CP11 F1 Design B linearization verification plan — instruction 139
+
+- **Authority/scope:** start only from `4fa9a5b8cdecdfc07afe54ee3eddb7d19719f5b8`, parent `f36b5d0a275ed27fd5f4da242ba192e43f8066d5`, under the authoritative F1 report. Change only CP11 publication/recovery/check code/tests, source-lock-vNext canon/Atlas witnesses, and phase evidence. CP12, rebase/reset/force-push, checked-in generation materialization, provider/credential/database I/O, `.cache`, and certification residue remain excluded.
+- **Required candidate RED:** direct lock-ignoring actor plus real descriptor operations falsify candidate post-validation install rename, restore rename, no-prior public unlink, and final-public-validation→sole-authority-retirement. Assertions require lost/authority-free identity behavior, not merely failure text.
+- **Required GREEN matrix:** every `CURRENT`/`JOURNAL` × prior-present/absent × install/restore/logical-absence transition through no-replace capture, create-only selection, terminalization, fresh recovery, real `lock-render --check`, late replacement/unlink, A/B/C substitution, malformed private graph, unsupported/collision errors, successor cleanup substitution, and cooperating-writer serialization.
+- **Pass criteria:** every publisher-observed displaced public inode remains reachable under its bound capture identity; decode yields only selected prior/intended identity or fails closed; pending/divergent shared check is nonzero, emits no success stdout, changes no filesystem entry, and cleanup cannot weaken active successor terminal.
+- **Planned gates:** focused RED/Green tests; `go test -count=1 -timeout 20m ./cmd/connectorgen`; `go test -race -count=1 -timeout 20m ./cmd/connectorgen`; `make connectorgen-vnext-locks`; definition validation; `make connector-boundary`; Atlas/canon/docs; vet/build/contract; diff/secret scan; exact-range self-review; normal push and GitHub API base/head/SHA read-back.
+
+## CP11 F1 Design B final local verification — instruction 139
+
+- **Focused protocol witnesses:** terminal-transition matrix; every reachable
+  terminal-authority durable cut; unsupported/collision/source-absence
+  no-replace failures; topology and private-identity refusal; repeated A/B/C
+  substitutions; retained predecessor cleanup safety; cooperating writers; and
+  all three actual `lock-render --check` paths passed under
+  `-count=1 -timeout 20m`.
+- **Changed package:** `go test -count=1 -timeout 20m ./cmd/connectorgen`
+  passed in 124.842s. `go test -race -count=1 -timeout 20m
+  ./cmd/connectorgen` passed in 416.263s. The focused retained-predecessor
+  witness also passed under `-race`.
+- **Corpus and authoring:** `make connectorgen-vnext-locks` passed; `go run
+  ./cmd/connectorgen validate internal/connectors/defs` checked 553 connectors
+  with 0 findings; `jq -e . docs/connector-canon/foundations/catalog.json`,
+  `TestFoundationAtlasSelectorsResolve`, `make connector-canon-check`, and
+  `make docs-check` passed.
+- **Static and boundary:** `go vet ./cmd/connectorgen`, `go build
+  -o /tmp/connectorgen-cp11 ./cmd/connectorgen`, `make tidy-check`, and `go run
+  ./cmd/agentcontractgen check` passed. `make connector-boundary` reported
+  `outcome: "clean"` for 284 files and 553 connectors, with only its existing
+  declared documentation exceptions.
+- **Platform check:** native Darwin compilation exercised
+  `RenameatxNp(..., RENAME_EXCL)` through the package suite. A direct Linux
+  cross-compile of the exact `unix.Renameat2(..., RENAME_NOREPLACE)` API passed.
+  A full Linux `./cmd/connectorgen` cross-compile is not claimed: the embedded
+  `go-duckdb` dependency failed first with `undefined: Conn` without a Linux
+  cgo toolchain.
+- **Generated residue:** `make docs-check` created the local `pm` binary; this
+  run removed it immediately. `.cache/` and
+  `internal/connectors/certifications/.fingerprint-salt` remain untouched.

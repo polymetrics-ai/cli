@@ -287,6 +287,18 @@ func (d *vNextPublicationDirectory) renameFrom(source *vNextPublicationDirectory
 	return nil
 }
 
+// renameNoReplaceFrom captures the member that exists at the namespace
+// transition. Unlike renameFrom it never replaces an existing destination.
+func (d *vNextPublicationDirectory) renameNoReplaceFrom(source *vNextPublicationDirectory, oldName, newName string) error {
+	if source == nil || source.file == nil {
+		return fs.ErrClosed
+	}
+	if !vNextPublicationDirectNameValid(oldName) || !vNextPublicationDirectNameValid(newName) {
+		return fmt.Errorf("invalid publication no-replace rename %q to %q", oldName, newName)
+	}
+	return vNextPublicationRenameNoReplace(int(source.file.Fd()), oldName, int(d.file.Fd()), newName)
+}
+
 func (d *vNextPublicationDirectory) linkFrom(source *vNextPublicationDirectory, oldName, newName, label string) error {
 	if source == nil || source.file == nil {
 		return fs.ErrClosed
