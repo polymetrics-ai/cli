@@ -274,33 +274,6 @@ func (d *vNextPublicationDirectory) assertIdentity(name, label string, expected 
 	return nil
 }
 
-func (d *vNextPublicationDirectory) renameBound(source *vNextPublicationDirectory, oldName, newName, label string, identity vNextPublicationIdentity, afterIdentity func() error) (bool, error) {
-	if source == nil || source.file == nil {
-		return false, fs.ErrClosed
-	}
-	if err := source.assertIdentity(oldName, label, identity); err != nil {
-		return false, err
-	}
-	if afterIdentity != nil {
-		if err := afterIdentity(); err != nil {
-			return false, err
-		}
-	}
-	if err := source.assertIdentity(oldName, label, identity); err != nil {
-		return false, err
-	}
-	if !vNextPublicationDirectNameValid(newName) {
-		return false, fmt.Errorf("invalid publication rename target %q", newName)
-	}
-	if err := d.renameFrom(source, oldName, newName); err != nil {
-		return false, err
-	}
-	if err := d.assertIdentity(newName, label, identity); err != nil {
-		return true, err
-	}
-	return true, nil
-}
-
 func (d *vNextPublicationDirectory) renameFrom(source *vNextPublicationDirectory, oldName, newName string) error {
 	if source == nil || source.file == nil {
 		return fs.ErrClosed
@@ -314,17 +287,34 @@ func (d *vNextPublicationDirectory) renameFrom(source *vNextPublicationDirectory
 	return nil
 }
 
-func (d *vNextPublicationDirectory) linkBound(oldName, newName, label string, identity vNextPublicationIdentity) error {
-	if err := d.assertIdentity(oldName, label, identity); err != nil {
-		return err
+func (d *vNextPublicationDirectory) linkFrom(source *vNextPublicationDirectory, oldName, newName, label string) error {
+	if source == nil || source.file == nil {
+		return fs.ErrClosed
 	}
-	if !vNextPublicationDirectNameValid(newName) {
-		return fmt.Errorf("invalid %s name %q", label, newName)
+	if !vNextPublicationDirectNameValid(oldName) || !vNextPublicationDirectNameValid(newName) {
+		return fmt.Errorf("invalid %s link %q to %q", label, oldName, newName)
 	}
-	if err := unix.Linkat(int(d.file.Fd()), oldName, int(d.file.Fd()), newName, 0); err != nil {
+	if err := unix.Linkat(int(source.file.Fd()), oldName, int(d.file.Fd()), newName, 0); err != nil {
 		return fmt.Errorf("link %s: %w", label, err)
 	}
+	return nil
+}
+
+func (d *vNextPublicationDirectory) linkFromBound(source *vNextPublicationDirectory, oldName, newName, label string, identity vNextPublicationIdentity) error {
+	if source == nil || source.file == nil {
+		return fs.ErrClosed
+	}
+	if err := source.assertIdentity(oldName, label, identity); err != nil {
+		return err
+	}
+	if err := d.linkFrom(source, oldName, newName, label); err != nil {
+		return err
+	}
 	return d.assertIdentity(newName, label, identity)
+}
+
+func (d *vNextPublicationDirectory) linkBound(oldName, newName, label string, identity vNextPublicationIdentity) error {
+	return d.linkFromBound(d, oldName, newName, label, identity)
 }
 
 func (d *vNextPublicationDirectory) removeRegularBound(name, label string, identity vNextPublicationIdentity) error {

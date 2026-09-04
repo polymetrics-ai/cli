@@ -198,9 +198,12 @@ with `unsupported`.
     rename is allowed before that journal is durable. A `CURRENT` or `JOURNAL`
     temporary is the `control` child of a retained private
     `.connectorgen-publication-*` directory directly below the connector root.
-    Its source child identity is rechecked immediately before the
-    descriptor-relative final rename; a swapped source refuses without altering
-    the prior control or deleting either temporary object. Fsync the
+    Before final installation, a verified hard-link backup of the prior control
+    is retained in a private quarantine. The source child is rechecked
+    immediately before the descriptor-relative transition; the installed inode
+    must then equal the retained temporary identity. A mismatch hard-links the
+    installed replacement into quarantine, rechecks it, and atomically restores
+    the prior control without deleting either object. Fsync the
     `generations/` descriptor after the rename, then atomically replace
     `CURRENT` with the new generation and integrity digest and fsync its
     containing descriptor. `CURRENT`, the journal, `integrity.json` (including

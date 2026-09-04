@@ -1394,6 +1394,107 @@ func TestVNextGenerationPublisherRefusesLateReplacedAtomicControlTemporary(t *te
 	}
 }
 
+func TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary(t *testing.T) {
+	tests := []struct {
+		name   string
+		target string
+		write  func(*vNextGenerationPublisher, *vNextPublicationOperation, vNextGenerationPointer) error
+	}{
+		{
+			name:   "CURRENT",
+			target: vNextPublicationCurrentFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeCurrentLocked(operation, pointer)
+			},
+		},
+		{
+			name:   "JOURNAL",
+			target: vNextPublicationJournalFile,
+			write: func(publisher *vNextGenerationPublisher, operation *vNextPublicationOperation, pointer vNextGenerationPointer) error {
+				return publisher.writeJournalLocked(operation, vNextGenerationJournal{New: pointer, State: "prepared"})
+			},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+			if err != nil {
+				t.Fatal(err)
+			}
+			targetPath := filepath.Join(root, "acme", test.target)
+			if test.target == vNextPublicationJournalFile {
+				payload, err := vNextPublicationJSON(vNextGenerationJournal{New: pointer, State: "prepared"})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := os.WriteFile(targetPath, payload, 0o600); err != nil {
+					t.Fatal(err)
+				}
+			}
+			before, err := os.ReadFile(targetPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			priorInfo, err := os.Stat(targetPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			var movedPath string
+			hookHit := false
+			guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point != vNextPublicationAfterFinalControlSourceIdentity || hookHit {
+					return nil
+				}
+				hookHit = true
+				_, movedPath = vNextReplacePublicationTemporaryForTest(t, root, []byte("final unrelated replacement"))
+				return nil
+			}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			operation, err := guard.openOperation(context.Background(), syscall.LOCK_EX, true)
+			if err != nil {
+				t.Fatal(err)
+			}
+			err = test.write(guard, operation, pointer)
+			operation.close()
+
+			if !hookHit {
+				t.Fatal("atomic control write did not reach final source-identity namespace barrier")
+			}
+			if err == nil || !strings.Contains(err.Error(), "identity") {
+				t.Fatalf("final atomic %s replacement error = %v, want identity refusal", test.target, err)
+			}
+			if got, readErr := os.ReadFile(targetPath); readErr != nil || !bytes.Equal(got, before) {
+				t.Fatalf("final atomic %s replacement changed prior control: err=%v got=%q want=%q", test.target, readErr, got, before)
+			}
+			restoredInfo, statErr := os.Stat(targetPath)
+			if statErr != nil {
+				t.Fatal(statErr)
+			}
+			if !os.SameFile(priorInfo, restoredInfo) {
+				t.Fatalf("final atomic %s replacement restored a different prior control inode", test.target)
+			}
+			replacementPath := vNextFindPublicationPrivatePayloadForTest(t, root, []byte("final unrelated replacement"))
+			if got, readErr := os.ReadFile(replacementPath); readErr != nil || string(got) != "final unrelated replacement" {
+				t.Fatalf("final atomic %s replacement was not retained: err=%v got=%q", test.target, readErr, got)
+			}
+			if directory := filepath.Base(filepath.Dir(replacementPath)); !strings.HasPrefix(directory, ".connectorgen-quarantine-") {
+				t.Fatalf("final atomic %s replacement retained outside quarantine: %q", test.target, replacementPath)
+			}
+			if _, statErr := os.Stat(movedPath); statErr != nil {
+				t.Fatalf("final atomic %s replacement removed original temporary: %v", test.target, statErr)
+			}
+		})
+	}
+}
+
 func vNextReplacePublicationTemporaryForTest(t *testing.T, root string, replacement []byte) (string, string) {
 	t.Helper()
 	connectorRoot := filepath.Join(root, "acme")
@@ -1427,6 +1528,40 @@ func vNextReplacePublicationTemporaryForTest(t *testing.T, root string, replacem
 		t.Fatal(err)
 	}
 	return path, moved
+}
+
+func vNextFindPublicationPrivatePayloadForTest(t *testing.T, root string, want []byte) string {
+	t.Helper()
+	connectorRoot := filepath.Join(root, "acme")
+	entries, err := os.ReadDir(connectorRoot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() || (!strings.HasPrefix(entry.Name(), ".connectorgen-publication-") && !strings.HasPrefix(entry.Name(), ".connectorgen-quarantine-")) {
+			continue
+		}
+		directory := filepath.Join(connectorRoot, entry.Name())
+		children, err := os.ReadDir(directory)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, child := range children {
+			if child.IsDir() {
+				continue
+			}
+			path := filepath.Join(directory, child.Name())
+			got, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if bytes.Equal(got, want) {
+				return path
+			}
+		}
+	}
+	t.Fatalf("publication private state does not retain %q", want)
+	return ""
 }
 
 func TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup(t *testing.T) {

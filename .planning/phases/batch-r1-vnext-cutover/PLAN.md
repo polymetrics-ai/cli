@@ -776,3 +776,34 @@
 - **F4 evidence correction:** the review correctly classified the old closed-set comparator and fixture-written marker as nonphysical witnesses. New physical closed-tree and publisher-written durable-stage tests, plus the lease/control/matched-pair refusals, are mapped only in `authoring.source-lock-vnext.v1`.
 - Focused F1–F4/Atlas proof suite passed: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextGenerationPublisher(ActivatesClosedSetAndDefersHeldPrune|DefersHeldGenerationPrune|RefusesPruneWithInvalidLease|Refuses(Replaced|LateReplaced)AtomicControlTemporary|RefusesLateReplacedValidatedStageCleanup|RefusesLateReplacedValidatedGenerationCleanup|RefusesLateReplacedGenerationLeaseCleanup|RefusesLateReplacedRollbackGenerationCleanup|RefusesLateReplacedControlCleanup|SerializesMatchedLockAnchorReplacement|CheckRefusesPhysicalClosedSetMutation|RecoversPublisherWrittenDurableStage|SerializesWritersAndReadersSeeWholeGeneration|RollsBackFailedActiveValidationWithoutOrphan|RecoversEveryDurableCutPoint)|TestVNextPublicationOpenLockBindsConnectorDirectory|TestRunLockRenderPublishesOnlyClosedGeneration)$'` → `ok` (7.962s). The normal complete `cmd/connectorgen` suite also passed (61.981s); race and remaining gates remain recorded in the verification checklist.
 - Complete race suite passed: `go test -race -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (329.199s). Corpus, definition, documentation, static, contract, build, and exact-diff gates are recorded in `VERIFICATION.md`; only the required ordinary commit/push, API read-back, inbox archival, and Firstmate exact-SHA pause remain.
+
+## CP11 final F1 repair continuation — Firstmate instruction 133
+
+## Task Delivery Header
+
+- Issue: Refs #4427 — transactional connector-generation publication repair; parent Refs #4325.
+- Base branch: `main` (existing draft PR #4294 target, read back through the GitHub API after ordinary push).
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main`.
+- Delivery: one normal non-force F1-only correction candidate over immutable review subject `958a07a778fba6264d1aec567efa5d8c853eefa2`, API-confirmed on draft PR #4294, then a fresh Firstmate exact-SHA-review pause.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: repair only the final `CURRENT`/`JOURNAL` source check/use transition and its dependent `authoring.source-lock-vnext.v1` refusal witness; F2 and F3 remain accepted and unchanged, and CP12 remains prohibited.
+- Verification: deterministic final-source-barrier RED/GREEN for both controls; focused/full/race `cmd/connectorgen`; vNext corpus, definition, docs/Atlas, static, contract, build, exact-diff, self-review, and PR API gates.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| A source replacement after final validation cannot overwrite `CURRENT` or `JOURNAL` irrecoverably | fake | Checked-in publication generations are deliberately absent. A temporary-root publisher test injects a replacement strictly after final source validation and immediately before the namespace transition, then asserts prior control bytes, moved original temporary, and replacement all persist after refusal. |
+| The F1 Atlas refusal mapping names that exact final-boundary witness | live | `TestFoundationAtlasSelectorsResolve` resolves the one updated source-lock-vNext mapping to the executable final-boundary test; an unregistered or wrong mapping fails the real validator. |
+
+### Discussed scope, design, and TDD order
+
+- Intake: `133.msg` and `data/cli-batch1-cp11-repair-r3-final-review-r1/report.md` were read in full. The review accepts F2/F3 and authorizes no work beyond F1 plus its mapping. The known GSD issue prompt remains absent; generated discuss/plan/execute/verify/review prompts and this inline/manual fallback are recorded because Firstmate forbids role spawning.
+- Skills: `go-engineering`, its advanced concurrency guidance, `diagnose`, `tdd`, and `connector-migration-exact-sha-review` were loaded. Required `golang-how-to` and specialist `golang-*` skills are unavailable in this runtime and are not claimed.
+- RED: introduce an existing-suite hook strictly after the final private-source identity validation and immediately before its namespace installation. With the predecessor protocol, the hook swaps the source, `renameat` installs the replacement, and the prior control changes despite the later identity error.
+- GREEN: preserve the prior control as a verified hard-link backup in a retained private quarantine before installation. After the final barrier, install the candidate, verify the installed inode, and on mismatch hard-link the installed replacement into quarantine before atomically restoring the prior control. A clean expected install removes only the verified private backup. No F2/F3 path changes.
+- F4: replace only the F1 mapping negative witness with the new final-source-barrier test and update the corresponding source-lock publication guarantee/canon wording. Do not change any other Atlas entry or mapping.
+
+### Execution evidence
+
+- **F1 RED:** `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary$'` failed for both `CURRENT` and `JOURNAL`: after the new final-source-validation barrier swapped `control`, the predecessor installed `"final unrelated replacement"` over the prior control.
+- **F1 GREEN:** a pre-transition verified hard-link backup holds the prior control in a private quarantine. The final barrier now precedes the namespace installation, which verifies the installed inode. A mismatched installed replacement is hard-linked into quarantine before an atomic prior-control restore; the test proves prior bytes and inode, original temporary, and quarantined replacement for both controls.
+- **F4 GREEN:** only the F1 source-lock-vNext guarantee/mapping changed to `TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary`; the focused old/new control, durable-cut, and Atlas selector suite passed in 5.657s.

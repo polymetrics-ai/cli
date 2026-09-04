@@ -415,3 +415,16 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 - **F3:** the operation lock is a duplicated retained connector-directory descriptor. No production code reads, creates, or trusts `.connectorgen.lock`/anchor siblings, so a self-consistent replacement pair cannot split the Flock domain.
 - **F4:** the source-lock-vNext Atlas now maps only physical/durable behavior witnesses for closed trees, publisher-written stages, late cleanup, and matched pairs. The in-memory comparator is no longer a publication-guarantee witness.
 - **Scope/maintenance:** no runtime route, source lock, rendered execution JSON, provider, credential, database, cache, certification residue, release automation, or CP12 surface changed. Full normal/race package, corpus, definition, docs, static, contract, build, and diff gates are recorded in `VERIFICATION.md`. No additional local finding remains; fresh Firstmate exact-SHA review is still mandatory after ordinary push.
+
+## 2026-09-04 — CP11 final F1 continuation intake (instruction 133)
+
+- Fresh independent review BLOCKed `958a07a778fba6264d1aec567efa5d8c853eefa2` on one remaining F1/F4 defect. Its exact report was read in full. F2 quarantine cleanup and F3 connector-directory serialization are accepted; reopening either is out of scope.
+- The defect is a final source check/use race: `renameBound` checked the private source a second time, then consumed its pathname with `renameat`; the old hook ran before the second check, so the claimed refusal never exercised the final boundary. The correction must preserve a prior control, verify the installed inode, and restore both sides on mismatch.
+- Inline/manual GSD remains required because the adapter's known issue prompt is absent and Firstmate forbids role spawning. Local review cannot replace the required fresh exact-SHA review after normal push.
+
+## 2026-09-04 — CP11 final F1 continuation local self-review (instruction 133)
+
+- **F1 transition:** the final hook follows the last private-source identity assertion and immediately precedes the installation call. Existing-target installation hard-links the verified prior control into a private quarantine, verifies the installed inode, hard-links any mismatch before atomically restoring the exact prior inode. The no-prior path uses a non-overwriting link and retains a mismatch privately rather than replacing an unexpected public target.
+- **F1 witness:** the new test drives both `CURRENT` and `JOURNAL` through that exact hook, proves the restored inode is the original control, and locates the mismatched payload under a quarantine rather than merely checking an error string. The old pre-final-boundary witness remains unmodified; it no longer anchors the F1 Atlas guarantee.
+- **F4 mapping/canon:** only the F1 source-lock-vNext guarantee text, proof-test registration, negative mapping, and its canon explanation changed; F2/F3 mappings and production code remain untouched.
+- **Scope/verification:** manual source review found no remaining F1 defect. Final normal/race package, focused witness/Atlas, corpus, definition, docs, static, contract, build, tidy, whitespace, and command-smoke evidence is recorded in `VERIFICATION.md`. Fresh Firstmate exact-SHA review remains required after one ordinary push.

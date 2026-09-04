@@ -185,7 +185,7 @@
           "each published generation is a physically closed digest-addressed artifact tree with no inherited optional member; validation recomputes that address from the on-disk members",
           "a publisher-written and fsynced typed stage marker binds connector, stage, and content generation; recovery removes that owned stage, while unknown or malformed stages are preserved and refused",
           "connector and generation roots are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect publication reads or writes",
-          "CURRENT and JOURNAL atomic writes preserve the prior control across durable cuts; a late replacement of the verified private temporary source is refused while the prior control, original source, and replacement remain intact",
+          "CURRENT and JOURNAL atomic writes preserve the prior control across durable cuts; after final private-source validation, a late source replacement is verified at the installed inode, quarantined, and the prior control is restored while the original source and replacement remain intact",
           "recovery removes a validated publisher-owned staged tree only after quarantining its descriptor-bound target; a late stage replacement preserves both original and replacement",
           "pruning removes a validated stale generation only after quarantining its descriptor-bound root; a late generation replacement preserves both original and replacement",
           "the generation lease that authorizes a prune is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object",
@@ -480,6 +480,11 @@
         {
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
           "name": "TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup"
         },
         {
@@ -547,10 +552,10 @@
         },
         {
           "guarantees": [
-            "CURRENT and JOURNAL atomic writes preserve the prior control across durable cuts; a late replacement of the verified private temporary source is refused while the prior control, original source, and replacement remain intact"
+            "CURRENT and JOURNAL atomic writes preserve the prior control across durable cuts; after final private-source validation, a late source replacement is verified at the installed inode, quarantined, and the prior control is restored while the original source and replacement remain intact"
           ],
           "positive": "TestVNextGenerationPublisherRecoversEveryDurableCutPoint",
-          "negative": "TestVNextGenerationPublisherRefusesLateReplacedAtomicControlTemporary"
+          "negative": "TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary"
         },
         {
           "guarantees": [

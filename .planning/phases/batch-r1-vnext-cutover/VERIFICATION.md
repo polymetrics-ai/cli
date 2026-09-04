@@ -537,3 +537,17 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - **Corpus/definition/Atlas GREEN:** `make connectorgen-vnext-locks` → `ok` in 32.693s; `go run ./cmd/connectorgen validate internal/connectors/defs` checked 553 connectors with 0 findings; `TestFoundationAtlasSelectorsResolve` passed.
 - **Maintenance GREEN:** `make docs-check`, `go vet ./cmd/connectorgen`, `go mod tidy -diff`, `go build ./cmd/pm`, `go run ./cmd/agentcontractgen check`, and `git diff --check` passed.
 - **Read-only smoke boundary:** top-level `go run ./cmd/connectorgen --help` rendered usage. `lock-render --help` is not a supported subcommand form and returns its existing usage error; a real checked-in connector `lock-render --check` stops at the expected absent `generations/` directory because this checkpoint deliberately does not materialize a publication corpus. The temporary-root package proofs above exercise publish/check behavior without changing definition state.
+
+## CP11 final F1 continuation verification plan — instruction 133
+
+- F1: run the new final-source-validation replacement test for `CURRENT` and `JOURNAL`; each subtest must observe an identity refusal and preserve prior control bytes, moved original temporary, and the mismatched replacement.
+- F4: run `TestFoundationAtlasSelectorsResolve` after updating only the F1 mapping.
+- Gates after GREEN: focused normal/race selectors and complete normal/race `cmd/connectorgen`; `make connectorgen-vnext-locks`; definition validation; Atlas JSON/docs; vet; build; agent-contract; tidy; exact diff; inline self-review; ordinary push; PR API base/head/SHA read-back; external status update; archive `133.msg`; then fresh Firstmate exact-SHA pause. No standalone adversarial program or provider/credential action.
+
+## CP11 final F1 continuation local results — instruction 133
+
+- **Focused GREEN:** `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary|TestFoundationAtlasSelectorsResolve)$'` → `ok` in 1.568s. The `CURRENT` and `JOURNAL` subtests execute the barrier strictly after final source validation and before namespace installation, then prove identity refusal, prior bytes/inode, moved original temporary, and a quarantined replacement.
+- **Complete package GREEN:** `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` in 65.113s; `go test -race -count=1 -timeout 20m ./cmd/connectorgen` → `ok` in 328.540s.
+- **Corpus/definition/Atlas GREEN:** `make connectorgen-vnext-locks` → `ok` in 33.542s; `go run ./cmd/connectorgen validate internal/connectors/defs` checked 553 connectors with 0 findings; `jq -e . docs/connector-canon/foundations/catalog.json` and `TestFoundationAtlasSelectorsResolve` passed.
+- **Maintenance GREEN:** `make docs-check`, `go vet ./cmd/connectorgen`, `go mod tidy -diff`, `go build ./cmd/pm`, `go run ./cmd/agentcontractgen check`, and `git diff --check` passed.
+- **Read-only smoke boundary:** `go run ./cmd/connectorgen --help` rendered the real command usage. No provider, credential, database, source-lock materialization, `.cache`, certification-residue, release-automation, or CP12 action occurred.
