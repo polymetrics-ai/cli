@@ -184,6 +184,22 @@ func (d *vNextPublicationDirectory) openFile(name, label string, flags int, perm
 	return file, nil
 }
 
+func (d *vNextPublicationDirectory) duplicateFile(label string) (*os.File, error) {
+	if d == nil || d.file == nil {
+		return nil, fs.ErrClosed
+	}
+	fd, err := unix.Dup(int(d.file.Fd()))
+	if err != nil {
+		return nil, fmt.Errorf("duplicate %s: %w", label, err)
+	}
+	file := os.NewFile(uintptr(fd), label)
+	if file == nil {
+		_ = unix.Close(fd)
+		return nil, fmt.Errorf("duplicate %s: invalid file descriptor", label)
+	}
+	return file, nil
+}
+
 func (d *vNextPublicationDirectory) openRegular(name, label string, flags int) (*os.File, error) {
 	file, err := d.openFile(name, label, flags, 0, false)
 	if err != nil {
@@ -258,14 +274,44 @@ func (d *vNextPublicationDirectory) assertIdentity(name, label string, expected 
 	return nil
 }
 
-func (d *vNextPublicationDirectory) renameBound(oldName, newName, label string, identity vNextPublicationIdentity) error {
-	if err := d.assertIdentity(oldName, label, identity); err != nil {
-		return err
+func (d *vNextPublicationDirectory) renameBound(source *vNextPublicationDirectory, oldName, newName, label string, identity vNextPublicationIdentity, afterIdentity func() error) (bool, error) {
+	if source == nil || source.file == nil {
+		return false, fs.ErrClosed
 	}
-	if err := d.rename(oldName, newName); err != nil {
-		return err
+	if err := source.assertIdentity(oldName, label, identity); err != nil {
+		return false, err
 	}
-	return d.assertIdentity(newName, label, identity)
+	if afterIdentity != nil {
+		if err := afterIdentity(); err != nil {
+			return false, err
+		}
+	}
+	if err := source.assertIdentity(oldName, label, identity); err != nil {
+		return false, err
+	}
+	if !vNextPublicationDirectNameValid(newName) {
+		return false, fmt.Errorf("invalid publication rename target %q", newName)
+	}
+	if err := d.renameFrom(source, oldName, newName); err != nil {
+		return false, err
+	}
+	if err := d.assertIdentity(newName, label, identity); err != nil {
+		return true, err
+	}
+	return true, nil
+}
+
+func (d *vNextPublicationDirectory) renameFrom(source *vNextPublicationDirectory, oldName, newName string) error {
+	if source == nil || source.file == nil {
+		return fs.ErrClosed
+	}
+	if !vNextPublicationDirectNameValid(oldName) || !vNextPublicationDirectNameValid(newName) {
+		return fmt.Errorf("invalid publication rename %q to %q", oldName, newName)
+	}
+	if err := unix.Renameat(int(source.file.Fd()), oldName, int(d.file.Fd()), newName); err != nil {
+		return fmt.Errorf("rename publication member %q to %q: %w", oldName, newName, err)
+	}
+	return nil
 }
 
 func (d *vNextPublicationDirectory) linkBound(oldName, newName, label string, identity vNextPublicationIdentity) error {
@@ -295,6 +341,18 @@ func vNextPublicationStatIsDir(stat unix.Stat_t) bool {
 	return stat.Mode&unix.S_IFMT == unix.S_IFDIR
 }
 
+func (d *vNextPublicationDirectory) removeEmptyDirectoryBound(name, label string, identity vNextPublicationIdentity) error {
+	if identity.mode != unix.S_IFDIR {
+		return fmt.Errorf("%s is not a directory", label)
+	}
+	if err := d.assertIdentity(name, label, identity); err != nil {
+		return err
+	}
+	if err := unix.Unlinkat(int(d.file.Fd()), name, unix.AT_REMOVEDIR); err != nil {
+		return fmt.Errorf("remove directory %s: %w", label, err)
+	}
+	return nil
+}
 func vNextPublicationStatIsRegular(stat unix.Stat_t) bool {
 	return stat.Mode&unix.S_IFMT == unix.S_IFREG
 }
@@ -304,13 +362,7 @@ func vNextPublicationStatIsSymlink(stat unix.Stat_t) bool {
 }
 
 func (d *vNextPublicationDirectory) rename(oldName, newName string) error {
-	if !vNextPublicationDirectNameValid(oldName) || !vNextPublicationDirectNameValid(newName) {
-		return fmt.Errorf("invalid publication rename %q to %q", oldName, newName)
-	}
-	if err := unix.Renameat(int(d.file.Fd()), oldName, int(d.file.Fd()), newName); err != nil {
-		return fmt.Errorf("rename publication member %q to %q: %w", oldName, newName, err)
-	}
-	return nil
+	return d.renameFrom(d, oldName, newName)
 }
 
 func (d *vNextPublicationDirectory) removeTree(name, label string) error {

@@ -60,7 +60,7 @@ func runLockRenderContextWithHooks(ctx context.Context, args []string, stdout, s
 		logf(stderr, "connectorgen lock-render: stage publication artifacts: %v\n", err)
 		return 1
 	}
-	if err := publisher.acquireOperation(ctx, operation, mode, create); err != nil {
+	if err := publisher.acquireOperation(ctx, operation, mode); err != nil {
 		logf(stderr, "connectorgen lock-render: acquire publication operation: %v\n", err)
 		return 1
 	}

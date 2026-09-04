@@ -31,8 +31,6 @@ const (
 	vNextPublicationGenerationDirectory = "generations"
 	vNextPublicationCurrentFile         = "CURRENT"
 	vNextPublicationJournalFile         = "JOURNAL"
-	vNextPublicationLockFile            = ".connectorgen.lock"
-	vNextPublicationLockAnchorFile      = ".connectorgen.lock.anchor"
 	vNextPublicationIntegrityFile       = "integrity.json"
 	vNextPublicationControlMaxBytes     = 1 << 20
 	vNextPublicationLeaseFile           = ".lease"
@@ -42,31 +40,36 @@ const (
 type vNextPublicationFaultPoint string
 
 const (
-	vNextPublicationBeforeFileSync          vNextPublicationFaultPoint = "before_file_sync"
-	vNextPublicationAfterFileSync           vNextPublicationFaultPoint = "after_file_sync"
-	vNextPublicationBeforeStageDirectory    vNextPublicationFaultPoint = "before_stage_directory_sync"
-	vNextPublicationAfterStageDirectory     vNextPublicationFaultPoint = "after_stage_directory_sync"
-	vNextPublicationBeforeJournalSync       vNextPublicationFaultPoint = "before_journal_sync"
-	vNextPublicationAfterJournalSync        vNextPublicationFaultPoint = "after_journal_sync"
-	vNextPublicationBeforeCurrentTempSync   vNextPublicationFaultPoint = "before_current_temp_sync"
-	vNextPublicationAfterCurrentTempSync    vNextPublicationFaultPoint = "after_current_temp_sync"
-	vNextPublicationBeforeCurrentRename     vNextPublicationFaultPoint = "before_current_rename"
-	vNextPublicationAfterCurrentRename      vNextPublicationFaultPoint = "after_current_rename"
-	vNextPublicationBeforeCurrentParent     vNextPublicationFaultPoint = "before_current_parent_sync"
-	vNextPublicationAfterCurrentParent      vNextPublicationFaultPoint = "after_current_parent_sync"
-	vNextPublicationBeforeActiveValidate    vNextPublicationFaultPoint = "before_active_validation"
-	vNextPublicationAfterActiveValidate     vNextPublicationFaultPoint = "after_active_validation"
-	vNextPublicationBeforeCommitSync        vNextPublicationFaultPoint = "before_commit_sync"
-	vNextPublicationAfterCommitSync         vNextPublicationFaultPoint = "after_commit_sync"
-	vNextPublicationBeforePrune             vNextPublicationFaultPoint = "before_prune"
-	vNextPublicationAfterPrune              vNextPublicationFaultPoint = "after_prune"
-	vNextPublicationBeforeStageCleanup      vNextPublicationFaultPoint = "before_stage_cleanup"
-	vNextPublicationAfterLockAcquire        vNextPublicationFaultPoint = "after_lock_acquire"
-	vNextPublicationBeforeStageRename       vNextPublicationFaultPoint = "before_stage_rename"
-	vNextPublicationAfterStageRename        vNextPublicationFaultPoint = "after_stage_rename"
-	vNextPublicationBeforeStageRemoval      vNextPublicationFaultPoint = "before_stage_removal"
-	vNextPublicationBeforeGenerationRemoval vNextPublicationFaultPoint = "before_generation_removal"
-	vNextPublicationBeforeControlRemoval    vNextPublicationFaultPoint = "before_control_removal"
+	vNextPublicationBeforeFileSync                 vNextPublicationFaultPoint = "before_file_sync"
+	vNextPublicationAfterFileSync                  vNextPublicationFaultPoint = "after_file_sync"
+	vNextPublicationBeforeStageDirectory           vNextPublicationFaultPoint = "before_stage_directory_sync"
+	vNextPublicationAfterStageDirectory            vNextPublicationFaultPoint = "after_stage_directory_sync"
+	vNextPublicationBeforeJournalSync              vNextPublicationFaultPoint = "before_journal_sync"
+	vNextPublicationAfterJournalSync               vNextPublicationFaultPoint = "after_journal_sync"
+	vNextPublicationBeforeCurrentTempSync          vNextPublicationFaultPoint = "before_current_temp_sync"
+	vNextPublicationAfterCurrentTempSync           vNextPublicationFaultPoint = "after_current_temp_sync"
+	vNextPublicationBeforeCurrentRename            vNextPublicationFaultPoint = "before_current_rename"
+	vNextPublicationAfterCurrentRename             vNextPublicationFaultPoint = "after_current_rename"
+	vNextPublicationBeforeCurrentParent            vNextPublicationFaultPoint = "before_current_parent_sync"
+	vNextPublicationAfterCurrentParent             vNextPublicationFaultPoint = "after_current_parent_sync"
+	vNextPublicationBeforeActiveValidate           vNextPublicationFaultPoint = "before_active_validation"
+	vNextPublicationAfterActiveValidate            vNextPublicationFaultPoint = "after_active_validation"
+	vNextPublicationBeforeCommitSync               vNextPublicationFaultPoint = "before_commit_sync"
+	vNextPublicationAfterCommitSync                vNextPublicationFaultPoint = "after_commit_sync"
+	vNextPublicationBeforePrune                    vNextPublicationFaultPoint = "before_prune"
+	vNextPublicationAfterPrune                     vNextPublicationFaultPoint = "after_prune"
+	vNextPublicationBeforeStageCleanup             vNextPublicationFaultPoint = "before_stage_cleanup"
+	vNextPublicationAfterLockAcquire               vNextPublicationFaultPoint = "after_lock_acquire"
+	vNextPublicationBeforeStageRename              vNextPublicationFaultPoint = "before_stage_rename"
+	vNextPublicationAfterStageRename               vNextPublicationFaultPoint = "after_stage_rename"
+	vNextPublicationBeforeStageRemoval             vNextPublicationFaultPoint = "before_stage_removal"
+	vNextPublicationBeforeGenerationRemoval        vNextPublicationFaultPoint = "before_generation_removal"
+	vNextPublicationBeforeControlRemoval           vNextPublicationFaultPoint = "before_control_removal"
+	vNextPublicationAfterControlSourceIdentity     vNextPublicationFaultPoint = "after_control_source_identity"
+	vNextPublicationAfterStageRemovalIdentity      vNextPublicationFaultPoint = "after_stage_removal_identity"
+	vNextPublicationAfterGenerationRemovalIdentity vNextPublicationFaultPoint = "after_generation_removal_identity"
+	vNextPublicationAfterGenerationLeaseIdentity   vNextPublicationFaultPoint = "after_generation_lease_identity"
+	vNextPublicationAfterControlRemovalIdentity    vNextPublicationFaultPoint = "after_control_removal_identity"
 )
 
 // vNextPublicationHooks is test-only fault instrumentation for durable state
@@ -194,14 +197,14 @@ func (p *vNextGenerationPublisher) openOperationRoot(ctx context.Context, create
 	return &vNextPublicationOperation{connector: connector}, nil
 }
 
-func (p *vNextGenerationPublisher) acquireOperation(ctx context.Context, operation *vNextPublicationOperation, mode int, create bool) error {
+func (p *vNextGenerationPublisher) acquireOperation(ctx context.Context, operation *vNextPublicationOperation, mode int) error {
 	if operation == nil || operation.connector == nil {
 		return fs.ErrClosed
 	}
 	if err := ctx.Err(); err != nil {
 		return err
 	}
-	lock, identity, err := vNextPublicationOpenLock(operation.connector, create)
+	lock, identity, err := vNextPublicationOpenLock(operation.connector)
 	if err != nil {
 		return err
 	}
@@ -265,7 +268,7 @@ func (p *vNextGenerationPublisher) openOperation(ctx context.Context, mode int, 
 	if err != nil {
 		return nil, err
 	}
-	if err := p.acquireOperation(ctx, operation, mode, create); err != nil {
+	if err := p.acquireOperation(ctx, operation, mode); err != nil {
 		operation.close()
 		return nil, err
 	}
@@ -777,21 +780,30 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 	if err := operation.assertLockBound(); err != nil {
 		return err
 	}
-	temporaryName, temporary, err := vNextPublicationCreateTemp(operation.connector)
+	temporaryName, temporaryRoot, temporary, err := vNextPublicationCreateTemp(operation.connector)
 	if err != nil {
+		return err
+	}
+	temporaryRootIdentity, err := vNextPublicationIdentityFromFile(temporaryRoot.file, "publication temporary root")
+	if err != nil {
+		_ = temporary.Close()
+		_ = temporaryRoot.Close()
 		return err
 	}
 	identity, err := vNextPublicationIdentityFromFile(temporary, "publication temporary")
 	if err != nil {
 		_ = temporary.Close()
+		_ = temporaryRoot.Close()
 		return err
 	}
-	renamed := false
+	moved := false
 	defer func() {
-		if !renamed {
-			_ = operation.connector.removeRegularBound(temporaryName, "publication temporary", identity)
-		}
 		_ = temporary.Close()
+		if !moved {
+			_ = temporaryRoot.removeRegularBound(vNextPublicationTemporaryFile, "publication temporary", identity)
+		}
+		_ = temporaryRoot.Close()
+		_ = operation.connector.removeEmptyDirectoryBound(temporaryName, "publication temporary root", temporaryRootIdentity)
 	}()
 	if err := temporary.Chmod(0o644); err != nil {
 		return err
@@ -817,10 +829,12 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 			return err
 		}
 	}
-	if err := operation.connector.renameBound(temporaryName, target, "publication temporary", identity); err != nil {
+	moved, err = operation.connector.renameBound(temporaryRoot, vNextPublicationTemporaryFile, target, "publication temporary", identity, func() error {
+		return p.hit(vNextPublicationAfterControlSourceIdentity)
+	})
+	if err != nil {
 		return err
 	}
-	renamed = true
 	operation.bindControl(target, identity)
 	if afterRename != "" {
 		if err := p.hit(afterRename); err != nil {
@@ -843,22 +857,197 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 	return nil
 }
 
-func vNextPublicationCreateTemp(root *vNextPublicationDirectory) (string, *os.File, error) {
+const vNextPublicationTemporaryFile = "control"
+
+func vNextPublicationCreateTemp(root *vNextPublicationDirectory) (string, *vNextPublicationDirectory, *os.File, error) {
 	var token [16]byte
 	for range 128 {
 		if _, err := cryptorand.Read(token[:]); err != nil {
-			return "", nil, fmt.Errorf("generate publication temporary name: %w", err)
+			return "", nil, nil, fmt.Errorf("generate publication temporary name: %w", err)
 		}
 		name := ".connectorgen-publication-" + hex.EncodeToString(token[:])
-		file, err := root.openFile(name, "publication temporary", unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o644, false)
+		if err := unix.Mkdirat(int(root.file.Fd()), name, 0o700); err != nil {
+			if errors.Is(err, fs.ErrExist) {
+				continue
+			}
+			return "", nil, nil, fmt.Errorf("create publication temporary root: %w", err)
+		}
+		temporaryRoot, err := root.openDirectory(name, "publication temporary root")
+		if err != nil {
+			return "", nil, nil, err
+		}
+		file, err := temporaryRoot.openFile(vNextPublicationTemporaryFile, "publication temporary", unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o644, false)
 		if err == nil {
-			return name, file, nil
+			return name, temporaryRoot, file, nil
+		}
+		_ = temporaryRoot.Close()
+		if rootIdentity, identityErr := root.identityAt(name, "publication temporary root"); identityErr == nil {
+			_ = root.removeEmptyDirectoryBound(name, "publication temporary root", rootIdentity)
 		}
 		if !errors.Is(err, fs.ErrExist) {
-			return "", nil, err
+			return "", nil, nil, err
 		}
 	}
-	return "", nil, fmt.Errorf("create publication temporary file: exhausted unique names")
+	return "", nil, nil, fmt.Errorf("create publication temporary root: exhausted unique names")
+}
+
+const vNextPublicationQuarantineMember = "candidate"
+
+type vNextPublicationRemovalBinding struct {
+	name     string
+	label    string
+	identity vNextPublicationIdentity
+}
+
+func vNextPublicationCreateQuarantine(root *vNextPublicationDirectory) (string, *vNextPublicationDirectory, vNextPublicationIdentity, error) {
+	var token [16]byte
+	for range 128 {
+		if _, err := cryptorand.Read(token[:]); err != nil {
+			return "", nil, vNextPublicationIdentity{}, fmt.Errorf("generate publication quarantine name: %w", err)
+		}
+		name := ".connectorgen-quarantine-" + hex.EncodeToString(token[:])
+		if err := unix.Mkdirat(int(root.file.Fd()), name, 0o700); err != nil {
+			if errors.Is(err, fs.ErrExist) {
+				continue
+			}
+			return "", nil, vNextPublicationIdentity{}, fmt.Errorf("create publication quarantine: %w", err)
+		}
+		quarantine, err := root.openDirectory(name, "publication quarantine")
+		if err != nil {
+			return "", nil, vNextPublicationIdentity{}, err
+		}
+		identity, err := vNextPublicationIdentityFromFile(quarantine.file, "publication quarantine")
+		if err == nil {
+			return name, quarantine, identity, nil
+		}
+		_ = quarantine.Close()
+		if rootIdentity, identityErr := root.identityAt(name, "publication quarantine"); identityErr == nil {
+			_ = root.removeEmptyDirectoryBound(name, "publication quarantine", rootIdentity)
+		}
+		return "", nil, vNextPublicationIdentity{}, err
+	}
+	return "", nil, vNextPublicationIdentity{}, fmt.Errorf("create publication quarantine: exhausted unique names")
+}
+
+func vNextPublicationAssertRemovalBindings(root *vNextPublicationDirectory, bindings []vNextPublicationRemovalBinding) error {
+	for _, binding := range bindings {
+		if err := root.assertIdentity(binding.name, binding.label, binding.identity); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func vNextPublicationRestoreQuarantined(parent *vNextPublicationDirectory, name, label string, quarantine *vNextPublicationDirectory, candidateIdentity vNextPublicationIdentity) error {
+	if err := quarantine.assertIdentity(vNextPublicationQuarantineMember, label, candidateIdentity); err != nil {
+		return err
+	}
+	if _, err := parent.identityAt(name, label); err == nil {
+		return fmt.Errorf("%s identity changed while restoring quarantined candidate", label)
+	} else if !errors.Is(err, fs.ErrNotExist) {
+		return err
+	}
+	return parent.renameFrom(quarantine, vNextPublicationQuarantineMember, name)
+}
+
+func vNextPublicationRefuseQuarantinedReplacement(parent *vNextPublicationDirectory, name, label string, quarantine *vNextPublicationDirectory, candidateIdentity vNextPublicationIdentity) error {
+	cause := fmt.Errorf("%s identity changed", label)
+	if err := vNextPublicationRestoreQuarantined(parent, name, label, quarantine, candidateIdentity); err != nil {
+		return fmt.Errorf("%w; retain quarantined candidate: %v", cause, err)
+	}
+	return cause
+}
+
+func (p *vNextGenerationPublisher) removeRegularQuarantinedLocked(parent *vNextPublicationDirectory, name, label string, file *os.File, identity vNextPublicationIdentity, afterIdentity vNextPublicationFaultPoint) error {
+	actual, err := vNextPublicationIdentityFromFile(file, label)
+	if err != nil {
+		return err
+	}
+	if actual != identity {
+		return fmt.Errorf("%s identity changed", label)
+	}
+	if err := parent.assertIdentity(name, label, identity); err != nil {
+		return err
+	}
+	if afterIdentity != "" {
+		if err := p.hit(afterIdentity); err != nil {
+			return err
+		}
+	}
+	quarantineName, quarantine, quarantineIdentity, err := vNextPublicationCreateQuarantine(parent)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		_ = parent.removeEmptyDirectoryBound(quarantineName, "publication quarantine", quarantineIdentity)
+	}()
+	defer quarantine.Close()
+
+	if err := quarantine.renameFrom(parent, name, vNextPublicationQuarantineMember); err != nil {
+		return err
+	}
+	candidateIdentity, err := quarantine.identityAt(vNextPublicationQuarantineMember, label)
+	if err != nil {
+		return err
+	}
+	if candidateIdentity != identity {
+		return vNextPublicationRefuseQuarantinedReplacement(parent, name, label, quarantine, candidateIdentity)
+	}
+	return quarantine.removeRegularBound(vNextPublicationQuarantineMember, label, identity)
+}
+
+func (p *vNextGenerationPublisher) removeTreeQuarantinedLocked(parent *vNextPublicationDirectory, name, label string, root *vNextPublicationDirectory, identity vNextPublicationIdentity, bindings []vNextPublicationRemovalBinding, afterBindings, afterEntry vNextPublicationFaultPoint) error {
+	actual, err := vNextPublicationIdentityFromFile(root.file, label)
+	if err != nil {
+		return err
+	}
+	if actual != identity {
+		return fmt.Errorf("%s identity changed", label)
+	}
+	if err := vNextPublicationAssertRemovalBindings(root, bindings); err != nil {
+		return err
+	}
+	if afterBindings != "" {
+		if err := p.hit(afterBindings); err != nil {
+			return err
+		}
+	}
+	if err := parent.assertIdentity(name, label, identity); err != nil {
+		return err
+	}
+	if afterEntry != "" {
+		if err := p.hit(afterEntry); err != nil {
+			return err
+		}
+	}
+	quarantineName, quarantine, quarantineIdentity, err := vNextPublicationCreateQuarantine(parent)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		_ = parent.removeEmptyDirectoryBound(quarantineName, "publication quarantine", quarantineIdentity)
+	}()
+	defer quarantine.Close()
+
+	if err := quarantine.renameFrom(parent, name, vNextPublicationQuarantineMember); err != nil {
+		return err
+	}
+	candidateIdentity, err := quarantine.identityAt(vNextPublicationQuarantineMember, label)
+	if err != nil {
+		return err
+	}
+	if candidateIdentity != identity {
+		return vNextPublicationRefuseQuarantinedReplacement(parent, name, label, quarantine, candidateIdentity)
+	}
+	candidate, err := quarantine.openDirectory(vNextPublicationQuarantineMember, label)
+	if err != nil {
+		return vNextPublicationRefuseQuarantinedReplacement(parent, name, label, quarantine, candidateIdentity)
+	}
+	defer candidate.Close()
+	if err := vNextPublicationAssertRemovalBindings(candidate, bindings); err != nil {
+		return vNextPublicationRefuseQuarantinedReplacement(parent, name, label, quarantine, candidateIdentity)
+	}
+	return quarantine.removeTreeBound(vNextPublicationQuarantineMember, label, candidate, identity)
 }
 
 func (p *vNextGenerationPublisher) readCurrentLocked(operation *vNextPublicationOperation) (vNextGenerationPointer, bool, error) {
@@ -1153,7 +1342,7 @@ func (p *vNextGenerationPublisher) removeControlLocked(operation *vNextPublicati
 	if err := p.hit(vNextPublicationBeforeControlRemoval); err != nil {
 		return err
 	}
-	if err := operation.connector.removeRegularBound(name, "publication control", identity); err != nil {
+	if err := p.removeRegularQuarantinedLocked(operation.connector, name, "publication control", file, identity, vNextPublicationAfterControlRemovalIdentity); err != nil {
 		return err
 	}
 	operation.clearControl(name)
@@ -1255,7 +1444,7 @@ func (p *vNextGenerationPublisher) removeStageBoundLocked(operation *vNextPublic
 	if err := p.hit(vNextPublicationBeforeStageRemoval); err != nil {
 		return err
 	}
-	return operation.generations.removeTreeBound(name, fmt.Sprintf("stale staging directory %q", name), stage, identity)
+	return p.removeTreeQuarantinedLocked(operation.generations, name, fmt.Sprintf("stale staging directory %q", name), stage, identity, nil, "", vNextPublicationAfterStageRemovalIdentity)
 }
 
 func (p *vNextGenerationPublisher) validateStageOwnerLocked(root *vNextPublicationDirectory, stage, generation string) error {
@@ -1338,10 +1527,20 @@ func (p *vNextGenerationPublisher) removeGenerationLocked(operation *vNextPublic
 	if err := p.hit(vNextPublicationBeforeGenerationRemoval); err != nil {
 		return err
 	}
-	if err := generationRoot.assertIdentity(vNextPublicationLeaseFile, fmt.Sprintf("generation lease %q", generation), leaseIdentity); err != nil {
-		return err
-	}
-	return operation.generations.removeTreeBound(generation, fmt.Sprintf("generation %q", generation), generationRoot, identity)
+	return p.removeTreeQuarantinedLocked(
+		operation.generations,
+		generation,
+		fmt.Sprintf("generation %q", generation),
+		generationRoot,
+		identity,
+		[]vNextPublicationRemovalBinding{{
+			name:     vNextPublicationLeaseFile,
+			label:    fmt.Sprintf("generation lease %q", generation),
+			identity: leaseIdentity,
+		}},
+		vNextPublicationAfterGenerationLeaseIdentity,
+		vNextPublicationAfterGenerationRemovalIdentity,
+	)
 }
 
 func (p *vNextGenerationPublisher) assertNoOrphansLocked(operation *vNextPublicationOperation, active string) error {
@@ -1416,29 +1615,8 @@ func vNextPublicationAcquireLock(ctx context.Context, lock *os.File, mode int, l
 	}
 }
 
-func vNextPublicationOpenLock(root *vNextPublicationDirectory, create bool) (*os.File, vNextPublicationIdentity, error) {
-	if create {
-		lock, err := root.openFile(vNextPublicationLockFile, "connector publication lock", unix.O_CREAT|unix.O_EXCL|unix.O_RDWR, 0o600, false)
-		if err == nil {
-			identity, identityErr := vNextPublicationIdentityFromFile(lock, "connector publication lock")
-			if identityErr != nil {
-				_ = lock.Close()
-				return nil, vNextPublicationIdentity{}, identityErr
-			}
-			if err := vNextPublicationEnsureLockAnchor(root, identity, true); err != nil {
-				_ = lock.Close()
-				return nil, vNextPublicationIdentity{}, err
-			}
-			return lock, identity, nil
-		}
-		if !errors.Is(err, fs.ErrExist) {
-			return nil, vNextPublicationIdentity{}, err
-		}
-	}
-	lock, err := root.openRegular(vNextPublicationLockFile, "connector publication lock", unix.O_RDWR)
-	if errors.Is(err, fs.ErrNotExist) && !create {
-		return nil, vNextPublicationIdentity{}, fmt.Errorf("open existing connector publication lock: %w", err)
-	}
+func vNextPublicationOpenLock(root *vNextPublicationDirectory) (*os.File, vNextPublicationIdentity, error) {
+	lock, err := root.duplicateFile("connector publication lock")
 	if err != nil {
 		return nil, vNextPublicationIdentity{}, err
 	}
@@ -1447,40 +1625,21 @@ func vNextPublicationOpenLock(root *vNextPublicationDirectory, create bool) (*os
 		_ = lock.Close()
 		return nil, vNextPublicationIdentity{}, err
 	}
-	if err := vNextPublicationEnsureLockAnchor(root, identity, false); err != nil {
+	rootIdentity, err := vNextPublicationIdentityFromFile(root.file, "connector publication root")
+	if err != nil {
 		_ = lock.Close()
 		return nil, vNextPublicationIdentity{}, err
+	}
+	if rootIdentity != identity {
+		_ = lock.Close()
+		return nil, vNextPublicationIdentity{}, fmt.Errorf("connector publication root identity changed")
 	}
 	return lock, identity, nil
 }
 
-// vNextPublicationEnsureLockAnchor creates the companion only with a newly
-// created lock. Reconstructing a missing companion for an existing pathname
-// could turn a replacement inode into a second lock domain.
-
-func vNextPublicationEnsureLockAnchor(root *vNextPublicationDirectory, identity vNextPublicationIdentity, create bool) error {
-	anchor, err := root.identityAt(vNextPublicationLockAnchorFile, "connector publication lock anchor")
-	if errors.Is(err, fs.ErrNotExist) {
-		if !create {
-			return fmt.Errorf("open existing connector publication lock anchor: %w", err)
-		}
-		if err := root.linkBound(vNextPublicationLockFile, vNextPublicationLockAnchorFile, "connector publication lock anchor", identity); err != nil && !errors.Is(err, fs.ErrExist) {
-			return err
-		}
-		anchor, err = root.identityAt(vNextPublicationLockAnchorFile, "connector publication lock anchor")
-	}
-	if err != nil {
-		return err
-	}
-	if anchor != identity {
-		return fmt.Errorf("connector publication lock anchor identity changed")
-	}
-	return nil
-}
-
-// vNextPublicationAssertLockBound verifies the descriptor and both directory
-// entries still name the one inode protected by the acquired Flock.
-
+// vNextPublicationAssertLockBound keeps the complete operation on the retained
+// connector-directory inode. Sibling lock files cannot establish another Flock
+// domain because this check never treats them as serialization authority.
 func vNextPublicationAssertLockBound(root *vNextPublicationDirectory, lock *os.File, identity vNextPublicationIdentity) error {
 	actual, err := vNextPublicationIdentityFromFile(lock, "connector publication lock")
 	if err != nil {
@@ -1489,10 +1648,14 @@ func vNextPublicationAssertLockBound(root *vNextPublicationDirectory, lock *os.F
 	if actual != identity {
 		return fmt.Errorf("connector publication lock identity changed")
 	}
-	if err := root.assertIdentity(vNextPublicationLockFile, "connector publication lock", identity); err != nil {
+	rootIdentity, err := vNextPublicationIdentityFromFile(root.file, "connector publication root")
+	if err != nil {
 		return err
 	}
-	return root.assertIdentity(vNextPublicationLockAnchorFile, "connector publication lock anchor", identity)
+	if rootIdentity != identity {
+		return fmt.Errorf("connector publication root identity changed")
+	}
+	return nil
 }
 
 func (p *vNextGenerationPublisher) hit(point vNextPublicationFaultPoint) error {

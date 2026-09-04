@@ -401,3 +401,17 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 - Required next gate: one ordinary commit and push of this exact candidate,
   PR #4294 API base/head/SHA read-back, status update, then pause unchanged for
   Firstmate's independent exact-SHA review. CP12 remains prohibited.
+
+## 2026-09-04 — CP11 exact-review continuation intake (instruction 132)
+
+- Fresh independent exact-SHA review BLOCKed `d3661661dbd1646376e0fbae6d73ab658532a153`; the report is `data/cli-batch1-cp11-repair-r2-final-review-r1/report.md` and was read in full. It authorizes only F1 late rename-source binding, F2 late cleanup/quarantine binding, F3 matched sibling lock-pair serialization, and F4 behavior-appropriate source-lock-vNext Atlas witnesses.
+- The review's concrete defect statements, not the prior candidate's passing suite, are the completion contract. In particular, a pathname precheck before `renameat`/`unlinkat` is not identity binding; a missing-anchor test is not a matched-pair test; and a resolving Atlas symbol is not evidence that its mapped physical/durability claim actually ran.
+- Manual workflow fallback remains required: the GSD adapter's known issue prompt is absent, Firstmate forbids role spawning, and no compatible isolated reviewer is authorized. The final local review will be explicitly self-review only and cannot replace the next Firstmate exact-SHA review.
+
+## 2026-09-04 — CP11 exact-review continuation local self-review (instruction 132)
+
+- **F1:** `writeAtomicLocked` now creates the source only as `control` in a retained private directory. `renameBound` rechecks that exact source before descriptor-relative rename; deferred cleanup cannot unlink a late replacement.
+- **F2:** regular controls and tree cleanup use the same quarantine protocol: retain validated descriptors, move the public entry into a private descriptor-confined directory, recheck candidate and lease identities, then delete only the private candidate. A mismatch restores the candidate when safe or leaves both objects intact.
+- **F3:** the operation lock is a duplicated retained connector-directory descriptor. No production code reads, creates, or trusts `.connectorgen.lock`/anchor siblings, so a self-consistent replacement pair cannot split the Flock domain.
+- **F4:** the source-lock-vNext Atlas now maps only physical/durable behavior witnesses for closed trees, publisher-written stages, late cleanup, and matched pairs. The in-memory comparator is no longer a publication-guarantee witness.
+- **Scope/maintenance:** no runtime route, source lock, rendered execution JSON, provider, credential, database, cache, certification residue, release automation, or CP12 surface changed. Full normal/race package, corpus, definition, docs, static, contract, build, and diff gates are recorded in `VERIFICATION.md`. No additional local finding remains; fresh Firstmate exact-SHA review is still mandatory after ordinary push.

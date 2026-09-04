@@ -519,3 +519,21 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
   - `go vet ./cmd/connectorgen`, `go mod tidy -diff`, and `go run ./cmd/agentcontractgen check` → `ok`.
 - CLI help/manual/website parity: not applicable because no PM or connectorgen command, flag, output, namespace, generated manual, or website surface changed. The existing generator help was exercised as a regression check; source-lock canon and Atlas documentation changed because the authoring publication behavior changed.
 - Manual GSD verification fallback: `verify-work` and `code-review` prompts were generated after the earlier discuss/plan/execute prompts. The adapter has no compatible authorized isolated worker/reviewer, so deterministic tests and this inline self-review are the local evidence; they do not substitute for Firstmate's required fresh exact-SHA review after the normal push.
+
+## CP11 exact-review continuation verification plan — instruction 132
+
+- F1: run separate late-bound private-source replacements for `CURRENT` and `JOURNAL`; refusal must preserve prior control bytes, moved original temporary, and replacement.
+- F2: run late stage, pruning-generation, lease-only, rollback-generation, `CURRENT`, and `JOURNAL` replacement tests. Each must prove the operation neither deletes the moved validated object nor the later replacement.
+- F3: while the first publisher holds the retained connector-directory lock, replace both sibling lock names with a self-consistent pair. The second publisher must not reach a mutation fault point; after the first completes, recovery and a new publish must work.
+- F4: Atlas mapping checks must name physical closed-publication and durable-marker tests, the new lease/current/matched-pair refusal witnesses, and the existing staged command physical preflight witnesses. No unrelated Atlas record is changed.
+- Gates after GREEN: focused normal and race selectors, complete normal and race `cmd/connectorgen`, `make connectorgen-vnext-locks`, definition validation, docs/Atlas JSON, vet, build, agent-contract, tidy, exact diff, read-only self-review, normal push, PR API base/head/SHA read-back, external status update, archive `132.msg`, and a fresh Firstmate exact-SHA pause. No standalone adversarial program, provider, credential, or CP12 operation is permitted.
+
+## CP11 exact-review continuation local results — instruction 132
+
+- **Focused GREEN:** the F1–F4 publication/Atlas proof selector passed in 7.962s, including both late atomic controls, all late quarantine cleanup boundaries, matched-pair serialization, physical closed-tree and durable-stage witnesses, invalid-lease refusal, and Atlas selector resolution.
+- **Normal package GREEN:** `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` in 61.981s.
+- **TDD provenance:** the corresponding executable RED/GREEN observations are recorded in `TDD-LEDGER.md` under the instruction 132 actual section. F4 is a documented mapping-evidence correction: the report's source-level proof mismatch is the RED evidence; the added physical/durable tests are the GREEN proof. No fabricated failing runtime test was used.
+- **Race package GREEN:** `go test -race -count=1 -timeout 20m ./cmd/connectorgen` → `ok` in 329.199s.
+- **Corpus/definition/Atlas GREEN:** `make connectorgen-vnext-locks` → `ok` in 32.693s; `go run ./cmd/connectorgen validate internal/connectors/defs` checked 553 connectors with 0 findings; `TestFoundationAtlasSelectorsResolve` passed.
+- **Maintenance GREEN:** `make docs-check`, `go vet ./cmd/connectorgen`, `go mod tidy -diff`, `go build ./cmd/pm`, `go run ./cmd/agentcontractgen check`, and `git diff --check` passed.
+- **Read-only smoke boundary:** top-level `go run ./cmd/connectorgen --help` rendered usage. `lock-render --help` is not a supported subcommand form and returns its existing usage error; a real checked-in connector `lock-render --check` stops at the expected absent `generations/` directory because this checkpoint deliberately does not materialize a publication corpus. The temporary-root package proofs above exercise publish/check behavior without changing definition state.

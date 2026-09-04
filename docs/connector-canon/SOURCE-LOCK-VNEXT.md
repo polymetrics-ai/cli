@@ -163,20 +163,17 @@ with `unsupported`.
    file plus `manifest.json`, `provenance.json`, `atlas.json`, `index.json`,
    and `proof.json`. The author-owned `source.lock.json` is never a candidate
    member.
-9. After the entire candidate has been admitted in memory, acquire only the
-   target connector's publication lock through that same retained connector
-   descriptor, then reread the source lock through it under the lock. The lock
-   pathname and its `.connectorgen.lock.anchor` companion must name the same
-   verified inode. The companion is linked only when a new lock is created; a
-   missing companion for an existing lock refuses rather than rebuilding a
-   possibly separate lock domain. Keep the acquired lock descriptor and verify
-   both names after nonblocking acquisition and before each publication state
-   transition; replacing the lock pathname therefore refuses instead of
-   creating a second lock domain. If the source bytes changed during admission,
-   refuse the operation and require a retry. Only then open or create the
-   `generations/` directory and retain its verified descriptor for the rest of
-   the operation. Read lock/control files, stages, leases, and every cleanup
-   target through these descriptors only.
+9. After the entire candidate has been admitted in memory, acquire the target
+   connector's publication lock by duplicating that same retained
+   connector-directory descriptor and taking a nonblocking `Flock` on the
+   duplicate. The lock descriptor and retained connector descriptor must keep
+   the same verified directory inode through the operation. Sibling
+   `.connectorgen.lock` or anchor files are never serialization authority, so a
+   matched replacement sibling pair cannot establish a second lock domain. If
+   the source bytes changed during admission, refuse the operation and require
+   a retry. Only then open or create the `generations/` directory and retain its
+   verified descriptor for the rest of the operation. Read lock/control files,
+   stages, leases, and every cleanup target through these descriptors only.
    After a successful nonblocking lock acquisition, recheck the signal context
    and unlock before any mutation when it was cancelled. Recover any interrupted
    prior publication from its typed journal before staging a new candidate.
@@ -198,28 +195,30 @@ with `unsupported`.
 13. Persist and fsync a typed `state:"prepared"` recovery journal
     `{old,new,state}` **before** the same-directory rename that activates the
     completed stage as `generations/<content-digest>/`; no final-generation
-    rename is allowed before that journal is durable. Temporary `CURRENT` and
-    `JOURNAL` files keep their verified open-file identity through the final
-    atomic rename; a swapped temporary refuses without altering the prior
-    control. Fsync the `generations/` descriptor after the rename, then
-    atomically replace `CURRENT` with the new generation and integrity digest
-    and fsync its containing descriptor. `CURRENT`, the journal,
-    `integrity.json` (including each file entry), and the stage marker are
-    bounded, no-follow, strict JSON documents: duplicate members and trailing
-    values are invalid.
-14. Revalidate the selected `CURRENT` generation, including its recomputed
-    content address, mark the journal committed, and clear it only after the
-    active generation is complete. A failed active validation restores the old
-    `CURRENT` (or removes it for a first publish) and removes the rejected
-    generation. The validated `CURRENT` or `JOURNAL` descriptor remains bound
-    through cleanup; a replacement refuses and preserves both objects.
+    rename is allowed before that journal is durable. A `CURRENT` or `JOURNAL`
+    temporary is the `control` child of a retained private
+    `.connectorgen-publication-*` directory directly below the connector root.
+    Its source child identity is rechecked immediately before the
+    descriptor-relative final rename; a swapped source refuses without altering
+    the prior control or deleting either temporary object. Fsync the
+    `generations/` descriptor after the rename, then atomically replace
+    `CURRENT` with the new generation and integrity digest and fsync its
+    containing descriptor. `CURRENT`, the journal, `integrity.json` (including
+    each file entry), and the stage marker are bounded, no-follow, strict JSON
+    documents: duplicate members and trailing values are invalid.
+14. Revalidate the selected `CURRENT` generation, mark the journal committed,
+    and clear it only after the active generation is complete. A failed active
+    validation restores the old `CURRENT` (or removes it for a first publish)
+    and removes the rejected generation. Every destructive cleanup first
+    rechecks the retained descriptor-bound target, moves it into a private
+    `.connectorgen-quarantine-*` directory under its retained parent, then
+    rechecks the quarantined candidate and any lease binding before deletion.
+    A replacement at any boundary refuses and preserves both the original and
+    replacement rather than deleting either object.
 15. Prune only stale generations whose closed tree and integrity prove publisher
     ownership and whose per-generation lease can be acquired exclusively. A
-    validated stage, generation, and lease keep their descriptor identities
-    through recovery, pruning, and rollback removal; a replacement refuses
-    rather than deleting either the original or replacement. A reader holds
-    that lease from reading `CURRENT` until it releases its handle, so an
-    in-use old generation—and any unowned directory—remains intact.
+    reader holds that lease from reading `CURRENT` until it releases its handle,
+    so an in-use old generation—and any unowned directory—remains intact.
 
 The `CURRENT` pointer is the only generation selection authority for a
 publication root. A reader observes either the prior complete generation or the

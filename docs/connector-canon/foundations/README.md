@@ -45,10 +45,12 @@ connector-specific adapter, not for another consumer.
 
 `authoring.source-lock-vnext.v1` additionally records its bounded
 `publication_guarantees` separately from general authoring guarantees. Every
-mapping names exactly one behavior-granular claim, one registered positive
-proof, and one distinct refusal proof; the Atlas validator rejects a compound,
-omitted, duplicate, undeclared, or unregistered mapping. This is a
-source-lock publication contract only, not a whole-catalog proof migration.
+mapping names exactly one behavior-granular claim, one registered physical or
+durable positive proof, and one distinct refusal proof. Do not map an
+in-memory comparator to a filesystem publication guarantee. The Atlas
+validator rejects a compound, omitted, duplicate, undeclared, or unregistered
+mapping. This is a source-lock publication contract only, not a whole-catalog
+proof migration.
 
 Keep stable IDs while ownership moves. Retired IDs remain only in a current
 entry's `supersedes` list; their old commands, files, and procedures do not

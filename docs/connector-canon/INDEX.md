@@ -38,12 +38,14 @@ document conflicts with the source-lock vNext architecture, vNext controls.
   typed ownership marker, semantically revalidated by its recomputed content
   address and exact closed tree, then recorded in a durable prepared journal
   before the same-directory final-generation rename and atomic `CURRENT`
-  selection. The publication lock and its companion anchor stay bound to one
-  acquired inode; temporary controls and validated cleanup targets retain their
-  verified identities through rename or removal, so pathname replacement
-  refuses rather than opening a second lock domain or deleting a replacement.
-  Recovery uses that one journal/stage state machine; pruning starts only after
-  integrity proves publisher ownership and readers release their leases.
+  selection. The operation `Flock` is held on a duplicate of the retained
+  connector-directory inode, so lock-file or anchor sibling replacement cannot
+  create a second domain. Atomic controls use a private temporary directory;
+  destructive cleanup moves verified targets into a private quarantine and
+  rechecks them before deletion. Pathname replacement therefore refuses rather
+  than deleting a replacement. Recovery uses that one journal/stage state
+  machine; pruning starts only after integrity proves publisher ownership and
+  readers release their leases.
   Contended lock acquisition rechecks cancellation after successful nonblocking
   acquisition before mutation. This checkpoint does not materialize the
   checked-in corpus or add a runtime `CURRENT` reader.
