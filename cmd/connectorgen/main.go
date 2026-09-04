@@ -26,21 +26,30 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 )
 
 func main() {
-	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	os.Exit(runContext(ctx, os.Args[1:], os.Stdout, os.Stderr))
 }
 
 // run is the full CLI entry point (argv without the program name); it is
 // exercised directly by tests rather than shelling out to a built binary.
 func run(args []string, stdout, stderr io.Writer) int {
+	return runContext(context.Background(), args, stdout, stderr)
+}
+
+func runContext(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
 		logln(stderr, usage())
 		return 2
@@ -56,7 +65,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 	case "gen":
 		return runGen(args, stdout, stderr)
 	case "lock-render":
-		return runLockRender(args, stdout, stderr)
+		return runLockRenderContext(ctx, args, stdout, stderr)
 	case "-h", "--help", "help":
 		logln(stdout, usage())
 		return 0

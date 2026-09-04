@@ -161,26 +161,38 @@ with `unsupported`.
    file plus `manifest.json`, `provenance.json`, `atlas.json`, `index.json`,
    and `proof.json`. The author-owned `source.lock.json` is never a candidate
    member.
-9. Acquire the target connector's publication lock only. Recover any interrupted
-   prior publication from its typed journal before staging a new candidate.
-   Publication never spans connectors.
+9. Acquire only the target connector's publication lock through a
+   descriptor-relative root; connector roots and lock files must be real,
+   non-symlinked entries. The CLI's signal context makes contended acquisition
+   cancellable. Recover any interrupted prior publication from its typed journal
+   before staging a new candidate. Publication never spans connectors.
 10. Create a same-filesystem temporary directory directly below that connector's
-    `generations/` directory, write the entire candidate there, reject unsafe
-    paths and symlinks, write its file-digest `integrity.json`, then fsync every
-    file and the staged directory.
-11. Validate the physical staged files through the same in-memory loader,
+    `generations/` directory. First write and fsync a typed stage-ownership
+    marker binding its version, connector, content generation, and stage name.
+    Recovery removes only a marker-proven stage; an unknown or malformed
+    `.stage-*` directory is preserved and refuses the operation.
+11. Write the entire candidate, an empty per-generation lease, and its
+    file-digest `integrity.json`; reject unsafe paths and symlinks, then fsync
+    every file and staged directory.
+12. Validate the physical staged files through the same in-memory loader,
     selected runtime identity, manifest/index construction, and
-    `commandrunner.Preflight`. This validation performs no credential,
-    provider, or transport I/O.
-12. Record and fsync a recovery journal `{old,new,state}`; atomically rename
+    `commandrunner.Preflight`. Each validation recomputes the framed
+    content-generation address from the closed artifact bytes, requires the
+    exact declared directory/member set and empty lease, and performs no
+    credential, provider, or transport I/O.
+13. Record and fsync a recovery journal `{old,new,state}`; atomically rename
     the completed stage to `generations/<content-digest>/`; atomically replace
     `CURRENT` with the new generation and its integrity digest; and fsync the
-    containing directory after each durable rename.
-13. Revalidate the selected `CURRENT` generation, mark the journal committed,
-    and clear it only after the active generation is complete. A failed active
-    validation restores the old `CURRENT` (or removes it for a first publish)
-    and removes the rejected generation.
-14. Prune only stale generations whose closed tree and integrity prove publisher
+    containing directory after each durable rename. `CURRENT`, the journal,
+    `integrity.json` (including each file entry), and the stage marker are
+    bounded, no-follow, strict JSON documents: duplicate members and trailing
+    values are invalid.
+14. Revalidate the selected `CURRENT` generation, including its recomputed
+    content address, mark the journal committed, and clear it only after the
+    active generation is complete. A failed active validation restores the old
+    `CURRENT` (or removes it for a first publish) and removes the rejected
+    generation.
+15. Prune only stale generations whose closed tree and integrity prove publisher
     ownership and whose per-generation lease can be acquired exclusively. A
     reader holds that lease from reading `CURRENT` until it releases its handle,
     so an in-use old generation—and any unowned directory—remains intact.
@@ -188,11 +200,11 @@ with `unsupported`.
 The `CURRENT` pointer is the only generation selection authority for a
 publication root. A reader observes either the prior complete generation or the
 new complete generation—never an index from one generation with an artifact
-from another. Recovery treats an interrupted stage as stale, restores or
-validates a complete pointer, and never accepts an incomplete or symlinked
-tree. Optional files are members of the closed set: a generation that retains
-an optional file absent from the candidate fails validation rather than
-silently inheriting it.
+from another. Recovery treats an interrupted stage as stale only after its
+durable ownership proof; it never accepts an incomplete, renamed,
+self-consistent, symlinked, or otherwise non-exact tree. Optional files are
+members of the closed set: a generation that retains an optional file absent
+from the candidate fails validation rather than silently inheriting it.
 
 The outputs inside a published generation are:
 
@@ -203,7 +215,9 @@ The outputs inside a published generation are:
 - `cli_surface.json` when CLI root content or commands exist;
 - the explicitly allowed optional execution files;
 - publication metadata: `manifest.json`, `provenance.json`, `atlas.json`,
-  `index.json`, `proof.json`, and `integrity.json`.
+  `index.json`, and `proof.json`;
+- publication control members: `integrity.json`, `.lease`, and the durable
+  `.connectorgen-stage.json` ownership marker; none is a runtime artifact.
 
 `--check` performs the same canonicalization, semantic admission, rendering,
 closed-set construction, and staged-file validation in memory. It then requires

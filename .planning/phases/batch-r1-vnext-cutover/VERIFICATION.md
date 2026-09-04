@@ -335,3 +335,77 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
   phase-evidence file found no private-key, GitHub-token, OpenAI-token, or
   AWS-key signature. The scan deliberately excluded untouched untracked
   `.cache/` and certification residue.
+
+## CP11 exact-review correction verification plan
+
+- Exact authority: instruction `126.msg` permits five corrections only from
+  `c4f0bc3728dda318ea3d01f78de7aa299b6135cb`; CP12 remains prohibited.
+- Observable temporary-root proof: test root/lock symlink refusal with
+  external sentinels; unknown-stage preservation across every public operation;
+  renamed/self-consistent generation, unexpected-directory, and nonempty-lease
+  rejection; oversized/duplicate control-document refusal; and context
+  cancellation with unchanged `CURRENT`/journal plus successful retry.
+- Required execution: focused RED/GREEN selectors after each behavior;
+  race publisher suite; full `./cmd/connectorgen`; affected engine/index/
+  commandrunner packages; `make connectorgen-vnext-locks`; canon/Atlas JSON
+  and selector checks; vet; `go build -o /dev/null ./cmd/pm`; docs validation;
+  agent-contract and definitions validation; diff/secret checks; and the
+  documented `internal/cli` baseline run.
+- Parity: no PM command/flag/help/manual/website behavior is intended. Exercise
+  unchanged `connectorgen --help`; update only canonical authoring/Atlas claims
+  if the corrected filesystem, strict-control, or cancellation contract changes.
+- Review/delivery: append the inline manual-GSD result and read-only
+  self-review to phase evidence; normally push one checkpoint; verify PR #4294
+  API base=`main`, expected head ref, draft/open state, and exact SHA; then
+  pause unchanged for Firstmate's new exact-SHA CP11 review.
+
+## 2026-09-04 — CP11 exact-review correction verification
+
+- Authority/scope: instruction `126.msg` permits only the five publication
+  corrections from `c4f0bc3728dda318ea3d01f78de7aa299b6135cb`. All observable
+  proofs use hermetic temporary publication roots. No checked-in connector or
+  source lock was materialized; no provider, credential, database,
+  certification, runtime-route, cross-connector, or CP12 work occurred.
+- RED/GREEN record: `TDD-LEDGER.md` records the observed root/stage/tree/control
+  REDs, the blocking-Flock manual RED fallback, and exact GREEN dispositions.
+  `REVIEW-CONVERGENCE.md` records the required inline/manual local review and
+  its non-substitution for Firstmate's pending independent review.
+- Correction selector GREEN:
+  `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextGenerationPublisherRefusesSymlinkedConnectorRootWithoutTouchingTarget|TestVNextGenerationPublisherRefusesSymlinkedLockWithoutTouchingTarget|TestRunLockRenderRefusesSymlinkedConnectorRootWithoutTouchingTarget|TestVNextGenerationPublisherPreservesUnownedStageAcrossMutations|TestVNextGenerationPublisherRecoversDurablyOwnedStage|TestVNextGenerationPublisherRejectsSelfConsistentRenamedGeneration|TestVNextGenerationPublisherRejectsUnexpectedDirectoryAndNonemptyLease|TestVNextGenerationPublisherRejectsDuplicatePublicationControlMembers|TestVNextGenerationPublisherRejectsOversizedIntegrityControl|TestVNextGenerationPublisherContextCancelsContendedLockWithoutStateChange|TestRunLockRenderContextCancelsContendedPublicationAndRetries)$'`
+  → `ok` (3.902s).
+- Race/concurrency GREEN:
+  `go test -race -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextGenerationPublisher.*|TestVNextPublicationGenerationIDDelimitsArtifactNamesAndBytes|TestRunLockRenderPublishesOnlyClosedGeneration|TestRunLockRenderContextCancelsContendedPublicationAndRetries)$'`
+  → `ok` (10.795s).
+- Changed-package GREEN:
+  `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (56.628s);
+  `go test -count=1 -timeout 20m ./internal/connectors/engine ./internal/connectors/manifestindex ./internal/connectors/commandrunner`
+  → `ok`.
+- Authoring/canon GREEN: `make connectorgen-vnext-locks` → `ok`;
+  `go run ./cmd/connectorgen validate internal/connectors/defs` →
+  `553 connector(s) checked, 0 findings`; `jq empty
+  docs/connector-canon/foundations/catalog.json`,
+  `bash scripts/tests/connector-canon.sh`, and
+  `go test -count=1 -timeout 20m ./cmd/connectorgen -run
+  '^TestFoundationAtlasSelectorsResolve$'` → `ok`.
+- Static/documentation GREEN: `go vet ./cmd/connectorgen`,
+  `go build -o /dev/null ./cmd/pm`, `go run ./cmd/agentcontractgen check`,
+  `make docs-check`, `go run ./cmd/connectorgen --help`, and
+  `git diff --check` passed. The help output preserves the existing
+  `lock-render <connector> [--defs <dir>] [--check]` syntax; PM/manual/website
+  parity is not applicable because no PM surface changed.
+- Hygiene: a scoped changed-path scan found no private-key, GitHub-token,
+  OpenAI-token, or AWS-key marker. `make docs-check`'s transient `pm` binary
+  was removed; `.cache/` and `internal/connectors/certifications/` remain
+  untracked, unread, and untouched.
+- Required baseline (not green, unchanged scope):
+  `go test -count=1 -timeout 20m ./internal/cli` failed after 234.747s with
+  existing `TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility`,
+  `TestSourceBoundOriginRejectsBeforeAppOrCredential`,
+  `TestSourceBoundOriginRejectsPersistedCredentialConfigBeforeVault`, and
+  `TestETLHelpListsAllSyncModes` failures, plus local Redis connection-refused
+  logs for `127.0.0.1:1` and `127.0.0.1:2`. CP11 changes no `internal/cli`
+  source, so this is recorded baseline evidence rather than repaired or called
+  green.
+- Delivery gate: correction commit/push, PR #4294 API base/head/SHA read-back,
+  Firstmate-state update, and a new independent exact-SHA review remain pending;
+  CP12 remains prohibited.

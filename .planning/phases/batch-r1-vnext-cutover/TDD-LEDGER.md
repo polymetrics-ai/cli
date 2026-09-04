@@ -476,3 +476,85 @@
   → `ok`. Every declared fsync/rename/validation/commit/prune cut point recovers
   to an exact old or new complete generation; the barrier test rejects writer
   interleave and mixed metadata/index reads; held leases defer stale prune.
+
+### 2026-09-04 — CP11 exact-review correction plan (instruction 126)
+
+- Authority/base: Firstmate accepted the independent CP11 exact-SHA BLOCK at
+  `c4f0bc3728dda318ea3d01f78de7aa299b6135cb` as five bounded corrections.
+  Only temporary publication roots are allowed; CP12, actual connector/source
+  lock materialization, runtime routing, provider/credential I/O, certification,
+  cross-connector transactions, and author-owned deletion remain prohibited.
+- RED 1 — descriptor confinement: make a valid connector entry or its
+  `.connectorgen.lock` a symlink to an external sentinel. Probe every public
+  publisher operation and `runLockRender` for a missing uniform pre-access
+  refusal; GREEN rejects the link via rooted no-follow handling before target
+  mutation.
+- RED 2 — stage ownership: add `.stage-author-owned` with a sentinel and no
+  valid typed marker. `Recover`, `Publish`, `Open`, and `Prune` must currently
+  remove it; GREEN preserves it and refuses the operation, while a
+  publisher-created/synced marker still permits stale-stage recovery.
+- RED 3 — closed-tree identity: copy a valid generation under another valid
+  `g-*` basename and rewrite self-consistent pointer/integrity identity; add an
+  unexpected empty directory or nonempty lease. Current validation accepts
+  these shapes; GREEN recomputes the framed artifact address and requires exact
+  directory/lease invariants on every check/open/recovery/prune path.
+- RED 4 — control documents: inject oversized or duplicate-member `CURRENT`,
+  journal, integrity root, and integrity-file records. Current integrity
+  validation can allocate unbounded bytes and duplicate fields use
+  last-member-wins; GREEN uses one bounded rooted reader plus strict duplicate
+  rejection and leaves durable state unchanged.
+- RED 5 — cancellation: hold the actual connector lock from another descriptor
+  and cancel each waiting public publisher/CLI operation. Current blocking
+  `Flock` cannot return; GREEN returns the supplied context error without a
+  goroutine leak or state change, then succeeds after release.
+- Refactor condition: factor rooted control/file/lock helpers only after each
+  observable behavior is green; do not widen the publisher into a runtime
+  resolver or add a second source-lock reader.
+
+### 2026-09-04 — CP11 exact-review correction actual RED/GREEN
+
+- Base discipline: all correction evidence started from the instruction-126
+  authorization at `c4f0bc3728dda318ea3d01f78de7aa299b6135cb`; no CP12,
+  connector/source-lock materialization, provider, credential, or runtime-route
+  work was performed.
+- RED 1 observed: before rooted connector handling,
+  `TestVNextGenerationPublisherRefusesSymlinkedConnectorRootWithoutTouchingTarget`
+  reported `Publish`, `Recover`, and `Prune` as successful against an external
+  symlink target; `Check` failed only for a missing lock and `Open` only for no
+  active generation. The test therefore exposed the missing boundary rather
+  than a safe refusal. The lock-specific fixture was added after that root
+  correction; its pre-change behavior is the independent exact-review finding,
+  not a retroactively claimed local RED run.
+- GREEN 1: `os.Root`-relative connector/lock handling rejects root and lock
+  symlinks before access; source-lock/control reads and control replacement/
+  removal are rooted. The external-sentinel root, lock, and lock-render tests
+  pass.
+- RED 2 observed: absent or malformed `.stage-author-owned` markers let
+  `Recover`, `Publish`, `Open`, and `Prune` return nil and remove the sentinel
+  stage. GREEN writes and fsyncs a typed `{version,connector,generation,stage}`
+  marker, preserves/refuses unproven stages, and still recovers a valid
+  publisher-owned stage.
+- RED 3 observed: every operation in
+  `TestVNextGenerationPublisherRejectsSelfConsistentRenamedGeneration` accepted
+  a renamed tree whose pointer and integrity had been rewritten consistently;
+  `Check` also accepted an unexpected directory and a nonempty lease. GREEN
+  streams the sorted artifact bytes through the publication framing on every
+  validation, requires the selected generation name, exact directories/members,
+  and an empty lease.
+- RED 4 observed: duplicate members in `CURRENT`, `JOURNAL`, integrity root,
+  and an integrity file entry all let `Recover` return nil. An integrity payload
+  over the limit was fully read and failed later as invalid JSON instead of at
+  the bound. GREEN routes the controls through one bounded rooted reader and
+  `decodeStrictJSON`; all duplicate and oversized cases refuse deterministically.
+- RED 5 manual fallback: the authorized base used blocking
+  `syscall.Flock` without a context path. Executing cancellation against that
+  blocking call would not return, so the source-level red is recorded rather
+  than faking a timed run. GREEN uses nonblocking retry with the supplied
+  context; the publisher and real `runLockRenderContext` contention tests return
+  `context.DeadlineExceeded`, preserve `CURRENT`/absence of `JOURNAL`, and retry
+  after release without a retained lock handle.
+- GREEN command:
+  `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextGenerationPublisherRefusesSymlinkedConnectorRootWithoutTouchingTarget|TestVNextGenerationPublisherRefusesSymlinkedLockWithoutTouchingTarget|TestRunLockRenderRefusesSymlinkedConnectorRootWithoutTouchingTarget|TestVNextGenerationPublisherPreservesUnownedStageAcrossMutations|TestVNextGenerationPublisherRecoversDurablyOwnedStage|TestVNextGenerationPublisherRejectsSelfConsistentRenamedGeneration|TestVNextGenerationPublisherRejectsUnexpectedDirectoryAndNonemptyLease|TestVNextGenerationPublisherRejectsDuplicatePublicationControlMembers|TestVNextGenerationPublisherRejectsOversizedIntegrityControl|TestVNextGenerationPublisherContextCancelsContendedLockWithoutStateChange|TestRunLockRenderContextCancelsContendedPublicationAndRetries)$'`
+  → `ok`.
+- Broader changed-package GREEN:
+  `go test -count=1 -timeout 20m ./cmd/connectorgen` → `ok` (59.779s).

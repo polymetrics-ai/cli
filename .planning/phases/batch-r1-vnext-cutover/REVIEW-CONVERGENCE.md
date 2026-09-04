@@ -302,3 +302,30 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 - Required next gate: commit and normally push this exact candidate, verify PR
   #4294 base/head/SHA through the API, then pause for Firstmate's independent
   exact-SHA review. CP12 remains prohibited.
+
+## 2026-09-04 — CP11 exact-review correction local self-review
+
+- Review subject: instruction-126's five bounded corrections in
+  `cmd/connectorgen/{main.go,vnext_lock_cli.go,vnext_publication.go}`,
+  their temporary-root tests, the source-lock canon, Foundation Atlas record,
+  and CP11 evidence. Reviewed from the authorized
+  `c4f0bc3728dda318ea3d01f78de7aa299b6135cb` base discipline; CP12 and all
+  connector/runtime/provider/credential surfaces remain out of scope.
+- Workflow: no compatible isolated GSD reviewer is available, so this is the
+  required inline/manual read-only review. It is not independent review and
+  does not replace the next Firstmate exact-SHA gate.
+
+| Lens | Disposition |
+| --- | --- |
+| Root and control confinement | Pass. Connector roots and publication locks are `os.Root`-relative and reject visible symlinks before access. Source-lock/control reads, control-file atomic replacement, and control deletion remain beneath the connector descriptor. Root/lock external-sentinel tests cover every publisher entrypoint and lock-render. |
+| Stage ownership and recovery | Pass. A stage marker is written and directory-synced before candidate files, binds version/connector/generation/stage, remains with the generation, and is strictly decoded before cleanup. Missing, malformed, mismatched, or symlinked `.stage-*` entries are preserved and force refusal; a durable valid stage still recovers. |
+| Closed-tree identity | Pass. Validation streams the sorted declared artifact bytes through the same length framing as publication and compares the result to `CURRENT`; exact file and directory membership plus an empty lease are required. A copied/renamed tree with rewritten pointer/integrity metadata cannot self-certify. |
+| Strict metadata and resource bounds | Pass. One bounded rooted reader fronts CURRENT, JOURNAL, integrity, and the marker; strict duplicate-member/trailing-value rejection reuses the source-lock decoder. Read growth is capped at 1 MiB plus one byte; the control record is rejected before an unbounded decode. |
+| Cancellation and resource release | Pass. The production CLI signal context reaches context-bearing publish/check/recover/open/prune entrypoints. Nonblocking advisory-lock retry checks cancellation without a spawned waiter; the temporary-root tests prove deadline return, unchanged CURRENT/JOURNAL, released descriptor/lock state through a successful retry, and the real lock-render path. |
+| Runtime and secret boundary | Pass. Publication remains authoring-only over temporary roots; it adds no `defs.FS` reader, source-lock runtime reader, App/PM routing, connector source lock/materialization, provider call, credential lookup, database access, certification read, or cross-connector transaction. No secret value was read or emitted. |
+| Canon/Atlas and CLI parity | Pass. Canon and Atlas now name only the implemented confinement, durable stage, exact-tree, strict-control, and cancellation guarantees; catalog revision 34 resolves each owner/proof selector. `connectorgen lock-render` syntax/help is unchanged, so PM/manual/website updates are not applicable. |
+| Proof and baseline | Pass for the changed surface: correction selector suite, race suite, full `cmd/connectorgen`, vNext lock target, canon/Atlas checks, affected packages, vet/build/docs/contract/definition validation passed. `internal/cli` remains its recorded unrelated polling/source-origin/ETL-help and local Redis-refusal baseline. |
+
+- Findings: no new local CP11 correction blocker. The remaining mandatory gate is
+  a fresh Firstmate independent exact-SHA review after the ordinary correction
+  push; do not begin CP12 or amend the reviewed candidate beforehand.

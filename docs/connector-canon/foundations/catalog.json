@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 33,
+  "catalog_revision": 34,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -15,7 +15,7 @@
       "layer": "source_lock_authoring",
       "status": "available",
       "kind": "generic",
-      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through staged validation, digests, durable recovery, atomic selection, and lease-safe pruning.",
+      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through descriptor-confined staged validation, recomputed content addresses, durable recovery, atomic selection, cancellable locking, and lease-safe pruning.",
       "owner": {
         "primary_package": "polymetrics.ai/cmd/connectorgen",
         "supporting_packages": [
@@ -97,7 +97,7 @@
           },
           {
             "file": "cmd/connectorgen/vnext_lock_cli.go",
-            "name": "runLockRender"
+            "name": "runLockRenderContext"
           },
           {
             "file": "cmd/connectorgen/vnext_publication.go",
@@ -105,7 +105,7 @@
           },
           {
             "file": "cmd/connectorgen/vnext_publication.go",
-            "name": "(*vNextGenerationPublisher).Publish"
+            "name": "(*vNextGenerationPublisher).PublishContext"
           },
           {
             "file": "cmd/connectorgen/vnext_publication.go",
@@ -175,9 +175,11 @@
           "rendering and staged provenance are deterministic under semantically irrelevant operation reordering; authored operation positions remain diagnostics only",
           "source locks are one complete JSON document with no duplicate object members before canonicalization or publication",
           "execution objects reject authoring-evidence fields",
-          "each connector publication is a closed digest-addressed set with no inherited optional artifacts",
+          "each connector publication is a closed digest-addressed set with no inherited optional artifacts; every validation recomputes that address from the exact artifact tree",
+          "a durable typed stage marker binds connector, stage, and content generation; unknown or malformed staging directories are preserved and refuse recovery",
+          "CURRENT, journal, and integrity controls are no-follow, bounded strict JSON documents; duplicate members and trailing values are rejected",
           "a typed journal, fsync boundaries, and atomic CURRENT selection recover to an old-complete or new-complete generation only",
-          "a reader-held generation lease prevents pruning that generation, and an unvalidated generation is never treated as publisher-owned",
+          "a reader-held generation lease prevents pruning that generation, an unvalidated generation is never treated as publisher-owned, and a cancelled lock acquisition changes no publication state",
           "publication validates staged physical bytes through the existing loader, selected runtime identity, manifest/index construction, and command preflight without credential or provider I/O"
         ]
       },
@@ -200,7 +202,7 @@
         "Trailing JSON values and duplicate object members fail before canonicalization or publication.",
         "Typed graph validation rejects invalid encoders, wrong schema roles, missing bindings, and normalized command alias collisions before staging.",
         "Semantic admission reads only an in-memory rendered view; it uses engine.Load, engine.New, the exact command resolver, commandrunner preflight, sealed executor and generated hook selection, manifestindex.New, and supplied syncplan.Resolve without provider I/O, credential resolution, or transport.",
-        "Publication stages only below the target connector's generations directory, rejects unsafe paths and symlinks, fsyncs files and directories, revalidates physical staged bytes, records a typed recovery journal, replaces CURRENT atomically, and prunes only integrity-validated publisher-owned generations whose leases are exclusively available.",
+        "Publication uses descriptor-relative roots for connector and lock entries, stages only below the target connector's generations directory under a durable typed marker, rejects unsafe paths and symlinks, requires the exact closed directory/member tree and empty lease, fsyncs files and directories, revalidates the recomputed content address, records a typed recovery journal, replaces CURRENT atomically, and prunes only integrity-validated publisher-owned generations whose leases are exclusively available.",
         "Every admitted request/response schema reference must semantically equal an effective loaded runtime schema; a direct role with no typed runtime schema is rejected.",
         "Generated hook extensions are selected only through hookset.Factories and retained in the staged manifest/index entry.",
         "Canonical source-ID order governs staged provenance; an authored operation index is retained only for diagnostics.",
@@ -367,6 +369,41 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_test.go",
           "name": "TestVNextGenerationPublisherRefusesSymlinkedGenerationRootWithoutDeletingTarget"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesSymlinkedConnectorRootWithoutTouchingTarget"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesSymlinkedLockWithoutTouchingTarget"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherPreservesUnownedStageAcrossMutations"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRejectsSelfConsistentRenamedGeneration"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRejectsDuplicatePublicationControlMembers"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherContextCancelsContendedLockWithoutStateChange"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestRunLockRenderContextCancelsContendedPublicationAndRetries"
         }
       ],
       "known_gap_refs": [],

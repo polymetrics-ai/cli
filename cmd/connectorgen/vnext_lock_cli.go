@@ -1,20 +1,24 @@
 package main
 
 import (
+	"context"
 	"io"
-	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 )
 
-func runLockRender(args []string, stdout, stderr io.Writer) int {
+func runLockRenderContext(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	connector, defsRoot, check, code := parseVNextLockArgs("lock-render", args, stderr)
 	if code != 0 {
 		return code
 	}
-	lockPath := filepath.Join(defsRoot, connector, "source.lock.json")
-	raw, err := os.ReadFile(lockPath)
+	publisher, err := newVNextGenerationPublisher(defsRoot, connector, vNextPublicationHooks{})
+	if err != nil {
+		logf(stderr, "connectorgen lock-render: initialize publisher: %v\n", err)
+		return 1
+	}
+	raw, err := publisher.readSourceLock()
 	if err != nil {
 		logf(stderr, "connectorgen lock-render: read source lock: %v\n", err)
 		return 1
@@ -38,20 +42,15 @@ func runLockRender(args []string, stdout, stderr io.Writer) int {
 		logf(stderr, "connectorgen lock-render: stage publication artifacts: %v\n", err)
 		return 1
 	}
-	publisher, err := newVNextGenerationPublisher(defsRoot, connector, vNextPublicationHooks{})
-	if err != nil {
-		logf(stderr, "connectorgen lock-render: initialize publisher: %v\n", err)
-		return 1
-	}
 	if check {
-		if err := publisher.Check(artifacts); err != nil {
+		if err := publisher.CheckContext(ctx, artifacts); err != nil {
 			logf(stderr, "connectorgen lock-render: check published generation: %v\n", err)
 			return 1
 		}
 		logf(stdout, "vNext execution generation is current: %s\n", connector)
 		return 0
 	}
-	pointer, err := publisher.Publish(artifacts)
+	pointer, err := publisher.PublishContext(ctx, artifacts)
 	if err != nil {
 		logf(stderr, "connectorgen lock-render: publish generation: %v\n", err)
 		return 1

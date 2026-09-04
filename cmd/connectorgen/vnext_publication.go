@@ -1,7 +1,8 @@
 package main
 
 import (
-	"bytes"
+	"context"
+	cryptorand "crypto/rand"
 	"crypto/sha256"
 	"encoding/binary"
 	"encoding/hex"
@@ -17,6 +18,7 @@ import (
 	"sort"
 	"strings"
 	"syscall"
+	"time"
 
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
@@ -31,6 +33,7 @@ const (
 	vNextPublicationIntegrityFile       = "integrity.json"
 	vNextPublicationControlMaxBytes     = 1 << 20
 	vNextPublicationLeaseFile           = ".lease"
+	vNextPublicationStageOwnerFile      = ".connectorgen-stage.json"
 )
 
 type vNextPublicationFaultPoint string
@@ -80,6 +83,13 @@ type vNextGenerationJournal struct {
 	State string                  `json:"state"`
 }
 
+type vNextPublicationStageOwner struct {
+	Version    int    `json:"version"`
+	Connector  string `json:"connector"`
+	Generation string `json:"generation"`
+	Stage      string `json:"stage"`
+}
+
 type vNextGenerationIntegrity struct {
 	Version    int                         `json:"version"`
 	Connector  string                      `json:"connector"`
@@ -100,11 +110,11 @@ type vNextGenerationPublisher struct {
 }
 
 type vNextGenerationHandle struct {
-	root     string
-	pointer  vNextGenerationPointer
-	files    map[string]struct{}
-	lease    *os.File
-	released bool
+	filesRoot *os.Root
+	pointer   vNextGenerationPointer
+	files     map[string]struct{}
+	lease     *os.File
+	released  bool
 }
 
 func newVNextGenerationPublisher(root, connector string, hooks vNextPublicationHooks) (*vNextGenerationPublisher, error) {
@@ -126,39 +136,73 @@ func (p *vNextGenerationPublisher) generationsRoot() string {
 	return filepath.Join(p.connectorRoot(), vNextPublicationGenerationDirectory)
 }
 
-func (p *vNextGenerationPublisher) lockPath() string {
-	return filepath.Join(p.connectorRoot(), vNextPublicationLockFile)
-}
-
-func (p *vNextGenerationPublisher) currentPath() string {
-	return filepath.Join(p.connectorRoot(), vNextPublicationCurrentFile)
-}
-
-func (p *vNextGenerationPublisher) journalPath() string {
-	return filepath.Join(p.connectorRoot(), vNextPublicationJournalFile)
-}
-
 func (p *vNextGenerationPublisher) generationPath(generation string) string {
 	return filepath.Join(p.generationsRoot(), generation)
 }
 
-func (p *vNextGenerationPublisher) ensureGenerationsRootLocked() error {
-	if err := os.MkdirAll(p.connectorRoot(), 0o755); err != nil {
-		return fmt.Errorf("create connector publication root: %w", err)
+func (p *vNextGenerationPublisher) openConnectorRoot(create bool) (*os.Root, error) {
+	defsRoot, err := os.OpenRoot(p.root)
+	if err != nil {
+		return nil, fmt.Errorf("open publication definitions root: %w", err)
 	}
-	root := p.generationsRoot()
-	if _, err := os.Lstat(root); errors.Is(err, fs.ErrNotExist) {
-		if err := os.Mkdir(root, 0o755); err != nil && !errors.Is(err, fs.ErrExist) {
-			return fmt.Errorf("create generation root: %w", err)
+	defer defsRoot.Close()
+
+	info, err := defsRoot.Lstat(p.connector)
+	if errors.Is(err, fs.ErrNotExist) && create {
+		if err := defsRoot.Mkdir(p.connector, 0o755); err != nil && !errors.Is(err, fs.ErrExist) {
+			return nil, fmt.Errorf("create connector publication root: %w", err)
 		}
-	} else if err != nil {
-		return fmt.Errorf("stat generation root: %w", err)
+		info, err = defsRoot.Lstat(p.connector)
 	}
-	return p.assertGenerationsRootLocked()
+	if err != nil {
+		return nil, fmt.Errorf("stat connector publication root: %w", err)
+	}
+	if info.Mode()&fs.ModeSymlink != 0 {
+		return nil, fmt.Errorf("connector publication root %q is a symlink", p.connector)
+	}
+	if !info.IsDir() {
+		return nil, fmt.Errorf("connector publication root %q is not a directory", p.connector)
+	}
+	root, err := defsRoot.OpenRoot(p.connector)
+	if err != nil {
+		return nil, fmt.Errorf("open connector publication root: %w", err)
+	}
+	return root, nil
 }
 
-func (p *vNextGenerationPublisher) assertGenerationsRootLocked() error {
-	info, err := os.Lstat(p.generationsRoot())
+func (p *vNextGenerationPublisher) readSourceLock() ([]byte, error) {
+	root, err := p.openConnectorRoot(false)
+	if err != nil {
+		return nil, err
+	}
+	defer root.Close()
+	info, err := root.Lstat("source.lock.json")
+	if err != nil {
+		return nil, fmt.Errorf("stat source lock: %w", err)
+	}
+	if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
+		return nil, fmt.Errorf("source lock is not a regular file")
+	}
+	raw, err := root.ReadFile("source.lock.json")
+	if err != nil {
+		return nil, fmt.Errorf("read source lock: %w", err)
+	}
+	return raw, nil
+}
+
+func (p *vNextGenerationPublisher) ensureGenerationsRootLocked() error {
+	root, err := p.openConnectorRoot(true)
+	if err != nil {
+		return err
+	}
+	defer root.Close()
+	info, err := root.Lstat(vNextPublicationGenerationDirectory)
+	if errors.Is(err, fs.ErrNotExist) {
+		if err := root.Mkdir(vNextPublicationGenerationDirectory, 0o755); err != nil && !errors.Is(err, fs.ErrExist) {
+			return fmt.Errorf("create generation root: %w", err)
+		}
+		info, err = root.Lstat(vNextPublicationGenerationDirectory)
+	}
 	if err != nil {
 		return fmt.Errorf("stat generation root: %w", err)
 	}
@@ -168,12 +212,31 @@ func (p *vNextGenerationPublisher) assertGenerationsRootLocked() error {
 	return nil
 }
 
-func (p *vNextGenerationPublisher) Publish(artifacts vNextPublicationArtifacts) (vNextGenerationPointer, error) {
+func (p *vNextGenerationPublisher) assertGenerationsRootLocked() error {
+	root, err := p.openConnectorRoot(false)
+	if err != nil {
+		return err
+	}
+	defer root.Close()
+	info, err := root.Lstat(vNextPublicationGenerationDirectory)
+	if err != nil {
+		return fmt.Errorf("stat generation root: %w", err)
+	}
+	if !info.IsDir() || info.Mode()&fs.ModeSymlink != 0 {
+		return fmt.Errorf("generation root is not a directory")
+	}
+	return nil
+}
+
+func (p *vNextGenerationPublisher) PublishContext(ctx context.Context, artifacts vNextPublicationArtifacts) (vNextGenerationPointer, error) {
+	if err := ctx.Err(); err != nil {
+		return vNextGenerationPointer{}, err
+	}
 	files, err := vNextPublicationFiles(artifacts.Files)
 	if err != nil {
 		return vNextGenerationPointer{}, err
 	}
-	lock, err := p.lock(syscall.LOCK_EX)
+	lock, err := p.lock(ctx, syscall.LOCK_EX)
 	if err != nil {
 		return vNextGenerationPointer{}, err
 	}
@@ -224,12 +287,15 @@ func (p *vNextGenerationPublisher) Publish(artifacts vNextPublicationArtifacts) 
 	return pointer, nil
 }
 
-func (p *vNextGenerationPublisher) Check(artifacts vNextPublicationArtifacts) error {
+func (p *vNextGenerationPublisher) CheckContext(ctx context.Context, artifacts vNextPublicationArtifacts) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
 	files, err := vNextPublicationFiles(artifacts.Files)
 	if err != nil {
 		return err
 	}
-	lock, err := p.readLock(syscall.LOCK_SH)
+	lock, err := p.readLock(ctx, syscall.LOCK_SH)
 	if err != nil {
 		return err
 	}
@@ -253,10 +319,11 @@ func (p *vNextGenerationPublisher) Check(artifacts vNextPublicationArtifacts) er
 	return p.assertNoOrphansLocked(pointer.Generation)
 }
 
-// Recover resolves an interrupted publication before a future reader or writer
-// uses the connector root.
-func (p *vNextGenerationPublisher) Recover() error {
-	lock, err := p.lock(syscall.LOCK_EX)
+func (p *vNextGenerationPublisher) Recover(ctx context.Context) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	lock, err := p.lock(ctx, syscall.LOCK_EX)
 	if err != nil {
 		return err
 	}
@@ -264,13 +331,14 @@ func (p *vNextGenerationPublisher) Recover() error {
 	return p.recoverLocked()
 }
 
-// Open returns a pointer-bound immutable generation and holds its lease until
-// Release. A future prune cannot remove this generation while the handle lives.
-func (p *vNextGenerationPublisher) Open() (*vNextGenerationHandle, error) {
-	if err := p.Recover(); err != nil {
+func (p *vNextGenerationPublisher) Open(ctx context.Context) (*vNextGenerationHandle, error) {
+	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	lock, err := p.lock(syscall.LOCK_SH)
+	if err := p.Recover(ctx); err != nil {
+		return nil, err
+	}
+	lock, err := p.lock(ctx, syscall.LOCK_SH)
 	if err != nil {
 		return nil, err
 	}
@@ -289,23 +357,32 @@ func (p *vNextGenerationPublisher) Open() (*vNextGenerationHandle, error) {
 	if err != nil {
 		return nil, err
 	}
-	lease, err := os.OpenFile(filepath.Join(p.generationPath(pointer.Generation), vNextPublicationLeaseFile), os.O_RDWR, 0)
+	generationRoot, err := os.OpenRoot(p.generationPath(pointer.Generation))
 	if err != nil {
+		return nil, fmt.Errorf("open generation root %q: %w", pointer.Generation, err)
+	}
+	lease, err := generationRoot.OpenFile(vNextPublicationLeaseFile, os.O_RDWR, 0)
+	if err != nil {
+		_ = generationRoot.Close()
 		return nil, fmt.Errorf("open generation lease %q: %w", pointer.Generation, err)
 	}
 	if err := syscall.Flock(int(lease.Fd()), syscall.LOCK_SH); err != nil {
 		_ = lease.Close()
+		_ = generationRoot.Close()
 		return nil, fmt.Errorf("hold generation lease %q: %w", pointer.Generation, err)
 	}
 	files := make(map[string]struct{}, len(integrity.Files))
 	for _, file := range integrity.Files {
 		files[file.Path] = struct{}{}
 	}
-	return &vNextGenerationHandle{root: p.generationPath(pointer.Generation), pointer: pointer, files: files, lease: lease}, nil
+	return &vNextGenerationHandle{filesRoot: generationRoot, pointer: pointer, files: files, lease: lease}, nil
 }
 
-func (p *vNextGenerationPublisher) Prune() error {
-	lock, err := p.lock(syscall.LOCK_EX)
+func (p *vNextGenerationPublisher) Prune(ctx context.Context) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	lock, err := p.lock(ctx, syscall.LOCK_EX)
 	if err != nil {
 		return err
 	}
@@ -327,10 +404,19 @@ func (p *vNextGenerationPublisher) Prune() error {
 }
 
 func (p *vNextGenerationPublisher) GenerationExists(generation string) bool {
-	if !vNextPublicationGenerationIDValid(generation) || p.assertGenerationsRootLocked() != nil {
+	if !vNextPublicationGenerationIDValid(generation) {
 		return false
 	}
-	info, err := os.Lstat(p.generationPath(generation))
+	root, err := p.openConnectorRoot(false)
+	if err != nil {
+		return false
+	}
+	defer root.Close()
+	generations, err := root.Lstat(vNextPublicationGenerationDirectory)
+	if err != nil || !generations.IsDir() || generations.Mode()&fs.ModeSymlink != 0 {
+		return false
+	}
+	info, err := root.Lstat(path.Join(vNextPublicationGenerationDirectory, generation))
 	return err == nil && info.IsDir() && info.Mode()&fs.ModeSymlink == 0
 }
 
@@ -360,7 +446,7 @@ func (h *vNextGenerationHandle) ReadFile(name string) ([]byte, error) {
 	if _, exists := h.files[name]; !exists {
 		return nil, fs.ErrNotExist
 	}
-	return os.ReadFile(filepath.Join(h.root, filepath.FromSlash(name)))
+	return h.filesRoot.ReadFile(name)
 }
 
 func (h *vNextGenerationHandle) Release() {
@@ -369,6 +455,7 @@ func (h *vNextGenerationHandle) Release() {
 	}
 	h.released = true
 	unlockVNextPublicationFile(h.lease)
+	_ = h.filesRoot.Close()
 }
 
 func (p *vNextGenerationPublisher) stageLocked(files map[string][]byte, validate func(string) error) (vNextGenerationPointer, error) {
@@ -394,10 +481,29 @@ func (p *vNextGenerationPublisher) stageLocked(files map[string][]byte, validate
 	if err != nil {
 		return vNextGenerationPointer{}, fmt.Errorf("create same-filesystem stage: %w", err)
 	}
+	stageName := filepath.Base(stage)
+	marker, err := vNextPublicationJSON(vNextPublicationStageOwner{
+		Version:    1,
+		Connector:  p.connector,
+		Generation: generation,
+		Stage:      stageName,
+	})
+	if err != nil {
+		return vNextGenerationPointer{}, fmt.Errorf("encode stage ownership marker: %w", err)
+	}
+	if err := p.writeStageFile(stage, vNextPublicationStageOwnerFile, marker); err != nil {
+		return vNextGenerationPointer{}, err
+	}
+	if err := syncVNextPublicationDirectory(stage); err != nil {
+		return vNextGenerationPointer{}, fmt.Errorf("sync stage ownership marker: %w", err)
+	}
+	if err := syncVNextPublicationDirectory(p.generationsRoot()); err != nil {
+		return vNextGenerationPointer{}, fmt.Errorf("sync stage ownership parent: %w", err)
+	}
 	published := false
 	defer func() {
 		if !published {
-			_ = os.RemoveAll(stage)
+			_ = p.removeStageLocked(stageName)
 		}
 	}()
 	for _, name := range sortedVNextPublicationFiles(files) {
@@ -515,7 +621,7 @@ func (p *vNextGenerationPublisher) writeJournalLocked(journal vNextGenerationJou
 	if journal.State == "committed" {
 		before, after = vNextPublicationBeforeCommitSync, vNextPublicationAfterCommitSync
 	}
-	return p.writeAtomicLocked(p.journalPath(), payload, before, after, "", "", "", "")
+	return p.writeAtomicLocked(vNextPublicationJournalFile, payload, before, after, "", "", "", "")
 }
 
 func (p *vNextGenerationPublisher) writeCurrentLocked(pointer vNextGenerationPointer) error {
@@ -527,19 +633,20 @@ func (p *vNextGenerationPublisher) writeCurrentLocked(pointer vNextGenerationPoi
 		return err
 	}
 	payload = append(payload, '\n')
-	return p.writeAtomicLocked(p.currentPath(), payload, vNextPublicationBeforeCurrentTempSync, vNextPublicationAfterCurrentTempSync, vNextPublicationBeforeCurrentRename, vNextPublicationAfterCurrentRename, vNextPublicationBeforeCurrentParent, vNextPublicationAfterCurrentParent)
+	return p.writeAtomicLocked(vNextPublicationCurrentFile, payload, vNextPublicationBeforeCurrentTempSync, vNextPublicationAfterCurrentTempSync, vNextPublicationBeforeCurrentRename, vNextPublicationAfterCurrentRename, vNextPublicationBeforeCurrentParent, vNextPublicationAfterCurrentParent)
 }
 
 func (p *vNextGenerationPublisher) writeAtomicLocked(target string, payload []byte, beforeSync, afterSync, beforeRename, afterRename, beforeParent, afterParent vNextPublicationFaultPoint) error {
-	if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
-		return err
-	}
-	temporary, err := os.CreateTemp(filepath.Dir(target), ".connectorgen-publication-")
+	root, err := p.openConnectorRoot(true)
 	if err != nil {
 		return err
 	}
-	temporaryPath := temporary.Name()
-	defer func() { _ = os.Remove(temporaryPath) }()
+	defer root.Close()
+	temporaryName, temporary, err := vNextPublicationCreateTemp(root)
+	if err != nil {
+		return err
+	}
+	defer func() { _ = root.Remove(temporaryName) }()
 	if err := temporary.Chmod(0o644); err != nil {
 		_ = temporary.Close()
 		return err
@@ -572,7 +679,7 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(target string, payload []by
 			return err
 		}
 	}
-	if err := os.Rename(temporaryPath, target); err != nil {
+	if err := root.Rename(temporaryName, target); err != nil {
 		return err
 	}
 	if afterRename != "" {
@@ -585,7 +692,7 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(target string, payload []by
 			return err
 		}
 	}
-	if err := syncVNextPublicationDirectory(filepath.Dir(target)); err != nil {
+	if err := syncVNextPublicationRoot(root); err != nil {
 		return err
 	}
 	if afterParent != "" {
@@ -596,8 +703,40 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(target string, payload []by
 	return nil
 }
 
+func vNextPublicationCreateTemp(root *os.Root) (string, *os.File, error) {
+	var token [16]byte
+	for range 128 {
+		if _, err := cryptorand.Read(token[:]); err != nil {
+			return "", nil, fmt.Errorf("generate publication temporary name: %w", err)
+		}
+		name := ".connectorgen-publication-" + hex.EncodeToString(token[:])
+		file, err := root.OpenFile(name, os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0o644)
+		if err == nil {
+			return name, file, nil
+		}
+		if !errors.Is(err, fs.ErrExist) {
+			return "", nil, fmt.Errorf("create publication temporary file: %w", err)
+		}
+	}
+	return "", nil, fmt.Errorf("create publication temporary file: exhausted unique names")
+}
+
+func syncVNextPublicationRoot(root *os.Root) error {
+	directory, err := root.Open(".")
+	if err != nil {
+		return err
+	}
+	defer directory.Close()
+	return directory.Sync()
+}
+
 func (p *vNextGenerationPublisher) readCurrentLocked() (vNextGenerationPointer, bool, error) {
-	payload, found, err := vNextPublicationReadRegular(p.currentPath(), "CURRENT")
+	root, err := p.openConnectorRoot(false)
+	if err != nil {
+		return vNextGenerationPointer{}, false, err
+	}
+	defer root.Close()
+	payload, found, err := vNextPublicationReadControl(root, vNextPublicationCurrentFile, "CURRENT")
 	if err != nil {
 		return vNextGenerationPointer{}, false, err
 	}
@@ -626,7 +765,12 @@ func (p *vNextGenerationPublisher) pointerForGenerationLocked(generation string)
 	if !info.IsDir() || info.Mode()&fs.ModeSymlink != 0 {
 		return vNextGenerationPointer{}, fmt.Errorf("generation %q is not a directory", generation)
 	}
-	payload, found, err := vNextPublicationReadRegular(filepath.Join(root, vNextPublicationIntegrityFile), "generation integrity")
+	generationRoot, err := os.OpenRoot(root)
+	if err != nil {
+		return vNextGenerationPointer{}, fmt.Errorf("open generation %q root: %w", generation, err)
+	}
+	defer generationRoot.Close()
+	payload, found, err := vNextPublicationReadControl(generationRoot, vNextPublicationIntegrityFile, "generation integrity")
 	if err != nil {
 		return vNextGenerationPointer{}, fmt.Errorf("read generation %q integrity: %w", generation, err)
 	}
@@ -640,23 +784,31 @@ func (p *vNextGenerationPublisher) pointerForGenerationLocked(generation string)
 	return vNextGenerationPointer{Generation: generation, IntegrityDigest: vNextPublicationDigest(payload)}, nil
 }
 
-func vNextPublicationReadRegular(filePath, label string) ([]byte, bool, error) {
-	info, err := os.Lstat(filePath)
+func vNextPublicationReadControl(root *os.Root, name, label string) ([]byte, bool, error) {
+	info, err := root.Lstat(name)
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil, false, nil
 	}
 	if err != nil {
 		return nil, false, fmt.Errorf("stat %s: %w", label, err)
 	}
-	if !info.Mode().IsRegular() {
+	if info.Mode()&fs.ModeSymlink != 0 || !info.Mode().IsRegular() {
 		return nil, true, fmt.Errorf("%s is not a regular file", label)
 	}
 	if info.Size() < 0 || info.Size() > vNextPublicationControlMaxBytes {
 		return nil, true, fmt.Errorf("%s exceeds %d-byte limit", label, vNextPublicationControlMaxBytes)
 	}
-	payload, err := os.ReadFile(filePath)
+	handle, err := root.Open(name)
+	if err != nil {
+		return nil, true, fmt.Errorf("open %s: %w", label, err)
+	}
+	defer handle.Close()
+	payload, err := io.ReadAll(io.LimitReader(handle, vNextPublicationControlMaxBytes+1))
 	if err != nil {
 		return nil, true, fmt.Errorf("read %s: %w", label, err)
+	}
+	if len(payload) > vNextPublicationControlMaxBytes {
+		return nil, true, fmt.Errorf("%s exceeds %d-byte limit", label, vNextPublicationControlMaxBytes)
 	}
 	return payload, true, nil
 }
@@ -691,17 +843,17 @@ func (p *vNextGenerationPublisher) validateGenerationLocked(root string, pointer
 	if !rootInfo.IsDir() || rootInfo.Mode()&fs.ModeSymlink != 0 {
 		return vNextGenerationIntegrity{}, fmt.Errorf("generation root is not a directory")
 	}
-	integrityPath := filepath.Join(root, vNextPublicationIntegrityFile)
-	info, err := os.Lstat(integrityPath)
+	generationRoot, err := os.OpenRoot(root)
 	if err != nil {
-		return vNextGenerationIntegrity{}, fmt.Errorf("stat integrity: %w", err)
+		return vNextGenerationIntegrity{}, fmt.Errorf("open generation root: %w", err)
 	}
-	if !info.Mode().IsRegular() {
-		return vNextGenerationIntegrity{}, fmt.Errorf("integrity file is not regular")
-	}
-	payload, err := os.ReadFile(integrityPath)
+	defer generationRoot.Close()
+	payload, found, err := vNextPublicationReadControl(generationRoot, vNextPublicationIntegrityFile, "integrity")
 	if err != nil {
-		return vNextGenerationIntegrity{}, fmt.Errorf("read integrity: %w", err)
+		return vNextGenerationIntegrity{}, err
+	}
+	if !found {
+		return vNextGenerationIntegrity{}, fmt.Errorf("integrity file is missing")
 	}
 	if vNextPublicationDigest(payload) != pointer.IntegrityDigest {
 		return vNextGenerationIntegrity{}, fmt.Errorf("integrity digest does not match CURRENT")
@@ -716,8 +868,15 @@ func (p *vNextGenerationPublisher) validateGenerationLocked(root string, pointer
 	if !vNextPublicationGenerationIDValid(integrity.Generation) {
 		return vNextGenerationIntegrity{}, fmt.Errorf("integrity generation is invalid")
 	}
-	if err := vNextPublicationValidateFileDigests(root, integrity.Files); err != nil {
+	if err := p.validateStageOwnerLocked(root, "", pointer.Generation); err != nil {
 		return vNextGenerationIntegrity{}, err
+	}
+	computedGeneration, err := vNextPublicationValidateFileDigests(root, integrity.Files)
+	if err != nil {
+		return vNextGenerationIntegrity{}, err
+	}
+	if computedGeneration != pointer.Generation {
+		return vNextGenerationIntegrity{}, fmt.Errorf("generation content address %q does not match selected generation %q", computedGeneration, pointer.Generation)
 	}
 	if err := vNextPublicationValidateClosedTree(root, integrity.Files); err != nil {
 		return vNextGenerationIntegrity{}, err
@@ -732,7 +891,12 @@ func (p *vNextGenerationPublisher) recoverLocked() error {
 	if err := p.removeStagesLocked(); err != nil {
 		return err
 	}
-	payload, foundJournal, err := vNextPublicationReadRegular(p.journalPath(), "publication journal")
+	root, err := p.openConnectorRoot(false)
+	if err != nil {
+		return err
+	}
+	defer root.Close()
+	payload, foundJournal, err := vNextPublicationReadControl(root, vNextPublicationJournalFile, "publication journal")
 	if err != nil {
 		return err
 	}
@@ -813,17 +977,23 @@ func (p *vNextGenerationPublisher) rollbackLocked(old vNextGenerationPointer, ha
 }
 
 func (p *vNextGenerationPublisher) removeCurrentLocked() error {
-	if err := os.Remove(p.currentPath()); err != nil && !errors.Is(err, fs.ErrNotExist) {
-		return err
-	}
-	return syncVNextPublicationDirectory(p.connectorRoot())
+	return p.removeControlLocked(vNextPublicationCurrentFile)
 }
 
 func (p *vNextGenerationPublisher) removeJournalLocked() error {
-	if err := os.Remove(p.journalPath()); err != nil && !errors.Is(err, fs.ErrNotExist) {
+	return p.removeControlLocked(vNextPublicationJournalFile)
+}
+
+func (p *vNextGenerationPublisher) removeControlLocked(name string) error {
+	root, err := p.openConnectorRoot(false)
+	if err != nil {
 		return err
 	}
-	return syncVNextPublicationDirectory(p.connectorRoot())
+	defer root.Close()
+	if err := root.Remove(name); err != nil && !errors.Is(err, fs.ErrNotExist) {
+		return err
+	}
+	return syncVNextPublicationRoot(root)
 }
 
 func (p *vNextGenerationPublisher) pruneLocked(active string) error {
@@ -890,7 +1060,7 @@ func (p *vNextGenerationPublisher) removeStagesLocked() error {
 }
 
 func (p *vNextGenerationPublisher) removeStageLocked(name string) error {
-	if !strings.HasPrefix(name, ".stage-") {
+	if !vNextPublicationStageNameValid(name) {
 		return fmt.Errorf("invalid staging directory %q", name)
 	}
 	stage := filepath.Join(p.generationsRoot(), name)
@@ -904,10 +1074,54 @@ func (p *vNextGenerationPublisher) removeStageLocked(name string) error {
 	if !info.IsDir() || info.Mode()&fs.ModeSymlink != 0 {
 		return fmt.Errorf("stale staging entry %q is not a directory", name)
 	}
+	if err := p.validateStageOwnerLocked(stage, name, ""); err != nil {
+		return fmt.Errorf("refuse remove stale staging directory %q without ownership proof: %w", name, err)
+	}
 	if err := os.RemoveAll(stage); err != nil {
 		return fmt.Errorf("remove stale staging directory %q: %w", name, err)
 	}
 	return nil
+}
+
+func (p *vNextGenerationPublisher) validateStageOwnerLocked(root, stage, generation string) error {
+	stageRoot, err := os.OpenRoot(root)
+	if err != nil {
+		return fmt.Errorf("open stage ownership root: %w", err)
+	}
+	defer stageRoot.Close()
+	payload, found, err := vNextPublicationReadControl(stageRoot, vNextPublicationStageOwnerFile, "stage ownership marker")
+	if err != nil {
+		return err
+	}
+	if !found {
+		return fmt.Errorf("stage ownership marker is missing")
+	}
+	var owner vNextPublicationStageOwner
+	if err := vNextPublicationDecode(payload, &owner); err != nil {
+		return fmt.Errorf("decode stage ownership marker: %w", err)
+	}
+	if owner.Version != 1 || owner.Connector != p.connector || !vNextPublicationGenerationIDValid(owner.Generation) || !vNextPublicationStageNameValid(owner.Stage) {
+		return fmt.Errorf("stage ownership marker is invalid")
+	}
+	if stage != "" && owner.Stage != stage {
+		return fmt.Errorf("stage ownership marker does not match staging directory")
+	}
+	if generation != "" && owner.Generation != generation {
+		return fmt.Errorf("stage ownership marker does not match generation")
+	}
+	return nil
+}
+
+func vNextPublicationStageNameValid(name string) bool {
+	if !strings.HasPrefix(name, ".stage-") || len(name) == len(".stage-") || strings.ContainsAny(name, `/\`) {
+		return false
+	}
+	for _, value := range name {
+		if value < 0x20 || value == 0x7f {
+			return false
+		}
+	}
+	return true
 }
 
 func (p *vNextGenerationPublisher) removeGenerationLocked(generation string) error {
@@ -983,37 +1197,114 @@ func (p *vNextGenerationPublisher) assertNoOrphansLocked(active string) error {
 }
 
 func (p *vNextGenerationPublisher) assertNoPendingJournalLocked() error {
-	if _, err := os.Lstat(p.journalPath()); errors.Is(err, fs.ErrNotExist) {
+	root, err := p.openConnectorRoot(false)
+	if err != nil {
+		return err
+	}
+	defer root.Close()
+	_, found, err := vNextPublicationReadControl(root, vNextPublicationJournalFile, "publication journal")
+	if err != nil {
+		return err
+	}
+	if !found {
 		return nil
-	} else if err != nil {
-		return fmt.Errorf("stat publication journal: %w", err)
 	}
 	return fmt.Errorf("connector %q has a pending publication journal; recover before checking", p.connector)
 }
 
-func (p *vNextGenerationPublisher) lock(mode int) (*os.File, error) {
-	if err := os.MkdirAll(p.connectorRoot(), 0o755); err != nil {
-		return nil, fmt.Errorf("create connector publication root: %w", err)
+func (p *vNextGenerationPublisher) lock(ctx context.Context, mode int) (*os.File, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
 	}
-	lock, err := os.OpenFile(p.lockPath(), os.O_CREATE|os.O_RDWR, 0o600)
+	root, err := p.openConnectorRoot(true)
 	if err != nil {
-		return nil, fmt.Errorf("open connector publication lock: %w", err)
+		return nil, err
 	}
-	if err := syscall.Flock(int(lock.Fd()), mode); err != nil {
+	defer root.Close()
+	lock, err := vNextPublicationOpenLock(root, true)
+	if err != nil {
+		return nil, err
+	}
+	if err := vNextPublicationAcquireLock(ctx, lock, mode, "connector publication"); err != nil {
 		_ = lock.Close()
-		return nil, fmt.Errorf("lock connector publication: %w", err)
+		return nil, err
 	}
 	return lock, nil
 }
 
-func (p *vNextGenerationPublisher) readLock(mode int) (*os.File, error) {
-	lock, err := os.Open(p.lockPath())
-	if err != nil {
-		return nil, fmt.Errorf("open existing connector publication lock: %w", err)
+func (p *vNextGenerationPublisher) readLock(ctx context.Context, mode int) (*os.File, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, err
 	}
-	if err := syscall.Flock(int(lock.Fd()), mode); err != nil {
+	root, err := p.openConnectorRoot(false)
+	if err != nil {
+		return nil, err
+	}
+	defer root.Close()
+	lock, err := vNextPublicationOpenLock(root, false)
+	if err != nil {
+		return nil, err
+	}
+	if err := vNextPublicationAcquireLock(ctx, lock, mode, "existing connector publication"); err != nil {
 		_ = lock.Close()
-		return nil, fmt.Errorf("lock existing connector publication: %w", err)
+		return nil, err
+	}
+	return lock, nil
+}
+
+func vNextPublicationAcquireLock(ctx context.Context, lock *os.File, mode int, label string) error {
+	retry := time.NewTimer(time.Hour)
+	if !retry.Stop() {
+		<-retry.C
+	}
+	defer retry.Stop()
+	for {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		err := syscall.Flock(int(lock.Fd()), mode|syscall.LOCK_NB)
+		if err == nil {
+			return nil
+		}
+		if !errors.Is(err, syscall.EWOULDBLOCK) && !errors.Is(err, syscall.EAGAIN) {
+			return fmt.Errorf("lock %s: %w", label, err)
+		}
+		retry.Reset(10 * time.Millisecond)
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-retry.C:
+		}
+	}
+}
+
+func vNextPublicationOpenLock(root *os.Root, create bool) (*os.File, error) {
+	info, err := root.Lstat(vNextPublicationLockFile)
+	if errors.Is(err, fs.ErrNotExist) {
+		if !create {
+			return nil, fmt.Errorf("open existing connector publication lock: %w", err)
+		}
+		lock, createErr := root.OpenFile(vNextPublicationLockFile, os.O_CREATE|os.O_EXCL|os.O_RDWR, 0o600)
+		if createErr == nil {
+			return lock, nil
+		}
+		if !errors.Is(createErr, fs.ErrExist) {
+			return nil, fmt.Errorf("create connector publication lock: %w", createErr)
+		}
+		info, err = root.Lstat(vNextPublicationLockFile)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("stat connector publication lock: %w", err)
+	}
+	if info.Mode()&fs.ModeSymlink != 0 {
+		return nil, fmt.Errorf("connector publication lock is a symlink")
+	}
+	if !info.Mode().IsRegular() {
+		return nil, fmt.Errorf("connector publication lock is not a regular file")
+	}
+	lock, err := root.OpenFile(vNextPublicationLockFile, os.O_RDWR, 0)
+	if err != nil {
+		return nil, fmt.Errorf("open connector publication lock: %w", err)
 	}
 	return lock, nil
 }
@@ -1064,14 +1355,11 @@ func vNextPublicationArtifactPathValid(name string) error {
 
 func vNextPublicationGenerationID(files map[string][]byte) string {
 	hash := sha256.New()
-	var size [8]byte
 	for _, name := range sortedVNextPublicationFiles(files) {
-		binary.BigEndian.PutUint64(size[:], uint64(len(name)))
-		_, _ = hash.Write(size[:])
+		vNextPublicationWriteLength(hash, len(name))
 		_, _ = io.WriteString(hash, name)
 		payload := files[name]
-		binary.BigEndian.PutUint64(size[:], uint64(len(payload)))
-		_, _ = hash.Write(size[:])
+		vNextPublicationWriteLength(hash, len(payload))
 		_, _ = hash.Write(payload)
 	}
 	return "g-" + hex.EncodeToString(hash.Sum(nil))
@@ -1093,32 +1381,6 @@ func vNextPublicationIntegrityForFiles(connector, generation string, files map[s
 func vNextPublicationDigest(payload []byte) string {
 	sum := sha256.Sum256(payload)
 	return "sha256:" + hex.EncodeToString(sum[:])
-}
-
-func vNextPublicationDigestFile(filePath string) (int64, string, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return 0, "", err
-	}
-	defer file.Close()
-
-	hasher := sha256.New()
-	var buffer [32 * 1024]byte
-	var bytesRead int64
-	for {
-		count, readErr := file.Read(buffer[:])
-		if count > 0 {
-			bytesRead += int64(count)
-			_, _ = hasher.Write(buffer[:count])
-		}
-		if errors.Is(readErr, io.EOF) {
-			break
-		}
-		if readErr != nil {
-			return 0, "", readErr
-		}
-	}
-	return bytesRead, "sha256:" + hex.EncodeToString(hasher.Sum(nil)), nil
 }
 
 func vNextPublicationPointerValid(pointer vNextGenerationPointer) error {
@@ -1155,69 +1417,121 @@ func vNextPublicationDigestValid(value string) bool {
 	return true
 }
 
-func vNextPublicationValidateFileDigests(root string, files []vNextGenerationFileDigest) error {
+func vNextPublicationValidateFileDigests(root string, files []vNextGenerationFileDigest) (string, error) {
+	generationRoot, err := os.OpenRoot(root)
+	if err != nil {
+		return "", fmt.Errorf("open generation artifact root: %w", err)
+	}
+	defer generationRoot.Close()
+	content := sha256.New()
 	previous := ""
 	for _, file := range files {
 		if err := vNextPublicationArtifactPathValid(file.Path); err != nil {
-			return err
+			return "", err
 		}
 		if previous >= file.Path {
-			return fmt.Errorf("integrity files are not strictly sorted")
+			return "", fmt.Errorf("integrity files are not strictly sorted")
 		}
 		previous = file.Path
 		if file.Bytes < 0 || !vNextPublicationDigestValid(file.Digest) {
-			return fmt.Errorf("integrity entry %q is invalid", file.Path)
+			return "", fmt.Errorf("integrity entry %q is invalid", file.Path)
 		}
-		path := filepath.Join(root, filepath.FromSlash(file.Path))
-		info, err := os.Lstat(path)
+		info, err := generationRoot.Lstat(file.Path)
 		if err != nil {
-			return fmt.Errorf("stat generation artifact %s: %w", file.Path, err)
+			return "", fmt.Errorf("stat generation artifact %s: %w", file.Path, err)
 		}
-		if !info.Mode().IsRegular() {
-			return fmt.Errorf("generation artifact %s is not regular", file.Path)
+		if !info.Mode().IsRegular() || info.Size() != int64(file.Bytes) {
+			return "", fmt.Errorf("generation artifact %s is not the declared regular file", file.Path)
 		}
-		bytesRead, digest, err := vNextPublicationDigestFile(path)
+		vNextPublicationWriteLength(content, len(file.Path))
+		_, _ = io.WriteString(content, file.Path)
+		vNextPublicationWriteLength(content, file.Bytes)
+
+		handle, err := generationRoot.Open(file.Path)
 		if err != nil {
-			return fmt.Errorf("read generation artifact %s: %w", file.Path, err)
+			return "", fmt.Errorf("open generation artifact %s: %w", file.Path, err)
 		}
-		if bytesRead != int64(file.Bytes) || digest != file.Digest {
-			return fmt.Errorf("generation artifact %s differs from integrity", file.Path)
+		digest := sha256.New()
+		var buffer [32 * 1024]byte
+		var bytesRead int64
+		for {
+			count, readErr := handle.Read(buffer[:])
+			if count > 0 {
+				bytesRead += int64(count)
+				_, _ = content.Write(buffer[:count])
+				_, _ = digest.Write(buffer[:count])
+			}
+			if errors.Is(readErr, io.EOF) {
+				break
+			}
+			if readErr != nil {
+				_ = handle.Close()
+				return "", fmt.Errorf("read generation artifact %s: %w", file.Path, readErr)
+			}
+		}
+		if err := handle.Close(); err != nil {
+			return "", fmt.Errorf("close generation artifact %s: %w", file.Path, err)
+		}
+		actualDigest := "sha256:" + hex.EncodeToString(digest.Sum(nil))
+		if bytesRead != int64(file.Bytes) || actualDigest != file.Digest {
+			return "", fmt.Errorf("generation artifact %s differs from integrity", file.Path)
 		}
 	}
-	return nil
+	return "g-" + hex.EncodeToString(content.Sum(nil)), nil
+}
+
+func vNextPublicationWriteLength(writer io.Writer, length int) {
+	var frame [8]byte
+	binary.BigEndian.PutUint64(frame[:], uint64(length))
+	_, _ = writer.Write(frame[:])
 }
 
 func vNextPublicationValidateClosedTree(root string, files []vNextGenerationFileDigest) error {
-	expected := make(map[string]struct{}, len(files)+2)
-	expected[vNextPublicationIntegrityFile] = struct{}{}
-	expected[vNextPublicationLeaseFile] = struct{}{}
+	expectedFiles := make(map[string]struct{}, len(files)+3)
+	expectedFiles[vNextPublicationIntegrityFile] = struct{}{}
+	expectedFiles[vNextPublicationLeaseFile] = struct{}{}
+	expectedFiles[vNextPublicationStageOwnerFile] = struct{}{}
+	expectedDirectories := map[string]struct{}{".": {}}
 	for _, file := range files {
-		expected[file.Path] = struct{}{}
+		expectedFiles[file.Path] = struct{}{}
+		parts := strings.Split(file.Path, "/")
+		for index := 1; index < len(parts); index++ {
+			expectedDirectories[strings.Join(parts[:index], "/")] = struct{}{}
+		}
 	}
-	seen := make(map[string]struct{}, len(expected))
+	seen := make(map[string]struct{}, len(expectedFiles))
 	err := filepath.WalkDir(root, func(name string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			return err
-		}
-		if name == root {
-			return nil
-		}
-		if entry.Type()&fs.ModeSymlink != 0 {
-			return fmt.Errorf("generation contains symlink %s", name)
-		}
-		if entry.IsDir() {
-			return nil
-		}
-		if !entry.Type().IsRegular() {
-			return fmt.Errorf("generation contains nonregular member %s", name)
 		}
 		relative, err := filepath.Rel(root, name)
 		if err != nil {
 			return err
 		}
 		relative = filepath.ToSlash(relative)
-		if _, exists := expected[relative]; !exists {
+		if entry.Type()&fs.ModeSymlink != 0 {
+			return fmt.Errorf("generation contains symlink %s", name)
+		}
+		if entry.IsDir() {
+			if _, exists := expectedDirectories[relative]; !exists {
+				return fmt.Errorf("generation contains unexpected directory %q", relative)
+			}
+			return nil
+		}
+		if !entry.Type().IsRegular() {
+			return fmt.Errorf("generation contains nonregular member %s", name)
+		}
+		if _, exists := expectedFiles[relative]; !exists {
 			return fmt.Errorf("generation contains unexpected member %q", relative)
+		}
+		if relative == vNextPublicationLeaseFile {
+			info, err := entry.Info()
+			if err != nil {
+				return fmt.Errorf("stat generation lease: %w", err)
+			}
+			if info.Size() != 0 {
+				return fmt.Errorf("generation lease must be empty")
+			}
 		}
 		seen[relative] = struct{}{}
 		return nil
@@ -1225,7 +1539,7 @@ func vNextPublicationValidateClosedTree(root string, files []vNextGenerationFile
 	if err != nil {
 		return err
 	}
-	for name := range expected {
+	for name := range expectedFiles {
 		if _, found := seen[name]; !found {
 			return fmt.Errorf("generation is missing expected member %q", name)
 		}
@@ -1269,19 +1583,7 @@ func vNextPublicationJournalValid(journal vNextGenerationJournal) error {
 }
 
 func vNextPublicationDecode(payload []byte, destination any) error {
-	decoder := json.NewDecoder(bytes.NewReader(payload))
-	decoder.DisallowUnknownFields()
-	if err := decoder.Decode(destination); err != nil {
-		return err
-	}
-	var trailing any
-	if err := decoder.Decode(&trailing); err != io.EOF {
-		if err == nil {
-			return fmt.Errorf("trailing JSON value")
-		}
-		return err
-	}
-	return nil
+	return decodeStrictJSON(payload, destination)
 }
 
 func sortedVNextPublicationFiles(files map[string][]byte) []string {

@@ -505,3 +505,76 @@
   unavailable in this runtime; they are not claimed. The website integration
   and CLI parity references were read; no React/UI implementation or PM CLI
   surface is changed.
+
+## CP11 exact-review correction — Firstmate instruction 126
+
+## Task Delivery Header
+
+- Issue: Refs #4427 — transactional connector-generation publication correction; parent Refs #4325.
+- Base branch: `main` (existing draft PR #4294 base, API-verified again after delivery).
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main` through existing draft PR #4294.
+- Delivery: one normal non-force correction push to
+  `fm/cli-top100-declaration-batch-r1`, PR #4294 base/head/SHA API read-back,
+  then no branch change until Firstmate's next exact-SHA review disposition.
+- Working branch: `fm/cli-batch1-vnext-cutover-r2`.
+- Task: correct the five CP11 exact-review blockers from immutable
+  `c4f0bc3728dda318ea3d01f78de7aa299b6135cb`: descriptor-relative
+  no-follow confinement, durable stage ownership, content-address validation,
+  strict bounded control documents, and cancellable lock acquisition.
+- Verification: one executable RED/GREEN control per finding; race/fault and
+  full changed-package checks; canon/Atlas/static checks; read-only local
+  review; normal push and PR API base/head/SHA read-back.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Connector root and publication lock cannot escape `--defs` | fake | A hermetic temporary definitions root is required because instruction 126 forbids materializing a real connector. Symlinked connector-root and lock tests assert all operations refuse and external sentinels remain byte-identical. |
+| Only durably marked publisher stages are removed | fake | A temporary `.stage-author-owned` directory proves `Recover`, `Publish`, `Open`, and `Prune` preserve its sentinel and refuse ownership; a publisher-created marker permits recovery cleanup. |
+| Every selected generation is its actual closed-tree content address | fake | A temporary copied/renamed self-consistent tree, unexpected empty directory, and nonempty lease each make `Check`/`Open` refuse before a reader observes it. |
+| Every control document is bounded, no-follow, and unambiguous | fake | Temporary malformed `CURRENT`, journal, integrity root, and integrity-file payloads assert deterministic refusal, unchanged durable state, and no external-target read. |
+| CLI/publisher lock waits honor cancellation | fake | A second descriptor holds the actual temporary connector lock; each context-bearing operation returns its cancellation error with unchanged pointer/journal, releases its acquisition handle, and succeeds after release. |
+
+### Correction design and impact disposition
+
+- Authority/base: instruction `126.msg` accepts the exact-review BLOCK and
+  authorizes only these five corrections from
+  `c4f0bc3728dda318ea3d01f78de7aa299b6135cb`. CP12 remains prohibited.
+- Foundation Atlas classification: **constrained_extension** of
+  `authoring.source-lock-vnext.v1`. The existing publisher remains the sole
+  authoring owner; no runtime, connector, source-lock, renderer, or transport
+  route is added.
+- Confinement: retain a descriptor for the supplied definitions root and open
+  connector/generation subroots relative to it. Reject connector-root and lock
+  symlinks before access; source-lock and publication-control reads plus
+  control-file replacement/removal stay beneath those rooted descriptors.
+  Stage cleanup first proves a real non-symlinked directory and strict marker;
+  `runLockRender` reads its author-owned source lock through the confined
+  connector root.
+- Stage ownership: write, sync, and retain a typed private marker immediately
+  after a random direct-child stage directory is created. Recovery/prune
+  removes only a regular directory whose strict marker binds connector,
+  generation, and stage identity; any unknown, malformed, or symlinked stage
+  is preserved and makes the operation fail closed.
+- Generation integrity: stream every validated artifact through the same
+  length-framed content-address calculation used for publication. Require its
+  result to equal directory, integrity, and pointer generation values; derive
+  the exact permitted directory set from artifact paths, and require an empty
+  regular lease.
+- Control and cancellation: use one rooted no-follow bounded reader plus
+  `decodeStrictJSON` duplicate rejection for all typed control documents.
+  Thread `context.Context` from the CLI signal boundary through every
+  publisher operation and use a nonblocking advisory-lock retry that returns
+  cancellation without creating, replacing, pruning, or leaking state.
+- Scope: preserve all connector/source locks, flat execution corpus, `defs.FS`,
+  App/CLI runtime routing, provider/credential/database access, certification,
+  cross-connector transactions, and author-owned files. No PM command syntax,
+  help, manual, or website surface changes are expected; authoring canon/Atlas
+  claims change only where these behavior guarantees become true.
+- Lifecycle/skills: `scripts/gsd doctor` has only the established missing
+  `issue-122-rebootstrap.md`; all five command sources and generated
+  discuss/plan/execute/verify/review prompts resolved. The phase has no
+  compatible isolated GSD worker/reviewer, so GSD/TDD/review executes inline
+  and is recorded here. Loaded `go-engineering` (advanced/production),
+  `tdd`, `connector-lane-build-order`,
+  `connector-migration-exact-sha-review`, `frontend-design`, and
+  `vercel-react-best-practices`; required unavailable names
+  `golang-how-to` and `web-design-guidelines` are not claimed.
