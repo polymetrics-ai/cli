@@ -1485,8 +1485,8 @@ func TestVNextGenerationPublisherRefusesFinalReplacedAtomicControlTemporary(t *t
 			if got, readErr := os.ReadFile(replacementPath); readErr != nil || string(got) != "final unrelated replacement" {
 				t.Fatalf("final atomic %s replacement was not retained: err=%v got=%q", test.target, readErr, got)
 			}
-			if directory := filepath.Base(filepath.Dir(replacementPath)); !strings.HasPrefix(directory, ".connectorgen-quarantine-") {
-				t.Fatalf("final atomic %s replacement retained outside quarantine: %q", test.target, replacementPath)
+			if directory := filepath.Base(filepath.Dir(replacementPath)); !strings.HasPrefix(directory, vNextPublicationControlRepairDirectoryPrefix) {
+				t.Fatalf("final atomic %s replacement retained outside private control-repair transaction: %q", test.target, replacementPath)
 			}
 			if _, statErr := os.Stat(movedPath); statErr != nil {
 				t.Fatalf("final atomic %s replacement removed original temporary: %v", test.target, statErr)
@@ -1570,8 +1570,8 @@ func TestVNextGenerationPublisherRecoversInterruptedReplacedControlBeforeDecode(
 			if got, readErr := os.ReadFile(targetPath); readErr != nil || string(got) != "interrupted substituted control" {
 				t.Fatalf("interrupted %s = %q, %v; want substituted control", test.target, got, readErr)
 			}
-			if _, statErr := os.Stat(filepath.Join(root, "acme", vNextPublicationControlRepairFile)); statErr != nil {
-				t.Fatalf("interrupted %s repair authority error = %v, want pending authority", test.target, statErr)
+			if got := vNextPublicationPendingControlRepairAuthoritiesForTest(t, root); got != 1 {
+				t.Fatalf("interrupted %s repair authority count = %d, want one pending authority", test.target, got)
 			}
 
 			recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -1638,7 +1638,7 @@ func vNextFindPublicationPrivatePayloadForTest(t *testing.T, root string, want [
 		t.Fatal(err)
 	}
 	for _, entry := range entries {
-		if !entry.IsDir() || (!strings.HasPrefix(entry.Name(), ".connectorgen-publication-") && !strings.HasPrefix(entry.Name(), ".connectorgen-quarantine-")) {
+		if !entry.IsDir() || (!strings.HasPrefix(entry.Name(), ".connectorgen-publication-") && !strings.HasPrefix(entry.Name(), ".connectorgen-quarantine-") && !strings.HasPrefix(entry.Name(), vNextPublicationControlRepairDirectoryPrefix)) {
 			continue
 		}
 		directory := filepath.Join(connectorRoot, entry.Name())

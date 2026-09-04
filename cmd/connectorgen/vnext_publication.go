@@ -71,10 +71,13 @@ const (
 	vNextPublicationAfterControlRepairPrepared              vNextPublicationFaultPoint = "after_control_repair_prepared"
 	vNextPublicationAfterControlRepairInstall               vNextPublicationFaultPoint = "after_control_repair_install"
 	vNextPublicationAfterControlRepairInstallSync           vNextPublicationFaultPoint = "after_control_repair_install_sync"
+	vNextPublicationAfterControlRepairInstalledPhaseSync    vNextPublicationFaultPoint = "after_control_repair_installed_phase_sync"
 	vNextPublicationAfterControlRepairReplacementRetainSync vNextPublicationFaultPoint = "after_control_repair_replacement_retain_sync"
 	vNextPublicationAfterControlRepairReplacementSync       vNextPublicationFaultPoint = "after_control_repair_replacement_sync"
 	vNextPublicationAfterControlRepairPublicRestoreSync     vNextPublicationFaultPoint = "after_control_repair_public_restore_sync"
 	vNextPublicationAfterControlRepairRestoreSync           vNextPublicationFaultPoint = "after_control_repair_restore_sync"
+	vNextPublicationBeforeControlRepairAuthorityClear       vNextPublicationFaultPoint = "before_control_repair_authority_clear"
+	vNextPublicationAfterControlRepairAuthorityRetireSync   vNextPublicationFaultPoint = "after_control_repair_authority_retire_sync"
 	vNextPublicationAfterControlRepairClearSync             vNextPublicationFaultPoint = "after_control_repair_clear_sync"
 	vNextPublicationAfterStageRemovalIdentity               vNextPublicationFaultPoint = "after_stage_removal_identity"
 	vNextPublicationAfterGenerationRemovalIdentity          vNextPublicationFaultPoint = "after_generation_removal_identity"
@@ -850,7 +853,7 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 	}
 	repair, repairErr := p.beginControlRepairLocked(operation, target, identity)
 	if repair != nil {
-		defer repair.close(operation)
+		defer repair.close()
 	}
 	if repairErr != nil {
 		return repairErr
@@ -863,6 +866,9 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 		return err
 	}
 	if err := p.hit(vNextPublicationAfterFinalControlSourceIdentity); err != nil {
+		return err
+	}
+	if err := repair.assertPrivateIdentity(operation); err != nil {
 		return err
 	}
 	moved, mismatch, err := vNextPublicationInstallAtomicControl(operation.connector, temporaryRoot, target, "publication control", identity, priorIdentity, hasPrior, func() error {

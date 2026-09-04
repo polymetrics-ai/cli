@@ -198,24 +198,34 @@ with `unsupported`.
     rename is allowed before that journal is durable. A `CURRENT` or `JOURNAL`
     temporary is the `control` child of a retained private
     `.connectorgen-publication-*` directory directly below the connector root.
-    Before final installation, retain and fsync a verified hard-link backup of
-    the prior control in a private quarantine, then atomically persist and fsync
-    a bounded strict typed `.connectorgen-control-repair.json` authority. That
-    authority binds the `CURRENT` or `JOURNAL` target, intended temporary,
-    optional prior, observed replacement, quarantine name/identity, and repair
-    phase. It is durable before exposure. The source child is rechecked
-    immediately before the descriptor-relative transition; the installed inode
-    must then equal the retained temporary identity. A mismatch retains and
-    fsyncs the installed replacement, records that identity, restores and fsyncs
-    the prior control (or the valid absent first-publication namespace), and
-    clears the repair authority only after that durable resolution. Recovery
-    reads a pending repair authority before it decodes ordinary `CURRENT` or
-    `JOURNAL`; it never treats a pending substituted public control as selection
-    authority. Fsync the `generations/` descriptor after the rename, then
-    atomically replace `CURRENT` with the new generation and integrity digest
-    and fsync its containing descriptor. `CURRENT`, the journal, repair
-    authority, `integrity.json` (including each file entry), and the stage
-    marker are bounded, no-follow, strict JSON documents: duplicate members and
+    Before final installation, create a unique connector-local
+    `.connectorgen-control-repair-<random>/` directory with `Mkdirat` exclusive
+    creation and retain its descriptor identity. Hard-link and fsync the prior
+    control in that private transaction when one exists, then create and fsync
+    its bounded strict `prepared.json` authority with exclusive creation. The
+    immutable prepared authority binds the `CURRENT` or `JOURNAL` target,
+    intended temporary, optional prior, and private transaction name/identity;
+    it is durable before exposure. No mutable root repair-authority pathname
+    exists. Every later recovery state is a new bounded `phase-*.json` member,
+    also exclusively created, that binds the prepared inode/digest and its
+    immediate predecessor identity/digest. The source child and private
+    transaction/prepared authority are rechecked immediately before the
+    descriptor-relative transition; the installed inode must then equal the
+    retained temporary identity. A mismatch retains and
+    fsyncs the installed replacement, appends its bound phase, restores and
+    fsyncs the prior control (or the valid absent first-publication namespace),
+    and appends a restored phase before clearing the private authority. Recovery
+    locates and verifies a pending private transaction and its contiguous phase
+    chain before it decodes ordinary `CURRENT` or `JOURNAL`; it never treats a
+    pending substituted public control as selection authority. Cleanup rechecks
+    public and private identities, then removes and fsyncs the prepared authority
+    before it deletes only private phase/backup garbage; a retained substitute
+    remains forensic private state. Fsync the
+    `generations/` descriptor after the rename, then atomically replace
+    `CURRENT` with the new generation and integrity digest and fsync its
+    containing descriptor. `CURRENT`, the journal, prepared authority, phase
+    records, `integrity.json` (including each file entry), and the stage marker
+    are bounded, no-follow, strict JSON documents: duplicate members and
     trailing values are invalid.
 14. Revalidate the selected `CURRENT` generation, mark the journal committed,
     and clear it only after the active generation is complete. A failed active
