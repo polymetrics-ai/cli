@@ -14,12 +14,12 @@
 ### 2026-09-06 — CP11 Group 1 F-04 safe snapshot oracle
 
 - **RED (exact original fixture):** [GROUP1-EVIDENCE.md](GROUP1-EVIDENCE.md) records the bounded `7e014d00` child matrix. The old snapshot blocks on regular→FIFO and mixes retained A metadata with B bytes for regular→symlink and directory A→B substitutions. The fixture report names source/overlay hashes, command, child outputs, kill/reap bounds, and its unrun F-01 overlay limit.
-- **GREEN contract (not yet claimed):** the active snapshot must derive regular-file identity and bytes from one nonblocking/no-follow descriptor, verify each recursive directory descriptor against the observed identity, refuse A/B replacement without reading a FIFO or following B, and retain ordinary nested-schema behavior.
+- **GREEN:** the active 17.659 s matrix records regular-file identity/bytes from one nonblocking/no-follow descriptor, verified directory descriptors for recursion, refusal of FIFO/symlink/directory B without B bytes, a nested positive, and semantic interrupted-authority/FIFO caller preservation. The exact tested diff identity and output witnesses are in `GROUP1-EVIDENCE.md`; this does not accept Group 2 F-01.
 
 ### 2026-09-06 — CP11 Group 1 F-08 bounded child ownership
 
 - **RED (exact original fixture):** [GROUP1-EVIDENCE.md](GROUP1-EVIDENCE.md) records a process that follows the old `Start` then readiness-failure-before-cleanup order. Its exact sleeper PID remains live after the inner test exits. The outer fixture, not the original unarmed process, performs PID-specific `SIGKILL` then `ESRCH` absence observation; it does not directly `Wait` for or claim to reap the orphaned grandchild. Its `SIGKILL` is explicitly excluded from real-signal success evidence.
-- **GREEN contract (not yet claimed):** every active signal-test child becomes cleanup-owned immediately after `Start`; FIFO and actual lock-contention readiness are bounded observations; all normal and cleanup waits are bounded; real OS `SIGINT` proves lock-render cancellation and a retry after release; a withheld readiness/nonterminating-child test proves bounded cleanup without being counted as signal success.
+- **GREEN:** every active child becomes direct-`Wait`/cleanup-owned immediately after `Start`; FIFO and connector-directory descriptor observed lock-contention readiness are bounded; normal/cleanup waits are bounded; real OS `SIGINT` proves cancellation/no-success-output/state preservation/retry; and withheld FIFO readiness proves direct owned-child `Wait` cleanup separately from signal success. The exact matrix/output is in `GROUP1-EVIDENCE.md`.
 
 ### 2026-09-02 — G0 direct-parent delivery amendment
 
