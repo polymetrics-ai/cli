@@ -1038,3 +1038,38 @@
 3. Establish built-main Group-B SIGINT/SIGTERM/repeated-signal REDs for non-consuming siblings, then preserve existing lock-render lock-acquisition/pre-mutation cancellation, no mutation/success, and post-unlock retry without expanding to mid-transaction cancellation.
 4. Resolve Group-C lint/error contracts and FIFO proof snapshots. The configured linter is the RED witness for dead code; R3-05 is evidence strengthening and must not fabricate a production fault.
 5. Only after focused GREEN, changed-package/race and relevant authoring/preflight/canon/Atlas/boundary/docs/static/release evidence, freeze one code-bearing local SHA for Firstmate's required fresh Astra full-range exact-SHA review. New causal findings go to Firstmate; no piecemeal acceptance.
+
+## 2026-09-06 — CP11 F-01–F-08 coordinated TDD plan
+
+### Task Delivery Header
+
+- Issue: Refs [#4427](https://github.com/polymetrics-ai/cli/issues/4427) — transactional connector-generation publication; parent Refs [#4325](https://github.com/polymetrics-ai/cli/issues/4325).
+- Base branch: `main` through existing [PR 4294](https://github.com/polymetrics-ai/cli/pull/4294).
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main`.
+- Delivery: locally committed coordinated CP11 repair and exact-SHA evidence, then Firstmate-managed independent review; no push or merge in this scope.
+- Working branch: `fm/cli-top100-declaration-batch-r1`.
+- Task: repair the audited F-01–F-08 publication/proof group without relaxing B-01/B-02/R3 contracts; obtain actual RED/GREEN and a fresh independent whole-range review.
+- Verification: focused behavioral selectors and retained B/R3 controls; normal/race `cmd/connectorgen`; current canon/Atlas/source-lock/preflight/static/boundary checks; review at final exact code SHA.
+
+| Slice | RED before behavior change | GREEN acceptance and retained controls |
+| --- | --- | --- |
+| F-04 safe snapshot oracle | Bounded child exposes regular→FIFO, regular→symlink, and directory replacement at the oracle's classification/open boundary. | Same descriptor supplies identity and bytes or refuses boundedly; no FIFO/symlink target read; nested schema and semantic-admission controls remain. |
+| F-08 real process harness | Current early exit/readiness/Wait path is held/withheld under a bounded parent and demonstrates non-deterministic readiness or unreaped child without hanging the suite. | Every successful Start arms kill/reap, every lock releases, normal/cleanup waits bound; actual lock contention readiness, real OS signal, no success/mutation, and retry are observed. |
+| F-01 capture identity | Durable pending CURRENT/JOURNAL capture A→B swap immediately before each actual dependent open moves/accepts B on the candidate. | Checked descriptor is retained or rechecked before enumerate/candidate/rename/sync; B refuses before public mutation and A/B/control remain identifiable. |
+| F-02 recursive ownership | Repeated actual nested A→B refusal leaks an open child descriptor or exact ownership accounting under a bounded no-GC child; Fstat error is a separate control. | Every acquired child closes once, refusal preserves actual objects/quarantine semantics, normal cleanup remains unchanged. |
+| F-03 writer/owned cleanup | Actual temporary Close error after Write/Sync is silently successful or loses required typed/owned cleanup state. | Close error is surfaced without false rollback claim; primary/secondary errors remain inspectable; linked anchor and safe owned cleanup/recovery/retry are accounted for. |
+| F-05/F-06 proof matrix | Equal-byte distinct B defeats prior weak identity oracle; current durable fixtures show actual prepared rather than committed state and omit rejected-new restart/final prune. | Exact A/B/C/control identities precede restoration; named durable/caller matrix decodes CURRENT/JOURNAL at every cut and exercises fresh restart/final prune. |
+| F-07 canonical evidence | Prior records claim signal RED unavailable. | Dated PLAN/TDD/VERIFICATION/REVIEW correction names recovered records/commands/hashes, old uncommitted-tree limit, and does not call final code the failing state. |
+
+Required skills recorded for this plan: `golang-how-to`, `golang-cli`,
+`golang-testing`, `golang-error-handling`, `golang-safety`, `golang-context`,
+`golang-concurrency`, `golang-security`, and `golang-lint`; the pinned
+`firstmate-exhaustive-review` gate and project CLI parity reference were also
+read. CLI help/manual/website parity is **not applicable**: no user-facing
+command, flag, help text, generated manual, website content, or PM/App route is
+added or changed; the tests exercise existing internal `connectorgen` behavior
+only. Preserve stdout success ordering and no-success-on-refusal instead.
+
+The plan is the documented non-Pi inline fallback for generated GSD
+`discuss-phase` and `plan-phase --tdd`; generated `execute-phase`,
+`verify-work`, and `code-review` are run/recorded in sequence after this plan.

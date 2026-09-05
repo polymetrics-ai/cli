@@ -137,3 +137,33 @@ decision remains.
 - The accepted boundary is local and authoring-only: a malformed local nonregular member must refuse promptly without changing identity/bytes or holding the connector lock. This is neither a provider capability nor a generic runtime/filesystem foundation decision.
 - The repair uses TDD with a subprocess RED control because the pre-fix behavior can hang. GREEN must preserve descriptor-relative no-follow semantics and validate the exact opened descriptor. A pathname precheck, broad retry, manual cleanup surface, or new runtime reader is rejected.
 - B-01 remains the final no-clobber correction and B-02 remains the strict interrupted-bootstrap correction. Both are retained for final fresh exact-SHA review; L-01 cache cleanup remains optional and out of scope. CP12 remains prohibited.
+
+## 2026-09-06 — CP11 F-01–F-08 coordinated repair discussion
+
+The Firstmate-authored `CP11-F01-F08-coordinated-repair.md` is the complete
+input to this discussion.  It closes all product and architecture questions:
+this is one authoring-only publication repair, retaining existing descriptor
+relative confinement, no-follow/type validation, authority history, no-replace
+public restore, strict bootstrap, directory lifetime locking, independent lease
+identity, and lock-render-only signal scope.  No provider/runtime/credential/
+database action, source-lock materialization, new filesystem abstraction,
+generic writer, new flag, receiver, or cancellation model is in scope.
+
+The required `scripts/gsd` adapter was checked with `scripts/gsd doctor` and
+all five lifecycle sources/prompts resolved.  Doctor retains the established
+missing `.gsd/prompts/issue-122-rebootstrap.md` issue prompt, while
+`agentcontractgen check` passed.  The phase has no ROADMAP-backed compatible Pi
+worker and the Firstmate single-writer contract forbids role spawning, so this
+is the adapter-documented inline/manual fallback: generated `discuss-phase`
+and `plan-phase --tdd` prompts were read and their steps are recorded here and
+in PLAN/TDD.  This records a runtime limitation, not a waiver of TDD,
+verification, audit, or independent exact-SHA review.
+
+The discussion ordering is fixed by the completed audit: first make the
+snapshot/process witnesses safe and bounded (F-04/F-08), then obtain real
+production REDs and repair the one capture/resource/error group (F-01/F-02/
+F-03), then strengthen reader/durable-cut proof (F-05/F-06), then correct F-07
+provenance canonically and verify the complete wave.  Existing correct reader,
+lease and signal behavior is not intentionally broken merely to manufacture a
+RED; oracle mutation controls are labeled as controls.  All source changes stay
+frozen until the plan/TDD ledger below exists.

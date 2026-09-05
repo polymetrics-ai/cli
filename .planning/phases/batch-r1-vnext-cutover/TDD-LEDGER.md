@@ -888,3 +888,28 @@ Retained controls: R3-01 nonblocking descriptor admission; B-01 A/B/C and activa
 - **Static GREEN:** `gofmt -d` on every changed Go file, `go vet ./cmd/connectorgen`, `go build -o /dev/null ./cmd/connectorgen`, `go run ./cmd/agentcontractgen check`, `go mod tidy -diff`, and `git diff --check` passed. Configured `golangci-lint run ./cmd/connectorgen/...` still reports exactly `15` inherited pre-range diagnostics (one existing `staticcheck` and fourteen existing unused declarations); it reports no R3-02–07 location.
 - **Boundary GREEN:** the single retained interactive `make connector-boundary` capture exited `0` with `ConnectorBoundaryReport.outcome=clean`, `checked_files=284`, `connectors_loaded=553`, `findings=[]`, `warnings=[]`, and six existing documented exceptions. A prior noninteractive boundary invocation had already produced its JSON, but its terminal capture collapsed before the final exit; the one interactive repeat exists solely to retain this definitive exit/result and did not follow a code change or unresolved finding.
 - **Next gate:** inspect and freeze this coherent local repair as one code-bearing commit, then obtain the required fresh independent Astra/xhigh exact-SHA full-range review. No push, CP12 work, or acceptance follows these local checks.
+
+## 2026-09-06 — CP11 F-01–F-08 coordinated TDD ledger
+
+This ledger supersedes no earlier historical result.  Its RED/GREEN entries are
+written before the coordinated source/test wave; no planned row below is an
+executed result until the exact command, output, exit, duration, and tested
+state are appended.
+
+| Group | Red: observable candidate failure | Green: observable repaired behavior | State |
+| --- | --- | --- | --- |
+| F-04 | Bounded child schedules replacement after snapshot classification; current oracle can mix A metadata/B bytes, follow symlink, or block/read FIFO. | Opened descriptor identity/type is checked before bytes; regular→FIFO/symlink/directory swap either preserves A or refuses boundedly. | pending RED |
+| F-08 | Bounded held-lock/withheld-readiness child exposes unbounded Wait, sleep race, or child cleanup omission without a broad package hang. | Cleanup/reap/lock release runs from every early exit; deterministic contention readiness, actual signal exit, preserved state, and retry pass. | pending RED |
+| F-01 | Each real capture validator/candidate/mutating reopen admits or moves into B after A→B swap. | Checked-open identity refuses before dependent public mutation and valid continuity/reacquisition remains. | pending RED |
+| F-02 | Repeated nested cleanup substitution grows descriptor count/owned open descriptor; open Fstat error controls early exit. | Count/ownership remains bounded without finalizers; A/B/root/quarantine outcomes match recursive policy. | pending RED |
+| F-03 | Real writable close-injection after Write/Sync reports success or loses secondary typed/anchor cleanup outcome. | Error exposes close cause, preserves meaningful primary/secondary causes and actual durable recovery state/no success output. | pending RED |
+| F-05/F-06 | Equal-byte distinct inode mutation evades old assertions; cut decoding demonstrates mislabeled prepared JOURNAL and omitted restart/final prune. | Assertions see A/B/C/control identity before restore; all named caller/cut rows decode and preserve/refuse/recover correctly. | pending RED/control |
+| F-07 | Historical canonical record says trace unavailable. | Corrections record recovered 12.383s RED, edit, 15.417s GREEN, hashes and uncommitted-tree limit. | pending evidence edit |
+
+Manual GSD execution record: `scripts/gsd doctor`, lifecycle `sources`,
+`prompt discuss-phase batch-r1-vnext-cutover`,
+`prompt plan-phase batch-r1-vnext-cutover --tdd`, and
+`go run ./cmd/agentcontractgen check` executed before this ledger. The custom
+phase lacks a ROADMAP-compatible Pi runner and Firstmate requires one Terra
+writer, so the project adapter's permitted inline fallback is used; it does not
+permit skipping RED/GREEN, verification, or the fresh Astra review.
