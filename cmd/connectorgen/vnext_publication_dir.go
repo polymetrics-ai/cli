@@ -201,7 +201,7 @@ func (d *vNextPublicationDirectory) duplicateFile(label string) (*os.File, error
 }
 
 func (d *vNextPublicationDirectory) openRegular(name, label string, flags int) (*os.File, error) {
-	file, err := d.openFile(name, label, flags, 0, false)
+	file, err := d.openFile(name, label, flags|unix.O_NONBLOCK, 0, false)
 	if err != nil {
 		return nil, err
 	}
@@ -213,6 +213,24 @@ func (d *vNextPublicationDirectory) openRegular(name, label string, flags int) (
 	if !info.Mode().IsRegular() {
 		_ = file.Close()
 		return nil, fmt.Errorf("%s is not a regular file", label)
+	}
+	return file, nil
+}
+
+func (d *vNextPublicationDirectory) openFilesystemMember(name string) (*os.File, error) {
+	const label = "publication filesystem member"
+	file, err := d.openFile(name, label, unix.O_RDONLY|unix.O_NONBLOCK, 0, false)
+	if err != nil {
+		return nil, err
+	}
+	info, err := file.Stat()
+	if err != nil {
+		_ = file.Close()
+		return nil, fmt.Errorf("stat %s: %w", label, err)
+	}
+	if !info.Mode().IsRegular() && !info.IsDir() {
+		_ = file.Close()
+		return nil, fmt.Errorf("%s is not a regular file or directory", label)
 	}
 	return file, nil
 }
@@ -452,5 +470,5 @@ func (f vNextPublicationDirectoryFS) Open(name string) (fs.File, error) {
 	if !fs.ValidPath(name) {
 		return nil, &fs.PathError{Op: "open", Path: name, Err: fs.ErrInvalid}
 	}
-	return f.root.openFile(name, "publication filesystem member", unix.O_RDONLY, 0, false)
+	return f.root.openFilesystemMember(name)
 }

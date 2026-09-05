@@ -9,11 +9,14 @@ import (
 	"io"
 	"io/fs"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"syscall"
 	"testing"
 	"time"
+
+	"golang.org/x/sys/unix"
 
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/connectors/manifestindex"
@@ -2902,6 +2905,194 @@ func sameStrings(got, want []string) bool {
 		}
 	}
 	return true
+}
+
+const vNextPublicationFIFOReaderScenarioEnv = "PM_CONNECTORGEN_FIFO_READER_SCENARIO"
+
+func TestVNextPublicationFIFOReaderRefusesBeforeBlockingOpen(t *testing.T) {
+	if scenario := os.Getenv(vNextPublicationFIFOReaderScenarioEnv); scenario != "" {
+		vNextPublicationFIFOReaderSubprocess(t, scenario)
+		return
+	}
+
+	for _, scenario := range []string{"stale-stage-owner", "public-current-recover", "public-journal-check", "admission-filesystem"} {
+		t.Run(scenario, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			command := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestVNextPublicationFIFOReaderRefusesBeforeBlockingOpen$", "-test.v")
+			command.Env = append(os.Environ(), vNextPublicationFIFOReaderScenarioEnv+"="+scenario)
+			output, err := command.CombinedOutput()
+			if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+				t.Fatalf("FIFO %s child did not refuse before blocking open; output=%q", scenario, output)
+			}
+			if err != nil {
+				t.Fatalf("FIFO %s child failed: %v; output=%q", scenario, err, output)
+			}
+		})
+	}
+}
+
+func vNextPublicationFIFOReaderSubprocess(t *testing.T, scenario string) {
+	t.Helper()
+	switch scenario {
+	case "stale-stage-owner":
+		root := t.TempDir()
+		publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		pointer, err := publisher.Publish(vNextPublicationArtifactsForTest("active", false))
+		if err != nil {
+			t.Fatal(err)
+		}
+		stageName := ".stage-fifo-owner"
+		stagePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, stageName)
+		vNextWriteOwnedStageForTest(t, stagePath, pointer, stageName, "stale")
+		markerPath := filepath.Join(stagePath, vNextPublicationStageOwnerFile)
+		if err := os.Remove(markerPath); err != nil {
+			t.Fatal(err)
+		}
+		if err := unix.Mkfifo(markerPath, 0o600); err != nil {
+			t.Fatal(err)
+		}
+		fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := fresh.Recover(context.Background()); err == nil || !strings.Contains(err.Error(), "not a regular file") {
+			t.Fatalf("Recover() with FIFO stage marker error = %v, want prompt regular-file refusal", err)
+		}
+		if info, err := os.Lstat(markerPath); err != nil || info.Mode()&os.ModeNamedPipe == 0 {
+			t.Fatalf("FIFO stage marker changed after refusal: info=%v err=%v", info, err)
+		}
+		operation, err := fresh.openOperation(context.Background(), syscall.LOCK_EX, true)
+		if err != nil {
+			t.Fatalf("operation lock remained held after FIFO refusal: %v", err)
+		}
+		operation.close()
+	case "public-current-recover", "public-journal-check":
+		root := t.TempDir()
+		lock := minimalVNextLockForTest()
+		connectorRoot := filepath.Join(root, lock.Connector)
+		if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		raw, err := json.Marshal(lock)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+			t.Fatal(err)
+		}
+		var stdout, stderr bytes.Buffer
+		if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr); code != 0 {
+			t.Fatalf("initial lock-render = %d; stdout=%q stderr=%q", code, stdout.String(), stderr.String())
+		}
+		target := vNextPublicationCurrentFile
+		if scenario == "public-journal-check" {
+			target = vNextPublicationJournalFile
+		}
+		targetPath := filepath.Join(connectorRoot, target)
+		savedPath := targetPath + ".before-fifo"
+		_, err = os.Lstat(targetPath)
+		hadOriginal := err == nil
+		if !hadOriginal && !errors.Is(err, fs.ErrNotExist) {
+			t.Fatal(err)
+		}
+		if hadOriginal {
+			if err := os.Rename(targetPath, savedPath); err != nil {
+				t.Fatal(err)
+			}
+		}
+		if err := unix.Mkfifo(targetPath, 0o600); err != nil {
+			t.Fatal(err)
+		}
+		if scenario == "public-current-recover" {
+			publisher, err := newVNextGenerationPublisher(root, lock.Connector, vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := publisher.Recover(context.Background()); err == nil || !strings.Contains(err.Error(), "not a regular file") {
+				t.Fatalf("Recover() with FIFO %s error = %v, want prompt regular-file refusal", target, err)
+			}
+		} else {
+			stdout.Reset()
+			stderr.Reset()
+			if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root, "--check"}, &stdout, &stderr); code != 1 || stdout.Len() != 0 || !strings.Contains(stderr.String(), "not a regular file") {
+				t.Fatalf("lock-render --check with FIFO %s = %d; stdout=%q stderr=%q", target, code, stdout.String(), stderr.String())
+			}
+		}
+		if info, err := os.Lstat(targetPath); err != nil || info.Mode()&os.ModeNamedPipe == 0 {
+			t.Fatalf("FIFO %s changed after refusal: info=%v err=%v", target, info, err)
+		}
+		publisher, err := newVNextGenerationPublisher(root, lock.Connector, vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		operation, err := publisher.openOperation(context.Background(), syscall.LOCK_EX, true)
+		if err != nil {
+			t.Fatalf("operation lock remained held after FIFO %s refusal: %v", target, err)
+		}
+		operation.close()
+		if err := os.Remove(targetPath); err != nil {
+			t.Fatal(err)
+		}
+		if hadOriginal {
+			if err := os.Rename(savedPath, targetPath); err != nil {
+				t.Fatal(err)
+			}
+		}
+		stdout.Reset()
+		stderr.Reset()
+		if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root, "--check"}, &stdout, &stderr); code != 0 {
+			t.Fatalf("lock-render --check after FIFO %s restoration = %d; stdout=%q stderr=%q", target, code, stdout.String(), stderr.String())
+		}
+	case "admission-filesystem":
+		root := t.TempDir()
+		if err := os.WriteFile(filepath.Join(root, "spec.json"), []byte(`{"marker":"regular"}`), 0o600); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.Mkdir(filepath.Join(root, "schemas"), 0o700); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(root, "schemas", "record.json"), []byte(`{"type":"object"}`), 0o600); err != nil {
+			t.Fatal(err)
+		}
+		directory, err := vNextPublicationOpenDirectory(root, "FIFO admission root")
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Cleanup(func() {
+			if err := directory.Close(); err != nil {
+				t.Errorf("close FIFO admission root: %v", err)
+			}
+		})
+		stage := vNextPublicationStageFS{connector: "acme", root: vNextPublicationDirectoryFS{root: directory}}
+		if _, err := fs.ReadDir(stage, "acme"); err != nil {
+			t.Fatalf("enumerate regular staged filesystem: %v", err)
+		}
+		if _, err := fs.ReadDir(stage, "acme/schemas"); err != nil {
+			t.Fatalf("enumerate nested staged schema directory: %v", err)
+		}
+		if payload, err := fs.ReadFile(stage, "acme/schemas/record.json"); err != nil || string(payload) != `{"type":"object"}` {
+			t.Fatalf("read nested staged schema = %q, %v", payload, err)
+		}
+		member := filepath.Join(root, "spec.json")
+		if err := os.Remove(member); err != nil {
+			t.Fatal(err)
+		}
+		if err := unix.Mkfifo(member, 0o600); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := fs.ReadFile(stage, "acme/spec.json"); err == nil || !strings.Contains(err.Error(), "not a regular file") {
+			t.Fatalf("admission filesystem FIFO read error = %v, want prompt regular-file refusal", err)
+		}
+		if info, err := os.Lstat(member); err != nil || info.Mode()&os.ModeNamedPipe == 0 {
+			t.Fatalf("FIFO admission member changed after refusal: info=%v err=%v", info, err)
+		}
+	default:
+		t.Fatalf("unknown FIFO reader subprocess scenario %q", scenario)
+	}
 }
 func vNextCreateOwnedStageForTest(root string, pointer vNextGenerationPointer, stageName string, recover func(context.Context) error) error {
 	stage := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, stageName)
