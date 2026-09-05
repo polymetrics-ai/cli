@@ -130,3 +130,10 @@ decision remains.
 4. The first artifacts are deterministic RED witnesses on temporary roots using
    the real production descriptor paths. Green requires inode/byte retention
    and ordinary fresh recovery/retry, not an error code alone.
+
+## 2026-09-05 — CP11-R3-01 successor discussion record
+
+- Independent exact-range publication and bootstrap reviews found the same FIFO-before-type-check liveness defect. A separate Astra merged-ledger audit affirmed it and added the semantic-admission `vNextPublicationDirectoryFS.Open` bypass as a sibling of the same descriptor-reader cause.
+- The accepted boundary is local and authoring-only: a malformed local nonregular member must refuse promptly without changing identity/bytes or holding the connector lock. This is neither a provider capability nor a generic runtime/filesystem foundation decision.
+- The repair uses TDD with a subprocess RED control because the pre-fix behavior can hang. GREEN must preserve descriptor-relative no-follow semantics and validate the exact opened descriptor. A pathname precheck, broad retry, manual cleanup surface, or new runtime reader is rejected.
+- B-01 remains the final no-clobber correction and B-02 remains the strict interrupted-bootstrap correction. Both are retained for final fresh exact-SHA review; L-01 cache cleanup remains optional and out of scope. CP12 remains prohibited.
