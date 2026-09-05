@@ -11,6 +11,16 @@
 
 ## Actual evidence
 
+### 2026-09-06 — CP11 Group 1 F-04 safe snapshot oracle
+
+- **RED (exact original fixture):** [GROUP1-EVIDENCE.md](GROUP1-EVIDENCE.md) records the bounded `7e014d00` child matrix. The old snapshot blocks on regular→FIFO and mixes retained A metadata with B bytes for regular→symlink and directory A→B substitutions. The fixture report names source/overlay hashes, command, child outputs, kill/reap bounds, and its unrun F-01 overlay limit.
+- **GREEN contract (not yet claimed):** the active snapshot must derive regular-file identity and bytes from one nonblocking/no-follow descriptor, verify each recursive directory descriptor against the observed identity, refuse A/B replacement without reading a FIFO or following B, and retain ordinary nested-schema behavior.
+
+### 2026-09-06 — CP11 Group 1 F-08 bounded child ownership
+
+- **RED (exact original fixture):** [GROUP1-EVIDENCE.md](GROUP1-EVIDENCE.md) records a process that follows the old `Start` then readiness-failure-before-cleanup order. Its exact sleeper PID remains live after the inner test exits. The outer fixture, not the original unarmed process, owns the direct PID-specific kill/reap remediation; its `SIGKILL` is explicitly excluded from real-signal success evidence.
+- **GREEN contract (not yet claimed):** every active signal-test child becomes cleanup-owned immediately after `Start`; FIFO and actual lock-contention readiness are bounded observations; all normal and cleanup waits are bounded; real OS `SIGINT` proves lock-render cancellation and a retry after release; a withheld readiness/nonterminating-child test proves bounded cleanup without being counted as signal success.
+
 ### 2026-09-02 — G0 direct-parent delivery amendment
 
 - Authority and route: #4325 comment `5500153864` mandates the issue lifecycle and one-writer, ordinary fast-forward delivery to `fm/cli-top100-declaration-batch-r1`; #4294 comment `5500165004` is the authoritative routing correction. The attempted PR-body replacement failed before mutation on deprecated `projectCards`, so no PR-body mutation is claimed.
