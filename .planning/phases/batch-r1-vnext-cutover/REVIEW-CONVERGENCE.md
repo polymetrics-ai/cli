@@ -516,3 +516,45 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 - **Conclusion:** no remaining CP11-local finding. Commit and ordinary push one
   coherent candidate, read back PR #4294 base/head/SHA, archive the handled
   instruction, and pause unchanged for Firstmate's fresh exact-SHA review.
+
+## 2026-09-05 — CP11 Astra B-01/B-02 frozen correction intake
+
+- Immutable reviewed candidate: `8214bd91403ce620773b61caf674faa540ee1701`; immediate parent `4fa9a5b8cdecdfc07afe54ee3eddb7d19719f5b8`; review source `data/cli-batch1-cp11-astra-review-r2/report.md`. This is the complete current CP11 blocking ledger. L-01 is explicitly optional and excluded.
+- Custody: Firstmate owns the independent Astra re-review. Native OMP task fan-out is disabled and no direct reviewer/fixer role may be created. The local worker records the required inline GSD/TDD/review procedure and will freeze one coherent corrected SHA without pushing it.
+- B-01, source-derived finding pending executable RED: `vNextPublicationRestoreQuarantined` observes absence then calls clobbering `renameFrom`; a second C at that public name can be overwritten while B is restored from quarantine. `activateStageLocked` likewise plain-renames a stage over a late empty final-generation directory. Reachable callers are stale-stage recovery, stale-generation prune, failed-active-validation rollback, and final activation. Violated contract: every cleanup/activation boundary preserves every observed identity. Required exact proof is C-public/B-private/A-reachable inode-and-byte preservation, not only an error.
+- B-02, source-derived finding pending executable RED: a strict, fsynced base `prepared.json` with no terminal phase is valid private authority but `ensureControlAuthorityLocked` rejects it before ordinary recovery. Reachable path is first publication bootstrap after `prepared`/transaction-sync/connector-sync and before base terminal append; visible behavior is permanently failing ordinary fresh recovery. Violated contract: valid durable bootstrap preparation is resumable under the exclusive lock without weakening read-only check or malformed-state refusal.
+
+| Mandatory lens | B-01/B-02 finding coverage | State before RED |
+| --- | --- | --- |
+| Architecture/data flow | Quarantine restore, activation, authority bootstrap, recovery, check, and retry paths are mapped in `PLAN.md`. | complete source map |
+| Happy/bad/edge behavior | A/B/C replacements, final empty destination, CURRENT/JOURNAL first/second base head, valid/malformed/missing-prepared and retry states are enumerated. | executable proof pending |
+| State machine/concurrency | B-01 uses a lock-ignoring actor at the exact syscall seam; B-02 covers pre-marker durable cut, fresh restart, and retry. | executable proof pending |
+| Security/authority | No public overwrite fallback; valid base only; strict private graph before public decode; check stays read-only. | complete contract map |
+| Error/retry/resume | No-replace collision/unsupported stays typed; ordinary recovery resumes valid base and retains conflict reconciliation. | executable proof pending |
+| Output/filesystem integrity | Tests assert inode/bytes/tree reachability for A/B/C and selected authority state, not exit status alone. | executable proof pending |
+| Declaration/runtime boundary | CP11 remains authoring-only; no runtime `CURRENT` reader, importer, compatibility path, credential, provider, or database path changes. | complete |
+| Canon/Atlas evidence | Existing claims are retained as contract, not passed evidence; behavior-granular proof mappings update only after GREEN. | pending GREEN |
+| Tests/evidence | Existing one-substitution and post-bootstrap matrices are retained as regressions but do not cover B-01/B-02. | executable RED required |
+
+- Disconfirming controls: a candidate C-preservation outcome disproves B-01; a malformed/missing-prepared recovery outcome invalidates the proposed B-02 narrowing. Both are recorded as findings, not normalized into the correction.
+- Local review prohibition before fix: no behavior code is changed before a deterministic test-only fault seam and its executable RED are recorded. The later local self-review must inspect the complete `8214bd…new` range, new fault points, all recovery/cleanup callers, canon/Atlas mappings, and every preserved refusal. It is not the required fresh Astra review.
+
+
+## 2026-09-05 — CP11 Astra B-01/B-02 executable RED update
+
+- The frozen source-derived ledger is now executable: the exact three-selector command exited 1 in 3.250s. B-01 lost C in each real stage/generation/rollback restoration caller and accepted the final-generation activation collision; B-02 refused fresh recovery for both valid durable bootstrap cuts after the read-only check assertion passed.
+- This is evidence of the blockers, not a local review verdict. Production behavior remains unmodified pending the bounded Green patch. After Green, inspect the full `8214bd91403ce620773b61caf674faa540ee1701..local-candidate` range, then freeze the SHA for Firstmate-managed Astra re-review without pushing or starting CP12.
+
+## 2026-09-05 — CP11 Astra B-01/B-02 focused GREEN update
+
+- B-01 is corrected without a new primitive: all restore and activation destinations use the established descriptor-relative no-replace path. The physical A/B/C and final-destination witnesses pass, including retained typed collision causes.
+- B-02 is corrected through the narrow markerless-base transition only. Exclusive recovery validates a unique phase-empty/no-predecessor equal-prior/intended record, appends its terminal, re-scans, then completes missing base authority/marker; check remains non-mutating and malformed/private/graph refusals remain in the continuity selector.
+- Atlas/canon mapping was changed only because the existing one-substitution and post-bootstrap proof names could not substantiate the new exact boundaries. `TestFoundationAtlasSelectorsResolve`, focused normal, continuity, and focused race passed. This is not the final local self-review or the required Firstmate Astra verdict.
+
+## 2026-09-05 — CP11 Astra B-01/B-02 local correction review
+
+- **Reviewed scope:** `cmd/connectorgen/vnext_publication.go`, `vnext_publication_repair.go`, their physical/durable tests, `SOURCE-LOCK-VNEXT.md`, the existing `authoring.source-lock-vnext.v1` catalog record, and CP11 planning evidence. No connector definition, rendered execution artifact, runtime reader, provider, credential, database, `.cache`, or certification-residue path is in the correction.
+- **B-01 decision:** `restoreQuarantinedLocked` validates B, observes public absence, then uses `renameNoReplaceFrom`; a C created after that observation cannot be replaced. The refusal retains both its identity cause and the typed collision cause. `activateStageLocked` uses the same primitive, so an unvalidated late final-generation directory remains rather than being overwritten. The witnesses exercise real stage cleanup, prune, rollback, and activation paths with A/B/C inode and byte checks.
+- **B-02 decision:** markerless recovery permits one state only when scanner-validated private identity, no predecessor, zero phases, and equal prior/intended all hold. It appends the existing strict committed terminal phase, closes/re-scans, creates a missing base head only afterward, and writes the marker only after both terminal heads exist. Successors, nonempty phases, malformed/missing private records, graph failures, and read-only check remain fail-closed.
+- **Proof/documentation:** prior mappings only named one-substitution and post-bootstrap tests, so they could not substantiate the new exact boundaries. The catalog now registers/matches the A/B/C, final-activation, and strict-base tests one guarantee at a time; the canon describes the same bounded protocol. No new foundation or compatibility route is introduced.
+- **Verification/finding:** focused, continuity, focused race, full normal/race package, canon, definition, docs, static, help, diff, and explicit changed-path scan gates passed as recorded in `VERIFICATION.md`. No local actionable finding remains. This review is evidence only; the candidate remains BLOCKED until Firstmate-managed Astra exact-SHA review.

@@ -68,6 +68,7 @@ const (
 	vNextPublicationAfterControlSourceIdentity             vNextPublicationFaultPoint = "after_control_source_identity"
 	vNextPublicationAfterFinalControlSourceIdentity        vNextPublicationFaultPoint = "after_final_control_source_identity"
 	vNextPublicationAfterControlRepairPrepared             vNextPublicationFaultPoint = "after_control_repair_prepared"
+	vNextPublicationAfterBaseControlRepairPrepared         vNextPublicationFaultPoint = "after_base_control_repair_prepared"
 	vNextPublicationAfterControlRepairCaptureDirectory     vNextPublicationFaultPoint = "after_control_repair_capture_directory"
 	vNextPublicationBeforeControlRepairCapture             vNextPublicationFaultPoint = "before_control_repair_capture"
 	vNextPublicationAfterControlRepairCaptureRename        vNextPublicationFaultPoint = "after_control_repair_capture_rename"
@@ -83,6 +84,7 @@ const (
 	vNextPublicationAfterGenerationRemovalIdentity         vNextPublicationFaultPoint = "after_generation_removal_identity"
 	vNextPublicationAfterGenerationLeaseIdentity           vNextPublicationFaultPoint = "after_generation_lease_identity"
 	vNextPublicationAfterControlRemovalIdentity            vNextPublicationFaultPoint = "after_control_removal_identity"
+	vNextPublicationBeforeQuarantineRestore                vNextPublicationFaultPoint = "before_quarantine_restore"
 )
 
 // vNextPublicationHooks is test-only fault instrumentation for durable state
@@ -666,7 +668,7 @@ func (p *vNextGenerationPublisher) activateStageLocked(operation *vNextPublicati
 	if err := p.hit(vNextPublicationBeforeStageRename); err != nil {
 		return err
 	}
-	if err := operation.generations.rename(stageName, generation); err != nil {
+	if err := operation.generations.renameNoReplaceFrom(operation.generations, stageName, generation); err != nil {
 		return fmt.Errorf("activate staged generation %q: %w", generation, err)
 	}
 	if err := operation.generations.Sync(); err != nil {
@@ -967,7 +969,7 @@ func vNextPublicationAssertRemovalBindings(root *vNextPublicationDirectory, bind
 	return nil
 }
 
-func vNextPublicationRestoreQuarantined(parent *vNextPublicationDirectory, name, label string, quarantine *vNextPublicationDirectory, candidateIdentity vNextPublicationIdentity) error {
+func (p *vNextGenerationPublisher) restoreQuarantinedLocked(parent *vNextPublicationDirectory, name, label string, quarantine *vNextPublicationDirectory, candidateIdentity vNextPublicationIdentity) error {
 	if err := quarantine.assertIdentity(vNextPublicationQuarantineMember, label, candidateIdentity); err != nil {
 		return err
 	}
@@ -976,13 +978,16 @@ func vNextPublicationRestoreQuarantined(parent *vNextPublicationDirectory, name,
 	} else if !errors.Is(err, fs.ErrNotExist) {
 		return err
 	}
-	return parent.renameFrom(quarantine, vNextPublicationQuarantineMember, name)
+	if err := p.hit(vNextPublicationBeforeQuarantineRestore); err != nil {
+		return err
+	}
+	return parent.renameNoReplaceFrom(quarantine, vNextPublicationQuarantineMember, name)
 }
 
-func vNextPublicationRefuseQuarantinedReplacement(parent *vNextPublicationDirectory, name, label string, quarantine *vNextPublicationDirectory, candidateIdentity vNextPublicationIdentity) error {
+func (p *vNextGenerationPublisher) refuseQuarantinedReplacementLocked(parent *vNextPublicationDirectory, name, label string, quarantine *vNextPublicationDirectory, candidateIdentity vNextPublicationIdentity) error {
 	cause := fmt.Errorf("%s identity changed", label)
-	if err := vNextPublicationRestoreQuarantined(parent, name, label, quarantine, candidateIdentity); err != nil {
-		return fmt.Errorf("%w; retain quarantined candidate: %v", cause, err)
+	if err := p.restoreQuarantinedLocked(parent, name, label, quarantine, candidateIdentity); err != nil {
+		return fmt.Errorf("%w; retain quarantined candidate: %w", cause, err)
 	}
 	return cause
 }
@@ -1020,7 +1025,7 @@ func (p *vNextGenerationPublisher) removeRegularQuarantinedLocked(parent *vNextP
 		return err
 	}
 	if candidateIdentity != identity {
-		return vNextPublicationRefuseQuarantinedReplacement(parent, name, label, quarantine, candidateIdentity)
+		return p.refuseQuarantinedReplacementLocked(parent, name, label, quarantine, candidateIdentity)
 	}
 	return quarantine.removeRegularBound(vNextPublicationQuarantineMember, label, identity)
 }
@@ -1066,15 +1071,15 @@ func (p *vNextGenerationPublisher) removeTreeQuarantinedLocked(parent *vNextPubl
 		return err
 	}
 	if candidateIdentity != identity {
-		return vNextPublicationRefuseQuarantinedReplacement(parent, name, label, quarantine, candidateIdentity)
+		return p.refuseQuarantinedReplacementLocked(parent, name, label, quarantine, candidateIdentity)
 	}
 	candidate, err := quarantine.openDirectory(vNextPublicationQuarantineMember, label)
 	if err != nil {
-		return vNextPublicationRefuseQuarantinedReplacement(parent, name, label, quarantine, candidateIdentity)
+		return p.refuseQuarantinedReplacementLocked(parent, name, label, quarantine, candidateIdentity)
 	}
 	defer candidate.Close()
 	if err := vNextPublicationAssertRemovalBindings(candidate, bindings); err != nil {
-		return vNextPublicationRefuseQuarantinedReplacement(parent, name, label, quarantine, candidateIdentity)
+		return p.refuseQuarantinedReplacementLocked(parent, name, label, quarantine, candidateIdentity)
 	}
 	return quarantine.removeTreeBound(vNextPublicationQuarantineMember, label, candidate, identity)
 }

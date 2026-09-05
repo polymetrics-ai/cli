@@ -2949,3 +2949,317 @@ func vNextReplaceConnectorRootForTest(root, external, stageName string) error {
 	}
 	return os.Symlink(external, connectorRoot)
 }
+
+func TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore(t *testing.T) {
+	const candidatePayload = "second public replacement"
+	const replacementPayload = "third public replacement"
+
+	t.Run("stage", func(t *testing.T) {
+		root := t.TempDir()
+		baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+		if err != nil {
+			t.Fatal(err)
+		}
+		stageName := ".stage-second-replacement"
+		stagePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, stageName)
+		vNextWriteOwnedStageForTest(t, stagePath, pointer, stageName, "original")
+
+		witness := newVNextPublicationSecondReplacementWitnessForTest(t, stagePath, vNextPublicationAfterStageRemovalIdentity, []byte(candidatePayload), []byte(replacementPayload))
+		guard, err := newVNextGenerationPublisher(root, "acme", witness.hooks())
+		if err != nil {
+			t.Fatal(err)
+		}
+		err = guard.Recover(context.Background())
+		if err == nil || !strings.Contains(err.Error(), "identity") {
+			t.Fatalf("Recover() after second stage replacement error = %v, want identity refusal", err)
+		}
+		witness.assertPreserved(t)
+		if !errors.Is(err, fs.ErrExist) {
+			t.Fatalf("Recover() after second stage replacement error = %v, want no-replace conflict", err)
+		}
+		if got, readErr := os.ReadFile(filepath.Join(witness.originalPath, "sentinel.txt")); readErr != nil || string(got) != "original" {
+			t.Fatalf("stage original did not remain intact: err=%v got=%q", readErr, got)
+		}
+	})
+
+	t.Run("generation", func(t *testing.T) {
+		root := t.TempDir()
+		baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		old, err := baseline.Publish(vNextPublicationArtifactsForTest("old", false))
+		if err != nil {
+			t.Fatal(err)
+		}
+		handle, err := baseline.Open(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		current, publishErr := baseline.Publish(vNextPublicationArtifactsForTest("current", false))
+		handle.Release()
+		if publishErr != nil {
+			t.Fatal(publishErr)
+		}
+		generationPath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation)
+
+		witness := newVNextPublicationSecondReplacementWitnessForTest(t, generationPath, vNextPublicationAfterGenerationRemovalIdentity, []byte(candidatePayload), []byte(replacementPayload))
+		guard, err := newVNextGenerationPublisher(root, "acme", witness.hooks())
+		if err != nil {
+			t.Fatal(err)
+		}
+		operation, err := guard.openOperation(context.Background(), syscall.LOCK_EX, true)
+		if err != nil {
+			t.Fatal(err)
+		}
+		err = guard.pruneLocked(operation, current.Generation)
+		operation.close()
+		if err == nil || !strings.Contains(err.Error(), "identity") {
+			t.Fatalf("Prune() after second generation replacement error = %v, want identity refusal", err)
+		}
+		witness.assertPreserved(t)
+		if !errors.Is(err, fs.ErrExist) {
+			t.Fatalf("Prune() after second generation replacement error = %v, want no-replace conflict", err)
+		}
+		if got, readErr := os.ReadFile(filepath.Join(witness.originalPath, "metadata.json")); readErr != nil || string(got) != `{"marker":"old"}` {
+			t.Fatalf("generation original did not remain intact: err=%v got=%q", readErr, got)
+		}
+	})
+
+	t.Run("rollback", func(t *testing.T) {
+		root := t.TempDir()
+		baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, err := baseline.Publish(vNextPublicationArtifactsForTest("old", true)); err != nil {
+			t.Fatal(err)
+		}
+		newSet := vNextPublicationArtifactsForTest("new", false)
+		validationCalls := 0
+		activeFailure := errors.New("active validation failure")
+		newSet.Validate = func(fs.FS) error {
+			validationCalls++
+			if validationCalls == 2 {
+				return activeFailure
+			}
+			return nil
+		}
+		generationPath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, vNextPublicationGenerationID(newSet.Files))
+
+		witness := newVNextPublicationSecondReplacementWitnessForTest(t, generationPath, vNextPublicationAfterGenerationRemovalIdentity, []byte(candidatePayload), []byte(replacementPayload))
+		guard, err := newVNextGenerationPublisher(root, "acme", witness.hooks())
+		if err != nil {
+			t.Fatal(err)
+		}
+		_, err = guard.Publish(newSet)
+		if err == nil || !strings.Contains(err.Error(), "identity") {
+			t.Fatalf("Publish(new) after second rollback replacement error = %v, want identity refusal", err)
+		}
+		if validationCalls != 2 {
+			t.Fatalf("validation calls = %d, want staged then active validation", validationCalls)
+		}
+		witness.assertPreserved(t)
+		if !errors.Is(err, fs.ErrExist) {
+			t.Fatalf("Publish(new) after second rollback replacement error = %v, want no-replace conflict", err)
+		}
+		if got, readErr := os.ReadFile(filepath.Join(witness.originalPath, "metadata.json")); readErr != nil || string(got) != `{"marker":"new"}` {
+			t.Fatalf("rollback generation original did not remain intact: err=%v got=%q", readErr, got)
+		}
+	})
+}
+
+func TestVNextGenerationPublisherRefusesFinalGenerationActivationCollision(t *testing.T) {
+	root := t.TempDir()
+	var generationPath string
+	var collisionInfo os.FileInfo
+	collisionHit := false
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point != vNextPublicationBeforeStageRename || collisionHit {
+			return nil
+		}
+		collisionHit = true
+		if err := os.Mkdir(generationPath, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		var statErr error
+		collisionInfo, statErr = os.Stat(generationPath)
+		if statErr != nil {
+			t.Fatal(statErr)
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := publisher.openOperation(context.Background(), syscall.LOCK_EX, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stageName, pointer, err := publisher.stageLocked(operation, vNextPublicationArtifactsForTest("active", false).Files, nil)
+	if err != nil {
+		operation.close()
+		t.Fatal(err)
+	}
+	stagePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, stageName)
+	stageInfo, err := os.Stat(stagePath)
+	if err != nil {
+		operation.close()
+		t.Fatal(err)
+	}
+	generationPath = filepath.Join(root, "acme", vNextPublicationGenerationDirectory, pointer.Generation)
+	err = publisher.activateStageLocked(operation, stageName, pointer.Generation)
+	operation.close()
+
+	if !collisionHit {
+		t.Fatal("activateStageLocked() did not reach final generation collision seam")
+	}
+	if !errors.Is(err, fs.ErrExist) {
+		t.Fatalf("activateStageLocked() collision error = %v, want no-replace destination conflict", err)
+	}
+	if info, statErr := os.Stat(stagePath); statErr != nil || !os.SameFile(info, stageInfo) {
+		t.Fatalf("activation collision did not retain staged generation: err=%v info=%v", statErr, info)
+	}
+	if info, statErr := os.Stat(generationPath); statErr != nil || !os.SameFile(info, collisionInfo) {
+		t.Fatalf("activation collision did not retain destination: err=%v info=%v", statErr, info)
+	}
+}
+
+type vNextPublicationSecondReplacementWitness struct {
+	publicPath         string
+	afterIdentity      vNextPublicationFaultPoint
+	candidatePayload   []byte
+	replacementPayload []byte
+	originalPath       string
+	originalInfo       os.FileInfo
+	candidatePath      string
+	candidateInfo      os.FileInfo
+	publicInfo         os.FileInfo
+	identityHit        bool
+	restoreHit         bool
+}
+
+func newVNextPublicationSecondReplacementWitnessForTest(t *testing.T, publicPath string, afterIdentity vNextPublicationFaultPoint, candidatePayload, replacementPayload []byte) *vNextPublicationSecondReplacementWitness {
+	t.Helper()
+	return &vNextPublicationSecondReplacementWitness{
+		publicPath:         publicPath,
+		afterIdentity:      afterIdentity,
+		candidatePayload:   candidatePayload,
+		replacementPayload: replacementPayload,
+	}
+}
+
+func (w *vNextPublicationSecondReplacementWitness) hooks() vNextPublicationHooks {
+	return vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point == w.afterIdentity && !w.identityHit {
+			w.identityHit = true
+			originalPath, err := vNextReplaceDirectoryWithRegularFileForTest(w.publicPath, w.candidatePayload)
+			if err != nil {
+				return err
+			}
+			w.originalPath = originalPath
+			originalInfo, err := os.Stat(w.originalPath)
+			if err != nil {
+				return err
+			}
+			w.originalInfo = originalInfo
+			return nil
+		}
+		if point != vNextPublicationBeforeQuarantineRestore || !w.identityHit || w.restoreHit {
+			return nil
+		}
+		w.restoreHit = true
+		if _, err := os.Lstat(w.publicPath); !errors.Is(err, fs.ErrNotExist) {
+			return fmt.Errorf("public replacement before quarantine restore = %v, want absent", err)
+		}
+		candidatePath, err := vNextPublicationQuarantinedCandidateForTest(filepath.Dir(w.publicPath), w.candidatePayload)
+		if err != nil {
+			return err
+		}
+		w.candidatePath = candidatePath
+		candidateInfo, err := os.Stat(w.candidatePath)
+		if err != nil {
+			return err
+		}
+		if !candidateInfo.Mode().IsRegular() {
+			return fmt.Errorf("quarantined second replacement mode = %v, want regular file", candidateInfo.Mode())
+		}
+		w.candidateInfo = candidateInfo
+		if err := os.WriteFile(w.publicPath, w.replacementPayload, 0o600); err != nil {
+			return err
+		}
+		publicInfo, err := os.Stat(w.publicPath)
+		if err != nil {
+			return err
+		}
+		if !publicInfo.Mode().IsRegular() {
+			return fmt.Errorf("third public replacement mode = %v, want regular file", publicInfo.Mode())
+		}
+		w.publicInfo = publicInfo
+		return nil
+	}}
+}
+
+func (w *vNextPublicationSecondReplacementWitness) assertPreserved(t *testing.T) {
+	t.Helper()
+	if !w.identityHit {
+		t.Fatal("cleanup did not reach post-identity replacement seam")
+	}
+	if !w.restoreHit {
+		t.Fatal("cleanup did not reach quarantine restoration seam")
+	}
+	if info, err := os.Stat(w.originalPath); err != nil || !os.SameFile(info, w.originalInfo) {
+		t.Fatalf("moved original identity changed: err=%v info=%v", err, info)
+	}
+	if got, err := os.ReadFile(w.publicPath); err != nil || !bytes.Equal(got, w.replacementPayload) {
+		t.Fatalf("third public replacement was not retained: err=%v got=%q want=%q", err, got, w.replacementPayload)
+	}
+	if info, err := os.Stat(w.publicPath); err != nil || !os.SameFile(info, w.publicInfo) {
+		t.Fatalf("third public replacement inode changed: err=%v info=%v", err, info)
+	}
+	if got, err := os.ReadFile(w.candidatePath); err != nil || !bytes.Equal(got, w.candidatePayload) {
+		t.Fatalf("quarantined second replacement was not retained: err=%v got=%q want=%q", err, got, w.candidatePayload)
+	}
+	if info, err := os.Stat(w.candidatePath); err != nil || !os.SameFile(info, w.candidateInfo) {
+		t.Fatalf("quarantined second replacement inode changed: err=%v info=%v", err, info)
+	}
+}
+
+func vNextReplaceDirectoryWithRegularFileForTest(path string, payload []byte) (string, error) {
+	moved := path + ".late-original"
+	if err := os.Rename(path, moved); err != nil {
+		return "", err
+	}
+	if err := os.WriteFile(path, payload, 0o600); err != nil {
+		return "", err
+	}
+	return moved, nil
+}
+
+func vNextPublicationQuarantinedCandidateForTest(parent string, payload []byte) (string, error) {
+	entries, err := os.ReadDir(parent)
+	if err != nil {
+		return "", err
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() || !strings.HasPrefix(entry.Name(), ".connectorgen-quarantine-") {
+			continue
+		}
+		candidate := filepath.Join(parent, entry.Name(), vNextPublicationQuarantineMember)
+		got, err := os.ReadFile(candidate)
+		if errors.Is(err, fs.ErrNotExist) {
+			continue
+		}
+		if err != nil {
+			return "", err
+		}
+		if bytes.Equal(got, payload) {
+			return candidate, nil
+		}
+	}
+	return "", fmt.Errorf("publication quarantine does not retain %q", payload)
+}

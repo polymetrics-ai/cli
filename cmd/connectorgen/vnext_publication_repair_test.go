@@ -1705,3 +1705,83 @@ func vNextPublicationPendingControlRepairAuthoritiesForTest(t *testing.T, root s
 	}
 	return pending
 }
+
+func TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation(t *testing.T) {
+	tests := []struct {
+		name    string
+		crashAt int
+	}{
+		{name: "CURRENT first base authority", crashAt: 1},
+		{name: "JOURNAL second base authority", crashAt: 2},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			lock := minimalVNextLockForTest()
+			connectorRoot := filepath.Join(root, lock.Connector)
+			if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+				t.Fatal(err)
+			}
+			raw, err := json.Marshal(lock)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+				t.Fatal(err)
+			}
+
+			crash := errors.New("crash after durable base prepared authority")
+			hits := 0
+			var stdout, stderr bytes.Buffer
+			code := runLockRenderContextWithHooks(context.Background(), []string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr, vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point != vNextPublicationAfterBaseControlRepairPrepared {
+					return nil
+				}
+				hits++
+				if hits == test.crashAt {
+					return crash
+				}
+				return nil
+			}})
+			if code != 1 || !strings.Contains(stderr.String(), crash.Error()) {
+				t.Fatalf("runLockRender() after %s interruption = %d; stdout=%q stderr=%q", test.name, code, stdout.String(), stderr.String())
+			}
+			if hits != test.crashAt {
+				t.Fatalf("base prepared fault hits = %d, want %d", hits, test.crashAt)
+			}
+
+			beforeCheck := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
+			stdout.Reset()
+			stderr.Reset()
+			if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root, "--check"}, &stdout, &stderr); code != 1 {
+				t.Fatalf("runLockRender(--check) during %s interruption = %d, want 1; stdout=%q stderr=%q", test.name, code, stdout.String(), stderr.String())
+			}
+			if stdout.Len() != 0 {
+				t.Fatalf("runLockRender(--check) during %s interruption wrote stdout %q", test.name, stdout.String())
+			}
+			if afterCheck := vNextPublicationTreeSnapshotForTest(t, connectorRoot); !bytes.Equal(beforeCheck, afterCheck) {
+				t.Fatalf("runLockRender(--check) changed interrupted %s authority state", test.name)
+			}
+
+			fresh, err := newVNextGenerationPublisher(root, lock.Connector, vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := fresh.Recover(context.Background()); err != nil {
+				t.Fatalf("fresh Recover() after %s interruption = %v", test.name, err)
+			}
+			vNextPublicationAssertTerminalAuthoritiesMatchPublicForTest(t, fresh)
+			for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+				if _, err := os.Lstat(filepath.Join(connectorRoot, target)); !errors.Is(err, fs.ErrNotExist) {
+					t.Fatalf("%s after recovering %s base authority = %v, want original absence", target, test.name, err)
+				}
+			}
+
+			stdout.Reset()
+			stderr.Reset()
+			if code := runLockRender([]string{"lock-render", lock.Connector, "--defs", root}, &stdout, &stderr); code != 0 {
+				t.Fatalf("runLockRender() retry after %s interruption = %d; stdout=%q stderr=%q", test.name, code, stdout.String(), stderr.String())
+			}
+		})
+	}
+}

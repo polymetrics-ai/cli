@@ -220,7 +220,8 @@
           "CURRENT and JOURNAL each retain one terminal authority head; every successor records and binds its predecessor terminal identity, digest, and selected state before that successor can become a head",
           "a public CURRENT or JOURNAL transition captures its syscall-time occupant with descriptor-relative no-replace rename, classifies the moved inode afterward, and selects only a retained prior or intended inode through create-only linkat",
           "unsupported no-replace primitives, capture destination collisions, and source absence never fall back to overwrite or public unlink; they retain prior authority and fail closed or converge through bounded recovery",
-          "recovery and check scan the complete marker and private authority graph before public-control decoding, refusing pending, retry-required, malformed, gapped, forked, or terminal-divergent state",
+          "recovery and check scan the complete marker and private authority graph before public-control decoding; retry-required, malformed, gapped, forked, missing, or terminal-divergent states refuse before public-control decode",
+          "under the exclusive publisher lock, a markerless bootstrap resumes only one strict no-predecessor, phase-empty base prepared authority whose prior equals intended and whose private identities validate; it appends its committed terminal head before completing the second base head and marker",
           "private transaction, prepared, phase, capture, and predecessor identities are revalidated across every transition boundary; replacement fails before public-control decode",
           "every authorized public-control read revalidates retained private authority identities after graph scan and before it decodes that control",
           "cooperating writers serialize all control transitions under the retained connector-directory lock and leave one terminal authority head per target",
@@ -234,7 +235,7 @@
           "CURRENT and JOURNAL removal is a terminal authority transition that captures any public occupant and selects logical absence without public unlinkat; a late replacement is retained and causes a bounded conflict rather than deletion",
           "the operation Flock is bound to the retained connector-directory inode, so a matched replacement .connectorgen.lock and anchor sibling pair cannot create a second publication lock domain",
           "the source lock is read through the retained no-follow connector descriptor before and after lock acquisition; a source mutation during admission is refused before generation state is created",
-          "a durable prepared journal is fsynced before its same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation",
+          "a durable prepared journal is fsynced before its descriptor-relative no-replace same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation, and a late destination collision preserves both staged and destination inodes",
           "a reader-held or invalid generation lease prevents pruning that generation",
           "an unvalidated generation is never treated as publisher-owned",
           "cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state",
@@ -652,6 +653,21 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_test.go",
           "name": "TestVNextGenerationPublisherRefusesPhysicallyStagedCommandPreflight"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesFinalGenerationActivationCollision"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation"
         }
       ],
       "publication_guarantee_proofs": [
@@ -699,10 +715,17 @@
         },
         {
           "guarantees": [
-            "recovery and check scan the complete marker and private authority graph before public-control decoding, refusing pending, retry-required, malformed, gapped, forked, or terminal-divergent state"
+            "recovery and check scan the complete marker and private authority graph before public-control decoding; retry-required, malformed, gapped, forked, missing, or terminal-divergent states refuse before public-control decode"
           ],
           "positive": "TestVNextGenerationPublisherRecoversEveryTerminalAuthorityDurableCut",
           "negative": "TestVNextGenerationPublisherCheckRefusesAuthorityTopologyBeforePublicDecode"
+        },
+        {
+          "guarantees": [
+            "under the exclusive publisher lock, a markerless bootstrap resumes only one strict no-predecessor, phase-empty base prepared authority whose prior equals intended and whose private identities validate; it appends its committed terminal head before completing the second base head and marker"
+          ],
+          "positive": "TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation",
+          "negative": "TestVNextGenerationPublisherCheckRefusesMalformedPrivateTransactionBeforePublicDecode"
         },
         {
           "guarantees": [
@@ -751,14 +774,14 @@
             "recovery removes a validated publisher-owned staged tree only after quarantining its descriptor-bound target; a late stage replacement preserves both original and replacement"
           ],
           "positive": "TestVNextGenerationPublisherRecoversPublisherWrittenDurableStage",
-          "negative": "TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup"
+          "negative": "TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore"
         },
         {
           "guarantees": [
             "pruning removes a validated stale generation only after quarantining its descriptor-bound root; a late generation replacement preserves both original and replacement"
           ],
           "positive": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune",
-          "negative": "TestVNextGenerationPublisherRefusesLateReplacedValidatedGenerationCleanup"
+          "negative": "TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore"
         },
         {
           "guarantees": [
@@ -772,7 +795,7 @@
             "rollback removes a rejected generation only after quarantining its descriptor-bound root; a late rollback replacement preserves both original and replacement"
           ],
           "positive": "TestVNextGenerationPublisherRollsBackFailedActiveValidationWithoutOrphan",
-          "negative": "TestVNextGenerationPublisherRefusesLateReplacedRollbackGenerationCleanup"
+          "negative": "TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore"
         },
         {
           "guarantees": [
@@ -797,10 +820,10 @@
         },
         {
           "guarantees": [
-            "a durable prepared journal is fsynced before its same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation"
+            "a durable prepared journal is fsynced before its descriptor-relative no-replace same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation, and a late destination collision preserves both staged and destination inodes"
           ],
           "positive": "TestVNextGenerationPublisherWritesPreparedJournalBeforeFinalRename",
-          "negative": "TestVNextGenerationPublisherRecoversPreparedJournalAfterFinalRename"
+          "negative": "TestVNextGenerationPublisherRefusesFinalGenerationActivationCollision"
         },
         {
           "guarantees": [

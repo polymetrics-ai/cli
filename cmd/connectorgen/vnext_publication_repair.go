@@ -1114,36 +1114,86 @@ func mustVNextPublicationRecordedDirectoryIdentity(recorded vNextPublicationReco
 }
 
 func (p *vNextGenerationPublisher) ensureControlAuthorityLocked(operation *vNextPublicationOperation) error {
-	graph, err := p.scanControlAuthorityLocked(operation)
-	if err != nil {
-		return err
-	}
-	defer graph.close()
-	if graph.marker {
-		return nil
-	}
-	for _, state := range graph.states {
-		if state.record.Predecessor != nil {
-			return fmt.Errorf("publication control authority marker is missing from successor graph")
+	for range 4 {
+		graph, err := p.scanControlAuthorityLocked(operation)
+		if err != nil {
+			return err
 		}
-		if _, _, _, terminal := state.terminal(); !terminal {
-			return fmt.Errorf("publication control authority marker is missing from pending repair")
+		if graph.marker {
+			graph.close()
+			return nil
 		}
-	}
-	for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
-		if _, found := graph.heads[target]; found {
+
+		var pending *vNextPublicationControlRepairState
+		for _, state := range graph.states {
+			if state.record.Predecessor != nil {
+				graph.close()
+				return fmt.Errorf("publication control authority marker is missing from successor graph")
+			}
+			if _, _, _, terminal := state.terminal(); terminal {
+				continue
+			}
+			if !vNextPublicationResumableBaseControlAuthority(state) || pending != nil {
+				graph.close()
+				return fmt.Errorf("publication control authority marker is missing from pending repair")
+			}
+			pending = state
+		}
+		if pending != nil {
+			err := p.resumeBaseControlAuthorityLocked(operation, pending)
+			graph.close()
+			if err != nil {
+				return err
+			}
 			continue
 		}
-		state, err := p.createBaseControlAuthorityLocked(operation, target)
+
+		missing := ""
+		for _, target := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+			head, found := graph.heads[target]
+			if !found {
+				missing = target
+				break
+			}
+			if _, _, _, terminal := head.state.terminal(); !terminal {
+				graph.close()
+				return fmt.Errorf("publication control authority marker is missing from pending repair")
+			}
+		}
+		graph.close()
+		if missing == "" {
+			_, err := vNextPublicationWriteAuthorityMarker(operation.connector)
+			return err
+		}
+		state, err := p.createBaseControlAuthorityLocked(operation, missing)
 		if err != nil {
 			return err
 		}
 		state.close()
 	}
-	if _, err := vNextPublicationWriteAuthorityMarker(operation.connector); err != nil {
+	return fmt.Errorf("publication control authority bootstrap did not create marker")
+}
+
+func vNextPublicationResumableBaseControlAuthority(state *vNextPublicationControlRepairState) bool {
+	return state != nil &&
+		state.record.Predecessor == nil &&
+		len(state.phases) == 0 &&
+		state.record.Prior.sameLogical(state.record.Intended)
+}
+
+func (p *vNextGenerationPublisher) resumeBaseControlAuthorityLocked(operation *vNextPublicationOperation, state *vNextPublicationControlRepairState) error {
+	if !vNextPublicationResumableBaseControlAuthority(state) {
+		return fmt.Errorf("publication control authority marker is missing from pending repair")
+	}
+	if err := state.assertPrivateIdentity(operation); err != nil {
 		return err
 	}
-	return nil
+	selected := state.record.Intended
+	return p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairPhase{
+		State:    vNextPublicationControlRepairTerminal,
+		Selected: &selected,
+		Outcome:  vNextPublicationControlRepairCommitted,
+	})
 }
 
 func (p *vNextGenerationPublisher) createBaseControlAuthorityLocked(operation *vNextPublicationOperation, target string) (*vNextPublicationControlRepairState, error) {
@@ -1272,6 +1322,10 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 	state := &vNextPublicationControlRepairState{record: repair, preparedIdentity: preparedIdentity, preparedDigest: vNextPublicationDigest(payload), transactionName: transactionName, transaction: transaction, transactionIdentity: transactionIdentity}
 	keep = true
 	if base {
+		if err := p.hit(vNextPublicationAfterBaseControlRepairPrepared); err != nil {
+			state.close()
+			return nil, err
+		}
 		selected := newIntended
 		if err := p.appendControlRepairPhaseLocked(operation, state, vNextPublicationControlRepairPhase{State: vNextPublicationControlRepairTerminal, Selected: &selected, Outcome: vNextPublicationControlRepairCommitted}); err != nil {
 			state.close()

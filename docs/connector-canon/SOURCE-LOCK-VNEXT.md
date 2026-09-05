@@ -193,19 +193,25 @@ with `unsupported`.
     exact declared directory/member set and empty lease, and performs no
     credential, provider, or transport I/O.
 13. Persist and fsync a typed `state:"prepared"` recovery journal
-    `{old,new,state}` **before** the same-directory rename that activates the
-    completed stage as `generations/<content-digest>/`; no final-generation
-    rename is allowed before that journal is durable. `CURRENT` and `JOURNAL`
-    are then governed by a connector-local durable authority protocol. Bootstrap
-    under the exclusive publication lock creates a strict terminal head for the
-    observed state of each control before it creates the permanent
-    `.connectorgen-control-authority-v3.json` marker. Every later transition
-    creates and fsyncs a random
-    `.connectorgen-control-repair-<random>/prepared.json` successor that binds
-    its predecessor terminal, tagged prior and intended state, private
-    hard-link anchors, transaction identity, and the finite capture limit.
-    Phase records are append-only, strictly decoded, and bind their immutable
-    prepared identity/digest and immediate predecessor.
+    `{old,new,state}` **before** a descriptor-relative no-replace same-directory
+    rename activates the completed stage as
+    `generations/<content-digest>/`; no final-generation rename is allowed
+    before that journal is durable. `CURRENT` and `JOURNAL` are then governed
+    by a connector-local durable authority protocol. Bootstrap under the
+    exclusive publication lock first persists a strict no-predecessor base
+    `prepared.json` for each observed control state, then appends the base
+    committed terminal; the permanent
+    `.connectorgen-control-authority-v3.json` marker follows only after both
+    base heads are terminal. An interruption before that append may be resumed
+    only by exclusive recovery when the phase chain is empty, prior and
+    intended states are logically equal, and every private identity still
+    validates. Recovery appends that committed terminal before it creates a
+    missing base head or marker. Every later transition creates and fsyncs a
+    random `.connectorgen-control-repair-<random>/prepared.json` successor
+    that binds its predecessor terminal, tagged prior and intended state,
+    private hard-link anchors, transaction identity, and the finite capture
+    limit. Phase records are append-only, strictly decoded, and bind their
+    immutable prepared identity/digest and immediate predecessor.
 
     A public mutation first creates a bound private capture slot and durable
     `capture_intent`, then uses descriptor-relative no-replace rename to move
@@ -227,17 +233,19 @@ with `unsupported`.
     authorized public-control read revalidates the transaction, prepared, phase,
     capture, and predecessor descriptor identities it depends on. A terminal
     divergence creates a successor that restores the retained terminal
-    selection; a pending, retry-required, malformed, forked, missing, or
-    divergent graph fails closed. `lock-render --check` performs that graph
-    validation under its shared lock without writing or emitting a success line,
-    then decodes a public control only through the open descriptor whose
-    identity equals the terminal selection. The private namespace is
-    integrity protection against accidental and noncooperating public-name
-    races, not authentication against a same-UID actor able to
-    delete or replace every private authority member. `CURRENT`, the journal,
-    authority marker, prepared authority, phase records, `integrity.json`
-    (including each file entry), and the stage marker are bounded, no-follow,
-    strict JSON documents: duplicate members and trailing values are invalid.
+    selection; retry-required, malformed, gapped, forked, missing, or divergent
+    graph state fails closed. A pending graph is never decoded, and only an
+    exclusive recovery may resume a verified authority transition.
+    `lock-render --check` performs that graph validation under its shared lock
+    without writing or emitting a success line, then decodes a public control
+    only through the open descriptor whose identity equals the terminal
+    selection. The private namespace is integrity protection against accidental
+    and noncooperating public-name races, not authentication against a same-UID
+    actor able to delete or replace every private authority member. `CURRENT`,
+    the journal, authority marker, prepared authority, phase records,
+    `integrity.json` (including each file entry), and the stage marker are
+    bounded, no-follow, strict JSON documents: duplicate members and trailing
+    values are invalid.
 14. Revalidate the selected `CURRENT` generation, mark the journal committed,
     and clear it only after the active generation is complete. A failed active
     validation restores the old `CURRENT` (or removes it for a first publish)
