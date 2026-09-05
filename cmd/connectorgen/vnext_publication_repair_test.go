@@ -980,14 +980,21 @@ func TestVNextGenerationPublisherCheckRefusesAuthorityTopologyBeforePublicDecode
 					operation.close()
 					t.Fatal("CURRENT has no authority head")
 				}
-				identity, present, err := head.state.anchor(head.selected, head.selected.Member)
+				sourceDirectory, err := head.state.openTransaction(operation)
+				if err != nil {
+					graph.close()
+					operation.close()
+					t.Fatal(err)
+				}
+				identity, present, err := head.state.anchor(sourceDirectory, head.selected, head.selected.Member)
 				if err != nil || !present {
+					_ = sourceDirectory.Close()
 					graph.close()
 					operation.close()
 					t.Fatalf("CURRENT terminal anchor = identity %#v present %t error %v", identity, present, err)
 				}
 				intended := vNextPublicationControlStateWithMember(head.selected, vNextPublicationControlReplacementMember)
-				source := &vNextPublicationControlAnchorSource{directory: head.state.transaction, name: head.selected.Member, identity: identity}
+				source := &vNextPublicationControlAnchorSource{directory: sourceDirectory, name: head.selected.Member, identity: identity}
 				first, err := publisher.createControlRepairLocked(operation, vNextPublicationCurrentFile, head, intended, source, false)
 				if err == nil {
 					first.close()
@@ -998,6 +1005,9 @@ func TestVNextGenerationPublisherCheckRefusesAuthorityTopologyBeforePublicDecode
 						second.close()
 					}
 					err = secondErr
+				}
+				if closeErr := sourceDirectory.Close(); closeErr != nil && err == nil {
+					err = closeErr
 				}
 				graph.close()
 				operation.close()
@@ -1199,8 +1209,17 @@ func TestVNextGenerationPublisherRepeatedSubstitutionsRemainForensic(t *testing.
 		if state.record.Target != vNextPublicationCurrentFile {
 			continue
 		}
-		if err := state.validateAnchors(); err != nil {
+		transaction, err := state.openTransaction(inspection)
+		if err != nil {
+			t.Fatalf("open CURRENT transaction %q: %v", state.transactionName, err)
+		}
+		err = state.validateAnchors(transaction)
+		closeErr := transaction.Close()
+		if err != nil {
 			t.Fatalf("CURRENT transaction %q anchors = %v", state.transactionName, err)
+		}
+		if closeErr != nil {
+			t.Fatalf("close CURRENT transaction %q: %v", state.transactionName, closeErr)
 		}
 		captures := 0
 		for _, phase := range state.phases {
@@ -1316,13 +1335,14 @@ func TestVNextGenerationPublisherRefusesPrivateAuthorityReplacementBeforePublicD
 				t.Fatalf("Recover() decoded public CURRENT before private replacement refusal: %v", err)
 			}
 			replaced := transaction
-			if test.name == "prepared" {
+			switch test.name {
+			case "prepared":
 				replaced = filepath.Join(transaction, vNextPublicationControlRepairPreparedFile)
-			} else if test.name == "capture" {
+			case "capture":
 				replaced = filepath.Join(transaction, vNextPublicationControlCaptureName(1))
-			} else if test.name == "phase" {
+			case "phase":
 				replaced = filepath.Join(transaction, vNextPublicationControlRepairPhaseName(2))
-			} else if test.name == "predecessor" {
+			case "predecessor":
 				replaced = predecessor
 			}
 			if _, statErr := os.Lstat(replaced); statErr != nil {
@@ -1631,9 +1651,11 @@ func vNextPublicationFindPrivatePayloadForTest(t *testing.T, root string, want [
 func vNextPublicationTreeSnapshotForTest(t *testing.T, root string) []byte {
 	t.Helper()
 	type entry struct {
-		Path      string `json:"path"`
-		Directory bool   `json:"directory"`
-		Payload   []byte `json:"payload,omitempty"`
+		Path    string `json:"path"`
+		Device  uint64 `json:"device"`
+		Inode   uint64 `json:"inode"`
+		Mode    uint32 `json:"mode"`
+		Payload []byte `json:"payload,omitempty"`
 	}
 	var entries []entry
 	var visit func(string, string)
@@ -1648,16 +1670,24 @@ func vNextPublicationTreeSnapshotForTest(t *testing.T, root string) []byte {
 			if relative != "" {
 				name = filepath.Join(relative, name)
 			}
-			if child.IsDir() {
-				entries = append(entries, entry{Path: name, Directory: true})
+			var stat unix.Stat_t
+			if err := unix.Lstat(path, &stat); err != nil {
+				t.Fatal(err)
+			}
+			snapshot := entry{Path: name, Device: uint64(stat.Dev), Inode: uint64(stat.Ino), Mode: uint32(stat.Mode)}
+			if vNextPublicationStatIsDir(stat) {
+				entries = append(entries, snapshot)
 				visit(path, name)
 				continue
 			}
-			payload, err := os.ReadFile(path)
-			if err != nil {
-				t.Fatal(err)
+			if vNextPublicationStatIsRegular(stat) {
+				payload, err := os.ReadFile(path)
+				if err != nil {
+					t.Fatal(err)
+				}
+				snapshot.Payload = payload
 			}
-			entries = append(entries, entry{Path: name, Payload: payload})
+			entries = append(entries, snapshot)
 		}
 	}
 	visit(root, "")
@@ -1667,45 +1697,6 @@ func vNextPublicationTreeSnapshotForTest(t *testing.T, root string) []byte {
 	}
 	return snapshot
 }
-func vNextPublicationPendingControlRepairAuthoritiesForTest(t *testing.T, root string) int {
-	t.Helper()
-	connectorRoot := filepath.Join(root, "acme")
-	transactions, err := filepath.Glob(filepath.Join(connectorRoot, vNextPublicationControlRepairDirectoryPrefix+"*"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	pending := 0
-	for _, transaction := range transactions {
-		prepared := filepath.Join(transaction, vNextPublicationControlRepairPreparedFile)
-		if _, err := os.Stat(prepared); err != nil {
-			if errors.Is(err, fs.ErrNotExist) {
-				pending++
-				continue
-			}
-			t.Fatal(err)
-		}
-		terminal := false
-		for sequence := 1; sequence <= vNextPublicationControlRepairMaxPhases; sequence++ {
-			payload, err := os.ReadFile(filepath.Join(transaction, vNextPublicationControlRepairPhaseName(sequence)))
-			if errors.Is(err, fs.ErrNotExist) {
-				break
-			}
-			if err != nil {
-				t.Fatal(err)
-			}
-			var phase vNextPublicationControlRepairPhase
-			if err := vNextPublicationDecode(payload, &phase); err != nil {
-				t.Fatal(err)
-			}
-			terminal = phase.State == vNextPublicationControlRepairTerminal
-		}
-		if !terminal {
-			pending++
-		}
-	}
-	return pending
-}
-
 func TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation(t *testing.T) {
 	tests := []struct {
 		name    string

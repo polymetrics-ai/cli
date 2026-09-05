@@ -230,13 +230,13 @@
           "lock-render --check emits no success line and makes no write when terminal authority diverges from a public control",
           "recovery removes a validated publisher-owned staged tree only after quarantining its descriptor-bound target; a late stage replacement preserves both original and replacement",
           "pruning removes a validated stale generation only after quarantining its descriptor-bound root; a late generation replacement preserves both original and replacement",
-          "the generation lease that authorizes a prune is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object",
+          "the descriptor-bound generation lease member is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object",
           "rollback removes a rejected generation only after quarantining its descriptor-bound root; a late rollback replacement preserves both original and replacement",
           "CURRENT and JOURNAL removal is a terminal authority transition that captures any public occupant and selects logical absence without public unlinkat; a late replacement is retained and causes a bounded conflict rather than deletion",
           "the operation Flock is bound to the retained connector-directory inode, so a matched replacement .connectorgen.lock and anchor sibling pair cannot create a second publication lock domain",
           "the source lock is read through the retained no-follow connector descriptor before and after lock acquisition; a source mutation during admission is refused before generation state is created",
           "a durable prepared journal is fsynced before its descriptor-relative no-replace same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation, and a late destination collision preserves both staged and destination inodes",
-          "a reader-held or invalid generation lease prevents pruning that generation",
+          "a reader-held generation-directory lock or invalid generation lease prevents pruning that generation",
           "an unvalidated generation is never treated as publisher-owned",
           "cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state",
           "publication validates staged physical bytes through the existing loader, selected runtime identity, manifest/index construction, and command preflight without credential or provider I/O"
@@ -785,7 +785,7 @@
         },
         {
           "guarantees": [
-            "the generation lease that authorizes a prune is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object"
+            "the descriptor-bound generation lease member is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object"
           ],
           "positive": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune",
           "negative": "TestVNextGenerationPublisherRefusesLateReplacedGenerationLeaseCleanup"
@@ -827,7 +827,7 @@
         },
         {
           "guarantees": [
-            "a reader-held or invalid generation lease prevents pruning that generation"
+            "a reader-held generation-directory lock or invalid generation lease prevents pruning that generation"
           ],
           "positive": "TestVNextGenerationPublisherDefersHeldGenerationPrune",
           "negative": "TestVNextGenerationPublisherRefusesPruneWithInvalidLease"

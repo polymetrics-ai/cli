@@ -171,10 +171,26 @@ func (d *vNextPublicationDirectory) openFile(name, label string, flags int, perm
 	if err != nil {
 		return nil, err
 	}
-	defer parent.Close()
 	fd, err := unix.Openat(int(parent.file.Fd()), base, flags|unix.O_CLOEXEC|unix.O_NOFOLLOW, uint32(perm.Perm()))
+	var openErr error
 	if err != nil {
-		return nil, vNextPublicationOpenAtError(parent, base, label, err)
+		// Capture the failure while the parent descriptor is still usable. In
+		// particular, vNextPublicationOpenAtError checks whether a rejected
+		// member is a symlink through that descriptor.
+		openErr = vNextPublicationOpenAtError(parent, base, label, err)
+	}
+	closeErr := parent.Close()
+	if err != nil {
+		if closeErr != nil {
+			return nil, fmt.Errorf("%v; close %s parent: %w", openErr, label, closeErr)
+		}
+		return nil, openErr
+	}
+	if closeErr != nil {
+		if closeFileErr := unix.Close(fd); closeFileErr != nil {
+			return nil, fmt.Errorf("close %s parent: %v; close opened file: %w", label, closeErr, closeFileErr)
+		}
+		return nil, fmt.Errorf("close %s parent: %w", label, closeErr)
 	}
 	file := os.NewFile(uintptr(fd), label)
 	if file == nil {
@@ -240,10 +256,13 @@ func (d *vNextPublicationDirectory) readFile(name, label string) ([]byte, error)
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
 	payload, err := io.ReadAll(file)
+	closeErr := file.Close()
 	if err != nil {
 		return nil, fmt.Errorf("read %s: %w", label, err)
+	}
+	if closeErr != nil {
+		return nil, fmt.Errorf("close %s: %w", label, closeErr)
 	}
 	return payload, nil
 }
@@ -253,10 +272,13 @@ func (d *vNextPublicationDirectory) readDir() ([]os.DirEntry, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer copy.Close()
 	entries, err := copy.file.ReadDir(-1)
+	closeErr := copy.Close()
 	if err != nil {
 		return nil, fmt.Errorf("read %s: %w", d.label, err)
+	}
+	if closeErr != nil {
+		return nil, fmt.Errorf("close %s directory copy: %w", d.label, closeErr)
 	}
 	sort.Slice(entries, func(left, right int) bool { return entries[left].Name() < entries[right].Name() })
 	return entries, nil
@@ -343,10 +365,6 @@ func (d *vNextPublicationDirectory) linkFromBound(source *vNextPublicationDirect
 	return d.assertIdentity(newName, label, identity)
 }
 
-func (d *vNextPublicationDirectory) linkBound(oldName, newName, label string, identity vNextPublicationIdentity) error {
-	return d.linkFromBound(d, oldName, newName, label, identity)
-}
-
 func (d *vNextPublicationDirectory) removeRegularBound(name, label string, identity vNextPublicationIdentity) error {
 	if err := d.assertIdentity(name, label, identity); err != nil {
 		return err
@@ -381,10 +399,6 @@ func vNextPublicationStatIsSymlink(stat unix.Stat_t) bool {
 	return stat.Mode&unix.S_IFMT == unix.S_IFLNK
 }
 
-func (d *vNextPublicationDirectory) rename(oldName, newName string) error {
-	return d.renameFrom(d, oldName, newName)
-}
-
 func (d *vNextPublicationDirectory) removeTree(name, label string) error {
 	identity, err := d.identityAt(name, label)
 	if errors.Is(err, fs.ErrNotExist) {
@@ -406,7 +420,6 @@ func (d *vNextPublicationDirectory) removeTree(name, label string) error {
 	if err != nil {
 		return err
 	}
-	defer child.Close()
 	actual, err := vNextPublicationIdentityFromFile(child.file, label)
 	if err != nil {
 		return err
@@ -414,7 +427,15 @@ func (d *vNextPublicationDirectory) removeTree(name, label string) error {
 	if actual != identity {
 		return fmt.Errorf("%s identity changed", label)
 	}
-	return d.removeTreeBound(name, label, child, identity)
+	removeErr := d.removeTreeBound(name, label, child, identity)
+	closeErr := child.Close()
+	if removeErr != nil {
+		return removeErr
+	}
+	if closeErr != nil {
+		return fmt.Errorf("close %s directory: %w", label, closeErr)
+	}
+	return nil
 }
 
 func (d *vNextPublicationDirectory) removeTreeBound(name, label string, root *vNextPublicationDirectory, identity vNextPublicationIdentity) error {

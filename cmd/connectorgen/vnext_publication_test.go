@@ -34,6 +34,440 @@ func runLockRender(args []string, stdout, stderr io.Writer) int {
 	return runLockRenderContext(context.Background(), args, stdout, stderr)
 }
 
+func TestVNextGenerationPublisherOpenKeepsValidatedDirectory(t *testing.T) {
+	root := t.TempDir()
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	pointer, err := publisher.Publish(vNextPublicationArtifactsForTest("validated-A", false))
+	if err != nil {
+		t.Fatalf("Publish(validated A) error = %v", err)
+	}
+
+	validatedPath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, pointer.Generation)
+	retainedPath := filepath.Join(root, "retained-validated-A")
+	reader, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point != vNextPublicationAfterOpenValidation {
+			return nil
+		}
+		if err := os.Rename(validatedPath, retainedPath); err != nil {
+			return fmt.Errorf("move validated A: %w", err)
+		}
+		if err := vNextPublicationCopyTreeForTest(retainedPath, validatedPath); err != nil {
+			return fmt.Errorf("install replacement B: %w", err)
+		}
+		return os.WriteFile(filepath.Join(validatedPath, "metadata.json"), []byte(`{"marker":"replacement-B"}`), 0o600)
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	handle, err := reader.Open(context.Background())
+	if err != nil {
+		t.Fatalf("Open() after A/B substitution error = %v", err)
+	}
+	defer handle.Release()
+	if got, want := handle.Generation(), pointer.Generation; got != want {
+		t.Fatalf("Open() generation = %q, want validated %q", got, want)
+	}
+	assertVNextPublicationMarker(t, handle, "validated-A")
+	if _, err := os.Stat(retainedPath); err != nil {
+		t.Fatalf("retained validated A = %v", err)
+	}
+}
+
+func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.T) {
+	for _, cleanup := range []string{"prune", "publish", "recover"} {
+		t.Run(cleanup, func(t *testing.T) {
+			root := t.TempDir()
+			publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			old, err := publisher.Publish(vNextPublicationArtifactsForTest("held-A", false))
+			if err != nil {
+				t.Fatalf("Publish(A) error = %v", err)
+			}
+			held, err := publisher.Open(context.Background())
+			if err != nil {
+				t.Fatalf("Open(A) error = %v", err)
+			}
+			defer held.Release()
+
+			leasePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation, vNextPublicationLeaseFile)
+			retainedLease := filepath.Join(root, "retained-"+old.Generation+".lease")
+			replaceLease := func() error {
+				if err := os.Rename(leasePath, retainedLease); err != nil {
+					return fmt.Errorf("move held lease: %w", err)
+				}
+				return os.WriteFile(leasePath, nil, 0o600)
+			}
+			restoreLease := func() {
+				t.Helper()
+				if err := os.Remove(leasePath); err != nil {
+					t.Fatalf("remove replacement lease: %v", err)
+				}
+				if err := os.Rename(retainedLease, leasePath); err != nil {
+					t.Fatalf("restore held lease: %v", err)
+				}
+			}
+
+			switch cleanup {
+			case "prune":
+				if _, err := publisher.Publish(vNextPublicationArtifactsForTest("current-B", false)); err != nil {
+					t.Fatalf("Publish(B) error = %v", err)
+				}
+				if err := replaceLease(); err != nil {
+					t.Fatal(err)
+				}
+				if err := publisher.Prune(context.Background()); err != nil {
+					t.Fatalf("Prune() with held A error = %v", err)
+				}
+			case "publish":
+				if _, err := publisher.Publish(vNextPublicationArtifactsForTest("current-B", false)); err != nil {
+					t.Fatalf("Publish(B) error = %v", err)
+				}
+				if err := replaceLease(); err != nil {
+					t.Fatal(err)
+				}
+				if _, err := publisher.Publish(vNextPublicationArtifactsForTest("current-C", false)); err != nil {
+					t.Fatalf("Publish(C) with held A error = %v", err)
+				}
+			case "recover":
+				crash := errors.New("crash after committed journal and lease substitution")
+				writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+					if point != vNextPublicationAfterCommitSync {
+						return nil
+					}
+					if err := replaceLease(); err != nil {
+						return err
+					}
+					return crash
+				}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if _, err := writer.Publish(vNextPublicationArtifactsForTest("current-B", false)); !errors.Is(err, crash) {
+					t.Fatalf("Publish(B) error = %v, want injected crash", err)
+				}
+				recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := recovered.Recover(context.Background()); err != nil {
+					t.Fatalf("Recover() with held A error = %v", err)
+				}
+			}
+
+			if !publisher.GenerationExists(old.Generation) {
+				t.Fatal("cleanup removed the held generation after its lease pathname was replaced")
+			}
+			assertVNextPublicationMarker(t, held, "held-A")
+			leaseInfo, err := os.Lstat(leasePath)
+			if err != nil {
+				t.Fatalf("replacement lease after cleanup = %v", err)
+			}
+			if leaseInfo.Size() != 0 || !leaseInfo.Mode().IsRegular() {
+				t.Fatalf("replacement lease after cleanup = mode %v size %d, want empty regular file", leaseInfo.Mode(), leaseInfo.Size())
+			}
+
+			held.Release()
+			restoreLease()
+			if err := publisher.Prune(context.Background()); err != nil {
+				t.Fatalf("Prune() after release/restoration error = %v", err)
+			}
+			if publisher.GenerationExists(old.Generation) {
+				t.Fatal("Prune() retained stale generation after reader release")
+			}
+		})
+	}
+}
+
+const vNextPublicationDescriptorLimitScenarioEnv = "PM_CONNECTORGEN_DESCRIPTOR_LIMIT_SCENARIO"
+
+func TestVNextGenerationPublisherBoundsAuthorityScanDescriptors(t *testing.T) {
+	if scenario := os.Getenv(vNextPublicationDescriptorLimitScenarioEnv); scenario != "" {
+		vNextPublicationDescriptorLimitSubprocess(t, scenario)
+		return
+	}
+	for _, scenario := range []string{"check", "open", "recover", "prune", "publish"} {
+		t.Run(scenario, func(t *testing.T) {
+			ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
+			defer cancel()
+			command := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestVNextGenerationPublisherBoundsAuthorityScanDescriptors$", "-test.v")
+			command.Env = append(os.Environ(), vNextPublicationDescriptorLimitScenarioEnv+"="+scenario)
+			output, err := command.CombinedOutput()
+			if ctx.Err() != nil {
+				t.Fatalf("descriptor-limit %s child timed out: %s", scenario, output)
+			}
+			if err != nil {
+				t.Fatalf("descriptor-limit %s child failed: %v; output=%s", scenario, err, output)
+			}
+		})
+	}
+}
+
+func vNextPublicationDescriptorLimitSubprocess(t *testing.T, scenario string) {
+	t.Helper()
+	root := t.TempDir()
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var current vNextPublicationArtifacts
+	for index := 0; index < 24; index++ {
+		current = vNextPublicationArtifactsForTest(fmt.Sprintf("retained-%02d", index), false)
+		if _, err := publisher.Publish(current); err != nil {
+			t.Fatalf("Publish(retained history %d) error = %v", index, err)
+		}
+	}
+	var limit unix.Rlimit
+	if err := unix.Getrlimit(unix.RLIMIT_NOFILE, &limit); err != nil {
+		t.Fatalf("get descriptor limit: %v", err)
+	}
+	const target = uint64(96)
+	if limit.Max < target {
+		t.Fatalf("descriptor maximum = %d, need at least %d for bounded-history witness", limit.Max, target)
+	}
+	if err := unix.Setrlimit(unix.RLIMIT_NOFILE, &unix.Rlimit{Cur: target, Max: limit.Max}); err != nil {
+		t.Fatalf("set descriptor limit: %v", err)
+	}
+	var actual unix.Rlimit
+	if err := unix.Getrlimit(unix.RLIMIT_NOFILE, &actual); err != nil {
+		t.Fatalf("read effective descriptor limit: %v", err)
+	}
+	if actual.Cur != target {
+		t.Fatalf("effective descriptor limit = %d, want %d", actual.Cur, target)
+	}
+	t.Logf("descriptor-limit scenario %s uses RLIMIT_NOFILE=%d after history construction; the child retains runtime headroom", scenario, actual.Cur)
+
+	switch scenario {
+	case "check":
+		if err := publisher.Check(current); err != nil {
+			t.Fatalf("Check() under bounded descriptor limit error = %v", err)
+		}
+	case "open":
+		handle, err := publisher.Open(context.Background())
+		if err != nil {
+			t.Fatalf("Open() under bounded descriptor limit error = %v", err)
+		}
+		defer handle.Release()
+		assertVNextPublicationMarker(t, handle, "retained-23")
+	case "recover":
+		if err := publisher.Recover(context.Background()); err != nil {
+			t.Fatalf("Recover() under bounded descriptor limit error = %v", err)
+		}
+	case "prune":
+		if err := publisher.Prune(context.Background()); err != nil {
+			t.Fatalf("Prune() under bounded descriptor limit error = %v", err)
+		}
+	case "publish":
+		if _, err := publisher.Publish(vNextPublicationArtifactsForTest("retained-next", false)); err != nil {
+			t.Fatalf("Publish(next) under bounded descriptor limit error = %v", err)
+		}
+	default:
+		t.Fatalf("unknown descriptor-limit scenario %q", scenario)
+	}
+}
+
+func vNextPublicationCopyTreeForTest(source, destination string) error {
+	return filepath.WalkDir(source, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		relative, err := filepath.Rel(source, path)
+		if err != nil {
+			return err
+		}
+		if relative == "." {
+			return os.Mkdir(destination, 0o755)
+		}
+		target := filepath.Join(destination, relative)
+		if entry.IsDir() {
+			return os.Mkdir(target, 0o755)
+		}
+		if !entry.Type().IsRegular() {
+			return fmt.Errorf("copy fixture member %q is not regular", relative)
+		}
+		payload, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		return os.WriteFile(target, payload, 0o600)
+	})
+}
+
+func TestConnectorgenMainPreservesNonConsumingSignalTermination(t *testing.T) {
+	binary := vNextConnectorgenBinaryForTest(t)
+	for _, test := range []struct {
+		name    string
+		signals []os.Signal
+	}{
+		{name: "interrupt", signals: []os.Signal{os.Interrupt}},
+		{name: "terminate", signals: []os.Signal{syscall.SIGTERM}},
+		{name: "repeated-interrupt", signals: []os.Signal{os.Interrupt, os.Interrupt}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			workingDirectory, err := os.Getwd()
+			if err != nil {
+				t.Fatal(err)
+			}
+			root := t.TempDir()
+			bundle := filepath.Join(root, "github")
+			source := filepath.Join(workingDirectory, "..", "..", "internal", "connectors", "defs", "github")
+			if err := vNextPublicationCopyTreeForTest(source, bundle); err != nil {
+				t.Fatalf("copy validate bundle fixture: %v", err)
+			}
+			fifo := filepath.Join(bundle, "spec.json")
+			if err := os.Remove(fifo); err != nil {
+				t.Fatal(err)
+			}
+			if err := unix.Mkfifo(fifo, 0o600); err != nil {
+				t.Fatal(err)
+			}
+			command := exec.Command(binary, "validate", root, "--connector", "github")
+			var stdout, stderr bytes.Buffer
+			command.Stdout = &stdout
+			command.Stderr = &stderr
+			if err := command.Start(); err != nil {
+				t.Fatalf("start validate subprocess: %v", err)
+			}
+			writer := vNextPublicationOpenFIFOWriterForTest(t, fifo)
+			t.Cleanup(func() {
+				if err := writer.Close(); err != nil {
+					t.Errorf("close validate FIFO writer: %v", err)
+				}
+			})
+			for _, signal := range test.signals {
+				if err := command.Process.Signal(signal); err != nil && !errors.Is(err, os.ErrProcessDone) {
+					t.Fatalf("signal validate subprocess with %v: %v", signal, err)
+				}
+				time.Sleep(25 * time.Millisecond)
+			}
+			wait := make(chan error, 1)
+			go func() { wait <- command.Wait() }()
+			select {
+			case err := <-wait:
+				if err == nil {
+					t.Fatalf("validate subprocess exited successfully after %v; stdout=%q stderr=%q", test.signals, stdout.String(), stderr.String())
+				}
+				exit, ok := err.(*exec.ExitError)
+				if !ok {
+					t.Fatalf("validate subprocess error = %T %v, want signal termination", err, err)
+				}
+				status, ok := exit.Sys().(syscall.WaitStatus)
+				if !ok || !status.Signaled() {
+					t.Fatalf("validate subprocess status = %#v, want signal termination; stdout=%q stderr=%q", exit.Sys(), stdout.String(), stderr.String())
+				}
+			case <-time.After(1500 * time.Millisecond):
+				_ = command.Process.Kill()
+				<-wait
+				t.Fatalf("validate subprocess did not terminate after %v; global signal interception kept a non-consuming command alive; stdout=%q stderr=%q", test.signals, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestConnectorgenMainLockRenderSignalCancellationAndRetry(t *testing.T) {
+	binary := vNextConnectorgenBinaryForTest(t)
+	root := t.TempDir()
+	lock := minimalVNextLockForTest()
+	connectorRoot := filepath.Join(root, lock.Connector)
+	if err := os.MkdirAll(connectorRoot, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(connectorRoot, "source.lock.json"), raw, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	initial := exec.Command(binary, "lock-render", lock.Connector, "--defs", root)
+	if output, err := initial.CombinedOutput(); err != nil {
+		t.Fatalf("initial lock-render error = %v; output=%s", err, output)
+	}
+	currentPath := filepath.Join(connectorRoot, vNextPublicationCurrentFile)
+	before, err := os.ReadFile(currentPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	held := vNextPublicationHoldLockForTest(t, root)
+	command := exec.Command(binary, "lock-render", lock.Connector, "--defs", root, "--check")
+	var stdout, stderr bytes.Buffer
+	command.Stdout = &stdout
+	command.Stderr = &stderr
+	if err := command.Start(); err != nil {
+		unlockVNextPublicationFile(held)
+		t.Fatalf("start contended lock-render subprocess: %v", err)
+	}
+	time.Sleep(100 * time.Millisecond)
+	if err := command.Process.Signal(os.Interrupt); err != nil {
+		unlockVNextPublicationFile(held)
+		t.Fatalf("signal contended lock-render subprocess: %v", err)
+	}
+	err = command.Wait()
+	unlockVNextPublicationFile(held)
+	if err == nil {
+		t.Fatalf("contended lock-render exited successfully after signal; stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+	exit, ok := err.(*exec.ExitError)
+	if !ok || exit.ExitCode() != 1 {
+		t.Fatalf("contended lock-render error = %T %v, want cancellation exit 1; stdout=%q stderr=%q", err, err, stdout.String(), stderr.String())
+	}
+	if stdout.Len() != 0 || !strings.Contains(stderr.String(), context.Canceled.Error()) {
+		t.Fatalf("contended lock-render output after cancellation: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+	if after, err := os.ReadFile(currentPath); err != nil || !bytes.Equal(before, after) {
+		t.Fatalf("contended lock-render changed CURRENT: err=%v before=%q after=%q", err, before, after)
+	}
+	if _, err := os.Lstat(filepath.Join(connectorRoot, vNextPublicationJournalFile)); !errors.Is(err, fs.ErrNotExist) {
+		t.Fatalf("contended lock-render changed JOURNAL: %v", err)
+	}
+	retry := exec.Command(binary, "lock-render", lock.Connector, "--defs", root, "--check")
+	if output, err := retry.CombinedOutput(); err != nil {
+		t.Fatalf("lock-render retry error = %v; output=%s", err, output)
+	}
+}
+
+func vNextConnectorgenBinaryForTest(t *testing.T) string {
+	t.Helper()
+	workingDirectory, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	binary := filepath.Join(t.TempDir(), "connectorgen")
+	command := exec.Command("go", "build", "-o", binary, ".")
+	command.Dir = workingDirectory
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("build connectorgen test binary: %v; output=%s", err, output)
+	}
+	return binary
+}
+
+func vNextPublicationOpenFIFOWriterForTest(t *testing.T, path string) *os.File {
+	t.Helper()
+	deadline := time.Now().Add(5 * time.Second)
+	for time.Now().Before(deadline) {
+		fd, err := unix.Open(path, unix.O_WRONLY|unix.O_NONBLOCK|unix.O_CLOEXEC, 0)
+		if err == nil {
+			writer := os.NewFile(uintptr(fd), "validate metadata FIFO writer")
+			if writer == nil {
+				_ = unix.Close(fd)
+				t.Fatal("construct validate metadata FIFO writer")
+			}
+			return writer
+		}
+		if !errors.Is(err, unix.ENXIO) {
+			t.Fatalf("open validate metadata FIFO writer: %v", err)
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	t.Fatal("validate subprocess never reached deterministic FIFO-read readiness")
+	return nil
+}
+
 func TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune(t *testing.T) {
 	root := t.TempDir()
 	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -657,12 +1091,20 @@ func TestVNextPublicationOpenLockBindsConnectorDirectory(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer connector.Close()
+	t.Cleanup(func() {
+		if err := connector.Close(); err != nil {
+			t.Errorf("close connector publication root: %v", err)
+		}
+	})
 	lock, identity, err := vNextPublicationOpenLock(connector)
 	if err != nil {
 		t.Fatalf("vNextPublicationOpenLock() error = %v", err)
 	}
-	defer lock.Close()
+	t.Cleanup(func() {
+		if err := lock.Close(); err != nil {
+			t.Errorf("close connector publication lock: %v", err)
+		}
+	})
 	connectorIdentity, err := vNextPublicationIdentityFromFile(connector.file, "connector publication root")
 	if err != nil {
 		t.Fatal(err)
@@ -1355,40 +1797,6 @@ func vNextReplacePublicationTemporaryForTest(t *testing.T, root string, replacem
 	return path, moved
 }
 
-func vNextFindPublicationPrivatePayloadForTest(t *testing.T, root string, want []byte) string {
-	t.Helper()
-	connectorRoot := filepath.Join(root, "acme")
-	entries, err := os.ReadDir(connectorRoot)
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, entry := range entries {
-		if !entry.IsDir() || (!strings.HasPrefix(entry.Name(), ".connectorgen-publication-") && !strings.HasPrefix(entry.Name(), ".connectorgen-quarantine-") && !strings.HasPrefix(entry.Name(), vNextPublicationControlRepairDirectoryPrefix)) {
-			continue
-		}
-		directory := filepath.Join(connectorRoot, entry.Name())
-		children, err := os.ReadDir(directory)
-		if err != nil {
-			t.Fatal(err)
-		}
-		for _, child := range children {
-			if child.IsDir() {
-				continue
-			}
-			path := filepath.Join(directory, child.Name())
-			got, err := os.ReadFile(path)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if bytes.Equal(got, want) {
-				return path
-			}
-		}
-	}
-	t.Fatalf("publication private state does not retain %q", want)
-	return ""
-}
-
 func TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup(t *testing.T) {
 	root := t.TempDir()
 	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -1779,6 +2187,279 @@ func TestVNextGenerationPublisherRefusesLateReplacedValidatedGenerationCleanup(t
 }
 
 func TestVNextGenerationPublisherRefusesLateReplacedGenerationLeaseCleanup(t *testing.T) {
+	for _, test := range []struct {
+		name        string
+		replacement []byte
+	}{
+		{name: "nonempty replacement", replacement: []byte("late lease replacement")},
+		{name: "empty replacement", replacement: nil},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			old, err := baseline.Publish(vNextPublicationArtifactsForTest("old", false))
+			if err != nil {
+				t.Fatal(err)
+			}
+			handle, err := baseline.Open(context.Background())
+			if err != nil {
+				t.Fatal(err)
+			}
+			current, err := baseline.Publish(vNextPublicationArtifactsForTest("current", false))
+			handle.Release()
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			generationPath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation)
+			leasePath := filepath.Join(generationPath, vNextPublicationLeaseFile)
+			movedPath := leasePath + ".late-original"
+			leaseInfo, err := os.Lstat(leasePath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			leaseBytes, err := os.ReadFile(leasePath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !leaseInfo.Mode().IsRegular() || len(leaseBytes) != 0 {
+				t.Fatalf("original lease = mode %v bytes %q, want empty regular file", leaseInfo.Mode(), leaseBytes)
+			}
+			generationInfo, err := os.Stat(generationPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			currentPath := filepath.Join(root, "acme", vNextPublicationCurrentFile)
+			currentInfo, err := os.Stat(currentPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			currentBytes, err := os.ReadFile(currentPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			activePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, current.Generation)
+			activeInfo, err := os.Stat(activePath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			activeMetadata, err := os.ReadFile(filepath.Join(activePath, "metadata.json"))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			hookHit := false
+			var replacementInfo os.FileInfo
+			guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
+					return nil
+				}
+				hookHit = true
+				if err := os.Rename(leasePath, movedPath); err != nil {
+					return err
+				}
+				if err := os.WriteFile(leasePath, test.replacement, 0o600); err != nil {
+					return err
+				}
+				replacementInfo, err = os.Lstat(leasePath)
+				if err != nil {
+					return err
+				}
+				if !replacementInfo.Mode().IsRegular() || os.SameFile(leaseInfo, replacementInfo) {
+					return fmt.Errorf("late replacement does not have a distinct regular identity")
+				}
+				return nil
+			}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			operation, err := guard.openOperation(context.Background(), syscall.LOCK_EX, true)
+			if err != nil {
+				t.Fatal(err)
+			}
+			err = guard.pruneLocked(operation, current.Generation)
+			operation.close()
+
+			if !hookHit {
+				t.Fatal("Prune() did not reach late generation-lease identity barrier")
+			}
+			if err == nil || !strings.Contains(err.Error(), "identity") {
+				_, movedErr := os.Lstat(movedPath)
+				_, replacementErr := os.Lstat(leasePath)
+				_, generationErr := os.Stat(generationPath)
+				t.Fatalf("Prune() after late %s lease replacement error = %v, want identity refusal; moved=%v replacement=%v generation=%v", test.name, err, movedErr, replacementErr, generationErr)
+			}
+			if info, statErr := os.Lstat(movedPath); statErr != nil || !os.SameFile(info, leaseInfo) {
+				t.Fatalf("late lease replacement did not preserve original A: err=%v info=%v", statErr, info)
+			}
+			if got, readErr := os.ReadFile(movedPath); readErr != nil || !bytes.Equal(got, leaseBytes) {
+				t.Fatalf("late lease replacement changed original A bytes: err=%v got=%q want=%q", readErr, got, leaseBytes)
+			}
+			if info, statErr := os.Lstat(leasePath); statErr != nil || !os.SameFile(info, replacementInfo) {
+				t.Fatalf("late lease replacement did not preserve replacement B: err=%v info=%v", statErr, info)
+			}
+			if got, readErr := os.ReadFile(leasePath); readErr != nil || !bytes.Equal(got, test.replacement) {
+				t.Fatalf("late lease replacement changed replacement B bytes: err=%v got=%q want=%q", readErr, got, test.replacement)
+			}
+			if info, statErr := os.Stat(generationPath); statErr != nil || !os.SameFile(info, generationInfo) {
+				t.Fatalf("late lease replacement changed generation root: err=%v info=%v", statErr, info)
+			}
+			if got, readErr := os.ReadFile(currentPath); readErr != nil || !bytes.Equal(got, currentBytes) {
+				t.Fatalf("late lease replacement changed CURRENT bytes: err=%v got=%q want=%q", readErr, got, currentBytes)
+			}
+			if info, statErr := os.Stat(currentPath); statErr != nil || !os.SameFile(info, currentInfo) {
+				t.Fatalf("late lease replacement changed CURRENT identity: err=%v info=%v", statErr, info)
+			}
+			if info, statErr := os.Stat(activePath); statErr != nil || !os.SameFile(info, activeInfo) {
+				t.Fatalf("late lease replacement changed active generation: err=%v info=%v", statErr, info)
+			}
+			if got, readErr := os.ReadFile(filepath.Join(activePath, "metadata.json")); readErr != nil || !bytes.Equal(got, activeMetadata) {
+				t.Fatalf("late lease replacement changed active metadata: err=%v got=%q want=%q", readErr, got, activeMetadata)
+			}
+		})
+	}
+}
+
+func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers(t *testing.T) {
+	for _, test := range []struct {
+		name   string
+		invoke func(*vNextGenerationPublisher) error
+	}{
+		{name: "prune", invoke: func(publisher *vNextGenerationPublisher) error {
+			return publisher.Prune(context.Background())
+		}},
+		{name: "no journal recovery", invoke: func(publisher *vNextGenerationPublisher) error {
+			return publisher.Recover(context.Background())
+		}},
+		{name: "publish initial recovery", invoke: func(publisher *vNextGenerationPublisher) error {
+			_, err := publisher.Publish(vNextPublicationArtifactsForTest("next", false))
+			return err
+		}},
+		{name: "open transitive recovery", invoke: func(publisher *vNextGenerationPublisher) error {
+			handle, err := publisher.Open(context.Background())
+			if handle != nil {
+				handle.Release()
+			}
+			return err
+		}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			old, err := baseline.Publish(vNextPublicationArtifactsForTest("old", false))
+			if err != nil {
+				t.Fatal(err)
+			}
+			handle, err := baseline.Open(context.Background())
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := baseline.Publish(vNextPublicationArtifactsForTest("current", false)); err != nil {
+				handle.Release()
+				t.Fatal(err)
+			}
+			handle.Release()
+
+			leasePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation, vNextPublicationLeaseFile)
+			hookHit := false
+			guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+				if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
+					return nil
+				}
+				hookHit = true
+				if err := os.Rename(leasePath, leasePath+".late-original"); err != nil {
+					return err
+				}
+				return os.WriteFile(leasePath, []byte("late public caller replacement"), 0o600)
+			}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			err = test.invoke(guard)
+			if !hookHit {
+				t.Fatal("public cleanup caller did not reach late generation-lease identity barrier")
+			}
+			if err == nil || !strings.Contains(err.Error(), "identity") {
+				t.Fatalf("public %s after late lease replacement error = %v, want identity refusal", test.name, err)
+			}
+			if _, statErr := os.Lstat(leasePath + ".late-original"); statErr != nil {
+				t.Fatalf("public %s removed late original lease: %v", test.name, statErr)
+			}
+			if got, readErr := os.ReadFile(leasePath); readErr != nil || string(got) != "late public caller replacement" {
+				t.Fatalf("public %s changed late replacement lease: err=%v got=%q", test.name, readErr, got)
+			}
+		})
+	}
+
+	t.Run("committed journal recovery", func(t *testing.T) {
+		root := t.TempDir()
+		baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		old, err := baseline.Publish(vNextPublicationArtifactsForTest("old", false))
+		if err != nil {
+			t.Fatal(err)
+		}
+		handle, err := baseline.Open(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		crash := errors.New("committed journal before stale prune")
+		writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+			if point == vNextPublicationAfterCommitSync {
+				return crash
+			}
+			return nil
+		}})
+		if err != nil {
+			handle.Release()
+			t.Fatal(err)
+		}
+		if _, err := writer.Publish(vNextPublicationArtifactsForTest("current", false)); !errors.Is(err, crash) {
+			handle.Release()
+			t.Fatalf("Publish(current) error = %v, want committed-journal interruption", err)
+		}
+		handle.Release()
+
+		leasePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation, vNextPublicationLeaseFile)
+		hookHit := false
+		guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+			if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
+				return nil
+			}
+			hookHit = true
+			if err := os.Rename(leasePath, leasePath+".late-original"); err != nil {
+				return err
+			}
+			return os.WriteFile(leasePath, []byte("late committed replacement"), 0o600)
+		}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		err = guard.Recover(context.Background())
+		if !hookHit {
+			t.Fatal("committed-journal recovery did not reach late generation-lease identity barrier")
+		}
+		if err == nil || !strings.Contains(err.Error(), "identity") {
+			t.Fatalf("Recover() after committed journal late lease replacement error = %v, want identity refusal", err)
+		}
+		if _, statErr := os.Lstat(leasePath + ".late-original"); statErr != nil {
+			t.Fatalf("committed-journal recovery removed late original lease: %v", statErr)
+		}
+		if got, readErr := os.ReadFile(leasePath); readErr != nil || string(got) != "late committed replacement" {
+			t.Fatalf("committed-journal recovery changed replacement lease: err=%v got=%q", readErr, got)
+		}
+	})
+}
+
+func TestVNextGenerationPublisherLateLeaseReplacementRetainsPublicGenerationCollision(t *testing.T) {
 	root := t.TempDir()
 	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
 	if err != nil {
@@ -1797,20 +2478,105 @@ func TestVNextGenerationPublisherRefusesLateReplacedGenerationLeaseCleanup(t *te
 	if err != nil {
 		t.Fatal(err)
 	}
-	leasePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation, vNextPublicationLeaseFile)
-	movedPath := leasePath + ".late-original"
 
-	hookHit := false
+	generationsPath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory)
+	generationPath := filepath.Join(generationsPath, old.Generation)
+	leasePath := filepath.Join(generationPath, vNextPublicationLeaseFile)
+	movedLeaseName := vNextPublicationLeaseFile + ".late-original"
+	movedLeasePath := filepath.Join(generationPath, movedLeaseName)
+	leaseInfo, err := os.Lstat(leasePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	leaseBytes, err := os.ReadFile(leasePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	generationInfo, err := os.Stat(generationPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	currentPath := filepath.Join(root, "acme", vNextPublicationCurrentFile)
+	currentInfo, err := os.Stat(currentPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	currentBytes, err := os.ReadFile(currentPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	activePath := filepath.Join(generationsPath, current.Generation)
+	activeInfo, err := os.Stat(activePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	activeMetadata, err := os.ReadFile(filepath.Join(activePath, "metadata.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	replacementBytes := []byte("late lease replacement")
+	publicBytes := []byte(`{"marker":"public-C"}`)
+	var replacementInfo, retainedInfo, publicInfo os.FileInfo
+	var retainedPath string
+	identityHit := false
+	restoreHit := false
 	guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-		if point != vNextPublicationFaultPoint("after_generation_lease_identity") || hookHit {
+		switch point {
+		case vNextPublicationAfterGenerationLeaseIdentity:
+			if identityHit {
+				return nil
+			}
+			identityHit = true
+			if err := os.Rename(leasePath, movedLeasePath); err != nil {
+				return err
+			}
+			if err := os.WriteFile(leasePath, replacementBytes, 0o600); err != nil {
+				return err
+			}
+			var err error
+			replacementInfo, err = os.Lstat(leasePath)
+			if err != nil {
+				return err
+			}
+			if !replacementInfo.Mode().IsRegular() || os.SameFile(leaseInfo, replacementInfo) {
+				return fmt.Errorf("late replacement does not have a distinct regular identity")
+			}
 			return nil
-		}
-		hookHit = true
-		if err := os.Rename(leasePath, movedPath); err != nil {
-			t.Fatal(err)
-		}
-		if err := os.WriteFile(leasePath, []byte("late lease replacement"), 0o600); err != nil {
-			t.Fatal(err)
+		case vNextPublicationBeforeQuarantineRestore:
+			if !identityHit || restoreHit {
+				return nil
+			}
+			restoreHit = true
+			if _, err := os.Lstat(generationPath); !errors.Is(err, fs.ErrNotExist) {
+				return fmt.Errorf("public generation before quarantine restore = %v, want absent", err)
+			}
+			entries, err := os.ReadDir(generationsPath)
+			if err != nil {
+				return err
+			}
+			for _, entry := range entries {
+				if !entry.IsDir() || !strings.HasPrefix(entry.Name(), ".connectorgen-quarantine-") {
+					continue
+				}
+				candidate := filepath.Join(generationsPath, entry.Name(), vNextPublicationQuarantineMember)
+				info, err := os.Stat(candidate)
+				if err == nil && os.SameFile(info, generationInfo) {
+					retainedPath, retainedInfo = candidate, info
+					break
+				}
+			}
+			if retainedPath == "" {
+				return fmt.Errorf("quarantine does not retain original generation before restoration")
+			}
+			if err := os.Mkdir(generationPath, 0o755); err != nil {
+				return err
+			}
+			if err := os.WriteFile(filepath.Join(generationPath, "metadata.json"), publicBytes, 0o600); err != nil {
+				return err
+			}
+			publicInfo, err = os.Stat(generationPath)
+			return err
 		}
 		return nil
 	}})
@@ -1824,16 +2590,46 @@ func TestVNextGenerationPublisherRefusesLateReplacedGenerationLeaseCleanup(t *te
 	err = guard.pruneLocked(operation, current.Generation)
 	operation.close()
 
-	if !hookHit {
-		t.Fatal("Prune() did not reach late generation-lease identity barrier")
+	if !identityHit || !restoreHit {
+		t.Fatalf("late lease collision barriers reached identity=%t restore=%t, want both", identityHit, restoreHit)
 	}
-	if err == nil || !strings.Contains(err.Error(), "identity") {
-		t.Fatalf("Prune() after late lease replacement error = %v, want identity refusal", err)
+	if err == nil || !strings.Contains(err.Error(), "identity") || !errors.Is(err, fs.ErrExist) {
+		t.Fatalf("Prune() after late lease/public C collision error = %v, want identity refusal retaining no-replace conflict", err)
 	}
-	for _, path := range []string{leasePath, movedPath} {
-		if _, statErr := os.Stat(path); statErr != nil {
-			t.Fatalf("Prune() removed a late generation-lease object %q: %v", path, statErr)
-		}
+	if info, statErr := os.Stat(retainedPath); statErr != nil || !os.SameFile(info, retainedInfo) || !os.SameFile(info, generationInfo) {
+		t.Fatalf("quarantined generation A/B identity changed: err=%v info=%v", statErr, info)
+	}
+	retainedMoved := filepath.Join(retainedPath, movedLeaseName)
+	retainedLease := filepath.Join(retainedPath, vNextPublicationLeaseFile)
+	if info, statErr := os.Lstat(retainedMoved); statErr != nil || !os.SameFile(info, leaseInfo) {
+		t.Fatalf("quarantined original lease A changed: err=%v info=%v", statErr, info)
+	}
+	if got, readErr := os.ReadFile(retainedMoved); readErr != nil || !bytes.Equal(got, leaseBytes) {
+		t.Fatalf("quarantined original lease A bytes changed: err=%v got=%q want=%q", readErr, got, leaseBytes)
+	}
+	if info, statErr := os.Lstat(retainedLease); statErr != nil || !os.SameFile(info, replacementInfo) {
+		t.Fatalf("quarantined replacement lease B changed: err=%v info=%v", statErr, info)
+	}
+	if got, readErr := os.ReadFile(retainedLease); readErr != nil || !bytes.Equal(got, replacementBytes) {
+		t.Fatalf("quarantined replacement lease B bytes changed: err=%v got=%q want=%q", readErr, got, replacementBytes)
+	}
+	if info, statErr := os.Stat(generationPath); statErr != nil || !os.SameFile(info, publicInfo) {
+		t.Fatalf("public C identity changed: err=%v info=%v", statErr, info)
+	}
+	if got, readErr := os.ReadFile(filepath.Join(generationPath, "metadata.json")); readErr != nil || !bytes.Equal(got, publicBytes) {
+		t.Fatalf("public C bytes changed: err=%v got=%q want=%q", readErr, got, publicBytes)
+	}
+	if info, statErr := os.Stat(currentPath); statErr != nil || !os.SameFile(info, currentInfo) {
+		t.Fatalf("late lease collision changed CURRENT identity: err=%v info=%v", statErr, info)
+	}
+	if got, readErr := os.ReadFile(currentPath); readErr != nil || !bytes.Equal(got, currentBytes) {
+		t.Fatalf("late lease collision changed CURRENT bytes: err=%v got=%q want=%q", readErr, got, currentBytes)
+	}
+	if info, statErr := os.Stat(activePath); statErr != nil || !os.SameFile(info, activeInfo) {
+		t.Fatalf("late lease collision changed active generation: err=%v info=%v", statErr, info)
+	}
+	if got, readErr := os.ReadFile(filepath.Join(activePath, "metadata.json")); readErr != nil || !bytes.Equal(got, activeMetadata) {
+		t.Fatalf("late lease collision changed active metadata: err=%v got=%q want=%q", readErr, got, activeMetadata)
 	}
 }
 
@@ -1886,6 +2682,59 @@ func TestVNextGenerationPublisherRefusesLateReplacedRollbackGenerationCleanup(t 
 	}
 	if info, statErr := os.Stat(generationPath); statErr != nil || !info.IsDir() {
 		t.Fatalf("late rollback generation replacement did not preserve replacement: err=%v info=%v", statErr, info)
+	}
+}
+
+func TestVNextGenerationPublisherRefusesLateReplacedRollbackGenerationLeaseCleanup(t *testing.T) {
+	root := t.TempDir()
+	baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := baseline.Publish(vNextPublicationArtifactsForTest("old", true)); err != nil {
+		t.Fatal(err)
+	}
+	newSet := vNextPublicationArtifactsForTest("new", false)
+	validationCalls := 0
+	activeFailure := errors.New("active validation failure")
+	newSet.Validate = func(fs.FS) error {
+		validationCalls++
+		if validationCalls == 2 {
+			return activeFailure
+		}
+		return nil
+	}
+	generation := vNextPublicationGenerationID(newSet.Files)
+	leasePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, generation, vNextPublicationLeaseFile)
+	hookHit := false
+	guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
+			return nil
+		}
+		hookHit = true
+		if err := os.Rename(leasePath, leasePath+".late-original"); err != nil {
+			return err
+		}
+		return os.WriteFile(leasePath, []byte("late rollback lease replacement"), 0o600)
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, publishErr := guard.Publish(newSet)
+	if !hookHit {
+		t.Fatal("rollback generation cleanup did not reach late lease identity barrier")
+	}
+	if publishErr == nil || !strings.Contains(publishErr.Error(), activeFailure.Error()) || !strings.Contains(publishErr.Error(), "identity") {
+		t.Fatalf("Publish(new) after late rollback lease replacement error = %v, want active-validation and identity refusal", publishErr)
+	}
+	if validationCalls != 2 {
+		t.Fatalf("validation calls = %d, want staged then active validation", validationCalls)
+	}
+	if _, statErr := os.Lstat(leasePath + ".late-original"); statErr != nil {
+		t.Fatalf("rollback cleanup removed late original lease: %v", statErr)
+	}
+	if got, readErr := os.ReadFile(leasePath); readErr != nil || string(got) != "late rollback lease replacement" {
+		t.Fatalf("rollback cleanup changed late replacement lease: err=%v got=%q", readErr, got)
 	}
 }
 
@@ -2955,6 +3804,7 @@ func vNextPublicationFIFOReaderSubprocess(t *testing.T, scenario string) {
 		if err := unix.Mkfifo(markerPath, 0o600); err != nil {
 			t.Fatal(err)
 		}
+		before := vNextPublicationTreeSnapshotForTest(t, filepath.Join(root, "acme"))
 		fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
 		if err != nil {
 			t.Fatal(err)
@@ -2964,6 +3814,9 @@ func vNextPublicationFIFOReaderSubprocess(t *testing.T, scenario string) {
 		}
 		if info, err := os.Lstat(markerPath); err != nil || info.Mode()&os.ModeNamedPipe == 0 {
 			t.Fatalf("FIFO stage marker changed after refusal: info=%v err=%v", info, err)
+		}
+		if after := vNextPublicationTreeSnapshotForTest(t, filepath.Join(root, "acme")); !bytes.Equal(before, after) {
+			t.Fatal("FIFO stage marker refusal changed publication tree")
 		}
 		operation, err := fresh.openOperation(context.Background(), syscall.LOCK_EX, true)
 		if err != nil {
@@ -3007,6 +3860,7 @@ func vNextPublicationFIFOReaderSubprocess(t *testing.T, scenario string) {
 		if err := unix.Mkfifo(targetPath, 0o600); err != nil {
 			t.Fatal(err)
 		}
+		before := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
 		if scenario == "public-current-recover" {
 			publisher, err := newVNextGenerationPublisher(root, lock.Connector, vNextPublicationHooks{})
 			if err != nil {
@@ -3024,6 +3878,9 @@ func vNextPublicationFIFOReaderSubprocess(t *testing.T, scenario string) {
 		}
 		if info, err := os.Lstat(targetPath); err != nil || info.Mode()&os.ModeNamedPipe == 0 {
 			t.Fatalf("FIFO %s changed after refusal: info=%v err=%v", target, info, err)
+		}
+		if after := vNextPublicationTreeSnapshotForTest(t, connectorRoot); !bytes.Equal(before, after) {
+			t.Fatalf("FIFO %s refusal changed public/private authority tree", target)
 		}
 		publisher, err := newVNextGenerationPublisher(root, lock.Connector, vNextPublicationHooks{})
 		if err != nil {
@@ -3084,11 +3941,15 @@ func vNextPublicationFIFOReaderSubprocess(t *testing.T, scenario string) {
 		if err := unix.Mkfifo(member, 0o600); err != nil {
 			t.Fatal(err)
 		}
+		before := vNextPublicationTreeSnapshotForTest(t, root)
 		if _, err := fs.ReadFile(stage, "acme/spec.json"); err == nil || !strings.Contains(err.Error(), "not a regular file") {
 			t.Fatalf("admission filesystem FIFO read error = %v, want prompt regular-file refusal", err)
 		}
 		if info, err := os.Lstat(member); err != nil || info.Mode()&os.ModeNamedPipe == 0 {
 			t.Fatalf("FIFO admission member changed after refusal: info=%v err=%v", info, err)
+		}
+		if after := vNextPublicationTreeSnapshotForTest(t, root); !bytes.Equal(before, after) {
+			t.Fatal("adapter-only FIFO refusal changed the staged filesystem")
 		}
 	default:
 		t.Fatalf("unknown FIFO reader subprocess scenario %q", scenario)

@@ -256,9 +256,14 @@ with `unsupported`.
     A replacement at any boundary refuses and preserves both the original and
     replacement rather than deleting either object.
 15. Prune only stale generations whose closed tree and integrity prove publisher
-    ownership and whose per-generation lease can be acquired exclusively. A
-    reader holds that lease from reading `CURRENT` until it releases its handle,
-    so an in-use old generation—and any unowned directory—remains intact.
+    ownership. A reader holds a shared Flock on the retained generation-directory
+    inode from reading `CURRENT` until it releases its handle; cleanup takes the
+    matching exclusive directory Flock, so an in-use old generation remains
+    intact even if the `.lease` pathname is replaced. The empty regular `.lease`
+    member remains an independently descriptor-bound closed-tree member: cleanup
+    captures and rechecks its identity through quarantine before deletion, so a
+    late replacement refuses without deleting either lease object. Any unowned
+    directory remains intact.
 
 Once the protected-mode marker exists, public controls are never sole
 selection authority: exactly one retained terminal head per target selects a

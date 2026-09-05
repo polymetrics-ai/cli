@@ -38,9 +38,16 @@ import (
 )
 
 func main() {
+	os.Exit(runMain(os.Args[1:], os.Stdout, os.Stderr))
+}
+
+func runMain(args []string, stdout, stderr io.Writer) int {
+	if len(args) == 0 || args[0] != "lock-render" {
+		return run(args, stdout, stderr)
+	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
-	os.Exit(runContext(ctx, os.Args[1:], os.Stdout, os.Stderr))
+	return runContext(ctx, args, stdout, stderr)
 }
 
 // run is the full CLI entry point (argv without the program name); it is
