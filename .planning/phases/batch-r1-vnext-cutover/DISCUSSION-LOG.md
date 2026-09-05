@@ -110,3 +110,23 @@ No user decision remains. The inline manual-GSD fallback is necessary because
 the custom phase has no adapter roadmap and no compatible isolated worker; it
 does not waive RED/GREEN, scoped verification, read-only review, or the next
 Firstmate exact-SHA gate.
+
+## 2026-09-05 — CP11 Astra B-01/B-02 correction decision record
+
+The captain's recovery authorization adopts the two Astra blockers as one bounded
+CP11 correction wave. No product, connector, runtime, or shared-foundation
+decision remains.
+
+1. Reuse the existing descriptor-relative no-replace primitive for both
+   quarantine restoration and final-generation activation. A second pathname
+   absence check is not atomic and is not a permissible substitute.
+2. Resume only a strict valid pre-marker base preparation: no predecessor, no
+   phase, equal prior/intended logical state, validated private transaction and
+   anchors, under the existing exclusive publisher lock. Finish its durable
+   terminal phase, then complete missing base heads and marker creation.
+3. `lock-render --check` remains read-only and refuses the pending markerless
+   state. Malformed/missing prepared records and non-base graphs remain
+   fail-closed; no manual unlock, cleanup, or legacy recovery route is added.
+4. The first artifacts are deterministic RED witnesses on temporary roots using
+   the real production descriptor paths. Green requires inode/byte retention
+   and ordinary fresh recovery/retry, not an error code alone.
