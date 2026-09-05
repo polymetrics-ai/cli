@@ -608,3 +608,74 @@ Read-only review scope: `cmd/connectorgen/vnext_admission.go`, `vnext_graph.go`,
 - **Meaningful RED/GREEN:** the pre-change bounded subprocess selector exited 1 after a stale-stage owner and enumerated admission member FIFO each exceeded one second before the prior blocking open returned. The repair's final focused selector passes and observes prompt refusal, FIFO preservation, lock release, actual `lock-render --check` no-success behavior for `JOURNAL`, and valid nested directory traversal. Full normal/race package evidence, boundary/preflight/canon/docs/static/release checks, lint-new-line proof, smoke classification, and the inherited `internal/cli` baseline are detailed in `VERIFICATION.md`.
 - **New edge/function inventory for final review:** `openFilesystemMember` is the only new production helper; it introduces one allowed-type branch for a directory required by nested staged schemas. `openRegular` adds no state transition, retry, or fallback, only a nonblocking flag before its existing `Stat()` gate. The regression introduces bounded child-process scenarios for stale stage ownership, public `CURRENT`, public `JOURNAL` check, and adapter-after-enumeration substitution. There is no provider-live, native Linux runtime, power-loss, or whole-programme certification claim.
 - **Disposition:** CP11-R3-01 is locally repaired with an observable regression, not accepted. B-01 and B-02 remain source-preserved dispositions pending the same independent final review. No scope decision, new foundation, or additional root was discovered; CP12 remains prohibited until a fresh Astra/xhigh context reviews the complete original range plus this committed repair/evidence delta at its exact SHA.
+
+## 2026-09-06 — CP11 R3-02–07 audited frozen ledger (artifact-only checkpoint)
+
+### Exact reviewed identity, custody, and evidence boundary
+
+- **Reviewed code SHA:** `3a455877cdd9686ba6f04341960a3c31196909bd`.
+- **Full immutable range:** `36e4d980de0d51d92fe74a68306845643596a6cb..3a455877cdd9686ba6f04341960a3c31196909bd` (14 commits, 37 paths; base is the recorded merge base).
+- **Writer:** sole Codex Terra/xhigh project owner. The original fresh Astra/xhigh discovery review did not implement the FIFO repair; the separate GPT-6 Astra/xhigh frozen-ledger auditor did not implement or discover the original candidate; GPT-5.6 Luna/low performed read-only mechanical reconciliation only. All three worked read-only and made no provider, credential, customer-database, test, build, generator, lint, GitHub, or no-mistakes action.
+- **Independent inputs preserved outside this candidate:** exact discovery ledger, independent Astra audit, audited causal ledger, and corrected Luna table are retained in Firstmate task data under `data/cli-batch1-pi-takeover/`. This canonical record preserves their operative findings and is the local committed repair input.
+- **Certification boundary:** writer-recorded Darwin FIFO 2.200s, normal 132.575s, and race 409.519s evidence is not independent execution. Neither those results nor this audit establish full-suite/full-lint green, native Linux runtime, power-loss, provider-live/customer database behavior, hosted Verify/security, release, or no-mistakes certification.
+
+### Full causal finding/disposition ledger
+
+| ID | Severity | Causal classification | Audited disposition and invariant |
+| --- | --- | --- | --- |
+| CP11-R3-01 | Medium | Original full-range FIFO root, fixed by `3a455877` | **Production resolved.** Descriptor-relative no-follow/nonblocking opening validates the same descriptor before reading; semantic-admission `FS.Open` receives the matching regular-or-directory gate. R3-05 owns remaining preservation-proof gaps. |
+| CP11-R3-02 | Medium | Earlier CP11 discovery miss | **Confirmed.** `scanControlAuthorityLocked` retains every historical transaction directory descriptor (`2 + 4p` for `p` changed publications) for graph identity, so healthy history can persistently reach `EMFILE`. Group with R3-06/R3-07 and consequential ownership/error handling; preserve every authority record. |
+| CP11-R3-03 | Medium | Earlier CP11 discovery miss | **Confirmed.** Process-wide `signal.NotifyContext` intercepts SIGINT/SIGTERM for validate/boundary/ownership/gen although they discard the context; `main`'s deferred stop is bypassed by `os.Exit`. Scope interception to lock-render's consumption contract and test production entry point. |
+| CP11-R3-04 | Medium | One full-range configured-lint group | **Amended and confirmed.** 31 introduced diagnostics (21 errcheck, 3 staticcheck, 7 unused) are a gate failure; 20 remain proven pre-range programme debt. Error/sync/close handling needs semantics, not blanket ignores/suppression/config weakening. |
+| CP11-R3-05 | Low | `fix_created:3a455877cdd9686ba6f04341960a3c31196909bd` evidence gap | **Amended and confirmed.** FIFO tests lack type-safe before/after FIFO inode and relevant generation/private-authority/control snapshots; adapter path does not acquire a publication lock. This is not an unresolved production FIFO claim. |
+| CP11-R3-06 | Medium | Earlier CP11 reader-identity miss | **Added.** `openLocked` validates generation A, closes it, reopens generation name B, then returns B with A's file list. Bind/transfer the validated descriptor or refuse; this is authoring API scope, not a PM runtime CURRENT reader claim. |
+| CP11-R3-07 | Medium | Earlier CP11 reader-lifetime miss | **Added.** A held reader's replaceable empty lease inode can be moved and replaced with empty B, allowing cleanup to lock B and delete the held generation. Stabilize reader/cleanup lock identity across all cleanup siblings. |
+
+#### Source and sibling map
+
+- **R3-02:** `vnext_publication_repair.go:194,206,213,492,499,540,679,717,734,766`; publication transitions `vnext_publication.go:350,358,374,380`. Graph state descriptors support prepared/phase/capture/anchor/predecessor identity and public-read revalidation. Check/Open/Recover/Prune/Publish all reach scans. A fault-path sibling returns non-nil state plus error after `AfterControlRepairPrepared` and current callers discard it without close; it joins the ownership repair without explaining ordinary history growth.
+- **R3-03:** `main.go:40-68,165`; `gen.go:358-392`; `boundary.go:15`; `ownership.go:15`. Default termination must remain for non-consuming command branches. Lock-render cancellation remains lock-acquisition/pre-mutation only, not a new full mid-transaction cancellation promise.
+- **R3-04:** introduced paths are `cmd/connectorgen/vnext_publication.go`, `vnext_publication_dir.go`, `vnext_publication_repair.go`, their tests, and `main.go:48`. `main.run` predates CP11 but dispatch commit `4fedb3875cbe7071799aed0e9b6ce1e34257f95e` removed its sole call. Durability-sensitive sites include `writeAtomicLocked:812-817` and failed-creation cleanup `createControlRepairLocked:1236-1247`.
+- **R3-05:** `vnext_publication_test.go:2912-3096`, PLAN/TDD records and `VERIFICATION.md:679,686`. A FIFO-safe snapshot must not use `snapshotVNextPublicationTreeForTest` unchanged because its non-directory `os.ReadFile` path would open the FIFO.
+- **R3-06:** `vnext_publication.go:449-479,548-555,1184-1207`; local actor replacement occurs after A validation before B re-open/lease binding.
+- **R3-07:** `vnext_publication.go:465-470,627-630,1511-1567,1865-1923`; real Open/Prune and Recover/Publish cleanup siblings must hold an identity-stable domain. The late-lease existing test is not the early-empty-replacement case.
+
+### Preserved resolved contracts
+
+- **B-01:** final no-replace quarantine restoration and stage activation preserve A/B/C and late collision identity/bytes with typed `fs.ErrExist`, across stage/prune/rollback/activation callers and Darwin/Linux fail-closed shims.
+- **B-02:** only strictly scanned, phase-empty, predecessor-free equal-prior/intended interrupted base authority resumes; revalidate, terminalize, rescan, complete heads/marker. Preserve CURRENT-first/JOURNAL-second check refusal/recovery and all malformed/private graph refusals.
+- **R3-01:** retain nonblocking final-descriptor type validation, real nested semantic directory traversal, no-success refusal ordering, byte bounds, strict decoding, and existing lease/create behavior.
+- No repair may add a provider route, credential/database action, generic executor, runtime source-lock/CURRENT reader, authority deletion/GC, path-only precheck, hidden fallback, or new shared runtime foundation.
+
+### Mandatory-lens status at this freeze
+
+| Lens | Audited status |
+| --- | --- |
+| Architecture/data flow | **Complete.** Command dispatch, admission, authority/public controls, generation, Check/Open/Recover/Prune, callbacks and cleanup mapped; R3-06 validation-to-reader handoff added. |
+| Happy/bad/edge | **Complete.** Absent/empty/malformed/duplicate/trailing/oversized/partial/symlink/FIFO/replacement/cancellation/interruption cases mapped; required witnesses below remain RED work. |
+| State/concurrency | **Complete.** Publication/authority transitions, bootstrap, locks, handles, leases, cleanup and lock order mapped; R3-02/03/06/07 actionable. |
+| Security/secret taint | **Complete.** Local object identity is the hostile boundary; no secret/provider taint added. Arbitrary same-UID destruction of all private authority remains outside the retained threat promise. |
+| Retry/rate/resume/idempotency | **Complete/applicable.** Healthy-history retry persists R3-02 failure; no provider rate/replay behavior changed. |
+| Output/filesystem integrity | **Complete.** Strict control bytes and success/refusal ordering retained; R3-05/R3-06/R3-07 identify missing preservation/identity proof. |
+| Declaration/closed surface | **Complete.** CP10 physical admission/preflight remains sole route; no runtime/provider surface added. |
+| CLI/App parity | **Complete/applicable.** Connectorgen command branches mapped; R3-03 affects siblings. PM/App routes and four historical red CLI obligations remain outside CP11 behavior. |
+| Provider semantics | **Not applicable with evidence.** No provider operation, transport, credential, database, paging, redirect, or remote idempotency behavior changed. |
+| Tests/evidence | **Complete static audit.** Existing/required witnesses and causal limits mapped; static audit is distinct from executed evidence. |
+
+### Required coordinated RED/GREEN matrix
+
+| Group | Required observable RED | Required GREEN and preserved negative controls |
+| --- | --- | --- |
+| A: R3-02, R3-06, R3-07 | Actual-publication retained history in fresh controlled-`RLIMIT_NOFILE` child reaches valid-history descriptor exhaustion; barrier replaces validated A before actual Open; early empty lease replacement while old Open is held permits cleanup loss/broken old read. | Same effective limit completes Check/Open-read-release/Recover/Prune/next publish with returned bytes/history identities; descriptor/transaction/prepared/phase/capture/predecessor replacement refuses; partial prepared-hook cleanup and lock reacquisition prove release; Open binds validated A or refuses; held generation survives all cleanup siblings then prunes after release. |
+| B: R3-03 | Production-main non-consuming command remains alive after real SIGINT/SIGTERM/repeat signal, not merely direct context cancellation. | Real signals terminate without success output and without timeout-SIGKILL ambiguity; bounded local-I/O readiness; real flock-held lock-render returns cancellation exit 1/no mutation then succeeds after release. |
+| C: R3-04/R3-05 | Full configured lint exposes all 31 in-range diagnostics; current FIFO tests lack safe preservation oracles. | Semantic error/durability/dead-code repair yields zero in-range configured diagnostics without suppression/coverage deletion, leaving 20 debt explicit; FIFO-safe metadata snapshots prove relevant inode/bytes/authority/generation/control preservation and scope lock release to locking cases. |
+
+### Mechanical evidence corrections
+
+- The repair code commit `3a455877cdd9686ba6f04341960a3c31196909bd` changes exactly six paths: `cmd/connectorgen/vnext_publication_dir.go`, `cmd/connectorgen/vnext_publication_test.go`, and phase PLAN/TDD-LEDGER/VERIFICATION/REVIEW-CONVERGENCE. The old `TDD-LEDGER.md:381` six-member fixture is unrelated CP10 test material and is withdrawn as commit-path evidence. The four-file staging wording in `VERIFICATION.md:686` is wrong and requires a later bounded evidence correction.
+- The authoritative pre-range source prefixes are `cmd/connectorgen/vnext_admission.go:390` and grouped `cmd/connectorgen/orderedjson.go`, not Luna's initially expanded `internal/connectors` prefixes. The twelve grouped helper identities are unavailable in retained output and must not be invented.
+- The four named `internal/cli` failures and 20 pre-range diagnostics are red final-programme obligations, not CP11 green evidence. Old-checkout-looking lint output is cache/presentation metadata, not wrong-target execution, supported by worktree/module/config/path evidence and matching polling blob `cb34243703a64123c1f9b116e7152249c43da98e`.
+
+### Next permitted repair and final-review gate
+
+The full audited repair order is (A) descriptor/reader ownership R3-02/R3-06/R3-07 with consequential close/cleanup semantics; (B) actual-entry signal behavior R3-03 plus `main.run`; (C) remaining full-range in-range lint and R3-05 truthful preservation evidence. Establish RED before relevant code edits, then coherent GREEN/continuity checks. Record every new helper/state/edge for a fresh GPT-6 Astra/xhigh context that implemented none of the repair. That context must review the complete original range plus all repair deltas at final exact code SHA. CP11 remains unaccepted until it returns a zero-blocker verdict with actual CP11 evidence; no later code-bearing commit may rely on an earlier exact-SHA review.
