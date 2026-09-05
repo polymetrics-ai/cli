@@ -707,3 +707,44 @@ The switch to stable generation-directory Flocks correctly fixes reader lifetime
 ### Required executable continuation
 
 Restore the old test/barrier surgically without reverting the coordinated repair files. First run the restored/equivalent witness against the current nil-binding logic and observe missing identity refusal or object loss; a hook-hit-only failure is insufficient. Then restore the independently bound lease-member guard, prove A/B inode/type/byte and generation/control identity preservation for empty/nonempty B, and rerun the Atlas selector plus affected held-reader/resource/identity/FIFO/signal suites. The corrected test must remain in the final complete-range Astra/xhigh review together with its temporary deletion and the two failed full runs as causal history.
+
+## 2026-09-06 — fresh Astra/xhigh final review of repaired CP11 code
+
+**Verdict: changes required; CP11 remains unaccepted.** A fresh read-only
+`gpt-6-astra`/xhigh context that did not implement the repair reviewed code
+`7294373166db75466e2c92269f7887f51ceaddc6` over the complete immutable range
+`36e4d980de0d51d92fe74a68306845643596a6cb..7294373166db75466e2c92269f7887f51ceaddc6`.
+It read the required briefs, historical phase records, audits, canon/catalog,
+and mechanical validation index; inspected all 37 range paths and the complete
+publication/authority/directory/rename implementations and tests. It made no
+mutation and ran no tests, builds, generators, linter, provider/database, or
+no-mistakes operation. The review started from a clean worktree at the named
+code SHA. This record is an artifact-only report; it neither changes that code
+nor makes a provider-live/full-programme certification.
+
+### Findings requiring one coordinated follow-up repair scope
+
+| ID | Severity/classification | Location, invariant, and observable regression |
+| --- | --- | --- |
+| F-01 | Medium; remaining R3-02/R3-06 identity-handoff sibling | `cmd/connectorgen/vnext_publication_repair.go:1523`; sibling validation paths `vNextPublicationValidateCaptureLocked:981` and `vNextPublicationValidateCapturedCandidateLocked:1045`. Capture A is validated and closed, then its pathname is reopened without checking that opened directory against recorded `capture.Identity`; a lock-ignoring actor can replace it with B before a public control is moved into B. Bind/retain the checked descriptor through dependent validation/capture. A regression must install distinct B immediately before the dependent open and require refusal before public-control movement plus unchanged A/B identity/content. |
+| F-02 | Low; `fix_created:7294373166db75466e2c92269f7887f51ceaddc6` | `cmd/connectorgen/vnext_publication_dir.go:419`. `removeTree` removed `defer child.Close`; its `Fstat` and identity-mismatch returns at lines 425/428 bypass the lone close at 431. A nested replacement during recursive stage/generation cleanup leaks the descriptor. Repeat actual cleanup refusals with deterministic replacement; preserve refusal/objects and prove descriptor count bounded without finalization. |
+| F-03 | Medium; remaining R3-04 writer-error-contract miss | `cmd/connectorgen/vnext_publication.go:839` (`writeAtomicLocked`). The writable temporary's successful `Close()` error is discarded after `Write`/`Sync`; `writeCurrentLocked`, `writeJournalLocked`, publication, and recovery can miss the outcome. Inject writable-close failure after write/sync and require observable error with recoverable durable state. `vnext_publication_repair.go:1277` failed-creation cleanup also discards cleanup/sync/close outcomes while returning a primary error; it is a related disposition, not independently asserted false success. |
+| F-04 | Low; residual `fix_created:3a455877cdd9686ba6f04341960a3c31196909bd` R3-05 oracle gap | `cmd/connectorgen/vnext_publication_repair_test.go:1674`. The snapshot skips stable nonregular `Lstat` values but then uses `os.ReadFile(path)` at 1684; a regular-to-FIFO/symlink replacement between classification/open can block or read unrelated bytes, and recursion has the same reopen window. The oracle needs no-follow/nonblocking opened-descriptor identity before bytes; a replacement regression must refuse boundedly without reading replacement/external target. This is not a remaining production R3-01 FIFO defect. |
+| F-05 | Low; repair-wave proof gap | `cmd/connectorgen/vnext_publication_test.go:74,163`. `OpenKeepsValidatedDirectory` proves returned A bytes but not A inode continuity/B identity or bytes. Held-generation checks prove old reader bytes and only an empty B pathname, not B inode or displaced lease-A before restoration. Cover Prune/Publish/Recover with exact A/B identity/bytes and selected state before restoration; equal-byte distinct B must fail. Core reader handoff/directory locking was statically found correct. |
+| F-06 | Low; late-member recovery-cut matrix gap | `cmd/connectorgen/vnext_publication_test.go:2326`; `TDD-LEDGER.md:880`. The matrix omits fresh recovery of a rejected `journal.New` generation through `vnext_publication.go:1376`; immediate active-validation rollback is not that restart cut. Leave prepared/interrupted publication with old selection/finalized rejected new generation, restart real `Recover`, perform late lease substitution, and assert identity refusal, A/B and old-selection preservation, and recoverable state. |
+| F-07 | Medium; R3-03 evidence gap | `TDD-LEDGER.md:860`; `PLAN.md:1038`. The required pre-repair production-main SIGINT/SIGTERM/repeated-signal RED remains planned; no actual command, tested identity, and observed failure are recoverable. `runMain` was statically found correctly scoped; broader/full writer GREEN does not constitute the required RED. Recover genuine provenance if available or retain this gap truthfully; do not manufacture a RED from current green behavior. |
+
+### Preserved dispositions and lenses
+
+- B-01 no-replace restoration/activation and typed collision causes remain; no overwrite fallback was found. B-02 remains strict phase-empty/predecessor-free/equal-prior-intended recovery with malformed/private/read-only refusals. R3-01 production descriptor admission is retained; F-04 is test-oracle only.
+- R3-02 historical handle accumulation and prepared-hook state ownership are repaired; F-01/F-02 remain. R3-03 code is repaired; F-07 is proof provenance. The 31 introduced configured diagnostics remain dispositioned without configuration weakening; F-02/F-03 are remaining semantic concerns. R3-06 validated descriptor handoff and R3-07 directory lock plus independent late-member binding are retained; F-05/F-06 prevent acceptance.
+
+| Mandatory lens | Status |
+| --- | --- |
+| Architecture/data flow; happy/bad/edge; state/concurrency; security/taint; retry/resume/idempotency; output/filesystem integrity; declaration/closed surface; CLI/App parity | Complete static inspection; F-01–F-07 are the remaining contracts. |
+| Provider semantics | Not applicable: no provider operation, transport, credential, database, paging, or remote idempotency behavior changed. |
+| Tests/evidence | Blocked for acceptance by F-04–F-07 and the remaining error-contract defects. |
+
+Writer-recorded local hermetic execution remains attributed rather than independently rerun: Group-A REDs (Open `4.063s`, held reader `6.606s`, bounded descriptor `99.621s`); late-member nil-binding RED `2.485s`; focused GREEN `2.479s`; public-C `3.155s`; four-selector matrix `7.245s`; broader CP11 `121.026s`; normal `253.295s`; race `676.216s`; admitted definitions 553/0 and boundary clean exit 0 (284 files, 553 connectors, empty findings/warnings, six documented exceptions). `connectorgen-vnext-locks` is cached evidence, not a fresh run. Scoped lint retains the 15 established pre-range package items; four `internal/cli` failures and 20 broader lint items stay CP29/final-programme obligations. No provider-live, customer database, whole-suite, hosted, Linux/power-cut, shared-receiver, no-mistakes, or full-programme certification exists.
+
+The older four-file staging instruction is historical, not a discrepancy in the ten-file `72943731` commit; contemporaneous six-path `3a455877` history and the unrelated CP10 fixture distinction remain corrected. Firstmate must author the next coherent repair brief for F-01–F-07. No piecemeal fix, CP12 advance, or acceptance is authorized by this failed exact-SHA review.
