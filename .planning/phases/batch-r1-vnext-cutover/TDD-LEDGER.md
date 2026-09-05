@@ -18,7 +18,7 @@
 
 ### 2026-09-06 — CP11 Group 1 F-08 bounded child ownership
 
-- **RED (exact original fixture):** [GROUP1-EVIDENCE.md](GROUP1-EVIDENCE.md) records a process that follows the old `Start` then readiness-failure-before-cleanup order. Its exact sleeper PID remains live after the inner test exits. The outer fixture, not the original unarmed process, owns the direct PID-specific kill/reap remediation; its `SIGKILL` is explicitly excluded from real-signal success evidence.
+- **RED (exact original fixture):** [GROUP1-EVIDENCE.md](GROUP1-EVIDENCE.md) records a process that follows the old `Start` then readiness-failure-before-cleanup order. Its exact sleeper PID remains live after the inner test exits. The outer fixture, not the original unarmed process, performs PID-specific `SIGKILL` then `ESRCH` absence observation; it does not directly `Wait` for or claim to reap the orphaned grandchild. Its `SIGKILL` is explicitly excluded from real-signal success evidence.
 - **GREEN contract (not yet claimed):** every active signal-test child becomes cleanup-owned immediately after `Start`; FIFO and actual lock-contention readiness are bounded observations; all normal and cleanup waits are bounded; real OS `SIGINT` proves lock-render cancellation and a retry after release; a withheld readiness/nonterminating-child test proves bounded cleanup without being counted as signal success.
 
 ### 2026-09-02 — G0 direct-parent delivery amendment
