@@ -998,6 +998,35 @@ func sourceLaneContains(values []string, want string) bool {
 // Structural comparison deliberately has no implication/union solver. Local
 // reference expansion is bounded; lexical numbers are never converted to float.
 func sourceLaneSchemaCompare(facts sourceFacts, source, target json.RawMessage) string {
+	// A separately unknown composition must not mask an explicit contradiction
+	// in a constraint whose meaning is already known on both sides.
+	left, leftOK := sourceResolveObject(facts, source, map[string]bool{}, 0)
+	right, rightOK := sourceResolveObject(sourceFacts{Document: target}, target, map[string]bool{}, 0)
+	if leftOK && rightOK {
+		for _, field := range []string{"type", "format", "nullable", "const", "minimum", "maximum", "minLength", "maxLength", "minItems", "maxItems"} {
+			x, xOK := left[field]
+			y, yOK := right[field]
+			if !xOK || !yOK {
+				continue
+			}
+			var xv, yv any
+			if decodeSourceJSON(x, &xv) != nil || decodeSourceJSON(y, &yv) != nil {
+				continue
+			}
+			if _, ok := xv.(json.Number); ok {
+				if _, ok := yv.(json.Number); ok {
+					equal, known := sourceLaneNumericBoundEqual(x, y)
+					if known && !equal {
+						return "target_schema_mismatch"
+					}
+					continue
+				}
+			}
+			if !reflect.DeepEqual(xv, yv) {
+				return "target_schema_mismatch"
+			}
+		}
+	}
 	visits := 0
 	var normalize func(sourceFacts, json.RawMessage, int) (any, bool)
 	normalize = func(owner sourceFacts, raw json.RawMessage, depth int) (any, bool) {
@@ -1072,7 +1101,7 @@ func sourceLaneSchemaCompare(facts sourceFacts, source, target json.RawMessage) 
 					return nil, false
 				}
 				if number, ok := value.(json.Number); ok { // normalized without rounding
-					value = sourceLaneNumberKey(string(number))
+					value = struct{ Decimal string }{sourceLaneNumberKey(string(number))}
 				}
 				out[k] = value
 			default:
@@ -1263,7 +1292,9 @@ func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceS
 	// Missing current provenance remains visible, but cannot hide a known
 	// schema/template contradiction encountered above.
 	if len(issues) == 0 || ref.SourceSchema != nil || len(ref.FieldMappings) > 0 {
-		if observed.Write != nil || observed.REST != nil {
+		if observed.Write != nil && observed.Write.GraphQL != nil {
+			issues = append(issues, sourceLaneGraphQLVariablesContract(facts, ref, *observed.Write.GraphQL)...)
+		} else if observed.Write != nil || observed.REST != nil {
 			add(sourceLaneBodyContract(facts, ref, observed), ptr)
 		}
 		if observed.Stream != nil {
@@ -1323,6 +1354,63 @@ func sourceLaneGraphQLContract(facts sourceFacts, a sourceSemanticAnnotation, re
 	return issues
 }
 
+func sourceLaneGraphQLVariablesContract(facts sourceFacts, ref sourceLaneTargetRef, graphql engine.GraphQLRequestSpec) []sourceLaneBindingIssue {
+	issues := []sourceLaneBindingIssue{}
+	add := func(code string) {
+		issues = append(issues, sourceLaneBindingIssue{code, ref.Artifact + "#" + ref.Pointer})
+	}
+	if ref.SourceSchema == nil {
+		add("source_graphql_request_schema_unavailable")
+		return issues
+	}
+	raw, code := sourceLaneCitedValue(facts, *ref.SourceSchema)
+	if code != "" {
+		add(code)
+		return issues
+	}
+	root, ok := sourceResolveObject(facts, raw, map[string]bool{}, 0)
+	if !ok {
+		add("source_schema_unverified")
+		return issues
+	}
+	var props map[string]json.RawMessage
+	if json.Unmarshal(root["properties"], &props) != nil {
+		add("source_schema_unverified")
+		return issues
+	}
+	if len(props) != len(graphql.Variables) {
+		add("target_graphql_variable_mismatch")
+	}
+	for name := range props {
+		value, exists := graphql.Variables[name]
+		if !exists {
+			add("target_graphql_variable_mismatch")
+			continue
+		}
+		text, ok := value.(string)
+		if !ok {
+			add("target_graphql_variable_unverified")
+			continue
+		}
+		kind, pointer, code := sourceLaneTemplateCoordinate(text)
+		if code != "" {
+			add("target_graphql_variable_unverified")
+			continue
+		}
+		matched := false
+		for _, m := range ref.FieldMappings {
+			projection, c := sourceLaneSchemaProjection(facts, *ref.SourceSchema, m.Source.Pointer)
+			if c == "" && len(projection.Path) == 1 && projection.Path[0] == name && m.Target.Pointer != nil && m.Target.Kind == kind && *m.Target.Pointer == pointer {
+				matched = true
+			}
+		}
+		if !matched {
+			add("target_graphql_variable_mismatch")
+		}
+	}
+	return issues
+}
+
 func sourceLaneCheckAggregate(key sourceOperationKey, facts sourceFacts, a sourceSemanticAnnotation, ref sourceLaneTargetRef, raw []byte) []sourceLaneBindingIssue {
 	issues := []sourceLaneBindingIssue{}
 	ptr := ref.Artifact + "#" + ref.Pointer
@@ -1355,8 +1443,7 @@ func sourceLaneCheckAggregate(key sourceOperationKey, facts sourceFacts, a sourc
 		add("canonical_generation_mismatch")
 	}
 	if ref.Kind == "sync_transport" {
-		add("target_contract_unverified")
-		return issues
+		return append(issues, sourceLaneSyncContract(facts, ref, descriptor, *source, raw)...)
 	}
 	if ref.Kind == "canonical_operation" {
 		if ref.ID != ref.CanonicalID || ref.Pointer != "/operations/"+strconv.Itoa(source.Index) || ref.CanonicalPointer != "/operations/"+strconv.Itoa(source.CanonicalIndex) {
@@ -1427,6 +1514,114 @@ func sourceLaneCheckAggregate(key sourceOperationKey, facts sourceFacts, a sourc
 			issues = append(issues, sourceLaneCheckPresent(key, facts, a, r, childRaw, node)...)
 		}
 	}
+	return issues
+}
+
+func sourceLaneSyncContract(facts sourceFacts, ref sourceLaneTargetRef, descriptor vNextCanonicalDescriptor, source vNextCanonicalOperation, raw []byte) []sourceLaneBindingIssue {
+	issues := []sourceLaneBindingIssue{}
+	ptr := ref.Artifact + "#" + ref.Pointer
+	add := func(code string) { issues = append(issues, sourceLaneBindingIssue{code, ptr}) }
+	if ref.Lane != "sync_transport" {
+		add("target_lane_mismatch")
+	}
+	if ref.CanonicalPointer != "/execution/sync_transport.json"+ref.Pointer {
+		add("canonical_provenance_mismatch")
+	}
+	if !bytes.Equal(raw, descriptor.Staged.Outputs["sync_transport.json"]) || !vNextJSONEquivalent(json.RawMessage(raw), descriptor.Execution["sync_transport.json"]) {
+		add("canonical_artifact_mismatch")
+	}
+	bundle := facts.bindings.Bundles[ref.Connector]
+	if bundle.SyncTransport == nil {
+		add("target_transport_contract_unverified")
+		return issues
+	}
+	node, err := sourceJSONPointer(raw, ref.Pointer)
+	if err != nil {
+		add("target_pointer_mismatch")
+		return issues
+	}
+	var childKind, childID string
+	switch ref.Pointer {
+	case "/source_transport":
+		var role connectors.SourceTransportDescriptor
+		if decodeStrictJSON(node, &role) != nil || role.Validate() != nil {
+			add("target_shape_invalid")
+			return issues
+		}
+		if role.Executor.ID != ref.ID || !reflect.DeepEqual(bundle.SyncTransport.Source, &role) {
+			add("target_identity_mismatch")
+		}
+		if source.Stream == nil || !sourceLaneContains(role.EligibleStreams, source.Stream.Spec.Name) {
+			add("target_transport_eligibility_mismatch")
+		} else {
+			childKind = "stream"
+			childID = source.Stream.Spec.Name
+		}
+		found := false
+		for _, sync := range descriptor.Staged.Sync {
+			if sync.SourceID != source.ID {
+				continue
+			}
+			found = true
+			if sync.FieldPath != "/operations/"+strconv.Itoa(source.Index)+"/stream" {
+				add("target_transport_coordinate_unverified")
+			}
+			if sync.Result.Validate() != nil || sync.Result.Plan == nil {
+				add("target_transport_plan_mismatch")
+				continue
+			}
+			plan := sync.Result.Plan
+			if source.Stream == nil || plan.Source.ID != source.Stream.Spec.Name || plan.GenerationDigest != descriptor.Staged.Identity.Digest || !vNextPlanUsesManifestSource(*plan, descriptor.Staged.Manifest) {
+				add("target_transport_plan_mismatch")
+			}
+			mode := false
+			for _, value := range role.Modes {
+				mode = mode || value == plan.Mode
+			}
+			if !mode {
+				add("target_transport_mode_mismatch")
+			}
+		}
+		if !found {
+			add("target_transport_plan_unverified")
+		}
+	case "/destination_transport":
+		var role connectors.DestinationTransportDescriptor
+		if decodeStrictJSON(node, &role) != nil || role.Validate() != nil {
+			add("target_shape_invalid")
+			return issues
+		}
+		if role.Executor.ID != ref.ID || !reflect.DeepEqual(bundle.SyncTransport.Destination, &role) {
+			add("target_identity_mismatch")
+		}
+		if source.Write == nil || !sourceLaneContains(role.EligibleActions, source.Write.Spec.Name) {
+			add("target_transport_eligibility_mismatch")
+		} else {
+			childKind = "write"
+			childID = source.Write.Spec.Name
+		}
+		if role.Acknowledgement != connectors.TransportAcknowledgementDurableWarehouse {
+			add("target_transport_acknowledgement_unverified")
+		}
+		add("target_transport_plan_unverified")
+	default:
+		add("target_pointer_mismatch")
+	}
+	if childID != "" {
+		matches := 0
+		for _, p := range descriptor.Staged.Provenance {
+			if p.SourceID == source.ID && p.FieldPath == vNextProvenanceOperationPointer(source, childKind) && p.TargetKind == childKind && p.TargetID == childID {
+				matches++
+			}
+		}
+		if matches != 1 {
+			add("canonical_provenance_mismatch")
+		}
+	}
+	// Retained callback/event presence cannot prove descriptor delivery/mode/ack
+	// guarantees, and a syncplan executor is not a registered transport factory.
+	add("source_transport_contract_unverified")
+	add("target_transport_executor_unverified")
 	return issues
 }
 
@@ -1662,7 +1857,21 @@ func sourceLaneProjectionContract(facts sourceFacts, a sourceSemanticAnnotation,
 				add("target_body_projection_unverified", m.Source.Pointer)
 				continue
 			}
-			if !reflect.DeepEqual(source.Path, actual.Path) || !reflect.DeepEqual(source.Required, actual.Required) {
+			if target.Write != nil && target.Write.BodyType == "json_array" {
+				coordinate := []string{}
+				for _, field := range strings.Split(target.Write.BodyField, ".") {
+					coordinate = append(coordinate, field)
+				}
+				if len(source.Path) != 0 || !reflect.DeepEqual(actual.Path, coordinate) {
+					add("target_body_projection_mismatch", m.Source.Pointer)
+				}
+			} else if target.Write != nil && target.Write.GraphQL != nil {
+				// Variable placement is checked against the actual typed Variables
+				// consumer, permitting only an explicitly declared input mapping.
+				if !reflect.DeepEqual(source.Required, actual.Required) {
+					add("target_schema_mismatch", m.Source.Pointer)
+				}
+			} else if !reflect.DeepEqual(source.Path, actual.Path) || !reflect.DeepEqual(source.Required, actual.Required) {
 				add("target_body_projection_mismatch", m.Source.Pointer)
 			}
 		} else {
@@ -1764,6 +1973,41 @@ func sourceLaneBodyContract(facts sourceFacts, ref sourceLaneTargetRef, target s
 		return "target_request_contract_unverified"
 	}
 	w := target.Write
+	if w.BodyType == "json_array" {
+		pointer := ""
+		for _, field := range strings.Split(w.BodyField, ".") {
+			pointer += "/properties/" + escapeSourcePointer(field)
+		}
+		projection, code := sourceLaneTargetProjection(w.RecordSchema, pointer)
+		if code != "" {
+			return code
+		}
+		required := true
+		for _, present := range projection.Required {
+			required = required && present
+		}
+		var bodyRequired bool
+		_ = json.Unmarshal(bodyNode["required"], &bodyRequired)
+		if bodyRequired && !required {
+			return "target_request_requiredness_mismatch"
+		}
+		if code := sourceLaneSchemaCompare(facts, anchor, projection.Raw); code != "" {
+			return code
+		}
+		if len(w.BodySchema) > 0 {
+			if code := sourceLaneSchemaCompare(facts, anchor, w.BodySchema); code != "" {
+				return code
+			}
+		}
+		covered := false
+		for _, m := range ref.FieldMappings {
+			covered = covered || m.Source == *ref.SourceSchema && m.Target.Kind == sourceLaneFieldSchema && m.Target.Pointer != nil && *m.Target.Pointer == pointer
+		}
+		if !covered {
+			return "target_body_coverage_unverified"
+		}
+		return ""
+	}
 	if w.BodyType != "json" && w.BodyType != "" {
 		return "target_body_projection_unverified"
 	}
