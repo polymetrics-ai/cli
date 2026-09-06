@@ -848,3 +848,22 @@ harness correction; this record grants no extra signal or cancellation
 contract. CP11 remains unaccepted pending the complete Group 3 proof matrix,
 whole-package/race/static gates, freeze, and fresh independent exact-SHA
 review.
+
+## 2026-09-06 — CP11 code freeze and final review input
+
+- The complete coordinated F-01–F-08 behavior wave is frozen at code commit
+  `e77cd390f45eb938917dc3c39882bda34aae09a6`, tree
+  `4c37521b11a6f1a22bd6fa5ea5e043d4982329f8`. This follows the preserved
+  candidate `0ff2ac7d96c5b67a76da6228631b9e0d057a9e4e`; existing published
+  head `8214bd91403ce620773b61caf674faa540ee1701` is an ancestor. The review
+  subject remains the complete original range and all repair deltas, not an
+  isolated final commit.
+- Current execution includes full `cmd/connectorgen` normal/race PASS at
+  263.677s/691.666s after final new-only lint zero. The reviewer receives
+  GROUP1/2/3 evidence, TDD order correction, exact baseline fixture/overlay
+  provenance, and this exact code identity. The final artifact binding is
+  documentation only; no behavior source/test change is permitted while the
+  review and mechanical index run.
+- The outcome must retain every full-lens finding/disposition or a reasoned
+  zero-blocker result. A report alone does not accept CP11, publish, or begin
+  CP12.
