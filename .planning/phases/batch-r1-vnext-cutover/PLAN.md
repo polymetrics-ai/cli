@@ -1117,6 +1117,21 @@ second-signal or mid-transaction guarantee is asserted.
 3. **Group 3 — F-02-P/F-05/F-06-P:** reuse trustworthy Group 1 observations for nested public quarantine recovery/prune and every named durable caller/cut. Observe raw controls, roots/content and real private authority before restoration, complete empty/nonempty B rows, and correct the false Group 3 no-authority claim without rewriting historical evidence.
 4. **Freeze:** record only observed canonical/Atlas proof changes; run focused normal/race, one full `cmd/connectorgen` normal/race and required static/canon/preflight/docs/boundary-scanner/release gates. Commit/freeze the behavior candidate, then use the supplied fresh Astra/xhigh and Luna/low prompts.
 
+### Group 1 execution update (2026-09-06)
+
+- **F-04-R/F-08-R complete:** The original unsafe witness execution was
+  preserved before the helper changed; the exact record is
+  `GROUP1-F04-ORIGINAL-CONTROL.md`. The safe helper now binds observations to
+  actually opened no-follow/nonblocking descriptors. The real-main contention
+  proof has an inert test-only EWOULDBLOCK/EAGAIN acknowledgement and a
+  pre-flock negative gate; it uses SIGINT and SIGTERM only after acknowledgement
+  and asserts exact non-consuming default signals separately. The focused
+  Group 1 normal/race selectors passed in package 9.198s/15.924s; hashes and
+  the race-only test-bound adjustment are in `GROUP1-EVIDENCE.md`.
+- **Next:** Group 2 pre-edit behavioral acceptance controls for F-03-A/B/C;
+  no Group 2 production repair happens before their actual failed-preparation,
+  compound-cause and owned-allocation A→B observations are recorded.
+
 ### Retained invariants
 
 No-replace B-01 A/B/C/public-C, strict B-02 bootstrap, bounded metadata/live descriptors, capture-open identities, validated returned directory, directory lifetime lock plus lease integrity, and F-07 historical provenance stay protected. A passing defect-reproduction probe is a RED witness, not GREEN; proof strengthening never fabricates a production defect.

@@ -354,12 +354,13 @@ func vNextPublicationCopyTreeForTest(source, destination string) error {
 func TestConnectorgenMainPreservesNonConsumingSignalTermination(t *testing.T) {
 	binary := vNextConnectorgenBinaryForTest(t)
 	for _, test := range []struct {
-		name    string
-		signals []os.Signal
+		name       string
+		signals    []os.Signal
+		wantSignal syscall.Signal
 	}{
-		{name: "interrupt", signals: []os.Signal{os.Interrupt}},
-		{name: "terminate", signals: []os.Signal{syscall.SIGTERM}},
-		{name: "repeated-interrupt", signals: []os.Signal{os.Interrupt, os.Interrupt}},
+		{name: "interrupt", signals: []os.Signal{os.Interrupt}, wantSignal: syscall.SIGINT},
+		{name: "terminate", signals: []os.Signal{syscall.SIGTERM}, wantSignal: syscall.SIGTERM},
+		{name: "repeated-interrupt", signals: []os.Signal{os.Interrupt, os.Interrupt}, wantSignal: syscall.SIGINT},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			workingDirectory, err := os.Getwd()
@@ -409,8 +410,8 @@ func TestConnectorgenMainPreservesNonConsumingSignalTermination(t *testing.T) {
 				t.Fatalf("validate subprocess error = %T %v, want signal termination", err, err)
 			}
 			status, ok := exit.Sys().(syscall.WaitStatus)
-			if !ok || !status.Signaled() {
-				t.Fatalf("validate subprocess status = %#v, want signal termination; stdout=%q stderr=%q", exit.Sys(), stdout.String(), stderr.String())
+			if !ok || !status.Signaled() || status.Signal() != test.wantSignal {
+				t.Fatalf("validate subprocess status = %#v, want exact signal %v; stdout=%q stderr=%q", exit.Sys(), test.wantSignal, stdout.String(), stderr.String())
 			}
 		})
 	}

@@ -60,6 +60,7 @@ const (
 	vNextPublicationBeforePrune                            vNextPublicationFaultPoint = "before_prune"
 	vNextPublicationAfterPrune                             vNextPublicationFaultPoint = "after_prune"
 	vNextPublicationBeforeStageCleanup                     vNextPublicationFaultPoint = "before_stage_cleanup"
+	vNextPublicationBeforeLockAcquire                      vNextPublicationFaultPoint = "before_lock_acquire"
 	vNextPublicationAfterLockAcquire                       vNextPublicationFaultPoint = "after_lock_acquire"
 	vNextPublicationBeforeStageRename                      vNextPublicationFaultPoint = "before_stage_rename"
 	vNextPublicationAfterStageRename                       vNextPublicationFaultPoint = "after_stage_rename"
@@ -93,6 +94,10 @@ const (
 type vNextPublicationHooks struct {
 	At                   func(vNextPublicationFaultPoint) error
 	ControlCaptureRename func() error
+	// LockContention is test-only instrumentation for the exact retained
+	// directory descriptor after its nonblocking flock reports contention.
+	// Production leaves it nil.
+	LockContention func(vNextPublicationIdentity) error
 	// CloseAtomicTemporary is a narrowly scoped test seam. Its callback owns
 	// exactly one real Close of the supplied temporary and may return a
 	// completion error after that Close; production leaves it nil.
@@ -231,6 +236,9 @@ func (p *vNextGenerationPublisher) acquireOperation(ctx context.Context, operati
 	if err := ctx.Err(); err != nil {
 		return err
 	}
+	if err := p.hit(vNextPublicationBeforeLockAcquire); err != nil {
+		return err
+	}
 	lock, identity, err := vNextPublicationOpenLock(operation.connector)
 	if err != nil {
 		return err
@@ -240,6 +248,11 @@ func (p *vNextGenerationPublisher) acquireOperation(ctx context.Context, operati
 			return err
 		}
 		return vNextPublicationAssertLockBound(operation.connector, lock, identity)
+	}, func() error {
+		if p.hooks.LockContention == nil {
+			return nil
+		}
+		return p.hooks.LockContention(identity)
 	}); err != nil {
 		_ = lock.Close()
 		return err
@@ -1691,7 +1704,7 @@ func (p *vNextGenerationPublisher) assertNoPendingJournalLocked(operation *vNext
 	return fmt.Errorf("connector %q has a pending publication journal; recover before checking", p.connector)
 }
 
-func vNextPublicationAcquireLock(ctx context.Context, lock *os.File, mode int, label string, afterAcquire func() error) error {
+func vNextPublicationAcquireLock(ctx context.Context, lock *os.File, mode int, label string, afterAcquire, onContention func() error) error {
 	retry := time.NewTimer(time.Hour)
 	if !retry.Stop() {
 		<-retry.C
@@ -1717,6 +1730,11 @@ func vNextPublicationAcquireLock(ctx context.Context, lock *os.File, mode int, l
 		}
 		if !errors.Is(err, syscall.EWOULDBLOCK) && !errors.Is(err, syscall.EAGAIN) {
 			return fmt.Errorf("lock %s: %w", label, err)
+		}
+		if onContention != nil {
+			if err := onContention(); err != nil {
+				return err
+			}
 		}
 		retry.Reset(10 * time.Millisecond)
 		select {

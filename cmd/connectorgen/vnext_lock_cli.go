@@ -10,8 +10,13 @@ import (
 	"syscall"
 )
 
+// vNextPublicationLockRenderHooksForTest is a nil-by-default test overlay for
+// runMain's real lock-render route. It has no command-line or runtime
+// configuration surface; production always leaves it empty.
+var vNextPublicationLockRenderHooksForTest vNextPublicationHooks
+
 func runLockRenderContext(ctx context.Context, args []string, stdout, stderr io.Writer) int {
-	return runLockRenderContextWithHooks(ctx, args, stdout, stderr, vNextPublicationHooks{})
+	return runLockRenderContextWithHooks(ctx, args, stdout, stderr, vNextPublicationLockRenderHooksForTest)
 }
 
 func runLockRenderContextWithHooks(ctx context.Context, args []string, stdout, stderr io.Writer, hooks vNextPublicationHooks) int {

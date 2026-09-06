@@ -26,3 +26,54 @@
 - F-08: every child in the two signal tests starts through `vNextPublicationStartBoundedChildForTest`, which starts its direct `command.Wait` goroutine and cleanup owner immediately after a successful `Start`; no test path invokes a raw unbounded `Wait`. The lock-render test logged child PID `68022` holding the connector-directory descriptor while the parent lock was held before sending real `SIGINT`, then asserted exit 1/context cancellation, no success output, unchanged complete selected/control/authority/generation snapshot, release, and retry. The non-consuming child received real `SIGINT`/`SIGTERM` variants and exited as signaled. The withheld FIFO readiness/nonterminating child returned within 100 ms, was killed by its immediate owner, and logged direct `Wait` completion; that direct Wait proof is distinct from the original orphan's PID-absence observation.
 
 Group 1 F-04/F-08 evidence is now complete for execution purposes. The same active diff still contains the separately preserved, prematurely started F-01 production patch; it remains unaccepted until the Group 2 original-behaviour fixture runs and its complete capture/candidate/mutating matrix is recorded.
+
+## 2026-09-06 — CP11 e77 seven-finding Group 1 repair (steers 051/053)
+
+- **F-04-R original negative control preserved before helper replacement:**
+  [GROUP1-F04-ORIGINAL-CONTROL.md](GROUP1-F04-ORIGINAL-CONTROL.md) retains
+  the complete command/output, parent-visible A/B boundary, exact old-helper
+  seam, hashes, reconstructable helper hunk, and full 197-line bounded child
+  snapshot. It ran at parent `67ff7a7ababdbd4d91d9a0b5f9b9d6705fb3c189`:
+  `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestCP11F04ROriginalWitnessCanMixPathObservations$' -v` exited 0 in 4.5s
+  (`ok ... 1.199s`) only because it observed the FIFO pathname-read block and
+  A-classification/B-payload symlink and directory substitutions. It is an
+  original-behaviour oracle witness, never repair GREEN; it was not rerun.
+- **F-04-R repair:** `vNextPublicationFileWitnessForTest` now retains a
+  no-follow/nonblocking regular-file descriptor via the existing
+  `vNextPublicationDirectory` path; its `FileInfo` and `io.ReadAll` bytes come
+  from that same descriptor. `vNextPublicationDirectoryWitnessForTest` retains
+  the opened directory descriptor and reads `metadata.json` relative to it.
+  A test-only after-open callback forces regular A→FIFO B, regular A→symlink B,
+  and directory A→B after the actual descriptor/open classification. All three
+  return retained A identity/bytes without B reads or FIFO blocking.
+- **F-08-R negative and repair controls:** the test child reaches the old lsof
+  directory-open observation and a test-owned pre-flock gate while the parent
+  holds the exact directory lock. Before the parent releases that gate, no
+  contention acknowledgement exists; directory-open is therefore explicitly
+  disqualified as readiness. `LockContention` is a nil-by-default test-only
+  callback invoked only after the real `LOCK_NB` returns `EWOULDBLOCK`/`EAGAIN`
+  on the retained directory identity. The child calls the real `runMain`
+  lock-render path, so real SIGINT and SIGTERM occur only after the parent has
+  compared that acknowledgement to its held descriptor identity. The old broad
+  non-consuming signal assertion now compares `WaitStatus.Signal()` with the
+  sent SIGINT/SIGTERM; cleanup SIGKILL remains excluded.
+- **Focused GREEN command:** `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestCP11F04RWitnessRetainsOpenedObjectAcrossReplacement|TestConnectorgenMainSignalsOnlyAfterExactLockContention|TestConnectorgenMainPreservesNonConsumingSignalTermination)$' -v` exited 0 in 12.4s
+  (`ok polymetrics.ai/cmd/connectorgen 9.198s`). Its selector covers FIFO,
+  symlink, directory, real-main SIGINT, real-main SIGTERM, exact default
+  signal status, no-success/cancellation, selected/control/authority/generation
+  preservation, direct waits and ordinary retry. It neither claims provider,
+  power-loss, no-mistakes, release, nor CP11 acceptance.
+- **Focused race command:** the same selector under `go test -race -count=1
+  -timeout 20m ./cmd/connectorgen ... -v` exited 0 in 20.2s (`ok
+  polymetrics.ai/cmd/connectorgen 15.924s`). The first race run exposed only a
+  test-binary post-boundary completion bound: successful FIFO/directory child
+  outputs could arrive after its one-second normal-wait budget. The helper was
+  unchanged; the owner widened that normal (non-cleanup) bound to three seconds,
+  retained immediate cleanup ownership, and then reran both race and normal.
+- **Exact tested source/test identities:**
+  `vnext_publication.go` `b67349746761d31faa789b300a4284dce4974343f2123bf8000f3534dc626892`;
+  `vnext_lock_cli.go` `962bc07c21098c2826d7c7f3770852ab62d4f70dd3bc56ea2f98dba7bc5ee84d`;
+  `vnext_publication_durable_matrix_test.go` `532d0cc07bf0b0754d4a557303a7bf83b5d0e64259ea69213db68a6c81d85d5c`;
+  `vnext_publication_test.go` `2927c544fb4e4995fff5843f5264c14108b6f5fcfd4c6e80b904bb5f14679390`;
+  `vnext_publication_witness_observation_test.go` `b42a9a03140e8c8cac27d5661ae62b7f408241e26adf3b9dd44ba4b87186316a`;
+  `vnext_publication_lock_contention_test.go` `12b2c177132404c24df7a4a3ea0d196a883a6813d836a2a347ebfcc659fb08ab`.

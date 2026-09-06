@@ -4,12 +4,15 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
 	"syscall"
 	"testing"
+
+	"golang.org/x/sys/unix"
 )
 
 // vNextPublicationPathWitness binds a test assertion to an actual pathname
@@ -22,29 +25,60 @@ type vNextPublicationPathWitness struct {
 
 func vNextPublicationFileWitnessForTest(t *testing.T, path string) vNextPublicationPathWitness {
 	t.Helper()
-	info, err := os.Lstat(path)
+	parent, err := vNextPublicationOpenDirectory(filepath.Dir(path), "witness parent")
 	if err != nil {
-		t.Fatalf("lstat witness %q: %v", path, err)
+		t.Fatalf("open witness parent for %q: %v", path, err)
 	}
-	payload, err := os.ReadFile(path)
+	file, err := parent.openRegular(filepath.Base(path), "file witness", unix.O_RDONLY)
 	if err != nil {
-		t.Fatalf("read witness %q: %v", path, err)
+		_ = parent.Close()
+		t.Fatalf("open file witness %q: %v", path, err)
+	}
+	info, err := file.Stat()
+	if err != nil {
+		_ = file.Close()
+		_ = parent.Close()
+		t.Fatalf("stat file witness %q: %v", path, err)
+	}
+	if vNextPublicationWitnessAfterOpenForTest != nil {
+		vNextPublicationWitnessAfterOpenForTest("file", path, info)
+	}
+	payload, readErr := io.ReadAll(file)
+	closeFileErr := file.Close()
+	closeParentErr := parent.Close()
+	if readErr != nil {
+		t.Fatalf("read witness %q: %v", path, readErr)
+	}
+	if closeFileErr != nil {
+		t.Fatalf("close file witness %q: %v", path, closeFileErr)
+	}
+	if closeParentErr != nil {
+		t.Fatalf("close witness parent for %q: %v", path, closeParentErr)
 	}
 	return vNextPublicationPathWitness{info: info, payload: payload}
 }
 
 func vNextPublicationDirectoryWitnessForTest(t *testing.T, path string) vNextPublicationPathWitness {
 	t.Helper()
-	info, err := os.Lstat(path)
+	directory, err := vNextPublicationOpenDirectory(path, "directory witness")
 	if err != nil {
-		t.Fatalf("lstat directory witness %q: %v", path, err)
+		t.Fatalf("open directory witness %q: %v", path, err)
 	}
-	if !info.IsDir() {
-		t.Fatalf("directory witness %q type = %v, want directory", path, info.Mode())
-	}
-	payload, err := os.ReadFile(filepath.Join(path, "metadata.json"))
+	info, err := directory.file.Stat()
 	if err != nil {
-		t.Fatalf("read directory witness metadata %q: %v", path, err)
+		_ = directory.Close()
+		t.Fatalf("stat directory witness %q: %v", path, err)
+	}
+	if vNextPublicationWitnessAfterOpenForTest != nil {
+		vNextPublicationWitnessAfterOpenForTest("directory", path, info)
+	}
+	payload, readErr := directory.readFile("metadata.json", "directory witness metadata")
+	closeErr := directory.Close()
+	if readErr != nil {
+		t.Fatalf("read directory witness metadata %q: %v", path, readErr)
+	}
+	if closeErr != nil {
+		t.Fatalf("close directory witness %q: %v", path, closeErr)
 	}
 	return vNextPublicationPathWitness{info: info, payload: payload}
 }
