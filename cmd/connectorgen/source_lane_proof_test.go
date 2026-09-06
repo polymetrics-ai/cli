@@ -176,41 +176,130 @@ func TestSourceLaneProofInvalidClaims(t *testing.T) {
 
 func TestSourceLaneProofBoundaries(t *testing.T) {
 	base, original, cells := proofFixture(t)
-	for _,tc:=range []struct{name,code,severity string; edit func(string,*sourceLaneProofRecord)}{
-		{"stale_input","proof_inputs_outdated","deficit",func(root string,r *sourceLaneProofRecord){proofWrite(t,root,r.Inputs[1].Path,[]byte("changed code"))}},
-		{"falsely_current_input","proof_current_claim_invalid","error",func(root string,r *sourceLaneProofRecord){r.ClaimCurrent=true;proofWrite(t,root,r.Inputs[1].Path,[]byte("changed code"))}},
-		{"missing_receipt","proof_receipt_unavailable","deficit",func(root string,r *sourceLaneProofRecord){if err:=os.Remove(filepath.Join(root,r.ReceiptPath));err!=nil{t.Fatal(err)}}},
-		{"unsafe_path","proof_record_invalid","error",func(root string,r *sourceLaneProofRecord){r.Inputs[1].Path="../outside.go"}},
-		{"absolute_path","proof_record_invalid","error",func(root string,r *sourceLaneProofRecord){r.ReceiptPath="/tmp/secret"}},
-		{"symlink_escape","proof_input_invalid","error",func(root string,r *sourceLaneProofRecord){name:=filepath.Join(root,r.Inputs[1].Path);if err:=os.Remove(name);err!=nil{t.Fatal(err)};if err:=os.Symlink(filepath.Join(base,r.Inputs[1].Path),name);err!=nil{t.Fatal(err)}}},
-		{"preflight_only","proof_scope_unproven","deficit",func(_ string,r *sourceLaneProofRecord){r.Scope="preflight_only"}},
-		{"syntax_only","proof_scope_unproven","deficit",func(_ string,r *sourceLaneProofRecord){r.Scope="syntax_only"}},
-		{"shared_engine","proof_scope_unproven","deficit",func(_ string,r *sourceLaneProofRecord){r.Scope="shared_engine"}},
-		{"C3","proof_scope_unproven","deficit",func(_ string,r *sourceLaneProofRecord){r.ExecutionClass="C3"}},
-		{"C4","proof_scope_unproven","deficit",func(_ string,r *sourceLaneProofRecord){r.ExecutionClass="C4"}},
-		{"fixture_claims_C1","proof_scope_unproven","deficit",func(_ string,r *sourceLaneProofRecord){r.ExecutionClass="C1"}},
-		{"zero_selected","proof_result_invalid","error",func(root string,r *sourceLaneProofRecord){raw,err:=os.ReadFile(filepath.Join(root,r.ReceiptPath));if err!=nil{t.Fatal(err)};raw=[]byte(strings.ReplaceAll(string(raw),r.SelectedTest,"Other/subtest"));r.ReceiptSHA256=sourceBytesHash(raw);proofWrite(t,root,r.ReceiptPath,raw)}},
-		{"skipped_selected","proof_result_invalid","error",func(root string,r *sourceLaneProofRecord){raw,err:=os.ReadFile(filepath.Join(root,r.ReceiptPath));if err!=nil{t.Fatal(err)};raw=[]byte(strings.ReplaceAll(string(raw),`"Action":"pass"`,`"Action":"skip"`));r.ReceiptSHA256=sourceBytesHash(raw);proofWrite(t,root,r.ReceiptPath,raw)}},
-		{"forged_receipt_bytes","proof_receipt_digest_invalid","error",func(root string,r *sourceLaneProofRecord){proofWrite(t,root,r.ReceiptPath,[]byte("PASS"))}},
-	}{t.Run(tc.name,func(t *testing.T){
-		root:=t.TempDir();r:=original;r.Inputs=append([]sourceLaneProofInput(nil),r.Inputs...)
-		for _,p:=range append(append([]sourceLaneProofInput(nil),r.Inputs...),sourceLaneProofInput{Path:r.ReceiptPath},sourceLaneProofInput{Path:r.Targets[0].Artifact}){raw,err:=os.ReadFile(filepath.Join(base,p.Path));if err!=nil{t.Fatal(err)};proofWrite(t,root,p.Path,raw)}
-		tc.edit(root,&r);proofDocument(t,root,[]sourceLaneProofRecord{r})
-		inputs:=loadSourceLaneProofs(root,[]sourceLaneProofReview{{Record:r,Fixture:true}})
-		if !proofHasDiagnostic(inputs.Diagnostics,tc.code,tc.severity){t.Fatalf("want %s/%s, got %+v",tc.code,tc.severity,inputs.Diagnostics)}
-		got:=assessSourceLaneProof(r.Key,cells,inputs);if len(got)!=7 || got[0].State=="implemented"{t.Fatalf("invalid proof promoted/lost cells: %+v",got)}
-		if tc.severity=="error" && !proofHasDiagnostic(got[0].Diagnostics,tc.code,"error"){t.Fatalf("invalidity suppressed by state: %+v",got[0])}
-	})}
-	t.Run("duplicate_claims",func(t *testing.T){
-		proofDocument(t,base,[]sourceLaneProofRecord{original,original});in:=loadSourceLaneProofs(base,[]sourceLaneProofReview{{Record:original,Fixture:true}})
-		if !proofHasDiagnostic(in.Diagnostics,"proof_duplicate_claim","error"){t.Fatalf("duplicate accepted: %+v",in)}
-		if assessSourceLaneProof(original.Key,cells,in)[0].State=="implemented"{t.Fatal("duplicate promoted")}
+	for _, tc := range []struct {
+		name, code, severity string
+		edit                 func(string, *sourceLaneProofRecord)
+	}{
+		{"stale_input", "proof_inputs_outdated", "deficit", func(root string, r *sourceLaneProofRecord) {
+			proofWrite(t, root, r.Inputs[1].Path, []byte("changed code"))
+		}},
+		{"falsely_current_input", "proof_current_claim_invalid", "error", func(root string, r *sourceLaneProofRecord) {
+			r.ClaimCurrent = true
+			proofWrite(t, root, r.Inputs[1].Path, []byte("changed code"))
+		}},
+		{"missing_receipt", "proof_receipt_unavailable", "deficit", func(root string, r *sourceLaneProofRecord) {
+			if err := os.Remove(filepath.Join(root, r.ReceiptPath)); err != nil {
+				t.Fatal(err)
+			}
+		}},
+		{"unsafe_path", "proof_record_invalid", "error", func(root string, r *sourceLaneProofRecord) { r.Inputs[1].Path = "../outside.go" }},
+		{"absolute_path", "proof_record_invalid", "error", func(root string, r *sourceLaneProofRecord) { r.ReceiptPath = "/tmp/secret" }},
+		{"symlink_escape", "proof_input_invalid", "error", func(root string, r *sourceLaneProofRecord) {
+			name := filepath.Join(root, r.Inputs[1].Path)
+			if err := os.Remove(name); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.Symlink(filepath.Join(base, r.Inputs[1].Path), name); err != nil {
+				t.Fatal(err)
+			}
+		}},
+		{"preflight_only", "proof_scope_unproven", "deficit", func(_ string, r *sourceLaneProofRecord) { r.Scope = "preflight_only" }},
+		{"syntax_only", "proof_scope_unproven", "deficit", func(_ string, r *sourceLaneProofRecord) { r.Scope = "syntax_only" }},
+		{"shared_engine", "proof_scope_unproven", "deficit", func(_ string, r *sourceLaneProofRecord) { r.Scope = "shared_engine" }},
+		{"C3", "proof_scope_unproven", "deficit", func(_ string, r *sourceLaneProofRecord) { r.ExecutionClass = "C3" }},
+		{"C4", "proof_scope_unproven", "deficit", func(_ string, r *sourceLaneProofRecord) { r.ExecutionClass = "C4" }},
+		{"fixture_claims_C1", "proof_scope_unproven", "deficit", func(_ string, r *sourceLaneProofRecord) { r.ExecutionClass = "C1" }},
+		{"zero_selected", "proof_result_invalid", "error", func(root string, r *sourceLaneProofRecord) {
+			raw, err := os.ReadFile(filepath.Join(root, r.ReceiptPath))
+			if err != nil {
+				t.Fatal(err)
+			}
+			raw = []byte(strings.ReplaceAll(string(raw), r.SelectedTest, "Other/subtest"))
+			r.ReceiptSHA256 = sourceBytesHash(raw)
+			proofWrite(t, root, r.ReceiptPath, raw)
+		}},
+		{"skipped_selected", "proof_result_invalid", "error", func(root string, r *sourceLaneProofRecord) {
+			raw, err := os.ReadFile(filepath.Join(root, r.ReceiptPath))
+			if err != nil {
+				t.Fatal(err)
+			}
+			raw = []byte(strings.ReplaceAll(string(raw), `"Action":"pass"`, `"Action":"skip"`))
+			r.ReceiptSHA256 = sourceBytesHash(raw)
+			proofWrite(t, root, r.ReceiptPath, raw)
+		}},
+		{"forged_receipt_bytes", "proof_receipt_digest_invalid", "error", func(root string, r *sourceLaneProofRecord) { proofWrite(t, root, r.ReceiptPath, []byte("PASS")) }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			r := original
+			r.Inputs = append([]sourceLaneProofInput(nil), r.Inputs...)
+			for _, p := range append(append([]sourceLaneProofInput(nil), r.Inputs...), sourceLaneProofInput{Path: r.ReceiptPath}, sourceLaneProofInput{Path: r.Targets[0].Artifact}) {
+				raw, err := os.ReadFile(filepath.Join(base, p.Path))
+				if err != nil {
+					t.Fatal(err)
+				}
+				proofWrite(t, root, p.Path, raw)
+			}
+			tc.edit(root, &r)
+			proofDocument(t, root, []sourceLaneProofRecord{r})
+			inputs := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: r, Fixture: true}})
+			if !proofHasDiagnostic(inputs.Diagnostics, tc.code, tc.severity) {
+				t.Fatalf("want %s/%s, got %+v", tc.code, tc.severity, inputs.Diagnostics)
+			}
+			got := assessSourceLaneProof(r.Key, cells, inputs)
+			if len(got) != 7 || got[0].State == "implemented" {
+				t.Fatalf("invalid proof promoted/lost cells: %+v", got)
+			}
+			if tc.severity == "error" && !proofHasDiagnostic(got[0].Diagnostics, tc.code, "error") {
+				t.Fatalf("invalidity suppressed by state: %+v", got[0])
+			}
+		})
+	}
+	t.Run("duplicate_claims", func(t *testing.T) {
+		proofDocument(t, base, []sourceLaneProofRecord{original, original})
+		in := loadSourceLaneProofs(base, []sourceLaneProofReview{{Record: original, Fixture: true}})
+		if !proofHasDiagnostic(in.Diagnostics, "proof_duplicate_claim", "error") {
+			t.Fatalf("duplicate accepted: %+v", in)
+		}
+		if assessSourceLaneProof(original.Key, cells, in)[0].State == "implemented" {
+			t.Fatal("duplicate promoted")
+		}
 	})
-	t.Run("malformed_closed_document",func(t *testing.T){for _,raw:=range []string{`{"schema_version":1,"records":[],"extra":1}`,`{"schema_version":1,"records":[],"records":[]}`,`{"schema_version":1,"records":null}`,`{"schema_version":1,"records":[]} {}`} {
-		proofWrite(t,base,sourceLaneProofPath,[]byte(raw));in:=loadSourceLaneProofs(base,nil);if !proofHasDiagnostic(in.Diagnostics,"proof_document_invalid","error"){t.Fatalf("malformed proof accepted %s: %+v",raw,in)}
-	}})
-	t.Run("missing_applicability_and_references",func(t *testing.T){
-		proofDocument(t,base,[]sourceLaneProofRecord{original});in:=loadSourceLaneProofs(base,[]sourceLaneProofReview{{Record:original,Fixture:true}})
-		for _,kind:=range []string{"undetermined","reference","missing_foundation","exclusion"}{t.Run(kind,func(t *testing.T){local:=append([]sourceLaneCell(nil),cells...);switch kind{case "undetermined":local[0].Applicability="undetermined";case "reference":local[0].References=nil;case "missing_foundation":local[0].State="missing_foundation";local[0].GapRefs=[]string{"existing-gap"};case "exclusion":local[0].Applicability="not_applicable";local[0].State="not_applicable"};got:=assessSourceLaneProof(original.Key,local,in);if got[0].State=="implemented" || len(got)!=7{t.Fatalf("proof overrode source/reference: %+v",got)};if kind=="missing_foundation" && (got[0].State!="missing_foundation" || !reflect.DeepEqual(got[0].GapRefs,local[0].GapRefs)){t.Fatal("existing gap changed")}})}
+	t.Run("malformed_closed_document", func(t *testing.T) {
+		for _, raw := range []string{`{"schema_version":1,"records":[],"extra":1}`, `{"schema_version":1,"records":[],"records":[]}`, `{"schema_version":1,"records":null}`, `{"schema_version":1,"records":[]} {}`} {
+			proofWrite(t, base, sourceLaneProofPath, []byte(raw))
+			in := loadSourceLaneProofs(base, nil)
+			if !proofHasDiagnostic(in.Diagnostics, "proof_document_invalid", "error") {
+				t.Fatalf("malformed proof accepted %s: %+v", raw, in)
+			}
+		}
+	})
+	t.Run("missing_applicability_and_references", func(t *testing.T) {
+		proofDocument(t, base, []sourceLaneProofRecord{original})
+		in := loadSourceLaneProofs(base, []sourceLaneProofReview{{Record: original, Fixture: true}})
+		for _, kind := range []string{"undetermined", "reference", "missing_foundation", "exclusion"} {
+			t.Run(kind, func(t *testing.T) {
+				local := append([]sourceLaneCell(nil), cells...)
+				switch kind {
+				case "undetermined":
+					local[0].Applicability = "undetermined"
+				case "reference":
+					local[0].References = nil
+				case "missing_foundation":
+					local[0].State = "missing_foundation"
+					local[0].GapRefs = []string{"existing-gap"}
+				case "exclusion":
+					local[0].Applicability = "not_applicable"
+					local[0].State = "not_applicable"
+				}
+				got := assessSourceLaneProof(original.Key, local, in)
+				if got[0].State == "implemented" || len(got) != 7 {
+					t.Fatalf("proof overrode source/reference: %+v", got)
+				}
+				if kind == "missing_foundation" && (got[0].State != "missing_foundation" || !reflect.DeepEqual(got[0].GapRefs, local[0].GapRefs)) {
+					t.Fatal("existing gap changed")
+				}
+			})
+		}
 	})
 }
