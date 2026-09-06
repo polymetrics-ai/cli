@@ -88,7 +88,13 @@ func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLane
 	for key := range duplicate {
 		annotationIndex[key] = nil
 	}
+	bindings := collectSourceLaneBindings(ctx, repo, cohort)
 	for _, source := range inventory.Operations {
+		for _, observation := range bindings.Observations {
+			if observation.Connector == source.Key.Connector {
+				result.Diagnostics = append(result.Diagnostics, sourceLaneDiagnostic{Key: source.Key, Lanes: sourceLaneNames(), Stage: observation.Stage, Code: observation.Code, Pointer: observation.Pointer, Owner: source.Key.Connector, Severity: "deficit"})
+			}
+		}
 		var raw *retainedSourceDocument
 		if doc, exists := docs[source.RawDocumentID]; exists {
 			raw = &doc
@@ -102,6 +108,7 @@ func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLane
 			}
 			result.Diagnostics = append(result.Diagnostics, sourceLaneDiagnostic{Key: source.Key, Lanes: sourceLaneNames(), Stage: "normalization", Code: code, Pointer: source.Pointer, Owner: source.Key.Connector, Severity: severity})
 		}
+		facts.bindings = &bindings
 		annotation := annotationIndex[source.Key]
 		cells := classifySourceLanes(source.Key, facts, annotation)
 		result.SourceOperations = append(result.SourceOperations, sourceLaneManifestRow{Source: source, Facts: facts, Lanes: cells})
