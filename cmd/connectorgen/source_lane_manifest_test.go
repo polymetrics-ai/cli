@@ -1009,7 +1009,7 @@ func TestSourceLaneManifestProviderFactCounterexamples(t *testing.T) {
 }
 
 func TestSourceLaneManifestIntegratedBindingProofBoundary(t *testing.T) {
-	for _, which := range []string{"mapped without proof", "schema only", "orphan annotation", "orphan proof"} {
+	for _, which := range []string{"mapped without proof", "schema only", "orphan annotation", "orphan proof", "unresolved success"} {
 		t.Run(which, func(t *testing.T) {
 			key, facts, annotation := sourceBindingFixture099F(t, "envelope", nil)
 			root := t.TempDir()
@@ -1032,6 +1032,10 @@ func TestSourceLaneManifestIntegratedBindingProofBoundary(t *testing.T) {
 				t.Fatal(err)
 			}
 			other["id"] = "retained.unmapped"
+			if which == "unresolved success" {
+				operation := rows[0].(map[string]any)["source_operation"].(map[string]any)
+				operation["responses"].(map[string]any)["201"] = map[string]any{"$ref": "https://provider.invalid/response"}
+			}
 			rest["operations"] = append(rows, other)
 			raw, err := json.Marshal(doc)
 			if err != nil {
@@ -1088,6 +1092,27 @@ func TestSourceLaneManifestIntegratedBindingProofBoundary(t *testing.T) {
 					cell := requireSourceLane(t, row.Lanes, "etl", "applicable")
 					if len(cell.References) != 1 || !sourceLaneTargetRefEqual(cell.References[0], *ref) {
 						t.Fatalf("actual complete/scoped binding lost: %+v", cell)
+					}
+					if which == "unresolved success" || which == "mapped without proof" {
+						// Independently supplied reviewed-input fixture tests the reducer
+						// after the real builder; it does not certify an ETL execution or
+						// replace the separately tested catalog/receipt loader.
+						record := sourceLaneProofRecord{ID: "fixture-reviewed-match", Key: key, Lane: "etl", Targets: []sourceLaneTargetRef{canonicalSourceLaneTargetRef(*ref)}}
+						inputs := sourceLaneProofInputs{byCell: map[sourceLaneProofCell]sourceLaneProofRecord{{key, "etl"}: record}}
+						assessed := requireSourceLane(t, assessSourceLaneProof(key, row.Lanes, inputs), "etl", "applicable")
+						blocked := which == "unresolved success"
+						if (assessed.State == "implemented") == blocked {
+							t.Fatalf("matching proof promotion ignored complete-scope boundary: %+v", assessed)
+						}
+						if blocked {
+							found := false
+							for _, d := range cell.Diagnostics {
+								found = found || (d.Code == "target_required_scope_unverified" && d.Pointer == "/rest/operations/0/source_operation/responses/201" && d.Severity == "deficit")
+							}
+							if !found || len(assessed.ProofRefs) != 0 {
+								t.Fatalf("unresolved201 scope/proof identity lost: %+v", assessed)
+							}
+						}
 					}
 					if (which == "schema only") != proofHasDiagnostic(cell.Diagnostics, "target_executable_coverage_unverified", "deficit") {
 						t.Fatalf("schema-only executable coverage misreported: %+v", cell.Diagnostics)

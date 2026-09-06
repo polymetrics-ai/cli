@@ -507,3 +507,40 @@ discovery context. No additional auditor, fix loop, finding cap, forced clean
 result, publication or acceptance is implied. Existing provider/credential/DB/
 receiver boundaries remain unchanged. Full finding dispositions and actual final
 validation are required before Firstmate decides the next coherent scope.
+
+
+## Firstmate121 adopted disposition (correction118)
+
+Complete decision SHA256 ecd07ca66fb7ce4cce74f65f7d5d49455becc931427d564351c9e12b77fdb879 and complete118B report SHA256 7c0bd997ba2c03d43beb02a80cb70d62900193991800da5bed15e6f9aa8015d3 were read; parent verified report and all sealed118B files. Original reviewer journal remains unchanged.
+
+# Firstmate121 — CR-05 implementation selection and WR-02 evidence disposition
+
+This is Firstmate's decision within the already authorized CP12 correction118. It changes no receiver/product approval or required current behavior. Parent cli-batch1-pi-takeover remains the sole project owner, Astra/medium; the same Astra/xhigh specialist continues the separate118C collection question. No new review/discovery context, provider execution, main merge or CP13 advance is authorized.
+
+Firstmate read the complete sealed118B report: /Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp12-authority-evidence-118B-report.md,40740 bytes, SHA2567c0bd997ba2c03d43beb02a80cb70d62900193991800da5bed15e6f9aa8015d3. Reconcile/adopt that exact report; its full source-owner trace, citation tuples, regression matrix and evidence chronology are part of this decision. The independently preserved progress snapshot is decisions/CR05-118B-selected-progress.md,10785 bytes SHA2567f57814fc593d62ec852228437ae8d27ad377dfc0098682490fc265131deba17. Original review100 and all original receipts remain immutable.
+
+## CR-05 — selected, implementation may proceed
+
+Adopt the report's smallest typed source-owned Go demand catalog and generic exact-identity validator. Seed only the existing097-authorized Vercel createWebhook demand. Preserve the current annotation-triggered override: without a gap annotation, retain ordinary source semantics/unresolved registration; do not automatically add confirmed gaps from catalog membership. This removes the last option left open in118B.
+
+The two decision-owner IDs remain PENDING product decisions. Neither is an approved receiver implementation or exposure choice. The approved item is only CP12's source-backed demand attribution. Keep that distinction in types/comments/docs and diagnostics. No approved:true flag, arbitrary new JSON decision authority, provider-name branch or annotation-derived trust.
+
+Require the full source key, retained path/hash, protocol/method/path/provider operation, exact registration/request/url/event citations, existing gap, actual Atlas identity and exact duplicate-free decision-owner set described in118B. Unknown/copied labels, unrelated source/route, stale or contradictory source/citations, negated/incidental/read-only webhook mentions, wrong/missing Atlas or unsupported demand must not gain confirmed authority. Valid source registration without established attribution remains unresolved for CP13. Preserve the existing Vercel and Notion POST-read controls and all row/cell identities.
+
+Parent owns the rules/catalog implementation and any necessary manifest/CLI caller, tests, docs/Atlas and genuine input-pin adaptation. Prefer existing rules/types; a small cohesive authoring Go/test file is allowed if it improves ownership/readability, but no generic approval framework. Keep the annotation wire schema unchanged unless a concrete existing-shape closure needs documentation. If Atlas bytes are newly consumed, record their real input pin once; do not pretend compiled catalog data is a file input. Capture genuine pre-edit RED for the complete specified matrix, then GREEN/refactor and final integrated proof. CR-05 is not closed merely by this decision.
+
+## WR-02 — explicit historical disposition, with verification still required
+
+Firstmate independently rehashed all six recovered files, their six literal Add File copies, the filtered public-record file, and matched all six expected hashes to the three original097 receipts. Recovery manifest6614 bytes SHA25650bc5a6b8b3da286bf9903f6e13f5cc504c937518041134d2968583d5558afd9. Update the canonical evidence matrix to say the originals are now recoverable from complete recorded writes and recorded formatting. Do not claim they were separately archived at test time; immediate-capture practice was deficient and118 corrects it prospectively.
+
+Credit only the actual original new-feature seam assertions: missing inventory/stale-count observations, missing retained route/body facts, and absent seven-cell output, with their corresponding unchanged-function GREEN evidence. These were previously absent planned production functions called by independent desired-behavior tests; no existing behavior was removed and no unconditional test failure was inserted. They are valid narrow introduction RED, not proof that every later semantic assertion ran. Preserve the separately genuine unknown-media and other semantic REDs at their own original times.
+
+For supplied-sync, linked GraphQL lineage and CLI output cuts, record the precise historical process deviations from118B. The valid supplied-plan cases are later controls; linked lineage is a corrected-fixture pre-change replay after implementation; output-cut witnesses are later reached-effect proof. None becomes original RED, and binding-group failures do not substitute for the missing original lineage chronology. Correct any broader claim in the current ledger/docs while preserving old evidence.
+
+Firstmate's acceptance interpretation is per coherent CP implementation/correction with extensive genuine behavior evidence, as captain099 requires. A missing historical execution cannot be manufactured now. The additional Firstmate100 custody/chronology rule must not become an impossible request to undo correct code solely to create RED. Treat these remaining history deviations as explicitly recorded process limitations, with required current behavior and regression evidence still enforceable. This is NOT a claim of perfect historical TDD compliance and does not waive a product test, admitted-phase witness, correction or current-source review.
+
+WR-02 may be dispositioned in the existing independent corrected-source closure only after it verifies the recovery/source scope, truthful amended chronology, actual admitted supplied-sync and linked-GraphQL current witnesses, and real writer-cut/preservation controls on valid final source. Any missing or incorrect current behavior/evidence remains blocking and must be fixed. The closure must retain the historical limitation in its verdict rather than calling later proof original RED. Do not add a fake defect, broad rerun, new full discovery round or perpetual history-reconstruction gate.
+
+All substantive118 corrections continue to require original desired-behavior RED before their production edits, exact complete source/test/dependency snapshots, unchanged assertions through GREEN, meaningful negative controls/falsification and proportionate final verification. No lower standard is authorized for future CPs. Record this explicit Firstmate disposition in the canonical review/obligation matrix, linked to118B and the original100 finding, without changing the original reviewer journal.
+
+Continue independent corrections and118C. Return the full corrected-source handoff only when all required implementation and validation are complete. CP12 acceptance remains ungranted and CP13 remains unstarted.
