@@ -704,3 +704,32 @@ func TestSourceLaneManifestEffectiveParameterOracle(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneManifestSourceInputBytes(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	path := filepath.Join(root, "source.json")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Retained file-byte identity includes whitespace; normalized document bytes
+	// are not the authority for the original input size.
+	raw = append(append([]byte(" \n"), raw...), '\n')
+	if err := os.WriteFile(path, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+	result, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, pin := range result.Inputs {
+		if pin.Path == "source.json" {
+			if pin.Bytes != int64(len(raw)) || pin.SHA256 != sourceBytesHash(raw) {
+				t.Fatalf("retained input identity lost: %+v; actual bytes=%d", pin, len(raw))
+			}
+			return
+		}
+	}
+	t.Fatal("actual retained source input missing")
+}

@@ -72,7 +72,12 @@ func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort so
 		result.Documents = append(result.Documents, document)
 	}
 	for _, anchor := range cohort.Inventories {
-		result.Inputs = append(result.Inputs, sourceArtifactPin{Path: anchor.Path, SHA256: anchor.SHA256})
+		pin := sourceArtifactPin{Path: anchor.Path, SHA256: anchor.SHA256}
+		if document, observed := docs[anchor.Connector+":"+anchor.Inventory]; observed &&
+			document.Path == anchor.Path && document.RetainedFileSHA256 == anchor.SHA256 {
+			pin.Bytes = document.Bytes
+		}
+		result.Inputs = append(result.Inputs, pin)
 		result.Inputs = append(result.Inputs, anchor.Artifacts...)
 	}
 
