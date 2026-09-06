@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strings"
 )
 
 type sourceLaneTotals struct {
@@ -93,6 +94,14 @@ func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLane
 			raw = &doc
 		}
 		facts := normalizeSourceFacts(source, docs[source.DocumentID], raw)
+
+		for _, code := range facts.Diagnostics {
+			severity := "deficit"
+			if facts.Status == "unavailable" || strings.Contains(code, "invalid") {
+				severity = "error"
+			}
+			result.Diagnostics = append(result.Diagnostics, sourceLaneDiagnostic{Key: source.Key, Lanes: sourceLaneNames(), Stage: "normalization", Code: code, Pointer: source.Pointer, Owner: source.Key.Connector, Severity: severity})
+		}
 		annotation := annotationIndex[source.Key]
 		cells := classifySourceLanes(source.Key, facts, annotation)
 		result.SourceOperations = append(result.SourceOperations, sourceLaneManifestRow{Source: source, Facts: facts, Lanes: cells})

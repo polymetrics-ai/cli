@@ -103,3 +103,44 @@ func TestSourceLaneManifestRetainedCorpus(t *testing.T) {
 	}
 	t.Logf("primary=%d supplements=%d cells=%d documents=%d deficits=%d", got.SourceTotals.Primary, got.SourceTotals.Supplement, got.SourceTotals.Cells, len(got.Documents), got.Validation.Deficits)
 }
+
+func TestSourceLaneManifestNormalizationFailure(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	raw, err := os.ReadFile(filepath.Join(root, "source.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc map[string]any
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		t.Fatal(err)
+	}
+	rows := doc["rest"].(map[string]any)["operations"].([]any)
+	delete(rows[0].(map[string]any), "source_operation")
+	raw, err = json.Marshal(doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "source.json"), raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+	got, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got.SourceOperations) != 2 || got.SourceTotals.Cells != 14 || got.SourceOperations[0].Source.Key.ID != "source.a" || got.SourceOperations[1].Source.Key.ID != "source.b" {
+		t.Fatal("normalization failure removed anchored identities")
+	}
+	if got.SourceOperations[0].Facts.Status != "unavailable" || got.SourceOperations[1].Facts.Status != "available" {
+		t.Fatal("actual normalizer boundary or unaffected sibling was lost")
+	}
+	reached := false
+	for _, d := range got.Diagnostics {
+		if d.Stage == "normalization" && d.Key.ID == "source.a" && d.Code == "source_operation_not_retained" && d.Severity == "error" {
+			reached = true
+		}
+	}
+	if !reached || got.Validation.Status != "invalid" {
+		t.Fatalf("actual normalization error hidden in success report: %+v %+v", got.Validation, got.Diagnostics)
+	}
+}
