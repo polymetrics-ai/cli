@@ -474,6 +474,32 @@ func TestSourceLaneBinding099FSyncTransport(t *testing.T) {
 	}
 }
 
+func TestSourceLaneBinding099FDestinationTransport(t *testing.T) {
+	for _, wrong := range []bool{false, true} {
+		t.Run(strconv.FormatBool(wrong), func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "body", func(lock *vNextSourceLock) {
+				lock.Lanes["sync_transport"] = "implemented"
+				lock.Execution = map[string]json.RawMessage{"sync_transport.json": json.RawMessage(`{"schema_version":1,"destination_transport":{"executor":{"family":"declarative_api","id":"fixture_destination"},"eligible_actions":["create_widget"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"tombstone"},"acknowledgement":"durable_warehouse","apply_strategies":[{"mode":"full_append","strategy":"append","action":"create_widget"}]}}`)}
+			})
+			facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+				doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)["callbacks"] = map[string]any{"changes": map[string]any{}}
+			})
+			r := &a.IntendedBindings[0]
+			r.Kind, r.Lane, r.ID = "sync_transport", "sync_transport", "fixture_destination"
+			r.Artifact = "internal/connectors/defs/acme/sync_transport.json"
+			r.ArtifactSHA256 = sourceBytesHash(facts.bindings.Artifacts[r.Artifact])
+			r.Pointer, r.CanonicalPointer = "/destination_transport", "/execution/sync_transport.json/destination_transport"
+			r.SchemaRole, r.SourceSchema, r.FieldMappings = "", nil, nil
+			code := "target_transport_executor_unverified"
+			if wrong {
+				r.ID = "fixture_source"
+				code = "target_identity_mismatch"
+			}
+			sourceBindingOutcome099F(t, key, facts, a, 0, code)
+		})
+	}
+}
+
 func TestSourceLaneBinding099FTemplateControls(t *testing.T) {
 	for _, mode := range []string{"matching config record", "swapped fields", "nested config", "missing mapping", "other literal", "unsupported expression"} {
 		t.Run(mode, func(t *testing.T) {
@@ -574,7 +600,7 @@ func TestSourceLaneBinding099FJSONArray(t *testing.T) {
 }
 
 func TestSourceLaneBinding099FGraphQLVariables(t *testing.T) {
-	for _, mode := range []string{"valid", "swapped", "unrelated citation"} {
+	for _, mode := range []string{"valid", "swapped", "unrelated citation", "linked citation", "ambiguous linked citation"} {
 		t.Run(mode, func(t *testing.T) {
 			swapped := mode == "swapped"
 			key, facts, a := sourceBindingFixture099F(t, "body", func(lock *vNextSourceLock) {
@@ -620,6 +646,22 @@ func TestSourceLaneBinding099FGraphQLVariables(t *testing.T) {
 				a.GraphQL.OperationName = &name
 				want = 0
 				codes = []string{"source_binding_scope_mismatch"}
+			}
+			if strings.Contains(mode, "linked citation") {
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					doc["contract"] = map[string]any{"name": "Change"}
+					op := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)
+					op["contract"] = map[string]any{"$ref": "#/contract"}
+					if mode == "ambiguous linked citation" {
+						op["other_contract"] = map[string]any{"$ref": "#/contract"}
+					}
+				})
+				name = sourceBindingCitation099F(t, facts, "/contract/name")
+				a.GraphQL.OperationName = &name
+				if mode == "ambiguous linked citation" {
+					want = 0
+					codes = []string{"source_projection_ambiguous"}
+				}
 			}
 			sourceBindingOutcome099F(t, key, facts, a, want, codes...)
 		})
