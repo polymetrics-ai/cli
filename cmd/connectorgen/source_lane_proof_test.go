@@ -155,7 +155,7 @@ func TestSourceLaneProofCapacity(t *testing.T) {
 				t.Fatal(err)
 			}
 			t.Logf("inline document bytes=%d closure pins=%d", len(raw), len(records[0].Inputs))
-			in := loadSourceLaneProofs(root, reviews)
+			in := proofLoadFixture(root, reviews)
 			promoted := 0
 			for _, r := range records {
 				cells := assessSourceLaneProof(r.Key, proofBatchCells(r), in)
@@ -171,6 +171,211 @@ func TestSourceLaneProofCapacity(t *testing.T) {
 			}
 		})
 	}
+	t.Run("4097_shared_in_4343_anchors", func(t *testing.T) {
+		root, records, _ := proofBatch(t, "capacity", 4097)
+		keys := make([]sourceOperationKey, 0, 4343)
+		for i := 0; i < 4343; i++ {
+			keys = append(keys, sourceOperationKey{Connector: "proof-fixture", Inventory: "fixture", ID: fmt.Sprintf("fixture-%06d", i)})
+		}
+		policy, err := newSourceLaneProofPolicy(keys)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if policy.MaxRecords != 30401 {
+			t.Fatalf("trusted capacity=%d, want 30401", policy.MaxRecords)
+		}
+		records, catalog := proofSharedDocument(t, root, records)
+		witness := []sourceLaneProofReadEvent{}
+		policy.afterRead = func(e sourceLaneProofReadEvent) { witness = append(witness, e) }
+		in := loadSourceLaneProofs(context.Background(), root, policy, catalog)
+		promoted, cellsCount := 0, 0
+		for i, key := range keys {
+			r := sourceLaneProofRecord{Key: key}
+			if i < len(records) {
+				r = records[i]
+			}
+			cells := assessSourceLaneProof(key, proofBatchCells(r), in)
+			cellsCount += len(cells)
+			if len(cells) != 7 {
+				t.Fatalf("lost seven cells at %s", key.ID)
+			}
+			if cells[0].State == "implemented" {
+				promoted++
+				if i >= 4097 || !reflect.DeepEqual(cells[0].ProofRefs, []string{fmt.Sprintf("proof-%06d", i)}) {
+					t.Fatalf("wrong exact mapping %s: %+v", key.ID, cells[0])
+				}
+			} else if i < 4097 {
+				t.Fatalf("fixture proof %s unproven: %+v", key.ID, cells[0])
+			}
+		}
+		if promoted != 4097 || cellsCount != 30401 || len(in.Diagnostics) != 0 {
+			t.Fatalf("capacity result promoted=%d cells=%d diagnostics=%+v", promoted, cellsCount, in.Diagnostics)
+		}
+		unique := map[string]int64{}
+		for _, pin := range catalog.InputSets[0].Inputs {
+			info, err := os.Stat(filepath.Join(root, pin.Path))
+			if err != nil {
+				t.Fatal(err)
+			}
+			unique[pin.Path] = info.Size()
+		}
+		for _, name := range []string{sourceLaneProofPath, records[0].ReceiptPath, records[0].Targets[0].Artifact} {
+			info, err := os.Stat(filepath.Join(root, name))
+			if err != nil {
+				t.Fatal(err)
+			}
+			unique[name] = info.Size()
+		}
+		var bytes int64
+		for _, size := range unique {
+			bytes += size
+		}
+		if in.Stats.UniqueFiles != len(unique) || in.Stats.ReadCalls != 2*len(unique) || in.Stats.FinalReads != len(unique) || in.Stats.UniqueBytes != bytes || in.Stats.PhysicalCharged != 2*bytes {
+			t.Fatalf("want two unique content passes for %d files/%d bytes, got %+v", len(unique), bytes, in.Stats)
+		}
+		if !proofReadWitnessMatches(witness, unique) {
+			t.Fatalf("actual post-I/O witness does not match independent unique files")
+		}
+		t.Logf("4097 records / 4343 anchors / 30401 cells; document=%d unique_files=%d unique_bytes=%d physical_charged=%d read_calls=%d final_reads=%d", unique[sourceLaneProofPath], in.Stats.UniqueFiles, in.Stats.UniqueBytes, in.Stats.PhysicalCharged, in.Stats.ReadCalls, in.Stats.FinalReads)
+	})
+}
+
+func proofSharedDocument(t *testing.T, root string, records []sourceLaneProofRecord) ([]sourceLaneProofRecord, sourceLaneProofCatalog) {
+	t.Helper()
+	set := sourceLaneProofInputSet{Inputs: append([]sourceLaneProofInput(nil), records[0].Inputs...)}
+	set.SHA256 = sourceLaneProofSetHash(set.Inputs)
+	out := append([]sourceLaneProofRecord(nil), records...)
+	catalog := sourceLaneProofCatalog{InputSets: []sourceLaneProofInputSet{set}}
+	for i := range out {
+		out[i].Inputs = nil
+		out[i].InputSetSHA256 = set.SHA256
+		catalog.Reviews = append(catalog.Reviews, sourceLaneProofReview{Record: out[i], Fixture: true})
+	}
+	proofSharedRaw(t, root, out, []sourceLaneProofInputSet{set})
+	return out, catalog
+}
+
+func proofSharedRaw(t *testing.T, root string, records []sourceLaneProofRecord, sets []sourceLaneProofInputSet) {
+	t.Helper()
+	raw, err := json.Marshal(struct {
+		SchemaVersion int                       `json:"schema_version"`
+		Records       []sourceLaneProofRecord   `json:"records"`
+		InputSets     []sourceLaneProofInputSet `json:"input_sets,omitempty"`
+	}{1, records, sets})
+	if err != nil {
+		t.Fatal(err)
+	}
+	proofWrite(t, root, sourceLaneProofPath, raw)
+}
+
+func proofReadWitnessMatches(events []sourceLaneProofReadEvent, expected map[string]int64) bool {
+	counts := map[string]map[string]int{}
+	for _, e := range events {
+		size, ok := expected[e.Path]
+		if !ok || !e.Success || e.Bytes != size || e.Before == nil || e.After == nil || !os.SameFile(e.Before, e.After) {
+			return false
+		}
+		if counts[e.Path] == nil {
+			counts[e.Path] = map[string]int{}
+		}
+		counts[e.Path][e.Phase]++
+	}
+	for name := range expected {
+		if counts[name]["initial"] != 1 || counts[name]["final"] != 1 || len(counts[name]) != 2 {
+			return false
+		}
+	}
+	return true
+}
+
+func TestSourceLaneProofSharedInputs(t *testing.T) {
+	root, original, _ := proofBatch(t, "six", 6)
+	records, catalog := proofSharedDocument(t, root, original)
+	t.Run("valid_cap_plus_one", func(t *testing.T) {
+		p := proofFixturePolicy()
+		p.MaxRecords = 5
+		in := loadSourceLaneProofs(context.Background(), root, p, catalog)
+		if !proofHasDiagnostic(in.Diagnostics, "proof_document_invalid", "error") || len(in.accepted) != 0 {
+			t.Fatalf("cap+1 admitted: %+v", in)
+		}
+	})
+	t.Run("unknown_anchored_key", func(t *testing.T) {
+		p, _ := newSourceLaneProofPolicy([]sourceOperationKey{original[0].Key})
+		in := loadSourceLaneProofs(context.Background(), root, p, catalog)
+		if !proofHasDiagnostic(in.Diagnostics, "proof_source_unknown", "error") {
+			t.Fatalf("unknown source silently accepted: %+v", in.Diagnostics)
+		}
+	})
+	t.Run("tuple_budget", func(t *testing.T) {
+		p := proofFixturePolicy()
+		p.limits.Tuples = len(catalog.InputSets[0].Inputs) - 1
+		in := loadSourceLaneProofs(context.Background(), root, p, catalog)
+		if !proofHasDiagnostic(in.Diagnostics, "proof_document_invalid", "error") {
+			t.Fatalf("tuple ceiling ignored: %+v", in.Diagnostics)
+		}
+	})
+	for _, kind := range []string{"duplicate_set", "missing_set", "wrong_hash", "duplicate_path", "both_representations", "unreviewed_set"} {
+		t.Run(kind, func(t *testing.T) {
+			sets := append([]sourceLaneProofInputSet(nil), catalog.InputSets...)
+			rs := append([]sourceLaneProofRecord(nil), records...)
+			trusted := catalog
+			switch kind {
+			case "duplicate_set":
+				sets = append(sets, sets[0])
+			case "missing_set":
+				sets = nil
+			case "wrong_hash":
+				sets[0].SHA256 = strings.Repeat("b", 64)
+			case "duplicate_path":
+				sets[0].Inputs = append(append([]sourceLaneProofInput(nil), sets[0].Inputs...), sets[0].Inputs[0])
+			case "both_representations":
+				rs[0].Inputs = original[0].Inputs
+				trusted.Reviews = append([]sourceLaneProofReview(nil), catalog.Reviews...)
+				trusted.Reviews[0].Record = rs[0]
+			case "unreviewed_set":
+				trusted.InputSets = nil
+			}
+			proofSharedRaw(t, root, rs, sets)
+			in := loadSourceLaneProofs(context.Background(), root, proofFixturePolicy(), trusted)
+			if len(in.Diagnostics) == 0 || len(in.accepted) != 0 && kind != "both_representations" {
+				t.Fatalf("invalid shared input accepted %s: %+v", kind, in.Diagnostics)
+			}
+		})
+	}
+	proofSharedRaw(t, root, records, catalog.InputSets)
+	t.Run("set_order_independent_hash", func(t *testing.T) {
+		pins := append([]sourceLaneProofInput(nil), catalog.InputSets[0].Inputs...)
+		for i, j := 0, len(pins)-1; i < j; i, j = i+1, j-1 {
+			pins[i], pins[j] = pins[j], pins[i]
+		}
+		if sourceLaneProofSetHash(pins) != catalog.InputSets[0].SHA256 {
+			t.Fatal("set hash depends on input order")
+		}
+	})
+	t.Run("realistic_four_target_size", func(t *testing.T) {
+		model := records[0]
+		model.Targets = append([]sourceLaneTargetRef(nil), model.Targets...)
+		for _, kind := range []string{"command", "schema", "canonical_operation"} {
+			ref := model.Targets[0]
+			ref.Kind = kind
+			ref.ID = "fixture.realistic.operation.with.long.identity"
+			ref.Artifact = "internal/connectors/defs/proof-fixture/cli_surface.json"
+			model.Targets = append(model.Targets, ref)
+		}
+		raw, err := json.Marshal(model)
+		if err != nil {
+			t.Fatal(err)
+		}
+		setBytes, err := json.Marshal(catalog.InputSets)
+		if err != nil {
+			t.Fatal(err)
+		}
+		size := int64(len(raw)+1)*30401 + int64(len(setBytes)) + 64
+		if size >= 128<<20 {
+			t.Fatalf("realistic four-target model exceeds policy: %d", size)
+		}
+		t.Logf("serialized four-target 30401-record model=%d bytes (<128 MiB); sizing model only, not fabricated proof", size)
+	})
 }
 
 func TestSourceLaneProofReadAccounting(t *testing.T) {
@@ -197,7 +402,7 @@ func TestSourceLaneProofReadAccounting(t *testing.T) {
 	}
 	budget := int64(32)
 	r := sourceLaneProofRecord{Inputs: []sourceLaneProofInput{{Path: name, SHA256: sourceBytesHash(raw), Role: "code"}}}
-	code, _ := sourceLaneReadProof(opened, r, &budget)
+	code, _ := proofReadWithBudget(opened, r, &budget)
 	if code == "" || budget >= 32 {
 		t.Fatalf("failed bounded read must spend attempted allowance, got code=%s remaining=%d", code, budget)
 	}
@@ -305,7 +510,7 @@ func TestSourceLaneProofAdditionalControls(t *testing.T) {
 	root, r, cells := proofFixture(t)
 	t.Run("unreviewed_is_not_evidence", func(t *testing.T) {
 		proofDocument(t, root, []sourceLaneProofRecord{r})
-		in := loadSourceLaneProofs(root, nil)
+		in := proofLoadFixture(root, nil)
 		if !proofHasDiagnostic(in.Diagnostics, "proof_review_unavailable", "deficit") || assessSourceLaneProof(r.Key, cells, in)[0].State == "implemented" {
 			t.Fatalf("unreviewed proof accepted: %+v", in)
 		}
@@ -314,7 +519,7 @@ func TestSourceLaneProofAdditionalControls(t *testing.T) {
 		copy := r
 		copy.Key.Inventory = "primary"
 		proofDocument(t, root, []sourceLaneProofRecord{copy})
-		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
+		in := proofLoadFixture(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
 		if !proofHasDiagnostic(in.Diagnostics, "proof_scope_unproven", "deficit") {
 			t.Fatalf("fixture became primary proof: %+v", in)
 		}
@@ -324,7 +529,7 @@ func TestSourceLaneProofAdditionalControls(t *testing.T) {
 		other.ID = "other-proof"
 		other.ObservableContract = "Contradictory claim"
 		proofDocument(t, root, []sourceLaneProofRecord{r, other})
-		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: r, Fixture: true}, {Record: other, Fixture: true}})
+		in := proofLoadFixture(root, []sourceLaneProofReview{{Record: r, Fixture: true}, {Record: other, Fixture: true}})
 		if len(in.Diagnostics) != 2 || assessSourceLaneProof(r.Key, cells, in)[0].State == "implemented" {
 			t.Fatalf("contradiction accepted: %+v", in)
 		}
@@ -337,7 +542,7 @@ func TestSourceLaneProofAdditionalControls(t *testing.T) {
 		additional.ID = "widgets list"
 		copy.Targets = append(copy.Targets, additional)
 		proofDocument(t, root, []sourceLaneProofRecord{copy})
-		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
+		in := proofLoadFixture(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
 		got := assessSourceLaneProof(r.Key, cells, in)
 		if !proofHasDiagnostic(got[0].Diagnostics, "proof_prerequisites_unproven", "deficit") || got[0].State == "implemented" {
 			t.Fatalf("missing required reference accepted: %+v", got)
@@ -350,14 +555,14 @@ func TestSourceLaneProofAdditionalControls(t *testing.T) {
 		}
 		defer opened.Close()
 		budget := int64(0)
-		code, severity := sourceLaneReadProof(opened, r, &budget)
+		code, severity := proofReadWithBudget(opened, r, &budget)
 		if code != "proof_read_budget_exceeded" || severity != "error" {
 			t.Fatalf("budget ignored: %s/%s", code, severity)
 		}
 	})
 	t.Run("unchanged_input_cells", func(t *testing.T) {
 		proofDocument(t, root, []sourceLaneProofRecord{r})
-		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: r, Fixture: true}})
+		in := proofLoadFixture(root, []sourceLaneProofReview{{Record: r, Fixture: true}})
 		before, _ := json.Marshal(cells)
 		_ = assessSourceLaneProof(r.Key, cells, in)
 		after, _ := json.Marshal(cells)
@@ -369,7 +574,7 @@ func TestSourceLaneProofAdditionalControls(t *testing.T) {
 		copy := r
 		copy.Key.ID = "bad\nidentity"
 		proofDocument(t, root, []sourceLaneProofRecord{copy})
-		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
+		in := proofLoadFixture(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
 		if !proofHasDiagnostic(in.Diagnostics, "proof_record_invalid", "error") {
 			t.Fatalf("ambiguous ID accepted: %+v", in)
 		}
@@ -379,7 +584,7 @@ func TestSourceLaneProofAdditionalControls(t *testing.T) {
 		if err := os.Symlink(t.TempDir(), filepath.Join(isolated, "data")); err != nil {
 			t.Fatal(err)
 		}
-		in := loadSourceLaneProofs(isolated, nil)
+		in := proofLoadFixture(isolated, nil)
 		if !proofHasDiagnostic(in.Diagnostics, "proof_document_invalid", "error") {
 			t.Fatalf("unsafe optional path treated as absence: %+v", in)
 		}
@@ -398,7 +603,7 @@ func proofHasDiagnostic(ds []sourceLaneDiagnostic, code, severity string) bool {
 func TestSourceLaneStateReduction(t *testing.T) {
 	root, record, cells := proofFixture(t)
 	t.Run("absent_evidence_retains_seven", func(t *testing.T) {
-		got := assessSourceLaneProof(record.Key, cells, loadSourceLaneProofs(root, nil))
+		got := assessSourceLaneProof(record.Key, cells, proofLoadFixture(root, nil))
 		if len(got) != 7 || got[0].State != "mapped_unproven" || !proofHasDiagnostic(got[0].Diagnostics, "proof_unavailable", "deficit") {
 			t.Fatalf("absent proof: %+v", got)
 		}
@@ -408,7 +613,7 @@ func TestSourceLaneStateReduction(t *testing.T) {
 	})
 	t.Run("matching_actual_fixture_promotes", func(t *testing.T) {
 		proofDocument(t, root, []sourceLaneProofRecord{record})
-		got := assessSourceLaneProof(record.Key, cells, loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: record, Fixture: true}}))
+		got := assessSourceLaneProof(record.Key, cells, proofLoadFixture(root, []sourceLaneProofReview{{Record: record, Fixture: true}}))
 		if len(got) != 7 || got[0].State != "implemented" || !reflect.DeepEqual(got[0].ProofRefs, []string{record.ID}) {
 			t.Fatalf("matching actual fixture must promote only direct_read: %+v", got)
 		}
@@ -442,7 +647,7 @@ func TestSourceLaneProofInvalidClaims(t *testing.T) {
 			r.Targets = append([]sourceLaneTargetRef(nil), original.Targets...)
 			tc.change(&r)
 			proofDocument(t, root, []sourceLaneProofRecord{r})
-			inputs := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: original, Fixture: true}})
+			inputs := proofLoadFixture(root, []sourceLaneProofReview{{Record: original, Fixture: true}})
 			if !proofHasDiagnostic(inputs.Diagnostics, tc.code, "error") {
 				t.Fatalf("invalid asserted claim lost: %+v", inputs.Diagnostics)
 			}
@@ -522,7 +727,7 @@ func TestSourceLaneProofBoundaries(t *testing.T) {
 			}
 			tc.edit(root, &r)
 			proofDocument(t, root, []sourceLaneProofRecord{r})
-			inputs := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: r, Fixture: true}})
+			inputs := proofLoadFixture(root, []sourceLaneProofReview{{Record: r, Fixture: true}})
 			if !proofHasDiagnostic(inputs.Diagnostics, tc.code, tc.severity) {
 				t.Fatalf("want %s/%s, got %+v", tc.code, tc.severity, inputs.Diagnostics)
 			}
@@ -537,7 +742,7 @@ func TestSourceLaneProofBoundaries(t *testing.T) {
 	}
 	t.Run("duplicate_claims", func(t *testing.T) {
 		proofDocument(t, base, []sourceLaneProofRecord{original, original})
-		in := loadSourceLaneProofs(base, []sourceLaneProofReview{{Record: original, Fixture: true}})
+		in := proofLoadFixture(base, []sourceLaneProofReview{{Record: original, Fixture: true}})
 		if !proofHasDiagnostic(in.Diagnostics, "proof_duplicate_claim", "error") {
 			t.Fatalf("duplicate accepted: %+v", in)
 		}
@@ -548,7 +753,7 @@ func TestSourceLaneProofBoundaries(t *testing.T) {
 	t.Run("malformed_closed_document", func(t *testing.T) {
 		for _, raw := range []string{`{"schema_version":1,"records":[],"extra":1}`, `{"schema_version":1,"records":[],"records":[]}`, `{"schema_version":1,"records":null}`, `{"schema_version":1,"records":[]} {}`} {
 			proofWrite(t, base, sourceLaneProofPath, []byte(raw))
-			in := loadSourceLaneProofs(base, nil)
+			in := proofLoadFixture(base, nil)
 			if !proofHasDiagnostic(in.Diagnostics, "proof_document_invalid", "error") {
 				t.Fatalf("malformed proof accepted %s: %+v", raw, in)
 			}
@@ -556,7 +761,7 @@ func TestSourceLaneProofBoundaries(t *testing.T) {
 	})
 	t.Run("missing_applicability_and_references", func(t *testing.T) {
 		proofDocument(t, base, []sourceLaneProofRecord{original})
-		in := loadSourceLaneProofs(base, []sourceLaneProofReview{{Record: original, Fixture: true}})
+		in := proofLoadFixture(base, []sourceLaneProofReview{{Record: original, Fixture: true}})
 		for _, kind := range []string{"undetermined", "reference", "missing_foundation", "exclusion"} {
 			t.Run(kind, func(t *testing.T) {
 				local := append([]sourceLaneCell(nil), cells...)
@@ -582,4 +787,27 @@ func TestSourceLaneProofBoundaries(t *testing.T) {
 			})
 		}
 	})
+}
+
+func proofFixturePolicy() sourceLaneProofPolicy {
+	keys := []sourceOperationKey{{Connector: "proof-fixture", Inventory: "fixture", ID: "fixture.widgets"}, {Connector: "proof-fixture", Inventory: "primary", ID: "fixture.widgets"}}
+	for i := 0; i < 4343; i++ {
+		keys = append(keys, sourceOperationKey{Connector: "proof-fixture", Inventory: "fixture", ID: fmt.Sprintf("fixture-%06d", i)})
+	}
+	p, err := newSourceLaneProofPolicy(keys)
+	if err != nil {
+		panic(err)
+	}
+	return p
+}
+func proofLoadFixture(root string, reviews []sourceLaneProofReview) sourceLaneProofInputs {
+	return loadSourceLaneProofs(context.Background(), root, proofFixturePolicy(), sourceLaneProofCatalog{Reviews: reviews})
+}
+func proofReadWithBudget(root *os.Root, r sourceLaneProofRecord, budget *int64) (string, string) {
+	p := proofFixturePolicy()
+	p.limits.UniqueBytes = *budget
+	c := sourceLaneProofCache{ctx: context.Background(), root: root, policy: p, files: map[string]*sourceLaneProofFile{}}
+	code, severity, _ := assessSourceLaneProofFiles(&c, r, r.Inputs)
+	*budget -= c.stats.UniqueBytes
+	return code, severity
 }
