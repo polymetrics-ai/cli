@@ -153,11 +153,32 @@ func TestCP11OwnershipRemainingControlStates(t *testing.T) {
 			if present != test.prior {
 				t.Fatalf("fixture prior present=%t want=%t", present, test.prior)
 			}
+
+			desiredPointer := vNextPublicationFixturePointer(t, artifacts)
+			if pointer != desiredPointer {
+				t.Fatal("remaining-state setup differs from fixture")
+			}
+			controls := map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, desiredPointer), vNextPublicationJournalFile: nil}
+			if test.target == vNextPublicationCurrentFile && !test.prior {
+				controls[test.target] = nil
+			}
+			if test.target == vNextPublicationJournalFile && test.prior {
+				controls[test.target] = vNextPublicationExpectedJSON(t, vNextGenerationJournal{New: desiredPointer, State: "prepared"})
+			}
+			var intended []byte
+			if test.intended {
+				if test.target == vNextPublicationCurrentFile {
+					intended = vNextPublicationExpectedJSON(t, desiredPointer)
+				} else {
+					intended = vNextPublicationExpectedJSON(t, vNextGenerationJournal{New: desiredPointer, State: "committed"})
+				}
+			}
+			plan := vNextPublicationNewExpectedPlan(t, root, controls, vNextPublicationExpectedTransition{target: test.target, intended: intended, phases: 0})
 			known := vNextPublicationRepairTransactionsForTest(t, connector)
 			fault := errors.New("complete prepared record Sync completion")
 			fired := 0
 			var beforeRecord vNextPublicationExpectedTree
-			writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{
+			writer, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{
 				At: func(point vNextPublicationFaultPoint) error {
 					if point == vNextPublicationBeforeControlRepairRecord {
 						var err error
@@ -174,7 +195,7 @@ func TestCP11OwnershipRemainingControlStates(t *testing.T) {
 					}
 					return err
 				}},
-			})
+			}))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -208,7 +229,7 @@ func TestCP11OwnershipRemainingControlStates(t *testing.T) {
 			if err := vNextPublicationCompareExpectedMembers(after, prior, false); err != nil {
 				t.Fatal(err)
 			}
-			vNextPublicationAssertPendingPreparedGraphForTest(t, writer, connector, test.target, test.prior, test.intended, known)
+			vNextPublicationAssertPendingPreparedGraphForTest(t, writer, connector, test.target, plan, known)
 			beforeCheck, err := vNextPublicationObserveExpectedTree(connector)
 			if err != nil {
 				t.Fatal(err)

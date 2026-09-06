@@ -116,20 +116,21 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 			}
 			defer held.Release()
 
+			filesA := vNextPublicationArtifactsForTest("held-A", false)
+			filesB := vNextPublicationArtifactsForTest("current-B", false)
+			filesC := vNextPublicationArtifactsForTest("current-C", false)
+			desiredA := vNextPublicationFixturePointer(t, filesA)
+			desiredB := vNextPublicationFixturePointer(t, filesB)
+			desiredC := vNextPublicationFixturePointer(t, filesC)
+			if old != desiredA {
+				t.Fatal("held A setup differs from fixture")
+			}
+			var plan *vNextPublicationExpectedPlan
 			leasePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation, vNextPublicationLeaseFile)
 			retainedLease := filepath.Join(root, "retained-"+old.Generation+".lease")
 			originalLeaseA := vNextPublicationFileWitnessForTest(t, leasePath)
 			var displacedLeaseA, replacementLeaseB vNextPublicationPathWitness
-			var heldExpected, priorAuthority, expectedControls vNextPublicationExpectedTree
-			recordControls := func(point vNextPublicationFaultPoint) error {
-				if point == vNextPublicationAfterFinalControlRepairValidation {
-					var err error
-					expectedControls, err = vNextPublicationExpectedPublicControls(root)
-					return err
-				}
-				return nil
-			}
-			publisher.hooks.At = recordControls
+			var heldExpected, priorAuthority vNextPublicationExpectedTree
 
 			replaceLease := func() error {
 				if err := os.Rename(leasePath, retainedLease); err != nil {
@@ -143,6 +144,9 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 					return err
 				}
 				replacementLeaseB = vNextPublicationFileWitnessForTest(t, leasePath)
+				if plan != nil {
+					plan.leaseDelta(t, old.Generation, leasePath, retainedLease)
+				}
 				if !bytes.Equal(displacedLeaseA.payload, replacementLeaseB.payload) {
 					return fmt.Errorf("equal-byte lease mutation control has unequal bytes")
 				}
@@ -153,10 +157,6 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 					return err
 				}
 				priorAuthority, err = vNextPublicationExpectedStableAuthority(root)
-				if err != nil {
-					return err
-				}
-				expectedControls, err = vNextPublicationExpectedPublicControls(root)
 				if err != nil {
 					return err
 				}
@@ -180,10 +180,15 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 				if err != nil {
 					t.Fatalf("Publish(B) error = %v", err)
 				}
-				expectedCurrent = current
+				if current != desiredB {
+					t.Fatal("held prune setup B differs from fixture")
+				}
+				expectedCurrent = desiredB
 				if err := replaceLease(); err != nil {
 					t.Fatal(err)
 				}
+				plan = vNextPublicationNewExpectedPlan(t, root, map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, desiredB), vNextPublicationJournalFile: nil})
+				publisher.hooks = plan.hooks(vNextPublicationHooks{})
 				if err := publisher.Prune(context.Background()); err != nil {
 					t.Fatalf("Prune() with held A error = %v", err)
 				}
@@ -195,6 +200,12 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 				if err := replaceLease(); err != nil {
 					t.Fatal(err)
 				}
+				if currentB != desiredB {
+					t.Fatal("held publish setup B differs from fixture")
+				}
+				plan, _ = vNextPublicationExpectedPublish(t, root, filesB, filesC, "complete")
+				plan.expectPrunedGeneration(desiredB.Generation)
+				publisher.hooks = plan.hooks(vNextPublicationHooks{})
 				currentC, err := publisher.Publish(vNextPublicationArtifactsForTest("current-C", false))
 				if err != nil {
 					t.Fatalf("Publish(C) with held A error = %v", err)
@@ -202,13 +213,16 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 				if currentC == currentB {
 					t.Fatal("Publish(C) did not intentionally advance CURRENT")
 				}
-				expectedCurrent = currentC
+				if currentC != desiredC {
+					t.Fatal("held publish C differs from fixture")
+				}
+				expectedCurrent = desiredC
 			case "recover":
+				plan, _ = vNextPublicationExpectedPublish(t, root, filesA, filesB, "prepared")
+				plan.steps = append(plan.steps, vNextPublicationExpectedTransition{target: vNextPublicationJournalFile, intended: nil, phases: 4})
+
 				crash := errors.New("crash after CURRENT selection before committed JOURNAL replacement and lease substitution")
-				writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
-					if err := recordControls(point); err != nil {
-						return err
-					}
+				writer, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 					if point != vNextPublicationAfterCommitSync {
 						return nil
 					}
@@ -216,7 +230,7 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 						return err
 					}
 					return crash
-				}})
+				}}))
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -225,11 +239,13 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 				}
 				var preparedJournal vNextGenerationJournal
 				var foundPreparedJournal bool
-				expectedCurrent, preparedJournal, foundPreparedJournal, _, _ = vNextPublicationReadCurrentJournalForTest(t, root)
-				if !foundPreparedJournal || preparedJournal.State != "prepared" || preparedJournal.Old == nil || *preparedJournal.Old != old || preparedJournal.New != expectedCurrent {
+				var observedCurrent vNextGenerationPointer
+				observedCurrent, preparedJournal, foundPreparedJournal, _, _ = vNextPublicationReadCurrentJournalForTest(t, root)
+				expectedCurrent = desiredB
+				if observedCurrent != desiredB || !foundPreparedJournal || preparedJournal.State != "prepared" || preparedJournal.Old == nil || *preparedJournal.Old != old || preparedJournal.New != expectedCurrent {
 					t.Fatalf("AfterCommitSync interruption durable state = current %#v journal %#v, want prepared old/new-selected", expectedCurrent, preparedJournal)
 				}
-				recovered, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: recordControls})
+				recovered, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{}))
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -238,6 +254,9 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 				}
 			}
 
+			if err := plan.check(); err != nil {
+				t.Fatal(err)
+			}
 			vNextPublicationAssertExpectedTree(t, filepath.Dir(leasePath), heldExpected)
 			actualAuthority, authorityErr := vNextPublicationExpectedStableAuthority(root)
 			if authorityErr != nil {
@@ -250,7 +269,7 @@ func TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock(t *testing.
 			if controlErr != nil {
 				t.Fatal(controlErr)
 			}
-			if err := vNextPublicationCompareExpectedMembers(actualControls, expectedControls, true); err != nil {
+			if err := vNextPublicationCompareExpectedMembers(actualControls, plan.controls, true); err != nil {
 				t.Fatalf("held cleanup controls after explicit transition cut: %v", err)
 			}
 			if !publisher.GenerationExists(old.Generation) {
@@ -2056,27 +2075,35 @@ func TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup(t *testing
 	stageName := ".stage-owned"
 	stagePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, stageName)
 	vNextWriteOwnedStageForTest(t, stagePath, pointer, stageName, "original")
+	wantStageA := vNextPublicationExpectedOwnedStage(t, stagePath, pointer, stageName, "original")
 
 	var movedPath string
 	hookHit := false
+	desiredPointer := vNextPublicationFixturePointer(t, vNextPublicationArtifactsForTest("active", false))
+	if pointer != desiredPointer {
+		t.Fatal("stage setup differs from declared fixture")
+	}
+	plan := vNextPublicationNewExpectedPlan(t, root, map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, desiredPointer), vNextPublicationJournalFile: nil})
 	priorAuthority, priorErr := vNextPublicationExpectedStableAuthority(root)
 	if priorErr != nil {
 		t.Fatal(priorErr)
 	}
 	var expectedCut vNextPublicationExpectedTree
-	guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+	guard, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 		if point != vNextPublicationBeforeStageRemoval || hookHit {
 			return nil
 		}
 		hookHit = true
 		movedPath = vNextReplaceOwnedStageForTest(t, stagePath, pointer, stageName, "replacement")
+		plan.stageDelta(t, stagePath, movedPath, vNextPublicationExpectedOwnedStage(t, stagePath, desiredPointer, stageName, "replacement"))
+
 		var observeErr error
-		expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+		expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority, plan)
 		if observeErr != nil {
 			return observeErr
 		}
 		return nil
-	}})
+	}}))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2089,7 +2116,7 @@ func TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup(t *testing
 		t.Fatalf("Recover() after stage replacement error = %v, want identity refusal", err)
 	}
 	vNextPublicationAssertCurrentJournalForTest(t, root, "stage-cleanup identity refusal", pointer, "", nil, vNextGenerationPointer{})
-	if err := vNextPublicationEarlyStageVerdict(root, movedPath, stagePath, expectedCut, nil); err != nil {
+	if err := vNextPublicationEarlyStageVerdict(root, movedPath, expectedCut, wantStageA); err != nil {
 		t.Fatal(err)
 	}
 
@@ -2101,7 +2128,7 @@ func TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup(t *testing
 	if checkErr == nil {
 		t.Fatal("Check accepted retained stale/replaced stage")
 	}
-	if err := vNextPublicationEarlyStageVerdict(root, movedPath, stagePath, expectedCut, nil); err != nil {
+	if err := vNextPublicationEarlyStageVerdict(root, movedPath, expectedCut, wantStageA); err != nil {
 		t.Fatal(err)
 	}
 	if err := os.RemoveAll(stagePath); err != nil {
@@ -2385,24 +2412,37 @@ func TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup(t *tes
 
 	hookHit := false
 	var movedPath string
+	desiredPointer := vNextPublicationFixturePointer(t, vNextPublicationArtifactsForTest("active", false))
+	if pointer != desiredPointer {
+		t.Fatal("stage setup differs from declared fixture")
+	}
+	plan := vNextPublicationNewExpectedPlan(t, root, map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, desiredPointer), vNextPublicationJournalFile: nil})
 	priorAuthority, priorErr := vNextPublicationExpectedStableAuthority(root)
 	if priorErr != nil {
 		t.Fatal(priorErr)
 	}
 	var expectedCut vNextPublicationExpectedTree
-	guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+	guard, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 		if point != vNextPublicationFaultPoint("after_stage_removal_identity") || hookHit {
 			return nil
 		}
 		hookHit = true
 		movedPath = vNextReplaceDirectoryAtPathForTest(t, stagePath)
-		var observeErr error
-		expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+		replacement, observeErr := vNextPublicationObserveExpectedTree(stagePath)
+		if observeErr != nil {
+			return observeErr
+		}
+		if len(replacement) != 1 || replacement["."].identity.mode != unix.S_IFDIR {
+			return fmt.Errorf("late stage B is not empty directory")
+		}
+		plan.stageDelta(t, stagePath, movedPath, replacement)
+
+		expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority, plan)
 		if observeErr != nil {
 			return observeErr
 		}
 		return nil
-	}})
+	}}))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -2689,12 +2729,17 @@ func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupC
 			leaseA := vNextPublicationFileWitnessForTest(t, leasePath)
 			var displacedLeaseA, replacementLeaseB vNextPublicationPathWitness
 			hookHit := false
+			desiredCurrent := vNextPublicationFixturePointer(t, vNextPublicationArtifactsForTest("current", false))
+			if current != desiredCurrent {
+				t.Fatal("static cleanup setup differs from fixture")
+			}
+			plan := vNextPublicationNewExpectedPlan(t, root, map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, desiredCurrent), vNextPublicationJournalFile: nil})
 			priorAuthority, priorErr := vNextPublicationExpectedStableAuthority(root)
 			if priorErr != nil {
 				t.Fatal(priorErr)
 			}
 			var expectedCut vNextPublicationExpectedTree
-			guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+			guard, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 				if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
 					return nil
 				}
@@ -2710,14 +2755,15 @@ func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupC
 					return err
 				}
 				replacementLeaseB = vNextPublicationFileWitnessForTest(t, leasePath)
+				plan.leaseDelta(t, old.Generation, leasePath, leasePath+".late-original")
 				vNextPublicationAssertDistinctWitnessForTest(t, "late public caller A/B", displacedLeaseA, replacementLeaseB)
 				var observeErr error
-				expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+				expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority, plan)
 				if observeErr != nil {
 					return observeErr
 				}
 				return nil
-			}})
+			}}))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -2749,24 +2795,26 @@ func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupC
 		if err != nil {
 			t.Fatal(err)
 		}
+		newFiles := vNextPublicationArtifactsForTest("current", false)
+		plan, wantedNew := vNextPublicationExpectedPublish(t, root, vNextPublicationArtifactsForTest("old", false), newFiles, "prepared")
 		crash := errors.New("prepared JOURNAL/new-selected before committed replacement")
-		writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		writer, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 			if point == vNextPublicationAfterCommitSync {
 				return crash
 			}
 			return nil
-		}})
+		}}))
 		if err != nil {
 			handle.Release()
 			t.Fatal(err)
 		}
-		if _, err := writer.Publish(vNextPublicationArtifactsForTest("current", false)); !errors.Is(err, crash) {
+		if _, err := writer.Publish(newFiles); !errors.Is(err, crash) {
 			handle.Release()
 			t.Fatalf("Publish(current) error = %v, want prepared-JOURNAL interruption", err)
 		}
 		handle.Release()
 		selectedNew, preparedJournal, foundPreparedJournal, _, _ := vNextPublicationReadCurrentJournalForTest(t, root)
-		if !foundPreparedJournal || preparedJournal.State != "prepared" || preparedJournal.Old == nil || *preparedJournal.Old != old || preparedJournal.New != selectedNew {
+		if selectedNew != wantedNew || !foundPreparedJournal || preparedJournal.State != "prepared" || preparedJournal.Old == nil || *preparedJournal.Old != old || preparedJournal.New != selectedNew {
 			t.Fatalf("AfterCommitSync durable state = current %#v journal %#v, want prepared old/new-selected", selectedNew, preparedJournal)
 		}
 
@@ -2779,7 +2827,7 @@ func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupC
 			t.Fatal(priorErr)
 		}
 		var expectedCut vNextPublicationExpectedTree
-		guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		guard, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 			if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
 				return nil
 			}
@@ -2795,14 +2843,15 @@ func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupC
 				return err
 			}
 			replacementLeaseB = vNextPublicationFileWitnessForTest(t, leasePath)
+			plan.leaseDelta(t, old.Generation, leasePath, leasePath+".late-original")
 			vNextPublicationAssertDistinctWitnessForTest(t, "late prepared-journal A/B", displacedLeaseA, replacementLeaseB)
 			var observeErr error
-			expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+			expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority, plan)
 			if observeErr != nil {
 				return observeErr
 			}
 			return nil
-		}})
+		}}))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -2815,7 +2864,7 @@ func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupC
 		}
 		vNextPublicationAssertWitnessForTest(t, "prepared-journal recovery displaced A", leasePath+".late-original", displacedLeaseA)
 		vNextPublicationAssertWitnessForTest(t, "prepared-journal recovery replacement B", leasePath, replacementLeaseB)
-		vNextPublicationAssertCurrentJournalForTest(t, root, "prepared-journal recovery refusal", selectedNew, "prepared", &old, selectedNew)
+		vNextPublicationAssertCurrentJournalForTest(t, root, "prepared-journal recovery refusal", wantedNew, "prepared", &old, wantedNew)
 		vNextPublicationAssertDurableCutWitnessForTest(t, root, "prepared-journal recovery refusal", expectedCut)
 	})
 }

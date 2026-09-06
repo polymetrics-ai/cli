@@ -189,6 +189,24 @@ func TestCP11F03ARepairPreparationFrontierMatrix(t *testing.T) {
 						t.Fatalf("prepare %s predecessor: %v", target.name, err)
 					}
 				}
+
+				desiredOld := vNextPublicationFixturePointer(t, artifacts)
+				if old != desiredOld {
+					t.Fatal("old setup differs from fixture")
+				}
+				controls := map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, desiredOld), vNextPublicationJournalFile: nil}
+				if target.control == vNextPublicationJournalFile && target.prior {
+					controls[vNextPublicationJournalFile] = vNextPublicationExpectedJSON(t, vNextGenerationJournal{New: desiredOld, State: "prepared"})
+				}
+				var intended []byte
+				if target.intended {
+					if target.control == vNextPublicationCurrentFile {
+						intended = vNextPublicationExpectedJSON(t, desiredOld)
+					} else {
+						intended = vNextPublicationExpectedJSON(t, vNextGenerationJournal{New: desiredOld, State: "prepared"})
+					}
+				}
+				plan := vNextPublicationNewExpectedPlan(t, root, controls, vNextPublicationExpectedTransition{target: target.control, intended: intended, phases: 0})
 				knownTransactions := vNextPublicationRepairTransactionsForTest(t, filepath.Join(root, "acme"))
 				injected := errors.New("injected " + frontier.name)
 				hooks := frontier.hooks(injected)
@@ -207,7 +225,7 @@ func TestCP11F03ARepairPreparationFrontierMatrix(t *testing.T) {
 					}
 					return nil
 				}
-				writer, err := newVNextGenerationPublisher(root, "acme", hooks)
+				writer, err := newVNextGenerationPublisher(root, "acme", plan.hooks(hooks))
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -240,7 +258,7 @@ func TestCP11F03ARepairPreparationFrontierMatrix(t *testing.T) {
 					if err := vNextPublicationCompareExpectedMembers(afterRecord, beforeRecord, false); err != nil {
 						t.Fatalf("pre-record controls/anchors changed: %v", err)
 					}
-					vNextPublicationAssertPendingPreparedGraphForTest(t, fresh, connectorRoot, target.control, target.prior, target.intended, knownTransactions)
+					vNextPublicationAssertPendingPreparedGraphForTest(t, fresh, connectorRoot, target.control, plan, knownTransactions)
 					beforeCheck := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
 					if err := fresh.Check(artifacts); err == nil {
 						t.Fatalf("pending %s %s Check succeeded", target.name, frontier.name)
@@ -296,14 +314,23 @@ func TestCP11F03ARepairBasePresentPresentAuthorityRecovers(t *testing.T) {
 			// intended anchors) is present. This is fixture-only in the isolated
 			// temp root.
 			vNextPublicationRemoveAuthorityGraphForTest(t, connectorRoot)
+			desiredOld := vNextPublicationFixturePointer(t, artifacts)
+			if old != desiredOld {
+				t.Fatal("base old setup differs from fixture")
+			}
+			controls := map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, desiredOld), vNextPublicationJournalFile: nil}
+			if target == vNextPublicationJournalFile {
+				controls[target] = vNextPublicationExpectedJSON(t, vNextGenerationJournal{New: desiredOld, State: "prepared"})
+			}
+			plan := vNextPublicationNewExpectedPlan(t, root, controls, vNextPublicationExpectedTransition{target: target, intended: controls[target], base: true, phases: 0})
 
 			crash := errors.New("crash after durable present-present base authority")
-			writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+			writer, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 				if point == vNextPublicationAfterBaseControlRepairPrepared {
 					return crash
 				}
 				return nil
-			}})
+			}}))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -321,7 +348,7 @@ func TestCP11F03ARepairBasePresentPresentAuthorityRecovers(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			vNextPublicationAssertPendingPreparedGraphForTest(t, fresh, connectorRoot, target, true, true, map[string]vNextPublicationExpectedTree{})
+			vNextPublicationAssertPendingPreparedGraphForTest(t, fresh, connectorRoot, target, plan, map[string]vNextPublicationExpectedTree{})
 			beforeCheck := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
 			if err := fresh.Check(artifacts); err == nil {
 				t.Fatalf("Check() during %s present-present base interruption succeeded", target)
@@ -390,16 +417,20 @@ func vNextPublicationAssertNoPreparedGraphForTest(t *testing.T, connectorRoot st
 	}
 }
 
-func vNextPublicationAssertPendingPreparedGraphForTest(t *testing.T, publisher *vNextGenerationPublisher, connectorRoot, target string, wantPriorPresent, wantIntendedPresent bool, knownTransactions map[string]vNextPublicationExpectedTree) {
+func vNextPublicationAssertPendingPreparedGraphForTest(t *testing.T, publisher *vNextGenerationPublisher, connectorRoot, target string, plan *vNextPublicationExpectedPlan, knownTransactions map[string]vNextPublicationExpectedTree) {
 	t.Helper()
-	if err := vNextPublicationPendingPreparedVerdict(publisher, connectorRoot, target, wantPriorPresent, wantIntendedPresent, knownTransactions, nil); err != nil {
+	if err := vNextPublicationPendingPreparedVerdict(publisher, connectorRoot, target, plan, knownTransactions); err != nil {
 		t.Fatal(err)
 	}
 }
 
-// Extraction-only094: desiredPayload is carried but old presence/graph semantics
-// are deliberately retained until the caller-level negative control runs RED.
-func vNextPublicationPendingPreparedVerdict(publisher *vNextGenerationPublisher, connectorRoot, target string, wantPriorPresent, wantIntendedPresent bool, knownTransactions map[string]vNextPublicationExpectedTree, desiredPayload []byte) error {
+// The independent plan is checked before the complementary production decoder.
+func vNextPublicationPendingPreparedVerdict(publisher *vNextGenerationPublisher, connectorRoot, target string, plan *vNextPublicationExpectedPlan, knownTransactions map[string]vNextPublicationExpectedTree) error {
+	if err := plan.check(); err != nil {
+		return err
+	}
+	wantPriorPresent := plan.prior[target].payload != nil
+	wantIntendedPresent := plan.steps[0].intended != nil
 	for name, expected := range knownTransactions {
 		if err := vNextPublicationCompareExpectedTree(filepath.Join(connectorRoot, name), expected); err != nil {
 			return err

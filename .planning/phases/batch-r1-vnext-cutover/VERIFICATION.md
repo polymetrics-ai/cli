@@ -966,3 +966,20 @@ test or dependency mutation during overlap; acceptance waits every required gate
 ## Firstmate094 — current verification intake
 
 Pending: four meaningful caller-level oracle RED/GREEN pairs; complete091 caller/intent/acquisition/phase mapping and direct owner assertion inspection; focused combined normal/race closure; changed-test vet and original-base introduced lint; coherent candidate freeze and final uncached cmd/connectorgen package normal/race; exact unchanged-input supplementary reuse; current policy-reference companion; Firstmate-authored independent original-range review. Production/dependency equality to8aadc1ce mandatory. CP11 remains unaccepted.
+
+
+## Firstmate094 current proof correction — no CP11 acceptance
+
+Source/tests are being prepared for coherent freeze. Full immutable091 audit and all three089 dispositions remain in REVIEW-CONVERGENCE.md. CP11-PROOF-CORRECTION-094.md/.json is additive to the immutable original119-row manifest. Original080 policy bytes remain unresolved; current immutable087/088 policy hashes are explicitly bound without claiming historical recovery.
+
+The candidate-ready gate receipts in receipts-094 record exact commands, wall times, real exits, selected/run/pass inventory, source hashes and unchanged-input checks. Full package normal/race on the final commit, independent fresh original-range review and Firstmate acceptance remain required. Test-inclusive vet and original-base introduced lint are current runs. Atlas checks are current because references changed. Supplementary unchanged non-test input mapping is in receipts-094/supplementary-input-equivalence.json; original results retain original SHA/date, and boundary/canon/full-test results are not relabeled. Historical CP29 debts and cached preflight remain explicit.
+
+Candidate-ready completion (all sessions terminal):
+
+- focused-normal-ready-receipt.json: exit0, wall50.85434733401053s; exact inputs unchanged; raw SHA256 c3350c5ce35dd81c2f98012195ecde780ad5e9dcc77d72c7917bc8d0ee2ea2bf.
+- focused-race-ready-receipt.json: exit0, wall68.63664212499862s; exact inputs unchanged; raw SHA256 bd353a0925bb7162ecd3b652f0dc7c1a3a4996b1a6817bafdb0dd03836e07d95.
+- vet-ready-receipt.json: exit0, wall1.5183071670180652s; exact inputs unchanged; raw SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855.
+- lint-ready-receipt.json: exit0, wall5.003222041996196s; exact inputs unchanged; raw SHA256 e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47.
+- atlas-ready-receipt.json: exit0, wall3.8699734169931617s; exact inputs unchanged; raw SHA256 9f158baa74cc40c9e92a5a1ee653af127314fbd9c4f079921b8ae14fba18483a.
+
+Both focused runs selected and executed all22 top-level tests with79 test/subtest pass events plus package PASS. Atlas selected tests produced22 test/subtest pass events plus package PASS. Required final full package normal/race and independent review are pending. Working scoped diffcheck and immutable binding verification passed.

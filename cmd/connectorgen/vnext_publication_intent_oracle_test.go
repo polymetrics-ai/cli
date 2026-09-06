@@ -30,6 +30,7 @@ func TestCP11FinalPruneOracleRejectsWrongFixture(t *testing.T) {
 				t.Fatal(err)
 			}
 			desired := vNextPublicationArtifactsForTest("desired-N", false)
+			plan, _ := vNextPublicationExpectedPublish(t, root, vNextPublicationArtifactsForTest("old", false), desired, "committed")
 			actual := desired
 			if wrong {
 				actual = vNextPublicationArtifactsForTest("coherent-Q", false)
@@ -41,7 +42,7 @@ func TestCP11FinalPruneOracleRejectsWrongFixture(t *testing.T) {
 			lease := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation, vNextPublicationLeaseFile)
 			var cut vNextPublicationExpectedTree
 			fired := false
-			writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+			writer, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 				if point != vNextPublicationAfterGenerationLeaseIdentity || fired {
 					return nil
 				}
@@ -52,9 +53,10 @@ func TestCP11FinalPruneOracleRejectsWrongFixture(t *testing.T) {
 				if err := os.WriteFile(lease, []byte("actual lease B"), 0600); err != nil {
 					return err
 				}
-				cut, err = vNextPublicationCaptureExpectedCut(root, prior)
+				plan.leaseDelta(t, old.Generation, lease, lease+"-A")
+				cut, err = vNextPublicationObserveExpectedTree(filepath.Join(root, "acme"))
 				return err
-			}})
+			}}))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -63,9 +65,9 @@ func TestCP11FinalPruneOracleRejectsWrongFixture(t *testing.T) {
 				t.Fatalf("actual final-prune cut fired=%t err=%v", fired, err)
 			}
 			vNextPublicationAssertExpectedTree(t, filepath.Join(root, "acme"), cut)
-			_, verdict := vNextPublicationFinalPruneVerdict(root, prior, old, desired)
-			if wrong && verdict == nil {
-				t.Fatal("oracle accepted coherent Q although fixture intended N")
+			_, verdict := vNextPublicationFinalPruneVerdict(root, prior, old, desired, plan)
+			if wrong && (verdict == nil || !strings.Contains(verdict.Error(), "JOURNAL replacement differs from independent payload")) {
+				t.Fatalf("wrong fixture must fail independent prepared JOURNAL check: %v", verdict)
 			}
 			if !wrong && verdict != nil {
 				t.Fatalf("correct N rejected: %v", verdict)
@@ -98,17 +100,19 @@ func TestCP11PreparedOracleRejectsWrongIntendedPayload(t *testing.T) {
 			if wrong {
 				actual.State = "committed"
 			}
+
+			plan := vNextPublicationNewExpectedPlan(t, root, map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, old), vNextPublicationJournalFile: nil}, vNextPublicationExpectedTransition{target: vNextPublicationJournalFile, intended: desired, phases: 0})
 			known := vNextPublicationRepairTransactionsForTest(t, filepath.Join(root, "acme"))
 			fault := errors.New("actual prepared Sync completed")
 			fired := 0
-			writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{ControlRecord: vNextPublicationControlRecordHooks{Sync: func(file *os.File, label string) error {
+			writer, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{ControlRecord: vNextPublicationControlRecordHooks{Sync: func(file *os.File, label string) error {
 				err := file.Sync()
 				if label == "publication control repair prepared authority" {
 					fired++
 					return errors.Join(err, fault)
 				}
 				return err
-			}}})
+			}}}))
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -121,9 +125,9 @@ func TestCP11PreparedOracleRejectsWrongIntendedPayload(t *testing.T) {
 			if fired != 1 || !errors.Is(err, fault) {
 				t.Fatalf("retained prepared cut fired=%d err=%v", fired, err)
 			}
-			verdict := vNextPublicationPendingPreparedVerdict(writer, filepath.Join(root, "acme"), vNextPublicationJournalFile, false, true, known, desired)
-			if wrong && verdict == nil {
-				t.Fatal("oracle accepted wrong well-formed intended anchor payload")
+			verdict := vNextPublicationPendingPreparedVerdict(writer, filepath.Join(root, "acme"), vNextPublicationJournalFile, plan, known)
+			if wrong && (verdict == nil || !strings.Contains(verdict.Error(), "differs from independent payload")) {
+				t.Fatalf("wrong intended payload must fail independent anchor check: %v", verdict)
 			}
 			if !wrong && verdict != nil {
 				t.Fatalf("correct intended payload rejected: %v", verdict)
@@ -152,24 +156,23 @@ func vNextPublicationExerciseEarlyStageOracle(t *testing.T, mutation string) {
 	stageName := ".stage-owned"
 	stage := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, stageName)
 	vNextWriteOwnedStageForTest(t, stage, pointer, stageName, "original")
-	wantA, err := vNextPublicationObserveExpectedTree(stage)
-	if err != nil {
-		t.Fatal(err)
-	}
+	wantA := vNextPublicationExpectedOwnedStage(t, stage, pointer, stageName, "original")
+	plan := vNextPublicationNewExpectedPlan(t, root, map[string][]byte{vNextPublicationCurrentFile: vNextPublicationExpectedJSON(t, vNextPublicationFixturePointer(t, vNextPublicationArtifactsForTest("active", false))), vNextPublicationJournalFile: nil})
 	prior, err := vNextPublicationExpectedStableAuthority(root)
 	if err != nil {
 		t.Fatal(err)
 	}
 	var cut vNextPublicationExpectedTree
 	var moved string
-	writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+	writer, err := newVNextGenerationPublisher(root, "acme", plan.hooks(vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 		if point != vNextPublicationBeforeStageRemoval || moved != "" {
 			return nil
 		}
 		moved = vNextReplaceOwnedStageForTest(t, stage, pointer, stageName, "replacement")
-		cut, err = vNextPublicationCaptureExpectedCut(root, prior)
+		plan.stageDelta(t, stage, moved, vNextPublicationExpectedOwnedStage(t, stage, pointer, stageName, "replacement"))
+		cut, err = vNextPublicationCaptureExpectedCut(root, prior, plan)
 		return err
-	}})
+	}}))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -177,7 +180,7 @@ func vNextPublicationExerciseEarlyStageOracle(t *testing.T, mutation string) {
 	if moved == "" || err == nil || !strings.Contains(err.Error(), "identity") {
 		t.Fatalf("actual early-stage cut moved=%q err=%v", moved, err)
 	}
-	if err := vNextPublicationEarlyStageVerdict(root, moved, stage, cut, wantA); err != nil {
+	if err := vNextPublicationEarlyStageVerdict(root, moved, cut, wantA); err != nil {
 		t.Fatalf("true renamed A rejected: %v", err)
 	}
 	if mutation == "changed-bytes" {
@@ -191,7 +194,7 @@ func vNextPublicationExerciseEarlyStageOracle(t *testing.T, mutation string) {
 		}
 		vNextCopyDirectoryForTest(t, original, moved)
 	}
-	if err := vNextPublicationEarlyStageVerdict(root, moved, stage, cut, wantA); err == nil {
-		t.Fatalf("oracle accepted displaced A %s", mutation)
+	if err := vNextPublicationEarlyStageVerdict(root, moved, cut, wantA); err == nil || !strings.Contains(err.Error(), "identity/type/bytes changed") {
+		t.Fatalf("displaced A %s must fail retained witness comparison: %v", mutation, err)
 	}
 }

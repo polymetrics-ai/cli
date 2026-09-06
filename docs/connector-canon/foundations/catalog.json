@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 42,
+  "catalog_revision": 43,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -744,6 +744,26 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_resource_error_test.go",
           "name": "TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_intent_oracle_test.go",
+          "name": "TestCP11FinalPruneOracleRejectsWrongFixture"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_intent_oracle_test.go",
+          "name": "TestCP11PreparedOracleRejectsWrongIntendedPayload"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_intent_oracle_test.go",
+          "name": "TestCP11EarlyStageOracleRejectsChangedNonemptyA"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_intent_oracle_test.go",
+          "name": "TestCP11EarlyStageOracleRejectsSameByteReplacementA"
         }
       ],
       "publication_guarantee_proofs": [
