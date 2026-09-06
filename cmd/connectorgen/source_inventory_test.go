@@ -283,3 +283,84 @@ func TestSourceInventoryRetainsRawDocumentBinding(t *testing.T) {
 		t.Fatalf("raw document retention altered census: rows=%d diagnostics=%v", len(got.Operations), got.Diagnostics)
 	}
 }
+
+func TestSourceInventoryNodeBudget(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	for _, tc := range []struct {
+		name                string
+		document, aggregate int64
+		wantFailure         bool
+	}{
+		{"valid retained counterpart", 1000, 1000, false},
+		{"document exceeded", 1, 1000, true},
+		{"aggregate exceeded", 1000, 1, true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			got := loadRetainedSourceInventoryWithNodeLimits(context.Background(), root, cohort, tc.document, tc.aggregate)
+			if len(got.Operations) != 2 {
+				t.Fatalf("budget refusal removed anchored sources: %+v", got.Operations)
+			}
+			for _, row := range got.Operations {
+				found := false
+				for _, diagnostic := range row.Diagnostics {
+					found = found || diagnostic.Code == "source_node_budget_exceeded"
+				}
+				if tc.wantFailure && (!found || row.Observed) {
+					t.Errorf("readable correctly hashed provider source escaped node budget: %+v", row)
+				}
+				if !tc.wantFailure && (len(row.Diagnostics) != 0 || !row.Observed) {
+					t.Errorf("valid retained counterpart refused: %+v", row)
+				}
+			}
+		})
+	}
+}
+
+func TestSourceInventoryNodeCoordinates(t *testing.T) {
+	// Independent literal count: object + two keys + array + three scalar values.
+	input := []byte(`{"a":[1,2],"b":true}`)
+	for _, limit := range []int64{6, 7, 8} {
+		got, err := countSourceJSONNodes(context.Background(), input, limit)
+		if err != nil || got != 7 {
+			t.Fatalf("node count at limit %d = %d, %v; want 7", limit, got, err)
+		}
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if n, err := countSourceJSONNodes(ctx, input, 1000); err != context.Canceled || n != 0 {
+		t.Fatalf("canceled scanner continued: nodes=%d err=%v", n, err)
+	}
+}
+
+func TestSourceInventoryRetainedNodeBudget(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := os.ReadFile(filepath.Join(root, "data/connector-canon/batch1-source-lane-cohort.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var cohort sourceLaneCohort
+	if err := json.Unmarshal(raw, &cohort); err != nil {
+		t.Fatal(err)
+	}
+	got := loadRetainedSourceInventory(context.Background(), root, cohort)
+	if len(got.Diagnostics) != 0 {
+		t.Fatalf("accepted retained sources failed node limits: %+v", got.Diagnostics)
+	}
+	var total, maximum int64
+	for _, document := range got.Documents {
+		nodes, err := countSourceJSONNodes(context.Background(), document.Payload, 1000000)
+		if err != nil || nodes > 1000000 {
+			t.Fatalf("document %s nodes=%d err=%v", document.ID, nodes, err)
+		}
+		total += nodes
+		maximum = max(maximum, nodes)
+		t.Logf("document=%s charged_nodes=%d", document.ID, nodes)
+	}
+	if total > 8000000 {
+		t.Fatalf("aggregate node budget exceeded: %d", total)
+	}
+	t.Logf("retained_documents=%d aggregate_nodes=%d maximum_document_nodes=%d", len(got.Documents), total, maximum)
+}

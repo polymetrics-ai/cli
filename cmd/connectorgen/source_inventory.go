@@ -93,6 +93,10 @@ type retainedSourceInventory struct {
 // loadRetainedSourceInventory allocates the anchored universe before reading
 // provider evidence. A failed source cannot change that universe.
 func loadRetainedSourceInventory(ctx context.Context, repo string, cohort sourceLaneCohort) retainedSourceInventory {
+	return loadRetainedSourceInventoryWithNodeLimits(ctx, repo, cohort, 1000000, 8000000)
+}
+
+func loadRetainedSourceInventoryWithNodeLimits(ctx context.Context, repo string, cohort sourceLaneCohort, documentLimit, aggregateLimit int64) retainedSourceInventory {
 	result := retainedSourceInventory{Operations: []retainedSourceOperation{}, Documents: []retainedSourceDocument{}, Diagnostics: []sourceLaneDiagnostic{}}
 	if err := validateSourceLaneCohort(cohort); err != nil {
 		result.Diagnostics = append(result.Diagnostics, sourceLaneDiagnostic{Lanes: sourceLaneNames(), Stage: "inventory", Code: "cohort_anchor_invalid", Owner: "batch1", Severity: "error"})
@@ -125,7 +129,22 @@ func loadRetainedSourceInventory(ctx context.Context, repo string, cohort source
 		return result
 	}
 	defer func() { _ = root.Close() }() // Root holds read-only directory authority, no durable writes.
-	var totalBytes int64
+	var totalBytes, totalNodes int64
+	checkNodes := func(data []byte) string {
+		remaining := min(documentLimit, aggregateLimit-totalNodes)
+		nodes, err := countSourceJSONNodes(ctx, data, max(remaining, 0))
+		totalNodes += nodes
+		if err != nil {
+			if ctx.Err() != nil {
+				return "source_canceled"
+			}
+			return "source_invalid"
+		}
+		if nodes > documentLimit || totalNodes > aggregateLimit {
+			return "source_node_budget_exceeded"
+		}
+		return ""
+	}
 	for _, anchor := range cohort.Inventories {
 		base := sourceOperationKey{Connector: anchor.Connector, Inventory: anchor.Inventory}
 		fail := func(code string) {
@@ -165,6 +184,10 @@ func loadRetainedSourceInventory(ctx context.Context, repo string, cohort source
 		}
 		if !validArtifacts {
 			fail("source_artifact_invalid")
+			continue
+		}
+		if code := checkNodes(data); code != "" {
+			fail(code)
 			continue
 		}
 		var envelope map[string]json.RawMessage
@@ -233,12 +256,24 @@ func loadRetainedSourceInventory(ctx context.Context, repo string, cohort source
 			case kind == "text/html":
 				payload, decodeErr = json.Marshal(string(raw))
 			case kind == "application/json":
+				if code := checkNodes(raw); code != "" {
+					fail(code)
+					rawValid = false
+					continue
+				}
 				payload, decodeErr = canonicalSourceJSON(raw)
 			case kind == "application/yaml" || (kind == "" && doc.Artifact.OpenAPI != ""):
 				kind = "application/yaml"
 				payload, decodeErr = sourceYAMLDocument(raw)
 			default:
 				decodeErr = fmt.Errorf("unsupported retained artifact representation")
+			}
+			if decodeErr == nil && kind != "application/json" {
+				if code := checkNodes(payload); code != "" {
+					fail(code)
+					rawValid = false
+					continue
+				}
 			}
 			if decodeErr != nil {
 				rawValid = false
@@ -515,4 +550,40 @@ func sourceLaneRelativePath(value string) bool {
 		}
 	}
 	return true
+}
+
+// countSourceJSONNodes charges containers, scalar values and object member names.
+// The member-name charge also bounds wide-object duplicate-key bookkeeping.
+// It stops after one excess token, before allocating a provider object graph.
+func countSourceJSONNodes(ctx context.Context, data []byte, limit int64) (int64, error) {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	var nodes int64
+	depth := 0
+	for {
+		if err := ctx.Err(); err != nil {
+			return nodes, err
+		}
+		token, err := decoder.Token()
+		if err == io.EOF {
+			return nodes, nil
+		}
+		if err != nil {
+			return nodes, err
+		}
+		if delimiter, ok := token.(json.Delim); ok {
+			if delimiter == '}' || delimiter == ']' {
+				depth--
+				continue
+			}
+			depth++
+			if depth > 256 {
+				return nodes, fmt.Errorf("source nesting limit exceeded")
+			}
+		}
+		nodes++
+		if nodes > limit {
+			return nodes, nil
+		}
+	}
 }
