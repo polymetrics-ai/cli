@@ -529,6 +529,7 @@ func TestSourceLaneBinding099FTemplateControls(t *testing.T) {
 func TestSourceLaneBinding099FSchemaOracle(t *testing.T) {
 	for _, tc := range []struct{ name, source, target, want string }{
 		{"decimal equivalence", `{"const":1}`, `{"const":1.0}`, ""},
+		{"numeric enum equivalence", `{"enum":[1]}`, `{"enum":[1.0]}`, ""},
 		{"number versus numeric-looking string", `{"const":1}`, `{"const":"1e0"}`, "target_schema_mismatch"},
 		{"unknown composition cannot mask known type", `{"type":"string","allOf":[{}]}`, `{"type":"integer"}`, "target_schema_mismatch"},
 		{"external ref remains unknown", `{"$ref":"https://example.invalid/schema"}`, `{"type":"string"}`, "source_schema_unverified"},
@@ -718,6 +719,50 @@ func TestSourceLaneBinding099FOptionalBodyAndSourceErrors(t *testing.T) {
 			}
 			sourceBindingOutcome099F(t, key, facts, a, want, codes...)
 		})
+	}
+}
+
+func TestSourceLaneBinding099FIncompleteCoverage(t *testing.T) {
+	for _, mode := range []string{"schema only", "unknown success response"} {
+		t.Run(mode, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "envelope", nil)
+			code := "target_required_scope_unverified"
+			if mode == "schema only" {
+				r := &a.IntendedBindings[0]
+				r.Kind = "schema"
+				r.ID = "schemas/widgets.json"
+				r.Artifact = "internal/connectors/defs/acme/" + r.ID
+				r.Pointer = ""
+				r.ArtifactSHA256 = sourceBytesHash(facts.bindings.Artifacts[r.Artifact])
+				r.CanonicalPointer = "/operations/0/schema_refs/record"
+				code = "target_executable_coverage_unverified"
+			} else {
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					responses := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)["responses"].(map[string]any)
+					responses["201"] = map[string]any{"description": "Unknown successful response"}
+				})
+			}
+			sourceBindingOutcome099F(t, key, facts, a, 1, code)
+		})
+	}
+}
+
+func TestSourceLaneBinding099FAuthoringCustody(t *testing.T) {
+	root, cohort, _ := sourceBindingRepositoryFixture(t)
+	path := "internal/connectors/defs/acme/source.lock.json"
+	before, err := os.ReadFile(filepath.Join(root, path))
+	if err != nil {
+		t.Fatal(err)
+	}
+	inputs := collectSourceLaneBindings(context.Background(), root, cohort)
+	if !reflect.DeepEqual(inputs.Authoring[path], before) {
+		t.Fatal("collector failed exact separately owned authoring bytes")
+	}
+	if _, exists := inputs.Artifacts[path]; exists {
+		t.Fatal("source lock leaked into execution artifacts")
+	}
+	if len(inputs.Canonical) != 1 || len(inputs.Bundles) != 1 {
+		t.Fatal("authoring observation lost admitted executable counterpart")
 	}
 }
 
