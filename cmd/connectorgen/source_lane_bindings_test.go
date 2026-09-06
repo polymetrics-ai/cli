@@ -13,6 +13,186 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
+const sourceBindingBody099F = `{"type":"object","properties":{"data":{"type":"object","properties":{"name":{"type":"string"}},"required":["name"],"additionalProperties":false}},"required":["data"],"additionalProperties":false}`
+const sourceBindingRecord099F = `{"type":"object","properties":{"id":{"type":"string"}},"required":["id"],"additionalProperties":false}`
+const sourceBindingEnvelope099F = `{"type":"object","properties":{"data":{"type":"array","items":` + sourceBindingRecord099F + `}},"required":["data"],"additionalProperties":false}`
+
+// The source literals above are retained independently of each target and its
+// mutations. Canonicalization and engine.Load must succeed before any oracle.
+func sourceBindingFixture099F(t *testing.T, kind string, change func(*vNextSourceLock)) (sourceOperationKey, sourceFacts, sourceSemanticAnnotation) {
+	t.Helper()
+	lock := minimalVNextLockForTest()
+	method, summary, route := "GET", "Get widgets", "/widgets"
+	opSource := `"responses":{"200":{"content":{"application/json":{"schema":` + sourceBindingEnvelope099F + `}}}}`
+	artifact, id, canonical, field, lane := "streams.json", "widgets", "stream:widgets", "stream", "etl"
+	role := sourceLaneSchemaRecord
+	anchorSuffix := "/responses/200/content/application~1json/schema"
+	if kind == "body" {
+		method, summary, route = "POST", "Create widgets", "/widgets/{id}"
+		opSource = `"parameters":[{"name":"id","in":"path","required":true,"schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":` + sourceBindingBody099F + `}}},"responses":{"204":{"description":"No content"}}`
+		artifact, id, canonical, field, lane = "writes.json", "create_widget", "write:widgets.create", "write", "direct_write"
+		role, anchorSuffix = sourceLaneSchemaRequest, "/requestBody/content/application~1json/schema"
+		lock.Lanes["etl"] = "unsupported"
+		lock.Schemas["schemas/request.json"] = json.RawMessage(`{"type":"object","properties":{"id":{"type":"string"},"data":{"type":"object","properties":{"name":{"type":"string"}},"required":["name"],"additionalProperties":false}},"required":["id","data"],"additionalProperties":false}`)
+		lock.Operations = []vNextOperationDescriptor{{ID: canonical, SchemaRefs: vNextSchemaReferences{Request: "schemas/request.json"}, Write: json.RawMessage(`{"name":"create_widget","kind":"create","method":"POST","path":"/widgets/{{ record.id }}","path_fields":["id"],"body_type":"json","body_required":true,"body_fields":["data"],"record_schema":` + string(lock.Schemas["schemas/request.json"]) + `,"risk":"low"}`)}}
+	} else {
+		lock.Schemas["schemas/widgets.json"] = json.RawMessage(sourceBindingRecord099F)
+	}
+	if change != nil {
+		change(&lock)
+	}
+	descriptor, err := canonicalizeVNextSourceLock(lock)
+	if err != nil {
+		t.Fatalf("fixture must reach semantic binding, admission failed: %v", err)
+	}
+	key := sourceOperationKey{Connector: "acme", Inventory: "primary", ID: "retained.widgets"}
+	node := json.RawMessage(`{"id":"retained.widgets","protocol":"rest","method":"` + method + `","path":"` + route + `","source_operation":{"summary":"` + summary + `",` + opSource + `}}`)
+	doc := retainedSourceDocument{ID: "fixture:099F", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+	facts := normalizeSourceFacts(retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}, doc, nil)
+	facts.bindings = sourceBindingTestInputs(t, map[string][]byte{}, map[string]vNextCanonicalDescriptor{"acme": descriptor})
+	if descriptor.Staged.Identity.Digest == "" || facts.bindings.Bundles["acme"].Name != "acme" {
+		t.Fatal("actual admission/load witness missing")
+	}
+	ref := sourceLaneTargetRef{Kind: field, Connector: "acme", ID: id, Lane: lane, Artifact: "internal/connectors/defs/acme/" + artifact, Pointer: "/streams/0", ArtifactSHA256: sourceBytesHash(descriptor.Staged.Outputs[artifact]), CanonicalID: canonical, CanonicalPointer: "/operations/0/" + field, Generation: descriptor.Staged.Identity.Digest, SchemaRole: role}
+	if kind == "body" {
+		ref.Pointer = "/actions/0"
+	}
+	base := "/rest/operations/0/source_operation"
+	anchor := sourceBindingCitation099F(t, facts, base+anchorSuffix)
+	ref.SourceSchema = &anchor
+	mapField := func(source, target string) sourceLaneFieldMapping {
+		return sourceLaneFieldMapping{Source: sourceBindingCitation099F(t, facts, source), Target: sourceLaneFieldTarget{Kind: sourceLaneFieldSchema, Pointer: &target}}
+	}
+	if kind == "body" {
+		ref.FieldMappings = []sourceLaneFieldMapping{mapField(base+"/parameters/0", "/properties/id"), mapField(anchor.Pointer+"/properties/data", "/properties/data")}
+	} else {
+		ref.FieldMappings = []sourceLaneFieldMapping{mapField(anchor.Pointer+"/properties/data/items", "")}
+	}
+	return key, facts, sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: summary, IntendedBindings: []sourceLaneTargetRef{ref}}
+}
+
+func sourceBindingCitation099F(t *testing.T, facts sourceFacts, pointer string) sourceFactRef {
+	t.Helper()
+	raw, err := sourceJSONPointer(facts.Document, pointer)
+	if err != nil {
+		t.Fatal(err)
+	}
+	canonical, err := canonicalSourceJSON(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return sourceFactRef{DocumentID: "fixture:099F", Pointer: pointer, ValueSHA256: sourceBytesHash(canonical)}
+}
+
+func sourceBindingOutcome099F(t *testing.T, key sourceOperationKey, facts sourceFacts, a sourceSemanticAnnotation, wantAccepted int, wantCodes ...string) sourceLaneCell {
+	t.Helper()
+	cells := classifySourceLanes(key, facts, &a)
+	if len(cells) != 7 {
+		t.Fatalf("lost seven cells: %d", len(cells))
+	}
+	lane := a.IntendedBindings[0].Lane
+	cell := requireSourceLane(t, cells, lane, "applicable")
+	if len(cell.References) != wantAccepted {
+		t.Errorf("accepted=%d want=%d; diagnostics=%+v", len(cell.References), wantAccepted, cell.Diagnostics)
+	}
+	for _, code := range wantCodes {
+		found := false
+		for _, d := range cell.Diagnostics {
+			if d.Code == code {
+				found = true
+				if d.Key != key || d.Stage != "reference" || len(d.Lanes) != 1 || d.Lanes[0] != lane {
+					t.Errorf("wrong diagnostic scope: %+v", d)
+				}
+			}
+		}
+		if !found {
+			t.Errorf("want %s; got %+v", code, cell.Diagnostics)
+		}
+	}
+	if cell.State != "mapped_unproven" || len(cell.ProofRefs) != 0 {
+		t.Errorf("binding promoted behavior: %+v", cell)
+	}
+	return cell
+}
+
+func TestSourceLaneBinding099FBodyAndEnvelope(t *testing.T) {
+	for _, kind := range []string{"body", "envelope"} {
+		t.Run(kind, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, kind, nil)
+			cell := sourceBindingOutcome099F(t, key, facts, a, 1)
+			if len(cell.Diagnostics) != 0 {
+				t.Errorf("complete literal counterpart has diagnostics: %+v", cell.Diagnostics)
+			}
+			if len(cell.References) == 1 && !sourceLaneTargetRefEqual(cell.References[0], a.IntendedBindings[0]) {
+				t.Error("accepted identity/projection changed")
+			}
+		})
+	}
+	for _, tc := range []struct{ name, old, new string }{
+		{"nested required omitted", `"required":["name"]`, `"required":[]`},
+		{"nested type changed", `"name":{"type":"string"}`, `"name":{"type":"integer"}`},
+		{"body field omitted", `"body_fields":["data"]`, `"body_fields":["id"]`},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "body", func(lock *vNextSourceLock) {
+				lock.Operations[0].Write = json.RawMessage(strings.ReplaceAll(string(lock.Operations[0].Write), tc.old, tc.new))
+				lock.Schemas["schemas/request.json"] = json.RawMessage(strings.ReplaceAll(string(lock.Schemas["schemas/request.json"]), tc.old, tc.new))
+			})
+			code := "target_schema_mismatch"
+			if tc.name == "body field omitted" {
+				code = "target_body_projection_mismatch"
+			}
+			sourceBindingOutcome099F(t, key, facts, a, 0, code)
+		})
+	}
+	for _, tc := range []struct {
+		name   string
+		change func(*sourceLaneTargetRef)
+	}{
+		{"wrong role", func(r *sourceLaneTargetRef) { r.SchemaRole = sourceLaneSchemaRequest }},
+		{"envelope mistaken for item", func(r *sourceLaneTargetRef) { r.FieldMappings[0].Source = *r.SourceSchema }},
+		{"false raw citation digest", func(r *sourceLaneTargetRef) { r.SourceSchema.ValueSHA256 = strings.Repeat("0", 64) }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "envelope", nil)
+			tc.change(&a.IntendedBindings[0])
+			code := "target_schema_role_mismatch"
+			if tc.name == "envelope mistaken for item" {
+				code = "target_record_projection_mismatch"
+			}
+			if tc.name == "false raw citation digest" {
+				code = "source_binding_citation_mismatch"
+			}
+			sourceBindingOutcome099F(t, key, facts, a, 0, code)
+		})
+	}
+}
+
+func TestSourceLaneBinding099FSiblingScopes(t *testing.T) {
+	for _, badFirst := range []bool{false, true} {
+		t.Run(strconv.FormatBool(badFirst), func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "envelope", nil)
+			good := canonicalSourceLaneTargetRef(a.IntendedBindings[0])
+			bad := canonicalSourceLaneTargetRef(good)
+			bad.ID = "absent"
+			a.IntendedBindings = []sourceLaneTargetRef{good, bad}
+			if badFirst {
+				a.IntendedBindings = []sourceLaneTargetRef{bad, good}
+			}
+			cell := sourceBindingOutcome099F(t, key, facts, a, 1, "target_absent")
+			if len(cell.References) == 1 && !sourceLaneTargetRefEqual(cell.References[0], good) {
+				t.Error("wrong sibling accepted")
+			}
+			if len(cell.References) == 1 {
+				*cell.References[0].FieldMappings[0].Target.Pointer = "changed"
+				if *good.FieldMappings[0].Target.Pointer != "" {
+					t.Error("accepted ref aliases caller memory")
+				}
+			}
+		})
+	}
+}
+
 func TestSourceLaneBindingClaims(t *testing.T) {
 	const artifact = "internal/connectors/defs/fixture/operations.json"
 	raw := []byte(`{"operations":[{"id":"read_widget","kind":"rest_read","rest":{"method":"GET","path":"/widgets/{id}"}},{"id":"other_widget","kind":"rest_read","rest":{"method":"GET","path":"/other/{id}"}}]}`)
