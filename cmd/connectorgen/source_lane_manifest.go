@@ -116,6 +116,17 @@ func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort so
 		proofs = loadSourceLaneProofs(ctx, repo, policy, sourceLaneProofCatalog{})
 	}
 	result.Diagnostics = append(result.Diagnostics, proofs.Diagnostics...)
+	var demandAtlasOwners map[string]string
+	for _, annotation := range annotations {
+		if annotation.FoundationGap != "" {
+			var pin sourceArtifactPin
+			demandAtlasOwners, pin = loadSourceDemandAtlas(ctx, repo)
+			if pin.Path != "" {
+				result.Inputs = append(result.Inputs, pin)
+			}
+			break
+		}
+	}
 	bindings := collectSourceLaneBindings(ctx, repo, cohort)
 	for _, source := range inventory.Operations {
 		for _, observation := range bindings.Observations {
@@ -149,6 +160,7 @@ func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort so
 			}
 			result.Diagnostics = append(result.Diagnostics, sourceLaneDiagnostic{Key: source.Key, Lanes: sourceLaneNames(), Stage: "normalization", Code: code, Pointer: source.Pointer, Owner: source.Key.Connector, Severity: severity})
 		}
+		facts.demandAtlasOwners = demandAtlasOwners
 		facts.bindings = &bindings
 		annotation := annotationIndex[source.Key]
 		cells := classifySourceLanes(source.Key, facts, annotation)

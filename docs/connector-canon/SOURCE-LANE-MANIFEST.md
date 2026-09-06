@@ -62,6 +62,15 @@ report. A short or failed stdout write fails the command.
   Shared reviewed input sets avoid repeating the full dependency closure for
   every record; an empty file does not establish behavioral coverage.
 
+A confirmed receiver-demand annotation must join the source-owned authoring
+catalog's exact retained operation, file identity, registration and request/event
+citations, actual Atlas owner and complete duplicate-free decision-owner set.
+The catalog records the existing demand attribution; receiver implementation and
+exposure decisions remain pending. Copied labels cannot create another confirmed
+gap. With no gap annotation, registration remains unresolved for CP13. The report
+reads and pins `foundations/catalog.json` once when a gap is asserted; runtime
+execution does not consume this input or the demand catalog.
+
 A retained-document record separates its actual file hash/size from an upstream
 hash/size declared in that file. `upstream_bytes_verified` is true only when the
 corresponding raw bytes were read and verified. Each source row points into its

@@ -31,6 +31,8 @@ type sourceParameterFact struct {
 type sourceFacts struct {
 	CoverageConfidence string                     `json:"coverage_confidence"`
 	CompletenessLimits []string                   `json:"completeness_limits"`
+	retainedDocument   sourceArtifactPin          `json:"-"`
+	demandAtlasOwners  map[string]string          `json:"-"`
 	referenceRoot      any                        `json:"-"`
 	bindings           *sourceLaneBindingInputs   `json:"-"`
 	analysis           *sourceShapeAnalysis       `json:"-"`
@@ -66,7 +68,7 @@ func normalizeSourceFactsObserved(row retainedSourceOperation, doc retainedSourc
 		facts.CompletenessLimits = []string{"retained_snapshot_only_not_current_provider_completeness"}
 		facts.CompletenessLimits = append(facts.CompletenessLimits, facts.Diagnostics...)
 	}()
-	facts = sourceFacts{Parameters: []sourceParameterFact{}, Status: "unavailable", Groups: map[string]json.RawMessage{}, Refs: map[string]sourceFactRef{}, Diagnostics: []string{}, Document: doc.Payload, RefPrefix: "/source_contract"}
+	facts = sourceFacts{retainedDocument: sourceArtifactPin{Path: doc.Path, SHA256: doc.RetainedFileSHA256, Bytes: doc.Bytes}, Parameters: []sourceParameterFact{}, Status: "unavailable", Groups: map[string]json.RawMessage{}, Refs: map[string]sourceFactRef{}, Diagnostics: []string{}, Document: doc.Payload, RefPrefix: "/source_contract"}
 	if !row.Observed {
 		facts.Diagnostics = append(facts.Diagnostics, "source_unavailable")
 		return facts

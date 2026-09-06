@@ -291,7 +291,6 @@ func validateSourceAnnotation(key sourceOperationKey, facts sourceFacts, a sourc
 	if err := json.Unmarshal(cited, &text); err != nil || !strings.Contains(text, a.Clause) {
 		return fmt.Errorf("annotation clause absent")
 	}
-	words := strings.ToLower(a.Clause)
 	if a.Semantics != "" && sourceActionSemantics(a.Clause) != a.Semantics {
 		return fmt.Errorf("semantic interpretation lacks affirmative cited support")
 	}
@@ -301,8 +300,8 @@ func validateSourceAnnotation(key sourceOperationKey, facts sourceFacts, a sourc
 	if a.Semantics == "mutation" && (facts.Method == "GET" || facts.Method == "HEAD") {
 		return fmt.Errorf("mutation conflicts with safe read contract")
 	}
-	if a.FoundationGap != "" && (a.FoundationGap != "cli-webhook-event-surface-foundation-r1" || a.AtlasID != "transport.sync-contract.v1" || len(a.DecisionRefs) == 0 || !strings.Contains(words, "webhook")) {
-		return fmt.Errorf("unrecognized or uncited foundation demand")
+	if a.FoundationGap != "" {
+		return validateSourceFoundationDemand(key, facts, a)
 	}
 	return nil
 }

@@ -363,7 +363,8 @@
         "An identity-known incomplete authority record is disposed only through its retained identity before its single Close. A complete bound record remains authority despite a completion error. Unknown or replaced records remain forensic residue; recovery never accepts arbitrary malformed authority.",
         "Nested recursive descriptor proof covers Recover of an owned stage, Prune of a stale generation, and Publish initial recovery. Its post-Stat injection proves actual opened-child Close and retained nested bytes/outer root; it does not claim natural Stat failure, whole-tree atomic deletion, a retained pre-operation child identity, or final-Publish nested pruning. The separate final-prune lease tests retain their own scope.",
         "Retained source membership comes from exact pinned cohort keys; missing inputs retain anchored rows and seven unresolved cells, with expected and observed totals separate. Report consistency and schema validity do not establish executable capability.",
-        "Source-lanes generation buffers a complete report to stdout; check compares a confined candidate without writing. Its report, inventory, annotations and behavioral-proof records are authoring-only and never runtime inputs."
+        "Source-lanes generation buffers a complete report to stdout; check compares a confined candidate without writing. Its report, inventory, annotations and behavioral-proof records are authoring-only and never runtime inputs.",
+        "The source-lanes report grants confirmed receiver-demand attribution only through an annotation-triggered exact join to its source-owned demand catalog, retained operation/citation identities, the consumed Atlas owner and the duplicate-free existing decision-owner set. Pending receiver and exposure decisions remain pending; this grants no executable capability."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -948,6 +949,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_manifest_test.go",
           "name": "TestSourceLaneManifestProviderFactCounterexamples"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_demand_test.go",
+          "name": "TestSourceLane118DemandCannotBorrowAuthority"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_demand_test.go",
+          "name": "TestSourceLane118DemandActualBuilder"
         }
       ],
       "publication_guarantee_proofs": [
