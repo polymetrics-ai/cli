@@ -1062,6 +1062,143 @@
           ]
         }
       }
+    },
+    "response_interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "collection",
+            "single_resource"
+          ]
+        },
+        "response_schema": {
+          "$ref": "#/$defs/json_fact_ref"
+        },
+        "records_pointer": {
+          "type": "string",
+          "pattern": "^(/([^~/]|~[01])*){0,256}$"
+        },
+        "citation": {
+          "$ref": "#/$defs/json_fact_ref"
+        },
+        "clause": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "response_schema",
+        "citation",
+        "clause"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "collection"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "records_pointer"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "records_pointer"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "source_annotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/key"
+        },
+        "semantics": {
+          "enum": [
+            "",
+            "read",
+            "mutation"
+          ]
+        },
+        "citation": {
+          "$ref": "#/$defs/json_fact_ref"
+        },
+        "clause": {
+          "type": "string",
+          "minLength": 1
+        },
+        "foundation_gap": {
+          "type": "string"
+        },
+        "atlas_id": {
+          "type": "string"
+        },
+        "decision_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "intended_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/target_ref"
+          }
+        },
+        "materialized_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/target_ref"
+          }
+        },
+        "graphql": {
+          "$ref": "#/$defs/graphql_refs"
+        },
+        "response_interpretations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/response_interpretation"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "key",
+        "citation",
+        "clause"
+      ]
+    },
+    "annotation_envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_annotation"
+          }
+        }
+      },
+      "required": [
+        "schema_version",
+        "annotations"
+      ]
     }
   }
 }

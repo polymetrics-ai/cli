@@ -56,7 +56,8 @@
           "cmd/connectorgen/source_lane_bindings.go",
           "cmd/connectorgen/source_lane_proof.go",
           "cmd/connectorgen/source_lane_manifest.go",
-          "cmd/connectorgen/source_lane_cli.go"
+          "cmd/connectorgen/source_lane_cli.go",
+          "cmd/connectorgen/source_lane_collection.go"
         ],
         "symbols": [
           {
@@ -246,6 +247,14 @@
           {
             "file": "cmd/connectorgen/source_lane_bindings.go",
             "name": "sourceLaneProjectionContract"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_collection.go",
+            "name": "applySourceResponseInterpretations"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_collection.go",
+            "name": "validateSourceLaneInterpretationEvidence"
           }
         ]
       },
@@ -364,7 +373,8 @@
         "Nested recursive descriptor proof covers Recover of an owned stage, Prune of a stale generation, and Publish initial recovery. Its post-Stat injection proves actual opened-child Close and retained nested bytes/outer root; it does not claim natural Stat failure, whole-tree atomic deletion, a retained pre-operation child identity, or final-Publish nested pruning. The separate final-prune lease tests retain their own scope.",
         "Retained source membership comes from exact pinned cohort keys; missing inputs retain anchored rows and seven unresolved cells, with expected and observed totals separate. Report consistency and schema validity do not establish executable capability.",
         "Source-lanes generation buffers a complete report to stdout; check compares a confined candidate without writing. Its report, inventory, annotations and behavioral-proof records are authoring-only and never runtime inputs.",
-        "The source-lanes report grants confirmed receiver-demand attribution only through an annotation-triggered exact join to its source-owned demand catalog, retained operation/citation identities, the consumed Atlas owner and the duplicate-free existing decision-owner set. Pending receiver and exposure decisions remain pending; this grants no executable capability."
+        "The source-lanes report grants confirmed receiver-demand attribution only through an annotation-triggered exact join to its source-owned demand catalog, retained operation/citation identities, the consumed Atlas owner and the duplicate-free existing decision-owner set. Pending receiver and exposure decisions remain pending; this grants no executable capability.",
+        "Source-lane collection cardinality is independent from binary shape; ambiguous envelopes require exact successful-response interpretations with separate instance record pointers and literal source/support/array/item citations. Unknown sibling scopes retain deficits, and an independent retained-source/original-annotation check prevents generated agreement from supplying interpretation authority."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -959,6 +969,21 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_demand_test.go",
           "name": "TestSourceLane118DemandActualBuilder"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection_test.go",
+          "name": "TestSourceLane122ReviewedCollectionSeeds"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection_test.go",
+          "name": "TestSourceLane122ResponseOccurrenceCustody"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection_test.go",
+          "name": "TestSourceLane122IndependentInterpretationEvidence"
         }
       ],
       "publication_guarantee_proofs": [

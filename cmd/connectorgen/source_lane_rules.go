@@ -146,6 +146,8 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 	var collectionIssues []sourceLaneDiagnostic
 	if annotationValid && annotation != nil && len(annotation.ResponseInterpretations) > 0 {
 		response.Cardinality, collectionRefs, collectionIssues = applySourceResponseInterpretations(key, facts, semantics, annotation.ResponseInterpretations)
+	} else if semantics == "read" {
+		_, _, collectionIssues = applySourceResponseInterpretations(key, facts, semantics, nil)
 	}
 	request := sourceRequestShape(facts)
 	if facts.analysis.Exhausted {
@@ -319,6 +321,7 @@ func validateSourceAnnotation(key sourceOperationKey, facts sourceFacts, a sourc
 
 type sourceShape struct {
 	Known, Binary bool
+	Envelope      bool
 	Cardinality   sourceCollectionKind
 }
 
@@ -452,6 +455,7 @@ func sourceContentShape(facts sourceFacts, raw json.RawMessage) sourceShape {
 			shape := sourceSchemaShape(facts, entry["schema"], map[string]bool{}, 0)
 			result.Known = result.Known && shape.Known
 			result.Binary = result.Binary || shape.Binary
+			result.Envelope = result.Envelope || shape.Envelope
 			result.Cardinality = mergeSourceCollection(result.Cardinality, shape.Cardinality)
 		}
 	}
@@ -479,6 +483,9 @@ func sourceResolveObject(facts sourceFacts, raw json.RawMessage, seen map[string
 	}
 	var ref string
 	if rawRef, exists := node["$ref"]; exists {
+		if !sourceReferenceAnnotationSiblings(node) {
+			return nil, false
+		}
 		if err := json.Unmarshal(rawRef, &ref); err != nil || !strings.HasPrefix(ref, "#/") || seen[ref] {
 			return nil, false
 		}
@@ -561,7 +568,11 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 	var props map[string]json.RawMessage
 	closedObject := (typ == "object" || len(node["properties"]) > 0) && string(node["additionalProperties"]) == "false"
 	fixedProperties := true
-	if len(node["properties"]) > 0 && json.Unmarshal(node["properties"], &props) == nil {
+	if len(node["properties"]) > 0 && (json.Unmarshal(node["properties"], &props) != nil || props == nil) {
+		fixedProperties = false
+		unresolved = true
+	}
+	if props != nil {
 		propertyKeys := make([]string, 0, len(props))
 		for name := range props {
 			propertyKeys = append(propertyKeys, name)
@@ -618,6 +629,7 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 	if cardinalityUnresolved {
 		result.Cardinality = sourceCollectionUnknown
 	}
+	result.Envelope = result.Cardinality == sourceCollectionUnknown && (typ == "object" || (typ == "" && len(node["properties"]) > 0))
 	if facts.analysis != nil {
 		facts.analysis.Shapes[cacheKey] = result
 	}

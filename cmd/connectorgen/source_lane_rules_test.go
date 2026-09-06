@@ -460,7 +460,7 @@ func TestSourceLane118CompositionUnknownPersists(t *testing.T) {
 		name, schema string
 		known        bool
 	}{
-		{"known standalone composition", `{"allOf":[{"type":"object","properties":{"id":{"type":"string"}}}]}`, true},
+		{"known standalone composition", `{"allOf":[{"type":"object","additionalProperties":false,"properties":{"id":{"type":"string"}}}]}`, true},
 		{"external property", `{"type":"object","properties":{"detail":{"$ref":"https://example.invalid/schema"}},"allOf":[{"type":"object"}]}`, false},
 		{"missing local property", `{"type":"object","properties":{"detail":{"$ref":"#/components/schemas/Absent"}},"anyOf":[{"type":"object"}]}`, false},
 		{"unknown earlier composition", `{"allOf":[{"$ref":"https://example.invalid/schema"}],"oneOf":[{"type":"object"}]}`, false},

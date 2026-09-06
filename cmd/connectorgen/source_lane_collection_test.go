@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"reflect"
 	"testing"
 )
 
@@ -13,6 +15,11 @@ func TestSourceLane122RetainedCollectionBoundary(t *testing.T) {
 		{"unfamiliar envelope", `{"type":"object","properties":{"templates":{"type":"array","items":{"type":"object"}}}}`, "undetermined"},
 		{"familiar metadata envelope", `{"type":"object","properties":{"data":{"type":"array","items":{"type":"object"}}}}`, "undetermined"},
 		{"bare object", `{"type":"object"}`, "undetermined"},
+		{"malformed closed properties", `{"type":"object","additionalProperties":false,"properties":[]}`, "undetermined"},
+		{"null closed properties", `{"type":"object","additionalProperties":false,"properties":null}`, "undetermined"},
+		{"agreeing array alternatives", `{"oneOf":[{"type":"array","items":{"type":"object"}},{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"}}}}]}`, "applicable"},
+		{"agreeing scalar alternatives", `{"anyOf":[{"type":"string"},{"type":"number"}]}`, "not_applicable"},
+		{"closed nested metadata", `{"type":"object","additionalProperties":false,"properties":{"meta":{"type":"object","additionalProperties":false,"properties":{"count":{"type":"integer"}}}}}`, "not_applicable"},
 		{"closed scalar object", `{"type":"object","additionalProperties":false,"properties":{"id":{"type":"string"}}}`, "not_applicable"},
 		{"root records unknown field", `{"type":"array","items":{"type":"object","properties":{"detail":{"$ref":"https://example.invalid/schema"}}}}`, "applicable"},
 		{"mixed alternatives", `{"oneOf":[{"type":"array","items":{"type":"object"}},{"type":"string"}]}`, "undetermined"},
@@ -123,6 +130,9 @@ func TestSourceLane122ReviewedCollectionSeeds(t *testing.T) {
 						}
 						for _, c := range r.Lanes {
 							if c.Lane == "etl" {
+								if !present && !proofHasDiagnostic(c.Diagnostics, "source_collection_interpretation_missing", "deficit") {
+									t.Errorf("%s missing explicit source interpretation diagnostic", tc.id)
+								}
 								if c.Applicability != want {
 									t.Errorf("%s interpretation=%v ETL=%s want %s", tc.id, present, c.Applicability, want)
 								}
@@ -248,6 +258,367 @@ func TestSourceLane122InterpretationContracts(t *testing.T) {
 							t.Fatal("interpretation fabricated behavior proof")
 						}
 					}
+				}
+			}
+		})
+	}
+}
+
+func sourceCollection122Fixture(t *testing.T, schemaJSON, contractJSON string) (string, sourceLaneCohort, sourceOperationKey, sourceFacts, sourceFactRef) {
+	t.Helper()
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	raw, err := os.ReadFile(filepath.Join(root, "source.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc map[string]any
+	if err = json.Unmarshal(raw, &doc); err != nil {
+		t.Fatal(err)
+	}
+	var schema any
+	if err = json.Unmarshal([]byte(schemaJSON), &schema); err != nil {
+		t.Fatal(err)
+	}
+	for _, row := range doc["rest"].(map[string]any)["operations"].([]any) {
+		row.(map[string]any)["source_operation"] = map[string]any{"summary": "List primary and secondary records", "responses": map[string]any{"200": map[string]any{"content": map[string]any{"application/json": map[string]any{"schema": schema}}}}}
+	}
+	if contractJSON != "" {
+		var contract any
+		if err = json.Unmarshal([]byte(contractJSON), &contract); err != nil {
+			t.Fatal(err)
+		}
+		doc["source_contract"] = contract
+	}
+	raw, err = json.Marshal(doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	proofWrite(t, root, "source.json", raw)
+	cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+	inventory := loadRetainedSourceInventory(context.Background(), root, cohort)
+	if len(inventory.Documents) != 1 || len(inventory.Operations) != 2 || !inventory.Operations[0].Observed {
+		t.Fatal("lineage fixture did not pass source loading")
+	}
+	row := inventory.Operations[0]
+	facts := normalizeSourceFacts(row, inventory.Documents[0], nil)
+	schemaRaw, _ := json.Marshal(schema)
+	ref := sourceFactRef{DocumentID: "fixture:primary", Pointer: "/rest/operations/0/source_operation/responses/200/content/application~1json/schema", ValueSHA256: sourceBytesHash(schemaRaw)}
+	return root, cohort, row.Key, facts, ref
+}
+
+func TestSourceLane122InterpretationLineage(t *testing.T) {
+	for _, tc := range []struct {
+		name, schema, contract, path, kind, want string
+		valid                                    bool
+	}{
+		{"deeper", `{"type":"object","properties":{"outer":{"type":"object","properties":{"records":{"type":"array","items":{"type":"object"}}}}}}`, "", "/outer/records", "collection", "applicable", true},
+		{"escaped", `{"type":"object","properties":{"a/b~c":{"type":"array","items":{"type":"object"}}}}`, "", "/a~1b~0c", "collection", "applicable", true},
+		{"local schema", `{"$ref":"#/components/schemas/Envelope"}`, `{"components":{"schemas":{"Envelope":{"type":"object","properties":{"data":{"type":"array","items":{"type":"object"}}}}}}}`, "/data", "collection", "applicable", true},
+		{"external", `{"$ref":"https://example.invalid/schema"}`, "", "/data", "collection", "undetermined", true},
+		{"cycle", `{"$ref":"#/components/schemas/Cycle"}`, `{"components":{"schemas":{"Cycle":{"$ref":"#/components/schemas/Cycle"}}}}`, "/data", "collection", "undetermined", true},
+		{"scalar wrapper", `{"type":"string","properties":{"data":{"type":"array","items":{"type":"object"}}}}`, "", "/data", "collection", "undetermined", false},
+		{"single unknown conjunction", `{"type":"object","allOf":[{"$ref":"https://example.invalid/schema"}]}`, "", "", "single_resource", "undetermined", true},
+		{"unrelated support", `{"type":"object","properties":{"data":{"type":"array","items":{"type":"object"}},"count":{"type":"integer","description":"Count of metadata values"}}}`, "", "/data", "collection", "undetermined", false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			root, cohort, key, facts, ref := sourceCollection122Fixture(t, tc.schema, tc.contract)
+			interpretation := sourceResponseInterpretation{Kind: tc.kind, ResponseSchema: ref, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary")}
+			if tc.kind == "collection" {
+				path := tc.path
+				interpretation.RecordsPointer = &path
+			}
+			if tc.name == "unrelated support" {
+				pointer := ref.Pointer + "/properties/count/description"
+				value := json.RawMessage(`"Count of metadata values"`)
+				interpretation.Citation = sourceFactRef{DocumentID: ref.DocumentID, Pointer: pointer, ValueSHA256: sourceBytesHash(value)}
+				interpretation.Clause = "Count of metadata values"
+			}
+			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary"), ResponseInterpretations: []sourceResponseInterpretation{interpretation}}
+			got, err := buildSourceLaneManifest(context.Background(), root, cohort, []sourceSemanticAnnotation{a})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if (got.Validation.Status == "valid") != tc.valid {
+				t.Errorf("lineage validation=%s want valid=%v", got.Validation.Status, tc.valid)
+			}
+			for _, r := range got.SourceOperations {
+				if r.Source.Key == key {
+					requireSourceLane(t, r.Lanes, "etl", tc.want)
+					requireSourceLane(t, r.Lanes, "direct_read", "applicable")
+				}
+			}
+		})
+	}
+}
+
+func TestSourceLane122InterpretationOrder(t *testing.T) {
+	root, cohort, key, facts, ref := sourceCollection122Fixture(t, `{"type":"object","properties":{"data":{"type":"array","items":{"type":"object"}},"other":{"type":"array","items":{"type":"object"}}}}`, "")
+	a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary")}
+	for _, path := range []string{"/data", "/other"} {
+		p := path
+		a.ResponseInterpretations = append(a.ResponseInterpretations, sourceResponseInterpretation{Kind: "collection", ResponseSchema: ref, RecordsPointer: &p, Citation: a.Citation, Clause: a.Clause})
+	}
+	first, err := buildSourceLaneManifest(context.Background(), root, cohort, []sourceSemanticAnnotation{a})
+	if err != nil {
+		t.Fatal(err)
+	}
+	a.ResponseInterpretations[0], a.ResponseInterpretations[1] = a.ResponseInterpretations[1], a.ResponseInterpretations[0]
+	second, err := buildSourceLaneManifest(context.Background(), root, cohort, []sourceSemanticAnnotation{a})
+	if err != nil {
+		t.Fatal(err)
+	}
+	left, _ := json.Marshal(first)
+	right, _ := json.Marshal(second)
+	if string(left) != string(right) {
+		t.Fatal("interpretation permutation changes complete manifest bytes")
+	}
+}
+
+func TestSourceLane122IndependentInterpretationEvidence(t *testing.T) {
+	for _, which := range []string{"wrong literal hash", "omitted required citation", "unbacked interpreted claim"} {
+		t.Run(which, func(t *testing.T) {
+			schema := `{"type":"object","properties":{"data":{"type":"array","items":{"type":"object"}}}}`
+			if which == "unbacked interpreted claim" {
+				schema = `{"type":"array","items":{"type":"object"}}`
+			}
+			root, cohort, key, facts, ref := sourceCollection122Fixture(t, schema, "")
+			path := "/data"
+			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary"), ResponseInterpretations: []sourceResponseInterpretation{{Kind: "collection", ResponseSchema: ref, RecordsPointer: &path, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary")}}}
+			annotations := []sourceSemanticAnnotation{a}
+			if which == "unbacked interpreted claim" {
+				annotations = nil
+			}
+			expected, err := buildSourceLaneManifest(context.Background(), root, cohort, annotations)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if expected.Validation.Status != "valid" {
+				t.Fatal("independent evidence fixture was not valid")
+			}
+			for i := range expected.SourceOperations {
+				if expected.SourceOperations[i].Source.Key == key {
+					for j := range expected.SourceOperations[i].Lanes {
+						c := &expected.SourceOperations[i].Lanes[j]
+						if c.Lane != "etl" {
+							continue
+						}
+						if c.Applicability != "applicable" {
+							t.Fatal("fixture did not reach collection")
+						}
+						switch which {
+						case "wrong literal hash":
+							for k := range c.FactRefs {
+								if c.FactRefs[k].Pointer == ref.Pointer {
+									c.FactRefs[k].ValueSHA256 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+								}
+							}
+						case "omitted required citation":
+							c.FactRefs = nil
+						case "unbacked interpreted claim":
+							c.RuleID = "source_response_interpretation"
+						}
+					}
+				}
+			}
+			// Both producer-shaped values agree on the same wrong claim. The validator
+			// must use retained documents and original authoring input, not that agreement.
+			raw, _ := json.Marshal(expected)
+			var candidate sourceLaneManifest
+			if err = json.Unmarshal(raw, &candidate); err != nil {
+				t.Fatal(err)
+			}
+			found := false
+			for _, d := range validateSourceLaneManifest(candidate, expected) {
+				if d.Code == "source_collection_citation_invalid" || d.Code == "source_collection_citation_missing" || d.Code == "source_collection_authority_missing" {
+					found = true
+				}
+			}
+			if !found {
+				t.Fatal("independent validator trusted matching incorrect produced interpretation evidence")
+			}
+		})
+	}
+}
+
+func TestSourceLane122ResponseOccurrenceCustody(t *testing.T) {
+	for _, mode := range []string{"local response", "request clone", "error clone", "component clone", "foreign operation", "unknown success sibling", "unknown media sibling"} {
+		t.Run(mode, func(t *testing.T) {
+			root, cohort, _, _, _ := sourceCollection122Fixture(t, `{"type":"object","properties":{"records":{"type":"array","items":{"type":"object"}}}}`, "")
+			raw, err := os.ReadFile(filepath.Join(root, "source.json"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			var doc map[string]any
+			if err := json.Unmarshal(raw, &doc); err != nil {
+				t.Fatal(err)
+			}
+			op := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)
+			responses := op["responses"].(map[string]any)
+			response := responses["200"].(map[string]any)
+			schema := response["content"].(map[string]any)["application/json"].(map[string]any)["schema"]
+			pointer := "/rest/operations/0/source_operation/responses/200/content/application~1json/schema"
+			unknownPointer := ""
+			switch mode {
+			case "local response":
+				doc["source_contract"] = map[string]any{"components": map[string]any{"responses": map[string]any{"Page": response}}}
+				responses["200"] = map[string]any{"$ref": "#/components/responses/Page"}
+				pointer = "/source_contract/components/responses/Page/content/application~1json/schema"
+			case "request clone":
+				op["requestBody"] = response
+				pointer = "/rest/operations/0/source_operation/requestBody/content/application~1json/schema"
+			case "error clone":
+				responses["400"] = response
+				pointer = "/rest/operations/0/source_operation/responses/400/content/application~1json/schema"
+			case "component clone":
+				doc["source_contract"] = map[string]any{"components": map[string]any{"schemas": map[string]any{"Clone": schema}}}
+				pointer = "/source_contract/components/schemas/Clone"
+			case "foreign operation":
+				pointer = "/rest/operations/1/source_operation/responses/200/content/application~1json/schema"
+			case "unknown success sibling":
+				responses["201"] = map[string]any{"$ref": "https://example.invalid/response"}
+				unknownPointer = "/rest/operations/0/source_operation/responses/201"
+			case "unknown media sibling":
+				response["content"].(map[string]any)["application/xml"] = map[string]any{"schema": map[string]any{"$ref": "https://example.invalid/schema"}}
+				unknownPointer = "/rest/operations/0/source_operation/responses/200/content/application~1xml/schema"
+			}
+			raw, err = json.Marshal(doc)
+			if err != nil {
+				t.Fatal(err)
+			}
+			proofWrite(t, root, "source.json", raw)
+			cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+			inventory := loadRetainedSourceInventory(context.Background(), root, cohort)
+			if len(inventory.Operations) != 2 || !inventory.Operations[0].Observed {
+				t.Fatal("source occurrence fixture not reached")
+			}
+			row := inventory.Operations[0]
+			facts := normalizeSourceFacts(row, inventory.Documents[0], nil)
+			literal, err := json.Marshal(schema)
+			if err != nil {
+				t.Fatal(err)
+			}
+			path := "/records"
+			a := sourceSemanticAnnotation{Key: row.Key, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary"), ResponseInterpretations: []sourceResponseInterpretation{{Kind: "collection", ResponseSchema: sourceFactRef{DocumentID: "fixture:primary", Pointer: pointer, ValueSHA256: sourceBytesHash(literal)}, RecordsPointer: &path, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary")}}}
+			got, err := buildSourceLaneManifest(context.Background(), root, cohort, []sourceSemanticAnnotation{a})
+			if err != nil {
+				t.Fatal(err)
+			}
+			valid := mode == "local response" || unknownPointer != ""
+			if (got.Validation.Status == "valid") != valid {
+				t.Fatalf("validation=%s want valid=%v", got.Validation.Status, valid)
+			}
+			if len(got.SourceOperations) != 2 || got.SourceTotals.Cells != 14 {
+				t.Fatal("source membership changed")
+			}
+			for _, result := range got.SourceOperations {
+				if result.Source.Key != row.Key {
+					continue
+				}
+				want := "undetermined"
+				if valid {
+					want = "applicable"
+				}
+				cell := requireSourceLane(t, result.Lanes, "etl", want)
+				requireSourceLane(t, result.Lanes, "direct_read", "applicable")
+				if valid {
+					found := false
+					for _, ref := range cell.FactRefs {
+						found = found || ref == a.ResponseInterpretations[0].ResponseSchema
+					}
+					if !found {
+						t.Fatal("lost literal successful response occurrence")
+					}
+				}
+				if unknownPointer != "" {
+					found := false
+					for _, d := range cell.Diagnostics {
+						found = found || (d.Code == "source_collection_scope_unknown" && d.Pointer == unknownPointer && d.Severity == "deficit")
+					}
+					if !found {
+						t.Fatalf("lost unknown sibling at %s: %+v", unknownPointer, cell.Diagnostics)
+					}
+				}
+				if cell.State == "implemented" || len(cell.ProofRefs) != 0 || len(cell.References) != 0 {
+					t.Fatal("interpretation promoted executable proof")
+				}
+			}
+		})
+	}
+}
+
+func TestSourceLane122CLIInterpretationReader(t *testing.T) {
+	root, cohort, key, facts, ref := sourceCollection122Fixture(t, `{"type":"object","properties":{"records":{"type":"array","items":{"type":"object"}}}}`, "")
+	path := "/records"
+	a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary"), ResponseInterpretations: []sourceResponseInterpretation{{Kind: "collection", ResponseSchema: ref, RecordsPointer: &path, Citation: facts.Refs["summary"], Clause: sourceFactText(facts, "summary")}}}
+	cohortRaw, err := json.Marshal(cohort)
+	if err != nil {
+		t.Fatal(err)
+	}
+	proofWrite(t, root, "data/connector-canon/batch1-source-lane-cohort.json", cohortRaw)
+	proofDocument(t, root, []sourceLaneProofRecord{})
+	for _, invalid := range []bool{false, true} {
+		raw, err := json.Marshal(map[string]any{"schema_version": 1, "annotations": []sourceSemanticAnnotation{a}})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if invalid {
+			raw = bytes.Replace(raw, []byte(`"records_pointer":"/records"`), []byte(`"records_pointer":null`), 1)
+		}
+		proofWrite(t, root, "data/connector-canon/batch1-source-lane-annotations.json", raw)
+		before := sourceBindingFixtureSnapshot(t, root)
+		var out, diagnostics bytes.Buffer
+		code := runContext(context.Background(), []string{"source-lanes", "--repo", root}, &out, &diagnostics)
+		wantCode := 0
+		if invalid {
+			wantCode = 1
+		}
+		if code != wantCode {
+			t.Fatalf("reader code%d want%d: %s", code, wantCode, &diagnostics)
+		}
+		var manifest sourceLaneManifest
+		if err := json.Unmarshal(out.Bytes(), &manifest); err != nil {
+			t.Fatal(err)
+		}
+		if len(manifest.SourceOperations) != 2 || manifest.SourceTotals.Cells != 14 {
+			t.Fatal("reader lost source rows")
+		}
+		for _, row := range manifest.SourceOperations {
+			if row.Source.Key != key {
+				continue
+			}
+			want := "applicable"
+			if invalid {
+				want = "undetermined"
+			}
+			cell := requireSourceLane(t, row.Lanes, "etl", want)
+			if invalid && !proofHasDiagnostic(cell.Diagnostics, "source_collection_interpretation_invalid", "error") {
+				t.Fatal("reader lost invalid interpretation diagnosis")
+			}
+			requireSourceLane(t, row.Lanes, "direct_read", "applicable")
+		}
+		if !reflect.DeepEqual(before, sourceBindingFixtureSnapshot(t, root)) {
+			t.Fatal("read-only CLI changed fixture")
+		}
+	}
+}
+
+func TestSourceLane122ReferenceConjunctionRefusal(t *testing.T) {
+	for _, tc := range []struct{ name, schema, want string }{
+		{"annotation sibling", `{"$ref":"#/components/schemas/Records","description":"Retained records"}`, "applicable"},
+		{"conflicting scalar sibling", `{"$ref":"#/components/schemas/Records","type":"string"}`, "undetermined"},
+		{"unproved constraint sibling", `{"$ref":"#/components/schemas/Records","not":{"type":"array"}}`, "undetermined"},
+		{"conflicting item sibling", `{"type":"array","items":{"$ref":"#/components/schemas/Record","type":"string"}}`, "undetermined"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			root, cohort, key, _, _ := sourceCollection122Fixture(t, tc.schema, `{"components":{"schemas":{"Records":{"type":"array","items":{"type":"object"}},"Record":{"type":"object"}}}}`)
+			got, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, row := range got.SourceOperations {
+				if row.Source.Key == key {
+					requireSourceLane(t, row.Lanes, "etl", tc.want)
+					requireSourceLane(t, row.Lanes, "direct_read", "applicable")
 				}
 			}
 		})

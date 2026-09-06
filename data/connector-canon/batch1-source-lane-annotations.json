@@ -60,6 +60,114 @@
       "decision_refs": [],
       "intended_bindings": [],
       "materialized_bindings": []
+    },
+    {
+      "key": {
+        "connector": "notion",
+        "inventory": "primary",
+        "id": "notion.rest.list-data-source-templates"
+      },
+      "semantics": "",
+      "citation": {
+        "document_id": "notion:primary",
+        "pointer": "/rest/operations/20/source_operation/summary",
+        "value_sha256": "24def794a4bb5323e2cc33f1cbc1c46b6853ed347012ef1f63c54ccf34227a6a"
+      },
+      "clause": "List templates in a data source",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": [],
+      "response_interpretations": [
+        {
+          "kind": "collection",
+          "response_schema": {
+            "document_id": "notion:primary",
+            "pointer": "/rest/operations/20/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "d0bb6e883cbb6b3319c80548204e679444c5760ba168d367b5f96cc5b32a9e6b"
+          },
+          "records_pointer": "/templates",
+          "citation": {
+            "document_id": "notion:primary",
+            "pointer": "/rest/operations/20/source_operation/summary",
+            "value_sha256": "24def794a4bb5323e2cc33f1cbc1c46b6853ed347012ef1f63c54ccf34227a6a"
+          },
+          "clause": "List templates in a data source"
+        }
+      ]
+    },
+    {
+      "key": {
+        "connector": "jira",
+        "inventory": "primary",
+        "id": "jira.rest.getForgeAppPropertyKeys"
+      },
+      "semantics": "",
+      "citation": {
+        "document_id": "jira:primary",
+        "pointer": "/rest/operations/612/source_operation/summary",
+        "value_sha256": "de3860330e8bd22a4adb0f29ceee030864da6fa602eae9c7114c3c23b58a90b1"
+      },
+      "clause": "Get app property keys (Forge)",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": [],
+      "response_interpretations": [
+        {
+          "kind": "collection",
+          "response_schema": {
+            "document_id": "jira:primary",
+            "pointer": "/rest/operations/612/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "bc67b792846dc2f7af0c72295878bcf3d11b1666b3169afe83cb921aafa878e5"
+          },
+          "records_pointer": "/keys",
+          "citation": {
+            "document_id": "jira:primary",
+            "pointer": "/rest/operations/612/source_operation/description",
+            "value_sha256": "92963f25f0b163b977128bb756c7a53f7a7ebcff841065389a0f9738ce3fbb18"
+          },
+          "clause": "Returns all property keys for the Forge app."
+        }
+      ]
+    },
+    {
+      "key": {
+        "connector": "circleci",
+        "inventory": "primary",
+        "id": "circleci.rest.getOrgSummaryData"
+      },
+      "semantics": "",
+      "citation": {
+        "document_id": "circleci:primary",
+        "pointer": "/rest/operations/2/source_operation/summary",
+        "value_sha256": "2229623788608fb988baab690ac0d0971968307d69a297d190044684b835e18e"
+      },
+      "clause": "Get summary metrics with trends for the entire org, and for each project.",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": [],
+      "response_interpretations": [
+        {
+          "kind": "collection",
+          "response_schema": {
+            "document_id": "circleci:primary",
+            "pointer": "/rest/operations/2/source_operation/responses/200/content/application~1json/schema",
+            "value_sha256": "bebfac3af76e397550408de4732d94ad8e4ca0c2a1fd05f4cc154c0782c24001"
+          },
+          "records_pointer": "/org_project_data",
+          "citation": {
+            "document_id": "circleci:primary",
+            "pointer": "/rest/operations/2/source_operation/summary",
+            "value_sha256": "2229623788608fb988baab690ac0d0971968307d69a297d190044684b835e18e"
+          },
+          "clause": "Get summary metrics with trends for the entire org, and for each project."
+        }
+      ]
     }
   ]
 }

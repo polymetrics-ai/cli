@@ -53,6 +53,8 @@ func (r *sourceResponseInterpretation) UnmarshalJSON(raw []byte) error {
 type sourceCollectionScope struct {
 	Ref             sourceFactRef
 	ResponsePointer string
+	UnknownPointer  string
+	Envelope        bool
 	Cardinality     sourceCollectionKind
 }
 
@@ -86,12 +88,8 @@ func sourceCollectionObjectAt(facts sourceFacts, pointer string) (map[string]jso
 		if !exists {
 			return node, pointer, lineage, true
 		}
-		for name := range node {
-			switch name {
-			case "$ref", "description", "title", "deprecated", "example", "examples":
-			default:
-				return nil, pointer, lineage, false
-			}
+		if !sourceReferenceAnnotationSiblings(node) {
+			return nil, pointer, lineage, false
 		}
 		var ref string
 		if json.Unmarshal(edge, &ref) != nil || !strings.HasPrefix(ref, "#/") {
@@ -100,6 +98,19 @@ func sourceCollectionObjectAt(facts sourceFacts, pointer string) (map[string]jso
 		pointer = facts.RefPrefix + ref[1:]
 	}
 	return nil, pointer, lineage, false
+}
+
+// Structural siblings of a reference require conjunction reasoning. These
+// descriptive siblings do not change its shape and may retain source context.
+func sourceReferenceAnnotationSiblings(node map[string]json.RawMessage) bool {
+	for name := range node {
+		switch name {
+		case "$ref", "description", "title", "deprecated", "example", "examples":
+		default:
+			return false
+		}
+	}
+	return true
 }
 
 func sourceCollectionScopes(facts sourceFacts) []sourceCollectionScope {
@@ -141,12 +152,12 @@ func sourceCollectionScopes(facts sourceFacts) []sourceCollectionScope {
 		for _, name := range media {
 			var entry map[string]json.RawMessage
 			if json.Unmarshal(content[name], &entry) != nil {
-				scopes = append(scopes, sourceCollectionScope{ResponsePointer: actual})
+				scopes = append(scopes, sourceCollectionScope{ResponsePointer: actual, UnknownPointer: actual + "/content/" + escapeSourcePointer(name)})
 				continue
 			}
 			one, _ := json.Marshal(map[string]json.RawMessage{name: content[name]})
 			shape := sourceContentShape(facts, one)
-			scope := sourceCollectionScope{ResponsePointer: actual, Cardinality: shape.Cardinality}
+			scope := sourceCollectionScope{ResponsePointer: actual, UnknownPointer: actual + "/content/" + escapeSourcePointer(name), Envelope: shape.Envelope, Cardinality: shape.Cardinality}
 			if schema := entry["schema"]; len(schema) > 0 {
 				canonical, err := canonicalSourceJSON(schema)
 				if err == nil {
@@ -199,6 +210,9 @@ func validateSourceResponseInterpretation(facts sourceFacts, semantics string, s
 		return sourceCollectionUnknown, nil, unknown
 	}
 	refs := []sourceFactRef{scope.Ref, a.Citation}
+	if len(node["allOf"]) > 0 || len(node["oneOf"]) > 0 || len(node["anyOf"]) > 0 {
+		return sourceCollectionUnknown, nil, unknown
+	}
 	if a.Kind == "collection" {
 		if !sourceLaneProjectionPointer(*a.RecordsPointer) {
 			return sourceCollectionUnknown, nil, invalid
@@ -210,6 +224,11 @@ func validateSourceResponseInterpretation(facts sourceFacts, semantics string, s
 		for _, part := range parts {
 			name := strings.ReplaceAll(strings.ReplaceAll(part, "~1", "/"), "~0", "~")
 			if name == "*" || name == "[]" {
+				return sourceCollectionUnknown, nil, invalid
+			}
+			var wrapperType string
+			_ = json.Unmarshal(node["type"], &wrapperType)
+			if wrapperType != "" && wrapperType != "object" {
 				return sourceCollectionUnknown, nil, invalid
 			}
 			var props map[string]json.RawMessage
@@ -268,7 +287,7 @@ func validateSourceResponseInterpretation(facts sourceFacts, semantics string, s
 	owned = owned || (a.Citation.DocumentID == scope.Ref.DocumentID && a.Citation.Pointer == scope.ResponsePointer+"/description")
 	if a.Citation.DocumentID == scope.Ref.DocumentID && strings.HasSuffix(a.Citation.Pointer, "/description") {
 		for _, base := range lineage {
-			owned = owned || strings.HasPrefix(a.Citation.Pointer, base+"/")
+			owned = owned || a.Citation.Pointer == base+"/description"
 		}
 	}
 	if !owned {
@@ -286,7 +305,7 @@ func applySourceResponseInterpretations(key sourceOperationKey, facts sourceFact
 	refs := []sourceFactRef{}
 	add := func(code, pointer string) {
 		severity := "error"
-		if code == "source_collection_interpretation_unresolved" {
+		if code == "source_collection_interpretation_unresolved" || code == "source_collection_interpretation_missing" || code == "source_collection_scope_unknown" {
 			severity = "deficit"
 		}
 		issues = append(issues, sourceLaneDiagnostic{Key: key, Lanes: []string{"etl"}, Stage: "classification", Code: code, Pointer: pointer, Owner: key.Connector, Severity: severity})
@@ -335,5 +354,138 @@ func applySourceResponseInterpretations(key sourceOperationKey, facts sourceFact
 	if len(issues) > 0 {
 		result = sourceCollectionUnknown
 	}
+	// A demonstrated collection does not erase an unresolved successful sibling.
+	// These deficits describe individual response occurrences, not aggregate
+	// applicability, and never grant a materialized binding or runtime proof.
+	if semantics == "read" {
+		for _, scope := range scopes {
+			if scope.Cardinality != sourceCollectionUnknown {
+				continue
+			}
+			pointer := scope.Ref.Pointer
+			if pointer == "" {
+				pointer = scope.UnknownPointer
+			}
+			if pointer == "" {
+				pointer = scope.ResponsePointer
+			}
+			if pointer == "" {
+				pointer = facts.Refs["responses"].Pointer
+			}
+			code := "source_collection_scope_unknown"
+			if scope.Envelope && roles[scope.Ref] == "" {
+				code = "source_collection_interpretation_missing"
+			}
+			add(code, pointer)
+		}
+	}
+	sort.Slice(refs, func(i, j int) bool {
+		left, _ := json.Marshal(refs[i])
+		right, _ := json.Marshal(refs[j])
+		return string(left) < string(right)
+	})
+	unique := refs[:0]
+	for _, ref := range refs {
+		if len(unique) == 0 || unique[len(unique)-1] != ref {
+			unique = append(unique, ref)
+		}
+	}
+	refs = unique
+	sort.Slice(issues, func(i, j int) bool {
+		left, _ := json.Marshal(issues[i])
+		right, _ := json.Marshal(issues[j])
+		return string(left) < string(right)
+	})
 	return result, refs, issues
+}
+
+// Recheck emitted interpretation evidence against retained documents and the
+// captured authoring input. Agreement between two produced cells is no oracle.
+func validateSourceLaneInterpretationEvidence(candidate sourceLaneManifest, annotationInputs json.RawMessage) []sourceLaneDiagnostic {
+	var annotations []sourceSemanticAnnotation
+	_ = json.Unmarshal(annotationInputs, &annotations)
+	documents := map[string]retainedSourceDocument{}
+	for _, doc := range candidate.Documents {
+		documents[doc.ID] = doc
+	}
+	issues := []sourceLaneDiagnostic{}
+	add := func(key sourceOperationKey, code, pointer string) {
+		issues = append(issues, sourceLaneDiagnostic{Key: key, Lanes: []string{"etl"}, Stage: "manifest", Code: code, Pointer: pointer, Owner: key.Connector, Severity: "error"})
+	}
+	for _, row := range candidate.SourceOperations {
+		for _, cell := range row.Lanes {
+			if cell.Lane != "etl" || cell.RuleID != "source_response_interpretation" {
+				continue
+			}
+			doc, exists := documents[row.Source.DocumentID]
+			if !exists {
+				add(row.Source.Key, "source_collection_authority_missing", row.Source.Pointer)
+				continue
+			}
+			source := row.Source
+			var err error
+			source.Node, err = sourceJSONPointer(doc.Payload, source.Pointer)
+			if err != nil {
+				add(source.Key, "source_collection_authority_missing", source.Pointer)
+				continue
+			}
+			var raw *retainedSourceDocument
+			if d, exists := documents[source.RawDocumentID]; exists {
+				raw = &d
+			}
+			facts := normalizeSourceFacts(source, doc, raw)
+			facts.analysis = &sourceShapeAnalysis{Root: facts.referenceRoot, Objects: map[string]map[string]json.RawMessage{}, Shapes: map[string]sourceShape{}}
+			allowed := map[sourceFactRef]bool{}
+			for _, ref := range facts.Refs {
+				allowed[ref] = true
+			}
+			scopes := sourceCollectionScopes(facts)
+			authorized := false
+			for _, annotation := range annotations {
+				if annotation.Key != source.Key {
+					continue
+				}
+				semantics := sourceOperationSemantics(facts)
+				if annotation.Semantics != "" {
+					semantics = annotation.Semantics
+				}
+				for _, interpretation := range annotation.ResponseInterpretations {
+					for _, scope := range scopes {
+						if scope.Ref != interpretation.ResponseSchema {
+							continue
+						}
+						kind, required, code := validateSourceResponseInterpretation(facts, semantics, scope, interpretation)
+						if code != "" {
+							continue
+						}
+						if (cell.Applicability == "applicable" && kind == sourceCollection) || (cell.Applicability == "not_applicable" && kind == sourceNoncollection) {
+							authorized = true
+						}
+						for _, ref := range required {
+							allowed[ref] = true
+							found := false
+							for _, emitted := range cell.FactRefs {
+								found = found || emitted == ref
+							}
+							if !found {
+								add(source.Key, "source_collection_citation_missing", ref.Pointer)
+							}
+						}
+					}
+				}
+			}
+			if !authorized {
+				add(source.Key, "source_collection_authority_missing", source.Pointer)
+			}
+			for _, ref := range cell.FactRefs {
+				original, exists := documents[ref.DocumentID]
+				value, err := sourceJSONPointer(original.Payload, ref.Pointer)
+				canonical, canonicalErr := canonicalSourceJSON(value)
+				if !exists || err != nil || canonicalErr != nil || sourceBytesHash(canonical) != ref.ValueSHA256 || !allowed[ref] {
+					add(source.Key, "source_collection_citation_invalid", ref.Pointer)
+				}
+			}
+		}
+	}
+	return issues
 }

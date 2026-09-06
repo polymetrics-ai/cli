@@ -145,6 +145,43 @@ not approve credentials, provider exercises, receiver exposure, a relay or a
 scope reduction. The existing checkpoint and independent-review gates still
 apply.
 
+## Reviewed response interpretations
+
+Collection cardinality is separate from binary shape. A root array of established
+object records supports collection applicability even when a nested record field
+is unknown. Scalars, scalar arrays and closed fixed scalar objects exclude ETL;
+bare or open objects and mixed or unresolved alternatives remain unknown. An
+object containing record arrays needs a reviewed response interpretation. Neither
+field spelling, pagination, a read method nor the number of arrays supplies that
+meaning.
+
+An exact-key annotation may include `response_interpretations`. Each entry has
+`kind` (`collection` or `single_resource`), a literal `response_schema` citation,
+a separately cited `citation` and literal `clause`. A collection additionally
+requires `records_pointer`: an instance JSON pointer through named object
+properties to an array of object records; `""` selects a root array. A single
+resource forbids that field, including null. The response-schema pointer is a
+source-document coordinate, not the instance record pointer.
+
+The authoring validator checks the exact successful response occurrence, local
+reference lineage, hashes, support location and selected shape. It rejects
+request/error/foreign occurrences, stale hashes, duplicate or conflicting claims,
+scalar selections and collection claims on mutations. Human review establishes
+the cited clause's meaning; the code does not interpret English. External refs,
+cycles, unsupported conjunctions and traversal limits retain scoped deficits.
+Unknown envelopes without an interpretation emit
+`source_collection_interpretation_missing`. Other unresolved response scopes
+emit `source_collection_scope_unknown`, including unresolved siblings of a
+separately established collection.
+
+The report retains schema, support and selected array/item citations. Its
+independent evidence check uses retained documents and the original annotation
+input, so agreement between two generated cells cannot establish authority.
+The three reviewed Batch One additions select Notion `/templates`, Jira `/keys`
+and CircleCI `/org_project_data`; they create no targets or behavioral proof.
+The optional annotation envelope is described by
+`source-lane-manifest.schema.json#/$defs/annotation_envelope`.
+
 ## Typed target projections
 
 Target references use closed kinds and an optional source-schema citation. Schema

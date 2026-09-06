@@ -35,6 +35,7 @@ type sourceLaneValidation struct {
 	Deficits int    `json:"deficits"`
 }
 type sourceLaneManifest struct {
+	annotationInputs json.RawMessage          `json:"-"`
 	SchemaVersion    int                      `json:"schema_version"`
 	Kind             string                   `json:"kind"`
 	CohortID         string                   `json:"cohort_id"`
@@ -57,6 +58,7 @@ func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLane
 // Production always uses nil and all retained input reads remain unchanged.
 func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort sourceLaneCohort, annotations []sourceSemanticAnnotation, afterNormalize func(sourceOperationKey, sourceFacts) error) (sourceLaneManifest, error) {
 	result := sourceLaneManifest{SchemaVersion: 1, Kind: "retained_source_lane_manifest", CohortID: cohort.CohortID, Inputs: []sourceArtifactPin{}, Documents: []retainedSourceDocument{}, SourceOperations: []sourceLaneManifestRow{}, LaneSummary: []sourceLaneSummary{}, Diagnostics: []sourceLaneDiagnostic{}}
+	result.annotationInputs, _ = json.Marshal(annotations)
 	if err := validateSourceLaneCohort(cohort); err != nil {
 		return result, fmt.Errorf("cohort anchor invalid")
 	}
@@ -174,6 +176,7 @@ func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort so
 		result.SourceOperations = append(result.SourceOperations, sourceLaneManifestRow{Source: source, Facts: facts, Lanes: cells})
 	}
 	result.Diagnostics = append(result.Diagnostics, validateSourceLaneFactCitations(result)...)
+	result.Diagnostics = append(result.Diagnostics, validateSourceLaneInterpretationEvidence(result, result.annotationInputs)...)
 	summarizeSourceLaneManifest(&result)
 	return result, nil
 }
@@ -235,6 +238,7 @@ func summarizeSourceLaneManifest(result *sourceLaneManifest) {
 // independently built report from current retained inputs.
 func validateSourceLaneManifest(candidate, expected sourceLaneManifest) []sourceLaneDiagnostic {
 	diagnostics := validateSourceLaneFactCitations(candidate)
+	diagnostics = append(diagnostics, validateSourceLaneInterpretationEvidence(candidate, expected.annotationInputs)...)
 	add := func(key sourceOperationKey, code, pointer string, lanes []string) {
 		diagnostics = append(diagnostics, sourceLaneDiagnostic{Key: key, Lanes: lanes, Stage: "manifest", Code: code, Pointer: pointer, Owner: key.Connector, Severity: "error"})
 	}

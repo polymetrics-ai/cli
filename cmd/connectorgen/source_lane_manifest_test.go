@@ -1044,6 +1044,10 @@ func TestSourceLaneManifestIntegratedBindingProofBoundary(t *testing.T) {
 			proofWrite(t, root, "source.json", raw)
 			cohort := sourceLaneCohort{SchemaVersion: 1, CohortID: "fixture", Inventories: []sourceInventoryAnchor{{Connector: "acme", Inventory: "primary", Class: "primary", Path: "source.json", SHA256: sourceBytesHash(raw), ExpectedIDs: []string{"retained.widgets", "retained.unmapped"}, ExpectedCount: 2}}}
 			annotation.Citation.DocumentID = "acme:primary"
+			for i := range annotation.ResponseInterpretations {
+				annotation.ResponseInterpretations[i].ResponseSchema.DocumentID = "acme:primary"
+				annotation.ResponseInterpretations[i].Citation.DocumentID = "acme:primary"
+			}
 			ref := &annotation.IntendedBindings[0]
 			ref.SourceSchema.DocumentID = "acme:primary"
 			for i := range ref.FieldMappings {
