@@ -50,6 +50,11 @@ func sourceBindingFixture099F(t *testing.T, kind string, change func(*vNextSourc
 	doc := retainedSourceDocument{ID: "fixture:099F", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
 	facts := normalizeSourceFacts(retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}, doc, nil)
 	facts.bindings = sourceBindingTestInputs(t, map[string][]byte{}, map[string]vNextCanonicalDescriptor{"acme": descriptor})
+	authored, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	facts.bindings.Authoring = map[string][]byte{"internal/connectors/defs/acme/source.lock.json": authored}
 	if descriptor.Staged.Identity.Digest == "" || facts.bindings.Bundles["acme"].Name != "acme" {
 		t.Fatal("actual admission/load witness missing")
 	}
@@ -188,6 +193,96 @@ func TestSourceLaneBinding099FSiblingScopes(t *testing.T) {
 				if *good.FieldMappings[0].Target.Pointer != "" {
 					t.Error("accepted ref aliases caller memory")
 				}
+			}
+		})
+	}
+}
+
+func TestSourceLaneBinding099FRegistryCanonical(t *testing.T) {
+	t.Run("registry extracted root", func(t *testing.T) {
+		key, facts, a := sourceBindingFixture099F(t, "envelope", nil)
+		r := &a.IntendedBindings[0]
+		r.Kind = "schema"
+		r.ID = "schemas/widgets.json"
+		r.Artifact = "internal/connectors/defs/acme/" + r.ID
+		r.Pointer = ""
+		r.ArtifactSHA256 = sourceBytesHash(facts.bindings.Artifacts[r.Artifact])
+		r.CanonicalPointer = "/operations/0/schema_refs/record"
+		sourceBindingOutcome099F(t, key, facts, a, 1)
+	})
+	for _, wrong := range []bool{false, true} {
+		t.Run("authored versus canonical index/"+strconv.FormatBool(wrong), func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "envelope", func(lock *vNextSourceLock) {
+				lock.Operations[0].ID = "z"
+				lock.Operations = append(lock.Operations, vNextOperationDescriptor{ID: "a", StreamOrder: 1, SchemaRefs: vNextSchemaReferences{Record: "schemas/widgets.json"}, Stream: json.RawMessage(`{"name":"widgets_a","path":"/widgets","records":{"path":"data"},"schema":"schemas/widgets.json"}`)})
+			})
+			r := &a.IntendedBindings[0]
+			r.Kind = "canonical_operation"
+			r.ID = "a"
+			r.CanonicalID = "a"
+			r.Artifact = "internal/connectors/defs/acme/source.lock.json"
+			r.ArtifactSHA256 = sourceBytesHash(facts.bindings.Authoring[r.Artifact])
+			r.Pointer = "/operations/1"
+			r.CanonicalPointer = "/operations/0"
+			if wrong {
+				r.CanonicalPointer = "/operations/1"
+			}
+			want := 1
+			codes := []string{}
+			if wrong {
+				want = 0
+				codes = []string{"canonical_provenance_mismatch"}
+			}
+			sourceBindingOutcome099F(t, key, facts, a, want, codes...)
+		})
+	}
+}
+
+func TestSourceLaneBinding099FGraphQL(t *testing.T) {
+	for _, tc := range []struct{ name, document, operation, schema, want string }{
+		{"matching exact document", "query FirstWidgets { widgets { id } }", "FirstWidgets", `{"type":"object","properties":{},"additionalProperties":false}`, "target_response_contract_unverified"},
+		{"same route other operation", "query SecondWidgets { widgets { id } }", "SecondWidgets", `{"type":"object","properties":{},"additionalProperties":false}`, "target_graphql_operation_mismatch"},
+		{"same name other root", "query FirstWidgets { otherWidgets { id } }", "FirstWidgets", `{"type":"object","properties":{},"additionalProperties":false}`, "target_graphql_document_mismatch"},
+		{"wrong variables schema", "query FirstWidgets($owner: String!) { widgets(owner: $owner) { id } }", "FirstWidgets", `{"type":"object","properties":{"owner":{"type":"string"}},"required":["owner"],"additionalProperties":false}`, "target_schema_mismatch"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			lock := graphQLSourceLockForSemanticAdmissionTest()
+			lock.Operations = lock.Operations[:1]
+			lock.Operations[0].Source = json.RawMessage(`{"provider_operation":"` + tc.operation + `","method":"POST","path":"/graphql"}`)
+			var op map[string]any
+			if json.Unmarshal(lock.Operations[0].Operation, &op) != nil {
+				t.Fatal("fixture operation")
+			}
+			g := op["graphql"].(map[string]any)
+			g["document"] = tc.document
+			g["operation_name"] = tc.operation
+			var schema any
+			if json.Unmarshal([]byte(tc.schema), &schema) != nil {
+				t.Fatal("fixture schema")
+			}
+			g["variables_schema"] = schema
+			lock.Operations[0].Operation, _ = json.Marshal(op)
+			descriptor, err := canonicalizeVNextSourceLock(lock)
+			if err != nil {
+				t.Fatalf("must reach actual admitted GraphQL binding: %v", err)
+			}
+			key := sourceOperationKey{Connector: "acme", Inventory: "primary", ID: "retained.graphql"}
+			node := json.RawMessage(`{"id":"retained.graphql","protocol":"graphql","method":"POST","path":"/graphql","source_operation":{"summary":"Read widgets","operation_name":"FirstWidgets","document":"query FirstWidgets { widgets { id } }","variables_schema":{"type":"object","properties":{},"additionalProperties":false},"responses":{"200":{"description":"Response schema unavailable"}}}}`)
+			facts := normalizeSourceFacts(retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}, retainedSourceDocument{ID: "fixture:099F", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}, nil)
+			facts.bindings = sourceBindingTestInputs(t, map[string][]byte{}, map[string]vNextCanonicalDescriptor{"acme": descriptor})
+			if facts.bindings.Bundles["acme"].Operations[0].GraphQL == nil {
+				t.Fatal("loaded GraphQL stage missing")
+			}
+			base := "/rest/operations/0/source_operation/"
+			name := sourceBindingCitation099F(t, facts, base+"operation_name")
+			document := sourceBindingCitation099F(t, facts, base+"document")
+			request := sourceBindingCitation099F(t, facts, base+"variables_schema")
+			empty := ""
+			ref := sourceLaneTargetRef{Kind: "operation", Connector: "acme", ID: "widgets.first", Lane: "direct_read", Artifact: "internal/connectors/defs/acme/operations.json", Pointer: "/operations/0", ArtifactSHA256: sourceBytesHash(descriptor.Staged.Outputs["operations.json"]), CanonicalID: "source:widgets.first", CanonicalPointer: "/operations/0/operation", Generation: descriptor.Staged.Identity.Digest, SchemaRole: sourceLaneSchemaRequest, SourceSchema: &request, FieldMappings: []sourceLaneFieldMapping{{Source: request, Target: sourceLaneFieldTarget{Kind: sourceLaneFieldSchema, Pointer: &empty}}}}
+			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Read widgets", Semantics: "read", GraphQL: &sourceLaneGraphQLRefs{OperationName: &name, Document: &document, RequestSchema: &request}, IntendedBindings: []sourceLaneTargetRef{ref}}
+			cell := sourceBindingOutcome099F(t, key, facts, a, 0, tc.want)
+			if tc.name == "matching exact document" && len(cell.Diagnostics) != 1 {
+				t.Errorf("matched request projection must reach only absent response consumer: %+v", cell.Diagnostics)
 			}
 		})
 	}
