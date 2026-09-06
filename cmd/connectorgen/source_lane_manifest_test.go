@@ -81,12 +81,31 @@ func TestSourceLaneManifestRetainedCorpus(t *testing.T) {
 	if got.SourceTotals.Primary != 4341 || got.SourceTotals.Supplement != 2 || got.SourceTotals.Cells != 30401 || len(got.SourceOperations) != 4343 {
 		t.Fatalf("source census drift: %+v", got.SourceTotals)
 	}
+	var expectedFixture struct {
+		Keys []sourceOperationKey `json:"keys"`
+	}
+	if err := json.Unmarshal(read("cmd/connectorgen/testdata/source_lanes/batch1-expected-ids.json"), &expectedFixture); err != nil {
+		t.Fatal(err)
+	}
+	expectedKeys := map[sourceOperationKey]bool{}
+	for _, key := range expectedFixture.Keys {
+		if expectedKeys[key] {
+			t.Fatalf("independent fixture duplicate: %+v", key)
+		}
+		expectedKeys[key] = true
+	}
+	if len(expectedKeys) != 4343 {
+		t.Fatalf("independent fixture has %d keys", len(expectedKeys))
+	}
 	observed := map[sourceOperationKey]bool{}
 	for _, row := range got.SourceOperations {
 		if observed[row.Source.Key] || !row.Source.Observed {
 			t.Fatalf("source duplicate or unobserved: %+v", row.Source.Key)
 		}
 		observed[row.Source.Key] = true
+		if !expectedKeys[row.Source.Key] {
+			t.Errorf("unexpected source outside independent retained census: %+v", row.Source.Key)
+		}
 		if len(row.Lanes) != 7 {
 			t.Fatalf("source lost lanes: %+v", row.Source.Key)
 		}
@@ -97,6 +116,11 @@ func TestSourceLaneManifestRetainedCorpus(t *testing.T) {
 		}
 		if row.Facts.Status == "unavailable" {
 			t.Errorf("retained source facts lost: %+v %v", row.Source.Key, row.Facts.Diagnostics)
+		}
+	}
+	for key := range expectedKeys {
+		if !observed[key] {
+			t.Errorf("independent expected source missing: %+v", key)
 		}
 	}
 	if got.Validation.Status != "valid" {
