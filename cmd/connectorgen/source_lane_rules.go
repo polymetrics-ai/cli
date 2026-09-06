@@ -145,6 +145,9 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 			}
 		}
 	}
+	if annotationValid && annotation != nil {
+		cells = resolveSourceLaneBindings(key, facts, *annotation, cells)
+	}
 	if !annotationValid {
 		for i := range cells {
 			cells[i].Diagnostics = append(cells[i].Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cells[i].Lane}, Stage: "classification", Code: "source_annotation_invalid", Pointer: annotation.Citation.Pointer, Owner: key.Connector, Severity: "error"})

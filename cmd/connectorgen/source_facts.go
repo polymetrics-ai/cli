@@ -26,6 +26,7 @@ type sourceParameterFact struct {
 }
 
 type sourceFacts struct {
+	bindings    *sourceLaneBindingInputs   `json:"-"`
 	analysis    *sourceShapeAnalysis       `json:"-"`
 	Document    json.RawMessage            `json:"-"`
 	RefPrefix   string                     `json:"-"`
