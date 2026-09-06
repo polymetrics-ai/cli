@@ -29,19 +29,20 @@ type sourceParameterFact struct {
 }
 
 type sourceFacts struct {
-	bindings    *sourceLaneBindingInputs   `json:"-"`
-	analysis    *sourceShapeAnalysis       `json:"-"`
-	Document    json.RawMessage            `json:"-"`
-	RefPrefix   string                     `json:"-"`
-	Parameters  []sourceParameterFact      `json:"effective_parameters"`
-	Status      string                     `json:"status"`
-	Method      string                     `json:"method"`
-	Path        string                     `json:"path"`
-	Protocol    string                     `json:"protocol"`
-	OperationID string                     `json:"operation_id"`
-	Groups      map[string]json.RawMessage `json:"groups"`
-	Refs        map[string]sourceFactRef   `json:"refs"`
-	Diagnostics []string                   `json:"diagnostics"`
+	referenceRoot any                        `json:"-"`
+	bindings      *sourceLaneBindingInputs   `json:"-"`
+	analysis      *sourceShapeAnalysis       `json:"-"`
+	Document      json.RawMessage            `json:"-"`
+	RefPrefix     string                     `json:"-"`
+	Parameters    []sourceParameterFact      `json:"effective_parameters"`
+	Status        string                     `json:"status"`
+	Method        string                     `json:"method"`
+	Path          string                     `json:"path"`
+	Protocol      string                     `json:"protocol"`
+	OperationID   string                     `json:"operation_id"`
+	Groups        map[string]json.RawMessage `json:"groups"`
+	Refs          map[string]sourceFactRef   `json:"refs"`
+	Diagnostics   []string                   `json:"diagnostics"`
 }
 
 // normalizeSourceFacts copies provider groups and records citations into the
@@ -79,11 +80,13 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 	for _, name := range []string{"method", "path", "protocol", "operation_id"} {
 		group(name, node[name], doc.ID, row.Pointer+"/"+name)
 	}
-	var root map[string]json.RawMessage
-	if err := decodeSourceJSON(doc.Payload, &root); err != nil {
+	view, err := sourceDocumentViewFor(doc)
+	if err != nil {
 		facts.Diagnostics = append(facts.Diagnostics, "source_document_invalid")
 		return facts
 	}
+	root := view.Root
+	facts.referenceRoot = view.ReferenceRoot
 	var operation map[string]json.RawMessage
 	operationPointer := row.Pointer + "/source_operation"
 	operationDocument := doc.ID
@@ -97,12 +100,15 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 	} else if rawDoc != nil {
 		facts.Document = rawDoc.Payload
 		facts.RefPrefix = ""
-		if err := decodeSourceJSON(rawDoc.Payload, &root); err != nil {
+		rawView, err := sourceDocumentViewFor(*rawDoc)
+		if err != nil {
 			facts.Diagnostics = append(facts.Diagnostics, "raw_document_invalid")
 			return facts
 		}
+		root = rawView.Root
+		facts.referenceRoot = rawView.ReferenceRoot
 		operationPointer = "/paths/" + escapeSourcePointer(facts.Path) + "/" + strings.ToLower(facts.Method)
-		raw, err := sourceJSONPointer(rawDoc.Payload, operationPointer)
+		raw, err := sourceDocumentPointer(*rawDoc, operationPointer)
 		if err != nil {
 			facts.Diagnostics = append(facts.Diagnostics, "raw_operation_missing")
 			return facts
@@ -112,7 +118,7 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 			return facts
 		}
 		operationDocument = rawDoc.ID
-		params, err := sourceJSONPointer(rawDoc.Payload, "/paths/"+escapeSourcePointer(facts.Path)+"/parameters")
+		params, err := sourceDocumentPointer(*rawDoc, "/paths/"+escapeSourcePointer(facts.Path)+"/parameters")
 		if err == nil {
 			group("path_parameters", params, rawDoc.ID, "/paths/"+escapeSourcePointer(facts.Path)+"/parameters")
 		}
@@ -131,14 +137,11 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 	for name, field := range names {
 		group(name, operation[field], operationDocument, operationPointer+"/"+escapeSourcePointer(field))
 	}
-	var contract map[string]json.RawMessage
+	contract := view.Contract
 	if rawDoc != nil {
 		contract = root
-	} else if len(root["source_contract"]) > 0 {
-		if err := decodeSourceJSON(root["source_contract"], &contract); err != nil {
-			facts.Diagnostics = append(facts.Diagnostics, "source_contract_invalid")
-		}
 	}
+	facts.Diagnostics = append(facts.Diagnostics, view.Diagnostics...)
 	contractPointer := "/source_contract"
 	contractDocument := doc.ID
 	if rawDoc != nil {
@@ -160,14 +163,8 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 	group("security_schemes", components["securitySchemes"], contractDocument, contractPointer+"/components/securitySchemes")
 	// Schema references resolve against the retained shared document.
 	group("webhooks", contract["webhooks"], contractDocument, contractPointer+"/webhooks")
-	var original map[string]json.RawMessage
-	if err := decodeSourceJSON(doc.Payload, &original); err == nil {
-		var rest map[string]json.RawMessage
-		if err := decodeSourceJSON(original["rest"], &rest); err == nil {
-			for _, name := range []string{"path_bridge", "event_schema_inventory", "batch_action_inventory"} {
-				group(name, rest[name], doc.ID, "/rest/"+name)
-			}
-		}
+	for _, name := range []string{"path_bridge", "event_schema_inventory", "batch_action_inventory"} {
+		group(name, view.Rest[name], doc.ID, "/rest/"+name)
 	}
 	facts.Status = "available"
 	if facts.Method == "" || facts.Path == "" || facts.Protocol == "" {
@@ -327,7 +324,7 @@ func sourceYAMLValue(node *yaml.Node, depth int, count *int, active map[*yaml.No
 }
 
 func effectiveSourceParameters(facts sourceFacts, diagnostics []string) ([]sourceParameterFact, []string) {
-	facts.analysis = &sourceShapeAnalysis{Objects: map[string]map[string]json.RawMessage{}, Shapes: map[string]sourceShape{}}
+	facts.analysis = &sourceShapeAnalysis{Root: facts.referenceRoot, Objects: map[string]map[string]json.RawMessage{}, Shapes: map[string]sourceShape{}}
 	byKey := map[string]sourceParameterFact{}
 	for _, group := range []string{"path_parameters", "parameters"} {
 		raw := facts.Groups[group]
@@ -557,4 +554,67 @@ func resolveSourceFactValue(document retainedSourceDocument, ref sourceFactRef) 
 		return json.Marshal(text)
 	}
 	return nil, fmt.Errorf("unknown rendered citation part")
+}
+
+// sourceDocumentView belongs to one immutable retained document. It avoids
+// reparsing the provider's complete root and shared references for each row.
+type sourceDocumentView struct {
+	PayloadSHA256 string
+	Root          map[string]json.RawMessage
+	Contract      map[string]json.RawMessage
+	Rest          map[string]json.RawMessage
+	ReferenceRoot any
+	Diagnostics   []string
+}
+
+func prepareSourceDocument(document retainedSourceDocument) (retainedSourceDocument, error) {
+	if document.ContentType == "text/html" {
+		return document, nil
+	}
+	view, err := sourceDocumentViewFor(document)
+	if err != nil {
+		return document, err
+	}
+	document.view = view
+	return document, nil
+}
+
+func sourceDocumentViewFor(document retainedSourceDocument) (*sourceDocumentView, error) {
+	digest := sourceBytesHash(document.Payload)
+	if document.view != nil {
+		if document.view.PayloadSHA256 != digest {
+			return nil, fmt.Errorf("retained document changed after preparation")
+		}
+		return document.view, nil
+	}
+	view := &sourceDocumentView{PayloadSHA256: digest, Diagnostics: []string{}}
+	if err := decodeSourceJSON(document.Payload, &view.Root); err != nil {
+		return nil, err
+	}
+	if view.Root == nil {
+		return nil, fmt.Errorf("source document is not an object")
+	}
+	if err := decodeSourceJSON(document.Payload, &view.ReferenceRoot); err != nil {
+		return nil, err
+	}
+	if raw := view.Root["source_contract"]; len(raw) > 0 {
+		if err := decodeSourceJSON(raw, &view.Contract); err != nil {
+			view.Diagnostics = append(view.Diagnostics, "source_contract_invalid")
+		}
+	}
+	if raw := view.Root["rest"]; len(raw) > 0 {
+		if err := decodeSourceJSON(raw, &view.Rest); err != nil {
+			view.Diagnostics = append(view.Diagnostics, "source_inventory_metadata_invalid")
+		}
+	}
+	return view, nil
+}
+
+func sourceDocumentPointer(document retainedSourceDocument, pointer string) (json.RawMessage, error) {
+	view, err := sourceDocumentViewFor(document)
+	if err != nil {
+		return nil, err
+	}
+	facts := sourceFacts{Document: document.Payload, analysis: &sourceShapeAnalysis{Root: view.ReferenceRoot}}
+	return sourceAnalysisPointer(facts, pointer)
 }

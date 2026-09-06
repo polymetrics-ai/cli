@@ -57,7 +57,7 @@ type sourceSemanticAnnotation struct {
 // classifySourceLanes treats source applicability separately from artifact and
 // proof availability. Unresolved semantics retain seven explicit cells.
 func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *sourceSemanticAnnotation) []sourceLaneCell {
-	facts.analysis = &sourceShapeAnalysis{Objects: map[string]map[string]json.RawMessage{}, Shapes: map[string]sourceShape{}}
+	facts.analysis = &sourceShapeAnalysis{Root: facts.referenceRoot, Objects: map[string]map[string]json.RawMessage{}, Shapes: map[string]sourceShape{}}
 	cells := make([]sourceLaneCell, 0, 7)
 	for _, lane := range sourceLaneNames() {
 		cells = append(cells, sourceLaneCell{Lane: lane, Applicability: "undetermined", State: "mapped_unproven", RuleID: "facts_unresolved", FactRefs: []sourceFactRef{}, Reason: sourceLaneReason{Code: "facts_unresolved", Text: "Retained facts do not yet establish this lane."}, IntendedBindings: []sourceLaneTargetRef{}, References: []sourceLaneTargetRef{}, ProofRefs: []string{}, OwnerRefs: []string{key.Connector}, GapRefs: []string{}, Diagnostics: []sourceLaneDiagnostic{}})

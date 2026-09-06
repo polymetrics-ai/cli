@@ -298,3 +298,43 @@ func TestSourceFactsRenderedTokenBudget(t *testing.T) {
 		t.Fatalf("token limit not reached/refused: %v", err)
 	}
 }
+
+func TestSourceFactsPreparedDocument(t *testing.T) {
+	row, original := retainedFactFixture(t, "vercel", "vercel.rest.readSessionFile")
+	prepared, err := prepareSourceDocument(original)
+	if err != nil {
+		t.Fatal(err)
+	}
+	before := normalizeSourceFacts(row, original, nil)
+	after := normalizeSourceFacts(row, prepared, nil)
+	a, _ := json.Marshal(before)
+	b, _ := json.Marshal(after)
+	if string(a) != string(b) {
+		t.Fatal("prepared document changed normalized facts")
+	}
+	if after.Method != "POST" || after.Path != "/v2/sandboxes/sessions/{sessionId}/fs/read" || len(after.Groups["request_body"]) == 0 || len(after.Groups["responses"]) == 0 {
+		t.Fatal("prepared facts lost independent provider contract")
+	}
+	expected, err := sourceJSONPointer(original.Payload, row.Pointer+"/source_operation")
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual, err := sourceDocumentPointer(prepared, row.Pointer+"/source_operation")
+	expectedCanonical, expectedErr := canonicalSourceJSON(expected)
+	actualCanonical, actualErr := canonicalSourceJSON(actual)
+	if err != nil || expectedErr != nil || actualErr != nil || string(expectedCanonical) != string(actualCanonical) {
+		t.Fatalf("prepared pointer changed source value: %v", err)
+	}
+	if _, err := sourceDocumentPointer(prepared, "/absent"); err == nil {
+		t.Fatal("missing pointer resolved")
+	}
+	prepared.Payload = append(append([]byte{}, prepared.Payload...), ' ')
+	if _, err := sourceDocumentViewFor(prepared); err == nil {
+		t.Fatal("mutated document reused old view")
+	}
+	for _, raw := range []string{"null", "[]", `{"duplicate":1,"duplicate":2}`} {
+		if _, err := prepareSourceDocument(retainedSourceDocument{Payload: json.RawMessage(raw)}); err == nil {
+			t.Fatalf("invalid prepared document accepted: %s", raw)
+		}
+	}
+}

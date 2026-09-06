@@ -71,15 +71,16 @@ type retainedSourceOperation struct {
 }
 
 type retainedSourceDocument struct {
-	ContentType            string          `json:"content_type"`
-	ID                     string          `json:"id"`
-	Path                   string          `json:"path"`
-	RetainedFileSHA256     string          `json:"retained_file_sha256"`
-	Bytes                  int64           `json:"bytes"`
-	UpstreamDeclaredSHA256 string          `json:"upstream_declared_sha256"`
-	UpstreamDeclaredBytes  int64           `json:"upstream_declared_bytes"`
-	UpstreamBytesVerified  bool            `json:"upstream_bytes_verified"`
-	Payload                json.RawMessage `json:"payload"`
+	view                   *sourceDocumentView `json:"-"`
+	ContentType            string              `json:"content_type"`
+	ID                     string              `json:"id"`
+	Path                   string              `json:"path"`
+	RetainedFileSHA256     string              `json:"retained_file_sha256"`
+	Bytes                  int64               `json:"bytes"`
+	UpstreamDeclaredSHA256 string              `json:"upstream_declared_sha256"`
+	UpstreamDeclaredBytes  int64               `json:"upstream_declared_bytes"`
+	UpstreamBytesVerified  bool                `json:"upstream_bytes_verified"`
+	Payload                json.RawMessage     `json:"payload"`
 }
 
 type retainedSourceInventory struct {
