@@ -1100,3 +1100,23 @@ uncommitted tested state: no full Git/tree SHA was recovered, and later
 `7294373166db75466e2c92269f7887f51ceaddc6` is not its identity. This is a
 historical evidence correction only; F-08 remains independent and no
 second-signal or mid-transaction guarantee is asserted.
+
+## 2026-09-06 — CP11 e77 seven-finding coordinated repair plan (steer 051)
+
+### Delivery and GSD record
+
+- **Immutable pre-fix authority:** behavioral `e77cd390f45eb938917dc3c39882bda34aae09a6` / tree `4c37521b11a6f1a22bd6fa5ea5e043d4982329f8`; audited ledger `3256d930c6e919ee55d25d78c8b90e7a33f9eca5`; provenance-only binding `d22f2ce42498d466728729399f231d644f2f2ca5`. The complete seven-entry audited ledger is fixed scope.
+- **Inline GSD fallback:** `scripts/gsd doctor` found the pre-existing missing `.gsd/prompts/issue-122-rebootstrap.md`; lifecycle sources/prompts resolve. The adapter permits inline discuss → plan --tdd → execute → verify → review under this single-worker contract. This is a named limitation, not a waiver of TDD, audit, or fresh review.
+- **Skills:** `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`, `golang-concurrency`, and `golang-lint`; required routing, GSD adapter and exhaustive-review gate apply. No user-facing CLI syntax/help/manual/website surface is planned.
+- **Exclusions:** no provider/credential/customer-DB activity, protected `.cache` access, runtime/receiver foundation, CP12, no-mistakes, push, release, or merge.
+
+### Dependency order and behavioral witnesses
+
+1. **Group 1 — F-04-R/F-08-R:** record bounded helper A→FIFO/symlink/directory A→B controls and directory-open-before-flock negative control; then make observations descriptor-bound and add a real EWOULDBLOCK acknowledgement before actual-main signal. Assert exact SIGINT/SIGTERM, direct waits, no success/mutation and retry while retaining TreeSnapshot, routing and cleanup fixes.
+2. **Group 2 — F-03-A/B/C:** record genuine failed-preparation, compound-cause and failed-allocation A→B failures before production edits. Repair the preparation graph, typed meaningful error producers/consumers and owned-allocation cleanup together, preserving strict bootstrap, pure absence, no-clobber A/B/C, history and one Close owner.
+3. **Group 3 — F-02-P/F-05/F-06-P:** reuse trustworthy Group 1 observations for nested public quarantine recovery/prune and every named durable caller/cut. Observe raw controls, roots/content and real private authority before restoration, complete empty/nonempty B rows, and correct the false Group 3 no-authority claim without rewriting historical evidence.
+4. **Freeze:** record only observed canonical/Atlas proof changes; run focused normal/race, one full `cmd/connectorgen` normal/race and required static/canon/preflight/docs/boundary-scanner/release gates. Commit/freeze the behavior candidate, then use the supplied fresh Astra/xhigh and Luna/low prompts.
+
+### Retained invariants
+
+No-replace B-01 A/B/C/public-C, strict B-02 bootstrap, bounded metadata/live descriptors, capture-open identities, validated returned directory, directory lifetime lock plus lease integrity, and F-07 historical provenance stay protected. A passing defect-reproduction probe is a RED witness, not GREEN; proof strengthening never fabricates a production defect.
