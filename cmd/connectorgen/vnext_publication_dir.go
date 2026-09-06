@@ -399,7 +399,22 @@ func vNextPublicationStatIsSymlink(stat unix.Stat_t) bool {
 	return stat.Mode&unix.S_IFMT == unix.S_IFLNK
 }
 
-func (d *vNextPublicationDirectory) removeTree(name, label string) error {
+// vNextPublicationRemoveTreeAfterIdentityForTest and
+// vNextPublicationRemoveTreeChildIdentityForTest are inert, narrowly scoped
+// descriptor-boundary seams. They let the CP11 ownership proof exercise a
+// real replacement and an open-child fstat failure without a filesystem
+// abstraction or production routing change.
+var vNextPublicationRemoveTreeAfterIdentityForTest func(*vNextPublicationDirectory, string)
+var vNextPublicationRemoveTreeChildIdentityForTest func(*os.File, string) (vNextPublicationIdentity, error)
+
+func vNextPublicationRemoveTreeChildIdentity(file *os.File, label string) (vNextPublicationIdentity, error) {
+	if vNextPublicationRemoveTreeChildIdentityForTest != nil {
+		return vNextPublicationRemoveTreeChildIdentityForTest(file, label)
+	}
+	return vNextPublicationIdentityFromFile(file, label)
+}
+
+func (d *vNextPublicationDirectory) removeTree(name, label string) (resultErr error) {
 	identity, err := d.identityAt(name, label)
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
@@ -416,26 +431,22 @@ func (d *vNextPublicationDirectory) removeTree(name, label string) error {
 	if identity.mode != unix.S_IFDIR {
 		return fmt.Errorf("%s is not a regular file or directory", label)
 	}
+	if vNextPublicationRemoveTreeAfterIdentityForTest != nil {
+		vNextPublicationRemoveTreeAfterIdentityForTest(d, name)
+	}
 	child, err := d.openDirectory(name, label)
 	if err != nil {
 		return err
 	}
-	actual, err := vNextPublicationIdentityFromFile(child.file, label)
+	defer vNextPublicationCloseAfter(&resultErr, child, label+" directory")
+	actual, err := vNextPublicationRemoveTreeChildIdentity(child.file, label)
 	if err != nil {
 		return err
 	}
 	if actual != identity {
 		return fmt.Errorf("%s identity changed", label)
 	}
-	removeErr := d.removeTreeBound(name, label, child, identity)
-	closeErr := child.Close()
-	if removeErr != nil {
-		return removeErr
-	}
-	if closeErr != nil {
-		return fmt.Errorf("close %s directory: %w", label, closeErr)
-	}
-	return nil
+	return d.removeTreeBound(name, label, child, identity)
 }
 
 func (d *vNextPublicationDirectory) removeTreeBound(name, label string, root *vNextPublicationDirectory, identity vNextPublicationIdentity) error {

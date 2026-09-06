@@ -819,3 +819,32 @@ Preserve B-01 typed no-replace A/B/C/public-C behavior, B-02 strict bootstrap, R
 Correct dated `VERIFICATION.md` “51 pre-existing”: 31 introduced diagnostics belong to complete CP11 range, `3a455877` has six paths, and old four-file/CP10-fixture text is not commit evidence. Preserve pre-range ownership records without inventing twelve grouped orderedjson names.
 
 **Required order:** commit this ledger; repair F-04/F-08 infrastructure; run real F-01/F-02/F-03 REDs; repair their one coherent resource/error group without weakening authority/locks/type/no-replace; complete F-05/F-06 proof and caller cuts; correct F-07/canonical mechanical history; run focused behavioral and retained B/R3/package/race/canon/Atlas/preflight/static gates; freeze exact code SHA; obtain fresh independent whole-range Astra/xhigh review. No per-finding acceptance, scope reduction, or finding/round cap applies. No unresolved product or architecture decision remains.
+
+## 2026-09-06 — CP11 F-07 canonical-record enactment
+
+The requested PLAN/TDD/VERIFICATION correction is now recorded. The old
+unavailable-provenance assertion is preserved above as superseded historical
+review evidence; it is withdrawn, not silently rewritten. The authoritative
+recovery remains
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-F07-signal-provenance-recovery-7294373166db75466e2c92269f7887f51ceaddc6.md`.
+
+It identifies the actual pre-routing RED as worker record 3224/event 3223,
+physical line 3224, SHA-256
+`65acae633258da13e38c4a9e0a64d532009bc2555b35ffc681a31b8d8828a14f`:
+the non-consuming signal selector exited 1 with `FAIL` in 12.383s. Record
+3230/event 3229/line 3230, SHA-256
+`9e4d444101f045b996d3c19ebe5e4d61ecd4abc2b2ab256b7d583bd2d88a3aa9`,
+is the source-edit boundary that scopes `NotifyContext` to lock-render.
+Record 3238/event 3237/line 3238, SHA-256
+`b0501c5a52f0fa821bd27907990bae074199e1bfb2563cb4cab3ea9f8c11fcff`,
+is the combined selector's exit 0 / `ok` in 15.417s. The transcript gives
+the full parent/interrupt/terminate/repeated-interrupt failure sequence and
+the exact commands in the linked recovery record.
+
+No full tree SHA was recovered because the RED was an uncommitted tested
+worktree state. `7294373166db75466e2c92269f7887f51ceaddc6` remains later
+reviewed code, never the red fixture identity. F-08 remains a separate
+harness correction; this record grants no extra signal or cancellation
+contract. CP11 remains unaccepted pending the complete Group 3 proof matrix,
+whole-package/race/static gates, freeze, and fresh independent exact-SHA
+review.

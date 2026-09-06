@@ -93,6 +93,13 @@ const (
 type vNextPublicationHooks struct {
 	At                   func(vNextPublicationFaultPoint) error
 	ControlCaptureRename func() error
+	// CloseAtomicTemporary is a narrowly scoped test seam. Its callback owns
+	// exactly one real Close of the supplied temporary and may return a
+	// completion error after that Close; production leaves it nil.
+	CloseAtomicTemporary func(*os.File) error
+	// CloseRepairPredecessor is the matching narrow test seam for an already
+	// linked predecessor anchor during failed repair creation.
+	CloseRepairPredecessor func(*vNextPublicationDirectory) error
 }
 type vNextPublicationArtifacts struct {
 	Files    map[string][]byte
@@ -374,7 +381,7 @@ func (p *vNextGenerationPublisher) publishLocked(operation *vNextPublicationOper
 	}
 	if validationErr != nil {
 		if rollbackErr := p.rollbackLocked(operation, old, hasOld, pointer); rollbackErr != nil {
-			return vNextGenerationPointer{}, fmt.Errorf("validate active generation: %v; restore previous generation: %w", validationErr, rollbackErr)
+			return vNextGenerationPointer{}, fmt.Errorf("validate active generation: %w; restore previous generation: %w", validationErr, rollbackErr)
 		}
 		return vNextGenerationPointer{}, fmt.Errorf("validate active generation: %w", validationErr)
 	}
@@ -816,7 +823,21 @@ func (p *vNextGenerationPublisher) writeCurrentLocked(operation *vNextPublicatio
 	return p.writeAtomicLocked(operation, vNextPublicationCurrentFile, payload, vNextPublicationBeforeCurrentTempSync, vNextPublicationAfterCurrentTempSync, vNextPublicationBeforeCurrentRename, vNextPublicationAfterCurrentRename, vNextPublicationBeforeCurrentParent, vNextPublicationAfterCurrentParent)
 }
 
-func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublicationOperation, target string, payload []byte, beforeSync, afterSync, beforeRename, afterRename, beforeParent, afterParent vNextPublicationFaultPoint) error {
+func (p *vNextGenerationPublisher) closeAtomicTemporary(file *os.File) error {
+	if p.hooks.CloseAtomicTemporary != nil {
+		return p.hooks.CloseAtomicTemporary(file)
+	}
+	return file.Close()
+}
+
+func (p *vNextGenerationPublisher) closeRepairPredecessor(directory *vNextPublicationDirectory) error {
+	if p.hooks.CloseRepairPredecessor != nil {
+		return p.hooks.CloseRepairPredecessor(directory)
+	}
+	return directory.Close()
+}
+
+func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublicationOperation, target string, payload []byte, beforeSync, afterSync, beforeRename, afterRename, beforeParent, afterParent vNextPublicationFaultPoint) (resultErr error) {
 	if err := operation.assertLockBound(); err != nil {
 		return err
 	}
@@ -826,21 +847,23 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 	}
 	temporaryRootIdentity, err := vNextPublicationIdentityFromFile(temporaryRoot.file, "publication temporary root")
 	if err != nil {
-		_ = temporary.Close()
-		_ = temporaryRoot.Close()
-		return err
+		resultErr = err
+		vNextPublicationRecordError(&resultErr, "close publication temporary", p.closeAtomicTemporary(temporary))
+		vNextPublicationCloseAfter(&resultErr, temporaryRoot, "publication temporary root")
+		return resultErr
 	}
 	identity, err := vNextPublicationIdentityFromFile(temporary, "publication temporary")
 	if err != nil {
-		_ = temporary.Close()
-		_ = temporaryRoot.Close()
-		return err
+		resultErr = err
+		vNextPublicationRecordError(&resultErr, "close publication temporary", p.closeAtomicTemporary(temporary))
+		vNextPublicationCloseAfter(&resultErr, temporaryRoot, "publication temporary root")
+		return resultErr
 	}
 	defer func() {
-		_ = p.removeRegularQuarantinedLocked(temporaryRoot, vNextPublicationTemporaryFile, "publication temporary", temporary, identity, "")
-		_ = temporary.Close()
-		_ = temporaryRoot.Close()
-		_ = operation.connector.removeEmptyDirectoryBound(temporaryName, "publication temporary root", temporaryRootIdentity)
+		vNextPublicationRecordError(&resultErr, "remove publication temporary", p.removeRegularQuarantinedLocked(temporaryRoot, vNextPublicationTemporaryFile, "publication temporary", temporary, identity, ""))
+		vNextPublicationRecordError(&resultErr, "close publication temporary", p.closeAtomicTemporary(temporary))
+		vNextPublicationCloseAfter(&resultErr, temporaryRoot, "publication temporary root")
+		vNextPublicationRecordError(&resultErr, "remove publication temporary root", operation.connector.removeEmptyDirectoryBound(temporaryName, "publication temporary root", temporaryRootIdentity))
 	}()
 	if err := temporary.Chmod(0o644); err != nil {
 		return err

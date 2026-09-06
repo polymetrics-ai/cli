@@ -534,10 +534,20 @@ func (state *vNextPublicationControlRepairState) terminal() (vNextPublicationCon
 	return phase, *phase.record.Selected, phase.record.Outcome, true
 }
 
-func vNextPublicationCloseAfter(resultErr *error, closer interface{ Close() error }, label string) {
-	if closeErr := closer.Close(); closeErr != nil && *resultErr == nil {
-		*resultErr = fmt.Errorf("close %s: %w", label, closeErr)
+func vNextPublicationRecordError(resultErr *error, action string, cause error) {
+	if cause == nil {
+		return
 	}
+	wrapped := fmt.Errorf("%s: %w", action, cause)
+	if *resultErr == nil {
+		*resultErr = wrapped
+		return
+	}
+	*resultErr = errors.Join(*resultErr, wrapped)
+}
+
+func vNextPublicationCloseAfter(resultErr *error, closer interface{ Close() error }, label string) {
+	vNextPublicationRecordError(resultErr, "close "+label, closer.Close())
 }
 
 func (state *vNextPublicationControlRepairState) assertPrivateIdentity(operation *vNextPublicationOperation) (resultErr error) {
@@ -978,19 +988,36 @@ func vNextPublicationValidateControlRepairPhaseSemanticLocked(state *vNextPublic
 	return nil
 }
 
-func vNextPublicationValidateCaptureLocked(transaction *vNextPublicationDirectory, capture vNextPublicationControlRepairCapture) (resultErr error) {
-	identity, err := transaction.identityAt(capture.Name, "publication control capture")
-	if err != nil {
-		return err
-	}
+// vNextPublicationBeforeRecordedCaptureOpenForTest is an inert, exact-boundary
+// seam for the CP11 capture proof. It runs immediately before the real
+// descriptor-relative open; production leaves it nil.
+var vNextPublicationBeforeRecordedCaptureOpenForTest func(*vNextPublicationDirectory, vNextPublicationControlRepairCapture)
+
+func vNextPublicationOpenRecordedCaptureLocked(transaction *vNextPublicationDirectory, capture vNextPublicationControlRepairCapture) (directory *vNextPublicationDirectory, resultErr error) {
 	expected, err := capture.Identity.publicationIdentity(unix.S_IFDIR)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	if identity != expected {
-		return fmt.Errorf("publication control capture identity changed")
+	if vNextPublicationBeforeRecordedCaptureOpenForTest != nil {
+		vNextPublicationBeforeRecordedCaptureOpenForTest(transaction, capture)
 	}
-	directory, err := transaction.openDirectory(capture.Name, "publication control capture")
+	directory, err = transaction.openDirectory(capture.Name, "publication control capture")
+	if err != nil {
+		return nil, err
+	}
+	actual, err := vNextPublicationIdentityFromFile(directory.file, "publication control capture")
+	if err == nil && actual != expected {
+		err = fmt.Errorf("publication control capture identity changed")
+	}
+	if err != nil {
+		vNextPublicationCloseAfter(&err, directory, "publication control capture")
+		return nil, err
+	}
+	return directory, nil
+}
+
+func vNextPublicationValidateCaptureLocked(transaction *vNextPublicationDirectory, capture vNextPublicationControlRepairCapture) (resultErr error) {
+	directory, err := vNextPublicationOpenRecordedCaptureLocked(transaction, capture)
 	if err != nil {
 		return err
 	}
@@ -1008,13 +1035,6 @@ func vNextPublicationValidateCaptureLocked(transaction *vNextPublicationDirector
 }
 
 func vNextPublicationReadEmptyControlCaptureLocked(transaction *vNextPublicationDirectory, name string) (identity vNextPublicationIdentity, resultErr error) {
-	identity, err := transaction.identityAt(name, "publication control capture")
-	if err != nil {
-		return vNextPublicationIdentity{}, err
-	}
-	if identity.mode != unix.S_IFDIR {
-		return vNextPublicationIdentity{}, fmt.Errorf("publication control capture is not a directory")
-	}
 	directory, err := transaction.openDirectory(name, "publication control capture")
 	if err != nil {
 		return vNextPublicationIdentity{}, err
@@ -1025,12 +1045,9 @@ func vNextPublicationReadEmptyControlCaptureLocked(transaction *vNextPublication
 			resultErr = fmt.Errorf("close publication control capture: %w", closeErr)
 		}
 	}()
-	actual, err := vNextPublicationIdentityFromFile(directory.file, "publication control capture")
+	identity, err = vNextPublicationIdentityFromFile(directory.file, "publication control capture")
 	if err != nil {
 		return vNextPublicationIdentity{}, err
-	}
-	if actual != identity {
-		return vNextPublicationIdentity{}, fmt.Errorf("publication control capture identity changed")
 	}
 	entries, err := directory.readDir()
 	if err != nil {
@@ -1046,7 +1063,7 @@ func vNextPublicationValidateCapturedCandidateLocked(transaction *vNextPublicati
 	if err := vNextPublicationValidateCaptureLocked(transaction, capture); err != nil {
 		return err
 	}
-	directory, err := transaction.openDirectory(capture.Name, "publication control capture")
+	directory, err := vNextPublicationOpenRecordedCaptureLocked(transaction, capture)
 	if err != nil {
 		return err
 	}
@@ -1268,20 +1285,20 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 	anchors := make([]vNextPublicationControlRepairAnchor, 0, 2)
 	defer func() {
 		if keep {
-			if closeErr := transaction.Close(); closeErr != nil && resultErr == nil {
+			if closeErr := transaction.Close(); closeErr != nil {
 				state = nil
-				resultErr = fmt.Errorf("close publication control repair transaction: %w", closeErr)
+				vNextPublicationRecordError(&resultErr, "close publication control repair transaction", closeErr)
 			}
 			return
 		}
 		for index := len(anchors) - 1; index >= 0; index-- {
 			anchor := anchors[index]
-			_ = transaction.removeRegularBound(anchor.name, "unprepared publication control anchor", anchor.identity)
+			vNextPublicationRecordError(&resultErr, "remove unprepared publication control anchor", transaction.removeRegularBound(anchor.name, "unprepared publication control anchor", anchor.identity))
 		}
-		_ = transaction.Sync()
-		_ = transaction.Close()
-		_ = operation.connector.removeEmptyDirectoryBound(transactionName, "unprepared publication control repair transaction", transactionIdentity)
-		_ = operation.connector.Sync()
+		vNextPublicationRecordError(&resultErr, "sync unprepared publication control repair transaction", transaction.Sync())
+		vNextPublicationCloseAfter(&resultErr, transaction, "unprepared publication control repair transaction")
+		vNextPublicationRecordError(&resultErr, "remove unprepared publication control repair transaction", operation.connector.removeEmptyDirectoryBound(transactionName, "unprepared publication control repair transaction", transactionIdentity))
+		vNextPublicationRecordError(&resultErr, "sync publication connector after unprepared repair cleanup", operation.connector.Sync())
 	}()
 
 	prior := vNextPublicationAbsentControlState()
@@ -1295,7 +1312,12 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 				return nil, err
 			}
 			linkErr := transaction.linkFromBound(predecessorTransaction, predecessor.selected.Member, vNextPublicationControlBackupMember, "publication control prior anchor", identity)
-			closeErr := predecessorTransaction.Close()
+			if linkErr == nil {
+				// The link is a known owned creation before the later fallible
+				// predecessor Close returns through !keep cleanup.
+				anchors = append(anchors, vNextPublicationControlRepairAnchor{name: vNextPublicationControlBackupMember, identity: identity})
+			}
+			closeErr := p.closeRepairPredecessor(predecessorTransaction)
 			if linkErr != nil {
 				return nil, linkErr
 			}
@@ -1305,7 +1327,6 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 			if err := transaction.assertIdentity(vNextPublicationControlBackupMember, "publication control prior anchor", identity); err != nil {
 				return nil, err
 			}
-			anchors = append(anchors, vNextPublicationControlRepairAnchor{name: vNextPublicationControlBackupMember, identity: identity})
 		}
 	}
 	if base {
@@ -1523,7 +1544,7 @@ func (p *vNextGenerationPublisher) completeControlCaptureLocked(operation *vNext
 	if err := vNextPublicationValidateCaptureLocked(transaction, capture); err != nil {
 		return err
 	}
-	directory, err := transaction.openDirectory(capture.Name, "publication control capture")
+	directory, err := vNextPublicationOpenRecordedCaptureLocked(transaction, capture)
 	if err != nil {
 		return err
 	}

@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -1427,6 +1428,51 @@ func vNextPublicationReplacePrivateDirectoryForTest(t *testing.T, path string) {
 	}
 }
 
+func TestVNextPublicationOpenRecordedCaptureRejectsSubstitutedDirectory(t *testing.T) {
+	root := t.TempDir()
+	transaction, err := vNextPublicationOpenDirectory(root, "publication control repair transaction")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if closeErr := transaction.Close(); closeErr != nil {
+			t.Errorf("close transaction: %v", closeErr)
+		}
+	}()
+
+	const captureName = ".capture-001"
+	if err := unix.Mkdirat(int(transaction.file.Fd()), captureName, 0o700); err != nil {
+		t.Fatal(err)
+	}
+	captureDirectory, err := transaction.openDirectory(captureName, "publication control capture")
+	if err != nil {
+		t.Fatal(err)
+	}
+	identity, err := vNextPublicationIdentityFromFile(captureDirectory.file, "publication control capture")
+	if closeErr := captureDirectory.Close(); closeErr != nil && err == nil {
+		err = closeErr
+	}
+	if err != nil {
+		t.Fatal(err)
+	}
+	capture := vNextPublicationControlRepairCapture{
+		Attempt:  1,
+		Name:     captureName,
+		Identity: vNextPublicationRecordIdentity(identity),
+	}
+
+	capturePath := filepath.Join(root, captureName)
+	vNextPublicationReplacePrivateDirectoryForTest(t, capturePath)
+	if directory, openErr := vNextPublicationOpenRecordedCaptureLocked(transaction, capture); openErr == nil {
+		if closeErr := directory.Close(); closeErr != nil {
+			t.Errorf("close substituted capture: %v", closeErr)
+		}
+		t.Fatal("open recorded capture accepted a substituted directory")
+	} else if !strings.Contains(openErr.Error(), "capture identity changed") {
+		t.Fatalf("open recorded capture error = %v, want capture identity refusal", openErr)
+	}
+}
+
 func vNextPublicationReplacePrivateFileForTest(t *testing.T, path string) {
 	t.Helper()
 	if err := os.Rename(path, path+".attacker-moved"); err != nil {
@@ -1658,39 +1704,81 @@ func vNextPublicationTreeSnapshotForTest(t *testing.T, root string) []byte {
 		Payload []byte `json:"payload,omitempty"`
 	}
 	var entries []entry
-	var visit func(string, string)
-	visit = func(directory, relative string) {
-		children, err := os.ReadDir(directory)
+	var visit func(*vNextPublicationDirectory, string)
+	visit = func(directory *vNextPublicationDirectory, relative string) {
+		defer func() {
+			if err := directory.Close(); err != nil {
+				t.Errorf("close snapshot directory %q: %v", relative, err)
+			}
+		}()
+		children, err := directory.readDir()
 		if err != nil {
 			t.Fatal(err)
 		}
 		for _, child := range children {
-			path := filepath.Join(directory, child.Name())
 			name := child.Name()
 			if relative != "" {
 				name = filepath.Join(relative, name)
 			}
-			var stat unix.Stat_t
-			if err := unix.Lstat(path, &stat); err != nil {
+			observed, err := directory.identityAt(child.Name(), "snapshot member "+name)
+			if err != nil {
 				t.Fatal(err)
 			}
-			snapshot := entry{Path: name, Device: uint64(stat.Dev), Inode: uint64(stat.Ino), Mode: uint32(stat.Mode)}
-			if vNextPublicationStatIsDir(stat) {
-				entries = append(entries, snapshot)
-				visit(path, name)
-				continue
+			if vNextPublicationSnapshotAfterObservationForTest != nil {
+				vNextPublicationSnapshotAfterObservationForTest(directory, child.Name(), observed)
 			}
-			if vNextPublicationStatIsRegular(stat) {
-				payload, err := os.ReadFile(path)
+			snapshot := entry{Path: name, Device: observed.device, Inode: observed.inode, Mode: observed.mode}
+			switch observed.mode {
+			case unix.S_IFDIR:
+				childDirectory, err := directory.openDirectory(child.Name(), "snapshot directory "+name)
 				if err != nil {
 					t.Fatal(err)
 				}
+				actual, identityErr := vNextPublicationIdentityFromFile(childDirectory.file, "snapshot directory "+name)
+				if identityErr != nil {
+					_ = childDirectory.Close()
+					t.Fatal(identityErr)
+				}
+				if actual != observed {
+					_ = childDirectory.Close()
+					t.Fatalf("snapshot directory %q identity changed", name)
+				}
+				entries = append(entries, snapshot)
+				visit(childDirectory, name)
+			case unix.S_IFREG:
+				file, err := directory.openRegular(child.Name(), "snapshot file "+name, unix.O_RDONLY)
+				if err != nil {
+					t.Fatal(err)
+				}
+				actual, identityErr := vNextPublicationIdentityFromFile(file, "snapshot file "+name)
+				if identityErr != nil {
+					_ = file.Close()
+					t.Fatal(identityErr)
+				}
+				if actual != observed {
+					_ = file.Close()
+					t.Fatalf("snapshot file %q identity changed", name)
+				}
+				payload, readErr := io.ReadAll(file)
+				closeErr := file.Close()
+				if readErr != nil {
+					t.Fatalf("read snapshot file %q: %v", name, readErr)
+				}
+				if closeErr != nil {
+					t.Fatalf("close snapshot file %q: %v", name, closeErr)
+				}
 				snapshot.Payload = payload
+				entries = append(entries, snapshot)
+			default:
+				entries = append(entries, snapshot)
 			}
-			entries = append(entries, snapshot)
 		}
 	}
-	visit(root, "")
+	directory, err := vNextPublicationOpenDirectory(root, "snapshot root")
+	if err != nil {
+		t.Fatal(err)
+	}
+	visit(directory, "")
 	snapshot, err := json.Marshal(entries)
 	if err != nil {
 		t.Fatal(err)

@@ -684,3 +684,27 @@ The final delivery record also runs the secret/local-state scan for tokens, priv
 - **Smoke classification and result:** Firstmate's scope clarification was applied before this required gate. `make smoke` creates one new `mktemp` project and passes that root to every `pm` command; its source is the deterministic in-process `sample` connector, while warehouse and outbox paths are confined below the same root. It creates no existing credential-store entry and makes no provider, customer-database, or network request. The successful run proves a nonempty connection-owned Parquet table and owner record plus a nonempty local outbox JSONL after plan, preview, stdin approval, and reverse execution. The exact disposable smoke root and ignored locally built `pm` artifact were moved to Trash after their assertions, so both remain recoverable and no smoke residue is in the worktree.
 - **Platform/baseline boundaries:** a CGO-disabled Linux cross-compile cannot build the project because the embedded DuckDB dependency fails first (`undefined: Conn`); that is recorded as a build-environment limitation, not Linux runtime proof. The separately required `go test -count=1 -timeout 20m ./internal/cli` ran for 223.511s and reproduced only four inherited failures — static polling-help text, two source-bound-origin preflight expectations, and ETL-help text — along with expected local Redis connection-refused logs. No failing test names or source paths are in this repair delta.
 - **Next gate:** stage only the four reviewed files, commit the coherent local CP11-R3-01 repair, bind its exact code SHA here and in the Firstmate status, then obtain the fresh independent Astra/xhigh review over the full original CP11 range plus this repair/evidence delta. CP11 is not accepted and CP12 remains prohibited.
+
+## 2026-09-06 — CP11 F-07 historical signal provenance correction
+
+This is a record correction, not a current rerun. The earlier statement that
+the pre-routing RED command/output/edit was unavailable is superseded by the
+metadata-bound recovery at
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-F07-signal-provenance-recovery-7294373166db75466e2c92269f7887f51ceaddc6.md`.
+
+- Worker record 3224/event 3223/physical line 3224, SHA-256 `65acae633258da13e38c4a9e0a64d532009bc2555b35ffc681a31b8d8828a14f`, ran `gofmt -w cmd/connectorgen/vnext_publication_test.go && go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestConnectorgenMainPreservesNonConsumingSignalTermination$'` and exited 1: `validate` did not terminate for the parent plus `interrupt`, `terminate`, and `repeated-interrupt`; package result was `FAIL polymetrics.ai/cmd/connectorgen 12.383s`.
+- Record 3230/event 3229/physical line 3230, SHA-256 `9e4d444101f045b996d3c19ebe5e4d61ecd4abc2b2ab256b7d583bd2d88a3aa9`, records the actual `main.go` routing change: non-`lock-render` calls `run`, and only `lock-render` creates `NotifyContext` through `runMain`.
+- Record 3238/event 3237/physical line 3238, SHA-256 `b0501c5a52f0fa821bd27907990bae074199e1bfb2563cb4cab3ea9f8c11fcff`, ran the combined non-consuming/lock-render selector after that edit and exited 0 / `ok polymetrics.ai/cmd/connectorgen 15.417s`.
+
+The failing snapshot was an uncommitted worktree, so no full Git/tree SHA is
+available; later commit `7294373166db75466e2c92269f7887f51ceaddc6` must not be
+called the failing state. This correction does not establish provider-live
+behavior, a forced second-signal guarantee, or cancellation in the middle of
+a publication transaction.
+
+## 2026-09-06 — CP11 F-01–F-08 current local validation
+
+- **Focused evidence:** Group 1 F-04/F-08 active selector, Group 2 F-01/F-02/F-03 selector, and Group 3 identity/durable-caller matrix are retained in `GROUP1-EVIDENCE.md`, `GROUP2-EVIDENCE.md`, and `GROUP3-EVIDENCE.md`. Group 3 includes the actual committed/new-selected `BeforePrune` cut, successful Publish final prune, fresh old-selected/rejected-new empty/nonempty variants, immediate rollback variants, stage ownership, Check read-only behavior, and the F-03 Publish-initial-recovery close caller.
+- **Final package/race source state:** after correcting two new F-02 test cleanup error checks, focused F-02 passed in 1.274s and new-only lint reported `0 issues.`. `go test -count=1 -timeout 20m ./cmd/connectorgen` then passed in 263.677s; `go test -race -count=1 -timeout 20m ./cmd/connectorgen` passed in 691.666s.
+- **Current static proof:** formatter diff, `go vet ./cmd/connectorgen`, both `cmd/connectorgen` and `cmd/pm` builds, `go mod tidy -diff`, generated agent-contract check, and diff check passed. In this same coherent wave, the source-lock publication test gate, connector canon check, 553-definition validation, runtime preflight, docs check, clean 284-file/553-connector boundary report, and release workflow check passed. No provider, credential, database, cache/certification input, no-mistakes pipeline, push, merge, or CP12 operation occurred.
+- **Remaining gate:** commit this reviewed coherent local wave, bind exact SHA/tree and changed paths, then freeze source for the separately prescribed Astra/xhigh whole-range review and Luna/low final mechanical index. These local results do not accept CP11.

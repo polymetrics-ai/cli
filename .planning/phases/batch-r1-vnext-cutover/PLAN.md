@@ -1073,3 +1073,30 @@ only. Preserve stdout success ordering and no-success-on-refusal instead.
 The plan is the documented non-Pi inline fallback for generated GSD
 `discuss-phase` and `plan-phase --tdd`; generated `execute-phase`,
 `verify-work`, and `code-review` are run/recorded in sequence after this plan.
+
+### 2026-09-06 — F-07 canonical provenance correction
+
+The earlier planned/unavailable-trace assertion is retained as superseded
+history. The authoritative bounded recovery is
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-F07-signal-provenance-recovery-7294373166db75466e2c92269f7887f51ceaddc6.md`.
+It binds the real pre-routing test to worker record 3224/event 3223/physical
+line 3224, SHA-256
+`65acae633258da13e38c4a9e0a64d532009bc2555b35ffc681a31b8d8828a14f`:
+`gofmt -w cmd/connectorgen/vnext_publication_test.go && go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestConnectorgenMainPreservesNonConsumingSignalTermination$'`
+exited 1 with package `FAIL` in 12.383s. The parent and the `interrupt`,
+`terminate`, and `repeated-interrupt` subtests failed because `validate` did
+not terminate under global signal interception.
+
+The recorded source-edit boundary is record 3230/event 3229/physical line
+3230, SHA-256
+`9e4d444101f045b996d3c19ebe5e4d61ecd4abc2b2ab256b7d583bd2d88a3aa9`:
+`main` exits through `runMain`; non-`lock-render` arguments call `run`; only
+`lock-render` creates `signal.NotifyContext`. Record 3238/event 3237/physical
+line 3238, SHA-256
+`b0501c5a52f0fa821bd27907990bae074199e1bfb2563cb4cab3ea9f8c11fcff`,
+then ran the combined non-consuming/lock-render selector to exit 0 with
+`ok polymetrics.ai/cmd/connectorgen 15.417s`. The failing tree was an
+uncommitted tested state: no full Git/tree SHA was recovered, and later
+`7294373166db75466e2c92269f7887f51ceaddc6` is not its identity. This is a
+historical evidence correction only; F-08 remains independent and no
+second-signal or mid-transaction guarantee is asserted.
