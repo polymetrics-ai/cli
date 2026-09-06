@@ -91,6 +91,14 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 					raw = facts.bindings.Authoring[ref.Artifact]
 				}
 			}
+			claims := sourceLaneSuppliedClaims(facts, annotation, ref)
+			for _, issue := range claims {
+				severity := sourceClaimSeverity(group.claimed)
+				if !strings.Contains(issue.Code, "unverified") {
+					severity = "error"
+				}
+				cells[index].Diagnostics = append(cells[index].Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{ref.Lane}, Stage: "reference", Code: issue.Code, Pointer: issue.Pointer, Owner: key.Connector, Severity: severity})
+			}
 			absent := func() {
 				if group.claimed {
 					add("materialized_target_absent", "error")
@@ -147,12 +155,162 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				d := sourceLaneDiagnostic{Key: key, Lanes: []string{ref.Lane}, Stage: "reference", Code: issue.Code, Pointer: issue.Pointer, Owner: key.Connector, Severity: severity}
 				cells[index].Diagnostics = append(cells[index].Diagnostics, d)
 			}
-			if len(issues) == 0 {
+			if len(issues) == 0 && len(claims) == 0 {
 				cells[index].References = append(cells[index].References, canonicalSourceLaneTargetRef(ref))
 			}
 		}
 	}
+	return sourceLaneCheckCoverage(key, facts, annotation, cells)
+}
+
+func sourceLaneSuppliedClaims(facts sourceFacts, a sourceSemanticAnnotation, ref sourceLaneTargetRef) []sourceLaneBindingIssue {
+	issues := []sourceLaneBindingIssue{}
+	if ref.SourceSchema != nil {
+		_, _, code := sourceLaneSchemaAnchor(facts, a, ref)
+		if code != "" {
+			issues = append(issues, sourceLaneBindingIssue{code, ref.SourceSchema.Pointer})
+		}
+	}
+	for _, m := range ref.FieldMappings {
+		_, code := sourceLaneCitedValue(facts, m.Source)
+		if code == "" {
+			parameter := false
+			for _, p := range facts.Parameters {
+				parameter = parameter || p.Ref == m.Source
+			}
+			if !parameter {
+				if ref.SourceSchema == nil {
+					code = "source_binding_scope_mismatch"
+				} else {
+					_, code = sourceLaneSchemaProjection(facts, *ref.SourceSchema, m.Source.Pointer)
+				}
+			}
+		}
+		if code != "" {
+			issues = append(issues, sourceLaneBindingIssue{code, m.Source.Pointer})
+		}
+	}
+	return issues
+}
+
+func sourceLaneCheckCoverage(key sourceOperationKey, facts sourceFacts, a sourceSemanticAnnotation, cells []sourceLaneCell) []sourceLaneCell {
+	type scope struct {
+		ref     sourceFactRef
+		request bool
+	}
+	scopes := []scope{}
+	for _, group := range []string{"request_body", "responses"} {
+		owner, ok := facts.Refs[group]
+		if !ok {
+			continue
+		}
+		root, ok := sourceResolveObject(facts, facts.Groups[group], map[string]bool{}, 0)
+		if !ok {
+			continue
+		}
+		mediaAt := func(node map[string]json.RawMessage, pointer string, request bool) {
+			var media map[string]json.RawMessage
+			if json.Unmarshal(node["content"], &media) != nil {
+				return
+			}
+			for name, value := range media {
+				var entry map[string]json.RawMessage
+				if json.Unmarshal(value, &entry) != nil || len(entry["schema"]) == 0 {
+					continue
+				}
+				raw, err := canonicalSourceJSON(entry["schema"])
+				if err != nil {
+					continue
+				}
+				scopes = append(scopes, scope{sourceFactRef{DocumentID: owner.DocumentID, Pointer: pointer + "/content/" + escapeSourcePointer(name) + "/schema", ValueSHA256: sourceBytesHash(raw)}, request})
+			}
+		}
+		if group == "request_body" {
+			mediaAt(root, owner.Pointer, true)
+		} else {
+			for status, value := range root {
+				if len(status) == 3 && status[0] == '2' {
+					node, ok := sourceResolveObject(facts, value, map[string]bool{}, 0)
+					if ok {
+						mediaAt(node, owner.Pointer+"/"+status, false)
+					}
+				}
+			}
+		}
+	}
+	for i := range cells {
+		cell := &cells[i]
+		for _, ref := range cell.References {
+			if ref.Kind == "schema" || ref.Kind == "sync_transport" {
+				continue
+			}
+			for _, needed := range scopes {
+				covered := false
+				for _, other := range cell.References {
+					if other.SourceSchema == nil || *other.SourceSchema != needed.ref || other.CanonicalID != ref.CanonicalID || other.Generation != ref.Generation {
+						continue
+					}
+					if needed.request && other.SchemaRole != sourceLaneSchemaRequest || !needed.request && other.SchemaRole != sourceLaneSchemaRecord && other.SchemaRole != sourceLaneSchemaResponse {
+						continue
+					}
+					if sourceLaneSharedConsumer(facts.bindings, ref, other) {
+						covered = true
+						break
+					}
+				}
+				if !covered {
+					cell.Diagnostics = append(cell.Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cell.Lane}, Stage: "reference", Code: "target_required_scope_unverified", Pointer: needed.ref.Pointer, Owner: key.Connector, Severity: "deficit"})
+				}
+			}
+		}
+	}
 	return cells
+}
+
+func sourceLaneSharedConsumer(inputs *sourceLaneBindingInputs, a, b sourceLaneTargetRef) bool {
+	if inputs == nil {
+		return false
+	}
+	consumers := func(ref sourceLaneTargetRef) []string {
+		if ref.Kind == "schema" || ref.Kind == "canonical_operation" {
+			descriptor := inputs.Canonical[ref.Connector]
+			for _, source := range descriptor.Graph.Operations {
+				if source.ID != ref.CanonicalID {
+					continue
+				}
+				ids := []string{}
+				if source.Stream != nil && (ref.SchemaRole == sourceLaneSchemaRecord || ref.SchemaRole == sourceLaneSchemaResponse || ref.Kind == "canonical_operation") {
+					ids = append(ids, "stream:"+source.Stream.Spec.Name)
+				}
+				if source.Write != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.Kind == "canonical_operation") {
+					ids = append(ids, "write:"+source.Write.Spec.Name)
+				}
+				if source.Operation != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.Kind == "canonical_operation") {
+					ids = append(ids, "operation:"+source.Operation.Spec.ID)
+				}
+				return ids
+			}
+			return nil
+		}
+		if ref.Kind != "command" {
+			return []string{ref.Kind + ":" + ref.ID}
+		}
+		binding, err := engine.ResolveImplementedCommandPath(inputs.Bundles[ref.Connector], ref.ID)
+		if err != nil {
+			return nil
+		}
+		return []string{binding.Binding.Kind + ":" + binding.Binding.ID}
+	}
+	x, y := consumers(a), consumers(b)
+	if len(x) == 0 || len(y) == 0 {
+		return false
+	}
+	for _, id := range x {
+		if !sourceLaneContains(y, id) {
+			return false
+		}
+	}
+	return true
 }
 
 func sourceClaimSeverity(claimed bool) string {
