@@ -49,6 +49,12 @@ type sourceLaneManifest struct {
 // buildSourceLaneManifest composes source inventory, normalized facts and lane
 // rules without running or publishing a connector. Proof is integrated separately.
 func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLaneCohort, annotations []sourceSemanticAnnotation) (sourceLaneManifest, error) {
+	return buildSourceLaneManifestObserved(ctx, repo, cohort, annotations, nil)
+}
+
+// The optional observer is a narrow test seam reached after real normalization.
+// Production always uses nil and all retained input reads remain unchanged.
+func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort sourceLaneCohort, annotations []sourceSemanticAnnotation, afterNormalize func(sourceOperationKey, sourceFacts) error) (sourceLaneManifest, error) {
 	result := sourceLaneManifest{SchemaVersion: 1, Kind: "retained_source_lane_manifest", CohortID: cohort.CohortID, Inputs: []sourceArtifactPin{}, Documents: []retainedSourceDocument{}, SourceOperations: []sourceLaneManifestRow{}, LaneSummary: []sourceLaneSummary{}, Diagnostics: []sourceLaneDiagnostic{}}
 	if err := validateSourceLaneCohort(cohort); err != nil {
 		return result, fmt.Errorf("cohort anchor invalid")
@@ -105,7 +111,20 @@ func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLane
 		if doc, exists := docs[source.RawDocumentID]; exists {
 			raw = &doc
 		}
-		facts := normalizeSourceFacts(source, docs[source.DocumentID], raw)
+		var facts sourceFacts
+		if ctx.Err() != nil {
+			facts = sourceFacts{Status: "unavailable", Parameters: []sourceParameterFact{}, Groups: map[string]json.RawMessage{}, Refs: map[string]sourceFactRef{}, Diagnostics: []string{"source_normalization_cancelled"}, CoverageConfidence: "partial", CompletenessLimits: []string{"retained_snapshot_only_not_current_provider_completeness", "source_normalization_cancelled"}}
+		} else {
+			facts = normalizeSourceFacts(source, docs[source.DocumentID], raw)
+			if afterNormalize != nil {
+				if err := afterNormalize(source.Key, facts); err != nil {
+					facts.Status = "unavailable"
+					facts.Diagnostics = append(facts.Diagnostics, "source_normalization_failed")
+					facts.CoverageConfidence = "partial"
+					facts.CompletenessLimits = append(facts.CompletenessLimits, "source_normalization_failed")
+				}
+			}
+		}
 
 		for _, code := range facts.Diagnostics {
 			severity := "deficit"

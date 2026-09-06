@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -458,6 +459,65 @@ func TestSourceLaneManifestObservedCounts(t *testing.T) {
 			}
 			if len(got.SourceOperations) != 2 || got.SourceOperations[0].Source.Key.ID != "source.a" || got.SourceOperations[1].Source.Key.ID != "source.b" {
 				t.Fatal("observed availability changed anchored keys")
+			}
+		})
+	}
+}
+
+func TestSourceLaneManifestReachedNormalizationFailures(t *testing.T) {
+	for _, cancelAfterFirst := range []bool{false, true} {
+		name := "post-normalization error"
+		if cancelAfterFirst {
+			name = "post-normalization cancellation"
+		}
+		t.Run(name, func(t *testing.T) {
+			root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			before := sourceBindingFixtureSnapshot(t, root)
+			var witnessed []string
+			result, err := buildSourceLaneManifestObserved(ctx, root, cohort, nil, func(key sourceOperationKey, facts sourceFacts) error {
+				if facts.Status != "available" || facts.Method != "GET" || facts.Path != "/items" {
+					t.Fatalf("observer did not follow actual normalization: %+v", facts)
+				}
+				witnessed = append(witnessed, key.ID)
+				if key.ID == "source.a" {
+					if cancelAfterFirst {
+						cancel()
+						return nil
+					}
+					return errors.New("actual post-normalization cut")
+				}
+				return nil
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(result.SourceOperations) != 2 || result.SourceTotals.Cells != 14 || result.SourceOperations[0].Source.Key.ID != "source.a" || result.SourceOperations[1].Source.Key.ID != "source.b" {
+				t.Fatal("failure lost independent source keys/cells")
+			}
+			if after := sourceBindingFixtureSnapshot(t, root); !reflect.DeepEqual(before, after) {
+				t.Fatal("normalization failure changed retained fixture state")
+			}
+			wantCode := "source_normalization_failed"
+			wantKey := "source.a"
+			if cancelAfterFirst {
+				wantCode = "source_normalization_cancelled"
+				wantKey = "source.b"
+				if !reflect.DeepEqual(witnessed, []string{"source.a"}) {
+					t.Errorf("normalization continued after actual cancellation: %v", witnessed)
+				}
+			} else if !reflect.DeepEqual(witnessed, []string{"source.a", "source.b"}) {
+				t.Errorf("normalization sibling not reached: %v", witnessed)
+			}
+			found := false
+			for _, d := range result.Diagnostics {
+				if d.Code == wantCode && d.Key.ID == wantKey && d.Stage == "normalization" && d.Severity == "error" {
+					found = true
+				}
+			}
+			if !found || result.Validation.Status != "invalid" {
+				t.Errorf("reached failure omitted: code=%s validation=%+v diagnostics=%+v", wantCode, result.Validation, result.Diagnostics)
 			}
 		})
 	}
