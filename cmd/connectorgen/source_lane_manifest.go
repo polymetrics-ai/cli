@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -155,6 +156,7 @@ func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort so
 		}
 		result.SourceOperations = append(result.SourceOperations, sourceLaneManifestRow{Source: source, Facts: facts, Lanes: cells})
 	}
+	result.Diagnostics = append(result.Diagnostics, validateSourceLaneFactCitations(result)...)
 	summarizeSourceLaneManifest(&result)
 	return result, nil
 }
@@ -215,7 +217,7 @@ func summarizeSourceLaneManifest(result *sourceLaneManifest) {
 // validateSourceLaneManifest checks a supplied authoring report against the
 // independently built report from current retained inputs.
 func validateSourceLaneManifest(candidate, expected sourceLaneManifest) []sourceLaneDiagnostic {
-	diagnostics := []sourceLaneDiagnostic{}
+	diagnostics := validateSourceLaneFactCitations(candidate)
 	add := func(key sourceOperationKey, code, pointer string, lanes []string) {
 		diagnostics = append(diagnostics, sourceLaneDiagnostic{Key: key, Lanes: lanes, Stage: "manifest", Code: code, Pointer: pointer, Owner: key.Connector, Severity: "error"})
 	}
@@ -289,4 +291,145 @@ func sourceLaneJSONEqual(a, b any) bool {
 	}
 	second, err := json.Marshal(b)
 	return err == nil && bytes.Equal(first, second)
+}
+
+// validateSourceLaneFactCitations verifies copied facts against retained source
+// documents independently of a freshly generated report's copied values.
+func validateSourceLaneFactCitations(candidate sourceLaneManifest) []sourceLaneDiagnostic {
+	diagnostics := []sourceLaneDiagnostic{}
+	documents := map[string]retainedSourceDocument{}
+	roots := map[string]any{}
+	invalid := map[string]bool{}
+	for _, document := range candidate.Documents {
+		if _, exists := documents[document.ID]; exists || document.ID == "" {
+			invalid[document.ID] = true
+		}
+		documents[document.ID] = document
+		if document.ContentType != "text/html" {
+			view, err := sourceDocumentViewFor(document)
+			if err != nil {
+				invalid[document.ID] = true
+			} else {
+				roots[document.ID] = view.ReferenceRoot
+			}
+		}
+	}
+	resolve := func(ref sourceFactRef) (json.RawMessage, error) {
+		document, exists := documents[ref.DocumentID]
+		if !exists || invalid[ref.DocumentID] {
+			return nil, fmt.Errorf("citation document unavailable")
+		}
+		if document.ContentType == "text/html" {
+			return resolveSourceFactValue(document, ref)
+		}
+		if ref.Section != "" || ref.Part != "" {
+			return nil, fmt.Errorf("rendered selector on JSON document")
+		}
+		return sourceLaneRetainedPointer(roots[ref.DocumentID], ref.Pointer)
+	}
+	for _, row := range candidate.SourceOperations {
+		add := func(code, pointer string) {
+			diagnostics = append(diagnostics, sourceLaneDiagnostic{Key: row.Source.Key, Lanes: sourceLaneNames(), Stage: "source_fact_validation", Code: code, Pointer: pointer, Owner: row.Source.Key.Connector, Severity: "error"})
+		}
+		names := make([]string, 0, len(row.Facts.Groups))
+		for name := range row.Facts.Groups {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			copied := row.Facts.Groups[name]
+			ref, cited := row.Facts.Refs[name]
+			if !cited && bytes.Equal(bytes.TrimSpace(copied), []byte("null")) {
+				continue
+			}
+			if !cited {
+				add("source_fact_citation_missing", name)
+				continue
+			}
+			actual, err := resolve(ref)
+			canonical, copyErr := canonicalSourceJSON(copied)
+			if err != nil || copyErr != nil {
+				add("source_fact_citation_invalid", ref.Pointer)
+				continue
+			}
+			actual, err = canonicalSourceJSON(actual)
+			if err != nil || sourceBytesHash(actual) != ref.ValueSHA256 || !bytes.Equal(canonical, actual) {
+				add("source_fact_value_mismatch", ref.Pointer)
+			}
+		}
+		refNames := make([]string, 0, len(row.Facts.Refs))
+		for name := range row.Facts.Refs {
+			refNames = append(refNames, name)
+		}
+		sort.Strings(refNames)
+		for _, name := range refNames {
+			if _, exists := row.Facts.Groups[name]; !exists {
+				add("source_fact_group_missing", name)
+			}
+		}
+		for _, field := range []struct{ name, value string }{
+			{"method", row.Facts.Method}, {"path", row.Facts.Path},
+			{"protocol", row.Facts.Protocol}, {"operation_id", row.Facts.OperationID},
+		} {
+			var value string
+			raw, exists := row.Facts.Groups[field.name]
+			if exists && !bytes.Equal(bytes.TrimSpace(raw), []byte("null")) {
+				if err := json.Unmarshal(raw, &value); err != nil {
+					add("source_fact_scalar_invalid", field.name)
+					continue
+				}
+			}
+			if field.name == "method" {
+				value = strings.ToUpper(value)
+			}
+			if field.value != value {
+				add("source_fact_scalar_mismatch", field.name)
+			}
+		}
+	}
+	return diagnostics
+}
+
+// sourceLaneRetainedPointer resolves an RFC 6901 pointer over a prepared JSON
+// root. It never follows remote references or reparses the full document.
+func sourceLaneRetainedPointer(root any, pointer string) (json.RawMessage, error) {
+	if pointer == "" {
+		return json.Marshal(root)
+	}
+	if !strings.HasPrefix(pointer, "/") {
+		return nil, fmt.Errorf("source pointer must be absolute")
+	}
+	parts := strings.Split(pointer[1:], "/")
+	if len(parts) > 256 {
+		return nil, fmt.Errorf("source pointer depth exceeded")
+	}
+	value := root
+	for _, part := range parts {
+		for i := 0; i < len(part); i++ {
+			if part[i] == '~' {
+				if i+1 == len(part) || (part[i+1] != '0' && part[i+1] != '1') {
+					return nil, fmt.Errorf("invalid source pointer escape")
+				}
+				i++
+			}
+		}
+		part = strings.ReplaceAll(strings.ReplaceAll(part, "~1", "/"), "~0", "~")
+		switch node := value.(type) {
+		case map[string]any:
+			var exists bool
+			value, exists = node[part]
+			if !exists {
+				return nil, fmt.Errorf("source pointer absent")
+			}
+		case []any:
+			index, err := strconv.Atoi(part)
+			if err != nil || index < 0 || index >= len(node) || strconv.Itoa(index) != part {
+				return nil, fmt.Errorf("source pointer array index invalid")
+			}
+			value = node[index]
+		default:
+			return nil, fmt.Errorf("source pointer traverses scalar")
+		}
+	}
+	return json.Marshal(value)
 }

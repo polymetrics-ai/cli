@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -520,5 +521,105 @@ func TestSourceLaneManifestReachedNormalizationFailures(t *testing.T) {
 				t.Errorf("reached failure omitted: code=%s validation=%+v diagnostics=%+v", wantCode, result.Validation, result.Diagnostics)
 			}
 		})
+	}
+}
+
+func TestSourceLaneManifestFactCitationOracle(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	original, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct {
+		name   string
+		mutate func(*sourceLaneManifest)
+	}{
+		{"valid", nil},
+		{"self consistent wrong responses", func(m *sourceLaneManifest) {
+			f := &m.SourceOperations[0].Facts
+			f.Groups["responses"] = json.RawMessage(`{"200":{"description":"invented response"}}`)
+			r := f.Refs["responses"]
+			r.ValueSHA256 = sourceBytesHash(f.Groups["responses"])
+			f.Refs["responses"] = r
+		}},
+		{"wrong copied method", func(m *sourceLaneManifest) { m.SourceOperations[0].Facts.Method = "POST" }},
+		{"missing citation", func(m *sourceLaneManifest) { delete(m.SourceOperations[0].Facts.Refs, "responses") }},
+		{"absent document", func(m *sourceLaneManifest) {
+			r := m.SourceOperations[0].Facts.Refs["responses"]
+			r.DocumentID = "other-document"
+			m.SourceOperations[0].Facts.Refs["responses"] = r
+		}},
+		{"wrong cited digest", func(m *sourceLaneManifest) {
+			r := m.SourceOperations[0].Facts.Refs["responses"]
+			r.ValueSHA256 = sourceBytesHash([]byte("other"))
+			m.SourceOperations[0].Facts.Refs["responses"] = r
+		}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			raw, err := json.Marshal(original)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var actual sourceLaneManifest
+			if err := json.Unmarshal(raw, &actual); err != nil {
+				t.Fatal(err)
+			}
+			if tc.mutate != nil {
+				tc.mutate(&actual)
+			}
+			// Both copied projections agree. Only the independently retained document
+			// can disconfirm the bad copied fact or fabricated citation.
+			findings := validateSourceLaneManifest(actual, actual)
+			if tc.mutate == nil {
+				if len(findings) != 0 {
+					t.Fatalf("valid retained counterpart rejected: %+v", findings)
+				}
+				return
+			}
+			found := false
+			for _, d := range findings {
+				if d.Key.ID == "source.a" && d.Stage == "source_fact_validation" && d.Severity == "error" {
+					found = true
+				}
+			}
+			if !found {
+				t.Fatalf("same corrupt projection passed retained-document oracle: %+v", findings)
+			}
+		})
+	}
+}
+
+func TestSourceLaneRetainedPointerCoordinates(t *testing.T) {
+	var root any
+	if err := decodeSourceJSON([]byte(`{"":false,"a/b":{"~key":[{"number":9007199254740993}]}}`), &root); err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct {
+		pointer string
+		want    string
+	}{
+		{"/", "false"},
+		{"/a~1b/~0key/0/number", "9007199254740993"},
+		{"/a~1b/~0key/0", `{"number":9007199254740993}`},
+	} {
+		t.Run(tc.pointer, func(t *testing.T) {
+			got, err := sourceLaneRetainedPointer(root, tc.pointer)
+			if err != nil || string(got) != tc.want {
+				t.Fatalf("retained pointer = %s, %v; want %s", got, err, tc.want)
+			}
+		})
+	}
+	whole, err := sourceLaneRetainedPointer(root, "")
+	if err != nil || string(whole) != `{"":false,"a/b":{"~key":[{"number":9007199254740993}]}}` {
+		t.Fatalf("root pointer = %s, %v", whole, err)
+	}
+	for _, pointer := range []string{
+		"a/b", "/a~2b", "/a~", "/absent", "/a~1b/~0key/00", "/a~1b/~0key/+0",
+		"/a~1b/~0key/-", "/a~1b/~0key/1", "/a~1b/~0key/0/number/x",
+		strings.Repeat("/x", 257),
+	} {
+		if _, err := sourceLaneRetainedPointer(root, pointer); err == nil {
+			t.Errorf("invalid pointer accepted: %q", pointer)
+		}
 	}
 }
