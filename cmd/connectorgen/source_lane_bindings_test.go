@@ -122,6 +122,86 @@ func sourceBindingOutcome099F(t *testing.T, key sourceOperationKey, facts source
 	return cell
 }
 
+func TestSourceLaneBinding118AUnresolvedSuccessCoverage(t *testing.T) {
+	for _, mode := range []string{"external", "missing local", "cycle", "unsuccessful"} {
+		t.Run(mode, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "envelope", nil)
+			before := sourceBindingOutcome099F(t, key, facts, a, 1)
+			if len(before.Diagnostics) != 0 || len(before.References) != 1 {
+				t.Fatal("admitted complete200 counterpart required")
+			}
+			good := before.References[0]
+			status := "201"
+			if mode == "unsuccessful" {
+				status = "400"
+			}
+			facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+				ref := "https://provider.invalid/response"
+				if mode == "missing local" {
+					ref = "#/responses/missing"
+				}
+				if mode == "cycle" {
+					ref = "#/responses/cycle"
+					doc["source_contract"] = map[string]any{"responses": map[string]any{"cycle": map[string]any{"$ref": ref}}}
+				}
+				op := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)
+				op["responses"].(map[string]any)[status] = map[string]any{"$ref": ref}
+			})
+			cell := sourceBindingOutcome099F(t, key, facts, a, 1)
+			if len(cell.References) != 1 || !sourceLaneTargetRefEqual(cell.References[0], good) {
+				t.Fatal("exact accepted200 sibling lost")
+			}
+			want := mode != "unsuccessful"
+			found := false
+			for _, d := range cell.Diagnostics {
+				if d.Code == "target_required_scope_unverified" && d.Pointer == "/rest/operations/0/source_operation/responses/"+status {
+					found = true
+					if d.Stage != "reference" || d.Severity != "deficit" || d.Key != key {
+						t.Errorf("incorrect scope diagnostic: %+v", d)
+					}
+				}
+			}
+			if found != want {
+				t.Errorf("unresolved successful scope diagnostic=%v want=%v: %+v", found, want, cell.Diagnostics)
+			}
+		})
+	}
+}
+
+func TestSourceLaneBinding118AUnresolvedRootCoverage(t *testing.T) {
+	for _, group := range []string{"request_body", "responses"} {
+		t.Run(group, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "envelope", nil)
+			before := classifySourceLanes(key, facts, &a)
+			cell := requireSourceLane(t, before, "etl", "applicable")
+			if len(cell.References) != 1 || len(cell.Diagnostics) != 0 {
+				t.Fatal("real admitted coverage input required")
+			}
+			// Isolate the coverage boundary using the independently accepted reference;
+			// the newly retained root is unresolved, not an absent optional group.
+			facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+				op := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)
+				name := "requestBody"
+				if group == "responses" {
+					name = "responses"
+				}
+				op[name] = map[string]any{"$ref": "https://provider.invalid/root"}
+			})
+			after := sourceLaneCheckCoverage(key, facts, a, before)
+			got := requireSourceLane(t, after, "etl", "applicable")
+			found := false
+			for _, d := range got.Diagnostics {
+				if d.Code == "target_required_scope_unverified" && d.Pointer == facts.Refs[group].Pointer {
+					found = true
+				}
+			}
+			if !found || len(after) != 7 || len(got.References) != 1 {
+				t.Errorf("unresolved root lost coverage obligation: %+v", got)
+			}
+		})
+	}
+}
+
 func TestSourceLaneBinding099FBodyAndEnvelope(t *testing.T) {
 	for _, kind := range []string{"body", "envelope"} {
 		t.Run(kind, func(t *testing.T) {

@@ -233,8 +233,13 @@ func sourceLaneCheckCoverage(key sourceOperationKey, facts sourceFacts, a source
 		if !ok {
 			continue
 		}
-		root, ok := sourceResolveObject(facts, facts.Groups[group], map[string]bool{}, 0)
+		raw := facts.Groups[group]
+		if len(raw) == 0 || string(raw) == "null" {
+			continue
+		}
+		root, ok := sourceResolveObject(facts, raw, map[string]bool{}, 0)
 		if !ok {
+			unknownScopes = append(unknownScopes, owner.Pointer)
 			continue
 		}
 		mediaAt := func(node map[string]json.RawMessage, pointer string, request bool) {
@@ -260,9 +265,11 @@ func sourceLaneCheckCoverage(key sourceOperationKey, facts sourceFacts, a source
 			mediaAt(root, owner.Pointer, true)
 		} else {
 			for status, value := range root {
-				if len(status) == 3 && status[0] == '2' && status != "204" && status != "205" {
+				if len(status) == 3 && status[0] == '2' {
 					node, ok := sourceResolveObject(facts, value, map[string]bool{}, 0)
-					if ok {
+					if !ok {
+						unknownScopes = append(unknownScopes, owner.Pointer+"/"+status)
+					} else if status != "204" && status != "205" {
 						mediaAt(node, owner.Pointer+"/"+status, false)
 					}
 				}
