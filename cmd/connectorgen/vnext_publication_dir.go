@@ -16,8 +16,9 @@ import (
 // opens its final component with O_NOFOLLOW, and every multi-component path is
 // resolved one verified descriptor at a time.
 type vNextPublicationDirectory struct {
-	file  *os.File
-	label string
+	file         *os.File
+	label        string
+	closeForTest func(*os.File, string) error
 }
 
 type vNextPublicationIdentity struct {
@@ -46,14 +47,22 @@ func vNextPublicationIdentityFromFile(file *os.File, label string) (vNextPublica
 }
 
 func vNextPublicationOpenDirectory(path, label string) (*vNextPublicationDirectory, error) {
+	return vNextPublicationOpenDirectoryWithCloseForTest(path, label, nil)
+}
+
+func vNextPublicationOpenDirectoryWithCloseForTest(path, label string, closeForTest func(*os.File, string) error) (*vNextPublicationDirectory, error) {
 	fd, err := unix.Open(path, unix.O_RDONLY|unix.O_DIRECTORY|unix.O_CLOEXEC|unix.O_NOFOLLOW, 0)
 	if err != nil {
 		return nil, vNextPublicationOpenPathError(path, label, err)
 	}
-	return vNextPublicationDirectoryFromFD(fd, label)
+	return vNextPublicationDirectoryFromFDWithCloseForTest(fd, label, closeForTest)
 }
 
 func vNextPublicationDirectoryFromFD(fd int, label string) (*vNextPublicationDirectory, error) {
+	return vNextPublicationDirectoryFromFDWithCloseForTest(fd, label, nil)
+}
+
+func vNextPublicationDirectoryFromFDWithCloseForTest(fd int, label string, closeForTest func(*os.File, string) error) (*vNextPublicationDirectory, error) {
 	file := os.NewFile(uintptr(fd), label)
 	if file == nil {
 		_ = unix.Close(fd)
@@ -68,7 +77,7 @@ func vNextPublicationDirectoryFromFD(fd int, label string) (*vNextPublicationDir
 		_ = file.Close()
 		return nil, fmt.Errorf("%s is not a directory", label)
 	}
-	return &vNextPublicationDirectory{file: file, label: label}, nil
+	return &vNextPublicationDirectory{file: file, label: label, closeForTest: closeForTest}, nil
 }
 
 func vNextPublicationOpenError(label string, err error) error {
@@ -106,6 +115,9 @@ func (d *vNextPublicationDirectory) Close() error {
 	if d == nil || d.file == nil {
 		return nil
 	}
+	if d.closeForTest != nil {
+		return d.closeForTest(d.file, d.label)
+	}
 	return d.file.Close()
 }
 
@@ -124,7 +136,7 @@ func (d *vNextPublicationDirectory) openDirectory(name, label string) (*vNextPub
 	if err != nil {
 		return nil, vNextPublicationOpenAtError(d, name, label, err)
 	}
-	return vNextPublicationDirectoryFromFD(fd, label)
+	return vNextPublicationDirectoryFromFDWithCloseForTest(fd, label, d.closeForTest)
 }
 
 func (d *vNextPublicationDirectory) ensureDirectory(name, label string) (*vNextPublicationDirectory, error) {

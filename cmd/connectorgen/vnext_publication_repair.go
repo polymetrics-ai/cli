@@ -1383,6 +1383,9 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 	if err != nil {
 		return nil, err
 	}
+	if err := p.hit(vNextPublicationAfterControlRepairRecord); err != nil {
+		return nil, err
+	}
 	if err := transaction.Sync(); err != nil {
 		return nil, fmt.Errorf("sync publication control repair prepared authority: %w", err)
 	}

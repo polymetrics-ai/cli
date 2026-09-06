@@ -46,17 +46,23 @@ Group 1 F-04/F-08 evidence is now complete for execution purposes. The same acti
   A test-only after-open callback forces regular A→FIFO B, regular A→symlink B,
   and directory A→B after the actual descriptor/open classification. All three
   return retained A identity/bytes without B reads or FIFO blocking.
-- **F-08-R negative and repair controls:** the test child reaches the old lsof
-  directory-open observation and a test-owned pre-flock gate while the parent
-  holds the exact directory lock. Before the parent releases that gate, no
-  contention acknowledgement exists; directory-open is therefore explicitly
-  disqualified as readiness. `LockContention` is a nil-by-default test-only
-  callback invoked only after the real `LOCK_NB` returns `EWOULDBLOCK`/`EAGAIN`
-  on the retained directory identity. The child calls the real `runMain`
-  lock-render path, so real SIGINT and SIGTERM occur only after the parent has
-  compared that acknowledgement to its held descriptor identity. The old broad
-  non-consuming signal assertion now compares `WaitStatus.Signal()` with the
-  sent SIGINT/SIGTERM; cleanup SIGKILL remains excluded.
+- **F-08-R chronology and repair controls:** no separately executed original
+  pre-flock negative control was found. The first recorded pre-flock execution
+  occurred only after the test-only `BeforeLockAcquire` gate, `LockContention`
+  callback, lock-render test hooks, and exact signal assertions had been added;
+  it is post-edit repair-harness proof, not a pre-edit RED. It shows the child
+  reaching the old lsof directory-open observation and a test-owned pre-flock
+  gate while the parent holds the exact directory lock. Before the parent
+  releases that gate, no contention acknowledgement exists; directory-open is
+  therefore explicitly disqualified as readiness. `LockContention` is a
+  nil-by-default test-only callback invoked only after the real `LOCK_NB`
+  returns `EWOULDBLOCK`/`EAGAIN` on the retained directory identity. The child
+  calls the real `runMain` lock-render path, so real SIGINT and SIGTERM occur
+  only after the parent has compared that acknowledgement to its held descriptor
+  identity. The old broad non-consuming signal assertion now compares
+  `WaitStatus.Signal()` with the sent SIGINT/SIGTERM; cleanup SIGKILL remains
+  excluded. This corrects provenance without recasting the later control as
+  original behaviour or manufacturing a redundant replay.
 - **Focused GREEN command:** `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestCP11F04RWitnessRetainsOpenedObjectAcrossReplacement|TestConnectorgenMainSignalsOnlyAfterExactLockContention|TestConnectorgenMainPreservesNonConsumingSignalTermination)$' -v` exited 0 in 12.4s
   (`ok polymetrics.ai/cmd/connectorgen 9.198s`). Its selector covers FIFO,
   symlink, directory, real-main SIGINT, real-main SIGTERM, exact default

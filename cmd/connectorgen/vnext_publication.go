@@ -70,6 +70,7 @@ const (
 	vNextPublicationAfterControlSourceIdentity             vNextPublicationFaultPoint = "after_control_source_identity"
 	vNextPublicationAfterFinalControlSourceIdentity        vNextPublicationFaultPoint = "after_final_control_source_identity"
 	vNextPublicationAfterControlRepairPrepared             vNextPublicationFaultPoint = "after_control_repair_prepared"
+	vNextPublicationAfterControlRepairRecord               vNextPublicationFaultPoint = "after_control_repair_record"
 	vNextPublicationAfterBaseControlRepairPrepared         vNextPublicationFaultPoint = "after_base_control_repair_prepared"
 	vNextPublicationAfterControlRepairCaptureDirectory     vNextPublicationFaultPoint = "after_control_repair_capture_directory"
 	vNextPublicationBeforeControlRepairCapture             vNextPublicationFaultPoint = "before_control_repair_capture"
@@ -98,6 +99,10 @@ type vNextPublicationHooks struct {
 	// directory descriptor after its nonblocking flock reports contention.
 	// Production leaves it nil.
 	LockContention func(vNextPublicationIdentity) error
+	// AfterTemporaryOpen and AfterQuarantineOpen are nil-by-default test seams
+	// at the owned allocation boundaries. Production leaves them nil.
+	AfterTemporaryOpen  func(*vNextPublicationDirectory, string, *vNextPublicationDirectory) error
+	AfterQuarantineOpen func(*vNextPublicationDirectory, string, *vNextPublicationDirectory, vNextPublicationIdentity) error
 	// CloseAtomicTemporary is a narrowly scoped test seam. Its callback owns
 	// exactly one real Close of the supplied temporary and may return a
 	// completion error after that Close; production leaves it nil.
@@ -105,6 +110,11 @@ type vNextPublicationHooks struct {
 	// CloseRepairPredecessor is the matching narrow test seam for an already
 	// linked predecessor anchor during failed repair creation.
 	CloseRepairPredecessor func(*vNextPublicationDirectory) error
+	// CloseDirectory and CloseStageFile are nil-by-default test seams for
+	// compound completion paths. Their callbacks must perform the real Close
+	// before returning an injected completion error.
+	CloseDirectory func(*os.File, string) error
+	CloseStageFile func(*os.File) error
 }
 type vNextPublicationArtifacts struct {
 	Files    map[string][]byte
@@ -194,7 +204,7 @@ func newVNextGenerationPublisher(root, connector string, hooks vNextPublicationH
 }
 
 func (p *vNextGenerationPublisher) openConnectorRoot(create bool) (*vNextPublicationDirectory, error) {
-	definitions, err := vNextPublicationOpenDirectory(p.root, "publication definitions root")
+	definitions, err := vNextPublicationOpenDirectoryWithCloseForTest(p.root, "publication definitions root", p.hooks.CloseDirectory)
 	if err != nil {
 		return nil, err
 	}
@@ -752,25 +762,32 @@ func (p *vNextGenerationPublisher) writeStageFile(stage *vNextPublicationDirecto
 		return err
 	}
 	if _, err := file.Write(payload); err != nil {
-		_ = file.Close()
+		_ = p.closeStageFile(file)
 		return fmt.Errorf("write staged file %s: %w", name, err)
 	}
 	if err := p.hit(vNextPublicationBeforeFileSync); err != nil {
-		_ = file.Close()
+		_ = p.closeStageFile(file)
 		return err
 	}
 	if err := file.Sync(); err != nil {
-		_ = file.Close()
+		_ = p.closeStageFile(file)
 		return fmt.Errorf("sync staged file %s: %w", name, err)
 	}
 	if err := p.hit(vNextPublicationAfterFileSync); err != nil {
-		_ = file.Close()
+		_ = p.closeStageFile(file)
 		return err
 	}
-	if err := file.Close(); err != nil {
+	if err := p.closeStageFile(file); err != nil {
 		return fmt.Errorf("close staged file %s: %w", name, err)
 	}
 	return nil
+}
+
+func (p *vNextGenerationPublisher) closeStageFile(file *os.File) error {
+	if p.hooks.CloseStageFile != nil {
+		return p.hooks.CloseStageFile(file)
+	}
+	return file.Close()
 }
 
 func (p *vNextGenerationPublisher) syncTreeDirectories(root *vNextPublicationDirectory) error {
@@ -854,7 +871,7 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 	if err := operation.assertLockBound(); err != nil {
 		return err
 	}
-	temporaryName, temporaryRoot, temporary, err := vNextPublicationCreateTemp(operation.connector)
+	temporaryName, temporaryRoot, temporary, err := vNextPublicationCreateTemp(operation.connector, p.hooks.AfterTemporaryOpen)
 	if err != nil {
 		return err
 	}
@@ -947,7 +964,7 @@ func (p *vNextGenerationPublisher) writeAtomicLocked(operation *vNextPublication
 
 const vNextPublicationTemporaryFile = "control"
 
-func vNextPublicationCreateTemp(root *vNextPublicationDirectory) (string, *vNextPublicationDirectory, *os.File, error) {
+func vNextPublicationCreateTemp(root *vNextPublicationDirectory, afterOpen func(*vNextPublicationDirectory, string, *vNextPublicationDirectory) error) (string, *vNextPublicationDirectory, *os.File, error) {
 	var token [16]byte
 	for range 128 {
 		if _, err := cryptorand.Read(token[:]); err != nil {
@@ -963,6 +980,12 @@ func vNextPublicationCreateTemp(root *vNextPublicationDirectory) (string, *vNext
 		temporaryRoot, err := root.openDirectory(name, "publication temporary root")
 		if err != nil {
 			return "", nil, nil, err
+		}
+		if afterOpen != nil {
+			if err := afterOpen(root, name, temporaryRoot); err != nil {
+				_ = temporaryRoot.Close()
+				return "", nil, nil, err
+			}
 		}
 		file, err := temporaryRoot.openFile(vNextPublicationTemporaryFile, "publication temporary", unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o644, false)
 		if err == nil {
@@ -987,7 +1010,7 @@ type vNextPublicationRemovalBinding struct {
 	identity vNextPublicationIdentity
 }
 
-func vNextPublicationCreateQuarantine(root *vNextPublicationDirectory) (string, *vNextPublicationDirectory, vNextPublicationIdentity, error) {
+func vNextPublicationCreateQuarantine(root *vNextPublicationDirectory, afterOpen func(*vNextPublicationDirectory, string, *vNextPublicationDirectory, vNextPublicationIdentity) error) (string, *vNextPublicationDirectory, vNextPublicationIdentity, error) {
 	var token [16]byte
 	for range 128 {
 		if _, err := cryptorand.Read(token[:]); err != nil {
@@ -1006,7 +1029,15 @@ func vNextPublicationCreateQuarantine(root *vNextPublicationDirectory) (string, 
 		}
 		identity, err := vNextPublicationIdentityFromFile(quarantine.file, "publication quarantine")
 		if err == nil {
-			return name, quarantine, identity, nil
+			if afterOpen != nil {
+				if hookErr := afterOpen(root, name, quarantine, identity); hookErr != nil {
+					err = hookErr
+				} else {
+					return name, quarantine, identity, nil
+				}
+			} else {
+				return name, quarantine, identity, nil
+			}
 		}
 		_ = quarantine.Close()
 		if rootIdentity, identityErr := root.identityAt(name, "publication quarantine"); identityErr == nil {
@@ -1071,7 +1102,7 @@ func (p *vNextGenerationPublisher) removeRegularQuarantinedLocked(parent *vNextP
 			return err
 		}
 	}
-	quarantineName, quarantine, quarantineIdentity, err := vNextPublicationCreateQuarantine(parent)
+	quarantineName, quarantine, quarantineIdentity, err := vNextPublicationCreateQuarantine(parent, p.hooks.AfterQuarantineOpen)
 	if err != nil {
 		return err
 	}
@@ -1117,7 +1148,7 @@ func (p *vNextGenerationPublisher) removeTreeQuarantinedLocked(parent *vNextPubl
 			return err
 		}
 	}
-	quarantineName, quarantine, quarantineIdentity, err := vNextPublicationCreateQuarantine(parent)
+	quarantineName, quarantine, quarantineIdentity, err := vNextPublicationCreateQuarantine(parent, p.hooks.AfterQuarantineOpen)
 	if err != nil {
 		return err
 	}

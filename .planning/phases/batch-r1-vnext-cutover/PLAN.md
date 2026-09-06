@@ -1119,18 +1119,30 @@ second-signal or mid-transaction guarantee is asserted.
 
 ### Group 1 execution update (2026-09-06)
 
-- **F-04-R/F-08-R complete:** The original unsafe witness execution was
+- **F-04-R/F-08-R complete:** The original unsafe F-04 witness execution was
   preserved before the helper changed; the exact record is
   `GROUP1-F04-ORIGINAL-CONTROL.md`. The safe helper now binds observations to
-  actually opened no-follow/nonblocking descriptors. The real-main contention
-  proof has an inert test-only EWOULDBLOCK/EAGAIN acknowledgement and a
-  pre-flock negative gate; it uses SIGINT and SIGTERM only after acknowledgement
-  and asserts exact non-consuming default signals separately. The focused
-  Group 1 normal/race selectors passed in package 9.198s/15.924s; hashes and
-  the race-only test-bound adjustment are in `GROUP1-EVIDENCE.md`.
+  actually opened no-follow/nonblocking descriptors. No earlier executed
+  pre-edit F-08 pre-flock negative was found. Its recorded pre-flock gate is a
+  later repair-harness control, with inert test-only EWOULDBLOCK/EAGAIN
+  acknowledgement; it uses SIGINT and SIGTERM only after acknowledgement and
+  asserts exact non-consuming default signals separately. The focused Group 1
+  normal/race selectors passed in package 9.198s/15.924s; hashes and the
+  race-only test-bound adjustment are in `GROUP1-EVIDENCE.md`.
 - **Next:** Group 2 pre-edit behavioral acceptance controls for F-03-A/B/C;
   no Group 2 production repair happens before their actual failed-preparation,
   compound-cause and owned-allocation A→B observations are recorded.
+
+### Group 2 original-control update (2026-09-06)
+
+- **F-03-A/B/C RED recorded before repair:**
+  `GROUP2-F03-ORIGINAL-CONTROLS.md` binds the 2.687s bounded fixture command,
+  test-only seam/source identities, and durable/error observations. Its
+  defect-reproduction pass is RED evidence: it shows prepared-only authority
+  after the post-record frontier, typed-cause flattening in real compound
+  close/write paths, and temporary/quarantine A→empty-B replacement deletion.
+  The complete F-03-B sibling table remains in scope for the coordinated repair;
+  no source repair has begun at this record.
 
 ### Retained invariants
 
