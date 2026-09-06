@@ -399,3 +399,51 @@ func TestSourceFactsCoverageConfidence(t *testing.T) {
 		t.Errorf("rendered coverage=%+v status=%s refs=%+v", got, facts.Status, facts.Refs)
 	}
 }
+
+func TestSourceFacts118DuplicateParameterScopes(t *testing.T) {
+	for _, scope := range []string{"path", "operation"} {
+		for _, same := range []bool{true, false} {
+			t.Run(fmt.Sprintf("%s/equal=%t", scope, same), func(t *testing.T) {
+				first := `{"name":"limit","in":"query","required":true,"schema":{"type":"integer"}}`
+				second := first
+				if !same {
+					second = `{"name":"limit","in":"query","required":false,"schema":{"type":"string"}}`
+				}
+				params := `[` + first + `,` + second + `]`
+				pathParams, opParams := `[]`, `[]`
+				prefix := "/paths/~1items/parameters"
+				if scope == "path" {
+					pathParams = params
+				} else {
+					opParams = params
+					prefix = "/paths/~1items/get/parameters"
+				}
+				raw := retainedSourceDocument{ID: "raw", Payload: json.RawMessage(`{"paths":{"/items":{"parameters":` + pathParams + `,"get":{"parameters":` + opParams + `,"responses":{"200":{"description":"ok"}}}}}}`)}
+				node := json.RawMessage(`{"id":"read","method":"GET","protocol":"rest","path":"/items"}`)
+				facts := normalizeSourceFacts(retainedSourceOperation{Observed: true, Node: node}, retainedSourceDocument{ID: "archive", Payload: json.RawMessage(`{"rest":{}}`)}, &raw)
+				if facts.Status != "available" || len(facts.Parameters) != 1 || len(facts.Groups["source_operation"]) == 0 {
+					t.Fatalf("normalizer phase not reached: %+v", facts)
+				}
+				want := "source_parameter_duplicate:" + prefix + "/0:" + prefix + "/1"
+				found := false
+				for _, d := range facts.Diagnostics {
+					found = found || d == want
+				}
+				if !found {
+					t.Errorf("reached actual effective parameter reduction; duplicate must retain both occurrence pointers: want %s; got %v", want, facts.Diagnostics)
+				}
+				if facts.Parameters[0].Ref.Pointer != prefix+"/0" || !facts.Parameters[0].Required {
+					t.Errorf("ambiguous scope must retain first known occurrence, not silently replace it: %+v", facts.Parameters)
+				}
+				var originals []json.RawMessage
+				group := "parameters"
+				if scope == "path" {
+					group = "path_parameters"
+				}
+				if err := json.Unmarshal(facts.Groups[group], &originals); err != nil || len(originals) != 2 {
+					t.Fatalf("original conflicting facts lost: %s %v", facts.Groups[group], err)
+				}
+			})
+		}
+	}
+}

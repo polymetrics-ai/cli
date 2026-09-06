@@ -1115,3 +1115,56 @@ func TestSourceLaneManifestIntegratedBindingProofBoundary(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneManifest118DuplicateParameterAuthority(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	path := filepath.Join(root, "source.json")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var doc map[string]any
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		t.Fatal(err)
+	}
+	rows := doc["rest"].(map[string]any)["operations"].([]any)
+	rows[0].(map[string]any)["source_operation"].(map[string]any)["parameters"] = []any{
+		map[string]any{"name": "limit", "in": "query", "required": true},
+		map[string]any{"name": "limit", "in": "query", "required": false},
+	}
+	raw, err = json.Marshal(doc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(path, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+	got, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got.SourceOperations) != 2 || got.SourceTotals.Cells != 14 || got.SourceOperations[0].Source.Key.ID != "source.a" || got.SourceOperations[1].Source.Key.ID != "source.b" {
+		t.Fatalf("source membership changed: %+v", got.SourceTotals)
+	}
+	for _, row := range got.SourceOperations {
+		if !row.Source.Observed || len(row.Lanes) != 7 {
+			t.Fatal("real retained builder phase not reached")
+		}
+	}
+	if got.Validation.Status != "invalid" {
+		t.Errorf("real duplicate source reached builder without invalid diagnostic: %+v", got.Validation)
+	}
+	// Remove producer diagnostics. Independent retained-source validation must
+	// still identify the duplicate rather than trusting the normalized projection.
+	got.SourceOperations[0].Facts.Diagnostics = nil
+	got.Diagnostics = nil
+	findings := validateSourceLaneFactCitations(got)
+	found := false
+	for _, d := range findings {
+		found = found || (d.Key.ID == "source.a" && d.Stage == "source_fact_validation" && d.Code == "source_parameter_duplicate" && d.Pointer == "/rest/operations/0/source_operation/parameters/1")
+	}
+	if !found {
+		t.Errorf("independent validator accepted ambiguous retained occurrences after producer diagnostics removed: %+v", findings)
+	}
+}

@@ -348,6 +348,10 @@ func effectiveSourceParameters(facts sourceFacts, diagnostics []string) ([]sourc
 			diagnostics = append(diagnostics, "source_parameters_invalid")
 			continue
 		}
+		// Precedence exists between scopes, never between duplicate declarations
+		// in one scope. Keep the first known occurrence and both source pointers;
+		// the complete raw group remains available as invalid retained evidence.
+		seen := map[string]string{}
 		for i, parameter := range parameters {
 			node, ok := sourceResolveObject(facts, parameter, map[string]bool{}, 0)
 			if !ok {
@@ -383,7 +387,13 @@ func effectiveSourceParameters(facts sourceFacts, diagnostics []string) ([]sourc
 				diagnostics = append(diagnostics, "source_parameter_invalid")
 				continue
 			}
-			byKey[in+":"+name] = sourceParameterFact{In: in, Name: name, Required: required, Node: encoded, Ref: ref}
+			key := in + ":" + name
+			if first, duplicate := seen[key]; duplicate {
+				diagnostics = append(diagnostics, "source_parameter_duplicate:"+first+":"+ref.Pointer)
+				continue
+			}
+			seen[key] = ref.Pointer
+			byKey[key] = sourceParameterFact{In: in, Name: name, Required: required, Node: encoded, Ref: ref}
 		}
 	}
 	keys := make([]string, 0, len(byKey))

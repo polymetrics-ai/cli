@@ -510,6 +510,35 @@ func validateSourceLaneRequiredFactGroups(row sourceLaneManifestRow, documents m
 		add("source_operation_citation_invalid", pointer)
 		return diagnostics
 	}
+	// Inspect retained occurrences independently of effectiveSourceParameters
+	// and the claimant's diagnostics/projection. Legal inter-scope precedence
+	// cannot make duplicate declarations within either source scope valid.
+	checkParameters := func(raw json.RawMessage, sourcePointer string) {
+		var parameters []json.RawMessage
+		if json.Unmarshal(raw, &parameters) != nil {
+			return
+		}
+		facts := sourceFacts{Document: documents[documentID].Payload, referenceRoot: roots[documentID]}
+		if documentID == row.Source.DocumentID {
+			facts.RefPrefix = "/source_contract"
+		}
+		seen := map[[2]string]bool{}
+		for i, rawParameter := range parameters {
+			parameter, ok := sourceResolveObject(facts, rawParameter, map[string]bool{}, 0)
+			if !ok {
+				continue
+			}
+			var key [2]string
+			if json.Unmarshal(parameter["in"], &key[0]) != nil || json.Unmarshal(parameter["name"], &key[1]) != nil {
+				continue
+			}
+			if seen[key] {
+				add("source_parameter_duplicate", fmt.Sprintf("%s/%d", sourcePointer, i))
+			}
+			seen[key] = true
+		}
+	}
+	checkParameters(operation["parameters"], pointer+"/parameters")
 	for _, field := range []struct{ name, key string }{
 		{"parameters", "parameters"}, {"request_body", "requestBody"}, {"responses", "responses"},
 		{"summary", "summary"}, {"description", "description"}, {"callbacks", "callbacks"},
@@ -531,6 +560,9 @@ func validateSourceLaneRequiredFactGroups(row sourceLaneManifestRow, documents m
 		contractDocument, contractPointer = documentID, ""
 		if parent, _, ok := strings.Cut(pointer, "/"+strings.ToLower(row.Facts.Method)); ok {
 			requireAt("path_parameters", documentID, parent+"/parameters")
+			if raw, err := sourceLaneRetainedPointer(roots[documentID], parent+"/parameters"); err == nil {
+				checkParameters(raw, parent+"/parameters")
+			}
 		}
 	}
 	if security, present := operation["security"]; present {

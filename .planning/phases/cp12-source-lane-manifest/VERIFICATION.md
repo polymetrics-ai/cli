@@ -54,3 +54,7 @@ Unsupported direct-only response/record consumers, binary schema consumers, exte
 ## Remaining completion boundary
 
 Final docs/Atlas checks pass20/20 plus schema validation. The original merged race timed out at20minutes,187selected/186passed events, with full-corpus test interrupted after16m44s; rawSHA256df94d6479669ce0774f929d0235075044112fcf7b015c18ae1a4ca55e47c8d31.All45unreached top-level tests passed279/279events in224.694569s, rawSHA2562619f631d0b87e8bda2aa862ecb6828eb698a2fe4eba86628e6bd0b2d4e73562. The exact union now covers465of466expected race events; only TestSourceLaneManifestRetainedCorpus remains. Its isolated run uses the same20m limit, with no source change. Full-corpus race remains unresolved; no current all-race GREEN or review-ready claim is made. Original evidence is preserved for Firstmate reconciliation. Local verification and an evidence handoff do not accept CP12 or CP11. No CP13, new reviewer, no-mistakes or publication gate has started.
+
+## Correction118 verification checklist (pending)
+
+CR01–07, WR01–02 all open. Require snapshot-bound original RED/GREEN per planned group, actual phase and falsification controls, isolated helper integration, actual corrected corpus normal/race and exact test-name union; full regenerated artifact twice/schema/pins/check preservation; focused final static/build/runtime-isolation/docs checks; Firstmate118B decisions and one independent corrected-source closure. No acceptance yet.
