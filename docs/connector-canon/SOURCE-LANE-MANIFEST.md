@@ -95,6 +95,12 @@ exclusions and existing foundation decisions remain independent of proof
 availability. Invalid asserted claims remain errors even if their cells are
 unproven.
 
+Affirmative retained hook-registration clauses preserve unresolved sync demands
+when callback objects are absent. That visibility creates no receiver gap or
+execution claim: CP13 reconciles historical demand identities and ownership.
+The existing Vercel demand keeps its explicit reviewed gap; Sentry remains
+mapped-unproven and does not become a thirteenth receiver gap.
+
 The report is not the separate source-role/destination-role/mode matrix. It does
 not approve credentials, provider exercises, receiver exposure, a relay or a
 scope reduction. The existing checkpoint and independent-review gates still

@@ -210,3 +210,62 @@ func TestSourceLaneRenderedUnknownContracts(t *testing.T) {
 		}
 	}
 }
+
+func TestSourceLaneReceiverDemandVisibility(t *testing.T) {
+	for _, tc := range []struct{ connector, id string }{
+		{"bitbucket", "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/hooks"},
+		{"bitbucket", "bitbucket.rest.post_/workspaces/{workspace}/hooks"},
+		{"bitbucket", "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/hooks/{uid}"},
+		{"bitbucket", "bitbucket.rest.put_/workspaces/{workspace}/hooks/{uid}"},
+		{"circleci", "circleci.rest.createWebhook"}, {"circleci", "circleci.rest.updateWebhook"},
+		{"gitlab", "postApiV4GroupsIdHooks"}, {"gitlab", "postApiV4Hooks"}, {"gitlab", "postApiV4ProjectsIdHooks"},
+		{"jira", "jira.rest.registerDynamicWebhooks"}, {"stripe", "stripe.rest.PostWebhookEndpoints"},
+		{"sentry", "sentry.rest.Register a New Service Hook"},
+	} {
+		t.Run(tc.connector+"/"+tc.id, func(t *testing.T) {
+			row, doc := retainedFactFixture(t, tc.connector, tc.id)
+			facts := normalizeSourceFacts(row, doc, nil)
+			cells := classifySourceLanes(row.Key, facts, nil)
+			if len(cells) != 7 {
+				t.Fatal("source lost a lane")
+			}
+			cell := cells[6]
+			if cell.Lane != "sync_transport" || cell.Applicability != "undetermined" || cell.State != "mapped_unproven" {
+				t.Errorf("registration demand hidden or promoted: %+v", cell)
+			}
+			if len(cell.GapRefs) != 0 || len(cell.ProofRefs) != 0 || len(cell.References) != 0 {
+				t.Errorf("unreconciled demand invented foundation/execution/proof: %+v", cell)
+			}
+		})
+	}
+}
+
+func TestSourceLaneReceiverDemandClauseControls(t *testing.T) {
+	for _, tc := range []struct {
+		name, method, summary string
+		want                  bool
+	}{
+		{"affirmative", "POST", "Create a webhook for the project", true},
+		{"read registration config", "GET", "Get a webhook for the project", false},
+		{"negative instruction", "POST", "Do not create a webhook", false},
+		{"word lookalike", "POST", "Create a hookable widget", false},
+		{"later example", "POST", "Create a widget. For updates, create a webhook.", false},
+		{"quoted action", "POST", "The create webhook endpoint is deprecated", false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			node, err := json.Marshal(map[string]any{"id": "provider.webhook_name_not_authority", "protocol": "rest", "method": tc.method, "path": "/items", "source_operation": map[string]any{"summary": tc.summary, "responses": map[string]any{}}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			doc := retainedSourceDocument{ID: "fixture:primary", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+			facts := normalizeSourceFacts(retainedSourceOperation{Observed: true, Node: node, Pointer: "/rest/operations/0"}, doc, nil)
+			ref, got := sourceRegistrationDemand(facts)
+			if got != tc.want {
+				t.Fatalf("registration=%v want=%v", got, tc.want)
+			}
+			if got && (ref.DocumentID != doc.ID || ref.Pointer != "/rest/operations/0/source_operation/summary") {
+				t.Fatalf("wrong source witness %+v", ref)
+			}
+		})
+	}
+}

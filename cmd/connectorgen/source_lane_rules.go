@@ -126,6 +126,12 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 	}
 	if raw := facts.Groups["callbacks"]; len(raw) > 0 && string(raw) != "null" && string(raw) != "{}" {
 		set(6, true, "source_callback_contract", "callbacks")
+	} else if registrationRef, registration := sourceRegistrationDemand(facts); registration {
+		// A registration contract neither implements event intake nor excludes the
+		// source-backed demand merely because OpenAPI callbacks are absent.
+		cells[6].RuleID = "source_registration_demand_unresolved"
+		cells[6].FactRefs = append(cells[6].FactRefs, registrationRef)
+		cells[6].OwnerRefs = append(cells[6].OwnerRefs, "CP13")
 	} else if _, complete := facts.Refs["source_operation"]; semantics != "" && complete {
 		set(6, false, "no_operation_event_contract", "source_operation")
 	}
@@ -509,4 +515,39 @@ func copySourceSeen(in map[string]bool) map[string]bool {
 		out[key] = value
 	}
 	return out
+}
+
+// sourceRegistrationDemand recognizes affirmative registration descriptions
+// from retained prose, never operation IDs or executable artifacts. The result
+// only preserves an unresolved demand; it grants no foundation or lane support.
+func sourceRegistrationDemand(facts sourceFacts) (sourceFactRef, bool) {
+	if facts.Method != "POST" && facts.Method != "PUT" && facts.Method != "PATCH" {
+		return sourceFactRef{}, false
+	}
+	for _, group := range []string{"summary", "description"} {
+		ref, exists := facts.Refs[group]
+		if !exists {
+			continue
+		}
+		text := strings.ToLower(strings.TrimSpace(sourceFactText(facts, group)))
+		affirmative := false
+		for _, verb := range []string{"create", "creates", "add", "adds", "register", "registers", "update", "updates"} {
+			if strings.HasPrefix(text, verb+" ") {
+				affirmative = true
+				break
+			}
+		}
+		if !affirmative {
+			continue
+		}
+		// Only the first sentence names the action; later examples cannot turn an
+		// unrelated mutation into a registration claim.
+		clause := strings.SplitN(text, ".", 2)[0]
+		for _, word := range strings.FieldsFunc(clause, func(r rune) bool { return !(r >= 'a' && r <= 'z') }) {
+			if word == "webhook" || word == "webhooks" || word == "hook" || word == "hooks" {
+				return ref, true
+			}
+		}
+	}
+	return sourceFactRef{}, false
 }
