@@ -550,18 +550,21 @@ func collectSourceLaneBindings(ctx context.Context, repo string, cohort sourceLa
 }
 
 func sourceLaneTargetPointer(raw []byte, ref sourceLaneTargetRef) (string, string) {
-	collection, identity := "", ""
+	collection, identity, file := "", "", ""
 	switch ref.Kind {
 	case "operation":
-		collection, identity = "operations", "id"
+		collection, identity, file = "operations", "id", "operations.json"
 	case "write":
-		collection, identity = "actions", "name"
+		collection, identity, file = "actions", "name", "writes.json"
 	case "stream":
-		collection, identity = "streams", "name"
+		collection, identity, file = "streams", "name", "streams.json"
 	case "command":
-		collection, identity = "commands", "path"
+		collection, identity, file = "commands", "path", "cli_surface.json"
 	default:
 		return "", "target_contract_unverified"
+	}
+	if ref.Artifact != "" && ref.Artifact != "internal/connectors/defs/"+ref.Connector+"/"+file {
+		return "", "target_artifact_kind_mismatch"
 	}
 	var root map[string]json.RawMessage
 	if err := decodeSourceJSON(raw, &root); err != nil {
