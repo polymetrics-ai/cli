@@ -983,3 +983,7 @@ Candidate-ready completion (all sessions terminal):
 - atlas-ready-receipt.json: exit0, wall3.8699734169931617s; exact inputs unchanged; raw SHA256 9f158baa74cc40c9e92a5a1ee653af127314fbd9c4f079921b8ae14fba18483a.
 
 Both focused runs selected and executed all22 top-level tests with79 test/subtest pass events plus package PASS. Atlas selected tests produced22 test/subtest pass events plus package PASS. Required final full package normal/race and independent review are pending. Working scoped diffcheck and immutable binding verification passed.
+
+## Firstmate094 original full candidate completion
+
+Frozen source/test/evidence candidate `06528824c62d62b31b96ce4a4d97778a0cd2b9a8`, tree `b8732d4f0acb3ab2d08f2e70bdb4e13b6bc4f524`: uncached full cmd/connectorgen normal exit0wall383.5111943339871s and race exit0wall841.757921832992s. Each recorded631 pass events including package, zero skips and failures. Exact tested source/dependency/Atlas hashes match each other and current files; original raw hashes verified. Session79019 terminal. Complete packet and original command/raw/source receipts: `receipts-094/candidate-06528824-validation-packet.json`. These results complete local094 validation, not independent review or CP11 acceptance. Subsequent changes only record this evidence; production/tests/dependencies remain frozen.

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "checkpoint": "CP11",
   "assignment": "Firstmate094",
-  "status": "coherent test-only correction; candidate-ready gates passed; frozen full package and independent review pending",
+  "status": "full normal/race and current local gates green; independent original-range review and Firstmate acceptance pending",
   "original_review_base": "36e4d980de0d51d92fe74a68306845643596a6cb",
   "unchanged_production_candidate": "8aadc1cef19ea1a0b329ec898feb07e68e96913e",
   "audited_ledger_commit": "ede1950bcbfbfff5906e604ca8008f0ad579e34c",
@@ -4798,5 +4798,38 @@
       "test_pass_events": 23,
       "raw_sha256": "9f158baa74cc40c9e92a5a1ee653af127314fbd9c4f079921b8ae14fba18483a"
     }
-  ]
+  ],
+  "full_package_validation": {
+    "candidate": "06528824c62d62b31b96ce4a4d97778a0cd2b9a8",
+    "tree": "b8732d4f0acb3ab2d08f2e70bdb4e13b6bc4f524",
+    "status": "full normal/race and current local gates green; independent original-range review and Firstmate acceptance pending",
+    "normal": {
+      "receipt": ".planning/phases/batch-r1-vnext-cutover/receipts-094/candidate-06528824-full-normal-receipt.json",
+      "exit_code": 0,
+      "wall_seconds": 383.5111943339871,
+      "passes": 631,
+      "raw_sha256": "9263d757bbd58f799b7f8de72f303876953663d3152c3bcac153dee6cb1150c6"
+    },
+    "race": {
+      "receipt": ".planning/phases/batch-r1-vnext-cutover/receipts-094/candidate-06528824-full-race-receipt.json",
+      "exit_code": 0,
+      "wall_seconds": 841.757921832992,
+      "passes": 631,
+      "raw_sha256": "c7bf27ab74a32b7214b69a494defc7b124e4ae0e33a1dec8dc036c1264d308c5"
+    },
+    "same_actual_pass_inventory": true,
+    "same_tested_inputs": true,
+    "current_inputs_match_receipts": true,
+    "tracked_clean_before_evidence_update": true,
+    "owner_sessions": {
+      "79019": "terminal; original normal/race completion captured",
+      "7173": "terminal; candidate-ready lint/vet/Atlas/focused normal/race complete"
+    },
+    "source_freeze": "production/tests/dependencies remain06528824; subsequent evidence-only commit does not create another behavioral candidate",
+    "limits": [
+      "No independent review verdict or CP11 acceptance.",
+      "Historical080 policy references remain unresolved; current087/088 immutable authority is separately bound.",
+      "No provider-live, Linux-runtime, power-loss, cached-preflight upgrade or whole-programme completion."
+    ]
+  }
 }
