@@ -52,7 +52,8 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 	}
 	position := -1
 	// Explicit source claims are checked even when no target materializes.
-	for _, issue := range sourceLaneGraphQLCitations(facts, annotation.GraphQL) {
+	graphqlClaims := sourceLaneGraphQLCitations(facts, annotation.GraphQL)
+	for _, issue := range graphqlClaims {
 		for i := range cells {
 			cells[i].Diagnostics = append(cells[i].Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cells[i].Lane}, Stage: "reference", Code: issue.Code, Pointer: issue.Pointer, Owner: key.Connector, Severity: "error"})
 		}
@@ -178,7 +179,7 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				d := sourceLaneDiagnostic{Key: key, Lanes: []string{ref.Lane}, Stage: "reference", Code: issue.Code, Pointer: issue.Pointer, Owner: key.Connector, Severity: severity}
 				cells[index].Diagnostics = append(cells[index].Diagnostics, d)
 			}
-			if len(issues) == 0 && len(claims) == 0 && conflicts[position] == "" {
+			if len(issues) == 0 && len(claims) == 0 && len(graphqlClaims) == 0 && conflicts[position] == "" {
 				cells[index].References = append(cells[index].References, canonicalSourceLaneTargetRef(ref))
 			}
 		}
