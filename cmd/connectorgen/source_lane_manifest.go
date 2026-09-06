@@ -386,6 +386,18 @@ func validateSourceLaneFactCitations(candidate sourceLaneManifest) []sourceLaneD
 				add("source_fact_scalar_mismatch", field.name)
 			}
 		}
+		parameterFacts := row.Facts
+		documentID := row.Facts.Refs["source_operation"].DocumentID
+		parameterFacts.Document = documents[documentID].Payload
+		parameterFacts.referenceRoot = roots[documentID]
+		parameterFacts.RefPrefix = ""
+		if documentID == row.Source.DocumentID {
+			parameterFacts.RefPrefix = "/source_contract"
+		}
+		parameters, _ := effectiveSourceParameters(parameterFacts, nil)
+		if !sourceLaneJSONEqual(parameters, row.Facts.Parameters) {
+			add("source_parameter_projection_mismatch", "/facts/effective_parameters")
+		}
 	}
 	return diagnostics
 }

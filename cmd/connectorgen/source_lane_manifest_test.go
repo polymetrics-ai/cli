@@ -623,3 +623,70 @@ func TestSourceLaneRetainedPointerCoordinates(t *testing.T) {
 		}
 	}
 }
+
+func TestSourceLaneManifestEffectiveParameterOracle(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	path := filepath.Join(root, "source.json")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document map[string]any
+	if err := json.Unmarshal(raw, &document); err != nil {
+		t.Fatal(err)
+	}
+	rows := document["rest"].(map[string]any)["operations"].([]any)
+	rows[0].(map[string]any)["source_operation"].(map[string]any)["parameters"] = []any{
+		map[string]any{"name": "limit", "in": "query", "required": true, "schema": map[string]any{"type": "integer", "minimum": 1}},
+	}
+	raw, err = json.Marshal(document)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(path, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+	original, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(original.SourceOperations[0].Facts.Parameters) != 1 {
+		t.Fatal("retained literal query limit was not normalized")
+	}
+	for _, tc := range []struct {
+		name   string
+		mutate func(*sourceFacts)
+	}{
+		{"valid retained parameter", nil},
+		{"requiredness changed", func(f *sourceFacts) { f.Parameters[0].Required = false }},
+		{"location changed", func(f *sourceFacts) { f.Parameters[0].In = "header" }},
+		{"name changed", func(f *sourceFacts) { f.Parameters[0].Name = "other" }},
+		{"resolved schema changed", func(f *sourceFacts) {
+			f.Parameters[0].Node = json.RawMessage(`{"name":"limit","in":"query","required":true,"schema":{"type":"string"}}`)
+		}},
+		{"parameter omitted", func(f *sourceFacts) { f.Parameters = []sourceParameterFact{} }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			encoded, _ := json.Marshal(original)
+			var actual sourceLaneManifest
+			if err := json.Unmarshal(encoded, &actual); err != nil {
+				t.Fatal(err)
+			}
+			if tc.mutate != nil {
+				tc.mutate(&actual.SourceOperations[0].Facts)
+			}
+			findings := validateSourceLaneManifest(actual, actual)
+			found := false
+			for _, d := range findings {
+				found = found || (d.Key.ID == "source.a" && d.Stage == "source_fact_validation" && d.Code == "source_parameter_projection_mismatch")
+			}
+			if tc.mutate == nil && len(findings) != 0 {
+				t.Fatalf("valid retained counterpart rejected: %+v", findings)
+			}
+			if tc.mutate != nil && !found {
+				t.Fatalf("self-consistent false parameter projection accepted: %+v", findings)
+			}
+		})
+	}
+}
