@@ -19,6 +19,8 @@ import (
 
 const sourceLaneProofPath = "data/connector-canon/batch1-source-lane-proofs.json"
 
+var errSourceLaneProofCapacity = errors.New("proof record capacity exceeded")
+
 type sourceLaneProofInput struct {
 	Path   string `json:"path"`
 	SHA256 string `json:"sha256"`
@@ -365,7 +367,7 @@ func decodeSourceLaneProofDocument(ctx context.Context, raw []byte, p sourceLane
 					return nil, nil, ctx.Err()
 				}
 				if count >= p.MaxRecords {
-					return records, sets, fmt.Errorf("proof record capacity exceeded")
+					return records, sets, errSourceLaneProofCapacity
 				}
 				count++
 				// Tokens are bounded before decoding the per-entry typed object.
@@ -377,6 +379,13 @@ func decodeSourceLaneProofDocument(ctx context.Context, raw []byte, p sourceLane
 					return nil, nil, err
 				}
 				if name == "records" {
+					var representation struct {
+						Inputs json.RawMessage `json:"inputs"`
+						Set    json.RawMessage `json:"input_set_sha256"`
+					}
+					if json.Unmarshal(entry, &representation) != nil || len(representation.Inputs) > 0 && len(representation.Set) > 0 {
+						return nil, nil, fmt.Errorf("ambiguous input representation")
+					}
 					var r sourceLaneProofRecord
 					if decodeSourceJSON(entry, &r) != nil || decodeStrictJSON(entry, &r) != nil {
 						return nil, nil, fmt.Errorf("invalid record")
@@ -509,6 +518,9 @@ func loadSourceLaneProofs(ctx context.Context, repo string, policy sourceLanePro
 	}
 	records, declared, err := decodeSourceLaneProofDocument(ctx, raw, policy)
 	if err != nil {
+		if errors.Is(err, errSourceLaneProofCapacity) {
+			add(sourceLaneProofRecord{}, "proof_record_capacity_exceeded", "error")
+		}
 		code := "proof_document_invalid"
 		if ctx.Err() != nil {
 			code = "proof_cancelled"
@@ -622,6 +634,9 @@ func loadSourceLaneProofs(ctx context.Context, repo string, policy sourceLanePro
 		result.accepted[r.ID] = true
 	}
 	cache.finalize()
+	if ctx.Err() != nil {
+		doc.code = "proof_cancelled"
+	}
 	setInvalid := map[string]string{}
 	for hash, paths := range cache.setPaths {
 		for _, name := range paths {

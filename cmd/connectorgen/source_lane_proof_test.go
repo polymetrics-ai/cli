@@ -406,6 +406,347 @@ func TestSourceLaneProofReadAccounting(t *testing.T) {
 	if code == "" || budget >= 32 {
 		t.Fatalf("failed bounded read must spend attempted allowance, got code=%s remaining=%d", code, budget)
 	}
+	t.Run("actual_failed_attempts_and_cached_refusal", func(t *testing.T) {
+		p := proofFixturePolicy()
+		p.limits.UniqueBytes = 64
+		p.limits.InputBytes = 16
+		events := []sourceLaneProofReadEvent{}
+		p.afterRead = func(e sourceLaneProofReadEvent) { events = append(events, e) }
+		cache := sourceLaneProofCache{ctx: context.Background(), root: opened, policy: p, files: map[string]*sourceLaneProofFile{}}
+		for i := 0; i < 8; i++ {
+			_, f := cache.get(name, 16, false)
+			if f.code != "proof_input_invalid" {
+				t.Fatalf("oversized error lost: %s", f.code)
+			}
+		}
+		if len(events) != 1 || events[0].Success || events[0].Charged != 17 || events[0].Before.Size() != 65 || !os.SameFile(before, events[0].Before) || cache.stats.UniqueBytes != 16 || cache.stats.PhysicalCharged != 17 {
+			t.Fatalf("failed-attempt witness/accounting incorrect: events=%+v stats=%+v", events, cache.stats)
+		}
+		for i := 0; i < 8; i++ {
+			next := fmt.Sprintf("internal/oversized-%d.go", i)
+			proofWrite(t, root, next, raw)
+			_, f := cache.get(next, 16, false)
+			if f.code == "" {
+				t.Fatal("oversized file accepted")
+			}
+		}
+		if cache.stats.ReadCalls != 4 || cache.stats.UniqueBytes != 64 || cache.stats.PhysicalCharged != 68 {
+			t.Fatalf("bounded failed attempts escaped: %+v", cache.stats)
+		}
+	})
+	t.Run("witness_rejects_duplicate_actual_reads_and_wrong_phase", func(t *testing.T) {
+		name := "internal/small.go"
+		proofWrite(t, root, name, []byte("small"))
+		p := proofFixturePolicy()
+		events := []sourceLaneProofReadEvent{}
+		p.afterRead = func(e sourceLaneProofReadEvent) { events = append(events, e) }
+		cache := sourceLaneProofCache{ctx: context.Background(), root: opened, policy: p, files: map[string]*sourceLaneProofFile{}}
+		cache.get(name, 16, false)
+		cache.finalize()
+		expected := map[string]int64{name: 5}
+		if !proofReadWitnessMatches(events, expected) {
+			t.Fatal("valid actual two-pass witness rejected")
+		}
+		cache.read(name, "initial", 16)
+		if proofReadWitnessMatches(events, expected) {
+			t.Fatal("witness accepted a third actual read")
+		}
+		wrong := append([]sourceLaneProofReadEvent(nil), events[:2]...)
+		wrong[1].Phase = "cache_hit"
+		if proofReadWitnessMatches(wrong, expected) {
+			t.Fatal("witness accepted incorrect phase")
+		}
+	})
+}
+
+func TestSourceLaneProofCacheIdentity(t *testing.T) {
+	base, original, _ := proofBatch(t, "six", 6)
+	// Each record has an independently bound artifact to make unaffected
+	// sibling evidence observable after replacing only the first artifact.
+	for i := range original {
+		original[i].Targets = append([]sourceLaneTargetRef(nil), original[i].Targets...)
+		name := fmt.Sprintf("internal/connectors/defs/proof-fixture/target-%d.json", i)
+		bytes, err := os.ReadFile(filepath.Join(base, original[i].Targets[0].Artifact))
+		if err != nil {
+			t.Fatal(err)
+		}
+		proofWrite(t, base, name, bytes)
+		original[i].Targets[0].Artifact = name
+	}
+	for _, kind := range []string{"inode_replacement", "same_inode_content", "symlink", "directory"} {
+		t.Run(kind, func(t *testing.T) {
+			root := t.TempDir()
+			proofCopyFixtureFiles(t, base, root, original)
+			records, catalog := proofSharedDocument(t, root, original)
+			name := records[0].Targets[0].Artifact
+			before, err := os.Stat(filepath.Join(root, name))
+			if err != nil {
+				t.Fatal(err)
+			}
+			expected, err := os.ReadFile(filepath.Join(root, name))
+			if err != nil {
+				t.Fatal(err)
+			}
+			p := proofFixturePolicy()
+			reached := false
+			finalRead := false
+			p.afterRead = func(e sourceLaneProofReadEvent) {
+				if e.Path != name {
+					return
+				}
+				if e.Phase == "final" {
+					finalRead = true
+				}
+				if e.Phase != "initial" || reached {
+					return
+				}
+				reached = true
+				if !e.Success || e.Bytes != int64(len(expected)) || !os.SameFile(before, e.Before) {
+					t.Fatal("mutation hook did not reach original completed read")
+				}
+				filename := filepath.Join(root, name)
+				switch kind {
+				case "inode_replacement":
+					replacement := filename + ".replacement"
+					if err := os.WriteFile(replacement, expected, 0600); err != nil {
+						t.Fatal(err)
+					}
+					if err := os.Rename(replacement, filename); err != nil {
+						t.Fatal(err)
+					}
+					after, err := os.Stat(filename)
+					if err != nil || os.SameFile(before, after) {
+						t.Fatal("replacement did not produce independently different inode")
+					}
+				case "same_inode_content":
+					changed := append([]byte(nil), expected...)
+					changed[len(changed)-2] = ' '
+					if err := os.WriteFile(filename, changed, 0600); err != nil {
+						t.Fatal(err)
+					}
+					after, err := os.Stat(filename)
+					if err != nil || !os.SameFile(before, after) {
+						t.Fatal("mutation did not retain inode")
+					}
+				case "symlink":
+					if err := os.Remove(filename); err != nil {
+						t.Fatal(err)
+					}
+					if err := os.Symlink(filepath.Join(base, name), filename); err != nil {
+						t.Fatal(err)
+					}
+				case "directory":
+					if err := os.Remove(filename); err != nil {
+						t.Fatal(err)
+					}
+					if err := os.Mkdir(filename, 0700); err != nil {
+						t.Fatal(err)
+					}
+				}
+			}
+			in := loadSourceLaneProofs(context.Background(), root, p, catalog)
+			if !reached || !proofHasDiagnostic(in.Diagnostics, "proof_file_changed", "error") || in.accepted[records[0].ID] {
+				t.Fatalf("changed cached file accepted: reached=%v diagnostics=%+v", reached, in.Diagnostics)
+			}
+			for _, r := range records[1:] {
+				if !in.accepted[r.ID] {
+					t.Fatalf("unaffected sibling %s lost: %+v", r.ID, in.Diagnostics)
+				}
+			}
+			if kind == "same_inode_content" && !finalRead {
+				t.Fatal("in-place mutation was not checked by actual final content read")
+			}
+		})
+	}
+	for _, order := range []string{"stale_then_correct", "correct_then_stale", "current_false"} {
+		t.Run(order, func(t *testing.T) {
+			root := t.TempDir()
+			proofCopyFixtureFiles(t, base, root, original)
+			records := append([]sourceLaneProofRecord(nil), original[:2]...)
+			bad := 0
+			if order == "correct_then_stale" {
+				bad = 1
+			}
+			records[bad].Inputs = append([]sourceLaneProofInput(nil), records[bad].Inputs...)
+			records[bad].Inputs[1].SHA256 = strings.Repeat("b", 64)
+			records[bad].ClaimCurrent = order == "current_false"
+			proofDocument(t, root, records)
+			catalog := sourceLaneProofCatalog{}
+			for _, r := range records {
+				catalog.Reviews = append(catalog.Reviews, sourceLaneProofReview{Record: r, Fixture: true})
+			}
+			in := loadSourceLaneProofs(context.Background(), root, proofFixturePolicy(), catalog)
+			code, severity := "proof_inputs_outdated", "deficit"
+			if order == "current_false" {
+				code, severity = "proof_current_claim_invalid", "error"
+			}
+			if !proofHasDiagnostic(in.Diagnostics, code, severity) || in.accepted[records[bad].ID] || !in.accepted[records[1-bad].ID] {
+				t.Fatalf("claim-specific digest poisoned actual cache: %+v", in.Diagnostics)
+			}
+		})
+	}
+	t.Run("cached_bytes_do_not_replace_exact_target_identity", func(t *testing.T) {
+		records, catalog := proofSharedDocument(t, base, original)
+		in := loadSourceLaneProofs(context.Background(), base, proofFixturePolicy(), catalog)
+		cells := proofBatchCells(records[0])
+		cells[0].References = append([]sourceLaneTargetRef(nil), records[0].Targets...)
+		cells[0].References[0].ID = records[1].Targets[0].ID
+		got := assessSourceLaneProof(records[0].Key, cells, in)
+		if got[0].State == "implemented" || !proofHasDiagnostic(got[0].Diagnostics, "proof_prerequisites_unproven", "deficit") {
+			t.Fatalf("same-byte wrong target accepted: %+v", got[0])
+		}
+	})
+	for _, phase := range []string{"before_read", "after_initial", "after_final", "after_last_final"} {
+		t.Run("cancel_"+phase, func(t *testing.T) {
+			records, catalog := proofSharedDocument(t, base, original)
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+			p := proofFixturePolicy()
+			calls := 0
+			if phase == "before_read" {
+				cancel()
+			}
+			p.afterRead = func(e sourceLaneProofReadEvent) {
+				calls++
+				if phase == "after_initial" && e.Phase == "initial" || phase == "after_final" && e.Phase == "final" || phase == "after_last_final" && e.Phase == "final" && e.Path == records[len(records)-1].Targets[0].Artifact {
+					cancel()
+				}
+			}
+			in := loadSourceLaneProofs(ctx, base, p, catalog)
+			if !proofHasDiagnostic(in.Diagnostics, "proof_cancelled", "error") || len(in.accepted) != 0 {
+				t.Fatalf("cancellation hidden: %+v", in.Diagnostics)
+			}
+			if phase == "before_read" && calls != 0 {
+				t.Fatal("read after initial cancellation")
+			}
+			for _, r := range records {
+				if len(assessSourceLaneProof(r.Key, proofBatchCells(r), in)) != 7 {
+					t.Fatal("cancel dropped cells")
+				}
+			}
+		})
+	}
+}
+
+func TestSourceLaneProofFiniteLimits(t *testing.T) {
+	root, r, cells := proofFixture(t)
+	t.Run("target_reader_above_four_MiB", func(t *testing.T) {
+		copy := r
+		copy.Targets = append([]sourceLaneTargetRef(nil), r.Targets...)
+		copy.Targets[0].Artifact = "internal/connectors/defs/proof-fixture/large-target.json"
+		raw := append([]byte(`{"operations":[{"id":"fixture.widgets"}]}`), []byte(strings.Repeat(" ", 4<<20))...)
+		proofWrite(t, root, copy.Targets[0].Artifact, raw)
+		copy.Targets[0].ArtifactSHA256 = sourceBytesHash(raw)
+		proofDocument(t, root, []sourceLaneProofRecord{copy})
+		in := proofLoadFixture(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
+		local := append([]sourceLaneCell(nil), cells...)
+		local[0].References = copy.Targets
+		if assessSourceLaneProof(copy.Key, local, in)[0].State != "implemented" {
+			t.Fatalf("valid target within 64 MiB refused: %+v", in.Diagnostics)
+		}
+	})
+	t.Run("unique_file_limit", func(t *testing.T) {
+		proofDocument(t, root, []sourceLaneProofRecord{r})
+		p := proofFixturePolicy()
+		p.limits.Files = 1
+		in := loadSourceLaneProofs(context.Background(), root, p, sourceLaneProofCatalog{Reviews: []sourceLaneProofReview{{Record: r, Fixture: true}}})
+		if !proofHasDiagnostic(in.Diagnostics, "proof_file_limit_exceeded", "error") {
+			t.Fatalf("unique file ceiling ignored: %+v", in.Diagnostics)
+		}
+	})
+	t.Run("document_lookahead_charged", func(t *testing.T) {
+		proofDocument(t, root, []sourceLaneProofRecord{r})
+		p := proofFixturePolicy()
+		p.limits.DocumentBytes = 16
+		in := loadSourceLaneProofs(context.Background(), root, p, sourceLaneProofCatalog{})
+		if !proofHasDiagnostic(in.Diagnostics, "proof_document_invalid", "error") || in.Stats.ReadCalls != 1 || in.Stats.PhysicalCharged != 17 {
+			t.Fatalf("document failed read uncharged: %+v %+v", in.Diagnostics, in.Stats)
+		}
+	})
+	t.Run("record_target_bound", func(t *testing.T) {
+		copy := r
+		copy.Targets = make([]sourceLaneTargetRef, 65)
+		for i := range copy.Targets {
+			copy.Targets[i] = r.Targets[0]
+			copy.Targets[i].ID = fmt.Sprintf("target-%d", i)
+		}
+		proofDocument(t, root, []sourceLaneProofRecord{copy})
+		in := proofLoadFixture(root, nil)
+		if !proofHasDiagnostic(in.Diagnostics, "proof_document_invalid", "error") {
+			t.Fatalf("target allocation limit ignored: %+v", in.Diagnostics)
+		}
+	})
+	for _, kind := range []string{"duplicate_run", "duplicate_pass", "failed_event", "wrong_package"} {
+		t.Run(kind, func(t *testing.T) {
+			copy := r
+			copy.ReceiptPath = "data/connector-canon/proof-receipts/invalid-" + kind + ".jsonl"
+			raw, err := os.ReadFile(filepath.Join(root, r.ReceiptPath))
+			if err != nil {
+				t.Fatal(err)
+			}
+			switch kind {
+			case "duplicate_run", "duplicate_pass":
+				action := "run"
+				if kind == "duplicate_pass" {
+					action = "pass"
+				}
+				lines := strings.Split(strings.TrimSpace(string(raw)), "\n")
+				for i, line := range lines {
+					var event struct{ Action, Test string }
+					if json.Unmarshal([]byte(line), &event) == nil && event.Action == action && event.Test == r.SelectedTest {
+						lines = append(lines[:i+1], append([]string{line}, lines[i+1:]...)...)
+						break
+					}
+				}
+				raw = []byte(strings.Join(lines, "\n") + "\n")
+			case "failed_event":
+				raw = []byte(strings.ReplaceAll(string(raw), `"Action":"pass"`, `"Action":"fail"`))
+			case "wrong_package":
+				raw = []byte(strings.ReplaceAll(string(raw), r.Package, "wrong/package"))
+			}
+			copy.ReceiptSHA256 = sourceBytesHash(raw)
+			proofWrite(t, root, copy.ReceiptPath, raw)
+			proofDocument(t, root, []sourceLaneProofRecord{copy})
+			in := proofLoadFixture(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
+			if !proofHasDiagnostic(in.Diagnostics, "proof_result_invalid", "error") || len(in.accepted) != 0 {
+				t.Fatalf("false result accepted %s: %+v", kind, in.Diagnostics)
+			}
+		})
+	}
+	t.Run("null_inline_plus_shared_is_ambiguous", func(t *testing.T) {
+		records, catalog := proofSharedDocument(t, root, []sourceLaneProofRecord{r})
+		raw, err := os.ReadFile(filepath.Join(root, sourceLaneProofPath))
+		if err != nil {
+			t.Fatal(err)
+		}
+		raw = []byte(strings.Replace(string(raw), `"input_set_sha256":`, `"inputs":null,"input_set_sha256":`, 1))
+		proofWrite(t, root, sourceLaneProofPath, raw)
+		in := loadSourceLaneProofs(context.Background(), root, proofFixturePolicy(), catalog)
+		if len(in.accepted) != 0 || len(in.Diagnostics) == 0 {
+			t.Fatalf("ambiguous input representations accepted %s: %+v", records[0].ID, in)
+		}
+	})
+}
+
+func proofCopyFixtureFiles(t *testing.T, source, destination string, records []sourceLaneProofRecord) {
+	t.Helper()
+	names := map[string]bool{}
+	for _, r := range records {
+		for _, pin := range r.Inputs {
+			names[pin.Path] = true
+		}
+		for _, ref := range r.Targets {
+			names[ref.Artifact] = true
+		}
+		names[r.ReceiptPath] = true
+	}
+	for name := range names {
+		raw, err := os.ReadFile(filepath.Join(source, name))
+		if err != nil {
+			t.Fatal(err)
+		}
+		proofWrite(t, destination, name, raw)
+	}
 }
 
 func proofWrite(t *testing.T, root, name string, raw []byte) {
