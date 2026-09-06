@@ -76,6 +76,24 @@ Each fact envelope states `coverage_confidence` as `machine_readable_snapshot`,
 as the retained basis. These labels describe available evidence; even a fully
 normalized snapshot makes no claim about the current provider universe.
 
+The validator checks copied group values and citation hashes against retained
+JSON or rendered document values. The retained row and operation determine
+which metadata, request, response and descriptive groups must be present;
+deleting both a group and its citation cannot hide those operation facts.
+Effective parameter nodes, locations, names and requiredness must match the
+existing local-reference projection of the verified source groups. These checks
+validate retained facts; executable target joins and behavioral proof remain
+separate.
+
+Retained inputs have a 64 MiB per-file and 512 MiB aggregate byte limit.
+Document accounting permits 1,000,000 nodes per document and 8,000,000 in total;
+it charges containers, scalar values and object member names. JSON scanning
+stops after one excess token before decoding the object graph. YAML retains its
+bounded alias/node conversion, then contributes its converted payload to the
+aggregate. Nesting is limited to 256 levels. Refusal preserves anchored source
+rows with diagnostics. Rendered content also keeps its separate byte/token
+bounds; a one-node string is not an exemption from those bounds.
+
 ## Seven separate cells
 
 Every source row retains direct read, direct write, binary download, binary

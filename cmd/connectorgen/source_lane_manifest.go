@@ -386,6 +386,9 @@ func validateSourceLaneFactCitations(candidate sourceLaneManifest) []sourceLaneD
 				add("source_fact_scalar_mismatch", field.name)
 			}
 		}
+		if row.Source.Observed {
+			diagnostics = append(diagnostics, validateSourceLaneRequiredFactGroups(row, documents, roots)...)
+		}
 		parameterFacts := row.Facts
 		documentID := row.Facts.Refs["source_operation"].DocumentID
 		parameterFacts.Document = documents[documentID].Payload
@@ -444,4 +447,70 @@ func sourceLaneRetainedPointer(root any, pointer string) (json.RawMessage, error
 		}
 	}
 	return json.Marshal(value)
+}
+
+// The retained row and operation, rather than the copied group list, determine
+// which provider facts must be represented. This detects jointly omitted facts
+// and citations without treating an absent provider property as a known value.
+func validateSourceLaneRequiredFactGroups(row sourceLaneManifestRow, documents map[string]retainedSourceDocument, roots map[string]any) []sourceLaneDiagnostic {
+	diagnostics := []sourceLaneDiagnostic{}
+	add := func(code, pointer string) {
+		diagnostics = append(diagnostics, sourceLaneDiagnostic{Key: row.Source.Key, Lanes: sourceLaneNames(), Stage: "source_fact_validation", Code: code, Pointer: pointer, Owner: row.Source.Key.Connector, Severity: "error"})
+	}
+	raw, err := sourceLaneRetainedPointer(roots[row.Source.DocumentID], row.Source.Pointer)
+	var node map[string]json.RawMessage
+	if err != nil || decodeSourceJSON(raw, &node) != nil || node == nil {
+		add("source_row_citation_invalid", row.Source.Pointer)
+		return diagnostics
+	}
+	require := func(name string, value json.RawMessage, documentID, pointer string) {
+		if len(value) == 0 {
+			return
+		}
+		ref, cited := row.Facts.Refs[name]
+		copied, present := row.Facts.Groups[name]
+		canonical, err := canonicalSourceJSON(value)
+		actual, copyErr := canonicalSourceJSON(copied)
+		if !present || !cited || err != nil || copyErr != nil || !bytes.Equal(canonical, actual) ||
+			ref.DocumentID != documentID || ref.Pointer != pointer || ref.Section != "" || ref.Part != "" || ref.ValueSHA256 != sourceBytesHash(canonical) {
+			add("source_retained_fact_missing_or_changed", pointer)
+		}
+	}
+	for _, name := range []string{"method", "path", "protocol", "operation_id"} {
+		require(name, node[name], row.Source.DocumentID, row.Source.Pointer+"/"+name)
+	}
+	documentID := row.Source.DocumentID
+	pointer := row.Source.Pointer + "/source_operation"
+	operationRaw := node["source_operation"]
+	if len(operationRaw) == 0 && row.Source.RawDocumentID != "" && documents[row.Source.RawDocumentID].ContentType != "text/html" {
+		var method, path string
+		if json.Unmarshal(node["method"], &method) != nil || json.Unmarshal(node["path"], &path) != nil {
+			add("source_operation_coordinates_invalid", row.Source.Pointer)
+			return diagnostics
+		}
+		documentID = row.Source.RawDocumentID
+		pointer = "/paths/" + escapeSourcePointer(path) + "/" + strings.ToLower(method)
+		operationRaw, err = sourceLaneRetainedPointer(roots[documentID], pointer)
+		if err != nil {
+			add("source_operation_citation_invalid", pointer)
+			return diagnostics
+		}
+	}
+	if len(operationRaw) == 0 {
+		return diagnostics // Rendered/unknown operations have no invented JSON facts.
+	}
+	require("source_operation", operationRaw, documentID, pointer)
+	var operation map[string]json.RawMessage
+	if decodeSourceJSON(operationRaw, &operation) != nil {
+		add("source_operation_citation_invalid", pointer)
+		return diagnostics
+	}
+	for _, field := range []struct{ name, key string }{
+		{"parameters", "parameters"}, {"request_body", "requestBody"}, {"responses", "responses"},
+		{"summary", "summary"}, {"description", "description"}, {"callbacks", "callbacks"},
+		{"deprecated", "deprecated"}, {"external_docs", "externalDocs"},
+	} {
+		require(field.name, operation[field.key], documentID, pointer+"/"+field.key)
+	}
+	return diagnostics
 }

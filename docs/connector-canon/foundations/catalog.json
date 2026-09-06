@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 43,
+  "catalog_revision": 44,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -210,6 +210,18 @@
           {
             "file": "cmd/connectorgen/source_lane_cli.go",
             "name": "runSourceLanesContext"
+          },
+          {
+            "file": "cmd/connectorgen/source_inventory.go",
+            "name": "countSourceJSONNodes"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_manifest.go",
+            "name": "validateSourceLaneFactCitations"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_manifest.go",
+            "name": "validateSourceLaneRequiredFactGroups"
           }
         ]
       },
@@ -832,6 +844,26 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_cli_test.go",
           "name": "TestSourceLaneCLIReadOnlyRoundTrip"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_inventory_test.go",
+          "name": "TestSourceInventoryNodeBudget"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_inventory_test.go",
+          "name": "TestSourceInventoryRetainedNodeBudget"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_manifest_test.go",
+          "name": "TestSourceLaneManifestFactCitationOracle"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_manifest_test.go",
+          "name": "TestSourceLaneManifestEffectiveParameterOracle"
         }
       ],
       "publication_guarantee_proofs": [

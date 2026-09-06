@@ -544,6 +544,20 @@ func TestSourceLaneManifestFactCitationOracle(t *testing.T) {
 		}},
 		{"wrong copied method", func(m *sourceLaneManifest) { m.SourceOperations[0].Facts.Method = "POST" }},
 		{"missing citation", func(m *sourceLaneManifest) { delete(m.SourceOperations[0].Facts.Refs, "responses") }},
+		{"omitted fact and citation", func(m *sourceLaneManifest) {
+			delete(m.SourceOperations[0].Facts.Groups, "responses")
+			delete(m.SourceOperations[0].Facts.Refs, "responses")
+		}},
+		{"null fact and omitted citation", func(m *sourceLaneManifest) {
+			m.SourceOperations[0].Facts.Groups["responses"] = json.RawMessage("null")
+			delete(m.SourceOperations[0].Facts.Refs, "responses")
+		}},
+		{"omitted operation and response", func(m *sourceLaneManifest) {
+			for _, name := range []string{"source_operation", "responses"} {
+				delete(m.SourceOperations[0].Facts.Groups, name)
+				delete(m.SourceOperations[0].Facts.Refs, name)
+			}
+		}},
 		{"absent document", func(m *sourceLaneManifest) {
 			r := m.SourceOperations[0].Facts.Refs["responses"]
 			r.DocumentID = "other-document"
