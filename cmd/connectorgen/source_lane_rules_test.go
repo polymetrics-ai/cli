@@ -145,3 +145,47 @@ func TestSourceLaneBinaryLocalReference(t *testing.T) {
 		t.Fatalf("external schema became an applicability proof: %+v", got)
 	}
 }
+
+func TestSourceLaneAnnotationContradiction(t *testing.T) {
+	for _, tc := range []struct {
+		name, method, summary, interpretation string
+		valid                                 bool
+	}{
+		{"post read claimed mutation", "POST", "Read a file", "mutation", false},
+		{"mutation mentions read target", "POST", "Create a read token", "read", false},
+		{"substring is not read semantics", "POST", "Update the playlist", "read", false},
+		{"negated mutation", "POST", "Do not create a widget", "mutation", false},
+		{"positive post read", "POST", "Read a file", "read", true},
+		{"positive mutation", "POST", "Create a widget", "mutation", true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			node, err := json.Marshal(map[string]any{"id": "fixture", "protocol": "rest", "method": tc.method, "path": "/widgets", "source_operation": map[string]any{"summary": tc.summary, "responses": map[string]any{"204": map[string]any{"description": "No content"}}}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			row := retainedSourceOperation{Key: sourceOperationKey{Connector: "fixture", Inventory: "primary", ID: "fixture"}, Observed: true, Node: node, Pointer: "/rest/operations/0"}
+			doc := retainedSourceDocument{ID: "fixture", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+			facts := normalizeSourceFacts(row, doc, nil)
+			annotation := sourceSemanticAnnotation{Key: row.Key, Semantics: tc.interpretation, Citation: facts.Refs["summary"], Clause: tc.summary}
+			cells := classifySourceLanes(row.Key, facts, &annotation)
+			invalid := false
+			for _, cell := range cells {
+				for _, diagnostic := range cell.Diagnostics {
+					if diagnostic.Code == "source_annotation_invalid" {
+						invalid = true
+					}
+				}
+			}
+			if invalid == tc.valid {
+				t.Fatalf("annotation %q for cited %q: invalid=%v, want %v; cells=%+v", tc.interpretation, tc.summary, invalid, !tc.valid, cells)
+			}
+			if tc.valid {
+				lane := "direct_read"
+				if tc.interpretation == "mutation" {
+					lane = "direct_write"
+				}
+				requireSourceLane(t, cells, lane, "applicable")
+			}
+		})
+	}
+}

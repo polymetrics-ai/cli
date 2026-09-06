@@ -157,15 +157,31 @@ func sourceOperationSemantics(facts sourceFacts) string {
 	if facts.Method == "GET" || facts.Method == "HEAD" {
 		return "read"
 	}
-	summary := strings.ToLower(strings.TrimSpace(sourceFactText(facts, "summary")))
-	// These are cited source action words, not operation-ID/name heuristics.
-	words := []string{"create", "creates", "add", "adds", "update", "updates", "delete", "deletes", "remove", "removes", "approve", "approves", "reject", "rejects", "cancel", "cancels", "set", "sets", "replace", "replaces", "upload", "uploads", "publish", "publishes", "start", "starts", "stop", "stops", "trigger", "triggers", "revoke", "revokes", "restore", "restores", "archive", "archives", "assign", "assigns", "invite", "invites", "enable", "enables", "disable", "disables", "attach", "attaches", "detach", "detaches"}
+	summary := sourceFactText(facts, "summary")
 	if facts.Method != "POST" && facts.Method != "PUT" && facts.Method != "PATCH" && facts.Method != "DELETE" {
 		return ""
 	}
+	if sourceActionSemantics(summary) == "mutation" {
+		return "mutation"
+	}
+	return ""
+}
+
+// sourceActionSemantics recognizes affirmative leading actions only. A word
+// inside an object name (such as playlist or read token) is not an action.
+// Unsupported prose remains unresolved and requires a supported source clause.
+func sourceActionSemantics(clause string) string {
+	summary := strings.ToLower(strings.TrimSpace(clause))
+	// These are cited source action words, not operation-ID/name heuristics.
+	words := []string{"create", "creates", "add", "adds", "update", "updates", "delete", "deletes", "remove", "removes", "approve", "approves", "reject", "rejects", "cancel", "cancels", "set", "sets", "replace", "replaces", "upload", "uploads", "publish", "publishes", "start", "starts", "stop", "stops", "trigger", "triggers", "revoke", "revokes", "restore", "restores", "archive", "archives", "assign", "assigns", "invite", "invites", "enable", "enables", "disable", "disables", "attach", "attaches", "detach", "detaches"}
 	for _, word := range words {
 		if summary == word || strings.HasPrefix(summary, word+" ") {
 			return "mutation"
+		}
+	}
+	for _, word := range []string{"read", "reads", "query", "queries", "retrieve", "retrieves", "search", "searches", "list", "lists", "get", "gets"} {
+		if summary == word || strings.HasPrefix(summary, word+" ") {
+			return "read"
 		}
 	}
 	return ""
@@ -205,8 +221,11 @@ func validateSourceAnnotation(key sourceOperationKey, facts sourceFacts, a sourc
 		return fmt.Errorf("annotation clause absent")
 	}
 	words := strings.ToLower(a.Clause)
-	if a.Semantics == "read" && !strings.Contains(words, "read") && !strings.Contains(words, "query") && !strings.Contains(words, "retrieve") && !strings.Contains(words, "search") && !strings.Contains(words, "list") && !strings.Contains(words, "get") {
-		return fmt.Errorf("read interpretation lacks cited support")
+	if a.Semantics != "" && sourceActionSemantics(a.Clause) != a.Semantics {
+		return fmt.Errorf("semantic interpretation lacks affirmative cited support")
+	}
+	if asserted := sourceActionSemantics(sourceFactText(facts, "summary")); a.Semantics != "" && asserted != "" && asserted != a.Semantics {
+		return fmt.Errorf("semantic interpretation contradicts source action")
 	}
 	if a.Semantics == "mutation" && (facts.Method == "GET" || facts.Method == "HEAD") {
 		return fmt.Errorf("mutation conflicts with safe read contract")
