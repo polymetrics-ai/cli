@@ -733,3 +733,95 @@ func TestSourceLaneManifestSourceInputBytes(t *testing.T) {
 	}
 	t.Fatal("actual retained source input missing")
 }
+
+// These are actual collector failures after a known-good loaded/admitted control,
+// not injected normalization errors relabeled as later pipeline phases.
+func TestSourceLaneManifestCollectorFailurePreservation(t *testing.T) {
+	for _, which := range []string{"control", "import", "admission", "execution load"} {
+		t.Run(which, func(t *testing.T) {
+			root, _, _ := sourceBindingRepositoryFixture(t)
+			retained := []byte(`{"schema_version":2,"connector":"acme","counts":{"total":2},"rest":{"operations":[{"id":"source.a","protocol":"rest","method":"GET","path":"/widgets","source_operation":{"summary":"Get widgets","responses":{"200":{"description":"Unknown body"}}}},{"id":"source.b","protocol":"rest","method":"GET","path":"/widgets","source_operation":{"summary":"Get widgets","responses":{"200":{"description":"Unknown body"}}}}]}}`)
+			if err := os.WriteFile(filepath.Join(root, "source.json"), retained, 0600); err != nil {
+				t.Fatal(err)
+			}
+			cohort := sourceLaneCohort{SchemaVersion: 1, CohortID: "fixture", Inventories: []sourceInventoryAnchor{{Connector: "acme", Inventory: "primary", Class: "primary", Path: "source.json", SHA256: sourceBytesHash(retained), ExpectedIDs: []string{"source.a", "source.b"}, ExpectedCount: 2}}}
+			positive := collectSourceLaneBindings(context.Background(), root, cohort)
+			if len(positive.Observations) != 0 || len(positive.Canonical) != 1 || len(positive.Bundles) != 1 {
+				t.Fatalf("control did not reach loaded and admitted results: %+v", positive.Observations)
+			}
+			stage, code := "", ""
+			lockPath := filepath.Join(root, "internal/connectors/defs/acme/source.lock.json")
+			switch which {
+			case "import":
+				if err := os.WriteFile(lockPath, []byte(`{"schema_version":4,"operations":`), 0600); err != nil {
+					t.Fatal(err)
+				}
+				stage, code = "canonical_import", "canonical_input_invalid"
+			case "admission":
+				lock := vNextRequestSchemaLockForSemanticAdmissionTest()
+				if _, err := canonicalizeVNextSourceLock(lock); err != nil {
+					t.Fatalf("request positive not admitted: %v", err)
+				}
+				lock.Schemas["schemas/other-request.json"] = json.RawMessage(`{"type":"object","properties":{"count":{"type":"integer"}},"required":["count"],"additionalProperties":false}`)
+				lock.Operations[0].SchemaRefs.Request = "schemas/other-request.json"
+				raw, err := json.Marshal(lock)
+				if err != nil {
+					t.Fatal(err)
+				}
+				decoded, err := decodeVNextSourceLock(raw)
+				if err != nil {
+					t.Fatalf("admission fixture failed earlier import: %v", err)
+				}
+				if _, err := canonicalizeVNextSourceLock(decoded); err == nil || !strings.Contains(err.Error(), "/operations/0/schema_refs/request") {
+					t.Fatalf("fixture did not reach selected schema admission: %v", err)
+				}
+				if err := os.WriteFile(lockPath, raw, 0600); err != nil {
+					t.Fatal(err)
+				}
+				stage, code = "canonical_generation", "canonical_generation_unavailable"
+			case "execution load":
+				if err := os.WriteFile(filepath.Join(root, "internal/connectors/defs/acme/operations.json"), []byte(`{"operations":`), 0600); err != nil {
+					t.Fatal(err)
+				}
+				stage, code = "execution_load", "execution_bundle_invalid"
+			}
+			before := sourceBindingFixtureSnapshot(t, root)
+			observed := collectSourceLaneBindings(context.Background(), root, cohort)
+			_, canonicalPresent := observed.Canonical["acme"]
+			_, bundlePresent := observed.Bundles["acme"]
+			if canonicalPresent != (which == "control" || which == "execution load") || bundlePresent != (which != "execution load") {
+				t.Fatalf("wrong reached-stage results: canonical=%v bundle=%v observations=%+v", canonicalPresent, bundlePresent, observed.Observations)
+			}
+			got, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(got.SourceOperations) != 2 || got.SourceTotals.Cells != 14 || got.Validation.Status != "valid" {
+				t.Fatalf("unclaimed execution failure changed membership or became source invalidity: %+v %+v", got.SourceTotals, got.Validation)
+			}
+			for i, row := range got.SourceOperations {
+				wantID := []string{"source.a", "source.b"}[i]
+				if row.Source.Key != (sourceOperationKey{Connector: "acme", Inventory: "primary", ID: wantID}) || !row.Source.Observed || row.Facts.Method != "GET" || row.Facts.Path != "/widgets" || len(row.Lanes) != 7 {
+					t.Fatalf("source row changed at %s: %+v", which, row.Source)
+				}
+				for n, lane := range sourceLaneNames() {
+					if row.Lanes[n].Lane != lane || row.Lanes[n].State == "implemented" {
+						t.Fatalf("lane lost or falsely promoted: %+v", row.Lanes[n])
+					}
+				}
+				found := false
+				for _, d := range got.Diagnostics {
+					if d.Key == row.Source.Key && d.Stage == stage && d.Code == code && d.Severity == "deficit" && reflect.DeepEqual(d.Lanes, sourceLaneNames()) {
+						found = true
+					}
+				}
+				if found != (which != "control") {
+					t.Fatalf("named observation missing or invented for %s: %+v", wantID, got.Diagnostics)
+				}
+			}
+			if after := sourceBindingFixtureSnapshot(t, root); !reflect.DeepEqual(before, after) {
+				t.Fatal("collector/manifest altered pre-retained input bytes")
+			}
+		})
+	}
+}
