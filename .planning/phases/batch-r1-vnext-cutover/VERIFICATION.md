@@ -961,3 +961,8 @@ reusable readiness-checker infrastructure; existing structural checks and semant
 assertion inspection remain mandatory.088 authorizes Firstmate-authored read-only
 review overlapping final deterministic checks on the frozen candidate. No source,
 test or dependency mutation during overlap; acceptance waits every required gate.
+
+
+## Firstmate094 — current verification intake
+
+Pending: four meaningful caller-level oracle RED/GREEN pairs; complete091 caller/intent/acquisition/phase mapping and direct owner assertion inspection; focused combined normal/race closure; changed-test vet and original-base introduced lint; coherent candidate freeze and final uncached cmd/connectorgen package normal/race; exact unchanged-input supplementary reuse; current policy-reference companion; Firstmate-authored independent original-range review. Production/dependency equality to8aadc1ce mandatory. CP11 remains unaccepted.

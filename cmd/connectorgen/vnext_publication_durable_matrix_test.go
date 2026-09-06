@@ -661,7 +661,7 @@ func TestVNextPublicationSuccessfulPublishFinalPruneRejectsLateLeaseReplacement(
 		leaseB = vNextPublicationFileWitnessForTest(t, leasePath)
 		vNextPublicationAssertDistinctWitnessForTest(t, "successful Publish final prune A/B", leaseA, leaseB)
 		var observeErr error
-		expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+		expectedCut, observeErr = vNextPublicationFinalPruneVerdict(root, priorAuthority, old, newSet)
 		if observeErr != nil {
 			return observeErr
 		}

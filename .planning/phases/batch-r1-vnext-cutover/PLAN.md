@@ -1511,3 +1511,18 @@ reusable readiness-checker infrastructure; existing structural checks and semant
 assertion inspection remain mandatory.088 authorizes Firstmate-authored read-only
 review overlapping final deterministic checks on the frozen candidate. No source,
 test or dependency mutation during overlap; acceptance waits every required gate.
+
+
+## Firstmate094 coordinated proof correction — planned before test edits
+
+Authority: complete091 audit SHA256 f0dcb5abe32b4139cf56b5d3893b4fc83917d8407b798d997b2a7f26f051a7a3 adopted by Firstmate094; exact audited ledger committed ede1950b, preceded by089-only aggregation b8c36b6f. Behavioral/test baseline8aadc1ce; production/dependencies remain frozen.
+
+GSD sources resolved for discuss-phase, plan-phase, execute-phase, verify-work; generated discuss/plan --tdd/execute prompts used through scripts/gsd at official20297a8f. Inline execution follows the documented non-Pi path because the single-owner094 contract forbids unnecessary role spawning; discussion/design is the complete independent091 decision, not an unperformed new research phase. Existing doctor limitation (unrelated missing issue-122-rebootstrap prompt) remains documented; no daemon or adapter rewrite. Skills: Go how-to/testing plus previously loaded error handling, safety, security, lint; pinned exhaustive gate and connector-lane-build-order. No CLI/runtime/help/provider contract changes; publication Atlas reused with proof references only if needed.
+
+One dependency-ordered test-only wave:
+1. Extract minimal nonfatal actual-caller verdicts preserving old semantics. Add four caller-level counterexamples: valid Q where fixture expects N; well-formed wrong F03A intended anchor; nonempty changed displaced A; same-byte replacement A while original remains alive. Capture original desired rejection failures, positive controls and source/diff hashes.
+2. Small immutable fixture/control/transition expectation in expected_test.go. Derive pointers/integrity/serialized controls from fixture inputs before calls; compose existing stage/record hooks to validate payload/shape before acquiring new identities. Explicit transition plans bind target/predecessor/prior/intended/phases/attempt/selected state and exact new membership. Preserve old history and legitimate new inodes.
+3. Migrate all091 DM/PT cut callers, held-reader companions, static empty-delta rows; G2 preparation/base and RR remaining-state consumers; preserve existing phase and A/B semantics. Capture external early stage A before move and compare two roots after refusal and Check before restoration. Four negative controls must share actual migrated verdicts and correct positives.
+4. Add current evidence companion for mappings/dispositions/receipts and immutable087/088 policy references without rewriting080 manifest/history. Inspect each caller expectation/acquisition/allowed delta. Focused full dependency closure normal/race, changed-test gofmt/vet and original-base introduced lint, then coherent commit/freeze and final full package normal/race. Reuse supplementary evidence only with exact unchanged-input binding. Firstmate supplies next journal-enabled original-range reviewer prompt under088; no selfacceptance or publication.
+
+Affected owners: cmd/connectorgen/vnext_publication_expected_test.go, vnext_publication_durable_matrix_test.go, vnext_publication_test.go, vnext_publication_group2_original_test.go, vnext_publication_record_result_test.go, optional narrow four-control test file; additive phase evidence and necessary existing Atlas proof references only. Full091 sibling/acquisition/transition table is embedded byte-exact in REVIEW-CONVERGENCE and is the implementation checklist. No production edits authorized.

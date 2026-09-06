@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"io/fs"
 	"os"
@@ -391,17 +392,27 @@ func vNextPublicationAssertNoPreparedGraphForTest(t *testing.T, connectorRoot st
 
 func vNextPublicationAssertPendingPreparedGraphForTest(t *testing.T, publisher *vNextGenerationPublisher, connectorRoot, target string, wantPriorPresent, wantIntendedPresent bool, knownTransactions map[string]vNextPublicationExpectedTree) {
 	t.Helper()
+	if err := vNextPublicationPendingPreparedVerdict(publisher, connectorRoot, target, wantPriorPresent, wantIntendedPresent, knownTransactions, nil); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// Extraction-only094: desiredPayload is carried but old presence/graph semantics
+// are deliberately retained until the caller-level negative control runs RED.
+func vNextPublicationPendingPreparedVerdict(publisher *vNextGenerationPublisher, connectorRoot, target string, wantPriorPresent, wantIntendedPresent bool, knownTransactions map[string]vNextPublicationExpectedTree, desiredPayload []byte) error {
 	for name, expected := range knownTransactions {
-		vNextPublicationAssertExpectedTree(t, filepath.Join(connectorRoot, name), expected)
+		if err := vNextPublicationCompareExpectedTree(filepath.Join(connectorRoot, name), expected); err != nil {
+			return err
+		}
 	}
 	operation, err := publisher.openOperation(context.Background(), unix.LOCK_SH, false)
 	if err != nil {
-		t.Fatal(err)
+		return err
 	}
 	defer operation.close()
 	graph, err := publisher.scanControlAuthorityLocked(operation)
 	if err != nil {
-		t.Fatal(err)
+		return err
 	}
 	defer graph.close()
 	var state *vNextPublicationControlRepairState
@@ -412,56 +423,56 @@ func vNextPublicationAssertPendingPreparedGraphForTest(t *testing.T, publisher *
 		}
 	}
 	if state == nil {
-		t.Fatalf("pending %s authority graph has no new prepared phase-free state", target)
+		return fmt.Errorf("pending %s authority graph has no new prepared phase-free state", target)
 	}
 	priorIdentity, priorPresent, err := state.record.Prior.identity(vNextPublicationControlBackupMember)
 	if err != nil {
-		t.Fatal(err)
+		return err
 	}
 	intendedIdentity, intendedPresent, err := state.record.Intended.identity(vNextPublicationControlReplacementMember)
 	if err != nil {
-		t.Fatal(err)
+		return err
 	}
 	if priorPresent != wantPriorPresent || intendedPresent != wantIntendedPresent {
-		t.Fatalf("pending %s repair states = prior-present:%t intended-present:%t, want prior-present:%t intended-present:%t", target, priorPresent, intendedPresent, wantPriorPresent, wantIntendedPresent)
+		return fmt.Errorf("pending %s repair states = prior-present:%t intended-present:%t, want prior-present:%t intended-present:%t", target, priorPresent, intendedPresent, wantPriorPresent, wantIntendedPresent)
 	}
 	transaction, err := state.openTransaction(operation)
 	if err != nil {
-		t.Fatal(err)
+		return err
 	}
 	if priorPresent {
 		actual, found, anchorErr := state.anchor(transaction, state.record.Prior, vNextPublicationControlBackupMember)
 		if anchorErr != nil || !found || actual != priorIdentity {
 			_ = transaction.Close()
-			t.Fatalf("pending %s prior anchor = identity=%#v found=%t err=%v, want %#v", target, actual, found, anchorErr, priorIdentity)
+			return fmt.Errorf("pending %s prior anchor = identity=%#v found=%t err=%v, want %#v", target, actual, found, anchorErr, priorIdentity)
 		}
 	}
 	if intendedPresent {
 		actual, found, anchorErr := state.anchor(transaction, state.record.Intended, vNextPublicationControlReplacementMember)
 		if anchorErr != nil || !found || actual != intendedIdentity {
 			_ = transaction.Close()
-			t.Fatalf("pending %s intended anchor = identity=%#v found=%t err=%v, want %#v", target, actual, found, anchorErr, intendedIdentity)
+			return fmt.Errorf("pending %s intended anchor = identity=%#v found=%t err=%v, want %#v", target, actual, found, anchorErr, intendedIdentity)
 		}
 	}
 	if err := transaction.Close(); err != nil {
-		t.Fatal(err)
+		return err
 	}
 	_, publicFound, publicIdentity, err := vNextPublicationReadControlBound(operation.connector, target, "pending public control")
 	if err != nil {
-		t.Fatal(err)
+		return err
 	}
 	if publicFound != wantPriorPresent {
-		t.Fatalf("pending %s public control = found:%t identity:%#v, want prior-present:%t", target, publicFound, publicIdentity, wantPriorPresent)
+		return fmt.Errorf("pending %s public control = found:%t identity:%#v, want prior-present:%t", target, publicFound, publicIdentity, wantPriorPresent)
 	}
 	if wantPriorPresent && publicIdentity != priorIdentity {
-		t.Fatalf("pending %s public control identity = %#v, want prior %#v", target, publicIdentity, priorIdentity)
+		return fmt.Errorf("pending %s public control identity = %#v, want prior %#v", target, publicIdentity, priorIdentity)
 	}
 	preparedPath := filepath.Join(connectorRoot, state.transactionName, vNextPublicationControlRepairPreparedFile)
 	if _, err := os.Stat(preparedPath); err != nil {
-		t.Fatalf("pending %s prepared record missing: %v", target, err)
+		return fmt.Errorf("pending %s prepared record missing: %v", target, err)
 	}
+	return nil
 }
-
 func TestCP11F03CRepairTemporaryCleanupPreservesReplacementB(t *testing.T) {
 	for _, test := range []struct {
 		name    string

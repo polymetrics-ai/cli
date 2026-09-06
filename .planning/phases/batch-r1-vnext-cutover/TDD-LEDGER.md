@@ -1381,3 +1381,14 @@ only the unused vNextPublicationDirectoryFromFD forwarding wrapper (all live
 callers already use WithCloseForTest). No protocol or ownership contract changed.
 The original13 diagnostic JSON/log remains; final lint and whole package will
 bind this last mechanical source delta, not reuse earlier focused receipt hashes.
+
+
+## Firstmate094 — pre-edit oracle falsification plan
+
+Audited ledger ede1950b binds complete091 to8aadc1ce. Red: pending four actual-caller oracle controls; this will demonstrate unsound expected-state rejection, not production corruption/deletion. If minimal nonfatal extraction precedes RED, record its actual diff/content hashes and unchanged semantics, never invent a tree SHA. Green: pending all four rejection controls plus legitimate fixture output, same-inode base/absent cases, genuine moved A, replacement CURRENT inode, held-reader and recovery positives across every affected consumer. Original089 normal/race remain historical622events each; no new-candidate result yet.
+
+###094 actual-oracle RED completed before semantic repair
+
+Original command/selector/input hashes and full events: receipts-094/oracle-red-receipt.json and oracle-red.jsonl. Start2026-09-06T11:21:13.577274Z, wall9.645836875s, Go exit1; wrapper/session91527 terminal exit0 after preserving the actual child result. Four required rejection controls failed for precisely the expected missing assertions: coherent Q accepted despite desired N; well-formed wrong F03A anchor accepted; changed nonempty displaced A accepted; same-byte replacement A accepted. Correct N and correct requested F03A payload passed; each stage control accepted genuine moved A before applying its mutation. Eight run events include four parents and four pointer/payload subtests; six fail events include parent propagation, not six defects.
+
+Source baseline HEADede1950bcbfbfff5906e604ca8008f0ad579e34c plus extraction-only test diff SHA2569dc134a1a377fe864f994a0ff03646309d8d740b4bf13a30eb4d55a6ed88e76e and individually hashed new test file. No full working-tree SHA claimed. Raw SHA25673422135588be2303534bea89c700d8dbe055dc0d57f0f3db308e8bcbd5a789d; all input hashes unchanged after run. These are real caller-oracle REDs, not demonstrated production corruption/deletion. Existing public final-prune, F03A wrapper and early-stage row now use the same extracted nonfatal verdicts as the controls. Desired fields are intentionally unenforced in this recorded RED state; complete094 migration removes that gap. Production remains unchanged.

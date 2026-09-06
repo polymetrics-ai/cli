@@ -2089,15 +2089,10 @@ func TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup(t *testing
 		t.Fatalf("Recover() after stage replacement error = %v, want identity refusal", err)
 	}
 	vNextPublicationAssertCurrentJournalForTest(t, root, "stage-cleanup identity refusal", pointer, "", nil, vNextGenerationPointer{})
-	for _, path := range []string{
-		filepath.Join(movedPath, "sentinel.txt"),
-		filepath.Join(stagePath, "sentinel.txt"),
-	} {
-		if got, readErr := os.ReadFile(path); readErr != nil || string(got) == "" {
-			t.Fatalf("Recover() removed a validated-stage replacement object %q: err=%v got=%q", path, readErr, got)
-		}
+	if err := vNextPublicationEarlyStageVerdict(root, movedPath, stagePath, expectedCut, nil); err != nil {
+		t.Fatal(err)
 	}
-	vNextPublicationAssertExpectedTree(t, filepath.Join(root, "acme"), expectedCut)
+
 	fresh, freshErr := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
 	if freshErr != nil {
 		t.Fatal(freshErr)
@@ -2106,7 +2101,9 @@ func TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup(t *testing
 	if checkErr == nil {
 		t.Fatal("Check accepted retained stale/replaced stage")
 	}
-	vNextPublicationAssertExpectedTree(t, filepath.Join(root, "acme"), expectedCut)
+	if err := vNextPublicationEarlyStageVerdict(root, movedPath, stagePath, expectedCut, nil); err != nil {
+		t.Fatal(err)
+	}
 	if err := os.RemoveAll(stagePath); err != nil {
 		t.Fatal(err)
 	}

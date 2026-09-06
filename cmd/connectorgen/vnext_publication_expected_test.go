@@ -364,3 +364,36 @@ func TestCP11ExpectedCleanupScheduleRejectsWrongPhase(t *testing.T) {
 		t.Fatal("accepted wrong cleanup phase")
 	}
 }
+
+// Extraction-only094: retain the original final-prune observation semantics.
+// The independent desired files become enforced after the actual-oracle RED.
+func vNextPublicationFinalPruneVerdict(root string, prior vNextPublicationExpectedTree, old vNextGenerationPointer, desired vNextPublicationArtifacts) (vNextPublicationExpectedTree, error) {
+	cut, err := vNextPublicationCaptureExpectedCut(root, prior)
+	if err != nil {
+		return nil, err
+	}
+	var current vNextGenerationPointer
+	var journal vNextGenerationJournal
+	if err := json.Unmarshal(cut[vNextPublicationCurrentFile].payload, &current); err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(cut[vNextPublicationJournalFile].payload, &journal); err != nil {
+		return nil, err
+	}
+	if journal.State != "committed" || journal.New != current || journal.Old == nil || *journal.Old != old {
+		return nil, fmt.Errorf("final-prune control mismatch")
+	}
+	return cut, nil
+}
+
+// Extraction-only094: the old early-stage row checked nonempty external bytes
+// and exact connector membership, but did not compare the premove A witness.
+func vNextPublicationEarlyStageVerdict(root, moved, stage string, cut, desiredA vNextPublicationExpectedTree) error {
+	for _, path := range []string{filepath.Join(moved, "sentinel.txt"), filepath.Join(stage, "sentinel.txt")} {
+		payload, err := os.ReadFile(path)
+		if err != nil || len(payload) == 0 {
+			return fmt.Errorf("stage sentinel %s: %w", path, err)
+		}
+	}
+	return vNextPublicationCompareExpectedTree(filepath.Join(root, "acme"), cut)
+}
