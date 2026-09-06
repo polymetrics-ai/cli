@@ -1747,3 +1747,285 @@ reusable readiness-checker infrastructure; existing structural checks and semant
 assertion inspection remain mandatory.088 authorizes Firstmate-authored read-only
 review overlapping final deterministic checks on the frozen candidate. No source,
 test or dependency mutation during overlap; acceptance waits every required gate.
+
+
+## 2026-09-06 — Firstmate091 complete089 aggregation awaiting independent audit
+
+Firstmate091 authorizes this evidence-only append on frozen candidate 8aadc1cef19ea1a0b329ec898feb07e68e96913e, tree b40b84816189eb1a795d48556ec0e25547d76362, original base 36e4d980de0d51d92fe74a68306845643596a6cb. This complete aggregation is not yet audited and grants no repair or acceptance. The independently readable report below is authoritative if aggregation differs.
+
+Report: /Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-8aadc1ce-independent-review-089.md
+SHA-256: c8af5a801a22a8e109e9b12f1227339f6ec30389fe9922c23b66094c191ff642
+
+All three findings and all original severity language are retained verbatim. The frontmatter critical count denotes two acceptance blockers; their bodies state low demonstrated direct impact and no demonstrated production defect. Independent091 must adjudicate that distinction. Five original dispositions are supported,7481-04 remains open across the two causal paths; all ten lenses and every stated sibling/limit follow below.
+
+Custody clarification: the report uses Firstmate for factual policy-history and terminal-session replies that came from this canonical project worker, not the captain-facing Firstmate primary. No authority decision was conveyed by those factual replies.
+
+<!-- BEGIN IMMUTABLE COMPLETE089 REPORT -->
+---
+phase: batch-r1-vnext-cutover
+checkpoint: CP11
+reviewed: 2026-09-06T10:18:47Z
+depth: deep
+reviewer: cp11_8aadc1ce_independent_review_089
+review_base: 36e4d980de0d51d92fe74a68306845643596a6cb
+review_candidate: 8aadc1cef19ea1a0b329ec898feb07e68e96913e
+review_tree: b40b84816189eb1a795d48556ec0e25547d76362
+files_reviewed: 47
+files_reviewed_list:
+  - Makefile
+  - cmd/connectorgen/main.go
+  - cmd/connectorgen/vnext_lock_cli.go
+  - cmd/connectorgen/vnext_lock_test.go
+  - cmd/connectorgen/vnext_publication.go
+  - cmd/connectorgen/vnext_publication_allocation_consumer_test.go
+  - cmd/connectorgen/vnext_publication_allocation_witness_test.go
+  - cmd/connectorgen/vnext_publication_capture_identity_test.go
+  - cmd/connectorgen/vnext_publication_close_owner_test.go
+  - cmd/connectorgen/vnext_publication_compound_frontier_test.go
+  - cmd/connectorgen/vnext_publication_dir.go
+  - cmd/connectorgen/vnext_publication_durable_matrix_test.go
+  - cmd/connectorgen/vnext_publication_expected_test.go
+  - cmd/connectorgen/vnext_publication_group2_original_test.go
+  - cmd/connectorgen/vnext_publication_linearization_test.go
+  - cmd/connectorgen/vnext_publication_lock_contention_test.go
+  - cmd/connectorgen/vnext_publication_observation_test.go
+  - cmd/connectorgen/vnext_publication_ownership_test.go
+  - cmd/connectorgen/vnext_publication_phase_frontier_test.go
+  - cmd/connectorgen/vnext_publication_record_result_test.go
+  - cmd/connectorgen/vnext_publication_rename.go
+  - cmd/connectorgen/vnext_publication_rename_darwin.go
+  - cmd/connectorgen/vnext_publication_rename_linux.go
+  - cmd/connectorgen/vnext_publication_repair.go
+  - cmd/connectorgen/vnext_publication_repair_test.go
+  - cmd/connectorgen/vnext_publication_resource_error_test.go
+  - cmd/connectorgen/vnext_publication_test.go
+  - cmd/connectorgen/vnext_publication_witness_observation_test.go
+  - docs/GUIDE.md
+  - docs/architecture/connector-operation-kernel.md
+  - docs/connector-canon/IMPLEMENTATION-PROCEDURE.md
+  - docs/connector-canon/INDEX.md
+  - docs/connector-canon/REMOTE-REPRODUCIBILITY.md
+  - docs/connector-canon/SOURCE-LOCK-VNEXT.md
+  - docs/connector-canon/foundations/README.md
+  - docs/connector-canon/foundations/catalog.json
+  - docs/connector-canon/foundations/catalog.schema.json
+  - docs/migration/conventions.md
+  - docs/sync-transport-definition.md
+  - go.mod
+  - go.sum
+  - internal/connectors/boundary/boundary_test.go
+  - internal/connectors/boundary/lexicon.go
+  - scripts/tests/connector-canon.sh
+  - website/content/docs/connector-delivery.mdx
+  - website/content/docs/installation.mdx
+  - website/lib/docs.generated.ts
+findings:
+  critical: 2
+  warning: 1
+  info: 0
+  total: 3
+status: issues_found
+acceptance: blocked_by_mandatory_behavioral_proof
+---
+
+# CP11 independent acceptance review 089
+
+## Narrative Findings (AI reviewer)
+
+**Changes required.** Two mandatory proof defects remain within original 7481-04. They concern independent intended-state assertions and preservation of the displaced stage object. A separate warning concerns historical policy hashes that no longer resolve to the referenced bytes. No additional production correctness or security defect was demonstrated in this review. Passing normal/race results do not close the identified assertion gaps.
+
+This is the complete returned finding set after all ten lenses and reachable siblings, not an interim list or authorization to repair. Firstmate owns the complete-ledger disposition and next dispatch. CP11 remains unaccepted; no CP12, publication, live certification, no-mistakes run, release or merge is asserted.
+
+## Verified identity and scope
+
+The reviewed worktree is /Users/karthiksivadas/.treehouse/cli-6bae67/2/cli, branch fm/cli-top100-declaration-batch-r1, issue4427 / parent4325 / existing PR4294. Independently executed Git reads established HEAD 8aadc1cef19ea1a0b329ec898feb07e68e96913e, tree b40b84816189eb1a795d48556ec0e25547d76362, and merge base 36e4d980de0d51d92fe74a68306845643596a6cb. The entire original-base range was reviewed. There is no accepted CP11 baseline that would permit restricting this review to 083 or the final commit. The declared companion has the same commit identity; new owner receipt files are untracked evidence outputs, not a replacement code tree.
+
+The tracked worktree remained identical to HEAD. No CodeGraph index exists; no index was created. Protected .cache/ content was not read or modified. No project source, tests, dependencies, generated output, index or refs were changed by this reviewer.
+
+Independently recomputed original-range inventory:
+
+| Category | Paths | Added / removed lines |
+| --- | ---: | ---: |
+| Production Go and build wiring | 10: nine Go files and Makefile | 5,138 / 62 |
+| Tests and test script | 21: twenty Go tests and connector-canon.sh | 13,089 / 5 |
+| Documentation / Atlas | 13 | 934 / 90 |
+| Dependency declarations/checksums | 2 | 4 / 4 |
+| Generated website projection | 1 | 2 / 2 |
+| Planning/evidence, including archived logs/patch | 68 | 26,733 / 0 |
+| Total | 115 | 45,900 / 163 |
+
+The 47-path frontmatter lists non-planning review scope. Changed production units and newly added publication tests were read in full; changed regions of existing test/documentation files were reviewed with their relevant surrounding contracts. Evidence was followed through the compact projection to actual rows, assertion bodies, original references and receipts. The 68 evidence paths are not 68 production files, and their raw volume is not a claim that every historical log line independently proves behavior.
+
+Applicable context included AGENTS.md; delivery header/routing and GSD Pi guidance; both project skill indexes; the pinned firstmate-exhaustive-review skill; connector canon and Atlas README/catalog; CLI/help/docs parity; approved execution/evidence policies; Go how-to, testing, error handling, security, safety, lint, CLI and concurrency guidance. This was the authorized independent, read-only inline review; no children were spawned. Captain routing and final-only publication supersede historical Claude/parallel-role/intermediate-push wording.
+
+## Actionable findings
+
+### CP11-089-01 — BLOCKER: expected intent still comes from produced controls/records
+
+**Type/severity:** mandatory behavioral-proof defect; acceptance blocker with low demonstrated direct impact. Static assertion analysis, not a reproduced production bypass.
+
+**Primary locations:** [vnext_publication_expected_test.go:251](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_expected_test.go:251), especially the snapshot return at 264 and terminal comparison at 315; [vnext_publication_durable_matrix_test.go:679](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_durable_matrix_test.go:679); [vnext_publication_group2_original_test.go:417](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_group2_original_test.go:417).
+
+**Contract:** original audit 7481-04 requires independently expected raw controls, root content/identity, prior history and explicit permitted new transitions at every named cut, including F03A. Adopted design079's expected-state section explicitly says that decoding a new pointer from post-operation CURRENT is not an independent expectation. It permits capturing a newly created inode at the real cut, provided its bytes are checked against independently computed intent. It does not require retaining a pre-Publish CURRENT inode when replacement is legitimate.
+
+**Reachability and effect:** the real Publish/Recover/rollback fixtures reach their lease cleanup cuts, then vNextPublicationCaptureExpectedCut compares stable prior members, checks a generic phase schedule, and snapshots the entire observed connector. Its completed-transition checker obtains prepared.Intended from the newly produced prepared record and compares terminal.Selected with that same value. It has no fixture-supplied expected prior/intended control value. Thus the snapshot accurately proves that the observed state survives cleanup, but cannot establish that the state entering cleanup selected the intended fixture output. A coherent wrong selection is outside what these assertions reject. This is an observer limitation; no claim is made that current production can manufacture that state.
+
+Concrete affected siblings:
+
+| Actual row | Missing independent assertion |
+| --- | --- |
+| Empty-B prepared/new-selected Recover | DM:403 publishes the current fixture, then DM:408–412 derives expected CURRENT from the resulting CURRENT and only requires JOURNAL.New to agree. |
+| Empty-B committed/new-selected Recover | DM:442–451 repeats the same dependency on observed CURRENT. |
+| Empty-B successful Publish final prune | DM:466 passes nil wantCurrent; DM:515 explicitly skips the CURRENT comparison. DM:522 only requires JOURNAL.New to equal observed CURRENT. |
+| Nonempty-B committed/new-selected Recover | DM:568–572 derives newPointer from the interrupted operation; later refusal/completion comparisons reuse it. |
+| Nonempty-B successful Publish final prune | DM:639 defines newSet, but DM:679–696 never binds newPointer to newSet's expected generation/integrity/artifact content; later recovery again compares the observed pointer to itself. |
+| Prepared/new-selected nonempty-B public cleanup | PT:2771–2773 derives selectedNew from CURRENT; PT:2821 then uses it as expected CURRENT/JOURNAL.New. |
+| Fresh rejected-new Recover, empty/nonempty B | DM:718 supplies newSet, but DM:732–738 chooses both expected JOURNAL.New and the rejected root path from interruptedJournal.New. The fixture input is not the expectation for those values. |
+| Immediate rollback, empty/nonempty B | DM:829 independently computes the rejected generation path, a real improvement that must remain. DM:871–878 still takes expected JOURNAL.New from rollbackJournal.New without binding its generation/integrity to that independently selected fixture root. This is a narrower control-value gap, not absence of the rejected-root path witness. |
+| Held-reader Publish/Recover variants | PT:124–128 overwrites expectedControls from every completed production transition. PT:198–205 accepts returned currentC as its expected new value; PT:228–230 takes the interrupted expectedCurrent from observed controls. PT:243–254 preserves prior history and those snapshots, but does not independently specify the new transition values/deltas. The actual held reader A and lifetime lock are proved separately and are not disputed. |
+| F03A preparation helper/callers | G2:197–199 snapshots controls and already-created anchors before record writing; G2:239 preserves them. G2:417–443 nevertheless derives expected prior/intended identities from the newly produced prepared record and accepts only caller-supplied presence booleans. The intended anchor bytes are not checked against the requested target write before that record becomes the expectation. Prior transaction snapshots at G2:374/394 now correctly prevent the old skipped-history omission; this does not supply the missing independent intended-value check. |
+
+Here DM is cmd/connectorgen/vnext_publication_durable_matrix_test.go, PT is cmd/connectorgen/vnext_publication_test.go, and G2 is cmd/connectorgen/vnext_publication_group2_original_test.go, all under the absolute worktree above. These are the same causal invariant, not separate production findings per row.
+
+**Narrow counterexample condition:** in the final-prune row, substitute a different coherent new generation/record selection before CaptureExpectedCut captures it, while retaining old and the actual A/B lease witnesses. The listed expected-state assertions compare that new pointer with itself and preserve the snapshot; none asserts that its content equals newSet. This condition describes the missing test assertion. It was not executed as a modified-production probe. The existing negative comparator tests correctly reject a wrong root or inode when supplied the correct independent expectation; their correctness does not repair these call sites.
+
+**Classification:** residual original 7481-04/F03A proof omission; incomplete closure by the new expected-state helpers. Not a new product requirement and not evidence that the production repairs to 7481-01 are wrong.
+
+**Required disposition/regression:** derive intended pointer/journal/artifact bytes from the fixture input before the tested transition. Capture actual created inodes at the proper write/install cut, after comparing their payload to that independent intent. Pass expected prior/intended/selected values and explicit phase deltas into the pending/completed transition checks. Apply the correction to the siblings above, retaining legitimate control replacement and stable-history preservation. Add a bounded negative control at an actual affected call-site oracle that rejects a coherent wrong new selection, and an F03A wrong intended-anchor value. Keep helper acquisition safety and phase-sequence checks. Update the affected 04 obligation/claim mappings to the actual assertions; do not relabel the currently passing tests as pre-repair production REDs.
+
+### CP11-089-02 — BLOCKER: early stage cleanup omits displaced A from the exact witness
+
+**Type/severity:** mandatory preservation-proof defect; acceptance blocker with low demonstrated direct impact. Static evidence only; no production deletion was demonstrated.
+
+**Locations:** [vnext_publication_test.go:2046](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_test.go:2046), mutation/capture at 2072–2074, surviving-A assertion at 2092–2100; [vnext_publication_test.go:2209](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_test.go:2209), especially 2211.
+
+**Contract and reachability:** 7481-04 includes the owned stale-stage Recover early/late replacement cuts and requires the actual root identities/content before restoration. Recover reaches BeforeStageRemoval after validation of the owned stage A. vNextReplaceOwnedStageForTest renames A into a separate t.TempDir, installs stage B, and returns the external movedPath. CaptureExpectedCut subsequently observes only root/acme. The exact comparisons after Recover and nonmutating Check therefore cover B and connector authority, but exclude moved A.
+
+For moved A, the only post-refusal payload assertion is that sentinel.txt can be read and is nonempty. Neither the original A directory/member identities nor exact original sentinel/marker bytes are compared before fixture restoration. Changing the external sentinel from original to another nonempty string, or replacing external A with a same-byte directory, is outside what these assertions reject. The later restoration and successful Recover/Publish/Check do not retroactively observe A's identity at the refused cut.
+
+**Sibling boundary:** the late-stage helper vNextReplaceDirectoryAtPathForTest moves A to .late-original within the connector tree, so the expected-tree comparison includes that A. It is not the same omitted-tree defect. Failed-allocation A/B directory tests and lease-file witnesses also have their own retained actual A/B witnesses; they are not implicated merely by sharing the letter B.
+
+**Classification:** residual original 7481-04 owned-stage early-root proof omission after the new comparator was added; distinct causal path from CP11-089-01. No current production A/B deletion implication.
+
+**Required disposition/regression:** retain A's full expected directory/member identity/type/bytes before moving it, then compare movedPath to that expectation after Recover and after Check, before restoring fixture names. Alternatively place displaced A inside the explicitly compared witness universe while retaining its independently captured identity. Add a small negative control demonstrating rejection of changed nonempty sentinel bytes and same-byte replacement identity at moved A. Preserve the existing exact B/authority checks, stage-specific ownership semantics, refusal and bounded fresh recovery/retry.
+
+### CP11-089-03 — WARNING: two historical policy hashes no longer resolve to their referenced files
+
+**Type:** evidence reproducibility defect, not a code defect or a new product guarantee.
+
+**Location:** [CP11-ACCEPTANCE.json:55](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/.planning/phases/batch-r1-vnext-cutover/CP11-ACCEPTANCE.json:55), references for QUALITY-EXECUTION-PLAN.md and ENGINEERING-EXECUTION-POLICY.md at 55–64.
+
+Both entries explicitly describe Firstmate080 receipt history, but point to mutable paths and carry hashes that do not match the files now at those paths. Recorded QUALITY hash is 48def9ce4bb18dc7c6f288d32c4bb09d9929bceadf01cf23e44c8befaa8790af; current bytes hash to 6f43608b411136c859208e8d8cbc115b7914d3f4356a4ee0fb3f877e1a3d3274. Recorded ENGINEERING hash is f67d49f98cc222305f7d62afd73ace84478b6ebabaab47a03d4e80eaa899eb6c; current bytes hash to 8827280eb1df065870975e5c0f46225b2b75c5a6ea8cf8c0a041f5c1ad78d690.
+
+An independent reference/hash traversal reproduces exactly these two external-policy mismatches; all historical source-path hashes and current assertion bindings verified. Firstmate confirmed that the durable 080 message points to those mutable paths without embedding versions/digests, and no immutable matching 080 copies were located in the targeted task history. The old hashes cannot therefore be presented as presently resolvable exact-byte references. This does not discredit the currently supplied approved policy, which this review read and separately bound above, nor does it change the original CP11 scope or the explicit 087/088 instructions.
+
+**Classification:** new evidence about a historical-reference limitation after policy evolution. Preserve the old recorded hashes truthfully; do not fabricate recovered 080 bytes.
+
+**Disposition:** in an evidence companion, distinguish the unresolved historical 080 digest claims from current governing-policy references, and bind the latter to current exact bytes/version. If matching historical copies are later recovered, reference those immutable copies. No source repair or policy rollback is called for.
+
+## Ten mandatory lenses
+
+| Lens | Review disposition and concrete coverage |
+| --- | --- |
+| Architecture / data flow | Complete. main/runMain → lock-render context admission → retained connector/source descriptor and lock → publication/stage/control graph → physical loader/manifest/index/preflight was traced. Publish, Check, Recover, Open and Prune share operation ownership without a new runtime reader. Repair head selection, anchors and all seven phase append callers were inspected. |
+| Happy / bad / edge behavior | Complete. Strict JSON, duplicate/trailing members, bounded control sizes, malformed/unknown graph refusal, absence classes, valid bootstrap, partial/full writes, parent completion, descriptor 0, wrapping/identity failure, no-replace collision and cleanup refusal were traced. No requirement for successful recovery from arbitrary malformed authority was invented. |
+| State / concurrency | Complete. Connector inode flock, cancellation at acquisition, lock-render-only signal routing, actual contention acknowledgment, retained generation directory shared lifetime lock, separate lease identity, A/B/C quarantine/restore and staged/control linearization inspected. Test seam restoration/sequential execution and actual resource-instance Close accounting were checked. Mandatory expected-state proof remains deficient as reported. |
+| Security / secret taint | Complete for local authoring. Names and artifact members are constrained; no-follow/nonblocking open, opened-object stat/identity and descriptor-relative dependent access prevent path/type substitution from becoming authority. Strict create-only/no-replace operations protect unknown replacements. No credentials/provider response content reaches these new code paths. No network/secret operation was performed. |
+| Retry / rate / resume / idempotency | Complete for publication. Actual producer role-based allocation classification, bounded 128 attempts, compound absence, late selection, retry_required successors and fresh recovery were traced. Rate limits and remote idempotency are unchanged and not certified. |
+| Output integrity | Complete source analysis. Deterministic framed generation IDs, closed membership/hash checks, staged and selected validation, whole-generation returned A, meaningful completion causes and CLI nonzero behavior were inspected. CP11-089-01/02 limit mandatory proof of independently intended/preserved output at named cuts. |
+| Declaration reachability / closed surface | Complete. Existing lock decoder/canonicalizer/admission, engine.Load/loadBundle, engine.New, manifest synthesis/index, commandrunner.Preflight/resolvePreflightCommand and implemented-command binding were followed. Runtime embedded definitions still include fixed execution JSON only. No source.lock, CURRENT, authority record, provider evidence, fallback or Atlas runtime gate was added. |
+| CLI / App parity | Complete for changed authoring surface; runtime App changes N/A with evidence. Only connectorgen lock-render obtains the new publication/signal route. Runtime commandrunner and fixed embedded definitions remain their existing shared CLI/App route. Documentation/website explanations match authoring-only CURRENT and unchanged execution-only runtime; the two changed generated website bodies exactly match their MDX sources. No new runtime namespace/flag/approval behavior requires a separate App implementation. |
+| Provider semantics | Bounded N/A for remote behavior: no provider operation, request encoder, paging/rate policy, credential, warehouse/database execution or connector execution corpus changed. Authoring admission still reaches the real existing loader/preflight contract, covered above. This is not provider-live, database or transport certification. |
+| Tests / evidence | Complete discovery and final receipt reconciliation; acceptance blocked by CP11-089-01/02, with CP11-089-03 warning. Read actual test bodies and hook timing/resource ownership, not just names or schema. Verified all 119 stable IDs, current 28 proof groups, 36 bound test references and 606 assertion references. Normal/race contain every one of those symbols; that mechanical fact is not semantic coverage certification. |
+
+## Six original findings and retained protections
+
+| Original finding | Current source and proof disposition |
+| --- | --- |
+| 7481-01: partial creation / record authority | Production repair supported. openFileResult at dir.go:199 distinguishes actual opened fd from error and transfers ownership, including fd 0, before parent completion can fail. The common record writer at repair.go:480 establishes creation and one Close owner before fallible identity work, distinguishes partial bytes from complete retained records, binds cleanup while fd-owned, checks final name binding, and preserves causes. createControlRepairLocked:1346 retains complete dependencies on errors and independently checks prepared absence before anchor unwind; appendControlRepairPhaseLocked:1518 records retained complete phases while still returning error. All seven actual appenders stop dependent transitions on error. The 3-record frontier matrix, result-boundary tests, actual seven-caller phase/sequence matrix, CURRENT/JOURNAL/bootstrap/successor tests and fresh Check/Recover/retry exercise these paths. Unknown/replaced states remain refused. The F03A independent expected-intent omission belongs to 04/089-01; production coherence and actual resource execution are not reopened merely for that oracle gap. |
+| 7481-02: complete allocation outcome | Supported. CreateTemp:991 retains primary collision separately from parent completion, raw Close, root Close and identity-bound cleanup; only a pure retryable allocation outcome retries. Actual blocker Openat plus parent completion tests, known-A intentional ENOTEMPTY retention, identity-refused displaced A/B, multiple causes, one-Close transfer and bounded exhaustion are exercised. Eight actual write/restoration consumer routes preserve compound causes through Publish, CURRENT/JOURNAL and Recover/Open/Prune. Pure/compound absence and late-selection/conflict compatibility remain. Synthetic errors.Join is not the sole producer proof. |
+| 7481-03: failed allocator A/B | Supported by TestCP11AllocationCallersRetainActualAB, five named callers × empty/nonempty DIRECTORY B. Publish, explicit CURRENT/JOURNAL, generation Prune and stage Recover execute failed allocation; A is opened and retained, a real exclusive control blocker is installed for temporary allocation, A is displaced and actual actor-created B is captured before failure. Exact identity/type/member/byte/residue comparison, attempts/errors/Close accounting and fresh recovery/retry after fixture-owned restoration are present. Older successful-allocation/later-cleanup fixtures retain their narrower complementary role. |
+| 7481-04: independent expected state | Not closed. The new descriptor-safe exact tree comparator, B capture timing, prior transaction snapshots and negative root/inode/history/phase controls repair substantial portions. Actual callers still have CP11-089-01, and early stage A has CP11-089-02. See complete cut table below. |
+| 7481-05: bounded claim correction | Supported. resource_error_test.go:193 names publish-initial-recovery-generation, matching recoverLocked before new staging. Atlas catalog:287 now limits post-Stat proof to real Stat followed by injected completion, actual child Close, retained bytes/outer root, and explicitly disclaims pre-operation child identity and nested final-prune claims. Mandatory nested Recover-owned-stage and Prune-stale-generation tests preserve repeated no-GC resource accounting and permitted partial residue with fixture-owned reconstruction. Separate real final-prune lease tests remain, subject to 04's independent-intent gap. No optional additional nested final-prune feature is required. |
+| 7481-06: explicit compound siblings | Supported. ownership/compound-frontier/close-owner tests execute actual Write(error)+Close, actual short Write+Close and completed Sync+Close for each record kind. Opened-control identity, Stat and bounded-read failure each combines actual resource Close, not an after-successful-read substitute. Failed actual predecessor link+Close supplements successful link+Close. Capture has earlier primary plus actual Sync/completion and Close; stage has actual writable Sync/completion plus Close and cleanup refusal. Counts are per actual os.File/resource instance, including parent duplicate/raw fd/readDir copy/unknown identity. Inert seams have sequential, restored test ownership. These passing compound tests do not discharge the separately identified expected-state gap. |
+
+All seven phase appenders were traced individually: resumeBaseControlAuthorityLocked:1304, createControlRepairLocked:1346, beginControlCaptureLocked:1554, completeControlCaptureLocked:1636, selectControlStateLocked:1704, terminalizeRetryLocked:1752 and resolveControlRepairLocked:1763 in vnext_publication_repair.go. The actual phase test identifies its production caller and expected sequence/state/outcome, including already-performed capture/selection and retry-terminal states; it is not seven labels routed solely to one raw writer.
+
+Retained protections: F04R observers acquire identity/type/bytes from the actual opened object and have FIFO/symlink/directory boundary controls. F08R uses real LOCK_NB contention readiness, actual OS signals, direct child Wait and bounded cleanup. B01 typed no-replace preserves quarantine A/B/public C; B02 retains strict valid bootstrap, not arbitrary bootstrap. R3 bounded live descriptors preserve history without imposing a disk-history bound; returned filesystems remain bound to validated A; generation directory lifetime locks remain independent of regular lease-file identity. F01's six real CURRENT/JOURNAL capture opens cover validation/candidate/mutating use before dependent action. F02 installs child Close ownership before fallible stat and has actual repeated public nested proofs. No concrete changed dependency or counterexample reopened these source protections.
+
+F07 provenance is retained exactly as recorded: original uncommitted RED 12.383s, routing edit, GREEN 15.417s. The failing worktree has no recovered full tree SHA. Commit729 is not relabeled as that RED tree. The convergence provenance at lines792–805 binds the original records; no replay or fabricated reconstruction was performed.
+
+## Complete 7481-04 caller/cut disposition
+
+| Required cut | Actual object and current assessment |
+| --- | --- |
+| Explicit Prune | Empty/nonempty regular lease B captured at the actual lease boundary; independent preexisting current, A/B and connector tree/history retained. Supported. Prune may enter cleanup through initial recovery; that is not mislabeled as a later phase. |
+| No-JOURNAL Recover | Separate public call, both lease-file variants; expected existing selected controls and roots captured before destructive use. Supported. |
+| Open through recovery | Separate return contract and refusal/no invalid handle, both variants; same existing-state witnesses. Supported, alongside returned-validated-A tests. |
+| Publish initial recovery | Stale old already unheld at entry; failure precedes new staging. Both lease variants and correctly labeled nested proof. Supported for the preexisting state. |
+| Held-reader prune and its Publish/Recover companions | Real Open retains A, directory lifetime lock survives equal-byte lease B replacement, old root/A and actual A/B witnesses retained. Pure prune preservation supported. New-selection/private-transition expectations in Publish/Recover companions remain 089-01. |
+| Prepared JOURNAL / new-selected Recover | Correct prepared phase and actual A/B lease substitutions; independently intended new control/record value missing in both variants: 089-01. |
+| Committed JOURNAL / new-selected Recover | Actual committed cut is distinct from AfterCommitSync's earlier prepared state; actual A/B and retained old established. Independent new expectation remains 089-01. |
+| Successful Publish final prune | Old starts current, so hooks genuinely fire after new validation and committed journal. This is genuine final-prune lease proof, with empty/nonempty B. Independent new output expectation remains 089-01; nested final-prune proof is not required. |
+| Old-selected / rejected-new fresh Recover | Real finalized rejected new and old-selected prepared cut; both B variants and fixture restoration/recovery present. Expected rejected pointer/root chosen from observed JOURNAL.New: 089-01. |
+| Immediate rollback | Actual second validation failure, both causes, old restoration, independently selected rejected generation path and A/B captured. JOURNAL.New expected-value binding remains the narrower 089-01 sibling. |
+| Owned stale-stage Recover | Stage marker/root, not a generation lease contract. Early exact comparison excludes external displaced A: 089-02. Late root substitution includes A/B within compared connector tree and preserves stable controls/history. Nested stage resource proof is separate and retained. |
+| Additional nonmutating Check | Both ordinary stale-state and pending-JOURNAL tests compare expected state around Check and preserve refusal without recovery. Supported. Check is not converted into a lease-deletion variant. |
+
+## New-edge inventory and consumer tracing
+
+The complete scan challenged the new file-open result, owned-record result, cleanup result roles, retained-complete consumption, independent prepared-absence guard, phase append bookkeeping, low-level resource seams and the new expected-state observer. Unknown identity/replaced occupancy is never used as unlink authority. A successful Openat followed by parent Close error is not treated as no creation. Complete bytes plus completion error can retain a coherent record without allowing a dependent transition to proceed. Wrapping failure/descriptor 0/short writes/multiple errors have truthful ownership outcomes.
+
+Temporary and quarantine allocation were traced separately through writeAtomicLocked, JOURNAL/CURRENT writers, rollback/restoration, all public recovery consumers and stage/generation cleanup. Known-A nonempty intentional retention does not swallow an identity refusal or completion failure. No natural producer path was found that hides a meaningful completion merely because another error matches EEXIST or a typed control conflict. Private anchors/captures and no-replace restoration preserve unknown late occupants and public C.
+
+Affected unchanged dependencies were followed beyond changed files: vnext_lock.go's strict decoder/canonicalizer, vnext_admission.go's runtime selection/manifest validation, engine/bundle.go:1380 loadBundle and structural route/schema/header checks, engine/connector.go:59 constructor, commandrunner/runner.go:236 and :497 actual preflight resolver, manifestindex and defs embedding. The added publisher validates the physical staged/selected closed tree through those contracts. Boundary lexicon's changed alias/construction handling and tests were reviewed with their callers. No alternative executable declaration path was introduced.
+
+go.mod/go.sum promote the existing x/sys v0.47.0 to direct and change indirect x/text v0.39.0 to v0.38.0. The actual dependency bytes are included in source bindings and current tidy/vet/build evidence. This is not a claim of a dependency vulnerability audit or proof of every untouched runtime behavior. Darwin no-replace and flock behavior has actual local execution; Linux implementation was read, but no Linux runtime result is claimed. Unsupported platforms retain explicit refusal rather than an overwrite fallback.
+
+## Validation actually performed and reconciled
+
+Reviewer work consisted of read-only source/diff/caller/assertion inspection, Git identity/inventory/whitespace checks, reference/source/receipt SHA-256 verification, JSONL event/selection reconciliation, and exact comparison of the two changed generated website bodies to their MDX sources. No reviewer Go test, build, overlay, provider call, runtime service or child agent was launched. The narrow findings are static missing-assertion findings; no additive test source or modified source probe is claimed.
+
+The owner supplied the final immutable-candidate packet during review. It was reconciled without restarting the source scan. Independently verified packet SHA-256: cc9d7bff36b52537e9bad321755b9e5b07e86a09725cd2a18c5166e76c466d70, at .planning/phases/batch-r1-vnext-cutover/receipts-083/candidate-8aadc1ce-validation-packet-089.json.
+
+| Bound owner execution | Actual result and reconciliation |
+| --- | --- |
+| go test -json -count=1 -timeout 20m ./cmd/connectorgen | Exit0, 380.287086584s wall; 2026-09-06 09:48:44.890162Z to 09:55:05.180692Z. Raw JSONL has 622 run events, 622 test/subtest pass events and one package pass; no skip/fail events. Uncached. All 211 recorded source hashes match current frozen files. |
+| go test -race -json -count=1 -timeout 20m ./cmd/connectorgen | Exit0, 862.432093375s wall; completed 10:09:27.628244Z. Same 622 run/pass events plus package pass, no skip/fail events, uncached; all 211 source hashes match. |
+| Original-base introduced lint, ./... | Original golangci-lint command used --new-from-rev 36e4d980de0d51d92fe74a68306845643596a6cb, --timeout 20m, unlimited issue counters and JSON output. Exit0, actual Issues array empty. All 868 recorded input hashes and raw JSON/log hashes match. Receipt was captured after the pre-freeze command at cf417bcf62672aff83303086fa68df21bfff068a; unchanged input hashes bind it to this candidate. It is not falsely described as a command started at8aadc1ce. Wall time was not separately captured. |
+| go vet ./... | Current candidate exit0; raw output empty and hash verified. |
+| go build -o /dev/null ./cmd/connectorgen; corresponding ./cmd/pm | Both current candidate exit0. Actual environment includes CGO_ENABLED=1, darwin/arm64, Go1.26.6; no CGO-free binary claim. |
+| go mod tidy -diff | Exit0, empty diff; no dependency rewrite by this reviewer. |
+| go run ./cmd/agentcontractgen check | Exit0; raw receipt verified. |
+| go run ./cmd/connectorgen validate internal/connectors/defs | Exit0; 553 definitions, zero errors. |
+| go run ./cmd/connectorgen boundary . --json | Exit0, 337.288150917s wall; 284 files, 553 loaded connectors, zero findings/warnings and six explicit existing exceptions. This is a scanner result, not a boundary test-package PASS. |
+| go run ./cmd/pm docs validate --connectors-dir docs/connectors; go run ./cmd/pm help docs | Both exit0; actual output hashes verified. |
+| make release-workflow-check | Exit0; raw output verified. This is release configuration checking, not release publication. |
+| connector-canon decomposition | The receipt's executed static prefix exactly matches the script prefix (1,543 characters). Its Go selector's tests, including deterministic source-lock/publication and Atlas tests, occur in both completed full package runs. No redundant expensive subset rerun was required. The early static receipt's pending-package wording remains its timestamped class; the final packet resolves completion. |
+
+All 13 packet receipt hashes and raw outputs verified, as did the original lint receipt (aac3bdfb46677a81e1942eab1d1d31a276ed67edc26392f9cf8959dced36584f). Current proof groups contain 36 test references and 606 exact assertion-line references, all matching their source hashes and executed test symbols. The 119 obligation IDs are unique, and their local/reference links resolve apart from the two historical policy-byte mismatches described in 089-03. These checks verify binding/selection; they do not certify assertion adequacy or turn 622 parent/subtest events into 622 independent obligations.
+
+Focused earlier receipts retain their precommit/proof-only limits: coordinated 195/195 events normal/race104.920/145.784s; record9/9 events6.335/10.425s; consumers9/9 events12.699/19.727s; assertions/resources80/80 events51.863/72.478s. Later 3.299s assertion race evidence is a development observation. None substitutes for the final full executions. Original desired REDs, fixture/setup failures, passing defect witnesses, proof-only tests and original additive overlays remain their original classes; no historical production bytes or tests were replaced to improve those records.
+
+Independent original-range git diff --check reproduced exit2 and 69 diagnostics, all confined to .planning/phases/batch-r1-vnext-cutover/PREMATURE-F01-EDIT-SNAPSHOT.patch. Excluding only that archive reproduced exit0. Full raw output hash is 19414a0226df8dad65ff8c89da079e444d0d12f368d72e72f214a0429c47163b, matching the owner's bound receipt. The receipt hash is 2adfa6722ca297254d3e7976cfee6a259beafe42c66e81ab26ecea4471706d27. The archive was not reformatted; the unqualified range is not called whitespace-clean.
+
+Original runtime-preflight evidence remains explicitly cached. Historical boundary-package invalid_cli_surface failure, its original-base-package-source reproduction under current dependencies, older CLI/engine/App/contract/Redis and other CP29 obligations remain separate from current scanner success. No full-repository test suite, Linux filesystem runtime, power-loss, provider-live, database, hosted, no-mistakes or programme-wide certification is inferred. The rescheduled reusable checker/negative-input infrastructure under087 is not a CP11 defect; the behavioral assertion omissions above are mandatory existing proof.
+
+## Reference custody and terminal state
+
+Independently verified exact hashes:
+
+| Reference | SHA-256 |
+| --- | --- |
+| Complete original7481 audit | bc109e85fdde9d1958b2cde7874a3f7b30b8e5d06b1b0c2764088fb34fa3e0a0 |
+| Adopted ownership design079 | 35f8926266fdae784e88d429eeea0b27adcd114a1550ca47cd7dece3f592a417 |
+| Candidate handoff088 | 2517e5819d27df2dc315310fe43b56c462752b87c09588e40d3e75654c123809 |
+| Frozen CP11-ACCEPTANCE.json | 71529be0e953cf8ab5240708118cccfc2c8ca05663904818d1d94bdebc43f5f9 |
+
+Git show at053853368a1514eaadf0b2411ab8740959559797 independently confirmed canonical convergence contains the exact original audit hash. Historical P/D/R/G2/DM/RE/PT source hashes resolve against their declared7481 commit; original additional test sources resolve against their external content hashes, not falsely against committed test bytes. Design079 was challenged as rationale, not accepted as correctness proof.
+
+All reviewer shell/read/verification commands are terminal. One exploratory read used an incorrect commandrunner path and one scratch reference walker initially rejected nullable optional references; both were corrected in subsequent terminal read-only calls. Neither is test evidence or an implementation failure. No reviewer sessions or children remain. Firstmate reported owner sessions22356 (normal/race) and34177 (supplementary checks) terminal exit0, corroborated by completed receipts. Only this review report was created by this reviewer; its SHA-256 is returned separately to avoid a self-referential file hash.
+
+Acceptance remains blocked by CP11-089-01 and CP11-089-02. The complete source review and final deterministic receipt reconciliation are finished; Firstmate must disposition this full set before authorizing the next coordinated work.
+
+<!-- END IMMUTABLE COMPLETE089 REPORT -->
