@@ -297,7 +297,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -362,7 +362,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -428,7 +428,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -494,7 +494,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -560,7 +560,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -626,7 +626,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -692,7 +692,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -758,7 +758,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -824,7 +824,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -890,7 +890,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -956,7 +956,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -1022,7 +1022,7 @@
       "object_kind": "regular control record and owned parent/transaction",
       "variants": [],
       "first_side_effect": "Exclusive Openat creation before fallible parent completion; for writable frontiers content may be partial or complete.",
-      "resource_cleanup_owner": "Common writer and caller must transfer truthful owned state; exact selected design pending.",
+      "resource_cleanup_owner": "Design079: opener transfers actual opened fd even on parent completion error; common writer owns one Close and proven-owned incomplete-record disposal; caller retains complete authority and graph dependencies (see design_reference).",
       "expected_state_ref": "record",
       "independently_expected_pre_state": {
         "$ref": "#/expected_state_contracts/record/pre"
@@ -7350,7 +7350,7 @@
     "manifest_semantic_status": "owner_draft_from_audited_obligations_not_independent_acceptance",
     "obligation_count": 119,
     "closed_count": 0,
-    "remaining": "Architect design incorporation, Firstmate coherent implementation brief, exact missing assertions/receipts, source-bound verification and independent acceptance.",
+    "remaining": "Firstmate coherent implementation brief, exact missing assertions/receipts, source-bound verification and independent acceptance.",
     "structural_check": "PASS: required fields, unique IDs, six findings, caller/variant inventory, JSON Pointer and receipt/contract references, existing symbols and source hashes. Not semantic or implementation acceptance.",
     "disposition_counts": {
       "original_desired_red": 6,
