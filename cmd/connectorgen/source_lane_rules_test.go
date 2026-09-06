@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -451,5 +452,89 @@ func TestSourceLaneGraphQLCitationShapes(t *testing.T) {
 	ref.Section = "#heading"
 	if sourceLaneGraphQLRefsShape(refs) {
 		t.Fatal("rendered quote used as machine-readable GraphQL document")
+	}
+}
+
+func TestSourceLane118CompositionUnknownPersists(t *testing.T) {
+	for _, tc := range []struct {
+		name, schema string
+		known        bool
+	}{
+		{"known standalone composition", `{"allOf":[{"type":"object","properties":{"id":{"type":"string"}}}]}`, true},
+		{"external property", `{"type":"object","properties":{"detail":{"$ref":"https://example.invalid/schema"}},"allOf":[{"type":"object"}]}`, false},
+		{"missing local property", `{"type":"object","properties":{"detail":{"$ref":"#/components/schemas/Absent"}},"anyOf":[{"type":"object"}]}`, false},
+		{"unknown earlier composition", `{"allOf":[{"$ref":"https://example.invalid/schema"}],"oneOf":[{"type":"object"}]}`, false},
+		{"malformed earlier composition", `{"allOf":{},"anyOf":[{"type":"object"}]}`, false},
+		{"unknown array item", `{"type":"array","items":{"$ref":"#/components/schemas/Absent"},"allOf":[{"type":"object"}]}`, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			node := json.RawMessage(`{"id":"fixture","protocol":"rest","method":"GET","path":"/widgets","source_operation":{"summary":"Read widget","requestBody":{"content":{"application/json":{"schema":` + tc.schema + `}}},"responses":{"200":{"content":{"application/json":{"schema":` + tc.schema + `}}}}}}`)
+			row := retainedSourceOperation{Key: sourceOperationKey{Connector: "fixture", Inventory: "primary", ID: "fixture"}, Observed: true, Node: node, Pointer: "/rest/operations/0"}
+			doc := retainedSourceDocument{ID: "fixture", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+			facts := normalizeSourceFacts(row, doc, nil)
+			if facts.Status == "unavailable" || len(facts.Groups["responses"]) == 0 || len(facts.Groups["request_body"]) == 0 {
+				t.Fatalf("fixture did not reach retained shape analysis: %+v", facts)
+			}
+			cells := classifySourceLanes(row.Key, facts, nil)
+			requireSourceLane(t, cells, "direct_read", "applicable")
+			want := "undetermined"
+			if tc.known {
+				want = "not_applicable"
+			}
+			for _, lane := range []string{"binary_download", "binary_upload", "etl"} {
+				requireSourceLane(t, cells, lane, want)
+			}
+		})
+	}
+}
+
+func TestSourceLane118ShapeBudgetAtomic(t *testing.T) {
+	for _, count := range []int{99980, 100020} {
+		t.Run(fmt.Sprint(count), func(t *testing.T) {
+			props := make(map[string]any, count)
+			for i := 0; i < count; i++ {
+				props[fmt.Sprintf("p%06d", i)] = map[string]any{"type": "string", "description": fmt.Sprint(i)}
+			}
+			// Opposite lexical sides of the distinct pNNNNNN budget consumers.
+			props["a_binary"] = map[string]any{"type": "string", "format": "binary"}
+			props["records"] = map[string]any{"type": "array", "items": map[string]any{"type": "object"}}
+			reverse := make(map[string]any, len(props))
+			reverse["records"], reverse["a_binary"] = props["records"], props["a_binary"]
+			for i := count - 1; i >= 0; i-- {
+				name := fmt.Sprintf("p%06d", i)
+				reverse[name] = props[name]
+			}
+			schema, err := json.Marshal(map[string]any{"type": "object", "properties": props})
+			if err != nil {
+				t.Fatal(err)
+			}
+			otherSchema, otherErr := json.Marshal(map[string]any{"type": "object", "properties": reverse})
+			if otherErr != nil || string(schema) != string(otherSchema) {
+				t.Fatal("map construction changed pinned schema bytes")
+			}
+			node := json.RawMessage(`{"id":"fixture","protocol":"rest","method":"GET","path":"/widgets","source_operation":{"summary":"Read widgets","requestBody":{"content":{"application/json":{"schema":{"type":"string"}}}},"responses":{"200":{"content":{"application/octet-stream":{},"application/json":{"schema":{"type":"array","items":{"type":"object"}}}}},"201":{"content":{"application/json":{"schema":` + string(schema) + `}}}}}}`)
+			row := retainedSourceOperation{Key: sourceOperationKey{Connector: "fixture", Inventory: "primary", ID: "fixture"}, Observed: true, Node: node, Pointer: "/rest/operations/0"}
+			doc := retainedSourceDocument{ID: "fixture", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+			facts := normalizeSourceFacts(row, doc, nil)
+			if facts.Status == "unavailable" || len(facts.Groups["responses"]) == 0 {
+				t.Fatalf("fixture failed before shape frontier: %+v", facts.Diagnostics)
+			}
+			cells := classifySourceLanes(row.Key, facts, nil)
+			first, _ := json.Marshal(cells)
+			second, _ := json.Marshal(classifySourceLanes(row.Key, facts, nil))
+			if string(first) != string(second) {
+				t.Fatal("identical retained source produced different complete lane bytes")
+			}
+			requireSourceLane(t, cells, "direct_read", "applicable")
+			if count < 100000 {
+				requireSourceLane(t, cells, "binary_download", "applicable")
+				requireSourceLane(t, cells, "etl", "applicable")
+				requireSourceLane(t, cells, "binary_upload", "not_applicable")
+			} else {
+				for _, lane := range []string{"binary_download", "binary_upload", "etl"} {
+					requireSourceLane(t, cells, lane, "undetermined")
+				}
+			}
+		})
 	}
 }

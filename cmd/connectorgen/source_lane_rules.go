@@ -141,12 +141,16 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 		set(5, true, "source_destination_mutation", "method", "summary", "request_body")
 	}
 	response := sourceResponseShape(facts)
+	request := sourceRequestShape(facts)
+	if facts.analysis.Exhausted {
+		// Partial traversal cannot establish a shape contract for this operation.
+		response, request = sourceShape{}, sourceShape{}
+	}
 	if response.Binary {
 		set(2, true, "successful_binary_response", "responses")
 	} else if response.Known {
 		set(2, false, "known_nonbinary_response", "responses")
 	}
-	request := sourceRequestShape(facts)
 	if request.Binary {
 		set(3, true, "binary_request", "request_body")
 	} else if request.Known {
@@ -306,10 +310,11 @@ func validateSourceAnnotation(key sourceOperationKey, facts sourceFacts, a sourc
 type sourceShape struct{ Known, Binary, Collection bool }
 
 type sourceShapeAnalysis struct {
-	Objects map[string]map[string]json.RawMessage
-	Shapes  map[string]sourceShape
-	Root    any
-	Visits  int
+	Objects   map[string]map[string]json.RawMessage
+	Shapes    map[string]sourceShape
+	Root      any
+	Visits    int
+	Exhausted bool
 }
 
 func sourceAnalysisPointer(facts sourceFacts, pointer string) (json.RawMessage, error) {
@@ -399,7 +404,13 @@ func sourceContentShape(facts sourceFacts, raw json.RawMessage) sourceShape {
 		return sourceShape{}
 	}
 	result := sourceShape{Known: true}
-	for media, rawEntry := range content {
+	mediaKeys := make([]string, 0, len(content))
+	for media := range content {
+		mediaKeys = append(mediaKeys, media)
+	}
+	sort.Strings(mediaKeys)
+	for _, media := range mediaKeys {
+		rawEntry := content[media]
 		var entry map[string]json.RawMessage
 		if err := json.Unmarshal(rawEntry, &entry); err != nil {
 			result.Known = false
@@ -434,6 +445,7 @@ func sourceResolveObject(facts sourceFacts, raw json.RawMessage, seen map[string
 	if facts.analysis != nil {
 		facts.analysis.Visits++
 		if facts.analysis.Visits > 100000 {
+			facts.analysis.Exhausted = true
 			return nil, false
 		}
 		if cached, exists := facts.analysis.Objects[cacheKey]; exists {
@@ -496,6 +508,7 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 	_ = json.Unmarshal(node["type"], &typ)
 	_ = json.Unmarshal(node["format"], &format)
 	result := sourceShape{Known: typ != "" || len(node["properties"]) > 0}
+	unresolved := false
 	if format == "binary" || format == "byte" {
 		result.Known = true
 		result.Binary = true
@@ -509,14 +522,20 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 		result.Collection = valid && (itemType == "object" || len(item["properties"]) > 0)
 		shape := sourceSchemaShape(facts, node["items"], copySourceSeen(seen), depth+1)
 		result.Binary = result.Binary || shape.Binary
-		result.Known = result.Known && shape.Known
+		unresolved = unresolved || !shape.Known
 	}
 	var props map[string]json.RawMessage
 	if len(node["properties"]) > 0 && json.Unmarshal(node["properties"], &props) == nil {
-		for name, property := range props {
+		propertyKeys := make([]string, 0, len(props))
+		for name := range props {
+			propertyKeys = append(propertyKeys, name)
+		}
+		sort.Strings(propertyKeys)
+		for _, name := range propertyKeys {
+			property := props[name]
 			shape := sourceSchemaShape(facts, property, copySourceSeen(seen), depth+1)
 			result.Binary = result.Binary || shape.Binary
-			result.Known = result.Known && shape.Known
+			unresolved = unresolved || !shape.Known
 			if name == "data" || name == "items" || name == "results" || name == "values" || name == "records" {
 				result.Collection = result.Collection || shape.Collection
 			}
@@ -528,7 +547,7 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 			continue
 		}
 		if err := json.Unmarshal(node[keyword], &branches); err != nil || len(branches) == 0 {
-			result.Known = false
+			unresolved = true
 			continue
 		}
 		known := true
@@ -538,8 +557,11 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 			result.Binary = result.Binary || shape.Binary
 			result.Collection = result.Collection || shape.Collection
 		}
-		result.Known = known
+		unresolved = unresolved || !known
+		result.Known = result.Known || known
 	}
+	// A later known composition cannot erase an unresolved sibling contract.
+	result.Known = result.Known && !unresolved
 	if facts.analysis != nil {
 		facts.analysis.Shapes[cacheKey] = result
 	}
