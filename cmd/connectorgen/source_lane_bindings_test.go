@@ -85,3 +85,92 @@ func TestSourceLaneBindingCanonicalPositive(t *testing.T) {
 		t.Fatalf("identity promoted behavior: %+v", cell)
 	}
 }
+
+func TestSourceLaneGitLabBridge(t *testing.T) {
+	for _, tc := range []struct{ name, sourcePath, targetPath, bridge, want string }{
+		{"declared exact boundary", "/api/v4/projects/{id}", "/projects/{id}", `{"source_prefix":"/api/v4","connector_prefix":""}`, "target_contract_unverified"},
+		{"prefix lookalike", "/api/v40/projects/{id}", "/0/projects/{id}", `{"source_prefix":"/api/v4","connector_prefix":""}`, "target_semantics_mismatch"},
+		{"undeclared prefix", "/api/v4/projects/{id}", "/projects/{id}", `null`, "target_semantics_mismatch"},
+		{"unrelated prefix declaration", "/private/projects/{id}", "/projects/{id}", `{"source_prefix":"/private","connector_prefix":""}`, "target_semantics_mismatch"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			node, err := json.Marshal(map[string]any{"id": "provider.project", "protocol": "rest", "method": "GET", "path": tc.sourcePath, "source_operation": map[string]any{"summary": "Get project", "responses": map[string]any{"204": map[string]any{"description": "No content"}}}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			key := sourceOperationKey{Connector: "fixture", Inventory: "primary", ID: "provider.project"}
+			row := retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}
+			doc := retainedSourceDocument{ID: "fixture", Payload: json.RawMessage(`{"rest":{"path_bridge":` + tc.bridge + `,"operations":[` + string(node) + `]}}`)}
+			facts := normalizeSourceFacts(row, doc, nil)
+			raw, err := json.Marshal(map[string]any{"operations": []any{map[string]any{"id": "project", "kind": "rest_read", "rest": map[string]any{"method": "GET", "path": tc.targetPath}}}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			artifact := "internal/connectors/defs/fixture/operations.json"
+			facts.bindings = &sourceLaneBindingInputs{Artifacts: map[string][]byte{artifact: raw}}
+			ref := sourceLaneTargetRef{Kind: "operation", Connector: "fixture", ID: "project", Lane: "direct_read", Artifact: artifact, Pointer: "/operations/0"}
+			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Get project", IntendedBindings: []sourceLaneTargetRef{ref}}
+			cells := classifySourceLanes(key, facts, &a)
+			cell := requireSourceLane(t, cells, "direct_read", "applicable")
+			found := false
+			for _, d := range cell.Diagnostics {
+				if d.Code == tc.want {
+					found = true
+				}
+			}
+			if !found {
+				t.Fatalf("bridge %s: want %s got %+v", tc.name, tc.want, cell.Diagnostics)
+			}
+			if facts.Path != tc.sourcePath {
+				t.Fatalf("source route was rewritten: %q", facts.Path)
+			}
+		})
+	}
+}
+
+func TestSourceLaneBindingParameterContract(t *testing.T) {
+	for _, tc := range []struct {
+		name, sourceType string
+		sourceRequired   bool
+		sourceMaximum    int
+		want             string
+	}{
+		{"matching bounded parameter", "integer", true, 100, "target_response_contract_unverified"},
+		{"wrong existing type", "string", true, 100, "target_parameter_mismatch"},
+		{"wrong requiredness", "integer", false, 100, "target_parameter_mismatch"},
+		{"wrong bound", "integer", true, 10, "target_parameter_mismatch"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			lock := operationDirectReadLockForSemanticAdmissionTest()
+			lock.Operations[0].Operation = json.RawMessage(`{"id":"widgets.get","kind":"rest_read","summary":"Get widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/widgets","max_bytes":1024,"parameters":[{"name":"limit","in":"query","type":"integer","required":true,"minimum":1,"maximum":100}]}}`)
+			lock.Operations[0].Commands[0].Command = json.RawMessage(`{"path":"widgets get","summary":"Get widgets","intent":"direct_read","availability":"implemented","operation":"widgets.get","api_surface":[{"method":"GET","path":"/widgets"}],"output_policy":"json_redacted","flags":[{"name":"limit","maps_to":"query.limit","type":"integer","required":true,"minimum":1,"maximum":100}]}`)
+			descriptor, err := canonicalizeVNextSourceLock(lock)
+			if err != nil {
+				t.Fatal(err)
+			}
+			node, err := json.Marshal(map[string]any{"id": "provider.widgets.get", "protocol": "rest", "method": "GET", "path": "/widgets", "source_operation": map[string]any{"summary": "Get widgets", "parameters": []any{map[string]any{"name": "limit", "in": "query", "required": tc.sourceRequired, "schema": map[string]any{"type": tc.sourceType, "minimum": 1, "maximum": tc.sourceMaximum}}}, "responses": map[string]any{"200": map[string]any{"description": "Unresolved response"}}}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			key := sourceOperationKey{Connector: "acme", Inventory: "primary", ID: "provider.widgets.get"}
+			row := retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}
+			doc := retainedSourceDocument{ID: "acme:primary", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+			facts := normalizeSourceFacts(row, doc, nil)
+			artifact := "internal/connectors/defs/acme/operations.json"
+			raw := descriptor.Staged.Outputs["operations.json"]
+			facts.bindings = &sourceLaneBindingInputs{Artifacts: map[string][]byte{artifact: raw}, Canonical: map[string]vNextCanonicalDescriptor{"acme": descriptor}}
+			ref := sourceLaneTargetRef{Kind: "operation", Connector: "acme", ID: "widgets.get", Lane: "direct_read", Artifact: artifact, Pointer: "/operations/0", ArtifactSHA256: sourceBytesHash(raw), CanonicalID: "operation:widgets.get", CanonicalPointer: "/operations/0/operation", Generation: descriptor.Staged.Identity.Digest}
+			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Get widgets", IntendedBindings: []sourceLaneTargetRef{ref}}
+			cell := requireSourceLane(t, classifySourceLanes(key, facts, &a), "direct_read", "applicable")
+			found := false
+			for _, d := range cell.Diagnostics {
+				if d.Code == tc.want {
+					found = true
+				}
+			}
+			if !found {
+				t.Fatalf("%s: want %s got %+v", tc.name, tc.want, cell.Diagnostics)
+			}
+		})
+	}
+}

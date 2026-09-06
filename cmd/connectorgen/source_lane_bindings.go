@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"path"
+	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -102,7 +104,7 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				add("target_contract_unverified", sourceClaimSeverity(group.claimed))
 				continue
 			}
-			if op.REST.Method != facts.Method || op.REST.Path != facts.Path {
+			if op.REST.Method != facts.Method || !sourceLanePathsEqual(facts, op.REST.Path) {
 				add("target_semantics_mismatch", "error")
 				continue
 			}
@@ -140,8 +142,12 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 			}
 			// Admission proves the current canonical target identity. The
 			// provider-to-target parameter/body/response join remains separate.
-			if len(facts.Parameters) > 0 || len(op.REST.Parameters) > 0 || len(op.REST.PaginationParameters) > 0 {
-				add("target_parameter_contract_unverified", sourceClaimSeverity(group.claimed))
+			if code := sourceLaneRESTParameterContract(facts, *op.REST); code != "" {
+				severity := sourceClaimSeverity(group.claimed)
+				if code == "target_parameter_mismatch" {
+					severity = "error"
+				}
+				add(code, severity)
 				continue
 			}
 			if body := facts.Groups["request_body"]; (len(body) > 0 && string(body) != "null") || len(op.REST.Body) > 0 || len(op.REST.BodySchema) > 0 {
@@ -159,4 +165,128 @@ func sourceClaimSeverity(claimed bool) string {
 		return "error"
 	}
 	return "deficit"
+}
+
+// sourceLanePathsEqual applies only the retained, accepted bridge contract.
+// Neither source facts nor runtime routing are modified by this comparison.
+func sourceLanePathsEqual(facts sourceFacts, target string) bool {
+	if facts.Path == target {
+		return true
+	}
+	raw := facts.Groups["path_bridge"]
+	ref, exists := facts.Refs["path_bridge"]
+	if !exists || ref.DocumentID == "" || ref.Pointer != "/rest/path_bridge" {
+		return false
+	}
+	canonical, err := canonicalSourceJSON(raw)
+	if err != nil || sourceBytesHash(canonical) != ref.ValueSHA256 {
+		return false
+	}
+	var bridge struct {
+		SourcePrefix    string `json:"source_prefix"`
+		ConnectorPrefix string `json:"connector_prefix"`
+	}
+	if err := decodeStrictJSON(json.RawMessage(raw), &bridge); err != nil || bridge.SourcePrefix != "/api/v4" || bridge.ConnectorPrefix != "" {
+		return false
+	}
+	if !strings.HasPrefix(facts.Path, bridge.SourcePrefix+"/") {
+		return false
+	}
+	return strings.TrimPrefix(facts.Path, bridge.SourcePrefix) == target
+}
+
+func sourceLaneRESTParameterContract(facts sourceFacts, target engine.RESTOperationSpec) string {
+	const mismatch = "target_parameter_mismatch"
+	const unknown = "target_parameter_contract_unverified"
+	targets := map[string]engine.OperationParameter{}
+	parameters := append(append([]engine.OperationParameter{}, target.Parameters...), target.PaginationParameters...)
+	for _, p := range parameters {
+		key := p.In + ":" + p.Name
+		if _, exists := targets[key]; exists {
+			return mismatch
+		}
+		targets[key] = p
+	}
+	if len(targets) != len(facts.Parameters) {
+		return mismatch
+	}
+	for _, p := range facts.Parameters {
+		actual, exists := targets[p.In+":"+p.Name]
+		if !exists || p.Required != actual.Required {
+			return mismatch
+		}
+		var node map[string]json.RawMessage
+		if err := decodeSourceJSON(p.Node, &node); err != nil {
+			return unknown
+		}
+		for _, field := range []string{"content", "style", "explode", "allowReserved", "allowEmptyValue"} {
+			if _, exists := node[field]; exists {
+				return unknown
+			}
+		}
+		schema, ok := sourceResolveObject(facts, node["schema"], map[string]bool{}, 0)
+		if !ok {
+			return unknown
+		}
+		for field := range schema {
+			switch field {
+			case "type", "enum", "minimum", "maximum", "description", "title", "default", "example", "examples":
+			default:
+				return unknown
+			}
+		}
+		var sourceType string
+		if err := json.Unmarshal(schema["type"], &sourceType); err != nil || sourceType == "" {
+			return unknown
+		}
+		if sourceType != actual.Type {
+			return mismatch
+		}
+		for _, bound := range []struct {
+			name  string
+			value any
+		}{{"minimum", actual.Minimum}, {"maximum", actual.Maximum}} {
+			raw, err := json.Marshal(bound.value)
+			if err != nil {
+				return unknown
+			}
+			source := schema[bound.name]
+			if len(source) == 0 {
+				source = json.RawMessage("null")
+			}
+			left, err := canonicalSourceJSON(source)
+			if err != nil {
+				return unknown
+			}
+			right, err := canonicalSourceJSON(raw)
+			if err != nil {
+				return unknown
+			}
+			if !bytes.Equal(left, right) {
+				return mismatch
+			}
+		}
+		var values []string
+		if enum, exists := schema["enum"]; exists {
+			if err := json.Unmarshal(enum, &values); err != nil {
+				return unknown
+			}
+		}
+		expected := append([]string{}, values...)
+		actualValues := append([]string{}, actual.Values...)
+		sort.Strings(expected)
+		sort.Strings(actualValues)
+		if len(expected) != len(actualValues) {
+			return mismatch
+		}
+		for i := range expected {
+			if expected[i] != actualValues[i] {
+				return mismatch
+			}
+		}
+		if actual.Repeatable || len(actual.Schema) > 0 || actual.MaxBytes > 0 {
+			return unknown
+		}
+	}
+	return ""
 }
