@@ -1109,3 +1109,25 @@ matrix, not CP11 or the final Group 2 review/static boundary.
   lint all passed as recorded in `GROUP3-EVIDENCE.md`. This is an execution
   checkpoint, not CP11 acceptance; an independent exact-SHA review remains
   required.
+
+### 2026-09-06 — CP11 current gate ledger, artifact-only bind (Firstmate 064)
+
+The frozen behavioral candidate is
+`7481d1770a21cc95869fd10bf281f632af48c089` / tree
+`a2e583336ffa8ad86a0de95110259342bfa6dab0`; this accounting append does not
+change source/test behavior. Fresh recorded GREEN is: source lock target
+`make connectorgen-vnext-locks` (`206.821s`); canon target
+`make connector-canon-check`; definition target `make connectorgen-validate`
+(553/0); `TestFoundationAtlasSelectorsResolve` (`1.326s`); docs target
+`make docs-check`; and release target `make release-workflow-check`. Exact
+runtime preflight exited 0 but its Go package output was **cached**, so it is
+not upgraded to fresh execution evidence. The package normal/race `319.928s` /
+`783.834s` receipts remain separate exact-candidate checks.
+
+The literal `make connector-boundary` invocation is a pending ledger cell:
+the parallel wrapper lost its session/result/output before the process ended,
+and no duplicate was authorized. It is neither GREEN nor a waived check. See
+the immutable-result record (SHA-256
+`a9bcdf60d0fb4945e096216727a39344ae87816e18abde8b6bdb71022e2bc908`) at
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-7481d177-current-gate-report-064.md`.
+Fresh independent exact-SHA review remains the required next acceptance gate.

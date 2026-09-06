@@ -200,3 +200,33 @@ and `cmd/pm` builds, `go mod tidy -diff`, `agentcontractgen check`, and
 553-definition validation, runtime preflight, connector boundary, and release
 checks remain recorded in the TDD/verification record; this test-only close
 fix added no generated connector or public documentation change.
+
+## Current independent-gate accounting — Firstmate 064
+
+The behavioral candidate remains
+`7481d1770a21cc95869fd10bf281f632af48c089` (tree
+`a2e583336ffa8ad86a0de95110259342bfa6dab0`). This is an artifact-only
+accounting addendum: it changes neither test nor production source and makes
+no CP11 acceptance, provider, power-loss, release, or merge claim. The
+candidate commit itself changes three test files and five evidence files;
+`git diff --check 7481d177^ 7481d177` exits 0. The worktree continued to show
+only protected untracked `.cache/`, which was not read, staged, or modified.
+
+| Gate | Exact command / source | Current result |
+| --- | --- | --- |
+| Source lock | `make connectorgen-vnext-locks` (Makefile 94–95) | exit 0, `ok polymetrics.ai/cmd/connectorgen 206.821s` |
+| Connector canon | `make connector-canon-check` (Makefile 103–107; `scripts/tests/connector-canon.sh`) | exit 0, `connector canon check: ok` |
+| Definitions | `make connectorgen-validate` (Makefile 88–89) | exit 0, `553 connector(s) checked, 0 findings` |
+| Foundation Atlas | `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestFoundationAtlasSelectorsResolve$'` | exit 0, package `1.326s` |
+| Runtime preflight | `make connector-runtime-preflight` (Makefile 97–101) | exit 0; cached Go result, not fresh execution proof |
+| Docs | `make docs-check` (Makefile 41–44, including build) | exit 0; `pm` built and connector docs validated |
+| Release workflow | `make release-workflow-check` (Makefile 112–120) | exit 0; pinned dependencies, Homebrew notification, darwin/linux arm64/amd64 parity, tooling, size budget, and production layout reported passed |
+| Boundary scanner | `make connector-boundary` (Makefile 109–110; `go run ./cmd/connectorgen boundary . --json`) | **Unresolved:** the concurrent wrapper retained neither session, exit status, nor output. Its processes later ended, but termination is not a pass and the command was not rerun. |
+
+The full normal/race package receipts above remain the final exact-candidate
+test receipts (`319.928s`/`783.834s`), rather than substitutions for these
+different gates. The detailed external record is
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-7481d177-current-gate-report-064.md`
+(SHA-256 `a9bcdf60d0fb4945e096216727a39344ae87816e18abde8b6bdb71022e2bc908`).
+Independent Astra exact-SHA review remains required, and the boundary gate
+remains pending Firstmate recovery or explicit rerun authority.

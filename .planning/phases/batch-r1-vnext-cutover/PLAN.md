@@ -1297,3 +1297,23 @@ No-replace B-01 A/B/C/public-C, strict B-02 bootstrap, bounded metadata/live des
   fabricated production RED. An early fixture draft correctly exposed that
   nested failure leaves quarantine residue rather than promising rollback; the
   final test records that residue before restoring only its owned fixture backup.
+
+### CP11 artifact-only current-gate bind — Firstmate 064
+
+The behavior-bearing checkpoint remains exactly
+`7481d1770a21cc95869fd10bf281f632af48c089` / tree
+`a2e583336ffa8ad86a0de95110259342bfa6dab0`. After its test/source freeze,
+fresh static/admission documentation gates passed: the exact source-lock,
+canon, definition, Foundation Atlas, docs, and release Make/Go recipes now
+record exit 0. Runtime preflight also exited 0, with an explicitly **cached**
+Go result; it is not claimed as fresh runtime execution. Their literal
+commands, outputs, source references, and exact-candidate package/race receipt
+separation are in `GROUP3-EVIDENCE.md` and the external current-gate report
+with SHA-256 `a9bcdf60d0fb4945e096216727a39344ae87816e18abde8b6bdb71022e2bc908`.
+
+The required `make connector-boundary` invocation has no retrievable
+exit/output from its concurrent wrapper. Its observed process completion does
+not constitute a pass, no duplicate run was performed, and its disposition
+requires Firstmate recovery or explicit rerun authority. This artifact-only
+bind neither accepts CP11 nor changes the required fresh whole-range Astra
+exact-SHA review.

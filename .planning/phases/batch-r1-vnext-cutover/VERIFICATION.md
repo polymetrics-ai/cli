@@ -835,3 +835,27 @@ above. `scripts/gsd doctor` otherwise passed its adapter/provenance checks and
 reported the pre-existing missing canonical issue-122 prompt. No human
 judgment, provider-live claim, credential, database, or release approval is
 implied. The required fresh Astra exact-SHA review remains a separate gate.
+
+### CP11 current independent-gate accounting — Firstmate 064
+
+`7481d1770a21cc95869fd10bf281f632af48c089` / tree
+`a2e583336ffa8ad86a0de95110259342bfa6dab0` remains the frozen behavioral
+candidate. The later record is artifact-only and does not alter source/test
+behavior. Fresh executions passed source locks (`make connectorgen-vnext-locks`,
+`206.821s`), connector canon (`make connector-canon-check`), definitions
+(`make connectorgen-validate`, 553 checked/0 findings), the named Foundation
+Atlas selector (`1.326s`), docs (`make docs-check`), and release workflow
+(`make release-workflow-check`). Runtime preflight exited 0 through its exact
+Make target, but Go reported it **cached**, so it is not treated as fresh
+execution proof. The exact final normal/race package receipts remain
+`319.928s`/`783.834s` and are distinct from the foregoing gates.
+
+`make connector-boundary` was launched using its exact `go run
+./cmd/connectorgen boundary . --json` recipe but its concurrent wrapper lost
+the result/session/output. The subsequent disappearance of its processes is
+not a success result; no duplicate execution was run. It remains unresolved.
+The complete factual receipt is
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-7481d177-current-gate-report-064.md`
+(SHA-256 `a9bcdf60d0fb4945e096216727a39344ae87816e18abde8b6bdb71022e2bc908`).
+This verification record does not accept CP11; independent Astra exact-SHA
+review and a truthful disposition of the boundary gate remain required.
