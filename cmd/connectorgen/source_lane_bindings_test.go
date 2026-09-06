@@ -18,6 +18,9 @@ import (
 	"polymetrics.ai/internal/syncplan"
 )
 
+// This support belongs to the synthetic retained source, not its execution target.
+const sourceBindingCollectionClause124 = "The data array contains the widget records returned by this collection read."
+
 const sourceBindingBody099F = `{"type":"object","properties":{"data":{"type":"object","properties":{"name":{"type":"string"}},"required":["name"],"additionalProperties":false}},"required":["data"],"additionalProperties":false}`
 const sourceBindingRecord099F = `{"type":"object","properties":{"id":{"type":"string"}},"required":["id"],"additionalProperties":false}`
 const sourceBindingEnvelope099F = `{"type":"object","properties":{"data":{"type":"array","items":` + sourceBindingRecord099F + `}},"required":["data"],"additionalProperties":false}`
@@ -28,7 +31,7 @@ func sourceBindingFixture099F(t *testing.T, kind string, change func(*vNextSourc
 	t.Helper()
 	lock := minimalVNextLockForTest()
 	method, summary, route := "GET", "Get widgets", "/widgets"
-	opSource := `"responses":{"200":{"content":{"application/json":{"schema":` + sourceBindingEnvelope099F + `}}}}`
+	opSource := `"responses":{"200":{"description":"` + sourceBindingCollectionClause124 + `","content":{"application/json":{"schema":` + sourceBindingEnvelope099F + `}}}}`
 	artifact, id, canonical, field, lane := "streams.json", "widgets", "stream:widgets", "stream", "etl"
 	role := sourceLaneSchemaRecord
 	anchorSuffix := "/responses/200/content/application~1json/schema"
@@ -78,7 +81,15 @@ func sourceBindingFixture099F(t *testing.T, kind string, change func(*vNextSourc
 	} else {
 		ref.FieldMappings = []sourceLaneFieldMapping{mapField(anchor.Pointer+"/properties/data/items", "")}
 	}
-	return key, facts, sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: summary, IntendedBindings: []sourceLaneTargetRef{ref}}
+	annotation := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: summary, IntendedBindings: []sourceLaneTargetRef{ref}}
+	if kind != "body" {
+		records := "/data" // instance path, independent of target schema/extraction pointers
+		annotation.ResponseInterpretations = []sourceResponseInterpretation{{
+			Kind: "collection", ResponseSchema: sourceBindingCitation099F(t, facts, base+"/responses/200/content/application~1json/schema"),
+			RecordsPointer: &records, Citation: sourceBindingCitation099F(t, facts, base+"/responses/200/description"), Clause: sourceBindingCollectionClause124,
+		}}
+	}
+	return key, facts, annotation
 }
 
 func sourceBindingCitation099F(t *testing.T, facts sourceFacts, pointer string) sourceFactRef {
