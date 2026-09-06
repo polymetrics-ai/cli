@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 45,
+  "catalog_revision": 46,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -891,6 +891,11 @@
           "file": "cmd/connectorgen/source_lane_proof_test.go",
           "name": "TestSourceLaneProofProjectionIdentity",
           "package": "./cmd/connectorgen"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_manifest_test.go",
+          "name": "TestSourceLaneManifestSharedFactOmission"
         }
       ],
       "publication_guarantee_proofs": [

@@ -517,5 +517,31 @@ func validateSourceLaneRequiredFactGroups(row sourceLaneManifestRow, documents m
 	} {
 		require(field.name, operation[field.key], documentID, pointer+"/"+field.key)
 	}
+	// Require shared facts from their retained authority even when a claimant
+	// removed both the copied group and its citation. Operation security,
+	// including an explicit empty array, takes precedence over root security.
+	requireAt := func(name, sourceDocument, sourcePointer string) {
+		value, err := sourceLaneRetainedPointer(roots[sourceDocument], sourcePointer)
+		if err == nil {
+			require(name, value, sourceDocument, sourcePointer)
+		}
+	}
+	contractDocument, contractPointer := row.Source.DocumentID, "/source_contract"
+	if documentID != row.Source.DocumentID {
+		contractDocument, contractPointer = documentID, ""
+		if parent, _, ok := strings.Cut(pointer, "/"+strings.ToLower(row.Facts.Method)); ok {
+			requireAt("path_parameters", documentID, parent+"/parameters")
+		}
+	}
+	if security, present := operation["security"]; present {
+		require("security", security, documentID, pointer+"/security")
+	} else {
+		requireAt("security", contractDocument, contractPointer+"/security")
+	}
+	requireAt("security_schemes", contractDocument, contractPointer+"/components/securitySchemes")
+	requireAt("webhooks", contractDocument, contractPointer+"/webhooks")
+	for _, name := range []string{"path_bridge", "event_schema_inventory", "batch_action_inventory"} {
+		requireAt(name, row.Source.DocumentID, "/rest/"+name)
+	}
 	return diagnostics
 }

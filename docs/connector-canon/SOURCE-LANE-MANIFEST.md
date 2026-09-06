@@ -80,6 +80,10 @@ The validator checks copied group values and citation hashes against retained
 JSON or rendered document values. The retained row and operation determine
 which metadata, request, response and descriptive groups must be present;
 deleting both a group and its citation cannot hide those operation facts.
+The same check covers effective security (including an explicit empty operation
+override), security schemes, root webhooks, retained path parameters, and the
+source envelope's bridge, event and batch inventories. Shared values remain
+anchored to their original document locations.
 Effective parameter nodes, locations, names and requiredness must match the
 existing local-reference projection of the verified source groups. These checks
 validate retained facts; executable target joins and behavioral proof remain

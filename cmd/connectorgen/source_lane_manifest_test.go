@@ -825,3 +825,119 @@ func TestSourceLaneManifestCollectorFailurePreservation(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneManifestSharedFactOmission(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	p := filepath.Join(root, "source.json")
+	raw, err := os.ReadFile(p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var document map[string]any
+	if err := json.Unmarshal(raw, &document); err != nil {
+		t.Fatal(err)
+	}
+	document["source_contract"] = map[string]any{
+		"security":   []any{map[string]any{"bearer": []any{}}},
+		"components": map[string]any{"securitySchemes": map[string]any{"bearer": map[string]any{"type": "http", "scheme": "bearer"}}},
+		"webhooks":   map[string]any{"changed": map[string]any{"post": map[string]any{"description": "Retained change event"}}},
+	}
+	rest := document["rest"].(map[string]any)
+	rest["path_bridge"] = map[string]any{"source_prefix": "/api/v4", "connector_prefix": ""}
+	rest["event_schema_inventory"] = []any{"changed"}
+	rest["batch_action_inventory"] = []any{"create"}
+	rest["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)["security"] = []any{}
+	raw, err = json.Marshal(document)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(p, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+	original, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct {
+		name, group, value, pointer string
+		row                         int
+	}{
+		{"operation override", "security", `[]`, "/rest/operations/0/source_operation/security", 0},
+		{"inherited security", "security", `[{"bearer":[]}]`, "/source_contract/security", 1},
+		{"schemes", "security_schemes", `{"bearer":{"scheme":"bearer","type":"http"}}`, "/source_contract/components/securitySchemes", 0},
+		{"webhooks", "webhooks", `{"changed":{"post":{"description":"Retained change event"}}}`, "/source_contract/webhooks", 0},
+		{"bridge", "path_bridge", `{"connector_prefix":"","source_prefix":"/api/v4"}`, "/rest/path_bridge", 0},
+		{"events", "event_schema_inventory", `["changed"]`, "/rest/event_schema_inventory", 0},
+		{"batch actions", "batch_action_inventory", `["create"]`, "/rest/batch_action_inventory", 0},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			value, err := canonicalSourceJSON(original.SourceOperations[tc.row].Facts.Groups[tc.group])
+			if err != nil || string(value) != tc.value || original.SourceOperations[tc.row].Facts.Refs[tc.group].Pointer != tc.pointer {
+				t.Fatalf("literal positive missing: %s (%v)", value, err)
+			}
+			if findings := validateSourceLaneManifest(original, original); len(findings) != 0 {
+				t.Fatalf("positive rejected: %+v", findings)
+			}
+			encoded, err := json.Marshal(original)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var omitted sourceLaneManifest
+			if err := json.Unmarshal(encoded, &omitted); err != nil {
+				t.Fatal(err)
+			}
+			delete(omitted.SourceOperations[tc.row].Facts.Groups, tc.group)
+			delete(omitted.SourceOperations[tc.row].Facts.Refs, tc.group)
+			found := false
+			for _, d := range validateSourceLaneManifest(omitted, omitted) {
+				found = found || (d.Key == original.SourceOperations[tc.row].Source.Key && d.Stage == "source_fact_validation" && d.Code == "source_retained_fact_missing_or_changed" && d.Pointer == tc.pointer)
+			}
+			if !found {
+				t.Fatal("joint omission of independently retained shared fact and citation accepted")
+			}
+		})
+	}
+}
+
+func TestSourceLaneManifestRawSharedFactOmission(t *testing.T) {
+	node := json.RawMessage(`{"id":"source.a","protocol":"rest","method":"GET","path":"/items"}`)
+	doc := retainedSourceDocument{ID: "fixture:primary", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+	rawDoc := retainedSourceDocument{ID: "fixture:raw", Payload: json.RawMessage(`{"security":[{"bearer":[]}],"paths":{"/items":{"parameters":[{"name":"limit","in":"query","schema":{"type":"integer"}}],"get":{"responses":{"200":{"description":"Unknown body"}}}}}}`)}
+	row := retainedSourceOperation{Key: sourceOperationKey{Connector: "fixture", Inventory: "primary", ID: "source.a"}, Observed: true, Node: node, DocumentID: doc.ID, RawDocumentID: rawDoc.ID, Pointer: "/rest/operations/0"}
+	original := sourceLaneManifestRow{Source: row, Facts: normalizeSourceFacts(row, doc, &rawDoc)}
+	documents := map[string]retainedSourceDocument{doc.ID: doc, rawDoc.ID: rawDoc}
+	roots := map[string]any{}
+	for id, d := range documents {
+		var root any
+		if err := decodeSourceJSON(d.Payload, &root); err != nil {
+			t.Fatal(err)
+		}
+		roots[id] = root
+	}
+	if got := validateSourceLaneRequiredFactGroups(original, documents, roots); len(got) != 0 {
+		t.Fatalf("raw positive rejected: %+v", got)
+	}
+	for _, tc := range []struct{ group, pointer, value string }{
+		{"security", "/security", `[{"bearer":[]}]`},
+		{"path_parameters", "/paths/~1items/parameters", `[{"in":"query","name":"limit","schema":{"type":"integer"}}]`},
+	} {
+		t.Run(tc.group, func(t *testing.T) {
+			value, err := canonicalSourceJSON(original.Facts.Groups[tc.group])
+			if err != nil || string(value) != tc.value || original.Facts.Refs[tc.group].DocumentID != rawDoc.ID || original.Facts.Refs[tc.group].Pointer != tc.pointer {
+				t.Fatalf("raw positive literal/owner absent: %s %v", value, err)
+			}
+			encoded, _ := json.Marshal(original)
+			var omitted sourceLaneManifestRow
+			if err := json.Unmarshal(encoded, &omitted); err != nil {
+				t.Fatal(err)
+			}
+			delete(omitted.Facts.Groups, tc.group)
+			delete(omitted.Facts.Refs, tc.group)
+			got := validateSourceLaneRequiredFactGroups(omitted, documents, roots)
+			if len(got) != 1 || got[0].Pointer != tc.pointer || got[0].Code != "source_retained_fact_missing_or_changed" {
+				t.Fatalf("raw source omission not diagnosed: %+v", got)
+			}
+		})
+	}
+}
