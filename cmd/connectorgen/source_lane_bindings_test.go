@@ -160,6 +160,31 @@ func TestSourceLaneBindingProviderOperationIdentity(t *testing.T) {
 	}
 }
 
+func TestSourceLaneBindingArtifactKindIdentity(t *testing.T) {
+	lock := operationDirectReadLockForSemanticAdmissionTest()
+	descriptor, err := canonicalizeVNextSourceLock(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw := descriptor.Staged.Outputs["operations.json"]
+	for _, tc := range []struct{ name, file, kind, id, want string }{
+		{"correct operation artifact", "operations.json", "operation", "widgets.get", ""},
+		{"same bytes wrong artifact kind", "writes.json", "operation", "widgets.get", "target_artifact_kind_mismatch"},
+		{"same bytes wrong target kind", "operations.json", "stream", "widgets.get", "target_artifact_kind_mismatch"},
+		{"same bytes wrong exact ID", "operations.json", "operation", "widgets.other", "target_absent"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			pointer, code := sourceLaneTargetPointer(raw, sourceLaneTargetRef{Kind: tc.kind, ID: tc.id, Connector: "acme", Artifact: "internal/connectors/defs/acme/" + tc.file})
+			if code != tc.want {
+				t.Fatalf("existing valid bytes, kind=%s file=%s id=%s: got pointer=%s code=%s, want %s", tc.kind, tc.file, tc.id, pointer, code, tc.want)
+			}
+			if code == "" && pointer != "/operations/0" {
+				t.Fatalf("lost exact target pointer: %s", pointer)
+			}
+		})
+	}
+}
+
 func TestSourceLaneGitLabBridge(t *testing.T) {
 	for _, tc := range []struct{ name, sourcePath, targetPath, bridge, want string }{
 		{"declared exact boundary", "/api/v4/projects/{id}", "/projects/{id}", `{"source_prefix":"/api/v4","connector_prefix":""}`, "target_contract_unverified"},
