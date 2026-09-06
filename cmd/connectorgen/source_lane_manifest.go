@@ -114,6 +114,12 @@ func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLane
 		annotation := annotationIndex[source.Key]
 		cells := classifySourceLanes(source.Key, facts, annotation)
 		cells = assessSourceLaneProof(source.Key, cells, proofs)
+		// The manifest encodes empty diagnostic collections as arrays.
+		for i := range cells {
+			if cells[i].Diagnostics == nil {
+				cells[i].Diagnostics = []sourceLaneDiagnostic{}
+			}
+		}
 		result.SourceOperations = append(result.SourceOperations, sourceLaneManifestRow{Source: source, Facts: facts, Lanes: cells})
 	}
 	summarizeSourceLaneManifest(&result)

@@ -259,3 +259,33 @@ func TestSourceLaneManifestProofFailurePreservation(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneManifestArrayEncoding(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	got, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := json.Marshal(got)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var decoded struct {
+		Rows []struct {
+			Lanes []map[string]json.RawMessage `json:"lanes"`
+		} `json:"source_operations"`
+	}
+	if err := json.Unmarshal(raw, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	for rowIndex, row := range decoded.Rows {
+		for laneIndex, lane := range row.Lanes {
+			for _, field := range []string{"fact_refs", "intended_bindings", "references", "proof_refs", "owner_refs", "gap_refs", "diagnostics"} {
+				value := lane[field]
+				if len(value) == 0 || value[0] != '[' {
+					t.Errorf("row%d lane%d %s must be JSON array, got%s", rowIndex, laneIndex, field, value)
+				}
+			}
+		}
+	}
+}
