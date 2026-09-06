@@ -177,6 +177,33 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				add("canonical_provenance_mismatch", "error")
 				continue
 			}
+			if facts.OperationID != "" {
+				var source *vNextCanonicalOperation
+				for i := range descriptor.Graph.Operations {
+					if descriptor.Graph.Operations[i].ID == ref.CanonicalID {
+						source = &descriptor.Graph.Operations[i]
+						break
+					}
+				}
+				if source == nil {
+					add("canonical_provenance_mismatch", "error")
+					continue
+				}
+				sourceFacts, err := vNextDecodeSourceFacts(*source)
+				if err != nil {
+					add("target_operation_identity_mismatch", "error")
+					continue
+				}
+				provider, supplied, err := vNextSourceFact(*source, sourceFacts, "provider_operation")
+				if err != nil || (supplied && provider != facts.OperationID) {
+					add("target_operation_identity_mismatch", "error")
+					continue
+				}
+				if !supplied {
+					add("target_operation_identity_unverified", sourceClaimSeverity(group.claimed))
+					continue
+				}
+			}
 			// Admission proves the current canonical target identity. The
 			// provider-to-target parameter/body/response join remains separate.
 			if observed.REST == nil {
