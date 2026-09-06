@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 46,
+  "catalog_revision": 47,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -234,6 +234,18 @@
           {
             "file": "cmd/connectorgen/source_lane_rules.go",
             "name": "sourceLaneTargetRefEqual"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_bindings.go",
+            "name": "resolveSourceLaneBindings"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_bindings.go",
+            "name": "sourceLaneCheckCoverage"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_bindings.go",
+            "name": "sourceLaneProjectionContract"
           }
         ]
       },
@@ -896,6 +908,46 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_manifest_test.go",
           "name": "TestSourceLaneManifestSharedFactOmission"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_bindings_test.go",
+          "name": "TestSourceLaneBinding099FBodyAndEnvelope"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_bindings_test.go",
+          "name": "TestSourceLaneBinding099FGraphQL"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_bindings_test.go",
+          "name": "TestSourceLaneBinding099FIncompleteCoverage"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_bindings_test.go",
+          "name": "TestSourceLaneBinding099FAuthoringCustody"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_bindings_test.go",
+          "name": "TestSourceLaneBinding099FCrossReferenceControls"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_manifest_test.go",
+          "name": "TestSourceLaneManifestCollectorFailurePreservation"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_manifest_test.go",
+          "name": "TestSourceLaneManifestIntegratedBindingProofBoundary"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_manifest_test.go",
+          "name": "TestSourceLaneManifestProviderFactCounterexamples"
         }
       ],
       "publication_guarantee_proofs": [

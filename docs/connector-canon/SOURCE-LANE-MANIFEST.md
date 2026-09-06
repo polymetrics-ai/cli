@@ -98,6 +98,13 @@ aggregate. Nesting is limited to 256 levels. Refusal preserves anchored source
 rows with diagnostics. Rendered content also keeps its separate byte/token
 bounds; a one-node string is not an exemption from those bounds.
 
+These retained-inventory limits are distinct from target collection and output
+encoding. The collector bounds each execution file to 64 MiB but has no separate
+aggregate byte or schema-file-count ceiling. Generation buffers the complete
+JSON result without an independent output-byte ceiling; check mode limits the
+saved candidate to 512 MiB. These checks do not promise a single bound on total
+process memory or an atomic snapshot of all repository files.
+
 ## Seven separate cells
 
 Every source row retains direct read, direct write, binary download, binary
