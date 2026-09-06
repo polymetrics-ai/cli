@@ -94,6 +94,35 @@ func TestSourceLaneBindingCanonicalPositive(t *testing.T) {
 	if cell.State != "mapped_unproven" || len(cell.ProofRefs) != 0 {
 		t.Fatalf("identity promoted behavior: %+v", cell)
 	}
+	changed := map[string][]byte{}
+	for name, raw := range descriptor.Staged.Outputs {
+		changed[name] = raw
+	}
+	var metadata map[string]any
+	if err := json.Unmarshal(changed["metadata.json"], &metadata); err != nil {
+		t.Fatal(err)
+	}
+	metadata["description"] = "Different current generation"
+	changed["metadata.json"], err = json.Marshal(metadata)
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual, err := engine.Load(newVNextExecutionFS("acme", changed), "acme")
+	if err != nil {
+		t.Fatal(err)
+	}
+	facts.bindings.Bundles["acme"] = actual
+	facts.bindings.Artifacts["internal/connectors/defs/acme/metadata.json"] = changed["metadata.json"]
+	drift := requireSourceLane(t, classifySourceLanes(key, facts, &annotation), "direct_read", "applicable")
+	found = false
+	for _, d := range drift.Diagnostics {
+		if d.Code == "execution_generation_mismatch" {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("other-file generation drift hidden by matching referenced file: %+v", drift.Diagnostics)
+	}
 }
 
 func TestSourceLaneGitLabBridge(t *testing.T) {
@@ -412,6 +441,12 @@ func sourceBindingTestInputs(t *testing.T, artifacts map[string][]byte, canonica
 	t.Helper()
 	inputs := &sourceLaneBindingInputs{Artifacts: artifacts, Canonical: canonical, Bundles: map[string]engine.Bundle{}}
 	for name, descriptor := range canonical {
+		for file, raw := range descriptor.Staged.Outputs {
+			key := "internal/connectors/defs/" + name + "/" + file
+			if _, exists := inputs.Artifacts[key]; !exists {
+				inputs.Artifacts[key] = raw
+			}
+		}
 		bundle, err := engine.Load(newVNextExecutionFS(name, descriptor.Staged.Outputs), name)
 		if err != nil {
 			t.Fatal(err)
@@ -510,5 +545,41 @@ func TestSourceLaneBindingDeclaredTargetKinds(t *testing.T) {
 				}
 			})
 		}
+	}
+}
+
+func TestSourceLaneBindingCommandIdentity(t *testing.T) {
+	lock := operationDirectReadLockForSemanticAdmissionTest()
+	lock.Operations = append(lock.Operations, vNextOperationDescriptor{ID: "operation:widgets.other", Operation: json.RawMessage(`{"id":"widgets.other","kind":"rest_read","summary":"Get other widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/other","max_bytes":1024}}`), Commands: []vNextCommandDescriptor{{Order: 1, Command: json.RawMessage(`{"path":"widgets other","summary":"Get other widgets","intent":"direct_read","availability":"implemented","operation":"widgets.other","api_surface":[{"method":"GET","path":"/other"}],"output_policy":"json_redacted","flags":[]}`)}}})
+	descriptor, err := canonicalizeVNextSourceLock(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct{ name, id, canonicalID, canonicalPointer, want string }{
+		{"matching command", "widgets get", "operation:widgets.get", "/operations/0/commands/0", "target_response_contract_unverified"},
+		{"wrong existing command", "widgets other", "operation:widgets.other", "/operations/1/commands/0", "target_semantics_mismatch"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			node := json.RawMessage(`{"id":"provider.widgets","method":"GET","path":"/widgets","protocol":"rest","source_operation":{"summary":"Get widgets","responses":{"200":{"description":"Response contract unresolved"}}}}`)
+			key := sourceOperationKey{Connector: "acme", Inventory: "primary", ID: "provider.widgets"}
+			row := retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}
+			doc := retainedSourceDocument{ID: "acme:primary", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+			facts := normalizeSourceFacts(row, doc, nil)
+			artifact := "internal/connectors/defs/acme/cli_surface.json"
+			raw := descriptor.Staged.Outputs["cli_surface.json"]
+			facts.bindings = sourceBindingTestInputs(t, map[string][]byte{artifact: raw}, map[string]vNextCanonicalDescriptor{"acme": descriptor})
+			ref := sourceLaneTargetRef{Kind: "command", Connector: "acme", ID: tc.id, Lane: "direct_read", Artifact: artifact, ArtifactSHA256: sourceBytesHash(raw), CanonicalID: tc.canonicalID, CanonicalPointer: tc.canonicalPointer, Generation: descriptor.Staged.Identity.Digest}
+			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Get widgets", IntendedBindings: []sourceLaneTargetRef{ref}}
+			cell := requireSourceLane(t, classifySourceLanes(key, facts, &a), "direct_read", "applicable")
+			found := false
+			for _, d := range cell.Diagnostics {
+				if d.Code == tc.want {
+					found = true
+				}
+			}
+			if !found {
+				t.Fatalf("%s: want%s got%+v", tc.name, tc.want, cell.Diagnostics)
+			}
+		})
 	}
 }

@@ -157,6 +157,11 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				add("canonical_generation_mismatch", "error")
 				continue
 			}
+			actual, exists := facts.bindings.Bundles[key.Connector]
+			if !exists || actual.Identity.Digest != descriptor.Staged.Identity.Digest {
+				add("execution_generation_mismatch", "error")
+				continue
+			}
 			relative := strings.TrimPrefix(ref.Artifact, "internal/connectors/defs/"+key.Connector+"/")
 			if !bytes.Equal(raw, descriptor.Staged.Outputs[relative]) {
 				add("canonical_artifact_mismatch", "error")
@@ -575,6 +580,51 @@ func sourceLaneObserveTypedTarget(ref sourceLaneTargetRef, node []byte, inputs *
 	}
 	command := connectors.CommandSurfaceCommand{Path: ref.ID, Intent: ref.Lane}
 	switch ref.Kind {
+	case "command":
+		var declared engine.CLICommand
+		if err := decodeStrictJSON(node, &declared); err != nil {
+			return result, "target_shape_invalid"
+		}
+		if declared.Path != ref.ID {
+			return result, "target_identity_mismatch"
+		}
+		if declared.Intent != ref.Lane {
+			return result, "target_lane_mismatch"
+		}
+		if declared.Availability != "implemented" {
+			return result, "target_execution_unavailable"
+		}
+		binding, err := engine.ResolveImplementedCommandPath(bundle, ref.ID)
+		if err != nil {
+			return result, "target_binding_unresolved"
+		}
+		file := ""
+		switch binding.Binding.Kind {
+		case connectors.CommandBindingOperation:
+			file = "operations.json"
+		case connectors.CommandBindingWrite:
+			file = "writes.json"
+		case connectors.CommandBindingStream:
+			file = "streams.json"
+		default:
+			return result, "target_contract_unverified"
+		}
+		target := sourceLaneTargetRef{Kind: binding.Binding.Kind, ID: binding.Binding.ID, Connector: ref.Connector, Lane: ref.Lane, Artifact: "internal/connectors/defs/" + ref.Connector + "/" + file}
+		raw := inputs.Artifacts[target.Artifact]
+		pointer, code := sourceLaneTargetPointer(raw, target)
+		if code != "" {
+			return result, code
+		}
+		selected, err := sourceJSONPointer(raw, pointer)
+		if err != nil {
+			return result, "target_pointer_mismatch"
+		}
+		result, code = sourceLaneObserveTypedTarget(target, selected, inputs)
+		if code != "" {
+			return result, code
+		}
+		result.Binding = binding
+		return result, ""
 	case "operation":
 		var op engine.OperationSpec
 		if err := decodeStrictJSON(node, &op); err != nil {
