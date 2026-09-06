@@ -42,7 +42,7 @@ func main() {
 }
 
 func runMain(args []string, stdout, stderr io.Writer) int {
-	if len(args) == 0 || args[0] != "lock-render" {
+	if len(args) == 0 || (args[0] != "lock-render" && args[0] != "source-lanes") {
 		return run(args, stdout, stderr)
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
@@ -63,6 +63,8 @@ func runContext(ctx context.Context, args []string, stdout, stderr io.Writer) in
 	}
 
 	switch args[0] {
+	case "source-lanes":
+		return runSourceLanesContext(ctx, args, stdout, stderr)
 	case "validate":
 		return runValidate(args, stdout, stderr)
 	case "boundary":
@@ -102,7 +104,8 @@ func usage() string {
   connectorgen boundary [repo-root] [--json] [--base <ref>]
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
 	connectorgen gen
-	connectorgen lock-render <connector> [--defs <dir>] [--check]`
+	connectorgen lock-render <connector> [--defs <dir>] [--check]
+	connectorgen source-lanes [--repo <dir>] [--check [--manifest <relative-path>]]`
 }
 
 // runValidate implements `connectorgen validate [dir] [--json]`.
