@@ -359,6 +359,20 @@
           "items": {
             "type": "string"
           }
+        },
+        "coverage_confidence": {
+          "enum": [
+            "machine_readable_snapshot",
+            "rendered_reference",
+            "partial"
+          ]
+        },
+        "completeness_limits": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": [
@@ -370,7 +384,9 @@
         "operation_id",
         "groups",
         "refs",
-        "diagnostics"
+        "diagnostics",
+        "coverage_confidence",
+        "completeness_limits"
       ]
     },
     "source": {

@@ -29,26 +29,38 @@ type sourceParameterFact struct {
 }
 
 type sourceFacts struct {
-	referenceRoot any                        `json:"-"`
-	bindings      *sourceLaneBindingInputs   `json:"-"`
-	analysis      *sourceShapeAnalysis       `json:"-"`
-	Document      json.RawMessage            `json:"-"`
-	RefPrefix     string                     `json:"-"`
-	Parameters    []sourceParameterFact      `json:"effective_parameters"`
-	Status        string                     `json:"status"`
-	Method        string                     `json:"method"`
-	Path          string                     `json:"path"`
-	Protocol      string                     `json:"protocol"`
-	OperationID   string                     `json:"operation_id"`
-	Groups        map[string]json.RawMessage `json:"groups"`
-	Refs          map[string]sourceFactRef   `json:"refs"`
-	Diagnostics   []string                   `json:"diagnostics"`
+	CoverageConfidence string                     `json:"coverage_confidence"`
+	CompletenessLimits []string                   `json:"completeness_limits"`
+	referenceRoot      any                        `json:"-"`
+	bindings           *sourceLaneBindingInputs   `json:"-"`
+	analysis           *sourceShapeAnalysis       `json:"-"`
+	Document           json.RawMessage            `json:"-"`
+	RefPrefix          string                     `json:"-"`
+	Parameters         []sourceParameterFact      `json:"effective_parameters"`
+	Status             string                     `json:"status"`
+	Method             string                     `json:"method"`
+	Path               string                     `json:"path"`
+	Protocol           string                     `json:"protocol"`
+	OperationID        string                     `json:"operation_id"`
+	Groups             map[string]json.RawMessage `json:"groups"`
+	Refs               map[string]sourceFactRef   `json:"refs"`
+	Diagnostics        []string                   `json:"diagnostics"`
 }
 
 // normalizeSourceFacts copies provider groups and records citations into the
 // pinned document. Executable definitions never supply missing source facts.
-func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocument, rawDoc *retainedSourceDocument) sourceFacts {
-	facts := sourceFacts{Parameters: []sourceParameterFact{}, Status: "unavailable", Groups: map[string]json.RawMessage{}, Refs: map[string]sourceFactRef{}, Diagnostics: []string{}, Document: doc.Payload, RefPrefix: "/source_contract"}
+func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocument, rawDoc *retainedSourceDocument) (facts sourceFacts) {
+	defer func() {
+		facts.CoverageConfidence = "partial"
+		if _, rendered := facts.Refs["rendered_reference"]; rendered {
+			facts.CoverageConfidence = "rendered_reference"
+		} else if facts.Status == "available" && len(facts.Diagnostics) == 0 {
+			facts.CoverageConfidence = "machine_readable_snapshot"
+		}
+		facts.CompletenessLimits = []string{"retained_snapshot_only_not_current_provider_completeness"}
+		facts.CompletenessLimits = append(facts.CompletenessLimits, facts.Diagnostics...)
+	}()
+	facts = sourceFacts{Parameters: []sourceParameterFact{}, Status: "unavailable", Groups: map[string]json.RawMessage{}, Refs: map[string]sourceFactRef{}, Diagnostics: []string{}, Document: doc.Payload, RefPrefix: "/source_contract"}
 	if !row.Observed {
 		facts.Diagnostics = append(facts.Diagnostics, "source_unavailable")
 		return facts

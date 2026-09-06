@@ -338,3 +338,64 @@ func TestSourceFactsPreparedDocument(t *testing.T) {
 		}
 	}
 }
+
+func TestSourceFactsCoverageConfidence(t *testing.T) {
+	row, doc := retainedFactFixture(t, "vercel", "vercel.rest.readSessionFile")
+	for _, unavailable := range []bool{false, true} {
+		name := "machine snapshot"
+		if unavailable {
+			name = "unavailable"
+		}
+		t.Run(name, func(t *testing.T) {
+			current := row
+			current.Observed = !unavailable
+			facts := normalizeSourceFacts(current, doc, nil)
+			raw, err := json.Marshal(facts)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var got struct {
+				Confidence string   `json:"coverage_confidence"`
+				Limits     []string `json:"completeness_limits"`
+			}
+			if err := json.Unmarshal(raw, &got); err != nil {
+				t.Fatal(err)
+			}
+			want := "machine_readable_snapshot"
+			if unavailable {
+				want = "partial"
+			}
+			if got.Confidence != want {
+				t.Errorf("coverage=%q want=%q", got.Confidence, want)
+			}
+			if len(got.Limits) == 0 {
+				t.Error("retained snapshot has no explicit completeness limit")
+			}
+			if !unavailable && facts.Refs["source_operation"].DocumentID != doc.ID {
+				t.Error("snapshot lost source basis")
+			}
+		})
+	}
+	markup := []byte("<h2 id=download>Download file</h2><p>Download the raw bytes.</p>")
+	payload, err := json.Marshal(string(markup))
+	if err != nil {
+		t.Fatal(err)
+	}
+	html := retainedSourceDocument{ID: "fixture:html", ContentType: "text/html", Payload: payload, RetainedFileSHA256: sourceBytesHash(markup), Bytes: int64(len(markup))}
+	node := json.RawMessage(`{"protocol":"rest","method":"get","path":"/file"}`)
+	facts := normalizeSourceFacts(retainedSourceOperation{Observed: true, Node: node, SourceLocation: "#download"}, retainedSourceDocument{ID: "fixture:lock", Payload: json.RawMessage(`{"rest":{}}`)}, &html)
+	raw, err := json.Marshal(facts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var got struct {
+		Confidence string   `json:"coverage_confidence"`
+		Limits     []string `json:"completeness_limits"`
+	}
+	if err := json.Unmarshal(raw, &got); err != nil {
+		t.Fatal(err)
+	}
+	if got.Confidence != "rendered_reference" || len(got.Limits) == 0 || facts.Refs["rendered_reference"].Section != "#download" {
+		t.Errorf("rendered coverage=%+v status=%s refs=%+v", got, facts.Status, facts.Refs)
+	}
+}

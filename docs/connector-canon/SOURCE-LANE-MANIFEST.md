@@ -70,6 +70,11 @@ JSON and one trailing newline. Rendered HTML references retain verified heading
 sections and text citations; they do not invent request/response schemas
 from prose. External references are not fetched.
 
+Each fact envelope states `coverage_confidence` as `machine_readable_snapshot`,
+`rendered_reference` or `partial`, with `completeness_limits` and its exact `refs`
+as the retained basis. These labels describe available evidence; even a fully
+normalized snapshot makes no claim about the current provider universe.
+
 ## Seven separate cells
 
 Every source row retains direct read, direct write, binary download, binary
