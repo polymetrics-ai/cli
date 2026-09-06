@@ -288,6 +288,131 @@ func TestSourceLaneBinding099FGraphQL(t *testing.T) {
 	}
 }
 
+func sourceBindingRepin099F(t *testing.T, key sourceOperationKey, facts sourceFacts, change func(map[string]any)) sourceFacts {
+	t.Helper()
+	var document map[string]any
+	if json.Unmarshal(facts.Document, &document) != nil {
+		t.Fatal("document decode")
+	}
+	change(document)
+	raw, err := json.Marshal(document)
+	if err != nil {
+		t.Fatal(err)
+	}
+	node, err := sourceJSONPointer(raw, "/rest/operations/0")
+	if err != nil {
+		t.Fatal(err)
+	}
+	updated := normalizeSourceFacts(retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}, retainedSourceDocument{ID: "fixture:099F", Payload: raw}, nil)
+	updated.bindings = facts.bindings
+	return updated
+}
+
+func TestSourceLaneBinding099FMultipleScopes(t *testing.T) {
+	for _, mode := range []string{"both", "missing second", "bad second first", "bad second last"} {
+		t.Run(mode, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "envelope", nil)
+			facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+				op := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)
+				var response any
+				_ = json.Unmarshal([]byte(`{"content":{"application/json":{"schema":`+sourceBindingEnvelope099F+`}}}`), &response)
+				op["responses"].(map[string]any)["201"] = response
+			})
+			second := canonicalSourceLaneTargetRef(a.IntendedBindings[0])
+			anchor := sourceBindingCitation099F(t, facts, "/rest/operations/0/source_operation/responses/201/content/application~1json/schema")
+			second.SourceSchema = &anchor
+			second.FieldMappings[0].Source = sourceBindingCitation099F(t, facts, anchor.Pointer+"/properties/data/items")
+			want := 2
+			codes := []string{}
+			if mode != "both" {
+				want = 1
+				codes = []string{"target_required_scope_unverified"}
+			}
+			if mode != "missing second" {
+				if strings.HasPrefix(mode, "bad") {
+					second.FieldMappings[0].Source = anchor
+					codes = append(codes, "target_record_projection_mismatch")
+				}
+				a.IntendedBindings = append(a.IntendedBindings, second)
+				if mode == "bad second first" {
+					a.IntendedBindings[0], a.IntendedBindings[1] = a.IntendedBindings[1], a.IntendedBindings[0]
+				}
+			}
+			sourceBindingOutcome099F(t, key, facts, a, want, codes...)
+		})
+	}
+}
+
+func TestSourceLaneBinding099FSourceSelectors(t *testing.T) {
+	for _, mode := range []string{"unrelated equal node", "overridden parameter", "invalid absent target", "local ref occurrence", "external ref", "ambiguous component"} {
+		t.Run(mode, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "body", nil)
+			r := &a.IntendedBindings[0]
+			want := 0
+			code := "source_binding_scope_mismatch"
+			switch mode {
+			case "unrelated equal node":
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					var schema any
+					_ = json.Unmarshal([]byte(sourceBindingBody099F), &schema)
+					doc["unrelated"] = schema
+				})
+				c := sourceBindingCitation099F(t, facts, "/unrelated")
+				r.SourceSchema = &c
+			case "overridden parameter":
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					doc["unrelated"] = map[string]any{"name": "id", "in": "path", "required": true, "schema": map[string]any{"type": "string"}}
+				})
+				r.FieldMappings[0].Source = sourceBindingCitation099F(t, facts, "/unrelated")
+			case "invalid absent target":
+				r.ID = "future"
+				r.SourceSchema.ValueSHA256 = strings.Repeat("0", 64)
+				code = "source_binding_citation_mismatch"
+			case "local ref occurrence", "external ref", "ambiguous component":
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					var schema any
+					_ = json.Unmarshal([]byte(sourceBindingBody099F), &schema)
+					doc["source_contract"] = map[string]any{"components": map[string]any{"schemas": map[string]any{"Body": schema}}}
+					op := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)
+					uri := "#/components/schemas/Body"
+					if mode == "external ref" {
+						uri = "https://provider.example/schema"
+					}
+					op["requestBody"].(map[string]any)["content"].(map[string]any)["application/json"].(map[string]any)["schema"] = map[string]any{"$ref": uri}
+				})
+				anchor := sourceBindingCitation099F(t, facts, r.SourceSchema.Pointer)
+				r.SourceSchema = &anchor
+				r.FieldMappings[1].Source = sourceBindingCitation099F(t, facts, "/source_contract/components/schemas/Body/properties/data")
+				if mode == "local ref occurrence" {
+					want = 1
+					code = ""
+				}
+				if mode == "external ref" {
+					code = "source_schema_unverified"
+				}
+				if mode == "ambiguous component" {
+					facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+						body := doc["source_contract"].(map[string]any)["components"].(map[string]any)["schemas"].(map[string]any)["Body"].(map[string]any)
+						var field any
+						_ = json.Unmarshal([]byte(`{"type":"object","properties":{"name":{"type":"string"}},"required":["name"],"additionalProperties":false}`), &field)
+						doc["source_contract"].(map[string]any)["components"].(map[string]any)["schemas"].(map[string]any)["Shared"] = field
+						props := body["properties"].(map[string]any)
+						props["data"] = map[string]any{"$ref": "#/components/schemas/Shared"}
+						props["other"] = map[string]any{"$ref": "#/components/schemas/Shared"}
+					})
+					r.FieldMappings[1].Source = sourceBindingCitation099F(t, facts, "/source_contract/components/schemas/Shared")
+					code = "source_projection_ambiguous"
+				}
+			}
+			codes := []string{}
+			if code != "" {
+				codes = append(codes, code)
+			}
+			sourceBindingOutcome099F(t, key, facts, a, want, codes...)
+		})
+	}
+}
+
 func TestSourceLaneBindingClaims(t *testing.T) {
 	const artifact = "internal/connectors/defs/fixture/operations.json"
 	raw := []byte(`{"operations":[{"id":"read_widget","kind":"rest_read","rest":{"method":"GET","path":"/widgets/{id}"}},{"id":"other_widget","kind":"rest_read","rest":{"method":"GET","path":"/other/{id}"}}]}`)
