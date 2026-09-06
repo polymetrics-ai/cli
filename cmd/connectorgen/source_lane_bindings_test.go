@@ -11,6 +11,8 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/synccontract"
+	"polymetrics.ai/internal/syncplan"
 )
 
 const sourceBindingBody099F = `{"type":"object","properties":{"data":{"type":"object","properties":{"name":{"type":"string"}},"required":["name"],"additionalProperties":false}},"required":["data"],"additionalProperties":false}`
@@ -403,6 +405,116 @@ func TestSourceLaneBinding099FSourceSelectors(t *testing.T) {
 					r.FieldMappings[1].Source = sourceBindingCitation099F(t, facts, "/source_contract/components/schemas/Shared")
 					code = "source_projection_ambiguous"
 				}
+			}
+			codes := []string{}
+			if code != "" {
+				codes = append(codes, code)
+			}
+			sourceBindingOutcome099F(t, key, facts, a, want, codes...)
+		})
+	}
+}
+
+func TestSourceLaneBinding099FSyncTransport(t *testing.T) {
+	for _, mode := range []string{"descriptor without factory", "plan does not register factory", "wrong explicit plan coordinate", "wrong executor ID", "wrong role"} {
+		t.Run(mode, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "envelope", func(lock *vNextSourceLock) {
+				lock.Lanes["sync_transport"] = "implemented"
+				lock.Execution = map[string]json.RawMessage{"sync_transport.json": json.RawMessage(`{"schema_version":1,"source_transport":{"executor":{"family":"declarative_api","id":"fixture_source"},"eligible_streams":["widgets"],"modes":["full_overwrite"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"tombstone"}}}`)}
+			})
+			facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+				doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)["callbacks"] = map[string]any{"changes": map[string]any{}}
+			})
+			r := &a.IntendedBindings[0]
+			r.Kind = "sync_transport"
+			r.Lane = "sync_transport"
+			r.ID = "fixture_source"
+			r.Artifact = "internal/connectors/defs/acme/sync_transport.json"
+			r.Pointer = "/source_transport"
+			r.ArtifactSHA256 = sourceBytesHash(facts.bindings.Artifacts[r.Artifact])
+			r.CanonicalPointer = "/execution/sync_transport.json/source_transport"
+			r.SchemaRole = ""
+			r.SourceSchema = nil
+			r.FieldMappings = nil
+			code := "target_transport_executor_unverified"
+			if strings.Contains(mode, "plan") {
+				descriptor := facts.bindings.Canonical["acme"]
+				axes, ok := synccontract.ModeAxes(synccontract.ModeFullOverwrite)
+				if !ok {
+					t.Fatal("mode contract missing")
+				}
+				plan := syncplan.Plan{ContractVersion: syncplan.ContractVersion, Source: syncplan.BindingRef{Kind: synccontract.BindingKindStream, ID: "widgets"}, Target: syncplan.BindingRef{Kind: synccontract.BindingKindAction, ID: "destination.write"}, Mode: synccontract.ModeFullOverwrite, Axes: axes, GenerationDigest: descriptor.Staged.Identity.Digest, ArtifactDigest: vNextSemanticAdmissionDigest("a"), EvidenceDigest: vNextSemanticAdmissionDigest("b"), Executors: []syncplan.ExecutorRef{{Role: syncplan.ExecutorRoleSource, ID: descriptor.Staged.Manifest.Executor, Digest: descriptor.Staged.Identity.Digest}, {Role: syncplan.ExecutorRoleDestination, ID: "closed_typed/destination.v1", Digest: vNextSemanticAdmissionDigest("c")}}, Foundation: syncplan.FoundationRef{ID: "authoring.source-lock-vnext.v1", Digest: vNextSemanticAdmissionDigest("d"), Available: true, Reference: "docs/connector-canon/foundations/catalog.json"}}
+				coordinate := "/operations/0/stream"
+				if mode == "wrong explicit plan coordinate" {
+					coordinate = "/operations/9/stream"
+					code = "target_transport_coordinate_unverified"
+				}
+				staged, err := admitVNextCanonicalDescriptor(descriptor, vNextSemanticAdmissionInput{Sync: []vNextSyncAdmission{{SourceID: "stream:widgets", FieldPath: coordinate, Plan: plan}}})
+				if err != nil {
+					t.Fatalf("real supplied sync admission must succeed: %v", err)
+				}
+				if len(staged.Sync) != 1 || staged.Sync[0].Result.Kind != syncplan.ResultKindExecutable {
+					t.Fatal("actual sync phase not reached")
+				}
+				descriptor.Staged = staged
+				facts.bindings.Canonical["acme"] = descriptor
+			}
+			if mode == "wrong executor ID" {
+				r.ID = "api_engine.v1"
+				code = "target_identity_mismatch"
+			}
+			if mode == "wrong role" {
+				r.Pointer = "/destination_transport"
+				r.CanonicalPointer = "/execution/sync_transport.json/destination_transport"
+				code = "target_absent"
+			}
+			sourceBindingOutcome099F(t, key, facts, a, 0, code)
+		})
+	}
+}
+
+func TestSourceLaneBinding099FTemplateControls(t *testing.T) {
+	for _, mode := range []string{"matching config record", "swapped fields", "nested config", "missing mapping", "other literal", "unsupported expression"} {
+		t.Run(mode, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "body", func(lock *vNextSourceLock) {
+				lock.ConfigSchema = json.RawMessage(`{"type":"object","properties":{"workspace_id":{"type":"string"}},"required":["workspace_id"]}`)
+				route := "/workspaces/{{ config.workspace_id }}/widgets/{{ record.id }}"
+				if mode == "swapped fields" {
+					route = "/workspaces/{{ record.id }}/widgets/{{ config.workspace_id }}"
+				}
+				if mode == "nested config" {
+					route = "/workspaces/{{ config.workspace_id.child }}/widgets/{{ record.id }}"
+				}
+				if mode == "other literal" {
+					route = "/other/{{ config.workspace_id }}/widgets/{{ record.id }}"
+				}
+				if mode == "unsupported expression" {
+					route = "/workspaces/{{ config.workspace_id | lower }}/widgets/{{ record.id }}"
+				}
+				lock.Operations[0].Write = json.RawMessage(strings.Replace(string(lock.Operations[0].Write), "/widgets/{{ record.id }}", route, 1))
+			})
+			facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+				node := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)
+				node["path"] = "/workspaces/{workspace_id}/widgets/{id}"
+				op := node["source_operation"].(map[string]any)
+				op["parameters"] = append(op["parameters"].([]any), map[string]any{"name": "workspace_id", "in": "path", "required": true, "schema": map[string]any{"type": "string"}})
+			})
+			pointer := "/properties/workspace_id"
+			a.IntendedBindings[0].FieldMappings = append(a.IntendedBindings[0].FieldMappings, sourceLaneFieldMapping{Source: sourceBindingCitation099F(t, facts, "/rest/operations/0/source_operation/parameters/1"), Target: sourceLaneFieldTarget{Kind: sourceLaneFieldConfig, Pointer: &pointer}})
+			want := 0
+			code := "target_path_projection_mismatch"
+			if mode == "matching config record" {
+				want = 1
+				code = ""
+			}
+			if mode == "nested config" || mode == "unsupported expression" {
+				code = "target_path_projection_unverified"
+			}
+			if mode == "other literal" {
+				code = "target_semantics_mismatch"
+			}
+			if mode == "missing mapping" {
+				a.IntendedBindings[0].FieldMappings = a.IntendedBindings[0].FieldMappings[:2]
 			}
 			codes := []string{}
 			if code != "" {
