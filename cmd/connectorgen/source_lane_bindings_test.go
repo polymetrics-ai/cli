@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -10,6 +12,7 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/syncplan"
@@ -120,6 +123,159 @@ func sourceBindingOutcome099F(t *testing.T, key sourceOperationKey, facts source
 		t.Errorf("binding promoted behavior: %+v", cell)
 	}
 	return cell
+}
+
+func sourceBindingREST118A(t *testing.T, parameters, fixed string) (sourceOperationKey, sourceFacts, sourceSemanticAnnotation) {
+	t.Helper()
+	lock := operationDirectReadLockForSemanticAdmissionTest()
+	lock.Operations[0].Operation = json.RawMessage(`{"id":"widgets.get","kind":"rest_read","summary":"Get widgets","risk":"low","approval":"none","output_policy":"json_redacted","rest":{"method":"GET","path":"/widgets","max_bytes":1024,"response":{"success_statuses":["204"]},"parameters":` + parameters + `,"query":` + fixed + `}}`)
+	if strings.Contains(parameters, `"in":"path"`) {
+		lock.Operations[0].Operation = json.RawMessage(strings.ReplaceAll(string(lock.Operations[0].Operation), `/widgets`, `/widgets/{mode}`))
+		lock.Operations[0].Commands[0].Command = json.RawMessage(strings.ReplaceAll(string(lock.Operations[0].Commands[0].Command), `/widgets`, `/widgets/{mode}`))
+	}
+	descriptor, err := canonicalizeVNextSourceLock(lock)
+	if err != nil {
+		t.Fatalf("real direct REST admission required: %v", err)
+	}
+	key := sourceOperationKey{Connector: "acme", Inventory: "primary", ID: "provider.widgets.get"}
+	node := json.RawMessage(`{"id":"provider.widgets.get","protocol":"rest","method":"GET","path":"/widgets","source_operation":{"summary":"Get widgets","responses":{"204":{"description":"No content"}}}}`)
+	if strings.Contains(parameters, `"in":"path"`) {
+		node = json.RawMessage(strings.ReplaceAll(string(node), `/widgets`, `/widgets/{mode}`))
+	}
+	doc := retainedSourceDocument{ID: "fixture:099F", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+	facts := normalizeSourceFacts(retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}, doc, nil)
+	facts.bindings = sourceBindingTestInputs(t, map[string][]byte{}, map[string]vNextCanonicalDescriptor{"acme": descriptor})
+	artifact := "internal/connectors/defs/acme/operations.json"
+	ref := sourceLaneTargetRef{Kind: "operation", Connector: "acme", ID: "widgets.get", Lane: "direct_read", Artifact: artifact, Pointer: "/operations/0", ArtifactSHA256: sourceBytesHash(facts.bindings.Artifacts[artifact]), CanonicalID: "operation:widgets.get", CanonicalPointer: "/operations/0/operation", Generation: descriptor.Staged.Identity.Digest}
+	if facts.bindings.Bundles["acme"].Name != "acme" || ref.Generation == "" {
+		t.Fatal("actual typed load/staging not reached")
+	}
+	return key, facts, sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Get widgets", IntendedBindings: []sourceLaneTargetRef{ref}}
+}
+
+func TestSourceLaneBinding118AFixedQuery(t *testing.T) {
+	for _, mode := range []string{"no fixed query", "unrelated key", "matching default", "wrong default", "missing default", "different literal key", "same name path coordinate", "numeric default", "wrong numeric default", "boolean default"} {
+		for _, materialized := range []bool{false, true} {
+			t.Run(mode+"/materialized="+strconv.FormatBool(materialized), func(t *testing.T) {
+				parameters, fixed := "[]", "{}"
+				sourceParameter := `{"name":"mode","in":"query","schema":{"type":"string","default":"compact"}}`
+				code := ""
+				want := 1
+				if mode != "no fixed query" && mode != "unrelated key" {
+					parameters = `[{"name":"mode","in":"query","type":"string"}]`
+					fixed = `{"mode":"compact"}`
+				}
+				switch mode {
+				case "unrelated key":
+					fixed = `{"unrelated":"sent"}`
+					code = "target_parameter_contract_unverified"
+				case "wrong default":
+					fixed = `{"mode":"expanded"}`
+					code = "target_parameter_mismatch"
+				case "missing default":
+					sourceParameter = `{"name":"mode","in":"query","schema":{"type":"string"}}`
+					code = "target_parameter_contract_unverified"
+				case "different literal key":
+					fixed = `{"mode-alias":"compact"}`
+					code = "target_parameter_contract_unverified"
+				case "same name path coordinate":
+					parameters = `[{"name":"mode","in":"path","type":"string","required":true}]`
+					sourceParameter = `{"name":"mode","in":"path","required":true,"schema":{"type":"string","default":"compact"}}`
+					code = "target_parameter_contract_unverified"
+				case "numeric default", "wrong numeric default":
+					parameters = `[{"name":"mode","in":"query","type":"number"}]`
+					sourceParameter = `{"name":"mode","in":"query","schema":{"type":"number","default":1.0}}`
+					fixed = `{"mode":"1e0"}`
+					if mode == "wrong numeric default" {
+						fixed = `{"mode":"2"}`
+						code = "target_parameter_mismatch"
+					}
+				case "boolean default":
+					parameters = `[{"name":"mode","in":"query","type":"boolean"}]`
+					sourceParameter = `{"name":"mode","in":"query","schema":{"type":"boolean","default":false}}`
+					fixed = `{"mode":"false"}`
+				}
+				key, facts, a := sourceBindingREST118A(t, parameters, fixed)
+				if parameters != "[]" {
+					facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+						var parameter any
+						if json.Unmarshal([]byte(sourceParameter), &parameter) != nil {
+							t.Fatal("literal source parameter invalid")
+						}
+						doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)["parameters"] = []any{parameter}
+					})
+				}
+				expected := a.IntendedBindings[0]
+				if materialized {
+					a.MaterializedBindings = []sourceLaneTargetRef{expected}
+					a.IntendedBindings = nil
+				}
+				cells := classifySourceLanes(key, facts, &a)
+				cell := requireSourceLane(t, cells, "direct_read", "applicable")
+				if code != "" {
+					want = 0
+				}
+				if len(cells) != 7 || len(cell.References) != want || cell.State != "mapped_unproven" || len(cell.ProofRefs) != 0 {
+					t.Errorf("query contract acceptance want%d: %+v", want, cell)
+				}
+				if want == 1 && (len(cell.Diagnostics) != 0 || len(cell.References) != 1 || !sourceLaneTargetRefEqual(cell.References[0], expected)) {
+					t.Errorf("exact admitted positive changed: %+v", cell)
+				}
+				if code != "" {
+					found := false
+					for _, d := range cell.Diagnostics {
+						if d.Code == code {
+							found = true
+							severity := "error"
+							if !materialized && strings.Contains(code, "unverified") {
+								severity = "deficit"
+							}
+							if d.Severity != severity || d.Stage != "reference" || d.Key != key {
+								t.Errorf("wrong query diagnostic: %+v", d)
+							}
+						}
+					}
+					if !found {
+						t.Errorf("want%s after admitted REST binding, got%+v", code, cell.Diagnostics)
+					}
+				}
+			})
+		}
+	}
+}
+
+func TestSourceLaneBinding118AFixedQueryWire(t *testing.T) {
+	key, facts, a := sourceBindingREST118A(t, `[{"name":"mode","in":"query","type":"string"}]`, `{"mode":"compact"}`)
+	facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+		doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)["parameters"] = []any{map[string]any{"name": "mode", "in": "query", "schema": map[string]any{"type": "string", "default": "compact"}}}
+	})
+	cell := sourceBindingOutcome099F(t, key, facts, a, 1)
+	if len(cell.Diagnostics) != 0 {
+		t.Fatal("supported exact fixed default must bind")
+	}
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.Method != "GET" || r.URL.Path != "/widgets" || r.URL.RawQuery != "mode=compact" {
+			t.Errorf("literal emitted query mismatch: %s %s", r.Method, r.URL.String())
+		}
+		w.WriteHeader(http.StatusNoContent)
+	}))
+	defer server.Close()
+	bundle := facts.bindings.Bundles["acme"]
+	bundle.HTTP.URL = server.URL
+	// The literal204 response has no JSON body. The current direct reader
+	// reaches and sends the query before its separate JSON response parser refuses it.
+	if _, err := engine.OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "widgets.get"}, nil); err == nil || !strings.Contains(err.Error(), "response is not JSON") {
+		t.Fatalf("expected post-wire204 parser boundary, got: %v", err)
+	}
+	if requests != 1 {
+		t.Fatalf("want one emitted request, got%d", requests)
+	}
+	_, err := engine.OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "widgets.get", Query: map[string]string{"mode": "expanded"}}, nil)
+	if err == nil || requests != 1 {
+		t.Fatalf("fixed/caller-declared query conflict must refuse before wire; error=%v requests=%d", err, requests)
+	}
 }
 
 func TestSourceLaneBinding118AUnresolvedSuccessCoverage(t *testing.T) {

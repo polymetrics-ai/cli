@@ -492,6 +492,74 @@ func sourceLaneRESTParameterContract(facts sourceFacts, target engine.RESTOperat
 			return unknown
 		}
 	}
+	// The engine sends each fixed entry under its literal query key. Parameter
+	// declarations at another wire location and CLI spellings confer no authority.
+	fixedNames := make([]string, 0, len(target.Query))
+	for name := range target.Query {
+		fixedNames = append(fixedNames, name)
+	}
+	sort.Strings(fixedNames)
+	for _, name := range fixedNames {
+		value := target.Query[name]
+		var source *sourceParameterFact
+		for i := range facts.Parameters {
+			p := &facts.Parameters[i]
+			if p.In == "query" && p.Name == name {
+				source = p
+				break
+			}
+		}
+		if source == nil {
+			return unknown
+		}
+		var declaration map[string]json.RawMessage
+		if decodeSourceJSON(source.Node, &declaration) != nil {
+			return unknown
+		}
+		schema, ok := sourceResolveObject(facts, declaration["schema"], map[string]bool{}, 0)
+		if !ok {
+			return unknown
+		}
+		raw, exists := schema["default"]
+		if !exists {
+			return unknown
+		}
+		var expected any
+		if decodeSourceJSON(raw, &expected) != nil {
+			return unknown
+		}
+		kind := targets["query:"+name].Type
+		switch expected := expected.(type) {
+		case string:
+			if kind != "string" {
+				return unknown
+			}
+			if value != expected {
+				return mismatch
+			}
+		case bool:
+			if kind != "boolean" {
+				return unknown
+			}
+			if value != strconv.FormatBool(expected) {
+				return mismatch
+			}
+		case json.Number:
+			if kind != "number" && kind != "integer" {
+				return unknown
+			}
+			equal, known := sourceLaneNumericBoundEqual([]byte(expected), []byte(value))
+			if !known {
+				return unknown
+			}
+			if !equal {
+				return mismatch
+			}
+		default:
+			return unknown
+		}
+	}
+
 	return ""
 }
 
