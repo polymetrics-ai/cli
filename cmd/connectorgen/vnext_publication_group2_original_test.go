@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -118,7 +119,7 @@ func TestCP11F03ARepairPreparationFrontierMatrix(t *testing.T) {
 					return file.Write(payload[:len(payload)-1])
 				}}}
 			}},
-			{name: "record-sync-completion", hooks: func(injected error) vNextPublicationHooks {
+			{name: "record-sync-completion", keepGraph: true, hooks: func(injected error) vNextPublicationHooks {
 				return vNextPublicationHooks{ControlRecord: vNextPublicationControlRecordHooks{Sync: func(file *os.File, label string) error {
 					if err := file.Sync(); err != nil {
 						return err
@@ -129,7 +130,7 @@ func TestCP11F03ARepairPreparationFrontierMatrix(t *testing.T) {
 					return nil
 				}}}
 			}},
-			{name: "record-close-completion", hooks: func(injected error) vNextPublicationHooks {
+			{name: "record-close-completion", keepGraph: true, hooks: func(injected error) vNextPublicationHooks {
 				return vNextPublicationHooks{ControlRecord: vNextPublicationControlRecordHooks{Close: func(file *os.File, label string) error {
 					if err := file.Close(); err != nil {
 						return err
@@ -581,8 +582,8 @@ func vNextPublicationAssertTemporaryReplacementBForTest(t *testing.T, foreign []
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := publisher.Publish(vNextPublicationArtifactsForTest("temporary-retry", true)); err != nil {
-		t.Fatalf("Publish after original temporary allocation interference = %v", err)
+	if _, err := publisher.Publish(vNextPublicationArtifactsForTest("temporary-retry", true)); err == nil {
+		t.Fatal("Publish swallowed failed allocation identity/cleanup refusal")
 	}
 	if !fired {
 		t.Fatal("temporary allocation hook did not fire")
@@ -1029,19 +1030,19 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 				}
 				defer directory.Close()
 				payload := []byte("shared record payload")
-				identity, created, err := vNextPublicationWriteControlRepairRecord(directory, label.file, label.name, payload, vNextPublicationControlRecordHooks{Write: func(file *os.File, _ string, payload []byte) (int, error) {
+				record, err := vNextPublicationWriteControlRepairRecord(directory, label.file, label.name, payload, vNextPublicationControlRecordHooks{Write: func(file *os.File, _ string, payload []byte) (int, error) {
 					return file.Write(payload[:len(payload)-1])
 				}})
-				if !created || identity.mode != unix.S_IFREG || err == nil || !strings.Contains(err.Error(), "short write") {
-					t.Fatalf("%s actual short write = identity=%#v created=%t err=%v", label.name, identity, created, err)
+				if !record.created || record.identity.mode != unix.S_IFREG || !errors.Is(err, io.ErrShortWrite) || record.disposition != vNextPublicationRecordRemoved {
+					t.Fatalf("%s actual short write = identity=%#v created=%t err=%v", label.name, record.identity, record.created, err)
 				}
-				if err := os.Remove(filepath.Join(root, label.file)); err != nil {
+				if _, err := os.Lstat(filepath.Join(root, label.file)); !errors.Is(err, fs.ErrNotExist) {
 					t.Fatal(err)
 				}
 				syncCompletion := errors.New(label.name + " sync completion")
 				closeCompletion := errors.New(label.name + " close completion")
 				closed := 0
-				_, created, err = vNextPublicationWriteControlRepairRecord(directory, label.file, label.name, payload, vNextPublicationControlRecordHooks{
+				record, err = vNextPublicationWriteControlRepairRecord(directory, label.file, label.name, payload, vNextPublicationControlRecordHooks{
 					Sync: func(file *os.File, _ string) error {
 						if err := file.Sync(); err != nil {
 							return err
@@ -1056,8 +1057,8 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 						return closeCompletion
 					},
 				})
-				if !created || !errors.Is(err, syncCompletion) || !errors.Is(err, closeCompletion) || closed != 1 {
-					t.Fatalf("%s sync/close = created=%t closed=%d err=%v", label.name, created, closed, err)
+				if !record.created || record.disposition != vNextPublicationRecordRetainedComplete || !errors.Is(err, syncCompletion) || !errors.Is(err, closeCompletion) || closed != 1 {
+					t.Fatalf("%s sync/close = created=%t closed=%d err=%v", label.name, record.created, closed, err)
 				}
 			})
 		}

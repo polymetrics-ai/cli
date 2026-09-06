@@ -1013,17 +1013,37 @@ func vNextPublicationCreateTemp(root *vNextPublicationDirectory, afterOpen func(
 				return "", nil, nil, err
 			}
 		}
-		file, err := temporaryRoot.openFile(vNextPublicationTemporaryFile, "publication temporary", unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o644, false)
-		if err == nil {
-			return name, temporaryRoot, file, nil
+		opened := temporaryRoot.openFileResult(vNextPublicationTemporaryFile, "publication temporary", unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o644, false)
+		completionErr := opened.parentCloseErr
+		if opened.opened && completionErr == nil {
+			file := os.NewFile(uintptr(opened.fd), "publication temporary")
+			if file != nil {
+				return name, temporaryRoot, file, nil
+			}
+			completionErr = fmt.Errorf("adopt publication temporary: invalid file descriptor")
 		}
-		vNextPublicationCloseAfter(&err, temporaryRoot, "publication temporary root")
-		vNextPublicationRecordError(&err, "remove publication temporary root", root.removeEmptyDirectoryBound(name, "publication temporary root", identity))
-		if !errors.Is(err, fs.ErrExist) {
-			return "", nil, nil, err
+		if opened.opened {
+			vNextPublicationRecordError(&completionErr, "close opened publication temporary", vNextPublicationCloseOpenedFileAfterParentClose(opened.fd, "publication temporary"))
+		}
+		vNextPublicationRecordError(&completionErr, "close publication temporary root", temporaryRoot.Close())
+		// Preserve the cleanup operation's origin before wrapping/joining it.
+		// Only the actual AT_REMOVEDIR ENOTEMPTY on matching A is the
+		// intentional collision residue; identity/completion errors never are.
+		identityErr := root.assertIdentity(name, "publication temporary root", identity)
+		vNextPublicationRecordError(&completionErr, "identify publication temporary cleanup", identityErr)
+		if identityErr == nil {
+			removeErr := unix.Unlinkat(int(root.file.Fd()), name, unix.AT_REMOVEDIR)
+			retainedCollision := !opened.opened && errors.Is(opened.openErr, fs.ErrExist) && removeErr == unix.ENOTEMPTY
+			if !retainedCollision {
+				vNextPublicationRecordError(&completionErr, "remove publication temporary root", removeErr)
+			}
+		}
+		if opened.opened || !errors.Is(opened.openErr, fs.ErrExist) || completionErr != nil {
+			return "", nil, nil, errors.Join(opened.openErr, completionErr)
 		}
 	}
-	return "", nil, nil, fmt.Errorf("create publication temporary root: exhausted unique names")
+	return "", nil, nil, fmt.Errorf("create publication temporary root: exhausted unique names: %w", fs.ErrExist)
+
 }
 
 const vNextPublicationQuarantineMember = "candidate"

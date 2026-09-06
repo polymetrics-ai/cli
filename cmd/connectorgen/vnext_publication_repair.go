@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/fs"
+	"os"
 	"strings"
 
 	"golang.org/x/sys/unix"
@@ -458,46 +460,98 @@ func vNextPublicationCreateControlRepairTransaction(root *vNextPublicationDirect
 	return "", nil, vNextPublicationIdentity{}, fmt.Errorf("create publication control repair transaction: exhausted unique names")
 }
 
-func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirectory, name, label string, payload []byte, hooks vNextPublicationControlRecordHooks) (identity vNextPublicationIdentity, created bool, err error) {
-	file, err := directory.openFile(name, label, unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o600, false)
-	if err != nil {
-		return vNextPublicationIdentity{}, false, err
+type vNextPublicationRecordDisposition uint8
+
+const (
+	vNextPublicationRecordUnknown vNextPublicationRecordDisposition = iota
+	vNextPublicationRecordNotCreated
+	vNextPublicationRecordRemoved
+	vNextPublicationRecordRetainedIncomplete
+	vNextPublicationRecordRetainedComplete
+)
+
+type vNextPublicationRecordResult struct {
+	created         bool
+	identity        vNextPublicationIdentity
+	contentComplete bool
+	disposition     vNextPublicationRecordDisposition
+}
+
+func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirectory, name, label string, payload []byte, hooks vNextPublicationControlRecordHooks) (result vNextPublicationRecordResult, err error) {
+	opened := directory.openFileResult(name, label, unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o600, false)
+	err = errors.Join(opened.openErr, opened.parentCloseErr)
+	if !opened.opened {
+		result.disposition = vNextPublicationRecordNotCreated
+		return result, err
 	}
-	created = true
-	identity, err = vNextPublicationIdentityFromFile(file, label)
-	if err != nil {
-		vNextPublicationRecordError(&err, "close "+label, file.Close())
-		return identity, created, err
+	result.created = true
+	file := os.NewFile(uintptr(opened.fd), label)
+	if file == nil {
+		vNextPublicationRecordError(&err, "adopt "+label, fmt.Errorf("invalid file descriptor"))
+		vNextPublicationRecordError(&err, "close opened "+label, vNextPublicationCloseOpenedFileAfterParentClose(opened.fd, label))
+		return result, err
 	}
+	// Install the unique Close owner before identity acquisition or any hook.
 	defer func() {
-		closeRecord := file.Close
 		if hooks.Close != nil {
-			closeRecord = func() error { return hooks.Close(file, label) }
+			vNextPublicationRecordError(&err, "close "+label, hooks.Close(file, label))
+		} else {
+			vNextPublicationRecordError(&err, "close "+label, file.Close())
 		}
-		vNextPublicationRecordError(&err, "close "+label, closeRecord())
+		if result.contentComplete {
+			if bindErr := directory.assertIdentity(name, label, result.identity); bindErr != nil {
+				vNextPublicationRecordError(&err, "bind completed "+label, bindErr)
+				result.disposition = vNextPublicationRecordUnknown
+			} else {
+				result.disposition = vNextPublicationRecordRetainedComplete
+			}
+		}
 	}()
-	writeRecord := file.Write
-	if hooks.Write != nil {
-		writeRecord = func(payload []byte) (int, error) { return hooks.Write(file, label, payload) }
+	identity, identityErr := vNextPublicationIdentityFromFile(file, label)
+	if identityErr != nil {
+		vNextPublicationRecordError(&err, "identify "+label, identityErr)
+		return result, err
 	}
-	written, err := writeRecord(payload)
+	result.identity = identity
+	result.disposition = vNextPublicationRecordRetainedIncomplete
+	// Incomplete disposal happens before Close, while this fd pins our inode.
+	defer func() {
+		if result.contentComplete {
+			return
+		}
+		removeErr := directory.removeRegularBound(name, label, result.identity)
+		vNextPublicationRecordError(&err, "remove incomplete "+label, removeErr)
+		if removeErr == nil {
+			result.disposition = vNextPublicationRecordRemoved
+			vNextPublicationRecordError(&err, "sync removed "+label, directory.Sync())
+		}
+	}()
 	if err != nil {
-		return identity, created, fmt.Errorf("write %s: %w", label, err)
+		return result, err
 	}
-	if written != len(payload) {
-		return identity, created, fmt.Errorf("write %s: short write", label)
+	write := file.Write
+	if hooks.Write != nil {
+		write = func(b []byte) (int, error) { return hooks.Write(file, label, b) }
 	}
-	syncRecord := file.Sync
+	written, writeErr := write(payload)
+	result.contentComplete = written == len(payload)
+	if writeErr != nil {
+		vNextPublicationRecordError(&err, "write "+label, writeErr)
+	}
+	if !result.contentComplete {
+		vNextPublicationRecordError(&err, "write "+label, fmt.Errorf("wrote %d of %d bytes: %w", written, len(payload), io.ErrShortWrite))
+		return result, err
+	}
+	if err != nil {
+		return result, err
+	}
+	sync := file.Sync
 	if hooks.Sync != nil {
-		syncRecord = func() error { return hooks.Sync(file, label) }
+		sync = func() error { return hooks.Sync(file, label) }
 	}
-	if err := syncRecord(); err != nil {
-		return identity, created, fmt.Errorf("sync %s: %w", label, err)
-	}
-	if err := directory.assertIdentity(name, label, identity); err != nil {
-		return identity, created, err
-	}
-	return identity, created, nil
+	vNextPublicationRecordError(&err, "sync "+label, sync())
+	vNextPublicationRecordError(&err, "bind "+label, directory.assertIdentity(name, label, result.identity))
+	return result, err
 }
 
 func (state *vNextPublicationControlRepairState) close() {
@@ -713,14 +767,14 @@ func vNextPublicationWriteAuthorityMarker(root *vNextPublicationDirectory, hooks
 		return vNextPublicationIdentity{}, err
 	}
 	payload = append(payload, '\n')
-	identity, _, err := vNextPublicationWriteControlRepairRecord(root, vNextPublicationControlAuthorityMarkerFile, "publication control authority marker", payload, hooks)
+	record, err := vNextPublicationWriteControlRepairRecord(root, vNextPublicationControlAuthorityMarkerFile, "publication control authority marker", payload, hooks)
 	if err != nil {
 		return vNextPublicationIdentity{}, err
 	}
 	if err := root.Sync(); err != nil {
 		return vNextPublicationIdentity{}, fmt.Errorf("sync publication control authority marker: %w", err)
 	}
-	return identity, nil
+	return record.identity, nil
 }
 
 func (p *vNextGenerationPublisher) scanControlAuthorityLocked(operation *vNextPublicationOperation) (*vNextPublicationControlAuthorityGraph, error) {
@@ -1296,7 +1350,6 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 	keep := false
 	anchors := make([]vNextPublicationControlRepairAnchor, 0, 2)
 	var preparedIdentity vNextPublicationIdentity
-	preparedCreated := false
 	defer func() {
 		if keep {
 			if closeErr := transaction.Close(); closeErr != nil {
@@ -1305,22 +1358,16 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 			}
 			return
 		}
-		if preparedCreated {
-			if preparedIdentity.mode == 0 {
-				// A record pathname may exist but its identity was never obtained.
-				// Preserve the transaction and its anchors rather than deleting an
-				// unknown occupant or stranding a possible authority record.
-				vNextPublicationCloseAfter(&resultErr, transaction, "unprepared publication control repair transaction")
-				return
+		// A failed exclusive open does not establish absence. Never remove
+		// dependencies while any unknown/retained record still occupies the name.
+		if _, absenceErr := transaction.identityAt(vNextPublicationControlRepairPreparedFile, "unprepared authority"); !vNextPublicationPureNotExist(absenceErr) {
+			if absenceErr != nil {
+				vNextPublicationRecordError(&resultErr, "check unprepared authority absence", absenceErr)
 			}
-			if removeErr := transaction.removeRegularBound(vNextPublicationControlRepairPreparedFile, "unprepared publication control repair prepared authority", preparedIdentity); removeErr != nil {
-				// Do not remove referenced anchors after a replacement or cleanup
-				// failure leaves the prepared pathname present.
-				vNextPublicationRecordError(&resultErr, "remove unprepared publication control repair prepared authority", removeErr)
-				vNextPublicationCloseAfter(&resultErr, transaction, "unprepared publication control repair transaction")
-				return
-			}
+			vNextPublicationCloseAfter(&resultErr, transaction, "unprepared publication control repair transaction")
+			return
 		}
+
 		for index := len(anchors) - 1; index >= 0; index-- {
 			anchor := anchors[index]
 			vNextPublicationRecordError(&resultErr, "remove unprepared publication control anchor", transaction.removeRegularBound(anchor.name, "unprepared publication control anchor", anchor.identity))
@@ -1415,7 +1462,9 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 	if err := p.hit(vNextPublicationBeforeControlRepairRecord); err != nil {
 		return nil, err
 	}
-	preparedIdentity, preparedCreated, err = vNextPublicationWriteControlRepairRecord(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", payload, p.hooks.ControlRecord)
+	prepared, err := vNextPublicationWriteControlRepairRecord(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", payload, p.hooks.ControlRecord)
+	preparedIdentity = prepared.identity
+	keep = prepared.disposition == vNextPublicationRecordRetainedComplete
 	if err != nil {
 		return nil, err
 	}
@@ -1479,14 +1528,16 @@ func (p *vNextGenerationPublisher) appendControlRepairPhaseLocked(operation *vNe
 	}
 	payload = append(payload, '\n')
 	name := vNextPublicationControlRepairPhaseName(phase.Sequence)
-	identity, _, err := vNextPublicationWriteControlRepairRecord(transaction, name, "publication control repair phase", payload, p.hooks.ControlRecord)
+	record, err := vNextPublicationWriteControlRepairRecord(transaction, name, "publication control repair phase", payload, p.hooks.ControlRecord)
+	if record.disposition == vNextPublicationRecordRetainedComplete {
+		state.phases = append(state.phases, vNextPublicationControlRepairPhaseState{record: phase, name: name, identity: record.identity, digest: vNextPublicationDigest(payload)})
+	}
 	if err != nil {
 		return err
 	}
 	if err := transaction.Sync(); err != nil {
 		return fmt.Errorf("sync publication control repair phase: %w", err)
 	}
-	state.phases = append(state.phases, vNextPublicationControlRepairPhaseState{record: phase, name: name, identity: identity, digest: vNextPublicationDigest(payload)})
 	return nil
 }
 

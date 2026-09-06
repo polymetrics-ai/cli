@@ -190,36 +190,46 @@ func (d *vNextPublicationDirectory) openParent(name, label string, create bool) 
 	return parent, parts[len(parts)-1], nil
 }
 
-func (d *vNextPublicationDirectory) openFile(name, label string, flags int, perm fs.FileMode, createParents bool) (*os.File, error) {
+// vNextPublicationFileOpenResult retains the first successful effect even when
+// parent completion fails. The consumer owns fd exactly when opened is true;
+// descriptor zero is valid. The error roles remain separate until classification.
+type vNextPublicationFileOpenResult struct {
+	fd             int
+	opened         bool
+	openErr        error
+	parentCloseErr error
+}
+
+func (d *vNextPublicationDirectory) openFileResult(name, label string, flags int, perm fs.FileMode, createParents bool) vNextPublicationFileOpenResult {
 	parent, base, err := d.openParent(name, label, createParents)
 	if err != nil {
-		return nil, err
+		return vNextPublicationFileOpenResult{openErr: err}
 	}
 	fd, err := unix.Openat(int(parent.file.Fd()), base, flags|unix.O_CLOEXEC|unix.O_NOFOLLOW, uint32(perm.Perm()))
-	var openErr error
+	result := vNextPublicationFileOpenResult{fd: fd, opened: err == nil}
 	if err != nil {
-		// Capture the failure while the parent descriptor is still usable. In
-		// particular, vNextPublicationOpenAtError checks whether a rejected
-		// member is a symlink through that descriptor.
-		openErr = vNextPublicationOpenAtError(parent, base, label, err)
+		result.openErr = vNextPublicationOpenAtError(parent, base, label, err)
 	}
-	closeErr := parent.Close()
+	if err := parent.Close(); err != nil {
+		result.parentCloseErr = fmt.Errorf("close %s parent: %w", label, err)
+	}
+	return result
+}
+
+func (d *vNextPublicationDirectory) openFile(name, label string, flags int, perm fs.FileMode, createParents bool) (*os.File, error) {
+	result := d.openFileResult(name, label, flags, perm, createParents)
+	err := errors.Join(result.openErr, result.parentCloseErr)
 	if err != nil {
-		if closeErr != nil {
-			return nil, errors.Join(openErr, fmt.Errorf("close %s parent: %w", label, closeErr))
+		if result.opened {
+			vNextPublicationRecordError(&err, "close opened "+label, vNextPublicationCloseOpenedFileAfterParentClose(result.fd, label))
 		}
-		return nil, openErr
+		return nil, err
 	}
-	if closeErr != nil {
-		if closeFileErr := vNextPublicationCloseOpenedFileAfterParentClose(fd, label); closeFileErr != nil {
-			return nil, errors.Join(fmt.Errorf("close %s parent: %w", label, closeErr), fmt.Errorf("close opened %s: %w", label, closeFileErr))
-		}
-		return nil, fmt.Errorf("close %s parent: %w", label, closeErr)
-	}
-	file := os.NewFile(uintptr(fd), label)
+	file := os.NewFile(uintptr(result.fd), label)
 	if file == nil {
-		_ = unix.Close(fd)
-		return nil, fmt.Errorf("open %s: invalid file descriptor", label)
+		err = fmt.Errorf("open %s: invalid file descriptor", label)
+		vNextPublicationRecordError(&err, "close opened "+label, vNextPublicationCloseOpenedFileAfterParentClose(result.fd, label))
+		return nil, err
 	}
 	return file, nil
 }

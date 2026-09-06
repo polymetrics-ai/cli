@@ -1,0 +1,156 @@
+=== RUN   TestCP11F03ARepairPostRecordFailureRetainsCoherentAuthority
+--- PASS: TestCP11F03ARepairPostRecordFailureRetainsCoherentAuthority (0.99s)
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/before-record-operation-failure
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/record-short-write
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/record-sync-completion
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/record-close-completion
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/post-record
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/post-transaction-sync
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/post-connector-sync
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/before-record-operation-failure
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/record-short-write
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/record-sync-completion
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/record-close-completion
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/post-record
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/post-transaction-sync
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/post-connector-sync
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/before-record-operation-failure
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/record-short-write
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/record-sync-completion
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/record-close-completion
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/post-record
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/post-transaction-sync
+=== RUN   TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/post-connector-sync
+--- PASS: TestCP11F03ARepairPreparationFrontierMatrix (18.58s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/before-record-operation-failure (0.76s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/record-short-write (0.81s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/record-sync-completion (0.89s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/record-close-completion (0.92s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/post-record (0.92s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/post-transaction-sync (0.89s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-absent-to-present/post-connector-sync (0.91s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/before-record-operation-failure (0.73s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/record-short-write (0.78s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/record-sync-completion (0.82s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/record-close-completion (0.80s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/post-record (0.88s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/post-transaction-sync (0.84s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/CURRENT-present-to-present/post-connector-sync (0.94s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/before-record-operation-failure (1.06s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/record-short-write (1.02s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/record-sync-completion (0.98s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/record-close-completion (0.96s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/post-record (0.89s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/post-transaction-sync (0.89s)
+    --- PASS: TestCP11F03ARepairPreparationFrontierMatrix/JOURNAL-present-to-absent/post-connector-sync (0.89s)
+=== RUN   TestCP11F03ARepairBasePresentPresentAuthorityRecovers
+=== RUN   TestCP11F03ARepairBasePresentPresentAuthorityRecovers/CURRENT
+=== RUN   TestCP11F03ARepairBasePresentPresentAuthorityRecovers/JOURNAL
+--- PASS: TestCP11F03ARepairBasePresentPresentAuthorityRecovers (1.63s)
+    --- PASS: TestCP11F03ARepairBasePresentPresentAuthorityRecovers/CURRENT (0.75s)
+    --- PASS: TestCP11F03ARepairBasePresentPresentAuthorityRecovers/JOURNAL (0.88s)
+=== RUN   TestCP11F03CRepairTemporaryCleanupPreservesReplacementB
+=== RUN   TestCP11F03CRepairTemporaryCleanupPreservesReplacementB/empty
+=== RUN   TestCP11F03CRepairTemporaryCleanupPreservesReplacementB/nonempty
+--- PASS: TestCP11F03CRepairTemporaryCleanupPreservesReplacementB (0.21s)
+    --- PASS: TestCP11F03CRepairTemporaryCleanupPreservesReplacementB/empty (0.10s)
+    --- PASS: TestCP11F03CRepairTemporaryCleanupPreservesReplacementB/nonempty (0.11s)
+=== RUN   TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB
+=== RUN   TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB/JOURNAL/empty
+=== RUN   TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB/JOURNAL/nonempty
+=== RUN   TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB/CURRENT/empty
+=== RUN   TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB/CURRENT/nonempty
+--- PASS: TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB (3.56s)
+    --- PASS: TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB/JOURNAL/empty (0.93s)
+    --- PASS: TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB/JOURNAL/nonempty (0.91s)
+    --- PASS: TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB/CURRENT/empty (0.88s)
+    --- PASS: TestCP11F03CRepairCurrentAndJournalTemporaryPathsPreserveReplacementB/CURRENT/nonempty (0.85s)
+=== RUN   TestCP11F03CRepairQuarantineCleanupPreservesReplacementB
+=== RUN   TestCP11F03CRepairQuarantineCleanupPreservesReplacementB/empty
+=== RUN   TestCP11F03CRepairQuarantineCleanupPreservesReplacementB/nonempty
+--- PASS: TestCP11F03CRepairQuarantineCleanupPreservesReplacementB (1.57s)
+    --- PASS: TestCP11F03CRepairQuarantineCleanupPreservesReplacementB/empty (0.77s)
+    --- PASS: TestCP11F03CRepairQuarantineCleanupPreservesReplacementB/nonempty (0.79s)
+=== RUN   TestCP11F03CRepairStaleStageQuarantinePreservesReplacementB
+=== RUN   TestCP11F03CRepairStaleStageQuarantinePreservesReplacementB/empty
+=== RUN   TestCP11F03CRepairStaleStageQuarantinePreservesReplacementB/nonempty
+--- PASS: TestCP11F03CRepairStaleStageQuarantinePreservesReplacementB (0.92s)
+    --- PASS: TestCP11F03CRepairStaleStageQuarantinePreservesReplacementB/empty (0.47s)
+    --- PASS: TestCP11F03CRepairStaleStageQuarantinePreservesReplacementB/nonempty (0.46s)
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/definitions_and_connector_close
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/missing_control_parent_close
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/staged_file_sync_and_close
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/failed_stage_and_owned_cleanup
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/capture_sync_and_close
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/failed_open_plus_parent_close
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/parent_close_plus_opened-file_close
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/opened_control_read_plus_close_and_pure_absence
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/shared_record_writers_preserve_short_sync_and_close
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/shared_record_writers_preserve_short_sync_and_close/authority-marker
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/shared_record_writers_preserve_short_sync_and_close/prepared
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/shared_record_writers_preserve_short_sync_and_close/phase
+=== RUN   TestCP11F03BRepairCompoundCausesRemainInspectable/linked_predecessor_close
+--- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable (0.62s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/definitions_and_connector_close (0.00s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/missing_control_parent_close (0.00s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/staged_file_sync_and_close (0.04s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/failed_stage_and_owned_cleanup (0.04s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/capture_sync_and_close (0.11s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/failed_open_plus_parent_close (0.00s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/parent_close_plus_opened-file_close (0.00s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/opened_control_read_plus_close_and_pure_absence (0.00s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/shared_record_writers_preserve_short_sync_and_close (0.03s)
+        --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/shared_record_writers_preserve_short_sync_and_close/authority-marker (0.01s)
+        --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/shared_record_writers_preserve_short_sync_and_close/prepared (0.01s)
+        --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/shared_record_writers_preserve_short_sync_and_close/phase (0.01s)
+    --- PASS: TestCP11F03BRepairCompoundCausesRemainInspectable/linked_predecessor_close (0.40s)
+=== RUN   TestCP11OwnershipPreparedOpenCompletionMustRemainRecoverable
+    vnext_publication_ownership_test.go:72: Publish=close publication control repair prepared authority parent: review: real prepared-open parent Close completed with error; Check=stale staging directory ".stage-53511d707184275b3d70839ce2b436f5" remains; Recover=<nil>; CURRENT unchanged=true
+--- PASS: TestCP11OwnershipPreparedOpenCompletionMustRemainRecoverable (0.52s)
+=== RUN   TestCP11OwnershipTempRetryMustNotSwallowCompletion
+    vnext_publication_ownership_test.go:143: Publish pointer=main.vNextGenerationPointer{Generation:"", IntegrityDigest:""} error=open publication temporary: file exists
+        close publication temporary root: review: failed allocator owned-directory real Close completion
+        remove publication temporary root: publication temporary root identity changed A/B identities and bytes preserved=true
+--- PASS: TestCP11OwnershipTempRetryMustNotSwallowCompletion (0.09s)
+=== RUN   TestCP11OwnershipRecordFrontiersRecover
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/prepared/parent-close-after-create
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/prepared/partial-write-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/prepared/short-write-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/prepared/sync-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/prepared/full-write-error-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/prepared/close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/marker/parent-close-after-create
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/marker/partial-write-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/marker/short-write-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/marker/sync-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/marker/full-write-error-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/marker/close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/phase/parent-close-after-create
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/phase/partial-write-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/phase/short-write-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/phase/sync-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/phase/full-write-error-close
+=== RUN   TestCP11OwnershipRecordFrontiersRecover/phase/close
+--- PASS: TestCP11OwnershipRecordFrontiersRecover (7.09s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/prepared/parent-close-after-create (0.36s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/prepared/partial-write-close (0.38s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/prepared/short-write-close (0.38s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/prepared/sync-close (0.40s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/prepared/full-write-error-close (0.38s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/prepared/close (0.34s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/marker/parent-close-after-create (0.41s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/marker/partial-write-close (0.38s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/marker/short-write-close (0.38s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/marker/sync-close (0.38s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/marker/full-write-error-close (0.50s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/marker/close (0.58s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/phase/parent-close-after-create (0.38s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/phase/partial-write-close (0.35s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/phase/short-write-close (0.36s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/phase/sync-close (0.37s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/phase/full-write-error-close (0.38s)
+    --- PASS: TestCP11OwnershipRecordFrontiersRecover/phase/close (0.39s)
+PASS
+ok  	polymetrics.ai/cmd/connectorgen	36.742s

@@ -1211,3 +1211,77 @@ Only evidence aggregation/correction has occurred. No production/test repair
 has started. The complete audited set now awaits Firstmate's separately
 authored coordinated repair/proof scope; CP11 remains unaccepted and CP12
 has not begun.
+
+## Firstmate083 coordinated implementation — current TDD plan
+
+Authority: complete Firstmate083 brief and adopted design079 (hash recorded in
+CP11-ACCEPTANCE.json). Owner Astra/medium; no child roles. Intake7459a0e9,
+behavior/test/dependency7481d177. No competing no-mistakes run.
+GSD sources resolved for discuss/plan/execute/verify; generated plan-phase --tdd
+and execute-phase prompts read. Completed079 discussion/design is reused.
+Documented inline Codex execution applies because this canonical assignment
+forbids additional roles; prompt generation itself is not verification.
+Required Go how-to/testing/error-handling/security/safety/design-patterns/
+structs-interfaces/lint guidance and existing delivery routing apply.
+
+| Group | Findings / affected symbols | Expected behavior and intended RED | Planned verification |
+| --- | --- | --- | --- |
+| A | 03/04, durable/allocation witness helpers | Retained pre-cut identities/bytes/history reject readable replacement root, equal-byte different inode, actual B→C, lost history and wrong phase; preserve original oracle counterexample as RED | `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestCP11Expected' -v`, then focused race |
+| B | 01/02, openFile result, record writer and three callers, CreateTemp/classifiers | Actual created fd survives parent completion; owned incomplete bytes removed, complete authority retained, compound collision returned; desired existing probe cases RED before production edits | focused ownership/allocator normal/race, all seven phase semantics and valid state classes |
+| C | 03/04/06, G2/DM/PT/RE callers and narrow fault seams | All stipulated allocation/cut/compound/resource-instance assertions use independent expected state; explicit missing proof remains open until actual assertions pass | proportional selected normal/race, exact receipts |
+| D | 05/all, claim labels/Atlas/evidence/readiness check | Actual initial-recovery label; immutable baseline catches omitted IDs, stale receipts and fake/zero execution; semantic review still required | negative gate fixtures, stable final whole package normal/race, required supplementary and original-range lint |
+
+Red: pending new Group A oracle regression execution; original073 RED receipts
+remain immutable, not claimed as current executions.
+Green: pending. No repaired capability or CP11 acceptance is claimed.
+Production/test changes begin only after this plan record. Each completed command
+will retain exact source/test/dependency binding and raw results. The 119 existing
+rows and all prior resolved protections remain accountable by manifest reference.
+
+### 083 Group A comparator foundation
+
+Red: `receipts-083/group-a-original-red.json` and raw log preserve actual
+legacy observer acceptance of replaced prior root; package1.797s exit1. Exact
+RED test bytes retained as `group-a-original-red-test.go.txt`.
+Green: new pre-interference descriptor-derived tree comparator rejects replacement
+root, same-byte wrong inode, empty/nonempty B→C, missing/replaced history, changed
+bytes and unexpected member. Focused normal1.677s and race3.128s exit0; receipts
+include exact command/output/source hashes. No caller integration or wrong-phase
+closure is inferred: those remain Group C obligations. Snapshot errors propagate;
+recursive descriptor closes are per frame. Production remains unchanged.
+
+### 083 Group B first coherent implementation / development validation
+
+Red: `receipts-083/group-b-original-red.json` preserves two actual desired
+production regressions, package1.786s exit1: prepared-open completion strands EOF;
+compound allocator error is swallowed. Original external reports remain unchanged.
+Implementation introduces partial-open and record-result ownership, owned incomplete
+cleanup, retained complete records and caller adoption, separate allocator outcomes.
+During development a broad textual edit accidentally removed the existing phase
+reader append; the first focused run failed baseline setup with phase EEXIST.
+Diff inspection restored that unchanged reader line before proceeding. This was an
+implementation-edit error, not a new audited source defect. The next two-probe
+development run passed1.674s. Expanded Ownership/F03 development selection then
+passed36.742s with original raw output retained; receipt honestly lacks timestamps.
+Green is bounded to that selection: all three record kinds cover actual parent
+Close after create, partial/short Write+Close, Sync+Close, full Write error+Close
+and Close completion, exact one-record Close, retained full bytes/removed incomplete
+identity, nonmutating Check and fresh recovery/retry. Seven actual phase caller
+semantics and all Group C/D obligations remain open. No final candidate is claimed.
+
+Firstmate084 producer compliance: existing removeEmptyDirectoryBound has single
+identity-refusal or contextual raw Unlinkat error returns, not joined cleanup.
+Nevertheless allocator now keeps identity refusal and raw AT_REMOVEDIR result
+separate locally; only direct `removeErr == unix.ENOTEMPTY` after matching-A
+validation is intentional retention. Parent/raw/root completion causes remain
+separate and forbid retry even when they match a collision sentinel. No generic
+joined-sentinel classifier. Focused A/B race before this refinement passed48.478s
+(`receipts-083/group-ab-focused-race.json`); refinement requires its own controls.
+
+084 refinement Green: actual pure collision retries once; 128 matching-A
+ENOTEMPTY collisions stop at the bound with an inspectable collision cause;
+actual parent/root Close errors (including a completion also matching ErrExist)
+stop after one attempt/one completion. Every retained blocker tree compares to
+its actor-created pre-cleanup identity/bytes. Focused normal0.988s development
+output; original race receipt `group-b-084-allocator-race.json` package2.273s
+exit0 includes original compound public Publish A/B regression.

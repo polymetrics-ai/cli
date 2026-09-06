@@ -1463,3 +1463,29 @@ no child/session or new GREEN is claimed. External test-content and overlay hash
 virtual added paths, tested production SHA, and transcription versus original-tool
 receipt classes are explicit in the manifest. The 119 rows preserve six audited
 findings and existing variants; they are not 119 new defects or test requirements.
+
+## Firstmate083 coordinated implementation — current TDD plan
+
+Authority: complete Firstmate083 brief and adopted design079 (hash recorded in
+CP11-ACCEPTANCE.json). Owner Astra/medium; no child roles. Intake7459a0e9,
+behavior/test/dependency7481d177. No competing no-mistakes run.
+GSD sources resolved for discuss/plan/execute/verify; generated plan-phase --tdd
+and execute-phase prompts read. Completed079 discussion/design is reused.
+Documented inline Codex execution applies because this canonical assignment
+forbids additional roles; prompt generation itself is not verification.
+Required Go how-to/testing/error-handling/security/safety/design-patterns/
+structs-interfaces/lint guidance and existing delivery routing apply.
+
+| Group | Findings / affected symbols | Expected behavior and intended RED | Planned verification |
+| --- | --- | --- | --- |
+| A | 03/04, durable/allocation witness helpers | Retained pre-cut identities/bytes/history reject readable replacement root, equal-byte different inode, actual B→C, lost history and wrong phase; preserve original oracle counterexample as RED | `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestCP11Expected' -v`, then focused race |
+| B | 01/02, openFile result, record writer and three callers, CreateTemp/classifiers | Actual created fd survives parent completion; owned incomplete bytes removed, complete authority retained, compound collision returned; desired existing probe cases RED before production edits | focused ownership/allocator normal/race, all seven phase semantics and valid state classes |
+| C | 03/04/06, G2/DM/PT/RE callers and narrow fault seams | All stipulated allocation/cut/compound/resource-instance assertions use independent expected state; explicit missing proof remains open until actual assertions pass | proportional selected normal/race, exact receipts |
+| D | 05/all, claim labels/Atlas/evidence/readiness check | Actual initial-recovery label; immutable baseline catches omitted IDs, stale receipts and fake/zero execution; semantic review still required | negative gate fixtures, stable final whole package normal/race, required supplementary and original-range lint |
+
+Red: pending new Group A oracle regression execution; original073 RED receipts
+remain immutable, not claimed as current executions.
+Green: pending. No repaired capability or CP11 acceptance is claimed.
+Production/test changes begin only after this plan record. Each completed command
+will retain exact source/test/dependency binding and raw results. The 119 existing
+rows and all prior resolved protections remain accountable by manifest reference.
