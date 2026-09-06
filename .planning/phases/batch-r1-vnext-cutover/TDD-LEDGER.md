@@ -963,10 +963,10 @@ permit skipping RED/GREEN, verification, or the fresh Astra review.
 | Group | Audited IDs | Required pre-edit RED or negative control | GREEN acceptance boundary | State |
 | --- | --- | --- | --- | --- |
 | 1 | F-04-R, F-08-R | **Executed:** F-04's bounded original-behaviour control observed FIFO block and A/B symlink/directory mixing; preserved without rerun in `GROUP1-F04-ORIGINAL-CONTROL.md`. No separately executed pre-edit F-08 pre-flock control was found. The recorded pre-flock gate ran after its test-only readiness/signal instrumentation and is repair-harness proof only; it must not be labelled a pre-edit RED. | **GREEN 2026-09-06:** retained descriptor yields coherent A identity/bytes across FIFO/symlink/directory B; exact retained-directory `EWOULDBLOCK` acknowledgement precedes real-main SIGINT/SIGTERM; direct waits, no-success/state and retry hold. Normal/race focused selector exit 0 / package 9.198s/15.924s in `GROUP1-EVIDENCE.md`. | Complete before Group 2 |
-| 2 | F-03-A, F-03-B, F-03-C | **Executed RED:** `GROUP2-F03-ORIGINAL-CONTROLS.md` records the 2.687s bounded actual controls: post-record failure strands prepared-only authority; real definitions/connector close and staged-file primary/completion paths flatten a typed cause, while missing-control open plus parent close loses the absence cause; temporary and quarantine A→empty-B allocations delete B. | Complete identity-proven preparation is retained or removed coherently; meaningful typed causes survive public consumers including absence handling; only owned A is cleaned and B/A state survives empty/nonempty cases. | Focused GREEN recorded; steer-058 dynamic matrix pending |
-| 3 | F-02-P, F-05/F-06-P | Public nested quarantine replacement/opened-child failure lacks complete resource proof; caller/cut matrix lacks raw control/root/private-authority identity and required B variants. | Nested public Recover/Prune preserves accounted residue/ownership and bounded descriptors; all named cuts assert allowed controls, root/content/private graph before restoration, accurate variants, no-clobber and fresh retry. | Planned after Group 2 |
+| 2 | F-03-A, F-03-B, F-03-C | **Executed RED:** `GROUP2-F03-ORIGINAL-CONTROLS.md` records the 2.687s bounded actual controls: post-record failure strands prepared-only authority; real definitions/connector close and staged-file primary/completion paths flatten a typed cause, while missing-control open plus parent close loses the absence cause; temporary and quarantine A→empty-B allocations delete B. | Complete identity-proven preparation is retained or removed coherently; meaningful typed causes survive public consumers including absence handling; only owned A is cleaned and B/A state survives empty/nonempty directory cases. | Dynamic matrix executed at `54746816`; fresh review still pending |
+| 3 | F-02-P, F-05/F-06-P | Public nested quarantine replacement/opened-child failure lacks complete resource proof; caller/cut matrix lacks raw control/root/private-authority identity and required B variants. | Nested public Recover/Prune preserves accounted residue/ownership and bounded descriptors; all named cuts assert allowed controls, root/content/private graph before restoration, accurate variants, no-clobber and fresh retry. | Authorized for execution after Group 2 |
 
-The exact GSD prompts for issue 4427 were generated/read. `doctor` has the documented unrelated missing issue-122 prompt; compatible Pi role execution is unavailable under the single-writer contract, so this ledger records the permitted inline fallback. Each row is unexecuted until exact command/output/duration and tested identity are appended.
+The exact GSD prompts for issue 4427 were generated/read. `doctor` has the documented unrelated missing issue-122 prompt; compatible Pi role execution is unavailable under the single-writer contract, so this ledger records the permitted inline fallback. The table is the plan-time state; later exact command/output/duration and test identity addenda supersede its execution state.
 
 ### 2026-09-06 — CP11 Group 2 intended-behaviour RED (steer 055)
 
@@ -1031,3 +1031,29 @@ physical `11540/11549/11563/11577` receipts remain associated with their
 earlier two-class source state. See `GROUP2-F03-REPAIR-EVIDENCE.md` for full
 selectors, source-state limits, and all assertions. This closes the F-03
 matrix, not CP11 or the final Group 2 review/static boundary.
+
+### 2026-09-06 — Group 2 bind; Group 3 proof-only TDD record (steer 061)
+
+- **Bound Group 2 GREEN:** exact checkpoint `54746816735a964d0177a7a64646d29561f08180`
+  contains the F-03 matrix implementation/test/evidence result stated above.
+  The interim `10897` and four `11540/11549/11563/11577` receipts remain
+  correctly limited to their earlier source states. F-03-C's B is a replaced
+  directory (empty or with foreign bytes), not a regular file.
+- **F-02-P proof control:** a new public Recover/Prune fixture must traverse
+  actual root quarantine into nested owned stage/generation removal, replace a
+  nested child after its identity observation and before open, and fault the
+  real opened child identity. It must observe A/B identity/type/bytes at
+  public and quarantine paths before restoration, account for root/quarantine/
+  child/lock descriptors without GC/finalizer credit, state permitted earlier
+  sibling removal and residue, then prove fixture-only restoration and bounded
+  fresh recovery/retry. This is an oracle-completeness test; a passing old
+  production path is not a fabricated RED.
+- **F-05/F-06-P proof control:** each mandatory caller/cut must retain
+  descriptor-safe raw control bytes/type/inode plus decoded state, actual
+  selected/rejected root content, and real transaction/prepared/phase/anchor
+  identity before any restoration. Initial Publish normally creates private
+  transaction authority; prior documentation asserting otherwise is corrected.
+  Legitimate new controls/phase/capture state are compared as real-cut
+  advancement, not against an obsolete pre-Publish inode. Empty and nonempty
+  replacement directories B are required for each unheld destructive
+  generation row; held-reader rows retain empty B for contention.

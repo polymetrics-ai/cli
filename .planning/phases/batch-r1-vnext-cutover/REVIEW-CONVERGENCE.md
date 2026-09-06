@@ -1096,12 +1096,14 @@ of this later repair tree.
 | Audit ID | Current disposition |
 | --- | --- |
 | F-03-A, F-03-B, F-03-C | The coordinated Group 2 repair/proof slice addresses the named ownership/error roots: complete prepared authority is retained before later sync frontiers; meaningful compound causes have direct consumers; and temporary/quarantine cleanup stays identity-bound to A. The resource-backed current results above are the response evidence. A new independent exact-SHA review must still accept or reject them. |
-| F-04-R | Open: the later durable-matrix witness helper still needs a safe opened-object observation contract and bounded hostile substitution control. |
+| F-04-R | Provisionally remediated after the e77 review by `69246943`: the durable-matrix file/directory witness holds the checked descriptor, and the bounded FIFO/symlink/directory post-open child control is recorded in `GROUP1-EVIDENCE.md`. The audit predates that commit; fresh exact-SHA review still decides acceptance. |
 | F-05/F-06-P | Open: named caller/cut proof needs exact selected control bytes/inodes, roots/content, and private authority graph before restoration; the false no-private-authority explanation needs correction. |
 | F-02-P | Open: add the actual public nested stage/generation quarantine recursion refusal/FD-ownership proof; no remaining leak is alleged. |
-| F-08-R | Open: readiness must acknowledge a real conflicting directory flock and non-consuming tests must assert the exact signal sent. |
+| F-08-R | Provisionally remediated after the e77 review by `69246943`: `LockContention` fires only after actual `LOCK_NB` contention on the retained descriptor, the child proves directory-open is insufficient before release, and non-consuming status compares the exact sent signal. `GROUP1-EVIDENCE.md` records bounded normal/race results; fresh exact-SHA review still decides acceptance. |
 
 These are finding dispositions, not a finding cap, scope reduction, or an
 authorization for CP12, no-mistakes, publication, provider work, release, or
-merge. The next coordinated Group 1/3 proof-and-repair plan begins only after
-this committed Group 2 slice.
+merge. The historical e77 reports are the frozen diagnosis, not a renewed
+review event for later Group 1/2 commits. Group 3 alone is the remaining
+authorized execution group; the resulting coherent tree still requires fresh
+independent whole-range exact-SHA review.

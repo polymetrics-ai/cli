@@ -47,10 +47,13 @@ invented production RED.
 | Stage cleanup | `TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup`: real owned-stage recovery checks its actual stage ownership contract, refuses replacement, and keeps selected CURRENT/no JOURNAL unchanged. No generation lease is invented for this row. |
 | Non-destructive Check | `TestVNextGenerationPublisherCheckIsReadOnly`: Check preserves CURRENT bytes, leaves stale generation, and creates/removes no JOURNAL. |
 
-Each matrix fixture records CURRENT/JOURNAL from decoded durable bytes at the
-interruption or refusal before restoring only test-owned A/B names. No private
-repair authority is created in these ordinary publication fixtures; the absence
-of a repair transaction is therefore preserved rather than fabricated.
+Each matrix fixture records decoded CURRENT/JOURNAL values at the interruption
+or refusal before restoring only test-owned A/B names. The former claim that
+ordinary Publish creates no private repair authority is corrected: its normal
+publication fixtures retain real transaction authorities (the audited probe
+observed six). Group 3 must add descriptor-safe raw control and real
+transaction/prepared/phase/anchor identity witnesses before it can claim the
+caller/cut proof complete.
 
 ## F-03 public recovery caller completion
 

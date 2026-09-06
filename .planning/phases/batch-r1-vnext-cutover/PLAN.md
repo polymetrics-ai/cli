@@ -1214,3 +1214,45 @@ F-03 dynamic matrix only. It does not grant CP11 acceptance or replace Group
 ### Retained invariants
 
 No-replace B-01 A/B/C/public-C, strict B-02 bootstrap, bounded metadata/live descriptors, capture-open identities, validated returned directory, directory lifetime lock plus lease integrity, and F-07 historical provenance stay protected. A passing defect-reproduction probe is a RED witness, not GREEN; proof strengthening never fabricates a production defect.
+
+### CP11 Group 2 checkpoint binding and Group 3 execution — steer 061
+
+- **Checkpoint, not acceptance:** `54746816735a964d0177a7a64646d29561f08180`
+  (`fix(connectorgen): complete CP11 Group 2 authority proof`) is the coherent
+  Group 2 source/test/evidence checkpoint. It follows `a9924626` and
+  `8d133782`; its behavior paths are
+  `vnext_publication.go`, `vnext_publication_repair.go`,
+  `vnext_publication_dir.go`, and
+  `vnext_publication_group2_original_test.go`. The corresponding canonical
+  records are this plan, `TDD-LEDGER.md`, `VERIFICATION.md`,
+  `REVIEW-CONVERGENCE.md`, and `GROUP2-F03-REPAIR-EVIDENCE.md`.
+- **Bound execution record:** the Group 2 test-only seams are
+  `vNextPublicationControlRecordHooks`, post-record/transaction/connector
+  sync points, the opened-file-after-parent-close seam, and read-control
+  completion/close seams; nil production paths stay direct descriptor calls.
+  The current F-03 matrix results are A normal `20.804s`, its three race state
+  classes `10.200s`/`10.089s`/`11.507s`, base normal/race `2.617s`/`4.095s`,
+  and B/C normal/race `8.442s`/`11.749s`, all `ok`. The earlier physical
+  `10897` full-package `271.387s` and `11540/11549/11563/11577` two-class
+  receipts remain historical source-state evidence, never results for this
+  checkpoint. F-03-C's actual interference is a replacement **directory** B,
+  empty or holding foreign bytes—not a regular-file substitution.
+- **Historical diagnosis, not reinvocation:** the e77 Astra report and ledger
+  audit remain the fixed seven-entry diagnosis through `e77cd390`; they are
+  not a new review of `a9924626` or this checkpoint. Group 1's post-e77
+  `69246943` witness/contention changes remain completed execution evidence.
+  F-03-A/B/C, F-04-R, and F-08-R await only the required fresh whole-range
+  exact-SHA review; they are not restarted as new intake.
+- **Authorized Group 3 execution:** implement only F-02-P and F-05/F-06-P.
+  Use actual public Recover→owned-stage cleanup and Prune traversal after
+  root quarantine to observe nested post-identity/pre-open A→B replacement
+  and an opened nested-child identity failure, accounting separately for
+  root, quarantine, child, lock, bounded descriptors, allowed prior sibling
+  deletion, and residue. Extend each listed durable caller/cut with
+  descriptor-safe raw CURRENT/JOURNAL bytes/type/inode, logical state,
+  selected/rejected roots/content, and the real retained
+  transaction/prepared/phase/anchor graph before fixture restoration. Preserve
+  only fixture-owned interference, public-C/no-replace, legitimate selection
+  advance, and bounded fresh recovery/retry. These are proof obligations:
+  do not manufacture a production RED when an observation-only test passes on
+  prior production.

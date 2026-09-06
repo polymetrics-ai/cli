@@ -771,3 +771,23 @@ normal/race `8.442s`/`11.749s`, all `ok`. Earlier complete physical
 `11540/11549/11563/11577` receipts are preserved as the prior two-class source
 state. The F-03 dynamic proof is complete; Group 2's source/static/final-review
 and CP11 acceptance gates remain open.
+
+### CP11 Group 2 execution binding; Group 3 verification boundary — steer 061
+
+- **Exact completed checkpoint:** `54746816735a964d0177a7a64646d29561f08180`
+  binds the current F-03 source/test/evidence tree. It is not a new independent
+  review or CP11 acceptance. The unchanged Group 1 F-04-R/F-08-R normal/race
+  results (package `9.198s`/`15.924s`) remain their existing post-e77 evidence;
+  they were not rerun solely for this record.
+- **Accurate F-03-C wording:** the executed B substitutions are directories—an
+  empty directory and a directory carrying foreign bytes. The preserved
+  `10897` full-package and `11540/11549/11563/11577` receipt files describe
+  only the recorded earlier source states.
+- **Next verification:** Group 3 must add proportional focused normal and race
+  coverage only for the changed public nested-quarantine and durable-witness
+  tests. Its oracle must observe raw control/object identities and real private
+  authority before restoring fixture-owned interference; it must not promise
+  all-or-nothing recursive deletion or automatic restoration. After Group 3,
+  execute the specified coherent current-source package/race/static boundary
+  and submit the whole original range plus final SHA to fresh independent
+  Astra/xhigh review. No e77 report is reused as that review.
