@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -13,18 +15,52 @@ type sourceLaneReason struct {
 	Text string `json:"text"`
 }
 
+type sourceLaneSchemaRole string
+
+const (
+	sourceLaneSchemaRequest  sourceLaneSchemaRole = "request"
+	sourceLaneSchemaResponse sourceLaneSchemaRole = "response"
+	sourceLaneSchemaRecord   sourceLaneSchemaRole = "record"
+)
+
+type sourceLaneFieldTargetKind string
+
+const (
+	sourceLaneFieldSchema    sourceLaneFieldTargetKind = "schema"
+	sourceLaneFieldConfig    sourceLaneFieldTargetKind = "config"
+	sourceLaneFieldParameter sourceLaneFieldTargetKind = "parameter"
+)
+
+type sourceLaneFieldTarget struct {
+	Kind    sourceLaneFieldTargetKind `json:"kind"`
+	Pointer *string                   `json:"pointer"`
+}
+
+type sourceLaneFieldMapping struct {
+	Source sourceFactRef         `json:"source"`
+	Target sourceLaneFieldTarget `json:"target"`
+}
+
+type sourceLaneGraphQLRefs struct {
+	OperationName *sourceFactRef `json:"operation_name,omitempty"`
+	Document      *sourceFactRef `json:"document,omitempty"`
+	RequestSchema *sourceFactRef `json:"request_schema,omitempty"`
+}
+
 type sourceLaneTargetRef struct {
-	Kind             string `json:"kind"`
-	Connector        string `json:"connector"`
-	ID               string `json:"id"`
-	Lane             string `json:"lane"`
-	Artifact         string `json:"artifact"`
-	Pointer          string `json:"pointer"`
-	ArtifactSHA256   string `json:"artifact_sha256"`
-	CanonicalID      string `json:"canonical_id"`
-	CanonicalPointer string `json:"canonical_pointer"`
-	Generation       string `json:"generation"`
-	SchemaRole       string `json:"schema_role"`
+	Kind             string                   `json:"kind"`
+	Connector        string                   `json:"connector"`
+	ID               string                   `json:"id"`
+	Lane             string                   `json:"lane"`
+	Artifact         string                   `json:"artifact"`
+	Pointer          string                   `json:"pointer"`
+	ArtifactSHA256   string                   `json:"artifact_sha256"`
+	CanonicalID      string                   `json:"canonical_id"`
+	CanonicalPointer string                   `json:"canonical_pointer"`
+	Generation       string                   `json:"generation"`
+	SchemaRole       sourceLaneSchemaRole     `json:"schema_role"`
+	SourceSchema     *sourceFactRef           `json:"source_schema,omitempty"`
+	FieldMappings    []sourceLaneFieldMapping `json:"field_mappings,omitempty"`
 }
 
 type sourceLaneCell struct {
@@ -43,15 +79,16 @@ type sourceLaneCell struct {
 }
 
 type sourceSemanticAnnotation struct {
-	Key                  sourceOperationKey    `json:"key"`
-	Semantics            string                `json:"semantics"`
-	Citation             sourceFactRef         `json:"citation"`
-	Clause               string                `json:"clause"`
-	FoundationGap        string                `json:"foundation_gap"`
-	AtlasID              string                `json:"atlas_id"`
-	DecisionRefs         []string              `json:"decision_refs"`
-	IntendedBindings     []sourceLaneTargetRef `json:"intended_bindings"`
-	MaterializedBindings []sourceLaneTargetRef `json:"materialized_bindings"`
+	GraphQL              *sourceLaneGraphQLRefs `json:"graphql,omitempty"`
+	Key                  sourceOperationKey     `json:"key"`
+	Semantics            string                 `json:"semantics"`
+	Citation             sourceFactRef          `json:"citation"`
+	Clause               string                 `json:"clause"`
+	FoundationGap        string                 `json:"foundation_gap"`
+	AtlasID              string                 `json:"atlas_id"`
+	DecisionRefs         []string               `json:"decision_refs"`
+	IntendedBindings     []sourceLaneTargetRef  `json:"intended_bindings"`
+	MaterializedBindings []sourceLaneTargetRef  `json:"materialized_bindings"`
 }
 
 // classifySourceLanes treats source applicability separately from artifact and
@@ -550,4 +587,220 @@ func sourceRegistrationDemand(facts sourceFacts) (sourceFactRef, bool) {
 		}
 	}
 	return sourceFactRef{}, false
+}
+
+// sourceLaneProjectionPointer validates syntax only. The binding owner resolves
+// each coordinate against the exact selected schema or parameter container.
+func sourceLaneProjectionPointer(pointer string) bool {
+	if pointer == "" {
+		return true
+	}
+	if !strings.HasPrefix(pointer, "/") {
+		return false
+	}
+	depth := 0
+	for i := 0; i < len(pointer); i++ {
+		if pointer[i] == '/' {
+			depth++
+			if depth > 256 {
+				return false
+			}
+		}
+		if pointer[i] == '~' {
+			if i+1 == len(pointer) || (pointer[i+1] != '0' && pointer[i+1] != '1') {
+				return false
+			}
+			i++
+		}
+	}
+	return true
+}
+
+func sourceLaneJSONFactRefShape(ref sourceFactRef) bool {
+	return ref.DocumentID != "" && ref.Section == "" && ref.Part == "" &&
+		sourceLaneProjectionPointer(ref.Pointer) && sourceLaneDigest(ref.ValueSHA256)
+}
+
+func sourceLaneGraphQLRefsShape(refs *sourceLaneGraphQLRefs) bool {
+	if refs == nil {
+		return true
+	}
+	for _, ref := range []*sourceFactRef{refs.OperationName, refs.Document, refs.RequestSchema} {
+		if ref != nil && !sourceLaneJSONFactRefShape(*ref) {
+			return false
+		}
+	}
+	return true
+}
+
+// sourceLaneTargetRefShape checks the closed representation, not effective
+// source ownership, target existence or executable projection semantics.
+func sourceLaneTargetRefShape(ref sourceLaneTargetRef) error {
+	switch ref.Kind {
+	case "operation", "write", "stream", "command", "schema", "canonical_operation", "sync_transport":
+	default:
+		return fmt.Errorf("unknown target kind")
+	}
+	lane := false
+	for _, name := range sourceLaneNames() {
+		lane = lane || ref.Lane == name
+	}
+	if !lane {
+		return fmt.Errorf("unknown target lane")
+	}
+	switch ref.SchemaRole {
+	case "", sourceLaneSchemaRequest, sourceLaneSchemaResponse, sourceLaneSchemaRecord:
+	default:
+		return fmt.Errorf("unknown schema role")
+	}
+	if ref.Kind == "sync_transport" && (ref.SchemaRole != "" || ref.SourceSchema != nil || len(ref.FieldMappings) > 0) {
+		return fmt.Errorf("transport descriptor has schema projection")
+	}
+	if ref.SourceSchema != nil && (!sourceLaneJSONFactRefShape(*ref.SourceSchema) || ref.SchemaRole == "") {
+		return fmt.Errorf("invalid source schema citation or role")
+	}
+	type coordinate struct{ owner, pointer string }
+	sources := make([]coordinate, 0, len(ref.FieldMappings))
+	targets := make([]coordinate, 0, len(ref.FieldMappings))
+	for _, mapping := range ref.FieldMappings {
+		if !sourceLaneJSONFactRefShape(mapping.Source) || mapping.Target.Pointer == nil || !sourceLaneProjectionPointer(*mapping.Target.Pointer) {
+			return fmt.Errorf("invalid field citation or target pointer")
+		}
+		pointer := *mapping.Target.Pointer
+		switch mapping.Target.Kind {
+		case sourceLaneFieldSchema:
+			if ref.SchemaRole == "" {
+				return fmt.Errorf("schema field has no role")
+			}
+		case sourceLaneFieldConfig:
+			if pointer == "" {
+				return fmt.Errorf("config root is not a field binding")
+			}
+		case sourceLaneFieldParameter:
+			parts := strings.Split(pointer, "/")
+			if len(parts) != 3 || (parts[1] != "parameters" && parts[1] != "pagination_parameters") {
+				return fmt.Errorf("invalid parameter coordinate")
+			}
+			index := parts[2]
+			if index == "" || (len(index) > 1 && index[0] == '0') {
+				return fmt.Errorf("invalid parameter index")
+			}
+			for _, digit := range index {
+				if digit < '0' || digit > '9' {
+					return fmt.Errorf("invalid parameter index")
+				}
+			}
+		default:
+			return fmt.Errorf("unknown field target kind")
+		}
+		sources = append(sources, coordinate{mapping.Source.DocumentID, mapping.Source.Pointer})
+		targets = append(targets, coordinate{string(mapping.Target.Kind), pointer})
+	}
+	for _, coordinates := range [][]coordinate{sources, targets} {
+		sort.Slice(coordinates, func(i, j int) bool {
+			if coordinates[i].owner != coordinates[j].owner {
+				return coordinates[i].owner < coordinates[j].owner
+			}
+			return coordinates[i].pointer < coordinates[j].pointer
+		})
+		seen := map[coordinate]bool{}
+		for _, current := range coordinates {
+			if seen[current] {
+				return fmt.Errorf("duplicate conflicting or overlapping field mappings")
+			}
+			for i := range current.pointer {
+				if current.pointer[i] == '/' && seen[coordinate{current.owner, current.pointer[:i]}] {
+					return fmt.Errorf("duplicate conflicting or overlapping field mappings")
+				}
+			}
+			seen[current] = true
+		}
+	}
+	return nil
+}
+
+// canonicalSourceLaneTargetRef returns independent pointed values and sorted
+// mapping content. Call shape validation first; normalization never hides bad
+// duplicate/conflicting claims by deduplicating them.
+func canonicalSourceLaneTargetRef(ref sourceLaneTargetRef) sourceLaneTargetRef {
+	out := ref
+	if ref.SourceSchema != nil {
+		value := *ref.SourceSchema
+		out.SourceSchema = &value
+	}
+	out.FieldMappings = nil
+	if len(ref.FieldMappings) > 0 {
+		out.FieldMappings = append([]sourceLaneFieldMapping(nil), ref.FieldMappings...)
+		for i := range out.FieldMappings {
+			if ref.FieldMappings[i].Target.Pointer != nil {
+				value := *ref.FieldMappings[i].Target.Pointer
+				out.FieldMappings[i].Target.Pointer = &value
+			}
+		}
+		sort.Slice(out.FieldMappings, func(i, j int) bool {
+			a, b := out.FieldMappings[i], out.FieldMappings[j]
+			ap, bp := "", ""
+			if a.Target.Pointer != nil {
+				ap = *a.Target.Pointer
+			}
+			if b.Target.Pointer != nil {
+				bp = *b.Target.Pointer
+			}
+			av := []string{a.Source.DocumentID, a.Source.Pointer, a.Source.ValueSHA256, a.Source.Section, a.Source.Part, string(a.Target.Kind), ap}
+			bv := []string{b.Source.DocumentID, b.Source.Pointer, b.Source.ValueSHA256, b.Source.Section, b.Source.Part, string(b.Target.Kind), bp}
+			for n := range av {
+				if av[n] != bv[n] {
+					return av[n] < bv[n]
+				}
+			}
+			return false
+		})
+	}
+	return out
+}
+
+func sourceLaneTargetRefEqual(a, b sourceLaneTargetRef) bool {
+	if sourceLaneTargetRefShape(a) != nil || sourceLaneTargetRefShape(b) != nil {
+		return false
+	}
+	return reflect.DeepEqual(canonicalSourceLaneTargetRef(a), canonicalSourceLaneTargetRef(b))
+}
+
+// Citation coordinates cannot collapse JSON null/missing pointers into a
+// legitimate root pointer. Optional *sourceFactRef members still accept null.
+func (ref *sourceFactRef) UnmarshalJSON(raw []byte) error {
+	type plain sourceFactRef
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &fields); err != nil {
+		return err
+	}
+	for _, name := range []string{"document_id", "pointer", "value_sha256"} {
+		value, present := fields[name]
+		if !present || bytes.Equal(bytes.TrimSpace(value), []byte("null")) {
+			return fmt.Errorf("missing or null citation coordinate")
+		}
+	}
+	for _, name := range []string{"section", "part"} {
+		if value, present := fields[name]; present && bytes.Equal(bytes.TrimSpace(value), []byte("null")) {
+			return fmt.Errorf("null rendered citation coordinate")
+		}
+	}
+	var value plain
+	if err := decodeStrictJSON(raw, &value); err != nil {
+		return err
+	}
+	*ref = sourceFactRef(value)
+	return nil
+}
+
+func (role *sourceLaneSchemaRole) UnmarshalJSON(raw []byte) error {
+	if bytes.Equal(bytes.TrimSpace(raw), []byte("null")) {
+		return fmt.Errorf("null schema role")
+	}
+	var value string
+	if err := json.Unmarshal(raw, &value); err != nil {
+		return err
+	}
+	*role = sourceLaneSchemaRole(value)
+	return nil
 }

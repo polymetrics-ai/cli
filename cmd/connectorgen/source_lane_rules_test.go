@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 )
 
@@ -267,5 +268,188 @@ func TestSourceLaneReceiverDemandClauseControls(t *testing.T) {
 				t.Fatalf("wrong source witness %+v", ref)
 			}
 		})
+	}
+}
+
+func sourceLaneProjectionFixture() sourceLaneTargetRef {
+	a, b := "/properties/a", "/properties/b"
+	return sourceLaneTargetRef{Kind: "write", Connector: "fixture", ID: "create", Lane: "direct_write", SchemaRole: sourceLaneSchemaRequest,
+		SourceSchema: &sourceFactRef{DocumentID: "fixture:source", Pointer: "/request/schema", ValueSHA256: strings.Repeat("a", 64)},
+		FieldMappings: []sourceLaneFieldMapping{
+			{Source: sourceFactRef{DocumentID: "fixture:source", Pointer: "/request/schema/properties/a", ValueSHA256: strings.Repeat("b", 64)}, Target: sourceLaneFieldTarget{Kind: sourceLaneFieldSchema, Pointer: &a}},
+			{Source: sourceFactRef{DocumentID: "fixture:source", Pointer: "/request/schema/properties/b", ValueSHA256: strings.Repeat("c", 64)}, Target: sourceLaneFieldTarget{Kind: sourceLaneFieldSchema, Pointer: &b}},
+		}}
+}
+
+func TestSourceLaneTargetRefValueIdentity(t *testing.T) {
+	original := sourceLaneProjectionFixture()
+	for _, tc := range []struct {
+		name   string
+		change func(*sourceLaneTargetRef)
+		equal  bool
+	}{
+		{"independent pointers", func(*sourceLaneTargetRef) {}, true},
+		{"mapping order", func(r *sourceLaneTargetRef) {
+			r.FieldMappings[0], r.FieldMappings[1] = r.FieldMappings[1], r.FieldMappings[0]
+		}, true},
+		{"source schema digest", func(r *sourceLaneTargetRef) { r.SourceSchema.ValueSHA256 = strings.Repeat("d", 64) }, false},
+		{"source schema pointer", func(r *sourceLaneTargetRef) { r.SourceSchema.Pointer = "/other" }, false},
+		{"role", func(r *sourceLaneTargetRef) { r.SchemaRole = sourceLaneSchemaRecord }, false},
+		{"target kind", func(r *sourceLaneTargetRef) { r.FieldMappings[0].Target.Kind = sourceLaneFieldConfig }, false},
+		{"target pointer", func(r *sourceLaneTargetRef) { *r.FieldMappings[0].Target.Pointer = "/properties/other" }, false},
+		{"mapping source", func(r *sourceLaneTargetRef) { r.FieldMappings[0].Source.Pointer = "/other" }, false},
+		{"mapping digest", func(r *sourceLaneTargetRef) { r.FieldMappings[0].Source.ValueSHA256 = strings.Repeat("d", 64) }, false},
+		{"canonical identity", func(r *sourceLaneTargetRef) { r.CanonicalID = "other" }, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			other := sourceLaneProjectionFixture()
+			tc.change(&other)
+			if got := sourceLaneTargetRefEqual(original, other); got != tc.equal {
+				t.Fatalf("value identity=%v want%v", got, tc.equal)
+			}
+		})
+	}
+	empty := original
+	empty.FieldMappings = nil
+	other := empty
+	other.FieldMappings = []sourceLaneFieldMapping{}
+	if !sourceLaneTargetRefEqual(empty, other) {
+		t.Fatal("nil/empty mapping lists differ")
+	}
+	copy := canonicalSourceLaneTargetRef(original)
+	*copy.FieldMappings[0].Target.Pointer = "/changed"
+	copy.SourceSchema.Pointer = "/changed"
+	if original.SourceSchema.Pointer != "/request/schema" || *original.FieldMappings[0].Target.Pointer != "/properties/a" {
+		t.Fatal("canonical copy retained caller-owned pointers")
+	}
+}
+
+func TestSourceLaneProjectionShape(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		change func(*sourceLaneTargetRef)
+		valid  bool
+	}{
+		{"valid", func(*sourceLaneTargetRef) {}, true},
+		{"root schema", func(r *sourceLaneTargetRef) {
+			r.FieldMappings = r.FieldMappings[:1]
+			*r.FieldMappings[0].Target.Pointer = ""
+		}, true},
+		{"escaped fields", func(r *sourceLaneTargetRef) { *r.FieldMappings[0].Target.Pointer = "/properties/a~1b~0c" }, true},
+		{"missing pointer", func(r *sourceLaneTargetRef) { r.FieldMappings[0].Target.Pointer = nil }, false},
+		{"unknown tag", func(r *sourceLaneTargetRef) { r.FieldMappings[0].Target.Kind = "other" }, false},
+		{"bad escape", func(r *sourceLaneTargetRef) { *r.FieldMappings[0].Target.Pointer = "/properties/a~2b" }, false},
+		{"parameter index alias", func(r *sourceLaneTargetRef) {
+			r.FieldMappings[0].Target.Kind = sourceLaneFieldParameter
+			*r.FieldMappings[0].Target.Pointer = "/parameters/00"
+		}, false},
+		{"parameter coordinate", func(r *sourceLaneTargetRef) {
+			r.FieldMappings[0].Target.Kind = sourceLaneFieldParameter
+			*r.FieldMappings[0].Target.Pointer = "/parameters/0"
+		}, true},
+		{"config root", func(r *sourceLaneTargetRef) {
+			r.FieldMappings[0].Target.Kind = sourceLaneFieldConfig
+			*r.FieldMappings[0].Target.Pointer = ""
+		}, false},
+		{"duplicate", func(r *sourceLaneTargetRef) { r.FieldMappings = append(r.FieldMappings, r.FieldMappings[0]) }, false},
+		{"same target different source", func(r *sourceLaneTargetRef) { *r.FieldMappings[1].Target.Pointer = *r.FieldMappings[0].Target.Pointer }, false},
+		{"same source different target", func(r *sourceLaneTargetRef) { r.FieldMappings[1].Source = r.FieldMappings[0].Source }, false},
+		{"target overlap", func(r *sourceLaneTargetRef) { *r.FieldMappings[1].Target.Pointer = "/properties/a/properties/b" }, false},
+		{"source overlap", func(r *sourceLaneTargetRef) {
+			r.FieldMappings[1].Source.Pointer = r.FieldMappings[0].Source.Pointer + "/properties/b"
+		}, false},
+		{"nonadjacent target overlap", func(r *sourceLaneTargetRef) {
+			third := r.FieldMappings[1]
+			third.Source.Pointer = "/third"
+			p := "/properties/a/properties/b"
+			third.Target.Pointer = &p
+			r.FieldMappings = append(r.FieldMappings, third)
+			*r.FieldMappings[1].Target.Pointer = "/properties/a-other"
+		}, false},
+		{"transport projection", func(r *sourceLaneTargetRef) { r.Kind = "sync_transport" }, false},
+		{"missing role", func(r *sourceLaneTargetRef) { r.SchemaRole = "" }, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			ref := sourceLaneProjectionFixture()
+			tc.change(&ref)
+			if got := sourceLaneTargetRefShape(ref) == nil; got != tc.valid {
+				t.Fatalf("shape valid=%v want%v", got, tc.valid)
+			}
+		})
+	}
+}
+
+func TestSourceLaneProjectionJSONShapes(t *testing.T) {
+	base := sourceLaneProjectionFixture()
+	for _, tc := range []struct {
+		name  string
+		edit  func(map[string]any)
+		valid bool
+	}{
+		{"new optional absent", func(m map[string]any) { delete(m, "source_schema"); delete(m, "field_mappings") }, true},
+		{"new optional null", func(m map[string]any) { m["source_schema"] = nil; m["field_mappings"] = nil }, true},
+		{"empty mapping list", func(m map[string]any) { m["field_mappings"] = []any{} }, true},
+		{"empty citation", func(m map[string]any) { m["source_schema"] = map[string]any{} }, false},
+		{"citation pointer null", func(m map[string]any) { m["source_schema"].(map[string]any)["pointer"] = nil }, false},
+		{"citation pointer missing", func(m map[string]any) { delete(m["source_schema"].(map[string]any), "pointer") }, false},
+		{"role null", func(m map[string]any) { m["schema_role"] = nil }, false},
+		{"target pointer null", func(m map[string]any) {
+			m["field_mappings"].([]any)[0].(map[string]any)["target"].(map[string]any)["pointer"] = nil
+		}, false},
+		{"target pointer missing", func(m map[string]any) {
+			delete(m["field_mappings"].([]any)[0].(map[string]any)["target"].(map[string]any), "pointer")
+		}, false},
+		{"target null", func(m map[string]any) { m["field_mappings"].([]any)[0].(map[string]any)["target"] = nil }, false},
+		{"unknown field", func(m map[string]any) {
+			m["field_mappings"].([]any)[0].(map[string]any)["target"].(map[string]any)["extra"] = true
+		}, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			raw, _ := json.Marshal(base)
+			var doc map[string]any
+			if err := json.Unmarshal(raw, &doc); err != nil {
+				t.Fatal(err)
+			}
+			tc.edit(doc)
+			raw, _ = json.Marshal(doc)
+			var ref sourceLaneTargetRef
+			err := decodeStrictJSON(raw, &ref)
+			if err == nil {
+				err = sourceLaneTargetRefShape(ref)
+			}
+			if (err == nil) != tc.valid {
+				t.Fatalf("JSON shape accepted=%v want%v: %s (%v)", err == nil, tc.valid, raw, err)
+			}
+		})
+	}
+}
+
+func TestSourceLaneGraphQLCitationShapes(t *testing.T) {
+	for _, tc := range []struct {
+		raw   string
+		valid bool
+	}{
+		{`{}`, true},
+		{`{"graphql":null}`, true},
+		{`{"graphql":{}}`, true},
+		{`{"graphql":{"operation_name":null,"document":null,"request_schema":null}}`, true},
+		{`{"graphql":{"document":{}}}`, false},
+		{`{"graphql":{"root_field":"widgets"}}`, false},
+	} {
+		var annotation sourceSemanticAnnotation
+		err := decodeStrictJSON([]byte(tc.raw), &annotation)
+		valid := err == nil && sourceLaneGraphQLRefsShape(annotation.GraphQL)
+		if valid != tc.valid {
+			t.Errorf("GraphQL JSON shape valid=%v want%v for %s: %v", valid, tc.valid, tc.raw, err)
+		}
+	}
+	ref := sourceFactRef{DocumentID: "fixture:graphql", Pointer: "/operation/document", ValueSHA256: strings.Repeat("a", 64)}
+	refs := &sourceLaneGraphQLRefs{Document: &ref}
+	if !sourceLaneGraphQLRefsShape(refs) {
+		t.Fatal("literal JSON citation rejected")
+	}
+	ref.Section = "#heading"
+	if sourceLaneGraphQLRefsShape(refs) {
+		t.Fatal("rendered quote used as machine-readable GraphQL document")
 	}
 }

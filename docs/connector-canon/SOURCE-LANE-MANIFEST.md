@@ -125,6 +125,36 @@ not approve credentials, provider exercises, receiver exposure, a relay or a
 scope reduction. The existing checkpoint and independent-review gates still
 apply.
 
+## Typed target projections
+
+Target references use closed kinds and an optional source-schema citation. Schema
+roles are `request`, `response` or `record`; the empty role means unspecified.
+Each field mapping cites a retained source occurrence and names a target kind
+(`schema`, `config` or `parameter`) with an explicit JSON pointer. An empty
+pointer selects a schema root; a missing or null pointer is invalid. Config
+mappings select a property, while parameter mappings select an indexed typed
+parameter declaration. These coordinates do not evaluate templates or rename
+provider fields.
+
+Absent or null optional citations and absent, null or empty mapping lists carry
+no additional facts. A present citation must include its document, pointer and
+literal value digest. Optional GraphQL selectors cite the retained operation
+name, document and request schema; an empty selector object supplies no facts.
+They introduce no provider-envelope format or alternate GraphQL parser.
+
+Target identity compares every scalar and pointed value. Mapping order and
+nil-versus-empty lists do not change identity. Duplicate, conflicting and
+ancestor/descendant field claims are refused before comparison; normalization
+never removes invalid claims. Accepted copies own their citation and pointer
+values. Structural shape checks do not establish source ownership, a valid
+consumer projection or execution. Those require the binding join, and a
+reference deficit still prevents behavioral-proof promotion.
+
+A schema target uses the exact registry key and an empty artifact-root pointer,
+with its canonical operation/schema-role coordinate. Other proof target kinds
+cannot use the empty artifact pointer. Sync descriptor references carry their
+role and executor identity without schema projections.
+
 ## Proof record format and limits
 
 The [proof assertion schema](source-lane-proofs.schema.json) describes additive

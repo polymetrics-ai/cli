@@ -1152,3 +1152,78 @@ func proofReadWithBudget(root *os.Root, r sourceLaneProofRecord, budget *int64) 
 	*budget -= c.stats.UniqueBytes
 	return code, severity
 }
+
+func TestSourceLaneProofSchemaRootShape(t *testing.T) {
+	_, record, _ := proofFixture(t)
+	for _, tc := range []struct {
+		name   string
+		mutate func(*sourceLaneTargetRef)
+		valid  bool
+	}{
+		{"existing operation", nil, true},
+		{"schema root", func(ref *sourceLaneTargetRef) {
+			ref.Kind = "schema"
+			ref.ID = "schemas/widgets.json"
+			ref.Artifact = "internal/connectors/defs/proof-fixture/schemas/widgets.json"
+			ref.Pointer = ""
+			ref.CanonicalPointer = "/operations/0/schema_refs/record"
+			ref.SchemaRole = "record"
+		}, true},
+		{"operation empty pointer", func(ref *sourceLaneTargetRef) { ref.Pointer = "" }, false},
+		{"unknown kind", func(ref *sourceLaneTargetRef) { ref.Kind = "unknown" }, false},
+		{"unknown schema role", func(ref *sourceLaneTargetRef) { ref.SchemaRole = "unknown" }, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			copy := record
+			copy.Targets = append([]sourceLaneTargetRef(nil), record.Targets...)
+			if tc.mutate != nil {
+				tc.mutate(&copy.Targets[0])
+			}
+			if got := sourceLaneProofShape(copy); got != tc.valid {
+				t.Fatalf("actual target shape acceptance=%v; want%v for %+v", got, tc.valid, copy.Targets[0])
+			}
+		})
+	}
+}
+
+func TestSourceLaneProofProjectionIdentity(t *testing.T) {
+	_, record, cells := proofFixture(t)
+	ref := record.Targets[0]
+	ref.SchemaRole = sourceLaneSchemaRequest
+	ref.SourceSchema = &sourceFactRef{DocumentID: "fixture:retained", Pointer: "/request/schema", ValueSHA256: strings.Repeat("b", 64)}
+	pointer := "/parameters/0"
+	ref.FieldMappings = []sourceLaneFieldMapping{{Source: sourceFactRef{DocumentID: "fixture:retained", Pointer: "/parameters/0", ValueSHA256: strings.Repeat("c", 64)}, Target: sourceLaneFieldTarget{Kind: sourceLaneFieldParameter, Pointer: &pointer}}}
+	record.Targets = []sourceLaneTargetRef{canonicalSourceLaneTargetRef(ref)}
+	// This is the required-target reducer boundary: References and reviewed
+	// byCell input are supplied explicitly. It does not certify source-binding
+	// admission or claim the new projection was exercised by the HTTP fixture.
+	inputs := sourceLaneProofInputs{byCell: map[sourceLaneProofCell]sourceLaneProofRecord{{record.Key, record.Lane}: record}}
+	for _, tc := range []struct {
+		name    string
+		change  func(*sourceLaneTargetRef)
+		blocked bool
+	}{
+		{"separately allocated equal", func(*sourceLaneTargetRef) {}, false},
+		{"changed source schema", func(r *sourceLaneTargetRef) { r.SourceSchema.ValueSHA256 = strings.Repeat("d", 64) }, true},
+		{"changed mapping source", func(r *sourceLaneTargetRef) { r.FieldMappings[0].Source.Pointer = "/parameters/1" }, true},
+		{"changed mapping target", func(r *sourceLaneTargetRef) { *r.FieldMappings[0].Target.Pointer = "/parameters/1" }, true},
+		{"duplicate invalid mapping", func(r *sourceLaneTargetRef) { r.FieldMappings = append(r.FieldMappings, r.FieldMappings[0]) }, true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			observed := canonicalSourceLaneTargetRef(ref)
+			tc.change(&observed)
+			actual := append([]sourceLaneCell(nil), cells...)
+			actual[0].References = []sourceLaneTargetRef{observed}
+			result := assessSourceLaneProof(record.Key, actual, inputs)
+			if got := result[0].State == "implemented"; got == tc.blocked {
+				t.Fatalf("projection match promoted=%v blocked=%v diagnostics=%+v", got, tc.blocked, result[0].Diagnostics)
+			}
+		})
+	}
+	actual := append([]sourceLaneCell(nil), cells...)
+	actual[0].References = []sourceLaneTargetRef{canonicalSourceLaneTargetRef(ref)}
+	actual[0].Diagnostics = []sourceLaneDiagnostic{{Key: record.Key, Lanes: []string{record.Lane}, Stage: "reference", Code: "source_projection_unverified", Severity: "deficit"}}
+	if result := assessSourceLaneProof(record.Key, actual, inputs); result[0].State == "implemented" {
+		t.Fatal("matching projection proof overrode reference deficit")
+	}
+}

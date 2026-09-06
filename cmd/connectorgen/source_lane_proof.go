@@ -14,6 +14,7 @@ import (
 	"path"
 	"reflect"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -773,12 +774,24 @@ func sourceLaneProofShape(r sourceLaneProofRecord) bool {
 			return false
 		}
 	}
-	targets := map[sourceLaneTargetRef]bool{}
-	for _, ref := range r.Targets {
-		if targets[ref] || ref.Connector != r.Key.Connector || ref.Lane != r.Lane || !validSourceID(ref.ID) || !sourceLaneProofSafePath(ref.Artifact) || !strings.HasPrefix(ref.Artifact, "internal/connectors/defs/"+r.Key.Connector+"/") || !strings.HasSuffix(ref.Artifact, ".json") || !sourceLaneProofDigest(ref.ArtifactSHA256) || !strings.HasPrefix(ref.Pointer, "/") || !validSourceID(ref.CanonicalID) || !strings.HasPrefix(ref.CanonicalPointer, "/") || !sourceLaneProofDigest(ref.Generation) {
+	for i, ref := range r.Targets {
+		duplicate := false
+		for _, prior := range r.Targets[:i] {
+			duplicate = duplicate || sourceLaneTargetRefEqual(prior, ref)
+		}
+		pointerValid := strings.HasPrefix(ref.Pointer, "/")
+		if ref.Kind == "schema" {
+			parts := strings.Split(ref.CanonicalPointer, "/")
+			canonicalRole := len(parts) == 5 && parts[0] == "" && parts[1] == "operations" && parts[3] == "schema_refs" && parts[4] == string(ref.SchemaRole)
+			if canonicalRole {
+				index, err := strconv.Atoi(parts[2])
+				canonicalRole = err == nil && index >= 0 && strconv.Itoa(index) == parts[2]
+			}
+			pointerValid = ref.Pointer == "" && ref.Artifact == "internal/connectors/defs/"+ref.Connector+"/"+ref.ID && ref.SchemaRole != "" && canonicalRole
+		}
+		if duplicate || sourceLaneTargetRefShape(ref) != nil || !pointerValid || ref.Connector != r.Key.Connector || ref.Lane != r.Lane || !validSourceID(ref.ID) || !sourceLaneProofSafePath(ref.Artifact) || !strings.HasPrefix(ref.Artifact, "internal/connectors/defs/"+r.Key.Connector+"/") || !strings.HasSuffix(ref.Artifact, ".json") || !sourceLaneProofDigest(ref.ArtifactSHA256) || !validSourceID(ref.CanonicalID) || !strings.HasPrefix(ref.CanonicalPointer, "/") || !sourceLaneProofDigest(ref.Generation) {
 			return false
 		}
-		targets[ref] = true
 	}
 	return true
 }
@@ -876,7 +889,7 @@ func assessSourceLaneProof(key sourceOperationKey, cells []sourceLaneCell, input
 				for _, required := range r.Targets {
 					found := false
 					for _, ref := range out[i].References {
-						found = found || ref == required
+						found = found || sourceLaneTargetRefEqual(ref, required)
 					}
 					blocked = blocked || !found
 				}

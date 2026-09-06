@@ -242,7 +242,15 @@
       "additionalProperties": false,
       "properties": {
         "kind": {
-          "type": "string"
+          "enum": [
+            "operation",
+            "write",
+            "stream",
+            "command",
+            "schema",
+            "canonical_operation",
+            "sync_transport"
+          ]
         },
         "connector": {
           "type": "string"
@@ -251,7 +259,15 @@
           "type": "string"
         },
         "lane": {
-          "type": "string"
+          "enum": [
+            "direct_read",
+            "direct_write",
+            "binary_download",
+            "binary_upload",
+            "etl",
+            "reverse_etl",
+            "sync_transport"
+          ]
         },
         "artifact": {
           "type": "string"
@@ -272,7 +288,36 @@
           "type": "string"
         },
         "schema_role": {
-          "type": "string"
+          "enum": [
+            "",
+            "request",
+            "response",
+            "record"
+          ]
+        },
+        "source_schema": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/json_fact_ref"
+            }
+          ]
+        },
+        "field_mappings": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/field_mapping"
+              },
+              "uniqueItems": true
+            }
+          ]
         }
       },
       "required": [
@@ -287,6 +332,98 @@
         "canonical_pointer",
         "generation",
         "schema_role"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "source_schema"
+            ],
+            "properties": {
+              "source_schema": {
+                "type": "object"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "schema_role": {
+                "enum": [
+                  "request",
+                  "response",
+                  "record"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "field_mappings"
+            ],
+            "properties": {
+              "field_mappings": {
+                "type": "array",
+                "contains": {
+                  "properties": {
+                    "target": {
+                      "properties": {
+                        "kind": {
+                          "const": "schema"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "target"
+                  ]
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "schema_role": {
+                "enum": [
+                  "request",
+                  "response",
+                  "record"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "sync_transport"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "schema_role": {
+                "const": ""
+              },
+              "source_schema": {
+                "type": "null"
+              },
+              "field_mappings": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "array",
+                    "maxItems": 0
+                  }
+                ]
+              }
+            }
+          }
+        }
       ]
     },
     "parameter": {
@@ -791,6 +928,140 @@
         "primary",
         "supplement"
       ]
+    },
+    "json_fact_ref": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/fact_ref"
+        }
+      ],
+      "properties": {
+        "document_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(/([^~/]|~[01])*){0,256}$"
+        },
+        "value_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "section": {
+          "const": ""
+        },
+        "part": {
+          "const": ""
+        }
+      }
+    },
+    "field_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "schema",
+            "config",
+            "parameter"
+          ]
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(/([^~/]|~[01])*){0,256}$"
+        }
+      },
+      "required": [
+        "kind",
+        "pointer"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "config"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "pointer": {
+                "minLength": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "parameter"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "pointer": {
+                "pattern": "^/(parameters|pagination_parameters)/(0|[1-9][0-9]*)$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "field_mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/json_fact_ref"
+        },
+        "target": {
+          "$ref": "#/$defs/field_target"
+        }
+      },
+      "required": [
+        "source",
+        "target"
+      ]
+    },
+    "graphql_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "operation_name": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/json_fact_ref"
+            }
+          ]
+        },
+        "document": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/json_fact_ref"
+            }
+          ]
+        },
+        "request_schema": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/json_fact_ref"
+            }
+          ]
+        }
+      }
     }
   }
 }
