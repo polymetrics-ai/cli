@@ -447,3 +447,314 @@ func TestSourceFacts118DuplicateParameterScopes(t *testing.T) {
 		}
 	}
 }
+
+func source118ComponentsFixture(t *testing.T, rootRole bool, marker string) ([]retainedSourceOperation, retainedSourceDocument, *retainedSourceDocument, int) {
+	t.Helper()
+	components := `{"securitySchemes":{"auth":{"type":"http","scheme":"bearer"}},"schemas":{"Unused":{"type":"object","description":"` + marker + `","properties":{"id":{"type":"string"}}}}}`
+	operation := `{"summary":"List items","responses":{"200":{"description":"ok","content":{"application/json":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"}}}}}}}}}`
+	nodes := []json.RawMessage{}
+	rows := []retainedSourceOperation{}
+	paths := map[string]json.RawMessage{}
+	for i := 0; i < 3; i++ {
+		op := operation
+		if i == 1 {
+			op = `{"security":[],` + operation[1:]
+		}
+		id := fmt.Sprintf("read.%d", i)
+		path := fmt.Sprintf("/items%d", i)
+		node := fmt.Sprintf(`{"id":%q,"method":"GET","protocol":"rest","path":%q`, id, path)
+		if !rootRole {
+			node += `,"source_operation":` + op
+		}
+		node += `}`
+		nodes = append(nodes, json.RawMessage(node))
+		paths[path] = json.RawMessage(`{"get":` + op + `}`)
+		rows = append(rows, retainedSourceOperation{Key: sourceOperationKey{Connector: "fixture", Inventory: "primary", ID: id}, Observed: true, Node: json.RawMessage(node), DocumentID: "archive:" + marker, Pointer: fmt.Sprintf("/rest/operations/%d", i)})
+	}
+	operations, err := json.Marshal(nodes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	doc := retainedSourceDocument{ID: "archive:" + marker, Payload: json.RawMessage(`{"source_contract":{"security":[{"auth":[]}],"components":` + components + `},"rest":{"operations":` + string(operations) + `}}`)}
+	if !rootRole {
+		return rows, doc, nil, len(components)
+	}
+	encodedPaths, err := json.Marshal(paths)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw := retainedSourceDocument{ID: "raw:" + marker, Payload: json.RawMessage(`{"security":[{"auth":[]}],"components":` + components + `,"paths":` + string(encodedPaths) + `}`)}
+	return rows, doc, &raw, len(components)
+}
+
+func TestSourceFacts118ComponentDecodeWork(t *testing.T) {
+	for _, prepared := range []bool{false, true} {
+		for _, rootRole := range []bool{false, true} {
+			t.Run(fmt.Sprintf("prepared=%t/root=%t", prepared, rootRole), func(t *testing.T) {
+				for _, marker := range []string{"first", "second"} {
+					rows, doc, raw, componentBytes := source118ComponentsFixture(t, rootRole, marker)
+					if prepared {
+						var err error
+						doc, err = prepareSourceDocument(doc)
+						if err != nil {
+							t.Fatal(err)
+						}
+						if raw != nil {
+							p, err := prepareSourceDocument(*raw)
+							if err != nil {
+								t.Fatal(err)
+							}
+							raw = &p
+						}
+					}
+					count, total := 0, 0
+					observe := func(n int) { count++; total += n }
+					for i, row := range rows {
+						facts := normalizeSourceFactsObserved(row, doc, raw, observe)
+						if facts.Status != "available" || len(facts.Diagnostics) != 0 {
+							t.Fatalf("normalization not reached: %+v", facts.Diagnostics)
+						}
+						wantSecurity := `[{"auth":[]}]`
+						if i == 1 {
+							wantSecurity = `[]`
+						}
+						if string(facts.Groups["security"]) != wantSecurity {
+							t.Fatalf("operation override changed: %s", facts.Groups["security"])
+						}
+						wantSchemes := `{"auth":{"scheme":"bearer","type":"http"}}`
+						canonical, err := canonicalSourceJSON(facts.Groups["security_schemes"])
+						if err != nil || string(canonical) != wantSchemes {
+							t.Fatalf("known source schemes changed: %s %v", canonical, err)
+						}
+						wantID, wantPointer := doc.ID, "/source_contract/components/securitySchemes"
+						if raw != nil {
+							wantID, wantPointer = raw.ID, "/components/securitySchemes"
+						}
+						ref := facts.Refs["security_schemes"]
+						if ref.DocumentID != wantID || ref.Pointer != wantPointer || ref.ValueSHA256 != sourceBytesHash([]byte(wantSchemes)) {
+							t.Fatalf("literal citation changed: %+v", ref)
+						}
+						cells := classifySourceLanes(row.Key, facts, nil)
+						expected := []string{"applicable", "not_applicable", "not_applicable", "not_applicable", "applicable", "not_applicable", "not_applicable"}
+						if len(cells) != 7 {
+							t.Fatalf("lane membership=%d", len(cells))
+						}
+						for j, c := range cells {
+							if c.Lane != sourceLaneNames()[j] || c.Applicability != expected[j] || len(c.References) != 0 || len(c.ProofRefs) != 0 {
+								t.Fatalf("lane %d not literal expected: %+v", j, c)
+							}
+						}
+						// Returned groups are caller-owned; the next row must still see source bytes.
+						for j := range facts.Groups["security_schemes"] {
+							facts.Groups["security_schemes"][j] = ' '
+						}
+					}
+					want := len(rows)
+					if prepared {
+						want = 1
+					}
+					if count != want || total != want*componentBytes {
+						t.Errorf("completed strict component decode work=%d/%dbytes; want %d/%dbytes for %d operations and one document role", count, total, want, want*componentBytes, len(rows))
+					}
+				}
+			})
+		}
+	}
+}
+
+func TestSourceFacts118ComponentPreservation(t *testing.T) {
+	for _, rootRole := range []bool{false, true} {
+		for _, component := range []string{"absent", "null", "{}", "[]", `"invalid"`, "42"} {
+			t.Run(fmt.Sprintf("root=%t/components=%s", rootRole, component), func(t *testing.T) {
+				rows, doc, raw, _ := source118ComponentsFixture(t, rootRole, "preservation")
+				target := &doc
+				if raw != nil {
+					target = raw
+				}
+				var document map[string]json.RawMessage
+				if err := json.Unmarshal(target.Payload, &document); err != nil {
+					t.Fatal(err)
+				}
+				contract := document
+				if !rootRole {
+					if err := json.Unmarshal(document["source_contract"], &contract); err != nil {
+						t.Fatal(err)
+					}
+				}
+				if component == "absent" {
+					delete(contract, "components")
+				} else {
+					contract["components"] = json.RawMessage(component)
+				}
+				if !rootRole {
+					value, err := json.Marshal(contract)
+					if err != nil {
+						t.Fatal(err)
+					}
+					document["source_contract"] = value
+				}
+				target.Payload, _ = json.Marshal(document)
+				originalDoc := doc
+				var originalRaw *retainedSourceDocument
+				if raw != nil {
+					copy := *raw
+					originalRaw = &copy
+				}
+				var err error
+				doc, err = prepareSourceDocument(doc)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if raw != nil {
+					prepared, err := prepareSourceDocument(*raw)
+					if err != nil {
+						t.Fatal(err)
+					}
+					raw = &prepared
+				}
+				count := 0
+				invalid := component == "[]" || component == `"invalid"` || component == "42"
+				for _, row := range rows {
+					got := normalizeSourceFactsObserved(row, doc, raw, func(int) { count++ })
+					baseline := normalizeSourceFacts(row, originalDoc, originalRaw)
+					a, _ := json.Marshal(got)
+					b, _ := json.Marshal(baseline)
+					if string(a) != string(b) {
+						t.Fatalf("prepared/unprepared behavior differs: %s\n%s", a, b)
+					}
+					if got.Status != "available" || string(got.Groups["security_schemes"]) != "null" {
+						t.Fatalf("source state changed: %+v", got)
+					}
+					expected := []string{}
+					if invalid {
+						expected = []string{"source_components_invalid"}
+					}
+					actual, _ := json.Marshal(got.Diagnostics)
+					wanted, _ := json.Marshal(expected)
+					if string(actual) != string(wanted) {
+						t.Fatalf("exact old diagnostic frontier/order=%s want=%s", actual, wanted)
+					}
+				}
+				expectedCount := 1
+				if component == "absent" {
+					expectedCount = 0
+				}
+				if count != expectedCount {
+					t.Fatalf("actual component decode count=%d want=%d", count, expectedCount)
+				}
+			})
+		}
+		t.Run(fmt.Sprintf("root=%t/identity-and-early-return", rootRole), func(t *testing.T) {
+			rows, doc, raw, _ := source118ComponentsFixture(t, rootRole, "identity")
+			var err error
+			doc, err = prepareSourceDocument(doc)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if raw != nil {
+				p, err := prepareSourceDocument(*raw)
+				if err != nil {
+					t.Fatal(err)
+				}
+				raw = &p
+			}
+			count := 0
+			observe := func(int) { count++ }
+			missing := rows[0]
+			missing.Observed = false
+			got := normalizeSourceFactsObserved(missing, doc, raw, observe)
+			if count != 0 || len(got.Diagnostics) != 1 || got.Diagnostics[0] != "source_unavailable" {
+				t.Fatalf("early return decoded components: %d %v", count, got.Diagnostics)
+			}
+			got = normalizeSourceFactsObserved(rows[0], doc, raw, observe)
+			if got.Status != "available" || count != 1 {
+				t.Fatalf("valid preparation path absent: %d %v", count, got.Diagnostics)
+			}
+			for _, mutation := range []string{"same-length", "whitespace"} {
+				changed := doc
+				var changedRaw *retainedSourceDocument
+				if raw != nil {
+					copy := *raw
+					changedRaw = &copy
+				}
+				target := &changed
+				if changedRaw != nil {
+					target = changedRaw
+				}
+				target.Payload = append(json.RawMessage(nil), target.Payload...)
+				if mutation == "same-length" {
+					target.Payload = json.RawMessage(strings.Replace(string(target.Payload), "identity", "modified", 1))
+				} else {
+					target.Payload = append(target.Payload, ' ')
+				}
+				before := count
+				got := normalizeSourceFactsObserved(rows[0], changed, changedRaw, observe)
+				want := "source_document_invalid"
+				if rootRole {
+					want = "raw_document_invalid"
+				}
+				if count != before || len(got.Diagnostics) != 1 || got.Diagnostics[0] != want {
+					t.Fatalf("payload mutation reused stale prepared selection: %s count=%d diagnostics=%v", mutation, count, got.Diagnostics)
+				}
+			}
+			// Re-preparing an independent document with the same ID creates new custody.
+			rows2, doc2, raw2, _ := source118ComponentsFixture(t, rootRole, "identity")
+			doc2, err = prepareSourceDocument(doc2)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if raw2 != nil {
+				p, err := prepareSourceDocument(*raw2)
+				if err != nil {
+					t.Fatal(err)
+				}
+				raw2 = &p
+			}
+			normalizeSourceFactsObserved(rows2[0], doc2, raw2, observe)
+			if count != 2 {
+				t.Fatalf("fresh invocation skipped its real decode: %d", count)
+			}
+		})
+	}
+	for _, payload := range []string{`{"components":{"same":1,"same":2}}`, `{"components":{"value":01}}`, `{"components":{"value":NaN}}`} {
+		if _, err := prepareSourceDocument(retainedSourceDocument{Payload: json.RawMessage(payload)}); err == nil {
+			t.Fatalf("strict source decode relaxed: %s", payload)
+		}
+	}
+}
+
+func TestSourceFacts118LargeNumberPreserved(t *testing.T) {
+	document, err := prepareSourceDocument(retainedSourceDocument{Payload: json.RawMessage(`{"components":{"value":1e1000}}`)})
+	if err != nil {
+		t.Fatal(err)
+	}
+	actual, err := sourceDocumentPointer(document, "/components/value")
+	if err != nil || string(actual) != "1e1000" {
+		t.Fatalf("retained arbitrary precision number changed: %s %v", actual, err)
+	}
+}
+
+func TestSourceFacts118ComponentsEarlyFrontiers(t *testing.T) {
+	archive := retainedSourceDocument{ID: "archive", Payload: json.RawMessage(`{"source_contract":{"components":[]},"rest":{}}`)}
+	prepared, err := prepareSourceDocument(archive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	cases := []struct {
+		name, node, want string
+		raw              *retainedSourceDocument
+	}{
+		{"not retained", `{"id":"x","method":"GET","protocol":"rest","path":"/missing"}`, "source_operation_not_retained", nil},
+		{"invalid operation", `{"id":"x","method":"GET","protocol":"rest","path":"/missing","source_operation":[]}`, "source_operation_invalid", nil},
+		{"raw operation missing", `{"id":"x","method":"GET","protocol":"rest","path":"/missing"}`, "raw_operation_missing", &retainedSourceDocument{ID: "raw", Payload: json.RawMessage(`{"components":[],"paths":{}}`)}},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			count := 0
+			got := normalizeSourceFactsObserved(retainedSourceOperation{Observed: true, Node: json.RawMessage(tc.node)}, prepared, tc.raw, func(int) { count++ })
+			if count != 0 || len(got.Diagnostics) != 1 || got.Diagnostics[0] != tc.want {
+				t.Fatalf("early frontier gained component work/diagnostic: count=%d got=%v want=%s", count, got.Diagnostics, tc.want)
+			}
+		})
+	}
+}

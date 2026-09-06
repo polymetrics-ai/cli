@@ -49,7 +49,13 @@ type sourceFacts struct {
 
 // normalizeSourceFacts copies provider groups and records citations into the
 // pinned document. Executable definitions never supply missing source facts.
-func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocument, rawDoc *retainedSourceDocument) (facts sourceFacts) {
+func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocument, rawDoc *retainedSourceDocument) sourceFacts {
+	return normalizeSourceFactsObserved(row, doc, rawDoc, nil)
+}
+
+// observeComponents records bytes only after an actual strict component decode
+// returns. It does not substitute a decoder or change its result.
+func normalizeSourceFactsObserved(row retainedSourceOperation, doc retainedSourceDocument, rawDoc *retainedSourceDocument, observeComponents func(int)) (facts sourceFacts) {
 	defer func() {
 		facts.CoverageConfidence = "partial"
 		if _, rendered := facts.Refs["rendered_reference"]; rendered {
@@ -98,6 +104,7 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 		return facts
 	}
 	root := view.Root
+	componentView := view
 	facts.referenceRoot = view.ReferenceRoot
 	var operation map[string]json.RawMessage
 	operationPointer := row.Pointer + "/source_operation"
@@ -118,6 +125,7 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 			return facts
 		}
 		root = rawView.Root
+		componentView = rawView
 		facts.referenceRoot = rawView.ReferenceRoot
 		operationPointer = "/paths/" + escapeSourcePointer(facts.Path) + "/" + strings.ToLower(facts.Method)
 		raw, err := sourceDocumentPointer(*rawDoc, operationPointer)
@@ -166,13 +174,11 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 	} else {
 		group("security", contract["security"], contractDocument, contractPointer+"/security")
 	}
-	var components map[string]json.RawMessage
-	if len(contract["components"]) > 0 {
-		if err := decodeSourceJSON(contract["components"], &components); err != nil {
-			facts.Diagnostics = append(facts.Diagnostics, "source_components_invalid")
-		}
+	schemes, invalidComponents := componentView.securitySchemes(rawDoc != nil, observeComponents)
+	if invalidComponents {
+		facts.Diagnostics = append(facts.Diagnostics, "source_components_invalid")
 	}
-	group("security_schemes", components["securitySchemes"], contractDocument, contractPointer+"/components/securitySchemes")
+	group("security_schemes", schemes, contractDocument, contractPointer+"/components/securitySchemes")
 	// Schema references resolve against the retained shared document.
 	group("webhooks", contract["webhooks"], contractDocument, contractPointer+"/webhooks")
 	for _, name := range []string{"path_bridge", "event_schema_inventory", "batch_action_inventory"} {
@@ -587,6 +593,41 @@ type sourceDocumentView struct {
 	Rest          map[string]json.RawMessage
 	ReferenceRoot any
 	Diagnostics   []string
+	components    map[bool]sourceComponentSelection
+}
+
+type sourceComponentSelection struct {
+	schemes json.RawMessage
+	invalid bool
+}
+
+func (view *sourceDocumentView) securitySchemes(rootRole bool, observe func(int)) (json.RawMessage, bool) {
+	if selected, exists := view.components[rootRole]; exists {
+		return selected.schemes, selected.invalid
+	}
+	contract := view.Contract
+	if rootRole {
+		contract = view.Root
+	}
+	raw := contract["components"]
+	var components map[string]json.RawMessage
+	var err error
+	if len(raw) > 0 {
+		err = decodeSourceJSON(raw, &components)
+		if observe != nil {
+			observe(len(raw))
+		}
+	}
+	// Cache only this document/role's already validated selection. Decode at the
+	// old normalization frontier so early returns keep their diagnostic order.
+	// sourceDocumentViewFor still checks the payload hash on every access, and
+	// the normalizer copies returned groups before exposing them to callers.
+	selected := sourceComponentSelection{schemes: components["securitySchemes"], invalid: err != nil}
+	if view.components == nil {
+		view.components = map[bool]sourceComponentSelection{}
+	}
+	view.components[rootRole] = selected
+	return selected.schemes, selected.invalid
 }
 
 func prepareSourceDocument(document retainedSourceDocument) (retainedSourceDocument, error) {
