@@ -352,7 +352,7 @@ type sourceLaneBindingObservation struct {
 }
 
 func collectSourceLaneBindings(ctx context.Context, repo string, cohort sourceLaneCohort) (result sourceLaneBindingInputs) {
-	result = sourceLaneBindingInputs{Artifacts: map[string][]byte{}, Canonical: map[string]vNextCanonicalDescriptor{}, Bundles: map[string]engine.Bundle{}, Observations: []sourceLaneBindingObservation{}}
+	result = sourceLaneBindingInputs{Authoring: map[string][]byte{}, Artifacts: map[string][]byte{}, Canonical: map[string]vNextCanonicalDescriptor{}, Bundles: map[string]engine.Bundle{}, Observations: []sourceLaneBindingObservation{}}
 	connectors := map[string]bool{}
 	for _, anchor := range cohort.Inventories {
 		connectors[anchor.Connector] = true
@@ -442,6 +442,7 @@ func collectSourceLaneBindings(ctx context.Context, repo string, cohort sourceLa
 			add(name, "canonical_import", "canonical_input_unavailable", prefix+"/source.lock.json")
 			continue
 		}
+		result.Authoring[prefix+"/source.lock.json"] = raw
 		var header struct {
 			SchemaVersion int `json:"schema_version"`
 		}
@@ -479,6 +480,38 @@ func collectSourceLaneBindings(ctx context.Context, repo string, cohort sourceLa
 func sourceLaneTargetPointer(raw []byte, ref sourceLaneTargetRef) (string, string) {
 	collection, identity, file := "", "", ""
 	switch ref.Kind {
+	case "canonical_operation":
+		collection, identity, file = "operations", "id", "source.lock.json"
+	case "schema":
+		if !validVNextSchemaPath(ref.ID) || ref.Artifact != "internal/connectors/defs/"+ref.Connector+"/"+ref.ID {
+			return "", "target_artifact_kind_mismatch"
+		}
+		var node map[string]json.RawMessage
+		if decodeSourceJSON(raw, &node) != nil || node == nil {
+			return "", "target_shape_invalid"
+		}
+		return "", ""
+	case "sync_transport":
+		if ref.Artifact != "internal/connectors/defs/"+ref.Connector+"/sync_transport.json" {
+			return "", "target_artifact_kind_mismatch"
+		}
+		if ref.Pointer != "/source_transport" && ref.Pointer != "/destination_transport" {
+			return "", "target_pointer_mismatch"
+		}
+		node, err := sourceJSONPointer(raw, ref.Pointer)
+		if err != nil {
+			return "", "target_absent"
+		}
+		var role struct {
+			Executor connectors.TransportExecutorReference `json:"executor"`
+		}
+		if json.Unmarshal(node, &role) != nil {
+			return "", "target_shape_invalid"
+		}
+		if role.Executor.ID != ref.ID {
+			return "", "target_identity_mismatch"
+		}
+		return ref.Pointer, ""
 	case "operation":
 		collection, identity, file = "operations", "id", "operations.json"
 	case "write":
@@ -1001,7 +1034,10 @@ func sourceLaneEffectiveSchema(observed sourceLaneTypedTarget, bundle engine.Bun
 	return nil, "target_schema_consumer_unverified"
 }
 
-func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceSemanticAnnotation, ref sourceLaneTargetRef, raw, node []byte) []sourceLaneBindingIssue {
+func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceSemanticAnnotation, ref sourceLaneTargetRef, raw, node []byte, scopeOnly ...bool) []sourceLaneBindingIssue {
+	if ref.Kind == "canonical_operation" || ref.Kind == "schema" || ref.Kind == "sync_transport" {
+		return sourceLaneCheckAggregate(key, facts, a, ref, raw)
+	}
 	issues := []sourceLaneBindingIssue{}
 	add := func(code, pointer string) {
 		if code != "" {
@@ -1019,6 +1055,7 @@ func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceS
 		add(sourceLaneRESTParameterContract(facts, *observed.REST), ptr)
 	}
 	add(sourceLaneRouteContract(facts, ref, observed, bundle), ptr)
+	issues = append(issues, sourceLaneGraphQLContract(facts, a, ref, observed)...)
 	if facts.bindings == nil || ref.CanonicalID == "" || ref.CanonicalPointer == "" || ref.Generation == "" {
 		add("target_contract_unverified", ptr)
 	} else if descriptor, exists := facts.bindings.Canonical[key.Connector]; !exists {
@@ -1075,8 +1112,161 @@ func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceS
 			if ref.SourceSchema == nil {
 				add("target_response_contract_unverified", ptr)
 			}
-		} else if !sourceLaneNoResponseBody(facts) {
+		} else if len(scopeOnly) == 0 && !sourceLaneNoResponseBody(facts) {
 			add("target_response_contract_unverified", ptr)
+		}
+	}
+	return issues
+}
+
+func sourceLaneGraphQLContract(facts sourceFacts, a sourceSemanticAnnotation, ref sourceLaneTargetRef, target sourceLaneTypedTarget) []sourceLaneBindingIssue {
+	var document, name string
+	if target.GraphQL != nil {
+		document = target.GraphQL.Document
+		name = target.GraphQL.OperationName
+	} else if target.Stream != nil && target.Stream.GraphQL != nil {
+		document = target.Stream.GraphQL.Document
+		name = target.Stream.GraphQL.OperationName
+	} else if target.Write != nil && target.Write.GraphQL != nil {
+		document = target.Write.GraphQL.Document
+		name = target.Write.GraphQL.OperationName
+	} else {
+		return nil
+	}
+	issues := []sourceLaneBindingIssue{}
+	add := func(code, pointer string) { issues = append(issues, sourceLaneBindingIssue{code, pointer}) }
+	refs := a.GraphQL
+	if refs == nil {
+		refs = &sourceLaneGraphQLRefs{}
+	}
+	for _, field := range []struct {
+		ref                      *sourceFactRef
+		value, missing, mismatch string
+	}{{refs.Document, document, "source_graphql_document_unavailable", "target_graphql_document_mismatch"}, {refs.OperationName, name, "source_graphql_operation_unavailable", "target_graphql_operation_mismatch"}} {
+		if field.ref == nil {
+			add(field.missing, ref.Artifact+"#"+ref.Pointer)
+			continue
+		}
+		raw, code := sourceLaneCitedValue(facts, *field.ref)
+		if code != "" {
+			add(code, field.ref.Pointer)
+			continue
+		}
+		var value string
+		if json.Unmarshal(raw, &value) != nil || value != field.value {
+			add(field.mismatch, field.ref.Pointer)
+		}
+	}
+	if refs.RequestSchema == nil {
+		add("source_graphql_request_schema_unavailable", ref.Artifact+"#"+ref.Pointer)
+	} else if ref.SourceSchema == nil || *ref.SourceSchema != *refs.RequestSchema {
+		add("source_binding_scope_mismatch", refs.RequestSchema.Pointer)
+	}
+	return issues
+}
+
+func sourceLaneCheckAggregate(key sourceOperationKey, facts sourceFacts, a sourceSemanticAnnotation, ref sourceLaneTargetRef, raw []byte) []sourceLaneBindingIssue {
+	issues := []sourceLaneBindingIssue{}
+	ptr := ref.Artifact + "#" + ref.Pointer
+	add := func(code string) { issues = append(issues, sourceLaneBindingIssue{code, ptr}) }
+	if facts.bindings == nil {
+		add("target_contract_unverified")
+		return issues
+	}
+	descriptor, ok := facts.bindings.Canonical[key.Connector]
+	if !ok {
+		add("canonical_binding_absent")
+		return issues
+	}
+	var source *vNextCanonicalOperation
+	for i := range descriptor.Graph.Operations {
+		if descriptor.Graph.Operations[i].ID == ref.CanonicalID {
+			source = &descriptor.Graph.Operations[i]
+			break
+		}
+	}
+	if source == nil {
+		add("canonical_provenance_mismatch")
+		return issues
+	}
+	bundle, ok := facts.bindings.Bundles[key.Connector]
+	if !ok || bundle.Identity.Digest != descriptor.Staged.Identity.Digest {
+		add("execution_generation_mismatch")
+	}
+	if ref.Generation != descriptor.Staged.Identity.Digest {
+		add("canonical_generation_mismatch")
+	}
+	if ref.Kind == "sync_transport" {
+		add("target_contract_unverified")
+		return issues
+	}
+	if ref.Kind == "canonical_operation" {
+		if ref.ID != ref.CanonicalID || ref.Pointer != "/operations/"+strconv.Itoa(source.Index) || ref.CanonicalPointer != "/operations/"+strconv.Itoa(source.CanonicalIndex) {
+			add("canonical_provenance_mismatch")
+		}
+	} else {
+		registry := ""
+		switch ref.SchemaRole {
+		case sourceLaneSchemaRequest:
+			registry = source.SchemaRefs.Request
+		case sourceLaneSchemaRecord:
+			registry = source.SchemaRefs.Record
+		case sourceLaneSchemaResponse:
+			registry = source.SchemaRefs.Response
+		}
+		if registry != ref.ID || registry == "" || ref.CanonicalPointer != vNextProvenanceOperationPointer(*source, "schema_refs", string(ref.SchemaRole)) {
+			add("canonical_provenance_mismatch")
+		}
+		if !bytes.Equal(raw, descriptor.Staged.Outputs[ref.ID]) || !bytes.Equal(raw, facts.bindings.Artifacts[ref.Artifact]) {
+			add("canonical_artifact_mismatch")
+		}
+	}
+	children := []sourceLaneTargetRef{}
+	child := func(kind, id string) {
+		r := canonicalSourceLaneTargetRef(ref)
+		r.Kind = kind
+		r.ID = id
+		r.Artifact = "internal/connectors/defs/" + key.Connector + "/" + map[string]string{"operation": "operations.json", "write": "writes.json", "stream": "streams.json"}[kind]
+		r.CanonicalPointer = vNextProvenanceOperationPointer(*source, kind)
+		childRaw := facts.bindings.Artifacts[r.Artifact]
+		r.ArtifactSHA256 = sourceBytesHash(childRaw)
+		r.Pointer, _ = sourceLaneTargetPointer(childRaw, r)
+		children = append(children, r)
+	}
+	if source.Stream != nil && (ref.SchemaRole == sourceLaneSchemaRecord || ref.SchemaRole == sourceLaneSchemaResponse || ref.Lane == "etl" || ref.Lane == "direct_read") {
+		child("stream", source.Stream.Spec.Name)
+	}
+	if source.Write != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.Lane == "direct_write" || ref.Lane == "reverse_etl") {
+		child("write", source.Write.Spec.Name)
+	}
+	if source.Operation != nil && (ref.SchemaRole == sourceLaneSchemaRequest || ref.Kind == "canonical_operation") {
+		child("operation", source.Operation.Spec.ID)
+	}
+	if len(children) == 0 {
+		add("target_schema_consumer_unverified")
+	}
+	for _, r := range children {
+		childRaw := facts.bindings.Artifacts[r.Artifact]
+		node, err := sourceJSONPointer(childRaw, r.Pointer)
+		if err != nil {
+			add("target_pointer_mismatch")
+			continue
+		}
+		if ref.Kind == "schema" {
+			observed, code := sourceLaneObserveTypedTarget(r, node, facts.bindings)
+			if code != "" {
+				add(code)
+				continue
+			}
+			effective, code := sourceLaneEffectiveSchema(observed, bundle, ref.SchemaRole)
+			if code != "" {
+				add(code)
+			} else if !vNextJSONEquivalent(json.RawMessage(raw), effective) {
+				add("target_schema_mismatch")
+			}
+			issues = append(issues, sourceLaneCheckPresent(key, facts, a, r, childRaw, node, true)...)
+		} else {
+			issues = append(issues, sourceLaneCheckPresent(key, facts, a, r, childRaw, node)...)
 		}
 	}
 	return issues
