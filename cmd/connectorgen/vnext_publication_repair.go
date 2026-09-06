@@ -458,34 +458,34 @@ func vNextPublicationCreateControlRepairTransaction(root *vNextPublicationDirect
 	return "", nil, vNextPublicationIdentity{}, fmt.Errorf("create publication control repair transaction: exhausted unique names")
 }
 
-func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirectory, name, label string, payload []byte) (identity vNextPublicationIdentity, err error) {
+func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirectory, name, label string, payload []byte) (identity vNextPublicationIdentity, created bool, err error) {
 	file, err := directory.openFile(name, label, unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o600, false)
 	if err != nil {
-		return vNextPublicationIdentity{}, err
+		return vNextPublicationIdentity{}, false, err
+	}
+	created = true
+	identity, err = vNextPublicationIdentityFromFile(file, label)
+	if err != nil {
+		vNextPublicationRecordError(&err, "close "+label, file.Close())
+		return identity, created, err
 	}
 	defer func() {
-		if closeErr := file.Close(); closeErr != nil && err == nil {
-			err = fmt.Errorf("close %s: %w", label, closeErr)
-		}
+		vNextPublicationRecordError(&err, "close "+label, file.Close())
 	}()
 	written, err := file.Write(payload)
 	if err != nil {
-		return vNextPublicationIdentity{}, fmt.Errorf("write %s: %w", label, err)
+		return identity, created, fmt.Errorf("write %s: %w", label, err)
 	}
 	if written != len(payload) {
-		return vNextPublicationIdentity{}, fmt.Errorf("write %s: short write", label)
+		return identity, created, fmt.Errorf("write %s: short write", label)
 	}
 	if err := file.Sync(); err != nil {
-		return vNextPublicationIdentity{}, fmt.Errorf("sync %s: %w", label, err)
-	}
-	identity, err = vNextPublicationIdentityFromFile(file, label)
-	if err != nil {
-		return vNextPublicationIdentity{}, err
+		return identity, created, fmt.Errorf("sync %s: %w", label, err)
 	}
 	if err := directory.assertIdentity(name, label, identity); err != nil {
-		return vNextPublicationIdentity{}, err
+		return identity, created, err
 	}
-	return identity, nil
+	return identity, created, nil
 }
 
 func (state *vNextPublicationControlRepairState) close() {
@@ -701,7 +701,7 @@ func vNextPublicationWriteAuthorityMarker(root *vNextPublicationDirectory) (vNex
 		return vNextPublicationIdentity{}, err
 	}
 	payload = append(payload, '\n')
-	identity, err := vNextPublicationWriteControlRepairRecord(root, vNextPublicationControlAuthorityMarkerFile, "publication control authority marker", payload)
+	identity, _, err := vNextPublicationWriteControlRepairRecord(root, vNextPublicationControlAuthorityMarkerFile, "publication control authority marker", payload)
 	if err != nil {
 		return vNextPublicationIdentity{}, err
 	}
@@ -1283,6 +1283,8 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 	}
 	keep := false
 	anchors := make([]vNextPublicationControlRepairAnchor, 0, 2)
+	var preparedIdentity vNextPublicationIdentity
+	preparedCreated := false
 	defer func() {
 		if keep {
 			if closeErr := transaction.Close(); closeErr != nil {
@@ -1290,6 +1292,22 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 				vNextPublicationRecordError(&resultErr, "close publication control repair transaction", closeErr)
 			}
 			return
+		}
+		if preparedCreated {
+			if preparedIdentity.mode == 0 {
+				// A record pathname may exist but its identity was never obtained.
+				// Preserve the transaction and its anchors rather than deleting an
+				// unknown occupant or stranding a possible authority record.
+				vNextPublicationCloseAfter(&resultErr, transaction, "unprepared publication control repair transaction")
+				return
+			}
+			if removeErr := transaction.removeRegularBound(vNextPublicationControlRepairPreparedFile, "unprepared publication control repair prepared authority", preparedIdentity); removeErr != nil {
+				// Do not remove referenced anchors after a replacement or cleanup
+				// failure leaves the prepared pathname present.
+				vNextPublicationRecordError(&resultErr, "remove unprepared publication control repair prepared authority", removeErr)
+				vNextPublicationCloseAfter(&resultErr, transaction, "unprepared publication control repair transaction")
+				return
+			}
 		}
 		for index := len(anchors) - 1; index >= 0; index-- {
 			anchor := anchors[index]
@@ -1319,6 +1337,9 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 			}
 			closeErr := p.closeRepairPredecessor(predecessorTransaction)
 			if linkErr != nil {
+				if closeErr != nil {
+					return nil, errors.Join(linkErr, fmt.Errorf("close publication control predecessor transaction: %w", closeErr))
+				}
 				return nil, linkErr
 			}
 			if closeErr != nil {
@@ -1379,10 +1400,13 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 		return nil, err
 	}
 	payload = append(payload, '\n')
-	preparedIdentity, err := vNextPublicationWriteControlRepairRecord(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", payload)
+	preparedIdentity, preparedCreated, err = vNextPublicationWriteControlRepairRecord(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", payload)
 	if err != nil {
 		return nil, err
 	}
+	// The prepared record has closed, synced, and bound its own identity. Every
+	// later frontier retains the complete authority graph for fresh recovery.
+	keep = true
 	if err := p.hit(vNextPublicationAfterControlRepairRecord); err != nil {
 		return nil, err
 	}
@@ -1393,7 +1417,6 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 		return nil, fmt.Errorf("sync publication control repair transaction: %w", err)
 	}
 	state = &vNextPublicationControlRepairState{record: repair, preparedIdentity: preparedIdentity, preparedDigest: vNextPublicationDigest(payload), transactionName: transactionName, transactionIdentity: transactionIdentity}
-	keep = true
 	if base {
 		if err := p.hit(vNextPublicationAfterBaseControlRepairPrepared); err != nil {
 			state.close()
@@ -1435,7 +1458,7 @@ func (p *vNextGenerationPublisher) appendControlRepairPhaseLocked(operation *vNe
 	}
 	payload = append(payload, '\n')
 	name := vNextPublicationControlRepairPhaseName(phase.Sequence)
-	identity, err := vNextPublicationWriteControlRepairRecord(transaction, name, "publication control repair phase", payload)
+	identity, _, err := vNextPublicationWriteControlRepairRecord(transaction, name, "publication control repair phase", payload)
 	if err != nil {
 		return err
 	}
@@ -1496,12 +1519,9 @@ func (p *vNextGenerationPublisher) beginControlCaptureLocked(operation *vNextPub
 			err = fmt.Errorf("unrecorded publication control capture %q is not empty", name)
 		}
 	}
-	if syncErr := capture.Sync(); syncErr != nil && err == nil {
-		err = fmt.Errorf("sync publication control capture: %w", syncErr)
-	}
-	if closeErr := capture.Close(); closeErr != nil && err == nil {
-		err = closeErr
-	}
+	vNextPublicationRecordError(&err, "prepare publication control capture", p.hit(vNextPublicationBeforeControlRepairCaptureClose))
+	vNextPublicationRecordError(&err, "sync publication control capture", capture.Sync())
+	vNextPublicationCloseAfter(&err, capture, "publication control capture")
 	if err != nil {
 		return err
 	}

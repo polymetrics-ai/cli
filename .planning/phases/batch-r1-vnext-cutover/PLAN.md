@@ -1143,6 +1143,37 @@ second-signal or mid-transaction guarantee is asserted.
   close/write paths, and temporary/quarantine A→empty-B replacement deletion.
   The complete F-03-B sibling table remains in scope for the coordinated repair;
   no source repair has begun at this record.
+- **Desired-behaviour RED before repair:** after the preserved defect controls,
+  the intended F-03-A/B/C assertions failed in 2.567s before source behaviour
+  changed. The compile-only setup attempt is explicitly excluded. See
+  `GROUP2-F03-REPAIR-EVIDENCE.md` for the exact failure classes and the bounded
+  uncommitted-source chronology limit; it does not replace the original-control
+  commit or recast later GREEN results as RED.
+- **Coordinated GREEN:** post-record complete authority now remains coherent
+  through recovery; incomplete known preparations clean record-before-anchors while
+  unknown/replaced occupants fail closed. Shared compound producers preserve
+  typed causes through consumers without converting absence-plus-completion into
+  success. Temporary and quarantine allocation clean only identity-proven A,
+  preserving empty/nonempty B. The focused selector passed in 4.389s; the full
+  sibling disposition and remaining validation gates are in
+  `GROUP2-F03-REPAIR-EVIDENCE.md`.
+- **Intermediate package receipt:** the returned same-worker event at physical
+  `10897` is preserved in
+  `/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-group2-intermediate-package-raw-result.json`
+  (raw SHA-256
+  `4fd7390eef0b432f8f5f983d3924f9360bde2993d51586fa48bc6658634e0255`). It
+  records the then-uncommitted Group 2 `go test -count=1 -timeout 20m
+  ./cmd/connectorgen` as exit 0 / package `271.387s`, wall `273.672594250s`.
+  It is an intermediate result only: it neither binds later edits nor replaces
+  the complete final three-group normal/race validation or independent review.
+- **Follow-up proof gate (steer 058):** Group 2 is not complete after the
+  focused selector. `GROUP2-F03-REPAIR-EVIDENCE.md` now carries the frozen
+  case-to-contract matrix for F-03-A's pre-record/Write/short-Write/Sync/Close
+  and post-record sync frontiers across valid bootstrap/successor states;
+  F-03-B's remaining resource-backed compound-cause consumers; and F-03-C's
+  CURRENT/JOURNAL and stage/generation reachability. Add only post-repair
+  coverage for those cells, observing graph/identity/residue before fixture
+  restoration, nonmutating pending Check and bounded fresh recovery/retry.
 
 ### Retained invariants
 

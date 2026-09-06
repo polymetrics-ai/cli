@@ -963,7 +963,34 @@ permit skipping RED/GREEN, verification, or the fresh Astra review.
 | Group | Audited IDs | Required pre-edit RED or negative control | GREEN acceptance boundary | State |
 | --- | --- | --- | --- | --- |
 | 1 | F-04-R, F-08-R | **Executed:** F-04's bounded original-behaviour control observed FIFO block and A/B symlink/directory mixing; preserved without rerun in `GROUP1-F04-ORIGINAL-CONTROL.md`. No separately executed pre-edit F-08 pre-flock control was found. The recorded pre-flock gate ran after its test-only readiness/signal instrumentation and is repair-harness proof only; it must not be labelled a pre-edit RED. | **GREEN 2026-09-06:** retained descriptor yields coherent A identity/bytes across FIFO/symlink/directory B; exact retained-directory `EWOULDBLOCK` acknowledgement precedes real-main SIGINT/SIGTERM; direct waits, no-success/state and retry hold. Normal/race focused selector exit 0 / package 9.198s/15.924s in `GROUP1-EVIDENCE.md`. | Complete before Group 2 |
-| 2 | F-03-A, F-03-B, F-03-C | **Executed RED:** `GROUP2-F03-ORIGINAL-CONTROLS.md` records the 2.687s bounded actual controls: post-record failure strands prepared-only authority; real definitions/connector close and staged-file primary/completion paths flatten a typed cause, while missing-control open plus parent close loses the absence cause; temporary and quarantine A→empty-B allocations delete B. | Complete identity-proven preparation is retained or removed coherently; meaningful typed causes survive public consumers including absence handling; only owned A is cleaned and B/A state survives empty/nonempty cases. | RED recorded; repair pending |
+| 2 | F-03-A, F-03-B, F-03-C | **Executed RED:** `GROUP2-F03-ORIGINAL-CONTROLS.md` records the 2.687s bounded actual controls: post-record failure strands prepared-only authority; real definitions/connector close and staged-file primary/completion paths flatten a typed cause, while missing-control open plus parent close loses the absence cause; temporary and quarantine A→empty-B allocations delete B. | Complete identity-proven preparation is retained or removed coherently; meaningful typed causes survive public consumers including absence handling; only owned A is cleaned and B/A state survives empty/nonempty cases. | Focused GREEN recorded; steer-058 dynamic matrix pending |
 | 3 | F-02-P, F-05/F-06-P | Public nested quarantine replacement/opened-child failure lacks complete resource proof; caller/cut matrix lacks raw control/root/private-authority identity and required B variants. | Nested public Recover/Prune preserves accounted residue/ownership and bounded descriptors; all named cuts assert allowed controls, root/content/private graph before restoration, accurate variants, no-clobber and fresh retry. | Planned after Group 2 |
 
 The exact GSD prompts for issue 4427 were generated/read. `doctor` has the documented unrelated missing issue-122 prompt; compatible Pi role execution is unavailable under the single-writer contract, so this ledger records the permitted inline fallback. Each row is unexecuted until exact command/output/duration and tested identity are appended.
+
+### 2026-09-06 — CP11 Group 2 intended-behaviour RED (steer 055)
+
+- `GROUP2-F03-REPAIR-EVIDENCE.md` records the desired-assertion selector after
+  the immutable original-control checkpoint and before Group 2 production
+  edits. The initial missing-argument compile failure is excluded. The actual
+  2.567s selector exited 1: prepared-only authority, both empty replacement-B
+  deletions, and all three exercised compound-cause losses failed their intended
+  contract. No desired-assertion source hash was recorded at execution time;
+  the earlier immutable original-control source/output remains separately
+  bound. Steer 056 later reconstructed the target test bytes exactly relative
+  to the stated FileChange/formatter record set (snapshot SHA-256
+  `041f44816b2bd103a9b133dea196d6a68c243e64c6751375944ca2d5feb3a228`), but
+  that is not an execution-time or full working-tree identity. This is a
+  chronology limit, not a GREEN claim.
+
+- **GREEN:** the same F-03-A/B/C selector subsequently exited 0 / `ok
+  polymetrics.ai/cmd/connectorgen 4.389s`. It covers coherent post-record
+  recovery/Check/retry, typed compound producer/consumer errors including pure
+  absence, and empty/nonempty replacement B through public Publish/Prune. The
+  complete source sibling audit and its intentional read-only teardown limits
+  are recorded in `GROUP2-F03-REPAIR-EVIDENCE.md`. The source-bound receipt at
+  physical `10897` separately records the then-uncommitted intermediate full
+  package PASS (`271.387s`; wall `273.672594250s`; raw record SHA-256
+  `4fd7390eef0b432f8f5f983d3924f9360bde2993d51586fa48bc6658634e0255`). It
+  does not certify later edits; final three-group package/race/static and
+  independent review gates remain pending.

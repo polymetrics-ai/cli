@@ -194,13 +194,13 @@ func (d *vNextPublicationDirectory) openFile(name, label string, flags int, perm
 	closeErr := parent.Close()
 	if err != nil {
 		if closeErr != nil {
-			return nil, fmt.Errorf("%v; close %s parent: %w", openErr, label, closeErr)
+			return nil, errors.Join(openErr, fmt.Errorf("close %s parent: %w", label, closeErr))
 		}
 		return nil, openErr
 	}
 	if closeErr != nil {
 		if closeFileErr := unix.Close(fd); closeFileErr != nil {
-			return nil, fmt.Errorf("close %s parent: %v; close opened file: %w", label, closeErr, closeFileErr)
+			return nil, errors.Join(fmt.Errorf("close %s parent: %w", label, closeErr), fmt.Errorf("close opened %s: %w", label, closeFileErr))
 		}
 		return nil, fmt.Errorf("close %s parent: %w", label, closeErr)
 	}

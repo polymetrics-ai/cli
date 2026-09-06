@@ -73,6 +73,7 @@ const (
 	vNextPublicationAfterControlRepairRecord               vNextPublicationFaultPoint = "after_control_repair_record"
 	vNextPublicationAfterBaseControlRepairPrepared         vNextPublicationFaultPoint = "after_base_control_repair_prepared"
 	vNextPublicationAfterControlRepairCaptureDirectory     vNextPublicationFaultPoint = "after_control_repair_capture_directory"
+	vNextPublicationBeforeControlRepairCaptureClose        vNextPublicationFaultPoint = "before_control_repair_capture_close"
 	vNextPublicationBeforeControlRepairCapture             vNextPublicationFaultPoint = "before_control_repair_capture"
 	vNextPublicationAfterControlRepairCaptureRename        vNextPublicationFaultPoint = "after_control_repair_capture_rename"
 	vNextPublicationAfterControlRepairCaptureDirectorySync vNextPublicationFaultPoint = "after_control_repair_capture_directory_sync"
@@ -217,11 +218,14 @@ func (p *vNextGenerationPublisher) openConnectorRoot(create bool) (*vNextPublica
 	}
 	closeErr := definitions.Close()
 	if err != nil {
+		if closeErr != nil {
+			return nil, errors.Join(err, fmt.Errorf("close publication definitions root: %w", closeErr))
+		}
 		return nil, err
 	}
 	if closeErr != nil {
 		if connectorCloseErr := connector.Close(); connectorCloseErr != nil {
-			return nil, fmt.Errorf("close publication definitions root: %v; close connector root: %w", closeErr, connectorCloseErr)
+			return nil, errors.Join(fmt.Errorf("close publication definitions root: %w", closeErr), fmt.Errorf("close connector root: %w", connectorCloseErr))
 		}
 		return nil, fmt.Errorf("close publication definitions root: %w", closeErr)
 	}
@@ -621,7 +625,7 @@ func (h *vNextGenerationHandle) Release() {
 	_ = h.filesRoot.Close()
 }
 
-func (p *vNextGenerationPublisher) stageLocked(operation *vNextPublicationOperation, files map[string][]byte, validate func(fs.FS) error) (string, vNextGenerationPointer, error) {
+func (p *vNextGenerationPublisher) stageLocked(operation *vNextPublicationOperation, files map[string][]byte, validate func(fs.FS) error) (stageName string, pointer vNextGenerationPointer, resultErr error) {
 	if err := operation.assertLockBound(); err != nil {
 		return "", vNextGenerationPointer{}, err
 	}
@@ -642,27 +646,29 @@ func (p *vNextGenerationPublisher) stageLocked(operation *vNextPublicationOperat
 		return "", vNextGenerationPointer{}, err
 	}
 
-	stageName, stage, err := vNextPublicationCreateStage(operation.generations)
+	createdStageName, stage, err := vNextPublicationCreateStage(operation.generations)
 	if err != nil {
 		return "", vNextGenerationPointer{}, err
 	}
-	stageIdentity, err := vNextPublicationIdentityFromFile(stage.file, "publication stage")
-	if err != nil {
-		_ = stage.Close()
-		return "", vNextGenerationPointer{}, err
-	}
+	stageIdentityKnown := false
+	var stageIdentity vNextPublicationIdentity
 	retained := false
 	defer func() {
-		if !retained {
-			_ = p.removeStageBoundLocked(operation, stageName, stage, stageIdentity)
+		if !retained && stageIdentityKnown {
+			vNextPublicationRecordError(&resultErr, "remove publication stage", p.removeStageBoundLocked(operation, createdStageName, stage, stageIdentity))
 		}
-		_ = stage.Close()
+		vNextPublicationCloseAfter(&resultErr, stage, "publication stage")
 	}()
+	stageIdentity, err = vNextPublicationIdentityFromFile(stage.file, "publication stage")
+	if err != nil {
+		return "", vNextGenerationPointer{}, err
+	}
+	stageIdentityKnown = true
 	marker, err := vNextPublicationJSON(vNextPublicationStageOwner{
 		Version:    1,
 		Connector:  p.connector,
 		Generation: generation,
-		Stage:      stageName,
+		Stage:      createdStageName,
 	})
 	if err != nil {
 		return "", vNextGenerationPointer{}, fmt.Errorf("encode stage ownership marker: %w", err)
@@ -715,7 +721,7 @@ func (p *vNextGenerationPublisher) stageLocked(operation *vNextPublicationOperat
 		return "", vNextGenerationPointer{}, fmt.Errorf("staged integrity generation %q does not match %q", integrity.Generation, generation)
 	}
 	retained = true
-	return stageName, pointer, nil
+	return createdStageName, pointer, nil
 }
 
 func (p *vNextGenerationPublisher) activateStageLocked(operation *vNextPublicationOperation, stageName, generation string) error {
@@ -756,29 +762,25 @@ func vNextPublicationCreateStage(generations *vNextPublicationDirectory) (string
 	return "", nil, fmt.Errorf("create same-filesystem stage: exhausted unique names")
 }
 
-func (p *vNextGenerationPublisher) writeStageFile(stage *vNextPublicationDirectory, name string, payload []byte) error {
+func (p *vNextGenerationPublisher) writeStageFile(stage *vNextPublicationDirectory, name string, payload []byte) (resultErr error) {
 	file, err := stage.openFile(name, "staged file "+name, unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o644, true)
 	if err != nil {
 		return err
 	}
+	defer func() {
+		vNextPublicationRecordError(&resultErr, "close staged file "+name, p.closeStageFile(file))
+	}()
 	if _, err := file.Write(payload); err != nil {
-		_ = p.closeStageFile(file)
 		return fmt.Errorf("write staged file %s: %w", name, err)
 	}
 	if err := p.hit(vNextPublicationBeforeFileSync); err != nil {
-		_ = p.closeStageFile(file)
 		return err
 	}
 	if err := file.Sync(); err != nil {
-		_ = p.closeStageFile(file)
 		return fmt.Errorf("sync staged file %s: %w", name, err)
 	}
 	if err := p.hit(vNextPublicationAfterFileSync); err != nil {
-		_ = p.closeStageFile(file)
 		return err
-	}
-	if err := p.closeStageFile(file); err != nil {
-		return fmt.Errorf("close staged file %s: %w", name, err)
 	}
 	return nil
 }
@@ -981,9 +983,15 @@ func vNextPublicationCreateTemp(root *vNextPublicationDirectory, afterOpen func(
 		if err != nil {
 			return "", nil, nil, err
 		}
+		identity, err := vNextPublicationIdentityFromFile(temporaryRoot.file, "publication temporary root")
+		if err != nil {
+			vNextPublicationCloseAfter(&err, temporaryRoot, "publication temporary root")
+			return "", nil, nil, err
+		}
 		if afterOpen != nil {
 			if err := afterOpen(root, name, temporaryRoot); err != nil {
-				_ = temporaryRoot.Close()
+				vNextPublicationCloseAfter(&err, temporaryRoot, "publication temporary root")
+				vNextPublicationRecordError(&err, "remove publication temporary root", root.removeEmptyDirectoryBound(name, "publication temporary root", identity))
 				return "", nil, nil, err
 			}
 		}
@@ -991,10 +999,8 @@ func vNextPublicationCreateTemp(root *vNextPublicationDirectory, afterOpen func(
 		if err == nil {
 			return name, temporaryRoot, file, nil
 		}
-		_ = temporaryRoot.Close()
-		if rootIdentity, identityErr := root.identityAt(name, "publication temporary root"); identityErr == nil {
-			_ = root.removeEmptyDirectoryBound(name, "publication temporary root", rootIdentity)
-		}
+		vNextPublicationCloseAfter(&err, temporaryRoot, "publication temporary root")
+		vNextPublicationRecordError(&err, "remove publication temporary root", root.removeEmptyDirectoryBound(name, "publication temporary root", identity))
 		if !errors.Is(err, fs.ErrExist) {
 			return "", nil, nil, err
 		}
@@ -1028,22 +1034,18 @@ func vNextPublicationCreateQuarantine(root *vNextPublicationDirectory, afterOpen
 			return "", nil, vNextPublicationIdentity{}, err
 		}
 		identity, err := vNextPublicationIdentityFromFile(quarantine.file, "publication quarantine")
-		if err == nil {
-			if afterOpen != nil {
-				if hookErr := afterOpen(root, name, quarantine, identity); hookErr != nil {
-					err = hookErr
-				} else {
-					return name, quarantine, identity, nil
-				}
-			} else {
-				return name, quarantine, identity, nil
+		if err != nil {
+			vNextPublicationCloseAfter(&err, quarantine, "publication quarantine")
+			return "", nil, vNextPublicationIdentity{}, err
+		}
+		if afterOpen != nil {
+			if err := afterOpen(root, name, quarantine, identity); err != nil {
+				vNextPublicationCloseAfter(&err, quarantine, "publication quarantine")
+				vNextPublicationRecordError(&err, "remove publication quarantine", root.removeEmptyDirectoryBound(name, "publication quarantine", identity))
+				return "", nil, vNextPublicationIdentity{}, err
 			}
 		}
-		_ = quarantine.Close()
-		if rootIdentity, identityErr := root.identityAt(name, "publication quarantine"); identityErr == nil {
-			_ = root.removeEmptyDirectoryBound(name, "publication quarantine", rootIdentity)
-		}
-		return "", nil, vNextPublicationIdentity{}, err
+		return name, quarantine, identity, nil
 	}
 	return "", nil, vNextPublicationIdentity{}, fmt.Errorf("create publication quarantine: exhausted unique names")
 }
@@ -1244,9 +1246,34 @@ func vNextPublicationReadControl(root *vNextPublicationDirectory, name, label st
 	return payload, found, err
 }
 
+func vNextPublicationPureNotExist(err error) bool {
+	if err == nil {
+		return false
+	}
+	if err == fs.ErrNotExist {
+		return true
+	}
+	if joined, ok := err.(interface{ Unwrap() []error }); ok {
+		causes := joined.Unwrap()
+		if len(causes) == 0 {
+			return false
+		}
+		for _, cause := range causes {
+			if !vNextPublicationPureNotExist(cause) {
+				return false
+			}
+		}
+		return true
+	}
+	if wrapped, ok := err.(interface{ Unwrap() error }); ok {
+		return vNextPublicationPureNotExist(wrapped.Unwrap())
+	}
+	return errors.Is(err, fs.ErrNotExist)
+}
+
 func vNextPublicationReadControlBound(root *vNextPublicationDirectory, name, label string) ([]byte, bool, vNextPublicationIdentity, error) {
 	handle, err := root.openRegular(name, label, unix.O_RDONLY)
-	if errors.Is(err, fs.ErrNotExist) {
+	if vNextPublicationPureNotExist(err) {
 		return nil, false, vNextPublicationIdentity{}, nil
 	}
 	if err != nil {
@@ -1254,18 +1281,13 @@ func vNextPublicationReadControlBound(root *vNextPublicationDirectory, name, lab
 	}
 	identity, err := vNextPublicationIdentityFromFile(handle, label)
 	if err != nil {
-		if closeErr := handle.Close(); closeErr != nil {
-			return nil, true, vNextPublicationIdentity{}, fmt.Errorf("stat %s: %v; close: %w", label, err, closeErr)
-		}
+		vNextPublicationRecordError(&err, "close "+label, handle.Close())
 		return nil, true, vNextPublicationIdentity{}, err
 	}
 	payload, err := vNextPublicationReadOpenControl(handle, label)
-	closeErr := handle.Close()
+	vNextPublicationRecordError(&err, "close "+label, handle.Close())
 	if err != nil {
 		return nil, true, vNextPublicationIdentity{}, err
-	}
-	if closeErr != nil {
-		return nil, true, vNextPublicationIdentity{}, fmt.Errorf("close %s: %w", label, closeErr)
 	}
 	return payload, true, identity, nil
 }

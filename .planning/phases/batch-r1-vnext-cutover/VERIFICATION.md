@@ -715,3 +715,24 @@ a publication transaction.
 - **Frozen behavior paths:** `cmd/connectorgen/vnext_publication.go`, `vnext_publication_dir.go`, `vnext_publication_repair.go`, their existing tests, and the new capture-identity, durable-matrix, observation, and resource-error fixtures. Canonical plan/TDD/verification/review records and `GROUP1-EVIDENCE.md`, `GROUP2-EVIDENCE.md`, and `GROUP3-EVIDENCE.md` accompany the code. The inherited `DISCUSSION-LOG.md`, TDD-order correction, premature-F01 snapshot, source-lock canon, Foundation Atlas, and `main.go` remain part of the full original CP11 review range as applicable.
 - **Frozen validation:** final current `cmd/connectorgen` normal/race results are 263.677s/691.666s after new-only lint reached zero; the concrete source-lock/canon/553-definition/preflight/docs/boundary/release/static results are recorded above. No source/test behavior may change during the final review pass. A later artifact-only commit may bind this code SHA to read-only reports; it must not be called a behavioral retest or obscure this identity.
 - **Final review gates:** Firstmate's specified fresh GPT-6 Astra/xhigh whole-range review and Luna/low final mechanical index receive this exact code SHA/tree, GROUP1/2/3 evidence, `TDD-ORDER-CORRECTION.md`, and preserved exact-baseline fixture/overlay provenance. Their reports are evidence only; CP11 remains unaccepted and no push/CP12/no-mistakes action follows automatically.
+
+## CP11 Group 2 F-03 verification completion tracker — steer 058
+
+The post-repair focused Group 2 selector and its intermediate same-worker
+package receipt are not final Group 2 verification. The receipt's complete
+returned event is preserved at
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-group2-intermediate-package-raw-result.json`
+(physical `10897`, raw SHA-256
+`4fd7390eef0b432f8f5f983d3924f9360bde2993d51586fa48bc6658634e0255`): package
+`271.387s`, wall `273.672594250s`, then-uncommitted source state only.
+
+Before a Group 2 completion statement, execute and record the remaining
+resource-backed F-03-A pre-record/Write/short-Write/Sync/real-Close and
+post-record directory-sync frontiers with valid bootstrap/successor graph
+classes; every F-03-B listed producer/consumer compound-cause case; and the
+F-03-C CURRENT/JOURNAL plus stage/generation reachability cases. The case,
+selector, hook, real resource, pre-restoration graph/identity/residue, pending
+nonmutating Check, fresh recovery/retry, and normal/race result belong in
+`GROUP2-F03-REPAIR-EVIDENCE.md`. Until then this section is an explicit
+incomplete verification tracker, not a later-source attribution or CP11
+acceptance.

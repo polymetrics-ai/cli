@@ -1035,3 +1035,23 @@ the coordinated repair prompt.
 No product or architecture decision remains unresolved. This audit grants no
 source acceptance, push, no-mistakes, CP12, provider/live, release or merge
 authority.
+
+## 2026-09-06 — CP11 Group 2 F-03 proof-completion status (steer 058)
+
+The frozen F-03-A/B/C ledger remains the repair boundary. The current focused
+post-repair controls and intermediate full-package receipt demonstrate only
+their named cases; they do not close the audit or permit a final review. The
+receipt is the original returned event at physical `10897` (raw SHA-256
+`4fd7390eef0b432f8f5f983d3924f9360bde2993d51586fa48bc6658634e0255`) and is
+explicitly limited to its then-uncommitted source state.
+
+The remaining review-required proof is tracked case-by-case in
+`GROUP2-F03-REPAIR-EVIDENCE.md`: F-03-A's full preparation-frontier and valid
+state-class graph, F-03-B's resource-backed compound producer/consumer paths
+and pure-versus-compound absence, and F-03-C's CURRENT/JOURNAL temporary plus
+stage/generation quarantine reachability. Each added test must retain exact
+case/seam identity, actual resource/Close ownership, observable state before
+fixture restoration, meaningful error causes, pending Check and permitted
+fresh recovery/retry. Post-repair coverage is not a retroactive RED. No
+independent exact-SHA verdict is requested or implied while these cells remain
+incomplete.
