@@ -1,7 +1,12 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"os"
+	"path/filepath"
+	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -195,4 +200,187 @@ func TestSourceLaneBindingNumericOracle(t *testing.T) {
 			t.Errorf("%s vs %s: got (%v,%v), want (%v,%v)", tc.a, tc.b, equal, known, tc.equal, tc.known)
 		}
 	}
+}
+
+func sourceBindingRepositoryFixture(t *testing.T) (string, sourceLaneCohort, vNextCanonicalDescriptor) {
+	t.Helper()
+	lock := operationDirectReadLockForSemanticAdmissionTest()
+	descriptor, err := canonicalizeVNextSourceLock(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	root := t.TempDir()
+	outputs := map[string][]byte{}
+	for name, raw := range descriptor.Staged.Outputs {
+		outputs[name] = raw
+	}
+	raw, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	outputs["source.lock.json"] = raw
+	for name, raw := range outputs {
+		file := filepath.Join(root, "internal/connectors/defs/acme", name)
+		if err := os.MkdirAll(filepath.Dir(file), 0700); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(file, raw, 0600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	return root, sourceLaneCohort{Inventories: []sourceInventoryAnchor{{Connector: "acme", Inventory: "primary"}, {Connector: "acme", Inventory: "supplement"}}}, descriptor
+}
+
+func sourceBindingFixtureSnapshot(t *testing.T, root string) map[string]string {
+	t.Helper()
+	result := map[string]string{}
+	err := filepath.WalkDir(root, func(name string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		rel, err := filepath.Rel(root, name)
+		if err != nil {
+			return err
+		}
+		if entry.Type()&os.ModeSymlink != 0 {
+			target, err := os.Readlink(name)
+			if err != nil {
+				return err
+			}
+			result[rel] = "symlink:" + target
+			return nil
+		}
+		raw, err := os.ReadFile(name)
+		if err != nil {
+			return err
+		}
+		result[rel] = string(raw)
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	return result
+}
+
+func TestSourceLaneBindingCollector(t *testing.T) {
+	root, cohort, descriptor := sourceBindingRepositoryFixture(t)
+	before := sourceBindingFixtureSnapshot(t, root)
+	inputs := collectSourceLaneBindings(context.Background(), root, cohort)
+	if len(inputs.Observations) != 0 {
+		t.Fatalf("valid canonical/execution inputs rejected: %+v", inputs.Observations)
+	}
+	if len(inputs.Canonical) != 1 || inputs.Canonical["acme"].Staged.Identity.Digest != descriptor.Staged.Identity.Digest || len(inputs.Bundles) != 1 {
+		t.Fatalf("missing exact canonical/execution observation: %+v", inputs.Observations)
+	}
+	if len(inputs.Artifacts) != len(descriptor.Staged.Outputs) {
+		t.Fatalf("collected%d files, want%d closed runtime artifacts", len(inputs.Artifacts), len(descriptor.Staged.Outputs))
+	}
+	for name := range inputs.Artifacts {
+		if strings.Contains(name, "source.lock") {
+			t.Fatalf("authoring lock entered runtime inputs: %s", name)
+		}
+	}
+	if after := sourceBindingFixtureSnapshot(t, root); !reflect.DeepEqual(before, after) {
+		t.Fatal("read-only collection changed fixture files")
+	}
+}
+
+func TestSourceLaneBindingCollectorFaults(t *testing.T) {
+	for _, which := range []string{"cancel", "malformed authoring", "unsafe artifact"} {
+		t.Run(which, func(t *testing.T) {
+			root, cohort, _ := sourceBindingRepositoryFixture(t)
+			ctx := context.Background()
+			switch which {
+			case "cancel":
+				var cancel context.CancelFunc
+				ctx, cancel = context.WithCancel(ctx)
+				cancel()
+			case "malformed authoring":
+				if err := os.WriteFile(filepath.Join(root, "internal/connectors/defs/acme/source.lock.json"), []byte(`{"schema_version":4,"operations":`), 0600); err != nil {
+					t.Fatal(err)
+				}
+			case "unsafe artifact":
+				name := filepath.Join(root, "internal/connectors/defs/acme/metadata.json")
+				if err := os.Remove(name); err != nil {
+					t.Fatal(err)
+				}
+				if err := os.Symlink("spec.json", name); err != nil {
+					t.Fatal(err)
+				}
+			}
+			before := sourceBindingFixtureSnapshot(t, root)
+			inputs := collectSourceLaneBindings(ctx, root, cohort)
+			want := "cancelled"
+			if which == "malformed authoring" {
+				want = "canonical_input_invalid"
+			}
+			if which == "unsafe artifact" {
+				want = "artifact_input_invalid"
+			}
+			found := false
+			for _, o := range inputs.Observations {
+				if o.Code == want {
+					found = true
+				}
+			}
+			if !found {
+				t.Fatalf("fault%s lacked %s: %+v", which, want, inputs.Observations)
+			}
+			if which == "malformed authoring" && (len(inputs.Canonical) != 0 || len(inputs.Bundles) != 1) {
+				t.Fatalf("authoring fault erased runtime observation or created canonical admission")
+			}
+			if which == "unsafe artifact" && len(inputs.Bundles) != 0 {
+				t.Fatal("unsafe artifact became a loaded bundle")
+			}
+			if which == "cancel" && (len(inputs.Bundles) != 0 || len(inputs.Canonical) != 0 || len(inputs.Artifacts) != 0) {
+				t.Fatal("cancelled collection continued to artifact/admission work")
+			}
+			if after := sourceBindingFixtureSnapshot(t, root); !reflect.DeepEqual(before, after) {
+				t.Fatal("failure changed fixture state")
+			}
+		})
+	}
+}
+
+func TestSourceLaneBindingCollectorCurrentClosedInputs(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := os.ReadFile(filepath.Join(root, "data/connector-canon/batch1-source-lane-cohort.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var cohort sourceLaneCohort
+	if err := json.Unmarshal(raw, &cohort); err != nil {
+		t.Fatal(err)
+	}
+	inputs := collectSourceLaneBindings(context.Background(), root, cohort)
+	expected := map[string]bool{"asana": true, "gitlab": true, "bitbucket": true, "circleci": true, "dockerhub": true, "jira": true, "notion": true, "sentry": true, "stripe": true, "vercel": true}
+	if len(inputs.Bundles) != len(expected) {
+		t.Fatalf("closed input bundles%d, want10; observations=%+v", len(inputs.Bundles), inputs.Observations)
+	}
+	for name := range expected {
+		if _, exists := inputs.Bundles[name]; !exists {
+			t.Errorf("closed execution input %s missing", name)
+		}
+	}
+	if len(inputs.Canonical) != 2 {
+		t.Fatalf("canonical observations%d, want existing Asana/GitLab pair; observations=%+v", len(inputs.Canonical), inputs.Observations)
+	}
+	for _, name := range []string{"asana", "gitlab"} {
+		if _, exists := inputs.Canonical[name]; !exists {
+			t.Errorf("canonical observation missing%s", name)
+		}
+	}
+	for _, observation := range inputs.Observations {
+		if observation.Code != "canonical_input_unavailable" || observation.Connector == "asana" || observation.Connector == "gitlab" {
+			t.Errorf("unexpected current input observation: %+v", observation)
+		}
+	}
+	// These are static input observations only, never executable lane proof.
 }

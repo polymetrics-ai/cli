@@ -2,21 +2,27 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"io/fs"
 	"math/big"
+	"os"
 	"path"
 	"sort"
 	"strings"
 
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/connectors/manifestidentity"
 )
 
 // sourceLaneBindingInputs carries read-only, already observed artifacts into
 // source classification. Loading and admission remain separate from source
 // membership; an empty collection cannot remove a provider row.
 type sourceLaneBindingInputs struct {
-	Artifacts map[string][]byte
-	Canonical map[string]vNextCanonicalDescriptor
+	Bundles      map[string]engine.Bundle
+	Observations []sourceLaneBindingObservation
+	Artifacts    map[string][]byte
+	Canonical    map[string]vNextCanonicalDescriptor
 }
 
 // resolveSourceLaneBindings reports each reference independently. Artifact
@@ -341,4 +347,138 @@ func sourceLaneNumericBoundEqual(left, right []byte) (bool, bool) {
 		return false, false
 	}
 	return a == b, true
+}
+
+// sourceLaneBindingObservation is connector-scoped until manifest assembly
+// attaches it to every affected anchored source key and lane.
+type sourceLaneBindingObservation struct {
+	Connector string
+	Stage     string
+	Code      string
+	Pointer   string
+}
+
+func collectSourceLaneBindings(ctx context.Context, repo string, cohort sourceLaneCohort) (result sourceLaneBindingInputs) {
+	result = sourceLaneBindingInputs{Artifacts: map[string][]byte{}, Canonical: map[string]vNextCanonicalDescriptor{}, Bundles: map[string]engine.Bundle{}, Observations: []sourceLaneBindingObservation{}}
+	connectors := map[string]bool{}
+	for _, anchor := range cohort.Inventories {
+		connectors[anchor.Connector] = true
+	}
+	names := make([]string, 0, len(connectors))
+	for name := range connectors {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	add := func(connector, stage, code, pointer string) {
+		result.Observations = append(result.Observations, sourceLaneBindingObservation{connector, stage, code, pointer})
+	}
+	root, err := os.OpenRoot(repo)
+	if err != nil {
+		for _, name := range names {
+			add(name, "collection", "repository_unavailable", "")
+		}
+		return result
+	}
+	defer func() {
+		if err := root.Close(); err != nil {
+			for _, name := range names {
+				add(name, "collection", "repository_close_failed", "")
+			}
+		}
+	}()
+	for _, name := range names {
+		prefix := "internal/connectors/defs/" + name
+		if !validSourceID(name) || path.Base(name) != name || name == "." || name == ".." || strings.Contains(name, "\\") {
+			add(name, "collection", "connector_path_invalid", "")
+			continue
+		}
+		if ctx.Err() != nil {
+			add(name, "collection", "cancelled", prefix)
+			continue
+		}
+		files := []string{"metadata.json", "spec.json", "streams.json", "writes.json", "operations.json", "cli_surface.json", "rate_limits.json", "changefeed.json", "polling_watermark.json", "sync_transport.json", "database.json"}
+		// Walk only the closed execution-schema subtree. WalkDir never follows
+		// symlinks; each selected leaf is checked again by the confined reader.
+		err := fs.WalkDir(root.FS(), prefix+"/schemas", func(name string, entry fs.DirEntry, walkErr error) error {
+			if ctx.Err() != nil {
+				return ctx.Err()
+			}
+			if walkErr != nil {
+				return walkErr
+			}
+			if !entry.IsDir() && manifestidentity.IsExecutionJSONFile(strings.TrimPrefix(name, prefix+"/")) {
+				files = append(files, strings.TrimPrefix(name, prefix+"/"))
+			}
+			return nil
+		})
+		if err != nil && !vNextPublicationPureNotExist(err) {
+			// Missing schema directories and unreadable schema inventories are kept
+			// as observations; neither can create a canonical or materialized claim.
+			add(name, "collection", "schema_inventory_unavailable", prefix+"/schemas")
+		}
+		sort.Strings(files)
+		outputs := map[string][]byte{}
+		invalidInputs := false
+		for _, file := range files {
+			if ctx.Err() != nil {
+				add(name, "collection", "cancelled", prefix+"/"+file)
+				break
+			}
+			raw, err := readSourceInput(root, prefix+"/"+file, 64<<20)
+			if err != nil {
+				if !vNextPublicationPureNotExist(err) {
+					add(name, "collection", "artifact_input_invalid", prefix+"/"+file)
+					invalidInputs = true
+				}
+				continue // engine.Load diagnoses purely absent required members.
+			}
+			outputs[file] = raw
+			result.Artifacts[prefix+"/"+file] = raw
+		}
+		if ctx.Err() != nil {
+			continue
+		}
+		bundle, err := engine.Load(newVNextExecutionFS(name, outputs), name)
+		if invalidInputs || err != nil {
+			add(name, "execution_load", "execution_bundle_invalid", prefix)
+		} else {
+			result.Bundles[name] = bundle
+		}
+		raw, err := readSourceInput(root, prefix+"/source.lock.json", 64<<20)
+		if err != nil {
+			add(name, "canonical_import", "canonical_input_unavailable", prefix+"/source.lock.json")
+			continue
+		}
+		var header struct {
+			SchemaVersion int `json:"schema_version"`
+		}
+		if err := decodeSourceJSON(raw, &header); err != nil {
+			add(name, "canonical_import", "canonical_input_invalid", prefix+"/source.lock.json")
+			continue
+		}
+		if header.SchemaVersion != 4 {
+			add(name, "canonical_import", "canonical_schema_unavailable", prefix+"/source.lock.json")
+			continue
+		}
+		lock, err := decodeVNextSourceLock(raw)
+		if err != nil {
+			add(name, "canonical_import", "canonical_input_invalid", prefix+"/source.lock.json")
+			continue
+		}
+		if lock.Connector != name {
+			add(name, "canonical_import", "canonical_connector_mismatch", prefix+"/source.lock.json")
+			continue
+		}
+		if ctx.Err() != nil {
+			add(name, "canonical_generation", "cancelled", prefix+"/source.lock.json")
+			continue
+		}
+		descriptor, err := canonicalizeVNextSourceLock(lock)
+		if err != nil {
+			add(name, "canonical_generation", "canonical_generation_unavailable", prefix+"/source.lock.json")
+			continue
+		}
+		result.Canonical[name] = descriptor
+	}
+	return result
 }
