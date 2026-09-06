@@ -189,3 +189,24 @@ func TestSourceLaneAnnotationContradiction(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneRenderedUnknownContracts(t *testing.T) {
+	node := json.RawMessage(`{"id":"fixture.file","method":"GET","path":"/file","protocol":"rest"}`)
+	row := retainedSourceOperation{Key: sourceOperationKey{Connector: "fixture", Inventory: "supplement", ID: "fixture.file"}, Observed: true, Node: node, Pointer: "/rest/operations/0", SourceLocation: "#read"}
+	doc := retainedSourceDocument{ID: "fixture:lock", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+	markup := `<h2 id=read>Read file</h2><p>The file can be read.</p>`
+	payload, err := json.Marshal(markup)
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw := retainedSourceDocument{ID: "fixture:html", ContentType: "text/html", Payload: payload, RetainedFileSHA256: sourceBytesHash([]byte(markup)), Bytes: int64(len(markup))}
+	facts := normalizeSourceFacts(row, doc, &raw)
+	cells := classifySourceLanes(row.Key, facts, nil)
+	requireSourceLane(t, cells, "direct_read", "applicable")
+	for _, lane := range []string{"binary_download", "binary_upload", "etl", "sync_transport"} {
+		cell := requireSourceLane(t, cells, lane, "undetermined")
+		if len(cell.Diagnostics) == 0 {
+			t.Errorf("unresolved %s lacks a source-keyed diagnostic", lane)
+		}
+	}
+}

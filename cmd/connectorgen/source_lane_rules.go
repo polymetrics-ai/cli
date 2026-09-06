@@ -63,7 +63,7 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 		cells = append(cells, sourceLaneCell{Lane: lane, Applicability: "undetermined", State: "mapped_unproven", RuleID: "facts_unresolved", FactRefs: []sourceFactRef{}, Reason: sourceLaneReason{Code: "facts_unresolved", Text: "Retained facts do not yet establish this lane."}, IntendedBindings: []sourceLaneTargetRef{}, References: []sourceLaneTargetRef{}, ProofRefs: []string{}, OwnerRefs: []string{key.Connector}, GapRefs: []string{}, Diagnostics: []sourceLaneDiagnostic{}})
 	}
 	if facts.Status == "unavailable" {
-		return cells
+		return sourceLaneUnknownDiagnostics(key, cells)
 	}
 	semantics := sourceOperationSemantics(facts)
 	annotationValid := true
@@ -126,7 +126,7 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 	}
 	if raw := facts.Groups["callbacks"]; len(raw) > 0 && string(raw) != "null" && string(raw) != "{}" {
 		set(6, true, "source_callback_contract", "callbacks")
-	} else if semantics != "" {
+	} else if _, complete := facts.Refs["source_operation"]; semantics != "" && complete {
 		set(6, false, "no_operation_event_contract", "source_operation")
 	}
 	if annotationValid && annotation != nil {
@@ -152,6 +152,27 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 		for i := range cells {
 			cells[i].Diagnostics = append(cells[i].Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cells[i].Lane}, Stage: "classification", Code: "source_annotation_invalid", Pointer: annotation.Citation.Pointer, Owner: key.Connector, Severity: "error"})
 		}
+	}
+	return sourceLaneUnknownDiagnostics(key, cells)
+}
+
+func sourceLaneUnknownDiagnostics(key sourceOperationKey, cells []sourceLaneCell) []sourceLaneCell {
+	for i := range cells {
+		if cells[i].Applicability != "undetermined" {
+			continue
+		}
+		code := "source_semantics_unresolved"
+		switch cells[i].Lane {
+		case "binary_download":
+			code = "source_response_shape_unresolved"
+		case "binary_upload":
+			code = "source_request_shape_unresolved"
+		case "etl":
+			code = "source_record_shape_unresolved"
+		case "sync_transport":
+			code = "source_event_contract_unresolved"
+		}
+		cells[i].Diagnostics = append(cells[i].Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cells[i].Lane}, Stage: "classification", Code: code, Pointer: "", Owner: key.Connector, Severity: "deficit"})
 	}
 	return cells
 }

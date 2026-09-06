@@ -239,6 +239,11 @@ func sourceLanePathsEqual(facts sourceFacts, target string) bool {
 func sourceLaneRESTParameterContract(facts sourceFacts, target engine.RESTOperationSpec) string {
 	const mismatch = "target_parameter_mismatch"
 	const unknown = "target_parameter_contract_unverified"
+	for _, diagnostic := range facts.Diagnostics {
+		if diagnostic == "rendered_parameter_contract_unmapped" || strings.HasPrefix(diagnostic, "source_parameter") {
+			return unknown
+		}
+	}
 	targets := map[string]engine.OperationParameter{}
 	parameters := append(append([]engine.OperationParameter{}, target.Parameters...), target.PaginationParameters...)
 	for _, p := range parameters {

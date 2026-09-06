@@ -71,6 +71,7 @@ type retainedSourceOperation struct {
 }
 
 type retainedSourceDocument struct {
+	ContentType            string          `json:"content_type"`
 	ID                     string          `json:"id"`
 	Path                   string          `json:"path"`
 	RetainedFileSHA256     string          `json:"retained_file_sha256"`

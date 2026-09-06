@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"golang.org/x/net/html"
 	"gopkg.in/yaml.v3"
 	"io"
 	"sort"
@@ -12,6 +13,8 @@ import (
 )
 
 type sourceFactRef struct {
+	Section     string `json:"section,omitempty"`
+	Part        string `json:"part,omitempty"`
 	DocumentID  string `json:"document_id"`
 	Pointer     string `json:"pointer"`
 	ValueSHA256 string `json:"value_sha256"`
@@ -89,6 +92,8 @@ func normalizeSourceFacts(row retainedSourceOperation, doc retainedSourceDocumen
 			facts.Diagnostics = append(facts.Diagnostics, "source_operation_invalid")
 			return facts
 		}
+	} else if rawDoc != nil && rawDoc.ContentType == "text/html" {
+		return normalizeRenderedSourceFacts(row, *rawDoc, facts)
 	} else if rawDoc != nil {
 		facts.Document = rawDoc.Payload
 		facts.RefPrefix = ""
@@ -382,4 +387,174 @@ func effectiveSourceParameters(facts sourceFacts, diagnostics []string) ([]sourc
 		result = append(result, byKey[key])
 	}
 	return result, diagnostics
+}
+
+func normalizeRenderedSourceFacts(row retainedSourceOperation, document retainedSourceDocument, facts sourceFacts) sourceFacts {
+	markup, err := sourceRenderedMarkup(document)
+	if err != nil {
+		facts.Diagnostics = append(facts.Diagnostics, "rendered_document_invalid")
+		return facts
+	}
+	heading, text, err := sourceRenderedSection(markup, row.SourceLocation)
+	if err != nil {
+		facts.Diagnostics = append(facts.Diagnostics, "rendered_section_unavailable")
+		return facts
+	}
+	facts.Document = document.Payload
+	facts.RefPrefix = ""
+	for _, group := range []struct{ name, part, value string }{{"summary", "heading", heading}, {"rendered_reference", "text", text}} {
+		raw, err := json.Marshal(group.value)
+		if err != nil {
+			facts.Diagnostics = append(facts.Diagnostics, "rendered_value_invalid")
+			return facts
+		}
+		facts.Groups[group.name] = raw
+		facts.Refs[group.name] = sourceFactRef{DocumentID: document.ID, Section: row.SourceLocation, Part: group.part, ValueSHA256: sourceBytesHash(raw)}
+	}
+	facts.Status = "partial"
+	facts.Diagnostics = append(facts.Diagnostics, "rendered_parameter_contract_unmapped", "rendered_request_response_contract_unmapped")
+	return facts
+}
+
+func sourceRenderedMarkup(document retainedSourceDocument) ([]byte, error) {
+	if document.ContentType != "text/html" {
+		return nil, fmt.Errorf("not a rendered HTML document")
+	}
+	var markup string
+	if err := decodeSourceJSON(document.Payload, &markup); err != nil {
+		return nil, err
+	}
+	raw := []byte(markup)
+	if len(raw) > 64<<20 || int64(len(raw)) != document.Bytes || sourceBytesHash(raw) != document.RetainedFileSHA256 {
+		return nil, fmt.Errorf("rendered bytes do not match retained identity")
+	}
+	return raw, nil
+}
+
+// sourceRenderedSection extracts displayed text from one retained heading
+// section. It never follows links or executes HTML. Inline text remains
+// contiguous; block elements delimit words, and scripts/styles are excluded.
+func sourceRenderedSection(markup []byte, section string) (string, string, error) {
+	if len(markup) > 64<<20 || !strings.HasPrefix(section, "#") || len(section) < 2 || !validSourceID(section) {
+		return "", "", fmt.Errorf("invalid rendered section")
+	}
+	anchor := strings.TrimPrefix(section, "#")
+	tokenizer := html.NewTokenizer(bytes.NewReader(markup))
+	var heading, text strings.Builder
+	found, active, inHeading := false, false, false
+	level := 0
+	skip := ""
+	headingLevel := func(name string) int {
+		if len(name) == 2 && name[0] == 'h' && name[1] >= '1' && name[1] <= '6' {
+			return int(name[1] - '0')
+		}
+		return 0
+	}
+	block := func(name string) bool {
+		switch name {
+		case "p", "div", "pre", "li", "br", "table", "tr", "td", "th", "ul", "ol", "blockquote":
+			return true
+		}
+		return headingLevel(name) > 0
+	}
+	for count := 0; ; count++ {
+		if count >= 1000000 {
+			return "", "", fmt.Errorf("rendered token budget exceeded")
+		}
+		kind := tokenizer.Next()
+		if kind == html.ErrorToken {
+			if err := tokenizer.Err(); err != io.EOF {
+				return "", "", err
+			}
+			break
+		}
+		token := tokenizer.Token()
+		if skip != "" {
+			if kind == html.EndTagToken && token.Data == skip {
+				skip = ""
+			}
+			continue
+		}
+		if (kind == html.StartTagToken || kind == html.SelfClosingTagToken) && (token.Data == "script" || token.Data == "style") {
+			if kind != html.SelfClosingTagToken {
+				skip = token.Data
+			}
+			continue
+		}
+		if kind == html.StartTagToken {
+			currentLevel := headingLevel(token.Data)
+			if currentLevel > 0 {
+				id := ""
+				for _, attribute := range token.Attr {
+					if attribute.Key == "id" {
+						id = attribute.Val
+					}
+				}
+				if id == anchor {
+					if found {
+						return "", "", fmt.Errorf("duplicate rendered section")
+					}
+					found, active, inHeading = true, true, true
+					level = currentLevel
+				} else if active && currentLevel <= level {
+					active = false
+				}
+			}
+		}
+		if !active {
+			continue
+		}
+		switch kind {
+		case html.TextToken:
+			text.WriteString(token.Data)
+			if inHeading {
+				heading.WriteString(token.Data)
+			}
+		case html.StartTagToken, html.EndTagToken, html.SelfClosingTagToken:
+			if block(token.Data) {
+				text.WriteByte(' ')
+			}
+			if kind == html.EndTagToken && headingLevel(token.Data) == level {
+				inHeading = false
+			}
+		}
+	}
+	title := strings.Join(strings.Fields(heading.String()), " ")
+	if !found || inHeading || title == "" {
+		return "", "", fmt.Errorf("rendered section absent or incomplete")
+	}
+	return title, strings.Join(strings.Fields(text.String()), " "), nil
+}
+
+// resolveSourceFactValue re-reads a citation from its immutable document.
+// Rendered selectors are checked against the same bounded section parser;
+// ordinary source facts continue to use exact local JSON pointers.
+func resolveSourceFactValue(document retainedSourceDocument, ref sourceFactRef) (json.RawMessage, error) {
+	if document.ID != ref.DocumentID {
+		return nil, fmt.Errorf("source document identity mismatch")
+	}
+	if ref.Section == "" {
+		if ref.Part != "" {
+			return nil, fmt.Errorf("part without rendered section")
+		}
+		return sourceJSONPointer(document.Payload, ref.Pointer)
+	}
+	if ref.Pointer != "" {
+		return nil, fmt.Errorf("rendered citation cannot also select JSON")
+	}
+	markup, err := sourceRenderedMarkup(document)
+	if err != nil {
+		return nil, err
+	}
+	heading, text, err := sourceRenderedSection(markup, ref.Section)
+	if err != nil {
+		return nil, err
+	}
+	switch ref.Part {
+	case "heading":
+		return json.Marshal(heading)
+	case "text":
+		return json.Marshal(text)
+	}
+	return nil, fmt.Errorf("unknown rendered citation part")
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -192,5 +193,108 @@ func TestSourceFactsParameterPrecedence(t *testing.T) {
 	}
 	if err := json.Unmarshal(query.Node, &param); err != nil || param.Schema.Maximum != 5 {
 		t.Fatalf("effective bound lost: %s", query.Node)
+	}
+}
+
+func TestSourceFactsRetainedRenderedSupplements(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	lock, err := os.ReadFile(filepath.Join(root, "internal/connectors/defs/gitlab/sources/gitlab-binary-operation-source-lock.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var retained struct {
+		Rest struct {
+			Documents []struct {
+				Operations []json.RawMessage `json:"operations"`
+			} `json:"source_documents"`
+		} `json:"rest"`
+	}
+	if err := json.Unmarshal(lock, &retained); err != nil {
+		t.Fatal(err)
+	}
+	for i, tc := range []struct{ id, sha, section, title, clause string }{
+		{"gitlab.docs.generic_packages.upload_file", "f59c93194c095d0e925a5751a08eb7a2176a26c6b5f38bda52f805154219d0f0", "#publish-a-single-file", "Publish a single file", "--upload-file path/to/file.txt"},
+		{"gitlab.docs.repository_files.raw_download", "53244a720b8509536290e0058c946a246817c775c797df36f4c9aa1225fdf0a4", "#retrieve-a-raw-file-from-a-repository", "Retrieve a raw file from a repository", "Retrieves the raw file contents"},
+	} {
+		t.Run(tc.id, func(t *testing.T) {
+			raw, err := os.ReadFile(filepath.Join(root, "internal/connectors/defs/gitlab/sources/artifacts", tc.sha+".artifact"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if sourceBytesHash(raw) != tc.sha {
+				t.Fatal("retained rendered bytes drifted")
+			}
+			htmlJSON, err := json.Marshal(string(raw))
+			if err != nil {
+				t.Fatal(err)
+			}
+			row := retainedSourceOperation{Key: sourceOperationKey{Connector: "gitlab", Inventory: "binary-docs", ID: tc.id}, Observed: true, Node: retained.Rest.Documents[i].Operations[0], Pointer: fmt.Sprintf("/rest/source_documents/%d/operations/0", i), SourceLocation: tc.section}
+			document := retainedSourceDocument{ID: "gitlab:binary-docs", Payload: lock}
+			artifact := retainedSourceDocument{ID: "gitlab:binary-docs:raw:" + tc.sha, ContentType: "text/html", Payload: htmlJSON, RetainedFileSHA256: tc.sha, Bytes: int64(len(raw)), UpstreamBytesVerified: true}
+			facts := normalizeSourceFacts(row, document, &artifact)
+			if facts.Status != "partial" || sourceFactText(facts, "summary") != tc.title {
+				t.Fatalf("retained section facts unavailable: status=%s summary=%q diagnostics=%v", facts.Status, sourceFactText(facts, "summary"), facts.Diagnostics)
+			}
+			if !strings.Contains(sourceFactText(facts, "rendered_reference"), tc.clause) {
+				t.Fatalf("section lost independently expected clause %q", tc.clause)
+			}
+			expectedJSON, _ := json.Marshal(tc.title)
+			ref := facts.Refs["summary"]
+			if ref.DocumentID != artifact.ID || ref.Section != tc.section || ref.Part != "heading" || ref.ValueSHA256 != sourceBytesHash(expectedJSON) {
+				t.Fatalf("section citation mismatch: %+v", ref)
+			}
+			if len(facts.Groups["request_body"]) != 0 || len(facts.Groups["responses"]) != 0 {
+				t.Fatal("rendered section fabricated machine-readable request/response schemas")
+			}
+		})
+	}
+}
+
+func TestSourceFactsRenderedSectionControls(t *testing.T) {
+	markup := []byte(`<h2 id="before">Other</h2><p>unrelated</p><h2 id="selected">Read <span>file</span></h2><p>up<span>load</span> bytes</p><script>do not cite script</script><style>do not cite style</style><h3>Details</h3><p>bounded text</p><h2 id="after">After</h2><p>unrelated-after</p>`)
+	heading, text, err := sourceRenderedSection(markup, "#selected")
+	if err != nil || heading != "Read file" || text != "Read file upload bytes Details bounded text" {
+		t.Fatalf("section text mismatch: heading=%q text=%q err=%v", heading, text, err)
+	}
+	for _, tc := range []struct{ name, markup, section string }{
+		{"missing", string(markup), "#absent"},
+		{"duplicate", `<h2 id=x>One</h2><h2 id=x>Two</h2>`, "#x"},
+		{"unclosed heading", `<h2 id=x>One<p>body`, "#x"},
+		{"not a section", string(markup), "https://example.invalid/#selected"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if _, _, err := sourceRenderedSection([]byte(tc.markup), tc.section); err == nil {
+				t.Fatal("invalid section accepted")
+			}
+		})
+	}
+	payload, err := json.Marshal(string(markup))
+	if err != nil {
+		t.Fatal(err)
+	}
+	document := retainedSourceDocument{ID: "fixture:html", ContentType: "text/html", Payload: payload, RetainedFileSHA256: sourceBytesHash(markup), Bytes: int64(len(markup))}
+	ref := sourceFactRef{DocumentID: document.ID, Section: "#selected", Part: "heading"}
+	value, err := resolveSourceFactValue(document, ref)
+	if err != nil || string(value) != `"Read file"` {
+		t.Fatalf("citation resolution=%s err=%v", value, err)
+	}
+	ref.Part = "executable-selector"
+	if _, err := resolveSourceFactValue(document, ref); err == nil {
+		t.Fatal("unknown selector accepted")
+	}
+	ref.Part = "heading"
+	document.RetainedFileSHA256 = "changed"
+	if _, err := resolveSourceFactValue(document, ref); err == nil {
+		t.Fatal("changed retained document accepted")
+	}
+}
+
+func TestSourceFactsRenderedTokenBudget(t *testing.T) {
+	raw := []byte(`<h2 id=x>Bounded</h2>` + strings.Repeat("<br>", 1000000))
+	if _, _, err := sourceRenderedSection(raw, "#x"); err == nil || !strings.Contains(err.Error(), "token budget") {
+		t.Fatalf("token limit not reached/refused: %v", err)
 	}
 }
