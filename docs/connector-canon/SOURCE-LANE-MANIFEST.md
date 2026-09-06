@@ -11,8 +11,9 @@ supplements. Its report contains 4,343 source rows and 30,401 cells. These are
 source-accounting totals, not executable capability counts. Root `primary`,
 `supplement` and `operations` totals describe the anchored expected universe;
 `observed_primary`, `observed_supplement` and `observed_operations` separately
-count verified retained rows. Missing inputs reduce observation, never membership. The inventory keeps
-provider IDs verbatim and identifies each operation by connector, inventory and
+count verified retained rows. Missing inputs reduce observation, never membership.
+The inventory keeps provider IDs verbatim and identifies each operation by connector,
+inventory and
 ID; command names and canonical execution-unit IDs do not define membership.
 
 ## Generate and check
@@ -58,8 +59,8 @@ report. A short or failed stdout write fails the command.
 - `batch1-source-lane-proofs.json` contains optional scoped behavioral records.
   The real set remains empty until an original per-source/lane receipt and its
   assertion mapping have been reviewed. A proof record cannot approve itself.
-  Current loader capacity is undergoing reconciliation against the full cohort;
-  an empty file does not establish that the loader is complete.
+  Shared reviewed input sets avoid repeating the full dependency closure for
+  every record; an empty file does not establish behavioral coverage.
 
 A retained-document record separates its actual file hash/size from an upstream
 hash/size declared in that file. `upstream_bytes_verified` is true only when the
@@ -105,3 +106,41 @@ The report is not the separate source-role/destination-role/mode matrix. It does
 not approve credentials, provider exercises, receiver exposure, a relay or a
 scope reduction. The existing checkpoint and independent-review gates still
 apply.
+
+## Proof record format and limits
+
+The [proof assertion schema](source-lane-proofs.schema.json) describes additive
+closed schema version 1. The existing empty `records` array remains valid. A
+record uses exactly one of inline `inputs` or `input_set_sha256`; even an explicit
+`inputs: null` cannot accompany a shared-set reference. Optional same-document
+`input_sets` declare complete `{path, sha256, role}` tuples. A set digest covers
+compact canonical JSON of `{version: 1, inputs: [...]}`, with tuples sorted by
+path, digest and role. Sets are immutable evidence declarations, not executable
+commands or external registries.
+
+The caller separately supplies trusted reviewed sets and exact record/assertion
+mappings. Decoding a record never adds it to that catalog. Source keys come from
+the independently validated cohort, allowing at most one proof per exact
+key/lane: 30,401 possible slots for Batch One, without making every lane
+applicable. Global and orphan errors remain in the report even when they cannot
+be attached to an anchored row.
+
+The loader bounds the document to 128 MiB, each record to 64 targets, each set
+to 4,096 pins, aggregate input tuples to 131,072, and unique file entries to
+65,536. Unique charged bytes, including the document, are bounded to 512 MiB.
+Go/module/receipt files retain 4 MiB limits; target artifacts use 64 MiB limits.
+These independent ceilings do not promise admission of their full product.
+Structural decoding enforces counts before allocating further typed entries.
+
+An invocation-local cache records actual file identity, content digest and read
+status independently of a claimant's expected digest. Every successful unique
+file is checked again by identity and content before return: two bounded
+content-read passes, not one physical read or an atomic repository snapshot.
+Failed reads retain a conservative allowance charge including lookahead; that
+charge is an upper bound, not a claimed exact byte count. Physical allowance is
+at most twice the unique-byte budget plus bounded per-file lookahead. Context
+cancellation invalidates proof acceptance. No receipt command is executed.
+
+Schema validity, current hashes and successful test events still cannot establish
+assertion meaning or complete lane behavior. Those remain responsibilities of
+the independently reviewed assertion mapping and the checkpoint review gate.

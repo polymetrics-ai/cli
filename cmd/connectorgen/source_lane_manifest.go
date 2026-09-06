@@ -98,7 +98,17 @@ func buildSourceLaneManifestObserved(ctx context.Context, repo string, cohort so
 	for key := range duplicate {
 		annotationIndex[key] = nil
 	}
-	proofs := loadSourceLaneProofs(repo, nil)
+	anchoredKeys := make([]sourceOperationKey, 0, len(inventory.Operations))
+	for _, source := range inventory.Operations {
+		anchoredKeys = append(anchoredKeys, source.Key)
+	}
+	policy, policyErr := newSourceLaneProofPolicy(anchoredKeys)
+	var proofs sourceLaneProofInputs
+	if policyErr != nil {
+		proofs.Diagnostics = []sourceLaneDiagnostic{{Lanes: sourceLaneNames(), Stage: "proof", Code: "proof_cohort_policy_invalid", Owner: "batch1", Severity: "error"}}
+	} else {
+		proofs = loadSourceLaneProofs(ctx, repo, policy, sourceLaneProofCatalog{})
+	}
 	result.Diagnostics = append(result.Diagnostics, proofs.Diagnostics...)
 	bindings := collectSourceLaneBindings(ctx, repo, cohort)
 	for _, source := range inventory.Operations {
