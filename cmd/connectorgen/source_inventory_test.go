@@ -229,3 +229,57 @@ func TestSourceInventoryInvalidAnchor(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceInventoryRetainsRawDocumentBinding(t *testing.T) {
+	root, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := os.ReadFile(filepath.Join(root, "data/connector-canon/batch1-source-lane-cohort.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var cohort sourceLaneCohort
+	if err := json.Unmarshal(raw, &cohort); err != nil {
+		t.Fatal(err)
+	}
+	got := loadRetainedSourceInventory(context.Background(), root, cohort)
+	documents := map[string]retainedSourceDocument{}
+	for _, doc := range got.Documents {
+		documents[doc.ID] = doc
+	}
+	expected := map[string]struct{ sha, kind, method, route string }{
+		"asana.rest.getAgent":                       {"cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56", "application/yaml", "GET", "/agents/{agent_gid}"},
+		"gitlab.docs.generic_packages.upload_file":  {"f59c93194c095d0e925a5751a08eb7a2176a26c6b5f38bda52f805154219d0f0", "text/html", "PUT", "/projects/{id}/packages/generic/{package_name}/{package_version}/{file_name}"},
+		"gitlab.docs.repository_files.raw_download": {"53244a720b8509536290e0058c946a246817c775c797df36f4c9aa1225fdf0a4", "text/html", "GET", "/projects/{id}/repository/files/{file_path}/raw"},
+	}
+	seen := 0
+	for _, row := range got.Operations {
+		want, ok := expected[row.Key.ID]
+		if !ok {
+			continue
+		}
+		seen++
+		doc, ok := documents[row.RawDocumentID]
+		if !ok || doc.RetainedFileSHA256 != want.sha || doc.ContentType != want.kind || !doc.UpstreamBytesVerified {
+			t.Errorf("source %s lost exact verified raw-document binding: %q %+v", row.Key.ID, row.RawDocumentID, doc)
+			continue
+		}
+		facts := normalizeSourceFacts(row, documents[row.DocumentID], &doc)
+		if facts.Method != want.method || facts.Path != want.route || (facts.Status != "available" && facts.Status != "partial") {
+			t.Errorf("exact raw facts unavailable for %s: %+v", row.Key.ID, facts.Diagnostics)
+		}
+		if row.Key.Connector == "asana" && facts.Refs["responses"].DocumentID != doc.ID {
+			t.Error("Asana response fact is not bound to verified YAML")
+		}
+		if row.Key.Inventory == "binary-docs" && facts.Refs["summary"].Section != row.SourceLocation {
+			t.Error("supplement heading not bound to exact retained section")
+		}
+	}
+	if seen != 3 {
+		t.Fatalf("independent source identities absent: %d", seen)
+	}
+	if len(got.Operations) != 4343 || len(got.Diagnostics) != 0 {
+		t.Fatalf("raw document retention altered census: rows=%d diagnostics=%v", len(got.Operations), got.Diagnostics)
+	}
+}

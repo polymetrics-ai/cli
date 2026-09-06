@@ -60,6 +60,7 @@ type sourceLaneDiagnostic struct {
 }
 
 type retainedSourceOperation struct {
+	RawDocumentID  string                 `json:"raw_document_id"`
 	Key            sourceOperationKey     `json:"key"`
 	Class          string                 `json:"class"`
 	DocumentID     string                 `json:"document_id"`
@@ -153,8 +154,10 @@ func loadRetainedSourceInventory(ctx context.Context, repo string, cohort source
 			continue
 		}
 		validArtifacts := true
+		artifactBytes := map[string][]byte{}
 		for _, pin := range anchor.Artifacts {
 			raw, readErr := readSourceInput(root, pin.Path, 64<<20)
+			artifactBytes[pin.Path] = raw
 			totalBytes += int64(len(raw))
 			if readErr != nil || int64(len(raw)) != pin.Bytes || sourceBytesHash(raw) != pin.SHA256 || totalBytes > 512<<20 {
 				validArtifacts = false
@@ -184,6 +187,13 @@ func loadRetainedSourceInventory(ctx context.Context, repo string, cohort source
 			Bytes      int64             `json:"bytes"`
 			Operations []json.RawMessage `json:"operations"`
 			Documents  []struct {
+				ID          string `json:"id"`
+				ContentType string `json:"content_type"`
+				Artifact    struct {
+					SHA256  string `json:"sha256"`
+					Bytes   int64  `json:"bytes"`
+					OpenAPI string `json:"openapi"`
+				} `json:"artifact"`
 				Operations []json.RawMessage `json:"operations"`
 			} `json:"source_documents"`
 		}
@@ -191,15 +201,72 @@ func loadRetainedSourceInventory(ctx context.Context, repo string, cohort source
 			fail("source_invalid")
 			continue
 		}
-		result.Documents = append(result.Documents, retainedSourceDocument{ID: anchor.Connector + ":" + anchor.Inventory, Path: anchor.Path, RetainedFileSHA256: anchor.SHA256, Bytes: int64(len(data)), UpstreamDeclaredSHA256: rest.SHA256, UpstreamDeclaredBytes: rest.Bytes, Payload: append(json.RawMessage(nil), data...)})
+
+		rawDocuments := map[int]retainedSourceDocument{}
+		rawIDs := map[string]bool{}
+		rawValid := true
+		for i, doc := range rest.Documents {
+			if !sourceLaneIdentityPart(doc.ID) || rawIDs[doc.ID] {
+				rawValid = false
+				continue
+			}
+			rawIDs[doc.ID] = true
+			var matched *sourceArtifactPin
+			for j := range anchor.Artifacts {
+				pin := &anchor.Artifacts[j]
+				if pin.SHA256 == doc.Artifact.SHA256 && pin.Bytes == doc.Artifact.Bytes {
+					if matched != nil {
+						rawValid = false
+					}
+					matched = pin
+				}
+			}
+			if matched == nil {
+				rawValid = false
+				continue
+			}
+			raw := artifactBytes[matched.Path]
+			var payload json.RawMessage
+			kind := doc.ContentType
+			var decodeErr error
+			switch {
+			case kind == "text/html":
+				payload, decodeErr = json.Marshal(string(raw))
+			case kind == "application/json":
+				payload, decodeErr = canonicalSourceJSON(raw)
+			case kind == "application/yaml" || (kind == "" && doc.Artifact.OpenAPI != ""):
+				kind = "application/yaml"
+				payload, decodeErr = sourceYAMLDocument(raw)
+			default:
+				decodeErr = fmt.Errorf("unsupported retained artifact representation")
+			}
+			if decodeErr != nil {
+				rawValid = false
+				continue
+			}
+			rawDocuments[i] = retainedSourceDocument{ID: anchor.Connector + ":" + anchor.Inventory + ":raw:" + matched.SHA256, ContentType: kind, Path: matched.Path, RetainedFileSHA256: matched.SHA256, Bytes: matched.Bytes, UpstreamDeclaredSHA256: doc.Artifact.SHA256, UpstreamDeclaredBytes: doc.Artifact.Bytes, UpstreamBytesVerified: true, Payload: payload}
+		}
+		if !rawValid {
+			fail("source_artifact_binding_invalid")
+			continue
+		}
+		for i := range rest.Documents {
+			if doc, ok := rawDocuments[i]; ok {
+				result.Documents = append(result.Documents, doc)
+			}
+		}
+		result.Documents = append(result.Documents, retainedSourceDocument{ContentType: "application/json", ID: anchor.Connector + ":" + anchor.Inventory, Path: anchor.Path, RetainedFileSHA256: anchor.SHA256, Bytes: int64(len(data)), UpstreamDeclaredSHA256: rest.SHA256, UpstreamDeclaredBytes: rest.Bytes, Payload: append(json.RawMessage(nil), data...)})
 		rows := rest.Operations
 		pointers := []string{}
+		rawBindings := map[string]string{}
 		if version == 3 {
 			rows = []json.RawMessage{}
 			for d, doc := range rest.Documents {
 				for n, row := range doc.Operations {
 					rows = append(rows, row)
-					pointers = append(pointers, fmt.Sprintf("/rest/source_documents/%d/operations/%d", d, n))
+					pointer := fmt.Sprintf("/rest/source_documents/%d/operations/%d", d, n)
+					pointers = append(pointers, pointer)
+					rawBindings[pointer] = rawDocuments[d].ID
 				}
 			}
 		} else {
@@ -231,6 +298,7 @@ func loadRetainedSourceInventory(ctx context.Context, repo string, cohort source
 			}
 			result.Operations[target].Observed = true
 			result.Operations[target].Node = append(json.RawMessage(nil), row...)
+			result.Operations[target].RawDocumentID = rawBindings[pointers[n]]
 			result.Operations[target].Pointer = pointers[n]
 			result.Operations[target].SourceLocation = node.Location
 		}
