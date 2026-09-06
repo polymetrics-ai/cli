@@ -333,4 +333,3 @@ No tests below were executed by the planner. Record real RED before correspondin
 | E13 runtime isolation | Generate/check with source files only in authoring root; inspect embedded FS and changed runtime files | Existing allowlist excludes sources/new manifest, no PM reader/route changed. Positive unchanged runnable execution inventory remains independent of source proof. |
 
 The membership helper must reject E01 same-count substitution; the source-fact/applicability helper must reject E04/E05 readable contradictions; the reference helper must reject E06 wrong existing target/schema/identity. These three controls are mandatory even if the main feature tests already fail on malformed JSON. Do not add a generic mutation framework or dozens of implementation-mirroring tests.
-
