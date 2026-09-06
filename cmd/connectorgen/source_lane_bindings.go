@@ -222,6 +222,7 @@ func sourceLaneCheckCoverage(key sourceOperationKey, facts sourceFacts, a source
 		request bool
 	}
 	scopes := []scope{}
+	unknownScopes := []string{}
 	for _, group := range []string{"request_body", "responses"} {
 		owner, ok := facts.Refs[group]
 		if !ok {
@@ -233,12 +234,14 @@ func sourceLaneCheckCoverage(key sourceOperationKey, facts sourceFacts, a source
 		}
 		mediaAt := func(node map[string]json.RawMessage, pointer string, request bool) {
 			var media map[string]json.RawMessage
-			if json.Unmarshal(node["content"], &media) != nil {
+			if json.Unmarshal(node["content"], &media) != nil || len(media) == 0 {
+				unknownScopes = append(unknownScopes, pointer)
 				return
 			}
 			for name, value := range media {
 				var entry map[string]json.RawMessage
 				if json.Unmarshal(value, &entry) != nil || len(entry["schema"]) == 0 {
+					unknownScopes = append(unknownScopes, pointer+"/content/"+escapeSourcePointer(name))
 					continue
 				}
 				raw, err := canonicalSourceJSON(entry["schema"])
@@ -252,7 +255,7 @@ func sourceLaneCheckCoverage(key sourceOperationKey, facts sourceFacts, a source
 			mediaAt(root, owner.Pointer, true)
 		} else {
 			for status, value := range root {
-				if len(status) == 3 && status[0] == '2' {
+				if len(status) == 3 && status[0] == '2' && status != "204" && status != "205" {
 					node, ok := sourceResolveObject(facts, value, map[string]bool{}, 0)
 					if ok {
 						mediaAt(node, owner.Pointer+"/"+status, false)
@@ -263,9 +266,21 @@ func sourceLaneCheckCoverage(key sourceOperationKey, facts sourceFacts, a source
 	}
 	for i := range cells {
 		cell := &cells[i]
+		hasExecutable := false
+		for _, ref := range cell.References {
+			if ref.Kind != "schema" {
+				hasExecutable = true
+			}
+		}
+		if len(cell.References) > 0 && !hasExecutable {
+			cell.Diagnostics = append(cell.Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cell.Lane}, Stage: "reference", Code: "target_executable_coverage_unverified", Owner: key.Connector, Severity: "deficit"})
+		}
 		for _, ref := range cell.References {
 			if ref.Kind == "schema" || ref.Kind == "sync_transport" {
 				continue
+			}
+			for _, pointer := range unknownScopes {
+				cell.Diagnostics = append(cell.Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cell.Lane}, Stage: "reference", Code: "target_required_scope_unverified", Pointer: pointer, Owner: key.Connector, Severity: "deficit"})
 			}
 			for _, needed := range scopes {
 				covered := false
@@ -1114,7 +1129,15 @@ func sourceLaneSchemaCompare(facts sourceFacts, source, target json.RawMessage) 
 					if err != nil {
 						return nil, false
 					}
-					items = append(items, string(canonical))
+					var scalar any
+					if decodeSourceJSON(value, &scalar) != nil {
+						return nil, false
+					}
+					if number, ok := scalar.(json.Number); ok {
+						items = append(items, "number:"+sourceLaneNumberKey(string(number)))
+					} else {
+						items = append(items, "json:"+string(canonical))
+					}
 				}
 				sort.Strings(items)
 				out[k] = items
