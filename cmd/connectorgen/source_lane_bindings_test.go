@@ -615,6 +615,112 @@ func TestSourceLaneBinding099FGraphQLVariables(t *testing.T) {
 	}
 }
 
+func TestSourceLaneBinding099FCrossReferenceControls(t *testing.T) {
+	for _, mode := range []string{"duplicate", "conflict", "missing required parameter", "wrong equal registry", "wrong authored object"} {
+		t.Run(mode, func(t *testing.T) {
+			key, facts, a := sourceBindingFixture099F(t, "body", func(lock *vNextSourceLock) {
+				lock.Schemas["schemas/unrelated.json"] = append(json.RawMessage(nil), lock.Schemas["schemas/request.json"]...)
+			})
+			code := "target_duplicate_claim"
+			switch mode {
+			case "duplicate", "conflict":
+				second := canonicalSourceLaneTargetRef(a.IntendedBindings[0])
+				if mode == "conflict" {
+					pointer := "/properties/missing"
+					second.FieldMappings[1].Target.Pointer = &pointer
+					code = "target_projection_conflict"
+				}
+				a.MaterializedBindings = []sourceLaneTargetRef{second}
+			case "missing required parameter":
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					op := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)
+					op["parameters"] = append(op["parameters"].([]any), map[string]any{"name": "scope", "in": "query", "required": true, "schema": map[string]any{"type": "string"}})
+				})
+				code = "target_parameter_mismatch"
+			case "wrong equal registry":
+				r := &a.IntendedBindings[0]
+				r.Kind = "schema"
+				r.ID = "schemas/unrelated.json"
+				r.Artifact = "internal/connectors/defs/acme/" + r.ID
+				r.Pointer = ""
+				r.ArtifactSHA256 = sourceBytesHash(facts.bindings.Artifacts[r.Artifact])
+				r.CanonicalPointer = "/operations/0/schema_refs/request"
+				code = "canonical_provenance_mismatch"
+			case "wrong authored object":
+				r := &a.IntendedBindings[0]
+				r.Kind = "canonical_operation"
+				r.ID = r.CanonicalID
+				r.Artifact = "internal/connectors/defs/acme/source.lock.json"
+				r.Pointer = "/operations/0"
+				r.CanonicalPointer = "/operations/0"
+				var lock map[string]any
+				_ = json.Unmarshal(facts.bindings.Authoring[r.Artifact], &lock)
+				lock["operations"].([]any)[0].(map[string]any)["write"].(map[string]any)["path"] = "/other/{{ record.id }}"
+				raw, _ := json.Marshal(lock)
+				facts.bindings.Authoring[r.Artifact] = raw
+				r.ArtifactSHA256 = sourceBytesHash(raw)
+				code = "canonical_authoring_mismatch"
+			}
+			sourceBindingOutcome099F(t, key, facts, a, 0, code)
+		})
+	}
+}
+
+func TestSourceLaneBinding099FOptionalBodyAndSourceErrors(t *testing.T) {
+	for _, mode := range []string{"outer false", "outer absent", "error response", "duplicate field", "missing pointer", "unknown tag"} {
+		t.Run(mode, func(t *testing.T) {
+			kind := "body"
+			if mode == "error response" {
+				kind = "envelope"
+			}
+			key, facts, a := sourceBindingFixture099F(t, kind, func(lock *vNextSourceLock) {
+				if strings.HasPrefix(mode, "outer") {
+					lock.Operations[0].Write = json.RawMessage(strings.Replace(string(lock.Operations[0].Write), `"body_required":true`, `"body_required":false`, 1))
+				}
+			})
+			want := 0
+			code := "target_projection_shape_invalid"
+			switch mode {
+			case "outer false", "outer absent":
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					body := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)["requestBody"].(map[string]any)
+					if mode == "outer absent" {
+						delete(body, "required")
+					} else {
+						body["required"] = false
+					}
+				})
+				want = 1
+				code = ""
+			case "error response":
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					responses := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)["responses"].(map[string]any)
+					var response any
+					_ = json.Unmarshal([]byte(`{"content":{"application/json":{"schema":`+sourceBindingEnvelope099F+`}}}`), &response)
+					responses["400"] = response
+				})
+				r := &a.IntendedBindings[0]
+				anchor := sourceBindingCitation099F(t, facts, "/rest/operations/0/source_operation/responses/400/content/application~1json/schema")
+				r.SourceSchema = &anchor
+				r.FieldMappings[0].Source = sourceBindingCitation099F(t, facts, anchor.Pointer+"/properties/data/items")
+				code = "source_binding_scope_mismatch"
+			case "duplicate field":
+				r := &a.IntendedBindings[0]
+				r.FieldMappings = append(r.FieldMappings, r.FieldMappings[0])
+			case "missing pointer":
+				a.IntendedBindings[0].FieldMappings[0].Target.Pointer = nil
+			case "unknown tag":
+				a.IntendedBindings[0].FieldMappings[0].Target.Kind = "body"
+			}
+			codes := []string{}
+			if code != "" {
+				codes = append(codes, code)
+			}
+			sourceBindingOutcome099F(t, key, facts, a, want, codes...)
+		})
+	}
+}
+
 func TestSourceLaneBindingClaims(t *testing.T) {
 	const artifact = "internal/connectors/defs/fixture/operations.json"
 	raw := []byte(`{"operations":[{"id":"read_widget","kind":"rest_read","rest":{"method":"GET","path":"/widgets/{id}"}},{"id":"other_widget","kind":"rest_read","rest":{"method":"GET","path":"/other/{id}"}}]}`)
