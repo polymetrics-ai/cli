@@ -947,10 +947,17 @@ decision in this intake, no push, and no CP12/no-mistakes authorization.
 ## 2026-09-06 — CP11 e77 independent complete-ledger audit (frozen pre-repair record)
 
 The independent Codex GPT-6 Astra/xhigh auditor completed the required
-whole-ledger adjudication without changing project files or refs. Its complete
-verbatim report is preserved at
-`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-e77-complete-ledger-audit.md`,
-SHA-256 `6d0d5d80bd6355d2f578649f47dd36af5d9b441007a432b8a805dcac358010f2`.
+whole-ledger adjudication without changing project files or refs. The
+authoritative complete original return, recovered from the exact worker rollout
+message `amsg_01a07495-52ae-7a00-a473-530109963ffb` at physical line 9330,
+is preserved at
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-e77-audit-original-return.md`,
+SHA-256 `9d68c63c7d6b525dab6010997a9eb36dc43890ca9cfd657523bbee25e47e24ba`;
+adjacent `cp11-e77-audit-original-return-provenance.json` binds its message,
+session-meta CLI source and exact cwd provenance. The later
+`cp11-e77-complete-ledger-audit.md` copy differs only by a terminal newline
+(SHA-256 `6d0d5d80bd6355d2f578649f47dd36af5d9b441007a432b8a805dcac358010f2`)
+and is non-authoritative for this binding.
 It audits the immutable behavioral code
 `e77cd390f45eb938917dc3c39882bda34aae09a6`, tree
 `4c37521b11a6f1a22bd6fa5ea5e043d4982329f8`, over original base
