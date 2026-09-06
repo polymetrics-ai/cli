@@ -502,31 +502,7 @@ func sourceLaneNumericBoundEqual(left, right []byte) (bool, bool) {
 		if !ok {
 			return "", false
 		}
-		text := string(number)
-		negative := strings.HasPrefix(text, "-")
-		text = strings.TrimPrefix(text, "-")
-		coefficient, exponentText, hasExponent := strings.Cut(strings.ToLower(text), "e")
-		exponent := new(big.Int)
-		if hasExponent {
-			if _, ok := exponent.SetString(exponentText, 10); !ok {
-				return "", false
-			}
-		}
-		if dot := strings.IndexByte(coefficient, '.'); dot >= 0 {
-			exponent.Sub(exponent, big.NewInt(int64(len(coefficient)-dot-1)))
-			coefficient = coefficient[:dot] + coefficient[dot+1:]
-		}
-		coefficient = strings.TrimLeft(coefficient, "0")
-		if coefficient == "" {
-			return "0", true
-		}
-		shortened := strings.TrimRight(coefficient, "0")
-		exponent.Add(exponent, big.NewInt(int64(len(coefficient)-len(shortened))))
-		sign := ""
-		if negative {
-			sign = "-"
-		}
-		return sign + shortened + "e" + exponent.String(), true
+		return sourceLaneNumberKey(string(number)), true
 	}
 	a, ok := normalize(left)
 	if !ok {
