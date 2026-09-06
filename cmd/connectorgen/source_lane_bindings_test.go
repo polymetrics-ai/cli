@@ -125,6 +125,41 @@ func TestSourceLaneBindingCanonicalPositive(t *testing.T) {
 	}
 }
 
+func TestSourceLaneBindingProviderOperationIdentity(t *testing.T) {
+	for _, tc := range []struct{ name, provider, want string }{
+		{"exact supplied provider identity", "GetWidgets", "target_response_contract_unverified"},
+		{"same route different supplied operation", "GetOtherWidgets", "target_operation_identity_mismatch"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			lock := operationDirectReadLockForSemanticAdmissionTest()
+			lock.Operations[0].Source = json.RawMessage(`{"provider_operation":"` + tc.provider + `","method":"GET","path":"/widgets"}`)
+			descriptor, err := canonicalizeVNextSourceLock(lock)
+			if err != nil {
+				t.Fatal(err)
+			}
+			key := sourceOperationKey{Connector: "acme", Inventory: "primary", ID: "retained.widgets"}
+			node := json.RawMessage(`{"id":"retained.widgets","operation_id":"GetWidgets","method":"GET","path":"/widgets","protocol":"rest","source_operation":{"summary":"Get widgets","responses":{"200":{"description":"Unknown response shape"}}}}`)
+			facts := normalizeSourceFacts(retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}, retainedSourceDocument{ID: "acme:primary", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}, nil)
+			facts.bindings = sourceBindingTestInputs(t, map[string][]byte{}, map[string]vNextCanonicalDescriptor{"acme": descriptor})
+			if len(facts.bindings.Bundles["acme"].Operations) != 1 || descriptor.Staged.Identity.Digest == "" {
+				t.Fatal("real admission/load stage not reached")
+			}
+			artifact := "internal/connectors/defs/acme/operations.json"
+			ref := sourceLaneTargetRef{Kind: "operation", Connector: "acme", ID: "widgets.get", Lane: "direct_read", Artifact: artifact, Pointer: "/operations/0", ArtifactSHA256: sourceBytesHash(descriptor.Staged.Outputs["operations.json"]), CanonicalID: "operation:widgets.get", CanonicalPointer: "/operations/0/operation", Generation: descriptor.Staged.Identity.Digest}
+			cells := resolveSourceLaneBindings(key, facts, sourceSemanticAnnotation{IntendedBindings: []sourceLaneTargetRef{ref}}, []sourceLaneCell{{Lane: "direct_read", Applicability: "applicable"}})
+			found := false
+			for _, d := range cells[0].Diagnostics {
+				if d.Code == tc.want {
+					found = true
+				}
+			}
+			if !found {
+				t.Fatalf("admitted target provider identity %q: want %s; got %+v", tc.provider, tc.want, cells[0].Diagnostics)
+			}
+		})
+	}
+}
+
 func TestSourceLaneGitLabBridge(t *testing.T) {
 	for _, tc := range []struct{ name, sourcePath, targetPath, bridge, want string }{
 		{"declared exact boundary", "/api/v4/projects/{id}", "/projects/{id}", `{"source_prefix":"/api/v4","connector_prefix":""}`, "target_contract_unverified"},
