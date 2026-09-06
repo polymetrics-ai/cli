@@ -211,3 +211,51 @@ func TestSourceLaneManifestBindingObservation(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneManifestProofFailurePreservation(t *testing.T) {
+	for _, which := range []string{"empty proof", "malformed proof", "orphan assertion"} {
+		t.Run(which, func(t *testing.T) {
+			root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+			proofDocument(t, root, []sourceLaneProofRecord{})
+			if which == "malformed proof" {
+				proofWrite(t, root, sourceLaneProofPath, []byte(`{"schema_version":1,"records":`))
+			}
+			if which == "orphan assertion" {
+				proofDocument(t, root, []sourceLaneProofRecord{{ID: "orphan", Key: sourceOperationKey{Connector: "fixture", Inventory: "primary", ID: "source.other"}, Lane: "direct_read", ClaimCurrent: true}})
+			}
+			before := sourceBindingFixtureSnapshot(t, root)
+			got, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(got.SourceOperations) != 2 || got.SourceTotals.Cells != 14 {
+				t.Fatal("proof failure removed source rows/cells")
+			}
+			if (got.Validation.Status == "invalid") != (which != "empty proof") {
+				t.Fatalf("invalid proof silently disappeared: %+v %+v", got.Validation, got.Diagnostics)
+			}
+			if which == "orphan assertion" {
+				found := false
+				for _, d := range got.Diagnostics {
+					if d.Key.ID == "source.other" && d.Stage == "proof" && d.Severity == "error" {
+						found = true
+					}
+				}
+				if !found {
+					t.Fatal("orphan claimed proof was suppressed by anchored iteration")
+				}
+			}
+			for _, row := range got.SourceOperations {
+				if row.Source.Key.ID != "source.a" && row.Source.Key.ID != "source.b" {
+					t.Fatal("proof supplied source membership")
+				}
+				if row.Lanes[0].State != "mapped_unproven" || !proofHasDiagnostic(row.Lanes[0].Diagnostics, "proof_unavailable", "deficit") {
+					t.Fatal("empty/invalid proof did not retain explicit unproven lane")
+				}
+			}
+			if after := sourceBindingFixtureSnapshot(t, root); !reflect.DeepEqual(before, after) {
+				t.Fatal("proof phase mutated fixture")
+			}
+		})
+	}
+}

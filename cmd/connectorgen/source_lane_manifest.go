@@ -88,6 +88,8 @@ func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLane
 	for key := range duplicate {
 		annotationIndex[key] = nil
 	}
+	proofs := loadSourceLaneProofs(repo, nil)
+	result.Diagnostics = append(result.Diagnostics, proofs.Diagnostics...)
 	bindings := collectSourceLaneBindings(ctx, repo, cohort)
 	for _, source := range inventory.Operations {
 		for _, observation := range bindings.Observations {
@@ -111,6 +113,7 @@ func buildSourceLaneManifest(ctx context.Context, repo string, cohort sourceLane
 		facts.bindings = &bindings
 		annotation := annotationIndex[source.Key]
 		cells := classifySourceLanes(source.Key, facts, annotation)
+		cells = assessSourceLaneProof(source.Key, cells, proofs)
 		result.SourceOperations = append(result.SourceOperations, sourceLaneManifestRow{Source: source, Facts: facts, Lanes: cells})
 	}
 	summarizeSourceLaneManifest(&result)
