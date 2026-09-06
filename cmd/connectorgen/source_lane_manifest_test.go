@@ -941,3 +941,69 @@ func TestSourceLaneManifestRawSharedFactOmission(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneManifestProviderFactCounterexamples(t *testing.T) {
+	for _, tc := range []struct {
+		name, id, group string
+		path            []string
+		want            string
+	}{
+		{"session ID", "vercel.rest.readSessionFile", "parameters", nil, "sessionId"},
+		{"required file path", "vercel.rest.readSessionFile", "request_body", []string{"content", "application/json", "schema", "required"}, `["path"]`},
+		{"binary response", "vercel.rest.readSessionFile", "responses", []string{"200", "content", "application/octet-stream", "schema", "format"}, `"binary"`},
+		{"required events", "vercel.rest.createWebhook", "request_body", []string{"content", "application/json", "schema", "required"}, `["url","events"]`},
+		{"minimum events", "vercel.rest.createWebhook", "request_body", []string{"content", "application/json", "schema", "properties", "events", "minItems"}, `1`},
+		{"event enum", "vercel.rest.createWebhook", "request_body", []string{"content", "application/json", "schema", "properties", "events", "items", "enum"}, "budget.reached"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			row, doc := retainedFactFixture(t, "vercel", tc.id)
+			facts := normalizeSourceFacts(row, doc, nil)
+			candidate := sourceLaneManifest{Documents: []retainedSourceDocument{doc}, SourceOperations: []sourceLaneManifestRow{{Source: row, Facts: facts}}}
+			if findings := validateSourceLaneFactCitations(candidate); len(findings) != 0 {
+				t.Fatalf("retained positive rejected: %+v", findings)
+			}
+			var value any
+			if err := json.Unmarshal(facts.Groups[tc.group], &value); err != nil {
+				t.Fatal(err)
+			}
+			if tc.path == nil {
+				params := value.([]any)
+				first := params[0].(map[string]any)
+				if first["name"] != tc.want || first["in"] != "path" || first["required"] != true {
+					t.Fatalf("literal required session ID absent: %+v", first)
+				}
+				value = params[1:]
+			} else {
+				parent := value.(map[string]any)
+				for _, key := range tc.path[:len(tc.path)-1] {
+					parent = parent[key].(map[string]any)
+				}
+				last := tc.path[len(tc.path)-1]
+				if tc.name == "event enum" {
+					enums := parent[last].([]any)
+					if len(enums) == 0 || enums[0] != tc.want {
+						t.Fatalf("literal event enum absent: %+v", enums)
+					}
+				} else {
+					literal, err := json.Marshal(parent[last])
+					if err != nil || string(literal) != tc.want {
+						t.Fatalf("literal provider fact = %s want %s", literal, tc.want)
+					}
+				}
+				delete(parent, last)
+			}
+			mutated, err := json.Marshal(value)
+			if err != nil {
+				t.Fatal(err)
+			}
+			candidate.SourceOperations[0].Facts.Groups[tc.group] = mutated
+			found := false
+			for _, d := range validateSourceLaneFactCitations(candidate) {
+				found = found || (d.Key == row.Key && d.Code == "source_fact_value_mismatch" && d.Pointer == facts.Refs[tc.group].Pointer)
+			}
+			if !found {
+				t.Fatal("readable omitted provider fact was accepted against retained source")
+			}
+		})
+	}
+}
