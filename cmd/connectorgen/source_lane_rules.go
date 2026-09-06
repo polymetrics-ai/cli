@@ -79,16 +79,17 @@ type sourceLaneCell struct {
 }
 
 type sourceSemanticAnnotation struct {
-	GraphQL              *sourceLaneGraphQLRefs `json:"graphql,omitempty"`
-	Key                  sourceOperationKey     `json:"key"`
-	Semantics            string                 `json:"semantics"`
-	Citation             sourceFactRef          `json:"citation"`
-	Clause               string                 `json:"clause"`
-	FoundationGap        string                 `json:"foundation_gap"`
-	AtlasID              string                 `json:"atlas_id"`
-	DecisionRefs         []string               `json:"decision_refs"`
-	IntendedBindings     []sourceLaneTargetRef  `json:"intended_bindings"`
-	MaterializedBindings []sourceLaneTargetRef  `json:"materialized_bindings"`
+	ResponseInterpretations []sourceResponseInterpretation `json:"response_interpretations,omitempty"`
+	GraphQL                 *sourceLaneGraphQLRefs         `json:"graphql,omitempty"`
+	Key                     sourceOperationKey             `json:"key"`
+	Semantics               string                         `json:"semantics"`
+	Citation                sourceFactRef                  `json:"citation"`
+	Clause                  string                         `json:"clause"`
+	FoundationGap           string                         `json:"foundation_gap"`
+	AtlasID                 string                         `json:"atlas_id"`
+	DecisionRefs            []string                       `json:"decision_refs"`
+	IntendedBindings        []sourceLaneTargetRef          `json:"intended_bindings"`
+	MaterializedBindings    []sourceLaneTargetRef          `json:"materialized_bindings"`
 }
 
 // classifySourceLanes treats source applicability separately from artifact and
@@ -141,6 +142,11 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 		set(5, true, "source_destination_mutation", "method", "summary", "request_body")
 	}
 	response := sourceResponseShape(facts)
+	var collectionRefs []sourceFactRef
+	var collectionIssues []sourceLaneDiagnostic
+	if annotationValid && annotation != nil && len(annotation.ResponseInterpretations) > 0 {
+		response.Cardinality, collectionRefs, collectionIssues = applySourceResponseInterpretations(key, facts, semantics, annotation.ResponseInterpretations)
+	}
 	request := sourceRequestShape(facts)
 	if facts.analysis.Exhausted {
 		// Partial traversal cannot establish a shape contract for this operation.
@@ -159,11 +165,16 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 	if semantics == "mutation" {
 		set(4, false, "source_mutation", "method", "summary")
 	} else if semantics == "read" {
-		if response.Collection {
+		if response.Cardinality == sourceCollection {
 			set(4, true, "source_record_collection", "responses")
-		} else if response.Known {
+		} else if response.Cardinality == sourceNoncollection {
 			set(4, false, "fixed_noncollection_read", "responses")
 		}
+	}
+	cells[4].FactRefs = append(cells[4].FactRefs, collectionRefs...)
+	cells[4].Diagnostics = append(cells[4].Diagnostics, collectionIssues...)
+	if len(collectionRefs) > 0 && cells[4].Applicability != "undetermined" {
+		cells[4].RuleID = "source_response_interpretation"
 	}
 	if raw := facts.Groups["callbacks"]; len(raw) > 0 && string(raw) != "null" && string(raw) != "{}" {
 		set(6, true, "source_callback_contract", "callbacks")
@@ -306,7 +317,10 @@ func validateSourceAnnotation(key sourceOperationKey, facts sourceFacts, a sourc
 	return nil
 }
 
-type sourceShape struct{ Known, Binary, Collection bool }
+type sourceShape struct {
+	Known, Binary bool
+	Cardinality   sourceCollectionKind
+}
 
 type sourceShapeAnalysis struct {
 	Objects   map[string]map[string]json.RawMessage
@@ -365,7 +379,7 @@ func sourceResponseShape(facts sourceFacts) sourceShape {
 	if err := json.Unmarshal(facts.Groups["responses"], &responses); err != nil || len(responses) == 0 {
 		return sourceShape{}
 	}
-	result := sourceShape{Known: true}
+	result := sourceShape{Known: true, Cardinality: sourceNoncollection}
 	found := false
 	keys := make([]string, 0, len(responses))
 	for status := range responses {
@@ -380,20 +394,25 @@ func sourceResponseShape(facts sourceFacts) sourceShape {
 		response, ok := sourceResolveObject(facts, responses[status], map[string]bool{}, 0)
 		if !ok {
 			result.Known = false
+			result.Cardinality = mergeSourceCollection(result.Cardinality, sourceCollectionUnknown)
 			continue
 		}
 		if len(response["content"]) == 0 {
 			if status != "204" && status != "205" {
 				result.Known = false
+				result.Cardinality = mergeSourceCollection(result.Cardinality, sourceCollectionUnknown)
 			}
 			continue
 		}
 		shape := sourceContentShape(facts, response["content"])
 		result.Known = result.Known && shape.Known
 		result.Binary = result.Binary || shape.Binary
-		result.Collection = result.Collection || shape.Collection
+		result.Cardinality = mergeSourceCollection(result.Cardinality, shape.Cardinality)
 	}
 	result.Known = result.Known && found
+	if !found {
+		result.Cardinality = sourceCollectionUnknown
+	}
 	return result
 }
 
@@ -402,7 +421,7 @@ func sourceContentShape(facts sourceFacts, raw json.RawMessage) sourceShape {
 	if err := json.Unmarshal(raw, &content); err != nil || len(content) == 0 {
 		return sourceShape{}
 	}
-	result := sourceShape{Known: true}
+	result := sourceShape{Known: true, Cardinality: sourceNoncollection}
 	mediaKeys := make([]string, 0, len(content))
 	for media := range content {
 		mediaKeys = append(mediaKeys, media)
@@ -413,6 +432,7 @@ func sourceContentShape(facts sourceFacts, raw json.RawMessage) sourceShape {
 		var entry map[string]json.RawMessage
 		if err := json.Unmarshal(rawEntry, &entry); err != nil {
 			result.Known = false
+			result.Cardinality = mergeSourceCollection(result.Cardinality, sourceCollectionUnknown)
 			continue
 		}
 		lower := strings.ToLower(media)
@@ -421,16 +441,18 @@ func sourceContentShape(facts sourceFacts, raw json.RawMessage) sourceShape {
 		case concrete == "application/octet-stream" || concrete == "application/pdf" || concrete == "application/zip" || concrete == "application/gzip" || strings.HasPrefix(concrete, "image/") || strings.HasPrefix(concrete, "audio/") || strings.HasPrefix(concrete, "video/"):
 			if strings.Contains(concrete, "*") {
 				result.Known = false
+				result.Cardinality = mergeSourceCollection(result.Cardinality, sourceCollectionUnknown)
 			} else {
 				result.Binary = true
 			}
 		case strings.Contains(concrete, "*"):
 			result.Known = false
+			result.Cardinality = mergeSourceCollection(result.Cardinality, sourceCollectionUnknown)
 		default:
 			shape := sourceSchemaShape(facts, entry["schema"], map[string]bool{}, 0)
 			result.Known = result.Known && shape.Known
 			result.Binary = result.Binary || shape.Binary
-			result.Collection = result.Collection || shape.Collection
+			result.Cardinality = mergeSourceCollection(result.Cardinality, shape.Cardinality)
 		}
 	}
 	return result
@@ -508,6 +530,11 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 	_ = json.Unmarshal(node["format"], &format)
 	result := sourceShape{Known: typ != "" || len(node["properties"]) > 0}
 	unresolved := false
+	cardinalityConstrained := typ != "" || len(node["properties"]) > 0
+	switch typ {
+	case "string", "number", "integer", "boolean", "null":
+		result.Cardinality = sourceNoncollection
+	}
 	if format == "binary" || format == "byte" {
 		result.Known = true
 		result.Binary = true
@@ -518,12 +545,22 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 		if valid {
 			_ = json.Unmarshal(item["type"], &itemType)
 		}
-		result.Collection = valid && (itemType == "object" || len(item["properties"]) > 0)
+		if valid && len(item["allOf"]) == 0 && len(item["oneOf"]) == 0 && len(item["anyOf"]) == 0 {
+			if itemType == "object" || len(item["properties"]) > 0 {
+				result.Cardinality = sourceCollection
+			}
+			switch itemType {
+			case "string", "number", "integer", "boolean", "null":
+				result.Cardinality = sourceNoncollection
+			}
+		}
 		shape := sourceSchemaShape(facts, node["items"], copySourceSeen(seen), depth+1)
 		result.Binary = result.Binary || shape.Binary
 		unresolved = unresolved || !shape.Known
 	}
 	var props map[string]json.RawMessage
+	closedObject := (typ == "object" || len(node["properties"]) > 0) && string(node["additionalProperties"]) == "false"
+	fixedProperties := true
 	if len(node["properties"]) > 0 && json.Unmarshal(node["properties"], &props) == nil {
 		propertyKeys := make([]string, 0, len(props))
 		for name := range props {
@@ -535,11 +572,13 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 			shape := sourceSchemaShape(facts, property, copySourceSeen(seen), depth+1)
 			result.Binary = result.Binary || shape.Binary
 			unresolved = unresolved || !shape.Known
-			if name == "data" || name == "items" || name == "results" || name == "values" || name == "records" {
-				result.Collection = result.Collection || shape.Collection
-			}
+			fixedProperties = fixedProperties && shape.Cardinality == sourceNoncollection
 		}
 	}
+	if closedObject && fixedProperties {
+		result.Cardinality = sourceNoncollection
+	}
+	cardinalityUnresolved := false
 	for _, keyword := range []string{"allOf", "oneOf", "anyOf"} {
 		var branches []json.RawMessage
 		if len(node[keyword]) == 0 {
@@ -547,20 +586,38 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 		}
 		if err := json.Unmarshal(node[keyword], &branches); err != nil || len(branches) == 0 {
 			unresolved = true
+			cardinalityUnresolved = true
 			continue
 		}
 		known := true
-		for _, branch := range branches {
+		branchCardinality := sourceCollectionUnknown
+		for index, branch := range branches {
 			shape := sourceSchemaShape(facts, branch, copySourceSeen(seen), depth+1)
 			known = known && shape.Known
 			result.Binary = result.Binary || shape.Binary
-			result.Collection = result.Collection || shape.Collection
+			if index == 0 {
+				branchCardinality = shape.Cardinality
+			} else if branchCardinality != shape.Cardinality {
+				cardinalityUnresolved = true
+			}
 		}
 		unresolved = unresolved || !known
 		result.Known = result.Known || known
+		if branchCardinality == sourceCollectionUnknown {
+			cardinalityUnresolved = true
+		}
+		if !cardinalityConstrained {
+			result.Cardinality = branchCardinality
+			cardinalityConstrained = true
+		} else if result.Cardinality != branchCardinality {
+			cardinalityUnresolved = true
+		}
 	}
 	// A later known composition cannot erase an unresolved sibling contract.
 	result.Known = result.Known && !unresolved
+	if cardinalityUnresolved {
+		result.Cardinality = sourceCollectionUnknown
+	}
 	if facts.analysis != nil {
 		facts.analysis.Shapes[cacheKey] = result
 	}
