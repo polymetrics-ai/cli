@@ -791,3 +791,47 @@ and CP11 acceptance gates remain open.
   execute the specified coherent current-source package/race/static boundary
   and submit the whole original range plus final SHA to fresh independent
   Astra/xhigh review. No e77 report is reused as that review.
+
+### CP11 Group 3 focused verification — steer 061/062/063
+
+- Current changed source is test/evidence only:
+  `vnext_publication_resource_error_test.go`,
+  `vnext_publication_durable_matrix_test.go`, and
+  `vnext_publication_test.go`. The nested public caller matrix runs four
+  no-GC attempts for each Recover/Prune/final-Publish × replacement/opened-child
+  fault cell, records its quarantined root/nested residue before fixture-only
+  reconstruction, and proves fresh recovery. It introduces no production
+  cleanup path or recursive-rollback promise.
+- The durable caller matrix now binds descriptor-safe raw CURRENT/JOURNAL
+  type/inode/bytes to the decoded state, stable generation content, and actual
+  marker/transaction/prepared/phase/anchor authority graph at each cut. Empty
+  and nonempty regular `.lease` B run every unheld destructive schedule; those
+  are distinct from Group 2's replacement-directory B proof.
+- The preserved initial focused normal/race receipts are `30.270s`/`42.177s`
+  on their stated changing source state. Steer 063 corrects the object kinds:
+  F-03-C uses replacement directories, F-05/F-06 use replacement regular
+  `.lease` files, and F-02-P uses nested replacement directories.
+- Final focused GREEN after the stage-marker, raw-control/private-authority,
+  and root-scoped descriptor additions: the extended normal/race selector
+  passed `32.789s`/`45.628s`. The complete caller/fault/variant matrix and
+  preservation limits are in `GROUP3-EVIDENCE.md`.
+- **Final current-source package/static boundary:** full `cmd/connectorgen`
+  normal/race passed `319.928s`/`783.834s`; formatter, diff check, vet, both
+  builds, tidy diff, agent-contract check, and changed-code lint passed. This
+  is local proof, not CP11 acceptance.
+- Next: commit the coherent three-group proof/evidence wave, freeze its exact
+  SHA, and submit the whole original range plus final SHA to Firstmate's
+  prescribed fresh whole-range Astra/xhigh review and Luna mechanical index.
+  CP11 remains unaccepted.
+
+### CP11 Group 3 GSD verification fallback — steer 063
+
+`scripts/gsd sources verify-work` and
+`scripts/gsd prompt verify-work batch-r1-vnext-cutover` were executed before
+this record. The official workflow requests interactive Pi UAT; that isolated
+Pi workflow is unavailable to this single Codex writer, so the documented
+inline/manual fallback records only the automated, non-provider assertions
+above. `scripts/gsd doctor` otherwise passed its adapter/provenance checks and
+reported the pre-existing missing canonical issue-122 prompt. No human
+judgment, provider-live claim, credential, database, or release approval is
+implied. The required fresh Astra exact-SHA review remains a separate gate.

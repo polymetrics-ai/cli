@@ -813,6 +813,7 @@ func TestVNextGenerationPublisherCheckIsReadOnly(t *testing.T) {
 	if err := publisher.Check(newSet); err != nil {
 		t.Fatalf("Check() error = %v", err)
 	}
+	vNextPublicationAssertDurableCutWitnessForTest(t, root, "non-destructive Check", oldPointer)
 
 	afterCurrent, err := os.ReadFile(currentPath)
 	if err != nil {
@@ -2596,6 +2597,7 @@ func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupC
 			vNextPublicationAssertWitnessForTest(t, "late public caller displaced A", leasePath+".late-original", displacedLeaseA)
 			vNextPublicationAssertWitnessForTest(t, "late public caller replacement B", leasePath, replacementLeaseB)
 			vNextPublicationAssertCurrentJournalForTest(t, root, "late public caller refusal", current, "", nil, vNextGenerationPointer{})
+			vNextPublicationAssertDurableCutWitnessForTest(t, root, "late public caller refusal", old)
 		})
 	}
 
@@ -2670,6 +2672,7 @@ func TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupC
 		vNextPublicationAssertWitnessForTest(t, "prepared-journal recovery displaced A", leasePath+".late-original", displacedLeaseA)
 		vNextPublicationAssertWitnessForTest(t, "prepared-journal recovery replacement B", leasePath, replacementLeaseB)
 		vNextPublicationAssertCurrentJournalForTest(t, root, "prepared-journal recovery refusal", selectedNew, "prepared", &old, selectedNew)
+		vNextPublicationAssertDurableCutWitnessForTest(t, root, "prepared-journal recovery refusal")
 	})
 }
 

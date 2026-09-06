@@ -1054,6 +1054,58 @@ matrix, not CP11 or the final Group 2 review/static boundary.
   identity before any restoration. Initial Publish normally creates private
   transaction authority; prior documentation asserting otherwise is corrected.
   Legitimate new controls/phase/capture state are compared as real-cut
-  advancement, not against an obsolete pre-Publish inode. Empty and nonempty
-  replacement directories B are required for each unheld destructive
-  generation row; held-reader rows retain empty B for contention.
+  advancement, not against an obsolete pre-Publish inode. Each unheld
+  destructive generation row requires empty and nonempty replacement **regular
+  `.lease` files** B; held-reader rows retain an empty lease-file B for
+  contention. Group 2 F-03-C's distinct temporary/quarantine B is a
+  replacement directory.
+
+### 2026-09-06 — CP11 Group 3 F-02-P/F-05/F-06-P executed proof
+
+- **F-02-P:** `TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership`
+  is a serial, bounded-no-GC public-path matrix: Recover-owned-stage, Prune
+  stale-generation, and Publish-final-prune generation each execute nested
+  post-identity/pre-open directory A→B replacement and an actual opened-child
+  identity failure. Before only fixture-owned reconstruction it asserts public
+  root absence, retained quarantine-candidate root identity, nested A/B
+  identity/type/bytes or retained child bytes, observable partial residue, and
+  no descriptor growth. It does not claim automatic recursive rollback; fresh
+  recovery follows the assertion. The historical direct-child RED remains the
+  behavioral red. This is the new public proof GREEN, not a new production RED.
+- **F-05/F-06-P:** `vNextPublicationAssertDurableCutWitnessForTest` uses
+  descriptor-bound CURRENT/JOURNAL witnesses and scans the actual retained
+  authority graph. It asserts raw regular-control bytes/inode, decoded heads,
+  selected/rejected/stale stable-tree content, marker, transaction identity,
+  prepared record, all phases and validated anchors. The named public matrix
+  invokes the ten destructive caller/cut obligations plus read-only Check.
+  `TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB` adds the
+  empty half of every unheld schedule; existing named controls are the paired
+  nonempty cases. These B values are the real regular `.lease` member, not a
+  directory substitute.
+- **No false RED:** the prior Group 3 sentence denying ordinary private
+  authority is corrected in `GROUP3-EVIDENCE.md`; first normal Publish retains
+  the marker and real repair transactions. The added tests can pass existing
+  repaired production, which is the intended proof-only result.
+- **Focused GREEN:** `go test -count=1 -timeout 20m ./cmd/connectorgen -run
+  '^(TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership|TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB|TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers|TestVNextGenerationPublisherCheckIsReadOnly|TestVNextPublication(CommittedJournalNewSelectedRecoveryRejectsLateLeaseReplacement|SuccessfulPublishFinalPruneRejectsLateLeaseReplacement|FreshRejectedNewRecoveryRejectsLateLeaseReplacement|ImmediateRollbackRejectsLateLeaseReplacementIdentityVariants))$'` passed, package `30.270s`. The same exact selector with `-race` passed,
+  package `42.177s`.
+
+### 2026-09-06 — CP11 Group 3 final observation boundary (steer 063)
+
+- **Object kinds corrected:** F-03-C's B is a replacement directory; F-05/F-06
+  B is the actual regular `.lease` member; F-02-P's nested A→B is a directory.
+  The eight preserved changing-source result records are retained at the
+  Firstmate receipt path named in `GROUP3-EVIDENCE.md`; no wording-only rerun
+  is relabelled as an execution result.
+- **F-02-P GREEN strengthening:** the public Recover-owned-stage/Prune/final
+  Publish nested matrix now reads the actual stage-owner marker, observes raw
+  heads and real private authority before fixture reconstruction, and asserts
+  no lsof descriptor remains below the unique root after each fresh recovery.
+  GC remains disabled and the independent numeric descriptor count remains
+  bounded. The extended normal/race selector, including owned-stage cleanup,
+  passed `32.789s`/`45.628s`.
+- **Final current-source GREEN:** full `cmd/connectorgen` normal/race passed
+  `319.928s`/`783.834s`; formatter/diff/vet/build/tidy/agent-contract/new-code
+  lint all passed as recorded in `GROUP3-EVIDENCE.md`. This is an execution
+  checkpoint, not CP11 acceptance; an independent exact-SHA review remains
+  required.

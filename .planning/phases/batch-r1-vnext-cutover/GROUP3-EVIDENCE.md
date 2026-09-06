@@ -74,13 +74,122 @@ The command is a fresh focused execution of current uncommitted source/test
 state. It does not run the whole package, race detector, provider, database,
 or no-mistakes pipeline; those remain later gates.
 
-## Current full-package revalidation after F-02 lint cleanup
+## 2026-09-06 — steer 061/062 public nested and durable-witness execution
+
+This is a current test-only proof update, not a new independent review,
+production behavior claim, or CP11 acceptance. It follows Group 2 checkpoint
+`54746816735a964d0177a7a64646d29561f08180` and evidence checkpoint
+`e1dced72fce88eed2f7dfd860cdeeead57d32972`.
+
+- **F-02-P public recursion:**
+  `TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership` executes
+  actual Recover-owned-stage cleanup, public Prune stale-generation cleanup,
+  and successful Publish final-prune cleanup. For each, the root crossed into
+  its real quarantine before either a nested directory A→B replacement after
+  identity/before open, or an injected identity error only after `file.Stat()`
+  on the real nested descriptor. Four no-GC repetitions per caller/fault show
+  no numeric descriptor growth. The owned-stage row also descriptor-safely
+  reads and decodes its actual stage-owner marker before cleanup. Before
+  fixture reconstruction the test observes the public root absent, original
+  root identity at the quarantine candidate, nested A/B identity/type/bytes
+  (or retained nested A), nonempty partial residue, raw durable heads, and the
+  retained private authority graph. Each fresh recovery must leave no open
+  descriptor naming that unique test root (including its root, quarantine,
+  nested-child, and connector-lock paths). Earlier owned siblings may have
+  been deleted; neither the code nor this evidence promises all-or-nothing
+  deletion or automatic restoration. Only then does the fixture replace its
+  own candidate with a pre-call fixture backup and use fresh Recover.
+- **F-05/F-06-P raw durable state:**
+  `vNextPublicationOptionalFileWitnessForTest` and
+  `vNextPublicationAssertDurableCutWitnessForTest` make CURRENT/JOURNAL
+  presence and raw regular-file type/inode/bytes descriptor-bound. The witness
+  decodes the same bytes, snapshots every selected/rejected/stale generation
+  root, and opens the real control authority under a shared operation lock. It
+  retains the marker and validates/snapshots each transaction's prepared
+  record, phase chain and anchors before fixture restoration. Initial Publish
+  does retain private authority; the old contrary sentence above is corrected.
+- **Caller and variant coverage:** existing named public controls plus
+  `TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB` execute
+  explicit Prune, no-JOURNAL Recover/Open, Publish initial recovery,
+  prepared/committed new-selected recovery, successful final Publish prune,
+  rejected-new recovery, immediate rollback, owned-stage cleanup, and Check.
+  The unheld durable rows have separate empty and nonempty B executions. Their
+  B is the actual regular `.lease` member; Group 2 F-03-C remains the separate
+  replacement-directory B proof.
+- **Commands:**
+
+  ```text
+  go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership|TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB|TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers|TestVNextGenerationPublisherCheckIsReadOnly|TestVNextPublication(CommittedJournalNewSelectedRecoveryRejectsLateLeaseReplacement|SuccessfulPublishFinalPruneRejectsLateLeaseReplacement|FreshRejectedNewRecoveryRejectsLateLeaseReplacement|ImmediateRollbackRejectsLateLeaseReplacementIdentityVariants))$'
+  # exit 0, ok polymetrics.ai/cmd/connectorgen 30.270s
+
+  go test -race -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership|TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB|TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers|TestVNextGenerationPublisherCheckIsReadOnly|TestVNextPublication(CommittedJournalNewSelectedRecoveryRejectsLateLeaseReplacement|SuccessfulPublishFinalPruneRejectsLateLeaseReplacement|FreshRejectedNewRecoveryRejectsLateLeaseReplacement|ImmediateRollbackRejectsLateLeaseReplacementIdentityVariants))$'
+  # exit 0, ok polymetrics.ai/cmd/connectorgen 42.177s
+  ```
+
+The earlier full-package results below are historical records for their stated
+source trees. They are not relabelled as evidence for these later Group 3 test
+changes; current full-package/static/fresh-review gates remain required.
+
+## Steer 063 — object-kind correction and completed Group 3 matrix
+
+The 063 clarification is evidence provenance, not new scope: Group 2 F-03-C
+substitutes quarantine/allocation **directories** (empty or carrying foreign
+bytes), while F-05/F-06 substitutes only the destructive generation's regular
+`.lease` member with empty or nonempty lease-file B. The public nested F-02-P
+case separately substitutes a nested **directory**. No test was rerun merely
+for that wording correction. The eight preserved changing-source executions,
+including the two intentionally retained fixture failures and their later
+focused normal/race passes, are bound at
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-group3-focused-execution-receipts.json`;
+they are not collapsed into a claim about one frozen source tree.
+
+| Required caller/cut | Executable selector and B/fault variant | Pre-restoration state/resource proof | Limited recovery proof |
+| --- | --- | --- | --- |
+| Recover owned stage; Prune stale generation; Publish final stale-generation prune | `TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership`: each caller × nested directory A→B after identity/before open and opened-child post-`Stat` failure; four attempts with GC disabled | Public root absent; quarantined candidate retains root identity; nested A/B or retained-child identity/type/bytes; nonempty partial residue. The owned-stage cell reads/decodes its real owner marker. Every cell observes raw heads and retained marker/transaction/prepared/phase/anchor graph before fixture reconstruction. | Only fixture-owned candidate replacement is reconstructed; fresh Recover succeeds; lsof finds no descriptor naming the unique root/quarantine/child/connector-lock tree and numeric process descriptors do not grow. |
+| Explicit Prune; no-JOURNAL Recover/Open; Publish initial recovery | `TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB` (empty `.lease` B) and `TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers` (nonempty `.lease` B) | Selected CURRENT/no JOURNAL, A/B regular-file type/inode/bytes, selected/stale roots, raw controls, and real private authority are asserted at the actual refusal. | Restore only A; a fresh publisher Recover is required. |
+| Prepared and committed JOURNAL, new selected | Empty B: `...UnheldDurableRows.../prepared-new-selected-recover` and `/committed-new-selected-recover`; nonempty B: existing prepared public-caller and `TestVNextPublicationCommittedJournalNewSelectedRecoveryRejectsLateLeaseReplacement` | `AfterCommitSync` is prepared old/new with new CURRENT; `BeforePrune` is committed old/new with new CURRENT. Raw control files, roots, and authority graph are descriptor-safe witnesses. | Fixture-only A restoration then fresh Recover. |
+| Successful Publish final prune | Empty B: `...UnheldDurableRows.../successful-publish-final-prune`; nonempty B: `TestVNextPublicationSuccessfulPublishFinalPruneRejectsLateLeaseReplacement` | New CURRENT and committed old/new JOURNAL advance legitimately; pre-quarantine stale root identity/content and private authority remain observable before restore. | Fixture-only A restoration then fresh Recover. |
+| Old-selected rejected-new recovery; immediate validation rollback | `TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement` and `TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVariants`, each retaining existing empty/nonempty `.lease` B variants | Prepared old/new versus rollback-restored-old logical state, A/B identity/bytes, selected/rejected roots and durable/private witnesses are retained. | Existing fixture-only fresh recovery/cleanup path, with no restart or all-or-nothing claim. |
+| Owned-stage cleanup; non-destructive Check | `TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup` and `TestVNextGenerationPublisherCheckIsReadOnly` | Stage uses its real owner marker, never an invented lease-deletion case. Check preserves selected control/tree without destructive navigation; the durable witness records raw controls and authority. | Stage replacement remains no-replace protected; Check creates no recovery claim. |
+
+After adding the root-scoped descriptor and stage/control observations, the
+current focused matrix passed on the changed test source:
+
+```text
+go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership|TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB|TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers|TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup|TestVNextGenerationPublisherCheckIsReadOnly|TestVNextPublication(CommittedJournalNewSelectedRecoveryRejectsLateLeaseReplacement|SuccessfulPublishFinalPruneRejectsLateLeaseReplacement|FreshRejectedNewRecoveryRejectsLateLeaseReplacement|ImmediateRollbackRejectsLateLeaseReplacementIdentityVariants))$'
+# exit 0, ok polymetrics.ai/cmd/connectorgen 32.789s
+
+go test -race -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership|TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB|TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers|TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup|TestVNextGenerationPublisherCheckIsReadOnly|TestVNextPublication(CommittedJournalNewSelectedRecoveryRejectsLateLeaseReplacement|SuccessfulPublishFinalPruneRejectsLateLeaseReplacement|FreshRejectedNewRecoveryRejectsLateLeaseReplacement|ImmediateRollbackRejectsLateLeaseReplacementIdentityVariants))$'
+# exit 0, ok polymetrics.ai/cmd/connectorgen 45.628s
+```
+
+These focused results supersede neither the preserved 063 records nor the
+later required exact-final-source package/race/static and independent-review
+gates.
+
+## Final current-source package and static boundary
+
+After the final root-scoped resource and control-authority observations, the
+complete package boundaries passed on this exact pre-commit source tree:
+
+- `go test -count=1 -timeout 20m ./cmd/connectorgen` → exit 0 / `ok polymetrics.ai/cmd/connectorgen 319.928s`.
+- `go test -race -count=1 -timeout 20m ./cmd/connectorgen` → exit 0 / `ok polymetrics.ai/cmd/connectorgen 783.834s`.
+
+The final static boundary also passed: formatter, `git diff --check`,
+`go vet ./cmd/connectorgen`, `go build ./cmd/connectorgen`, `go build ./cmd/pm`,
+`go mod tidy -diff`, `go run ./cmd/agentcontractgen check`, and
+`golangci-lint run --new-from-rev=HEAD ./cmd/connectorgen/...` (0 issues).
+This is local hermetic proof only. It does not accept CP11, certify a provider,
+or replace Firstmate's required independent exact-SHA review.
+
+## Historical full-package revalidation after F-02 lint cleanup
 
 The final test-only cleanup checks the two F-02 parent-directory `Close`
 errors rather than discarding them. Its focused F-02 selector passed in 1.274s
 and `golangci-lint run --new-from-rev=HEAD ./cmd/connectorgen/...` reported
 `0 issues.`. Because this changed current test code after the first broad
-run, the package and race gates were repeated on the final source state:
+run, the package and race gates were repeated on that then-current source
+state, before the later Group 3 observation additions:
 
 - `go test -count=1 -timeout 20m ./cmd/connectorgen` → exit 0 / `ok polymetrics.ai/cmd/connectorgen 263.677s`.
 - `go test -race -count=1 -timeout 20m ./cmd/connectorgen` → exit 0 / `ok polymetrics.ai/cmd/connectorgen 691.666s`.

@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime/debug"
+	"sort"
 	"strconv"
 	"strings"
 	"syscall"
@@ -124,6 +125,321 @@ func TestVNextPublicationRemoveTreeClosesChildOnFstatError(t *testing.T) {
 	}
 	if got, err := os.ReadFile(filepath.Join(root, "target", "A")); err != nil || string(got) != "retained A" {
 		t.Fatalf("fstat refusal changed target bytes: got=%q err=%v", got, err)
+	}
+}
+
+// TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership exercises the
+// public cleanup callers after their root moved into the private quarantine.
+// The direct removeTree controls above prove the recursive primitive; these
+// rows prove the real Recover, Prune, and final-Publish paths retain the
+// candidate and only test-owned interference is restored after a nested
+// descriptor-bound refusal.
+func TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership(t *testing.T) {
+	previousGC := debug.SetGCPercent(-1)
+	defer debug.SetGCPercent(previousGC)
+
+	tests := []struct {
+		name    string
+		prepare func(*testing.T) (string, func(*vNextGenerationPublisher) error)
+	}{
+		{
+			name: "recover-owned-stage",
+			prepare: func(t *testing.T) (string, func(*vNextGenerationPublisher) error) {
+				root := t.TempDir()
+				baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+				if err != nil {
+					t.Fatal(err)
+				}
+				pointer, err := baseline.Publish(vNextPublicationArtifactsForTest("active", false))
+				if err != nil {
+					t.Fatal(err)
+				}
+				stageName := ".stage-public-nested"
+				stagePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, stageName)
+				vNextWriteOwnedStageForTest(t, stagePath, pointer, stageName, "owned stage")
+				vNextPublicationWriteNestedMemberForTest(t, stagePath)
+				return stagePath, func(publisher *vNextGenerationPublisher) error {
+					return publisher.Recover(context.Background())
+				}
+			},
+		},
+		{
+			name: "prune-stale-generation",
+			prepare: func(t *testing.T) (string, func(*vNextGenerationPublisher) error) {
+				root := t.TempDir()
+				baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+				if err != nil {
+					t.Fatal(err)
+				}
+				old, err := baseline.Publish(vNextPublicationArtifactsWithNestedMemberForTest("old"))
+				if err != nil {
+					t.Fatal(err)
+				}
+				handle, err := baseline.Open(context.Background())
+				if err != nil {
+					t.Fatal(err)
+				}
+				if _, err := baseline.Publish(vNextPublicationArtifactsForTest("current", false)); err != nil {
+					handle.Release()
+					t.Fatal(err)
+				}
+				handle.Release()
+				return filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation), func(publisher *vNextGenerationPublisher) error {
+					return publisher.Prune(context.Background())
+				}
+			},
+		},
+		{
+			name: "publish-final-prune-generation",
+			prepare: func(t *testing.T) (string, func(*vNextGenerationPublisher) error) {
+				root := t.TempDir()
+				baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+				if err != nil {
+					t.Fatal(err)
+				}
+				old, err := baseline.Publish(vNextPublicationArtifactsWithNestedMemberForTest("old"))
+				if err != nil {
+					t.Fatal(err)
+				}
+				handle, err := baseline.Open(context.Background())
+				if err != nil {
+					t.Fatal(err)
+				}
+				if _, err := baseline.Publish(vNextPublicationArtifactsForTest("current", false)); err != nil {
+					handle.Release()
+					t.Fatal(err)
+				}
+				handle.Release()
+				return filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation), func(publisher *vNextGenerationPublisher) error {
+					_, err := publisher.Publish(vNextPublicationArtifactsForTest("next", false))
+					return err
+				}
+			},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			for _, fault := range []struct {
+				name  string
+				fstat bool
+			}{
+				{name: "nested-replacement"},
+				{name: "opened-nested-child-fstat", fstat: true},
+			} {
+				t.Run(fault.name, func(t *testing.T) {
+					before := vNextPublicationNumericFDCountForTest(t)
+					const attempts = 4
+					for attempt := 0; attempt < attempts; attempt++ {
+						targetPath, invoke := test.prepare(t)
+						worktreeRoot := filepath.Dir(filepath.Dir(filepath.Dir(targetPath)))
+						rootIdentity := vNextPublicationDirectoryIdentityForTest(t, targetPath, "public cleanup root")
+						if strings.HasPrefix(filepath.Base(targetPath), ".stage-") {
+							stageMarker := vNextPublicationFileWitnessForTest(t, filepath.Join(targetPath, vNextPublicationStageOwnerFile))
+							if !stageMarker.info.Mode().IsRegular() || vNextPublicationInfoInodeForTest(stageMarker.info) == 0 {
+								t.Fatalf("owned stage marker is not a regular identity-bound file: mode=%v inode=%d", stageMarker.info.Mode(), vNextPublicationInfoInodeForTest(stageMarker.info))
+							}
+							var owner vNextPublicationStageOwner
+							if err := vNextPublicationDecode(stageMarker.payload, &owner); err != nil || owner.Connector != "acme" || owner.Generation == "" || owner.Stage != filepath.Base(targetPath) {
+								t.Fatalf("owned stage marker = %#v decode=%v, want acme/%q ownership", owner, err, filepath.Base(targetPath))
+							}
+						}
+						candidateParent := filepath.Dir(targetPath)
+						backupPath := filepath.Join(t.TempDir(), "fixture-owned-original")
+						vNextCopyDirectoryForTest(t, targetPath, backupPath)
+						injected := errors.New("injected public nested child fstat failure")
+						var nestedA, nestedB vNextPublicationIdentity
+						replacementHit := false
+						fstatHit := false
+
+						if fault.fstat {
+							vNextPublicationRemoveTreeChildIdentityForTest = func(file *os.File, label string) (vNextPublicationIdentity, error) {
+								if !strings.HasSuffix(label, "/nested") || fstatHit {
+									return vNextPublicationIdentityFromFile(file, label)
+								}
+								if _, err := file.Stat(); err != nil {
+									return vNextPublicationIdentity{}, err
+								}
+								fstatHit = true
+								return vNextPublicationIdentity{}, injected
+							}
+							t.Cleanup(func() { vNextPublicationRemoveTreeChildIdentityForTest = nil })
+						} else {
+							vNextPublicationRemoveTreeAfterIdentityForTest = func(directory *vNextPublicationDirectory, name string) {
+								if name != "nested" || replacementHit {
+									return
+								}
+								var err error
+								nestedA, err = directory.identityAt(name, "nested original A")
+								if err != nil {
+									t.Fatal(err)
+								}
+								if nestedA.mode != unix.S_IFDIR {
+									t.Fatalf("nested original A mode = %#o, want directory", nestedA.mode)
+								}
+								if err := unix.Renameat(int(directory.file.Fd()), name, int(directory.file.Fd()), name+".A"); err != nil {
+									t.Fatal(err)
+								}
+								if err := unix.Mkdirat(int(directory.file.Fd()), name, 0o700); err != nil {
+									t.Fatal(err)
+								}
+								foreign, err := directory.openFile(name+"/foreign", "nested replacement B", unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o600, false)
+								if err != nil {
+									t.Fatal(err)
+								}
+								if _, err := foreign.Write([]byte("nested replacement B")); err != nil {
+									_ = foreign.Close()
+									t.Fatal(err)
+								}
+								if err := foreign.Close(); err != nil {
+									t.Fatal(err)
+								}
+								nestedB, err = directory.identityAt(name, "nested replacement B")
+								if err != nil {
+									t.Fatal(err)
+								}
+								if nestedA == nestedB || nestedB.mode != unix.S_IFDIR {
+									t.Fatalf("nested replacement identities A=%#v B=%#v", nestedA, nestedB)
+								}
+								replacementHit = true
+							}
+							t.Cleanup(func() { vNextPublicationRemoveTreeAfterIdentityForTest = nil })
+						}
+
+						guard, err := newVNextGenerationPublisher(worktreeRoot, "acme", vNextPublicationHooks{})
+						if err != nil {
+							t.Fatal(err)
+						}
+						err = invoke(guard)
+						if fault.fstat {
+							if !fstatHit {
+								t.Fatal("public caller did not open the nested child before the fstat injection")
+							}
+							if !errors.Is(err, injected) {
+								t.Fatalf("public nested fstat error = %v, want %v", err, injected)
+							}
+						} else {
+							if !replacementHit {
+								t.Fatal("public caller did not reach nested post-identity/pre-open replacement")
+							}
+							if err == nil || !strings.Contains(err.Error(), "identity changed") {
+								t.Fatalf("public nested replacement error = %v, want identity refusal", err)
+							}
+						}
+
+						if _, statErr := os.Lstat(targetPath); !errors.Is(statErr, fs.ErrNotExist) {
+							t.Fatalf("public cleanup root after quarantine = %v, want absent", statErr)
+						}
+						candidatePath := vNextPublicationQuarantineCandidateDirectoryForTest(t, candidateParent)
+						if got := vNextPublicationDirectoryIdentityForTest(t, candidatePath, "quarantined cleanup candidate"); got != rootIdentity {
+							t.Fatalf("quarantined candidate identity = %#v, want original root %#v", got, rootIdentity)
+						}
+						if fault.fstat {
+							vNextPublicationAssertNestedPayloadForTest(t, filepath.Join(candidatePath, "nested", "deeper", "child.json"), []byte("nested original A"))
+						} else {
+							movedAPath := filepath.Join(candidatePath, "nested.A")
+							replacementBPath := filepath.Join(candidatePath, "nested")
+							if got := vNextPublicationDirectoryIdentityForTest(t, movedAPath, "quarantined nested original A"); got != nestedA {
+								t.Fatalf("quarantined nested original A identity = %#v, want %#v", got, nestedA)
+							}
+							if got := vNextPublicationDirectoryIdentityForTest(t, replacementBPath, "quarantined nested replacement B"); got != nestedB {
+								t.Fatalf("quarantined nested replacement B identity = %#v, want %#v", got, nestedB)
+							}
+							vNextPublicationAssertNestedPayloadForTest(t, filepath.Join(movedAPath, "deeper", "child.json"), []byte("nested original A"))
+							vNextPublicationAssertNestedPayloadForTest(t, filepath.Join(replacementBPath, "foreign"), []byte("nested replacement B"))
+						}
+						if residue := vNextPublicationTreeSnapshotForTest(t, candidatePath); len(residue) == 0 {
+							t.Fatal("quarantined candidate has no observable residue")
+						}
+						vNextPublicationAssertDurableControlsAndAuthorityForTest(t, worktreeRoot, "public nested cleanup refusal")
+						// The public caller intentionally makes no all-or-nothing
+						// rollback promise for a nested removal failure. After every
+						// A/B/residue assertion, replace only this test fixture with its
+						// pre-call backup. Production does not promise that restoration.
+						if err := os.RemoveAll(candidatePath); err != nil {
+							t.Fatalf("remove observed fixture quarantine candidate: %v", err)
+						}
+						if err := os.Remove(filepath.Dir(candidatePath)); err != nil {
+							t.Fatalf("remove observed empty quarantine fixture: %v", err)
+						}
+						if err := os.Rename(backupPath, targetPath); err != nil {
+							t.Fatalf("restore fixture-owned cleanup root: %v", err)
+						}
+
+						fresh, err := newVNextGenerationPublisher(worktreeRoot, "acme", vNextPublicationHooks{})
+						if err != nil {
+							t.Fatal(err)
+						}
+						if err := fresh.Recover(context.Background()); err != nil {
+							t.Fatalf("fresh recovery after fixture-only restoration: %v", err)
+						}
+						vNextPublicationAssertNoOpenDescriptorsUnderForTest(t, worktreeRoot)
+					}
+					if after := vNextPublicationNumericFDCountForTest(t); after != before {
+						t.Fatalf("public nested cleanup descriptors grew: before=%d after=%d", before, after)
+					}
+				})
+			}
+		})
+	}
+}
+
+func vNextPublicationArtifactsWithNestedMemberForTest(marker string) vNextPublicationArtifacts {
+	artifacts := vNextPublicationArtifactsForTest(marker, false)
+	artifacts.Files["nested/deeper/child.json"] = []byte("nested original A")
+	return artifacts
+}
+
+func vNextPublicationWriteNestedMemberForTest(t *testing.T, root string) {
+	t.Helper()
+	if err := os.MkdirAll(filepath.Join(root, "nested", "deeper"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "nested", "deeper", "child.json"), []byte("nested original A"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func vNextPublicationDirectoryIdentityForTest(t *testing.T, path, label string) vNextPublicationIdentity {
+	t.Helper()
+	directory, err := vNextPublicationOpenDirectory(path, label)
+	if err != nil {
+		t.Fatalf("open %s %q: %v", label, path, err)
+	}
+	identity, identityErr := vNextPublicationIdentityFromFile(directory.file, label)
+	closeErr := directory.Close()
+	if identityErr != nil {
+		t.Fatalf("observe %s %q: %v", label, path, identityErr)
+	}
+	if closeErr != nil {
+		t.Fatalf("close %s %q: %v", label, path, closeErr)
+	}
+	return identity
+}
+
+func vNextPublicationQuarantineCandidateDirectoryForTest(t *testing.T, parent string) string {
+	t.Helper()
+	entries, err := os.ReadDir(parent)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, entry := range entries {
+		if entry.IsDir() && strings.HasPrefix(entry.Name(), ".connectorgen-quarantine-") {
+			candidate := filepath.Join(parent, entry.Name(), vNextPublicationQuarantineMember)
+			if identity := vNextPublicationDirectoryIdentityForTest(t, candidate, "quarantined cleanup candidate"); identity.mode == unix.S_IFDIR {
+				return candidate
+			}
+		}
+	}
+	t.Fatal("public cleanup did not retain a quarantined directory candidate")
+	return ""
+}
+
+func vNextPublicationAssertNestedPayloadForTest(t *testing.T, path string, want []byte) {
+	t.Helper()
+	witness := vNextPublicationFileWitnessForTest(t, path)
+	if !bytes.Equal(witness.payload, want) {
+		t.Fatalf("nested payload %q = %q, want %q", path, witness.payload, want)
 	}
 }
 
@@ -566,6 +882,46 @@ func vNextPublicationNumericFDCountForTest(t *testing.T) int {
 		}
 	}
 	return count
+}
+
+// vNextPublicationAssertNoOpenDescriptorsUnderForTest makes the F-02 public
+// path resource boundary concrete: after each fixture-only recovery, no root,
+// quarantine, child, or connector-lock descriptor may still name that unique
+// test tree. The surrounding numeric count and disabled GC catch a separate
+// descriptor accumulating without relying on finalizers.
+func vNextPublicationAssertNoOpenDescriptorsUnderForTest(t *testing.T, root string) {
+	t.Helper()
+	lsof, err := exec.LookPath("lsof")
+	if err != nil {
+		t.Fatal(err)
+	}
+	output, err := exec.Command(lsof, "-n", "-P", "-p", strconv.Itoa(os.Getpid()), "-Ffn").Output()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var descriptors []string
+	fd := ""
+	for _, line := range strings.Split(string(output), "\n") {
+		if len(line) < 2 {
+			continue
+		}
+		switch line[0] {
+		case 'f':
+			if _, err := strconv.Atoi(line[1:]); err == nil {
+				fd = line[1:]
+			} else {
+				fd = ""
+			}
+		case 'n':
+			if fd != "" && strings.HasPrefix(line[1:], root) {
+				descriptors = append(descriptors, fd+":"+line[1:])
+			}
+		}
+	}
+	if len(descriptors) != 0 {
+		sort.Strings(descriptors)
+		t.Fatalf("public nested cleanup retained descriptors under %q: %v", root, descriptors)
+	}
 }
 
 func vNextPublicationRepairDirectoriesForTest(t *testing.T, root string) []string {

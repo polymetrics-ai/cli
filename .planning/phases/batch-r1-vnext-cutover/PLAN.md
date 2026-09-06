@@ -1256,3 +1256,44 @@ No-replace B-01 A/B/C/public-C, strict B-02 bootstrap, bounded metadata/live des
   advance, and bounded fresh recovery/retry. These are proof obligations:
   do not manufacture a production RED when an observation-only test passes on
   prior production.
+
+### CP11 Group 3 proof execution update — steer 061/062
+
+- **Steer 063 object-kind correction:** the earlier shorthand must not merge
+  distinct contracts. Group 2 F-03-C has replacement-directory B cases;
+  Group 3 F-05/F-06 has empty/nonempty replacement regular `.lease`-file B
+  cases; F-02-P has nested-directory replacement. The preserved completed
+  Group 3 receipts remain evidence for their respective changing source
+  states, with no wording-only rerun.
+
+- **Changed test-only paths:** `vnext_publication_resource_error_test.go`
+  adds serial public Recover-owned-stage, public Prune stale-generation, and
+  Publish-final-prune generation rows. Each crosses quarantine before a nested
+  `removeTree` post-identity/pre-open A→B directory replacement or actual
+  opened-child identity failure. `vnext_publication_durable_matrix_test.go`
+  makes CURRENT/JOURNAL reads descriptor-bound and adds raw-control,
+  generation-content, and private authority graph witnesses. The established
+  caller matrix in `vnext_publication_test.go` consumes the durable witness.
+  No production source, runtime route, connector declaration, provider,
+  credential, or CLI surface changed.
+- **Actual scope:** the nested rows run four bounded no-GC repetitions for each
+  caller/fault pair, separately account for root/quarantine candidate/nested
+  child and public-operation lock descriptors, record partial candidate residue
+  before fixture-only reconstruction, and use fresh recovery. The durable
+  witness captures raw CURRENT/JOURNAL regular-file bytes and inode, logical
+  head, selected/rejected/stale generation tree, marker, transaction directory,
+  prepared record, phase and anchor identity at the actual refusal. It invokes
+  public Prune, Recover, Open, Publish-initial-recovery, prepared and committed
+  new-selected recovery, final Publish prune, rejected-new recovery, immediate
+  rollback, owned-stage cleanup, and non-destructive Check.
+- **Variant boundary:** Group 2 F-03-C remains the replacement-*directory* B
+  proof. The Group 3 durable caller rows replace the actual `.lease` regular
+  member, so their empty and nonempty B cases are regular-file substitutions;
+  both cases execute each unheld public schedule rather than borrowing a shared
+  sink control. This is not a claim that a directory can stand in for a lease.
+- **TDD framing:** F-02-P's old direct-child descriptor RED remains historical.
+  The new public nested rows and F-05/F-06 witnesses are missing-observation
+  proof controls; their first passing execution on repaired production is not a
+  fabricated production RED. An early fixture draft correctly exposed that
+  nested failure leaves quarantine residue rather than promising rollback; the
+  final test records that residue before restoring only its owned fixture backup.

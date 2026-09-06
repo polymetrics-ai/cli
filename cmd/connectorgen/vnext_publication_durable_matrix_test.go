@@ -58,6 +58,42 @@ func vNextPublicationFileWitnessForTest(t *testing.T, path string) vNextPublicat
 	return vNextPublicationPathWitness{info: info, payload: payload}
 }
 
+func vNextPublicationOptionalFileWitnessForTest(t *testing.T, path string) (vNextPublicationPathWitness, bool) {
+	t.Helper()
+	parent, err := vNextPublicationOpenDirectory(filepath.Dir(path), "optional witness parent")
+	if err != nil {
+		t.Fatalf("open optional witness parent for %q: %v", path, err)
+	}
+	file, err := parent.openRegular(filepath.Base(path), "optional file witness", unix.O_RDONLY)
+	if errors.Is(err, fs.ErrNotExist) {
+		if closeErr := parent.Close(); closeErr != nil {
+			t.Fatalf("close absent optional witness parent for %q: %v", path, closeErr)
+		}
+		return vNextPublicationPathWitness{}, false
+	}
+	if err != nil {
+		_ = parent.Close()
+		t.Fatalf("open optional file witness %q: %v", path, err)
+	}
+	info, statErr := file.Stat()
+	payload, readErr := io.ReadAll(file)
+	closeFileErr := file.Close()
+	closeParentErr := parent.Close()
+	if statErr != nil {
+		t.Fatalf("stat optional file witness %q: %v", path, statErr)
+	}
+	if readErr != nil {
+		t.Fatalf("read optional file witness %q: %v", path, readErr)
+	}
+	if closeFileErr != nil {
+		t.Fatalf("close optional file witness %q: %v", path, closeFileErr)
+	}
+	if closeParentErr != nil {
+		t.Fatalf("close optional witness parent for %q: %v", path, closeParentErr)
+	}
+	return vNextPublicationPathWitness{info: info, payload: payload}, true
+}
+
 func vNextPublicationDirectoryWitnessForTest(t *testing.T, path string) vNextPublicationPathWitness {
 	t.Helper()
 	directory, err := vNextPublicationOpenDirectory(path, "directory witness")
@@ -134,21 +170,17 @@ func vNextPublicationInfoInodeForTest(info os.FileInfo) uint64 {
 func vNextPublicationReadCurrentJournalForTest(t *testing.T, root string) (vNextGenerationPointer, vNextGenerationJournal, bool, []byte, []byte) {
 	t.Helper()
 	connectorRoot := filepath.Join(root, "acme")
-	currentBytes, err := os.ReadFile(filepath.Join(connectorRoot, vNextPublicationCurrentFile))
-	if err != nil {
-		t.Fatalf("read CURRENT: %v", err)
-	}
+	currentWitness := vNextPublicationFileWitnessForTest(t, filepath.Join(connectorRoot, vNextPublicationCurrentFile))
+	currentBytes := currentWitness.payload
 	var current vNextGenerationPointer
 	if err := vNextPublicationDecode(currentBytes, &current); err != nil {
 		t.Fatalf("decode CURRENT: %v", err)
 	}
-	journalBytes, err := os.ReadFile(filepath.Join(connectorRoot, vNextPublicationJournalFile))
-	if errors.Is(err, fs.ErrNotExist) {
+	journalWitness, journalFound := vNextPublicationOptionalFileWitnessForTest(t, filepath.Join(connectorRoot, vNextPublicationJournalFile))
+	if !journalFound {
 		return current, vNextGenerationJournal{}, false, currentBytes, nil
 	}
-	if err != nil {
-		t.Fatalf("read JOURNAL: %v", err)
-	}
+	journalBytes := journalWitness.payload
 	var journal vNextGenerationJournal
 	if err := vNextPublicationDecode(journalBytes, &journal); err != nil {
 		t.Fatalf("decode JOURNAL: %v", err)
@@ -183,6 +215,104 @@ func vNextPublicationAssertCurrentJournalForTest(t *testing.T, root, label strin
 	}
 }
 
+// vNextPublicationAssertDurableControlsAndAuthorityForTest retains the raw
+// public heads and private authority that remain observable at a caller's
+// actual cut. A quarantined root is intentionally handled separately by its
+// caller, so a partial recursive removal cannot make the control proof lie.
+func vNextPublicationAssertDurableControlsAndAuthorityForTest(t *testing.T, root, label string) (vNextGenerationPointer, vNextGenerationJournal, bool) {
+	t.Helper()
+	current, journal, journalFound, currentBytes, journalBytes := vNextPublicationReadCurrentJournalForTest(t, root)
+	connectorRoot := filepath.Join(root, "acme")
+	currentWitness := vNextPublicationFileWitnessForTest(t, filepath.Join(connectorRoot, vNextPublicationCurrentFile))
+	if !currentWitness.info.Mode().IsRegular() || vNextPublicationInfoInodeForTest(currentWitness.info) == 0 || !bytes.Equal(currentWitness.payload, currentBytes) {
+		t.Fatalf("%s CURRENT raw witness is not the decoded regular control: mode=%v inode=%d bytes=%q decoded=%q", label, currentWitness.info.Mode(), vNextPublicationInfoInodeForTest(currentWitness.info), currentWitness.payload, currentBytes)
+	}
+	if !journalFound {
+		if len(journalBytes) != 0 {
+			t.Fatalf("%s absent JOURNAL retained raw bytes %q", label, journalBytes)
+		}
+	} else {
+		journalWitness := vNextPublicationFileWitnessForTest(t, filepath.Join(connectorRoot, vNextPublicationJournalFile))
+		if !journalWitness.info.Mode().IsRegular() || vNextPublicationInfoInodeForTest(journalWitness.info) == 0 || !bytes.Equal(journalWitness.payload, journalBytes) {
+			t.Fatalf("%s JOURNAL raw witness is not the decoded regular control: mode=%v inode=%d bytes=%q decoded=%q", label, journalWitness.info.Mode(), vNextPublicationInfoInodeForTest(journalWitness.info), journalWitness.payload, journalBytes)
+		}
+	}
+
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := publisher.openOperation(context.Background(), syscall.LOCK_SH, false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer operation.close()
+	graph, err := publisher.controlAuthorityForReadLocked(operation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer graph.close()
+	if !graph.marker || len(graph.states) == 0 {
+		t.Fatalf("%s private authority graph marker=%t transactions=%d, want retained authority", label, graph.marker, len(graph.states))
+	}
+	marker := vNextPublicationFileWitnessForTest(t, filepath.Join(connectorRoot, vNextPublicationControlAuthorityMarkerFile))
+	if !marker.info.Mode().IsRegular() || vNextPublicationInfoInodeForTest(marker.info) == 0 || len(marker.payload) == 0 {
+		t.Fatalf("%s authority marker witness is incomplete: mode=%v inode=%d bytes=%q", label, marker.info.Mode(), vNextPublicationInfoInodeForTest(marker.info), marker.payload)
+	}
+	for name, state := range graph.states {
+		if err := state.assertPrivateIdentity(operation); err != nil {
+			t.Fatalf("%s authority transaction %q identity: %v", label, name, err)
+		}
+		path := filepath.Join(connectorRoot, name)
+		identity := vNextPublicationDirectoryIdentityForTest(t, path, label+" authority transaction")
+		if identity != state.transactionIdentity {
+			t.Fatalf("%s authority transaction %q identity=%#v want %#v", label, name, identity, state.transactionIdentity)
+		}
+		tree := vNextPublicationTreeSnapshotForTest(t, path)
+		if len(tree) == 0 || !bytes.Contains(tree, []byte(vNextPublicationControlRepairPreparedFile)) {
+			t.Fatalf("%s authority transaction %q lacks prepared-record witness", label, name)
+		}
+		for _, phase := range state.phases {
+			if !bytes.Contains(tree, []byte(phase.name)) {
+				t.Fatalf("%s authority transaction %q lacks phase witness %q", label, name, phase.name)
+			}
+		}
+	}
+	return current, journal, journalFound
+}
+
+// vNextPublicationAssertDurableCutWitnessForTest keeps the public durable
+// heads, every relevant generation root, and the retained private control
+// authority observable at a caller's actual cut. It deliberately uses the
+// descriptor-safe test witnesses rather than treating decoded control values as
+// a substitute for raw bytes, object type, or inode identity.
+func vNextPublicationAssertDurableCutWitnessForTest(t *testing.T, root, label string, extraRoots ...vNextGenerationPointer) {
+	t.Helper()
+	current, journal, journalFound := vNextPublicationAssertDurableControlsAndAuthorityForTest(t, root, label)
+	connectorRoot := filepath.Join(root, "acme")
+
+	roots := map[string]vNextGenerationPointer{current.Generation: current}
+	for _, pointer := range extraRoots {
+		roots[pointer.Generation] = pointer
+	}
+	if journalFound {
+		roots[journal.New.Generation] = journal.New
+		if journal.Old != nil {
+			roots[journal.Old.Generation] = *journal.Old
+		}
+	}
+	for generation := range roots {
+		path := filepath.Join(connectorRoot, vNextPublicationGenerationDirectory, generation)
+		identity := vNextPublicationDirectoryIdentityForTest(t, path, label+" generation root")
+		if identity.mode != unix.S_IFDIR {
+			t.Fatalf("%s generation %q mode=%#o, want directory", label, generation, identity.mode)
+		}
+		if tree := vNextPublicationTreeSnapshotForTest(t, path); len(tree) == 0 {
+			t.Fatalf("%s generation %q has no observable stable-tree witness", label, generation)
+		}
+	}
+}
+
 func vNextPublicationRestoreLeaseForTest(t *testing.T, retainedPath, leasePath string) {
 	t.Helper()
 	if err := os.Remove(leasePath); err != nil {
@@ -190,6 +320,206 @@ func vNextPublicationRestoreLeaseForTest(t *testing.T, retainedPath, leasePath s
 	}
 	if err := os.Rename(retainedPath, leasePath); err != nil {
 		t.Fatalf("restore test lease %q: %v", leasePath, err)
+	}
+}
+
+// TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB completes
+// the empty-B half of the public durable-cut matrix. The paired nonempty-B
+// schedules remain in their named caller tests below and in
+// vnext_publication_test.go; this test deliberately executes the same public
+// calls rather than treating a shared guard as equivalence evidence.
+func TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB(t *testing.T) {
+	for _, test := range []struct {
+		name   string
+		invoke func(*vNextGenerationPublisher) error
+	}{
+		{name: "explicit-prune", invoke: func(publisher *vNextGenerationPublisher) error {
+			return publisher.Prune(context.Background())
+		}},
+		{name: "no-journal-recover", invoke: func(publisher *vNextGenerationPublisher) error {
+			return publisher.Recover(context.Background())
+		}},
+		{name: "publish-initial-recovery", invoke: func(publisher *vNextGenerationPublisher) error {
+			_, err := publisher.Publish(vNextPublicationArtifactsForTest("next", false))
+			return err
+		}},
+		{name: "open-transitive-recovery", invoke: func(publisher *vNextGenerationPublisher) error {
+			handle, err := publisher.Open(context.Background())
+			if handle != nil {
+				handle.Release()
+			}
+			return err
+		}},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+			if err != nil {
+				t.Fatal(err)
+			}
+			old, err := baseline.Publish(vNextPublicationArtifactsForTest("old", false))
+			if err != nil {
+				t.Fatal(err)
+			}
+			handle, err := baseline.Open(context.Background())
+			if err != nil {
+				t.Fatal(err)
+			}
+			current, err := baseline.Publish(vNextPublicationArtifactsForTest("current", false))
+			handle.Release()
+			if err != nil {
+				t.Fatal(err)
+			}
+			vNextPublicationAssertEmptyLeaseReplacementForTest(t, root, old, &current, "", test.invoke)
+		})
+	}
+
+	t.Run("prepared-new-selected-recover", func(t *testing.T) {
+		root := t.TempDir()
+		baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		old, err := baseline.Publish(vNextPublicationArtifactsForTest("old", false))
+		if err != nil {
+			t.Fatal(err)
+		}
+		handle, err := baseline.Open(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		crash := errors.New("stop at prepared new-selected cut")
+		writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+			if point == vNextPublicationAfterCommitSync {
+				return crash
+			}
+			return nil
+		}})
+		if err != nil {
+			handle.Release()
+			t.Fatal(err)
+		}
+		if _, err := writer.Publish(vNextPublicationArtifactsForTest("current", false)); !errors.Is(err, crash) {
+			handle.Release()
+			t.Fatalf("Publish(current) = %v, want prepared-cut interruption", err)
+		}
+		handle.Release()
+		current, journal, found, _, _ := vNextPublicationReadCurrentJournalForTest(t, root)
+		if !found || journal.State != "prepared" || journal.Old == nil || *journal.Old != old || journal.New != current {
+			t.Fatalf("prepared new-selected state = current %#v journal %#v", current, journal)
+		}
+		vNextPublicationAssertEmptyLeaseReplacementForTest(t, root, old, &current, "prepared", func(publisher *vNextGenerationPublisher) error {
+			return publisher.Recover(context.Background())
+		})
+	})
+
+	t.Run("committed-new-selected-recover", func(t *testing.T) {
+		root := t.TempDir()
+		baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		old, err := baseline.Publish(vNextPublicationArtifactsForTest("old", false))
+		if err != nil {
+			t.Fatal(err)
+		}
+		handle, err := baseline.Open(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		crash := errors.New("stop at committed new-selected cut")
+		writer, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+			if point == vNextPublicationBeforePrune {
+				return crash
+			}
+			return nil
+		}})
+		if err != nil {
+			handle.Release()
+			t.Fatal(err)
+		}
+		if _, err := writer.Publish(vNextPublicationArtifactsForTest("current", false)); !errors.Is(err, crash) {
+			handle.Release()
+			t.Fatalf("Publish(current) = %v, want committed-cut interruption", err)
+		}
+		handle.Release()
+		current, journal, found, _, _ := vNextPublicationReadCurrentJournalForTest(t, root)
+		if !found || journal.State != "committed" || journal.Old == nil || *journal.Old != old || journal.New != current {
+			t.Fatalf("committed new-selected state = current %#v journal %#v", current, journal)
+		}
+		vNextPublicationAssertEmptyLeaseReplacementForTest(t, root, old, &current, "committed", func(publisher *vNextGenerationPublisher) error {
+			return publisher.Recover(context.Background())
+		})
+	})
+
+	t.Run("successful-publish-final-prune", func(t *testing.T) {
+		root := t.TempDir()
+		baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+		if err != nil {
+			t.Fatal(err)
+		}
+		old, err := baseline.Publish(vNextPublicationArtifactsForTest("old", false))
+		if err != nil {
+			t.Fatal(err)
+		}
+		vNextPublicationAssertEmptyLeaseReplacementForTest(t, root, old, nil, "committed", func(publisher *vNextGenerationPublisher) error {
+			_, err := publisher.Publish(vNextPublicationArtifactsForTest("new", false))
+			return err
+		})
+	})
+}
+
+func vNextPublicationAssertEmptyLeaseReplacementForTest(t *testing.T, root string, old vNextGenerationPointer, wantCurrent *vNextGenerationPointer, wantJournalState string, invoke func(*vNextGenerationPublisher) error) {
+	t.Helper()
+	leasePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation, vNextPublicationLeaseFile)
+	retainedPath := leasePath + ".empty-B-A"
+	leaseA := vNextPublicationFileWitnessForTest(t, leasePath)
+	hookHit := false
+	guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
+		if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
+			return nil
+		}
+		hookHit = true
+		if err := os.Rename(leasePath, retainedPath); err != nil {
+			return err
+		}
+		if err := os.WriteFile(leasePath, nil, 0o600); err != nil {
+			return err
+		}
+		return nil
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = invoke(guard)
+	if !hookHit || err == nil || !strings.Contains(err.Error(), "identity") {
+		t.Fatalf("empty-B public durable call = %v, hook=%t, want identity refusal", err, hookHit)
+	}
+	leaseB := vNextPublicationFileWitnessForTest(t, leasePath)
+	vNextPublicationAssertWitnessForTest(t, "empty-B displaced A", retainedPath, leaseA)
+	vNextPublicationAssertDistinctWitnessForTest(t, "empty-B A/B", leaseA, leaseB)
+	if len(leaseB.payload) != 0 {
+		t.Fatalf("empty-B replacement payload = %q, want empty", leaseB.payload)
+	}
+	current, journal, found, _, _ := vNextPublicationReadCurrentJournalForTest(t, root)
+	if wantCurrent != nil && current != *wantCurrent {
+		t.Fatalf("empty-B CURRENT = %#v, want %#v", current, *wantCurrent)
+	}
+	if wantJournalState == "" {
+		if found {
+			t.Fatalf("empty-B JOURNAL = %#v, want absent", journal)
+		}
+	} else if !found || journal.State != wantJournalState || journal.Old == nil || *journal.Old != old || journal.New != current {
+		t.Fatalf("empty-B JOURNAL = %#v, want state=%q old=%#v new=%#v", journal, wantJournalState, old, current)
+	}
+	vNextPublicationAssertDurableCutWitnessForTest(t, root, "empty-B durable refusal", old)
+	vNextPublicationRestoreLeaseForTest(t, retainedPath, leasePath)
+	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := fresh.Recover(context.Background()); err != nil {
+		t.Fatalf("fresh recovery after empty-B fixture restoration: %v", err)
 	}
 }
 
@@ -260,6 +590,7 @@ func TestVNextPublicationCommittedJournalNewSelectedRecoveryRejectsLateLeaseRepl
 	vNextPublicationAssertWitnessForTest(t, "committed recovery displaced A", retainedPath, leaseA)
 	vNextPublicationAssertWitnessForTest(t, "committed recovery installed B", leasePath, leaseB)
 	vNextPublicationAssertCurrentJournalForTest(t, root, "committed recovery refusal", newPointer, "committed", &old, newPointer)
+	vNextPublicationAssertDurableCutWitnessForTest(t, root, "committed recovery refusal")
 
 	vNextPublicationRestoreLeaseForTest(t, retainedPath, leasePath)
 	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -322,6 +653,7 @@ func TestVNextPublicationSuccessfulPublishFinalPruneRejectsLateLeaseReplacement(
 	vNextPublicationAssertWitnessForTest(t, "successful Publish displaced A", retainedPath, leaseA)
 	vNextPublicationAssertWitnessForTest(t, "successful Publish installed B", leasePath, leaseB)
 	vNextPublicationAssertCurrentJournalForTest(t, root, "successful Publish final prune refusal", newPointer, "committed", &old, newPointer)
+	vNextPublicationAssertDurableCutWitnessForTest(t, root, "successful Publish final prune refusal")
 
 	vNextPublicationRestoreLeaseForTest(t, retainedPath, leasePath)
 	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -407,6 +739,7 @@ func TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement(t *
 			vNextPublicationAssertWitnessForTest(t, "fresh rejected-new displaced A", retainedPath, leaseA)
 			vNextPublicationAssertWitnessForTest(t, "fresh rejected-new installed B", leasePath, leaseB)
 			vNextPublicationAssertCurrentJournalForTest(t, root, "fresh rejected-new refusal", old, "prepared", &old, newPointer)
+			vNextPublicationAssertDurableCutWitnessForTest(t, root, "fresh rejected-new refusal")
 			if _, err := os.Stat(newRoot); err != nil {
 				t.Fatalf("fresh rejected-new refusal removed rejected root: %v", err)
 			}
@@ -493,6 +826,7 @@ func TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVar
 			vNextPublicationAssertWitnessForTest(t, "immediate rollback displaced A", retainedPath, leaseA)
 			vNextPublicationAssertWitnessForTest(t, "immediate rollback installed B", leasePath, leaseB)
 			vNextPublicationAssertCurrentJournalForTest(t, root, "immediate rollback refusal", old, "prepared", &old, newPointer)
+			vNextPublicationAssertDurableCutWitnessForTest(t, root, "immediate rollback refusal")
 
 			vNextPublicationRestoreLeaseForTest(t, retainedPath, leasePath)
 			fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
