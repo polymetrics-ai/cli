@@ -54,8 +54,12 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 	// Explicit source claims are checked even when no target materializes.
 	graphqlClaims := sourceLaneGraphQLCitations(facts, annotation.GraphQL)
 	for _, issue := range graphqlClaims {
+		severity := "error"
+		if strings.Contains(issue.Code, "unverified") {
+			severity = "deficit"
+		}
 		for i := range cells {
-			cells[i].Diagnostics = append(cells[i].Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cells[i].Lane}, Stage: "reference", Code: issue.Code, Pointer: issue.Pointer, Owner: key.Connector, Severity: "error"})
+			cells[i].Diagnostics = append(cells[i].Diagnostics, sourceLaneDiagnostic{Key: key, Lanes: []string{cells[i].Lane}, Stage: "reference", Code: issue.Code, Pointer: issue.Pointer, Owner: key.Connector, Severity: severity})
 		}
 	}
 	for _, group := range []struct {
@@ -115,7 +119,7 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 					raw = facts.bindings.Authoring[ref.Artifact]
 				}
 			}
-			claims := sourceLaneSuppliedClaims(facts, annotation, ref)
+			claims := append(sourceLaneSuppliedClaims(facts, annotation, ref), graphqlClaims...)
 			for _, issue := range claims {
 				severity := sourceClaimSeverity(group.claimed)
 				if !strings.Contains(issue.Code, "unverified") {
@@ -900,13 +904,81 @@ func sourceLaneGraphQLCitations(facts sourceFacts, refs *sourceLaneGraphQLRefs) 
 		}
 		_, code := sourceLaneCitedValue(facts, *ref)
 		if code == "" && (owner.DocumentID != ref.DocumentID || !strings.HasPrefix(ref.Pointer, owner.Pointer+"/")) {
-			code = "source_binding_scope_mismatch"
+			if owner.DocumentID != ref.DocumentID {
+				code = "source_binding_scope_mismatch"
+			} else {
+				code = sourceLaneLinkedCitation(facts, owner.Pointer, ref.Pointer)
+			}
 		}
 		if code != "" {
 			issues = append(issues, sourceLaneBindingIssue{code, ref.Pointer})
 		}
 	}
 	return issues
+}
+
+// sourceLaneLinkedCitation proves one local reference lineage from this
+// operation to a physically retained value. It neither searches for equal
+// values nor interprets provider-specific linking conventions.
+func sourceLaneLinkedCitation(facts sourceFacts, root, wanted string) string {
+	visits, matches := 0, 0
+	unresolved := false
+	var walk func(string, map[string]bool, int)
+	walk = func(pointer string, seen map[string]bool, depth int) {
+		visits++
+		if visits > 4096 || depth > 128 || seen[pointer] {
+			unresolved = true
+			return
+		}
+		raw, err := sourceJSONPointer(facts.Document, pointer)
+		if err != nil {
+			unresolved = true
+			return
+		}
+		if pointer == wanted {
+			matches++
+			return
+		}
+		next := make(map[string]bool, len(seen)+1)
+		for key, value := range seen {
+			next[key] = value
+		}
+		next[pointer] = true
+		var object map[string]json.RawMessage
+		if json.Unmarshal(raw, &object) == nil && object != nil {
+			if edge, ok := object["$ref"]; ok {
+				var ref string
+				if json.Unmarshal(edge, &ref) != nil || !strings.HasPrefix(ref, "#/") {
+					unresolved = true
+				} else {
+					walk(facts.RefPrefix+ref[1:], next, depth+1)
+				}
+			}
+			for name := range object {
+				if name != "$ref" {
+					walk(pointer+"/"+escapeSourcePointer(name), next, depth+1)
+				}
+			}
+			return
+		}
+		var array []json.RawMessage
+		if json.Unmarshal(raw, &array) == nil {
+			for i := range array {
+				walk(pointer+"/"+strconv.Itoa(i), next, depth+1)
+			}
+		}
+	}
+	walk(root, map[string]bool{}, 0)
+	if matches > 1 {
+		return "source_projection_ambiguous"
+	}
+	if unresolved {
+		return "source_schema_unverified"
+	}
+	if matches == 1 {
+		return ""
+	}
+	return "source_binding_scope_mismatch"
 }
 
 // A projection retains the instance coordinate and each ancestor's presence

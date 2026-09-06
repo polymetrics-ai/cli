@@ -649,14 +649,14 @@ func TestSourceLaneBinding099FGraphQLVariables(t *testing.T) {
 			}
 			if strings.Contains(mode, "linked citation") {
 				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
-					doc["contract"] = map[string]any{"name": "Change"}
+					doc["source_contract"] = map[string]any{"contract": map[string]any{"name": "Change"}}
 					op := doc["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)["source_operation"].(map[string]any)
 					op["contract"] = map[string]any{"$ref": "#/contract"}
 					if mode == "ambiguous linked citation" {
 						op["other_contract"] = map[string]any{"$ref": "#/contract"}
 					}
 				})
-				name = sourceBindingCitation099F(t, facts, "/contract/name")
+				name = sourceBindingCitation099F(t, facts, "/source_contract/contract/name")
 				a.GraphQL.OperationName = &name
 				if mode == "ambiguous linked citation" {
 					want = 0
