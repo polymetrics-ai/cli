@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "annotations": [
+    {
+      "key": {
+        "connector": "vercel",
+        "inventory": "primary",
+        "id": "vercel.rest.readSessionFile"
+      },
+      "semantics": "read",
+      "citation": {
+        "document_id": "vercel:primary",
+        "pointer": "/rest/operations/299/source_operation/summary",
+        "value_sha256": "9445e1d930264460cf49d30b0e4378c24ff81e22e168fd12d5f50dea441ae31e"
+      },
+      "clause": "Read a file",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": []
+    },
+    {
+      "key": {
+        "connector": "vercel",
+        "inventory": "primary",
+        "id": "vercel.rest.createWebhook"
+      },
+      "semantics": "mutation",
+      "citation": {
+        "document_id": "vercel:primary",
+        "pointer": "/rest/operations/381/source_operation/summary",
+        "value_sha256": "de9630dadd47a37e30684147218c08bddde88fe71a287c7f9f16e00c0aae690f"
+      },
+      "clause": "Creates a webhook",
+      "foundation_gap": "cli-webhook-event-surface-foundation-r1",
+      "atlas_id": "transport.sync-contract.v1",
+      "decision_refs": [
+        "cli-batch1-vercel-inbound-sync-decision-r1",
+        "cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary"
+      ],
+      "intended_bindings": [],
+      "materialized_bindings": []
+    },
+    {
+      "key": {
+        "connector": "notion",
+        "inventory": "primary",
+        "id": "notion.rest.post-database-query"
+      },
+      "semantics": "read",
+      "citation": {
+        "document_id": "notion:primary",
+        "pointer": "/rest/operations/18/source_operation/summary",
+        "value_sha256": "fdca906a2187603b762c7b0c6c20578017613b0fe949fe33ede456cba1dd25fb"
+      },
+      "clause": "Query a data source",
+      "foundation_gap": "",
+      "atlas_id": "",
+      "decision_refs": [],
+      "intended_bindings": [],
+      "materialized_bindings": []
+    }
+  ]
+}
