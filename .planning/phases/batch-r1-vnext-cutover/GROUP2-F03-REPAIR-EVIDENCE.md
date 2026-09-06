@@ -188,3 +188,44 @@ source/static/final-review boundary.
   -diff` passed. The complete final three-group normal/race validation remains
   pending; the intermediate package receipt above is deliberately not promoted
   to that later boundary.
+
+
+## 2026-09-06 — Complete Firstmate073 audit disposition
+
+The independent fresh Astra/xhigh complete-ledger audit returned **CHANGES
+REQUIRED: six actionable entries (one Medium, five Low)** against behavioral
+candidate `7481d1770a21cc95869fd10bf281f632af48c089`. Its full 315-line original
+text, all dispositions, ten lenses, ownership/consumer and eleven-caller/cut
+evidence tables are preserved verbatim in [REVIEW-CONVERGENCE.md](REVIEW-CONVERGENCE.md)
+under the dated complete-audit return. Original report SHA-256:
+`bc109e85fdde9d1958b2cde7874a3f7b30b8e5d06b1b0c2764088fb34fa3e0a0`.
+This supersedes current closure implications in earlier entries; it does not
+rewrite their historical source, test receipts or original attribution.
+
+7481-01/02 require common-record creation/partial-record ownership repair
+(including prepared, marker and phase siblings) and complete compound-collision
+error classification. 7481-03/04/06 require the previously stipulated exact
+allocation A/B and fresh recovery witnesses, independent expected controls/
+roots/stable history across every actual caller/cut including held-reader and
+Check, and the omitted compound-error controls. The prior F03 dynamic matrix
+is not completely closed. Missing proof does not establish renewed B deletion
+or a current recursive descriptor leak.
+
+7481-05 adjudicates the nested Publish fixture as initial recovery, not final
+prune. Its extra final-prune label and post-Stat retained-child identity claim
+are unsupported. Mandatory public nested Recover-stage/Prune-generation proof
+and the separate actual final-prune lease matrix remain. No extra nested
+final-prune runtime guarantee is required. F04R/F08R remain resolved; the
+other old-seven obligations retain the audit's partial dispositions.
+
+The new external four-cell marker/phase overlay exited 1 (package 1.079s,
+wall 5.26s), proving desired fresh-recovery failures on unchanged source.
+It is not production GREEN. Current normal/race and eight supplementary
+receipts, cached preflight, recovered 068 scanner success, historical F07
+chronology and CP29 debt retain their exact original limits. Current
+original-base-range lint attribution is still an acceptance gate.
+
+Only evidence aggregation/correction has occurred. No production/test repair
+has started. The complete audited set now awaits Firstmate's separately
+authored coordinated repair/proof scope; CP11 remains unaccepted and CP12
+has not begun.

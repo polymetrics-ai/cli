@@ -1107,3 +1107,621 @@ merge. The historical e77 reports are the frozen diagnosis, not a renewed
 review event for later Group 1/2 commits. Group 3 alone is the remaining
 authorized execution group; the resulting coherent tree still requires fresh
 independent whole-range exact-SHA review.
+
+
+## 2026-09-06 — Firstmate 070/073 preserving owner and complete 7481 audit intake
+
+### Task Delivery Header
+
+- Issue: Refs #4427 — transactional connector-generation publication; parent Refs #4325.
+- Base branch: `main`, verified by the GitHub pull API on 2026-09-06.
+- Merges into: `fm/cli-top100-declaration-batch-r1 → main`; main merge remains captain-owned.
+- Delivery: preserve the complete independent ledger audit and commit its evidence locally; no push, repair, CP12 advance or programme acceptance in this intake.
+- Working branch: `fm/cli-top100-declaration-batch-r1`.
+- Existing PR: https://github.com/polymetrics-ai/cli/pull/4294.
+- Task: aggregate the entire fresh review and all prior-seven dispositions, obtain Firstmate's supplied independent Astra/xhigh complete-ledger audit, and preserve every disposition for Firstmate's coordinated response.
+- Verification: exact Git/remote identity; original report/handoff SHA-256; code/test/dependency freeze; complete original report and ten-lens/contract-to-evidence audit with original command custody.
+
+| Acceptance criterion | Evidence | Observable assertion or fake reason |
+| --- | --- | --- |
+| Preserving owner and delivery identity | live | `pwd -P` and Git top-level both resolve to the assigned isolated worktree; branch/HEAD/tree and actual pull API head/base match 067/070. |
+| Runtime and branch custody | live | Current ancestor Codex PID 81393 arguments select `gpt-6-astra`, `model_reasoning_effort=medium`; process ancestry includes Herdr. Doctor is healthy and AXI status reports zero current-branch/repository runs. |
+| Immutable original review and full aggregation | live | File hashes match 067 and 070; all five entries and seven dispositions below are transcribed verbatim from the full original review, which remains unchanged. |
+| Complete independent adjudication | live, pending | A new native Astra/xhigh context must return the complete original-range audit; this draft supplies no acceptance. |
+| No provider or customer-data exercise | fake | Existing hermetic fault-injection receipts/probes are the authorized evidence scope; no provider credentials or customer database access is authorized. |
+
+### Verified source and review custody
+
+Worktree `/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli` remains at
+`afde575a1368fe86b5ab5acb5a3d39a294a20e96`, tree
+`41bead7def7472a0383b1081b1134c9e19803624`, 28 local commits ahead of the
+published `8214bd91403ce620773b61caf674faa540ee1701`. API base is `main` at
+`813f457a925f7ee3fe3bea101a43e445992c8552`. Only the protected untracked
+`.cache/` existed before this evidence edit; it remains untouched.
+Behavior/test identity is `7481d1770a21cc95869fd10bf281f632af48c089`, tree
+`a2e583336ffa8ad86a0de95110259342bfa6dab0`, over original base
+`36e4d980de0d51d92fe74a68306845643596a6cb`. The descendant changes only
+GROUP3-EVIDENCE, PLAN, TDD-LEDGER and VERIFICATION. This intake changes evidence
+only. The 067 handoff reports all old native children and command sessions
+terminal; none is revived or adopted.
+
+Complete original fresh report:
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-astra-7481d177-fresh-full-range-review.md`,
+380 lines / 52,454 bytes, SHA-256
+`2d92ce239d19509aa1838c23d5d0b9f31f4e5784232a512ee2b0f93e70ca571c`.
+It returned from fresh Astra/xhigh context
+`cp11_astra_7481d177_fresh_review_r1`, thread
+`01a07552-ef8d-7c01-b366-f4f79190c1c1`. Verdict: **CHANGES REQUIRED**,
+exactly five unadjudicated entries (one Medium and four Low). No self-acceptance
+or 90% estimate survives this intake. Handoff 067 hash is
+`ee71e0fbe4afbb0f996ce38923e706d77ec8abcdf207005165251cbacf432afe`.
+
+### Workflow, skills and independent role routing
+
+Read required routing, issue/parent contracts and GSD adapter. Loaded
+`no-mistakes`, `golang-how-to`, Go security/safety/error-handling/lint/testing,
+`connector-lane-build-order`, and the pinned `firstmate-exhaustive-review` gate.
+The approved `REVIEW-EVIDENCE-REQUIREMENTS.md` is required in full for the audit.
+`scripts/gsd sources code-review` and `scripts/gsd prompt code-review
+batch-r1-vnext-cutover` resolve the installed workflow. Doctor retains the
+known unrelated missing `.gsd/prompts/issue-122-rebootstrap.md`. The documented
+non-Pi inline/native route is used beneath this canonical worker. Firstmate073
+explicitly authorizes one independent native audit context and supersedes the
+generic local no-role rule for this assignment; it supplies the entire prompt.
+No new prompt scope, fixer, Pi role, pipeline or adapter is introduced.
+The requested fresh role is `cp11_7481_complete_ledger_audit_astra_r1`, model
+`gpt-6-astra`, effort `xhigh`, no inherited conversation. Actual launch receipt
+and complete verdict will be recorded after launch/return. Captain's current
+Astra and no-intermediate-push policy supersedes the imported gate's older
+Claude/push wording. Historical Terra/Luna records retain their real identity.
+
+### Complete original fresh findings and prior-seven dispositions — verbatim intake
+
+The following is verbatim review material, not the owner's adjudication. Its
+source-line references bind 7481. The auditor must also read the whole original
+report, including prior B/R3/F resolutions, ten lenses and proof custody.
+
+## Complete actionable ledger
+
+### 7481-01 — Medium — prepared creation can still strand a self-created, unrecoverable transaction
+
+**Disposition:** F-03-A remains open at an earlier actual-creation frontier.
+
+**Locations:** [record writer](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_repair.go:461), [openFile completion](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_dir.go:193), [failed-preparation cleanup](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_repair.go:1296).
+
+The common writer reports created=false whenever directory.openFile returns an error. But openFile first performs real Openat(O_CREAT|O_EXCL), then closes its temporary parent descriptor. If that Close reports an error, it closes the already-opened file and returns nil/error. The file has already been created. The writer therefore loses creation ownership before its new created=true assignment at line 466.
+
+createControlRepairLocked receives preparedCreated=false, removes its known prior/intended anchors, and tries to remove the transaction directory. The newly created empty prepared.json prevents removal. A later fresh scan treats that file as prepared authority, fails decoding EOF, and refuses normal recovery before public control processing.
+
+The reviewer probe performed that exact sequence using the existing CloseDirectory hook: real parent Close first, designated completion error second, armed only at BeforeControlRepairRecord for the prepared-authority label. Publish returned the completion error plus directory-not-empty; a new transaction contained only a zero-byte prepared.json. Prior CURRENT bytes stayed unchanged, but both Check and a fresh publisher's Recover returned “decode publication control repair prepared authority: EOF.” This is a desired-behavior RED, not a hypothetical power loss or a public-name attacker.
+
+**Causality:** the broad failed-preparation root existed in the original range, including 8214. a9924626 introduced the created flag and its false return at this still-fallible helper boundary; 54746816 added record hooks without moving the ownership frontier. This is an incomplete repair of an existing-range miss, not a newly introduced healthy-publication defect and not something created by artifact-only evidence commits.
+
+**Sibling scope:** every prepared writer using openFile has this earlier creation boundary, including CURRENT/JOURNAL successor and bootstrap classes. The common writer is also used by marker/phase creation; those callers must be inspected when changing its ownership/error result, without claiming that arbitrary malformed private state must be auto-repaired. Current Write/partial/Sync/record-Close and post-record directory-Sync cases do not exercise a parent-Close failure after successful creation.
+
+**Required bounded closure:** establish known ownership at the first successful creation, including helper post-create failures. Preserve a coherent recoverable preparation or completely remove only the proven-owned, unexposed preparation. Do not delete an unknown replacement, weaken malformed-state refusal, or merely preserve an unreadable record and call it recoverable. Add this real-open completion frontier to the existing state-class matrix, retain both primary/completion and cleanup causes, assert prior controls and owned graph before restoration, and prove nonmutating Check, fresh recovery and normal retry where permitted.
+
+### 7481-02 — Low — EEXIST retry discards newly joined completion/cleanup errors
+
+**Disposition:** residual F-03-B consumer defect on the F-03-C allocator path.
+
+**Location:** [failed temporary allocation retry](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication.go:1016).
+
+After an exclusive temporary control open fails, lines 1020–1021 join the owned temporary-directory Close and identity-bound cleanup outcomes into err. Line 1022 then tests only errors.Is(err, fs.ErrExist). A joined EEXIST plus a meaningful Close or cleanup failure still matches, so the entire joined result is discarded and allocation retries. A subsequent successful allocation can make public Publish return nil.
+
+The reviewer probe opened actual A, created its real control blocker, moved A, installed distinct nonempty directory B, then let the real control Openat fail EEXIST. It actually closed the owned A directory and appended a designated completion error. Publish returned a valid pointer and nil error. Exact A/B inodes and their “A blocker”/“B bytes” contents were preserved, proving that the ownership repair is useful but the completion outcome is still lost.
+
+**Causality:** the broad EEXIST consumer originates in 4fedb387/958a07a7. a9924626 introduced the joined producer directly before that unchanged consumer. The lost-error root predates this wave, while the new joined-error-to-old-retry compatibility edge is fix-created by a9924626. This is not a renewed B-deletion claim.
+
+**Sibling scope:** writeCurrentLocked and writeJournalLocked share the allocator; publication and recovery reach both. All error classification consumers were searched alongside the modified producers. The recursively pure NotExist predicate correctly prevents a joined absence/completion error becoming clean absence in ReadControlBound. Direct errno-only Mkdir/open/identity consumers are not equivalent to this joined path and were not falsely reported.
+
+**Required bounded closure:** retry only a genuinely retryable collision whose meaningful owned completion/cleanup has succeeded, or otherwise preserve the complete error through the public caller. Assert errors.Is/As visibility for both the collision and injected completion/cleanup, one Close owner, exact A/B state and bounded retry. Do not turn all harmless read-only teardown into a new durability requirement or add a generic error framework.
+
+### 7481-03 — Low — failed-allocation proof still substitutes existence and other control-write cuts for the audited A/B contract
+
+**Disposition:** F-03-C's production A-bound cleanup is improved, but its declared executable completion is not established.
+
+**Locations:** [CURRENT/JOURNAL fixture](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_group2_original_test.go:442), [replacement assertion](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_group2_original_test.go:527), [public temporary observer](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_group2_original_test.go:554), [public quarantine observer](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_group2_original_test.go:698).
+
+The public Publish EEXIST fixture retains only A/blocker existence, B existence and optional foreign bytes. It does not compare retained A/B to captured pre-cleanup identities, and it ends after Publish rather than proving the audited fresh recovery/retry. The public stale-generation Prune quarantine fixture similarly checks existence/optional payload and old-generation existence, not exact original A/B identity continuity or fresh recovery.
+
+The later CURRENT/JOURNAL fixture records A, moves its directory and creates B, but creates no control blocker and returns nil from AfterTemporaryOpen. The subsequent real control creation through retained A succeeds. The observed identity refusal is a later writeAtomic cleanup boundary, not failed allocator EEXIST ownership. It is useful coverage, but cannot establish equivalence to the missing failed-allocation sibling schedule.
+
+The later shared assertion verifies exact A but only that the current B is a directory distinct from A; it never retains the B identity created by the actor. A distinct C at B's pathname can satisfy that check. The stale-stage quarantine case adds legitimate fresh recovery but inherits this B-continuity gap. Empty and nonempty directory variants do run; emptiness/type variants are not substitutes for exact B identity.
+
+**Causality:** the public original-control skeleton is from 8d133782, the repaired existence checks from a9924626, and the new sibling fixture/assertion from 54746816. This is incomplete execution of the audited F-03-C proof obligation, including a repair-created boundary substitution. It is separate from 7481-02 because the absent identity/schedule/restart assertions remain even after truthful errors are fixed.
+
+**Required bounded closure:** use descriptor-safe expected witnesses for both A and the actual actor-created B before the attempted cleanup. Execute the actual failed temporary allocation and failed quarantine allocation through the two audited public paths, with their meaningful empty/nonempty directory variants, exact causes and residue. Prove the required fresh recovery/retry after only explicitly fixture-owned restoration. Retain the CURRENT/JOURNAL successful-allocation cleanup test as complementary coverage, or clearly narrow its claim rather than calling it failed-allocation proof.
+
+### 7481-04 — Low — durable “preservation” helper observes current state but does not compare it with required expected state
+
+**Disposition:** F-05/F-06-P remains open despite real additional observations and executed variants.
+
+**Locations:** [control/private helper](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_durable_matrix_test.go:222), [generation-root helper](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_durable_matrix_test.go:289), and their public-caller/rollback/Check call sites.
+
+The helper reads CURRENT/JOURNAL and then compares a second witness with bytes just read at the same post-operation cut. It requires a regular file and a nonzero inode, not the expected retained control identity or expected raw bytes from the relevant earlier cut. It scans the current private graph, compares transaction identities to that freshly scanned graph, and checks that a fresh serialized tree contains prepared/phase names. It discards those snapshots. It does not compare the pre-existing marker/transaction/prepared/phase/anchor history to an expected retained history with explicitly permitted new records.
+
+For selected/rejected/stale generation roots it requires a directory and a nonempty serialized snapshot, but compares neither expected root identity nor expected content. Even an encoded empty snapshot has nonzero byte length. A current coherent graph or a nonzero inode does not establish intermediate preservation.
+
+The reviewer proof control retained a real old generation across a new publication, moved old root A, then installed an unrelated B directory at the old generation pathname containing only a foreign file. The actual durable-cut helper returned normally. The control then deliberately failed its desired rejection assertion. This demonstrates an oracle false positive; it does **not** demonstrate that production Open, validation or cleanup accepts B.
+
+The strong A/B lease and returned-reader witnesses remain useful and accepted. The held-reader matrix still checks decoded expected controls plus its A/B witnesses without the required expected private/root/raw-control crosswalk. Later successful fixture restoration/fresh recovery cannot retrospectively establish those missing pre-restoration comparisons.
+
+**Causality:** the F-05/F-06 preservation obligation is older than this wave. These self-referential helper checks were introduced by 7481d177; the new evidence text overstates what they establish. The former “ordinary Publish has no authority” sentence is now explicitly corrected and is not retained as a separate finding.
+
+**Required bounded closure:** capture exact expected pre-existing controls, generation roots/content and private identities at the appropriate durable boundary; compare after refusal, explicitly permitting legitimate CURRENT/JOURNAL/phase advancement and newly appended transactions. Distinguish unchanged historical authority from newly created authority. Add an oracle control that would reject a substituted expected root/history rather than merely finding a readable current tree. Apply the contract to every named cut below, including held-reader and read-only Check, without requiring a successful Publish or rollback to retain a pre-Publish CURRENT inode that it legitimately replaces.
+
+### 7481-05 — Low — new nested “final Publish prune” row actually fails during initial recovery
+
+**Disposition:** F-02-P's required public Recover/Prune recursion is now exercised; this added cut claim is fix-created and false.
+
+**Locations:** [nested Publish fixture](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication_resource_error_test.go:193), [actual Publish order](/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/vnext_publication.go:395), GROUP3-EVIDENCE.md's 061/062 and 063 tables and derivative canonical status.
+
+The fixture publishes nested old, holds old while publishing current, then releases old before invoking guarded Publish(next). At entry, old is already an unheld stale generation. publishLocked calls recoverLocked before staging next; no-journal recovery removes stale generations. The installed nested hook therefore refuses during this initial recovery and Publish never reaches its later successful-selection/final-prune cut.
+
+The test asserts the shared nested hook and an error, not the expected new CURRENT/committed JOURNAL or a final-prune-only boundary. The weak generic control helper from 7481-04 cannot detect the wrong schedule. Calling the row “successful Publish final-prune cleanup” in the table is therefore unsupported.
+
+The actual public Recover-owned-stage and Prune-stale-generation nested rows are meaningful: they cross real quarantine, execute nested replacement and actual-open post-Stat failure, compare quarantined root identity and replacement-case A/B identities/bytes, repeat four times with GC disabled, reconstruct only the test fixture, then check fresh recovery and root-scoped descriptor release. The direct 24-refusal test and immediate child defer remain accepted. No current production FD leak is asserted.
+
+The post-Stat failure row checks nested payload but does not retain/compare the nested child's pre-failure identity despite the table's “retained-child identity” wording; either assert that identity or describe the narrower observation honestly. Already removed owned siblings and partial quarantine residue remain permissible.
+
+**Causality:** the incorrect fixture and final-prune label were introduced together in 7481d177. This is a new proof-schedule/evidence defect, not proof that F-02's original leak persists, and not a reason to demand all-or-nothing recursive deletion.
+
+**Required bounded closure:** make the named nested Publish row reach the true final prune with asserted selected/committed controls and relevant resource state, or explicitly withdraw the unsupported extra final-prune claim while preserving the genuinely executed mandatory Recover/Prune proof. Keep the separate real final-prune lease matrix; it is not nested recursive ownership evidence. No new process-restart or runtime guarantee is required.
+
+## Seven-entry audit disposition and sibling search
+
+| Audited entry | Current disposition |
+| --- | --- |
+| F-03-A | Partially repaired, not closed: coherent retention after successful record completion and later transaction/connector Sync is present; known partial records can be removed identity-bound. Earlier successful-create/parent-Close frontier remains 7481-01. Strict valid absence/bootstrap remains accepted. |
+| F-03-B | Partially repaired, not closed: meaningful producers now join errors and pure absence is distinguished; EEXIST consumes and loses joined completion/cleanup in 7481-02. |
+| F-03-C | A-bound production cleanup retained; original empty-B deletion is not reasserted. Error visibility and exact failed-allocation proof remain incomplete under 7481-02/03. |
+| F-04-R | Resolved: file witness derives type/identity/bytes from one opened no-follow/nonblocking descriptor; directory witness retains A while reading dependent metadata. Bounded FIFO/symlink/directory controls and ordinary nested positive are real. |
+| F-05/F-06-P | Partially repaired: all principal logical cuts and meaningful empty/nonempty regular lease-B variants now execute; ordinary authority existence is corrected. Expected intermediate raw/control/private/root preservation remains 7481-04. |
+| F-02-P | Core public nested Recover/Prune coverage added and no current leak found. New final-Publish and retained-child evidence claims require 7481-05; shared durable-state assertions inherit 7481-04. |
+| F-08-R | Resolved: actual EWOULDBLOCK/EAGAIN acknowledgement on the retained locked directory precedes signalling; pre-flock directory-open is explicitly insufficient; exact sent OS signal, bounded lifecycle, no-success/state/retry assertions retained. |
+
+The F-03 search covered actual open plus parent Close; parent Close plus already-opened-file Close; definitions/connector root completion; opened-control identity/read plus Close; writable marker/prepared/phase Write/Sync/Close; predecessor link registration and Close; stage file Write/Sync/Close and known-owned stage creation cleanup; capture identity/primary error plus Sync/Close; pure and joined absence; and conflict/collision consumers. The known predecessor anchor is registered before its fallible Close. Record/stage/capture primary failures are not flattened into generic strings. Read-only teardown policies were not recast as blanket new durability promises.
+
+The F-01 search covered all three recorded capture-dependent opens for both CURRENT and JOURNAL, transaction/predecessor reopens and empty-capture admission. The retained helper compares actual Fstat identity with recorded capture identity before dependent enumeration/candidate use/rename/sync. The six actual-open tests place replacements at their real dependent opens, assert exact A/B/public state, restore only fixtures and use fresh recovery. No current capture-handoff defect was found.
+
+The F-02/F-05/F-06 search covered public and internal cleanup sinks, nested children, early and late lease replacements, root replacements, public C collision, failed allocation, rollback, ordinary and interrupted publication, held handles and Check. The different object kinds remain separate: F-03-C B is a directory, F-05/F-06 B is a regular lease file, F-02 B is a nested directory.
+
+
+
+### Current gate correction and proof custody supplied to the audit
+
+The full current 064 report with 068 appendix has SHA-256
+`a59da5a5752e5c2149ca474cf5b9ac5761fa494fe7ae470ee04084a5680ba779`.
+The older `a9bcdf60...` hash in the untouched original review predates that
+appendix. The recovered original boundary result file has SHA-256
+`744d0d129e15c8eccbaf723dda0ca96487c8babc25ce3c2d53d6feea25ed5849`;
+physical 13951 / raw including-newline SHA-256
+`ec88ff8c01c57e8647206c78ff003698932b66be9420a737536073ddd75c07b7`
+records exit 0, wall 254.579597042s, clean 284 files/553 connectors, zero
+findings/warnings and six existing exceptions. No scanner rerun occurred.
+This supersedes only the stale unresolved-scanner cells, not the separate
+boundary-package `invalid_cli_surface` failure and original-package-source
+under current dependencies CP29 debt.
+
+Final intended-source package normal 319.928s / race 783.834s and focused
+32.789s / 45.628s remain their original pre-commit receipts. Earlier
+315.166s/763.610s and 30.270s/42.177s remain different source states. The
+current package-receipts file SHA-256 is
+`738193c2a30663995bb0e8904b131c244e8909f70f7a52b39b1840384ed27d6a`.
+All eight supplementary gates have successful current results; runtime
+preflight is explicitly cached. No refreshed whole-original-range lint
+receipt exists: Group 3 precommit new-only zero is not whole-range green.
+Historical 20 global/15 package diagnostics and 31 introduced diagnostics,
+CLI/engine/App/contract/Redis obligations and Linux CGO limitation remain
+separately bounded debt, not current acceptance.
+
+Original review probes retain test SHA-256
+`76cd08d998041871dcda4b576c6f09776b4848f7559a77caa87549e67dc3f7ef`,
+additional-nonexistent-test-path overlay SHA-256
+`bf669b5c23665f21aa6d04e7341a2466e640225afabf23d9db07a99500a6a8e3`,
+and transcribed receipt SHA-256
+`70da86171316ddce5f93ae168b7dc186275cdfc4aad6e9ea8036e0600107e2ea`.
+One three-probe command exited 1, package 2.560s/wall 5.59s: two desired
+production regressions and one oracle counterexample. A transcribed receipt
+is not an original rollout export, and failed assertions are not repaired GREEN.
+
+Pending audit dispositions include derivative Group 2 completion claims and
+Group 3 expected-state and nested-final-prune claims. Dated 068 boundary
+corrections and pending-five-finding notices have now been appended to
+PLAN/TDD/VERIFICATION/GROUP3; their original historical text is preserved.
+The original fresh report is unchanged; audit disposition precedes any
+coordinated repair/proof scope.
+The complete source membership, seven lanes/modes, architecture and CP12–31
+programme remain unchanged and unaccepted beyond the prior bounded CP01–10.
+
+### Independent audit launch receipt
+
+Firstmate074 inbox message 072 was read and acknowledged; it confirms the
+preserving owner session `01a07580-22bd-7e33-be7c-94728fc61408` and authorizes
+continuation under 073. Native `collaboration.spawn_agent` accepted a fresh
+`/root/cp11_7481_complete_ledger_audit_astra_r1`, explicitly
+`model=gpt-6-astra`, `reasoning_effort=xhigh`, `fork_turns=none`, using the
+complete Firstmate073 specialist prompt. `list_agents` reports the owner and
+this one auditor running. This is the worker-owned native execution of the
+installed GSD review/audit fallback, not a new Firstmate root or repair agent.
+
+
+## 2026-09-06 — Firstmate073 complete independent audit returned
+
+The one authorized fresh native Astra/xhigh auditor
+`/root/cp11_7481_complete_ledger_audit_astra_r1` returned its complete final
+answer and saved report. The owner read all 315 lines / 52,818 bytes and
+independently verified SHA-256
+`bc109e85fdde9d1958b2cde7874a3f7b30b8e5d06b1b0c2764088fb34fa3e0a0`.
+The full original report is preserved verbatim between the markers below.
+Its immutable range is `36e4d980de0d51d92fe74a68306845643596a6cb` through
+`7481d1770a21cc95869fd10bf281f632af48c089`, candidate tree
+`a2e583336ffa8ad86a0de95110259342bfa6dab0`. The report's observed evidence-only
+HEAD is `afde575a1368fe86b5ab5acb5a3d39a294a20e96`; this subsequent ledger
+aggregation does not create a new behavioral review candidate.
+
+**Current verdict: CHANGES REQUIRED; six adjudicated actionable entries,
+one Medium and five Low.** The original five survive with explicit
+amendments; 7481-06 adds an omitted existing F03B compound-proof obligation.
+There are two production invariants needing repair and four proof/evidence
+entries. This is the complete frozen response set, not a repair authorization.
+
+| Finding | Audited disposition and remaining bounded obligation |
+| --- | --- |
+| 7481-01, Medium | Confirmed common-record ownership defect, including earliest successful creation before parent Close and prepared/marker/phase partial-record siblings. Strict malformed-state refusal and coherent known-owned cleanup remain required. |
+| 7481-02, Low | Confirmed compound allocation error lost by collision retry. Preserve pure collision behavior, meaningful typed causes, one Close owner and actual A/B ownership through the complete public caller chain. |
+| 7481-03, Low | Confirmed failed-allocation proof gap. Retain actual A and actor-created DIRECTORY B, correct direct CURRENT/JOURNAL later-cleanup labels, and supply existing public/direct/stage/generation recovery obligations. No current B-deletion defect is inferred. |
+| 7481-04, Low | Confirmed expected-state oracle gap, including F03A stable-history siblings, all eleven cleanup caller/cut rows, held-reader and separate nonmutating Check. Legitimately advanced controls/phases differ from stable pre-existing history. |
+| 7481-05, Low | Confirmed unsupported extra nested final-Publish claim: that fixture reaches initial recovery. Mandatory nested Recover-stage/Prune-generation and actual final-prune lease proof remain. Correct the label and post-Stat child-identity overclaim; extra nested final-prune execution is optional. |
+| 7481-06, Low | Added omitted existing F03B proof: Write/short-Write plus Close, failed-link plus Close, capture primary plus Sync/Close, opened-control identity/stat/read plus Close, actual staged completion and per-resource Close ownership. No additional production defect is asserted. |
+
+The report preserves every old-seven disposition: F04R/F08R resolved;
+F03A/F03B/F03C/F05-F06P/F02P remain partial in the specified respects.
+B01/B02, R3, actual F01 capture opens, returned validated A, directory lifetime
+locking, late lease and original F07 RED/edit/GREEN chronology remain protected.
+All ten lenses and the complete ownership/consumer and actual caller/cut
+contract-to-evidence tables are included verbatim below.
+
+The additional marker/phase overlay completed exit 1, package 1.079s /
+wall 5.26s, with four desired fresh-recovery failures. Its actual test,
+overlay and original tool command/result capture hashes were independently
+verified against the report. No project test was added or changed; no supplied
+probe or completed normal/race/supplementary suite was rerun. The original
+three-probe transcription remains distinct from the new original tool-result
+capture and from a rollout export. All auditor commands are terminal and it
+created no child. Firstmate075/076 heartbeat messages (inbox 073/074) were
+forwarded to this same context and acknowledged, without new technical scope.
+
+Current original-base-range lint evidence remains a CP11 acceptance gate;
+Group3 new-only zero does not close it. Historical 20 global/15 package and
+31 introduced diagnostic groups remain their exact separate attributions.
+The corrected 068 boundary scanner success remains current; boundary-package
+and other CP29 obligations are not promoted. The preserved patch archive is
+the only recorded original-range diff-check exclusion; this new evidence
+slice has a separately scoped whitespace check.
+
+The owner will commit this complete evidence-only aggregation on
+`fm/cli-top100-declaration-batch-r1` and report its exact identity to Firstmate
+for a separately authored coordinated repair/proof brief. CP11 remains
+unaccepted; CP12, implementation repair, no-mistakes, publication and merge
+remain outside this audit completion. Existing delivery:
+https://github.com/polymetrics-ai/cli/pull/4294.
+
+<!-- BEGIN VERBATIM CP11-7481 COMPLETE AUDIT bc109e85 -->
+# CP11 complete-ledger audit — 7481, Astra/xhigh, round 1
+
+**CHANGES REQUIRED. Frozen set: six actionable entries — one Medium and five Low.** All five submitted entries survive with the bounded adjudications below. **7481-06** adds an omitted, already-required compound-error proof obligation. There are two production invariants requiring repair and four proof/evidence entries. Marker and phase record failures are confirmed siblings of 7481-01, not separate findings.
+
+This is the complete independent judgment for Firstmate's coordinated response. It is not implementation authorization, acceptance of a future repair, publication, CP12, no-mistakes, release, or merge certification. No individual finding was sent for early repair.
+
+## Identity, authority and scope
+
+| Field | Binding |
+| --- | --- |
+| Primary / parent issue | 4427 / 4325, CP11 |
+| Existing delivery | https://github.com/polymetrics-ai/cli/pull/4294 |
+| Worktree | /Users/karthiksivadas/.treehouse/cli-6bae67/2/cli |
+| Branch | fm/cli-top100-declaration-batch-r1 |
+| Original base and verified merge base | 36e4d980de0d51d92fe74a68306845643596a6cb |
+| Behavioral/test candidate | 7481d1770a21cc95869fd10bf281f632af48c089 |
+| Candidate tree | a2e583336ffa8ad86a0de95110259342bfa6dab0 |
+| Observed evidence-only HEAD | afde575a1368fe86b5ab5acb5a3d39a294a20e96 |
+| HEAD tree | 41bead7def7472a0383b1081b1134c9e19803624 |
+| Verified published ancestor | 8214bd91403ce620773b61caf674faa540ee1701 |
+| Original range | 52 paths, 20,672 insertions, 160 deletions |
+| Current merged REVIEW-CONVERGENCE SHA-256 | 8dd3142eb4a3abc3efe8dd10ab6099ec7571ed424c631e06c2c2497fdba5e97c |
+
+The earlier intake hash was 8fb9b29a37a3d3f0104bc245793fbd90ebdedb63c64f9f1f72266da93c44c20c. The owner subsequently corrected the intake paragraph to say that the dated 068 boundary corrections and pending-five-finding notices had already been appended. I read that update. The change is evidence chronology, not a changed disposition or behavioral candidate.
+
+HEAD's descendant changes are four planning files only. The observed worktree difference from 7481 is limited to PLAN, TDD-LEDGER, VERIFICATION, GROUP3-EVIDENCE and REVIEW-CONVERGENCE under .planning/phases/batch-r1-vnext-cutover. The explicit comparison of cmd, internal, Makefile, go.mod, go.sum, scripts, docs and website to 7481 exited 0. The pre-existing untracked .cache/ was neither read nor changed. No project file, index, commit or ref was modified by this auditor.
+
+I used the pinned [firstmate-exhaustive-review skill](/Users/karthiksivadas/pm-cli-agent-workspace/data/review-system/.agents/skills/firstmate-exhaustive-review/SKILL.md) and the complete approved [REVIEW-EVIDENCE-REQUIREMENTS.md](/Users/karthiksivadas/pm-cli-agent-workspace/data/batch-one-execution/REVIEW-EVIDENCE-REQUIREMENTS.md). The captain's model and no-publication overrides were applied; the complete-ledger and ten-lens requirements were retained. Project AGENTS, required-skill routing, task delivery header, delivery contract, issue contract, GSD adapter and CLI parity references were read. Go how-to, error handling, security, safety, testing, lint, CLI, context and concurrency guidance informed the review. CodeGraph was absent, so source inspection used Git and targeted reads without indexing.
+
+The full 380-line fresh review, complete merged convergence record, full prior e77 audit and original-return provenance, coordinated 051 repair brief, expanded 058 obligations, 063 object-kind/caller correction, 067 handoff, and CP11 GROUP1/GROUP2/GROUP2-F03/GROUP3/TDD/VERIFICATION evidence were reviewed. Mechanical indexes supplied locations and receipt bindings; they did not establish correctness.
+
+All source references below refer to 7481. Abbreviations used in the tables are exact paths:
+
+- P: cmd/connectorgen/vnext_publication.go
+- D: cmd/connectorgen/vnext_publication_dir.go
+- R: cmd/connectorgen/vnext_publication_repair.go
+- G2: cmd/connectorgen/vnext_publication_group2_original_test.go
+- DM: cmd/connectorgen/vnext_publication_durable_matrix_test.go
+- RE: cmd/connectorgen/vnext_publication_resource_error_test.go
+- PT: cmd/connectorgen/vnext_publication_test.go
+
+## Complete finding dispositions
+
+### 7481-01 — Medium — confirmed, with marker/phase siblings
+
+**A successful exclusive record creation can be reported as uncreated; other common-writer callers abandon self-created incomplete records.**
+
+D:193 openFile performs real Openat with O_CREAT|O_EXCL before closing its temporary parent. If that Close fails, it closes the newly opened raw descriptor and returns nil plus an error. R:461 sets created=true only after openFile returns successfully. Its error return therefore reports created=false even though an empty record already exists.
+
+R:1288 createControlRepairLocked uses preparedCreated to decide whether to remove the unexposed record before disposing of registered anchors. On this boundary it removes anchors while leaving the empty prepared.json. The supplied external probe demonstrates the retained empty record and unchanged public CURRENT; fresh Check/Recover refuse EOF. The original post-complete-record repair and later Write/Sync/Close tests did not cover this earlier side effect.
+
+The common writer's other callers are substantive siblings. R:709 WriteAuthorityMarker and R:1459 appendControlRepairPhaseLocked discard created and return on a failed writer. Both can leave their own malformed record after a partial Write, or after successful creation followed by the parent's Close completion failure. I ran one bounded additional-test overlay against unchanged source. Four cases — marker/phase multiplied by parent-Close-after-create/actual partial Write — captured the actual created regular-file identity, found that same object with zero or one byte, and demonstrated failed fresh recovery with EOF. These are production desired-behavior REDs. They do not show that arbitrary malformed private state should be accepted.
+
+The closure unit is the entire common record writer and its prepared, authority-marker and phase callers. Record the first successful creation and ownership before helper completion can hide it; preserve every meaningful cause and exactly one actual Close owner. On failure, either retain coherent authority or remove only a proven-owned, unexposed incomplete record through its bound identity. Do not remove required anchors first, use a pathname as ownership, erase a replacement occupant, or discard established history. A complete durable phase may already authorize a capture or selection; it is not interchangeable with an incomplete unexposed phase.
+
+Valid classes remain distinct: absent/absent bootstrap can legitimately have no anchors; present/present bootstrap must use equal states; successor CURRENT/JOURNAL cases include present/absent prior and intended state as actually reachable. Recovery must continue refusing unknown malformed graphs. Required proof includes the newly identified earliest-create boundary and partial Write, existing record/transaction/connector completion boundaries, pending nonmutating Check, and bounded fresh recovery/retry with expected controls/history at each applicable class.
+
+**Causality:** the broad failed-preparation ownership root predates the latest wave and exists in published 8214. a992 introduced the created result but placed its frontier after the fallible helper; 547 added hooks without closing it. Marker/phase incomplete-record handling is an older reachable common-writer sibling, not a new production defect introduced by 7481's tests.
+
+### 7481-02 — Low — confirmed
+
+**A retry classification drops a compound allocation outcome and can report successful Publish.**
+
+P:987 CreateTemp first creates and opens A, obtains A's identity, and then exclusively opens its control file. Its failed-control-open path now joins the owned directory Close and identity-bound cleanup outcomes into err. P:1022 still decides retryability with errors.Is(err, fs.ErrExist). A matching collision is not evidence that it is the only cause. A real Close or identity/cleanup failure is lost when the next allocation succeeds.
+
+The supplied public Publish probe reached the real exclusive-open collision and real Close followed by injected completion, retained actual A/B identities and bytes, and got nil from Publish. The current G2 public temporary replacement fixture also expects nil despite the identity-bound cleanup refusal; this expectation needs reconciliation with the repaired public error contract.
+
+The producer reaches writeAtomicLocked, writeCurrentLocked and writeJournalLocked. Their consumers include prepared JOURNAL creation, CURRENT selection, committed JOURNAL replacement, rollback restoration and recovery restoration; Recover is also reached from Open, Prune and Publish's initial recovery. Quarantine allocation does not have the same post-join collision retry: its after-open failure returns the joined outcome. A pure Mkdir collision may retry. Intentional forensic retention/ENOTEMPTY must retain its stated policy; it is not automatically another durability error. A real added Close failure or ownership refusal cannot disappear behind the collision.
+
+The pureNotExist predicate checks all joined children, and ReadControlBound treats compound absence as found/error. I found no corresponding new false-absence defect. I also traced typed control conflict and selection-install handling: no additional reachable compound-to-success conflict defect was established. Read-only teardown policy is not converted into a blanket durability requirement.
+
+**Required repair:** classify the complete outcome at the retry boundary, preserve typed causes and bounded attempts, demonstrate pure collision versus the meaningful compound through the actual producer and public caller, and retain A/B ownership.
+
+**Causality:** a992 introduced this joined-error-producer to old-retry-consumer edge. The broader history of discarded cleanup errors is older; neither “entirely new in 7481” nor “unchanged old error loss” is an adequate attribution.
+
+### 7481-03 — Low — confirmed required proof, amended production implication
+
+**Failed-allocation coverage does not establish the stipulated actual A/B identities and recovery for every caller.**
+
+G2:428/554 public Publish and G2:604/698 public stale-generation Prune do reach real failed allocations, with empty/nonempty replacement DIRECTORY variants. Their assertions mainly establish existence and optional bytes. They do not retain both actual A and actor-created B identities before cleanup or supply the promised fresh recovery/retry for those fixtures.
+
+G2:442's direct CURRENT/JOURNAL rows move A and install B at AfterTemporaryOpen but create no control blocker. The exclusive control-file allocation succeeds through retained A. The later error comes from deferred temporary-root cleanup after transition work. This is useful complementary cleanup coverage; it does not execute failed allocation for those explicit callers.
+
+G2:527's shared assertion checks expected A, then checks only that B is a directory different from A and, when supplied, has particular payload bytes. Unrelated C can pass. The empty-directory variant does not independently prove the retained actor-created B identity or all its expected contents. G2:618's stage quarantine fixture includes a retained A and fresh retry, but shares the deficient B assertion.
+
+The exact 058 F03-C obligation already required CURRENT/JOURNAL temporary uses, stage/generation quarantine reachability, actual identities/types/bytes/residue before restoration, meaningful errors and bounded fresh recovery/retry. The public and direct rows cannot silently substitute for each other. Either execute the missing failed-allocation rows or present a precise equivalence for independent adjudication that preserves the explicit contract. The existing direct successful-allocation/later-cleanup rows may be retained with narrower labels.
+
+**No current production B-deletion defect is inferred from this proof gap.** The old empty-directory deletion and the new cleanup/error contract are separate facts. a992's bound cleanup is a real repair; incomplete assertions do not undo it.
+
+**Causality:** residual old F03-C verification, with later direct fixtures claiming a failure phase they do not reach.
+
+### 7481-04 — Low — confirmed, with F03A expected-history and caller omissions
+
+**The central durable oracle verifies self-consistency of the observed state instead of preservation of independently expected state.**
+
+DM:222 reads CURRENT/JOURNAL and their witnesses after the operation, then compares the same current objects again. It scans current private authority and compares entries to their own current records. DM:289 requires a root directory and nonempty serialized snapshot; it is not given the expected root identity, expected bytes or expected prior history.
+
+The supplied oracle counterexample moved expected root A away, installed an unrelated readable directory B and invoked the helper. The helper accepted B. The probe then deliberately failed the oracle-rejection assertion. This is an oracle false positive, not evidence that production accepted B.
+
+The defect extends to witnesses used in the F03A proof: G2:330 records old transaction names only; AssertNoPreparedGraph skips those names and does not require them to remain. AssertPendingPreparedGraph derives prior/intended identities from the post-operation record. These checks can establish useful internal consistency but cannot prove that independently expected old authority, controls and anchors survived. That is the same expected-state invariant, not an additional production finding.
+
+DM's new empty lease-file B helper captures B only after invoke returns. Distinct-from-A cannot identify the actor's B at the destructive boundary. Several older rows do retain stronger actual lease A/B witnesses; they must not be weakened to the central helper.
+
+There are also explicit caller omissions. The held-reader row in PT:101 checks decoded controls without the durable expected-history helper. The stage cases around PT:1993 and PT:2285 have marker/root/identity observations of differing strength but do not supply the promised prior raw-control/private-history comparison. Check at PT:788 retains raw CURRENT bytes, but stale-root existence and a post-observed authority helper are not the complete independently expected cut. An assertion absent from those actual rows cannot be supplied by another row's passing name.
+
+**Required proof:** retain expected raw control types/inodes/bytes, actual root identities/content, stable authority marker/prepared/phase/anchor history, and actual actor-created A/B witnesses before the operation or at its proper durable cut. Separate stable pre-existing history from legitimate new transactions/phases. Specify expected new CURRENT/JOURNAL rather than requiring normal Publish or rollback to preserve an inode it legitimately replaces. Add bounded negative controls proving the important helpers reject unrelated roots, same bytes/different expected identity, and missing/replaced stable history. Apply the corrected comparison to every caller/cut in the table below, including held-reader and Check.
+
+**Causality:** residual F05/F06 and F02 proof incompleteness, plus inadequate oracle strengthening in the latest proof wave. The F03A helper sibling is another existing proof omission under the same invariant.
+
+### 7481-05 — Low — confirmed as an unsupported extra claim; no invented final-prune requirement
+
+**The nested Publish fixture reaches initial recovery, not final prune.**
+
+RE:137 builds an old generation with nested content, holds it while publishing current, then releases the handle. At entry to Publish(next), old is already an unheld stale generation. P:391 calls recoverLocked before staging next, selecting CURRENT, committing JOURNAL or entering final prune. The recursive child hook therefore fires while initial no-JOURNAL recovery prunes old. The fixture's nested final-prune claim is false.
+
+The existing contract's mandatory public nested rows are Recover removing an owned stage and Prune removing a stale generation. Those rows reach real quarantined recursion and preserve useful no-GC descriptor/resource proof. The direct recursive descriptor repair also remains valid. The contract does not require adding another nested final-prune schedule merely to save an extra label. **The bounded closure is to withdraw/correct the nested final-Publish claim and derivative evidence.** A genuinely reached additional final-prune nested row is optional.
+
+The separate DM successful-Publish final-prune lease tests start from old as the current generation and assert the new CURRENT with committed JOURNAL at refusal. They do reach final prune. They prove lease identity behavior; they are not nested recursive-descriptor proof.
+
+For the post-Stat nested case, the hook performs real Stat and then returns an injected error; it is not a natural Stat syscall failure. The fixture retains nested bytes and outer root identity, but does not retain a pre-operation nested-child identity for the claimed identity-preservation assertion. Narrow that assertion to what is observed, or add that exact child witness. No actor-created replacement B exists in the post-Stat-error case. Earlier legitimate deletions and retained quarantine residue are allowed; recovery proof must reconstruct only fixture-owned known content. Neither all-or-nothing recursive deletion nor a stage/Check generation lease is required.
+
+**Causality:** this fixture/claim was added in 7481. It is not an original unchanged production leak.
+
+### 7481-06 — Low — added: omitted mandatory F03B compound proof
+
+**The latest ledger marks the explicitly expanded error matrix covered although several stipulated compound cases are absent.**
+
+This is an omission in the fresh five-entry review, deduplicated as one remaining F03B proof invariant. It does not assert a newly demonstrated production error-loss defect beyond 7481-02. The exact 058 instruction explicitly rejects replacing stipulated cases with source changes, a package PASS, or another member of the class.
+
+G2:783's actual assertions establish several useful compound cases, but:
+
+- All three record labels execute short Write alone, and separately full Write plus real Sync/injected completion plus real Close/injected completion. They do not execute Write(error)+Close or short-Write+Close together. Manually deleting the raw test record afterward does not prove public recoverability.
+- The predecessor case and RE:816 exercise successful linking followed by Close failure. They do not exercise failed link plus Close in the same invocation. Registration-before-Close is correctly implemented and must remain.
+- The capture case starts with a successful identity/read path, injects a post-Sync completion and then Close completion. It does not preserve an earlier primary failure together with both Sync and Close causes. The BeforeControlRepairCaptureClose seam is not exercised by that matrix.
+- The opened-control case injects a read-completion error after the bounded read succeeded. It does not execute the separately stipulated identity/stat/read failure boundaries plus Close. Pure absence and compound missing-parent-close cases are real, useful covered rows.
+- The staged “sync and close” case injects BeforeFileSync, so it is a pre-Sync primary failure plus actual Close completion. It cannot be reported as a completed Sync failure. Bind another exact test if it covers the required writable completion class, or complete that narrow missing row.
+- One-close ownership is counted explicitly for records/predecessor, but is not independently counted throughout all claimed compound controls. A Close hook performing a real Close is useful evidence; it is not by itself the whole per-resource owner accounting.
+
+**Required proof:** complete or precisely bind those existing narrow compound cases, keep every meaningful cause visible at the relevant consumer/public caller, account for the actual resource and one Close owner, and observe the contract's state before restoration. Shared cases are appropriate; no Cartesian fault explosion, generic error framework or natural-I/O simulation is required. Public coherence after partial record creation belongs to 7481-01, and missing expected state belongs to 7481-04; do not duplicate those as further findings.
+
+**Causality:** incomplete 051/058 repair verification and overbroad later coverage disposition. It is not new architecture or a newly created production bug. The current “F03 dynamic matrix closed” statement must be corrected.
+
+## Contract-to-evidence: ownership, completion and classification
+
+Every row binds to candidate 7481 and the exact paths defined above. “Current package” means the owner receipts identified below, not a new run by this auditor. “Gap” means unresolved acceptance evidence.
+
+| Invariant and source | Public caller / actual phase; already-completed side effect | Resource owner and required state transition | Actual evidence and disposition |
+| --- | --- | --- | --- |
+| Root/operation ownership, P:225–338 | Publish/Recover/Open/Prune/Check entry; definitions and connector roots opened before completion error | openConnectorRoot must close its owned roots and preserve meaningful multiple failures; no success handle after failed setup | G2 “definitions and connector close” performs both real closes and asserts both causes. Current package covers it. No additional production finding. |
+| openFile failure, D:193 | Common record, temporary and read-control callers; failed Openat can still be followed by parent Close failure | Temporary parent is helper-owned; preserve open and Close errors; no descriptor transfer on failure | G2 failed-open+parent-close and parent-close+opened-file-close rows use real operations. Success-create ownership is incomplete: 01. |
+| Earliest record creation, D:193 → R:461 | CURRENT/JOURNAL preparation and common marker/phase creation; O_EXCL creation succeeds before parent Close | Helper initially owns fd; caller must receive truthful creation/identity state or helper must complete bound cleanup. Error is not no-side-effect evidence | Supplied prepared probe and four new marker/phase probes fail desired fresh recovery. 01 mandatory repair. |
+| Record Fstat/Write/short Write, R:461 | Prepared record before authority exposure; marker or next phase at its own append cut | Preserve created identity; one actual writable Close; incomplete bytes must not become accepted authority; remove only proven-owned unexposed state | G2 frontier matrix plus raw common-writer tests cover useful pieces. Actual partial marker/phase Writes newly fail recovery. 01 and 06; unknown identity is never deletion authority. |
+| Record Sync/Close, R:461 | Bytes already written; successful real operation may be followed by injected completion error | Preserve all meaningful causes and distinguish valid complete record from incomplete preparation; no double Close | Existing F03A Sync/Close and G2 common-record Sync+Close controls are real-resource coverage. Write+Close siblings remain 06. |
+| Anchor linking and predecessor completion, R:1288 | Successor preparation; predecessor anchor may already be linked when Close fails | Register successful link before fallible Close; remove only registered own unexposed links; retain predecessor and required history | Source does register link first; RE:816 and G2 successful-link Close coverage retained. Failed-link+Close proof remains 06. |
+| Prepared cleanup and post-record directory Sync, R:1288 | Prior/intended anchors and complete prepared record may already exist before transaction/connector Sync failure | Complete owned cleanup or coherent graph; never remove anchors while retaining a record that requires them | G2 F03A matrices and base tests supply real completion injection and fresh recovery. Earliest creation remains 01; expected stable-history oracle remains 04. |
+| Authority marker, R:709/1178 | Both valid base heads may exist; marker write fails before ensure returns | Retain coherent bases/history; own incomplete marker cannot strand ordinary recovery; complete marker remains authoritative | New marker zero-/one-byte identity-bound probe failures, 01. No permission to parse arbitrary malformed marker as valid. |
+| Phase append, R:1459 | Prior prepared/phases exist; public/capture state depends on phase being appended | Preserve prior valid history and completed transitions; incomplete new phase differs from completed phase plus directory Sync error | New phase zero-/one-byte probes prove 01 at first bootstrap phase. All phase callers must retain the same bounded contract; no speculative deletion of completed phases. |
+| Capture setup, R:1493 | Capture Mkdir/open/identity/read may already succeed; Sync and Close run after earlier errors | Capture descriptor has one owner; primary, Sync and Close causes survive; no capture intent from invalid/replaced directory | Six checked-open F01 tests remain strong; G2 post-Sync+Close is partial compound coverage. Earlier-primary+Sync+Close remains 06. |
+| Recorded capture reopen, R:1008/1575/1643 | Validation, completion and selection reopen a recorded directory | Compare actual opened descriptor to recorded identity before dependent read/link/rename; preserve A, actor B and public bytes | Capture identity tests cover CURRENT/JOURNAL across six actual opens, distinct pre-recorded A/B, unchanged public bytes, empty captures and fresh recovery after restoring A. F01 retained. |
+| Temporary Mkdir/open, P:987 | A exists before its control-file allocation; opening/identity acquisition can fail | Retain only demonstrably owned cleanup; do not delete a guessed path after failed identity acquisition | a992 bound cleanup corrects old B deletion. Pure Mkdir EEXIST remains bounded retry; failed control allocation compound error remains 02. |
+| Temporary collision consumer, P:1016–1024 → P:890 | Real O_EXCL collision, then real Close/cleanup outcome, before retry | Preserve meaningful noncollision causes and A/B; only genuinely retryable outcome can become another attempt | Supplied Publish probe returns nil erroneously. Public G2 nil expectation needs correction. 02; full caller chain traced, not a search-only judgment. |
+| CURRENT/JOURNAL atomic writer, P:848/864/890 | Temp Write/Sync, repair transition and public selection can precede deferred temp Close | Return completion failure even if selection advanced; recovery follows actual durable cut, not automatic rollback | RE atomic Close, rollback validation+Close, restoration-callers and CLI-output tests remain useful current-package coverage. 02 feeds them; 03/04/06 qualify missing proof. |
+| Absence classification, P:1262–1347 | Missing control Open may be joined with parent Close; existing read may already complete before Close | Only pure absence means not found; compound errors remain observable; read-only policy stays bounded | pureNotExist walks joined children; ReadControlBound preserves found/error for compound absence. G2 pure/compound controls covered; earlier read-failure compounds remain 06. |
+| Conflict/selection classification, R:1643/1702/1871 | No-replace link/selection or terminal phase may already complete | A conflict must not erase unrelated completion failures or authorize clobber; outer completion still propagates | Actual chain examined. No additional compound-conflict false success established. Keep compatibility check when changing error producers. |
+| Stage creation/write/activation, P:646/761/783/745 | Owned stage, marker/files and closed-set validation precede no-replace activation | Writable resources close, failed owned cleanup reports meaningful causes, destination collision preserves both identities; unknown malformed stages remain refused | Staged primary+Close and failed-stage cleanup cases exist; stage oracle and completion-label limitations are 04/06. PT final activation collision retains exact stage/destination. No generic cleanup of unknown stages authorized. |
+| Quarantine allocation, P:1037 | Quarantine directory A created/opened/identified before injected allocation failure | Close A and remove only matching empty A; retain replacement B and compound outcome | Stage/generation F03C rows reach real public paths. Bound cleanup is repaired; exact B and full fresh recovery proof remain 03. No post-join EEXIST retry sibling here. |
+| Quarantine move/restore, P:1086–1200 | Public object may already have moved into private candidate; public C may appear | Compare candidate/bindings; restore only with no-replace; preserve A/B/C on conflict | B01 stage/generation/rollback second-public-replacement tests retain exact candidate and public C bytes/inodes; activation collision also covered. Retained invariant. |
+| Recursive removal, D:434–500 | Child fd is opened before Stat or identity failure; earlier siblings may already be deleted | Immediate deferred Close owns every opened child; no GC credit; preserve mismatched child and allowed partial residue | RE direct replacement/Fstat tests and mandatory public Recover-stage/Prune-generation repeated nested tests. Immediate repair retained. 05 narrows wrong-phase/child-identity claims; 04 covers expected durable state. |
+| Lease and returned generation, P:493/508/1688 | Reader obtains validated directory A and lease; cleanup takes directory lifetime lock plus checked lease | Returned FS stays bound to A; held directory prevents removal even after lease-path replacement; destructive use compares actual lease identity | Returned-reader payload/descriptor tests, held-reader and late-lease matrices retained. Required full raw control/root/history comparison remains 04. |
+| Nonmutating Check, P:445/461 | Existing shared lock/read-only validation; no recovery/prune/repair | Exact expected pre-cut state remains unchanged; refusal cannot mutate authority or stale roots | Existing Check refusal and CURRENT-byte assertions useful; complete stable-history/root witness absent, 04. |
+
+An open or mkdir whose identity cannot be established does not authorize deleting an unknown occupant. An operation can also retain intentional forensic residue. Those qualifications do not excuse losing a known successful common-record creation or a meaningful compound error.
+
+## Actual durable caller/cut obligations
+
+The 063 correction distinguishes eleven public/cut rows; no-JOURNAL Recover and Open are separate entries. The following table retains those rows and their object kinds. Every applicable row needs 7481-04's independent expected controls, roots and stable private history; a generic post-observed helper cannot discharge it.
+
+| Actual caller/cut | Phase and permitted control transition | Object/proof retained; specific gap |
+| --- | --- | --- |
+| Explicit Prune | Current selected, no JOURNAL; no selection change needed | Distinct empty/nonempty regular lease-file B; generation root and A/B required. Existing actual refusal useful; strengthen expected state. |
+| No-JOURNAL Recover | Recover selects current and prunes stale | Same regular lease-file variants; preserve selected control/history at cut. Not equivalent to Open's public return. |
+| Open through recovery | Recovery occurs before returning handle | Both lease-file variants; assert refusal/no invalid handle and retained expected state. Preserve separate returned-A tests. |
+| Publish initial recovery | Stale generation already unheld at entry; new staging not yet reached | Both lease-file variants and actual initial-recovery nested fixture. No claim about final prune. |
+| Held-reader prune | Directory lifetime lock remains held despite replaced lease pathname | Held old root/A and lease B survive; prune can defer successfully. Decoded controls alone in PT:101 do not prove raw expected history. |
+| Prepared JOURNAL, new selected, Recover | Prepared old/new journal and new CURRENT already present | Both regular lease B variants; refusal retains the actual prepared cut until allowed recovery advances it. |
+| Committed JOURNAL, new selected, Recover | New CURRENT and committed journal present | Both regular lease B variants; old retained on refusal; raw identities/history must be bound before fault. |
+| Successful Publish final prune | New CURRENT selected/validated and committed journal written before old cleanup | Actual DM lease rows reach this phase. New control inodes are legitimate; compare to expected new cut, not pre-Publish inode. Nested final-prune proof is optional. |
+| Prepared old-selected / rejected-new fresh Recover | Recovery rejects new and selects/restores old or logical absence before rejected cleanup, as fixture dictates | Existing empty/nonempty rejected-generation lease variants retained. Compare post-restoration control authority plus rejected root at actual cut. |
+| Immediate rollback | Second active validation fails; old restoration may precede rejected-generation cleanup | Existing empty/nonempty lease variants; retain validation and cleanup causes. Legitimate restored CURRENT identity differs from pre-Publish. |
+| Owned stale-stage Recover | Stage ownership marker and root govern removal; no generation-lease contract | Existing early/late root replacement and mandatory nested stage proof retained. Raw controls/stable private history and exact actor B require stronger witnesses. |
+
+**Check is an additional, non-destructive contract**, not a lease-deletion variant: retain expected controls, selected/stale roots and private history unchanged on refusal. Nested child DIRECTORY B, failed-allocation DIRECTORY B, generation lease regular-file B, generation root, and directory lifetime lock are different objects. The report does not exchange one for another.
+
+## Old seven-entry ledger and preserved invariants
+
+| Prior entry | Current disposition |
+| --- | --- |
+| F-03-A | Partial. Later completed-record cleanup is repaired; earliest creation and marker/phase siblings remain 7481-01. Independent expected graph/history proof remains 7481-04. |
+| F-03-B | Partial. Many joins and real completion controls are valid; compound retry remains 7481-02 and stipulated missing compound proof is 7481-06. |
+| F-03-C | Partial. Bound cleanup repairs the demonstrated old B deletion. Actual A/B/recovery and failed-allocation caller proof remain 7481-03; public compound outcome also intersects 7481-02. |
+| F-04-R | Resolved. Safe observers open descriptor-relative, no-follow/nonblocking where applicable, bind observed identity before dependent reads, and bounded FIFO/symlink/directory negative controls reject B. This does not make the separate expected-state oracle complete. |
+| F-05/06-P | Partial. Named lease schedules and useful witnesses exist; independently expected raw controls/roots/private history across actual callers remain 7481-04. |
+| F-02-P | Partial proof closure. Immediate descriptor repair and mandatory nested Recover-stage/Prune-generation resource proof are retained. Expected durable-state comparison and unsupported extra claims remain 7481-04/05. No remaining leak is inferred. |
+| F-08-R | Resolved. Child acknowledgment follows an actual nonblocking flock contention result on the bound descriptor, and signal assertions distinguish the intended signal. An earlier pre-lock acknowledgment would not suffice; the current one does. |
+
+B01 no-replace restoration and public A/B/C preservation, B02 strict bootstrap authority, R3-01 FIFO refusal, R3-02 bounded live descriptors, R3-06 returned validated A, R3-07 independent directory lifetime lock plus lease integrity, and F01 recorded capture opens remain preserved. R3-02's history retains metadata rather than one live descriptor per transaction; its finite-descriptor control is not a disk-history bound. The six F01 CURRENT/JOURNAL actual-open witnesses retain pre-swap A/B identities and public bytes and recover after explicitly restoring owned A.
+
+F02's direct failed-child ownership repair has actual RED growth from 7 to 31 descriptors over 24 iterations and later bounded proof; it is not reopened merely because the nested final-Publish label is wrong. F07's accepted original signal chronology remains RED 12.383s, routing edit, GREEN 15.417s. The failing uncommitted source has no recovered full tree SHA; commit 729 is not relabeled as that RED tree. Its original RED/edit/GREEN hashes and the canonical provenance correction remain authoritative. No additional provenance replay is needed.
+
+R3-04 lint remains an acceptance-gate obligation with historical diagnostic attribution. R3-05's safe-observation repair remains distinct from the newly confirmed preservation-oracle weakness.
+
+## Ten-lens completion
+
+| Lens | Substantive audit result |
+| --- | --- |
+| 1. Architecture and data flow | Traced main signal routing → lock-render → admitted closed stage → retained roots/locks → stage → authority/JOURNAL/CURRENT → validation/rollback → prune/output; Open and Check follow their distinct paths. All original changed production files and repair-created ownership edges are included. 01/02 are discontinuities in those paths. |
+| 2. Happy, bad and edge behavior | Examined absent/present controls, valid/invalid bootstrap, partial versus complete records, exclusive collisions, symlink/FIFO/type changes, A/B/C substitution, validation failure, cancellation and real-operation-plus-injected completion. 01/02 survive; 03/06 separate missing proof from new defects. |
+| 3. State machine and concurrency | Distinguished initial recovery, prepared/new-selected, committed/new-selected, final prune, old-selected/rejected-new recovery and immediate rollback. Verified capture identity, no-replace restore, held generation directory locks and actual contention acknowledgment. 04/05 identify proof/phase overclaims. |
+| 4. Security and secret taint | Source names and local filesystem objects are the changed untrusted inputs. Descriptor-relative access, strict direct names, no-follow/type checks and fixed private record names remain. Unknown/replaced objects never become deletion authority. No new credential, provider, shell/HTTP/SQL tool or secret sink was introduced. |
+| 5. Retry, resume and idempotency | Traced every changed joined-error consumer through retry, absence, conflict, recovery and success. 02 is a reachable false-success retry; 01 prevents bounded fresh recovery after self-created failed record preparation. No provider retry/rate-limit behavior changed. |
+| 6. Output integrity | Closed physical file set/digest checks, actual returned-A payload and selection-before-output order remain. CLI writable-completion tests require an error without success output. 01/02 and incomplete expected-state evidence prevent acceptance; no transport envelope or provider-record completeness claim was added. |
+| 7. Declaration reachability and closed surface | No source.lock, connector definition corpus, seven-lane declaration or runtime selector changes. Atlas publication owners/proofs and constraint/schema changes were inspected with canon/Make/script consumers. Compact identifier boundary matching was reviewed separately from its package's inherited fixture failure. |
+| 8. CLI and App parity | Changed authoring lock-render/check/signal behavior and related guide/canon/website/generated docs were examined. Embedded runtime defs, PM connector hand parser, App save/load, approval/preview execution and provider routing remain outside this change. No new App/runtime publication route is claimed. |
+| 9. Provider semantics | Inapplicable with evidence: changed code consumes admitted local bytes and local filesystem state; no HTTP, GraphQL, transport content type, redirects, paging, rate header or provider idempotency implementation changed. No live-provider research or execution was needed. |
+| 10. Tests and evidence | Challenged assertion bodies and actual fault schedule, falsified the central helper using supplied evidence, independently proved record siblings, reconciled the full old seven and fresh five, added the omitted 058 compound proof, verified immutable bindings and separated current/historical/cached/RED/oracle results. Audit complete; acceptance incomplete. |
+
+The original range also changes go.mod/go.sum: x/sys v0.47.0 becomes direct at the same version and x/text moves from v0.39.0 to v0.38.0. These are part of the reviewed dependency identity and must not be silently excluded from future source binding. They do not introduce a second runtime foundation or explain the demonstrated local record/collision defects. No additional actionable dependency defect was established.
+
+## Original evidence and probe custody
+
+The fresh review was read in full and remains unchanged:
+
+| Artifact | SHA-256 |
+| --- | --- |
+| cp11-astra-7481d177-fresh-full-range-review.md, 380 lines / 52,454 bytes | 2d92ce239d19509aa1838c23d5d0b9f31f4e5784232a512ee2b0f93e70ca571c |
+| cp11-e77-complete-ledger-audit.md | 6d0d5d80bd6355d2f578649f47dd36af5d9b441007a432b8a805dcac358010f2 |
+| cp11-e77-audit-original-return.md, 429 lines / 40,699 bytes | 9d68c63c7d6b525dab6010997a9eb36dc43890ca9cfd657523bbee25e47e24ba |
+| Supplied review-probes_test.go | 76cd08d998041871dcda4b576c6f09776b4848f7559a77caa87549e67dc3f7ef |
+| Supplied review-probes-overlay.json | bf669b5c23665f21aa6d04e7341a2466e640225afabf23d9db07a99500a6a8e3 |
+| Supplied review-probes-receipt.md | 70da86171316ddce5f93ae168b7dc186275cdfc4aad6e9ea8036e0600107e2ea |
+| New cp11-7481-audit-record-siblings_test.go | 69b4966c393ab2e3aec6ebe05ce748e04fe66ab5805eecbce5ee8ed92bdb569b |
+| New cp11-7481-audit-record-siblings-overlay.json | 5deaf8b224dadabac615989a927bb39f0199d300fa8cc801b1bd70b58f525b7c |
+| New cp11-7481-audit-record-siblings-original-receipt.json | c749d83862aefc24e25618170fc2117d7864e4d442974429c1249f557a3de148 |
+| cp11-current-three-group-package-receipts.json | 738193c2a30663995bb0e8904b131c244e8909f70f7a52b39b1840384ed27d6a |
+
+All named private artifacts are under /Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover. The supplied probe filenames have the full prefix cp11-astra-7481d177-. The prior original-return provenance identifies message amsg_01a07495-52ae-7a00-a473-530109963ffb, physical record 9330, timestamp 2026-09-06T02:38:58.222Z and raw-record hash 34560dded37add4818eaac6415e15b595421ddde78071720ac9212f8fa24517f. The saved versus returned old audit has the preserved formatting/newline distinction; neither is a fresh acceptance. Complete prior current audit commit 3256d930 precedes repairs; d22f2ce4 is provenance-only.
+
+The supplied three-probe receipt is explicitly a **transcription**, not a raw rollout export. Its actual invocation was:
+
+    /usr/bin/time -p go test -count=1 -timeout 20m -overlay /Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-astra-7481d177-review-probes-overlay.json ./cmd/connectorgen -run '^TestCP11Astra7481' -v
+
+It completed with exit 1, package 2.560s, wall 5.59s, user 5.18s, sys 4.91s, session 62804. Two desired production regressions failed and one oracle-rejection assertion failed. The temporary probe retains actual A/B witnesses; the oracle counterexample records expected root A inode 0x2657d7a8 and unrelated B inode 0x2657d822 on device 0x1000010. The overlay added only the previously nonexistent cmd/connectorgen/cp11_astra_7481d177_review_probes_test.go. No existing production or test file was replaced. I did not rerun it for a more attractive receipt.
+
+My additional invocation was:
+
+    /usr/bin/time -p go test -count=1 -timeout 20m -overlay /Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-7481-audit-record-siblings-overlay.json ./cmd/connectorgen -run '^TestCP11CompleteAuditRecordSiblings$' -v
+
+Only the checked-nonexistent cmd/connectorgen/cp11_7481_audit_record_siblings_test.go was added virtually. The preserved JSON contains the original tool command/result capture, including initial session 2826 and its final exit 1 result; it is not a rollout export. Package time was 1.079s; wall 5.26s; user 5.16s; sys 5.27s. The four test failures were:
+
+| Case | Proven retained record | Public/Check/Recover observation |
+| --- | --- | --- |
+| marker / parent Close after create | Device 0x1000010, inode 0x26580024, regular, 0 bytes | Publish returns injected parent completion; Check and Recover decode marker EOF |
+| marker / partial Write | Same device, inode 0x2658002f, regular, 1 byte | Publish returns actual partial-write completion error; Check and Recover decode marker EOF |
+| phase / parent Close after create | Same device, inode 0x26580036, regular, 0 bytes | Publish returns injected parent completion; Check and Recover decode phase EOF |
+| phase / partial Write | Same device, inode 0x2658003d, regular, 1 byte | Publish returns actual partial-write completion error; Check and Recover decode phase EOF |
+
+For the parent-Close cases, the hook verifies the actual new record through the still-open parent before real Close and injected completion; pre-creation reads cannot trigger it. For partial Write, the hook obtains the writable descriptor identity and writes the first byte before returning the injected error. Post-return observation finds that same created object and exact bytes. The fixture checks absent CURRENT/JOURNAL and nonmutating Check before the desired fresh-Recover assertion fails. No arbitrary malformed external object or production-source overlay was substituted.
+
+These observations are not GREEN, naturally occurring filesystem failures, process-crash tests or power-loss certification.
+
+Current source hashes independently rechecked:
+
+| Path abbreviation | SHA-256 |
+| --- | --- |
+| P | 9bf803f98aa4186ef072ac0e8e7451bd1778b690da0f8dbea60d00027cb08d0b |
+| D | 1a90f8b8c82f9d498a1298778d0be495f29ef850ba3af7cbbd9657bb6ae9da81 |
+| R | 3e41f07670261fede3f44a21bc9bc725cf447bb8f62942d8af08d15fb159fb32 |
+| DM | 29fae715a98c1071e41ef6e297e59b49a12571452c1cbf4160c191c36cb07531 |
+| RE | 83c4733639776b0eaff90f2f0df31963b94eb3b12f4832564b3355b07e6fb65d |
+| G2 | 56b6a14286cc430b201c725fcda3de6ceab8b7e9e0bbd82fc09f6ea2ad0504bf |
+
+## Gates, terminal states and limits
+
+| Evidence/command | Terminal state and exact meaning |
+| --- | --- |
+| Owner final normal: go test -count=1 -timeout 20m ./cmd/connectorgen | Exit 0; package 319.928s; wall 322.297918541s. Original physical record 13267, raw hash f7f751f375e4c08a16006d97b428972c568a2d76d9d4ce01924283e7c6c90795. Intended final precommit source, bound to 7481. |
+| Owner final race: go test -race -count=1 -timeout 20m ./cmd/connectorgen | Exit 0; package 783.834s; wall 786.420858334s. Physical 13428, raw hash 5c3261ad57cef5fd94f4359759bc608a37f597182a85e5e1c90eb22b45996c67. Same intended final source. |
+| Owner current focused Group3 | Normal 32.789s and race 45.628s pass; these are the later intended final-source controls. |
+| Earlier all-group and focused receipts | 315.166/763.610 and 30.270/42.177 are different earlier source states. Group3 earlier fixture FAIL 5.011/4.935, corrected PASS 17.146 and intermediate controls are retained as their actual chronology, not production RED or current-source equivalence. |
+| Current eight supplementary gates | Successful current results retained: source-lock check 206.821s; definitions 553/0; Atlas 1.326s; canon/docs/release and boundary checks; runtime preflight explicitly cached. Literal commands/receipts remain in the 064 evidence and command index. These pass their actual gates, not the semantic audit. |
+| Current boundary scanner, recovered 068 receipt | Original exit 0, wall 254.579597042s; 284 files, 553 connectors, six exceptions, zero findings/warnings. Physical 13951, timestamp 2026-09-06T06:11:27.554Z, raw hash ec88ff8c01c57e8647206c78ff003698932b66be9420a737536073ddd75c07b7. No rerun needed. |
+| Boundary PACKAGE and original-source reproduction | Package failure at invalid_cli_surface, 249.388s; original-base package source under current dependencies reproduces in 0.153s. CP29 debt, not a current package PASS and not a whole-base checkout run. |
+| Current original-range lint | **Not established.** Group3 precommit new-only 0 is not a base-to-7481 lint receipt. Required current acceptance gate remains open. |
+| Independent original-range git diff --check | Exit 2, diagnostics in the preserved PREMATURE-F01-EDIT-SNAPSHOT.patch archive. Excluding only that exact artifact gives 0. Archive remains unchanged. |
+| Independent candidate/worktree identity and ancestor checks | Completed successfully; candidate tree/base/HEAD and published ancestor verified; code/test/dependency paths match 7481. |
+| Supplied probe command | Completed exit 1, 2.560s / 5.59s; historical supplied regression/oracle failures, not my rerun. |
+| Additional sibling probe command | Completed exit 1, 1.079s / 5.26s; four desired production regression failures against unchanged 7481. |
+| Auditor activity at finish | All inspection and artifact-write commands completed. No active command session, child process or delegated agent remains. No project edit, full/race rerun, baseline-debt rerun or publication occurred. |
+
+The original 064 report hash quoted in the fresh review predates the 068 appendix. Current private 064 SHA-256 is a59da5a5752e5c2149ca474cf5b9ac5761fa494fe7ae470ee04084a5680ba779. That is factual chronology; the original review must remain unchanged. The 068 receipt file SHA-256 is 744d0d129e15c8eccbaf723dda0ca96487c8babc25ce3c2d53d6feea25ed5849.
+
+The required lint acceptance gate is a current original-base-range introduced-diagnostic check with exact source attribution over the changed code surface. It must not silently use HEAD-relative proof-only changes. Preserve the established 20 global / 15 package old diagnostics separately from the 31 historical introduced group; no current surviving count is inferred here. These are not summed into a fabricated new total. Current findings need their coordinated response before final acceptance; this audit did not rerun lint or unrelated known debt.
+
+No Linux runtime, power loss, live provider, credential, customer database, shared receiver, new service/runtime foundation, whole-repository suite, release, main merge, full-programme or no-mistakes certification is supplied. Source-lock authority, closed runtime, Atlas authoring-only status and CLI/App/provider boundaries remain intact.
+
+## Bounded coordinated closure
+
+Firstmate should freeze and authorize one response to the complete six-entry set, with the tables above retained. This report does not itself authorize an implementation.
+
+1. **Mandatory production repair:** close the common-record ownership frontier and prepared/marker/phase siblings in 7481-01, and the compound allocation-to-retry edge in 7481-02. Preserve strict unknown-state refusal, all no-replace A/B/C invariants, registered anchors, valid bootstrap classes, actual selection cuts, one Close owner and typed causes.
+2. **Mandatory existing proof:** make expected-state helpers independent and falsifiable; complete 7481-03's explicit failed-allocation public/direct/stage/generation rows and exact DIRECTORY A/B witnesses; complete 7481-04's controls/root/history comparison across all caller/cut rows; complete 7481-06's stipulated compound classes. Bind repaired 01/02 behavior with actual desired RED/GREEN and fresh recovery at the proper cut. Later proof additions are not retroactive pre-edit REDs.
+3. **Unsupported extra claims:** correct 7481-05's nested final-Publish label and derivatives. Preserve mandatory nested Recover-stage/Prune-generation resource proof and actual final-prune lease proof. Narrow post-Stat retained-child identity wording to its observed bytes/root, or add that exact witness. No extra runtime guarantee is required.
+4. **Acceptance evidence:** update canonical dispositions and Atlas proof references to the assertions actually present; run proportional focused normal/race plus the required final candidate gates, including current original-range lint attribution. Freeze the resulting source/test/dependency SHA and obtain fresh complete-original-range review of the coordinated changes and their new edges. Preserve current receipts, old seven, historical F07, CP29 debt and all custody distinctions.
+
+There is no operational blocker or unresolved product/architecture question preventing a coordinated response. Remaining uncertainty is concrete: the specified proof cells and current original-range lint have no sufficient acceptance evidence, and no future repair has been implemented or reviewed by this auditor. The withdrawn 90% estimate is not reinstated.
+<!-- END VERBATIM CP11-7481 COMPLETE AUDIT bc109e85 -->
