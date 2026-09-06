@@ -394,3 +394,47 @@ func TestSourceLaneManifestDocumentReference(t *testing.T) {
 		t.Fatal("report repeats the full provider node instead of its existing immutable document reference")
 	}
 }
+
+func TestSourceLaneManifestObservedCounts(t *testing.T) {
+	for _, missing := range []bool{false, true} {
+		name := "retained"
+		if missing {
+			name = "missing"
+		}
+		t.Run(name, func(t *testing.T) {
+			root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+			if missing {
+				if err := os.Remove(filepath.Join(root, "source.json")); err != nil {
+					t.Fatal(err)
+				}
+			}
+			got, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			raw, err := json.Marshal(got)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var actual struct {
+				Totals map[string]int `json:"source_totals"`
+			}
+			if err := json.Unmarshal(raw, &actual); err != nil {
+				t.Fatal(err)
+			}
+			expected := 2
+			if missing {
+				expected = 0
+			}
+			for field, want := range map[string]int{"primary": 2, "supplement": 0, "operations": 2, "cells": 14, "observed_primary": expected, "observed_supplement": 0, "observed_operations": expected} {
+				value, present := actual.Totals[field]
+				if !present || value != want {
+					t.Errorf("%s present=%v value=%d want=%d", field, present, value, want)
+				}
+			}
+			if len(got.SourceOperations) != 2 || got.SourceOperations[0].Source.Key.ID != "source.a" || got.SourceOperations[1].Source.Key.ID != "source.b" {
+				t.Fatal("observed availability changed anchored keys")
+			}
+		})
+	}
+}

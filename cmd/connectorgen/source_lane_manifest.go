@@ -10,10 +10,13 @@ import (
 )
 
 type sourceLaneTotals struct {
-	Primary    int `json:"primary"`
-	Supplement int `json:"supplement"`
-	Operations int `json:"operations"`
-	Cells      int `json:"cells"`
+	ObservedPrimary    int `json:"observed_primary"`
+	ObservedSupplement int `json:"observed_supplement"`
+	ObservedOperations int `json:"observed_operations"`
+	Primary            int `json:"primary"`
+	Supplement         int `json:"supplement"`
+	Operations         int `json:"operations"`
+	Cells              int `json:"cells"`
 }
 type sourceLaneManifestRow struct {
 	Source retainedSourceOperation `json:"source"`
@@ -138,6 +141,14 @@ func summarizeSourceLaneManifest(result *sourceLaneManifest) {
 	}
 	for _, row := range result.SourceOperations {
 		result.SourceTotals.Operations++
+		if row.Source.Observed {
+			result.SourceTotals.ObservedOperations++
+			if row.Source.Class == "primary" {
+				result.SourceTotals.ObservedPrimary++
+			} else {
+				result.SourceTotals.ObservedSupplement++
+			}
+		}
 		if row.Source.Class == "primary" {
 			result.SourceTotals.Primary++
 		} else {
