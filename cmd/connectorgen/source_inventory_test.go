@@ -204,3 +204,28 @@ func TestSourceInventoryHistoricalRestoration(t *testing.T) {
 		t.Fatalf("observed source counts %v want independently stipulated %v", observed, want)
 	}
 }
+
+func TestSourceInventoryInvalidAnchor(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		change func(*sourceLaneCohort)
+	}{
+		{"duplicate source key", func(c *sourceLaneCohort) { c.Inventories[0].ExpectedIDs[1] = "source.a" }},
+		{"duplicate inventory", func(c *sourceLaneCohort) { c.Inventories = append(c.Inventories, c.Inventories[0]) }},
+		{"count disagrees", func(c *sourceLaneCohort) { c.Inventories[0].ExpectedCount = 1 }},
+		{"unknown class", func(c *sourceLaneCohort) { c.Inventories[0].Class = "other" }},
+		{"unknown version", func(c *sourceLaneCohort) { c.SchemaVersion = 2 }},
+		{"invalid digest", func(c *sourceLaneCohort) { c.Inventories[0].SHA256 = "" }},
+		{"unsafe source path", func(c *sourceLaneCohort) { c.Inventories[0].Path = "../source.json" }},
+		{"ambiguous connector", func(c *sourceLaneCohort) { c.Inventories[0].Connector = "fixture:other" }},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			root, c := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+			tc.change(&c)
+			got := loadRetainedSourceInventory(context.Background(), root, c)
+			if len(got.Operations) != 0 || len(got.Documents) != 0 || len(got.Diagnostics) != 1 || got.Diagnostics[0].Code != "cohort_anchor_invalid" {
+				t.Fatalf("ambiguous anchor must fail before membership/source reads; rows=%d documents=%d diagnostics=%+v", len(got.Operations), len(got.Documents), got.Diagnostics)
+			}
+		})
+	}
+}

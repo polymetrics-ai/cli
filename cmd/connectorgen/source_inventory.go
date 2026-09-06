@@ -93,6 +93,10 @@ type retainedSourceInventory struct {
 // provider evidence. A failed source cannot change that universe.
 func loadRetainedSourceInventory(ctx context.Context, repo string, cohort sourceLaneCohort) retainedSourceInventory {
 	result := retainedSourceInventory{Operations: []retainedSourceOperation{}, Documents: []retainedSourceDocument{}, Diagnostics: []sourceLaneDiagnostic{}}
+	if err := validateSourceLaneCohort(cohort); err != nil {
+		result.Diagnostics = append(result.Diagnostics, sourceLaneDiagnostic{Lanes: sourceLaneNames(), Stage: "inventory", Code: "cohort_anchor_invalid", Owner: "batch1", Severity: "error"})
+		return result
+	}
 	index := map[sourceOperationKey]int{}
 	for _, anchor := range cohort.Inventories {
 		for _, id := range anchor.ExpectedIDs {
@@ -367,4 +371,80 @@ func decodeSourceJSON(data []byte, destination any) error {
 		return err
 	}
 	return nil
+}
+
+// validateSourceLaneCohort refuses ambiguous authority before allocating rows.
+func validateSourceLaneCohort(cohort sourceLaneCohort) error {
+	if cohort.SchemaVersion != 1 || !validSourceID(cohort.CohortID) || len(cohort.Inventories) == 0 || len(cohort.Inventories) > 1024 {
+		return fmt.Errorf("invalid cohort envelope")
+	}
+	seen := map[string]bool{}
+	total := 0
+	for _, anchor := range cohort.Inventories {
+		if !sourceLaneIdentityPart(anchor.Connector) || !sourceLaneIdentityPart(anchor.Inventory) {
+			return fmt.Errorf("invalid inventory identity")
+		}
+		identity := anchor.Connector + ":" + anchor.Inventory
+		if seen[identity] {
+			return fmt.Errorf("duplicate inventory")
+		}
+		seen[identity] = true
+		if anchor.Class != "primary" && anchor.Class != "supplement" {
+			return fmt.Errorf("invalid inventory class")
+		}
+		if !sourceLaneRelativePath(anchor.Path) || !sourceLaneDigest(anchor.SHA256) || anchor.ExpectedCount <= 0 || anchor.ExpectedCount != len(anchor.ExpectedIDs) {
+			return fmt.Errorf("invalid inventory pin or count")
+		}
+		ids := map[string]bool{}
+		for _, id := range anchor.ExpectedIDs {
+			if !validSourceID(id) || ids[id] {
+				return fmt.Errorf("invalid or duplicate source identity")
+			}
+			ids[id] = true
+		}
+		total += len(ids)
+		if total > 100000 {
+			return fmt.Errorf("source identity budget exceeded")
+		}
+		pins := map[string]bool{}
+		for _, pin := range anchor.Artifacts {
+			if !sourceLaneRelativePath(pin.Path) || !sourceLaneDigest(pin.SHA256) || pin.Bytes <= 0 || pin.Bytes > 64<<20 || pins[pin.Path] {
+				return fmt.Errorf("invalid or duplicate artifact pin")
+			}
+			pins[pin.Path] = true
+		}
+	}
+	return nil
+}
+
+func sourceLaneDigest(value string) bool {
+	if len(value) != 64 || strings.ToLower(value) != value {
+		return false
+	}
+	_, err := hex.DecodeString(value)
+	return err == nil
+}
+
+func sourceLaneIdentityPart(value string) bool {
+	if value == "" || value == "." || value == ".." {
+		return false
+	}
+	for _, c := range value {
+		if !((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.') {
+			return false
+		}
+	}
+	return true
+}
+
+func sourceLaneRelativePath(value string) bool {
+	if value == "" || !validSourceID(value) || path.IsAbs(value) || path.Clean(value) != value || strings.Contains(value, "\\") {
+		return false
+	}
+	for _, part := range strings.Split(value, "/") {
+		if part == "" || part == "." || part == ".." {
+			return false
+		}
+	}
+	return true
 }
