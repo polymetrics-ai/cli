@@ -1175,6 +1175,42 @@ second-signal or mid-transaction guarantee is asserted.
   coverage for those cells, observing graph/identity/residue before fixture
   restoration, nonmutating pending Check and bounded fresh recovery/retry.
 
+### CP11 Group 2 F-03 post-repair proof completion — steer 058/060
+
+The F-03 resource-backed proof gate is now executed, not inferred from the
+intermediate package receipt. The exact test source is
+`cmd/connectorgen/vnext_publication_group2_original_test.go`; its test-only
+seams are `vNextPublicationControlRecordHooks`, the post-record and
+directory-sync fault points in `vnext_publication.go`/
+`vnext_publication_repair.go`, the raw opened-file close seam in
+`vnext_publication_dir.go`, and read-control completion/close seams in
+`vnext_publication.go`. Nil production paths remain direct descriptor calls.
+
+- F-03-A: `TestCP11F03ARepairPreparationFrontierMatrix` executes the full
+  record frontier at JOURNAL absent→present, CURRENT present→present, and
+  JOURNAL present→logical-absence. `TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation`
+  supplies absent/absent base bootstrap and
+  `TestCP11F03ARepairBasePresentPresentAuthorityRecovers` supplies both
+  CURRENT/JOURNAL present/present bases. They observe complete prepared
+  graph/phase/anchor identity, a nonmutating pending Check, and fresh
+  Recover/Check/retry; actual Sync/Close followed by injected completion is
+  intentionally not described as an OS/power-loss error.
+- F-03-B: `TestCP11F03BRepairCompoundCausesRemainInspectable` covers actual
+  open/parent-close and parent-close/opened-file-close ownership, opened
+  control read/close and pure absence, all shared record writers, predecessor,
+  stage, and capture consumers with both relevant causes observable.
+- F-03-C: its four named `TestCP11F03CRepair*` selectors cover Publish,
+  CURRENT/JOURNAL temporary, stale-generation Prune, and stale-stage
+  quarantine across empty/nonempty B, asserting A/B identity/type/bytes and
+  residue before fixture cleanup and then fresh recovery/retry.
+
+Current results are F-03-A normal `20.804s`, base normal/race
+`2.617s`/`4.095s`, state-class race `10.200s`/`10.089s`/`11.507s`, and F-03-B/C
+normal/race `8.442s`/`11.749s`; the primary evidence has the exact commands and
+preserved earlier physical `11540/11549/11563/11577` receipts. This closes the
+F-03 dynamic matrix only. It does not grant CP11 acceptance or replace Group
+2's source/static/final-review boundary.
+
 ### Retained invariants
 
 No-replace B-01 A/B/C/public-C, strict B-02 bootstrap, bounded metadata/live descriptors, capture-open identities, validated returned directory, directory lifetime lock plus lease integrity, and F-07 historical provenance stay protected. A passing defect-reproduction probe is a RED witness, not GREEN; proof strengthening never fabricates a production defect.

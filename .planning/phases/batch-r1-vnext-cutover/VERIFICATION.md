@@ -726,7 +726,8 @@ returned event is preserved at
 `4fd7390eef0b432f8f5f983d3924f9360bde2993d51586fa48bc6658634e0255`): package
 `271.387s`, wall `273.672594250s`, then-uncommitted source state only.
 
-Before a Group 2 completion statement, execute and record the remaining
+At creation, before a Group 2 completion statement, the required work was to
+execute and record the remaining
 resource-backed F-03-A pre-record/Write/short-Write/Sync/real-Close and
 post-record directory-sync frontiers with valid bootstrap/successor graph
 classes; every F-03-B listed producer/consumer compound-cause case; and the
@@ -736,3 +737,37 @@ nonmutating Check, fresh recovery/retry, and normal/race result belong in
 `GROUP2-F03-REPAIR-EVIDENCE.md`. Until then this section is an explicit
 incomplete verification tracker, not a later-source attribution or CP11
 acceptance.
+
+### CP11 Group 2 F-03 executed verification — steer 058/060
+
+The tracker cells are now executed at the current test source
+`cmd/connectorgen/vnext_publication_group2_original_test.go`. Its explicit
+seams are `vNextPublicationControlRecordHooks`, the record/directory-sync
+fault points in `vnext_publication.go` and `vnext_publication_repair.go`, the
+owned raw opened-file Close in `vnext_publication_dir.go`, and the
+read-control completion/Close points in `vnext_publication.go`; each is
+nil/direct in production.
+
+- `TestCP11F03ARepairPreparationFrontierMatrix` proves all seven preparation
+  cut classes in three actual transitions (JOURNAL absent→present, CURRENT
+  present→present, JOURNAL present→logical-absence), retaining the appropriate
+  phase-free graph or no unexposed cleanup, identity-bound anchors/public
+  state, nonmutating Check, and fresh Recover/Check/retry. Its Sync/Close test
+  performs the real operation before injecting its completion result.
+- `TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation`
+  preserves absent/absent base bootstrap; the current
+  `TestCP11F03ARepairBasePresentPresentAuthorityRecovers` does both CURRENT
+  and JOURNAL present/present bases through interruption and terminal-head
+  recovery.
+- `TestCP11F03BRepairCompoundCausesRemainInspectable` covers every listed
+  compound resource/consumer and pure absence. The four
+  `TestCP11F03CRepair*` selectors cover temporary and generation/stage
+  quarantine A/B ownership, exact nonempty B bytes and residue before
+  fixture-only cleanup, meaningful identity refusal, and fresh retry.
+
+Current exact results: F-03-A normal `20.804s`; its three bounded race classes
+`10.200s`, `10.089s`, `11.507s`; base normal/race `2.617s`/`4.095s`; and B/C
+normal/race `8.442s`/`11.749s`, all `ok`. Earlier complete physical
+`11540/11549/11563/11577` receipts are preserved as the prior two-class source
+state. The F-03 dynamic proof is complete; Group 2's source/static/final-review
+and CP11 acceptance gates remain open.

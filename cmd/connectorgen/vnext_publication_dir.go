@@ -27,6 +27,18 @@ type vNextPublicationIdentity struct {
 	mode   uint32
 }
 
+// vNextPublicationCloseOpenedFileAfterParentCloseForTest is an inert,
+// descriptor-bound seam for the one raw file descriptor that openFile owns
+// after its parent Close fails. Production always calls unix.Close directly.
+var vNextPublicationCloseOpenedFileAfterParentCloseForTest func(int, string) error
+
+func vNextPublicationCloseOpenedFileAfterParentClose(fd int, label string) error {
+	if vNextPublicationCloseOpenedFileAfterParentCloseForTest != nil {
+		return vNextPublicationCloseOpenedFileAfterParentCloseForTest(fd, label)
+	}
+	return unix.Close(fd)
+}
+
 func vNextPublicationIdentityFromStat(stat unix.Stat_t) vNextPublicationIdentity {
 	return vNextPublicationIdentity{
 		device: uint64(stat.Dev),
@@ -199,7 +211,7 @@ func (d *vNextPublicationDirectory) openFile(name, label string, flags int, perm
 		return nil, openErr
 	}
 	if closeErr != nil {
-		if closeFileErr := unix.Close(fd); closeFileErr != nil {
+		if closeFileErr := vNextPublicationCloseOpenedFileAfterParentClose(fd, label); closeFileErr != nil {
 			return nil, errors.Join(fmt.Errorf("close %s parent: %w", label, closeErr), fmt.Errorf("close opened %s: %w", label, closeFileErr))
 		}
 		return nil, fmt.Errorf("close %s parent: %w", label, closeErr)

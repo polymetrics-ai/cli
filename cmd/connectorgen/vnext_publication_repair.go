@@ -458,7 +458,7 @@ func vNextPublicationCreateControlRepairTransaction(root *vNextPublicationDirect
 	return "", nil, vNextPublicationIdentity{}, fmt.Errorf("create publication control repair transaction: exhausted unique names")
 }
 
-func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirectory, name, label string, payload []byte) (identity vNextPublicationIdentity, created bool, err error) {
+func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirectory, name, label string, payload []byte, hooks vNextPublicationControlRecordHooks) (identity vNextPublicationIdentity, created bool, err error) {
 	file, err := directory.openFile(name, label, unix.O_CREAT|unix.O_EXCL|unix.O_WRONLY, 0o600, false)
 	if err != nil {
 		return vNextPublicationIdentity{}, false, err
@@ -470,16 +470,28 @@ func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirecto
 		return identity, created, err
 	}
 	defer func() {
-		vNextPublicationRecordError(&err, "close "+label, file.Close())
+		closeRecord := file.Close
+		if hooks.Close != nil {
+			closeRecord = func() error { return hooks.Close(file, label) }
+		}
+		vNextPublicationRecordError(&err, "close "+label, closeRecord())
 	}()
-	written, err := file.Write(payload)
+	writeRecord := file.Write
+	if hooks.Write != nil {
+		writeRecord = func(payload []byte) (int, error) { return hooks.Write(file, label, payload) }
+	}
+	written, err := writeRecord(payload)
 	if err != nil {
 		return identity, created, fmt.Errorf("write %s: %w", label, err)
 	}
 	if written != len(payload) {
 		return identity, created, fmt.Errorf("write %s: short write", label)
 	}
-	if err := file.Sync(); err != nil {
+	syncRecord := file.Sync
+	if hooks.Sync != nil {
+		syncRecord = func() error { return hooks.Sync(file, label) }
+	}
+	if err := syncRecord(); err != nil {
 		return identity, created, fmt.Errorf("sync %s: %w", label, err)
 	}
 	if err := directory.assertIdentity(name, label, identity); err != nil {
@@ -694,14 +706,14 @@ func vNextPublicationReadControlState(directory *vNextPublicationDirectory, name
 	return vNextPublicationPresentControlState(member, identity), nil
 }
 
-func vNextPublicationWriteAuthorityMarker(root *vNextPublicationDirectory) (vNextPublicationIdentity, error) {
+func vNextPublicationWriteAuthorityMarker(root *vNextPublicationDirectory, hooks vNextPublicationControlRecordHooks) (vNextPublicationIdentity, error) {
 	marker := vNextPublicationControlAuthorityMarker{Version: vNextPublicationControlRepairVersion, Targets: []string{vNextPublicationCurrentFile, vNextPublicationJournalFile}}
 	payload, err := json.Marshal(marker)
 	if err != nil {
 		return vNextPublicationIdentity{}, err
 	}
 	payload = append(payload, '\n')
-	identity, _, err := vNextPublicationWriteControlRepairRecord(root, vNextPublicationControlAuthorityMarkerFile, "publication control authority marker", payload)
+	identity, _, err := vNextPublicationWriteControlRepairRecord(root, vNextPublicationControlAuthorityMarkerFile, "publication control authority marker", payload, hooks)
 	if err != nil {
 		return vNextPublicationIdentity{}, err
 	}
@@ -1212,7 +1224,7 @@ func (p *vNextGenerationPublisher) ensureControlAuthorityLocked(operation *vNext
 		}
 		graph.close()
 		if missing == "" {
-			_, err := vNextPublicationWriteAuthorityMarker(operation.connector)
+			_, err := vNextPublicationWriteAuthorityMarker(operation.connector, p.hooks.ControlRecord)
 			return err
 		}
 		state, err := p.createBaseControlAuthorityLocked(operation, missing)
@@ -1400,7 +1412,10 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 		return nil, err
 	}
 	payload = append(payload, '\n')
-	preparedIdentity, preparedCreated, err = vNextPublicationWriteControlRepairRecord(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", payload)
+	if err := p.hit(vNextPublicationBeforeControlRepairRecord); err != nil {
+		return nil, err
+	}
+	preparedIdentity, preparedCreated, err = vNextPublicationWriteControlRepairRecord(transaction, vNextPublicationControlRepairPreparedFile, "publication control repair prepared authority", payload, p.hooks.ControlRecord)
 	if err != nil {
 		return nil, err
 	}
@@ -1413,8 +1428,14 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 	if err := transaction.Sync(); err != nil {
 		return nil, fmt.Errorf("sync publication control repair prepared authority: %w", err)
 	}
+	if err := p.hit(vNextPublicationAfterControlRepairTransactionSync); err != nil {
+		return nil, err
+	}
 	if err := operation.connector.Sync(); err != nil {
 		return nil, fmt.Errorf("sync publication control repair transaction: %w", err)
+	}
+	if err := p.hit(vNextPublicationAfterControlRepairConnectorSync); err != nil {
+		return nil, err
 	}
 	state = &vNextPublicationControlRepairState{record: repair, preparedIdentity: preparedIdentity, preparedDigest: vNextPublicationDigest(payload), transactionName: transactionName, transactionIdentity: transactionIdentity}
 	if base {
@@ -1458,7 +1479,7 @@ func (p *vNextGenerationPublisher) appendControlRepairPhaseLocked(operation *vNe
 	}
 	payload = append(payload, '\n')
 	name := vNextPublicationControlRepairPhaseName(phase.Sequence)
-	identity, _, err := vNextPublicationWriteControlRepairRecord(transaction, name, "publication control repair phase", payload)
+	identity, _, err := vNextPublicationWriteControlRepairRecord(transaction, name, "publication control repair phase", payload, p.hooks.ControlRecord)
 	if err != nil {
 		return err
 	}
@@ -1521,6 +1542,7 @@ func (p *vNextGenerationPublisher) beginControlCaptureLocked(operation *vNextPub
 	}
 	vNextPublicationRecordError(&err, "prepare publication control capture", p.hit(vNextPublicationBeforeControlRepairCaptureClose))
 	vNextPublicationRecordError(&err, "sync publication control capture", capture.Sync())
+	vNextPublicationRecordError(&err, "complete publication control capture sync", p.hit(vNextPublicationAfterControlRepairCaptureSync))
 	vNextPublicationCloseAfter(&err, capture, "publication control capture")
 	if err != nil {
 		return err

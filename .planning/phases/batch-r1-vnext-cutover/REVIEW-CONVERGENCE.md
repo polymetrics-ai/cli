@@ -1055,3 +1055,53 @@ fixture restoration, meaningful error causes, pending Check and permitted
 fresh recovery/retry. Post-repair coverage is not a retroactive RED. No
 independent exact-SHA verdict is requested or implied while these cells remain
 incomplete.
+
+### 2026-09-06 — CP11 Group 2 F-03 proof-cell disposition (steer 058/060)
+
+The former incomplete proof cells are now dispositioned as **covered**, not as
+an independent exact-SHA review verdict. The active proof source is
+`cmd/connectorgen/vnext_publication_group2_original_test.go`; the only added
+seams are inert direct-descriptor test boundaries:
+`vNextPublicationControlRecordHooks` and record/directory-sync fault points in
+`vnext_publication.go`/`vnext_publication_repair.go`, the raw
+opened-file-after-parent-Close hook in `vnext_publication_dir.go`, and
+read-control completion/Close hooks in `vnext_publication.go`.
+
+| Former proof gap | Covered executable proof |
+| --- | --- |
+| F-03-A frontiers and graph classes | `TestCP11F03ARepairPreparationFrontierMatrix` covers each record frontier in JOURNAL absent→present, CURRENT present→present, and JOURNAL present→logical-absence; `TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation` covers absent/absent base; `TestCP11F03ARepairBasePresentPresentAuthorityRecovers` covers both CURRENT/JOURNAL present/present bases. Each observes ownership graph/identity, nonmutating Check, fresh recovery and retry. Real Sync/Close precedes injected completion; no natural I/O/power-loss inference is made. |
+| F-03-B concrete consumers | `TestCP11F03BRepairCompoundCausesRemainInspectable` covers the real open/parent-close, parent/opened-file-close, read/close/pure-absence, common record writer, predecessor, stage, and capture paths with joined observable causes and actual close ownership. |
+| F-03-C actual temporary/quarantine callers | The four `TestCP11F03CRepair*` selectors cover Publish, CURRENT/JOURNAL transition, stale-generation Prune, and stale-stage A→B cases over empty/nonempty B; they assert A/B identity/type/bytes/residue before fixture-only cleanup plus the defined fresh recovery/retry. |
+
+Current normal/race evidence is F-03-A `20.804s` normal and bounded classes
+`10.200s`/`10.089s`/`11.507s` race; base `2.617s`/`4.095s`; B/C
+`8.442s`/`11.749s`, all `ok`. The four physical `11540/11549/11563/11577`
+receipts remain exact earlier two-class evidence and are not attributed to the
+later state. This resolves only the identified F-03 proof gaps. A fresh
+whole-range review and the remaining Group 2/static/final CP11 gates are still
+required.
+
+### 2026-09-06 — independent e77 ledger intake and current disposition
+
+The immutable independent Astra/xhigh review at
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-final-astra-e77cd390-full-range-review.md`
+(SHA-256 `8b862d9ebe1e1644c7fc27e5c028b799c1ac4762a27e269489b098656302b3c2`)
+and its complete ledger audit at
+`/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-e77-complete-ledger-audit.md`
+(SHA-256 `6d0d5d80bd6355d2f578649f47dd36af5d9b441007a432b8a805dcac358010f2`)
+returned **CHANGES REQUIRED** for the frozen range through `e77cd390`.
+Their scope is preserved; neither report is retroactively made an acceptance
+of this later repair tree.
+
+| Audit ID | Current disposition |
+| --- | --- |
+| F-03-A, F-03-B, F-03-C | The coordinated Group 2 repair/proof slice addresses the named ownership/error roots: complete prepared authority is retained before later sync frontiers; meaningful compound causes have direct consumers; and temporary/quarantine cleanup stays identity-bound to A. The resource-backed current results above are the response evidence. A new independent exact-SHA review must still accept or reject them. |
+| F-04-R | Open: the later durable-matrix witness helper still needs a safe opened-object observation contract and bounded hostile substitution control. |
+| F-05/F-06-P | Open: named caller/cut proof needs exact selected control bytes/inodes, roots/content, and private authority graph before restoration; the false no-private-authority explanation needs correction. |
+| F-02-P | Open: add the actual public nested stage/generation quarantine recursion refusal/FD-ownership proof; no remaining leak is alleged. |
+| F-08-R | Open: readiness must acknowledge a real conflicting directory flock and non-consuming tests must assert the exact signal sent. |
+
+These are finding dispositions, not a finding cap, scope reduction, or an
+authorization for CP12, no-mistakes, publication, provider work, release, or
+merge. The next coordinated Group 1/3 proof-and-repair plan begins only after
+this committed Group 2 slice.

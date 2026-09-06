@@ -994,3 +994,40 @@ The exact GSD prompts for issue 4427 were generated/read. `doctor` has the docum
   `4fd7390eef0b432f8f5f983d3924f9360bde2993d51586fa48bc6658634e0255`). It
   does not certify later edits; final three-group package/race/static and
   independent review gates remain pending.
+
+### 2026-09-06 — CP11 F-03 steer-058 resource-backed GREEN completion
+
+This is added post-repair proof, not a rewrite of the earlier RED. The current
+test source is `cmd/connectorgen/vnext_publication_group2_original_test.go`.
+It uses only the inert direct-descriptor seams
+`vNextPublicationControlRecordHooks`, record/directory-sync points in
+`vnext_publication.go` and `vnext_publication_repair.go`, the raw
+opened-file-close seam in `vnext_publication_dir.go`, and read-control
+completion/close seams in `vnext_publication.go`.
+
+- **F-03-A GREEN:** `TestCP11F03ARepairPreparationFrontierMatrix` proved the
+  before-record, actual short-write, actual Sync+injected completion, actual
+  Close+injected completion, post-record, transaction-Sync, and connector-Sync
+  cuts for JOURNAL absent→present, CURRENT present→present, and JOURNAL
+  present→logical-absence. It records prepared/phase/anchor/public identity,
+  nonmutating pending Check, fresh recovery/Check/retry. Base interruption is
+  absent/absent in `TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation`
+  and both CURRENT/JOURNAL present/present in
+  `TestCP11F03ARepairBasePresentPresentAuthorityRecovers`.
+- **F-03-B GREEN:** `TestCP11F03BRepairCompoundCausesRemainInspectable`
+  follows all remaining real producer/consumer pairs (open/parent Close,
+  parent/opened-file Close, read/Close/pure absence, marker/prepared/phase
+  writers, predecessor, stage, and capture) and checks joined causal identity.
+- **F-03-C GREEN:** the four `TestCP11F03CRepair*` selectors cover Publish
+  temporary, CURRENT/JOURNAL transition temporary, generation quarantine, and
+  stage quarantine. Each preserves moved A and empty/nonempty B identity/type
+  and exact B bytes/residue before any fixture-only cleanup, then has its
+  specified fresh recovery/retry path.
+
+Commands/results: F-03-A normal matrix `ok 20.804s`; three state-class race
+selectors `ok 10.200s`, `10.089s`, and `11.507s`; base normal/race `ok
+2.617s`/`4.095s`; B/C normal/race `ok 8.442s`/`11.749s`. The preserved earlier
+physical `11540/11549/11563/11577` receipts remain associated with their
+earlier two-class source state. See `GROUP2-F03-REPAIR-EVIDENCE.md` for full
+selectors, source-state limits, and all assertions. This closes the F-03
+matrix, not CP11 or the final Group 2 review/static boundary.

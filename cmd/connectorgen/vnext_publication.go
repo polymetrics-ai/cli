@@ -70,10 +70,14 @@ const (
 	vNextPublicationAfterControlSourceIdentity             vNextPublicationFaultPoint = "after_control_source_identity"
 	vNextPublicationAfterFinalControlSourceIdentity        vNextPublicationFaultPoint = "after_final_control_source_identity"
 	vNextPublicationAfterControlRepairPrepared             vNextPublicationFaultPoint = "after_control_repair_prepared"
+	vNextPublicationBeforeControlRepairRecord              vNextPublicationFaultPoint = "before_control_repair_record"
 	vNextPublicationAfterControlRepairRecord               vNextPublicationFaultPoint = "after_control_repair_record"
+	vNextPublicationAfterControlRepairTransactionSync      vNextPublicationFaultPoint = "after_control_repair_transaction_sync"
+	vNextPublicationAfterControlRepairConnectorSync        vNextPublicationFaultPoint = "after_control_repair_connector_sync"
 	vNextPublicationAfterBaseControlRepairPrepared         vNextPublicationFaultPoint = "after_base_control_repair_prepared"
 	vNextPublicationAfterControlRepairCaptureDirectory     vNextPublicationFaultPoint = "after_control_repair_capture_directory"
 	vNextPublicationBeforeControlRepairCaptureClose        vNextPublicationFaultPoint = "before_control_repair_capture_close"
+	vNextPublicationAfterControlRepairCaptureSync          vNextPublicationFaultPoint = "after_control_repair_capture_sync"
 	vNextPublicationBeforeControlRepairCapture             vNextPublicationFaultPoint = "before_control_repair_capture"
 	vNextPublicationAfterControlRepairCaptureRename        vNextPublicationFaultPoint = "after_control_repair_capture_rename"
 	vNextPublicationAfterControlRepairCaptureDirectorySync vNextPublicationFaultPoint = "after_control_repair_capture_directory_sync"
@@ -116,6 +120,20 @@ type vNextPublicationHooks struct {
 	// before returning an injected completion error.
 	CloseDirectory func(*os.File, string) error
 	CloseStageFile func(*os.File) error
+	// ControlRecord is a nil-by-default, test-only seam for the three shared
+	// authority-record writers (marker, prepared, and phase). Each non-nil
+	// callback must perform the corresponding operation on the supplied real
+	// descriptor before returning an injected completion outcome.
+	ControlRecord vNextPublicationControlRecordHooks
+}
+
+// vNextPublicationControlRecordHooks is limited to the common durable
+// authority-record writer. It is test instrumentation, not a filesystem
+// abstraction: nil callbacks use the direct os.File operation in production.
+type vNextPublicationControlRecordHooks struct {
+	Write func(*os.File, string, []byte) (int, error)
+	Sync  func(*os.File, string) error
+	Close func(*os.File, string) error
 }
 type vNextPublicationArtifacts struct {
 	Files    map[string][]byte
@@ -1271,6 +1289,19 @@ func vNextPublicationPureNotExist(err error) bool {
 	return errors.Is(err, fs.ErrNotExist)
 }
 
+// The following seams are inert, exact read-control boundaries used only by
+// the CP11 compound-cause proof. Production reads and closes the supplied
+// descriptor directly.
+var vNextPublicationAfterReadOpenControlForTest func(*os.File, string) error
+var vNextPublicationCloseReadControlForTest func(*os.File, string) error
+
+func vNextPublicationCloseReadControl(file *os.File, label string) error {
+	if vNextPublicationCloseReadControlForTest != nil {
+		return vNextPublicationCloseReadControlForTest(file, label)
+	}
+	return file.Close()
+}
+
 func vNextPublicationReadControlBound(root *vNextPublicationDirectory, name, label string) ([]byte, bool, vNextPublicationIdentity, error) {
 	handle, err := root.openRegular(name, label, unix.O_RDONLY)
 	if vNextPublicationPureNotExist(err) {
@@ -1281,11 +1312,14 @@ func vNextPublicationReadControlBound(root *vNextPublicationDirectory, name, lab
 	}
 	identity, err := vNextPublicationIdentityFromFile(handle, label)
 	if err != nil {
-		vNextPublicationRecordError(&err, "close "+label, handle.Close())
+		vNextPublicationRecordError(&err, "close "+label, vNextPublicationCloseReadControl(handle, label))
 		return nil, true, vNextPublicationIdentity{}, err
 	}
 	payload, err := vNextPublicationReadOpenControl(handle, label)
-	vNextPublicationRecordError(&err, "close "+label, handle.Close())
+	if vNextPublicationAfterReadOpenControlForTest != nil {
+		vNextPublicationRecordError(&err, "complete "+label, vNextPublicationAfterReadOpenControlForTest(handle, label))
+	}
+	vNextPublicationRecordError(&err, "close "+label, vNextPublicationCloseReadControl(handle, label))
 	if err != nil {
 		return nil, true, vNextPublicationIdentity{}, err
 	}
