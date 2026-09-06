@@ -574,8 +574,9 @@ func TestSourceLaneBinding099FJSONArray(t *testing.T) {
 }
 
 func TestSourceLaneBinding099FGraphQLVariables(t *testing.T) {
-	for _, swapped := range []bool{false, true} {
-		t.Run(strconv.FormatBool(swapped), func(t *testing.T) {
+	for _, mode := range []string{"valid", "swapped", "unrelated citation"} {
+		t.Run(mode, func(t *testing.T) {
+			swapped := mode == "swapped"
 			key, facts, a := sourceBindingFixture099F(t, "body", func(lock *vNextSourceLock) {
 				input := "id"
 				if swapped {
@@ -610,6 +611,15 @@ func TestSourceLaneBinding099FGraphQLVariables(t *testing.T) {
 			if swapped {
 				want = 0
 				codes = []string{"target_graphql_variable_mismatch"}
+			}
+			if mode == "unrelated citation" {
+				facts = sourceBindingRepin099F(t, key, facts, func(doc map[string]any) {
+					doc["unrelated"] = "Change"
+				})
+				name = sourceBindingCitation099F(t, facts, "/unrelated")
+				a.GraphQL.OperationName = &name
+				want = 0
+				codes = []string{"source_binding_scope_mismatch"}
 			}
 			sourceBindingOutcome099F(t, key, facts, a, want, codes...)
 		})
