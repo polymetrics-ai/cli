@@ -132,10 +132,12 @@ func TestSourceLaneBindingParameterContract(t *testing.T) {
 	for _, tc := range []struct {
 		name, sourceType string
 		sourceRequired   bool
-		sourceMaximum    int
+		sourceMaximum    any
 		want             string
 	}{
 		{"matching bounded parameter", "integer", true, 100, "target_response_contract_unverified"},
+		{"equivalent exponent bound", "integer", true, json.Number("1e2"), "target_response_contract_unverified"},
+		{"equivalent decimal bound", "integer", true, json.Number("100.0"), "target_response_contract_unverified"},
 		{"wrong existing type", "string", true, 100, "target_parameter_mismatch"},
 		{"wrong requiredness", "integer", false, 100, "target_parameter_mismatch"},
 		{"wrong bound", "integer", true, 10, "target_parameter_mismatch"},
@@ -172,5 +174,25 @@ func TestSourceLaneBindingParameterContract(t *testing.T) {
 				t.Fatalf("%s: want %s got %+v", tc.name, tc.want, cell.Diagnostics)
 			}
 		})
+	}
+}
+
+func TestSourceLaneBindingNumericOracle(t *testing.T) {
+	for _, tc := range []struct {
+		a, b         string
+		equal, known bool
+	}{
+		{"9007199254740993", "9007199254740992", false, true},
+		{"0.0001", "1e-4", true, true},
+		{"-0.0", "0", true, true},
+		{"-10", "10", false, true},
+		{"1e999999999", "10e999999998", true, true},
+		{"null", "0", false, true},
+		{`"100"`, "100", false, false},
+	} {
+		equal, known := sourceLaneNumericBoundEqual([]byte(tc.a), []byte(tc.b))
+		if equal != tc.equal || known != tc.known {
+			t.Errorf("%s vs %s: got (%v,%v), want (%v,%v)", tc.a, tc.b, equal, known, tc.equal, tc.known)
+		}
 	}
 }

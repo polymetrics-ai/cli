@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"math/big"
 	"path"
 	"sort"
 	"strings"
@@ -254,15 +255,11 @@ func sourceLaneRESTParameterContract(facts sourceFacts, target engine.RESTOperat
 			if len(source) == 0 {
 				source = json.RawMessage("null")
 			}
-			left, err := canonicalSourceJSON(source)
-			if err != nil {
+			equal, known := sourceLaneNumericBoundEqual(source, raw)
+			if !known {
 				return unknown
 			}
-			right, err := canonicalSourceJSON(raw)
-			if err != nil {
-				return unknown
-			}
-			if !bytes.Equal(left, right) {
+			if !equal {
 				return mismatch
 			}
 		}
@@ -289,4 +286,59 @@ func sourceLaneRESTParameterContract(facts sourceFacts, target engine.RESTOperat
 		}
 	}
 	return ""
+}
+
+// sourceLaneNumericBoundEqual compares decimal coefficients and exponents;
+// it never expands an exponent into a huge integer or rounds through float64.
+func sourceLaneNumericBoundEqual(left, right []byte) (bool, bool) {
+	normalize := func(raw []byte) (string, bool) {
+		if len(raw) > 4096 {
+			return "", false
+		}
+		var value any
+		if err := decodeSourceJSON(raw, &value); err != nil {
+			return "", false
+		}
+		if value == nil {
+			return "null", true
+		}
+		number, ok := value.(json.Number)
+		if !ok {
+			return "", false
+		}
+		text := string(number)
+		negative := strings.HasPrefix(text, "-")
+		text = strings.TrimPrefix(text, "-")
+		coefficient, exponentText, hasExponent := strings.Cut(strings.ToLower(text), "e")
+		exponent := new(big.Int)
+		if hasExponent {
+			if _, ok := exponent.SetString(exponentText, 10); !ok {
+				return "", false
+			}
+		}
+		if dot := strings.IndexByte(coefficient, '.'); dot >= 0 {
+			exponent.Sub(exponent, big.NewInt(int64(len(coefficient)-dot-1)))
+			coefficient = coefficient[:dot] + coefficient[dot+1:]
+		}
+		coefficient = strings.TrimLeft(coefficient, "0")
+		if coefficient == "" {
+			return "0", true
+		}
+		shortened := strings.TrimRight(coefficient, "0")
+		exponent.Add(exponent, big.NewInt(int64(len(coefficient)-len(shortened))))
+		sign := ""
+		if negative {
+			sign = "-"
+		}
+		return sign + shortened + "e" + exponent.String(), true
+	}
+	a, ok := normalize(left)
+	if !ok {
+		return false, false
+	}
+	b, ok := normalize(right)
+	if !ok {
+		return false, false
+	}
+	return a == b, true
 }
