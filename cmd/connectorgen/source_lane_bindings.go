@@ -177,6 +177,33 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				add("canonical_provenance_mismatch", "error")
 				continue
 			}
+			if facts.OperationID != "" {
+				var source *vNextCanonicalOperation
+				for i := range descriptor.Graph.Operations {
+					if descriptor.Graph.Operations[i].ID == ref.CanonicalID {
+						source = &descriptor.Graph.Operations[i]
+						break
+					}
+				}
+				if source == nil {
+					add("canonical_provenance_mismatch", "error")
+					continue
+				}
+				sourceFacts, err := vNextDecodeSourceFacts(*source)
+				if err != nil {
+					add("target_operation_identity_mismatch", "error")
+					continue
+				}
+				provider, supplied, err := vNextSourceFact(*source, sourceFacts, "provider_operation")
+				if err != nil || (supplied && provider != facts.OperationID) {
+					add("target_operation_identity_mismatch", "error")
+					continue
+				}
+				if !supplied {
+					add("target_operation_identity_unverified", sourceClaimSeverity(group.claimed))
+					continue
+				}
+			}
 			// Admission proves the current canonical target identity. The
 			// provider-to-target parameter/body/response join remains separate.
 			if observed.REST == nil {
@@ -523,18 +550,21 @@ func collectSourceLaneBindings(ctx context.Context, repo string, cohort sourceLa
 }
 
 func sourceLaneTargetPointer(raw []byte, ref sourceLaneTargetRef) (string, string) {
-	collection, identity := "", ""
+	collection, identity, file := "", "", ""
 	switch ref.Kind {
 	case "operation":
-		collection, identity = "operations", "id"
+		collection, identity, file = "operations", "id", "operations.json"
 	case "write":
-		collection, identity = "actions", "name"
+		collection, identity, file = "actions", "name", "writes.json"
 	case "stream":
-		collection, identity = "streams", "name"
+		collection, identity, file = "streams", "name", "streams.json"
 	case "command":
-		collection, identity = "commands", "path"
+		collection, identity, file = "commands", "path", "cli_surface.json"
 	default:
 		return "", "target_contract_unverified"
+	}
+	if ref.Artifact != "" && ref.Artifact != "internal/connectors/defs/"+ref.Connector+"/"+file {
+		return "", "target_artifact_kind_mismatch"
 	}
 	var root map[string]json.RawMessage
 	if err := decodeSourceJSON(raw, &root); err != nil {
