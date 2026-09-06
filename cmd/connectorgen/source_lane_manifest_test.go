@@ -289,3 +289,55 @@ func TestSourceLaneManifestArrayEncoding(t *testing.T) {
 		}
 	}
 }
+
+func TestSourceLaneManifestExactValidation(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	expected, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	copyManifest := func() sourceLaneManifest {
+		t.Helper()
+		raw, err := json.Marshal(expected)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var result sourceLaneManifest
+		if err := json.Unmarshal(raw, &result); err != nil {
+			t.Fatal(err)
+		}
+		return result
+	}
+	for _, tc := range []struct {
+		name    string
+		change  func(*sourceLaneManifest)
+		invalid bool
+	}{
+		{"valid", func(*sourceLaneManifest) {}, false},
+		{"same count wrong source", func(m *sourceLaneManifest) { m.SourceOperations[0].Source.Key.ID = "source.other" }, true},
+		{"wrong normalized path", func(m *sourceLaneManifest) { m.SourceOperations[0].Facts.Path = "/other" }, true},
+		{"lost retained fact", func(m *sourceLaneManifest) { delete(m.SourceOperations[0].Facts.Groups, "responses") }, true},
+		{"substituted source bytes", func(m *sourceLaneManifest) { m.Documents[0].Payload = json.RawMessage(`{"schema_version":2}`) }, true},
+		{"false implementation", func(m *sourceLaneManifest) {
+			m.SourceOperations[0].Lanes[0].State = "implemented"
+			m.SourceOperations[0].Lanes[0].ProofRefs = []string{"invented"}
+		}, true},
+		{"suppressed diagnostic", func(m *sourceLaneManifest) { m.Diagnostics = []sourceLaneDiagnostic{}; m.Validation.Deficits = 0 }, true},
+		{"wrong summary", func(m *sourceLaneManifest) { m.LaneSummary[0].Primary["implemented"] = 2 }, true},
+		{"reduced self-consistent set", func(m *sourceLaneManifest) {
+			m.SourceOperations = m.SourceOperations[:1]
+			m.SourceTotals.Primary = 1
+			m.SourceTotals.Operations = 1
+			m.SourceTotals.Cells = 7
+		}, true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			candidate := copyManifest()
+			tc.change(&candidate)
+			got := validateSourceLaneManifest(candidate, expected)
+			if (len(got) > 0) != tc.invalid {
+				t.Fatalf("semantic validator invalid=%v diagnostics=%+v", tc.invalid, got)
+			}
+		})
+	}
+}

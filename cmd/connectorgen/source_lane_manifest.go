@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -169,4 +170,83 @@ func summarizeSourceLaneManifest(result *sourceLaneManifest) {
 	if result.Validation.Errors > 0 {
 		result.Validation.Status = "invalid"
 	}
+}
+
+// validateSourceLaneManifest checks a supplied authoring report against the
+// independently built report from current retained inputs.
+func validateSourceLaneManifest(candidate, expected sourceLaneManifest) []sourceLaneDiagnostic {
+	diagnostics := []sourceLaneDiagnostic{}
+	add := func(key sourceOperationKey, code, pointer string, lanes []string) {
+		diagnostics = append(diagnostics, sourceLaneDiagnostic{Key: key, Lanes: lanes, Stage: "manifest", Code: code, Pointer: pointer, Owner: key.Connector, Severity: "error"})
+	}
+	if candidate.SchemaVersion != 1 || candidate.Kind != "retained_source_lane_manifest" || candidate.CohortID != expected.CohortID {
+		add(sourceOperationKey{}, "manifest_identity_invalid", "", sourceLaneNames())
+	}
+	if len(candidate.SourceOperations) != expected.SourceTotals.Operations || candidate.SourceTotals != expected.SourceTotals {
+		add(sourceOperationKey{}, "manifest_counts_mismatch", "/source_totals", sourceLaneNames())
+	}
+	expectedRows := map[sourceOperationKey]sourceLaneManifestRow{}
+	for _, row := range expected.SourceOperations {
+		expectedRows[row.Source.Key] = row
+	}
+	for _, field := range []struct {
+		name                string
+		candidate, expected any
+	}{
+		{"inputs", candidate.Inputs, expected.Inputs}, {"documents", candidate.Documents, expected.Documents}, {"lane_summary", candidate.LaneSummary, expected.LaneSummary}, {"diagnostics", candidate.Diagnostics, expected.Diagnostics}, {"validation", candidate.Validation, expected.Validation},
+	} {
+		if !sourceLaneJSONEqual(field.candidate, field.expected) {
+			add(sourceOperationKey{}, "manifest_"+field.name+"_mismatch", "/"+field.name, sourceLaneNames())
+		}
+	}
+
+	seen := map[sourceOperationKey]bool{}
+	for i, row := range candidate.SourceOperations {
+		pointer := fmt.Sprintf("/source_operations/%d", i)
+		expectedRow, exists := expectedRows[row.Source.Key]
+		if !exists {
+			add(row.Source.Key, "manifest_source_unexpected", pointer, sourceLaneNames())
+		} else {
+			if !sourceLaneJSONEqual(row.Source, expectedRow.Source) {
+				add(row.Source.Key, "manifest_source_mismatch", pointer+"/source", sourceLaneNames())
+			}
+			if !sourceLaneJSONEqual(row.Facts, expectedRow.Facts) {
+				add(row.Source.Key, "manifest_facts_mismatch", pointer+"/facts", sourceLaneNames())
+			}
+			for j, cell := range row.Lanes {
+				if j >= len(expectedRow.Lanes) || !sourceLaneJSONEqual(cell, expectedRow.Lanes[j]) {
+					add(row.Source.Key, "manifest_lane_mismatch", fmt.Sprintf("%s/lanes/%d", pointer, j), []string{cell.Lane})
+				}
+			}
+		}
+
+		if seen[row.Source.Key] {
+			add(row.Source.Key, "manifest_source_duplicate", pointer, sourceLaneNames())
+		}
+		seen[row.Source.Key] = true
+		if len(row.Lanes) != 7 {
+			add(row.Source.Key, "manifest_lanes_mismatch", pointer+"/lanes", sourceLaneNames())
+			continue
+		}
+		for j, lane := range sourceLaneNames() {
+			if row.Lanes[j].Lane != lane {
+				add(row.Source.Key, "manifest_lanes_mismatch", pointer+"/lanes", []string{lane})
+			}
+		}
+	}
+	for _, row := range expected.SourceOperations {
+		if !seen[row.Source.Key] {
+			add(row.Source.Key, "manifest_source_missing", "/source_operations", sourceLaneNames())
+		}
+	}
+	return diagnostics
+}
+
+func sourceLaneJSONEqual(a, b any) bool {
+	first, err := json.Marshal(a)
+	if err != nil {
+		return false
+	}
+	second, err := json.Marshal(b)
+	return err == nil && bytes.Equal(first, second)
 }
