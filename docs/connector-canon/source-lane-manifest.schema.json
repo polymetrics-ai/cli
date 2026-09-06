@@ -1,0 +1,780 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Retained source lane manifest",
+  "description": "Authoring-only retained source accounting. Schema validity and counts do not establish executable support.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "const": "retained_source_lane_manifest"
+    },
+    "cohort_id": {
+      "type": "string"
+    },
+    "source_totals": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "supplement": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "operations": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "cells": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "observed_primary": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "observed_supplement": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "observed_operations": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "primary",
+        "supplement",
+        "operations",
+        "cells",
+        "observed_primary",
+        "observed_supplement",
+        "observed_operations"
+      ]
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/pin"
+      }
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/document"
+      }
+    },
+    "source_operations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/row"
+      }
+    },
+    "lane_summary": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "$ref": "#/$defs/summary"
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/diagnostic"
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "valid",
+            "invalid"
+          ]
+        },
+        "errors": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "deficits": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "status",
+        "errors",
+        "deficits"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "cohort_id",
+    "source_totals",
+    "inputs",
+    "documents",
+    "source_operations",
+    "lane_summary",
+    "diagnostics",
+    "validation"
+  ],
+  "$defs": {
+    "key": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "connector": {
+          "type": "string"
+        },
+        "inventory": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "connector",
+        "inventory",
+        "id"
+      ]
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/key"
+        },
+        "lanes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stage": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "deficit"
+          ]
+        }
+      },
+      "required": [
+        "key",
+        "lanes",
+        "stage",
+        "code",
+        "pointer",
+        "owner",
+        "severity"
+      ]
+    },
+    "pin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ]
+    },
+    "fact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "section": {
+          "type": "string"
+        },
+        "part": {
+          "type": "string"
+        },
+        "document_id": {
+          "type": "string"
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "value_sha256": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "document_id",
+        "pointer",
+        "value_sha256"
+      ]
+    },
+    "target_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "connector": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "lane": {
+          "type": "string"
+        },
+        "artifact": {
+          "type": "string"
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "type": "string"
+        },
+        "canonical_id": {
+          "type": "string"
+        },
+        "canonical_pointer": {
+          "type": "string"
+        },
+        "generation": {
+          "type": "string"
+        },
+        "schema_role": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "connector",
+        "id",
+        "lane",
+        "artifact",
+        "pointer",
+        "artifact_sha256",
+        "canonical_id",
+        "canonical_pointer",
+        "generation",
+        "schema_role"
+      ]
+    },
+    "parameter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "in": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "node": {},
+        "ref": {
+          "$ref": "#/$defs/fact_ref"
+        }
+      },
+      "required": [
+        "in",
+        "name",
+        "required",
+        "node",
+        "ref"
+      ]
+    },
+    "facts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "effective_parameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/parameter"
+          }
+        },
+        "status": {
+          "enum": [
+            "available",
+            "partial",
+            "unavailable"
+          ]
+        },
+        "method": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "operation_id": {
+          "type": "string"
+        },
+        "groups": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "refs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/fact_ref"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "effective_parameters",
+        "status",
+        "method",
+        "path",
+        "protocol",
+        "operation_id",
+        "groups",
+        "refs",
+        "diagnostics"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "raw_document_id": {
+          "type": "string"
+        },
+        "key": {
+          "$ref": "#/$defs/key"
+        },
+        "class": {
+          "enum": [
+            "primary",
+            "supplement"
+          ]
+        },
+        "document_id": {
+          "type": "string"
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "source_location": {
+          "type": "string"
+        },
+        "observed": {
+          "type": "boolean"
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          }
+        }
+      },
+      "required": [
+        "raw_document_id",
+        "key",
+        "class",
+        "document_id",
+        "pointer",
+        "source_location",
+        "observed",
+        "diagnostics"
+      ]
+    },
+    "cell": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lane": {
+          "enum": [
+            "direct_read",
+            "direct_write",
+            "binary_download",
+            "binary_upload",
+            "etl",
+            "reverse_etl",
+            "sync_transport"
+          ]
+        },
+        "applicability": {
+          "enum": [
+            "applicable",
+            "not_applicable",
+            "undetermined"
+          ]
+        },
+        "state": {
+          "enum": [
+            "implemented",
+            "mapped_unproven",
+            "missing_foundation",
+            "not_applicable"
+          ]
+        },
+        "rule_id": {
+          "type": "string"
+        },
+        "fact_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fact_ref"
+          }
+        },
+        "reason": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "text"
+          ]
+        },
+        "intended_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/target_ref"
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/target_ref"
+          }
+        },
+        "proof_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "owner_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gap_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnostic"
+          }
+        }
+      },
+      "required": [
+        "lane",
+        "applicability",
+        "state",
+        "rule_id",
+        "fact_refs",
+        "reason",
+        "intended_bindings",
+        "references",
+        "proof_refs",
+        "owner_refs",
+        "gap_refs",
+        "diagnostics"
+      ]
+    },
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "facts": {
+          "$ref": "#/$defs/facts"
+        },
+        "lanes": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "prefixItems": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/cell"
+                },
+                {
+                  "properties": {
+                    "lane": {
+                      "const": "direct_read"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/cell"
+                },
+                {
+                  "properties": {
+                    "lane": {
+                      "const": "direct_write"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/cell"
+                },
+                {
+                  "properties": {
+                    "lane": {
+                      "const": "binary_download"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/cell"
+                },
+                {
+                  "properties": {
+                    "lane": {
+                      "const": "binary_upload"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/cell"
+                },
+                {
+                  "properties": {
+                    "lane": {
+                      "const": "etl"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/cell"
+                },
+                {
+                  "properties": {
+                    "lane": {
+                      "const": "reverse_etl"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/cell"
+                },
+                {
+                  "properties": {
+                    "lane": {
+                      "const": "sync_transport"
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "items": false
+        }
+      },
+      "required": [
+        "source",
+        "facts",
+        "lanes"
+      ]
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "content_type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "retained_file_sha256": {
+          "type": "string"
+        },
+        "upstream_declared_sha256": {
+          "type": "string"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "upstream_declared_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "upstream_bytes_verified": {
+          "type": "boolean"
+        },
+        "payload": {
+          "type": [
+            "object",
+            "string"
+          ]
+        }
+      },
+      "required": [
+        "content_type",
+        "id",
+        "path",
+        "retained_file_sha256",
+        "upstream_declared_sha256",
+        "bytes",
+        "upstream_declared_bytes",
+        "upstream_bytes_verified",
+        "payload"
+      ]
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "lane": {
+          "enum": [
+            "direct_read",
+            "direct_write",
+            "binary_download",
+            "binary_upload",
+            "etl",
+            "reverse_etl",
+            "sync_transport"
+          ]
+        },
+        "primary": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "implemented": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "mapped_unproven": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "missing_foundation": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "not_applicable": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "implemented",
+            "mapped_unproven",
+            "missing_foundation",
+            "not_applicable"
+          ]
+        },
+        "supplement": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "implemented": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "mapped_unproven": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "missing_foundation": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "not_applicable": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "implemented",
+            "mapped_unproven",
+            "missing_foundation",
+            "not_applicable"
+          ]
+        }
+      },
+      "required": [
+        "lane",
+        "primary",
+        "supplement"
+      ]
+    }
+  }
+}

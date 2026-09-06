@@ -11,7 +11,9 @@ encoder, executor, warehouse contract, or composition path already exists.
 
 The Atlas is never loaded by the CLI. It does not contain provider operations,
 does not grant command availability, and cannot suppress execution. Provider
-facts belong only in the connector's schema-4 source lock; runtime capability
+facts are retained in immutable provider evidence and the connector's schema-4
+source lock. The [retained source/lane report](../SOURCE-LANE-MANIFEST.md) accounts
+for source-only archives without changing execution admission; runtime capability
 comes only from rendered execution JSON plus an actual registered path.
 
 ## Mandatory discovery

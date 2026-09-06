@@ -17,7 +17,9 @@ proof, never by an evidence filename or external review state.
    for execution operations, streams, actions, lanes, and warehouse flows.
 4. [Remote reproducibility](REMOTE-REPRODUCIBILITY.md) — clean-clone checks and
    the boundary around separately authorized live-provider tests.
-5. [Foundation Atlas](foundations/README.md) — shared executor inventory and the
+5. [Retained source and lane report](SOURCE-LANE-MANIFEST.md) — source membership,
+   cited applicability and explicit materialization/behavior deficits.
+6. [Foundation Atlas](foundations/README.md) — shared executor inventory and the
    approval rule for a genuine missing runtime foundation.
 
 The mechanical execution formats remain documented in

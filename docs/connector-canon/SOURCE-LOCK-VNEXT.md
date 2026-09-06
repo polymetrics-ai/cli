@@ -26,6 +26,12 @@ a command is available. Runtime reads execution JSON only. There is no second
 reader, fallback, feature flag, admission ledger, evidence hash gate, or
 provider-specific exception.
 
+The [retained source/lane report](SOURCE-LANE-MANIFEST.md) accounts for provider
+archives before they have executable forms. It is an authoring-only evidence
+projection, not a second execution-lock dialect or a runtime admission gate.
+Historical archive envelopes remain confined to that report; schema4 below
+continues to govern every executable authoring unit.
+
 ## 1. Source-lock document
 
 The file is `internal/connectors/defs/<connector>/source.lock.json`. Its root is
