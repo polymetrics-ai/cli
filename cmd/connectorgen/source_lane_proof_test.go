@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/fs"
 	"net/http"
 	"net/http/httptest"
@@ -44,6 +45,162 @@ func TestSourceLaneProofFixtureBehavior(t *testing.T) {
 			t.Fatalf("want exact A/B records, one bounded request, incomplete page; got %s requests=%d page=%+v", raw, requests, result.Page)
 		}
 	})
+}
+
+func TestSourceLaneProofBatchFixture(t *testing.T) {
+	for _, group := range []struct {
+		name  string
+		count int
+	}{{"six", 6}, {"thirtythree", 33}, {"capacity", 4097}} {
+		t.Run(group.name, func(t *testing.T) {
+			seen := map[string]bool{}
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				id := strings.TrimPrefix(r.URL.Path, "/widgets/")
+				if r.Method != "GET" || r.URL.Path != "/widgets/"+id || r.URL.Query().Get("limit") != "2" || seen[id] {
+					t.Errorf("unexpected or duplicate fixture request %s %s", r.Method, r.URL)
+				}
+				seen[id] = true
+				w.Header().Set("Content-Type", "application/json")
+				fmt.Fprintf(w, `[{"id":%q},{"id":%q}]`, id+"-A", id+"-B")
+			}))
+			defer server.Close()
+			for i := 0; i < group.count; i++ {
+				id := fmt.Sprintf("fixture-%06d", i)
+				b := engine.Bundle{Name: "proof-fixture", HTTP: engine.HTTPBase{URL: server.URL, Pagination: &engine.PaginationSpec{Type: "offset_limit", LimitParam: "limit", OffsetParam: "offset", PageSize: 2}}, Operations: []engine.OperationSpec{{ID: id, Kind: "rest_read", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &engine.RESTOperationSpec{Method: "GET", Path: "/widgets/" + id, MaxBytes: 1024}}}}
+				result, err := engine.OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{Operation: id}, nil)
+				if err != nil {
+					t.Fatal(err)
+				}
+				body, err := json.Marshal(result.Body)
+				if err != nil {
+					t.Fatal(err)
+				}
+				want := fmt.Sprintf(`[{"id":%q},{"id":%q}]`, id+"-A", id+"-B")
+				if string(body) != want || result.Page.Records != 2 || result.Page.Complete || !seen[id] {
+					t.Fatalf("operation %s: want %s, two records/incomplete page; got %s %+v", id, want, body, result.Page)
+				}
+			}
+			if len(seen) != group.count {
+				t.Fatalf("expected %d exact fixture operations, observed %d", group.count, len(seen))
+			}
+		})
+	}
+}
+
+func proofBatch(t *testing.T, group string, count int) (string, []sourceLaneProofRecord, []sourceLaneProofReview) {
+	t.Helper()
+	root, base, _ := proofFixture(t)
+	executable, err := os.Executable()
+	if err != nil {
+		t.Fatal(err)
+	}
+	receipt, err := exec.Command("go", "tool", "test2json", "-p", base.Package, executable, "-test.v", "-test.run=^TestSourceLaneProofBatchFixture$/^"+group+"$", "-test.timeout=20m").CombinedOutput()
+	if err != nil {
+		t.Fatalf("actual batch fixture: %v\n%s", err, receipt)
+	}
+	t.Logf("Original actual %s batch fixture receipt SHA256 %s:\n%s", group, sourceBytesHash(receipt), receipt)
+	base.TestSymbol = "TestSourceLaneProofBatchFixture"
+	base.SelectedTest = base.TestSymbol + "/" + group
+	base.ReceiptSHA256 = sourceBytesHash(receipt)
+	proofWrite(t, root, base.ReceiptPath, receipt)
+	operations := make([]map[string]string, 0, count)
+	for i := 0; i < count; i++ {
+		operations = append(operations, map[string]string{"id": fmt.Sprintf("fixture-%06d", i)})
+	}
+	raw, err := json.Marshal(map[string]any{"operations": operations})
+	if err != nil {
+		t.Fatal(err)
+	}
+	proofWrite(t, root, base.Targets[0].Artifact, raw)
+	records := make([]sourceLaneProofRecord, 0, count)
+	reviews := make([]sourceLaneProofReview, 0, count)
+	for i := 0; i < count; i++ {
+		r := base
+		r.ID = fmt.Sprintf("proof-%06d", i)
+		r.Key.ID = fmt.Sprintf("fixture-%06d", i)
+		r.Targets = append([]sourceLaneTargetRef(nil), base.Targets...)
+		r.Targets[0].ID = r.Key.ID
+		r.Targets[0].Pointer = fmt.Sprintf("/operations/%d", i)
+		r.Targets[0].ArtifactSHA256 = sourceBytesHash(raw)
+		r.Targets[0].CanonicalID = "operation:" + r.Key.ID
+		r.Targets[0].CanonicalPointer = fmt.Sprintf("/operations/%d/operation", i)
+		r.ObservableContract = "GET /widgets/" + r.Key.ID + " sends limit=2; exact " + r.Key.ID + "-A and " + r.Key.ID + "-B; one request; incomplete page"
+		records = append(records, r)
+		reviews = append(reviews, sourceLaneProofReview{Record: r, Fixture: true})
+	}
+	return root, records, reviews
+}
+
+func proofBatchCells(r sourceLaneProofRecord) []sourceLaneCell {
+	cells := make([]sourceLaneCell, 0, 7)
+	for _, lane := range sourceLaneNames() {
+		cells = append(cells, sourceLaneCell{Lane: lane, Applicability: "not_applicable", State: "not_applicable"})
+	}
+	cells[0].Applicability = "applicable"
+	cells[0].State = "mapped_unproven"
+	cells[0].References = r.Targets
+	return cells
+}
+
+func TestSourceLaneProofCapacity(t *testing.T) {
+	for _, group := range []struct {
+		name  string
+		count int
+	}{{"six", 6}, {"thirtythree", 33}} {
+		t.Run(group.name, func(t *testing.T) {
+			root, records, reviews := proofBatch(t, group.name, group.count)
+			proofDocument(t, root, records)
+			raw, err := os.ReadFile(filepath.Join(root, sourceLaneProofPath))
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Logf("inline document bytes=%d closure pins=%d", len(raw), len(records[0].Inputs))
+			in := loadSourceLaneProofs(root, reviews)
+			promoted := 0
+			for _, r := range records {
+				cells := assessSourceLaneProof(r.Key, proofBatchCells(r), in)
+				if len(cells) != 7 {
+					t.Fatalf("lost cells for %s", r.Key.ID)
+				}
+				if cells[0].State == "implemented" && reflect.DeepEqual(cells[0].ProofRefs, []string{r.ID}) {
+					promoted++
+				}
+			}
+			if promoted != group.count || len(in.Diagnostics) != 0 {
+				t.Fatalf("want %d exact promoted fixture records, got %d; diagnostics %+v", group.count, promoted, in.Diagnostics)
+			}
+		})
+	}
+}
+
+func TestSourceLaneProofReadAccounting(t *testing.T) {
+	root := t.TempDir()
+	name := "internal/oversized.go"
+	raw := []byte(strings.Repeat("x", 65))
+	proofWrite(t, root, name, raw)
+	opened, err := os.OpenRoot(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer opened.Close()
+	before, err := opened.Stat(name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Independent actual read witnesses prove the expected lookahead boundary.
+	for i := 0; i < 2; i++ {
+		got, err := readSourceInput(opened, name, 32)
+		after, statErr := opened.Stat(name)
+		if err == nil || got != nil || statErr != nil || !os.SameFile(before, after) || after.Size() != 65 {
+			t.Fatalf("real oversized read witness did not reach expected regular file: %v", err)
+		}
+	}
+	budget := int64(32)
+	r := sourceLaneProofRecord{Inputs: []sourceLaneProofInput{{Path: name, SHA256: sourceBytesHash(raw), Role: "code"}}}
+	code, _ := sourceLaneReadProof(opened, r, &budget)
+	if code == "" || budget >= 32 {
+		t.Fatalf("failed bounded read must spend attempted allowance, got code=%s remaining=%d", code, budget)
+	}
 }
 
 func proofWrite(t *testing.T, root, name string, raw []byte) {
