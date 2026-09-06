@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -79,6 +80,7 @@ func proofFixture(t *testing.T) (string, sourceLaneProofRecord, []sourceLaneCell
 	if err != nil {
 		t.Fatalf("actual fixture execution: %v\n%s", err, receipt)
 	}
+	t.Logf("Original actual hermetic fixture receipt (SHA256 %s):\n%s", sourceBytesHash(receipt), receipt)
 	if !strings.Contains(string(receipt), `"Action":"pass","Package":"polymetrics.ai/cmd/connectorgen","Test":"TestSourceLaneProofFixtureBehavior/bounded_records"`) {
 		t.Fatalf("selected fixture did not pass: %s", receipt)
 	}
@@ -92,6 +94,42 @@ func proofFixture(t *testing.T) (string, sourceLaneProofRecord, []sourceLaneCell
 		proofWrite(t, root, entry.path, raw)
 		r.Inputs = append(r.Inputs, sourceLaneProofInput{Path: entry.path, Role: entry.role, SHA256: sourceBytesHash(raw)})
 	}
+	// Retain the local code dependency closure as well as module pins. The
+	// reviewed fixture does not infer completeness from a single engine file.
+	for _, directory := range []string{"internal", "cmd/connectorgen"} {
+		err := filepath.WalkDir(filepath.Join("../..", directory), func(filename string, entry fs.DirEntry, walkErr error) error {
+			if walkErr != nil {
+				return walkErr
+			}
+			if entry.IsDir() || !strings.HasSuffix(filename, ".go") {
+				return nil
+			}
+			rel, err := filepath.Rel("../..", filename)
+			if err != nil {
+				return err
+			}
+			rel = filepath.ToSlash(rel)
+			for _, in := range r.Inputs {
+				if in.Path == rel {
+					return nil
+				}
+			}
+			raw, err := os.ReadFile(filename)
+			if err != nil {
+				return err
+			}
+			proofWrite(t, root, rel, raw)
+			role := "code"
+			if strings.HasSuffix(rel, "_test.go") {
+				role = "test"
+			}
+			r.Inputs = append(r.Inputs, sourceLaneProofInput{Path: rel, Role: role, SHA256: sourceBytesHash(raw)})
+			return nil
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
 	raw := []byte(`{"operations":[{"id":"fixture.widgets"}]}`)
 	artifact := "internal/connectors/defs/proof-fixture/operations.json"
 	proofWrite(t, root, artifact, raw)
@@ -104,6 +142,91 @@ func proofFixture(t *testing.T) (string, sourceLaneProofRecord, []sourceLaneCell
 	cells[0].State = "mapped_unproven"
 	cells[0].References = append([]sourceLaneTargetRef(nil), r.Targets...)
 	return root, r, cells
+}
+
+func TestSourceLaneProofAdditionalControls(t *testing.T) {
+	root, r, cells := proofFixture(t)
+	t.Run("unreviewed_is_not_evidence", func(t *testing.T) {
+		proofDocument(t, root, []sourceLaneProofRecord{r})
+		in := loadSourceLaneProofs(root, nil)
+		if !proofHasDiagnostic(in.Diagnostics, "proof_review_unavailable", "deficit") || assessSourceLaneProof(r.Key, cells, in)[0].State == "implemented" {
+			t.Fatalf("unreviewed proof accepted: %+v", in)
+		}
+	})
+	t.Run("fixture_cannot_promote_primary", func(t *testing.T) {
+		copy := r
+		copy.Key.Inventory = "primary"
+		proofDocument(t, root, []sourceLaneProofRecord{copy})
+		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
+		if !proofHasDiagnostic(in.Diagnostics, "proof_scope_unproven", "deficit") {
+			t.Fatalf("fixture became primary proof: %+v", in)
+		}
+	})
+	t.Run("contradictory_same_cell", func(t *testing.T) {
+		other := r
+		other.ID = "other-proof"
+		other.ObservableContract = "Contradictory claim"
+		proofDocument(t, root, []sourceLaneProofRecord{r, other})
+		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: r, Fixture: true}, {Record: other, Fixture: true}})
+		if len(in.Diagnostics) != 2 || assessSourceLaneProof(r.Key, cells, in)[0].State == "implemented" {
+			t.Fatalf("contradiction accepted: %+v", in)
+		}
+	})
+	t.Run("missing_one_required_target", func(t *testing.T) {
+		copy := r
+		copy.Targets = append([]sourceLaneTargetRef(nil), r.Targets...)
+		additional := r.Targets[0]
+		additional.Kind = "command"
+		additional.ID = "widgets list"
+		copy.Targets = append(copy.Targets, additional)
+		proofDocument(t, root, []sourceLaneProofRecord{copy})
+		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
+		got := assessSourceLaneProof(r.Key, cells, in)
+		if !proofHasDiagnostic(got[0].Diagnostics, "proof_prerequisites_unproven", "deficit") || got[0].State == "implemented" {
+			t.Fatalf("missing required reference accepted: %+v", got)
+		}
+	})
+	t.Run("budget_exhausted", func(t *testing.T) {
+		opened, err := os.OpenRoot(root)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer opened.Close()
+		budget := int64(0)
+		code, severity := sourceLaneReadProof(opened, r, &budget)
+		if code != "proof_read_budget_exceeded" || severity != "error" {
+			t.Fatalf("budget ignored: %s/%s", code, severity)
+		}
+	})
+	t.Run("unchanged_input_cells", func(t *testing.T) {
+		proofDocument(t, root, []sourceLaneProofRecord{r})
+		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: r, Fixture: true}})
+		before, _ := json.Marshal(cells)
+		_ = assessSourceLaneProof(r.Key, cells, in)
+		after, _ := json.Marshal(cells)
+		if string(before) != string(after) {
+			t.Fatal("reducer mutated input cells")
+		}
+	})
+	t.Run("control_character_identity", func(t *testing.T) {
+		copy := r
+		copy.Key.ID = "bad\nidentity"
+		proofDocument(t, root, []sourceLaneProofRecord{copy})
+		in := loadSourceLaneProofs(root, []sourceLaneProofReview{{Record: copy, Fixture: true}})
+		if !proofHasDiagnostic(in.Diagnostics, "proof_record_invalid", "error") {
+			t.Fatalf("ambiguous ID accepted: %+v", in)
+		}
+	})
+	t.Run("absent_document_beneath_symlink", func(t *testing.T) {
+		isolated := t.TempDir()
+		if err := os.Symlink(t.TempDir(), filepath.Join(isolated, "data")); err != nil {
+			t.Fatal(err)
+		}
+		in := loadSourceLaneProofs(isolated, nil)
+		if !proofHasDiagnostic(in.Diagnostics, "proof_document_invalid", "error") {
+			t.Fatalf("unsafe optional path treated as absence: %+v", in)
+		}
+	})
 }
 
 func proofHasDiagnostic(ds []sourceLaneDiagnostic, code, severity string) bool {
