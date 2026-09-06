@@ -70,10 +70,6 @@ func vNextPublicationOpenDirectoryWithCloseForTest(path, label string, closeForT
 	return vNextPublicationDirectoryFromFDWithCloseForTest(fd, label, closeForTest)
 }
 
-func vNextPublicationDirectoryFromFD(fd int, label string) (*vNextPublicationDirectory, error) {
-	return vNextPublicationDirectoryFromFDWithCloseForTest(fd, label, nil)
-}
-
 func vNextPublicationDirectoryFromFDWithCloseForTest(fd int, label string, closeForTest func(*os.File, string) error) (*vNextPublicationDirectory, error) {
 	file := os.NewFile(uintptr(fd), label)
 	if file == nil {

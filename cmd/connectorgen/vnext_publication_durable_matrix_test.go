@@ -286,8 +286,9 @@ func vNextPublicationAssertDurableControlsAndAuthorityForTest(t *testing.T, root
 // authority observable at a caller's actual cut. It deliberately uses the
 // descriptor-safe test witnesses rather than treating decoded control values as
 // a substitute for raw bytes, object type, or inode identity.
-func vNextPublicationAssertDurableCutWitnessForTest(t *testing.T, root, label string, extraRoots ...vNextGenerationPointer) {
+func vNextPublicationAssertDurableCutWitnessForTest(t *testing.T, root, label string, expected vNextPublicationExpectedTree, extraRoots ...vNextGenerationPointer) {
 	t.Helper()
+	vNextPublicationAssertExpectedTree(t, filepath.Join(root, "acme"), expected)
 	current, journal, journalFound := vNextPublicationAssertDurableControlsAndAuthorityForTest(t, root, label)
 	connectorRoot := filepath.Join(root, "acme")
 
@@ -474,7 +475,13 @@ func vNextPublicationAssertEmptyLeaseReplacementForTest(t *testing.T, root strin
 	leasePath := filepath.Join(root, "acme", vNextPublicationGenerationDirectory, old.Generation, vNextPublicationLeaseFile)
 	retainedPath := leasePath + ".empty-B-A"
 	leaseA := vNextPublicationFileWitnessForTest(t, leasePath)
+	var leaseB vNextPublicationPathWitness
 	hookHit := false
+	priorAuthority, priorErr := vNextPublicationExpectedStableAuthority(root)
+	if priorErr != nil {
+		t.Fatal(priorErr)
+	}
+	var expectedCut vNextPublicationExpectedTree
 	guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 		if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
 			return nil
@@ -486,7 +493,10 @@ func vNextPublicationAssertEmptyLeaseReplacementForTest(t *testing.T, root strin
 		if err := os.WriteFile(leasePath, nil, 0o600); err != nil {
 			return err
 		}
-		return nil
+		leaseB = vNextPublicationFileWitnessForTest(t, leasePath)
+		var err error
+		expectedCut, err = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+		return err
 	}})
 	if err != nil {
 		t.Fatal(err)
@@ -495,8 +505,8 @@ func vNextPublicationAssertEmptyLeaseReplacementForTest(t *testing.T, root strin
 	if !hookHit || err == nil || !strings.Contains(err.Error(), "identity") {
 		t.Fatalf("empty-B public durable call = %v, hook=%t, want identity refusal", err, hookHit)
 	}
-	leaseB := vNextPublicationFileWitnessForTest(t, leasePath)
 	vNextPublicationAssertWitnessForTest(t, "empty-B displaced A", retainedPath, leaseA)
+	vNextPublicationAssertWitnessForTest(t, "empty-B actual installed B", leasePath, leaseB)
 	vNextPublicationAssertDistinctWitnessForTest(t, "empty-B A/B", leaseA, leaseB)
 	if len(leaseB.payload) != 0 {
 		t.Fatalf("empty-B replacement payload = %q, want empty", leaseB.payload)
@@ -512,7 +522,7 @@ func vNextPublicationAssertEmptyLeaseReplacementForTest(t *testing.T, root strin
 	} else if !found || journal.State != wantJournalState || journal.Old == nil || *journal.Old != old || journal.New != current {
 		t.Fatalf("empty-B JOURNAL = %#v, want state=%q old=%#v new=%#v", journal, wantJournalState, old, current)
 	}
-	vNextPublicationAssertDurableCutWitnessForTest(t, root, "empty-B durable refusal", old)
+	vNextPublicationAssertDurableCutWitnessForTest(t, root, "empty-B durable refusal", expectedCut, old)
 	vNextPublicationRestoreLeaseForTest(t, retainedPath, leasePath)
 	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
 	if err != nil {
@@ -564,6 +574,11 @@ func TestVNextPublicationCommittedJournalNewSelectedRecoveryRejectsLateLeaseRepl
 	retainedPath := leasePath + ".committed-A"
 	var leaseA, leaseB vNextPublicationPathWitness
 	hookHit := false
+	priorAuthority, priorErr := vNextPublicationExpectedStableAuthority(root)
+	if priorErr != nil {
+		t.Fatal(priorErr)
+	}
+	var expectedCut vNextPublicationExpectedTree
 	guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 		if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
 			return nil
@@ -578,6 +593,11 @@ func TestVNextPublicationCommittedJournalNewSelectedRecoveryRejectsLateLeaseRepl
 		}
 		leaseB = vNextPublicationFileWitnessForTest(t, leasePath)
 		vNextPublicationAssertDistinctWitnessForTest(t, "committed recovery A/B", leaseA, leaseB)
+		var observeErr error
+		expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+		if observeErr != nil {
+			return observeErr
+		}
 		return nil
 	}})
 	if err != nil {
@@ -590,7 +610,7 @@ func TestVNextPublicationCommittedJournalNewSelectedRecoveryRejectsLateLeaseRepl
 	vNextPublicationAssertWitnessForTest(t, "committed recovery displaced A", retainedPath, leaseA)
 	vNextPublicationAssertWitnessForTest(t, "committed recovery installed B", leasePath, leaseB)
 	vNextPublicationAssertCurrentJournalForTest(t, root, "committed recovery refusal", newPointer, "committed", &old, newPointer)
-	vNextPublicationAssertDurableCutWitnessForTest(t, root, "committed recovery refusal")
+	vNextPublicationAssertDurableCutWitnessForTest(t, root, "committed recovery refusal", expectedCut)
 
 	vNextPublicationRestoreLeaseForTest(t, retainedPath, leasePath)
 	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -621,6 +641,11 @@ func TestVNextPublicationSuccessfulPublishFinalPruneRejectsLateLeaseReplacement(
 	retainedPath := leasePath + ".publish-final-prune-A"
 	var leaseA, leaseB vNextPublicationPathWitness
 	hookHit := false
+	priorAuthority, priorErr := vNextPublicationExpectedStableAuthority(root)
+	if priorErr != nil {
+		t.Fatal(priorErr)
+	}
+	var expectedCut vNextPublicationExpectedTree
 	guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 		if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
 			return nil
@@ -635,6 +660,11 @@ func TestVNextPublicationSuccessfulPublishFinalPruneRejectsLateLeaseReplacement(
 		}
 		leaseB = vNextPublicationFileWitnessForTest(t, leasePath)
 		vNextPublicationAssertDistinctWitnessForTest(t, "successful Publish final prune A/B", leaseA, leaseB)
+		var observeErr error
+		expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+		if observeErr != nil {
+			return observeErr
+		}
 		return nil
 	}})
 	if err != nil {
@@ -653,7 +683,7 @@ func TestVNextPublicationSuccessfulPublishFinalPruneRejectsLateLeaseReplacement(
 	vNextPublicationAssertWitnessForTest(t, "successful Publish displaced A", retainedPath, leaseA)
 	vNextPublicationAssertWitnessForTest(t, "successful Publish installed B", leasePath, leaseB)
 	vNextPublicationAssertCurrentJournalForTest(t, root, "successful Publish final prune refusal", newPointer, "committed", &old, newPointer)
-	vNextPublicationAssertDurableCutWitnessForTest(t, root, "successful Publish final prune refusal")
+	vNextPublicationAssertDurableCutWitnessForTest(t, root, "successful Publish final prune refusal", expectedCut)
 
 	vNextPublicationRestoreLeaseForTest(t, retainedPath, leasePath)
 	fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -712,6 +742,11 @@ func TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement(t *
 			leasePath := filepath.Join(newRoot, vNextPublicationLeaseFile)
 			retainedPath := leasePath + ".rejected-A"
 			var leaseA, leaseB vNextPublicationPathWitness
+			priorAuthority, priorErr := vNextPublicationExpectedStableAuthority(root)
+			if priorErr != nil {
+				t.Fatal(priorErr)
+			}
+			var expectedCut vNextPublicationExpectedTree
 			hookHit := false
 			fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 				if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
@@ -727,6 +762,11 @@ func TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement(t *
 				}
 				leaseB = vNextPublicationFileWitnessForTest(t, leasePath)
 				vNextPublicationAssertDistinctWitnessForTest(t, "fresh rejected-new A/B", leaseA, leaseB)
+				var observeErr error
+				expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+				if observeErr != nil {
+					return observeErr
+				}
 				return nil
 			}})
 			if err != nil {
@@ -739,7 +779,7 @@ func TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement(t *
 			vNextPublicationAssertWitnessForTest(t, "fresh rejected-new displaced A", retainedPath, leaseA)
 			vNextPublicationAssertWitnessForTest(t, "fresh rejected-new installed B", leasePath, leaseB)
 			vNextPublicationAssertCurrentJournalForTest(t, root, "fresh rejected-new refusal", old, "prepared", &old, newPointer)
-			vNextPublicationAssertDurableCutWitnessForTest(t, root, "fresh rejected-new refusal")
+			vNextPublicationAssertDurableCutWitnessForTest(t, root, "fresh rejected-new refusal", expectedCut)
 			if _, err := os.Stat(newRoot); err != nil {
 				t.Fatalf("fresh rejected-new refusal removed rejected root: %v", err)
 			}
@@ -792,6 +832,11 @@ func TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVar
 			retainedPath := leasePath + ".rollback-A"
 			var leaseA, leaseB vNextPublicationPathWitness
 			hookHit := false
+			priorAuthority, priorErr := vNextPublicationExpectedStableAuthority(root)
+			if priorErr != nil {
+				t.Fatal(priorErr)
+			}
+			var expectedCut vNextPublicationExpectedTree
 			guard, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{At: func(point vNextPublicationFaultPoint) error {
 				if point != vNextPublicationAfterGenerationLeaseIdentity || hookHit {
 					return nil
@@ -806,6 +851,11 @@ func TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVar
 				}
 				leaseB = vNextPublicationFileWitnessForTest(t, leasePath)
 				vNextPublicationAssertDistinctWitnessForTest(t, "immediate rollback A/B", leaseA, leaseB)
+				var observeErr error
+				expectedCut, observeErr = vNextPublicationCaptureExpectedCut(root, priorAuthority)
+				if observeErr != nil {
+					return observeErr
+				}
 				return nil
 			}})
 			if err != nil {
@@ -826,7 +876,7 @@ func TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVar
 			vNextPublicationAssertWitnessForTest(t, "immediate rollback displaced A", retainedPath, leaseA)
 			vNextPublicationAssertWitnessForTest(t, "immediate rollback installed B", leasePath, leaseB)
 			vNextPublicationAssertCurrentJournalForTest(t, root, "immediate rollback refusal", old, "prepared", &old, newPointer)
-			vNextPublicationAssertDurableCutWitnessForTest(t, root, "immediate rollback refusal")
+			vNextPublicationAssertDurableCutWitnessForTest(t, root, "immediate rollback refusal", expectedCut)
 
 			vNextPublicationRestoreLeaseForTest(t, retainedPath, leasePath)
 			fresh, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})

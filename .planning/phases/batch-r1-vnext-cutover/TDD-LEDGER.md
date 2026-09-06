@@ -1285,3 +1285,99 @@ stop after one attempt/one completion. Every retained blocker tree compares to
 its actor-created pre-cleanup identity/bytes. Focused normal0.988s development
 output; original race receipt `group-b-084-allocator-race.json` package2.273s
 exit0 includes original compound public Publish A/B regression.
+
+### 083 Group B/C proof integration / 085 execution classes
+
+Seven phase callers × CURRENT/JOURNAL × parent-close-after-create, actual partial
+Write and Sync completion passed42 cells20.986s before the additional explicit
+sequence/state/outcome assertions. The first development run20.480s failed8
+parent-close placements because it also encountered existing-phase read parents;
+the hook now requires the actual newly empty exclusive-created phase. This is a
+fixture placement correction, not another production finding. Original development
+log/test bytes are retained. Final strengthened selection remains pending.
+
+Ten actual failed-allocation A/B caller/variant cells passed development9.013s.
+Durable cut comparisons now take pre-fault expected trees, capture actual B at
+creation, retain prior immutable authority and compare complete raw controls and
+root contents. Initial durable integration14.940s and held/stage5.730s development
+checks passed before later strengthening; final source-bound normal/race pending.
+
+085: BeforeRepairPredecessorLink creates and closes an actual foreign blocker,
+returns nil (asserted fixtureCompleted), then production linkFromBound executes
+Linkat and returns EEXIST; actual predecessor Close runs once and its injected
+completion remains visible. The hook is not used as an executed Linkat failure.
+Opened-control identity/Stat callbacks perform real descriptor operations then
+inject completion failures into those producers. Bounded-read uses actual
+io.ReadAll/LimitReader with one real file byte followed by an injected reader
+error, not an after-successful-read hook. All are disclosed injections, not natural
+OS I/O failures. Staged AfterFileSync follows a real successful Sync; capture's
+preparation primary, actual Sync/post-Sync completion and actual Close causes
+remain separate. Initial compound development2.446s passed; reader-path refinement
+requires new receipt. Nil instrumentation preserves production operation paths.
+
+### Firstmate087 bounded closure continuation
+
+The original coordinated normal/race selections completed exit0 with195 passing
+parent/subtest events each, wall104.919844916/145.783956084s. Their original JSON
+receipts and full source hash maps match the pre-087 worktree; no rerun occurred.
+087 keeps the six audited findings and reschedules reusable checker infrastructure.
+First closure group adds only missing reachable control states and common-writer
+not-created/replaced-final/incomplete-disposal result controls. Existing three
+record kinds and seven phase callers share the same writer; do not multiply every
+state by every completion frontier. This is proof completion after the recorded
+original RED and repair, not a claim of new production RED. Before edits, missing
+assertions are the observed evidence gap. Green: pending focused new controls.
+
+087 record development: three result controls and three state controls passed;
+JOURNAL absence-to-absence revealed an incorrect test expectation of no authority
+record. transitionControlLocked always creates the durable transition; logical
+absence is unchanged, but private history advances. Corrected the proof to require
+its interrupted prepared graph and nonmutating Check refusal like other states.
+No production defect or extra repair is inferred; original failing output retained.
+
+087 first group Green: group-087-record-normal/race.json retain exact source
+hashes and original JSON events, exit0,9 passing parent/subtest events each,
+wall6.334979125/10.424881s. All four missing control states have actual complete
+prepared Sync completion, pre-record anchor/history preservation, explicit prior/
+intended bits, Check refusal/nonmutation, Recover and retry. Three result branches
+assert exact owned identity, writes/one Close (zero for unowned collision), compound
+causes and retained A/B payloads. No malformed unknown-record recovery is claimed.
+Next: actual allocation failures at prepared/current/committed/rollback/restoration
+consumers; preserve public return causes and independently expected selected state.
+
+087 allocation development passed all actual allocation/error/state assertions;
+four fresh-restoration follow-ons correctly refused pruning the deliberately
+corrupted rejected-generation fixture after restoring old CURRENT. The test now
+asserts that refusal and old selection before restoring only fixture-owned bytes,
+then requires fresh recovery/Open. This preserves unknown ownership refusal; no
+production repair is inferred. Original output group-087-consumer-development.log.
+
+087 allocation group Green: eight actual consumer cuts,9 passing events each
+in source-bound normal/race receipts, wall12.699292292/19.726962458s, exit0.
+Real EEXIST plus actual parent Close completion reaches Publish/rollback and
+Recover/Open/Prune/Publish restoration returns; failed A root and parent close
+exactly once, no retry, all captured controls/history/residue unchanged at return.
+Prepared/current/committed/rollback states assert independent expected heads and
+prepared JOURNAL payload; recovery follows actual selected generation. Invalid
+rejected fixture refusal and old restoration are proven before restoring its bytes.
+058/073 staged requirement is writable completion+Close and failed-stage owned
+cleanup, not an unconditional separate staged Write-failure matrix. Existing new
+TestCP11CompoundStagedActualSyncCloseCleanup executes actual Sync then completion,
+actual Close and cleanup refusal; bind that disclosed execution class. Next exact
+resource instance counts and independent compound-cut state assertions.
+
+087 assertion/resource primary selection passed80 normal/race parent/subtest
+events, wall51.863316/72.478139166s, exact receipts retained. Last reconciliation
+adds full-tree comparison to separate pending-JOURNAL Check and per-os.File
+instance Close counters to existing F03B callback controls. An attempted text edit
+before that80-event run found no following function and made no change; those
+receipts therefore do not claim these two final assertions. Focused follow-on
+and final combined package will bind them. No production source changed in087.
+
+Original-base package lint found13 introduced diagnostics:11 unchecked test
+teardowns, one tagged-switch simplification, and one unused production wrapper.
+Checked test-owned Close errors, simplified the test dispatch switch and removed
+only the unused vNextPublicationDirectoryFromFD forwarding wrapper (all live
+callers already use WithCloseForTest). No protocol or ownership contract changed.
+The original13 diagnostic JSON/log remains; final lint and whole package will
+bind this last mechanical source delta, not reuse earlier focused receipt hashes.

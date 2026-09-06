@@ -97,8 +97,7 @@ func TestCP11OwnershipTempRetryMustNotSwallowCompletion(t *testing.T) {
 				return err
 			}
 			if _, err := blocker.Write([]byte("A blocker")); err != nil {
-				blocker.Close()
-				return err
+				return errors.Join(err, blocker.Close())
 			}
 			if err := blocker.Close(); err != nil {
 				return err
@@ -284,7 +283,11 @@ func TestCP11OwnershipAllocatorClassifiesActualCleanup(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			defer directory.Close()
+			defer func() {
+				if err := directory.Close(); err != nil {
+					t.Errorf("close test-owned directory: %v", err)
+				}
+			}()
 			completion := errors.New("actual allocation completion")
 			attempts := 0
 			closes := 0

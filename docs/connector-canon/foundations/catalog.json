@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 41,
+  "catalog_revision": 42,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -159,6 +159,18 @@
           {
             "file": "internal/connectors/connsdk/refresh_token.go",
             "name": "(*OAuth2RefreshToken).exchangeLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_dir.go",
+            "name": "(*vNextPublicationDirectory).openFileResult"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "vNextPublicationWriteControlRepairRecord"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication.go",
+            "name": "vNextPublicationCreateTemp"
           }
         ]
       },
@@ -239,7 +251,9 @@
           "a reader-held generation-directory lock or invalid generation lease prevents pruning that generation",
           "an unvalidated generation is never treated as publisher-owned",
           "cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state",
-          "publication validates staged physical bytes through the existing loader, selected runtime identity, manifest/index construction, and command preflight without credential or provider I/O"
+          "publication validates staged physical bytes through the existing loader, selected runtime identity, manifest/index construction, and command preflight without credential or provider I/O",
+          "the common authority-record writer retains the opened descriptor ownership across a failed parent Close",
+          "a meaningful temporary-allocation completion error cannot be consumed as a retryable collision"
         ]
       },
       "selection": {
@@ -268,7 +282,9 @@
         "Known source facts may be checked against their exact declared target; unknown source fields remain opaque and preserved.",
         "Lane state must match authored execution content.",
         "Schema references must resolve to safe registry paths.",
-        "Runtime cannot read source.lock.json."
+        "Runtime cannot read source.lock.json.",
+        "An identity-known incomplete authority record is disposed only through its retained identity before its single Close. A complete bound record remains authority despite a completion error. Unknown or replaced records remain forensic residue; recovery never accepts arbitrary malformed authority.",
+        "Nested recursive descriptor proof covers Recover of an owned stage, Prune of a stale generation, and Publish initial recovery. Its post-Stat injection proves actual opened-child Close and retained nested bytes/outer root; it does not claim natural Stat failure, whole-tree atomic deletion, a retained pre-operation child identity, or final-Publish nested pruning. The separate final-prune lease tests retain their own scope."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -303,7 +319,7 @@
             "internal/connectors/defs/asana/operations.json"
           ],
           "notes": "One lock renders direct and saved execution lanes with explicit unsupported lanes."
-          },
+        },
         {
           "name": "FreeAgent refresh-token bundle",
           "files": [
@@ -353,7 +369,7 @@
           "package": "./internal/connectors/defs",
           "file": "internal/connectors/defs/vnext_runtime_inventory_test.go",
           "name": "TestRuntimeEmbedContainsExecutionJSONOnly"
-          },
+        },
         {
           "package": "./internal/connectors/connsdk",
           "file": "internal/connectors/connsdk/refresh_token_test.go",
@@ -668,6 +684,66 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_publication_repair_test.go",
           "name": "TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_ownership_test.go",
+          "name": "TestCP11OwnershipRecordFrontiersRecover"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_ownership_test.go",
+          "name": "TestCP11OwnershipAllocatorClassifiesActualCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_record_result_test.go",
+          "name": "TestCP11OwnershipRecordResultBoundaries"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_record_result_test.go",
+          "name": "TestCP11OwnershipRemainingControlStates"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_allocation_consumer_test.go",
+          "name": "TestCP11AllocationConsumersPreserveCompoundAndState"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_allocation_witness_test.go",
+          "name": "TestCP11AllocationCallersRetainActualAB"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_phase_frontier_test.go",
+          "name": "TestCP11OwnershipSevenPhaseCallers"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_compound_frontier_test.go",
+          "name": "TestCP11CompoundOpenedControlFrontiers"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_compound_frontier_test.go",
+          "name": "TestCP11CompoundFailedPredecessorLink"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_compound_frontier_test.go",
+          "name": "TestCP11CompoundCapturePrimarySyncClose"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_compound_frontier_test.go",
+          "name": "TestCP11CompoundStagedActualSyncCloseCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_resource_error_test.go",
+          "name": "TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership"
         }
       ],
       "publication_guarantee_proofs": [
@@ -852,6 +928,20 @@
           ],
           "positive": "TestVNextGenerationPublisherPhysicallyPreflightsImplementedStagedCommand",
           "negative": "TestVNextGenerationPublisherRefusesPhysicallyStagedCommandPreflight"
+        },
+        {
+          "guarantees": [
+            "the common authority-record writer retains the opened descriptor ownership across a failed parent Close"
+          ],
+          "positive": "TestCP11OwnershipRecordFrontiersRecover",
+          "negative": "TestCP11OwnershipRecordResultBoundaries"
+        },
+        {
+          "guarantees": [
+            "a meaningful temporary-allocation completion error cannot be consumed as a retryable collision"
+          ],
+          "positive": "TestCP11OwnershipAllocatorClassifiesActualCleanup",
+          "negative": "TestCP11AllocationConsumersPreserveCompoundAndState"
         }
       ],
       "known_gap_refs": [],

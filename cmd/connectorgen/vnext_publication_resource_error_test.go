@@ -131,7 +131,7 @@ func TestVNextPublicationRemoveTreeClosesChildOnFstatError(t *testing.T) {
 // TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership exercises the
 // public cleanup callers after their root moved into the private quarantine.
 // The direct removeTree controls above prove the recursive primitive; these
-// rows prove the real Recover, Prune, and final-Publish paths retain the
+// rows prove the real Recover, Prune, and Publish initial-recovery paths retain the
 // candidate and only test-owned interference is restored after a nested
 // descriptor-bound refusal.
 func TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership(t *testing.T) {
@@ -190,7 +190,7 @@ func TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership(t *testing.T
 			},
 		},
 		{
-			name: "publish-final-prune-generation",
+			name: "publish-initial-recovery-generation",
 			prepare: func(t *testing.T) (string, func(*vNextGenerationPublisher) error) {
 				root := t.TempDir()
 				baseline, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
@@ -233,6 +233,10 @@ func TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership(t *testing.T
 					for attempt := 0; attempt < attempts; attempt++ {
 						targetPath, invoke := test.prepare(t)
 						worktreeRoot := filepath.Dir(filepath.Dir(filepath.Dir(targetPath)))
+						expectedAuthority, authorityErr := vNextPublicationExpectedAuthority(worktreeRoot)
+						if authorityErr != nil {
+							t.Fatal(authorityErr)
+						}
 						rootIdentity := vNextPublicationDirectoryIdentityForTest(t, targetPath, "public cleanup root")
 						if strings.HasPrefix(filepath.Base(targetPath), ".stage-") {
 							stageMarker := vNextPublicationFileWitnessForTest(t, filepath.Join(targetPath, vNextPublicationStageOwnerFile))
@@ -251,6 +255,8 @@ func TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership(t *testing.T
 						var nestedA, nestedB vNextPublicationIdentity
 						replacementHit := false
 						fstatHit := false
+						var nestedOpened, quarantineOpened *os.File
+						closes := make(map[*os.File]int)
 
 						if fault.fstat {
 							vNextPublicationRemoveTreeChildIdentityForTest = func(file *os.File, label string) (vNextPublicationIdentity, error) {
@@ -261,10 +267,18 @@ func TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership(t *testing.T
 									return vNextPublicationIdentity{}, err
 								}
 								fstatHit = true
+								nestedOpened = file
 								return vNextPublicationIdentity{}, injected
 							}
 							t.Cleanup(func() { vNextPublicationRemoveTreeChildIdentityForTest = nil })
 						} else {
+							vNextPublicationRemoveTreeChildIdentityForTest = func(file *os.File, label string) (vNextPublicationIdentity, error) {
+								if strings.HasSuffix(label, "/nested") {
+									nestedOpened = file
+								}
+								return vNextPublicationIdentityFromFile(file, label)
+							}
+							t.Cleanup(func() { vNextPublicationRemoveTreeChildIdentityForTest = nil })
 							vNextPublicationRemoveTreeAfterIdentityForTest = func(directory *vNextPublicationDirectory, name string) {
 								if name != "nested" || replacementHit {
 									return
@@ -306,11 +320,28 @@ func TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership(t *testing.T
 							t.Cleanup(func() { vNextPublicationRemoveTreeAfterIdentityForTest = nil })
 						}
 
-						guard, err := newVNextGenerationPublisher(worktreeRoot, "acme", vNextPublicationHooks{})
+						guard, err := newVNextGenerationPublisher(worktreeRoot, "acme", vNextPublicationHooks{
+							AfterQuarantineOpen: func(_ *vNextPublicationDirectory, _ string, opened *vNextPublicationDirectory, _ vNextPublicationIdentity) error {
+								quarantineOpened = opened.file
+								return nil
+							},
+							CloseDirectory: func(file *os.File, _ string) error { closes[file]++; return file.Close() },
+						})
 						if err != nil {
 							t.Fatal(err)
 						}
 						err = invoke(guard)
+						for file, count := range closes {
+							if count != 1 {
+								t.Fatalf("directory instance %p Close count=%d", file, count)
+							}
+						}
+						if nestedOpened == nil || closes[nestedOpened] != 1 || quarantineOpened == nil || closes[quarantineOpened] != 1 {
+							t.Fatalf("actual nested/quarantine owners Close=%d/%d", closes[nestedOpened], closes[quarantineOpened])
+						}
+						if _, err := nestedOpened.Stat(); !errors.Is(err, fs.ErrClosed) {
+							t.Fatalf("nested descriptor remains usable: %v", err)
+						}
 						if fault.fstat {
 							if !fstatHit {
 								t.Fatal("public caller did not open the nested child before the fstat injection")
@@ -350,6 +381,13 @@ func TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership(t *testing.T
 						}
 						if residue := vNextPublicationTreeSnapshotForTest(t, candidatePath); len(residue) == 0 {
 							t.Fatal("quarantined candidate has no observable residue")
+						}
+						actualAuthority, authorityErr := vNextPublicationExpectedAuthority(worktreeRoot)
+						if authorityErr != nil {
+							t.Fatal(authorityErr)
+						}
+						if err := vNextPublicationCompareExpectedMembers(actualAuthority, expectedAuthority, true); err != nil {
+							t.Fatal(err)
 						}
 						vNextPublicationAssertDurableControlsAndAuthorityForTest(t, worktreeRoot, "public nested cleanup refusal")
 						// The public caller intentionally makes no all-or-nothing

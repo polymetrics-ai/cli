@@ -1,53 +1,22 @@
-# CP11 acceptance projection — Firstmate079/081
+# CP11 current acceptance projection — Firstmate087/088
 
-This is a compact navigation view of [CP11-ACCEPTANCE.json](CP11-ACCEPTANCE.json), not a second acceptance ledger. The JSON owns every stable row, original authority, object/phase, expected state, assertion and receipt gap. Counts are contract accounting, not new bugs, new requirements or one-test-per-row targets.
+CP11 remains **unaccepted**. [CP11-ACCEPTANCE.json](CP11-ACCEPTANCE.json) is the current contract-to-assertion table; its119 stable supporting rows preserve the original audit/source/test/receipt records. Current proof groups bind exact source hashes, test declarations and assertion locations. Original range begins36e4d980de0d51d92fe74a68306845643596a6cb; audit bound7481d177 and was committed05385336. Design079 and coordinated083/087 govern this repair.
 
-Behavior/test/dependency candidate: `7481d1770a21cc95869fd10bf281f632af48c089`; tree `a2e583336ffa8ad86a0de95110259342bfa6dab0`. Audited evidence commit: `053853368a1514eaadf0b2411ab8740959559797`. Original audit SHA-256: `bc109e85fdde9d1958b2cde7874a3f7b30b8e5d06b1b0c2764088fb34fa3e0a0`. CP11 remains unaccepted.
+| Finding | Current disposition | Concrete proof and remaining gate |
+| --- | --- | --- |
+|7481-01|Implemented; owner assertions bound|Explicit partial-open ownership; common writer owns one Close, bound incomplete cleanup, complete retention/final binding. Three record kinds × six frontiers; seven real phase callers × two targets × three frontiers; valid bootstrap/successor states and remaining result controls. Final coherent package and independent judgment pending.|
+|7481-02|Implemented; owner assertions bound|Separate actual open/completion/cleanup classes; only matching-A raw ENOTEMPTY permits intended retention. Pure retry and128 bound; eight actual prepared/current/committed/rollback/fresh-restoration consumers preserve compound causes and selected state. Final coherent package and independent judgment pending.|
+|7481-03|Proof implemented; owner assertions bound|Ten failed-allocation cells: Publish, direct CURRENT/JOURNAL, generation Prune, stage Recover × empty/nonempty DIRECTORY B. Actual opened A, actor B, raw controls/history/residue, one allocated-root Close and fresh recovery/retry. Existing later-cleanup tests remain complementary.|
+|7481-04|Proof implemented; owner assertions bound|Pre-fault expected full trees and stable history, new completed phase sequence/outcome, actual A/B captured at actor creation. Nine unheld schedules, held reader, early/late stage and separate Check. Counterexamples reject readable wrong root/inode/bytes/history/phase. Final package and semantic challenge pending.|
+|7481-05|Claims corrected; retained proof bound|Nested Publish is initial recovery. Mandatory nested Recover-stage/Prune-generation, four no-GC repetitions and actual child/quarantine Close remain. Post-Stat scope is real Stat plus injected completion, retained nested bytes/outer root; no natural failure, pre-operation child identity or nested final-prune claim.|
+|7481-06|Proof implemented; owner assertions bound|Record partial/short/Sync+Close; identity/Stat/bounded Read+Close; real failed Linkat+Close; capture primary+actual Sync completion+Close; staged actual writable/Sync completion+Close+cleanup. Exact resource-instance counts supplement finite-FD checks.058 staged writable class does not stipulate an additional unconditional Write-error matrix.|
 
-Design: **complete, design only** — [full report](/Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/cp11-ownership-design-079.md). Report SHA-256: `35f8926266fdae784e88d429eeea0b27adcd114a1550ca47cd7dece3f592a417`. The owner read the full return. It selects explicit partial-open ownership, common-writer cleanup of proven-owned incomplete records, retention of complete bound authority, and separate collision/completion classification. No unresolved architecture or product question was reported. Firstmate’s coherent implementation brief remains required.
+Completed focused receipts remain original source-bound observations: initial coordinated195/195 events normal/race104.920/145.784s;087 record9/9 events6.335/10.425s; allocation-consumer9/9 events12.699/19.727s; assertion/resource80/80 events51.863/72.478s. Later pending-Check/F03B assertions race3.299s are a development log, not a substitute for final combined validation. Parent/subtest event counts are not independent test or obligation counts.
 
-| Finding | Kind | Rows | Bounded contract and caller projection |
-| --- | --- | ---: | --- |
-| 7481-01 | Production | 35 | **Creation and partial-record ownership.** Prepared, marker and phase writers; actual phase callers and valid bootstrap/successor classes. |
-| 7481-02 | Production | 14 | **Complete collision outcome.** CreateTemp plus CURRENT/JOURNAL and recovery consumers; pure versus meaningful compound, absence/conflict compatibility. |
-| 7481-03 | Proof | 11 | **Failed-allocation A/B and recovery.** Public Publish, direct CURRENT/JOURNAL, generation Prune, stage Recover; empty/nonempty DIRECTORY B. |
-| 7481-04 | Proof | 30 | **Independent expected state.** Nine unheld generation schedules × empty/nonempty lease-file B; held reader; owned stage; separate Check; oracle counterexamples. |
-| 7481-05 | Claim / retained proof | 6 | **Correct unsupported claims.** Keep mandatory nested Recover-stage/Prune-generation proof. Nested Publish currently reaches initial recovery; extra final-prune scenario optional. |
-| 7481-06 | Proof | 23 | **Stipulated compound controls.** Write/short Write/Sync + Close for each record kind; opened-control siblings, link, capture, stage, one-Close ownership. |
+Full-repository introduced lint from the original base passed with0 issues after13 mechanical package diagnostics were corrected. Test-owned Close results are checked; unused DirectoryFromFD forwarding wrapper removed; test dispatch simplified. These final mechanical changes require the final source-bound package run. Old20 global/15 package/31 introduced observations retain their historical attribution; they are not current counts.
 
-## Actual caller/cut navigation
+All119 `closed` flags remain false because final gate reconciliation and independent Firstmate acceptance are pending. The reusable readiness-checker/negative-fixture framework is rescheduled off CP11's critical path by087; structural ID/reference/hash/symbol checks and actual semantic assertion/receipt inspection remain required. No provider-live, power-loss or Linux-runtime certification is claimed. Original preflight CACHED, scanner success and separate boundary-package CP29 debt remain distinct.
 
-- `01.*`: first-side-effect/partial-success states; prepared/marker/phase frontiers; CURRENT/JOURNAL bootstrap/successor classes; exact phase-call inventory. The linked design supplies representation/ownership; these draft rows remain unclosed.
-- `02.*`: allocation outcome cases and the complete classifier chain. `evidence_binding_gap` means the current explicit binding is missing; it does not assert a new standalone test is required.
-- `03.*`: actual failed allocations must preserve actor-created DIRECTORY B and opened A, exact residue and fresh recovery. Existing direct CURRENT/JOURNAL fixtures allocate successfully and fail later cleanup; their wrong-phase status is explicit.
-- `04.cut.*`: explicit Prune; no-JOURNAL Recover; Open; Publish initial recovery; prepared/new-selected Recover; committed/new-selected Recover; successful Publish final prune; rejected-new fresh Recover; immediate rollback; held-reader Prune; owned stale-stage Recover. Check is separate and non-destructive. Only the nine unheld generation rows have both empty/nonempty regular lease-file B requirements. Stage uses its marker/root; held reader keeps empty B.
-- `04.oracle.*`: unrelated readable root, same bytes/wrong identity, missing/replaced stable history, wrong phase, F03A old-history skips and actor-B timing. Legitimate new controls/phases/history must remain permitted.
-- `05.*`: preserve genuine mandatory nested resource coverage; correct initial-recovery/final-prune and post-Stat child-identity overclaims without inventing new guarantees.
-- `06.*`: retain useful existing compounds and complete the explicitly missing 058 combinations. Existing successful-link+Close or pre-Sync+Close does not silently replace failed-link+Close or real writable completion.
+Firstmate088 permits read-only review to overlap final deterministic validation on the frozen candidate. No source/test/dependency mutation during overlap. Firstmate authors the review prompt and reconciles the final verdict; no CP12, push, no-mistakes run or merge is authorized here.
 
-## Current readiness
-
-All 119 rows remain open or partial. Current disposition counts, derived from JSON:
-
-- `claim_correction_pending`: 2.
-- `evidence_binding_gap`: 26.
-- `incomplete_assertion`: 42.
-- `missing_negative_control`: 7.
-- `missing_test`: 13.
-- `oracle_counterexample`: 1.
-- `original_desired_red`: 6.
-- `partial_existing_coverage`: 14.
-- `retained_bounded_coverage`: 4.
-- `wrong_phase_existing_test`: 4.
-
-101 rows have no bound exact assertion location; 33 have no receipt reference. These are draft evidence gaps, not 101 proven absent tests or 33 required new executions. Structural ID/reference/symbol/hash/caller-variant checks passed; semantic completeness, repaired GREEN, final original-range lint and independent acceptance remain pending.
-
-## Evidence custody and prompt use
-
-External test bytes are separate from production SHA 7481. The JSON records each content hash, overlay hash and added virtual test path. The supplied three-probe result is a **transcription** (exit 1: two production REDs and an oracle counterexample). The new marker/phase four-cell result is an **original tool command/result capture**, not a rollout export (exit 1, 1.079s/5.26s). Neither modifies existing project sources/tests or supplies GREEN.
-
-The normal/race package receipts (319.928s/783.834s) bind intended final precommit source, not a postcommit run or semantic closure. Cached preflight, recovered scanner success, separate package failure and CP29 debt remain distinct. Prior resolved B01/B02/R3/F01/F02/F04R/F08R/F07 protections remain in JSON by reference.
-
-Use this projection plus exact relevant obligation IDs in later Firstmate-authored prompts; fetch detail on demand. Do not paste the full JSON or duplicate the original reports into each prompt. The approved execution policy retains CP11 original-base full-range review; accepted-baseline scopes apply later.
-
-Existing delivery: https://github.com/polymetrics-ai/cli/pull/4294.
+Delivery: https://github.com/polymetrics-ai/cli/pull/4294.

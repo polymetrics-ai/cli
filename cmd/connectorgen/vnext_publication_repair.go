@@ -507,7 +507,11 @@ func vNextPublicationWriteControlRepairRecord(directory *vNextPublicationDirecto
 			}
 		}
 	}()
-	identity, identityErr := vNextPublicationIdentityFromFile(file, label)
+	identify := vNextPublicationIdentityFromFile
+	if hooks.Identity != nil {
+		identify = hooks.Identity
+	}
+	identity, identityErr := identify(file, label)
 	if identityErr != nil {
 		vNextPublicationRecordError(&err, "identify "+label, identityErr)
 		return result, err
@@ -1388,7 +1392,13 @@ func (p *vNextGenerationPublisher) createControlRepairLocked(operation *vNextPub
 			if err != nil {
 				return nil, err
 			}
-			linkErr := transaction.linkFromBound(predecessorTransaction, predecessor.selected.Member, vNextPublicationControlBackupMember, "publication control prior anchor", identity)
+			var linkErr error
+			if p.hooks.BeforeRepairPredecessorLink != nil {
+				linkErr = p.hooks.BeforeRepairPredecessorLink(transaction)
+			}
+			if linkErr == nil {
+				linkErr = transaction.linkFromBound(predecessorTransaction, predecessor.selected.Member, vNextPublicationControlBackupMember, "publication control prior anchor", identity)
+			}
 			if linkErr == nil {
 				// The link is a known owned creation before the later fallible
 				// predecessor Close returns through !keep cleanup.

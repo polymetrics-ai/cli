@@ -1,0 +1,97 @@
+=== RUN   TestCP11OwnershipSevenPhaseCallers
+=== RUN   TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/CURRENT/parent-close-after-create
+=== RUN   TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/CURRENT/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/CURRENT/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/JOURNAL/parent-close-after-create
+=== RUN   TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/JOURNAL/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/JOURNAL/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/CURRENT/parent-close-after-create
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/CURRENT/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/CURRENT/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/JOURNAL/parent-close-after-create
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/JOURNAL/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/JOURNAL/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/CURRENT/parent-close-after-create
+=== RUN   TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/CURRENT/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/CURRENT/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/JOURNAL/parent-close-after-create
+=== RUN   TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/JOURNAL/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/JOURNAL/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/CURRENT/parent-close-after-create
+    vnext_publication_phase_frontier_test.go:249: actual caller/cut cause: fired=false closed=0 err=close publication control repair phase parent: phase parent frontier lacks actual empty created record
+=== RUN   TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/CURRENT/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/CURRENT/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/JOURNAL/parent-close-after-create
+    vnext_publication_phase_frontier_test.go:249: actual caller/cut cause: fired=false closed=0 err=close publication control repair phase parent: phase parent frontier lacks actual empty created record
+=== RUN   TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/JOURNAL/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/JOURNAL/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/CURRENT/parent-close-after-create
+    vnext_publication_phase_frontier_test.go:249: actual caller/cut cause: fired=false closed=0 err=close publication control repair phase parent: phase parent frontier lacks actual empty created record
+=== RUN   TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/CURRENT/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/CURRENT/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/JOURNAL/parent-close-after-create
+    vnext_publication_phase_frontier_test.go:249: actual caller/cut cause: fired=false closed=0 err=close publication control repair phase parent: phase parent frontier lacks actual empty created record
+=== RUN   TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/JOURNAL/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/JOURNAL/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/CURRENT/parent-close-after-create
+    vnext_publication_phase_frontier_test.go:249: actual caller/cut cause: fired=false closed=0 err=close publication control repair phase parent: phase parent frontier lacks actual empty created record
+=== RUN   TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/CURRENT/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/CURRENT/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/JOURNAL/parent-close-after-create
+    vnext_publication_phase_frontier_test.go:249: actual caller/cut cause: fired=false closed=0 err=close publication control repair phase parent: phase parent frontier lacks actual empty created record
+=== RUN   TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/JOURNAL/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/JOURNAL/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/CURRENT/parent-close-after-create
+    vnext_publication_phase_frontier_test.go:249: actual caller/cut cause: fired=false closed=0 err=close publication control repair phase parent: phase parent frontier lacks actual empty created record
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/CURRENT/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/CURRENT/sync-completion
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/JOURNAL/parent-close-after-create
+    vnext_publication_phase_frontier_test.go:249: actual caller/cut cause: fired=false closed=0 err=close publication control repair phase parent: phase parent frontier lacks actual empty created record
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/JOURNAL/partial-write
+=== RUN   TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/JOURNAL/sync-completion
+--- FAIL: TestCP11OwnershipSevenPhaseCallers (19.55s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/CURRENT/parent-close-after-create (0.41s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/CURRENT/partial-write (0.36s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/CURRENT/sync-completion (0.36s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/JOURNAL/parent-close-after-create (0.36s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/JOURNAL/partial-write (0.39s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/createControlRepairLocked/JOURNAL/sync-completion (0.40s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/CURRENT/parent-close-after-create (0.42s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/CURRENT/partial-write (0.40s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/CURRENT/sync-completion (0.40s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/JOURNAL/parent-close-after-create (0.38s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/JOURNAL/partial-write (0.39s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resumeBaseControlAuthorityLocked/JOURNAL/sync-completion (0.36s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/CURRENT/parent-close-after-create (0.52s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/CURRENT/partial-write (0.46s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/CURRENT/sync-completion (0.47s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/JOURNAL/parent-close-after-create (0.53s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/JOURNAL/partial-write (0.56s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/beginControlCaptureLocked/JOURNAL/sync-completion (0.52s)
+    --- FAIL: TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/CURRENT/parent-close-after-create (0.41s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/CURRENT/partial-write (0.54s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/CURRENT/sync-completion (0.47s)
+    --- FAIL: TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/JOURNAL/parent-close-after-create (0.37s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/JOURNAL/partial-write (0.57s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/completeControlCaptureLocked/JOURNAL/sync-completion (0.60s)
+    --- FAIL: TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/CURRENT/parent-close-after-create (0.41s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/CURRENT/partial-write (0.57s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/CURRENT/sync-completion (0.50s)
+    --- FAIL: TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/JOURNAL/parent-close-after-create (0.39s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/JOURNAL/partial-write (0.49s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/selectControlStateLocked/JOURNAL/sync-completion (0.58s)
+    --- FAIL: TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/CURRENT/parent-close-after-create (0.37s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/CURRENT/partial-write (0.58s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/CURRENT/sync-completion (0.59s)
+    --- FAIL: TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/JOURNAL/parent-close-after-create (0.39s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/JOURNAL/partial-write (0.58s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/terminalizeRetryLocked/JOURNAL/sync-completion (0.56s)
+    --- FAIL: TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/CURRENT/parent-close-after-create (0.41s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/CURRENT/partial-write (0.51s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/CURRENT/sync-completion (0.50s)
+    --- FAIL: TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/JOURNAL/parent-close-after-create (0.35s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/JOURNAL/partial-write (0.60s)
+    --- PASS: TestCP11OwnershipSevenPhaseCallers/resolveControlRepairLocked/JOURNAL/sync-completion (0.54s)
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	20.480s
+FAIL

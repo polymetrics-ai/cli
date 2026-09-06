@@ -115,6 +115,9 @@ type vNextPublicationHooks struct {
 	// CloseRepairPredecessor is the matching narrow test seam for an already
 	// linked predecessor anchor during failed repair creation.
 	CloseRepairPredecessor func(*vNextPublicationDirectory) error
+	// BeforeRepairPredecessorLink permits a fixture to create an actual link
+	// collision in the newly owned transaction. Production leaves it nil.
+	BeforeRepairPredecessorLink func(*vNextPublicationDirectory) error
 	// CloseDirectory and CloseStageFile are nil-by-default test seams for
 	// compound completion paths. Their callbacks must perform the real Close
 	// before returning an injected completion error.
@@ -131,9 +134,10 @@ type vNextPublicationHooks struct {
 // authority-record writer. It is test instrumentation, not a filesystem
 // abstraction: nil callbacks use the direct os.File operation in production.
 type vNextPublicationControlRecordHooks struct {
-	Write func(*os.File, string, []byte) (int, error)
-	Sync  func(*os.File, string) error
-	Close func(*os.File, string) error
+	Identity func(*os.File, string) (vNextPublicationIdentity, error)
+	Write    func(*os.File, string, []byte) (int, error)
+	Sync     func(*os.File, string) error
+	Close    func(*os.File, string) error
 }
 type vNextPublicationArtifacts struct {
 	Files    map[string][]byte
@@ -1314,6 +1318,9 @@ func vNextPublicationPureNotExist(err error) bool {
 // descriptor directly.
 var vNextPublicationAfterReadOpenControlForTest func(*os.File, string) error
 var vNextPublicationCloseReadControlForTest func(*os.File, string) error
+var vNextPublicationReadControlIdentityForTest func(*os.File, string) (vNextPublicationIdentity, error)
+var vNextPublicationReadControlStatForTest func(*os.File, string) (os.FileInfo, error)
+var vNextPublicationReadControlReaderForTest func(*os.File, string) io.Reader
 
 func vNextPublicationCloseReadControl(file *os.File, label string) error {
 	if vNextPublicationCloseReadControlForTest != nil {
@@ -1330,7 +1337,11 @@ func vNextPublicationReadControlBound(root *vNextPublicationDirectory, name, lab
 	if err != nil {
 		return nil, true, vNextPublicationIdentity{}, err
 	}
-	identity, err := vNextPublicationIdentityFromFile(handle, label)
+	identify := vNextPublicationIdentityFromFile
+	if vNextPublicationReadControlIdentityForTest != nil {
+		identify = vNextPublicationReadControlIdentityForTest
+	}
+	identity, err := identify(handle, label)
 	if err != nil {
 		vNextPublicationRecordError(&err, "close "+label, vNextPublicationCloseReadControl(handle, label))
 		return nil, true, vNextPublicationIdentity{}, err
@@ -1347,14 +1358,22 @@ func vNextPublicationReadControlBound(root *vNextPublicationDirectory, name, lab
 }
 
 func vNextPublicationReadOpenControl(handle *os.File, label string) ([]byte, error) {
-	info, err := handle.Stat()
+	stat := handle.Stat
+	if vNextPublicationReadControlStatForTest != nil {
+		stat = func() (os.FileInfo, error) { return vNextPublicationReadControlStatForTest(handle, label) }
+	}
+	info, err := stat()
 	if err != nil {
 		return nil, fmt.Errorf("stat %s: %w", label, err)
 	}
 	if info.Size() < 0 || info.Size() > vNextPublicationControlMaxBytes {
 		return nil, fmt.Errorf("%s exceeds %d-byte limit", label, vNextPublicationControlMaxBytes)
 	}
-	payload, err := io.ReadAll(io.LimitReader(handle, vNextPublicationControlMaxBytes+1))
+	var reader io.Reader = handle
+	if vNextPublicationReadControlReaderForTest != nil {
+		reader = vNextPublicationReadControlReaderForTest(handle, label)
+	}
+	payload, err := io.ReadAll(io.LimitReader(reader, vNextPublicationControlMaxBytes+1))
 	if err != nil {
 		return nil, fmt.Errorf("read %s: %w", label, err)
 	}

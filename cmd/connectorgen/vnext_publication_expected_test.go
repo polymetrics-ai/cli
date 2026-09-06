@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"golang.org/x/sys/unix"
@@ -10,6 +11,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -203,5 +205,162 @@ func TestCP11ExpectedTreeRejectsWrongReadableState(t *testing.T) {
 				t.Fatal("accepted deliberately wrong readable state")
 			}
 		})
+	}
+}
+
+// Authority expectations contain explicit public heads and every private member.
+// Temporary write directories are not authority and may be removed on return.
+func vNextPublicationExpectedAuthority(root string) (vNextPublicationExpectedTree, error) {
+	all, err := vNextPublicationObserveExpectedTree(filepath.Join(root, "acme"))
+	if err != nil {
+		return nil, err
+	}
+	authority := make(vNextPublicationExpectedTree)
+	for name, member := range all {
+		first := strings.Split(filepath.ToSlash(name), "/")[0]
+		if first == vNextPublicationCurrentFile || first == vNextPublicationJournalFile || first == vNextPublicationControlAuthorityMarkerFile || strings.HasPrefix(first, vNextPublicationControlRepairDirectoryPrefix) {
+			authority[name] = member
+		}
+	}
+	return authority, nil
+}
+
+func vNextPublicationCompareExpectedMembers(got, want vNextPublicationExpectedTree, exact bool) error {
+	if exact && len(got) != len(want) {
+		return fmt.Errorf("authority membership got %d want %d", len(got), len(want))
+	}
+	for path, expected := range want {
+		actual, found := got[path]
+		if !found || actual.identity != expected.identity || !bytes.Equal(actual.payload, expected.payload) {
+			return fmt.Errorf("authority %s identity/type/bytes changed", path)
+		}
+	}
+	return nil
+}
+
+func vNextPublicationExpectedStableAuthority(root string) (vNextPublicationExpectedTree, error) {
+	authority, err := vNextPublicationExpectedAuthority(root)
+	if err != nil {
+		return nil, err
+	}
+	delete(authority, vNextPublicationCurrentFile)
+	delete(authority, vNextPublicationJournalFile)
+	return authority, nil
+}
+
+func vNextPublicationCaptureExpectedCut(root string, prior vNextPublicationExpectedTree) (vNextPublicationExpectedTree, error) {
+	authority, err := vNextPublicationExpectedStableAuthority(root)
+	if err != nil {
+		return nil, err
+	}
+	// Existing authority members are immutable. New phases may be appended, but
+	// never excuse replacement or loss of an earlier prepared/anchor/capture.
+	if err := vNextPublicationCompareExpectedMembers(authority, prior, false); err != nil {
+		return nil, err
+	}
+	if err := vNextPublicationExpectedCompletedTransitions(authority, prior); err != nil {
+		return nil, err
+	}
+	return vNextPublicationObserveExpectedTree(filepath.Join(root, "acme"))
+}
+
+func vNextPublicationExpectedPublicControls(root string) (vNextPublicationExpectedTree, error) {
+	authority, err := vNextPublicationExpectedAuthority(root)
+	if err != nil {
+		return nil, err
+	}
+	controls := make(vNextPublicationExpectedTree)
+	for _, name := range []string{vNextPublicationCurrentFile, vNextPublicationJournalFile} {
+		if member, found := authority[name]; found {
+			controls[name] = member
+		}
+	}
+	return controls, nil
+}
+
+// Cleanup fixtures have no public-control interference before the lease/root
+// cut. Every newly completed successor must therefore have the four prescribed
+// phases and commit its intended selection. This independent schedule check
+// supplements byte/identity preservation and the production graph decoder.
+func vNextPublicationExpectedCompletedTransitions(current, prior vNextPublicationExpectedTree) error {
+	for path, member := range current {
+		if filepath.Base(path) != vNextPublicationControlRepairPreparedFile {
+			continue
+		}
+		if _, existed := prior[path]; existed {
+			continue
+		}
+		var prepared vNextPublicationControlRepair
+		if err := json.Unmarshal(member.payload, &prepared); err != nil {
+			return err
+		}
+		states := []string{"capture_intent", "captured", "selected", "terminal"}
+		if prepared.Predecessor == nil {
+			states = []string{"terminal"}
+		}
+		transaction := filepath.Dir(path)
+		for i, state := range states {
+			name := filepath.Join(transaction, vNextPublicationControlRepairPhaseName(i+1))
+			var phase vNextPublicationControlRepairPhase
+			record, found := current[name]
+			if !found {
+				return fmt.Errorf("expected completed cleanup transition missing %s", name)
+			}
+			if err := json.Unmarshal(record.payload, &phase); err != nil {
+				return err
+			}
+			if phase.Sequence != i+1 || phase.State != state {
+				return fmt.Errorf("wrong cleanup phase %s: sequence=%d state=%s", name, phase.Sequence, phase.State)
+			}
+			if state == "terminal" && (phase.Outcome != "committed" || phase.Selected == nil || !phase.Selected.sameLogical(prepared.Intended)) {
+				return fmt.Errorf("wrong cleanup terminal selection %s", name)
+			}
+		}
+		if _, extra := current[filepath.Join(transaction, vNextPublicationControlRepairPhaseName(len(states)+1))]; extra {
+			return fmt.Errorf("unexpected extra cleanup phase in %s", transaction)
+		}
+	}
+	return nil
+}
+
+func TestCP11ExpectedCleanupScheduleRejectsWrongPhase(t *testing.T) {
+	root := t.TempDir()
+	publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := publisher.Publish(vNextPublicationArtifactsForTest("schedule", false)); err != nil {
+		t.Fatal(err)
+	}
+	expected, err := vNextPublicationExpectedStableAuthority(root)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := vNextPublicationExpectedCompletedTransitions(expected, nil); err != nil {
+		t.Fatal(err)
+	}
+	changed := false
+	for path, member := range expected {
+		if filepath.Base(path) != vNextPublicationControlRepairPhaseName(3) {
+			continue
+		}
+		var phase vNextPublicationControlRepairPhase
+		if err := json.Unmarshal(member.payload, &phase); err != nil {
+			t.Fatal(err)
+		}
+		phase.State = "captured" // readable valid enum, wrong position in actual schedule
+		member.payload, err = json.Marshal(phase)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expected[path] = member
+		changed = true
+		break
+	}
+	if !changed {
+		t.Fatal("no actual successor third phase for negative control")
+	}
+	if err := vNextPublicationExpectedCompletedTransitions(expected, nil); err == nil {
+		t.Fatal("accepted wrong cleanup phase")
 	}
 }

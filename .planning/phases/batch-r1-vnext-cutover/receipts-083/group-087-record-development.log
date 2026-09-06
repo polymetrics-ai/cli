@@ -1,0 +1,6 @@
+--- FAIL: TestCP11OwnershipRemainingControlStates (2.46s)
+    --- FAIL: TestCP11OwnershipRemainingControlStates/JOURNAL-absent-absent-noop (0.40s)
+        vnext_publication_record_result_test.go:192: absence no-op wrote record: fired=1 err=sync publication control repair prepared authority: complete prepared record Sync completion
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	3.382s
+FAIL

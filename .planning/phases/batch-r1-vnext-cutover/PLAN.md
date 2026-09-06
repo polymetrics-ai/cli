@@ -1489,3 +1489,25 @@ Green: pending. No repaired capability or CP11 acceptance is claimed.
 Production/test changes begin only after this plan record. Each completed command
 will retain exact source/test/dependency binding and raw results. The 119 existing
 rows and all prior resolved protections remain accountable by manifest reference.
+
+## Current coordinated083/087 freeze preparation (088 scheduling)
+
+Current six-disposition projection: [CP11-ACCEPTANCE-SUMMARY.md](CP11-ACCEPTANCE-SUMMARY.md).
+The one current machine-readable contract-to-assertion table is CP11-ACCEPTANCE.json;
+its original119 IDs and historical RED/source/result records remain intact. Current
+proof groups bind exact function/assertion locations and source hashes, not names
+alone. All six findings have owner implementation/proof dispositions; final source
+package normal/race and independent original-range review remain pending. No row
+is independently closed and CP11 is not accepted. The current Atlas records common
+record ownership and collision completion behavior; nested claims are narrowed to
+the actual initial-recovery/post-Stat proof. Production086/087 defect fixes were
+not invented from fixture expectation failures.087 added proof only; the last lint
+cleanup removes an unused forwarding wrapper without changing any live call path.
+
+Go how-to/testing/error-handling, pinned exhaustive review/evidence dependencies,
+and existing issue-first inline GSD execution remain the routing. Original RED and
+coordinated repair evidence precede this later proof.087 reschedules optional
+reusable readiness-checker infrastructure; existing structural checks and semantic
+assertion inspection remain mandatory.088 authorizes Firstmate-authored read-only
+review overlapping final deterministic checks on the frozen candidate. No source,
+test or dependency mutation during overlap; acceptance waits every required gate.

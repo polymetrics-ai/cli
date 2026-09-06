@@ -190,7 +190,23 @@ func TestCP11F03ARepairPreparationFrontierMatrix(t *testing.T) {
 				}
 				knownTransactions := vNextPublicationRepairTransactionsForTest(t, filepath.Join(root, "acme"))
 				injected := errors.New("injected " + frontier.name)
-				writer, err := newVNextGenerationPublisher(root, "acme", frontier.hooks(injected))
+				hooks := frontier.hooks(injected)
+				var beforeRecord vNextPublicationExpectedTree
+				originalAt := hooks.At
+				hooks.At = func(point vNextPublicationFaultPoint) error {
+					if point == vNextPublicationBeforeControlRepairRecord {
+						var err error
+						beforeRecord, err = vNextPublicationExpectedAuthority(root)
+						if err != nil {
+							return err
+						}
+					}
+					if originalAt != nil {
+						return originalAt(point)
+					}
+					return nil
+				}
+				writer, err := newVNextGenerationPublisher(root, "acme", hooks)
 				if err != nil {
 					t.Fatal(err)
 				}
@@ -213,6 +229,16 @@ func TestCP11F03ARepairPreparationFrontierMatrix(t *testing.T) {
 				}
 				connectorRoot := filepath.Join(root, "acme")
 				if frontier.keepGraph {
+					afterRecord, err := vNextPublicationExpectedAuthority(root)
+					if err != nil {
+						t.Fatal(err)
+					}
+					if beforeRecord == nil {
+						t.Fatal("missing pre-record anchor witness")
+					}
+					if err := vNextPublicationCompareExpectedMembers(afterRecord, beforeRecord, false); err != nil {
+						t.Fatalf("pre-record controls/anchors changed: %v", err)
+					}
 					vNextPublicationAssertPendingPreparedGraphForTest(t, fresh, connectorRoot, target.control, target.prior, target.intended, knownTransactions)
 					beforeCheck := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
 					if err := fresh.Check(artifacts); err == nil {
@@ -294,7 +320,7 @@ func TestCP11F03ARepairBasePresentPresentAuthorityRecovers(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			vNextPublicationAssertPendingPreparedGraphForTest(t, fresh, connectorRoot, target, true, true, map[string]struct{}{})
+			vNextPublicationAssertPendingPreparedGraphForTest(t, fresh, connectorRoot, target, true, true, map[string]vNextPublicationExpectedTree{})
 			beforeCheck := vNextPublicationTreeSnapshotForTest(t, connectorRoot)
 			if err := fresh.Check(artifacts); err == nil {
 				t.Fatalf("Check() during %s present-present base interruption succeeded", target)
@@ -328,21 +354,28 @@ func vNextPublicationRemoveAuthorityGraphForTest(t *testing.T, connectorRoot str
 	}
 }
 
-func vNextPublicationRepairTransactionsForTest(t *testing.T, connectorRoot string) map[string]struct{} {
+func vNextPublicationRepairTransactionsForTest(t *testing.T, connectorRoot string) map[string]vNextPublicationExpectedTree {
 	t.Helper()
 	transactions, err := filepath.Glob(filepath.Join(connectorRoot, vNextPublicationControlRepairDirectoryPrefix+"*"))
 	if err != nil {
 		t.Fatal(err)
 	}
-	result := make(map[string]struct{}, len(transactions))
+	result := make(map[string]vNextPublicationExpectedTree, len(transactions))
 	for _, transaction := range transactions {
-		result[filepath.Base(transaction)] = struct{}{}
+		snapshot, err := vNextPublicationObserveExpectedTree(transaction)
+		if err != nil {
+			t.Fatal(err)
+		}
+		result[filepath.Base(transaction)] = snapshot
 	}
 	return result
 }
 
-func vNextPublicationAssertNoPreparedGraphForTest(t *testing.T, connectorRoot string, knownTransactions map[string]struct{}) {
+func vNextPublicationAssertNoPreparedGraphForTest(t *testing.T, connectorRoot string, knownTransactions map[string]vNextPublicationExpectedTree) {
 	t.Helper()
+	for name, expected := range knownTransactions {
+		vNextPublicationAssertExpectedTree(t, filepath.Join(connectorRoot, name), expected)
+	}
 	for name := range vNextPublicationRepairTransactionsForTest(t, connectorRoot) {
 		if _, existed := knownTransactions[name]; existed {
 			continue
@@ -356,8 +389,11 @@ func vNextPublicationAssertNoPreparedGraphForTest(t *testing.T, connectorRoot st
 	}
 }
 
-func vNextPublicationAssertPendingPreparedGraphForTest(t *testing.T, publisher *vNextGenerationPublisher, connectorRoot, target string, wantPriorPresent, wantIntendedPresent bool, knownTransactions map[string]struct{}) {
+func vNextPublicationAssertPendingPreparedGraphForTest(t *testing.T, publisher *vNextGenerationPublisher, connectorRoot, target string, wantPriorPresent, wantIntendedPresent bool, knownTransactions map[string]vNextPublicationExpectedTree) {
 	t.Helper()
+	for name, expected := range knownTransactions {
+		vNextPublicationAssertExpectedTree(t, filepath.Join(connectorRoot, name), expected)
+	}
 	operation, err := publisher.openOperation(context.Background(), unix.LOCK_SH, false)
 	if err != nil {
 		t.Fatal(err)
@@ -782,12 +818,23 @@ func vNextPublicationCreateReplacementBForTest(parent *vNextPublicationDirectory
 }
 
 func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
+	// Retain pointers across sequential controls to distinguish resource instances
+	// despite descriptor-number reuse. Each callback performs one actual Close.
+	closedFiles := make(map[*os.File]int)
+	closeFile := func(file *os.File) error {
+		closedFiles[file]++
+		if closedFiles[file] != 1 {
+			t.Errorf("compound resource instance %p Close=%d", file, closedFiles[file])
+		}
+		return file.Close()
+	}
+
 	t.Run("definitions and connector close", func(t *testing.T) {
 		root := t.TempDir()
 		definitionsClose := errors.New("injected definitions close failure")
 		connectorClose := errors.New("injected connector close failure")
 		publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{CloseDirectory: func(file *os.File, label string) error {
-			if err := file.Close(); err != nil {
+			if err := closeFile(file); err != nil {
 				return err
 			}
 			switch label {
@@ -815,7 +862,7 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 		root := t.TempDir()
 		completion := errors.New("injected missing-control parent close failure")
 		publisher, err := newVNextGenerationPublisher(root, "acme", vNextPublicationHooks{CloseDirectory: func(file *os.File, label string) error {
-			if err := file.Close(); err != nil {
+			if err := closeFile(file); err != nil {
 				return err
 			}
 			if label == "original missing control" {
@@ -851,7 +898,7 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 				return nil
 			},
 			CloseStageFile: func(file *os.File) error {
-				if err := file.Close(); err != nil {
+				if err := closeFile(file); err != nil {
 					return err
 				}
 				return completion
@@ -901,7 +948,7 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 				return nil
 			},
 			CloseDirectory: func(file *os.File, label string) error {
-				if err := file.Close(); err != nil {
+				if err := closeFile(file); err != nil {
 					return err
 				}
 				if label == "publication control capture" {
@@ -923,7 +970,7 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 		root := t.TempDir()
 		completion := errors.New("injected failed-open parent close")
 		directory, err := vNextPublicationOpenDirectoryWithCloseForTest(root, "compound root", func(file *os.File, label string) error {
-			if err := file.Close(); err != nil {
+			if err := closeFile(file); err != nil {
 				return err
 			}
 			if label == "compound missing control" {
@@ -934,7 +981,11 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer directory.Close()
+		defer func() {
+			if err := directory.Close(); err != nil {
+				t.Errorf("close test-owned directory: %v", err)
+			}
+		}()
 		if _, err := directory.openFile("missing-control", "compound missing control", unix.O_RDONLY, 0, false); !errors.Is(err, fs.ErrNotExist) || !errors.Is(err, completion) {
 			t.Fatalf("failed open/parent close = %v, want absence and completion causes", err)
 		}
@@ -945,7 +996,7 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 		parentCompletion := errors.New("injected opened-file parent close")
 		fileCompletion := errors.New("injected opened-file completion")
 		directory, err := vNextPublicationOpenDirectoryWithCloseForTest(root, "compound root", func(file *os.File, label string) error {
-			if err := file.Close(); err != nil {
+			if err := closeFile(file); err != nil {
 				return err
 			}
 			if label == "compound opened file" {
@@ -956,7 +1007,11 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer directory.Close()
+		defer func() {
+			if err := directory.Close(); err != nil {
+				t.Errorf("close test-owned directory: %v", err)
+			}
+		}()
 		vNextPublicationCloseOpenedFileAfterParentCloseForTest = func(fd int, label string) error {
 			if err := unix.Close(fd); err != nil {
 				return err
@@ -975,7 +1030,11 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer directory.Close()
+		defer func() {
+			if err := directory.Close(); err != nil {
+				t.Errorf("close test-owned directory: %v", err)
+			}
+		}()
 		if payload, found, _, err := vNextPublicationReadControlBound(directory, "pure-absence", "pure absent control"); payload != nil || found || err != nil {
 			t.Fatalf("pure absence = payload=%q found=%t err=%v, want clean absence", payload, found, err)
 		}
@@ -984,10 +1043,10 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 			t.Fatal(err)
 		}
 		if _, err := file.Write([]byte("control payload")); err != nil {
-			_ = file.Close()
+			_ = closeFile(file)
 			t.Fatal(err)
 		}
-		if err := file.Close(); err != nil {
+		if err := closeFile(file); err != nil {
 			t.Fatal(err)
 		}
 		primary := errors.New("injected read completion")
@@ -999,7 +1058,7 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 			return primary
 		}
 		vNextPublicationCloseReadControlForTest = func(file *os.File, label string) error {
-			if err := file.Close(); err != nil {
+			if err := closeFile(file); err != nil {
 				return err
 			}
 			return completion
@@ -1028,7 +1087,11 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 				if err != nil {
 					t.Fatal(err)
 				}
-				defer directory.Close()
+				defer func() {
+					if err := directory.Close(); err != nil {
+						t.Errorf("close test-owned directory: %v", err)
+					}
+				}()
 				payload := []byte("shared record payload")
 				record, err := vNextPublicationWriteControlRepairRecord(directory, label.file, label.name, payload, vNextPublicationControlRecordHooks{Write: func(file *os.File, _ string, payload []byte) (int, error) {
 					return file.Write(payload[:len(payload)-1])
@@ -1051,7 +1114,7 @@ func TestCP11F03BRepairCompoundCausesRemainInspectable(t *testing.T) {
 					},
 					Close: func(file *os.File, _ string) error {
 						closed++
-						if err := file.Close(); err != nil {
+						if err := closeFile(file); err != nil {
 							return err
 						}
 						return closeCompletion
