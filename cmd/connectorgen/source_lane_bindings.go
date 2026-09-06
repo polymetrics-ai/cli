@@ -32,6 +32,25 @@ type sourceLaneBindingInputs struct {
 // resolveSourceLaneBindings reports each reference independently. Artifact
 // existence never supplies membership or behavioral proof.
 func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annotation sourceSemanticAnnotation, cells []sourceLaneCell) []sourceLaneCell {
+	all := append(append([]sourceLaneTargetRef{}, annotation.IntendedBindings...), annotation.MaterializedBindings...)
+	conflicts := make([]string, len(all))
+	for i := range all {
+		for j := 0; j < i; j++ {
+			a, b := all[i], all[j]
+			a.FieldMappings = nil
+			b.FieldMappings = nil
+			if !sourceLaneTargetRefEqual(a, b) {
+				continue
+			}
+			code := "target_projection_conflict"
+			if sourceLaneTargetRefEqual(all[i], all[j]) {
+				code = "target_duplicate_claim"
+			}
+			conflicts[i] = code
+			conflicts[j] = code
+		}
+	}
+	position := -1
 	// Explicit source claims are checked even when no target materializes.
 	for _, issue := range sourceLaneGraphQLCitations(facts, annotation.GraphQL) {
 		for i := range cells {
@@ -43,6 +62,7 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 		claimed bool
 	}{{annotation.IntendedBindings, false}, {annotation.MaterializedBindings, true}} {
 		for _, ref := range group.refs {
+			position++
 			index := -1
 			for i := range cells {
 				if cells[i].Lane == ref.Lane {
@@ -67,6 +87,9 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 			if err := sourceLaneTargetRefShape(ref); err != nil {
 				add("target_projection_shape_invalid", "error")
 				continue
+			}
+			if conflicts[position] != "" {
+				add(conflicts[position], "error")
 			}
 			if cells[index].Applicability != "applicable" {
 				add("target_applicability_conflict", "error")
@@ -155,7 +178,7 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				d := sourceLaneDiagnostic{Key: key, Lanes: []string{ref.Lane}, Stage: "reference", Code: issue.Code, Pointer: issue.Pointer, Owner: key.Connector, Severity: severity}
 				cells[index].Diagnostics = append(cells[index].Diagnostics, d)
 			}
-			if len(issues) == 0 && len(claims) == 0 {
+			if len(issues) == 0 && len(claims) == 0 && conflicts[position] == "" {
 				cells[index].References = append(cells[index].References, canonicalSourceLaneTargetRef(ref))
 			}
 		}
@@ -1240,6 +1263,23 @@ func sourceLaneCheckPresent(key sourceOperationKey, facts sourceFacts, a sourceS
 	bundle := facts.bindings.Bundles[key.Connector]
 	if observed.REST != nil {
 		add(sourceLaneRESTParameterContract(facts, *observed.REST), ptr)
+	} else {
+		for _, parameter := range facts.Parameters {
+			mapped := false
+			for _, m := range ref.FieldMappings {
+				mapped = mapped || m.Source == parameter.Ref
+			}
+			if !mapped {
+				if parameter.Required {
+					add("target_parameter_mismatch", parameter.Ref.Pointer)
+				} else {
+					add("target_parameter_contract_unverified", parameter.Ref.Pointer)
+				}
+			}
+		}
+		if observed.Write != nil && len(observed.Write.Query) > 0 || observed.Stream != nil && (len(observed.Stream.Query) > 0 || len(observed.Stream.Headers) > 0) {
+			add("target_parameter_contract_unverified", ptr)
+		}
 	}
 	add(sourceLaneRouteContract(facts, ref, observed, bundle), ptr)
 	issues = append(issues, sourceLaneGraphQLContract(facts, a, ref, observed)...)
@@ -1448,6 +1488,11 @@ func sourceLaneCheckAggregate(key sourceOperationKey, facts sourceFacts, a sourc
 	if ref.Kind == "canonical_operation" {
 		if ref.ID != ref.CanonicalID || ref.Pointer != "/operations/"+strconv.Itoa(source.Index) || ref.CanonicalPointer != "/operations/"+strconv.Itoa(source.CanonicalIndex) {
 			add("canonical_provenance_mismatch")
+		}
+		selected, err := sourceJSONPointer(raw, ref.Pointer)
+		var authored vNextOperationDescriptor
+		if err != nil || decodeStrictJSON(selected, &authored) != nil || source.Index < 0 || source.Index >= len(descriptor.Operations) || !vNextJSONEquivalent(authored, descriptor.Operations[source.Index]) {
+			add("canonical_authoring_mismatch")
 		}
 	} else {
 		registry := ""
@@ -1973,6 +2018,9 @@ func sourceLaneBodyContract(facts sourceFacts, ref sourceLaneTargetRef, target s
 		return "target_request_contract_unverified"
 	}
 	w := target.Write
+	if w.DynamicFields != nil {
+		return "target_body_projection_unverified"
+	}
 	if w.BodyType == "json_array" {
 		pointer := ""
 		for _, field := range strings.Split(w.BodyField, ".") {
