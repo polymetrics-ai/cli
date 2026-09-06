@@ -159,6 +159,20 @@ with its canonical operation/schema-role coordinate. Other proof target kinds
 cannot use the empty artifact pointer. Sync descriptor references carry their
 role and executor identity without schema projections.
 
+The binding join checks retained source ownership before accepting a projection,
+including uniquely linked local references, and compares the loaded consumer's
+actual body, template, record extraction and GraphQL variable declarations.
+Separate successful response scopes retain separate references; an accepted
+schema observation alone does not complete executable coverage. Source-schema
+traversal is limited to 4,096 visits and 128 levels. Unsupported compositions,
+ambiguous ownership, external references and missing consumers remain explicit.
+
+Canonical-operation checks read already-observed source-lock bytes from a
+separate authoring map. Execution artifacts never contain those bytes. A valid
+sync descriptor or supplied plan does not prove registered transport or delivery
+authority. Direct-only response schemas, absent binary consumers and unsupported
+transformations are not promoted into executable capabilities.
+
 ## Proof record format and limits
 
 The [proof assertion schema](source-lane-proofs.schema.json) describes additive

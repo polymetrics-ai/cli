@@ -1007,3 +1007,111 @@ func TestSourceLaneManifestProviderFactCounterexamples(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneManifestIntegratedBindingProofBoundary(t *testing.T) {
+	for _, which := range []string{"mapped without proof", "schema only", "orphan annotation", "orphan proof"} {
+		t.Run(which, func(t *testing.T) {
+			key, facts, annotation := sourceBindingFixture099F(t, "envelope", nil)
+			root := t.TempDir()
+			for name, raw := range facts.bindings.Artifacts {
+				proofWrite(t, root, name, raw)
+			}
+			for name, raw := range facts.bindings.Authoring {
+				proofWrite(t, root, name, raw)
+			}
+			var doc map[string]any
+			if err := json.Unmarshal(facts.Document, &doc); err != nil {
+				t.Fatal(err)
+			}
+			doc["schema_version"], doc["connector"], doc["counts"] = 2, "acme", map[string]any{"total": 2}
+			rest := doc["rest"].(map[string]any)
+			rows := rest["operations"].([]any)
+			otherRaw, _ := json.Marshal(rows[0])
+			var other map[string]any
+			if err := json.Unmarshal(otherRaw, &other); err != nil {
+				t.Fatal(err)
+			}
+			other["id"] = "retained.unmapped"
+			rest["operations"] = append(rows, other)
+			raw, err := json.Marshal(doc)
+			if err != nil {
+				t.Fatal(err)
+			}
+			proofWrite(t, root, "source.json", raw)
+			cohort := sourceLaneCohort{SchemaVersion: 1, CohortID: "fixture", Inventories: []sourceInventoryAnchor{{Connector: "acme", Inventory: "primary", Class: "primary", Path: "source.json", SHA256: sourceBytesHash(raw), ExpectedIDs: []string{"retained.widgets", "retained.unmapped"}, ExpectedCount: 2}}}
+			annotation.Citation.DocumentID = "acme:primary"
+			ref := &annotation.IntendedBindings[0]
+			ref.SourceSchema.DocumentID = "acme:primary"
+			for i := range ref.FieldMappings {
+				ref.FieldMappings[i].Source.DocumentID = "acme:primary"
+			}
+			if which == "schema only" {
+				ref.Kind, ref.ID = "schema", "schemas/widgets.json"
+				ref.Artifact = "internal/connectors/defs/acme/" + ref.ID
+				ref.Pointer = ""
+				ref.ArtifactSHA256 = sourceBytesHash(facts.bindings.Artifacts[ref.Artifact])
+				ref.CanonicalPointer = "/operations/0/schema_refs/record"
+			}
+			annotations := []sourceSemanticAnnotation{annotation}
+			proofDocument(t, root, []sourceLaneProofRecord{})
+			if which == "orphan annotation" {
+				orphan := annotation
+				orphan.Key.ID = "not.retained"
+				annotations = append(annotations, orphan)
+			}
+			if which == "orphan proof" {
+				proofDocument(t, root, []sourceLaneProofRecord{{ID: "orphan", Key: sourceOperationKey{Connector: "acme", Inventory: "primary", ID: "not.retained"}, Lane: "etl", ClaimCurrent: true}})
+			}
+			before := sourceBindingFixtureSnapshot(t, root)
+			got, err := buildSourceLaneManifest(context.Background(), root, cohort, annotations)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if len(got.SourceOperations) != 2 || got.SourceTotals.Cells != 14 {
+				t.Fatalf("binding/proof altered universe: %+v", got.SourceTotals)
+			}
+			seen := map[string]bool{}
+			for _, row := range got.SourceOperations {
+				seen[row.Source.Key.ID] = true
+				if row.Source.Key.ID != "retained.widgets" && row.Source.Key.ID != "retained.unmapped" {
+					t.Fatal("output claim created source row")
+				}
+				if len(row.Lanes) != 7 {
+					t.Fatal("lost lane")
+				}
+				for i, lane := range row.Lanes {
+					if lane.Lane != sourceLaneNames()[i] || lane.State == "implemented" || len(lane.ProofRefs) != 0 {
+						t.Fatalf("empty proof promoted binding: %+v", lane)
+					}
+				}
+				if row.Source.Key == key {
+					cell := requireSourceLane(t, row.Lanes, "etl", "applicable")
+					if len(cell.References) != 1 || !sourceLaneTargetRefEqual(cell.References[0], *ref) {
+						t.Fatalf("actual complete/scoped binding lost: %+v", cell)
+					}
+					if (which == "schema only") != proofHasDiagnostic(cell.Diagnostics, "target_executable_coverage_unverified", "deficit") {
+						t.Fatalf("schema-only executable coverage misreported: %+v", cell.Diagnostics)
+					}
+				}
+			}
+			if len(seen) != 2 {
+				t.Fatal("duplicate source row")
+			}
+			if (got.Validation.Status == "invalid") != strings.HasPrefix(which, "orphan") {
+				t.Fatalf("global orphan/empty proof validity conflated: %+v %+v", got.Validation, got.Diagnostics)
+			}
+			if strings.HasPrefix(which, "orphan") {
+				found := false
+				for _, d := range got.Diagnostics {
+					found = found || (d.Key.ID == "not.retained" && d.Severity == "error")
+				}
+				if !found {
+					t.Fatal("orphan error lost outside anchored row iteration")
+				}
+			}
+			if after := sourceBindingFixtureSnapshot(t, root); !reflect.DeepEqual(before, after) {
+				t.Fatal("manifest/proof collection changed owned fixture bytes")
+			}
+		})
+	}
+}
