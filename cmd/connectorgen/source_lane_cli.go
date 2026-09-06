@@ -105,7 +105,7 @@ func runSourceLanesContext(ctx context.Context, args []string, stdout, stderr io
 		result.Validation.Errors++
 	}
 	sort.Slice(result.Inputs, func(i, j int) bool { return result.Inputs[i].Path < result.Inputs[j].Path })
-	raw, err := json.MarshalIndent(result, "", "  ")
+	raw, err := json.Marshal(result)
 	if err != nil {
 		logln(stderr, "source-lanes: manifest_encoding_invalid")
 		return 1

@@ -341,3 +341,56 @@ func TestSourceLaneManifestExactValidation(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLaneManifestDocumentReference(t *testing.T) {
+	root, cohort := sourceInventoryFixture(t, []string{"source.a", "source.b"}, 2)
+	original, err := os.ReadFile(filepath.Join(root, "source.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var input map[string]any
+	if err := json.Unmarshal(original, &input); err != nil {
+		t.Fatal(err)
+	}
+	first := input["rest"].(map[string]any)["operations"].([]any)[0].(map[string]any)
+	first["opaque_provider_extension"] = map[string]any{"values": []any{json.Number("9007199254740993"), true, nil}}
+	original, err = json.Marshal(input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "source.json"), original, 0600); err != nil {
+		t.Fatal(err)
+	}
+	cohort.Inventories[0].SHA256 = sourceBytesHash(original)
+	result, err := buildSourceLaneManifest(context.Background(), root, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	encoded, err := json.Marshal(result)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var restored sourceLaneManifest
+	if err := json.Unmarshal(encoded, &restored); err != nil {
+		t.Fatal(err)
+	}
+	row := restored.SourceOperations[0]
+	if row.Source.DocumentID != restored.Documents[0].ID || row.Source.Pointer != "/rest/operations/0" {
+		t.Fatal("source document association lost")
+	}
+	actual, err := sourceJSONPointer(restored.Documents[0].Payload, row.Source.Pointer+"/opaque_provider_extension/values/0")
+	if err != nil || string(actual) != "9007199254740993" {
+		t.Fatalf("opaque provider facts lost or rounded: %s %v", actual, err)
+	}
+	var decoded struct {
+		Rows []struct {
+			Source map[string]json.RawMessage `json:"source"`
+		} `json:"source_operations"`
+	}
+	if err := json.Unmarshal(encoded, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	if _, duplicated := decoded.Rows[0].Source["source_node"]; duplicated {
+		t.Fatal("report repeats the full provider node instead of its existing immutable document reference")
+	}
+}

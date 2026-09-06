@@ -67,7 +67,7 @@ type retainedSourceOperation struct {
 	Pointer        string                 `json:"pointer"`
 	SourceLocation string                 `json:"source_location"`
 	Observed       bool                   `json:"observed"`
-	Node           json.RawMessage        `json:"source_node"`
+	Node           json.RawMessage        `json:"-"`
 	Diagnostics    []sourceLaneDiagnostic `json:"diagnostics"`
 }
 
