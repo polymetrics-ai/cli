@@ -1,0 +1,99 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "endpoint": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "feature_group": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "force": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "group": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "key": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "namespace": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "organization": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repository": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runner": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "value": {
+      "maxLength": 1048576,
+      "type": [
+        "integer",
+        "null",
+        "string"
+      ]
+    }
+  },
+  "required": [
+    "name",
+    "value"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "exclude": {
+      "items": {
+        "enum": [
+          "repositories"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "exclude_attachments": {
+      "type": "boolean"
+    },
+    "exclude_git_data": {
+      "type": "boolean"
+    },
+    "exclude_metadata": {
+      "type": "boolean"
+    },
+    "exclude_owner_projects": {
+      "type": "boolean"
+    },
+    "exclude_releases": {
+      "type": "boolean"
+    },
+    "lock_repositories": {
+      "type": "boolean"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org_metadata_only": {
+      "type": "boolean"
+    },
+    "repositories": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "org",
+    "repositories"
+  ],
+  "type": "object"
+}

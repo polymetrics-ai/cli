@@ -7,7 +7,6 @@
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_invoice",
       "rest": {
         "method": "POST",
         "path": "/accounts/{account_id}/invoices/preview",
@@ -146,7 +145,6 @@
       "risk": "medium",
       "approval": "none",
       "output_policy": "binary",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_invoice_pdf",
       "binary": {
         "method": "GET",
         "path": "/invoices/{invoice_id}.pdf",
@@ -177,7 +175,6 @@
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_preview_renewal",
       "rest": {
         "method": "GET",
         "path": "/subscriptions/{subscription_id}/preview_renewal",
@@ -200,7 +197,6 @@
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_subscription_change",
       "rest": {
         "method": "POST",
         "path": "/subscriptions/{subscription_id}/change/preview",
@@ -582,7 +578,6 @@
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_purchase",
       "rest": {
         "method": "POST",
         "path": "/purchases/preview",
@@ -1671,7 +1666,7 @@
                   "next_bill_date": {
                     "type": "string",
                     "format": "date-time",
-                    "description": "If present, this sets the date the subscription's next billing period will start (`current_period_ends_at`). This can be used to align the subscription\u2019s billing to a specific day of the month. The initial invoice will be prorated for the period between the subscription's activation date and the billing period end date. Subsequent periods will be based off the plan interval. For a subscription with a trial period, this will change when the trial expires."
+                    "description": "If present, this sets the date the subscription's next billing period will start (`current_period_ends_at`). This can be used to align the subscription’s billing to a specific day of the month. The initial invoice will be prorated for the period between the subscription's activation date and the billing period end date. Subsequent periods will be based off the plan interval. For a subscription with a trial period, this will change when the trial expires."
                   },
                   "plan_code": {
                     "type": "string",
@@ -1861,7 +1856,6 @@
       "risk": "medium",
       "approval": "none",
       "output_policy": "binary",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_dates",
       "binary": {
         "method": "GET",
         "path": "/export_dates",
@@ -1883,7 +1877,6 @@
       "risk": "medium",
       "approval": "none",
       "output_policy": "binary",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/get_export_files",
       "binary": {
         "method": "GET",
         "path": "/export_dates/{export_date}/export_files",
@@ -1914,7 +1907,6 @@
       "risk": "medium",
       "approval": "none",
       "output_policy": "json_redacted",
-      "source_url": "https://recurly.com/developers/api/v2021-02-25/#operation/preview_gift_card",
       "rest": {
         "method": "POST",
         "path": "/gift_cards/preview",

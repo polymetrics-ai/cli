@@ -1,10 +1,10 @@
-# Overview
+# Canny Connector
 
-Reads Canny boards, posts, comments, categories, and companies through the Canny REST API.
+## Overview
+
+Reads Canny boards, posts, comments, categories, and companies through fixed Canny REST form requests.
 
 Readable streams: `boards`, `posts`, `comments`, `categories`, `companies`.
-
-This connector is read-only; no write actions are declared.
 
 Service API documentation: https://developers.canny.io/api-reference.
 
@@ -12,44 +12,35 @@ Service API documentation: https://developers.canny.io/api-reference.
 
 Connection fields:
 
-- `api_key` (required, secret, string); You can find your secret API key in Your Canny Subdomain >
-  Settings > API.
-- `base_url` (optional, string).
-- `mode` (optional, string).
+- `api_key` (required, secret, string); Canny API key.
 
-Secret fields are redacted in logs and write previews: `api_key`.
+Authentication uses declared mode(s): `none`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+## Execution contract
 
-Requests use the configured `base_url` value after applying defaults.
+Default stream pagination: `offset_limit`.
 
-Connection checks use a connector-managed request.
+Connection check: `POST /boards/list`
+Check Form body: `apiKey`={{ secrets.api_key }}.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `boards`: GET connector-managed request path - records path `data`; incremental cursor `created`;
-  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
-- `posts`: GET connector-managed request path - records path `data`; incremental cursor `created`;
-  formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
-- `comments`: GET connector-managed request path - records path `data`; incremental cursor
-  `created`; formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
-- `categories`: GET connector-managed request path - records path `data`; incremental cursor
-  `created`; formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
-- `companies`: GET connector-managed request path - records path `data`; incremental cursor
-  `created`; formatted as `rfc3339`; records at or before the lower bound are filtered client-side.
+- `boards`: `POST /boards/list`; records `boards`
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
+- `posts`: `POST /posts/list`; records `posts`
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
+- `comments`: `POST /comments/list`; records `comments`
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
+- `categories`: `POST /categories/list`; records `categories`
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
+- `companies`: `POST /companies/list`; records `companies`
+  - Form body: `apiKey`={{ secrets.api_key }}.
+  - Pagination: `offset_limit`. Form `skip`/`limit` windows stop at `hasMore=false`.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 5 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `boards`, `posts`, `comments`, `categories`,
-  `companies`.
+This connector's write surface is declared separately in the rendered execution bundle.

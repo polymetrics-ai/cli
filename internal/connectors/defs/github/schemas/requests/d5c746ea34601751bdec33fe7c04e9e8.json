@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "custom_property_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "custom_property_name",
+    "org"
+  ],
+  "type": "object"
+}

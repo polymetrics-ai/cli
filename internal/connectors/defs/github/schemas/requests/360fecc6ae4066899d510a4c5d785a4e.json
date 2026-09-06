@@ -1,0 +1,474 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "installation_id": {
+      "type": "integer"
+    },
+    "permissions": {
+      "additionalProperties": false,
+      "properties": {
+        "actions": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "administration": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "artifact_metadata": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "attestations": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "checks": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "code_quality": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "codespaces": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "contents": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "custom_properties_for_organizations": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "dependabot_secrets": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "deployments": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "discussions": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "email_addresses": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "enterprise_custom_properties_for_organizations": {
+          "enum": [
+            "read",
+            "write",
+            "admin"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "environments": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "followers": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "git_ssh_keys": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "gpg_keys": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "interaction_limits": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "issues": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "members": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "merge_queues": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "metadata": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_administration": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_announcement_banners": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_copilot_agent_settings": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_copilot_seat_management": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_custom_org_roles": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_custom_properties": {
+          "enum": [
+            "read",
+            "write",
+            "admin"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_custom_roles": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_events": {
+          "enum": [
+            "read"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_hooks": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_packages": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_personal_access_token_requests": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_personal_access_tokens": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_plan": {
+          "enum": [
+            "read"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_projects": {
+          "enum": [
+            "read",
+            "write",
+            "admin"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_secrets": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_self_hosted_runners": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "organization_user_blocking": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "packages": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "pages": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "profile": {
+          "enum": [
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "pull_requests": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "repository_custom_properties": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "repository_hooks": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "repository_projects": {
+          "enum": [
+            "read",
+            "write",
+            "admin"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "secret_scanning_alerts": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "secrets": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "security_events": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "single_file": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "starring": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "statuses": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "vulnerability_alerts": {
+          "enum": [
+            "read",
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "workflows": {
+          "enum": [
+            "write"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "repositories": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "repository_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "installation_id"
+  ],
+  "type": "object"
+}

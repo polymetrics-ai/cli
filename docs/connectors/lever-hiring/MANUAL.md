@@ -182,7 +182,6 @@ SECURITY
 COMMAND SURFACE
   Read Lever Hiring records and safely plan typed Lever mutations.
   Usage: pm lever-hiring <command> [flags]
-  Source CLI: Lever API (Lever Developer documentation fetched 2026-08-01)
   Global flags:
     --credential (string): Credential name to use for the Lever request.
     --connection (string): Alias for --credential.

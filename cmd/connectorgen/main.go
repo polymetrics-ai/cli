@@ -4,61 +4,59 @@
 //	validate [dir] [--json]   loads and validates every bundle under dir
 //	                           (default internal/connectors/defs), exit 1 on
 //	                           any finding
+//	validate [dir] --connector <name> --require-operational-contract <profile>
+//	                           additionally proves one declared capability
+//	                           profile has a closed executable declaration
 //	boundary [repo] [--json] [--base <ref>]
 //	                           scans shared Go for connector-specific policy
 //	                           outside definition-owned locations
 //	ownership [repo] [--json] [--base <ref>] [--scope-file <path>]
 //	                           validates changed paths for exactly one target connector
-//	gen                        regenerates hooks/hookset/hookset_gen.go and
-//	                           native/nativeset/nativeset_gen.go
-//	surface-sync [dir] [--check]
-//	                           derives operation-backed command metadata
-//	                           (api_surface, output_policy, flag maps_to,
-//	                           rest.max_bytes) and the compact runtime
-//	                           direct-read endpoint ledger from bundle sources
-//	declaration-admission [dir] [--json]
-//	                           checks optional source-cited declaration
-//	                           sidecars without asserting runtime or live proof
-//	source-import <connector> --out <path> [--defs <dir>] [--check]
-//	                           verifies a connector-owned source lock and
-//	                           emits canonical provider contracts for later
-//	                           declaration materializers
-//	source-retain <connector> --retrieved-at <RFC3339> --license <text> --terms <text>
-//	                           explicitly obtains, verifies, and stores source
-//	                           bytes using the lock-selected identity
-//	surface-reconcile [dir] [--check] [--json] [--reason-contains text]
-//	                           derives direct-read api_surface coverage and
-//	                           blocked reasons from runtime preflight
-//	batch plan --ledger <path> --out <path>
-//	                           turns provider-artifact ledger evidence into a
-//	                           deterministic, reviewable connector batch
-//	batch materialize --manifest <path> --source-defs-root <path> ...
-//	                           copies a reviewed source bundle and derives its
-//	                           cited provider-artifact inventory and CLI surface
+//	gen                        regenerates hooks/hookset/hookset_gen.go
+//	lock-render <connector>    projects immutable schema-v4 source.lock.json
+//	                           through the canonical operation descriptor into
+//	                           a staged, closed authoring generation; --check
+//	                           verifies its selected generation without writing
 //	batch gate --manifest <path> --report <path>
 //	                           records independent candidate validation and
 //	                           runtime-preflight results
-//	new <name>                 scaffolds internal/connectors/defs/<name>/
 //
-// It owns bundle validation plus generated hook/native import sets for the
+// It owns bundle validation plus generated hook imports for the
 // connector-architecture-v2 runtime.
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"strings"
+	"syscall"
 )
 
 func main() {
-	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr))
+	os.Exit(runMain(os.Args[1:], os.Stdout, os.Stderr))
+}
+
+func runMain(args []string, stdout, stderr io.Writer) int {
+	if len(args) == 0 || args[0] != "lock-render" {
+		return run(args, stdout, stderr)
+	}
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+	return runContext(ctx, args, stdout, stderr)
 }
 
 // run is the full CLI entry point (argv without the program name); it is
 // exercised directly by tests rather than shelling out to a built binary.
 func run(args []string, stdout, stderr io.Writer) int {
+	return runContext(context.Background(), args, stdout, stderr)
+}
+
+func runContext(ctx context.Context, args []string, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
 		logln(stderr, usage())
 		return 2
@@ -73,36 +71,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 		return runOwnership(args, stdout, stderr)
 	case "gen":
 		return runGen(args, stdout, stderr)
-	case "surface-sync":
-		return runSurfaceSync(args, stdout, stderr)
-	case "declaration-admission":
-		return runDeclarationAdmission(args, stdout, stderr)
-	case "params-import":
-		return runParamsImport(args, stdout, stderr)
-	case "source-import":
-		return runSourceImport(args, stdout, stderr)
-	case "source-retain":
-		return runSourceRetain(args, stdout, stderr)
-	case "evidence-gate":
-		return runEvidenceGate(args, stdout, stderr)
-	case "surface-reconcile":
-		return runSurfaceReconcile(args, stdout, stderr)
-	case "certification-matrix":
-		return runCertificationMatrix(args, stdout, stderr)
-	case "certification-sweep":
-		return runCertificationSweep(args, stdout, stderr)
-	case "certification-candidates":
-		return runCertificationCandidates(args, stdout, stderr)
-	case "certification-subject":
-		return runCertificationSubject(args, stdout, stderr)
-	case "certification-evidence":
-		return runCertificationEvidence(args, stdout, stderr)
-	case "operation-evidence":
-		return runOperationEvidence(args, stdout, stderr)
-	case "batch":
-		return runBatch(args, stdout, stderr)
-	case "new":
-		return runNew(args, stdout, stderr)
+	case "lock-render":
+		return runLockRenderContext(ctx, args, stdout, stderr)
 	case "-h", "--help", "help":
 		logln(stdout, usage())
 		return 0
@@ -128,45 +98,56 @@ func logf(w io.Writer, format string, a ...any) {
 
 func usage() string {
 	return `usage:
-  connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs)
+	connectorgen validate [dir] [--json] [--connector <name>]   (default dir: internal/connectors/defs)
   connectorgen boundary [repo-root] [--json] [--base <ref>]
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
 	connectorgen gen
-	connectorgen surface-sync [dir] [--check]  (default dir: internal/connectors/defs)
-	connectorgen declaration-admission [dir] [--json]  (default dir: internal/connectors/defs)
-	connectorgen source-import <connector> --out <path> [--defs <dir>] [--check]
-	connectorgen source-retain <connector> [--defs <dir>] --retrieved-at <RFC3339> --license <text> --terms <text>
-	connectorgen evidence-gate <evidence-manifest.json> <TDD-LEDGER.md> <REVIEW.md>
-	connectorgen surface-reconcile [dir] [--check] [--json] [--reason-contains text]  (default dir: internal/connectors/defs)
-	connectorgen certification-matrix [repo-root] (--connector <name> [--check] | --all | --check)
-	connectorgen certification-sweep [repo-root] --connector <name> [--check]
-	connectorgen certification-candidates [repo-root] --connector <name> [--check]
-	connectorgen certification-subject [repo-root] [--pm <built-pm>] [--check]
-	connectorgen certification-evidence (transport|change-capture) --connector <name> --report <path> --binary-sha <sha256> --from-env password=<ENV> --run-id <id> --record-prefix <id> [--repo-root <path>]
-	connectorgen certification-evidence report --connector <name> --report <path> --external-proof <path> --record-prefix <id> [--repo-root <path>]
-	connectorgen certification-evidence draft --draft <.tmp/live-certification/drafts/record.json> [--repo-root <path>]
-	connectorgen operation-evidence [repo-root] [--output <path>] [--fixed-100 <path>] [--check] [--write-fixed-100]
-	connectorgen batch plan --ledger <path> --out <path> [--size <1-40>] [--connector <name>] [--min-operations <n>] [--max-operations <n>]
-  connectorgen batch materialize --manifest <path> --source-defs-root <path> --retrieved-at <YYYY-MM-DD> --report <path> [--defs-root <path>] [--artifact-dir <path>] [--connector <name>]
-  connectorgen batch gate --manifest <path> --report <path> [--defs-root <path>] [--connector <name>]
-  connectorgen new <name>`
+	connectorgen lock-render <connector> [--defs <dir>] [--check]`
 }
 
 // runValidate implements `connectorgen validate [dir] [--json]`.
 func runValidate(args []string, stdout, stderr io.Writer) int {
 	dir := ""
 	asJSON := false
-	for _, a := range args[1:] {
+	connector := ""
+	connectorSet := false
+	for index := 1; index < len(args); index++ {
+		a := args[index]
 		switch a {
 		case "--json":
 			asJSON = true
+		case "--connector":
+			if index+1 >= len(args) || strings.HasPrefix(args[index+1], "-") {
+				logf(stderr, "connectorgen validate: %s requires a value\n", a)
+				return 2
+			}
+			index++
+			value := args[index]
+			if strings.TrimSpace(value) == "" {
+				logf(stderr, "connectorgen validate: %s requires a non-empty value\n", a)
+				return 2
+			}
+			if connectorSet {
+				logln(stderr, "connectorgen validate: --connector may be specified only once")
+				return 2
+			}
+			connector = value
+			connectorSet = true
 		default:
+			if strings.HasPrefix(a, "-") {
+				logf(stderr, "connectorgen validate: unknown flag %q\n", a)
+				return 2
+			}
 			if dir != "" {
 				logf(stderr, "connectorgen validate: unexpected extra argument %q\n", a)
 				return 2
 			}
 			dir = a
 		}
+	}
+	if connectorSet && !namePattern.MatchString(connector) {
+		logf(stderr, "connectorgen validate: invalid connector name %q\n", connector)
+		return 2
 	}
 
 	if dir == "" {
@@ -178,12 +159,21 @@ func runValidate(args []string, stdout, stderr io.Writer) int {
 		dir = filepath.Join(root, "internal/connectors/defs")
 	}
 
+	if connectorSet {
+		if isBundleDir(dir) {
+			if filepath.Base(filepath.Clean(dir)) != connector {
+				logf(stderr, "connectorgen validate: connector %q does not match bundle directory %q\n", connector, filepath.Base(filepath.Clean(dir)))
+				return 2
+			}
+		} else {
+			dir = filepath.Join(dir, connector)
+		}
+	}
 	report, err := validatePath(dir)
 	if err != nil {
 		logln(stderr, "connectorgen validate:", err)
 		return 1
 	}
-
 	if asJSON {
 		enc := json.NewEncoder(stdout)
 		enc.SetIndent("", "  ")

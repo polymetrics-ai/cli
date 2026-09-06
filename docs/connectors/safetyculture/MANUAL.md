@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector safetyculture [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads SafetyCulture audits, templates, and users through the SafetyCulture API. Read-only.
+  Reads SafetyCulture audits, templates, and users through fixed REST routes.
 
 ICON
   id: pm-sample
@@ -24,15 +24,30 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  start_date (required)
+  access_token (secret) (required)
+
+ETL STREAMS
+  audits:
+    primary key: id
+    fields: id(string), modified_at(string), name(string)
+  templates:
+    primary key: id
+    fields: id(string), modified_at(string), name(string)
+  users:
+    primary key: id
+    fields: id(string), modified_at(string), name(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded GET reads use the fixed SafetyCulture origin and declared bearer authentication.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

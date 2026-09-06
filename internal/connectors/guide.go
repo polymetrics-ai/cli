@@ -61,6 +61,11 @@ func GuideOf(c Connector) ConnectorGuide {
 	return guideWithIcon(guide, manifest)
 }
 
+func appendGuideSection(guide ConnectorGuide, section GuideSection) ConnectorGuide {
+	guide.Sections = append(guide.Sections, section)
+	return guide
+}
+
 func guideWithIcon(guide ConnectorGuide, manifest Manifest) ConnectorGuide {
 	for _, section := range guide.Sections {
 		if strings.EqualFold(section.Title, "icon") {
@@ -101,7 +106,7 @@ func guideWithSyncTransport(guide ConnectorGuide, connector Connector) Connector
 	lines := []string{
 		"Source transport: " + eligibility.Source.Status,
 		"Destination transport: " + eligibility.Destination.Status,
-		"A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.",
+		"A declared transport executes only when its named runtime executor and mode are available.",
 	}
 	if eligibility.Source.Executor != nil {
 		lines = append(lines, "Source executor: "+string(eligibility.Source.Executor.Family)+"/"+eligibility.Source.Executor.ID)
@@ -133,9 +138,9 @@ func guideWithPollingWatermark(guide ConnectorGuide, connector Connector) Connec
 	}
 	dynamic, _ := connector.(DynamicPollingWatermarkProvider)
 	if dynamic != nil && dynamic.HasDynamicPollingWatermark() {
-		lines = append(lines, "Runtime eligibility: this connector constructs an implemented declaration per selected catalog object. Every requested mode still requires runtime preflight for its destination binding, registered native executors, and immutable conformance evidence.")
+		lines = append(lines, "Runtime eligibility: this connector constructs an implemented declaration per selected catalog object. Every requested mode still requires runtime preflight for its destination binding, registered native executors, and compatible runtime mode.")
 	} else {
-		lines = append(lines, "Runtime eligibility: a static declaration alone does not implement a polling mode. Every requested mode requires runtime preflight for its selected catalog object, destination binding, registered native executors, and immutable conformance evidence.")
+		lines = append(lines, "Runtime eligibility: a static declaration alone does not implement a polling mode. Every requested mode requires runtime preflight for its selected catalog object, destination binding, registered native executors, and compatible runtime mode.")
 	}
 	if declaration.Reason != "" {
 		lines = append(lines, "Reason: "+declaration.Reason)
@@ -153,15 +158,6 @@ func commandSurfaceSection(surface *CommandSurface) GuideSection {
 		lines = append(lines, surface.Tagline)
 	}
 	lines = append(lines, "Usage: "+surface.Usage)
-	if surface.SourceCLI != nil && surface.SourceCLI.Name != "" {
-		source := "Source CLI: " + surface.SourceCLI.Name
-		if surface.SourceCLI.Reference != "" {
-			source += " (" + surface.SourceCLI.Reference + ")"
-		} else if surface.SourceCLI.Docs != "" {
-			source += " (" + surface.SourceCLI.Docs + ")"
-		}
-		lines = append(lines, source)
-	}
 	if commandSurfaceHasPMExecutionLimits(surface) {
 		lines = append(lines, "PM execution policy "+RequestContractExecutionPolicyVersion+": each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.")
 	}
@@ -314,6 +310,9 @@ func commandSurfaceRenderedFlags(cmd CommandSurfaceCommand) []CommandSurfaceFlag
 	case "binary_download", "text_export":
 		runtimeFlags = BinaryDownloadFlags()
 	case "direct_read":
+		if strings.TrimSpace(cmd.Stream) != "" {
+			return cmd.Flags
+		}
 		runtimeFlags = DirectReadPageFlags()
 	default:
 		return cmd.Flags

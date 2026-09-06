@@ -144,26 +144,6 @@ type RateLimitParkingScopeResolver interface {
 	RateLimitParkingScope(context.Context, RuntimeConfig, string, error) (RateLimitScopeKey, error)
 }
 
-var defaultRegistryBuilder = struct {
-	mu sync.RWMutex
-	fn func() *Registry
-}{}
-
-// RegisterDefaultRegistryBuilder installs the process default registry builder.
-// Wave 6 uses this to let the bundle-backed registry live in a package that can
-// import engine/defs without creating a connectors<->engine cycle.
-func RegisterDefaultRegistryBuilder(fn func() *Registry) {
-	defaultRegistryBuilder.mu.Lock()
-	defer defaultRegistryBuilder.mu.Unlock()
-	defaultRegistryBuilder.fn = fn
-}
-
-func registeredDefaultRegistryBuilder() func() *Registry {
-	defaultRegistryBuilder.mu.RLock()
-	defer defaultRegistryBuilder.mu.RUnlock()
-	return defaultRegistryBuilder.fn
-}
-
 type Record map[string]any
 
 type Capabilities struct {
@@ -429,6 +409,22 @@ func (e *ReadBudgetStoppedError) Error() string {
 	return "source pagination stopped at its page budget before exhaustion"
 }
 
+// ReadRequestBudgetExceededError reports that a caller-owned aggregate send
+// budget stopped a stream before another provider request was admitted. Limit
+// and Used are safe control-flow counters; the error deliberately carries no
+// route, query, credential, or provider response.
+type ReadRequestBudgetExceededError struct {
+	Limit int
+	Used  int
+}
+
+func (e *ReadRequestBudgetExceededError) Error() string {
+	if e == nil {
+		return "source read stopped at its request budget"
+	}
+	return fmt.Sprintf("source read stopped at its request budget after %d of %d requests", e.Used, e.Limit)
+}
+
 type SourceOrderedCursorReader interface {
 	CursorStateFromRecord(Record, string) (OpaqueCursorState, error)
 	ValidateCursorField(RuntimeConfig, string) error
@@ -446,6 +442,11 @@ type ReadRequest struct {
 	// tighten a declared stream limit; zero leaves it unchanged and a negative
 	// value is rejected.
 	MaxPages int
+	// MaxRequests is an optional caller-side aggregate provider-send cap.
+	// Unlike MaxPages it is shared by fan-out discovery, every child sequence,
+	// retries, and permitted redirects. Zero leaves established saved-ETL reads
+	// unbounded; a negative value is rejected before provider I/O.
+	MaxRequests int
 	// Continuation is accepted only by an engine-owned bounded-source resume.
 	// It is deliberately not mapped from command input or connector config.
 	Continuation *ReadContinuation
@@ -480,8 +481,8 @@ type OperationDirectReadRequest struct {
 	Query      map[string]string
 	// CommandBindings seals the exact caller-controlled fields declared by the
 	// generated command descriptor. The engine revalidates this set against the
-	// loaded bundle before using it, so legacy descriptors can remain executable
-	// while undeclared direct callers stay closed.
+	// loaded execution bundle before using it, so undeclared direct callers stay
+	// closed.
 	CommandBindings *OperationDirectReadBindings
 	// Headers contains only values for exact, provider-declared non-auth
 	// header parameters. The operation engine validates the declaration and
@@ -692,29 +693,6 @@ type OperationDirectReadPreflighter interface {
 // operation from receiving undeclared caller fields.
 type OperationDirectReadBindingPreflighter interface {
 	PreflightOperationDirectReadBindings(operation string, pathFields, queryFields, bodyFields []string, rawBody bool) error
-}
-
-// SourceBoundReadPreflighter verifies that a source-projected direct read
-// still names the exact locked source operation carried by its selected engine
-// operation. It has no URL, header, method, or request-body escape hatch.
-type SourceBoundReadPreflighter interface {
-	PreflightSourceBoundRead(operation, sourceOperation, method, path string) error
-}
-
-// SourceBoundStreamReadPreflighter performs the matching no-network proof for
-// an existing ETL stream. It keeps a collection command on the stream executor
-// only when its declaration-owned stream and source-bound operation agree.
-type SourceBoundStreamReadPreflighter interface {
-	PreflightSourceBoundStreamRead(stream, sourceOperation, method, path string) error
-}
-
-// SourceBoundOriginPreflighter checks the one declared source origin using
-// public configuration only. Command dispatch invokes it before App credential
-// resolution, so a caller cannot cause source-bound credential/auth state to
-// materialize merely by selecting another provider origin.
-type SourceBoundOriginPreflighter interface {
-	PreflightSourceBoundOperationOrigin(operation string, cfg RuntimeConfig) error
-	PreflightSourceBoundStreamOrigin(stream string, cfg RuntimeConfig) error
 }
 
 // OperationStructuredJSONVariablePreflighter exposes the deliberately narrow
@@ -996,6 +974,10 @@ type WriteRequest struct {
 	Table     string
 	Action    string
 	Overwrite bool
+	// DisableRetries is an internal closed-transport execution policy. It can
+	// only further restrict an already declaration-owned write action; it
+	// never permits a caller-selected route, body, or retry policy.
+	DisableRetries bool
 	// DeliveryOccurrence is an internal, durable-workset identity supplied by
 	// checkpointed destinations. It is never a provider parameter or a
 	// caller-selected idempotency key; the engine hashes it with the sealed
@@ -2935,10 +2917,6 @@ type SchemaMapper interface {
 	MapSchema(ctx context.Context, stream Stream) (Stream, error)
 }
 
-type LiveConformanceProvider interface {
-	LiveConformanceConfig(ctx context.Context) (RuntimeConfig, bool, error)
-}
-
 type Connector interface {
 	Name() string
 	Metadata() Metadata
@@ -2952,21 +2930,77 @@ type LocalWarehouseMaterializer interface {
 	MaterializesLocalWarehouse() bool
 }
 
+// RegistryResolver constructs one connector selected by a registry-owned
+// immutable metadata entry. It is never used for an unlisted name.
+type RegistryResolver func(context.Context, string) (Connector, error)
+
+// CommandSummary is the index-owned root-help projection of one declared
+// connector command surface. It contains no executable request details.
+type CommandSummary struct {
+	Connector string
+	Usage     string
+	Tagline   string
+}
+
+type registryFlight struct {
+	done chan struct{}
+	err  error
+}
+
 type Registry struct {
+	mu                    sync.RWMutex
 	connectors            map[string]Connector
+	metadata              map[string]Metadata
+	commandSummaries      map[string]CommandSummary
+	resolver              RegistryResolver
+	flights               map[string]*registryFlight
 	iconCoverageValidated bool
 }
 
 func NewEmptyRegistry() *Registry {
-	return &Registry{connectors: make(map[string]Connector)}
+	return &Registry{
+		connectors:       make(map[string]Connector),
+		metadata:         make(map[string]Metadata),
+		commandSummaries: make(map[string]CommandSummary),
+		flights:          make(map[string]*registryFlight),
+	}
+}
+
+// NewLazyRegistry records a closed metadata inventory without constructing its
+// connector implementations. Resolve constructs only a named listed connector.
+func NewLazyRegistry(metadata []Metadata, resolver RegistryResolver, commandSummaries ...CommandSummary) (*Registry, error) {
+	if resolver == nil {
+		return nil, errors.New("lazy registry resolver is required")
+	}
+	registry := NewEmptyRegistry()
+	registry.resolver = resolver
+	for _, meta := range metadata {
+		name := strings.TrimSpace(meta.Name)
+		if name == "" || name != meta.Name || hasLegacyIconConnectorPrefix(name) {
+			return nil, fmt.Errorf("lazy registry metadata name %q is invalid", meta.Name)
+		}
+		if _, exists := registry.metadata[name]; exists {
+			return nil, fmt.Errorf("duplicate lazy registry metadata %q", name)
+		}
+		meta.Name = name
+		registry.metadata[name] = MetadataWithIcon(meta)
+	}
+	for _, summary := range commandSummaries {
+		if summary.Connector == "" || strings.TrimSpace(summary.Connector) != summary.Connector || strings.TrimSpace(summary.Usage) == "" {
+			return nil, fmt.Errorf("lazy registry command summary is incomplete for %q", summary.Connector)
+		}
+		if _, exists := registry.metadata[summary.Connector]; !exists {
+			return nil, fmt.Errorf("lazy registry command summary %q has no metadata entry", summary.Connector)
+		}
+		if _, exists := registry.commandSummaries[summary.Connector]; exists {
+			return nil, fmt.Errorf("duplicate lazy registry command summary %q", summary.Connector)
+		}
+		registry.commandSummaries[summary.Connector] = summary
+	}
+	return registry, nil
 }
 
 func NewRegistry() *Registry {
-	if builder := registeredDefaultRegistryBuilder(); builder != nil {
-		registry := builder()
-		registry.MustValidateIconCoverage()
-		return registry
-	}
 	r := NewEmptyRegistry()
 	r.RegisterBuiltins()
 	r.MustValidateIconCoverage()
@@ -2976,29 +3010,139 @@ func NewRegistry() *Registry {
 // RegisterBuiltins adds the primitive local connectors that are implemented in
 // this package rather than in defs/. They are not legacy per-connector packages.
 func (r *Registry) RegisterBuiltins() {
-	r.Register(Sample{})
-	r.Register(File{})
-	r.Register(Warehouse{})
-	r.Register(Outbox{})
+	_ = r.Register(Sample{})
+	_ = r.Register(File{})
+	_ = r.Register(Warehouse{})
+	_ = r.Register(Outbox{})
 }
 
-func (r *Registry) Register(c Connector) {
-	r.connectors[c.Name()] = c
+func (r *Registry) Register(c Connector) error {
+	if c == nil {
+		return errors.New("connector is required")
+	}
+	name := c.Name()
+	metadata := MetadataOf(c)
+	if metadata.Name == "" {
+		metadata.Name = name
+	}
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if _, exists := r.metadata[name]; exists {
+		return fmt.Errorf("connector %q is already registered", name)
+	}
+	r.connectors[name] = c
+	r.metadata[name] = metadata
 	r.iconCoverageValidated = false
+	return nil
+}
+
+// Resolve returns the selected connector or its construction error. Concurrent
+// callers for one name share one synchronous construction flight.
+func (r *Registry) Resolve(ctx context.Context, name string) (Connector, error) {
+	if ctx == nil {
+		return nil, errors.New("connector resolve context is required")
+	}
+	if err := ctx.Err(); err != nil {
+		return nil, err
+	}
+
+	r.mu.Lock()
+	if connector, ok := r.connectors[name]; ok {
+		r.mu.Unlock()
+		return connector, nil
+	}
+	if _, ok := r.metadata[name]; !ok {
+		r.mu.Unlock()
+		return nil, fmt.Errorf("connector %q not found", name)
+	}
+	if r.resolver == nil {
+		r.mu.Unlock()
+		return nil, fmt.Errorf("connector %q is not constructible", name)
+	}
+	if pending, ok := r.flights[name]; ok {
+		r.mu.Unlock()
+		select {
+		case <-pending.done:
+			r.mu.RLock()
+			connector := r.connectors[name]
+			err := pending.err
+			r.mu.RUnlock()
+			if err != nil {
+				return nil, err
+			}
+			if connector == nil {
+				return nil, fmt.Errorf("connector %q resolver returned nil connector", name)
+			}
+			return connector, nil
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		}
+	}
+	pending := &registryFlight{done: make(chan struct{})}
+	r.flights[name] = pending
+	resolver := r.resolver
+	r.mu.Unlock()
+
+	connector, err := resolver(ctx, name)
+	if err == nil && connector == nil {
+		err = fmt.Errorf("connector %q resolver returned nil connector", name)
+	}
+	if err == nil && connector.Name() != name {
+		err = fmt.Errorf("connector resolver returned %q for %q", connector.Name(), name)
+	}
+	if err == nil && MetadataOf(connector).Name != name {
+		err = fmt.Errorf("connector %q metadata name does not match resolver selection", name)
+	}
+
+	r.mu.Lock()
+	if err == nil {
+		r.connectors[name] = connector
+	}
+	pending.err = err
+	delete(r.flights, name)
+	close(pending.done)
+	r.mu.Unlock()
+	if err != nil {
+		return nil, err
+	}
+	return connector, nil
 }
 
 func (r *Registry) Get(name string) (Connector, bool) {
-	c, ok := r.connectors[name]
-	return c, ok
+	connector, err := r.Resolve(context.Background(), name)
+	return connector, err == nil
 }
 
 func (r *Registry) List() []Metadata {
-	out := make([]Metadata, 0, len(r.connectors))
-	for _, connector := range r.connectors {
-		out = append(out, MetadataOf(connector))
+	r.mu.RLock()
+	out := make([]Metadata, 0, len(r.metadata))
+	for _, metadata := range r.metadata {
+		out = append(out, cloneRegistryMetadata(metadata))
 	}
+	r.mu.RUnlock()
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })
 	return out
+}
+
+// CommandSummaries returns the generated root-help summaries without resolving
+// their connector implementations.
+func (r *Registry) CommandSummaries() []CommandSummary {
+	r.mu.RLock()
+	out := make([]CommandSummary, 0, len(r.commandSummaries))
+	for _, summary := range r.commandSummaries {
+		out = append(out, summary)
+	}
+	r.mu.RUnlock()
+	sort.Slice(out, func(i, j int) bool { return out[i].Connector < out[j].Connector })
+	return out
+}
+
+func cloneRegistryMetadata(metadata Metadata) Metadata {
+	if metadata.Icon != nil {
+		icon := *metadata.Icon
+		metadata.Icon = &icon
+	}
+	return metadata
 }
 
 func (r *Registry) CatalogEntries() []Definition {
@@ -3197,14 +3341,6 @@ var LocalWarehouseDestinationTransportReference = TransportExecutorReference{
 	ID:     "local_parquet_warehouse",
 }
 
-// LocalWarehouseDestinationTransportConformance is admitted only by the
-// production composition's matching factory; a descriptor alone cannot admit
-// an unregistered materializer.
-var LocalWarehouseDestinationTransportConformance = ConformanceEvidenceReference{
-	Suite: "local_parquet_warehouse",
-	RunID: "connection_owned_v1",
-}
-
 const localWarehouseDestinationTransportAction = "materialize_local_parquet"
 
 func (Warehouse) Name() string { return "warehouse" }
@@ -3224,6 +3360,7 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 		Modes: []synccontract.Mode{
 			synccontract.ModeFullOverwrite,
 			synccontract.ModeFullAppend,
+			synccontract.ModeIncrementalAppend,
 			synccontract.ModeIncrementalUpsert,
 			synccontract.ModeIncrementalDedupe,
 			synccontract.ModeIncrementalDedupeHistory,
@@ -3233,11 +3370,11 @@ func (Warehouse) SyncTransportDescriptor() *SyncTransportDescriptor {
 			Ordering:    DeliveryOrderingSource,
 			Deletes:     DeliveryDeletesTombstone,
 		},
-		Conformance:     LocalWarehouseDestinationTransportConformance,
 		Acknowledgement: TransportAcknowledgementDurableWarehouse,
 		ApplyStrategies: []DestinationApplyStrategy{
 			{Mode: synccontract.ModeFullOverwrite, Strategy: ApplyStrategyReplace, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeFullAppend, Strategy: ApplyStrategyAppend, Action: localWarehouseDestinationTransportAction},
+			{Mode: synccontract.ModeIncrementalAppend, Strategy: ApplyStrategyAppend, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalUpsert, Strategy: ApplyStrategyMerge, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalDedupe, Strategy: ApplyStrategyDedupe, Action: localWarehouseDestinationTransportAction},
 			{Mode: synccontract.ModeIncrementalDedupeHistory, Strategy: ApplyStrategyDedupeHistory, Action: localWarehouseDestinationTransportAction},

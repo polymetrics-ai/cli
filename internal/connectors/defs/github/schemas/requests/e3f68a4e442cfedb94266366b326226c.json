@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "apps": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "branch": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "apps",
+    "branch"
+  ],
+  "type": "object"
+}

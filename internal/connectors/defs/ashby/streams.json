@@ -1,736 +1,2291 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "password": "",
+        "username": "{{ secrets.api_key }}"
+      }
+    ],
+    "check": {
+      "body": {
+        "limit": 1
+      },
+      "method": "POST",
+      "path": "/candidate.list"
+    },
     "headers": {
       "Accept": "application/json; version=1",
       "Content-Type": "application/json"
     },
-    "auth": [
-      {
-        "mode": "basic",
-        "username": "{{ secrets.api_key }}",
-        "password": ""
-      }
-    ],
-    "check": {
-      "method": "POST",
-      "path": "/apiKey.info"
-    },
     "pagination": {
       "type": "none"
-    }
+    },
+    "url": "https://api.ashbyhq.com",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "body": {
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "createdBefore": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdBefore }}",
+          "type": "integer"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "candidates",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/candidate.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/candidates.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/candidates.json"
     },
     {
+      "body": {
+        "closedAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.closedAfter }}",
+          "type": "integer"
+        },
+        "closedBefore": {
+          "omit_when_absent": true,
+          "template": "{{ query.closedBefore }}",
+          "type": "integer"
+        },
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "includeUnpublishedJobPostingsIds": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeUnpublishedJobPostingsIds }}",
+          "type": "boolean"
+        },
+        "limit": 100,
+        "openedAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.openedAfter }}",
+          "type": "integer"
+        },
+        "openedBefore": {
+          "omit_when_absent": true,
+          "template": "{{ query.openedBefore }}",
+          "type": "integer"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "jobs",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/job.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/jobs.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/jobs.json"
     },
     {
+      "body": {
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "createdBefore": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdBefore }}",
+          "type": "integer"
+        },
+        "jobId": {
+          "omit_when_absent": true,
+          "template": "{{ query.jobId }}"
+        },
+        "limit": 100,
+        "status": {
+          "omit_when_absent": true,
+          "template": "{{ query.status }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "applications",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/application.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/applications.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/applications.json"
     },
     {
+      "body": {
+        "includeDeactivated": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeDeactivated }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "users",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/user.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/users.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/users.json"
     },
     {
+      "body": {},
+      "body_type": "json",
+      "method": "POST",
       "name": "api_key_info",
-      "method": "POST",
       "path": "/apiKey.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/api_key_info.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/api_key_info.json"
     },
     {
+      "body": {
+        "endDate": {
+          "omit_when_absent": true,
+          "template": "{{ query.endDate }}"
+        },
+        "limit": 100,
+        "startDate": {
+          "omit_when_absent": true,
+          "template": "{{ query.startDate }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "audit_log_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/auditLog.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/audit_log_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/audit_log_list.json"
     },
     {
+      "body": {
+        "applicationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.applicationId }}"
+        },
+        "submittedFormInstanceId": {
+          "omit_when_absent": true,
+          "template": "{{ query.submittedFormInstanceId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "application_info",
-      "method": "POST",
       "path": "/application.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/application_info.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/application_info.json"
     },
     {
+      "body": {
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "application_hiring_team_role_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/applicationHiringTeamRole.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/application_hiring_team_role_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/application_hiring_team_role_list.json"
     },
     {
+      "body": {
+        "applicationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.applicationId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "application_list_history",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/application.listHistory",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/application_list_history.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "applicationId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/application_list_history.json"
     },
     {
+      "body": {
+        "applicationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.applicationId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "application_list_criteria_evaluations",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/application.listCriteriaEvaluations",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/application_list_criteria_evaluations.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "applicationId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/application_list_criteria_evaluations.json"
     },
     {
+      "body": {
+        "applicationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.applicationId }}"
+        },
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "application_feedback_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/applicationFeedback.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/application_feedback_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/application_feedback_list.json"
     },
     {
+      "body": {
+        "externalMappingId": {
+          "omit_when_absent": true,
+          "template": "{{ query.externalMappingId }}"
+        },
+        "id": {
+          "omit_when_absent": true,
+          "template": "{{ query.id }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "candidate_info",
-      "method": "POST",
       "path": "/candidate.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/candidate_info.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/candidate_info.json"
     },
     {
+      "body": {
+        "candidateId": {
+          "omit_when_absent": true,
+          "template": "{{ query.candidateId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "candidate_list_client_info",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/candidate.listClientInfo",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/candidate_list_client_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "candidateId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/candidate_list_client_info.json"
     },
     {
+      "body": {
+        "candidateId": {
+          "omit_when_absent": true,
+          "template": "{{ query.candidateId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "candidate_list_fraud_checks",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/candidate.listFraudChecks",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/candidate_list_fraud_checks.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "candidateId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/candidate_list_fraud_checks.json"
     },
     {
+      "body": {
+        "candidateId": {
+          "omit_when_absent": true,
+          "template": "{{ query.candidateId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "candidate_list_notes",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/candidate.listNotes",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/candidate_list_notes.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "candidateId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/candidate_list_notes.json"
     },
     {
+      "body": {
+        "candidateId": {
+          "omit_when_absent": true,
+          "template": "{{ query.candidateId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "candidate_list_projects",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/candidate.listProjects",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/candidate_list_projects.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "candidateId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/candidate_list_projects.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "candidate_tag_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/candidateTag.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/candidate_tag_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/candidate_tag_list.json"
     },
     {
+      "body": {
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "communication_template_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/communicationTemplate.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/communication_template_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/communication_template_list.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "feedback_form_definition_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/feedbackFormDefinition.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/feedback_form_definition_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/feedback_form_definition_list.json"
     },
     {
+      "body": {
+        "feedbackFormDefinitionId": {
+          "omit_when_absent": true,
+          "template": "{{ query.feedbackFormDefinitionId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "feedback_form_definition_info",
-      "method": "POST",
       "path": "/feedbackFormDefinition.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/feedback_form_definition_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "feedbackFormDefinitionId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/feedback_form_definition_info.json"
     },
     {
+      "body": {
+        "department": {
+          "omit_when_absent": true,
+          "template": "{{ query.department }}"
+        },
+        "includeUnpublishedJobPostings": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeUnpublishedJobPostings }}",
+          "type": "boolean"
+        },
+        "jobBoardId": {
+          "omit_when_absent": true,
+          "template": "{{ query.jobBoardId }}"
+        },
+        "limit": 100,
+        "listedOnly": {
+          "omit_when_absent": true,
+          "template": "{{ query.listedOnly }}",
+          "type": "boolean"
+        },
+        "location": {
+          "omit_when_absent": true,
+          "template": "{{ query.location }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "job_posting_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/jobPosting.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/job_posting_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/job_posting_list.json"
     },
     {
+      "body": {
+        "includeUnpublishedJobPostings": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeUnpublishedJobPostings }}",
+          "type": "boolean"
+        },
+        "jobBoardId": {
+          "omit_when_absent": true,
+          "template": "{{ query.jobBoardId }}"
+        },
+        "jobPostingId": {
+          "omit_when_absent": true,
+          "template": "{{ query.jobPostingId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "job_posting_info",
-      "method": "POST",
       "path": "/jobPosting.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/job_posting_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "jobPostingId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/job_posting_info.json"
     },
     {
+      "body": {
+        "id": {
+          "omit_when_absent": true,
+          "template": "{{ query.id }}"
+        },
+        "includeUnpublishedJobPostingsIds": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeUnpublishedJobPostingsIds }}",
+          "type": "boolean"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "job_info",
-      "method": "POST",
       "path": "/job.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/job_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "id"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/job_info.json"
     },
     {
+      "body": {
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "job_board_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/jobBoard.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/job_board_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/job_board_list.json"
     },
     {
+      "body": {
+        "jobId": {
+          "omit_when_absent": true,
+          "template": "{{ query.jobId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "job_interview_plan_info",
-      "method": "POST",
       "path": "/jobInterviewPlan.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/job_interview_plan_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "jobId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/job_interview_plan_info.json"
     },
     {
+      "body": {
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "job_template_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/jobTemplate.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/job_template_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/job_template_list.json"
     },
     {
+      "body": {
+        "departmentId": {
+          "omit_when_absent": true,
+          "template": "{{ query.departmentId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "department_info",
-      "method": "POST",
       "path": "/department.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/department_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "departmentId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/department_info.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "department_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/department.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/department_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/department_list.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "includeLocationHierarchy": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeLocationHierarchy }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "location_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/location.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/location_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/location_list.json"
     },
     {
+      "body": {
+        "locationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.locationId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "location_info",
-      "method": "POST",
       "path": "/location.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/location_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "locationId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/location_info.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_plan_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/interviewPlan.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_plan_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_plan_list.json"
     },
     {
+      "body": {
+        "interviewPlanId": {
+          "omit_when_absent": true,
+          "template": "{{ query.interviewPlanId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_stage_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/interviewStage.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_stage_list.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "interviewPlanId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_stage_list.json"
     },
     {
+      "body": {
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_stage_group_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/interviewStageGroup.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_stage_group_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_stage_group_list.json"
     },
     {
+      "body": {
+        "applicationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.applicationId }}"
+        },
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "offer_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/offer.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/offer_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/offer_list.json"
     },
     {
+      "body": {
+        "excludeFormDefinition": {
+          "omit_when_absent": true,
+          "template": "{{ query.excludeFormDefinition }}",
+          "type": "boolean"
+        },
+        "offerId": {
+          "omit_when_absent": true,
+          "template": "{{ query.offerId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "offer_info",
-      "method": "POST",
       "path": "/offer.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/offer_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "offerId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/offer_info.json"
     },
     {
+      "body": {
+        "openingId": {
+          "omit_when_absent": true,
+          "template": "{{ query.openingId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "opening_info",
-      "method": "POST",
       "path": "/opening.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/opening_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "openingId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/opening_info.json"
     },
     {
+      "body": {
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "opening_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/opening.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/opening_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/opening_list.json"
     },
     {
+      "body": {
+        "projectId": {
+          "omit_when_absent": true,
+          "template": "{{ query.projectId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "project_info",
-      "method": "POST",
       "path": "/project.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/project_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "projectId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/project_info.json"
     },
     {
+      "body": {
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "project_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/project.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/project_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/project_list.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "source_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/source.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/source_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/source_list.json"
     },
     {
+      "body": {
+        "includeDisabled": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeDisabled }}",
+          "type": "boolean"
+        },
+        "limit": 100,
+        "sourceId": {
+          "omit_when_absent": true,
+          "template": "{{ query.sourceId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "source_tracking_link_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/sourceTrackingLink.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/source_tracking_link_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/source_tracking_link_list.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "archive_reason_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/archiveReason.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/archive_reason_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/archive_reason_list.json"
     },
     {
+      "body": {
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "brand_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/brand.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/brand_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/brand_list.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "custom_field_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/customField.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/custom_field_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/custom_field_list.json"
     },
     {
+      "body": {
+        "customFieldId": {
+          "omit_when_absent": true,
+          "template": "{{ query.customFieldId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "custom_field_info",
-      "method": "POST",
       "path": "/customField.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/custom_field_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "customFieldId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/custom_field_info.json"
     },
     {
+      "body": {
+        "limit": 100,
+        "namesOnly": true
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "hiring_team_role_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/hiringTeamRole.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/hiring_team_role_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/hiring_team_role_list.json"
     },
     {
+      "body": {
+        "userId": {
+          "omit_when_absent": true,
+          "template": "{{ query.userId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "user_info",
-      "method": "POST",
       "path": "/user.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/user_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "userId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/user_info.json"
     },
     {
+      "body": {
+        "limit": 100,
+        "userId": {
+          "omit_when_absent": true,
+          "template": "{{ query.userId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "user_list_interviewer_pauses",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/user.listInterviewerPauses",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/user_list_interviewer_pauses.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "userId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/user_list_interviewer_pauses.json"
     },
     {
+      "body": {
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "email_sender_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/emailSender.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/email_sender_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/email_sender_list.json"
     },
     {
+      "body": {
+        "sequenceId": {
+          "omit_when_absent": true,
+          "template": "{{ query.sequenceId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "sequence_info",
-      "method": "POST",
       "path": "/sequence.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/sequence_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "sequenceId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/sequence_info.json"
     },
     {
+      "body": {
+        "candidateId": {
+          "omit_when_absent": true,
+          "template": "{{ query.candidateId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "sequence_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/sequence.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/sequence_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/sequence_list.json"
     },
     {
+      "body": {
+        "sequenceTemplateId": {
+          "omit_when_absent": true,
+          "template": "{{ query.sequenceTemplateId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "sequence_template_info",
-      "method": "POST",
       "path": "/sequenceTemplate.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/sequence_template_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "sequenceTemplateId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/sequence_template_info.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "sequence_template_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/sequenceTemplate.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/sequence_template_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/sequence_template_list.json"
     },
     {
+      "body": {
+        "applicationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.applicationId }}"
+        },
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "interviewStageId": {
+          "omit_when_absent": true,
+          "template": "{{ query.interviewStageId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_schedule_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/interviewSchedule.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_schedule_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_schedule_list.json"
     },
     {
+      "body": {
+        "applicationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.applicationId }}"
+        },
+        "candidateId": {
+          "omit_when_absent": true,
+          "template": "{{ query.candidateId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "take_home_assignment_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/takeHomeAssignment.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/take_home_assignment_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/take_home_assignment_list.json"
     },
     {
+      "body": {
+        "takeHomeAssignmentId": {
+          "omit_when_absent": true,
+          "template": "{{ query.takeHomeAssignmentId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "take_home_assignment_info",
-      "method": "POST",
       "path": "/takeHomeAssignment.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/take_home_assignment_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "takeHomeAssignmentId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/take_home_assignment_info.json"
     },
     {
+      "body": {
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "interviewScheduleId": {
+          "omit_when_absent": true,
+          "template": "{{ query.interviewScheduleId }}"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_event_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/interviewEvent.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_event_list.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "interviewScheduleId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_event_list.json"
     },
     {
+      "body": {
+        "interviewEventId": {
+          "omit_when_absent": true,
+          "template": "{{ query.interviewEventId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_briefing_info",
-      "method": "POST",
       "path": "/interviewBriefing.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_briefing_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "interviewEventId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_briefing_info.json"
     },
     {
+      "body": {
+        "id": {
+          "omit_when_absent": true,
+          "template": "{{ query.id }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_info",
-      "method": "POST",
       "path": "/interview.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "id"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_info.json"
     },
     {
+      "body": {
+        "excludeArchivedScheduleTemplateInterviews": {
+          "omit_when_absent": true,
+          "template": "{{ query.excludeArchivedScheduleTemplateInterviews }}",
+          "type": "boolean"
+        },
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "includeNonSharedInterviews": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeNonSharedInterviews }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/interview.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_list.json"
     },
     {
+      "body": {
+        "interviewStageId": {
+          "omit_when_absent": true,
+          "template": "{{ query.interviewStageId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interview_stage_info",
-      "method": "POST",
       "path": "/interviewStage.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interview_stage_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "interviewStageId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interview_stage_info.json"
     },
     {
+      "body": {
+        "surveyFormDefinitionId": {
+          "omit_when_absent": true,
+          "template": "{{ query.surveyFormDefinitionId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "survey_form_definition_info",
-      "method": "POST",
       "path": "/surveyFormDefinition.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/survey_form_definition_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "surveyFormDefinitionId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/survey_form_definition_info.json"
     },
     {
+      "body": {
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "survey_form_definition_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/surveyFormDefinition.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/survey_form_definition_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/survey_form_definition_list.json"
     },
     {
+      "body": {
+        "applicationId": {
+          "omit_when_absent": true,
+          "template": "{{ query.applicationId }}"
+        },
+        "candidateId": {
+          "omit_when_absent": true,
+          "template": "{{ query.candidateId }}"
+        },
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "limit": 100,
+        "surveyType": {
+          "omit_when_absent": true,
+          "template": "{{ query.surveyType }}",
+          "type": "enum"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "survey_request_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/surveyRequest.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/survey_request_list.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "surveyType"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/survey_request_list.json"
     },
     {
+      "body": {
+        "createdAfter": {
+          "omit_when_absent": true,
+          "template": "{{ query.createdAfter }}",
+          "type": "integer"
+        },
+        "limit": 100,
+        "surveyType": {
+          "omit_when_absent": true,
+          "template": "{{ query.surveyType }}",
+          "type": "enum"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "survey_submission_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/surveySubmission.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/survey_submission_list.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "surveyType"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/survey_submission_list.json"
     },
     {
+      "body": {
+        "webhookId": {
+          "omit_when_absent": true,
+          "template": "{{ query.webhookId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "webhook_info",
-      "method": "POST",
       "path": "/webhook.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/webhook_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "webhookId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/webhook_info.json"
     },
     {
+      "body": {
+        "includeArchivedPools": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchivedPools }}",
+          "type": "boolean"
+        },
+        "includeArchivedTrainingStages": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchivedTrainingStages }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interviewer_pool_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/interviewerPool.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interviewer_pool_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interviewer_pool_list.json"
     },
     {
+      "body": {
+        "interviewerPoolId": {
+          "omit_when_absent": true,
+          "template": "{{ query.interviewerPoolId }}"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "interviewer_pool_info",
-      "method": "POST",
       "path": "/interviewerPool.info",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/interviewer_pool_info.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "interviewerPoolId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/interviewer_pool_info.json"
     },
     {
+      "body": {
+        "includeArchived": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeArchived }}",
+          "type": "boolean"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "close_reason_list",
-      "method": "POST",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/closeReason.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/close_reason_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/close_reason_list.json"
     },
     {
+      "body": {
+        "includeHeadersInData": {
+          "omit_when_absent": true,
+          "template": "{{ query.includeHeadersInData }}",
+          "type": "boolean"
+        },
+        "reportId": {
+          "omit_when_absent": true,
+          "template": "{{ query.reportId }}"
+        },
+        "resultStyle": {
+          "omit_when_absent": true,
+          "template": "{{ query.resultStyle }}",
+          "type": "enum"
+        }
+      },
+      "body_type": "json",
+      "method": "POST",
       "name": "report_synchronous",
-      "method": "POST",
       "path": "/report.synchronous",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/report_synchronous.json",
-      "projection": "passthrough"
+      "required_body_fields": [
+        "reportId"
+      ],
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/report_synchronous.json"
     },
     {
-      "name": "approval_list",
+      "body": {
+        "entityId": {
+          "omit_when_absent": true,
+          "template": "{{ query.entityId }}"
+        },
+        "entityType": {
+          "omit_when_absent": true,
+          "template": "{{ query.entityType }}",
+          "type": "enum"
+        },
+        "limit": 100
+      },
+      "body_type": "json",
       "method": "POST",
+      "name": "approval_list",
+      "pagination": {
+        "body_cursor_field": "cursor",
+        "cursor_param": "cursor",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "stop_path": "moreDataAvailable",
+        "token_path": "nextCursor",
+        "type": "cursor"
+      },
       "path": "/approval.list",
+      "projection": "passthrough",
       "records": {
         "path": "results"
       },
-      "schema": "schemas/approval_list.json",
-      "projection": "passthrough"
+      "response_error": {
+        "path": "errors",
+        "success_path": "success"
+      },
+      "schema": "schemas/approval_list.json"
     }
   ]
 }

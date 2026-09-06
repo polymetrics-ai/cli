@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "expires_at": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "group_access": {
+      "enum": [
+        10,
+        15,
+        20,
+        25,
+        30,
+        40,
+        50
+      ],
+      "type": "integer"
+    },
+    "group_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "member_role_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "group_access",
+    "group_id",
+    "id"
+  ],
+  "type": "object"
+}

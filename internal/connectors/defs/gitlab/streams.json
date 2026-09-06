@@ -1,61 +1,119 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/user"
+    },
+    "error_map": [
+      {
+        "hint": "gitlab access_token is missing or invalid; re-run pm credentials add gitlab",
+        "status": 401
+      },
+      {
+        "hint": "gitlab token lacks access for this resource",
+        "status": 403
+      },
+      {
+        "class": "rate_limited",
+        "hint": "gitlab rate limit exceeded; the connector will retry with backoff",
+        "status": 429
+      }
     ],
     "pagination": {
-      "type": "link_header",
-      "page_size": 50
+      "page_size": 50,
+      "type": "link_header"
     },
-    "check": { "method": "GET", "path": "/user" },
-    "error_map": [
-      { "status": 401, "hint": "gitlab access_token is missing or invalid; re-run pm credentials add gitlab" },
-      { "status": 403, "hint": "gitlab token lacks access for this resource" },
-      { "status": 429, "class": "rate_limited", "hint": "gitlab rate limit exceeded; the connector will retry with backoff" }
-    ]
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
       "name": "projects",
       "path": "/projects",
       "query": {
-        "per_page": "50",
-        "last_activity_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "last_activity_after": {
+          "omit_when_absent": true,
+          "template": "{{ config.start_date }}"
+        },
+        "per_page": "50"
       },
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/projects.json"
     },
     {
       "name": "groups",
       "path": "/groups",
-      "query": { "per_page": "50" },
-      "records": { "path": "" },
+      "query": {
+        "per_page": "50"
+      },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/groups.json"
     },
     {
       "name": "users",
       "path": "/users",
       "query": {
-        "per_page": "50",
-        "created_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "created_after": {
+          "omit_when_absent": true,
+          "template": "{{ config.start_date }}"
+        },
+        "per_page": "50"
       },
-      "records": { "path": "" },
+      "records": {
+        "path": ""
+      },
       "schema": "schemas/users.json"
     },
     {
+      "computed_fields": {
+        "author_id": "{{ record.author.id }}"
+      },
       "name": "issues",
       "path": "/issues",
       "query": {
         "per_page": "50",
-        "updated_after": { "template": "{{ config.start_date }}", "omit_when_absent": true }
+        "updated_after": {
+          "omit_when_absent": true,
+          "template": "{{ config.start_date }}"
+        }
       },
-      "records": { "path": "" },
-      "computed_fields": {
-        "author_id": "{{ record.author.id }}"
+      "records": {
+        "path": ""
       },
       "schema": "schemas/issues.json"
+    },
+    {
+      "method": "GET",
+      "name": "mlflow_metrics_history",
+      "pagination": {
+        "cursor_param": "page_token",
+        "token_path": "next_page_token",
+        "type": "cursor"
+      },
+      "path": "/projects/{{ config.project_id }}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
+      "query": {
+        "max_results": "1000",
+        "metric_key": {
+          "template": "{{ config.mlflow_metric_key }}"
+        },
+        "run_id": {
+          "template": "{{ config.mlflow_run_id }}"
+        }
+      },
+      "records": {
+        "path": "metrics"
+      },
+      "schema": "schemas/mlflow_metrics_history.json"
     }
   ]
 }

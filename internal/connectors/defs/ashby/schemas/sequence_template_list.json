@@ -1,70 +1,70 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "sequence_template_list",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The unique identifier for the sequence template"
-    },
-    "title": {
-      "type": "string",
-      "description": "The sequence template's title"
+      "description": "The unique identifier for the sequence template",
+      "type": "string"
     },
     "isArchived": {
-      "type": "boolean",
-      "description": "Whether the sequence template is archived"
-    },
-    "unsubscribeLinkActive": {
-      "type": "boolean",
-      "description": "Whether emails sent from the sequence include an unsubscribe link"
-    },
-    "updatedAt": {
-      "type": "string",
-      "description": "When the returned template metadata last changed",
-      "format": "date-time"
+      "description": "Whether the sequence template is archived",
+      "type": "boolean"
     },
     "stages": {
-      "type": "array",
       "description": "The template's stages in sequence order",
       "items": {
-        "type": "object",
         "properties": {
           "id": {
-            "type": "string",
-            "description": "The unique identifier for the sequence template stage"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "Email",
-              "InMail",
-              "LinkedInConnection"
-            ]
+            "description": "The unique identifier for the sequence template stage",
+            "type": "string"
           },
           "sendAfter": {
-            "type": "object",
             "properties": {
               "kind": {
-                "type": "string",
                 "enum": [
                   "NoDelay"
-                ]
+                ],
+                "type": "string"
               }
             },
             "required": [
               "kind"
-            ]
+            ],
+            "type": "object"
+          },
+          "type": {
+            "enum": [
+              "Email",
+              "InMail",
+              "LinkedInConnection"
+            ],
+            "type": "string"
           }
         },
         "required": [
           "id",
           "type",
           "sendAfter"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "title": {
+      "description": "The sequence template's title",
+      "type": "string"
+    },
+    "unsubscribeLinkActive": {
+      "description": "Whether emails sent from the sequence include an unsubscribe link",
+      "type": "boolean"
+    },
+    "updatedAt": {
+      "description": "When the returned template metadata last changed",
+      "format": "date-time",
+      "type": "string"
     }
   },
+  "title": "sequence_template_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

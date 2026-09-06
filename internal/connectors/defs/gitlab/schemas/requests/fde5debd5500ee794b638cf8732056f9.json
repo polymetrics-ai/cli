@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "bitbucket_api_token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bitbucket_email": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "new_name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repo_path": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_namespace": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "bitbucket_api_token",
+    "bitbucket_email",
+    "repo_path",
+    "target_namespace"
+  ],
+  "type": "object"
+}

@@ -56,7 +56,7 @@ Connection fields:
 - `groups_sort_order` (optional, string; values `asc`, `desc`) — Optional /groups sort_order value.
 - `groups_sort_by` (optional, string) — Optional /groups sort_by value.
 - `channels_locale` (optional, string) — Optional /channels locale filter in ISO-639 format.
-- `mode` (optional, string) — Runtime mode: live (default) or fixture for credential-free conformance.
+- `mode` (optional, string) — Runtime mode: live (default) or fixture for credential-free fixture tests.
 
 Secret fields redacted by the connector runtime: `api_key`.
 
@@ -124,18 +124,18 @@ Blocked/planned direct, provider-search, and binary/file operations:
 
 ## Known limits
 
-- Fixture-only status: this bundle is not live-certified. `certification.json` supplies source
+- Fixture-only status: this bundle is not live-validated. the execution bundle supplies source
   defaults and live-unavailable classifiers only; it deliberately declares no Freshchat write
-  pairing so certification write stages use the built-in outbox self-test unless a future approved
+  pairing so validation write stages use the built-in outbox self-test unless a future approved
   live-safe pairing is added.
 - `POST /users/fetch` is a fixed provider-search operation with an `ids[]` request body and an
   official maximum of 100 users. It remains blocked on shared provider-search/query foundation #2985
   and is not exposed as a raw body/query command.
 - `POST /files/upload` and `POST /images/upload` are multipart binary/file uploads. They remain
   blocked until a typed binary/multipart contract or approved connector hook provides file-path
-  validation, size caps, redaction, preview, approval, cleanup, and conformance evidence.
+  validation, size caps, redaction, preview, approval, cleanup, and execution-contract evidence.
 - Freshchat has no documented CDC/changefeed operations in the reviewed official inventory; this
-  connector keeps `capabilities.cdc=false` and makes no CDC certification claim.
+  connector keeps `capabilities.cdc=false` and makes no CDC validation claim.
 - Shared foundation #2986/#2988 CDC work is tracked outside this connector and does not block
   Freshchat because no Freshchat CDC executor is advertised.
 - No generic HTTP, SQL, shell, file, GraphQL, method/path/body, or raw query escape hatch is exposed

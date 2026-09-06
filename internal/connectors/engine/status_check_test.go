@@ -19,7 +19,6 @@ func statusCheckBundle(baseURL, method string) Bundle {
 			ID: "acme.tags.status", Kind: "rest_status", Summary: "Check tags", Risk: "low", Approval: "none", OutputPolicy: "status",
 			REST: &RESTOperationSpec{Method: method, Path: "/v2/tags", MaxBytes: 1, Response: &OperationResponseSpec{SuccessStatuses: []string{"200-299"}}},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: method, Path: "/v2/tags", Operation: &SurfaceOperation{Model: "status_check"}}}},
 	}
 }
 
@@ -313,7 +312,6 @@ func TestOperationStatusCheckRejectsUndeclaredOrUnsafeParametersBeforeProviderIO
 	t.Cleanup(srv.Close)
 	b := statusCheckBundle(srv.URL, http.MethodHead)
 	b.Operations[0].REST.Path = "/v1/tags/{id}"
-	b.Surface.Endpoints[0].Path = "/v1/tags/{id}"
 	b.Operations[0].REST.Parameters = []OperationParameter{
 		{Name: "id", In: "path", Type: "string", Required: true, MaxBytes: 8},
 		{Name: "view", In: "query", Type: "string", Required: true, MaxBytes: 8},

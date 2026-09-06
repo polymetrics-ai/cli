@@ -1,12 +1,6 @@
 {
   "tagline": "Work with Notion pages, databases, data sources, blocks, comments, views and file uploads from the command line.",
   "usage": "pm notion <command> [flags]",
-  "source_cli": {
-    "name": "Notion API",
-    "docs": "https://developers.notion.com/reference/intro",
-    "reference": "https://developers.notion.com/openapi.json",
-    "source": "official OpenAPI 3.1.0 document, retrieved 2026-08-07"
-  },
   "groups": [
     {
       "id": "databases",
@@ -258,7 +252,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_async_task",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-async-task",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -278,7 +271,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_block",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-a-block",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -298,7 +290,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_block_children",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/get-block-children",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -318,7 +309,6 @@
       "availability": "implemented",
       "operation": "notion.list_comments",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/list-comments",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -338,7 +328,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_comment",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-comment",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -358,7 +347,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_data_source",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-a-data-source",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -378,7 +366,6 @@
       "availability": "implemented",
       "operation": "notion.list_data_source_templates",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/list-data-source-templates",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -398,7 +385,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_database",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-database",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -418,7 +404,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_file_upload",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-file-upload",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -438,7 +423,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_page",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-a-page",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -458,7 +442,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_page_markdown",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-page-markdown",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -478,7 +461,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_page_property",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-a-page-property",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -498,7 +480,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_bot_user",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/get-self",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -518,7 +499,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_user",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/get-user",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -538,7 +518,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_view",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/retrieve-a-view",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -558,7 +537,6 @@
       "availability": "implemented",
       "operation": "notion.retrieve_view_query_results",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/get-view-query-results",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -597,7 +575,6 @@
           "maps_to": "body.result_type"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/post-database-query",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -624,7 +601,6 @@
           "maps_to": "body.limit"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/query-meeting-notes",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -659,7 +635,6 @@
           "maps_to": "record.title"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/create-meeting-note",
       "api_surface": [
         {
           "method": "POST",
@@ -693,7 +668,6 @@
           "maps_to": "record.in_trash"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/update-a-block",
       "api_surface": [
         {
           "method": "PATCH",
@@ -721,7 +695,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/delete-a-block",
       "api_surface": [
         {
           "method": "DELETE",
@@ -749,7 +722,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/patch-block-children",
       "api_surface": [
         {
           "method": "PATCH",
@@ -770,7 +742,6 @@
       "risk": "medium — Notion has no provider idempotency header; keep reverse ETL in plan/preview/approve/execute so each approved record is submitted exactly once.",
       "approval": "Reverse ETL mutations require plan, preview, explicit approval, and execute; destructive actions require destructive confirmation.",
       "flags": [],
-      "source_url": "https://developers.notion.com/reference/create-a-comment",
       "api_surface": [
         {
           "method": "POST",
@@ -798,7 +769,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/update-a-comment",
       "api_surface": [
         {
           "method": "PATCH",
@@ -834,7 +804,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/update-a-comment",
       "api_surface": [
         {
           "method": "PATCH",
@@ -862,7 +831,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/delete-a-comment",
       "api_surface": [
         {
           "method": "DELETE",
@@ -890,7 +858,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/create-a-database",
       "api_surface": [
         {
           "method": "POST",
@@ -925,7 +892,6 @@
           "maps_to": "record.in_trash"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/update-a-data-source",
       "api_surface": [
         {
           "method": "PATCH",
@@ -959,7 +925,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/create-database",
       "api_surface": [
         {
           "method": "POST",
@@ -1011,7 +976,6 @@
           "maps_to": "record.parent"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/update-database",
       "api_surface": [
         {
           "method": "PATCH",
@@ -1044,7 +1008,6 @@
           "maps_to": "record.markdown"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/post-page",
       "api_surface": [
         {
           "method": "POST",
@@ -1096,7 +1059,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/patch-page",
       "api_surface": [
         {
           "method": "PATCH",
@@ -1130,7 +1092,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/update-page-markdown",
       "api_surface": [
         {
           "method": "PATCH",
@@ -1165,7 +1126,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/move-page",
       "api_surface": [
         {
           "method": "POST",
@@ -1200,7 +1160,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/move-page",
       "api_surface": [
         {
           "method": "POST",
@@ -1254,7 +1213,6 @@
           "maps_to": "record.view_id"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/create-view",
       "api_surface": [
         {
           "method": "POST",
@@ -1288,7 +1246,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/update-a-view",
       "api_surface": [
         {
           "method": "PATCH",
@@ -1316,7 +1273,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/delete-view",
       "api_surface": [
         {
           "method": "DELETE",
@@ -1350,7 +1306,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/create-view-query",
       "api_surface": [
         {
           "method": "POST",
@@ -1385,7 +1340,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/delete-view-query",
       "api_surface": [
         {
           "method": "DELETE",
@@ -1436,7 +1390,6 @@
           "maps_to": "record.number_of_parts"
         }
       ],
-      "source_url": "https://developers.notion.com/reference/create-file",
       "api_surface": [
         {
           "method": "POST",
@@ -1464,7 +1417,6 @@
           "required": true
         }
       ],
-      "source_url": "https://developers.notion.com/reference/complete-file-upload",
       "api_surface": [
         {
           "method": "POST",
@@ -1481,7 +1433,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "operation": "notion.send_file_upload",
-      "source_url": "https://developers.notion.com/reference/upload-file",
       "api_surface": [
         {
           "method": "POST",

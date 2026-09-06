@@ -1,0 +1,14 @@
+=== RUN   TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock
+=== RUN   TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock/prune
+=== RUN   TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock/publish
+=== RUN   TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock/recover
+--- PASS: TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock (2.97s)
+    --- PASS: TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock/prune (0.94s)
+    --- PASS: TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock/publish (1.31s)
+    --- PASS: TestVNextGenerationPublisherHeldGenerationUsesStableCleanupLock/recover (0.72s)
+=== RUN   TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup
+--- PASS: TestVNextGenerationPublisherRefusesReplacedValidatedStageCleanup (0.97s)
+=== RUN   TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup
+--- PASS: TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup (0.81s)
+PASS
+ok  	polymetrics.ai/cmd/connectorgen	5.730s

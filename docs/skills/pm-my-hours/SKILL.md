@@ -7,7 +7,7 @@ description: My Hours connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads My Hours clients, projects, team members, tags, and time log activity through the My Hours REST API.
+Reads My Hours clients, projects, team members, tags, and bounded time-log windows through fixed REST routes.
 
 ## Icon
 
@@ -24,17 +24,44 @@ Reads My Hours clients, projects, team members, tags, and time log activity thro
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- email (required)
+- end_date (required)
+- logs_batch_size
+- start_date (required)
+- password (secret) (required)
+
+## ETL Streams
+
+- clients:
+  - primary key: id
+  - fields: archived(boolean), custom_id(string), date_archived(string), id(integer), name(string)
+- projects:
+  - primary key: id
+  - fields: archived(boolean), billable(boolean), client_id(integer), client_name(string), date_archived(string), date_created(string), id(integer), name(string)
+- users:
+  - primary key: id
+  - fields: account_owner(boolean), active(boolean), admin(boolean), archived(boolean), billable_rate(number), email(string), id(integer), name(string), rate(number)
+- tags:
+  - primary key: id
+  - fields: archived(boolean), date_archived(string), id(integer), name(string)
+- time_logs:
+  - primary key: logId
+  - cursor: date
+  - fields: amount(number), billable(boolean), billable_amount(number), billable_hours(number), client_id(integer), client_name(string), date(string), invoiced(boolean), labor_hours(number), logId(integer), log_duration(number), note(string), project_id(integer), project_name(string), rate(number), tags(string), task_id(integer), task_name(string), user_id(integer), user_name(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: Bounded My Hours reads use a fixed password-token exchange, fixed origin, static API version header, and at most 600 declared UTC date windows.
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

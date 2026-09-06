@@ -38,6 +38,18 @@ func New() *Connector {
 	if err != nil {
 		panic("native/hubspot: failed to load defs/hubspot bundle: " + err.Error())
 	}
+	connector, err := NewFromBundle(bundle)
+	if err != nil {
+		panic("native/hubspot: invalid selected bundle: " + err.Error())
+	}
+	return connector
+}
+
+// NewFromBundle constructs HubSpot from the manifest-selected execution bundle.
+func NewFromBundle(bundle engine.Bundle) (*Connector, error) {
+	if bundle.Name != connectorName {
+		return nil, errors.New("selected bundle is not hubspot")
+	}
 	driver, err := discovery.New(discovery.Spec{
 		Connector:          connectorName,
 		Fallback:           standardObjects(),
@@ -46,9 +58,9 @@ func New() *Connector {
 		Converter:          hubspotFieldSchema,
 	})
 	if err != nil {
-		panic("native/hubspot: invalid discovery declaration: " + err.Error())
+		return nil, err
 	}
-	return &Connector{Base: engine.NewBase(bundle), bundle: bundle, driver: driver}
+	return &Connector{Base: engine.NewBase(bundle), bundle: bundle, driver: driver}, nil
 }
 
 // Check uses the bundle's common authenticated runtime. metadata.json does

@@ -1,12 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "pagespeed_reports",
-  "type": "object",
   "properties": {
-    "url": {
+    "accessibility_score": {
+      "type": "number"
+    },
+    "analysis_utc_timestamp": {
       "type": "string"
     },
-    "strategy": {
+    "best_practices_score": {
+      "type": "number"
+    },
+    "fetch_time": {
+      "type": "string"
+    },
+    "final_url": {
       "type": "string"
     },
     "id": {
@@ -15,19 +22,7 @@
     "kind": {
       "type": "string"
     },
-    "requested_url": {
-      "type": "string"
-    },
-    "final_url": {
-      "type": "string"
-    },
     "lighthouse_version": {
-      "type": "string"
-    },
-    "fetch_time": {
-      "type": "string"
-    },
-    "analysis_utc_timestamp": {
       "type": "string"
     },
     "overall_loading_experience": {
@@ -36,19 +31,24 @@
     "performance_score": {
       "type": "number"
     },
-    "accessibility_score": {
+    "pwa_score": {
       "type": "number"
     },
-    "best_practices_score": {
-      "type": "number"
+    "requested_url": {
+      "type": "string"
     },
     "seo_score": {
       "type": "number"
     },
-    "pwa_score": {
-      "type": "number"
+    "strategy": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
     }
   },
+  "title": "pagespeed_reports",
+  "type": "object",
   "x-primary-key": [
     "url",
     "strategy"

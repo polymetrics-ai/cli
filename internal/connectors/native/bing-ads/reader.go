@@ -101,7 +101,7 @@ func (c Connector) InitialState(ctx context.Context, stream string, cfg connecto
 	return connsdk.WithCursor(map[string]string{"stream": stream}, ""), nil
 }
 
-// Read dispatches to the fixture path (credential-free conformance) or the
+// Read dispatches to the fixture path (credential-free fixture execution) or the
 // live per-stream routing table, mirroring legacy bing_ads.go:113-168.
 func (c Connector) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	if err := ctx.Err(); err != nil {

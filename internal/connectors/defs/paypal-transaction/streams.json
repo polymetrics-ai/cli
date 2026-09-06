@@ -3,14 +3,32 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "custom", "hook": "paypal-transaction" }
+      {
+        "mode": "custom",
+        "hook": "paypal-transaction"
+      }
     ],
-    "pagination": { "type": "none" },
-    "check": { "method": "GET", "path": "/v1/reporting/balances" },
+    "pagination": {
+      "type": "none"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/v1/reporting/balances"
+    },
     "error_map": [
-      { "status": 401, "hint": "paypal-transaction client_id/client_secret are missing or invalid; re-run pm credentials add paypal-transaction" },
-      { "status": 403, "hint": "paypal-transaction app lacks the required scope for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "paypal-transaction rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "paypal-transaction client_id/client_secret are missing or invalid; re-run pm credentials add paypal-transaction"
+      },
+      {
+        "status": 403,
+        "hint": "paypal-transaction app lacks the required scope for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "paypal-transaction rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
@@ -19,10 +37,15 @@
       "path": "/v1/reporting/transactions",
       "query": {
         "start_date": "{{ incremental.lower_bound }}",
-        "end_date": { "template": "{{ config.end_date }}", "omit_when_absent": true },
+        "end_date": {
+          "template": "{{ config.end_date }}",
+          "omit_when_absent": true
+        },
         "fields": "all"
       },
-      "records": { "path": "transaction_details" },
+      "records": {
+        "path": "transaction_details"
+      },
       "pagination": {
         "type": "page_number",
         "page_param": "page",
@@ -50,8 +73,12 @@
     {
       "name": "balances",
       "path": "/v1/reporting/balances",
-      "records": { "path": "balances" },
-      "pagination": { "type": "none" },
+      "records": {
+        "path": "balances"
+      },
+      "pagination": {
+        "type": "none"
+      },
       "computed_fields": {
         "currency": "{{ record.currency }}",
         "primary": "{{ record.primary }}",
@@ -65,7 +92,9 @@
     {
       "name": "products",
       "path": "/v1/catalogs/products",
-      "records": { "path": "products" },
+      "records": {
+        "path": "products"
+      },
       "pagination": {
         "type": "page_number",
         "page_param": "page",
@@ -78,11 +107,11 @@
     {
       "name": "disputes",
       "path": "/v1/customer/disputes",
-      "records": { "path": "items" },
-      "pagination": { "type": "none" },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "StreamHook-handled: PayPal's disputes list returns HATEOAS pagination as links:[{rel,href}], an array of objects matched by rel==\"next\" -- the engine's only body-path next-page-URL pagination type (next_url_path) resolves a single dotted string path via connsdk.StringAt/selectPath, which has no array-element-matching-by-sibling-field grammar (interpolate.go/extract.go), so a bare links.<n>.href index would only ever read one fixed array position, not the record whose rel is \"next\". hook-covered, proven live by archived parity evidence for paypal-transaction and internal/connectors/hooks/paypal-transaction/hooks_test.go."
+      "records": {
+        "path": "items"
+      },
+      "pagination": {
+        "type": "none"
       },
       "schema": "schemas/disputes.json"
     }

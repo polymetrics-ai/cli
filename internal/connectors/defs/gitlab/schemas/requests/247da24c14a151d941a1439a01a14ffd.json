@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "additional_context": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "Category": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Content": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "Category",
+          "Content"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "ai_catalog_item_consumer_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "ai_catalog_item_version_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "allow_agent_to_request_user": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "environment": {
+      "enum": [
+        "ide",
+        "web",
+        "chat_partial",
+        "chat",
+        "ambient",
+        "external"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "goal": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "image": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "issue_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "merge_request_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "namespace_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_branch": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_workflow": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "workflow_definition": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [],
+  "type": "object"
+}

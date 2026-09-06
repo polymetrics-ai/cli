@@ -1,29 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "contacts",
-  "type": "object",
   "properties": {
-    "url": {
-      "type": "string"
-    },
-    "first_name": {
-      "type": "string"
-    },
-    "last_name": {
-      "type": "string"
-    },
-    "organisation_name": {
-      "type": "string"
-    },
-    "email": {
-      "type": "string"
-    },
-    "phone_number": {
-      "type": "string"
-    },
-    "status": {
-      "type": "string"
-    },
     "account_balance": {
       "type": "string"
     },
@@ -38,6 +15,24 @@
         "null"
       ]
     },
+    "email": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "organisation_name": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
     "updated_at": {
       "type": [
         "string",
@@ -48,10 +43,15 @@
         "array",
         "null"
       ]
+    },
+    "url": {
+      "type": "string"
     }
   },
+  "title": "contacts",
+  "type": "object",
+  "x-cursor-field": "updated_at",
   "x-primary-key": [
     "url"
-  ],
-  "x-cursor-field": "updated_at"
+  ]
 }

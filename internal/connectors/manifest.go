@@ -73,10 +73,25 @@ type WriteActionSpec struct {
 // nor a request body: the command runner may only bind its named source field
 // to the existing approval-bound write lifecycle.
 type BinaryUploadSource struct {
-	Field             string   `json:"field"`
-	MaxBytes          int64    `json:"max_bytes"`
-	AllowedMediaTypes []string `json:"allowed_media_types"`
+	Field             string                  `json:"field"`
+	MaxBytes          int64                   `json:"max_bytes"`
+	MediaPolicy       BinaryUploadMediaPolicy `json:"media_policy,omitempty"`
+	AllowedMediaTypes []string                `json:"allowed_media_types"`
 }
+
+// BinaryUploadMediaPolicy names the closed provider media contracts that may
+// expose a declared write action through the public binary_upload lane.
+// An empty value is not a public policy: legacy/internal actions must continue
+// to supply a finite AllowedMediaTypes list before commandrunner promotes them.
+type BinaryUploadMediaPolicy string
+
+const (
+	// BinaryUploadMediaPolicyProviderUnrestricted is declaration-owned proof
+	// that the provider accepts arbitrary file content for this exact file
+	// part. It is not inferred from an absent allow-list and cannot be combined
+	// with a caller- or connector-selected content type.
+	BinaryUploadMediaPolicyProviderUnrestricted BinaryUploadMediaPolicy = "provider_unrestricted"
+)
 
 // ConfirmationForWriteAction normalizes manifest metadata into the closed
 // runtime policy. DELETE is destructive by construction, so omission cannot

@@ -70,5 +70,5 @@ PII adjacent; no document content is downloaded, only listing metadata).
 
 - Batch defaults: read_page_size=20.
 - API coverage includes 10 stream-backed endpoint group(s).
-- Other cited artifact endpoints are explicitly classified in `api_surface.json`; endpoints absent
+- Other cited artifact endpoints are explicitly classified in `execution bundle`; endpoints absent
   from the cited artifact are not exposed by this bundle.

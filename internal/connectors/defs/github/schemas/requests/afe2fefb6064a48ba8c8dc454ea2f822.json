@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "ignored": {
+      "type": "boolean"
+    },
+    "thread_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "thread_id"
+  ],
+  "type": "object"
+}

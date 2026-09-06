@@ -61,12 +61,18 @@ func newPaginator(spec PaginationSpec, pageSize int, recordsPath string) (connsd
 		}, nil
 
 	case "offset_limit":
-		return &connsdk.OffsetPaginator{
-			LimitParam:  spec.LimitParam,
-			OffsetParam: spec.OffsetParam,
-			PageSize:    size,
+		return &offsetLimitPaginator{
+			limitParam:  spec.LimitParam,
+			offsetParam: spec.OffsetParam,
+			pageSize:    size,
+			stopPath:    spec.StopPath,
 		}, nil
 
+	case "offset_count":
+		if strings.TrimSpace(spec.LimitParam) == "" || size <= 0 {
+			return nil, fmt.Errorf("new paginator: offset_count requires limit_param and positive page_size")
+		}
+		return &offsetCountPaginator{limitParam: spec.LimitParam, pageSize: size}, nil
 	case "cursor":
 		return newCursorPaginator(spec, recordsPath)
 
@@ -79,6 +85,147 @@ func newPaginator(spec PaginationSpec, pageSize int, recordsPath string) (connsd
 	default:
 		return nil, fmt.Errorf("new paginator: unknown pagination type %q", spec.Type)
 	}
+}
+
+func continuationQuery(next *connsdk.NextPage, names ...string) (map[string]string, error) {
+	if next == nil || next.URL != "" {
+		return nil, fmt.Errorf("pagination continuation must contain only declared query state")
+	}
+	allowed := make(map[string]struct{}, len(names))
+	for _, name := range names {
+		if name != "" {
+			allowed[name] = struct{}{}
+		}
+	}
+	if len(next.Query) != len(allowed) {
+		return nil, fmt.Errorf("pagination continuation does not match declared query state")
+	}
+	values := make(map[string]string, len(allowed))
+	for name := range allowed {
+		value, ok := next.Query[name]
+		if !ok || len(value) != 1 || strings.TrimSpace(value[0]) == "" {
+			return nil, fmt.Errorf("pagination continuation has invalid %q value", name)
+		}
+		values[name] = value[0]
+	}
+	for name := range next.Query {
+		if _, ok := allowed[name]; !ok {
+			return nil, fmt.Errorf("pagination continuation contains undeclared query parameter %q", name)
+		}
+	}
+	return values, nil
+}
+
+func continuationURL(next *connsdk.NextPage) (string, error) {
+	if next == nil || strings.TrimSpace(next.URL) == "" || len(next.Query) != 0 {
+		return "", fmt.Errorf("pagination continuation must contain one provider URL")
+	}
+	return next.URL, nil
+}
+
+// offsetLimitPaginator advances a declared zero-based window. A source-declared
+// stop path takes precedence over the short-page fallback: providers such as
+// Canny can truthfully report a full final page with hasMore=false.
+type offsetLimitPaginator struct {
+	limitParam  string
+	offsetParam string
+	pageSize    int
+	stopPath    string
+	offset      int
+}
+
+func (p *offsetLimitPaginator) Start() *connsdk.NextPage {
+	p.offset = 0
+	return p.page()
+}
+
+func (p *offsetLimitPaginator) Next(resp *connsdk.Response, recordCount int) *connsdk.NextPage {
+	if p.stopPath != "" {
+		stopValue, err := connsdk.StringAt(resp.Body, p.stopPath)
+		if err != nil || stopValue != "true" {
+			return nil
+		}
+	}
+	if p.pageSize <= 0 || recordCount < p.pageSize {
+		return nil
+	}
+	p.offset += p.pageSize
+	return p.page()
+}
+
+func (p *offsetLimitPaginator) page() *connsdk.NextPage {
+	query := url.Values{}
+	if p.limitParam != "" && p.pageSize > 0 {
+		query.Set(p.limitParam, strconv.Itoa(p.pageSize))
+	}
+	if p.offsetParam != "" {
+		query.Set(p.offsetParam, strconv.Itoa(p.offset))
+	}
+	return &connsdk.NextPage{Query: query}
+}
+
+func (p *offsetLimitPaginator) Resume(next *connsdk.NextPage) error {
+	values, err := continuationQuery(next, p.limitParam, p.offsetParam)
+	if err != nil {
+		return err
+	}
+	if p.limitParam != "" && values[p.limitParam] != strconv.Itoa(p.pageSize) {
+		return fmt.Errorf("offset_limit continuation limit %q does not match declared page size", values[p.limitParam])
+	}
+	offset, err := strconv.Atoi(values[p.offsetParam])
+	if err != nil || offset < 0 || (p.pageSize > 0 && offset%p.pageSize != 0) {
+		return fmt.Errorf("offset_limit continuation offset is invalid")
+	}
+	p.offset = offset
+	return nil
+}
+
+// offsetCountPaginator sends one provider-declared query value containing the
+// zero-based offset and count, for APIs such as PrestaShop that reject split
+// offset/limit parameters.
+type offsetCountPaginator struct {
+	limitParam string
+	pageSize   int
+	offset     int
+}
+
+func (p *offsetCountPaginator) Start() *connsdk.NextPage {
+	p.offset = 0
+	return p.page()
+}
+
+func (p *offsetCountPaginator) Next(_ *connsdk.Response, recordCount int) *connsdk.NextPage {
+	if p.pageSize <= 0 || recordCount < p.pageSize {
+		return nil
+	}
+	p.offset += p.pageSize
+	return p.page()
+}
+
+func (p *offsetCountPaginator) page() *connsdk.NextPage {
+	query := url.Values{}
+	if p.limitParam != "" && p.pageSize > 0 {
+		query.Set(p.limitParam, fmt.Sprintf("%d,%d", p.offset, p.pageSize))
+	}
+	return &connsdk.NextPage{Query: query}
+}
+
+func (p *offsetCountPaginator) Resume(next *connsdk.NextPage) error {
+	values, err := continuationQuery(next, p.limitParam)
+	if err != nil {
+		return err
+	}
+	parts := strings.Split(values[p.limitParam], ",")
+	if len(parts) != 2 {
+		return fmt.Errorf("offset_count continuation window is invalid")
+	}
+	offset, offsetErr := strconv.Atoi(parts[0])
+	count, countErr := strconv.Atoi(parts[1])
+	if offsetErr != nil || countErr != nil || offset < 0 || count != p.pageSize || (p.pageSize > 0 && offset%p.pageSize != 0) {
+		return fmt.Errorf("offset_count continuation window is invalid")
+	}
+	p.offset = offset
+	return nil
 }
 
 // newCursorPaginator builds the paginator for pagination.type == "cursor",
@@ -259,6 +406,28 @@ func (p *startIndexPaginator) Next(resp *connsdk.Response, recordCount int) *con
 // nextURL.Err()/tokenPathCursor.Err().
 func (p *startIndexPaginator) Err() error { return p.lastErr }
 
+func (p *startIndexPaginator) Resume(next *connsdk.NextPage) error {
+	names := []string{p.indexParam}
+	if p.pageSize > 0 {
+		names = append(names, p.countParam)
+	}
+	values, err := continuationQuery(next, names...)
+	if err != nil {
+		return err
+	}
+	if p.pageSize > 0 && values[p.countParam] != strconv.Itoa(p.pageSize) {
+		return fmt.Errorf("start_index continuation count does not match declared page size")
+	}
+	index, err := strconv.Atoi(values[p.indexParam])
+	if err != nil || index < 0 {
+		return fmt.Errorf("start_index continuation index is invalid")
+	}
+	p.currentIndex = index
+	p.startedWalking = true
+	p.lastErr = nil
+	return nil
+}
+
 // intAt reads a non-negative integer from a dotted body path. A missing path,
 // a non-numeric value, or a read error all report "absent" rather than zero,
 // so a body that simply omits total_results cannot be mistaken for one that
@@ -289,6 +458,10 @@ type nonePaginator struct{}
 func (p *nonePaginator) Start() *connsdk.NextPage { return &connsdk.NextPage{} }
 
 func (p *nonePaginator) Next(*connsdk.Response, int) *connsdk.NextPage { return nil }
+
+func (p *nonePaginator) Resume(*connsdk.NextPage) error {
+	return fmt.Errorf("none pagination cannot resume a provider continuation")
+}
 
 // startPageOrDefault returns the effective start page for a page_number
 // paginator (S4 engine mini-wave item 1): a nil StartPage (never declared in
@@ -349,6 +522,26 @@ func pageNumberQuery(pageParam string, page int, sizeParam string, size int) url
 	return q
 }
 
+func (p *pageNumberPaginator) Resume(next *connsdk.NextPage) error {
+	names := []string{p.pageParam}
+	if p.pageSize > 0 && p.sizeParam != "" {
+		names = append(names, p.sizeParam)
+	}
+	values, err := continuationQuery(next, names...)
+	if err != nil {
+		return err
+	}
+	if p.pageSize > 0 && p.sizeParam != "" && values[p.sizeParam] != strconv.Itoa(p.pageSize) {
+		return fmt.Errorf("page_number continuation size does not match declared page size")
+	}
+	page, err := strconv.Atoi(values[p.pageParam])
+	if err != nil {
+		return fmt.Errorf("page_number continuation page is invalid")
+	}
+	p.page = page
+	return nil
+}
+
 // lastRecordCursor implements the stripe starting_after/has_more pagination
 // shape (today hand-written at internal/connectors/stripe/stripe.go:147):
 // the next page's cursor param is the value of lastRecordField on the LAST
@@ -394,6 +587,11 @@ func (p *lastRecordCursor) Next(resp *connsdk.Response, recordCount int) *connsd
 	q := url.Values{}
 	q.Set(p.cursorParam, lastID)
 	return &connsdk.NextPage{Query: q}
+}
+
+func (p *lastRecordCursor) Resume(next *connsdk.NextPage) error {
+	_, err := continuationQuery(next, p.cursorParam)
+	return err
 }
 
 // lastRecordFieldValue extracts the value of field from the LAST element of
@@ -520,6 +718,16 @@ func (p *tokenPathCursor) Next(resp *connsdk.Response, _ int) *connsdk.NextPage 
 // value) — mirrors nextURL.Err()/linkHeaderPaginator.Err().
 func (p *tokenPathCursor) Err() error { return p.lastErr }
 
+func (p *tokenPathCursor) Resume(next *connsdk.NextPage) error {
+	values, err := continuationQuery(next, p.cursorParam)
+	if err != nil {
+		return err
+	}
+	p.seen = map[string]bool{values[p.cursorParam]: true}
+	p.lastErr = nil
+	return nil
+}
+
 // baseOrigin is the (scheme, host) pair an SSRF-guarded paginator compares a
 // discovered next-page URL against. Both nextURL and linkHeaderPaginator
 // share this shape and its guard logic via checkOrigin below (M1/m2,
@@ -639,6 +847,19 @@ func (p *nextURL) Next(resp *connsdk.Response, _ int) *connsdk.NextPage {
 // "a guard blocked further pagination" call Err() after Harvest returns.
 func (p *nextURL) Err() error { return p.lastErr }
 
+func (p *nextURL) Resume(next *connsdk.NextPage) error {
+	resumeURL, err := continuationURL(next)
+	if err != nil {
+		return err
+	}
+	if err := checkOrigin(resumeURL, p.base, p.allowCrossHost); err != nil {
+		return fmt.Errorf("next_url: %w", err)
+	}
+	p.seen = map[string]bool{resumeURL: true}
+	p.lastErr = nil
+	return nil
+}
+
 // linkHeaderPaginator wraps connsdk.LinkHeaderPaginator's RFC 5988
 // Link-header-follow semantics with the SAME SSRF guard nextURL enforces
 // (M1, SECURITY-REVIEW.md MAJOR): before this type existed, newPaginator's
@@ -695,6 +916,19 @@ func (p *linkHeaderPaginator) Next(resp *connsdk.Response, _ int) *connsdk.NextP
 // Err mirrors nextURL.Err(): the sticky guard-violation error, or nil for a
 // benign stop (no Link header / no rel="next").
 func (p *linkHeaderPaginator) Err() error { return p.lastErr }
+
+func (p *linkHeaderPaginator) Resume(next *connsdk.NextPage) error {
+	resumeURL, err := continuationURL(next)
+	if err != nil {
+		return err
+	}
+	if err := checkOrigin(resumeURL, p.base, p.allowCrossHost); err != nil {
+		return fmt.Errorf("link_header: %w", err)
+	}
+	p.seen = map[string]bool{resumeURL: true}
+	p.lastErr = nil
+	return nil
+}
 
 // parseLinkNextHeader extracts the rel="next" URL from a Link header value,
 // duplicating connsdk's own (unexported) parseLinkNext logic — connsdk

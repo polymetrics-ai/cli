@@ -1,10 +1,10 @@
-# Overview
+# Copper Connector
 
-Reads Copper CRM people, companies, opportunities, leads, and tasks through the Copper REST API.
+## Overview
+
+Reads Copper CRM records through fixed typed search routes.
 
 Readable streams: `people`, `companies`, `opportunities`, `leads`, `tasks`.
-
-This connector is read-only; no write actions are declared.
 
 Service API documentation: https://developer.copper.com/.
 
@@ -13,48 +13,35 @@ Service API documentation: https://developer.copper.com/.
 Connection fields:
 
 - `api_key` (required, secret, string); Copper API key.
-- `base_url` (optional, string).
-- `mode` (optional, string).
-- `user_email` (required, string); user email used to login in to Copper.
+- `user_email` (required, string); Copper user email.
 
-Secret fields are redacted in logs and write previews: `api_key`.
+Authentication uses declared mode(s): `none`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+## Execution contract
 
-Requests use the configured `base_url` value after applying defaults.
+Default stream pagination: `page_number`.
 
-Connection checks use a connector-managed request.
+Connection check: `POST /people/search`
+Check JSON body: `page_number`=1, `page_size`=1.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `people`: GET connector-managed request path - records path `data`; incremental cursor
-  `date_modified`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `companies`: GET connector-managed request path - records path `data`; incremental cursor
-  `date_modified`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `opportunities`: GET connector-managed request path - records path `data`; incremental cursor
-  `date_modified`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `leads`: GET connector-managed request path - records path `data`; incremental cursor
-  `date_modified`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `tasks`: GET connector-managed request path - records path `data`; incremental cursor
-  `date_modified`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
+- `people`: `POST /people/search`; records `.`
+  - JSON body: `page_size`=100.
+  - Incremental cursor: `date_modified`.
+- `companies`: `POST /companies/search`; records `.`
+  - JSON body: `page_size`=100.
+  - Incremental cursor: `date_modified`.
+- `opportunities`: `POST /opportunities/search`; records `.`
+  - JSON body: `page_size`=100.
+  - Incremental cursor: `date_modified`.
+- `leads`: `POST /leads/search`; records `.`
+  - JSON body: `page_size`=100.
+  - Incremental cursor: `date_modified`.
+- `tasks`: `POST /tasks/search`; records `.`
+  - JSON body: `page_size`=100.
+  - Incremental cursor: `date_modified`.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 5 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `people`, `companies`, `opportunities`, `leads`,
-  `tasks`.
+This connector's write surface is declared separately in the rendered execution bundle.

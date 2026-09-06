@@ -141,9 +141,7 @@ pm credentials add gh-app --connector github \
   --value-stdin private_key < app-private-key.pem
 ```
 
-Many connectors also accept `--config mode=fixture` for a deterministic,
-network-free, credential-free path — handy for trying a connector or running
-conformance tests.
+Connector runtime commands use declared execution JSON and ordinary credential or approval boundaries. Deterministic test fixtures are test-harness inputs, not a generic user-facing fixture-valued connector configuration.
 
 ---
 
@@ -269,7 +267,7 @@ capabilities. A few examples:
   reads use a classic/fine-grained PAT, OAuth token, Actions `GITHUB_TOKEN`, an
   installation token, or a GitHub App (auto-signs a JWT → installation token). Use
   `pm connectors inspect github --json` and the generated GitHub connector manual for
-  current action availability and certification status.
+  current execution and lane availability.
 - **Stripe** (`stripe`) — Bearer (secret key) auth, cursor pagination, core CRM/billing
   streams, plus approval-gated customer create/update/delete writes. Run
   `pm connectors inspect stripe --json` for the current action list and destructive confirmation notes.
@@ -278,7 +276,7 @@ capabilities. A few examples:
 - Most SaaS connectors are read-first; they add approval-gated writes where the upstream
   API has safe, well-defined mutations.
 
-Every connector supports `--config mode=fixture` for a credential-free smoke test.
+Use `pm connectors inspect <name> --json` to discover the connector's declared executable surfaces; do not rely on a credential-free connector simulation.
 
 ---
 
@@ -366,16 +364,23 @@ Details: [docs/runtime/SETUP.md](runtime/SETUP.md).
 
 Adding a connector is the highest-leverage contribution. The pattern:
 
-1. **Author a bundle** — add `internal/connectors/defs/<name>/` with `metadata.json`,
-   `spec.json`, `api_surface.json`, `streams.json`, schemas, fixtures, and docs. Prefer
-   declarative streams/writes.
-2. **Use hooks only for real gaps** — add `internal/connectors/hooks/<name>/` when auth,
+1. **Author one source lock** — add
+   `internal/connectors/defs/<name>/source.lock.json` using schema version 4,
+   shared request/response/record schemas, canonical operations, and all seven
+   lane declarations.
+2. **Publish a closed execution generation** — use `connectorgen lock-render`;
+   it stages and revalidates metadata, spec, streams/schemas, writes,
+   operations, CLI surface, optional typed execution files, and publication
+   metadata before atomically selecting one complete generation. Runtime still
+   consumes execution JSON only.
+3. **Use hooks only for real gaps** — add `internal/connectors/hooks/<name>/` when auth,
    pagination, fan-out, or write behavior cannot be represented declaratively.
-3. **Promote full protocols to native** — use `internal/connectors/native/<name>/` only when
+4. **Promote full protocols to native** — use `internal/connectors/native/<name>/` only when
    a connector is inherently dynamic or too large for a hook. Native connectors are wired by
    `native/nativeset`, not package `init()` side effects.
-4. **Test first** — use bundle validation, conformance fixtures, and focused hook/native tests.
-5. **Add the icon release artifact** — connector icons are registry-backed and validated.
+5. **Test first** — use deterministic render checks, execution-only discovery,
+   fake-server encoder tests, DuckDB saved-flow tests, and focused hook/native tests.
+6. **Add the icon release artifact** — connector icons are registry-backed and validated.
    Run `PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate` to seed icons from an upstream registry. If the seeded icon is stale,
    compare it against the vendor website or official documentation, replace the SVG under
    `docs/connectors/icons/`, and update the icon entry in `internal/connectors/icon_data.json`
@@ -385,18 +390,17 @@ Adding a connector is the highest-leverage contribution. The pattern:
    instead of hand-editing. Registry keys are bare connector identifiers —
    `source-*`/`destination-*` keys are rejected — and every connector needs its own entry; see
    `docs/migration/icon-registry-single-source.md`.
-6. **Validate and regenerate generated sets** — `go run ./cmd/connectorgen validate internal/connectors/defs`
-   must report zero findings. Run `go run ./cmd/connectorgen surface-sync` after changing
-   `operations.json` or a direct-read `api_surface` row, so derivable command metadata and the
-   shared direct-read endpoint ledger are generated rather than hand-copied. See the
-   [migration conventions](migration/conventions.md#2-authoring-rules) for the direct-read
-   reconciliation workflow. Run `go run ./cmd/connectorgen gen` if hook/native package sets
-   changed, then `make verify`.
+7. **Validate generated output** — run `lock-render`, then confirm
+   `lock-render --check` reads the exact selected generation without writing.
+   `go run ./cmd/connectorgen validate internal/connectors/defs` must report
+   zero findings. Run `go run ./cmd/connectorgen gen` only if hook/native
+   package sets changed, then `make verify`.
 
 ```bash
 PM_ICON_REGISTRY_SOURCE=<registry-json-url> make icons-generate
+go run ./cmd/connectorgen lock-render <connector>
+go run ./cmd/connectorgen lock-render <connector> --check
 go run ./cmd/connectorgen validate internal/connectors/defs
-go run ./cmd/connectorgen surface-sync   # after operations.json or direct-read api_surface changes
 go run ./cmd/connectorgen gen            # only when hook/native package sets change
 make verify                              # must stay green
 ```

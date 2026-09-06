@@ -140,12 +140,12 @@ typed hooks or native implementations only where the documented contract needs
 them. Runtime-visible support comes from `pm connectors inspect`, not a catalog
 filename or a generated manual.
 
-Every connector flow is mediated by the local warehouse: API → warehouse → API,
-API → warehouse → database, database → warehouse → API, or database →
-warehouse → database. There are currently zero accepted live certifications;
-fixtures, endpoint ledgers, and `certification.json` files are not live proof.
-See [the connector delivery canon](docs/connector-canon/INDEX.md) before
-implementing or certifying a connector.
+Every saved connector flow is mediated by the local warehouse: API → warehouse
+→ API, API → warehouse → database, database → warehouse → API, or database →
+warehouse → database. Connector authors use one immutable schema-4 source lock
+to render the execution JSON consumed by the runtime. See the
+[connector delivery canon](docs/connector-canon/INDEX.md) before changing a
+connector.
 
 ## Architecture
 

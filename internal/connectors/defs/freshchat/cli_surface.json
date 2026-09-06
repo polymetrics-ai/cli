@@ -1,12 +1,6 @@
 {
   "tagline": "Read Freshchat data and safely plan Freshchat write actions without raw provider escape hatches.",
   "usage": "pm freshchat <account|agents|users|conversations|groups|channels|roles|outbound|reports|metrics|business-hours|csat|direct|binary> <command> [flags]",
-  "source_cli": {
-    "name": "Freshchat API",
-    "docs": "https://developers.freshchat.com/api/",
-    "reference": "Freshchat API docs ETag W/\"26e4fd8b1fe01578eae1dbaff6b69224\"",
-    "source": "provider_api"
-  },
   "groups": [
     {
       "id": "account",
@@ -1268,7 +1262,6 @@
       "summary": "Planned bounded subset fetch for up to 100 Freshchat user ids.",
       "intent": "direct_read",
       "availability": "planned",
-      "source_url": "https://developers.freshchat.com/api/#list_subset_users",
       "risk": "medium",
       "approval": "none until #2985 provides executable provider_search/provider_query safety; no live call is available today.",
       "notes": "Blocked on #2985 typed provider-search/query foundation. The official request body is ids[] with a provider-documented maximum of 100 users; no raw body escape hatch is exposed.",
@@ -1286,7 +1279,6 @@
       "summary": "Planned Freshchat file upload.",
       "intent": "direct_write",
       "availability": "planned",
-      "source_url": "https://developers.freshchat.com/api/#upload_a_file",
       "risk": "high",
       "approval": "blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.",
       "notes": "Blocked binary/file operation. Official API accepts one multipart file with a documented 25 MB cap; this connector currently accepts no filesystem path or binary payload.",
@@ -1305,7 +1297,6 @@
       "summary": "Planned Freshchat image upload.",
       "intent": "direct_write",
       "availability": "planned",
-      "source_url": "https://developers.freshchat.com/api/#upload_an_image",
       "risk": "high",
       "approval": "blocked until a typed binary/multipart plan -> preview -> approval -> execute contract exists.",
       "notes": "Blocked binary/file operation. Official API accepts multipart image input; this connector currently accepts no filesystem path or binary payload.",

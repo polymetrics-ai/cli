@@ -52,7 +52,7 @@ Local Parquet warehouse destination queried by the embedded DuckDB engine.
 
 - Source transport: unsupported
 - Destination transport: declared
-- A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+- A declared transport executes only when its named runtime executor and mode are available.
 - Destination executor: native_database/local_parquet_warehouse
 
 ## Commands

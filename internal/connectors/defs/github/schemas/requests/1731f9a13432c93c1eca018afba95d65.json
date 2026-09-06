@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "comments": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "line": {
+            "type": "integer"
+          },
+          "path": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "side": {
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "start_line": {
+            "type": "integer"
+          },
+          "start_side": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "body"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "commit_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "event": {
+      "enum": [
+        "APPROVE",
+        "REQUEST_CHANGES",
+        "COMMENT"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "pull_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pull_number"
+  ],
+  "type": "object"
+}

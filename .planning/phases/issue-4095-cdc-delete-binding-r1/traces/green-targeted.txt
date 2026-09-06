@@ -1,6 +1,0 @@
-Passed:
-
-    go test -timeout 20m -count=1 ./internal/connectors/native/postgres/... ./internal/connectors/database/...
-
-The source delete conversion and sealed mapping tests pass along with existing
-database and PostgreSQL unit regressions.

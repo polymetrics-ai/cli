@@ -1,0 +1,75 @@
+{
+  "destination_transport": {
+    "acknowledgement": "durable_warehouse",
+    "apply_strategies": [
+      {
+        "action": "source_write_44454c455445202f67726f7570732f7b69647d",
+        "mode": "full_append",
+        "strategy": "append"
+      }
+    ],
+    "delivery": {
+      "deletes": "not_available",
+      "idempotency": "single_attempt",
+      "ordering": "unordered"
+    },
+    "eligible_actions": [
+      "source_write_44454c455445202f67726f7570732f7b69647d"
+    ],
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_single_attempt_destination"
+    },
+    "modes": [
+      "full_append"
+    ],
+    "source_bindings": [
+      {
+        "action": "source_write_44454c455445202f67726f7570732f7b69647d",
+        "batch": {
+          "disposition": "per_record",
+          "max_records": 1
+        },
+        "eligible_streams": [
+          "groups"
+        ],
+        "executor": {
+          "family": "declarative_api",
+          "id": "declarative_stream_source"
+        },
+        "record_mapping": {
+          "inputs": [
+            {
+              "field": "path",
+              "input": "id"
+            }
+          ],
+          "kind": "input_fields"
+        }
+      }
+    ]
+  },
+  "schema_version": 1,
+  "source_transport": {
+    "delivery": {
+      "deletes": "not_available",
+      "idempotency": "at_least_once",
+      "ordering": "unordered"
+    },
+    "eligible_streams": [
+      "projects",
+      "groups",
+      "users",
+      "issues",
+      "mlflow_metrics_history"
+    ],
+    "executor": {
+      "family": "declarative_api",
+      "id": "declarative_stream_source"
+    },
+    "modes": [
+      "full_overwrite",
+      "full_append"
+    ]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "deployment_branch_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_branch_policies": {
+          "type": "boolean"
+        },
+        "protected_branches": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "protected_branches",
+        "custom_branch_policies"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "environment_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "prevent_self_review": {
+      "type": "boolean"
+    },
+    "reviewers": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "enum": [
+              "User",
+              "Team"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "wait_timer": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "environment_name"
+  ],
+  "type": "object"
+}

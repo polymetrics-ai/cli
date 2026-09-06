@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"strings"
-	"sync"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
@@ -113,6 +112,7 @@ func (r declaredRouteRequester) DoJSON(ctx context.Context, request DeclaredRout
 		return nil, err
 	}
 	clone := *requester
+	clone.Auth = nil
 	headers := make(map[string]string, len(requester.DefaultHeaders)+len(request.Headers))
 	for key, value := range requester.DefaultHeaders {
 		headers[key] = value
@@ -277,48 +277,4 @@ type WriteRecordHook interface {
 // engine to fall back to the declarative check request.
 type CheckHook interface {
 	Check(ctx context.Context, cfg connectors.RuntimeConfig, rt *Runtime) (handled bool, err error)
-}
-
-// hookRegistry is the process-global hook registry. It lives in engine
-// (rather than a separate package) to avoid an import cycle: hooks/<name>
-// packages need to reference engine types (AuthSpec, StreamSpec, ...) in
-// their method signatures, so engine cannot import them back.
-var hookRegistry = struct {
-	mu        sync.RWMutex
-	factories map[string]func() Hooks
-}{factories: make(map[string]func() Hooks)}
-
-// RegisterHooks registers a hook-set factory under name. It is intended to
-// be called from a hooks/<name> package's init(); the generated
-// hooks/hookset/hookset_gen.go blank-imports each hooks package to run those
-// init() side effects. Re-registering an existing name overwrites its factory:
-// the most recently registered factory wins.
-func RegisterHooks(name string, factory func() Hooks) {
-	hookRegistry.mu.Lock()
-	defer hookRegistry.mu.Unlock()
-	hookRegistry.factories[name] = factory
-}
-
-// HooksFor returns a freshly constructed Hooks for name, or nil when no
-// hook set is registered under that name. Callers (selectAuth, connector.go)
-// must treat a nil return as "no hooks available" rather than an error by
-// itself; a hook-requiring spec that finds no hooks is the caller's error to
-// raise (e.g. auth.go's missing-hook error).
-func HooksFor(name string) Hooks {
-	hookRegistry.mu.RLock()
-	factory, ok := hookRegistry.factories[name]
-	hookRegistry.mu.RUnlock()
-	if !ok {
-		return nil
-	}
-	return factory()
-}
-
-// unregisterHooks removes a previously registered hook factory. It exists
-// for test cleanup so process-global registration does not leak between
-// tests.
-func unregisterHooks(name string) {
-	hookRegistry.mu.Lock()
-	defer hookRegistry.mu.Unlock()
-	delete(hookRegistry.factories, name)
 }

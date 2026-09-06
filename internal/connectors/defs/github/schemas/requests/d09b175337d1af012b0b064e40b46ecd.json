@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 65535,
+      "type": "string"
+    },
+    "comment_id": {
+      "type": "integer"
+    },
+    "gist_id": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "body",
+    "comment_id",
+    "gist_id"
+  ],
+  "type": "object"
+}

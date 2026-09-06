@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "archived": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": "string"
+        },
+        "custom_fields": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "default_access_level": {
+          "type": "string"
+        },
+        "due_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "start_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "portfolio_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "portfolio_gid",
+    "data"
+  ],
+  "type": "object"
+}

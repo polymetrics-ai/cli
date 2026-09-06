@@ -224,7 +224,7 @@ func TestConnectorNameAndRegistration(t *testing.T) {
 	if New().ConnectorName() != "microsoft-entra-id" {
 		t.Fatalf("ConnectorName() = %q, want %q", New().ConnectorName(), "microsoft-entra-id")
 	}
-	hooks := engine.HooksFor("microsoft-entra-id")
+	hooks := ExplicitFactory()
 	if hooks == nil {
 		t.Fatal("engine.HooksFor(\"microsoft-entra-id\") = nil, want a registered hook set")
 	}

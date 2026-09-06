@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "body": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "event": {
+      "enum": [
+        "APPROVE",
+        "REQUEST_CHANGES",
+        "COMMENT"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "pull_number": {
+      "type": "integer"
+    },
+    "review_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "event",
+    "pull_number",
+    "review_id"
+  ],
+  "type": "object"
+}

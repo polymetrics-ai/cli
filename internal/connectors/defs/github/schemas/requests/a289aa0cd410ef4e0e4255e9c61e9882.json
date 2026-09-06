@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "issue_field_id": {
+      "type": "integer"
+    },
+    "org": {
+      "type": "string"
+    },
+    "project_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "org",
+    "project_number",
+    "issue_field_id"
+  ],
+  "type": "object"
+}

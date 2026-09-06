@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "active": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "delivery_retry_count": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "failure_deletion_timestamp": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "filters": {
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "last_failure_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_failure_content": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_success_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "next_attempt_after": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
+  "title": "webhooks",
+  "type": "object",
+  "x-primary-key": [
+    "gid"
+  ]
+}

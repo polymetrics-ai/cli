@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "add_labels": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "color": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "confidential": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "due_date_fixed": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "due_date_is_fixed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "end_date": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "epic_iid": {
+      "type": "integer"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "labels": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "parent_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "remove_labels": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "start_date": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_date_fixed": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_date_is_fixed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "state_event": {
+      "enum": [
+        "reopen",
+        "close"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "title": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "epic_iid",
+    "id"
+  ],
+  "type": "object"
+}

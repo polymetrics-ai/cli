@@ -40,10 +40,6 @@ const (
 	safetyMaxPages  = 10000
 )
 
-func init() {
-	engine.RegisterHooks("slack", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is the slack hook set: CheckHook + StreamHook.
 type Hooks struct{}
 

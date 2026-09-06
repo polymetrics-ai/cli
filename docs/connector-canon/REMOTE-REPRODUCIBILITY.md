@@ -1,71 +1,47 @@
-# Remote Reproducibility
+# Remote reproducibility
 
-This page distinguishes a clean clone's deterministic checks from live
-connector proof. A fresh machine can verify the canon and structural runtime
-preflight without provider credentials; it cannot honestly manufacture live
-certification.
+A clean clone can reproduce vNext authoring, deterministic rendering, JSON-only
+runtime discovery, fake-server protocol behavior, and DuckDB saved-flow proofs
+without provider credentials.
 
-## What a clean environment needs
+## Required environment
 
-- A checked-out repository including the `data/` source reports and
-  `docs/connector-canon/` archive/index added by this change.
-- Go **1.25** or the version/toolchain selected by `go.mod`; `GOTOOLCHAIN=auto`
-  is supported by the Makefile.
-- CGO enabled and a working C toolchain. DuckDB is the embedded query engine and
-  Parquet implementation, so `CGO_ENABLED=0` cannot build a usable warehouse
-  binary.
-- Git, standard POSIX shell utilities, and `shasum` for the source-pin check.
-- `golangci-lint` for the lint gate. Node is needed for the repository's GSD
-  adapter and website toolchain when those checks are run.
+- Go and the toolchain selected by `go.mod`;
+- CGO and a working C toolchain for DuckDB/Parquet;
+- Git and standard POSIX shell utilities;
+- no provider account, provider database, or mutable documentation fetch for
+  deterministic checks.
 
-No provider credential, database service, Podman endpoint, or runtime service
-is needed for the source-pin, definition, command-preflight, documentation, or
-focused unit-test checks.
-
-## Clean-clone baseline
+## Clean-clone checks
 
 ```bash
-git clone <repository-url> polymetrics-cli
-cd polymetrics-cli
-scripts/gsd doctor
 go run ./cmd/agentcontractgen check
-make connector-canon-check
-make connector-runtime-preflight
 go run ./cmd/connectorgen validate internal/connectors/defs
-go run ./cmd/connectorgen surface-sync --check
+go test ./cmd/connectorgen -run '^(TestVNextSourceLock.*|TestVNextGenerationPublisher.*|TestRunLockRenderPublishesOnlyClosedGeneration)$' -count=1
+go test ./internal/connectors/defs ./internal/connectors/engine ./internal/connectors/commandrunner -count=1
+go test ./internal/cli -count=1
 go build ./cmd/pm
-./pm docs validate --connectors-dir docs/connectors
 ```
 
-For a connector change, run its focused tests and `internal/cli` separately
-with `-timeout 20m`; CI remains the full-suite authority. See
-[the implementation procedure](IMPLEMENTATION-PROCEDURE.md) for the full
-change checklist.
+The runtime-inventory test proves source locks and authoring evidence are not
+embedded. The in-memory reference-render and temporary-root publication tests
+prove deterministic closed-generation construction, journal recovery, exact
+`CURRENT` selection, and lease-safe pruning without materializing the
+checked-in corpus. Local fake servers prove request encoding and
+credential-boundary reachability. Temporary DuckDB paths prove ETL,
+reverse ETL, and configured sync transport without an external provider.
 
-## What currently prevents full remote live proof
+## External provider tests
 
-1. **There are zero accepted live-certification artifacts.** A clean clone
-   cannot prove a live provider interaction from fixtures or filenames.
-2. **Provider environments and scoped credentials are external inputs.** A
-   worker needs captain-approved test scope, a sandbox or authorized account,
-   non-secret credential injection, bounded data, and a cleanup/receipt record.
-   None belongs in this repository.
-3. **Database and CDC live checks need infrastructure.** Native database tests
-   are opt-in and require the [dbtest maintainer guide's](../../internal/connectors/native/dbtest/README.md)
-   explicit Docker-or-Podman runtime and direct local Unix endpoint. Runtime-backed
-   checks need their documented local services; they are not part of the default
-   local path.
-4. **Parity lanes are still independent evidence streams.** PostgreSQL (#3972,
-   including warehouse-flow/mode gate #3987) and GitHub parity must be
-   evaluated on their own reviewed branches. The current GitHub source lock is
-   generated evidence; the archived wrong-branch gap map is not.
-5. **Some archived reports preserve non-portable historical references.** Their
-   content is retained for audit, but old absolute worktree paths are not a
-   reproducible command interface.
+Live provider tests are separate, optional operational evidence. They require
+explicit authorization, scoped non-interactive credentials, bounded test data,
+and cleanup. Their presence or absence never changes runtime admission. A
+deterministic build must not fetch current provider documentation.
 
-## Result
+## Genuine infrastructure requirements
 
-A clean environment can reproduce the repository's current canon, derivation,
-and “declared but unexecutable” structural guard. It cannot claim a connector
-is live-certified until the external proof above exists and is accepted. That
-limitation is intentional and must remain visible in connector documentation.
+Native database and CDC live tests may require an explicitly configured local
+database/container environment. Absence of that environment is reported as a
+test precondition, not converted into connector runtime state. A missing shared
+encoder, executor, or warehouse protocol is a Foundation Atlas gap and requires
+approval before implementation.

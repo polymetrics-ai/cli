@@ -1,32 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "comments",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "value": {
-      "type": "string"
-    },
     "created": {
       "type": "string"
     },
-    "likeCount": {
-      "type": "integer"
-    },
-    "internal": {
-      "type": "boolean"
-    },
-    "private": {
-      "type": "boolean"
-    },
-    "parentID": {
+    "id": {
       "type": "string"
     }
   },
+  "title": "comments",
+  "type": "object",
+  "x-cursor-field": "created",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "created"
+  ]
 }

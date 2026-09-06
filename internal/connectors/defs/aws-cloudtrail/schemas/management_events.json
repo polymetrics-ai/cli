@@ -1,8 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "management_events",
-  "type": "object",
   "properties": {
+    "AccessKeyId": {
+      "type": "string"
+    },
+    "CloudTrailEvent": {
+      "type": "string"
+    },
     "EventId": {
       "type": "string"
     },
@@ -15,24 +19,20 @@
     "EventTime": {
       "type": "integer"
     },
-    "Username": {
-      "type": "string"
-    },
-    "AccessKeyId": {
-      "type": "string"
-    },
     "ReadOnly": {
       "type": "string"
     },
     "Resources": {
       "type": "array"
     },
-    "CloudTrailEvent": {
+    "Username": {
       "type": "string"
     }
   },
+  "title": "management_events",
+  "type": "object",
+  "x-cursor-field": "EventTime",
   "x-primary-key": [
     "EventId"
-  ],
-  "x-cursor-field": "EventTime"
+  ]
 }

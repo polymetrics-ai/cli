@@ -7,16 +7,6 @@
   "properties": {
     "tagline": { "type": "string" },
     "usage": { "type": "string" },
-    "source_cli": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "name": { "type": "string" },
-        "docs": { "type": "string" },
-        "reference": { "type": "string" },
-        "source": { "type": "string" }
-      }
-    },
     "groups": {
       "type": "array",
       "items": {
@@ -112,9 +102,6 @@
           "stream": { "type": "string" },
           "write": { "type": "string" },
           "operation": { "type": "string" },
-          "source_operation": { "type": "string", "minLength": 1 },
-          "source_cli_path": { "type": "string" },
-          "source_url": { "type": "string" },
           "flags": {
             "type": "array",
             "items": {
@@ -217,11 +204,11 @@
               "reason": { "type": "string", "minLength": 1 },
               "component": {
                 "type": "string",
-                "enum": ["typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor", "binary_transfer_binding", "source_importer", "runtime_executor"]
+                "enum": ["typed_write_action", "typed_record_schema", "typed_request_body", "typed_response_descriptor", "binary_transfer_binding", "runtime_executor"]
               },
               "evidence": {
                 "type": "string",
-                "enum": ["write_action_absent", "record_schema_absent", "request_body_schema_absent", "response_descriptor_absent", "binary_transfer_binding_absent", "source_importer_absent", "runtime_executor_absent"]
+                "enum": ["write_action_absent", "record_schema_absent", "request_body_schema_absent", "response_descriptor_absent", "binary_transfer_binding_absent", "runtime_executor_absent"]
               },
               "target": {
                 "type": "object",

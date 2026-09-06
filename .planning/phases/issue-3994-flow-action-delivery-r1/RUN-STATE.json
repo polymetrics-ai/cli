@@ -1,9 +1,0 @@
-{
-  "issue": 3994,
-  "phase": "issue-3994-flow-action-delivery-r1",
-  "state": "verified_local",
-  "base_branch": "integration/4015-mvp-flat-r1",
-  "working_branch": "fm/cli-3994-flow-action-delivery-r1",
-  "gsd_mode": "inline_manual_fallback",
-  "fallback_reason": "This environment has no compatible isolated Pi worker runtime and the canonical delivery contract requires one active worker."
-}

@@ -10,7 +10,7 @@ Create credentials with `pm credentials add` using `api_key` from an environment
 
 ## Streams notes
 
-List-style GET resources use the shared Hubplanner `page=0&limit=200` pagination shape. The first stream (`resources`) keeps a two-page fixture to prove the zero-indexed page-number paginator terminates; other stream fixtures are sanitized single-page provider-shape samples. Detail GET endpoints that require an object id are exposed as bounded direct reads instead of ETL streams because the declarative stream contract has no per-record path-parameter input. The official operation allocation represented in `api_surface.json` is: 33 read operations, 59 reverse-ETL write operations, 2 provider-search/direct-read operations, and 13 CDC/webhook operations.
+List-style GET resources use the shared Hubplanner `page=0&limit=200` pagination shape. The first stream (`resources`) keeps a two-page fixture to prove the zero-indexed page-number paginator terminates; other stream fixtures are sanitized single-page provider-shape samples. Detail GET endpoints that require an object id are exposed as bounded direct reads instead of ETL streams because the declarative stream contract has no per-record path-parameter input. The official operation allocation represented in `execution bundle` is: 33 read operations, 59 reverse-ETL write operations, 2 provider-search/direct-read operations, and 13 CDC/webhook operations.
 
 ## Write actions & risks
 
@@ -18,7 +18,7 @@ List-style GET resources use the shared Hubplanner `page=0&limit=200` pagination
 
 ## Known limits
 
-- Fixture-only parity is not live certification. `certification.json` records a default stream but no live-safe write pairing or direct-read candidate; no provider credentials or live Hubplanner calls were used.
+- Fixture-only parity is not live validation. the execution bundle records a default stream but no live-safe write pairing or direct-read candidate; no provider credentials or live Hubplanner calls were used.
 - `create_webhook_subscription` intentionally does not expose the optional `authorization_token` request field because command records are persisted for plan/preview evidence; accepting a secret-bearing webhook token requires a future non-persisted secret input path.
 - The 10 outbound webhook event names in `webhooks.md` (`project.update`, `resource.update`, `booking.create`, `timeEntry.create`, `timeEntry.update`, `timeEntry.create.update`, `timeEntry.delete`, `booking.update`, `booking.delete`, and `booking.delete.multiple`) are ledgered as blocked because the current connector contract cannot receive provider callbacks as CDC. The documented shared dependency is the CDC/changefeed runtime foundation tracked by #2986 and #2988.
 - Relationship/helper endpoints present in the Markdown prose but outside the fixed r2 audit allocation (for example project/resource group membership helpers and project/resource tag attachment helpers) are not added as generic writes; adding them requires a future official-count refresh and typed action evidence.

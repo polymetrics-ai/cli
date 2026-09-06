@@ -1,31 +1,29 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "shipments",
-  "type": "object",
   "properties": {
-    "shipmentId": {
-      "type": "string"
+    "billTo": {
+      "type": "object"
     },
-    "status": {
-      "type": "string"
-    },
-    "direction": {
-      "type": "string"
+    "bol": {
+      "type": "object"
     },
     "bookedBy": {
-      "type": "string"
-    },
-    "quotedBy": {
       "type": "string"
     },
     "bookedDate": {
       "type": "string"
     },
-    "pickupDate": {
-      "type": "string"
-    },
     "createdDate": {
       "type": "string"
+    },
+    "direction": {
+      "type": "string"
+    },
+    "documents": {
+      "type": "array"
+    },
+    "equipment": {
+      "type": "object"
     },
     "isArchived": {
       "type": "boolean"
@@ -36,34 +34,36 @@
     "items": {
       "type": "array"
     },
-    "refNums": {
-      "type": "array"
-    },
     "locations": {
       "type": "array"
-    },
-    "documents": {
-      "type": "array"
-    },
-    "equipment": {
-      "type": "object"
     },
     "pickup": {
       "type": "object"
     },
-    "billTo": {
-      "type": "object"
+    "pickupDate": {
+      "type": "string"
     },
-    "bol": {
-      "type": "object"
+    "quotedBy": {
+      "type": "string"
     },
-    "tracking": {
-      "type": "object"
+    "refNums": {
+      "type": "array"
     },
     "selectedQuote": {
       "type": "object"
+    },
+    "shipmentId": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "tracking": {
+      "type": "object"
     }
   },
+  "title": "shipments",
+  "type": "object",
   "x-primary-key": [
     "shipmentId"
   ]

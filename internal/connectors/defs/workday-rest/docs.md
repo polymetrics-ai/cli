@@ -6,7 +6,7 @@ Workday's own directory publishes, with bearer-token authentication.
 Current official operation ledger: 911 documented HTTP operations (651 GET, 153 POST, 56 PATCH, 32
 DELETE, 19 PUT). Implemented rows: 911 commands = 654 bounded direct reads + 252 typed writes + 5
 binary downloads. Those commands, together with the 3 stream-backed reads, classify 910 documented
-endpoints; 1 endpoint is blocked as deprecated. Certified rows: 0 (fixture-only; no live provider
+endpoints; 1 endpoint is blocked as deprecated. Validated rows: 0 (fixture-only; no live provider
 calls were made).
 
 Readable streams: `workers`, `organizations`, `jobs`.
@@ -71,4 +71,4 @@ Read behavior: external Workday REST API read across HCM, Financials, Student an
 - Other documented endpoints are not exposed by this connector where they are blocked in the
   operation ledger as deprecated=1.
 - Fixture-only evidence: no live Workday credentials, provider calls, provider writes, or
-  certification run were used.
+  validation run were used.

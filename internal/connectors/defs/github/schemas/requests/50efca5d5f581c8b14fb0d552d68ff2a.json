@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "alert_number": {
+      "type": "integer"
+    },
+    "assignees": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "create_request": {
+      "type": "boolean"
+    },
+    "dismissed_comment": {
+      "maxLength": 280,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dismissed_reason": {
+      "enum": [
+        "false positive",
+        "won't fix",
+        "used in tests"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "enum": [
+        "open",
+        "dismissed"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "alert_number"
+  ],
+  "type": "object"
+}

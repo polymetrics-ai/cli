@@ -1,0 +1,80 @@
+# CP11 Group 2 bounded evidence
+
+## F-01 original-behaviour RED: recorded capture reopen
+
+- Baseline fixture: the preserved `.cache/cp11-f01-f03-original-7e014d00` exact archive of `7e014d00e2faf4ccf54e68b03dc1bb9c261463d3` (tree `60bd84ebddfb12dd6d2d0c6ab9c6d9087b716590`). Its product-source overlay contains only the fixture-only nil capture-open callback, SHA-256 `61df109aa181851f2de659bd150c1066d38c020b2859a49c07382a7e497951ed`; the final F-01 test overlay is `e42f3ab560eba2c30bff3d05dfbb65f9e4b230a3f48319243a1170e17107f764`.
+- Authoritative command: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestCP11F01OriginalBehaviorAcceptsSubstitutedCapture$' -v` → exit 1 / `FAIL polymetrics.ai/cmd/connectorgen 5.256s`.
+- Initial validation reopen: after the original pathname identity check recorded directory A, the fixture moved A aside and installed distinct empty B (`A=16777232/642612510`, `B=16777232/642612511`). The original `vNextPublicationValidateCaptureLocked` accepted B: `ORIGINAL F-01: validation accepted substituted capture B after recording A`.
+- Candidate reopen: after valid initial validation of A, the fixture installed distinct B (`A=16777232/642612514`, `B=16777232/642612515`). The original `vNextPublicationValidateCapturedCandidateLocked` accepted B as the absent candidate: `ORIGINAL F-01: candidate validation accepted substituted capture B after validating A`.
+- Mutating reopen: after A was recorded and validated, the fixture installed distinct B (`A=16777232/642612589`, `B=16777232/642612591`). The original `completeControlCaptureLocked` moved the exact prior CURRENT bytes into B, removed public CURRENT, and only then returned its late `publication control capture identity changed` result: `ORIGINAL F-01: mutating reopen moved CURRENT into substituted capture B before its late result publication control capture identity changed`.
+- Preserved failed setup chronology: the first fixture attempt exited 1 / 5.229s with the validation/candidate REDs but the mutating seam used a descriptor closed before it fired (`stat fixture capture A: bad file descriptor`). The second exited 1 / 5.249s after retaining the descriptor; it showed the late identity error but inspected it before checking whether CURRENT had already moved. Neither is substituted for the final 5.256s full matrix.
+
+The active `vNextPublicationOpenRecordedCaptureLocked` patch began before this RED and remains unaccepted pending active validation. The fixture did not receive that fix, no checkout was reset, and no production/project path outside the active worktree was changed.
+
+## F-01 active focused GREEN: checked recorded-capture descriptor
+
+- Authoritative command: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextPublicationOpenRecordedCaptureRejectsSubstitutedDirectory|TestVNextPublicationRecordedCaptureRejectsReplacementBeforeDependentUse|TestVNextPublicationCompleteCaptureRejectsReplacementBeforeCurrentMovement|TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix)$' -v` → exit 0 / `ok polymetrics.ai/cmd/connectorgen 7.349s`.
+- The active test file was SHA-256 `afe758a3d93650bce218e2a73354a4fcc2da9085363615b0a4b042c4b9d531c3` at this run. It shows the checked-open helper refusing a substituted directory at validation/candidate reopens and refusing before the actual CURRENT move; the terminal-authority matrix provides the valid-continuity positive.
+- This is deliberately incomplete active F-01 evidence: it does not yet supply a legitimate JOURNAL pending-capture fixture, record per-case A/B device/inode/type/bytes, or record lock reacquisition. Those fields remain Group 2 work; this focused result is not CP11 acceptance.
+
+## F-02 original-behaviour RED: removeTree child ownership
+
+- Baseline fixture remains the preserved exact `7e014d00e2faf4ccf54e68b03dc1bb9c261463d3` archive (tree `60bd84ebddfb12dd6d2d0c6ab9c6d9087b716590`). The minimal fixture source seam at the actual post-identity/pre-`openDirectory` boundary is SHA-256 `adb08aeeb7e3da08d5e84c425c643ad0d6d1342d9a7139e748fe449b2da5fe06`; the F-02 test overlay is SHA-256 `8994dbf4d54520d623d830ee5660888c021007f78b64a6e839d5da2753ff1b9a`.
+- Authoritative command: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestCP11F02OriginalRemoveTreeLeaksIdentityMismatchChild$' -v` → exit 1 / `FAIL polymetrics.ai/cmd/connectorgen 1.073s`.
+- The bounded fixture disables GC, records the Darwin process's numeric descriptor records through `/usr/sbin/lsof`, then repeats 24 real `removeTree` invocations. Between original child identity capture and the real `openDirectory`, it moves owned directory A aside and installs distinct directory B. Each invocation refuses with `identity changed`, preserves `A` bytes `retained A` and B bytes `replacement B`, yet leaks the successfully opened B child descriptor: `before=7 after=31`, exact delta 24. This is ownership/refusal evidence, not an all-or-nothing recursive-deletion claim.
+- The first local probe could not read Darwin `/dev/fd` (`fstatat /dev/fd: bad file descriptor`) and never reached the behavior under test. It is retained as fixture setup history only; the 1.073s run is the credited RED.
+
+## F-03 original-behaviour RED: writable temporary close outcome
+
+- Baseline fixture remains the same exact archive/tree. Its narrow test-only writer-boundary overlay is SHA-256 `8f2d15726bd918bca1352d05153a0bfee666615b6b65aa20bfedf9d8a8626017`; the F-03 test overlay is SHA-256 `3aa9ab48ebf1ed761610b080238c9914387054cc1813d97cfa9926ddeef4fbd8`.
+- Authoritative command: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^TestCP11F03OriginalPublishDropsRealWritableCloseError$' -v` → exit 1 / `FAIL polymetrics.ai/cmd/connectorgen 1.365s`.
+- The callback owns exactly one real `Close` for each actual `writeAtomicLocked` temporary and only then returns sentinel `injected writable temporary close failure`. Actual `Publish` performed three write/sync/transition paths, discarded every returned close outcome, and returned success: `ORIGINAL F-03: Publish returned success after 3 real writable temporary closes each returned injected writable temporary close failure`. Its selected generation was `g-04079b3b382c2acbc39460babd0742e11f35f4c26e479fa356f9deb35523e3b8`; CURRENT was readable and JOURNAL was absent after normal committed cleanup. Thus the witness does not allege lost bytes or failed fsync: it proves a completion-error-to-success conversion at the publication boundary.
+
+## Group 2 active GREEN: capture, ownership, and error contracts
+
+- Active source identities at this focused run: `vnext_publication.go` SHA-256 `b0b634db73cfa07a091546e92be68806964385c01a21f6f4f01277e05d4fed41`; `vnext_publication_dir.go` `735a58531de8c1c1e37f9d99bca6a7b0e9a9edee4fe18a00a0c238d245db3dee`; `vnext_publication_repair.go` `37d66564c1892cbd0b96be0347776fd6daf77e04e45a9eb21d901030def2ef0a`; capture fixture `129ab68950f2601083bb733430cb9ef48f8011154ae0709d8530573b91f419db`; resource/error fixture `38fbbcaebd3c72e277a05c400ec164d24c131b81e239f070d8587ef2150ac413`. The exact five-path source/test diff SHA-256 is `82f7b273dd13a0b2cdd3c7dee0582d6516afa230506acf02dcb9afea8be8418c`; it remains uncommitted.
+- Authoritative focused command: `go test -count=1 -timeout 20m ./cmd/connectorgen -run '^(TestVNextPublicationDurableCaptureRefusesReplacementForCurrentAndJournal|TestVNextPublicationRemoveTreeBoundsChildDescriptorsOnReplacement|TestVNextPublicationRemoveTreeClosesChildOnFstatError|TestVNextPublicationPublishReturnsWritableCloseErrorAndFreshRecovery|TestVNextPublicationWriteAtomicPreservesPrimaryAndCloseCauses|TestVNextPublicationAtomicCloseFailuresFollowTheirDurableCuts|TestVNextPublicationRollbackRetainsValidationAndCloseCauses|TestVNextPublicationRecoveryCallersReportRestoreCurrentCloseError|TestVNextPublicationFailedRepairCreationCleansLinkedPredecessorAnchor|TestRunLockRenderReportsWritableCloseFailureWithoutSuccessOutput)$' -v` → exit 0 / `ok polymetrics.ai/cmd/connectorgen 12.024s`.
+- F-01: the production seam runs immediately before each real descriptor-relative recorded-capture open. Six legitimate durable pending-capture cases passed: CURRENT and JOURNAL each at initial validation open, candidate reopen, and mutating completion reopen. Each first records public target bytes and an empty directory A; at the specified real open the fixture atomically moves A and installs distinct empty directory B. The checked-open helper refuses B before its dependent read/rename; public CURRENT/JOURNAL bytes remain byte-for-byte unchanged and B never receives the capture member. The test records A/B device/inode/type and empty-directory entry state before fixture restoration, restores only its own A/B names, then obtains a fresh lock through `Recover` and an ordinary retry publication. This is the required separate CURRENT/JOURNAL evidence, not an inference from one target.
+- F-02: `removeTree` owns the child descriptor immediately after `openDirectory`; the 24 replacement/refusal loop remains at its exact OS descriptor count rather than growing, while preserving A `retained A` and B `replacement B` bytes. The separate open-child fstat-boundary error control confirms the real descriptor is opened, returns the injected fstat cause, leaves target A unchanged, and returns to the same descriptor count. The test uses no finalizer/GC credit.
+- F-03: the narrow close callback calls the real writer `Close` once then supplies the injected completion error. The prepared-JOURNAL, CURRENT, and committed-JOURNAL cuts each report that error and fresh recovery follows the actual selected/control state. Rollback returns both the active validation and close causes through `errors.Is`, retains old CURRENT, then recovers. Recover, Open, Prune, and Publish entering recovery each return an injected restore-CURRENT close outcome after the durable old selection has actually been restored; no success is fabricated, the unvalidated rejected generation/JOURNAL remain for observation, and normal recovery succeeds after the test restores only its own tampered bytes. The focused caller matrix passed separately in 4.093s, including `Publish_initial_recovery`. `runLockRenderContextWithHooks` returns exit 1 with no success stdout and the close cause in stderr, then ordinary lock-render recovers/retries. The primary journal-sync plus close case retains both typed causes. A successful predecessor anchor is registered before its fallible close; the failed creation removes it and leaves the repair-directory inventory unchanged. This evidence does not assert provider or provider-live behavior.
+
+
+## 2026-09-06 — Complete Firstmate073 audit disposition
+
+The independent fresh Astra/xhigh complete-ledger audit returned **CHANGES
+REQUIRED: six actionable entries (one Medium, five Low)** against behavioral
+candidate `7481d1770a21cc95869fd10bf281f632af48c089`. Its full 315-line original
+text, all dispositions, ten lenses, ownership/consumer and eleven-caller/cut
+evidence tables are preserved verbatim in [REVIEW-CONVERGENCE.md](REVIEW-CONVERGENCE.md)
+under the dated complete-audit return. Original report SHA-256:
+`bc109e85fdde9d1958b2cde7874a3f7b30b8e5d06b1b0c2764088fb34fa3e0a0`.
+This supersedes current closure implications in earlier entries; it does not
+rewrite their historical source, test receipts or original attribution.
+
+7481-01/02 require common-record creation/partial-record ownership repair
+(including prepared, marker and phase siblings) and complete compound-collision
+error classification. 7481-03/04/06 require the previously stipulated exact
+allocation A/B and fresh recovery witnesses, independent expected controls/
+roots/stable history across every actual caller/cut including held-reader and
+Check, and the omitted compound-error controls. The prior F03 dynamic matrix
+is not completely closed. Missing proof does not establish renewed B deletion
+or a current recursive descriptor leak.
+
+7481-05 adjudicates the nested Publish fixture as initial recovery, not final
+prune. Its extra final-prune label and post-Stat retained-child identity claim
+are unsupported. Mandatory public nested Recover-stage/Prune-generation proof
+and the separate actual final-prune lease matrix remain. No extra nested
+final-prune runtime guarantee is required. F04R/F08R remain resolved; the
+other old-seven obligations retain the audit's partial dispositions.
+
+The new external four-cell marker/phase overlay exited 1 (package 1.079s,
+wall 5.26s), proving desired fresh-recovery failures on unchanged source.
+It is not production GREEN. Current normal/race and eight supplementary
+receipts, cached preflight, recovered 068 scanner success, historical F07
+chronology and CP29 debt retain their exact original limits. Current
+original-base-range lint attribution is still an acceptance gate.
+
+Only evidence aggregation/correction has occurred. No production/test repair
+has started. The complete audited set now awaits Firstmate's separately
+authored coordinated repair/proof scope; CP11 remains unaccepted and CP12
+has not begun.

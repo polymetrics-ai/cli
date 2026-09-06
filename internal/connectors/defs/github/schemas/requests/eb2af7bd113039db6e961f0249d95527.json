@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "cvss_vector_string": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "cwe_ids": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "description": {
+      "maxLength": 65535,
+      "type": "string"
+    },
+    "severity": {
+      "enum": [
+        "critical",
+        "high",
+        "medium",
+        "low"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "start_private_fork": {
+      "type": "boolean"
+    },
+    "summary": {
+      "maxLength": 1024,
+      "type": "string"
+    },
+    "vulnerabilities": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "package": {
+            "additionalProperties": false,
+            "properties": {
+              "ecosystem": {
+                "enum": [
+                  "rubygems",
+                  "npm",
+                  "pip",
+                  "maven",
+                  "nuget",
+                  "composer",
+                  "go",
+                  "rust",
+                  "erlang",
+                  "actions",
+                  "pub",
+                  "other",
+                  "swift"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "name": {
+                "maxLength": 8192,
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "ecosystem"
+            ],
+            "type": "object"
+          },
+          "patched_versions": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vulnerable_functions": {
+            "items": {
+              "maxLength": 8192,
+              "type": "string"
+            },
+            "maxItems": 256,
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "vulnerable_version_range": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "package"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "description",
+    "summary"
+  ],
+  "type": "object"
+}

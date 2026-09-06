@@ -1,9 +1,0 @@
-{
-  "record": {
-    "token": "doc_fixture_1"
-  },
-  "expect": {
-    "method": "POST",
-    "path": "/docs/doc_fixture_1/cancel/"
-  }
-}

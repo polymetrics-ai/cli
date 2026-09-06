@@ -7,8 +7,7 @@
       "summary": "Declared direct write: DELETE /v2/access-token.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-access-token-1-1 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "revokes the token this connector is authenticating with; irreversibly ends the connector's own session, never a data operation",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -17,8 +16,7 @@
       "summary": "Declared direct read: GET /v2/access-token.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-access-token-2-2 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -31,8 +29,7 @@
       "summary": "Declared direct read: GET /v2/builds.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-builds-3-3 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -45,8 +42,7 @@
       "summary": "Declared direct read: GET /v2/meta.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-meta-4-4 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -59,16 +55,14 @@
       "summary": "Declared etl: GET /v2/organizations.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-5-5 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-v2-organizations-org-slug",
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-6-6 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -81,16 +75,14 @@
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/agents.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-agents-7-7 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-v2-organizations-org-slug-agents-id",
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/agents/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-agents-id-8-8 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -103,8 +95,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/agents/{id}/pause.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-agents-id-pause-9-9 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /v2/organizations/{org.slug}/agents/{id}/pause.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -113,8 +104,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/agents/{id}/resume.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-agents-id-resume-10-10 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /v2/organizations/{org.slug}/agents/{id}/resume.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -123,8 +113,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/agents/{id}/stop.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-agents-id-stop-11-11 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /v2/organizations/{org.slug}/agents/{id}/stop.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -133,8 +122,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/api-settings.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-api-settings-12-12 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -147,8 +135,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/api-settings.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-api-settings-13-13 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -157,8 +144,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/audit_events.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-audit-events-14-14 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -171,8 +157,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/audit_events/{uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-audit-events-uuid-15-15 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -185,8 +170,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/builds.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-builds-16-16 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -199,16 +183,14 @@
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/clusters.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-17-17 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-v2-organizations-org-slug-clusters",
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/clusters.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-clusters-18-18 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a new cluster; low-frequency infrastructure-provisioning action, Pass B breadth-vs-cost triage, no consuming write modeled this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -217,8 +199,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{cluster.id}/agent-images.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-agent-images-19-19 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -231,8 +212,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/clusters/{cluster.id}/agent-images.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-agent-images-20-20 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -241,8 +221,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/clusters/{cluster.id}/agent-images/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-clusters-cluster-id-agent-images-id-21-21 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -251,8 +230,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{cluster.id}/agent-images/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-agent-images-id-22-22 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -265,8 +243,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/clusters/{cluster.id}/cache_volumes.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-clusters-cluster-id-cache-volumes-23-23 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -275,8 +252,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{cluster.id}/cache_volumes.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-cache-volumes-24-24 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -289,8 +265,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{cluster.id}/network_ranges.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-network-ranges-25-25 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -303,8 +278,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{cluster.id}/queues.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-queues-26-26 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -317,8 +291,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/clusters/{cluster.id}/queues.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-queues-27-27 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates an agent queue; part of the excluded queues surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -327,8 +300,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-clusters-cluster-id-queues-id-28-28 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes an agent queue; part of the excluded queues surface",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -337,8 +309,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-queues-id-29-29 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -351,8 +322,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-clusters-cluster-id-queues-id-30-30 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates an agent queue; part of the excluded queues surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -361,8 +331,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}/pause_dispatch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-queues-id-pause-dispatch-31-31 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "pauses job dispatch on a queue; part of the excluded queues surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -371,8 +340,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/clusters/{cluster.id}/queues/{id}/resume_dispatch.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-queues-id-resume-dispatch-32-32 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "resumes job dispatch on a queue; part of the excluded queues surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -381,8 +349,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{cluster.id}/tokens.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-tokens-33-33 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -395,8 +362,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/clusters/{cluster.id}/tokens.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-clusters-cluster-id-tokens-34-34 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "mints a new agent registration token; a credential-minting operation, never a data mutation",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -405,8 +371,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-clusters-cluster-id-tokens-id-35-35 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "revokes an agent registration token; credential-shaped mutation, would disconnect every agent still using it",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -415,8 +380,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-cluster-id-tokens-id-36-36 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -429,8 +393,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/clusters/{cluster.id}/tokens/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-clusters-cluster-id-tokens-id-37-37 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "renames/revokes-and-reissues an agent token; credential-shaped mutation",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -439,8 +402,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/clusters/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-clusters-id-38-38 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "permanently deletes a cluster and detaches every pipeline/queue/agent-token associated with it; not exposed as a write action this pass pending destructive-scope review",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -449,8 +411,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/clusters/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-clusters-id-39-39 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -463,8 +424,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/clusters/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-clusters-id-40-40 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a cluster's name/description/default-queue; low-frequency infrastructure-config action, Pass B breadth-vs-cost triage",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -473,8 +433,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/emojis.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-emojis-41-41 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -487,8 +446,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/jobs/{job.id}/ssh-session.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-jobs-job-id-ssh-session-42-42 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -497,8 +455,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/jobs/{job.id}/vnc-session.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-jobs-job-id-vnc-session-43-43 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -507,8 +464,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/members.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-members-44-44 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -521,8 +477,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/members/{user.uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-members-user-uuid-45-45 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -531,8 +486,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/members/{user.uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-members-user-uuid-46-46 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -545,8 +499,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/members/{user.uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-members-user-uuid-47-47 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -555,8 +508,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipeline-settings.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipeline-settings-48-48 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -569,8 +521,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/pipeline-settings.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-pipeline-settings-49-49 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -579,8 +530,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipeline-settings/advanced-queue-metrics.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipeline-settings-advanced-queue-metrics-50-50 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -589,8 +539,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/pipeline-settings/build-export.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-pipeline-settings-build-export-51-51 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -599,8 +548,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipeline-settings/build-export.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipeline-settings-build-export-52-52 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -609,8 +557,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/pipeline-settings/hosted-agents-ssh.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-pipeline-settings-hosted-agents-ssh-53-53 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -619,8 +566,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipeline-settings/hosted-agents-ssh.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipeline-settings-hosted-agents-ssh-54-54 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -629,8 +575,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/pipeline-settings/public-pipelines.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-pipeline-settings-public-pipelines-55-55 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -639,8 +584,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipeline-settings/public-pipelines.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipeline-settings-public-pipelines-56-56 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -649,8 +593,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipeline-templates.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipeline-templates-57-57 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -663,8 +606,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/pipeline-templates.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-pipeline-templates-58-58 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a pipeline template; part of the excluded templates surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -673,8 +615,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/pipeline-templates/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-pipeline-templates-uuid-59-59 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a pipeline template; part of the excluded templates surface, would also detach it from every pipeline still referencing it",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -683,8 +624,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipeline-templates/{uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipeline-templates-uuid-60-60 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -697,8 +637,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/pipeline-templates/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-pipeline-templates-uuid-61-61 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a pipeline template; part of the excluded templates surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -707,16 +646,14 @@
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/pipelines.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-62-62 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-v2-organizations-org-slug-pipelines",
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/pipelines.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-pipelines-63-63 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v2/organizations/{org.slug}/pipelines.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -725,16 +662,14 @@
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-64-64 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-v2-organizations-org-slug-pipelines-pipeline-slug-builds",
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-65-65 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -743,8 +678,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-66-66 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -757,8 +691,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/annotations.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations-67-67 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -771,8 +704,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/annotations.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations-68-68 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -781,8 +713,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/annotations/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-annotations-uuid-69-69 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -791,8 +722,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/artifacts.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-artifacts-70-70 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -805,8 +735,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/cancel.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-cancel-71-71 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/cancel.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -815,8 +744,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/artifacts.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-72-72 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -829,8 +757,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/artifacts/{id}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id-73-73 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -839,8 +766,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/artifacts/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id-74-74 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -853,8 +779,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/artifacts/{id}/download.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-artifacts-id-download-75-75 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -867,8 +792,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/env.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-env-76-76 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -881,8 +805,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/log.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-log-77-77 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -891,8 +814,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/log.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-log-78-78 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -905,8 +827,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/reprioritize.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-reprioritize-79-79 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -915,8 +836,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/retry.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-retry-80-80 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -925,8 +845,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/jobs/{job.id}/unblock.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-jobs-job-id-unblock-81-81 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -935,8 +854,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/rebuild.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-pipelines-pipeline-slug-builds-number-rebuild-82-82 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{number}/rebuild.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -945,8 +863,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/pipelines/{slug}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-pipelines-slug-83-83 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /v2/organizations/{org.slug}/pipelines/{slug}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -955,8 +872,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/pipelines/{slug}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-pipelines-slug-84-84 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -969,8 +885,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/pipelines/{slug}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-pipelines-slug-85-85 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /v2/organizations/{org.slug}/pipelines/{slug}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -979,8 +894,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/pipelines/{slug}/archive.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-pipelines-slug-archive-86-86 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v2/organizations/{org.slug}/pipelines/{slug}/archive.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -989,8 +903,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/pipelines/{slug}/unarchive.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-pipelines-slug-unarchive-87-87 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v2/organizations/{org.slug}/pipelines/{slug}/unarchive.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -999,8 +912,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/pipelines/{slug}/webhook.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-pipelines-slug-webhook-88-88 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "regenerates the pipeline's provider (GitHub/GitLab/etc) webhook URL/secret; a one-time provisioning action, not a syncable data mutation",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1009,8 +921,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/portals.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-portals-89-89 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1023,8 +934,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/portals.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-portals-90-90 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates a portal (a scoped external trigger credential); credential-adjacent provisioning, out of scope",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1033,8 +943,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/portals/{portal.slug}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-portals-portal-slug-91-91 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes a portal; part of the excluded portals surface",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1043,8 +952,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/portals/{portal.slug}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-portals-portal-slug-92-92 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1057,8 +965,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/portals/{portal.slug}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-portals-portal-slug-93-93 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "updates a portal; part of the excluded portals surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1067,8 +974,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/rate_limit.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-rate-limit-94-94 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1081,8 +987,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/repository_connections.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-repository-connections-95-95 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1095,8 +1000,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/repository_connections/{id}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-repository-connections-id-96-96 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1109,8 +1013,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/rules.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-rules-97-97 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1123,8 +1026,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/rules.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-rules-98-98 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "creates an access-control rule; a security-policy mutation, out of scope for this data-sync connector",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1133,8 +1035,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/rules/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-rules-uuid-99-99 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "deletes an access-control rule; a security-policy mutation, out of scope for this data-sync connector",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1143,8 +1044,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/rules/{uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-rules-uuid-100-100 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1157,8 +1057,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/services.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-services-101-101 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1171,8 +1070,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/services.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-services-102-102 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1181,8 +1079,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/services/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-services-uuid-103-103 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1191,8 +1088,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/services/{uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-services-uuid-104-104 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1205,8 +1101,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/services/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-services-uuid-105-105 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1215,8 +1110,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/services/{uuid}/disable.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-services-uuid-disable-106-106 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1225,8 +1119,7 @@
       "summary": "Declared direct write: PUT /v2/organizations/{org.slug}/services/{uuid}/enable.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.put-v2-organizations-org-slug-services-uuid-enable-107-107 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1235,16 +1128,14 @@
       "summary": "Declared etl: GET /v2/organizations/{org.slug}/teams.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-108-108 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations post-v2-organizations-org-slug-teams",
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/teams.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-teams-109-109 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v2/organizations/{org.slug}/teams.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1253,8 +1144,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/teams/{team.uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-teams-team-uuid-110-110 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: DELETE /v2/organizations/{org.slug}/teams/{team.uuid}.",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1263,8 +1153,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/teams/{team.uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-111-111 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1277,8 +1166,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/teams/{team.uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-teams-team-uuid-112-112 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PATCH /v2/organizations/{org.slug}/teams/{team.uuid}.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1287,8 +1175,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/teams/{team.uuid}/members.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-members-113-113 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1301,8 +1188,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/teams/{team.uuid}/members.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-teams-team-uuid-members-114-114 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "adds a user to a team; part of the team-membership surface excluded this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1311,8 +1197,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-115-115 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "removes a user from a team; part of the team-membership surface excluded this pass",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1321,8 +1206,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-116-116 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1335,8 +1219,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/teams/{team.uuid}/members/{user.uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-teams-team-uuid-members-user-uuid-117-117 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "changes a team member's role; part of the team-membership surface excluded this pass",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1345,8 +1228,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/teams/{team.uuid}/pipelines.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-pipelines-118-118 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1359,8 +1241,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/teams/{team.uuid}/pipelines.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-teams-team-uuid-pipelines-119-119 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "grants a team access to a pipeline; part of the excluded join-resource surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1369,8 +1250,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-120-120 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "revokes a team's pipeline access; part of the excluded join-resource surface",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1379,8 +1259,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-121-121 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1393,8 +1272,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/teams/{team.uuid}/pipelines/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-teams-team-uuid-pipelines-uuid-122-122 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "changes a team's pipeline access level; part of the excluded join-resource surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1403,8 +1281,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/teams/{team.uuid}/suites.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-suites-123-123 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1417,8 +1294,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/teams/{team.uuid}/suites.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-teams-team-uuid-suites-124-124 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "grants a team access to a test suite; part of the excluded join-resource surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1427,8 +1303,7 @@
       "summary": "Declared direct write: DELETE /v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.delete-v2-organizations-org-slug-teams-team-uuid-suites-uuid-125-125 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "revokes a team's test-suite access; part of the excluded join-resource surface",
       "approval": "direct_write commands require plan, preview, approval, execute with destructive confirmation"
     },
@@ -1437,8 +1312,7 @@
       "summary": "Declared direct read: GET /v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-organizations-org-slug-teams-team-uuid-suites-uuid-126-126 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1451,8 +1325,7 @@
       "summary": "Declared direct write: PATCH /v2/organizations/{org.slug}/teams/{team.uuid}/suites/{uuid}.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.patch-v2-organizations-org-slug-teams-team-uuid-suites-uuid-127-127 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "changes a team's test-suite access level; part of the excluded join-resource surface",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1461,8 +1334,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/teams/enable.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.post-v2-organizations-org-slug-teams-enable-128-128 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Documented provider operation has no connector-owned operation contract, command, or CLI surface. It remains declaration-pending rather than being treated as an engine gap.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1471,8 +1343,7 @@
       "summary": "Declared direct read: GET /v2/user.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.provider.get-v2-user-129-129 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -1485,8 +1356,7 @@
       "summary": "Declared direct write: PUT /organizations/{org.slug}/jobs/{job.id}/retry.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.local-api-surface.put-organizations-org-slug-jobs-job-id-retry-130 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /organizations/{org.slug}/jobs/{job.id}/retry.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1495,8 +1365,7 @@
       "summary": "Declared direct write: PUT /organizations/{org.slug}/jobs/{job.id}/unblock.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.local-api-surface.put-organizations-org-slug-jobs-job-id-unblock-131 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: PUT /organizations/{org.slug}/jobs/{job.id}/unblock.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -1505,8 +1374,7 @@
       "summary": "Declared direct write: POST /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://buildkite.com/docs/apis/rest-api",
-      "notes": "Blocked: locked source operation buildkite.local-api-surface.post-v2-organizations-org-slug-pipelines-pipeline-slug-builds-build-number-annotations-132 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /v2/organizations/{org.slug}/pipelines/{pipeline.slug}/builds/{build.number}/annotations.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     }

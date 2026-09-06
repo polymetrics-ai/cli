@@ -9,12 +9,19 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
 
+type testNoAuthHooks struct{ Hooks }
+
+func (testNoAuthHooks) Authenticator(context.Context, connectors.RuntimeConfig, engine.AuthSpec) (connsdk.Authenticator, error) {
+	return connsdk.AuthFunc(func(context.Context, *http.Request) error { return nil }), nil
+}
+
 func TestHooksRegistered(t *testing.T) {
-	h := engine.HooksFor("google-calendar")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("registered hooks = nil")
 	}
@@ -29,20 +36,6 @@ func TestHooksRegistered(t *testing.T) {
 	}
 	if _, ok := h.(engine.StreamHook); ok {
 		t.Fatal("hooks should not override declarative ReadStream")
-	}
-}
-
-func TestAuthenticatorConformanceFixtureNoOps(t *testing.T) {
-	auth, err := Hooks{}.Authenticator(context.Background(), connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"}, engine.AuthSpec{})
-	if err != nil {
-		t.Fatalf("Authenticator: %v", err)
-	}
-	req := httptest.NewRequest(http.MethodGet, "https://example.test/calendar", nil)
-	if err := auth.Apply(context.Background(), req); err != nil {
-		t.Fatalf("Apply: %v", err)
-	}
-	if got := req.Header.Get("Authorization"); got != "" {
-		t.Fatalf("Authorization = %q, want empty", got)
 	}
 }
 
@@ -92,7 +85,7 @@ func TestAuthenticatorLiveSyntheticValuesStillRefreshes(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	auth, err := Hooks{}.Authenticator(context.Background(), connectors.RuntimeConfig{}, engine.AuthSpec{TokenURL: srv.URL, ClientID: "synthetic-conformance-secret", ClientSecret: "synthetic-conformance-secret", Token: "synthetic-conformance-secret"})
+	auth, err := Hooks{}.Authenticator(context.Background(), connectors.RuntimeConfig{}, engine.AuthSpec{TokenURL: srv.URL, ClientID: "synthetic-fixture-secret", ClientSecret: "synthetic-fixture-secret", Token: "synthetic-fixture-secret"})
 	if err != nil {
 		t.Fatalf("Authenticator: %v", err)
 	}
@@ -132,10 +125,10 @@ func TestFreeBusyOperationDirectReadRejectsInvalidTimeBounds(t *testing.T) {
 		t.Fatalf("Load: %v", err)
 	}
 	b.HTTP.URL = srv.URL + "/calendar/v3"
-	conn := engine.New(b, Hooks{})
+	conn := engine.New(b, testNoAuthHooks{})
 	_, err = conn.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
 		Operation: "google-calendar.freebusy.query",
-		Config:    connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+		Config:    connectors.RuntimeConfig{ProjectDir: "__polymetrics_execution_fixture__"},
 		Body: map[string]any{
 			"timeMin": "not-a-date-time",
 			"timeMax": "2020-01-02T00:00:00Z",
@@ -177,10 +170,10 @@ func TestFreeBusyOperationDirectReadFixtureOnly(t *testing.T) {
 		t.Fatalf("Load: %v", err)
 	}
 	b.HTTP.URL = srv.URL + "/calendar/v3"
-	conn := engine.New(b, Hooks{})
+	conn := engine.New(b, testNoAuthHooks{})
 	direct, err := conn.OperationDirectRead(context.Background(), connectors.OperationDirectReadRequest{
 		Operation: "google-calendar.freebusy.query",
-		Config:    connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+		Config:    connectors.RuntimeConfig{ProjectDir: "__polymetrics_execution_fixture__"},
 		Body: map[string]any{
 			"timeMin": "2020-01-01T00:00:00Z",
 			"timeMax": "2020-01-02T00:00:00Z",
@@ -448,7 +441,7 @@ func TestWriteActionsSendDeclaredRecordQueries(t *testing.T) {
 			records := []connectors.Record{tt.record}
 			req := connectors.WriteRequest{
 				Action: tt.action,
-				Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+				Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_execution_fixture__"},
 			}
 			if tt.requiresApproval {
 				req = approvedFixtureWriteRequest(t, conn, req, records)
@@ -541,7 +534,7 @@ func TestEventsInitialReadDoesNotApplyImplicitCutoff(t *testing.T) {
 			err := conn.Read(context.Background(), connectors.ReadRequest{
 				Stream: "events",
 				Config: connectors.RuntimeConfig{
-					ProjectDir: "__polymetrics_conformance_fixture__",
+					ProjectDir: "__polymetrics_execution_fixture__",
 					Config:     config,
 				},
 			}, func(connectors.Record) error {
@@ -607,7 +600,7 @@ func TestLegacyStreamsProjectDeclaredSchemas(t *testing.T) {
 			var got connectors.Record
 			err := conn.Read(context.Background(), connectors.ReadRequest{
 				Stream: tt.name,
-				Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+				Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_execution_fixture__"},
 			}, func(record connectors.Record) error {
 				got = record
 				return nil
@@ -655,7 +648,7 @@ func TestSettingsReadFollowsNextPageToken(t *testing.T) {
 	var records []connectors.Record
 	err := conn.Read(context.Background(), connectors.ReadRequest{
 		Stream: "settings",
-		Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_conformance_fixture__"},
+		Config: connectors.RuntimeConfig{ProjectDir: "__polymetrics_execution_fixture__"},
 	}, func(record connectors.Record) error {
 		records = append(records, record)
 		return nil
@@ -680,5 +673,5 @@ func newFixtureConnector(t *testing.T, handler http.Handler) (*engine.Connector,
 		t.Fatalf("Load: %v", err)
 	}
 	b.HTTP.URL = srv.URL + "/calendar/v3"
-	return engine.New(b, Hooks{}), srv.Close
+	return engine.New(b, testNoAuthHooks{}), srv.Close
 }

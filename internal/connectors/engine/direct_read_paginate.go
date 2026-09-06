@@ -601,8 +601,8 @@ func pageAdvanceRecordCount(paginator connsdk.Paginator) int {
 	switch p := paginator.(type) {
 	case *pageNumberPaginator:
 		return p.pageSize
-	case *connsdk.OffsetPaginator:
-		return p.PageSize
+	case *offsetLimitPaginator:
+		return p.pageSize
 	default:
 		return 0
 	}

@@ -1,0 +1,234 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "advanced_security": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "code_security",
+        "secret_protection"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "code_scanning_default_setup": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "code_scanning_default_setup_options": {
+      "additionalProperties": false,
+      "properties": {
+        "runner_label": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runner_type": {
+          "enum": [
+            "standard",
+            "labeled",
+            "not_set"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "code_scanning_delegated_alert_dismissal": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "code_scanning_options": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_advanced": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "code_security": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "dependabot_alerts": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "dependabot_security_updates": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "dependency_graph": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "dependency_graph_autosubmit_action": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "dependency_graph_autosubmit_action_options": {
+      "additionalProperties": false,
+      "properties": {
+        "labeled_runners": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "maxLength": 255,
+      "type": "string"
+    },
+    "enforcement": {
+      "enum": [
+        "enforced",
+        "unenforced"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "enterprise": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "private_vulnerability_reporting": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_protection": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_delegated_alert_dismissal": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_extended_metadata": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_generic_secrets": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_non_provider_patterns": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_push_protection": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "secret_scanning_validity_checks": {
+      "enum": [
+        "enabled",
+        "disabled",
+        "not_set"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "enterprise",
+    "name"
+  ],
+  "type": "object"
+}

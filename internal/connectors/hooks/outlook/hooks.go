@@ -40,10 +40,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("outlook", func() engine.Hooks { return New() })
-}
-
 // Hooks is the outlook hook set: engine.AuthHook and engine.StreamHook.
 type Hooks struct {
 	// Now is injectable for tests; nil uses time.Now.

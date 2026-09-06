@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "branch_filter_strategy": {
+      "enum": [
+        "wildcard",
+        "regex",
+        "all_branches"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "custom_headers": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "custom_webhook_template": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enable_ssl_verification": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hook_id": {
+      "type": "integer"
+    },
+    "merge_requests_events": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "push_events": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "push_events_branch_filter": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repository_update_events": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "signing_token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "tag_push_events": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url_variables": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "hook_id"
+  ],
+  "type": "object"
+}

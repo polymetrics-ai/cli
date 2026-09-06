@@ -26,10 +26,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("github", func() engine.Hooks { return New() })
-}
-
 // Hooks is the github bundle's stateless Tier-2 hook set.
 type Hooks struct{}
 

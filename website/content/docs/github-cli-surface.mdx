@@ -14,9 +14,8 @@ This is metadata plus a guarded runtime path. It tells `pm` and docs renderers w
 are ETL reads, which create approval-gated write plans through fixed REST or GraphQL operations, and
 which local workflow features stay outside connector API dispatch.
 
-The generated counts below are current source-inventory evidence, not connector certification. The
-historical GitHub gap-map counts are archived as actively wrong because they were measured on the
-wrong branch; see the [connector delivery canon](connector-delivery).
+The generated counts below summarize the rendered GitHub execution bundle. They describe runnable
+bindings, not an independent permission layer; see the [connector delivery canon](connector-delivery).
 
 ## Current surface
 
@@ -24,29 +23,25 @@ wrong branch; see the [connector delivery canon](connector-delivery).
 
 | Metric | Value |
 |---|---:|
-| Declared command entries | 1612 |
+| Rendered command entries | 1612 |
 | Implemented command entries | 1587 |
 | Partial command entries | 0 |
 | Planned command entries | 0 |
 | Unsupported API entries | 4 |
 | Unsupported local workflow entries | 21 |
 | Unsafe or disallowed entries | 0 |
-| GitHub read streams | 37 |
-| GitHub write actions | 606 |
-| Pinned REST operations | 1220 |
-| Pinned GraphQL Query roots | 31 |
-| Pinned GraphQL Mutation roots | 274 |
-| Pinned source operations | 1525 |
-| Source inventory classification | 1525/1525 (100%) |
-| Executable implementation | 1495/1525 (98.03%) |
-| Current-head live proof | 0/1525 (0%) |
-| Tracked REST endpoints | 1220 |
-| Covered REST endpoints | 1219 |
-| Blocked REST endpoints | 1 |
-| Fixed GraphQL transport endpoints | 1 |
-| Fixed GraphQL root-operation bindings | 305 |
-| Supplemental fixed GraphQL bindings | 1 |
-| Legacy GraphQL compatibility bindings | 4 |
+| Rendered read streams | 37 |
+| Rendered write actions | 606 |
+| Authored canonical operations | 1813 |
+| Operation-bound commands | 574 |
+| Endpoint-bound commands | 1577 |
+| Direct read lane | implemented |
+| Direct write lane | implemented |
+| Binary download lane | implemented |
+| Binary upload lane | implemented |
+| ETL lane | implemented |
+| Reverse ETL lane | implemented |
+| Sync transport lane | implemented |
 
 {/* /generated:current-surface */}
 
@@ -56,12 +51,12 @@ wrong branch; see the [connector delivery canon](connector-delivery).
 
 | Intent | Current count | Runtime rule |
 |---|---:|---|
-| `etl` | 15 | Reads map to existing streams or planned stream/direct-read coverage. |
+| `etl` | 15 | Reads bind to rendered streams and keep warehouse materialization separate from direct reads. |
 | `reverse_etl` | 622 | Commands with explicit `record.*` flag mappings create stored reverse plans; execution requires preview and approval. |
-| `direct_read` | 654 | Constrained read commands that do not naturally fit streams. |
-| `binary_download` | 14 | Bounded GET downloads that require declared response status, media, and redirect policy before writing a file beneath a caller-supplied `--dest-root`; no response body is rendered. |
-| `binary_upload` | 1 | Declared, bounded local-file uploads follow plan → preview → approval → execute; the provider URL, byte cap, media policy, and request body remain connector-owned. |
-| `direct_write` | 287 | Fixed declared writes follow plan → preview → approval → execute; destructive operations also require typed confirmation. |
+| `direct_read` | 654 | Constrained reads bind to one rendered provider operation. |
+| `binary_download` | 14 | Bounded downloads require declared response status, media, redirect, size, and destination policy. |
+| `binary_upload` | 1 | Bounded local-file uploads follow plan → preview → approval → execute with connector-owned media and size policy. |
+| `direct_write` | 287 | Fixed rendered writes follow plan → preview → approval → execute; destructive operations require typed confirmation. |
 | `local_workflow` | 12 | Browser, git, shell, extension, completion, or local config behavior. |
 | `auth` | 3 | Credential lifecycle commands; never print token material. |
 | `config` | 3 | Local config behavior, not connector data extraction. |

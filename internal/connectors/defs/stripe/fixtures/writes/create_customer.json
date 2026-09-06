@@ -1,7 +1,0 @@
-{
-  "record": { "email": "fixture@example.com", "name": "Fixture Customer" },
-  "expect": {
-    "method": "POST",
-    "path": "/customers"
-  }
-}

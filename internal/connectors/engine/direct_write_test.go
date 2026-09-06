@@ -164,17 +164,6 @@ func TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest(t *tes
 				}},
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method: http.MethodPost,
-			Path:   "/api/vote",
-			Operation: &SurfaceOperation{
-				Model:            "destructive_action",
-				Status:           "blocked",
-				Risk:             "high",
-				BlockedByDefault: true,
-				Reason:           "operation metadata is bound by the executor",
-			},
-		}}},
 	}
 	req := connectors.OperationDirectWriteRequest{
 		Operation: "acme.vote",
@@ -284,7 +273,7 @@ func TestOperationDirectWriteContentTypeRejectsUnknownBeforeIO(t *testing.T) {
 	bundle := Bundle{Name: "acme", HTTP: HTTPBase{URL: srv.URL}, Operations: []OperationSpec{{
 		ID: "acme.bad.create", Kind: "rest_write", Summary: "Bad content", Risk: "medium", Approval: "none", OutputPolicy: "none", MutationClass: "create",
 		REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets", ContentType: "application/x-unsafe", MaxBytes: 1024},
-	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write"}}}}}
+	}}}
 	_, err := PreviewOperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{Operation: "acme.bad.create", Body: map[string]any{"value": "x"}}, nil)
 	if err == nil || !strings.Contains(err.Error(), "not supported") {
 		t.Fatalf("PreviewOperationDirectWrite error = %v, want closed-content-type refusal", err)
@@ -309,7 +298,7 @@ func TestOperationDirectWriteStoresReturnedSecretAndRetainsRuntimeResponse(t *te
 		MutationClass: "secret", SecretSensitive: true,
 		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "generated_credential"},
 		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
-	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	}}}
 	req := connectors.OperationDirectWriteRequest{Operation: "acme.credentials.create", Config: connectors.RuntimeConfig{SecretStore: store, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", WriteApprovalScope: connectors.WriteApprovalScopeFixture}}
 	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
 	if err != nil {
@@ -351,7 +340,7 @@ func TestOperationDirectWriteRetainsProviderReceiptWhenSecretStoreFails(t *testi
 		MutationClass: "secret", SecretSensitive: true,
 		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "generated_credential"},
 		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
-	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	}}}
 	req := connectors.OperationDirectWriteRequest{Operation: "acme.credentials.create", Config: connectors.RuntimeConfig{SecretStore: store, CredentialRevision: "fixture-credential-revision", ConfigurationDigest: "fixture-configuration-digest", WriteApprovalScope: connectors.WriteApprovalScopeFixture}}
 	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
 	if err != nil {
@@ -384,7 +373,7 @@ func TestOperationDirectWriteRejectsSecretResponseWithoutEncryptedStoreBeforeIO(
 		MutationClass: "secret", SecretSensitive: true,
 		SensitivePolicy: &SensitivePolicySpec{InputMode: "env", ApprovalMode: "typed_confirmation", ResponseSecretField: "credential", ResponseSecretStoreKey: "generated_credential"},
 		REST:            &RESTOperationSpec{Method: http.MethodPost, Path: "/v2/credentials", MaxBytes: 1024},
-	}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/v2/credentials", Operation: &SurfaceOperation{Model: "write"}}}}}
+	}}}
 	_, err := PreviewOperationDirectWrite(context.Background(), bundle, connectors.OperationDirectWriteRequest{Operation: "acme.credentials.create", Config: connectors.RuntimeConfig{SecretStore: newRecordingSecretStore()}}, nil)
 	if err == nil || !strings.Contains(err.Error(), "secret response") {
 		t.Fatalf("PreviewOperationDirectWrite error = %v, want pre-I/O encrypted-store refusal", err)
@@ -491,17 +480,6 @@ func TestOperationDirectWriteHonorsDeclaredJSONAndNoneResponsePolicies(t *testin
 						BodySchema:  json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`),
 					},
 				}},
-				Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-					Method: http.MethodPost,
-					Path:   "/widgets",
-					Operation: &SurfaceOperation{
-						Model:            "write_action",
-						Status:           "blocked",
-						Risk:             "medium",
-						BlockedByDefault: true,
-						Reason:           "operation metadata is bound by the executor",
-					},
-				}}},
 			}
 			req := connectors.OperationDirectWriteRequest{
 				Operation: "acme.widgets.create",
@@ -617,7 +595,6 @@ func TestOperationDirectWriteRetainsRESTDecodeFailureResponse(t *testing.T) {
 				BodySchema:  json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`),
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write"}}}},
 	}
 	req := connectors.OperationDirectWriteRequest{Operation: "acme.widgets.create", Body: map[string]any{"name": "widget"}}
 	preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
@@ -678,7 +655,6 @@ func TestOperationDirectWritePreservesExplicitNonJSONResponses(t *testing.T) {
 					ID: "acme.widgets.create", Kind: "rest_write", Summary: "Create one widget", Risk: "medium", Approval: "none", OutputPolicy: directWritePolicyJSON, MutationClass: "create",
 					REST: &RESTOperationSpec{Method: http.MethodPost, Path: "/widgets", ContentType: "application/json", MaxBytes: 1024, BodySchema: json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`)},
 				}},
-				Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodPost, Path: "/widgets", Operation: &SurfaceOperation{Model: "write_action", Status: "blocked", Risk: "medium", BlockedByDefault: true, Reason: "operation metadata is bound by the executor"}}}},
 			}
 			req := connectors.OperationDirectWriteRequest{Operation: "acme.widgets.create", Body: map[string]any{"name": "widget"}}
 			preview, err := PreviewOperationDirectWrite(context.Background(), bundle, req, nil)
@@ -737,17 +713,6 @@ func TestOperationDirectWriteNeverRetriesNonIdempotentFailure(t *testing.T) {
 				BodySchema:  json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`),
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method: http.MethodPost,
-			Path:   "/widgets",
-			Operation: &SurfaceOperation{
-				Model:            "write_action",
-				Status:           "blocked",
-				Risk:             "medium",
-				BlockedByDefault: true,
-				Reason:           "operation metadata is bound by the executor",
-			},
-		}}},
 	}
 	req := connectors.OperationDirectWriteRequest{
 		Operation: "acme.create-widget",
@@ -818,17 +783,6 @@ func TestOperationDirectWriteRefusesRedirectReplay(t *testing.T) {
 				BodySchema:  json.RawMessage(`{"type":"object","required":["name"],"properties":{"name":{"type":"string"}}}`),
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method: http.MethodPost,
-			Path:   "/widgets",
-			Operation: &SurfaceOperation{
-				Model:            "write_action",
-				Status:           "blocked",
-				Risk:             "medium",
-				BlockedByDefault: true,
-				Reason:           "operation metadata is bound by the executor",
-			},
-		}}},
 	}
 	req := connectors.OperationDirectWriteRequest{
 		Operation: "acme.create-widget",

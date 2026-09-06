@@ -44,36 +44,15 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
           "$(go env GOPATH)/bin/nfpm" --version
 
-      # The certify budget measures wall time INCLUDING compilation, and this job
-      # runs with the Go build cache disabled. Embedding DuckDB turned that
-      # compilation into a cold cgo link of two large test binaries, which is
-      # what pushed the measurement to 217.677s against a 210.000s budget — not
-      # the harness. Runtime was measured before and after the DuckDB change and
-      # is unchanged (75.4s vs 78.4s for the dominant test; it got marginally
-      # faster).
-      #
-      # Compiling the two timed binaries first moves that link out of the
-      # measured window without weakening anything: the budget still bounds the
-      # 25 harness calls and 92 CLI invocations it exists to bound, and
-      # certifytiming passes -count=1 so every test still really runs. Total CI
-      # time is unchanged; only what the number means is corrected.
-      - name: Precompile the timed test binaries
-        run: go test -run '^$' ./internal/cli/ ./internal/connectors/certify/
-
-      - name: Certify harness timing
-        run: make certify-timing
-
       - name: Verify
         run: make verify
 
       - name: Check generated files
         run: git diff --exit-code
 
-  # Hermetic GitHub fixture proofs start fresh pm binaries, including the
-  # exhaustive 97 generated candidates and the released read surface. They
-  # are intentionally isolated from `make verify`'s shared internal/cli
-  # deadline; every behavioral assertion remains mandatory in this 45-minute
-  # job while the ordinary Verify job keeps its fixed 20-minute package budget.
+  # Hermetic GitHub fixture proofs retain the two executable warehouse
+  # lifecycle tests after the retired certification-generated direct-read
+  # sweep was removed from vNext runtime proof.
   github-generated-direct-read-fixture:
     name: github-generated-direct-read-fixture
     runs-on: ubuntu-latest
@@ -88,10 +67,10 @@ jobs:
           go-version: '1.26.6'
           cache: false
 
-      # Shared admission is part of the small certification proof. This job
-      # owns its disposable Redis-compatible coordinator rather than relying on
-      # an ambient service supplied by a runner.
-      - name: Provision local shared-admission fixture
+      # Cross-process rate-limit coordination is part of the generated command
+      # proof. This job owns its disposable Redis-compatible coordinator rather
+      # than relying on an ambient runner service.
+      - name: Provision local coordination fixture
         run: |
           if ! command -v redis-server >/dev/null 2>&1; then
             sudo apt-get update
@@ -99,10 +78,10 @@ jobs:
           fi
           redis-server --version
 
-      - name: Exhaustive hermetic GitHub fresh-binary fixtures
+      - name: Hermetic GitHub warehouse lifecycle fixtures
         run: >-
           go test -tags github_fixture_sweep -timeout 35m -count=1 -v ./internal/cli
-          -run '^(TestPMBinaryProvesGitHubSharedAdmissionForGeneratedDirectReadFixture|TestPMBinaryExecutesGitHubGeneratedDirectReadCandidatesAgainstFixture|TestPMBinaryExecutesGitHubDisputedPartialVerdictsAgainstFixture|TestPMBinaryExecutesGitHubReleasedReadSurfaceAgainstFixture|TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'
+          -run '^(TestPMBinaryExecutesIssueLabelWarehouseTransportLifecycle|TestFreshBinaryDeclarativeGitHubWarehouseFlowRoundTrip)$'
 
   # pm embeds DuckDB, so every release target must actually link cgo against
   # go-duckdb's bundled library. That is verifiable only on a native runner:

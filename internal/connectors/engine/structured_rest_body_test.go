@@ -105,10 +105,6 @@ func structuredRESTBodyBundle(baseURL string) Bundle {
 				},
 			},
 		},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{
-			{Method: http.MethodPost, Path: "/workspaces/{workspace_id}/widgets", Operation: &SurfaceOperation{Model: "write"}},
-			{Method: http.MethodPost, Path: "/workspaces/{workspace_id}/widgets/archive", Operation: &SurfaceOperation{Model: "write"}},
-		}},
 	}
 }
 

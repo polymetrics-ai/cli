@@ -1,7 +1,0 @@
-{
-  "record": { "id": "task_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/task/task_fixture_1"
-  }
-}

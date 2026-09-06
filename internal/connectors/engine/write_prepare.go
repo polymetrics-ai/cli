@@ -25,12 +25,13 @@ type declarativeWriteDefinition struct {
 }
 
 type canonicalMultipartFile struct {
-	FieldName         string   `json:"field_name"`
-	SourcePathDigest  string   `json:"source_path_digest"`
-	ContentSHA256     string   `json:"content_sha256,omitempty"`
-	ContentType       string   `json:"content_type,omitempty"`
-	AllowedMediaTypes []string `json:"allowed_media_types,omitempty"`
-	MaxBytes          int64    `json:"max_bytes,omitempty"`
+	FieldName         string                             `json:"field_name"`
+	SourcePathDigest  string                             `json:"source_path_digest"`
+	ContentSHA256     string                             `json:"content_sha256,omitempty"`
+	ContentType       string                             `json:"content_type,omitempty"`
+	MediaPolicy       connectors.BinaryUploadMediaPolicy `json:"media_policy,omitempty"`
+	AllowedMediaTypes []string                           `json:"allowed_media_types,omitempty"`
+	MaxBytes          int64                              `json:"max_bytes,omitempty"`
 }
 
 func prepareDeclarativeWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, records []connectors.Record, h Hooks) (PreparedWrite, error) {
@@ -297,7 +298,7 @@ func prepareDeclarativeRequest(b Bundle, action WriteAction, record connectors.R
 		Query:   query.Encode(),
 		Headers: headers,
 	}
-	body, format, contentType, err := prepareCanonicalWriteBody(action, record, recordIndex, cfg, requirePayloadApproval)
+	body, format, contentType, err := prepareCanonicalWriteBody(b, action, record, recordIndex, cfg, requirePayloadApproval)
 	if err != nil {
 		return PreparedRequest{}, err
 	}
@@ -326,7 +327,7 @@ func canonicalWriteURL(baseURL, path string, query url.Values) (string, error) {
 	return parsed.String(), nil
 }
 
-func prepareCanonicalWriteBody(action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (string, string, string, error) {
+func prepareCanonicalWriteBody(b Bundle, action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (string, string, string, error) {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(record)}
 	marshalJSON := func(payload any) (string, string, string, error) {
 		if payload == nil {
@@ -339,6 +340,12 @@ func prepareCanonicalWriteBody(action WriteAction, record connectors.Record, rec
 		return string(raw), "json", "application/json", nil
 	}
 	switch bodyTypeOf(action) {
+	case "declared_batch":
+		payload, _, err := buildDeclaredBatchPayload(b, action, record, cfg)
+		if err != nil {
+			return "", "", "", err
+		}
+		return marshalJSON(payload)
 	case "form":
 		body := buildForm(record, action.PathFields).Encode()
 		if body == "" {
@@ -472,6 +479,7 @@ func prepareCanonicalMultipartSpec(subject string, multipart *MultipartSpec, rec
 			SourcePathDigest:  digestBytes([]byte(filepath.Clean(path))),
 			ContentSHA256:     approved,
 			ContentType:       part.ContentType,
+			MediaPolicy:       part.MediaPolicy,
 			AllowedMediaTypes: append([]string(nil), part.AllowedMediaTypes...),
 			MaxBytes:          part.MaxBytes,
 		})

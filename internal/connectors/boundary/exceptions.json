@@ -1,18 +1,6 @@
 {
   "exceptions": [
     {
-      "id": "github-certification-matrix-allowlist",
-      "rule": "connector_literal",
-      "connector": "github",
-      "path": "cmd/connectorgen/certificationallowlist.go",
-      "match": "github",
-      "reason": "the explicitly reviewable certification-proof allowlist is intentionally limited to GitHub and PostgreSQL",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/4015",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 1
-    },
-    {
       "id": "github-cli-docs-help-examples",
       "rule": "docs_example",
       "connector": "github",

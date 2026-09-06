@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "filter": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "group_by": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 1,
+      "type": "array"
+    },
+    "layout": {
+      "enum": [
+        "table",
+        "board",
+        "roadmap"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "project_number": {
+      "type": "integer"
+    },
+    "sort_by": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "vertical_group_by": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 1,
+      "type": "array"
+    },
+    "visible_fields": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "layout",
+    "name",
+    "org",
+    "project_number"
+  ],
+  "type": "object"
+}

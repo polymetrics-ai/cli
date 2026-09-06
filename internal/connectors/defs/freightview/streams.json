@@ -1,46 +1,84 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "mode": "oauth2_client_credentials",
+        "token_url": "https://api.freightview.com/v2.0/auth/token"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/shipments",
+      "query": {
+        "limit": "1"
+      }
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "cursor_param": "continuationToken",
+      "max_pages": 100,
+      "token_path": "continuationToken",
+      "type": "cursor"
+    },
+    "url": "https://api.freightview.com/v2.0",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "shipments",
       "method": "GET",
-      "path": "/__legacy_hook/shipments",
+      "name": "shipments",
+      "path": "/shipments",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "shipments"
       },
       "schema": "schemas/shipments.json"
     },
     {
-      "name": "quotes",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "shipmentId",
+            "path": "/shipments",
+            "records_path": "shipments"
+          }
+        },
+        "into": {
+          "path_var": "shipment_id"
+        },
+        "stamp_field": "shipment_id"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/quotes",
+      "name": "quotes",
+      "path": "/shipments/{{ fanout.id }}/quotes",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "quotes"
       },
       "schema": "schemas/quotes.json"
     },
     {
-      "name": "tracking",
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "shipmentId",
+            "path": "/shipments",
+            "records_path": "shipments"
+          }
+        },
+        "into": {
+          "path_var": "shipment_id"
+        },
+        "stamp_field": "shipment_id"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/tracking",
+      "name": "tracking",
+      "path": "/shipments/{{ fanout.id }}/tracking",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "."
       },
       "schema": "schemas/tracking.json"
     }

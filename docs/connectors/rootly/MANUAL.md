@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector rootly [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Rootly incidents, services, and users through the Rootly API. Read-only.
+  Reads Rootly incidents, services, and users through fixed JSON:API routes.
 
 ICON
   id: pm-sample
@@ -24,15 +24,30 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  start_date (required)
+  api_key (secret) (required)
+
+ETL STREAMS
+  incidents:
+    primary key: id
+    fields: id(string), status(string), title(string)
+  services:
+    primary key: id
+    fields: id(string), status(string), title(string)
+  users:
+    primary key: id
+    fields: id(string), status(string), title(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded Rootly JSON:API reads use the fixed provider origin and declared bearer authentication.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

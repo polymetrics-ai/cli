@@ -1,16 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "closed": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "string"
+    },
+    "number": {
+      "type": "integer"
+    },
+    "owner": {
+      "type": "string"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
   "title": "projects",
   "type": "object",
-  "x-primary-key": ["id"],
-  "properties": {
-    "repository": { "type": "string" },
-    "owner": { "type": "string" },
-    "id": { "type": "string" },
-    "number": { "type": "integer" },
-    "title": { "type": "string" },
-    "url": { "type": ["string", "null"] },
-    "closed": { "type": "boolean" },
-    "updated_at": { "type": ["string", "null"] }
-  }
+  "x-primary-key": [
+    "id"
+  ]
 }

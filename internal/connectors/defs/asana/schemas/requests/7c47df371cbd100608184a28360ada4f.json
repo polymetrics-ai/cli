@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "team": {
+          "type": "string"
+        },
+        "workspace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "public"
+      ],
+      "type": "object"
+    },
+    "project_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_gid",
+    "data"
+  ],
+  "type": "object"
+}

@@ -1,66 +1,66 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "custom_field_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The custom field's unique identifier"
-    },
-    "title": {
-      "type": "string",
-      "description": "The custom field's title"
-    },
     "description": {
       "type": "string"
     },
-    "objectType": {
-      "type": "string",
-      "description": "The type of object the field is associated with"
+    "fieldType": {
+      "description": "The custom field's field type",
+      "type": "string"
+    },
+    "id": {
+      "description": "The custom field's unique identifier",
+      "type": "string"
     },
     "isArchived": {
-      "type": "boolean",
-      "description": "Whether the custom field is archived"
+      "description": "Whether the custom field is archived",
+      "type": "boolean"
     },
     "isPrivate": {
-      "type": "boolean",
-      "description": "Whether the custom field is private"
-    },
-    "fieldType": {
-      "type": "string",
-      "description": "The custom field's field type"
+      "description": "Whether the custom field is private",
+      "type": "boolean"
     },
     "isRequired": {
-      "type": "boolean",
-      "description": "Whether the custom field is required"
+      "description": "Whether the custom field is required",
+      "type": "boolean"
+    },
+    "objectType": {
+      "description": "The type of object the field is associated with",
+      "type": "string"
     },
     "selectableValues": {
-      "type": "array",
       "description": "Selectable values for ValueSelect and MultiValueSelect custom fields",
       "items": {
-        "type": "object",
         "properties": {
+          "isArchived": {
+            "description": "Whether the selectable value is archived",
+            "type": "boolean"
+          },
           "label": {
-            "type": "string",
-            "description": "The display label for the selectable value"
+            "description": "The display label for the selectable value",
+            "type": "string"
           },
           "value": {
-            "type": "string",
-            "description": "The API value for the selectable value"
-          },
-          "isArchived": {
-            "type": "boolean",
-            "description": "Whether the selectable value is archived"
+            "description": "The API value for the selectable value",
+            "type": "string"
           }
         },
         "required": [
           "label",
           "value",
           "isArchived"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "title": {
+      "description": "The custom field's title",
+      "type": "string"
     }
   },
+  "title": "custom_field_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

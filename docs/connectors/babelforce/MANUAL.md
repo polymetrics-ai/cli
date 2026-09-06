@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector babelforce [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Babelforce call reporting, recordings, numbers, and users through the Babelforce v2 REST API.
+  Reads Babelforce call reporting, recordings, numbers, and users through fixed Babelforce v2 REST routes.
 
 ICON
   id: babelforce
@@ -24,15 +24,42 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  region
+  access_key_id (secret)
+  access_token (secret)
+
+ETL STREAMS
+  calls:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(string), id(string)
+  calls_extended:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(string), id(string)
+  recordings:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(string), id(string)
+  numbers:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(string), id(string)
+  users:
+    primary key: id
+    cursor: dateCreated
+    fields: dateCreated(string), id(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded Babelforce v2 reads use a source-declared regional provider origin and dual-header authentication.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

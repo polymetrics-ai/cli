@@ -14,26 +14,26 @@ import (
 	"time"
 
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/coordination"
 	"polymetrics.ai/internal/synccontract"
 )
 
 const (
-	productionParkingHelperEnv  = "POLYMETRICS_PRODUCTION_PARKING_HELPER"
-	productionParkingResetDelay = 30 * time.Second
+	productionParkingHelperEnv     = "POLYMETRICS_PRODUCTION_PARKING_HELPER"
+	productionParkingConnectorName = "github"
+	productionParkingResetDelay    = 30 * time.Second
 )
 
-func init() {
-	if os.Getenv(productionParkingHelperEnv) == "" {
-		return
+func productionParkingRegistry() (*connectors.Registry, error) {
+	registry := connectors.NewEmptyRegistry()
+	if err := registry.Register(&productionParkingSource{}); err != nil {
+		return nil, err
 	}
-	connectors.RegisterDefaultRegistryBuilder(func() *connectors.Registry {
-		registry := bundleregistry.New()
-		registry.Register(&productionParkingSource{})
-		return registry
-	})
+	if err := registry.Register(connectors.Warehouse{}); err != nil {
+		return nil, err
+	}
+	return registry, nil
 }
 
 // TestProductionParkingCompositionSurvivesProcessKill drives app.Open,
@@ -129,19 +129,19 @@ func runProductionParkingHelper(t *testing.T, mode string) {
 		if err := InitProject(root); err != nil {
 			t.Fatal(err)
 		}
-		a, err := Open(root)
+		a, err := openWithRegistry(root, false, productionParkingRegistry)
 		if err != nil {
 			t.Fatal(err)
 		}
 		ctx := context.Background()
-		if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "source", Connector: "sample"}); err != nil {
+		if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "source", Connector: productionParkingConnectorName}); err != nil {
 			t.Fatal(err)
 		}
 		if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "warehouse", Connector: "warehouse", Config: map[string]string{"path": filepath.Join(root, ".polymetrics", "warehouse")}}); err != nil {
 			t.Fatal(err)
 		}
 		if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
-			Name: "durable_parking", Source: EndpointConfig{Connector: "sample", Credential: "source"},
+			Name: "durable_parking", Source: EndpointConfig{Connector: productionParkingConnectorName, Credential: "source"},
 			Destination: EndpointConfig{Connector: "warehouse", Credential: "warehouse"},
 			Streams:     map[string]StreamConfig{"customers": {SyncMode: "full_refresh_overwrite", PrimaryKey: []string{"id"}, DestinationTable: "durable_customers"}},
 		}); err != nil {
@@ -158,7 +158,7 @@ func runProductionParkingHelper(t *testing.T, mode string) {
 		fmt.Printf("parked:%s\n", parked.ID)
 		select {}
 	case "admission":
-		a, err := Open(root)
+		a, err := openWithRegistry(root, false, productionParkingRegistry)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -172,7 +172,7 @@ func runProductionParkingHelper(t *testing.T, mode string) {
 			t.Fatal("parked-scope refusal advanced the checkpoint")
 		}
 	case "resume":
-		a, err := Open(root)
+		a, err := openWithRegistry(root, false, productionParkingRegistry)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -189,13 +189,17 @@ var productionParkingReads atomic.Int64
 
 type productionParkingSource struct{}
 
-func (*productionParkingSource) Name() string { return "sample" }
+func (*productionParkingSource) Name() string { return productionParkingConnectorName }
 func (*productionParkingSource) Metadata() connectors.Metadata {
-	return (connectors.Sample{}).Metadata()
+	metadata := (connectors.Sample{}).Metadata()
+	metadata.Name = productionParkingConnectorName
+	return metadata
 }
 func (*productionParkingSource) Check(context.Context, connectors.RuntimeConfig) error { return nil }
 func (*productionParkingSource) Catalog(ctx context.Context, cfg connectors.RuntimeConfig) (connectors.Catalog, error) {
-	return (connectors.Sample{}).Catalog(ctx, cfg)
+	catalog, err := (connectors.Sample{}).Catalog(ctx, cfg)
+	catalog.Connector = productionParkingConnectorName
+	return catalog, err
 }
 func (*productionParkingSource) Read(ctx context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	scope := connectors.RateLimitScopeKey("production-parking-scope")

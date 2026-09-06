@@ -5,7 +5,7 @@ authentication.
 
 Current official operation ledger: 144 documented HTTP operations (79 GET, 21 POST, 20 PUT, 18
 DELETE, 6 PATCH). Implemented rows: 144 = 24 stream-backed reads + 54 bounded direct reads + 65
-typed writes + 1 binary download. Certified rows: 0 (fixture-only; no live provider calls were
+typed writes + 1 binary download. Validated rows: 0 (fixture-only; no live provider calls were
 made).
 
 Readable streams: `conversations`, `conversations_threads`, `customer_properties`, `customers`,
@@ -114,4 +114,4 @@ mailbox, team, tag, webhook, workflow, and user data.
 - Other documented endpoints are not exposed by this connector where they are blocked in the
   operation ledger as direct_read=5.
 - Fixture-only evidence: no live Help Scout credentials, provider calls, provider writes, or
-  certification run were used.
+  validation run were used.

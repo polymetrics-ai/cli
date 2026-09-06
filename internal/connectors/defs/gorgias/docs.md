@@ -18,7 +18,7 @@ and that document's own operation count reconciles exactly with the ledger's car
 There is no top-level `webhooks` block in the document and Gorgias publishes no webhook management
 endpoints, so there is nothing in that area to implement.
 
-Every documented operation is partitioned exactly once in `api_surface.json` and carries exactly one
+Every documented operation is partitioned exactly once in `execution bundle` and carries exactly one
 disposition — executable, blocked with a named dependency, or not executable with a source citation.
 None is blank.
 
@@ -32,7 +32,7 @@ Connection fields:
 - `username` (required, string) — the Gorgias account email used for HTTP Basic auth.
 - `password` (required, secret, string) — the Gorgias API key used for HTTP Basic auth; never logged.
 - `page_size` (optional, string, default `100`) — records per page (1-100).
-- `mode` (optional, string) — `live` (default) or `fixture` for credential-free conformance.
+- `mode` (optional, string) — `live` (default) or `fixture` for credential-free fixture tests.
 
 Add the credential from an environment variable or stdin, never as prompt text:
 
@@ -144,6 +144,6 @@ allowlist or bounded final media contract, so the closed binary executor does no
 - **Flags exist for scalar fields only.** An object, array, or union-typed field is supplied by the
   reverse-ETL source record, not by a shell flag — the same rule the merged `notion`/`gong` bundles
   follow.
-- **No `fixtures/writes/*.json` are shipped.** Per `internal/connectors/conformance/dynamic.go`, a
+- **No `fixtures/writes/*.json` are shipped.** Per `internal/connectors/execution-contract/dynamic.go`, a
   missing write fixture is a skipped check, not a failure; `gong` (27 write actions, several
   multipart) ships the same way.

@@ -1,20 +1,55 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "added_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "key": {
+      "type": "string"
+    },
+    "last_used": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "read_only": {
+      "type": "boolean"
+    },
+    "repository": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "verified": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id"
+  ],
   "title": "deploy_keys",
   "type": "object",
-  "x-primary-key": ["id"],
-  "required": ["id"],
-  "properties": {
-    "repository": { "type": "string" },
-    "id": { "type": "integer" },
-    "key": { "type": "string" },
-    "url": { "type": "string" },
-    "title": { "type": "string" },
-    "verified": { "type": "boolean" },
-    "created_at": { "type": "string" },
-    "read_only": { "type": "boolean" },
-    "added_by": { "type": ["string", "null"] },
-    "last_used": { "type": ["string", "null"] },
-    "enabled": { "type": ["boolean", "null"] }
-  }
+  "x-primary-key": [
+    "id"
+  ]
 }

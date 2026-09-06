@@ -6,41 +6,65 @@
       "Accept-Version": "{{ config.accept_version }}"
     },
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
-    "check": { "method": "GET", "path": "/v2/sites/{{ config.site_id }}/collections" },
+    "check": {
+      "method": "GET",
+      "path": "/v2/sites/{{ config.site_id }}/collections"
+    },
     "error_map": [
-      { "status": 401, "hint": "webflow api_key is missing or invalid; re-run pm credentials add webflow" },
-      { "status": 403, "hint": "webflow account lacks access for this site" },
-      { "status": 429, "class": "rate_limited", "hint": "webflow rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "webflow api_key is missing or invalid; re-run pm credentials add webflow"
+      },
+      {
+        "status": 403,
+        "hint": "webflow account lacks access for this site"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "webflow rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "collections",
       "path": "/v2/sites/{{ config.site_id }}/collections",
-      "records": { "path": "collections" },
+      "records": {
+        "path": "collections"
+      },
       "projection": "passthrough",
       "schema": "schemas/collections.json"
     },
     {
       "name": "pages",
       "path": "/v2/sites/{{ config.site_id }}/pages",
-      "records": { "path": "pages" },
+      "records": {
+        "path": "pages"
+      },
       "projection": "passthrough",
       "schema": "schemas/pages.json"
     },
     {
       "name": "forms",
       "path": "/v2/sites/{{ config.site_id }}/forms",
-      "records": { "path": "forms" },
+      "records": {
+        "path": "forms"
+      },
       "projection": "passthrough",
       "schema": "schemas/forms.json"
     },
     {
       "name": "sites",
       "path": "/v2/sites",
-      "records": { "path": "sites" },
+      "records": {
+        "path": "sites"
+      },
       "schema": "schemas/sites.json"
     },
     {
@@ -52,13 +76,17 @@
         "limit_param": "limit",
         "page_size": 100
       },
-      "records": { "path": "assets" },
+      "records": {
+        "path": "assets"
+      },
       "schema": "schemas/assets.json"
     },
     {
       "name": "webhooks",
       "path": "/v2/sites/{{ config.site_id }}/webhooks",
-      "records": { "path": "webhooks" },
+      "records": {
+        "path": "webhooks"
+      },
       "schema": "schemas/webhooks.json"
     },
     {
@@ -70,7 +98,9 @@
         "limit_param": "limit",
         "page_size": 100
       },
-      "records": { "path": "redirects" },
+      "records": {
+        "path": "redirects"
+      },
       "schema": "schemas/redirects.json"
     },
     {
@@ -82,7 +112,9 @@
         "limit_param": "limit",
         "page_size": 100
       },
-      "records": { "path": "formSubmissions" },
+      "records": {
+        "path": "formSubmissions"
+      },
       "schema": "schemas/form_submissions.json"
     },
     {
@@ -94,7 +126,9 @@
         "limit_param": "limit",
         "page_size": 100
       },
-      "records": { "path": "orders" },
+      "records": {
+        "path": "orders"
+      },
       "schema": "schemas/orders.json"
     },
     {
@@ -106,13 +140,17 @@
         "limit_param": "limit",
         "page_size": 100
       },
-      "records": { "path": "items" },
+      "records": {
+        "path": "items"
+      },
       "schema": "schemas/products.json"
     },
     {
       "name": "custom_domains",
       "path": "/v2/sites/{{ config.site_id }}/custom_domains",
-      "records": { "path": "customDomains" },
+      "records": {
+        "path": "customDomains"
+      },
       "schema": "schemas/custom_domains.json"
     },
     {
@@ -124,19 +162,25 @@
         "limit_param": "limit",
         "page_size": 100
       },
-      "records": { "path": "components" },
+      "records": {
+        "path": "components"
+      },
       "schema": "schemas/components.json"
     },
     {
       "name": "asset_folders",
       "path": "/v2/sites/{{ config.site_id }}/asset_folders",
-      "records": { "path": "assetFolders" },
+      "records": {
+        "path": "assetFolders"
+      },
       "schema": "schemas/asset_folders.json"
     },
     {
       "name": "ecommerce_settings",
       "path": "/v2/sites/{{ config.site_id }}/ecommerce/settings",
-      "records": { "path": "." },
+      "records": {
+        "path": "."
+      },
       "schema": "schemas/ecommerce_settings.json"
     },
     {
@@ -148,7 +192,9 @@
         "limit_param": "limit",
         "page_size": 100
       },
-      "records": { "path": "items" },
+      "records": {
+        "path": "items"
+      },
       "incremental": {
         "cursor_field": "lastUpdated",
         "request_param": "lastUpdated[gte]"
@@ -161,12 +207,10 @@
             "id_field": "id"
           }
         },
-        "into": { "path_var": "id" },
+        "into": {
+          "path_var": "id"
+        },
         "stamp_field": "collectionId"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "cursor_advances' generic re-read harness is not fan_out-aware: it seeds a capture server that always answers 200 with an empty body, but this stream's fan_out.ids_from.request issues its own preliminary GET /v2/sites/{site_id}/collections id-listing request FIRST against that same always-empty capture server, so zero collection ids ever resolve and the per-collection items sub-sequence (the request that would actually carry lastUpdated[gte]) is never issued at all; the harness's single captured-value slot would in any case only ever record whichever request shape hit it last. This is a harness limitation (checkCursorAdvances has no fan_out-aware two-phase variant), not a bundle defect. Proven live by archived parity evidence for webflow's TestParityWebflow_CollectionItemsFanOutSendsLastUpdatedOnResumedSync (asserts the real two-phase read sends lastUpdated[gte]=<seeded cursor> on the per-collection sub-sequence) and TestParityWebflow_CollectionItemsFreshSyncOmitsLastUpdated (asserts a fresh sync omits the param entirely)."
       },
       "schema": "schemas/collection_items.json"
     }

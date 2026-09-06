@@ -14,7 +14,6 @@ func TestApplyPollingPageDispatchesOnlyARegisteredBoundedTargetAndReturnsDurable
 	fixture.declaration.Target.MaxBatchBytes = 256
 	apply := &recordingPollingPageApply{
 		reference: fixture.declaration.Target.Executor,
-		evidence:  RequiredPollingWatermarkConformanceEvidence(),
 	}
 	registry := NewPollingPreflightRegistry()
 	if err := registry.RegisterSource(fixture.source); err != nil {
@@ -91,7 +90,7 @@ func TestApplyPollingPageRefusesUnsafeInputBeforeTargetMutation(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			fixture := newPollingPreflightFixture(t)
 			fixture.declaration.Target.MaxBatchBytes = 256
-			apply := &recordingPollingPageApply{reference: fixture.declaration.Target.Executor, evidence: RequiredPollingWatermarkConformanceEvidence()}
+			apply := &recordingPollingPageApply{reference: fixture.declaration.Target.Executor}
 			registry := NewPollingPreflightRegistry()
 			if err := registry.RegisterSource(fixture.source); err != nil {
 				t.Fatal(err)
@@ -148,17 +147,12 @@ func pollingApplyTestPage(records, valueBytes int) PollingApplyPage {
 
 type recordingPollingPageApply struct {
 	reference connectors.TransportExecutorReference
-	evidence  PollingWatermarkConformanceEvidence
 	calls     int
 	page      PollingApplyPage
 }
 
 func (a *recordingPollingPageApply) PollingApplyExecutorReference() connectors.TransportExecutorReference {
 	return a.reference
-}
-
-func (a *recordingPollingPageApply) PollingApplyConformanceEvidence() PollingWatermarkConformanceEvidence {
-	return a.evidence
 }
 
 func (a *recordingPollingPageApply) ApplyPollingPage(_ context.Context, _ ResolvedPollingWatermark, page PollingApplyPage) (synccontract.DownstreamAcknowledgement, error) {

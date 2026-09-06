@@ -1,33 +1,47 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "GitLab Connection Specification",
-  "type": "object",
-  "required": ["access_token"],
   "properties": {
     "access_token": {
+      "description": "GitLab personal access token or OAuth access token. Used only for Bearer auth; never logged.",
       "type": "string",
-      "x-secret": true,
-      "description": "GitLab personal access token or OAuth access token. Used only for Bearer auth; never logged."
+      "x-secret": true
     },
     "base_url": {
-      "type": "string",
-      "format": "uri",
       "default": "https://gitlab.com/api/v4",
-      "description": "GitLab API base URL override, e.g. https://gitlab.example.com/api/v4 for self-managed instances, or for tests/proxies."
+      "description": "GitLab API base URL override, e.g. https://gitlab.example.com/api/v4 for self-managed instances, or for tests/proxies.",
+      "format": "uri",
+      "type": "string"
     },
-    "start_date": {
-      "type": "string",
-      "format": "date-time",
-      "description": "RFC3339 lower bound applied as each stream's matching since-filter (last_activity_after for projects, created_after for users, updated_after for issues; groups has no since-filter upstream)."
+    "mlflow_metric_key": {
+      "description": "Required MLflow metric_key query value for the source-bound metrics-history ETL stream.",
+      "type": "string"
     },
-    "page_size": {
-      "type": "string",
-      "default": "50",
-      "description": "Records per page (1-100)."
+    "mlflow_run_id": {
+      "description": "Required MLflow run_id query value for the source-bound metrics-history ETL stream.",
+      "type": "string"
     },
     "mode": {
-      "type": "string",
-      "description": "Runtime mode: live (default) or fixture for credential-free conformance."
+      "description": "Runtime mode: live (default) or fixture for credential-free tests.",
+      "type": "string"
+    },
+    "page_size": {
+      "default": "50",
+      "description": "Records per page (1-100).",
+      "type": "string"
+    },
+    "project_id": {
+      "description": "GitLab project ID or URL-encoded project path for the source-bound MLflow metrics-history ETL stream.",
+      "type": "string"
+    },
+    "start_date": {
+      "description": "RFC3339 lower bound applied as each stream's matching since-filter (last_activity_after for projects, created_after for users, updated_after for issues; groups has no since-filter upstream).",
+      "format": "date-time",
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "access_token"
+  ],
+  "title": "GitLab Connection Specification",
+  "type": "object"
 }

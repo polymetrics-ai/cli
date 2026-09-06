@@ -17,7 +17,6 @@ func TestPollingSourceExecutorResumesStrictTupleAcrossInterruptedPages(t *testin
 	state := pollingSourceRuntimeState()
 	firstSource := &pollingSourceFake{
 		reference: pollingSourceReference(),
-		evidence:  RequiredPollingWatermarkConformanceEvidence(),
 		state:     state,
 		pages: []PollingSourcePage{{
 			Items: []PollingSourceItem{
@@ -52,7 +51,6 @@ func TestPollingSourceExecutorResumesStrictTupleAcrossInterruptedPages(t *testin
 
 	secondSource := &pollingSourceFake{
 		reference: pollingSourceReference(),
-		evidence:  RequiredPollingWatermarkConformanceEvidence(),
 		state:     state,
 		pages: []PollingSourcePage{{
 			Items:      []PollingSourceItem{pollingSourceItem("c", "2026-08-06T10:00:00.000000001Z", "c")},
@@ -78,7 +76,7 @@ func TestPollingSourceExecutorReplaysAfterAcknowledgedCheckpointFailure(t *testi
 	state := pollingSourceRuntimeState()
 	prior := pollingSourceCommittedCheckpoint(t, state, pollingSourcePosition("2026-08-06T10:00:00Z", "a"))
 	firstSource := &pollingSourceFake{
-		reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: state,
+		reference: pollingSourceReference(), state: state,
 		pages: []PollingSourcePage{{
 			Items:      []PollingSourceItem{pollingSourceItem("b", "2026-08-06T10:00:00Z", "b")},
 			ObservedAt: time.Date(2026, time.August, 6, 10, 1, 0, 0, time.UTC),
@@ -99,7 +97,7 @@ func TestPollingSourceExecutorReplaysAfterAcknowledgedCheckpointFailure(t *testi
 	}
 
 	secondSource := &pollingSourceFake{
-		reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: state,
+		reference: pollingSourceReference(), state: state,
 		pages: []PollingSourcePage{{
 			Items:      []PollingSourceItem{pollingSourceItem("b", "2026-08-06T10:00:00Z", "b")},
 			ObservedAt: time.Date(2026, time.August, 6, 10, 1, 1, 0, time.UTC),
@@ -124,7 +122,7 @@ func TestPollingSourceExecutorReplaysAfterAcknowledgedCheckpointFailure(t *testi
 
 func TestPollingSourceExecutorCommitsEmptyPageWithoutInventingCursor(t *testing.T) {
 	source := &pollingSourceFake{
-		reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: pollingSourceRuntimeState(),
+		reference: pollingSourceReference(), state: pollingSourceRuntimeState(),
 		pages: []PollingSourcePage{{ObservedAt: time.Date(2026, time.August, 16, 1, 0, 0, 0, time.UTC)}},
 	}
 	executor := newPollingSourceExecutor(t, source)
@@ -153,7 +151,7 @@ func TestPollingSourceExecutorCommitsEmptyPageWithoutInventingCursor(t *testing.
 
 func TestPollingSourceExecutorRefusesAnUnbudgetedProviderReadBeforeDelivery(t *testing.T) {
 	source := &pollingSourceFake{
-		reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: pollingSourceRuntimeState(), skipBudget: true,
+		reference: pollingSourceReference(), state: pollingSourceRuntimeState(), skipBudget: true,
 		pages: []PollingSourcePage{{
 			Items:      []PollingSourceItem{pollingSourceItem("a", "2026-08-06T10:00:00Z", "a")},
 			ObservedAt: time.Date(2026, time.August, 6, 10, 4, 0, 0, time.UTC),
@@ -214,7 +212,7 @@ func TestPollingSourceExecutorRefusesUnsafeStateAndPageBeforeCheckpointMutation(
 	for _, testCase := range tests {
 		t.Run(testCase.name, func(t *testing.T) {
 			source := &pollingSourceFake{
-				reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: state,
+				reference: pollingSourceReference(), state: state,
 				pages: []PollingSourcePage{testCase.page}, traversalErr: testCase.traversal,
 			}
 			executor := newPollingSourceExecutor(t, source)
@@ -243,7 +241,7 @@ func TestPollingSourceExecutorRefusesUnsafeStateAndPageBeforeCheckpointMutation(
 func TestPollingSourceExecutorForwardsDeclaredSoftDeleteAsTombstone(t *testing.T) {
 	state := pollingSourceRuntimeState()
 	source := &pollingSourceFake{
-		reference: pollingSourceReference(), evidence: RequiredPollingWatermarkConformanceEvidence(), state: state,
+		reference: pollingSourceReference(), state: state,
 		pages: []PollingSourcePage{{
 			Items: []PollingSourceItem{{
 				Position: pollingSourcePosition("2026-08-06T10:00:00Z", "deleted"),
@@ -281,7 +279,6 @@ var (
 
 type pollingSourceFake struct {
 	reference       connectors.TransportExecutorReference
-	evidence        PollingWatermarkConformanceEvidence
 	state           PollingSourceRuntimeState
 	pages           []PollingSourcePage
 	requests        []synccontract.CheckpointPosition
@@ -293,10 +290,6 @@ type pollingSourceFake struct {
 
 func (s *pollingSourceFake) PollingSourceExecutorReference() connectors.TransportExecutorReference {
 	return s.reference
-}
-
-func (s *pollingSourceFake) PollingSourceConformanceEvidence() PollingWatermarkConformanceEvidence {
-	return s.evidence
 }
 
 func (s *pollingSourceFake) PollingSourceRuntimeState(context.Context, connectors.PollingCatalogObject) (PollingSourceRuntimeState, error) {

@@ -11,7 +11,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
-func TestGithubPullRequestsETLSupportsLegacyExecutableModes(t *testing.T) {
+func TestGithubPullRequestsETLSupportsDeclaredExecutableModes(t *testing.T) {
 	tests := []struct {
 		name string
 		mode string

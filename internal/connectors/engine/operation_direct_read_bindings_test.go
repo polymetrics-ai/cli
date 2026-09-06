@@ -14,20 +14,11 @@ import (
 )
 
 func operationBindingTestBundle(serverURL string, op OperationSpec) Bundle {
-	surface := &APISurface{Endpoints: []SurfaceEndpoint{{
-		Method: op.REST.Method,
-		Path:   op.REST.Path,
-		CoveredBy: &SurfaceCoverage{
-			DirectReads: []string{"fixture"},
-		},
-	}}}
 	bundle := Bundle{
 		Name:       "acme",
 		HTTP:       HTTPBase{URL: serverURL},
 		Operations: []OperationSpec{op},
-		Surface:    surface,
 	}
-	bundle.directReadLedger = deriveOperationDirectReadEndpointLedger(bundle.Operations, surface)
 	return bundle
 }
 

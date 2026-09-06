@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "bypass_actors": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "actor_id": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "actor_type": {
+            "enum": [
+              "Integration",
+              "OrganizationAdmin",
+              "RepositoryRole",
+              "Team",
+              "DeployKey",
+              "User"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "bypass_mode": {
+            "enum": [
+              "always",
+              "pull_request",
+              "exempt"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor_type"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "conditions": {
+      "additionalProperties": true,
+      "maxProperties": 256,
+      "type": "object"
+    },
+    "enforcement": {
+      "enum": [
+        "disabled",
+        "active",
+        "evaluate"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "rules": {
+      "items": {},
+      "maxItems": 256,
+      "type": "array"
+    },
+    "ruleset_id": {
+      "type": "integer"
+    },
+    "target": {
+      "enum": [
+        "branch",
+        "tag",
+        "push",
+        "repository"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "org",
+    "ruleset_id"
+  ],
+  "type": "object"
+}

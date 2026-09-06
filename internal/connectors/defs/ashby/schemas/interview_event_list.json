@@ -1,241 +1,45 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "interview_event_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the interview event"
-    },
-    "interviewId": {
-      "type": "string",
-      "description": "The id of the interview for this event"
-    },
-    "interviewScheduleId": {
-      "type": "string",
-      "description": "The id of the interview schedule for this event"
-    },
-    "interviewerUserIds": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "interviewers": {
-      "type": "array",
-      "description": "The users interviewing in this event",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the user"
-          },
-          "firstName": {
-            "type": "string",
-            "description": "The user's first name"
-          },
-          "lastName": {
-            "type": "string",
-            "description": "The user's last name"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "globalRole": {
-            "type": "string",
-            "description": "The user's global role in the organization",
-            "enum": [
-              "Organization Admin",
-              "Elevated Access",
-              "Limited Access",
-              "External Recruiter"
-            ]
-          },
-          "isEnabled": {
-            "type": "boolean",
-            "description": "Whether the user is enabled (not deactivated)"
-          },
-          "updatedAt": {
-            "type": "string",
-            "description": "The timestamp when the user was last updated (ISO 8601 format)"
-          },
-          "managerId": {
-            "type": "string",
-            "description": "The unique identifier for the user's manager"
-          },
-          "customFields": {
-            "type": "array",
-            "description": "Custom fields associated with the user (only included when requested)",
-            "items": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "description": "The unique identifier for the custom field definition"
-                },
-                "isPrivate": {
-                  "type": "boolean",
-                  "description": "Whether the custom field is private"
-                },
-                "title": {
-                  "type": "string",
-                  "description": "The title of the custom field"
-                },
-                "value": {
-                  "type": "object",
-                  "properties": {
-                    "value": {
-                      "type": "number",
-                      "description": "The currency amount"
-                    },
-                    "currencyCode": {
-                      "type": "string",
-                      "description": "The currency code"
-                    }
-                  },
-                  "required": [
-                    "value",
-                    "currencyCode"
-                  ]
-                },
-                "valueLabel": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "id",
-                "isPrivate",
-                "title",
-                "value"
-              ]
-            }
-          },
-          "trainingRole": {
-            "type": "string"
-          },
-          "interviewerPool": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "The unique identifier for the interviewer pool"
-              },
-              "title": {
-                "type": "string",
-                "description": "The title of the interviewer pool"
-              },
-              "isArchived": {
-                "type": "boolean",
-                "description": "Whether the interviewer pool is archived"
-              }
-            },
-            "required": [
-              "id",
-              "title",
-              "isArchived"
-            ]
-          },
-          "isFeedbackRequired": {
-            "type": "boolean",
-            "description": "Whether feedback is required from this interviewer"
-          }
-        },
-        "required": [
-          "id",
-          "firstName",
-          "lastName",
-          "email",
-          "globalRole",
-          "isEnabled",
-          "updatedAt",
-          "isFeedbackRequired"
-        ]
-      }
-    },
     "createdAt": {
-      "type": "string",
       "description": "The timestamp when the interview event was created",
-      "format": "date-time"
-    },
-    "updatedAt": {
-      "type": "string",
-      "description": "The timestamp when the interview event was last updated",
-      "format": "date-time"
-    },
-    "startTime": {
-      "type": "string",
-      "description": "The scheduled start time of the interview event",
-      "format": "date-time"
+      "format": "date-time",
+      "type": "string"
     },
     "endTime": {
-      "type": "string",
       "description": "The scheduled end time of the interview event",
-      "format": "date-time"
-    },
-    "feedbackLink": {
-      "type": "string",
-      "description": "The link interviewers can use to submit feedback",
-      "format": "uri"
-    },
-    "location": {
+      "format": "date-time",
       "type": "string"
-    },
-    "meetingLink": {
-      "type": "string"
-    },
-    "interviewerCalendarEventId": {
-      "type": "string"
-    },
-    "hasSubmittedFeedback": {
-      "type": "boolean",
-      "description": "Whether feedback has been submitted for this interview event"
     },
     "extraData": {
       "type": "object"
     },
+    "feedbackLink": {
+      "description": "The link interviewers can use to submit feedback",
+      "format": "uri",
+      "type": "string"
+    },
+    "hasSubmittedFeedback": {
+      "description": "Whether feedback has been submitted for this interview event",
+      "type": "boolean"
+    },
+    "id": {
+      "description": "The unique identifier for the interview event",
+      "type": "string"
+    },
     "interview": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the interview"
-        },
-        "title": {
-          "type": "string",
-          "description": "The internal title of the interview"
-        },
         "externalTitle": {
-          "type": "string",
-          "description": "The title of the interview shown to candidates"
+          "description": "The title of the interview shown to candidates",
+          "type": "string"
         },
-        "type": {
-          "type": "string",
-          "description": "The interview definition type, such as Interview, TakeHome, or Debrief",
-          "enum": [
-            "Assessment",
-            "Interview",
-            "InterviewWithoutSchedule",
-            "TakeHome",
-            "Debrief"
-          ]
+        "feedbackFormDefinitionId": {
+          "description": "The unique identifier for the feedback form definition used by this interview",
+          "type": "string"
         },
-        "isArchived": {
-          "type": "boolean",
-          "description": "Whether the interview is archived"
-        },
-        "isDebrief": {
-          "type": "boolean",
-          "description": "Whether the interview is a debrief"
-        },
-        "isFeedbackRequired": {
-          "type": "boolean",
-          "description": "Whether feedback is required for this interview"
-        },
-        "isFeedbackRequested": {
-          "type": "boolean",
-          "description": "Whether feedback is requested for this interview"
+        "id": {
+          "description": "The unique identifier for the interview",
+          "type": "string"
         },
         "instructionsHtml": {
           "type": "string"
@@ -243,12 +47,39 @@
         "instructionsPlain": {
           "type": "string"
         },
+        "isArchived": {
+          "description": "Whether the interview is archived",
+          "type": "boolean"
+        },
+        "isDebrief": {
+          "description": "Whether the interview is a debrief",
+          "type": "boolean"
+        },
+        "isFeedbackRequested": {
+          "description": "Whether feedback is requested for this interview",
+          "type": "boolean"
+        },
+        "isFeedbackRequired": {
+          "description": "Whether feedback is required for this interview",
+          "type": "boolean"
+        },
         "jobId": {
           "type": "string"
         },
-        "feedbackFormDefinitionId": {
-          "type": "string",
-          "description": "The unique identifier for the feedback form definition used by this interview"
+        "title": {
+          "description": "The internal title of the interview",
+          "type": "string"
+        },
+        "type": {
+          "description": "The interview definition type, such as Interview, TakeHome, or Debrief",
+          "enum": [
+            "Assessment",
+            "Interview",
+            "InterviewWithoutSchedule",
+            "TakeHome",
+            "Debrief"
+          ],
+          "type": "string"
         }
       },
       "required": [
@@ -261,12 +92,181 @@
         "isFeedbackRequired",
         "isFeedbackRequested",
         "feedbackFormDefinitionId"
-      ]
+      ],
+      "type": "object"
+    },
+    "interviewId": {
+      "description": "The id of the interview for this event",
+      "type": "string"
+    },
+    "interviewScheduleId": {
+      "description": "The id of the interview schedule for this event",
+      "type": "string"
+    },
+    "interviewerCalendarEventId": {
+      "type": "string"
+    },
+    "interviewerUserIds": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "interviewers": {
+      "description": "The users interviewing in this event",
+      "items": {
+        "properties": {
+          "customFields": {
+            "description": "Custom fields associated with the user (only included when requested)",
+            "items": {
+              "properties": {
+                "id": {
+                  "description": "The unique identifier for the custom field definition",
+                  "type": "string"
+                },
+                "isPrivate": {
+                  "description": "Whether the custom field is private",
+                  "type": "boolean"
+                },
+                "title": {
+                  "description": "The title of the custom field",
+                  "type": "string"
+                },
+                "value": {
+                  "properties": {
+                    "currencyCode": {
+                      "description": "The currency code",
+                      "type": "string"
+                    },
+                    "value": {
+                      "description": "The currency amount",
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "value",
+                    "currencyCode"
+                  ],
+                  "type": "object"
+                },
+                "valueLabel": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "isPrivate",
+                "title",
+                "value"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "email": {
+            "format": "email",
+            "type": "string"
+          },
+          "firstName": {
+            "description": "The user's first name",
+            "type": "string"
+          },
+          "globalRole": {
+            "description": "The user's global role in the organization",
+            "enum": [
+              "Organization Admin",
+              "Elevated Access",
+              "Limited Access",
+              "External Recruiter"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for the user",
+            "type": "string"
+          },
+          "interviewerPool": {
+            "properties": {
+              "id": {
+                "description": "The unique identifier for the interviewer pool",
+                "type": "string"
+              },
+              "isArchived": {
+                "description": "Whether the interviewer pool is archived",
+                "type": "boolean"
+              },
+              "title": {
+                "description": "The title of the interviewer pool",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "title",
+              "isArchived"
+            ],
+            "type": "object"
+          },
+          "isEnabled": {
+            "description": "Whether the user is enabled (not deactivated)",
+            "type": "boolean"
+          },
+          "isFeedbackRequired": {
+            "description": "Whether feedback is required from this interviewer",
+            "type": "boolean"
+          },
+          "lastName": {
+            "description": "The user's last name",
+            "type": "string"
+          },
+          "managerId": {
+            "description": "The unique identifier for the user's manager",
+            "type": "string"
+          },
+          "trainingRole": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "description": "The timestamp when the user was last updated (ISO 8601 format)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "firstName",
+          "lastName",
+          "email",
+          "globalRole",
+          "isEnabled",
+          "updatedAt",
+          "isFeedbackRequired"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "location": {
+      "type": "string"
+    },
+    "meetingLink": {
+      "type": "string"
     },
     "notetakerTranscriptId": {
       "type": "string"
+    },
+    "startTime": {
+      "description": "The scheduled start time of the interview event",
+      "format": "date-time",
+      "type": "string"
+    },
+    "updatedAt": {
+      "description": "The timestamp when the interview event was last updated",
+      "format": "date-time",
+      "type": "string"
     }
   },
+  "title": "interview_event_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

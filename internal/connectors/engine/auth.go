@@ -190,12 +190,19 @@ func buildAuthenticatorWithDeclaredRoute(ctx context.Context, cfg connectors.Run
 		}
 		return connsdk.APIKeyQuery(spec.Param, value), nil
 
+	case "aws_sigv4":
+		return buildCloudTrailSigV4Authenticator(spec, vars)
+
 	case "oauth2_client_credentials":
 		return buildOAuth2ClientCredentials(spec, vars)
 
 	case "oauth2_refresh_token":
 		return buildOAuth2RefreshToken(cfg, spec, vars)
 
+	case "declared_password_token":
+		return buildDeclaredPasswordTokenAuthenticator(spec, vars)
+	case "declared_session":
+		return buildDeclaredSessionAuthenticator(spec, vars, requester)
 	case "custom":
 		return buildCustomAuthWithDeclaredRoute(ctx, cfg, spec, h, requester)
 
@@ -344,6 +351,7 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 		ClientID:             clientID,
 		ClientSecret:         clientSecret,
 		ClientSecretRequired: spec.ClientSecret != "",
+		ClientAuthentication: spec.ClientAuthentication,
 		RefreshToken:         refreshToken,
 		Scopes:               scopes,
 		ExtraParams:          extraParams,
@@ -352,7 +360,7 @@ func buildOAuth2RefreshToken(cfg connectors.RuntimeConfig, spec AuthSpec, vars V
 	// Rotation persistence is opt-in and requires BOTH a declared key and a
 	// store. A bundle that declares no key never writes anything — the engine
 	// does not guess which secret to overwrite (see AuthSpec.RefreshTokenStoreKey).
-	// A caller with no store (conformance harnesses, tests) keeps rotation in
+	// A caller with no store (for example, tests) keeps rotation in
 	// memory for the process lifetime; it is never downgraded to a plaintext
 	// write.
 	storeKey := strings.TrimSpace(spec.RefreshTokenStoreKey)

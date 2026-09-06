@@ -1,27 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "tasks",
-  "type": "object",
   "properties": {
-    "url": {
+    "billing_period": {
       "type": "string"
-    },
-    "project": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "status": {
-      "type": "string"
-    },
-    "is_billable": {
-      "type": "boolean"
     },
     "billing_rate": {
-      "type": "string"
-    },
-    "billing_period": {
       "type": "string"
     },
     "created_at": {
@@ -35,6 +18,18 @@
         "null"
       ]
     },
+    "is_billable": {
+      "type": "boolean"
+    },
+    "name": {
+      "type": "string"
+    },
+    "project": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
     "updated_at": {
       "type": [
         "string",
@@ -45,10 +40,15 @@
         "array",
         "null"
       ]
+    },
+    "url": {
+      "type": "string"
     }
   },
+  "title": "tasks",
+  "type": "object",
+  "x-cursor-field": "updated_at",
   "x-primary-key": [
     "url"
-  ],
-  "x-cursor-field": "updated_at"
+  ]
 }

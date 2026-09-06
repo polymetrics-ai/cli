@@ -5,7 +5,6 @@
       "kind": "binary_download",
       "summary": "Download a message attachment with a bounded file-transfer policy.",
       "description": "Gmail returns a base64url JSON envelope rather than direct attachment bytes, so the raw binary executor does not expose this operation until a closed envelope decoder is declared.",
-      "source_url": "https://gmail.googleapis.com/$discovery/rest?version=v1",
       "risk": "medium",
       "approval": "filesystem writes require an explicit destination policy",
       "output_policy": "binary_file_bounded",

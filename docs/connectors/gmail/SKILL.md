@@ -253,7 +253,6 @@ Reads Gmail messages, threads, drafts, labels, history, filters, send-as aliases
 
 - Gmail command surface
 - Usage: pm gmail <command> [flags]
-- Source CLI: Gmail API v1 (Official Google Discovery document, revision 20260803)
 - PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
 - Global flags:
   - --credential (string): Credential name to use for the Gmail request.

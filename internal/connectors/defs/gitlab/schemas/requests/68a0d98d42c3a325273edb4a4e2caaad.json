@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "settings_context_hash": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "settings_context_hash"
+  ],
+  "type": "object"
+}

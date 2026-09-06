@@ -1,9 +1,0 @@
-{
-  "connector": "github",
-  "stage_names": [
-    "generated_direct_read_enterprise_teams_get"
-  ],
-  "nonpass_outcomes": {
-    "generated_direct_read_enterprise_teams_get": "product_defect"
-  }
-}

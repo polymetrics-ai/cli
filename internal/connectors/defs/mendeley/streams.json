@@ -1,69 +1,105 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "client_id": "{{ secrets.client_id }}",
+        "client_secret": "{{ secrets.client_secret }}",
+        "mode": "oauth2_refresh_token",
+        "refresh_token": "{{ secrets.client_refresh_token }}",
+        "token_url": "https://api.mendeley.com/oauth/token"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/documents",
+      "query": {
+        "limit": "1"
+      }
     },
-    "error_map": []
+    "error_map": [],
+    "pagination": {
+      "page_size": 100,
+      "size_param": "limit",
+      "type": "link_header"
+    },
+    "url": "https://api.mendeley.com",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
-      "name": "documents",
-      "method": "GET",
-      "path": "/__legacy_hook/documents",
-      "records": {
-        "path": "data"
+      "headers": {
+        "Accept": "application/vnd.mendeley-document.1+json"
       },
-      "schema": "schemas/documents.json",
       "incremental": {
+        "client_filtered": true,
         "cursor_field": "last_modified",
-        "client_filtered": true
-      }
-    },
-    {
-      "name": "folders",
-      "method": "GET",
-      "path": "/__legacy_hook/folders",
-      "records": {
-        "path": "data"
+        "request_param": "modified_since"
       },
-      "schema": "schemas/folders.json",
-      "incremental": {
-        "cursor_field": "modified",
-        "client_filtered": true
-      }
+      "method": "GET",
+      "name": "documents",
+      "path": "/documents",
+      "query": {
+        "order": "asc"
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/documents.json"
     },
     {
-      "name": "groups",
+      "headers": {
+        "Accept": "application/vnd.mendeley-folder.1+json"
+      },
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "modified",
+        "request_param": "modified_since"
+      },
       "method": "GET",
-      "path": "/__legacy_hook/groups",
+      "name": "folders",
+      "path": "/folders",
+      "query": {
+        "order": "asc"
+      },
       "records": {
-        "path": "data"
+        "path": ""
+      },
+      "schema": "schemas/folders.json"
+    },
+    {
+      "headers": {
+        "Accept": "application/vnd.mendeley-group.1+json"
+      },
+      "method": "GET",
+      "name": "groups",
+      "path": "/groups",
+      "query": {
+        "order": "asc"
+      },
+      "records": {
+        "path": ""
       },
       "schema": "schemas/groups.json"
     },
     {
-      "name": "annotations",
-      "method": "GET",
-      "path": "/__legacy_hook/annotations",
-      "records": {
-        "path": "data"
+      "headers": {
+        "Accept": "application/vnd.mendeley-annotation.1+json"
       },
-      "schema": "schemas/annotations.json",
       "incremental": {
+        "client_filtered": true,
         "cursor_field": "last_modified",
-        "client_filtered": true
-      }
+        "request_param": "modified_since"
+      },
+      "method": "GET",
+      "name": "annotations",
+      "path": "/annotations",
+      "query": {
+        "order": "asc"
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/annotations.json"
     }
   ]
 }

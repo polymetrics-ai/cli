@@ -1,11 +1,28 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
         "mode": "bearer",
         "token": "{{ secrets.access_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/users/me"
+    },
+    "error_map": [
+      {
+        "hint": "asana access token is missing or invalid; re-run pm credentials add asana",
+        "status": 401
+      },
+      {
+        "hint": "asana account lacks access for this request",
+        "status": 403
+      },
+      {
+        "class": "rate_limited",
+        "hint": "asana rate limit exceeded; the connector will retry with backoff",
+        "status": 429
       }
     ],
     "pagination": {
@@ -16,25 +33,8 @@
       "size_param": "limit",
       "type": "next_url"
     },
-    "check": {
-      "method": "GET",
-      "path": "/users/me"
-    },
-    "error_map": [
-      {
-        "status": 401,
-        "hint": "asana access token is missing or invalid; re-run pm credentials add asana"
-      },
-      {
-        "status": 403,
-        "hint": "asana account lacks access for this request"
-      },
-      {
-        "status": 429,
-        "class": "rate_limited",
-        "hint": "asana rate limit exceeded; the connector will retry with backoff"
-      }
-    ]
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
@@ -56,8 +56,8 @@
         "limit": "100",
         "opt_fields": "gid,name,resource_type,created_at,modified_at",
         "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -69,19 +69,19 @@
       "name": "tasks",
       "path": "/tasks",
       "query": {
+        "assignee": {
+          "omit_when_absent": true,
+          "template": "{{ config.assignee }}"
+        },
         "limit": "100",
         "opt_fields": "gid,name,resource_type,created_at,modified_at,completed",
-        "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
-        },
         "project": {
-          "template": "{{ config.project_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.project_id }}"
         },
-        "assignee": {
-          "template": "{{ config.assignee }}",
-          "omit_when_absent": true
+        "workspace": {
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -95,8 +95,8 @@
       "query": {
         "opt_fields": "gid,name,resource_type,email",
         "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -121,8 +121,8 @@
       "query": {
         "opt_fields": "gid,name,resource_type,color,notes,created_at",
         "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -131,6 +131,19 @@
       "schema": "schemas/tags.json"
     },
     {
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "gid",
+            "path": "/projects",
+            "records_path": "data"
+          }
+        },
+        "into": {
+          "path_var": "project_gid"
+        },
+        "stamp_field": "project_gid"
+      },
       "name": "sections",
       "path": "/projects/{{ fanout.id }}/sections",
       "query": {
@@ -139,22 +152,22 @@
       "records": {
         "path": "data"
       },
-      "fan_out": {
-        "ids_from": {
-          "request": {
-            "path": "/projects",
-            "records_path": "data",
-            "id_field": "gid"
-          }
-        },
-        "into": {
-          "path_var": "project_gid"
-        },
-        "stamp_field": "project_gid"
-      },
       "schema": "schemas/sections.json"
     },
     {
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "gid",
+            "path": "/tasks",
+            "records_path": "data"
+          }
+        },
+        "into": {
+          "path_var": "task_gid"
+        },
+        "stamp_field": "task_gid"
+      },
       "name": "stories",
       "path": "/tasks/{{ fanout.id }}/stories",
       "query": {
@@ -162,19 +175,6 @@
       },
       "records": {
         "path": "data"
-      },
-      "fan_out": {
-        "ids_from": {
-          "request": {
-            "path": "/tasks",
-            "records_path": "data",
-            "id_field": "gid"
-          }
-        },
-        "into": {
-          "path_var": "task_gid"
-        },
-        "stamp_field": "task_gid"
       },
       "schema": "schemas/stories.json"
     },
@@ -190,6 +190,19 @@
       "schema": "schemas/custom_fields.json"
     },
     {
+      "fan_out": {
+        "ids_from": {
+          "request": {
+            "id_field": "gid",
+            "path": "/projects",
+            "records_path": "data"
+          }
+        },
+        "into": {
+          "path_var": "project_gid"
+        },
+        "stamp_field": "project_gid"
+      },
       "name": "project_statuses",
       "path": "/projects/{{ fanout.id }}/project_statuses",
       "query": {
@@ -197,19 +210,6 @@
       },
       "records": {
         "path": "data"
-      },
-      "fan_out": {
-        "ids_from": {
-          "request": {
-            "path": "/projects",
-            "records_path": "data",
-            "id_field": "gid"
-          }
-        },
-        "into": {
-          "path_var": "project_gid"
-        },
-        "stamp_field": "project_gid"
       },
       "schema": "schemas/project_statuses.json"
     },
@@ -219,12 +219,12 @@
       "query": {
         "opt_fields": "gid,resource_type,is_guest,is_admin,is_limited_access,user.gid,user.name,team.gid,team.name",
         "team": {
-          "template": "{{ config.team_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.team_id }}"
         },
         "workspace": {
-          "template": "{{ config.workspace_id }}",
-          "omit_when_absent": true
+          "omit_when_absent": true,
+          "template": "{{ config.workspace_id }}"
         }
       },
       "records": {
@@ -237,6 +237,595 @@
       "path": "/workspaces/{{ config.workspace_id }}/workspace_memberships",
       "query": {
         "opt_fields": "gid,resource_type,is_active,is_admin,is_guest,user.gid,user.name"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/workspace_memberships.json"
+    },
+    {
+      "name": "agents_for_workspace",
+      "path": "/workspaces/{{ config.workspace_id }}/agents",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/agents.json"
+    },
+    {
+      "name": "ai_studio_runs",
+      "path": "/workspaces/{{ config.workspace_id }}/ai_studio/runs",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/ai_studio_runs.json"
+    },
+    {
+      "name": "ai_studio_seats",
+      "path": "/workspaces/{{ config.workspace_id }}/ai_studio/seats",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/ai_studio_seats.json"
+    },
+    {
+      "name": "allocations",
+      "path": "/allocations",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/allocations.json"
+    },
+    {
+      "name": "attachments_for_object",
+      "path": "/attachments",
+      "query": {
+        "limit": "100",
+        "parent": "{{ config.parent_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/attachments.json"
+    },
+    {
+      "name": "audit_log_events",
+      "path": "/workspaces/{{ config.workspace_id }}/audit_log_events",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/audit_log_events.json"
+    },
+    {
+      "name": "custom_field_settings_for_goal",
+      "path": "/goals/{{ config.goal_id }}/custom_field_settings",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/custom_field_settings.json"
+    },
+    {
+      "name": "custom_field_settings_for_portfolio",
+      "path": "/portfolios/{{ config.portfolio_id }}/custom_field_settings",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/custom_field_settings.json"
+    },
+    {
+      "name": "custom_field_settings_for_project",
+      "path": "/projects/{{ config.project_id }}/custom_field_settings",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/custom_field_settings.json"
+    },
+    {
+      "name": "custom_types",
+      "path": "/custom_types",
+      "query": {
+        "limit": "100",
+        "project": "{{ config.project_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/custom_types.json"
+    },
+    {
+      "name": "dependencies_for_task",
+      "path": "/tasks/{{ config.task_id }}/dependencies",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "dependents_for_task",
+      "path": "/tasks/{{ config.task_id }}/dependents",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "favorites_for_user",
+      "path": "/users/{{ config.user_id }}/favorites",
+      "query": {
+        "limit": "100",
+        "resource_type": "{{ config.favorite_resource_type }}",
+        "workspace": "{{ config.workspace_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/favorites.json"
+    },
+    {
+      "name": "goal_relationships",
+      "path": "/goal_relationships",
+      "query": {
+        "limit": "100",
+        "supported_goal": "{{ config.supported_goal_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/goal_relationships.json"
+    },
+    {
+      "name": "goals",
+      "path": "/goals",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/goals.json"
+    },
+    {
+      "name": "portfolio_items",
+      "path": "/portfolios/{{ config.portfolio_id }}/items",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/portfolio_items.json"
+    },
+    {
+      "name": "memberships",
+      "path": "/memberships",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/memberships.json"
+    },
+    {
+      "name": "ooo_entries",
+      "path": "/ooo_entries",
+      "query": {
+        "limit": "100",
+        "user": "{{ config.user_id }}",
+        "workspace": "{{ config.workspace_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/ooo_entries.json"
+    },
+    {
+      "name": "portfolio_memberships",
+      "path": "/portfolio_memberships",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/portfolio_memberships.json"
+    },
+    {
+      "name": "portfolio_memberships_for_portfolio",
+      "path": "/portfolios/{{ config.portfolio_id }}/portfolio_memberships",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/portfolio_memberships.json"
+    },
+    {
+      "name": "portfolios",
+      "path": "/portfolios",
+      "query": {
+        "limit": "100",
+        "workspace": "{{ config.workspace_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/portfolios.json"
+    },
+    {
+      "name": "project_memberships_for_project",
+      "path": "/projects/{{ config.project_id }}/project_memberships",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_memberships.json"
+    },
+    {
+      "name": "project_portfolio_settings_for_portfolio",
+      "path": "/portfolios/{{ config.portfolio_id }}/project_portfolio_settings",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_portfolio_settings.json"
+    },
+    {
+      "name": "project_portfolio_settings_for_project",
+      "path": "/projects/{{ config.project_id }}/project_portfolio_settings",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_portfolio_settings.json"
+    },
+    {
+      "name": "projects_for_task",
+      "path": "/tasks/{{ config.task_id }}/projects",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "projects_for_team",
+      "path": "/teams/{{ config.team_id }}/projects",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "projects_for_workspace",
+      "path": "/workspaces/{{ config.workspace_id }}/projects",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/projects.json"
+    },
+    {
+      "name": "project_templates",
+      "path": "/project_templates",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_templates.json"
+    },
+    {
+      "name": "project_templates_for_team",
+      "path": "/teams/{{ config.team_id }}/project_templates",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/project_templates.json"
+    },
+    {
+      "name": "rates",
+      "path": "/rates",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/rates.json"
+    },
+    {
+      "name": "reactions_on_object",
+      "path": "/reactions",
+      "query": {
+        "emoji_base": "{{ config.emoji_base }}",
+        "limit": "100",
+        "target": "{{ config.target_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/reactions.json"
+    },
+    {
+      "name": "roles",
+      "path": "/roles",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/roles.json"
+    },
+    {
+      "name": "statuses_for_object",
+      "path": "/status_updates",
+      "query": {
+        "limit": "100",
+        "parent": "{{ config.parent_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/statuses.json"
+    },
+    {
+      "name": "stories_for_goal",
+      "path": "/goals/{{ config.goal_id }}/stories",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/stories.json"
+    },
+    {
+      "name": "subtasks_for_task",
+      "path": "/tasks/{{ config.task_id }}/subtasks",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "tags_for_task",
+      "path": "/tasks/{{ config.task_id }}/tags",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "tags_for_workspace",
+      "path": "/workspaces/{{ config.workspace_id }}/tags",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tags.json"
+    },
+    {
+      "name": "tasks_for_project",
+      "path": "/projects/{{ config.project_id }}/tasks",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "tasks_for_section",
+      "path": "/sections/{{ config.section_id }}/tasks",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "tasks_for_tag",
+      "path": "/tags/{{ config.tag_id }}/tasks",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "tasks_for_user_task_list",
+      "path": "/user_task_lists/{{ config.user_task_list_id }}/tasks",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/tasks.json"
+    },
+    {
+      "name": "team_memberships_for_team",
+      "path": "/teams/{{ config.team_id }}/team_memberships",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/team_memberships.json"
+    },
+    {
+      "name": "team_memberships_for_user",
+      "path": "/users/{{ config.user_id }}/team_memberships",
+      "query": {
+        "limit": "100",
+        "workspace": "{{ config.workspace_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/team_memberships.json"
+    },
+    {
+      "name": "teams_for_user",
+      "path": "/users/{{ config.user_id }}/teams",
+      "query": {
+        "limit": "100",
+        "organization": "{{ config.organization_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/teams.json"
+    },
+    {
+      "name": "time_periods",
+      "path": "/time_periods",
+      "query": {
+        "limit": "100",
+        "workspace": "{{ config.workspace_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_periods.json"
+    },
+    {
+      "name": "timesheet_approval_statuses",
+      "path": "/timesheet_approval_statuses",
+      "query": {
+        "limit": "100",
+        "workspace": "{{ config.workspace_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/timesheet_approval_statuses.json"
+    },
+    {
+      "name": "time_tracking_categories",
+      "path": "/time_tracking_categories",
+      "query": {
+        "limit": "100",
+        "workspace": "{{ config.workspace_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_tracking_categories.json"
+    },
+    {
+      "name": "time_tracking_entries",
+      "path": "/time_tracking_entries",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_tracking_entries.json"
+    },
+    {
+      "name": "time_tracking_entries_for_task",
+      "path": "/tasks/{{ config.task_id }}/time_tracking_entries",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_tracking_entries.json"
+    },
+    {
+      "name": "time_tracking_entries_for_category",
+      "path": "/time_tracking_categories/{{ config.time_tracking_category_id }}/time_tracking_entries",
+      "query": {
+        "limit": "100"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/time_tracking_entries.json"
+    },
+    {
+      "name": "webhooks",
+      "path": "/webhooks",
+      "query": {
+        "limit": "100",
+        "workspace": "{{ config.workspace_id }}"
+      },
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/webhooks.json"
+    },
+    {
+      "name": "workspace_memberships_for_user",
+      "path": "/users/{{ config.user_id }}/workspace_memberships",
+      "query": {
+        "limit": "100"
       },
       "records": {
         "path": "data"

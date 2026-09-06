@@ -1,8 +1,0 @@
-{
-  "record": { "documentId": "doc_fixture_1", "message": "Revoking this request" },
-  "expect": {
-    "method": "POST",
-    "path": "/v1/document/revoke",
-    "body": { "message": "Revoking this request" }
-  }
-}

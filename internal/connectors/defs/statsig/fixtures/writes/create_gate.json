@@ -1,4 +1,0 @@
-{
-  "record": { "name": "fixture_gate", "description": "fixture record", "isEnabled": false },
-  "expect": { "method": "POST", "path": "/gates" }
-}

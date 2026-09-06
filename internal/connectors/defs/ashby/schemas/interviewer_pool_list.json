@@ -1,138 +1,71 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "interviewer_pool_list",
-  "type": "object",
   "properties": {
     "id": {
-      "type": "string",
-      "description": "The pool's id"
-    },
-    "title": {
-      "type": "string",
-      "description": "The pool's title"
+      "description": "The pool's id",
+      "type": "string"
     },
     "isArchived": {
-      "type": "boolean",
-      "description": "Whether the pool is archived"
+      "description": "Whether the pool is archived",
+      "type": "boolean"
+    },
+    "title": {
+      "description": "The pool's title",
+      "type": "string"
     },
     "trainingPath": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "The training path's id"
-        },
         "enabled": {
-          "type": "boolean",
-          "description": "Whether the training path is enabled"
+          "description": "Whether the training path is enabled",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "The training path's id",
+          "type": "string"
         },
         "trainingStages": {
-          "type": "array",
           "description": "The training stages in this path",
           "items": {
-            "type": "object",
             "properties": {
-              "id": {
-                "type": "string",
-                "description": "The training stage's id"
-              },
-              "interviewerRole": {
-                "type": "string",
-                "description": "The role of the interviewer for this stage",
-                "enum": [
-                  "Shadow",
-                  "ReverseShadow"
-                ]
-              },
-              "interviewsRequired": {
-                "type": "integer",
-                "description": "The number of interviews required for this stage"
-              },
-              "isArchived": {
-                "type": "boolean",
-                "description": "Whether the training stage is archived"
-              },
               "approvalRequired": {
-                "type": "boolean",
-                "description": "Whether approval is required for this stage"
+                "description": "Whether approval is required for this stage",
+                "type": "boolean"
               },
               "approvers": {
-                "type": "array",
                 "items": {
-                  "type": "object",
                   "properties": {
-                    "id": {
-                      "type": "string",
-                      "description": "The unique identifier for the user"
-                    },
-                    "firstName": {
-                      "type": "string",
-                      "description": "The user's first name"
-                    },
-                    "lastName": {
-                      "type": "string",
-                      "description": "The user's last name"
-                    },
-                    "email": {
-                      "type": "string",
-                      "format": "email"
-                    },
-                    "globalRole": {
-                      "type": "string",
-                      "description": "The user's global role in the organization",
-                      "enum": [
-                        "Organization Admin",
-                        "Elevated Access",
-                        "Limited Access",
-                        "External Recruiter"
-                      ]
-                    },
-                    "isEnabled": {
-                      "type": "boolean",
-                      "description": "Whether the user is enabled (not deactivated)"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "description": "The timestamp when the user was last updated (ISO 8601 format)"
-                    },
-                    "managerId": {
-                      "type": "string",
-                      "description": "The unique identifier for the user's manager"
-                    },
                     "customFields": {
-                      "type": "array",
                       "description": "Custom fields associated with the user (only included when requested)",
                       "items": {
-                        "type": "object",
                         "properties": {
                           "id": {
-                            "type": "string",
-                            "description": "The unique identifier for the custom field definition"
+                            "description": "The unique identifier for the custom field definition",
+                            "type": "string"
                           },
                           "isPrivate": {
-                            "type": "boolean",
-                            "description": "Whether the custom field is private"
+                            "description": "Whether the custom field is private",
+                            "type": "boolean"
                           },
                           "title": {
-                            "type": "string",
-                            "description": "The title of the custom field"
+                            "description": "The title of the custom field",
+                            "type": "string"
                           },
                           "value": {
-                            "type": "object",
                             "properties": {
-                              "value": {
-                                "type": "number",
-                                "description": "The currency amount"
-                              },
                               "currencyCode": {
-                                "type": "string",
-                                "description": "The currency code"
+                                "description": "The currency code",
+                                "type": "string"
+                              },
+                              "value": {
+                                "description": "The currency amount",
+                                "type": "number"
                               }
                             },
                             "required": [
                               "value",
                               "currencyCode"
-                            ]
+                            ],
+                            "type": "object"
                           },
                           "valueLabel": {
                             "type": "string"
@@ -143,8 +76,48 @@
                           "isPrivate",
                           "title",
                           "value"
-                        ]
-                      }
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "email": {
+                      "format": "email",
+                      "type": "string"
+                    },
+                    "firstName": {
+                      "description": "The user's first name",
+                      "type": "string"
+                    },
+                    "globalRole": {
+                      "description": "The user's global role in the organization",
+                      "enum": [
+                        "Organization Admin",
+                        "Elevated Access",
+                        "Limited Access",
+                        "External Recruiter"
+                      ],
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The unique identifier for the user",
+                      "type": "string"
+                    },
+                    "isEnabled": {
+                      "description": "Whether the user is enabled (not deactivated)",
+                      "type": "boolean"
+                    },
+                    "lastName": {
+                      "description": "The user's last name",
+                      "type": "string"
+                    },
+                    "managerId": {
+                      "description": "The unique identifier for the user's manager",
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "description": "The timestamp when the user was last updated (ISO 8601 format)",
+                      "type": "string"
                     }
                   },
                   "required": [
@@ -155,8 +128,30 @@
                     "globalRole",
                     "isEnabled",
                     "updatedAt"
-                  ]
-                }
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "id": {
+                "description": "The training stage's id",
+                "type": "string"
+              },
+              "interviewerRole": {
+                "description": "The role of the interviewer for this stage",
+                "enum": [
+                  "Shadow",
+                  "ReverseShadow"
+                ],
+                "type": "string"
+              },
+              "interviewsRequired": {
+                "description": "The number of interviews required for this stage",
+                "type": "integer"
+              },
+              "isArchived": {
+                "description": "Whether the training stage is archived",
+                "type": "boolean"
               }
             },
             "required": [
@@ -166,17 +161,22 @@
               "isArchived",
               "approvalRequired",
               "approvers"
-            ]
-          }
+            ],
+            "type": "object"
+          },
+          "type": "array"
         }
       },
       "required": [
         "id",
         "enabled",
         "trainingStages"
-      ]
+      ],
+      "type": "object"
     }
   },
+  "title": "interviewer_pool_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

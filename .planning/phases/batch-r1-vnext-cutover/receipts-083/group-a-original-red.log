@@ -1,0 +1,7 @@
+=== RUN   TestCP11ExpectedLegacyWitnessRejectsReplacedPriorRoot
+    vnext_publication_expected_test.go:43: PROOF CONTROL: durable-cut helper accepted changed prior root identity and unrelated contents; A=main.vNextPublicationIdentity{device:0x1000010, inode:0x265c1112, mode:0x4000} B=main.vNextPublicationIdentity{device:0x1000010, inode:0x265c118a, mode:0x4000}
+    vnext_publication_expected_test.go:45: F05/F06 preservation oracle accepted replaced prior root B; helper has no pre-cut expected witness
+--- FAIL: TestCP11ExpectedLegacyWitnessRejectsReplacedPriorRoot (0.84s)
+FAIL
+FAIL	polymetrics.ai/cmd/connectorgen	1.797s
+FAIL

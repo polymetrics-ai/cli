@@ -256,7 +256,6 @@ func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 					Ordering:    connectors.DeliveryOrderingSource,
 					Deletes:     connectors.DeliveryDeletesUnavailable,
 				},
-				Conformance: connectors.ConformanceEvidenceReference{Suite: "postgres_snapshot", RunID: "bounded_full_v1"},
 			}),
 			register: true,
 			wantErr:  "incompatible with transport executor family",
@@ -271,7 +270,7 @@ func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			registry := synctransport.NewRegistry(postgresTransportTestVerifier{})
+			registry := synctransport.NewRegistry()
 			if test.register && test.source.descriptor != nil {
 				if err := registry.RegisterSource(&preflightSpySourceExecutor{reference: test.source.descriptor.Executor}); err != nil {
 					t.Fatalf("RegisterSource() error = %v", err)
@@ -299,7 +298,7 @@ func TestPostgresTransportRegistryPreflightRefusesBeforeSourceIO(t *testing.T) {
 }
 
 func TestRegisterPostgresPollingTransportSourceMakesDefinitionSelectedSourceReachable(t *testing.T) {
-	registry := synctransport.NewRegistry(postgresTransportTestVerifier{})
+	registry := synctransport.NewRegistry()
 	connector := New()
 	if err := RegisterPollingTransportSource(registry, connector); err != nil {
 		t.Fatalf("RegisterSnapshotTransportSource() error = %v", err)
@@ -947,7 +946,6 @@ func postgresTransportTestSourceDescriptor() *connectors.SourceTransportDescript
 			Ordering:    connectors.DeliveryOrderingSource,
 			Deletes:     connectors.DeliveryDeletesUnavailable,
 		},
-		Conformance: connectors.ConformanceEvidenceReference{Suite: "postgres_polling_watermark", RunID: "shared_source_v1"},
 	}
 }
 
@@ -1004,7 +1002,6 @@ func newPreflightDestinationConnector() *preflightDestinationConnector {
 			Ordering:    connectors.DeliveryOrderingSource,
 			Deletes:     connectors.DeliveryDeletesUnavailable,
 		},
-		Conformance:     connectors.ConformanceEvidenceReference{Suite: "postgres_transport_test", RunID: "destination"},
 		Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
 		ApplyStrategies: []connectors.DestinationApplyStrategy{{
 			Mode:     synccontract.ModeFullAppend,
@@ -1075,12 +1072,6 @@ func (*preflightSpyDestinationExecutor) ApplyDestination(context.Context, synctr
 
 func (*preflightSpyDestinationExecutor) ReadBackDestination(context.Context, synctransport.DestinationReadBackRequest) error {
 	return errors.New("destination executor must not run during preflight")
-}
-
-type postgresTransportTestVerifier struct{}
-
-func (postgresTransportTestVerifier) VerifyTransportConformance(synctransport.ConformanceVerification) error {
-	return nil
 }
 
 func sameStrings(left, right []string) bool {

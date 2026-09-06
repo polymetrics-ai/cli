@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "is_access_control_inherited": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "project_portfolio_setting_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_portfolio_setting_gid",
+    "data"
+  ],
+  "type": "object"
+}

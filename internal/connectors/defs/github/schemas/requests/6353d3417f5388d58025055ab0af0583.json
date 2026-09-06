@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "environment_name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "value": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "environment_name",
+    "name",
+    "value"
+  ],
+  "type": "object"
+}

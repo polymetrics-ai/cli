@@ -18,6 +18,13 @@ type skillDoc struct {
 }
 
 func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
+	return runSkillsWithRegistry(args, stdout, jsonOut, appRegistry())
+}
+
+func runSkillsWithRegistry(args []string, stdout io.Writer, jsonOut bool, registry *connectors.Registry) error {
+	if registry == nil {
+		return fmt.Errorf("connector registry is required")
+	}
 	if len(args) == 0 || args[0] != "generate" {
 		return errUsage
 	}
@@ -26,7 +33,6 @@ func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
 	if dir == "" {
 		return validationErrorf("missing --dir")
 	}
-	registry := appRegistry()
 	generated, err := generateSkills(dir, registry)
 	if err != nil {
 		return err
@@ -42,9 +48,25 @@ func generateSkills(dir string, registry *connectors.Registry) ([]string, error)
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return nil, fmt.Errorf("create skills dir: %w", err)
 	}
-	docs, err := baseSkillDocsWithRegistry(registry.ListManifests(), registry)
+	if registry == nil {
+		return nil, fmt.Errorf("generate skills: connector registry is required")
+	}
+	// Keep one lazy-registry traversal: ListManifests would resolve the full
+	// fleet and connectorSkillWithRegistry would resolve it a second time after
+	// bounded cache eviction.
+	docs, err := baseSkillDocsWithRegistry(nil, registry)
 	if err != nil {
 		return nil, err
+	}
+	for _, metadata := range registry.List() {
+		if metadata.Name == "" {
+			continue
+		}
+		doc, err := connectorSkillWithRegistry(registry, metadata.Name)
+		if err != nil {
+			return nil, err
+		}
+		docs = append(docs, doc)
 	}
 	names := make([]string, 0, len(docs))
 	for _, doc := range docs {

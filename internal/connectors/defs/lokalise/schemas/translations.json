@@ -1,18 +1,16 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "translations",
-  "type": "object",
   "properties": {
-    "translation_id": {
-      "type": "integer"
+    "is_reviewed": {
+      "type": "boolean"
+    },
+    "is_unverified": {
+      "type": "boolean"
     },
     "key_id": {
       "type": "integer"
     },
     "language_iso": {
-      "type": "string"
-    },
-    "translation": {
       "type": "string"
     },
     "modified_at": {
@@ -27,18 +25,20 @@
     "modified_by_email": {
       "type": "string"
     },
-    "is_reviewed": {
-      "type": "boolean"
-    },
-    "is_unverified": {
-      "type": "boolean"
-    },
     "reviewed_by": {
+      "type": "integer"
+    },
+    "translation": {
+      "type": "string"
+    },
+    "translation_id": {
       "type": "integer"
     }
   },
+  "title": "translations",
+  "type": "object",
+  "x-cursor-field": "modified_at_timestamp",
   "x-primary-key": [
     "translation_id"
-  ],
-  "x-cursor-field": "modified_at_timestamp"
+  ]
 }

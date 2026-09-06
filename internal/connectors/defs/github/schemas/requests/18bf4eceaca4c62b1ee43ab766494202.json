@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "ai_findings_option": {
+      "enum": [
+        "disabled",
+        "on_push"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "languages": {
+      "items": {
+        "enum": [
+          "csharp",
+          "go",
+          "java-kotlin",
+          "javascript-typescript",
+          "python",
+          "ruby"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "runner_label": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "runner_type": {
+      "enum": [
+        "standard",
+        "labeled"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "configured",
+        "not-configured"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

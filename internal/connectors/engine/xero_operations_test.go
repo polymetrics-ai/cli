@@ -35,8 +35,8 @@ func TestXeroReportOperationsDirectRead(t *testing.T) {
 	cfg := connectors.RuntimeConfig{
 		Config: map[string]string{"base_url": server.URL + "/api.xro/2.0"},
 		Secrets: map[string]string{
-			"access_token": "synthetic-conformance-secret",
-			"tenant_id":    "synthetic-conformance-tenant",
+			"access_token": "synthetic-fixture-secret",
+			"tenant_id":    "synthetic-fixture-tenant",
 		},
 	}
 

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "installation_id": {
+      "type": "integer"
+    },
+    "repository_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "installation_id",
+    "repository_id"
+  ],
+  "type": "object"
+}

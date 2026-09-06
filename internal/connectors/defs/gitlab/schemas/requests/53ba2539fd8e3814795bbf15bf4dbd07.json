@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "access_level": {
+      "enum": [
+        "not_protected",
+        "ref_protected"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "active": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "description": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "locked": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "maintenance_note": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "maximum_timeout": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "paused": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "run_untagged": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "tag_list": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "type": "object"
+}

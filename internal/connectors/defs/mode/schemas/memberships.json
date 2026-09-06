@@ -1,22 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "memberships",
-  "type": "object",
   "properties": {
-    "token": {
-      "type": "string"
-    },
-    "id": {
-      "type": "integer"
-    },
     "admin": {
       "type": "boolean"
-    },
-    "username": {
-      "type": "string"
-    },
-    "email": {
-      "type": "string"
     },
     "created_at": {
       "type": [
@@ -28,10 +14,24 @@
         "array",
         "null"
       ]
+    },
+    "email": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "token": {
+      "type": "string"
+    },
+    "username": {
+      "type": "string"
     }
   },
+  "title": "memberships",
+  "type": "object",
+  "x-cursor-field": "created_at",
   "x-primary-key": [
     "token"
-  ],
-  "x-cursor-field": "created_at"
+  ]
 }

@@ -1,40 +1,40 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "communication_template_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the communication template"
-    },
     "createdAt": {
-      "type": "string",
       "description": "The date and time when the communication template was created",
-      "format": "date-time"
+      "format": "date-time",
+      "type": "string"
     },
-    "updatedAt": {
-      "type": "string",
-      "description": "The date and time when the communication template was last updated",
-      "format": "date-time"
-    },
-    "title": {
-      "type": "string",
-      "description": "The display title of the communication template"
+    "id": {
+      "description": "The unique identifier for the communication template",
+      "type": "string"
     },
     "intendedTypes": {
-      "type": "array",
       "description": "The communication channels this template is intended for",
       "items": {
-        "type": "string",
         "enum": [
           "email",
           "inMail",
           "linkedInConnection",
           "telephonySms"
-        ]
-      }
+        ],
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "title": {
+      "description": "The display title of the communication template",
+      "type": "string"
+    },
+    "updatedAt": {
+      "description": "The date and time when the communication template was last updated",
+      "format": "date-time",
+      "type": "string"
     }
   },
+  "title": "communication_template_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

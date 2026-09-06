@@ -32,10 +32,6 @@ const (
 	defaultMaxPages = 3
 )
 
-func init() {
-	engine.RegisterHooks("plaid", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is plaid's Tier-2 hook set: StreamHook (both reads) + CheckHook.
 type Hooks struct{}
 
@@ -55,7 +51,7 @@ var streamEndpoints = map[string]streamEndpoint{
 // ReadStream implements engine.StreamHook, handling both declared streams
 // (institutions, categories) with handled=true always — the declarative
 // streams.json fallback is a structural "shadow" path exercised only by
-// conformance's dynamic checks (Hooks=nil there), never here, matching
+// fixture execution checks (Hooks=nil there), never here, matching
 // monday's documented precedent (docs.md "Streams notes").
 func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
 	name := stream.Name

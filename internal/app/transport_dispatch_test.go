@@ -36,21 +36,19 @@ func TestRunETLCanonicalFullAppendUsesRegisteredTransports(t *testing.T) {
 
 	sourceRef := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "fake_api_source"}
 	destinationRef := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "fake_database_destination"}
-	sourceEvidence := connectors.ConformanceEvidenceReference{Suite: "external_transport_test", RunID: "source_run"}
-	destinationEvidence := connectors.ConformanceEvidenceReference{Suite: "external_transport_test", RunID: "destination_run"}
 	sourceRecord := connectors.Record{"id": "1", "provider": "untouched"}
 	source := &appTransportConnector{
 		meta: connectors.Metadata{Name: "canonical_api_source", DisplayName: "Canonical API Source", IntegrationType: "api", Capabilities: connectors.Capabilities{Read: true, Catalog: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{
 			Executor: sourceRef, EligibleStreams: []string{"records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend},
-			Delivery: appTransportDelivery(), Conformance: sourceEvidence,
+			Delivery: appTransportDelivery(),
 		}},
 	}
 	destination := &appTransportConnector{
 		meta: connectors.Metadata{Name: "canonical_database_destination", DisplayName: "Canonical Database Destination", IntegrationType: "database", Capabilities: connectors.Capabilities{Write: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
 			Executor: destinationRef, EligibleActions: []string{"stage_append"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend},
-			Delivery: appTransportDelivery(), Conformance: destinationEvidence,
+			Delivery:        appTransportDelivery(),
 			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
 			ApplyStrategies: []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "stage_append"}},
 		}},
@@ -73,11 +71,7 @@ func TestRunETLCanonicalFullAppendUsesRegisteredTransports(t *testing.T) {
 		CandidateCheckpoint: candidate,
 	}}
 	destinationExecutor := &appTransportDestinationExecutor{reference: destinationRef, sink: destination.Name()}
-	verifier := appTransportVerifier{accepted: map[appTransportConformanceKey]struct{}{
-		{role: connectors.TransportRoleSource, reference: sourceRef, evidence: sourceEvidence}:                {},
-		{role: connectors.TransportRoleDestination, reference: destinationRef, evidence: destinationEvidence}: {},
-	}}
-	a.transports = synctransport.NewRegistry(verifier)
+	a.transports = synctransport.NewRegistry()
 	if err := a.transports.RegisterSource(sourceExecutor); err != nil {
 		t.Fatal(err)
 	}
@@ -638,6 +632,7 @@ func TestRunETLTransportDoesNotParkDestinationRateLimit(t *testing.T) {
 func TestRunETLTransportPersistsZeroPhaseMeasurementWhenRefusedBeforeSourceIO(t *testing.T) {
 	fixture := setupAppTransportFixture(t, synccontract.ModeFullAppend)
 	fixture.app.transports = nil
+	fixture.app.transportRegistry = nil
 
 	run, err := fixture.app.RunETL(context.Background(), RunETLRequest{
 		Connection: fixture.connection, Stream: "records", BatchSize: 1,
@@ -2507,7 +2502,7 @@ func TestRunETLTransportCompletesExplicitEmptyFullOverwriteWithPublicationWitnes
 		return nil
 	}
 	fixture.destinationExecutor.output = json.RawMessage(`{"receipt_id":"empty-full-overwrite-once"}`)
-	registry := synctransport.NewRegistry(fixture.verifier)
+	registry := synctransport.NewRegistry()
 	if err := registry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: fixture.sourceExecutor}); err != nil {
 		t.Fatal(err)
 	}
@@ -2545,7 +2540,7 @@ func TestRunETLEmptyFullOverwritePersistsPendingReceiptBeforeReadBackAdmission(t
 	}
 	fixture.destinationExecutor.output = json.RawMessage(`{"receipt_id":"empty-admission-once"}`)
 	fixture.destinationExecutor.afterPublish = cancel
-	registry := synctransport.NewRegistry(fixture.verifier)
+	registry := synctransport.NewRegistry()
 	if err := registry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: fixture.sourceExecutor}); err != nil {
 		t.Fatal(err)
 	}
@@ -2614,7 +2609,7 @@ func TestRunETLEmptyFullOverwriteRecoversPendingReceiptAfterPostPublishStateComm
 	fixture.destinationExecutor.afterPublish = func() {
 		fixture.app.store.Locker = &postCommitUnlockFailureLocker{failAt: 1}
 	}
-	registry := synctransport.NewRegistry(fixture.verifier)
+	registry := synctransport.NewRegistry()
 	if err := registry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: fixture.sourceExecutor}); err != nil {
 		t.Fatal(err)
 	}
@@ -2657,7 +2652,7 @@ func TestRunETLEmptyFullOverwritePreventsPostReadBackExpiredLeaseReplay(t *testi
 	fixture.sourceExecutor.read = func(context.Context, synctransport.SourceRequest, func(synctransport.SourcePage) error) error {
 		return nil
 	}
-	registry := synctransport.NewRegistry(fixture.verifier)
+	registry := synctransport.NewRegistry()
 	if err := registry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: fixture.sourceExecutor}); err != nil {
 		t.Fatal(err)
 	}
@@ -2687,7 +2682,7 @@ func TestRunETLEmptyFullOverwritePreventsPostReadBackExpiredLeaseReplay(t *testi
 		}
 		contenderDestination = &appTransportDestinationExecutor{reference: fixture.destinationExecutor.reference, sink: fixture.destination.Name()}
 		fixture.configureRuntime(t, contender, contenderSource, contenderDestination)
-		contenderRegistry := synctransport.NewRegistry(fixture.verifier)
+		contenderRegistry := synctransport.NewRegistry()
 		if err := contenderRegistry.RegisterSource(&emptyAppTransportSourceExecutor{appTransportSourceExecutor: contenderSource}); err != nil {
 			t.Fatal(err)
 		}
@@ -3627,14 +3622,13 @@ func TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t *testi
 		meta: connectors.Metadata{Name: "unregistered_api_source", IntegrationType: "api", Capabilities: connectors.Capabilities{Read: true, Catalog: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{
 			Executor: sourceRef, EligibleStreams: []string{"records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend}, Delivery: appTransportDelivery(),
-			Conformance: connectors.ConformanceEvidenceReference{Suite: "external_transport_test", RunID: "source_run"},
 		}},
 	}
 	destination := &appTransportConnector{
 		meta: connectors.Metadata{Name: "registered_database_destination", IntegrationType: "database", Capabilities: connectors.Capabilities{Write: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
 			Executor: destinationRef, EligibleActions: []string{"stage_append"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend}, Delivery: appTransportDelivery(),
-			Conformance: connectors.ConformanceEvidenceReference{Suite: "external_transport_test", RunID: "destination_run"}, Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
+			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
 			ApplyStrategies: []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "stage_append"}},
 		}},
 	}
@@ -3648,7 +3642,7 @@ func TestRunETLTransportPreflightRejectsMissingExecutorBeforeSourceRead(t *testi
 	if _, err := a.AddCredential(ctx, AddCredentialRequest{Name: "destination", Connector: destination.Name()}); err != nil {
 		t.Fatal(err)
 	}
-	a.transports = synctransport.NewRegistry(appTransportVerifier{})
+	a.transports = synctransport.NewRegistry()
 	if _, err := a.CreateConnection(ctx, CreateConnectionRequest{
 		Name: "missing_executor_connection", Source: EndpointConfig{Connector: source.Name(), Credential: "source"}, Destination: EndpointConfig{Connector: destination.Name(), Credential: "destination"},
 		Streams: map[string]StreamConfig{"records": {SyncMode: string(synccontract.ModeFullAppend)}},
@@ -3683,27 +3677,25 @@ func TestETLRouteSelection_DeclarativeSourcePreservesDeclaredDestinationPrefligh
 	if err != nil {
 		t.Fatal(err)
 	}
-	sourceEvidence := connectors.ConformanceEvidenceReference{Suite: "declared-route", RunID: "source"}
-	destinationEvidence := connectors.ConformanceEvidenceReference{Suite: "declared-route", RunID: "destination"}
 	destinationRef := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "unregistered_declared_destination"}
 	source := &appTransportConnector{
 		meta:              connectors.Metadata{Name: "declared_source", IntegrationType: "api", Capabilities: connectors.Capabilities{Read: true}},
 		definitionStreams: []connectors.StreamSummary{{Name: "records"}},
 		descriptor: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{
 			Executor: declarativeStreamSourceReference, EligibleStreams: []string{"records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend},
-			Delivery: appTransportDelivery(), Conformance: sourceEvidence,
+			Delivery: appTransportDelivery(),
 		}},
 	}
 	destination := &appTransportConnector{
 		meta: connectors.Metadata{Name: "declared_destination", IntegrationType: "api", Capabilities: connectors.Capabilities{Write: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
 			Executor: destinationRef, EligibleActions: []string{"apply_records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend},
-			Delivery: appTransportDelivery(), Conformance: destinationEvidence, Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
+			Delivery: appTransportDelivery(), Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
 			ApplyStrategies: []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_records"}},
 		}},
 	}
 	sourceExecutor := &appTransportSourceExecutor{reference: declarativeStreamSourceReference}
-	a.transports = synctransport.NewRegistry(appTransportVerifier{})
+	a.transports = synctransport.NewRegistry()
 	if err := a.transports.RegisterSource(sourceExecutor); err != nil {
 		t.Fatal(err)
 	}
@@ -3727,28 +3719,22 @@ func TestETLRouteSelection_DeclarativeSourceRejectsUnmarkedResolvedDestination(t
 	if err != nil {
 		t.Fatal(err)
 	}
-	sourceEvidence := connectors.ConformanceEvidenceReference{Suite: "declared-route", RunID: "source"}
-	destinationEvidence := connectors.ConformanceEvidenceReference{Suite: "declared-route", RunID: "destination"}
 	destinationRef := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyDeclarativeAPI, ID: "unmarked_declared_destination"}
 	source := &appTransportConnector{
 		meta:              connectors.Metadata{Name: "declared_marker_source", IntegrationType: "api", Capabilities: connectors.Capabilities{Read: true}},
 		definitionStreams: []connectors.StreamSummary{{Name: "records"}},
 		descriptor: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{
-			Executor: declarativeStreamSourceReference, EligibleStreams: []string{"records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend}, Delivery: appTransportDelivery(), Conformance: sourceEvidence,
+			Executor: declarativeStreamSourceReference, EligibleStreams: []string{"records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend}, Delivery: appTransportDelivery(),
 		}},
 	}
 	destination := &appTransportConnector{
 		meta: connectors.Metadata{Name: "declared_marker_destination", IntegrationType: "api", Capabilities: connectors.Capabilities{Write: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
-			Executor: destinationRef, EligibleActions: []string{"apply_records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend}, Delivery: appTransportDelivery(), Conformance: destinationEvidence,
+			Executor: destinationRef, EligibleActions: []string{"apply_records"}, Modes: []synccontract.Mode{synccontract.ModeFullAppend}, Delivery: appTransportDelivery(),
 			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse, ApplyStrategies: []connectors.DestinationApplyStrategy{{Mode: synccontract.ModeFullAppend, Strategy: connectors.ApplyStrategyAppend, Action: "apply_records"}},
 		}},
 	}
-	verifier := appTransportVerifier{accepted: map[appTransportConformanceKey]struct{}{
-		{role: connectors.TransportRoleSource, reference: declarativeStreamSourceReference, evidence: sourceEvidence}: {},
-		{role: connectors.TransportRoleDestination, reference: destinationRef, evidence: destinationEvidence}:         {},
-	}}
-	a.transports = synctransport.NewRegistry(verifier)
+	a.transports = synctransport.NewRegistry()
 	sourceExecutor := &appTransportSourceExecutor{reference: declarativeStreamSourceReference}
 	destinationExecutor := &appTransportDestinationExecutor{reference: destinationRef, sink: destination.Name()}
 	if err := a.transports.RegisterSource(sourceExecutor); err != nil {
@@ -3768,13 +3754,11 @@ func TestETLRouteSelection_DeclarativeSourceRejectsUnmarkedResolvedDestination(t
 	}
 }
 
-// TestETLRouteSelection_DeclarativeSourceKeepsBoundedLocalWarehouseLegacyModes
-// protects the established declaration-owned local warehouse representation.
-// Only its two dedupe modes use the closed transport executor; its remaining
-// executable modes stay on the bounded ordinary warehouse route.  They must
-// not be mistaken for an unmarked destination or forced through a source mode
-// the transport declaration did not select.
-func TestETLRouteSelection_DeclarativeSourceKeepsBoundedLocalWarehouseLegacyModes(t *testing.T) {
+// TestETLRouteSelection_UsesOnlyExecutableVNextTransportModes proves that a
+// declared full snapshot reaches transport only when the selected destination
+// implements its mode-specific runtime port. It does not consult historical
+// source evidence to promote or suppress the route.
+func TestETLRouteSelection_UsesOnlyExecutableVNextTransportModes(t *testing.T) {
 	root := t.TempDir()
 	if err := InitProject(root); err != nil {
 		t.Fatal(err)
@@ -3796,21 +3780,25 @@ func TestETLRouteSelection_DeclarativeSourceKeepsBoundedLocalWarehouseLegacyMode
 		t.Fatal("closed local warehouse destination is not a materializer")
 	}
 
-	for _, mode := range []synccontract.Mode{
-		synccontract.ModeFullAppend,
-		synccontract.ModeFullOverwrite,
-		synccontract.ModeIncrementalAppend,
+	for _, testCase := range []struct {
+		mode         synccontract.Mode
+		wantSelected bool
+		wantReason   transportRouteReason
+	}{
+		{mode: synccontract.ModeFullAppend, wantSelected: true, wantReason: transportRouteDeclared},
+		{mode: synccontract.ModeFullOverwrite, wantReason: transportRouteDeclarationAbsent},
+		{mode: synccontract.ModeIncrementalAppend, wantReason: transportRouteDeclarationAbsent},
 	} {
-		t.Run(string(mode), func(t *testing.T) {
+		t.Run(string(testCase.mode), func(t *testing.T) {
 			selected, reason, err := a.selectTransportRoute(
 				Connection{Streams: map[string]StreamConfig{"pull_requests": {}}},
 				"pull_requests",
-				SyncMode{ContractMode: mode},
+				SyncMode{ContractMode: testCase.mode},
 				source,
 				destination,
 			)
-			if selected || reason != transportRouteDeclarationAbsent || err != nil {
-				t.Fatalf("selectTransportRoute(%q) = selected=%t reason=%q err=%v, want bounded ordinary local-warehouse route", mode, selected, reason, err)
+			if selected != testCase.wantSelected || reason != testCase.wantReason || err != nil {
+				t.Fatalf("selectTransportRoute(%q) = selected=%t reason=%q err=%v, want selected=%t reason=%q", testCase.mode, selected, reason, err, testCase.wantSelected, testCase.wantReason)
 			}
 		})
 	}
@@ -4442,23 +4430,6 @@ func (s *appTransportStage) Reopen(_ context.Context, receipt synctransport.Ware
 	return workset, nil
 }
 
-type appTransportConformanceKey struct {
-	role      connectors.TransportRole
-	reference connectors.TransportExecutorReference
-	evidence  connectors.ConformanceEvidenceReference
-}
-
-type appTransportVerifier struct {
-	accepted map[appTransportConformanceKey]struct{}
-}
-
-func (v appTransportVerifier) VerifyTransportConformance(request synctransport.ConformanceVerification) error {
-	if _, ok := v.accepted[appTransportConformanceKey{role: request.Role, reference: request.Executor, evidence: request.Evidence}]; !ok {
-		return fmt.Errorf("external conformance verification has no accepted result for %s", request.Executor.ID)
-	}
-	return nil
-}
-
 func appTransportDelivery() connectors.DeliveryGuarantees {
 	return connectors.DeliveryGuarantees{Idempotency: connectors.DeliveryIdempotencyKeyed, Ordering: connectors.DeliveryOrderingSource, Deletes: connectors.DeliveryDeletesTombstone}
 }
@@ -4468,7 +4439,6 @@ type appTransportFixture struct {
 	connection          string
 	source              *appTransportConnector
 	destination         *appTransportConnector
-	verifier            appTransportVerifier
 	sourceExecutor      *appTransportSourceExecutor
 	destinationExecutor *appTransportDestinationExecutor
 }
@@ -4487,21 +4457,19 @@ func setupAppTransportFixture(t *testing.T, mode synccontract.Mode) appTransport
 
 	sourceRef := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeAPI, ID: "fixture_api_source"}
 	destinationRef := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "fixture_database_destination"}
-	sourceEvidence := connectors.ConformanceEvidenceReference{Suite: "external_transport_test", RunID: "fixture_source_run"}
-	destinationEvidence := connectors.ConformanceEvidenceReference{Suite: "external_transport_test", RunID: "fixture_destination_run"}
 	actions, strategies := appTransportStrategies()
 	source := &appTransportConnector{
 		meta: connectors.Metadata{Name: "fixture_api_source", DisplayName: "Fixture API Source", IntegrationType: "api", Capabilities: connectors.Capabilities{Read: true, Catalog: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Source: &connectors.SourceTransportDescriptor{
 			Executor: sourceRef, EligibleStreams: []string{"records"}, Modes: synccontract.AllModes(),
-			Delivery: appTransportDelivery(), Conformance: sourceEvidence,
+			Delivery: appTransportDelivery(),
 		}},
 	}
 	destination := &appTransportConnector{
 		meta: connectors.Metadata{Name: "fixture_database_destination", DisplayName: "Fixture Database Destination", IntegrationType: "database", Capabilities: connectors.Capabilities{Write: true}},
 		descriptor: &connectors.SyncTransportDescriptor{Destination: &connectors.DestinationTransportDescriptor{
 			Executor: destinationRef, EligibleActions: actions, Modes: appTransportDestinationModes(),
-			Delivery: appTransportDelivery(), Conformance: destinationEvidence,
+			Delivery:        appTransportDelivery(),
 			Acknowledgement: connectors.TransportAcknowledgementDurableWarehouse,
 			ApplyStrategies: strategies,
 		}},
@@ -4523,11 +4491,7 @@ func setupAppTransportFixture(t *testing.T, mode synccontract.Mode) appTransport
 		CandidateCheckpoint: appTransportCheckpoint(source, sourceCredential, "records"),
 	}}
 	destinationExecutor := &appTransportDestinationExecutor{reference: destinationRef, sink: destination.Name()}
-	verifier := appTransportVerifier{accepted: map[appTransportConformanceKey]struct{}{
-		{role: connectors.TransportRoleSource, reference: sourceRef, evidence: sourceEvidence}:                {},
-		{role: connectors.TransportRoleDestination, reference: destinationRef, evidence: destinationEvidence}: {},
-	}}
-	a.transports = synctransport.NewRegistry(verifier)
+	a.transports = synctransport.NewRegistry()
 	if err := a.transports.RegisterSource(sourceExecutor); err != nil {
 		t.Fatal(err)
 	}
@@ -4551,7 +4515,6 @@ func setupAppTransportFixture(t *testing.T, mode synccontract.Mode) appTransport
 		connection:          connection,
 		source:              source,
 		destination:         destination,
-		verifier:            verifier,
 		sourceExecutor:      sourceExecutor,
 		destinationExecutor: destinationExecutor,
 	}
@@ -4563,7 +4526,7 @@ func (f appTransportFixture) configureRuntime(t *testing.T, a *App, sourceExecut
 	registry.Register(f.source)
 	registry.Register(f.destination)
 	a.registry = registry
-	a.transports = synctransport.NewRegistry(f.verifier)
+	a.transports = synctransport.NewRegistry()
 	if err := a.transports.RegisterSource(sourceExecutor); err != nil {
 		t.Fatal(err)
 	}

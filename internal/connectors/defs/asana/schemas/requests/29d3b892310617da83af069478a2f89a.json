@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "connect_to_app": {
+      "type": "boolean"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "parent": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "resource_subtype": {
+      "enum": [
+        "external"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "url": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "parent",
+    "resource_subtype",
+    "url"
+  ],
+  "type": "object"
+}

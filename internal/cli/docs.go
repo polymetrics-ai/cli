@@ -318,7 +318,7 @@ KEYS
 SECURITY
   Configuration is an allowlist. pm does not ingest arbitrary POLYMETRICS_* or
   PM_* variables. User-named credential env vars supplied to --from-env and
-  connector certification credsfile entries are credential data, not app config.
+  connector credential imports are credential data, not app config.
   Do not store secret values in config.yaml or examples. LLM API keys such as
   PM_LLM_API_KEY and provider-specific keys remain environment-only secret
   inputs and are not documented with values.
@@ -412,47 +412,47 @@ SYNOPSIS
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
-  pm connectors certify <connector> [--full | --direct-read-only | --write-only] [--resume] [--external-proof] [--full-parity] [--from-env field=ENV | --value-stdin field] [--json]
 
 DESCRIPTION
-  pm ships with runnable connector definitions compiled into the binary. Most
-  connectors are declarative JSON bundles interpreted by the connector engine;
-  hooks or native components cover APIs and protocols that need custom behavior.
+  pm ships with deterministic execution JSON bundles compiled into the binary.
+  Authors maintain schema-4 source.lock.json files, which are projected through
+  a canonical per-operation descriptor into metadata, schemas, streams, writes,
+  operations, CLI surface, and optional sync transport or rate limits. The
+  runtime never reads source locks or authoring evidence. Hooks or native
+  components cover APIs and protocols that need custom execution behavior.
 
   Connectors expose local metadata for ETL read streams and reverse ETL write
-  actions when those executable surfaces are implemented. Planned ledger-only
-  connectors remain visible in the catalog without executable streams or write
-  actions. Run pm connectors inspect <name> to see write=true/false, ETL
-  STREAMS, REVERSE ETL ACTIONS, and the generated certification quality
-  signal without reading credentials. COMMUNITY BUILD, UNCERTIFIED is a
-  warning only; the connector remains reachable.
+  actions when those executable surfaces are implemented. Connectors without
+  executable streams or writes remain visible in the catalog with explicit
+  unsupported lanes. Run pm connectors inspect <name> to see write=true/false,
+  ETL STREAMS, REVERSE ETL ACTIONS, and sync transport without reading
+  credentials.
 
   JSON inspection also projects the closed sync_transport source and
   destination eligibility. A structurally valid destination that declares
   acknowledgement=none remains declared so inspection reports that policy, but
   runtime preflight refuses it; only durable_warehouse can execute. A declared
-  role still requires externally verified conformance; it is not a certification
-  claim.
+  role executes only when its named runtime executor and mode are available.
 
   POLLING-WATERMARK ELIGIBILITY
   polling_watermark is a bounded polling scan, not CDC or change capture.
-  Its declaration status, where one exists, is separate from the connector's
+  Its execution status, where one exists, is separate from the connector's
   CDC capability. A polling mode is executable only when runtime preflight
   accepts the specific connector, discovered catalog object, and destination
-  binding after checking the declared native source and apply executors plus
-  immutable conformance evidence. A planned, unsupported, or absent static
-  declaration alone does not implement a polling mode. A connector that
-  constructs an implemented declaration per selected catalog object can become
+  binding after checking the rendered native source and apply executors. A
+  planned, unsupported, or absent static
+  binding alone does not implement a polling mode. A connector that
+  constructs an implemented binding per selected catalog object can become
   eligible only after the same runtime preflight succeeds.
 
-  An admitted source uses declared keyset ordering: a watermark and unique
+  An executable source uses rendered keyset ordering: a watermark and unique
   tie-breaker are checkpointed only after durable downstream acknowledgement.
   Delivery is at least once, so the inclusive resume boundary can replay an
-  accepted record. Snapshot barriers are declaration-bound and are never
+  accepted record. Snapshot barriers are execution-bound and are never
   silently replaced by a full scan. Polling cannot observe hard deletes after a
   row disappears; tombstones require a declared, cursor-advancing soft-delete
   mapping. State incompatibility, source identity mismatch, snapshot expiry,
-  and retention failure require an explicit rebootstrap; pm never implies an
+  and snapshot expiry require an explicit rebootstrap; pm never implies an
   automatic rescan.
 
   GitHub currently declares both closed transport roles, so pm connectors
@@ -463,11 +463,9 @@ DESCRIPTION
   LIMIT COORDINATION. Process-local policies coordinate only requests made by
   this pm process; they make no cross-process claim. Policies explicitly
   declaring require_shared refuse before a request when their optional shared
-  coordinator is unavailable. A connector with both ordinary policies reports
-  policy-scoped coordination. A certification-only require_shared overlay
-  preserves the process-local default label and explicitly states the
-  certification boundary. Inspection never exposes a rate scope, coordinator
-  address, or credential.
+  coordinator is unavailable. A connector with multiple policies reports
+  policy-scoped coordination. Inspection never exposes a rate scope,
+  coordinator address, or credential.
 
   For provider-style commands with bounded caller input, JSON inspection also
   reports request_execution_limits. Each row names the command flag, request
@@ -529,11 +527,11 @@ REVERSE ETL WRITE ACTIONS
   writable connectors; the rest are read-only because their APIs expose no
   supported mutations.
 
-DECLARATION-BOUND STRUCTURED WRITE INPUTS
+SCHEMA-BOUND STRUCTURED WRITE INPUTS
   Some provider-sourced direct-write commands expose a declared object or array
   as a typed json flag, for example --settings or --targets. The generated
   command help and connector manual name the accepted fields and their
-  maps_to=body.<field> binding. The operation declaration—not the caller—owns
+  maps_to=body.<field> binding. The rendered operation—not the caller—owns
   the method, route, content type, headers, and nested schema. There is no raw
   --body flag and no method, path, content-type, action, or connector override.
   A malformed, unknown, missing, oversized, or schema-incompatible structured
@@ -562,70 +560,13 @@ ACTIONS
 
   inspect <name>
     Prints a man-style connector manual for a bare connector name. Use --json
-    to print structured metadata for agents, including the generated binary
-    certification status and declared rate-limit coordination provenance when
-    applicable. Inspection is metadata-only and does not resolve credentials or
-    expose a rate scope. A connector is either CERTIFIED or COMMUNITY BUILD,
-    UNCERTIFIED; the latter remains available with a warning.
+    to print structured metadata for agents, including declared sync transport,
+    rate-limit coordination, and request execution limits when applicable.
+    Inspection is metadata-only and does not resolve credentials or expose a
+    rate scope.
 
   help <name>
     Alias for the human connector manual.
-
-  certify <connector>
-    Runs the legacy connector test harness. It does not set the generated
-    CERTIFIED status; only proof-bearing certification records can do that.
-    --external-proof is an explicit live HTTPS acceptance mode: it builds a
-    fresh pm child binary, accepts credentials only from --from-env or
-    --value-stdin, and writes a fingerprint-only transcript from complete,
-    bounded exchanges. Its version-2 credential scope is derived by the proof
-    writer: a verified --full-parity run claims full_parity; otherwise it
-    claims only observed_operations with protocol_exchanges as its proof. The
-    artifact preserves the actual certification exit and requires at least one
-    observed successful provider response; it refuses incomplete or truncated
-    exchanges.
-    --full-parity enables both the full read sweep and live writes; it refuses
-    to claim parity unless every applicable declared write has a production
-    mutation, independent read-back, and verified cleanup. Skipped, not_live,
-    recovered_unverified, blocked, failed, or leaked actions are never folded
-    into a pass result.
-    --write-only is a bounded GitHub repository-fixture wave, not a parity
-    claim: it is restricted to Polymetrics-Cert/pm-cert-3993-20260810-wz0fru,
-    the captain-approved run-owned disposable fixture, and records every
-    non-live boundary explicitly. Commit-comment actions currently require
-    GitHub's "Metadata" repository permission (read) for their item read-back;
-    without it they are reported blocked, never pass.
-    After that permission is granted, enable their bounded re-run explicitly
-    with --config certification_commit_comment_item_read=enabled; the default
-    avoids creating a further unverified commit comment while it is missing.
-    With --full --json from a source checkout,
-    the report includes the API-surface inventory and provider-artifact
-    provenance evidence separately from endpoint coverage and connector
-    capabilities. Version-1 and pre-ledger inventories remain legacy_unverified
-    during the staged migration and cannot be treated as an endpoint coverage
-    claim. Full direct-read
-    sweeps are serial. If one stops after a provider rate-limit response,
-    rerun it with --resume to reuse only matching, credential-free candidate
-    checkpoints; the report marks resumed rows instead of implying they were
-    re-executed.
-    --direct-read-only retains preflight, live credential validation, serial
-    rate-limit handling, declaration-owned output assertions, and secret scans
-    for direct-read candidates, but does not run unrelated stream/ETL stages.
-    It cannot be combined with --write. With --external-proof it emits an
-    observed-operations proof; use --full-parity only for a full-parity claim.
-    A complete version-2 ledger reports its ledger
-    version, artifact count, endpoint count, and cited endpoint count; invalid
-    version-2 provenance fails certification without enabling or changing any
-    connector capability. When the connector declares coordinated rate limits,
-    JSON may also contain safe rate_limit_events for attempts, observed resets,
-    waits, and requests stopped before send; the events contain no credentials
-    or rendered rate scopes.
-
-    PostgreSQL's full database proof requires --write plus an explicit
-    --stream schema.table and cursor_field configuration. It certifies live
-    catalog discovery, one bounded typed relation read, and PostgreSQL's six
-    declared polling-to-managed-target modes with independent target read-back.
-    It does not claim every relation in a dynamic database or a direct
-    writes.json action surface.
 
 EXAMPLES
   pm connectors
@@ -635,10 +576,6 @@ EXAMPLES
   pm connectors catalog --capability write --stage generally_available --json
   pm connectors inspect github
   pm connectors inspect github --json
-  pm connectors certify sample --full --json
-  pm connectors certify github --direct-read-only --resume --from-env token=GITHUB_TOKEN --json
-  pm connectors certify github --direct-read-only --external-proof --config owner=OWNER --config repo=REPO --from-env token=GITHUB_TOKEN --json
-  pm connectors certify postgres --full --write --stream public.events --config host=DB_HOST --config port=5432 --config database=DB_NAME --config username=DB_USER --config schema=public --config cursor_field=sequence --from-env password=POSTGRES_PASSWORD --json
   pm credentials add github-public --connector github --config owner=octocat --config repo=Hello-World --config auth_type=public
   pm credentials add github-token --connector github --config owner=OWNER --config repo=REPO --config auth_type=token --from-env token=GITHUB_TOKEN
   pm credentials add github-app --connector github --config owner=OWNER --config repo=REPO --config auth_type=github_app --config app_id=12345 --config installation_id=67890 --value-stdin private_key < app.pem
@@ -665,11 +602,12 @@ DESCRIPTION
 
 DECLARATIVE TYPED DESTINATION ACTION
   --destination-action persists one exact eligible writes.json action for a
-  declarative_typed_destination stream. It is accepted only for that closed
-  destination adapter and is validated against the destination descriptor,
-  source binding, mode, acknowledgement, and evidence before catalog or
-  provider I/O. It is not an ETL run flag: a plan and run resolve only this
-  saved identity, so an invocation cannot substitute another action.
+  declarative_typed_destination or declarative_single_attempt_destination
+  stream. It is accepted only for that closed destination adapter and is
+  validated against the destination descriptor, source binding, mode,
+  acknowledgement, and evidence before catalog or provider I/O. It is not an
+  ETL run flag: a plan and run resolve only this saved identity, so an
+  invocation cannot substitute another action.
 
 TARGET COPY CAPACITY
   --target-copy-workers records the bounded target connection capacity for an
@@ -714,13 +652,13 @@ STREAM AND TABLE NAMES
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
-  full_refresh_overwrite_deduped   compatibility name for typed full_overwrite admission
+  full_refresh_overwrite_deduped   full overwrite with primary-key deduplication
   incremental_append               append records at or after the saved cursor
-  incremental_append_deduped       compatibility name for typed incremental_dedupe admission
-  incremental_dedupe               typed current-state dedupe for an admitted source-to-warehouse transport
-  incremental_dedupe_history       typed source-version history for an admitted source-to-warehouse transport
+  incremental_append_deduped       incremental append with primary-key deduplication
+  incremental_dedupe               current-state dedupe with a compatible source executor
+  incremental_dedupe_history       source-version history with a compatible source executor
 
-  Incremental modes and deduped compatibility names require --cursor. Deduped
+  Incremental modes require --cursor. Deduped
   modes require --primary-key. A static connector manifest advertises the full
   deduped compatibility name only with both fields, and incremental modes only
   with a declared incremental executor. The two deduped compatibility names use
@@ -801,7 +739,7 @@ DESCRIPTION
 
   Some catalog slugs remain migration metadata only. Those entries are still
   inspectable through pm connectors inspect, but cannot execute ETL until a
-  runnable connector definition or component passes conformance and is enabled.
+  runtime execution bundle or native component provides the required executor.
 
   ETL runs read records from a configured source connector stream, add
   Polymetrics metadata fields, and write records to the destination connector.
@@ -903,9 +841,10 @@ CLOSED POSTGRESQL MANAGED-TARGET TRANSPORT
 
 DECLARATIVE TYPED DESTINATION TRANSPORT
   declarative-typed-destination runs only a sync_transport.json destination
-  that declares the exact declarative_typed_destination adapter. The saved
-  stream's destination_action selects one named, eligible writes.json action.
-  This is necessary when one connector exposes multiple
+  that declares declarative_typed_destination (retry-safe) or
+  declarative_single_attempt_destination (one request with no automatic
+  replay). The saved stream's destination_action selects one named, eligible
+  writes.json action. This is necessary when one connector exposes multiple
   record-driven destination actions for the same sync mode; no action is
   inferred from declaration order.
 
@@ -929,8 +868,8 @@ DECLARATIVE TYPED DESTINATION TRANSPORT
   The CLI accepts no connector, action, route, verb, body, mapping, or evidence
   flag. Connector JSON owns that behavior; shared Go validates the sealed
   descriptor, source binding, approval/workset guards, typed action execution,
-  acknowledgement, and read-back. An absent declaration, foreign action,
-  unlisted action, wrong source, malformed mapping, missing evidence, or
+  acknowledgement, and read-back. An absent binding, foreign action,
+  unlisted action, wrong source, malformed mapping, or
   unsupported mode fails before source or provider I/O. See
   docs/sync-transport-definition.md for the mechanical declaration contract.
 
@@ -1001,27 +940,27 @@ SYNC MODES
     replaces the final Parquet table only after the run succeeds.
 
   full_refresh_overwrite_deduped
-    Compatibility name for typed full_overwrite admission. pm refuses before
-    source I/O until a matching transport is admitted.
+    Replaces the output and deduplicates by the declared primary key. pm
+    refuses before source I/O until a matching executor is available.
 
   incremental_append
     Reads records at or after the saved cursor and appends accepted records to
     the write-ahead log. Cursor state advances only after successful writes.
 
   incremental_append_deduped
-    Compatibility name for typed incremental_dedupe admission. pm refuses
-    before source I/O until a matching transport is admitted.
+    Appends newer records and deduplicates by the declared primary key. pm
+    refuses before source I/O until a matching executor is available.
 
   incremental_dedupe
-    For an admitted source-to-warehouse transport, retains one current record
-    per declared primary key. It refuses before source I/O for other pairs.
+    Retains one current record per declared primary key. It refuses before
+    source I/O for incompatible source and destination pairs.
 
   incremental_dedupe_history
-    For an admitted source-to-warehouse transport, retains deduplicated source versions with _valid_from, _valid_to, and _is_current fields. It requires
-    declared primary-key and cursor fields, and refuses before source I/O for
-    other pairs.
+    Retains deduplicated source versions with _valid_from, _valid_to, and
+    _is_current fields. It requires primary-key and cursor fields, and refuses
+    before source I/O for incompatible pairs.
 
-  Incremental modes and deduped compatibility names require --cursor. Deduped
+  Incremental modes require --cursor. Deduped
   modes require --primary-key. Static connector manifests advertise the full
   deduped compatibility name only with both fields, and incremental modes only
   with a declared incremental executor.
@@ -1029,8 +968,8 @@ SYNC MODES
 POLLING-WATERMARK LIMITS
   polling_watermark is a bounded keyset scan, not CDC or a generic database
   query. The runtime evaluates every mode against the declared source ordering,
-  discovered object, destination binding, registered executors, and conformance
-  evidence before source I/O. A durable checkpoint records the watermark and
+  discovered object, destination binding, registered executors, and compatible
+  runtime mode before source I/O. A durable checkpoint records the watermark and
   unique tie-breaker only after downstream acknowledgement, so accepted records
   may replay. Hard deletes are not observable unless the declaration supplies
   a cursor-advancing soft-delete mapping. Incompatible state, source identity

@@ -1,4 +1,0 @@
-{
-  "record": {"calendar_id": "calendar_fixture_1", "summary": "Fixture Event", "start": {"dateTime": "2030-01-01T10:00:00Z"}, "end": {"dateTime": "2030-01-01T11:00:00Z"}},
-  "expect": {"method": "POST", "path": "/calendars/calendar_fixture_1/events", "body": {"summary": "Fixture Event", "start": {"dateTime": "2030-01-01T10:00:00Z"}, "end": {"dateTime": "2030-01-01T11:00:00Z"}}}
-}

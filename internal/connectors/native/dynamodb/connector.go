@@ -59,7 +59,7 @@
 // native/bing-ads's identical "there is no cdc.go" precedent).
 //
 // A mode=fixture config (cfg.Config["mode"]=="fixture") short-circuits all
-// network access so the conformance harness and unit tests can run with no
+// network access so the fixture tests and unit tests can run with no
 // live AWS credentials: in fixture mode Check succeeds, Catalog returns the
 // static stream, and Read emits two canned rows (ported verbatim from
 // legacy's readFixture).
@@ -112,11 +112,16 @@ type Connector struct {
 // since a bundle that fails to load here indicates a broken build, not a
 // runtime/user error.
 func New() Connector {
-	b, err := engine.Load(defs.FS, "dynamodb")
+	bundle, err := engine.Load(defs.FS, "dynamodb")
 	if err != nil {
 		panic("native/dynamodb: failed to load defs/dynamodb bundle: " + err.Error())
 	}
-	return Connector{Base: engine.NewBase(b)}
+	return NewFromBundle(bundle)
+}
+
+// NewFromBundle constructs DynamoDB from the manifest-selected execution bundle.
+func NewFromBundle(bundle engine.Bundle) Connector {
+	return Connector{Base: engine.NewBase(bundle)}
 }
 
 // Metadata overrides engine.Base's bundle-synthesized Metadata with the

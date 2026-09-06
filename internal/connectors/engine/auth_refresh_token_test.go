@@ -427,7 +427,7 @@ func TestBuildOAuth2RefreshTokenNoRotationWithoutDeclaredKey(t *testing.T) {
 }
 
 // TestBuildOAuth2RefreshTokenNoStoreConfiguredStillWorks proves a nil
-// SecretStore (conformance harnesses, tests, any caller with no credential
+// SecretStore (fixture tests, tests, any caller with no credential
 // store) degrades to in-memory rotation, never to a plaintext write.
 func TestBuildOAuth2RefreshTokenNoStoreConfiguredStillWorks(t *testing.T) {
 	srv, _, _ := refreshTokenServer(t, true)

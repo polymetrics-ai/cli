@@ -414,6 +414,35 @@ func TestNewPaginatorOffsetLimitShortPageStop(t *testing.T) {
 	}
 }
 
+func TestNewPaginatorOffsetLimitHonorsDeclaredStopPath(t *testing.T) {
+	hits := newHitCounter()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		offset := r.URL.Query().Get("offset")
+		switch offset {
+		case "0":
+			_, _ = w.Write([]byte(`{"data":[{"id":1},{"id":2}],"hasMore":true}`))
+		case "2":
+			_, _ = w.Write([]byte(`{"data":[{"id":3},{"id":4}],"hasMore":false}`))
+		default:
+			t.Fatalf("offset paginator requested page after hasMore=false: %q", offset)
+		}
+		hits.record(offset)
+	}))
+	defer srv.Close()
+
+	p, err := newPaginator(PaginationSpec{Type: "offset_limit", LimitParam: "limit", OffsetParam: "offset", PageSize: 2, StopPath: "hasMore"}, 2, "data")
+	if err != nil {
+		t.Fatalf("newPaginator() error = %v", err)
+	}
+	records, err := collectPages(t, requester(srv.URL), p, "data")
+	if err != nil {
+		t.Fatalf("collectPages() error = %v", err)
+	}
+	if len(records) != 4 || hits.count("0") != 1 || hits.count("2") != 1 {
+		t.Fatalf("records/hits = %d/%d/%d, want 4/1/1", len(records), hits.count("0"), hits.count("2"))
+	}
+}
+
 // --- cursor(token_path) ---
 
 func TestNewPaginatorCursorTokenPathExhausts(t *testing.T) {

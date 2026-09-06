@@ -123,38 +123,6 @@ func TestGeneratedDocsDescribeAuthenticationRequirements(t *testing.T) {
 	}
 }
 
-// TestCertificationArchitectureUsesExecutablePostgresResumeBindings guards the
-// #4015 architecture's keyset predicate from drifting back to symbolic values.
-// It documents the target contract; #3855 separately identifies the current
-// scalar reader predicate as a legacy implementation gap.
-func TestCertificationArchitectureUsesExecutablePostgresResumeBindings(t *testing.T) {
-	_, thisFile, _, ok := runtime.Caller(0)
-	if !ok {
-		t.Fatal("runtime.Caller(0) failed")
-	}
-	docPath := filepath.Join(filepath.Dir(thisFile), "..", "..", "..", "..", "docs", "architecture", "github-postgres-warehouse-certification.md")
-	raw, err := os.ReadFile(docPath)
-	if err != nil {
-		t.Fatalf("ReadFile(%s): %v", docPath, err)
-	}
-	doc := string(raw)
-	const bindingOrder = "bind the prior cursor value as pgx argument 1 (`$1`) and the stable primary-key tie breaker as argument 2 (`$2`)"
-	if !strings.Contains(doc, bindingOrder) {
-		t.Fatalf("certification architecture missing PostgreSQL pgx binding order: %q", bindingOrder)
-	}
-	const want = `WHERE cursor > $1
-   OR (cursor = $1 AND primary_key > $2)
-ORDER BY cursor, primary_key`
-	if !strings.Contains(doc, want) {
-		t.Fatalf("certification architecture missing executable PostgreSQL resume predicate:\n%s", want)
-	}
-	for _, forbidden := range []string{"WHERE cursor > $cursor", "primary_key > $primary_key"} {
-		if strings.Contains(doc, forbidden) {
-			t.Fatalf("certification architecture contains symbolic PostgreSQL placeholder %q", forbidden)
-		}
-	}
-}
-
 // TestNoInitRegistration is the required grep-guard (T-17): the native
 // package must NOT call RegisterFactory from anywhere in
 // its own source. The registration flip (wiring native/postgres into the

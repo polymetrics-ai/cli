@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "bio": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "blog": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "company": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "email": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "hireable": {
+      "type": "boolean"
+    },
+    "location": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "twitter_username": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [],
+  "type": "object"
+}

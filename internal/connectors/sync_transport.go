@@ -52,14 +52,23 @@ type DeliveryIdempotency string
 const (
 	DeliveryIdempotencyKeyed       DeliveryIdempotency = "keyed"
 	DeliveryIdempotencyAtLeastOnce DeliveryIdempotency = "at_least_once"
-	DeliveryIdempotencyNone        DeliveryIdempotency = "none"
+	// DeliveryIdempotencySingleAttempt declares a destination that consumes a
+	// bounded workset once and must not automatically replay an ambiguous
+	// provider write. It is intentionally not provider idempotency evidence.
+	DeliveryIdempotencySingleAttempt DeliveryIdempotency = "single_attempt"
+	DeliveryIdempotencyNone          DeliveryIdempotency = "none"
 )
 
 type DeliveryOrdering string
 
 const (
-	DeliveryOrderingSource    DeliveryOrdering = "source_ordered"
-	DeliveryOrderingUnordered DeliveryOrdering = "unordered"
+	DeliveryOrderingSource DeliveryOrdering = "source_ordered"
+	// DeliveryOrderingWindowCoalesced means the executor exhausts one complete
+	// provider-defined token window, coalesces it by stable key without relying
+	// on event order, and only then emits current state. It is not source order
+	// and therefore cannot represent ordered history or change capture.
+	DeliveryOrderingWindowCoalesced DeliveryOrdering = "window_coalesced"
+	DeliveryOrderingUnordered       DeliveryOrdering = "unordered"
 )
 
 type DeliveryDeletes string
@@ -68,15 +77,6 @@ const (
 	DeliveryDeletesTombstone   DeliveryDeletes = "tombstone"
 	DeliveryDeletesUnavailable DeliveryDeletes = "not_available"
 )
-
-// ConformanceEvidenceReference identifies an externally recorded verification
-// result. It is intentionally only a reference: a descriptor and an executor
-// cannot self-admit by returning this value. synctransport asks its separately
-// supplied verifier to establish whether this reference is accepted.
-type ConformanceEvidenceReference struct {
-	Suite string `json:"suite"`
-	RunID string `json:"run_id"`
-}
 
 // TransportAcknowledgement states the durability policy a destination
 // declares. `none` is structurally valid so inspection can report an honest
@@ -372,15 +372,14 @@ func (l DestinationReceiptLocator) Validate() error {
 // typed destination write before its source checkpoint may advance. Operation
 // is interpreted only by the connector that owns the declaration.
 type DestinationReadBackPolicy struct {
-	Operation              string                       `json:"operation"`
-	Identity               []DestinationReadBackField   `json:"identity"`
-	Expected               []DestinationReadBackField   `json:"expected"`
-	MaxRecords             int                          `json:"max_records"`
-	MaxAttempts            int                          `json:"max_attempts"`
-	TimeoutMilliseconds    int                          `json:"timeout_milliseconds"`
-	RetryDelayMilliseconds int                          `json:"retry_delay_milliseconds,omitempty"`
-	ReceiptLocator         DestinationReceiptLocator    `json:"receipt_locator"`
-	Conformance            ConformanceEvidenceReference `json:"conformance"`
+	Operation              string                     `json:"operation"`
+	Identity               []DestinationReadBackField `json:"identity"`
+	Expected               []DestinationReadBackField `json:"expected"`
+	MaxRecords             int                        `json:"max_records"`
+	MaxAttempts            int                        `json:"max_attempts"`
+	TimeoutMilliseconds    int                        `json:"timeout_milliseconds"`
+	RetryDelayMilliseconds int                        `json:"retry_delay_milliseconds,omitempty"`
+	ReceiptLocator         DestinationReceiptLocator  `json:"receipt_locator"`
 }
 
 // DestinationTombstoneReadBackPolicy declares the bounded provider read that
@@ -388,14 +387,13 @@ type DestinationReadBackPolicy struct {
 // separate from ordinary read-back because the successful state is absence,
 // not a create/update payload that happens to omit fields.
 type DestinationTombstoneReadBackPolicy struct {
-	Operation              string                       `json:"operation"`
-	Identity               []DestinationReadBackField   `json:"identity"`
-	MaxRecords             int                          `json:"max_records"`
-	MaxAttempts            int                          `json:"max_attempts"`
-	TimeoutMilliseconds    int                          `json:"timeout_milliseconds"`
-	RetryDelayMilliseconds int                          `json:"retry_delay_milliseconds,omitempty"`
-	ReceiptLocator         DestinationReceiptLocator    `json:"receipt_locator"`
-	Conformance            ConformanceEvidenceReference `json:"conformance"`
+	Operation              string                     `json:"operation"`
+	Identity               []DestinationReadBackField `json:"identity"`
+	MaxRecords             int                        `json:"max_records"`
+	MaxAttempts            int                        `json:"max_attempts"`
+	TimeoutMilliseconds    int                        `json:"timeout_milliseconds"`
+	RetryDelayMilliseconds int                        `json:"retry_delay_milliseconds,omitempty"`
+	ReceiptLocator         DestinationReceiptLocator  `json:"receipt_locator"`
 }
 
 func (p DestinationTombstoneReadBackPolicy) Validate() error {
@@ -420,7 +418,7 @@ func (p DestinationTombstoneReadBackPolicy) Validate() error {
 	if err := p.ReceiptLocator.Validate(); err != nil {
 		return err
 	}
-	return p.Conformance.Validate()
+	return nil
 }
 
 func (p DestinationReadBackPolicy) Validate() error {
@@ -448,7 +446,7 @@ func (p DestinationReadBackPolicy) Validate() error {
 	if err := p.ReceiptLocator.Validate(); err != nil {
 		return err
 	}
-	return p.Conformance.Validate()
+	return nil
 }
 
 func validateDestinationReadBackFields(kind string, fields []DestinationReadBackField) error {
@@ -482,9 +480,8 @@ type SourceTransportDescriptor struct {
 	// OrderedPipeline declares that this exact endpoint can safely have its
 	// next bounded extraction overlap a prior ordered destination apply. It
 	// does not declare source partitioning or unordered concurrent reads.
-	OrderedPipeline bool                         `json:"ordered_pipeline,omitempty"`
-	Delivery        DeliveryGuarantees           `json:"delivery"`
-	Conformance     ConformanceEvidenceReference `json:"conformance"`
+	OrderedPipeline bool               `json:"ordered_pipeline,omitempty"`
+	Delivery        DeliveryGuarantees `json:"delivery"`
 }
 
 // DestinationTransportDescriptor is the destination side of a connector's
@@ -502,7 +499,6 @@ type DestinationTransportDescriptor struct {
 	// connection policy, never a generic per-run worker dial.
 	CopyWorkerMaximum int                                 `json:"copy_worker_maximum,omitempty"`
 	Delivery          DeliveryGuarantees                  `json:"delivery"`
-	Conformance       ConformanceEvidenceReference        `json:"conformance"`
 	Acknowledgement   TransportAcknowledgement            `json:"acknowledgement"`
 	ApplyStrategies   []DestinationApplyStrategy          `json:"apply_strategies"`
 	SourceBindings    []DestinationSourceBinding          `json:"source_bindings,omitempty"`
@@ -511,8 +507,8 @@ type DestinationTransportDescriptor struct {
 }
 
 // SyncTransportDescriptor declares one or both roles a connector can perform.
-// A role has no executable meaning until a separate registry matches its exact
-// executor reference and an external conformance verifier admits it.
+// A role has no executable meaning until the runtime registry matches its exact
+// executor reference and mode-specific execution ports.
 type SyncTransportDescriptor struct {
 	Source      *SourceTransportDescriptor      `json:"source_transport,omitempty"`
 	Destination *DestinationTransportDescriptor `json:"destination_transport,omitempty"`
@@ -560,12 +556,12 @@ func ValidateTransportExecutorFamily(integrationType string, executor TransportE
 
 func (d DeliveryGuarantees) Validate() error {
 	switch d.Idempotency {
-	case DeliveryIdempotencyKeyed, DeliveryIdempotencyAtLeastOnce, DeliveryIdempotencyNone:
+	case DeliveryIdempotencyKeyed, DeliveryIdempotencyAtLeastOnce, DeliveryIdempotencySingleAttempt, DeliveryIdempotencyNone:
 	default:
 		return fmt.Errorf("unsupported transport idempotency guarantee %q", d.Idempotency)
 	}
 	switch d.Ordering {
-	case DeliveryOrderingSource, DeliveryOrderingUnordered:
+	case DeliveryOrderingSource, DeliveryOrderingWindowCoalesced, DeliveryOrderingUnordered:
 	default:
 		return fmt.Errorf("unsupported transport ordering guarantee %q", d.Ordering)
 	}
@@ -573,13 +569,6 @@ func (d DeliveryGuarantees) Validate() error {
 	case DeliveryDeletesTombstone, DeliveryDeletesUnavailable:
 	default:
 		return fmt.Errorf("unsupported transport delete guarantee %q", d.Deletes)
-	}
-	return nil
-}
-
-func (r ConformanceEvidenceReference) Validate() error {
-	if !isConcreteTransportIdentifier(r.Suite) || !isConcreteTransportIdentifier(r.RunID) {
-		return fmt.Errorf("transport conformance reference requires concrete suite and run IDs")
 	}
 	return nil
 }
@@ -607,7 +596,10 @@ func (d SourceTransportDescriptor) Validate() error {
 	if err := d.Delivery.Validate(); err != nil {
 		return err
 	}
-	return d.Conformance.Validate()
+	if d.Delivery.Idempotency == DeliveryIdempotencySingleAttempt {
+		return fmt.Errorf("source transport cannot declare single_attempt delivery")
+	}
+	return nil
 }
 
 func validateSourceTransportStreams(streams []string) error {
@@ -636,9 +628,6 @@ func (d DestinationTransportDescriptor) Validate() error {
 		return err
 	}
 	if err := d.Delivery.Validate(); err != nil {
-		return err
-	}
-	if err := d.Conformance.Validate(); err != nil {
 		return err
 	}
 	if err := validateDestinationSourceBindings(d.SourceBindings); err != nil {

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "email": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "invitee_id": {
+      "type": "integer"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "admin",
+        "direct_member",
+        "billing_manager",
+        "reinstate"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "team_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "org"
+  ],
+  "type": "object"
+}

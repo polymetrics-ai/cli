@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "aws_s3_configuration": {
+      "additionalProperties": false,
+      "properties": {
+        "aws_access_key_id": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "aws_secret_access_key": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path_style": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "region": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "aws_access_key_id",
+        "aws_secret_access_key",
+        "region"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "bucket": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "entities": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "destination_namespace": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "destination_slug": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_full_path": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source_type": {
+            "enum": [
+              "group_entity",
+              "project_entity"
+            ],
+            "maxLength": 8192,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_type",
+          "source_full_path",
+          "destination_namespace"
+        ],
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "export_prefix": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gcs_adc_configuration": {
+      "additionalProperties": false,
+      "properties": {
+        "google_project": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "google_project"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "gcs_configuration": {
+      "additionalProperties": false,
+      "properties": {
+        "google_json_key_string": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "google_project": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "google_project",
+        "google_json_key_string"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "gcs_hmac_configuration": {
+      "additionalProperties": false,
+      "properties": {
+        "google_storage_access_key_id": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "google_storage_secret_access_key": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path_style": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "region": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "google_storage_access_key_id",
+        "google_storage_secret_access_key",
+        "region"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "s3_compatible_configuration": {
+      "additionalProperties": false,
+      "properties": {
+        "aws_access_key_id": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "aws_secret_access_key": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "endpoint": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "path_style": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "region": {
+          "maxLength": 8192,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "aws_access_key_id",
+        "aws_secret_access_key",
+        "region",
+        "endpoint"
+      ],
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "bucket",
+    "entities",
+    "export_prefix"
+  ],
+  "type": "object"
+}

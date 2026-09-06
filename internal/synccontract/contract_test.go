@@ -384,14 +384,13 @@ func TestTombstoneRejectsNullRowFields(t *testing.T) {
 	}
 }
 
-func TestNativeContractNeedsRegisteredRunnableExecutorAndFixtureEvidence(t *testing.T) {
+func TestNativeContractNeedsRegisteredRunnableExecutorAndMatchingDescriptor(t *testing.T) {
 	contract := NativeCommandContract{
 		ContractVersion: NativeCommandContractVersion,
 		Protocol:        "postgres_wire",
 		Command:         "logical_replication",
 		Executor:        ExecutorReference{Kind: "native", ID: "postgres-logical"},
 		Modes:           []Mode{ModeChangeCapture},
-		Conformance:     RequiredConformanceEvidence(),
 	}
 	if err := contract.Validate(); err != nil {
 		t.Fatalf("contract rejected: %v", err)
@@ -408,34 +407,25 @@ func TestNativeContractNeedsRegisteredRunnableExecutorAndFixtureEvidence(t *test
 		Command:  "logical_replication",
 		Executor: ExecutorReference{Kind: "native", ID: "other"},
 		Modes:    []Mode{ModeChangeCapture},
-	}, evidence: RequiredConformanceEvidence()}
+	}}
 	if err := registry.Register(wrong); err != nil {
 		t.Fatal(err)
 	}
 	if registry.Admits(contract) {
 		t.Fatal("contract executable with a mismatched registered executor")
 	}
-	missingEvidence := &fakeNativeExecutor{descriptor: NativeSyncExecutorDescriptor{
-		Protocol: contract.Protocol,
-		Command:  contract.Command,
-		Executor: contract.Executor,
-		Modes:    contract.Modes,
-	}}
-	if err := registry.Register(missingEvidence); err == nil {
-		t.Fatal("registry accepted a native executor without fixture evidence")
-	}
 	matching := &fakeNativeExecutor{descriptor: NativeSyncExecutorDescriptor{
 		Protocol: contract.Protocol,
 		Command:  contract.Command,
 		Executor: contract.Executor,
 		Modes:    contract.Modes,
-	}, evidence: RequiredConformanceEvidence()}
+	}}
 	registry, err = NewNativeExecutorRegistry(matching)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if !registry.Admits(contract) {
-		t.Fatal("registry did not admit matching runnable executor and evidence")
+		t.Fatal("registry did not admit matching runnable executor descriptor")
 	}
 	if _, err := registry.Execute(context.Background(), contract, NativeSyncRequest{Mode: ModeChangeCapture}); err != nil {
 		t.Fatal(err)
@@ -475,46 +465,6 @@ func TestNativeContractNeedsRegisteredRunnableExecutorAndFixtureEvidence(t *test
 		if bytes.Contains(encoded, []byte(forbidden)) {
 			t.Fatalf("native contract contains forbidden generic escape-hatch field %s: %s", forbidden, encoded)
 		}
-	}
-}
-
-func TestConformanceFixturesAreVersionedAndDefensivelyCopied(t *testing.T) {
-	fixtures := ConformanceFixtures()
-	if len(fixtures) == 0 {
-		t.Fatal("ConformanceFixtures() returned no reusable fixtures")
-	}
-	ids := RequiredConformanceEvidence().FixtureIDs
-	if len(ids) != len(fixtures) {
-		t.Fatalf("evidence IDs = %d, fixtures = %d", len(ids), len(fixtures))
-	}
-	for _, expected := range []string{
-		"change-insert",
-		"change-update",
-		"checkpoint-opaque-bytes",
-		"partition-state-not-collapsed",
-		"invalid-checkpoint-rebootstrap",
-		"commit-after-durable-ack",
-		"retention-gap-rebootstrap",
-		"invalidated-slot-rebootstrap",
-		"expired-token-rebootstrap",
-		"generation-change-rebootstrap",
-		"source-identity-rebootstrap",
-		"history-delete-closes-window",
-		"tombstone-key-only",
-		"tombstone-before-image",
-		"tombstone-unavailable-image",
-		"source-truncate",
-		"source-invalidate",
-		"duplicate-replay-deduped",
-		"snapshot-to-stream-handoff",
-	} {
-		if !containsFixtureID(ids, expected) {
-			t.Fatalf("shared fixture corpus is missing %q", expected)
-		}
-	}
-	fixtures[0].ID = "mutated"
-	if ConformanceFixtures()[0].ID == "mutated" {
-		t.Fatal("ConformanceFixtures() returned mutable shared state")
 	}
 }
 
@@ -560,26 +510,14 @@ func validCheckpoint() CheckpointEnvelope {
 	}
 }
 
-func containsFixtureID(ids []string, expected string) bool {
-	for _, id := range ids {
-		if id == expected {
-			return true
-		}
-	}
-	return false
-}
-
 type fakeNativeExecutor struct {
 	descriptor NativeSyncExecutorDescriptor
-	evidence   ConformanceEvidence
 	runCalls   int
 }
 
 func (f *fakeNativeExecutor) NativeSyncExecutorDescriptor() NativeSyncExecutorDescriptor {
 	return f.descriptor
 }
-
-func (f *fakeNativeExecutor) NativeSyncConformanceEvidence() ConformanceEvidence { return f.evidence }
 
 func (f *fakeNativeExecutor) RunNativeSync(context.Context, NativeSyncRequest) (NativeSyncResult, error) {
 	f.runCalls++

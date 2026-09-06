@@ -1,5 +1,0 @@
-{
-  "record": { "id": 1 },
-  "expect": { "method": "DELETE", "path": "/webhooks/1" },
-  "response": { "status": 200, "body": { "success": true, "data": { "id": 1 } } }
-}

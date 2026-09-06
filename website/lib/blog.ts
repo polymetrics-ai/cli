@@ -167,7 +167,7 @@ export const BLOG_POSTS: BlogPost[] = [
         apiUrl: 'https://api.github.com/repos/polymetrics-ai/cli/pulls/27',
         openLabel: 'Open PR #27 on GitHub',
         snapshot: {
-          title: 'Connector architecture v2 bundles and certification harness',
+          title: 'Connector architecture v2 bundle migration',
           status: 'Closed, not merged',
           ref: '5ce0e094f7e937859e344f37782b028f4bd1fcbf',
           verifiedAt: '2026-07-16',
@@ -388,8 +388,8 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: 'What the repository actually contains',
         body: [
           'The giant PR did not become giant because one feature got carried away. It became giant because the surface area is genuinely large, and I had confused large scope with large delivery units.',
-          'These are repository inventory numbers, not a claim that every connector is production-certified. At the time of writing there are 547 connector definition directories, each with an API-surface inventory. Those files contain 29,129 classified endpoint entries: 14,780 GET reads, 3 HEAD checks, 14,169 explicit POST, PUT, PATCH, or DELETE mutations, and 177 hook, wildcard, GraphQL, WebSocket, or composite-method rows. The explicit mutations include 2,903 DELETE operations.',
-          'The same bundles define 7,088 ETL streams. Some operations are implemented, some are deliberately excluded, some depend on hooks or native code, and some still need live certification. The inventory tells us the size and shape of the work. It does not let us skip the proof that a connector behaves correctly against a real service.',
+          'These are historical repository inventory numbers, not a claim that every connector was executable. At the time of writing there were 547 connector definition directories containing 29,129 classified endpoint entries: 14,780 GET reads, 3 HEAD checks, 14,169 explicit POST, PUT, PATCH, or DELETE mutations, and 177 hook, wildcard, GraphQL, WebSocket, or composite-method rows. The explicit mutations included 2,903 DELETE operations.',
+          'Those bundles also defined 7,088 ETL streams. The inventory described the size and shape of the work, but it did not prove execution. The current source.lock vNext workflow replaces that inventory model with deterministic execution artifacts and local runtime proofs.',
         ],
         points: [
           '547 connector bundles with explicit API-surface inventories.',
@@ -397,7 +397,7 @@ export const BLOG_POSTS: BlogPost[] = [
           '14,780 GET reads, 3 HEAD checks, and 14,169 explicit HTTP mutations.',
           '177 mixed or nonstandard method rows remain visible instead of being mislabeled as writes.',
           '2,903 DELETE operations are called out explicitly inside the mutation inventory.',
-          '7,088 ETL streams defined for conformance and certification work.',
+          '7,088 ETL streams recorded in the historical inventory.',
         ],
       },
       {
@@ -413,7 +413,7 @@ export const BLOG_POSTS: BlogPost[] = [
         body: [
           'A harness turns a mutation from one action into a sequence with named states. First describe the intended change. Then calculate and preview the concrete effect. Bind approval to that plan. Only then execute it. A failure returns structured status and leaves the destination unchanged whenever the operation boundary allows it.',
           'The August 4 target is to make that model explicit for people as well as agents. Destructive and sensitive paths should be unavailable until policy enables them. Approval should be scoped to a specific plan rather than becoming an ambient yes to everything. The same command should behave predictably from a terminal, CI job, cron entry, or agent loop.',
-          'This is also where honesty matters. A mapped operation is not automatically an executable command, and an executable command is not automatically certified. The inventory, runtime policy, conformance tests, and live certification are separate gates because each answers a different question.',
+          'This is also where honesty matters. A mapped operation is not automatically an executable command. The current source.lock vNext renderer therefore requires an unambiguous operation binding, a real encoder or executor, and a deterministic execution artifact before runtime discovery can advertise it.',
         ],
         code: `pm reverse plan candidates_to_github --source-table candidates --destination github:github-local --action create_issue --map title:title
 pm reverse preview <plan-id> --json
@@ -560,10 +560,10 @@ parent      -> full verification -> human merge -> release`,
       {
         heading: 'The part where I ask for a star',
         body: [
-          'The immediate work is certification. Connector inventory is broad; live, repeatable evidence is the next gate. We are also tightening approval scopes, improving bulk-write previews, extending dry-run diffs, and making destructive confirmation policy consistent across connector actions.',
+          'The immediate work is deterministic connector execution. Compact source locks preserve provider facts, rendered bundles drive the only runtime path, and repeatable fake-server and warehouse proofs show that each lane reaches its real boundary. We are also tightening approval scopes, improving bulk-write previews, extending dry-run diffs, and making destructive confirmation policy consistent across connector actions.',
           'Distribution is part of the same story: release binaries and a Homebrew path should make the first useful run short without bypassing provenance. The MCP surface should let agents discover the same typed operations without inventing a second, more permissive API.',
           'Shepherd is the next story. It starts with the question this post deliberately leaves open: what happens when the harness itself needs supervision? That deserves a full engineering note, so I am leaving it at the question rather than smuggling the implementation into this one.',
-          'And now the shameless human bit: if this story made you laugh, wince, or remember a pull request whose scrollbar looked like a rounding error, please star the repository. A star will not certify 547 connectors or make make verify finish before lunch. It does tell me this strange, open-source plan is useful to someone outside my terminal.',
+          'And now the shameless human bit: if this story made you laugh, wince, or remember a pull request whose scrollbar looked like a rounding error, please star the repository. A star will not finish 547 connector execution bundles or make make verify finish before lunch. It does tell me this strange, open-source plan is useful to someone outside my terminal.',
           'If you have survived your own giant-PR saga, leave a note on the paragraph that brought back the memories. I would genuinely like to hear the story, partly for research and partly so I know I am not the only person who has tried to review a small novel through GitHub.',
         ],
         images: [

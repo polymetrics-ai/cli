@@ -1,0 +1,49 @@
+{
+  "schema_version": 4,
+  "connector": "less-annoying-crm",
+  "lanes": {"binary_download":"unsupported","binary_upload":"unsupported","direct_read":"unsupported","direct_write":"unsupported","etl":"implemented","reverse_etl":"unsupported","sync_transport":"unsupported"},
+  "provider_evidence": {"documentation":[{"role":"provider_reference","url":"https://www.lessannoyingcrm.com/help/topic/API"}]},
+  "metadata": {
+    "name":"less-annoying-crm",
+    "display_name":"Less Annoying CRM",
+    "description":"Reads Less Annoying CRM users, contacts, tasks, notes, and events through fixed v2 RPC requests.",
+    "integration_type":"api",
+    "release_stage":"alpha",
+    "capabilities":{"check":true,"read":true,"write":false,"query":false,"cdc":false,"dynamic_schema":false},
+    "risk":{"read":"Bounded POST reads use the fixed Less Annoying CRM v2 origin and declared API-key header authentication.","write":"unsupported","approval":"none; read-only"},
+    "docs_url":"https://www.lessannoyingcrm.com/help/topic/API"
+  },
+  "config_schema": {
+    "$schema":"http://json-schema.org/draft-07/schema",
+    "title":"Less Annoying CRM Connection Specification",
+    "type":"object",
+    "x-reject-unknown-config":true,
+    "required":["api_key","start_date"],
+    "properties":{
+      "api_key":{"type":"string","x-secret":true,"description":"Less Annoying CRM Programmer API key."},
+      "start_date":{"type":"string","description":"Initial ETL lower-bound configuration retained for connection compatibility."}
+    }
+  },
+  "http": {
+    "url":"https://api.lessannoyingcrm.com/v2",
+    "user_agent":"polymetrics-go-cli",
+    "auth":[{"mode":"api_key_header","header":"Authorization","prefix":"","value":"{{ secrets.api_key }}"}],
+    "pagination":{"type":"page_number","page_param":"Page","size_param":"MaxNumberOfResults","page_size":500,"start_page":1},
+    "check":{"method":"POST","path":"/","body":{"Function":"GetUsers"}},
+    "error_map":[]
+  },
+  "schemas": {
+    "schemas/users.json":{"$schema":"http://json-schema.org/draft-07/schema#","title":"users","type":"object","properties":{"UserId":{"type":"string"},"FirstName":{"type":"string"},"LastName":{"type":"string"},"Timezone":{"type":"string"}},"x-primary-key":["UserId"]},
+    "schemas/contacts.json":{"$schema":"http://json-schema.org/draft-07/schema#","title":"contacts","type":"object","properties":{"ContactId":{"type":"string"},"CompanyId":{"type":"string"},"Name":{"type":"string"},"Company Name":{"type":"string"},"Job Title":{"type":"string"},"Email":{"type":"array"},"Phone":{"type":"array"},"Address":{"type":"array"},"Website":{"type":"string"},"AssignedTo":{"type":"number"},"IsCompany":{"type":"boolean"},"DateCreated":{"type":["string","number","integer","boolean","object","array","null"]},"LastUpdate":{"type":["string","number","integer","boolean","object","array","null"]}},"x-primary-key":["ContactId"]},
+    "schemas/tasks.json":{"$schema":"http://json-schema.org/draft-07/schema#","title":"tasks","type":"object","properties":{"TaskId":{"type":"string"},"ContactId":{"type":"string"},"Name":{"type":"string"},"Description":{"type":"string"},"DueDate":{"type":"string"},"AssignedTo":{"type":"string"},"CalendarId":{"type":"string"},"IsCompleted":{"type":"boolean"},"DateCreated":{"type":["string","number","integer","boolean","object","array","null"]}},"x-primary-key":["TaskId"],"x-cursor-field":"DateCreated"},
+    "schemas/notes.json":{"$schema":"http://json-schema.org/draft-07/schema#","title":"notes","type":"object","properties":{"NoteId":{"type":"string"},"ContactId":{"type":"string"},"UserId":{"type":"string"},"Note":{"type":"string"},"IsRichText":{"type":"boolean"},"DateCreated":{"type":["string","number","integer","boolean","object","array","null"]},"DateDisplayedInHistory":{"type":["string","number","integer","boolean","object","array","null"]}},"x-primary-key":["NoteId"]},
+    "schemas/events.json":{"$schema":"http://json-schema.org/draft-07/schema#","title":"events","type":"object","properties":{"EventId":{"type":"string"},"Name":{"type":"string"},"Description":{"type":"string"},"Location":{"type":"string"},"StartDate":{"type":["string","number","integer","boolean","object","array","null"]},"EndDate":{"type":["string","number","integer","boolean","object","array","null"]},"IsAllDay":{"type":"boolean"},"IsRecurring":{"type":"boolean"},"ContactIds":{"type":"array"},"UserIds":{"type":"array"},"DateCreated":{"type":["string","number","integer","boolean","object","array","null"]},"DateUpdated":{"type":["string","number","integer","boolean","object","array","null"]}},"x-primary-key":["EventId"],"x-cursor-field":"DateUpdated"}
+  },
+  "operations": [
+    {"id":"less-annoying-crm.users","source":{"provider_reference":"https://www.lessannoyingcrm.com/help/topic/API"},"schema_refs":{"record":"schemas/users.json"},"stream_order":1,"stream":{"name":"users","method":"POST","path":"/","body":{"Function":"GetUsers"},"records":{"path":"."},"schema":"schemas/users.json"}},
+    {"id":"less-annoying-crm.contacts","source":{"provider_reference":"https://www.lessannoyingcrm.com/help/topic/API"},"schema_refs":{"record":"schemas/contacts.json"},"stream_order":2,"stream":{"name":"contacts","method":"POST","path":"/","body":{"Function":"GetContacts"},"records":{"path":"Results"},"schema":"schemas/contacts.json"}},
+    {"id":"less-annoying-crm.tasks","source":{"provider_reference":"https://www.lessannoyingcrm.com/help/topic/API"},"schema_refs":{"record":"schemas/tasks.json"},"stream_order":3,"stream":{"name":"tasks","method":"POST","path":"/","body":{"Function":"GetTasks"},"records":{"path":"Results"},"schema":"schemas/tasks.json","incremental":{"cursor_field":"DateCreated","client_filtered":true}}},
+    {"id":"less-annoying-crm.notes","source":{"provider_reference":"https://www.lessannoyingcrm.com/help/topic/API"},"schema_refs":{"record":"schemas/notes.json"},"stream_order":4,"stream":{"name":"notes","method":"POST","path":"/","body":{"Function":"GetNotes"},"records":{"path":"Results"},"schema":"schemas/notes.json"}},
+    {"id":"less-annoying-crm.events","source":{"provider_reference":"https://www.lessannoyingcrm.com/help/topic/API"},"schema_refs":{"record":"schemas/events.json"},"stream_order":5,"stream":{"name":"events","method":"POST","path":"/","body":{"Function":"GetEvents"},"records":{"path":"Results"},"schema":"schemas/events.json","incremental":{"cursor_field":"DateUpdated","client_filtered":true}}}
+  ]
+}

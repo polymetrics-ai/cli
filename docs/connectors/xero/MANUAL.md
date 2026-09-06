@@ -698,7 +698,6 @@ SECURITY
 COMMAND SURFACE
   Run bounded Xero Accounting API streams, report reads, and approved reverse-ETL writes.
   Usage: pm connectors command xero <group> <action> --credential <name> [flags] --json
-  Source CLI: Xero Accounting API (https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml)
   Global flags:
     --credential (string): Named Xero credential; secrets are loaded from the credential store and never from prompt text.
     --json (boolean): Emit machine-readable JSON output.

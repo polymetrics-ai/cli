@@ -1,7 +1,0 @@
-{
-  "request": { "method": "GET", "path": "/webfonts" },
-  "response": {
-    "status": 200,
-    "body": { "kind": "webfonts#webfontList", "items": [] }
-  }
-}

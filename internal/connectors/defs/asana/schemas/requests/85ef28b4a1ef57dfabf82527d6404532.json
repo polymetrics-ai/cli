@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "is_strict": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "privacy_setting": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean"
+        },
+        "requested_dates": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "gid": {
+                "type": "string"
+              },
+              "value": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "requested_roles": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "gid": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "team": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "project_template_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_template_gid",
+    "data"
+  ],
+  "type": "object"
+}

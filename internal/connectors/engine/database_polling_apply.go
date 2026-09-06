@@ -15,7 +15,6 @@ import (
 // name, or a caller-selected write operation.
 type DatabasePollingApplyConfig struct {
 	Reference  connectors.TransportExecutorReference
-	Evidence   PollingWatermarkConformanceEvidence
 	Write      *database.DatabaseWriteExecutor
 	Definition database.Definition
 	Control    database.ManagedTargetControlRecord
@@ -28,7 +27,6 @@ type DatabasePollingApplyConfig struct {
 // reader nor checkpoint persistence.
 type DatabasePollingApplyExecutor struct {
 	reference  connectors.TransportExecutorReference
-	evidence   PollingWatermarkConformanceEvidence
 	write      *database.DatabaseWriteExecutor
 	definition database.Definition
 	control    database.ManagedTargetControlRecord
@@ -48,12 +46,11 @@ type databasePollingSourceDefinitionProvider interface {
 // The first concrete page supplies only bounded records and explicit
 // tombstones; its selected mode and strategy remain declaration-derived.
 func NewDatabasePollingApplyExecutor(config DatabasePollingApplyConfig) (*DatabasePollingApplyExecutor, error) {
-	if config.Reference.Validate() != nil || config.Reference.Family != connectors.TransportExecutorFamilyNativeDatabase || !config.Evidence.matchesRequired() || config.Write == nil || config.Definition.Validate() != nil || len(config.Mapping.Columns()) == 0 || config.BatchSize <= 0 {
+	if config.Reference.Validate() != nil || config.Reference.Family != connectors.TransportExecutorFamilyNativeDatabase || config.Write == nil || config.Definition.Validate() != nil || len(config.Mapping.Columns()) == 0 || config.BatchSize <= 0 {
 		return nil, fmt.Errorf("database polling target configuration is invalid")
 	}
 	return &DatabasePollingApplyExecutor{
 		reference:  config.Reference,
-		evidence:   config.Evidence,
 		write:      config.Write,
 		definition: config.Definition,
 		control:    config.Control,
@@ -67,13 +64,6 @@ func (e *DatabasePollingApplyExecutor) PollingApplyExecutorReference() connector
 		return connectors.TransportExecutorReference{}
 	}
 	return e.reference
-}
-
-func (e *DatabasePollingApplyExecutor) PollingApplyConformanceEvidence() PollingWatermarkConformanceEvidence {
-	if e == nil {
-		return PollingWatermarkConformanceEvidence{}
-	}
-	return e.evidence
 }
 
 // ApplyPollingPage creates a new count-bound database plan from the

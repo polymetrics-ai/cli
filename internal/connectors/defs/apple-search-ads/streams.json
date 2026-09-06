@@ -29,9 +29,19 @@
       }
     },
     "error_map": [
-      { "status": 401, "hint": "apple-search-ads client_id/client_secret is missing or invalid; re-run pm credentials add apple-search-ads" },
-      { "status": 403, "hint": "apple-search-ads credentials lack access for this org_id/resource" },
-      { "status": 429, "class": "rate_limited", "hint": "Apple Search Ads API rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "apple-search-ads client_id/client_secret is missing or invalid; re-run pm credentials add apple-search-ads"
+      },
+      {
+        "status": 403,
+        "hint": "apple-search-ads credentials lack access for this org_id/resource"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Apple Search Ads API rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
@@ -39,7 +49,9 @@
       "name": "campaigns",
       "method": "GET",
       "path": "campaigns",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "id": "{{ record.id }}",
         "org_id": "{{ record.orgId }}",
@@ -57,15 +69,19 @@
         "modification_time": "{{ record.modificationTime }}",
         "deleted": "{{ record.deleted }}"
       },
-      "incremental": { "cursor_field": "modification_time", "param_format": "rfc3339" },
-      "schema": "schemas/campaigns.json",
-      "conformance": { "skip_dynamic": true, "reason": "hook-covered for consistency with adgroups/keywords/ads (all 4 streams dispatch through the same StreamHook); proven live by internal/connectors/hooks/apple-search-ads/hooks_test.go" }
+      "incremental": {
+        "cursor_field": "modification_time",
+        "param_format": "rfc3339"
+      },
+      "schema": "schemas/campaigns.json"
     },
     {
       "name": "adgroups",
       "method": "POST",
       "path": "adgroups/find",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "id": "{{ record.id }}",
         "campaign_id": "{{ record.campaignId }}",
@@ -82,15 +98,19 @@
         "modification_time": "{{ record.modificationTime }}",
         "deleted": "{{ record.deleted }}"
       },
-      "incremental": { "cursor_field": "modification_time", "param_format": "rfc3339" },
-      "schema": "schemas/adgroups.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (POST .../find with pagination carried in the JSON request body; StreamSpec.Body is declared but never read back out by the declarative read path); hook-covered, proven live by internal/connectors/hooks/apple-search-ads/hooks_test.go" }
+      "incremental": {
+        "cursor_field": "modification_time",
+        "param_format": "rfc3339"
+      },
+      "schema": "schemas/adgroups.json"
     },
     {
       "name": "keywords",
       "method": "POST",
       "path": "targetingkeywords/find",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "id": "{{ record.id }}",
         "ad_group_id": "{{ record.adGroupId }}",
@@ -102,15 +122,19 @@
         "modification_time": "{{ record.modificationTime }}",
         "deleted": "{{ record.deleted }}"
       },
-      "incremental": { "cursor_field": "modification_time", "param_format": "rfc3339" },
-      "schema": "schemas/keywords.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (POST .../find with pagination carried in the JSON request body; StreamSpec.Body is declared but never read back out by the declarative read path); hook-covered, proven live by internal/connectors/hooks/apple-search-ads/hooks_test.go" }
+      "incremental": {
+        "cursor_field": "modification_time",
+        "param_format": "rfc3339"
+      },
+      "schema": "schemas/keywords.json"
     },
     {
       "name": "ads",
       "method": "POST",
       "path": "ads/find",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "id": "{{ record.id }}",
         "ad_group_id": "{{ record.adGroupId }}",
@@ -124,9 +148,11 @@
         "modification_time": "{{ record.modificationTime }}",
         "deleted": "{{ record.deleted }}"
       },
-      "incremental": { "cursor_field": "modification_time", "param_format": "rfc3339" },
-      "schema": "schemas/ads.json",
-      "conformance": { "skip_dynamic": true, "reason": "StreamHook-handled (POST .../find with pagination carried in the JSON request body; StreamSpec.Body is declared but never read back out by the declarative read path); hook-covered, proven live by internal/connectors/hooks/apple-search-ads/hooks_test.go" }
+      "incremental": {
+        "cursor_field": "modification_time",
+        "param_format": "rfc3339"
+      },
+      "schema": "schemas/ads.json"
     }
   ]
 }

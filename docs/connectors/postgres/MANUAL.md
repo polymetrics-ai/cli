@@ -53,14 +53,14 @@ SECURITY
 SYNC TRANSPORT
   Source transport: declared
   Destination transport: declared
-  A declared transport still requires runtime preflight and externally verified conformance; it is not a certification claim.
+  A declared transport executes only when its named runtime executor and mode are available.
   Source executor: native_database/postgres_polling_watermark
   Destination executor: native_database/postgres_managed_target
 
 POLLING WATERMARK
   Static declaration status: planned
   Mechanism: polling_watermark is a bounded polling scan, not CDC or change capture.
-  Runtime eligibility: this connector constructs an implemented declaration per selected catalog object. Every requested mode still requires runtime preflight for its destination binding, registered native executors, and immutable conformance evidence.
+  Runtime eligibility: this connector constructs an implemented declaration per selected catalog object. Every requested mode still requires runtime preflight for its destination binding, registered native executors, and compatible runtime mode.
   Reason: PostgreSQL binds its cursor type, per-stream cursor column, and unique tie-breaker from the live catalog at run time. The static bundle cannot truthfully name those dynamic fields; the live sync transport constructs and preflights the implemented polling declaration.
 
 EXAMPLES

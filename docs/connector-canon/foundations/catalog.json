@@ -1,0 +1,3655 @@
+{
+  "$schema": "./catalog.schema.json",
+  "schema_version": 1,
+  "catalog_revision": 43,
+  "authority": {
+    "authoring_only": true,
+    "runtime_input": false,
+    "provider_fact_authority": "source_lock_vnext",
+    "connector_specific_selection": "closed_definition_reference",
+    "shared_runtime_connector_name_branching": false
+  },
+  "foundations": [
+    {
+      "id": "authoring.source-lock-vnext.v1",
+      "layer": "source_lock_authoring",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Strictly validates immutable schema-4 source locks, builds a typed canonical source graph, semantically admits effective source-to-runtime schema joins and complete closed executor/extension selection, deterministically renders execution JSON, then publishes a connector-local closed generation through operation-lifetime no-follow descriptor confinement, connector-directory inode locking, recomputed content addresses, retained terminal control authority, append-only successor repair, private-read revalidation, descriptor-relative no-replace capture, create-only selection, and lease-safe pruning.",
+      "owner": {
+        "primary_package": "polymetrics.ai/cmd/connectorgen",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/commandrunner",
+          "polymetrics.ai/internal/connectors/defs",
+          "polymetrics.ai/internal/connectors/engine",
+          "polymetrics.ai/internal/connectors/hooks/hookset",
+          "polymetrics.ai/internal/connectors/manifestindex",
+          "polymetrics.ai/internal/connectors/native/nativeset",
+          "polymetrics.ai/internal/connectors/connsdk",
+          "polymetrics.ai/internal/syncplan"
+        ],
+        "files": [
+          "cmd/connectorgen/vnext_lock.go",
+          "cmd/connectorgen/vnext_graph.go",
+          "cmd/connectorgen/vnext_admission.go",
+          "cmd/connectorgen/vnext_lock_cli.go",
+          "cmd/connectorgen/vnext_publication.go",
+          "cmd/connectorgen/vnext_publication_repair.go",
+          "cmd/connectorgen/vnext_publication_dir.go",
+          "cmd/connectorgen/vnext_publication_rename.go",
+          "cmd/connectorgen/vnext_publication_rename_linux.go",
+          "cmd/connectorgen/vnext_publication_rename_darwin.go",
+          "internal/connectors/defs/defs.go",
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/command_binding.go",
+          "internal/connectors/engine/connector.go",
+          "internal/connectors/hooks/hookset/hookset_gen.go",
+          "internal/connectors/commandrunner/runner.go",
+          "internal/connectors/manifestindex/index.go",
+          "internal/connectors/native/nativeset/factories.go",
+          "internal/connectors/engine/auth.go",
+          "internal/connectors/connsdk/refresh_token.go",
+          "internal/syncplan/plan.go"
+        ],
+        "symbols": [
+          {
+            "file": "cmd/connectorgen/vnext_lock.go",
+            "name": "vNextSourceLock"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_lock.go",
+            "name": "canonicalizeVNextSourceLock"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_lock.go",
+            "name": "renderVNextExecutionBundle"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_lock.go",
+            "name": "decodeVNextSourceLock"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "vNextCanonicalGraph"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "buildVNextCanonicalGraph"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "vNextCanonicalOperation"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_admission.go",
+            "name": "vNextValidateSourceSchemas"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_admission.go",
+            "name": "vNextSelectedRuntime"
+          },
+          {
+            "file": "internal/connectors/hooks/hookset/hookset_gen.go",
+            "name": "Factories"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "validateVNextCanonicalGraph"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_admission.go",
+            "name": "admitVNextCanonicalDescriptor"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_lock_cli.go",
+            "name": "runLockRenderContext"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication.go",
+            "name": "vNextGenerationPublisher"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "(*vNextGenerationPublisher).recoverControlRepairLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "(*vNextGenerationPublisher).ensureControlAuthorityLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "(*vNextGenerationPublisher).createControlRepairLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "(*vNextGenerationPublisher).resolveControlRepairLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "(*vNextGenerationPublisher).controlAuthorityForReadLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "vNextPublicationReadAuthorizedControlLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_dir.go",
+            "name": "(*vNextPublicationDirectory).renameNoReplaceFrom"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_dir.go",
+            "name": "vNextPublicationOpenDirectory"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication.go",
+            "name": "(*vNextGenerationPublisher).PublishContext"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication.go",
+            "name": "vNextPublicationArtifactsForStage"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "Load"
+          },
+          {
+            "file": "internal/connectors/engine/auth.go",
+            "name": "buildOAuth2RefreshToken"
+          },
+          {
+            "file": "internal/connectors/connsdk/refresh_token.go",
+            "name": "(*OAuth2RefreshToken).exchangeLocked"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_dir.go",
+            "name": "(*vNextPublicationDirectory).openFileResult"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication_repair.go",
+            "name": "vNextPublicationWriteControlRepairRecord"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_publication.go",
+            "name": "vNextPublicationCreateTemp"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl",
+          "reverse_etl",
+          "direct_read",
+          "direct_write",
+          "binary_download",
+          "binary_upload",
+          "sync_transport"
+        ],
+        "protocols": [
+          "HTTP/REST",
+          "GraphQL",
+          "multipart",
+          "binary",
+          "database",
+          "sync transport"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json"
+        ],
+        "request_response_shapes": [
+          "shared request schemas bound to effective loaded write or direct-operation request schemas",
+          "shared response schemas bound to effective loaded stream schemas",
+          "shared record schemas",
+          "canonical per-operation stream, write, operation, and command descriptors",
+          "canonical-order source-to-execution provenance with a staged loaded identity and complete manifest-index entry",
+          "optional database, changefeed, polling, rate-limit, and sync-transport execution objects",
+          "declaration-selected OAuth2 refresh-token client authentication"
+        ],
+        "sync_modes": [
+          "change_capture",
+          "full_append",
+          "full_overwrite",
+          "incremental_append",
+          "incremental_dedupe",
+          "incremental_dedupe_history",
+          "incremental_upsert"
+        ],
+        "guarantees": [
+          "all seven lanes are explicit",
+          "provider evidence is absent from the canonical runtime descriptor",
+          "the authoring graph retains provider evidence, CLI source facts, and operation source identities without projecting them to runtime JSON",
+          "semantic admission joins each request/response schema role to its effective loaded runtime schema, then joins each source operation to its stream/write/operation, command, runtime binding, staged manifest, and optional supplied sync plan",
+          "implemented commands use the existing exact binding resolver and commandrunner preflight before candidate staging",
+          "closed native executor and generated hook selection construct the staged in-memory runtime and retain the complete manifest extension",
+          "declared rate-limit JSON is admitted only through the existing loader and participates in the staged identity",
+          "rendering and staged provenance are deterministic under semantically irrelevant operation reordering; authored operation positions remain diagnostics only",
+          "source locks are one complete JSON document with no duplicate object members before canonicalization or publication",
+          "execution objects reject authoring-evidence fields"
+        ],
+        "publication_guarantees": [
+          "each published generation is a physically closed digest-addressed artifact tree with no inherited optional member; validation recomputes that address from the on-disk members",
+          "a publisher-written and fsynced typed stage marker binds connector, stage, and content generation; recovery removes that owned stage, while unknown or malformed stages are preserved and refused",
+          "connector and generation roots are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect publication reads or writes",
+          "CURRENT and JOURNAL each retain one terminal authority head; every successor records and binds its predecessor terminal identity, digest, and selected state before that successor can become a head",
+          "a public CURRENT or JOURNAL transition captures its syscall-time occupant with descriptor-relative no-replace rename, classifies the moved inode afterward, and selects only a retained prior or intended inode through create-only linkat",
+          "unsupported no-replace primitives, capture destination collisions, and source absence never fall back to overwrite or public unlink; they retain prior authority and fail closed or converge through bounded recovery",
+          "recovery and check scan the complete marker and private authority graph before public-control decoding; retry-required, malformed, gapped, forked, missing, or terminal-divergent states refuse before public-control decode",
+          "under the exclusive publisher lock, a markerless bootstrap resumes only one strict no-predecessor, phase-empty base prepared authority whose prior equals intended and whose private identities validate; it appends its committed terminal head before completing the second base head and marker",
+          "private transaction, prepared, phase, capture, and predecessor identities are revalidated across every transition boundary; replacement fails before public-control decode",
+          "every authorized public-control read revalidates retained private authority identities after graph scan and before it decodes that control",
+          "cooperating writers serialize all control transitions under the retained connector-directory lock and leave one terminal authority head per target",
+          "superseded terminal authority remains retained when private cleanup is uncertain; a private-path substitution is refused without deleting either authority",
+          "lock-render --check is read-only: it validates the complete private authority graph before public-control decode and leaves an authorized connector tree unchanged",
+          "lock-render --check emits no success line and makes no write when terminal authority diverges from a public control",
+          "recovery removes a validated publisher-owned staged tree only after quarantining its descriptor-bound target; a late stage replacement preserves both original and replacement",
+          "pruning removes a validated stale generation only after quarantining its descriptor-bound root; a late generation replacement preserves both original and replacement",
+          "the descriptor-bound generation lease member is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object",
+          "rollback removes a rejected generation only after quarantining its descriptor-bound root; a late rollback replacement preserves both original and replacement",
+          "CURRENT and JOURNAL removal is a terminal authority transition that captures any public occupant and selects logical absence without public unlinkat; a late replacement is retained and causes a bounded conflict rather than deletion",
+          "the operation Flock is bound to the retained connector-directory inode, so a matched replacement .connectorgen.lock and anchor sibling pair cannot create a second publication lock domain",
+          "the source lock is read through the retained no-follow connector descriptor before and after lock acquisition; a source mutation during admission is refused before generation state is created",
+          "a durable prepared journal is fsynced before its descriptor-relative no-replace same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation, and a late destination collision preserves both staged and destination inodes",
+          "a reader-held generation-directory lock or invalid generation lease prevents pruning that generation",
+          "an unvalidated generation is never treated as publisher-owned",
+          "cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state",
+          "publication validates staged physical bytes through the existing loader, selected runtime identity, manifest/index construction, and command preflight without credential or provider I/O",
+          "the common authority-record writer retains the opened descriptor ownership across a failed parent Close",
+          "a meaningful temporary-allocation completion error cannot be consumed as a retryable collision"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "authoring_command",
+          "verification_command"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/source.lock.json"
+        ],
+        "selectors": [
+          "connectorgen lock-render <connector>",
+          "connectorgen lock-render <connector> --check"
+        ],
+        "notes": "The schema-4 lock is the sole mutable authoring input; rendered JSON is the sole runtime input. Authoring publication selects one closed generation through CURRENT and does not materialize the checked-in corpus or add a runtime CURRENT reader."
+      },
+      "constraints": [
+        "Unknown root and execution fields fail strict decoding.",
+        "Trailing JSON values and duplicate object members fail before canonicalization or publication.",
+        "Typed graph validation rejects invalid encoders, wrong schema roles, missing bindings, and normalized command alias collisions before staging.",
+        "Semantic admission reads only an in-memory rendered view; it uses engine.Load, engine.New, the exact command resolver, commandrunner preflight, sealed executor and generated hook selection, manifestindex.New, and supplied syncplan.Resolve without provider I/O, credential resolution, or transport.",
+        "Publication retains a verified connector descriptor through in-memory admission, then rereads the source lock after it acquires the target connector lock; source mutation during admission is refused. It retains verified connector and generations directory descriptors for the rest of the operation; every source lock, connector, generation, lock, control, stage, lease, capture, rename, pruning, and cleanup action is descriptor-relative and no-follow. It stages only below the target connector's generations directory under a durable typed marker, rejects unsafe paths and symlinks, requires the exact closed directory/member tree and empty lease, fsyncs files and directories, persists a prepared journal before the same-directory final-generation rename, and revalidates the recomputed content address. Each CURRENT or JOURNAL transition creates a retained terminal-authority successor, captures any public occupant through descriptor-relative no-replace rename, and selects only a retained prior or intended inode through a create-only link; logical absence never unlinks a public control. Pruning remains limited to integrity-validated publisher-owned generations whose leases are exclusively available.",
+        "Every admitted request/response schema reference must semantically equal an effective loaded runtime schema; a direct role with no typed runtime schema is rejected.",
+        "Generated hook extensions are selected only through hookset.Factories and retained in the staged manifest/index entry.",
+        "Canonical source-ID order governs staged provenance; an authored operation index is retained only for diagnostics.",
+        "Known source facts may be checked against their exact declared target; unknown source fields remain opaque and preserved.",
+        "Lane state must match authored execution content.",
+        "Schema references must resolve to safe registry paths.",
+        "Runtime cannot read source.lock.json.",
+        "An identity-known incomplete authority record is disposed only through its retained identity before its single Close. A complete bound record remains authority despite a completion error. Unknown or replaced records remain forensic residue; recovery never accepts arbitrary malformed authority.",
+        "Nested recursive descriptor proof covers Recover of an owned stage, Prune of a stale generation, and Publish initial recovery. Its post-Stat injection proves actual opened-child Close and retained nested bytes/outer root; it does not claim natural Stat failure, whole-tree atomic deletion, a retained pre-operation child identity, or final-Publish nested pruning. The separate final-prune lease tests retain their own scope."
+      ],
+      "non_goals": [
+        "Executing provider or credential I/O.",
+        "Granting runtime capability from citations.",
+        "Providing a second runtime or diagnostic reader.",
+        "Synthesizing a destination binding, Foundation Atlas fact, or sync plan from one source lock.",
+        "Cross-connector distributed transactions.",
+        "Materializing the checked-in connector corpus or adding a runtime CURRENT reader.",
+        "Deleting source.lock.json or other author-owned files."
+      ],
+      "consumer_examples": [
+        {
+          "name": "GitHub vNext bundle",
+          "files": [
+            "internal/connectors/defs/github/source.lock.json",
+            "internal/connectors/defs/github/operations.json"
+          ],
+          "notes": "One lock renders the GitHub execution bundle and stages its generated hook extension through the closed production hook authority."
+        },
+        {
+          "name": "GitLab vNext bundle",
+          "files": [
+            "internal/connectors/defs/gitlab/source.lock.json",
+            "internal/connectors/defs/gitlab/operations.json"
+          ],
+          "notes": "One lock renders REST operations, streams, CLI, and sync transport."
+        },
+        {
+          "name": "Asana vNext bundle",
+          "files": [
+            "internal/connectors/defs/asana/source.lock.json",
+            "internal/connectors/defs/asana/operations.json"
+          ],
+          "notes": "One lock renders direct and saved execution lanes with explicit unsupported lanes."
+        },
+        {
+          "name": "FreeAgent refresh-token bundle",
+          "files": [
+            "internal/connectors/defs/free-agent-connector/source.lock.json",
+            "internal/connectors/defs/free-agent-connector/streams.json"
+          ],
+          "notes": "The source lock selects standard HTTP Basic client authentication for the fixed OAuth2 refresh-token endpoint."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestVNextSourceLockDeterministicallyRendersReferenceConnectors"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_admission_test.go",
+          "name": "TestVNextSemanticAdmissionRejectsSwappedGraphQLOperationBeforeWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_admission_test.go",
+          "name": "TestVNextSemanticAdmissionRejectsSwappedEffectiveSchemaBeforeWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_admission_test.go",
+          "name": "TestVNextSemanticAdmissionStagesGitHubProductionHookEntry"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_admission_test.go",
+          "name": "TestVNextSemanticAdmissionStagesRateIdentityAndManifestIndex"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_admission_test.go",
+          "name": "TestVNextSemanticAdmissionRunsResolverAndPreflightBeforeWriting"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/vnext_execution_bundle_test.go",
+          "name": "TestVNextReferenceConnectorsDiscoverFromExecutionJSONOnly"
+        },
+        {
+          "package": "./internal/connectors/defs",
+          "file": "internal/connectors/defs/vnext_runtime_inventory_test.go",
+          "name": "TestRuntimeEmbedContainsExecutionJSONOnly"
+        },
+        {
+          "package": "./internal/connectors/connsdk",
+          "file": "internal/connectors/connsdk/refresh_token_test.go",
+          "name": "TestOAuth2RefreshTokenBasicClientAuthentication"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestDecodeVNextSourceLockRejectsTrailingAndDuplicateJSON"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestRunLockRenderRejectsNonCanonicalSourceBeforeWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/s1a_contract_matrix_test.go",
+          "name": "TestS1ASourceParentContractMatrixMatchesExecution"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestRunLockRenderRejectsInvalidCanonicalGraphBeforeWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestVNextCanonicalGraphIgnoresIrrelevantOperationOrdering"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestEverySourceLockBuildsCanonicalGraph"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_lock_test.go",
+          "name": "TestVNextSemanticAdmissionRejectsUnboundDirectOperationSchemaRoles"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestRunLockRenderPublishesOnlyClosedGeneration"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRecoversEveryDurableCutPoint"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherSerializesWritersAndReadersSeeWholeGeneration"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherDefersHeldGenerationPrune"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesPruneWithInvalidLease"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherStagesDirectlyUnderGenerationRoot"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesToPruneUnownedGeneration"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesSymlinkedGenerationRootWithoutDeletingTarget"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesSymlinkedConnectorRootWithoutTouchingTarget"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextPublicationOpenLockBindsConnectorDirectory"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherPreservesUnownedStageAcrossMutations"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRejectsSelfConsistentRenamedGeneration"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRejectsDuplicatePublicationControlMembers"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherContextCancelsContendedLockWithoutStateChange"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestRunLockRenderContextCancelsContendedPublicationAndRetries"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherCheckRefusesPhysicalClosedSetMutation"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRetainsDescriptorsAcrossConnectorReplacement"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestRunLockRenderRetainsSourceDescriptorAcrossConnectorReplacement"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestRunLockRenderRejectsSourceMutationBeforeGenerationCreation"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherWritesPreparedJournalBeforeFinalRename"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRecoversPreparedJournalAfterFinalRename"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherCancelsAfterLockAcquireBeforeMutationAndRetries"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRecoversPublisherWrittenDurableStage"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherBootstrapsRetainedTerminalAuthorities"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherCheckRefusesMalformedPrivateTransactionBeforePublicDecode"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRecoversTerminalDivergenceThroughSuccessor"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRemoveControlCapturesLateOccupantInsteadOfUnlinking"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherNoReplaceFailureRetainsAuthorityAndPublicControl"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherNoReplaceSourceAbsentDoesNotClobber"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRecoversEveryTerminalAuthorityDurableCut"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherCheckRefusesAuthorityTopologyBeforePublicDecode"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRepeatedSubstitutionsRemainForensic"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRefusesPrivateAuthorityReplacementBeforePublicDecode"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherCheckRevalidatesPrivateAuthorityBeforePublicDecode"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherRetainsSupersededAuthorityWhenCleanupIsUnsafe"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherCooperatingWritersSerializeAuthorityHeads"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_linearization_test.go",
+          "name": "TestVNextGenerationPublisherCheckRefusesTerminalAuthorityFreeReplacement"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_linearization_test.go",
+          "name": "TestVNextGenerationPublisherCheckRefusesPendingPrivateAuthority"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestRunLockRenderCheckRefusesPendingPrivateAuthorityWithoutWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestRunLockRenderCheckRefusesDivergentTerminalAuthorityWithoutWriting"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_linearization_test.go",
+          "name": "TestVNextGenerationPublisherCapturesLatePublicControlReplacementWithoutClobber"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesLateReplacedValidatedStageCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesLateReplacedValidatedGenerationCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesLateReplacedGenerationLeaseCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRollsBackFailedActiveValidationWithoutOrphan"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesLateReplacedRollbackGenerationCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherSerializesMatchedLockAnchorReplacement"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherPhysicallyPreflightsImplementedStagedCommand"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesPhysicallyStagedCommandPreflight"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_test.go",
+          "name": "TestVNextGenerationPublisherRefusesFinalGenerationActivationCollision"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_repair_test.go",
+          "name": "TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_ownership_test.go",
+          "name": "TestCP11OwnershipRecordFrontiersRecover"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_ownership_test.go",
+          "name": "TestCP11OwnershipAllocatorClassifiesActualCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_record_result_test.go",
+          "name": "TestCP11OwnershipRecordResultBoundaries"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_record_result_test.go",
+          "name": "TestCP11OwnershipRemainingControlStates"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_allocation_consumer_test.go",
+          "name": "TestCP11AllocationConsumersPreserveCompoundAndState"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_allocation_witness_test.go",
+          "name": "TestCP11AllocationCallersRetainActualAB"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_phase_frontier_test.go",
+          "name": "TestCP11OwnershipSevenPhaseCallers"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_compound_frontier_test.go",
+          "name": "TestCP11CompoundOpenedControlFrontiers"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_compound_frontier_test.go",
+          "name": "TestCP11CompoundFailedPredecessorLink"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_compound_frontier_test.go",
+          "name": "TestCP11CompoundCapturePrimarySyncClose"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_compound_frontier_test.go",
+          "name": "TestCP11CompoundStagedActualSyncCloseCleanup"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_resource_error_test.go",
+          "name": "TestVNextPublicationPublicNestedQuarantineBoundsChildOwnership"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_intent_oracle_test.go",
+          "name": "TestCP11FinalPruneOracleRejectsWrongFixture"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_intent_oracle_test.go",
+          "name": "TestCP11PreparedOracleRejectsWrongIntendedPayload"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_intent_oracle_test.go",
+          "name": "TestCP11EarlyStageOracleRejectsChangedNonemptyA"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_publication_intent_oracle_test.go",
+          "name": "TestCP11EarlyStageOracleRejectsSameByteReplacementA"
+        }
+      ],
+      "publication_guarantee_proofs": [
+        {
+          "guarantees": [
+            "each published generation is a physically closed digest-addressed artifact tree with no inherited optional member; validation recomputes that address from the on-disk members"
+          ],
+          "positive": "TestRunLockRenderPublishesOnlyClosedGeneration",
+          "negative": "TestVNextGenerationPublisherCheckRefusesPhysicalClosedSetMutation"
+        },
+        {
+          "guarantees": [
+            "a publisher-written and fsynced typed stage marker binds connector, stage, and content generation; recovery removes that owned stage, while unknown or malformed stages are preserved and refused"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversPublisherWrittenDurableStage",
+          "negative": "TestVNextGenerationPublisherPreservesUnownedStageAcrossMutations"
+        },
+        {
+          "guarantees": [
+            "connector and generation roots are opened no-follow through retained descriptor-relative roots; root replacement cannot redirect publication reads or writes"
+          ],
+          "positive": "TestVNextGenerationPublisherRetainsDescriptorsAcrossConnectorReplacement",
+          "negative": "TestVNextGenerationPublisherRefusesSymlinkedConnectorRootWithoutTouchingTarget"
+        },
+        {
+          "guarantees": [
+            "CURRENT and JOURNAL each retain one terminal authority head; every successor records and binds its predecessor terminal identity, digest, and selected state before that successor can become a head"
+          ],
+          "positive": "TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix",
+          "negative": "TestVNextGenerationPublisherCheckRefusesTerminalAuthorityFreeReplacement"
+        },
+        {
+          "guarantees": [
+            "a public CURRENT or JOURNAL transition captures its syscall-time occupant with descriptor-relative no-replace rename, classifies the moved inode afterward, and selects only a retained prior or intended inode through create-only linkat"
+          ],
+          "positive": "TestVNextGenerationPublisherRepeatedSubstitutionsRemainForensic",
+          "negative": "TestVNextGenerationPublisherCapturesLatePublicControlReplacementWithoutClobber"
+        },
+        {
+          "guarantees": [
+            "unsupported no-replace primitives, capture destination collisions, and source absence never fall back to overwrite or public unlink; they retain prior authority and fail closed or converge through bounded recovery"
+          ],
+          "positive": "TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix",
+          "negative": "TestVNextGenerationPublisherNoReplaceFailureRetainsAuthorityAndPublicControl"
+        },
+        {
+          "guarantees": [
+            "recovery and check scan the complete marker and private authority graph before public-control decoding; retry-required, malformed, gapped, forked, missing, or terminal-divergent states refuse before public-control decode"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversEveryTerminalAuthorityDurableCut",
+          "negative": "TestVNextGenerationPublisherCheckRefusesAuthorityTopologyBeforePublicDecode"
+        },
+        {
+          "guarantees": [
+            "under the exclusive publisher lock, a markerless bootstrap resumes only one strict no-predecessor, phase-empty base prepared authority whose prior equals intended and whose private identities validate; it appends its committed terminal head before completing the second base head and marker"
+          ],
+          "positive": "TestVNextGenerationPublisherResumesInterruptedBaseAuthorityPreparation",
+          "negative": "TestVNextGenerationPublisherCheckRefusesMalformedPrivateTransactionBeforePublicDecode"
+        },
+        {
+          "guarantees": [
+            "private transaction, prepared, phase, capture, and predecessor identities are revalidated across every transition boundary; replacement fails before public-control decode"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversEveryTerminalAuthorityDurableCut",
+          "negative": "TestVNextGenerationPublisherRefusesPrivateAuthorityReplacementBeforePublicDecode"
+        },
+        {
+          "guarantees": [
+            "every authorized public-control read revalidates retained private authority identities after graph scan and before it decodes that control"
+          ],
+          "positive": "TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting",
+          "negative": "TestVNextGenerationPublisherCheckRevalidatesPrivateAuthorityBeforePublicDecode"
+        },
+        {
+          "guarantees": [
+            "cooperating writers serialize all control transitions under the retained connector-directory lock and leave one terminal authority head per target"
+          ],
+          "positive": "TestVNextGenerationPublisherCooperatingWritersSerializeAuthorityHeads",
+          "negative": "TestVNextGenerationPublisherSerializesMatchedLockAnchorReplacement"
+        },
+        {
+          "guarantees": [
+            "superseded terminal authority remains retained when private cleanup is uncertain; a private-path substitution is refused without deleting either authority"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversTerminalDivergenceThroughSuccessor",
+          "negative": "TestVNextGenerationPublisherRetainsSupersededAuthorityWhenCleanupIsUnsafe"
+        },
+        {
+          "guarantees": [
+            "lock-render --check is read-only: it validates the complete private authority graph before public-control decode and leaves an authorized connector tree unchanged"
+          ],
+          "positive": "TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting",
+          "negative": "TestRunLockRenderCheckRefusesPendingPrivateAuthorityWithoutWriting"
+        },
+        {
+          "guarantees": [
+            "lock-render --check emits no success line and makes no write when terminal authority diverges from a public control"
+          ],
+          "positive": "TestRunLockRenderCheckReadsAuthorizedTerminalAuthorityWithoutWriting",
+          "negative": "TestRunLockRenderCheckRefusesDivergentTerminalAuthorityWithoutWriting"
+        },
+        {
+          "guarantees": [
+            "recovery removes a validated publisher-owned staged tree only after quarantining its descriptor-bound target; a late stage replacement preserves both original and replacement"
+          ],
+          "positive": "TestVNextGenerationPublisherRecoversPublisherWrittenDurableStage",
+          "negative": "TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore"
+        },
+        {
+          "guarantees": [
+            "pruning removes a validated stale generation only after quarantining its descriptor-bound root; a late generation replacement preserves both original and replacement"
+          ],
+          "positive": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune",
+          "negative": "TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore"
+        },
+        {
+          "guarantees": [
+            "the descriptor-bound generation lease member is rechecked after quarantine before deletion; a late lease replacement is refused without deleting either lease object"
+          ],
+          "positive": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune",
+          "negative": "TestVNextGenerationPublisherRefusesLateReplacedGenerationLeaseCleanup"
+        },
+        {
+          "guarantees": [
+            "rollback removes a rejected generation only after quarantining its descriptor-bound root; a late rollback replacement preserves both original and replacement"
+          ],
+          "positive": "TestVNextGenerationPublisherRollsBackFailedActiveValidationWithoutOrphan",
+          "negative": "TestVNextGenerationPublisherRefusesSecondPublicReplacementAtQuarantineRestore"
+        },
+        {
+          "guarantees": [
+            "CURRENT and JOURNAL removal is a terminal authority transition that captures any public occupant and selects logical absence without public unlinkat; a late replacement is retained and causes a bounded conflict rather than deletion"
+          ],
+          "positive": "TestVNextGenerationPublisherTerminalAuthorityTransitionMatrix",
+          "negative": "TestVNextGenerationPublisherRemoveControlCapturesLateOccupantInsteadOfUnlinking"
+        },
+        {
+          "guarantees": [
+            "the operation Flock is bound to the retained connector-directory inode, so a matched replacement .connectorgen.lock and anchor sibling pair cannot create a second publication lock domain"
+          ],
+          "positive": "TestVNextGenerationPublisherSerializesWritersAndReadersSeeWholeGeneration",
+          "negative": "TestVNextGenerationPublisherSerializesMatchedLockAnchorReplacement"
+        },
+        {
+          "guarantees": [
+            "the source lock is read through the retained no-follow connector descriptor before and after lock acquisition; a source mutation during admission is refused before generation state is created"
+          ],
+          "positive": "TestRunLockRenderRetainsSourceDescriptorAcrossConnectorReplacement",
+          "negative": "TestRunLockRenderRejectsSourceMutationBeforeGenerationCreation"
+        },
+        {
+          "guarantees": [
+            "a durable prepared journal is fsynced before its descriptor-relative no-replace same-directory final-generation rename; recovery from either side of that cut selects only an old-complete or new-complete generation, and a late destination collision preserves both staged and destination inodes"
+          ],
+          "positive": "TestVNextGenerationPublisherWritesPreparedJournalBeforeFinalRename",
+          "negative": "TestVNextGenerationPublisherRefusesFinalGenerationActivationCollision"
+        },
+        {
+          "guarantees": [
+            "a reader-held generation-directory lock or invalid generation lease prevents pruning that generation"
+          ],
+          "positive": "TestVNextGenerationPublisherDefersHeldGenerationPrune",
+          "negative": "TestVNextGenerationPublisherRefusesPruneWithInvalidLease"
+        },
+        {
+          "guarantees": [
+            "an unvalidated generation is never treated as publisher-owned"
+          ],
+          "positive": "TestVNextGenerationPublisherActivatesClosedSetAndDefersHeldPrune",
+          "negative": "TestVNextGenerationPublisherRefusesToPruneUnownedGeneration"
+        },
+        {
+          "guarantees": [
+            "cancellation immediately after nonblocking Flock unlocks before mutation and changes no publication state"
+          ],
+          "positive": "TestRunLockRenderContextCancelsContendedPublicationAndRetries",
+          "negative": "TestVNextGenerationPublisherCancelsAfterLockAcquireBeforeMutationAndRetries"
+        },
+        {
+          "guarantees": [
+            "publication validates staged physical bytes through the existing loader, selected runtime identity, manifest/index construction, and command preflight without credential or provider I/O"
+          ],
+          "positive": "TestVNextGenerationPublisherPhysicallyPreflightsImplementedStagedCommand",
+          "negative": "TestVNextGenerationPublisherRefusesPhysicallyStagedCommandPreflight"
+        },
+        {
+          "guarantees": [
+            "the common authority-record writer retains the opened descriptor ownership across a failed parent Close"
+          ],
+          "positive": "TestCP11OwnershipRecordFrontiersRecover",
+          "negative": "TestCP11OwnershipRecordResultBoundaries"
+        },
+        {
+          "guarantees": [
+            "a meaningful temporary-allocation completion error cannot be consumed as a retryable collision"
+          ],
+          "positive": "TestCP11OwnershipAllocatorClassifiesActualCleanup",
+          "negative": "TestCP11AllocationConsumersPreserveCompoundAndState"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The source-lock schema, canonical descriptor, lane inference, output set, rendering, runtime inventory, hook extension selection boundary, or closed-generation publication protocol changes.",
+        "An effective request/response schema binding rule, canonical staged provenance identity, selected generation identity, or its executable proof changes.",
+        "A source-selected authentication shape, its generic engine binding, or its executable proof changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "definitions.bundle-loader.v1",
+      "layer": "declarative_bundle_loading",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Indexes safe metadata and closed executor/extension identities from embedded execution JSON without decoding bundles, then lazily loads one selected bundle through explicit factories and sealed native compatibility adapters.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/bundleregistry",
+        "supporting_packages": [
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/connectors/defs",
+          "polymetrics.ai/internal/connectors/engine",
+          "polymetrics.ai/internal/connectors/manifestidentity",
+          "polymetrics.ai/internal/connectors/manifestindex",
+          "polymetrics.ai/internal/connectors/manifeststore"
+        ],
+        "files": [
+          "cmd/connectorgen/gen.go",
+          "internal/app/app.go",
+          "internal/connectors/bundleregistry/factories.go",
+          "internal/connectors/bundleregistry/hooks.go",
+          "internal/connectors/bundleregistry/registry.go",
+          "internal/connectors/defs/defs.go",
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/schema/operations.schema.json",
+          "internal/connectors/engine/schema/writes.schema.json",
+          "internal/connectors/hooks/hookset/hookset_gen.go",
+          "internal/connectors/manifestindex/index.go",
+          "internal/connectors/manifestindex/index_gen.go",
+          "internal/connectors/manifestidentity/identity.go",
+          "internal/connectors/manifeststore/bundle_store.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "Bundle"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "Load"
+          },
+          {
+            "file": "internal/connectors/manifestindex/index_gen.go",
+            "name": "GeneratedEntries"
+          },
+          {
+            "file": "internal/connectors/manifestidentity/identity.go",
+            "name": "ForFS"
+          },
+          {
+            "file": "internal/connectors/manifeststore/bundle_store.go",
+            "name": "BundleStore.Acquire"
+          },
+          {
+            "file": "internal/connectors/bundleregistry/registry.go",
+            "name": "NewConstruction"
+          },
+          {
+            "file": "internal/connectors/bundleregistry/registry.go",
+            "name": "Construction.BuildRegistry"
+          },
+          {
+            "file": "internal/connectors/bundleregistry/factories.go",
+            "name": "NewExecutorFactories"
+          },
+          {
+            "file": "internal/app/app.go",
+            "name": "Open"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "DeclaredBatchSpec"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "validateDeclaredBatchSpec"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "validateMultipartMediaTypes"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl",
+          "reverse_etl",
+          "direct_read",
+          "direct_write",
+          "binary_download",
+          "binary_upload"
+        ],
+        "protocols": [
+          "protocol-neutral declarative bundles"
+        ],
+        "source_forms": [
+          "deterministically rendered connector execution JSON"
+        ],
+        "request_response_shapes": [
+          "authentication and connector metadata",
+          "binary and structured operation definitions",
+          "closed named-action provider batch envelopes",
+          "explicit provider-unrestricted multipart media policy",
+          "schemas, streams, writes, and operations",
+          "sync transport and database declarations"
+        ],
+        "sync_modes": [
+          "change_capture",
+          "full_append",
+          "full_overwrite",
+          "incremental_append",
+          "incremental_dedupe",
+          "incremental_dedupe_history",
+          "incremental_upsert"
+        ],
+        "guarantees": [
+          "closed schema validation before selected construction",
+          "embedded immutable execution snapshot",
+          "generated and loaded connector, generation, digest, and byte charge match before cache or factory admission",
+          "retained bundles plus distinct in-flight bundle loads never exceed the configured entry limit",
+          "metadata listing decodes no bundle and named resolution decodes one selected bundle",
+          "declared batches can select only their source-backed allow-listed actions and methods",
+          "a connector with read disabled may omit streams.json while readable connectors still require it",
+          "unrestricted upload media is available only through an explicit typed provider policy",
+          "one registry combines declarative connectors with generated explicit extension factories and sealed native compatibility adapters"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field",
+          "explicit_factory"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/*.json",
+          "internal/connectors/defs/<connector>/schemas/*.json"
+        ],
+        "selectors": [
+          "app.Open",
+          "bundleregistry.NewConstruction",
+          "Construction.BuildRegistry",
+          "ExecutorFactories.Construct",
+          "hookset.Factories",
+          "engine.Load"
+        ],
+        "notes": "The generated index supplies safe metadata plus exactly one closed executor and optional exact extension ID per bundle. Generator and engine compute the same closed execution identity; the loader must match connector, generation, digest, and byte charge before construction. Hook package init registration is not consulted. Runtime reads embedded execution JSON only; source.lock.json is excluded."
+      },
+      "constraints": [
+        "Unknown fields, duplicate identities, unsafe references, and invalid cross-file bindings fail bundle loading.",
+        "A declared batch cannot select arbitrary HTTP methods, paths, bodies, nested batches, or undeclared actions.",
+        "Provider-unrestricted media must be an explicit source-backed policy on a file part and cannot coexist with an allow-list or fixed content type.",
+        "Loading a definition does not prove its declared executor is implemented.",
+        "Runtime loads projected definitions, not provider source locks or this Atlas."
+      ],
+      "non_goals": [
+        "Importing provider documentation.",
+        "Providing arbitrary code hooks from JSON.",
+        "Reading authoring evidence at runtime."
+      ],
+      "consumer_examples": [
+        {
+          "name": "GitHub declarative bundle",
+          "files": [
+            "internal/connectors/defs/github/cli_surface.json",
+            "internal/connectors/defs/github/operations.json",
+            "internal/connectors/defs/github/streams.json",
+            "internal/connectors/defs/github/writes.json"
+          ],
+          "notes": "The registry loads the connector's projected definitions as one validated bundle."
+        },
+        {
+          "name": "PostgreSQL native definition overlay",
+          "files": [
+            "internal/connectors/defs/postgres/database.json",
+            "internal/connectors/defs/postgres/sync_transport.json"
+          ],
+          "notes": "Definitions remain the selected contracts while the native package supplies protocol execution."
+        },
+        {
+          "name": "Amazon SQS unsupported disposition",
+          "files": [
+            "internal/connectors/defs/amazon-sqs/cli_surface.json",
+            "internal/connectors/defs/amazon-sqs/metadata.json"
+          ],
+          "notes": "An all-lanes-unsupported, non-readable bundle has no stream artifact and exposes only its declared non-executable command dispositions."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_test.go",
+          "name": "TestBundleLoadHappyPathFullBundle"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_test.go",
+          "name": "TestBundleLoadSyncTransportProjectsIndependentDefinition"
+        },
+        {
+          "package": "./internal/connectors/manifeststore",
+          "file": "internal/connectors/manifeststore/bundle_store_test.go",
+          "name": "TestBundleStoreReservesEntryCapacityAcrossDistinctFlights"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/registry_test.go",
+          "name": "TestConstructionBuildsLazyRegistryWithoutDecodingList"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestEveryImplementedCommandHasProductionRuntimeSurface"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/factories_test.go",
+          "name": "TestNewExecutorFactoriesRejectsDuplicateIDsBeforeConstruction"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/registry_test.go",
+          "name": "TestConstructionRejectsUnknownExtensionBeforeLoading"
+        },
+        {
+          "package": "./internal/connectors/hooks/hookset",
+          "file": "internal/connectors/hooks/hookset/hookset_gen_test.go",
+          "name": "TestGeneratedHooksetConstructsRepresentativeHooks"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/app_test.go",
+          "name": "TestOpenConstructsTheExplicitProductionRegistry"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/declared_batch_test.go",
+          "name": "TestDeclaredBatchRejectsOpenOrInvalidSubrequestsBeforeProviderIO"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_media_test.go",
+          "name": "TestValidateMultipartMediaTypes"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/amazon_sqs_disposition_test.go",
+          "name": "TestAmazonSQSDispositionBundleLoads"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "A bundle schema, cross-file binding, embedded definition set, or registry composition rule changes.",
+        "A definition field begins selecting a new runtime contract or stops selecting an existing one.",
+        "An owner type, loader symbol, or proof test changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.direct-execution.v1",
+      "layer": "direct_execution",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Executes definition-bound direct reads, direct writes, binary downloads, and binary uploads through common preflight, request encoding, response handling, preview, approval, and command-binding paths. Its declarative base check can preserve an explicit exact allowed 2xx status set and an explicit response-byte cap through the existing requester policy.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/connectors/commandrunner",
+          "polymetrics.ai/internal/connectors/connsdk"
+        ],
+        "files": [
+          "internal/connectors/commandrunner/runner.go",
+          "internal/connectors/connectors.go",
+          "internal/connectors/manifest.go",
+          "internal/connectors/connsdk/http.go",
+          "internal/connectors/connsdk/rate_limit_requester.go",
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/binary_read.go",
+          "internal/connectors/engine/command_binding.go",
+          "internal/connectors/engine/connector.go",
+          "internal/connectors/engine/declared_batch.go",
+          "internal/connectors/engine/direct_read.go",
+          "internal/connectors/engine/direct_read_paginate.go",
+          "internal/connectors/engine/paginate.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/read_request_budget.go",
+          "internal/connectors/engine/schema/streams.schema.json",
+          "internal/connectors/engine/direct_write.go",
+          "internal/connectors/engine/structured_rest_body.go",
+          "internal/connectors/engine/write.go",
+          "internal/connectors/engine/write_prepare.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/connector.go",
+            "name": "(*Connector).OperationDirectRead"
+          },
+          {
+            "file": "internal/connectors/engine/connector.go",
+            "name": "(*Connector).OperationDirectWrite"
+          },
+          {
+            "file": "internal/connectors/engine/connector.go",
+            "name": "(*Connector).OperationBinaryDownload"
+          },
+          {
+            "file": "internal/connectors/engine/connector.go",
+            "name": "(*Connector).Write"
+          },
+          {
+            "file": "internal/connectors/engine/command_binding.go",
+            "name": "ResolveImplementedCommandBinding"
+          },
+          {
+            "file": "internal/connectors/commandrunner/runner.go",
+            "name": "PreflightRequest"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "Read"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "ReadWithOutcome"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "Check"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "requesterWithCheckSuccessStatuses"
+          },
+          {
+            "file": "internal/connectors/engine/paginate.go",
+            "name": "newPaginator"
+          },
+          {
+            "file": "internal/connectors/connsdk/http.go",
+            "name": "(*Requester).admitRequesterSend"
+          },
+          {
+            "file": "internal/connectors/commandrunner/runner.go",
+            "name": "coerceCommandFlagValue"
+          },
+          {
+            "file": "internal/connectors/engine/declared_batch.go",
+            "name": "buildDeclaredBatchPayload"
+          },
+          {
+            "file": "internal/connectors/engine/declared_batch.go",
+            "name": "validateDeclaredBatchResponse"
+          },
+          {
+            "file": "internal/connectors/engine/write_prepare.go",
+            "name": "prepareCanonicalMultipartSpec"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "direct_read",
+          "direct_write",
+          "binary_download",
+          "binary_upload"
+        ],
+        "protocols": [
+          "GraphQL",
+          "HTTP/REST"
+        ],
+        "source_forms": [
+          "projected CLI command, operation, stream, and write definitions"
+        ],
+        "request_response_shapes": [
+          "aggregate request-budgeted stream-backed direct reads",
+          "action-backed named structured JSON record fields",
+          "base64 and binary upload actions",
+          "bounded binary download responses",
+          "closed provider batch envelopes over allow-listed named actions",
+          "declared JSON, form, and multipart writes",
+          "fixed GraphQL operation bindings",
+          "fixed REST reads and writes",
+          "base check requests with optional exact accepted 2xx statuses and bounded response bytes",
+          "source-declared offset windows in query or typed JSON/form bodies with an optional authoritative response stop path",
+          "stream-backed bounded direct reads",
+          "tracked source reads that persist only the next generated provider cursor, offset window, or same-origin URL",
+          "structured nested REST request bodies"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "declaration and input preflight before provider I/O",
+          "action-backed structured JSON is decoded only for declared record fields and validated against the write schema",
+          "declared batches derive every method, path, and body from an existing allow-listed typed action",
+          "interactive stream reads share one caller request budget across fan-out discovery, child sequences, retries, and redirects while saved ETL keeps its established unbounded zero value",
+          "declared form/JSON offset windows never duplicate their pagination fields in the request query and a declared false stop path terminates a full final page",
+          "known tracked-read caps return an opaque continuation that resumes the exact generated provider cursor, offset window, or origin-checked URL without replaying acknowledged pages",
+          "one bounded provider-facing command invocation",
+          "preview and approval binding for mutation paths",
+          "declared base-check success statuses are normalized from unambiguous numeric spellings that resolve to 2xx and enforced as an exact allowed set when present",
+          "declared base-check max_bytes captures at most one excess byte and rejects oversized successful responses",
+          "response and payload bounds"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field",
+          "public_api"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/cli_surface.json",
+          "internal/connectors/defs/<connector>/operations.json",
+          "internal/connectors/defs/<connector>/streams.json",
+          "internal/connectors/defs/<connector>/writes.json"
+        ],
+        "selectors": [
+          "CLI command binding kind and ID",
+          "operation executor kind",
+          "stream ID",
+          "write action name and request kind"
+        ],
+        "notes": "The command runner resolves one exact declared binding and delegates to the common engine; unsupported or deferred bindings stop before provider I/O."
+      },
+      "constraints": [
+        "A direct command must remain bounded and must not own a warehouse checkpoint or saved sync lifecycle.",
+        "Structured JSON command flags are available only for action-backed direct writes, never as a generic operation body or HTTP escape hatch.",
+        "Declared batches cannot accept caller-authored methods, paths, raw bodies, query-bearing subrequests, nested batches, or undeclared actions.",
+        "Request fields, media types, response policies, and retry behavior must be declared and source-backed.",
+        "Provider-unrestricted upload media requires an explicit declaration and remains path-confined, byte-bounded, digest-bound, previewed, and approval-gated.",
+        "Binary upload uses typed write-action variants; binary download uses a declared successful response and byte bound.",
+        "A declared base-check success_statuses set contains unambiguous numeric spellings that normalize to exact 2xx codes and executes exact matches only; non-2xx values require the named exact response-status non-2xx execution gap, and response-status ranges/classes require the named exact response-status range execution gap. Omitted status metadata retains the legacy generic 2xx policy.",
+        "A declared base-check max_bytes is between 1 and the existing 64 MiB requester cap and uses that bounded requester path; omitted max_bytes retains the legacy response bound."
+      ],
+      "non_goals": [
+        "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
+        "Generic caller-authored HTTP requests.",
+        "Inventing provider retry safety or idempotency."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Asana source-projected direct command set",
+          "files": [
+            "internal/connectors/defs/asana/cli_surface.json",
+            "internal/connectors/defs/asana/operations.json",
+            "internal/connectors/defs/asana/writes.json"
+          ],
+          "notes": "Asana commands select common operation and write executors through definition bindings."
+        },
+        {
+          "name": "GitHub mixed REST, GraphQL, and binary command set",
+          "files": [
+            "internal/connectors/defs/github/cli_surface.json",
+            "internal/connectors/defs/github/operations.json",
+            "internal/connectors/defs/github/writes.json"
+          ],
+          "notes": "One bundle exercises several common direct executor kinds without creating a GitHub-only command runtime."
+        },
+        {
+          "name": "Canny form-paginated stream",
+          "files": [
+            "internal/connectors/defs/canny/source.lock.json",
+            "internal/connectors/defs/canny/streams.json"
+          ],
+          "notes": "The Canny stream selects form-body skip/limit windows and an authoritative hasMore stop through the common reader."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestReadMaxRequestsBoundsRequestBackedFanOutGlobally"
+        },
+        {
+          "package": "./internal/connectors/commandrunner",
+          "file": "internal/connectors/commandrunner/runner_test.go",
+          "name": "TestRunStreamBackedDirectReadUsesStreamExecutorWithoutPageNavigation"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/direct_read_test.go",
+          "name": "TestDirectReadExecutesFixedGETOperation"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/direct_write_test.go",
+          "name": "TestOperationDirectWritePreviewsApprovesAndExecutesSingleFormRequest"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/binary_read_test.go",
+          "name": "TestBinaryDownloadWritesBoundedFile"
+        },
+        {
+          "package": "./internal/connectors/commandrunner",
+          "file": "internal/connectors/commandrunner/runner_test.go",
+          "name": "TestEveryImplementedCommandPassesRuntimePreflight"
+        },
+        {
+          "package": "./internal/connectors/commandrunner",
+          "file": "internal/connectors/commandrunner/runner_test.go",
+          "name": "TestBuildDirectWriteCommandSupportsOnlyDeclaredStructuredJSONRecordFlags"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/declared_batch_test.go",
+          "name": "TestDeclaredBatchExecutesOnlyResolvedNamedActions"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_media_test.go",
+          "name": "TestCanonicalMultipartPreviewBindsProviderUnrestrictedMediaPolicy"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestRequesterWithCheckSuccessStatuses_BlocksNon2xxRuntimeGaps"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestCheck_ResponseMaxBytesPreservesDeclaredBound"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/paginate_test.go",
+          "name": "TestNewPaginatorOffsetLimitHonorsDeclaredStopPath"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/continuation_cap_test.go",
+          "name": "TestReadContinuationResumesExactProviderCursor"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/continuation_cap_test.go",
+          "name": "TestReadContinuationResumesExactProviderOffset"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/continuation_cap_test.go",
+          "name": "TestReadContinuationResumesExactProviderURL"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/transport_composition_test.go",
+          "name": "TestDeclarativeTransport_PageBudgetIsNotEOF"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionCannyGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "closed-command-foundation-components",
+          "reference": "internal/connectors/command_surface.go#CommandFoundation",
+          "notes": "Individual deferred commands use closed component and evidence claims; that accounting does not mean the common direct runtime is absent."
+        }
+      ],
+      "update_conditions": [
+        "A direct executor kind, request encoder, response policy, pagination contract, binary behavior, or approval path changes.",
+        "Command binding or runtime-preflight selection changes.",
+        "A supported direct request shape, owner symbol, constraint, or proof test changes.",
+        "Base-check accepted-status behavior changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.cartesian-config-fanout.v1",
+      "layer": "declarative_read_composition",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Expands a source-declared PageSpeed-style HTTPS URL list and mobile or desktop strategy list into a bounded deterministic Cartesian sequence of GET reads with fixed repeated category query parameters.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "CartesianConfigFanOutSpec"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "readCartesianConfigFanOut"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST JSON responses"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "configured HTTPS URL list crossed with configured mobile or desktop strategies",
+          "fixed source-declared repeated category query parameters",
+          "one JSON object response per declared URL and strategy pair"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "URL and strategy lists preserve their declared order and reject empty or duplicate entries",
+          "only HTTPS URL values and the closed mobile or desktop strategy values reach provider I/O",
+          "the configured Cartesian product is refused before provider I/O when it exceeds the source-declared combination or request budget",
+          "fixed categories remain repeated query values in their source-declared order",
+          "the generic engine never branches on connector name"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].cartesian_config_fan_out"
+        ],
+        "notes": "The field names the two configuration keys, two query parameters, closed category repetitions, and fixed request bounds. A source lock must declare the exact PageSpeed-style provider contract; it cannot add axes, arbitrary transforms, caller-defined categories, or another executor."
+      },
+      "constraints": [
+        "Only two configuration-derived axes are supported: HTTPS URLs and mobile or desktop strategies.",
+        "Categories are fixed source-lock values and are not caller configuration.",
+        "Every configuration product must satisfy both max_combinations and max_requests before the first request.",
+        "Tracked direct-read pagination and continuation are refused because the complete Cartesian sequence has no honest single continuation token."
+      ],
+      "non_goals": [
+        "An arbitrary list transform or multi-axis fan-out language.",
+        "Connector-specific hooks, native readers, caller-provided origins, or fixture paths.",
+        "Direct writes, reverse ETL, binary transfers, database behavior, or unbounded provider execution."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Google PageSpeed Insights reports",
+          "files": [
+            "internal/connectors/defs/google-pagespeed-insights/source.lock.json",
+            "internal/connectors/defs/google-pagespeed-insights/streams.json"
+          ],
+          "notes": "The lock declares URL by strategy execution with fixed Lighthouse categories and a hard twenty-request limit."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestReadCartesianConfigFanOutRunsDeclaredProductDeterministically"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestReadCartesianConfigFanOutRejectsBudgetBeforeProviderIO"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionGooglePageSpeedGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The closed two-axis request shape, validation, source selection, owner symbol, or proof test changes.",
+        "A new connector proposes this source-lock selector."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.per-stream-headers.v1",
+      "layer": "declarative_request_headers",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Applies a source-declared static vendor Accept media type to one ETL stream, deterministically replacing any same-name global header before the existing authenticated requester sends provider I/O.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "validateStaticStreamHeaders"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "readOneSequence"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "StreamSpec"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST JSON responses"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "one fixed application/vnd.*+json Accept media type per stream"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "only a static vendor JSON Accept media type is admitted",
+          "config interpolation, secret values, caller headers, and transport-control headers are rejected before provider I/O",
+          "at most eight declared static headers are accepted and only the closed Accept header name is currently permitted",
+          "a stream Accept header deterministically replaces a same-name global header without mutating another stream or the shared runtime"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].headers.Accept"
+        ],
+        "notes": "The closed field exists only for fixed vendor response media types. Extending it to another header name, a dynamic value, a caller value, or another lane requires a separate foundation decision."
+      },
+      "constraints": [
+        "Header names must be exact `Accept` and values must parse as parameter-free application/vnd.*+json media types.",
+        "No value may contain template delimiters.",
+        "Authorization, Cookie, Host, Content-Length, and all other transport-control headers are unavailable because only Accept is admitted."
+      ],
+      "non_goals": [
+        "A general per-request header map.",
+        "Dynamic configuration or secret interpolation.",
+        "Caller header injection, direct writes, reverse ETL, binary transfers, or native/hook execution."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Mendeley resource reads",
+          "files": [
+            "internal/connectors/defs/mendeley/source.lock.json",
+            "internal/connectors/defs/mendeley/streams.json"
+          ],
+          "notes": "Documents, folders, groups, and annotations select their exact required vendor Accept media types without a hook or native reader."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_test.go",
+          "name": "TestBundleLoadAcceptsDeclaredStaticVendorStreamHeaders"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_test.go",
+          "name": "TestBundleLoadRejectsUnsafeStaticStreamHeaders"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestReadStaticStreamHeadersOverrideGlobalHeaderDeterministically"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionMendeleyGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The allowed header name, static media-type grammar, merge behavior, owner symbol, or proof test changes.",
+        "A connector proposes this source-lock selector."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.declared-password-token.v1",
+      "layer": "declarative_authentication",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Authenticates a declared fixed HTTPS JSON email/password token route, extracts only its top-level accessToken, and applies that bearer token for the lifetime of the runtime without refresh or replay.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/auth.go",
+          "internal/connectors/engine/auth_declared_password_token.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/auth.go",
+            "name": "buildAuthenticatorWithDeclaredRoute"
+          },
+          {
+            "file": "internal/connectors/engine/auth_declared_password_token.go",
+            "name": "buildDeclaredPasswordTokenAuthenticator"
+          },
+          {
+            "file": "internal/connectors/engine/auth_declared_password_token.go",
+            "name": "declaredPasswordTokenAuthenticator"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "fixed HTTPS JSON token exchange"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "POST JSON {email,password} to a fixed route",
+          "top-level JSON accessToken response",
+          "Bearer token on subsequent declared requests"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the token URL is fixed HTTPS with no query, fragment, or interpolation",
+          "email is resolved only from declared configuration and password only from declared secret storage",
+          "the password is sent only in the bounded token JSON body and never reaches a data request",
+          "the bearer token is cached only for one runtime and is never refreshed or replayed"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "base.auth[].mode=declared_password_token"
+        ],
+        "notes": "This closed authentication mode owns only the exact email/password-to-accessToken JSON exchange. It is not an OAuth password grant or generic credential endpoint."
+      },
+      "constraints": [
+        "The token response is capped at 64 KiB and must contain a non-empty top-level accessToken.",
+        "No scopes, refresh token, arbitrary JSON fields, caller origin, query, fragment, or transport controls are admitted.",
+        "The source-declared fixed provider route is the sole password recipient."
+      ],
+      "non_goals": [
+        "OAuth password grants or generic username/password authentication.",
+        "Refresh, retry, provider credential creation, caller-defined token endpoints, or direct writes.",
+        "Native/custom authentication hooks."
+      ],
+      "consumer_examples": [
+        {
+          "name": "My Hours login",
+          "files": [
+            "internal/connectors/defs/my-hours/source.lock.json",
+            "internal/connectors/defs/my-hours/streams.json"
+          ],
+          "notes": "The source lock selects the fixed My Hours login route, email configuration binding, password secret binding, and extracted accessToken."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/auth_declared_password_token_test.go",
+          "name": "TestDeclaredPasswordTokenAuthSendsPasswordOnlyToFixedTokenRoute"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/auth_declared_password_token_test.go",
+          "name": "TestDeclaredPasswordTokenAuthRejectsDynamicOrNonHTTPSRoute"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionMyHoursGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The fixed token request/response shape, route constraint, secret containment, owner symbol, or proof changes.",
+        "A connector proposes this source-lock selector."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.date-window-fanout.v1",
+      "layer": "declarative_read_composition",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Schedules source-declared contiguous UTC date windows into fixed query parameters before the existing ETL reader runs each window.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "DateWindowFanOutSpec"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "readDateWindowFanOut"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST JSON responses"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "sequential UTC DateFrom and DateTo query windows"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "start, terminal, and batch configuration are validated before provider I/O",
+          "windows are contiguous, non-overlapping, and source-order deterministic",
+          "batch days are capped at 365 and window schedules are capped at 600",
+          "the reader cannot accept arbitrary date transforms or a caller origin"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].date_window_fan_out"
+        ],
+        "notes": "The closed selector names the three configuration keys, two query parameters, and fixed source limits. It is not a general date transform."
+      },
+      "constraints": [
+        "Dates must be YYYY-MM-DD UTC calendar dates with a terminal date not before the start.",
+        "Only the source-declared query names receive the generated dates.",
+        "Tracked pagination and continuation are unavailable for the full schedule."
+      ],
+      "non_goals": [
+        "Arbitrary recurrence, timezone conversion, relative dates, hooks, native readers, or direct writes."
+      ],
+      "consumer_examples": [
+        {
+          "name": "My Hours time logs",
+          "files": [
+            "internal/connectors/defs/my-hours/source.lock.json",
+            "internal/connectors/defs/my-hours/streams.json"
+          ],
+          "notes": "The time_logs stream schedules bounded DateFrom/DateTo windows through the fixed My Hours activity route."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestReadDateWindowFanOutSchedulesContiguousUTCWindows"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestReadDateWindowFanOutRejectsOverBudgetBeforeProviderIO"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionMyHoursGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The date scheduling shape, cap, source selector, owner, or proof changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.response-header-projection.v1",
+      "layer": "declarative_response_projection",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Projects source-declared response header names onto equal-length positional value arrays within extracted JSON rows before schema projection and record emission.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "resolveResponseHeaderProjections"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "applyResponseHeaderProjections"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "validateResponseHeaderProjections"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST JSON responses"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "response-level header arrays with declared name fields",
+          "extracted row-level positional value arrays with declared value fields"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "only declared response header names become emitted fields",
+          "every declared header appears exactly once",
+          "each row has an equal number of non-null positional values before any record emits",
+          "unknown headers, duplicate headers, missing values, and field overwrites fail the read"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].response_header_projection"
+        ],
+        "notes": "Each mapping declares response header and row value paths, optional field names, and the complete allowed header set; the generic engine never branches on connector name."
+      },
+      "constraints": [
+        "Only JSON object headers and values are accepted.",
+        "The mapping cannot invoke a hook, choose a URL, alter authentication, or transform caller-authored data.",
+        "Header names are closed by allowed_headers and cannot overwrite an extracted row field.",
+        "Validation completes for every extracted row before the page emits any record."
+      ],
+      "non_goals": [
+        "An arbitrary JSON transformation language.",
+        "Provider-specific record hooks or source-code callbacks.",
+        "Direct writes, reverse ETL, binary transfers, or database behavior."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Google Analytics Data API runReport rows",
+          "files": [
+            "internal/connectors/defs/google-analytics-data-api/source.lock.json",
+            "internal/connectors/defs/google-analytics-data-api/streams.json"
+          ],
+          "notes": "GA4 dimensionHeaders and metricHeaders map only the source-declared report fields to each rows[] positional value array."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestReadResponseHeaderProjectionMapsDeclaredHeadersToPositionalValues"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/read_test.go",
+          "name": "TestReadResponseHeaderProjectionRejectsInvalidResponseBeforeEmit"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionGoogleAnalyticsDataGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "A response header/value projection shape, validation rule, owner symbol, or proof test changes.",
+        "A connector selects the projection with a new declared response mapping."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.provider-extension-seams.v1",
+      "layer": "provider_extensions",
+      "status": "available",
+      "kind": "extension_seam",
+      "summary": "Provides bounded hook, native-connector, and definition-factory seams for provider-specific authentication, request, record, protocol, and transport behavior without cloning the generic engines. Includes a definition-selected single_attempt destination seam: one declaration-bound request per record, automatic retries disabled, bounded response capture, and no provider replay or generic writer.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/bundleregistry",
+          "polymetrics.ai/internal/connectors/hooks/hookset",
+          "polymetrics.ai/internal/connectors/native/nativeset",
+          "polymetrics.ai/internal/synctransport"
+        ],
+        "files": [
+          "internal/connectors/bundleregistry/registry.go",
+          "internal/connectors/engine/hooks.go",
+          "internal/connectors/hooks/hookset/hookset_gen.go",
+          "internal/connectors/native/nativeset/factories.go",
+          "internal/app/declarative_single_attempt_destination.go",
+          "internal/synctransport/definition_composition.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/hooks.go",
+            "name": "Hooks"
+          },
+          {
+            "file": "internal/connectors/bundleregistry/registry.go",
+            "name": "NewConstruction"
+          },
+          {
+            "file": "internal/connectors/hooks/hookset/hookset_gen.go",
+            "name": "Factories"
+          },
+          {
+            "file": "internal/connectors/engine/hooks.go",
+            "name": "CommandBindingTransportHook"
+          },
+          {
+            "file": "internal/connectors/engine/hooks.go",
+            "name": "PreparedWriteHook"
+          },
+          {
+            "file": "internal/app/declarative_single_attempt_destination.go",
+            "name": "declarativeSingleAttemptDestinationContractFor"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "DefinitionFactoryProvider"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "DefinitionFactoriesFromRegistry"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl",
+          "reverse_etl",
+          "direct_read",
+          "direct_write",
+          "binary_download",
+          "binary_upload"
+        ],
+        "protocols": [
+          "native database and provider protocols",
+          "provider-specific HTTP authentication and signing",
+          "provider-specific record and request transforms"
+        ],
+        "source_forms": [
+          "projected definition plus generated explicit implementation factory"
+        ],
+        "request_response_shapes": [
+          "authentication and declared route authorization",
+          "command transport binding",
+          "native source and destination executors",
+          "prepared write steps",
+          "record, stream, and write transforms"
+        ],
+        "sync_modes": [
+          "definition-selected modes implemented by the registered native or transport factory"
+        ],
+        "guarantees": [
+          "explicit interface ownership",
+          "generated explicit factory catalogs close extension discovery without import-time registration",
+          "transport factories bind exact executor and mode references"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field",
+          "explicit_factory"
+        ],
+        "definition_files": [],
+        "selectors": [
+          "bundleregistry.NewConstruction",
+          "hookset.Factories",
+          "synctransport.DefinitionFactoryProvider"
+        ],
+        "notes": "Use the narrowest existing interface and generated explicit factory catalog; definition-selected transport factories must not branch on connector name or import/registration order."
+      },
+      "constraints": [
+        "Extensions may implement provider-specific behavior only through a declared interface or exact executor reference.",
+        "A hook must not recreate common schema handling, pagination, request encoding, approval, warehouse, or transport orchestration.",
+        "JSON definitions cannot name arbitrary handlers or executable code paths.",
+        "Provider facts, mappings, and connector-specific executor selection stay in defs/<connector>; shared runtime owners must not branch on connector name."
+      ],
+      "non_goals": [
+        "A general plugin or arbitrary hook system.",
+        "Connector-name switches inside shared runtime orchestration.",
+        "A second implementation of an existing generic foundation."
+      ],
+      "consumer_examples": [
+        {
+          "name": "GitHub HTTP hooks",
+          "files": [
+            "internal/connectors/hooks/github/hooks.go",
+            "internal/connectors/hooks/github/factory_gen.go"
+          ],
+          "notes": "The connector exposes an explicit provider-specific hook factory while retaining the common declarative engine."
+        },
+        {
+          "name": "Feishu declared tenant authentication hook",
+          "files": [
+            "internal/connectors/hooks/feishu/hooks.go",
+            "internal/connectors/defs/feishu/streams.json"
+          ],
+          "notes": "The source-selected hook performs one fixed declared-route token exchange while the common engine owns Bitable reads and pagination."
+        },
+        {
+          "name": "PostgreSQL native transport factory provider",
+          "files": [
+            "internal/connectors/native/postgres/transport_source.go"
+          ],
+          "notes": "The native connector exposes exact definition-selected transport factories through the generic provider interface."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/gen_test.go",
+          "name": "TestHookPackagesDoNotRegisterGlobalHooks"
+        },
+        {
+          "package": "./internal/connectors/hooks/hookset",
+          "file": "internal/connectors/hooks/hookset/hookset_gen_test.go",
+          "name": "TestGeneratedHooksetConstructsRepresentativeHooks"
+        },
+        {
+          "package": "./internal/connectors/native/nativeset",
+          "file": "internal/connectors/native/nativeset/nativeset_test.go",
+          "name": "TestDatabaseAdapterPreservesProtectedRegistrations"
+        },
+        {
+          "package": "./internal/connectors/native/nativeset",
+          "file": "internal/connectors/native/nativeset/nativeset_test.go",
+          "name": "TestCompatibilityAdapterExcludesNativeDatabases"
+        },
+        {
+          "package": "./internal/connectors/native/postgres",
+          "file": "internal/connectors/native/postgres/transport_source_test.go",
+          "name": "TestPostgresDefinitionDeclaresResumablePollingTransportSource"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionFeishuGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "A hook, native connector, or definition-factory interface is added, removed, or changes responsibility.",
+        "Registration generation or exact executor-reference selection changes.",
+        "A provider-specific behavior moves into or out of a generic foundation."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "transport.sync-contract.v1",
+      "layer": "sync_contract_transport",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Defines the closed sync-mode, checkpoint, tombstone, delivery, and executor-reference contracts and orchestrates definition-selected sources through a durable warehouse stage into definition-selected destinations. single_attempt is a constrained full_append/append delivery class: declaration-bound input fields, one request per record, automatic retries disabled, response-captured durable acknowledgement, and no automatic replay; retry_safe remains a separate keyed/read-back class.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/synctransport",
+        "supporting_packages": [
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/synccontract"
+        ],
+        "files": [
+          "internal/app/transport_composition.go",
+          "internal/app/declarative_single_attempt_destination.go",
+          "internal/connectors/sync_transport.go",
+          "internal/synccontract/commit.go",
+          "internal/synccontract/mode.go",
+          "internal/synccontract/state.go",
+          "internal/synccontract/tombstone.go",
+          "internal/synctransport/definition_composition.go",
+          "internal/synctransport/orchestrator.go",
+          "internal/synctransport/registry.go",
+          "internal/synctransport/types.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/synccontract/mode.go",
+            "name": "Mode"
+          },
+          {
+            "file": "internal/synccontract/commit.go",
+            "name": "CommitAfterDownstreamAcknowledgement"
+          },
+          {
+            "file": "internal/connectors/sync_transport.go",
+            "name": "SyncTransportDescriptor"
+          },
+          {
+            "file": "internal/app/declarative_single_attempt_destination.go",
+            "name": "declarativeSingleAttemptDestinationExecutor"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "DefinitionFactory"
+          },
+          {
+            "file": "internal/synctransport/definition_composition.go",
+            "name": "RegisterDeclaredTransports"
+          },
+          {
+            "file": "internal/synctransport/orchestrator.go",
+            "name": "(*Orchestrator).Run"
+          },
+          {
+            "file": "internal/app/transport_composition.go",
+            "name": "(*App).composeTransportRegistry"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl",
+          "reverse_etl"
+        ],
+        "protocols": [
+          "definition-selected connector transports",
+          "native database transports"
+        ],
+        "source_forms": [
+          "sync_transport.json execution policy"
+        ],
+        "request_response_shapes": [
+          "bounded source pages and checkpoints",
+          "delivery guarantees and acknowledgement receipts",
+          "destination plans, applies, and read-back",
+          "explicit tombstones",
+          "warehouse receipts and reopened worksets"
+        ],
+        "sync_modes": [
+          "change_capture",
+          "full_append",
+          "full_overwrite",
+          "incremental_append",
+          "incremental_dedupe",
+          "incremental_dedupe_history",
+          "incremental_upsert"
+        ],
+        "guarantees": [
+          "checkpoint commit only after durable downstream acknowledgement",
+          "closed executor and mode selection",
+          "provider source to warehouse to destination mediation",
+          "typed preflight before source or destination I/O"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "application_composition",
+          "definition_field",
+          "interface_registration"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/sync_transport.json"
+        ],
+        "selectors": [
+          "destination executor reference plus mode contract",
+          "source executor reference plus mode contract",
+          "sync mode and stream or action allowlist"
+        ],
+        "notes": "App composition gathers only registered factories, then declarations select exact executor/evidence pairs; connector capability flags and names are not transport selectors."
+      },
+      "constraints": [
+        "A recognized sync mode is not executable until an exact source, destination, and mode intersection is registered.",
+        "Provider cursor, ordering, tombstone, idempotency, and scope semantics must remain source-cited and executor-enforced.",
+        "No connector-to-connector bypass may skip the warehouse stage."
+      ],
+      "non_goals": [
+        "Inferring incremental semantics from hashes, timestamps, or external labels.",
+        "Allowing arbitrary lifecycle hooks in connector JSON.",
+        "Treating a declaration as proof that an executor exists."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Asana event-token source transport",
+          "files": [
+            "internal/connectors/defs/asana/event_source_contract.json",
+            "internal/connectors/defs/asana/sync_transport.json"
+          ],
+          "notes": "A connector-specific evidence contract selects a registered executor while generic orchestration owns staging and checkpoint order."
+        },
+        {
+          "name": "PostgreSQL typed source and destination transports",
+          "files": [
+            "internal/connectors/defs/postgres/sync_transport.json",
+            "internal/connectors/native/postgres/transport_source.go"
+          ],
+          "notes": "The native connector supplies factories selected by the same closed transport descriptor."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/synccontract",
+          "file": "internal/synccontract/contract_test.go",
+          "name": "TestModeVocabularyIsClosed"
+        },
+        {
+          "package": "./internal/synccontract",
+          "file": "internal/synccontract/contract_test.go",
+          "name": "TestCommitAfterDownstreamAcknowledgement"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/transport_composition_test.go",
+          "name": "TestDefinitionTransportFactoriesSelectDeclaredEvidence"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/transport_composition_test.go",
+          "name": "TestAppCompositionRoutesLoadedSyntheticDefinitionConnector"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/transport_dispatch_test.go",
+          "name": "TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation"
+        }
+      ],
+      "known_gap_refs": [
+        {
+          "id": "mode-not-executable",
+          "reference": "internal/synccontract/mode.go#ModeNotExecutableError",
+          "notes": "The contract distinguishes a recognized mode from one missing a registered compatible executor."
+        }
+      ],
+      "update_conditions": [
+        "The sync-mode vocabulary, checkpoint, tombstone, acknowledgement, or resume contract changes.",
+        "Transport descriptor fields, executor-reference selection, factory registration, or orchestration order changes.",
+        "A supported source or destination role, guarantee, owner symbol, or proof test changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "warehouse.stage-etl.v1",
+      "layer": "warehouse_etl",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Stages connection-owned source work durably, materializes WAL records into Parquet-backed DuckDB tables under declared apply strategies, reads back destination receipts, and executes saved ETL through the local warehouse boundary. Full-snapshot materialization does not require a provider row cursor; incremental and history strategies retain their closed durable checkpoint and row-cursor requirements.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/app",
+        "supporting_packages": [
+          "polymetrics.ai/internal/warehouse"
+        ],
+        "files": [
+          "internal/app/connection_warehouse_stage.go",
+          "internal/app/local_warehouse.go",
+          "internal/app/local_warehouse_transport.go",
+          "internal/app/query_engine_duckdb.go",
+          "internal/app/transport_dispatch.go",
+          "internal/warehouse/artifact.go",
+          "internal/warehouse/layout.go",
+          "internal/warehouse/parquet.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/app/connection_warehouse_stage.go",
+            "name": "(*connectionWarehouseStage).Stage"
+          },
+          {
+            "file": "internal/app/connection_warehouse_stage.go",
+            "name": "(*connectionWarehouseStage).Reopen"
+          },
+          {
+            "file": "internal/app/local_warehouse_transport.go",
+            "name": "localWarehouseTransportDefinitionFactories"
+          },
+          {
+            "file": "internal/app/local_warehouse_transport.go",
+            "name": "materializeLocalWarehouseTransportTable"
+          },
+          {
+            "file": "internal/app/local_warehouse_transport.go",
+            "name": "localWarehouseTransportRawRecords"
+          },
+          {
+            "file": "internal/app/local_warehouse.go",
+            "name": "(*App).runWarehouseETL"
+          },
+          {
+            "file": "internal/app/local_warehouse.go",
+            "name": "materializeFinalTable"
+          },
+          {
+            "file": "internal/app/query_engine_duckdb.go",
+            "name": "duckdbEngine.QuerySQL"
+          },
+          {
+            "file": "internal/warehouse/parquet.go",
+            "name": "(*TableWriter).Commit"
+          },
+          {
+            "file": "internal/warehouse/parquet.go",
+            "name": "ReadTable"
+          },
+          {
+            "file": "internal/warehouse/parquet.go",
+            "name": "NormalizeValue"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "DuckDB SQL",
+          "Parquet",
+          "warehouse write-ahead log"
+        ],
+        "source_forms": [
+          "saved connector connection and stream definitions"
+        ],
+        "request_response_shapes": [
+          "connection-owned staged records and tombstones",
+          "durable warehouse acknowledgement and read-back",
+          "recursive connector JSON strings including date- and timestamp-shaped values",
+          "row-count-preserving all-empty-object batches",
+          "Parquet final tables",
+          "raw WAL records",
+          "warehouse receipts and reopened worksets"
+        ],
+        "sync_modes": [
+          "full_append",
+          "full_overwrite",
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped",
+          "incremental_append",
+          "incremental_append_deduped",
+          "incremental_dedupe",
+          "incremental_dedupe_history",
+          "incremental_upsert"
+        ],
+        "guarantees": [
+          "connection-owned warehouse paths",
+          "durable stage before destination apply",
+          "connector JSON string values retain string type through DuckDB and Parquet round trips",
+          "valid empty-object batches retain row cardinality through file-bound metadata and physical-schema checks",
+          "Parquet publication and destination read-back before checkpoint completion",
+          "typed dedupe and history materialization strategies",
+          "full_append and full_overwrite accept source snapshots without inventing a row cursor",
+          "incremental_append retains its durable source checkpoint and dedupe history retains its declared row cursor"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "application_composition",
+          "definition_field",
+          "public_api"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json",
+          "internal/connectors/defs/<connector>/sync_transport.json"
+        ],
+        "selectors": [
+          "App.RunETL saved connection",
+          "local warehouse destination transport reference",
+          "stream primary key, cursor, and selected sync mode"
+        ],
+        "notes": "Saved ETL resolves one source connection and the local warehouse destination; apply strategy comes from the closed mode and destination descriptor."
+      },
+      "constraints": [
+        "DuckDB is the only local query engine and Parquet implementation.",
+        "Empty-object reconstruction requires matching file metadata and physical schema; a sentinel column name alone is not authority.",
+        "Warehouse normalization must preserve JSON scalar types and propagate downstream emitter failures.",
+        "Every table and stage path is connection-owned and structurally validated.",
+        "full_append and full_overwrite are local execution policies selected by the connection; they do not assert a provider cursor, ordering, delete, or idempotency semantic.",
+        "Incremental modes still require an admitted provider cursor or event executor; warehouse materialization cannot manufacture one.",
+        "Dedupe history requires a declared row cursor; incremental append requires a durable candidate checkpoint.",
+        "Change capture requires its typed source and transport path and is not implied by ordinary materialization."
+      ],
+      "non_goals": [
+        "A Postgres warehouse or generic SQL destination.",
+        "A direct API-to-API transport.",
+        "Using content hashes as provider cursors or primary keys."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Local warehouse destination descriptor and composition",
+          "files": [
+            "internal/app/transport_composition.go",
+            "internal/connectors/connectors.go"
+          ],
+          "notes": "The built-in warehouse descriptor selects the local destination factory during app composition."
+        },
+        {
+          "name": "Saved ETL dispatch",
+          "files": [
+            "internal/app/transport_dispatch.go"
+          ],
+          "notes": "Saved connections enter the generic transport and warehouse lifecycle rather than a connector-specific bulk loop."
+        },
+        {
+          "name": "GitLab source-lock full-snapshot fixture",
+          "files": [
+            "internal/connectors/defs/gitlab/enabled_connector_contract.json",
+            "internal/cli/gitlab_transport_test.go"
+          ],
+          "notes": "A source-bound GET operation supplies the fixture request and response evidence; full modes remain local warehouse policy and fake-server proof does not claim provider incremental, order, deletion, or idempotency semantics."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/app",
+          "file": "internal/app/transport_composition_test.go",
+          "name": "TestLocalWarehouseDestinationExecutorWritesAndReadBacksConnectionOwnedParquet"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/connection_warehouse_stage_reconcile_test.go",
+          "name": "TestDeferredReconciliationRetiresOnlyCommittedConnectionOwnedTransportStages"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/transport_dispatch_test.go",
+          "name": "TestRunETLCanonicalFullAppendUsesRegisteredTransports"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/local_warehouse_transport_cursor_test.go",
+          "name": "TestLocalWarehouseTransportRawRecordsFullSnapshotsDoNotRequireRowCursor"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/local_warehouse_transport_cursor_test.go",
+          "name": "TestLocalWarehouseTransportRawRecordsRetainsIncrementalAndHistoryCursorRequirements"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/gitlab_transport_test.go",
+          "name": "TestGitLabSourceTransportMaterializesConnectionOwnedDuckDB"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/warehouse_parquet_read_test.go",
+          "name": "TestQuerySQLAggregatesOverParquetTables"
+        },
+        {
+          "package": "./internal/warehouse",
+          "file": "internal/warehouse/parquet_test.go",
+          "name": "TestWriteTablePreservesConnectorJSONStrings"
+        },
+        {
+          "package": "./internal/warehouse",
+          "file": "internal/warehouse/parquet_test.go",
+          "name": "TestWriteTablePreservesAllEmptyObjectBatches"
+        },
+        {
+          "package": "./internal/warehouse",
+          "file": "internal/warehouse/parquet_test.go",
+          "name": "TestReadAllEmptyObjectTableStopsOnEmitterError"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "Warehouse stage, receipt, read-back, WAL, Parquet, DuckDB, path ownership, or apply-strategy behavior changes.",
+        "A saved ETL mode becomes supported, constrained, or unsupported by local materialization.",
+        "Full-snapshot cursor handling or incremental/history cursor-checkpoint constraints change.",
+        "Transport dispatch, owner symbols, or durable proof tests change."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "warehouse.reverse-etl.v1",
+      "layer": "reverse_etl",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Reads pinned DuckDB warehouse rows, maps them into typed destination actions, persists a payload-bound plan and preview, consumes approval atomically, and dispatches bounded connector writes with result accounting.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/app",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors"
+        ],
+        "files": [
+          "internal/app/app.go",
+          "internal/app/authorization.go",
+          "internal/app/declarative_typed_destination_approval.go",
+          "internal/app/reverse_acknowledgement.go",
+          "internal/app/reverse_batchable.go",
+          "internal/app/types.go",
+          "internal/app/write_approval.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/app/app.go",
+            "name": "(*App).PlanReverseETL"
+          },
+          {
+            "file": "internal/app/app.go",
+            "name": "(*App).PreviewReversePlan"
+          },
+          {
+            "file": "internal/app/app.go",
+            "name": "(*App).RunReverseETL"
+          },
+          {
+            "file": "internal/app/app.go",
+            "name": "(*App).consumePlanApproval"
+          },
+          {
+            "file": "internal/app/declarative_typed_destination_approval.go",
+            "name": "(*App).PlanDeclarativeTypedDestinationTransport"
+          },
+          {
+            "file": "internal/app/types.go",
+            "name": "ReversePlan"
+          },
+          {
+            "file": "internal/app/types.go",
+            "name": "ReverseRun"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "reverse_etl"
+        ],
+        "protocols": [
+          "typed connector write actions",
+          "typed definition-selected destination transports"
+        ],
+        "source_forms": [
+          "DuckDB warehouse tables and saved destination definitions"
+        ],
+        "request_response_shapes": [
+          "connector command plans for one bounded mutation",
+          "definition-selected destination plans",
+          "field-mapped bulk write actions",
+          "payload identities and plan seals",
+          "preview digests and single-use approval grants",
+          "typed destination results and receipts"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "approved source rows and payloads are hash-bound before execution",
+          "approval consumption is atomic and non-replayable",
+          "destructive writes require persisted preview and confirmation",
+          "source table ownership is pinned at plan time"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field",
+          "public_api"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/operations.json",
+          "internal/connectors/defs/<connector>/sync_transport.json",
+          "internal/connectors/defs/<connector>/writes.json"
+        ],
+        "selectors": [
+          "destination connector and credential",
+          "field mappings from warehouse columns to action fields",
+          "typed destination transport action",
+          "write action or connector command binding"
+        ],
+        "notes": "Bulk reverse ETL selects a batchable write action; single-command plans may execute non-batchable bounded actions through the same plan and approval lifecycle."
+      },
+      "constraints": [
+        "Reverse ETL always reads warehouse rows and never substitutes a live API source.",
+        "One warehouse row must map deterministically to one bounded request for bulk execution.",
+        "Provider retry safety, idempotency, and read-back behavior must be declared truthfully and cannot be inferred from local plan hashes."
+      ],
+      "non_goals": [
+        "A generic HTTP write tool or API-to-API shortcut.",
+        "Unapproved or replayable destination mutation.",
+        "Treating all write actions as unattended managed destinations."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Asana typed reverse actions",
+          "files": [
+            "internal/connectors/defs/asana/writes.json"
+          ],
+          "notes": "Source-backed actions are available to the common warehouse plan, preview, approval, and execution route."
+        },
+        {
+          "name": "GitHub typed reverse actions",
+          "files": [
+            "internal/connectors/defs/github/writes.json"
+          ],
+          "notes": "The same generic lifecycle handles ordinary, destructive, and connector-command action plans."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/app",
+          "file": "internal/app/warehouse_parquet_read_test.go",
+          "name": "TestReverseETLReadsAParquetSourceTable"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/reverse_approval_test.go",
+          "name": "TestRunReverseETLRejectsApprovalTokenReplay"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/reverse_batchable_test.go",
+          "name": "TestBatchableActionStillPlansAndExecutesInBulk"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/reverse_confirmation_test.go",
+          "name": "TestRunReverseETLConsumesApprovalAtomicallyAcrossProcesses"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/foundations_integration_test.go",
+          "name": "TestFoundationRollupPreservesMultiActionReverseETLComposition"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "Plan, preview, approval, authorization, payload binding, source pinning, or result accounting changes.",
+        "Write-action batchability or definition-selected destination selection changes.",
+        "A supported reverse request shape, owner symbol, constraint, or proof test changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "orchestration.flow-schedule.v1",
+      "layer": "flow_schedule",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Parses and validates persisted flow DAGs, runs saved ETL, query, and authorized action steps with durable checkpoints and receipts, and schedules named flows through non-overlapping fire leases without carrying authorization material.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/flow",
+        "supporting_packages": [
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/cli",
+          "polymetrics.ai/internal/schedule"
+        ],
+        "files": [
+          "internal/app/flow_action.go",
+          "internal/cli/flow_action_runner.go",
+          "internal/cli/flow_cli.go",
+          "internal/cli/schedule.go",
+          "internal/flow/engine.go",
+          "internal/flow/manifest.go",
+          "internal/schedule/fire.go",
+          "internal/schedule/schedule.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/flow/manifest.go",
+            "name": "FlowManifest"
+          },
+          {
+            "file": "internal/flow/engine.go",
+            "name": "(*Engine).Run"
+          },
+          {
+            "file": "internal/app/flow_action.go",
+            "name": "(*App).ExecuteAuthorizedFlowAction"
+          },
+          {
+            "file": "internal/app/flow_action.go",
+            "name": "(*App).recordFlowActionReceipt"
+          },
+          {
+            "file": "internal/schedule/schedule.go",
+            "name": "Save"
+          },
+          {
+            "file": "internal/schedule/fire.go",
+            "name": "BeginFire"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl",
+          "reverse_etl"
+        ],
+        "protocols": [
+          "persisted flow manifests",
+          "system scheduler backends"
+        ],
+        "source_forms": [
+          "named saved connections, warehouse tables, and authorization references"
+        ],
+        "request_response_shapes": [
+          "authorized connector action steps",
+          "DAG dependencies and step checkpoints",
+          "ETL and warehouse query steps",
+          "flow action receipts",
+          "schedule manifests and fire receipts"
+        ],
+        "sync_modes": [
+          "modes selected by the referenced saved connection"
+        ],
+        "guarantees": [
+          "action checkpoint only after provider acknowledgement and read-back receipt",
+          "dependency-ordered flow execution",
+          "non-overlapping and non-replaying schedule fire leases",
+          "schedules retain references rather than approval tokens"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "public_api"
+        ],
+        "definition_files": [],
+        "selectors": [
+          "flow manifest step kind and dependency graph",
+          "named persisted flow reference in a schedule manifest",
+          "saved connection and durable authorization reference"
+        ],
+        "notes": "Flows orchestrate already-saved warehouse-mediated operations; schedules repeat a named flow and do not select connector executors directly."
+      },
+      "constraints": [
+        "A flow action must use a durable authorization reference created by the plan, preview, and approval lifecycle.",
+        "Schedules cannot carry credentials, approval tokens, or new authorization scope.",
+        "Flows consume named saved connections and warehouse tables rather than creating API-to-API shortcuts."
+      ],
+      "non_goals": [
+        "Connector-owned schedule or flow CLI intents.",
+        "Using a scheduler as write authorization.",
+        "Bypassing saved ETL or reverse ETL safety contracts."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Flow CLI composition",
+          "files": [
+            "internal/cli/flow_action_runner.go",
+            "internal/cli/flow_cli.go"
+          ],
+          "notes": "The CLI constructs the generic engine and routes authorized action steps through App."
+        },
+        {
+          "name": "Schedule CLI composition",
+          "files": [
+            "internal/cli/schedule.go"
+          ],
+          "notes": "Schedule commands persist named flow references and use the shared fire-lease lifecycle."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/flow",
+          "file": "internal/flow/flow_test.go",
+          "name": "TestEngineIntegrationSyncQueryChain"
+        },
+        {
+          "package": "./internal/flow",
+          "file": "internal/flow/action_test.go",
+          "name": "TestEngineActionWithTokenExecutes"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/flow_action_test.go",
+          "name": "TestExecuteAuthorizedFlowActionAcknowledgesReadsBackThenRecordsReceipt"
+        },
+        {
+          "package": "./internal/schedule",
+          "file": "internal/schedule/fire_test.go",
+          "name": "TestFireLeasePersistsTerminalReceiptAndRefusesOverlapOrCrashReplay"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "Flow manifest, DAG, checkpoint, action authorization, read-back, or receipt semantics change.",
+        "Schedule manifest, backend selection, fire lease, or replay behavior changes.",
+        "A supported step kind, owner symbol, constraint, or proof test changes."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.tenant-origin.v1",
+      "layer": "declarative_routing",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Resolves one source-declared connection-level tenant origin with an optional fixed API path before constructing the existing declarative HTTP runtime.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/tenant_origin.go",
+          "internal/connectors/engine/operation_route.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/tenant_origin.go",
+            "name": "TenantOriginSpec"
+          },
+          {
+            "file": "internal/connectors/engine/tenant_origin.go",
+            "name": "resolveTenantOrigin"
+          },
+          {
+            "file": "internal/connectors/engine/operation_route.go",
+            "name": "resolveOperationRoute"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl",
+          "direct_read",
+          "direct_write",
+          "binary_download",
+          "binary_upload",
+          "reverse_etl"
+        ],
+        "protocols": [
+          "declaration-bound HTTP tenant origin"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "one configured origin plus one optional source-declared API path"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "only the source-declared configuration key supplies the connection origin",
+          "HTTPS is required except for a source-declared loopback HTTP test origin",
+          "userinfo, query, fragment, unsafe append paths, and duplicate append paths are rejected before provider I/O",
+          "the resolved origin is shared by default stream routes and ordinary runtime construction"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "base.tenant_origin.config_key",
+          "base.tenant_origin.append_path"
+        ],
+        "notes": "The selector owns only a connection-level origin and fixed append path. It is not a command route override or a generic caller-selected HTTP destination."
+      },
+      "constraints": [
+        "The configured value must be an origin without userinfo, query, or fragment.",
+        "Only a literal source-declared append path beginning with slash is permitted.",
+        "Operation-specific declared routes remain separately validated; the foundation never accepts a record, command, or credential-supplied URL."
+      ],
+      "non_goals": [
+        "Arbitrary HTTP origins, caller routes, URL templates, redirects, or a generic HTTP client.",
+        "Connector-name branching, native executors, or provider-specific request hooks."
+      ],
+      "consumer_examples": [
+        {
+          "name": "PrestaShop API origin",
+          "files": [
+            "internal/connectors/defs/prestashop/source.lock.json",
+            "internal/connectors/defs/prestashop/streams.json"
+          ],
+          "notes": "The lock selects its required url configuration key and the fixed /api path."
+        },
+        {
+          "name": "Metabase API origin",
+          "files": [
+            "internal/connectors/defs/metabase/source.lock.json",
+            "internal/connectors/defs/metabase/streams.json"
+          ],
+          "notes": "The lock selects instance_api_url and its fixed /api path for session and data routes."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/tenant_origin_test.go",
+          "name": "TestResolveTenantOriginPermitsOnlyDeclaredLoopbackHTTP"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/tenant_origin_test.go",
+          "name": "TestTenantOriginOverridesDefaultOperationRoute"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionPrestaShopTenantOriginRejectsLegacyConfigBeforeIO"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionMetabaseDeclaredSessionCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The tenant-origin shape, URL constraints, shared route resolution, owner symbol, or proof changes.",
+        "A connector selects a new tenant-origin configuration key or fixed append path."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.declared-session.v1",
+      "layer": "declarative_authentication",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Exchanges declared username and password fields through one fixed session route, extracts the top-level session id, and applies it only as X-Metabase-Session for the lifetime of one runtime.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/auth.go",
+          "internal/connectors/engine/auth_declared_session.go",
+          "internal/connectors/engine/hooks.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/auth.go",
+            "name": "buildAuthenticatorWithDeclaredRoute"
+          },
+          {
+            "file": "internal/connectors/engine/auth_declared_session.go",
+            "name": "buildDeclaredSessionAuthenticator"
+          },
+          {
+            "file": "internal/connectors/engine/auth_declared_session.go",
+            "name": "declaredSessionAuthenticator"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "fixed declaration-bound JSON session exchange"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "POST JSON {username,password} to the fixed /session route",
+          "top-level JSON id response",
+          "X-Metabase-Session on subsequent declared requests"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the session route declaration is static HTTPS, contains no query or fragment, and names only /session",
+          "the exchange uses the resolved declaration-bound runtime origin and has retries disabled",
+          "username comes only from declared configuration and password is sent only in the session JSON body",
+          "the id is retained only in one runtime, with no refresh, replay, or caller-supplied session route"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "base.auth[].mode=declared_session"
+        ],
+        "notes": "This closed authentication mode owns only the exact username/password-to-id exchange. Existing session-token credentials select the ordinary declared X-Metabase-Session header path instead."
+      },
+      "constraints": [
+        "The response must contain a non-empty top-level id.",
+        "No caller endpoint, arbitrary body fields, headers, scopes, refresh, replay, native hook, or generic password grant is admitted.",
+        "The session request remains inside the existing declaration-aware admission and rate-budget path."
+      ],
+      "non_goals": [
+        "OAuth password grants, generic username/password authentication, or provider credential creation.",
+        "Direct writes, reverse ETL, binary transfers, or caller-controlled origins."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Metabase session authentication",
+          "files": [
+            "internal/connectors/defs/metabase/source.lock.json",
+            "internal/connectors/defs/metabase/streams.json"
+          ],
+          "notes": "The lock selects the fixed session exchange when password is present and the ordinary header authenticator when session_token is present."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/auth_declared_session_test.go",
+          "name": "TestDeclaredSessionAuthRejectsDynamicTokenRoute"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/auth_declared_session_test.go",
+          "name": "TestDeclaredSessionAuthUsesResolvedTenantOrigin"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionMetabaseDeclaredSessionCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The fixed session request/response shape, route constraint, secret containment, owner symbol, or proof changes.",
+        "A connector proposes this source-lock selector."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.array-zip-projection.v1",
+      "layer": "declarative_response_projection",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Zips source-declared equal-length JSON arrays into one emitted record per index with source-declared scalar fields copied onto every row.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "ArrayZipProjectionSpec"
+          },
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "ArrayZipFieldSpec"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "applyArrayZipProjection"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST JSON responses"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "one extracted JSON object with source-declared scalar paths",
+          "two or more source-declared aligned JSON arrays",
+          "one output record per shared array index"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "only declared scalar and array paths can contribute emitted fields",
+          "each array field must be an array and all declared arrays must have equal length before any row emits",
+          "numeric path segments select only source-declared response-array positions",
+          "the foundation never invokes a hook, changes authentication, chooses an origin, or transforms caller input"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].array_zip_projection.static_fields",
+          "streams[].array_zip_projection.array_fields"
+        ],
+        "notes": "The closed selector maps a declared field name to a declared response path. It is not an arbitrary JSON transformation language."
+      },
+      "constraints": [
+        "At least one array field is required and emitted field names are unique across scalar and array selections.",
+        "Scalar paths must resolve to a non-null scalar; array paths must resolve to arrays at every extracted response object.",
+        "An unequal array length fails the entire page before records are projected or emitted."
+      ],
+      "non_goals": [
+        "Arbitrary joins, reductions, expressions, callbacks, record hooks, or source-code transforms.",
+        "Direct writes, reverse ETL, binary transfers, database behavior, or caller-controlled origins."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Yahoo Finance chart prices",
+          "files": [
+            "internal/connectors/defs/yahoo-finance-price/source.lock.json",
+            "internal/connectors/defs/yahoo-finance-price/streams.json"
+          ],
+          "notes": "The prices stream copies chart meta.symbol and meta.currency while zipping timestamp, quote, and adjusted-close arrays into OHLCV rows."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/array_zip_projection_test.go",
+          "name": "TestArrayZipProjectionCombinesDeclaredArrays"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/array_zip_projection_test.go",
+          "name": "TestArrayZipProjectionRejectsMismatchedArrays"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionYahooFinancePriceArrayZipCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The array-zip selector, equal-length validation, owner symbol, or proof changes.",
+        "A connector proposes a new declared scalar or array mapping."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.declared-response-error.v1",
+      "layer": "declarative_response_projection",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Rejects a source-declared JSON error object or false success envelope before record extraction and emits a typed declared-response error.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/errors.go",
+          "internal/connectors/engine/read.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/bundle.go",
+            "name": "ResponseErrorSpec"
+          },
+          {
+            "file": "internal/connectors/engine/errors.go",
+            "name": "DeclaredResponseError"
+          },
+          {
+            "file": "internal/connectors/engine/read.go",
+            "name": "declaredResponseError"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST JSON responses"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "a source-declared JSON error object path",
+          "an optional declared non-empty string message field",
+          "an optional source-declared boolean success path whose false value is an error"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the declared error object or false success envelope is checked after a successful HTTP response and before records are extracted",
+          "a declared failure produces a typed DeclaredResponseError and zero emitted records",
+          "only declared object, message, and success paths participate, with provider text redacted by the engine error boundary"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].response_error.path",
+          "streams[].response_error.message_field",
+          "streams[].response_error.success_path"
+        ],
+        "notes": "The selector recognizes one closed response error object or boolean success envelope. It is not a generic response transformation or an arbitrary error hook."
+      },
+      "constraints": [
+        "At least one normalized, traversal-free error-object path or success path is required.",
+        "When declared, the message field must resolve to a non-empty string from the declared error object.",
+        "The foundation cannot alter status handling, authentication, origins, request encoding, or emitted records."
+      ],
+      "non_goals": [
+        "Provider-specific code branches, callbacks, generic JSON transforms, retries, or raw error-body exposure.",
+        "Direct writes, reverse ETL, binary transfers, or database behavior."
+      ],
+      "consumer_examples": [
+        {
+          "name": "Yahoo Finance chart errors",
+          "files": [
+            "internal/connectors/defs/yahoo-finance-price/source.lock.json",
+            "internal/connectors/defs/yahoo-finance-price/streams.json"
+          ],
+          "notes": "The prices stream turns chart.error.description into a typed error before any OHLCV array is extracted."
+        },
+        {
+          "name": "Ashby success envelopes",
+          "files": [
+            "internal/connectors/defs/ashby/source.lock.json",
+            "internal/connectors/defs/ashby/streams.json"
+          ],
+          "notes": "Every Ashby ETL stream treats success=false and its declared errors envelope as a pre-emission typed failure."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionYahooFinancePriceRejectsChartErrorBeforeEmit"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionAshbyRejectsFailureEnvelopeBeforeEmit"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The response-error or success-envelope shape, pre-emission ordering, owner symbol, or proof changes.",
+        "A connector selects a declared response-error object or success path."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.offset-count-pagination.v1",
+      "layer": "declarative_pagination",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Advances a source-declared zero-based provider window encoded as one combined offset,count query value until a short page ends the stream.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/paginate.go",
+          "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/schema/streams.schema.json"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/paginate.go",
+            "name": "offsetCountPaginator"
+          },
+          {
+            "file": "internal/connectors/engine/paginate.go",
+            "name": "newPaginator"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "HTTP/REST query pagination"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "one declared query parameter containing offset,count",
+          "a short extracted provider page as the only completion signal"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "the first request is exactly 0,page_size and each full page advances by page_size",
+          "the offset and count cannot be split into caller-selected parameters",
+          "a short extracted page stops without inferring totals or inventing a cursor"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/<connector>/streams.json"
+        ],
+        "selectors": [
+          "streams[].pagination.type=offset_count",
+          "streams[].pagination.limit_param",
+          "streams[].pagination.page_size"
+        ],
+        "notes": "This is a closed provider window encoding, not an alternate generic offset dialect."
+      },
+      "constraints": [
+        "Only the source-declared limit parameter receives the combined value.",
+        "The provider window begins at zero and uses a positive declared page size.",
+        "Direct-read numeric navigation is unavailable unless separately implemented and declared."
+      ],
+      "non_goals": [
+        "Arbitrary offset arithmetic, total-count inference, cursors, or caller pagination parameters.",
+        "Direct writes, reverse ETL, binary transfers, or database behavior."
+      ],
+      "consumer_examples": [
+        {
+          "name": "PrestaShop resources",
+          "files": [
+            "internal/connectors/defs/prestashop/source.lock.json",
+            "internal/connectors/defs/prestashop/streams.json"
+          ],
+          "notes": "Each resource declares PrestaShop's limit=offset,count query form with resource-keyed records."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/offset_count_pagination_test.go",
+          "name": "TestOffsetCountPaginatorUsesCombinedProviderWindow"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionPrestaShopGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The combined provider window format, stop condition, owner symbol, or proof changes.",
+        "A connector selects offset_count pagination."
+      ],
+      "supersedes": []
+    },
+    {
+      "id": "runtime.declared-aws-sigv4.v1",
+      "layer": "declarative_authentication",
+      "status": "available",
+      "kind": "generic",
+      "summary": "Applies declaration-bound AWS Signature Version 4 authentication only for fixed CloudTrail us-east-1 requests.",
+      "owner": {
+        "primary_package": "polymetrics.ai/internal/connectors/engine",
+        "supporting_packages": [
+          "polymetrics.ai/internal/connectors/defs"
+        ],
+        "files": [
+          "internal/connectors/engine/auth.go",
+          "internal/connectors/engine/auth_aws_sigv4.go"
+        ],
+        "symbols": [
+          {
+            "file": "internal/connectors/engine/auth.go",
+            "name": "buildAuthenticatorWithDeclaredRoute"
+          },
+          {
+            "file": "internal/connectors/engine/auth_aws_sigv4.go",
+            "name": "buildCloudTrailSigV4Authenticator"
+          },
+          {
+            "file": "internal/connectors/engine/auth_aws_sigv4.go",
+            "name": "cloudTrailSigV4Authenticator"
+          }
+        ]
+      },
+      "supported_contracts": {
+        "lanes": [
+          "etl"
+        ],
+        "protocols": [
+          "AWS Signature Version 4"
+        ],
+        "source_forms": [
+          "schema-4 source.lock.json",
+          "rendered streams.json"
+        ],
+        "request_response_shapes": [
+          "CloudTrail POST JSON request signed for cloudtrail/us-east-1"
+        ],
+        "sync_modes": [],
+        "guarantees": [
+          "only declared AWS credential fields are read",
+          "service and region are fixed to CloudTrail us-east-1 before provider I/O",
+          "the signer emits deterministic canonical request headers and never selects a caller origin"
+        ]
+      },
+      "selection": {
+        "mechanisms": [
+          "definition_field"
+        ],
+        "definition_files": [
+          "internal/connectors/defs/aws-cloudtrail/streams.json"
+        ],
+        "selectors": [
+          "base.auth[].mode=aws_sigv4",
+          "base.auth[].aws_service=cloudtrail",
+          "base.auth[].aws_region=us-east-1"
+        ],
+        "notes": "The mode is a closed CloudTrail-only signer, not a generic AWS request executor."
+      },
+      "constraints": [
+        "Caller service, region, endpoint, session route, and signing algorithm selection are unavailable.",
+        "Missing or empty credential fields fail before a request is signed or sent."
+      ],
+      "non_goals": [
+        "Generic AWS service support, arbitrary SigV4 regions, native execution, or provider mutation."
+      ],
+      "consumer_examples": [
+        {
+          "name": "AWS CloudTrail LookupEvents",
+          "files": [
+            "internal/connectors/defs/aws-cloudtrail/source.lock.json",
+            "internal/connectors/defs/aws-cloudtrail/streams.json"
+          ],
+          "notes": "CloudTrail ETL streams select fixed signer identity while the generic body-cursor reader owns LookupEvents pagination."
+        }
+      ],
+      "proof_tests": [
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/auth_aws_sigv4_test.go",
+          "name": "TestCloudTrailSigV4AuthenticatorDeterministicVector"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/executor_authority_test.go",
+          "name": "TestProductionCloudTrailGenericCheckAndRead"
+        }
+      ],
+      "known_gap_refs": [],
+      "update_conditions": [
+        "The fixed service/region signer contract, owner symbols, selector, or proof changes.",
+        "A connector proposes AWS SigV4 authentication."
+      ],
+      "supersedes": []
+    }
+  ]
+}

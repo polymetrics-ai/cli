@@ -25,6 +25,16 @@
           }
         },
         "user_agent": { "type": "string" },
+        "tenant_origin": {
+          "type": "object",
+          "required": ["config_key"],
+          "additionalProperties": false,
+          "properties": {
+            "config_key": { "type": "string" },
+            "append_path": { "type": "string" },
+            "allow_loopback_http": { "type": "boolean" }
+          }
+        },
         "headers": { "type": "object" },
         "auth": {
           "type": "array",
@@ -40,11 +50,17 @@
               "prefix": { "type": "string" },
               "param": { "type": "string" },
               "value": { "type": "string" },
+              "access_key_id": { "type": "string" },
+              "secret_access_key": { "type": "string" },
+              "session_token": { "type": "string" },
+              "aws_service": { "type": "string" },
+              "aws_region": { "type": "string" },
               "token_url": { "type": "string" },
               "client_id": { "type": "string" },
               "client_secret": { "type": "string" },
               "scopes": { "type": "string" },
               "extra_params": { "type": "object" },
+              "client_authentication": { "type": "string", "enum": ["body", "basic"] },
               "refresh_token": { "type": "string" },
               "refresh_token_store_key": { "type": "string" },
               "hook": { "type": "string" },
@@ -63,10 +79,14 @@
             "limit_param": { "type": "string" },
             "offset_param": { "type": "string" },
             "cursor_param": { "type": "string" },
+            "body_offset_field": { "type": "string" },
+            "body_limit_field": { "type": "string" },
             "token_path": { "type": "string" },
             "last_record_field": { "type": "string" },
             "stop_path": { "type": "string" },
             "next_url_path": { "type": "string" },
+            "body_cursor_field": { "type": "string" },
+            "body_page_field": { "type": "string" },
             "start_index_param": { "type": "string" },
             "count_param": { "type": "string" },
             "total_path": { "type": "string" },
@@ -74,7 +94,8 @@
             "start_index_base": { "type": "integer" },
             "page_size": { "type": "integer" },
             "max_pages": { "type": "integer" },
-            "allow_cross_host": { "type": "boolean" }
+            "allow_cross_host": { "type": "boolean" },
+            "require_continuation_on_cap": { "type": "boolean" }
           }
         },
         "check": {
@@ -83,7 +104,11 @@
           "properties": {
             "method": { "type": "string" },
             "path": { "type": "string" },
-            "query": { "type": "object" }
+            "query": { "type": "object" },
+            "body": { "type": "object" },
+            "body_type": { "type": "string", "enum": ["json", "form"] },
+            "success_statuses": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+            "max_bytes": { "type": "integer", "minimum": 1, "maximum": 67108864 }
           }
         },
         "error_map": {
@@ -121,6 +146,8 @@
           "path": { "type": "string" },
           "query": { "type": "object" },
           "body": { "type": "object" },
+          "required_body_fields": { "type": "array", "items": { "type": "string" } },
+          "body_type": { "type": "string", "enum": ["json", "form"] },
           "graphql": {
             "type": "object",
             "required": ["document", "operation_name"],
@@ -142,6 +169,7 @@
               "single_object": { "type": "boolean" },
               "keyed_object": { "type": "boolean" },
               "key_field": { "type": "string" },
+              "wrap_field": { "type": "string" },
               "filter": {
                 "type": "object",
                 "additionalProperties": false,
@@ -157,6 +185,8 @@
             "additionalProperties": false,
             "properties": {
               "type": { "type": "string" },
+              "body_offset_field": { "type": "string" },
+              "body_limit_field": { "type": "string" },
               "size_param": { "type": "string" },
               "page_param": { "type": "string" },
               "start_page": { "type": "integer" },
@@ -165,8 +195,10 @@
               "cursor_param": { "type": "string" },
               "token_path": { "type": "string" },
               "last_record_field": { "type": "string" },
+              "body_page_field": { "type": "string" },
               "stop_path": { "type": "string" },
               "next_url_path": { "type": "string" },
+              "body_cursor_field": { "type": "string" },
               "start_index_param": { "type": "string" },
               "count_param": { "type": "string" },
               "total_path": { "type": "string" },
@@ -174,7 +206,8 @@
               "start_index_base": { "type": "integer" },
               "page_size": { "type": "integer" },
               "max_pages": { "type": "integer" },
-              "allow_cross_host": { "type": "boolean" }
+              "allow_cross_host": { "type": "boolean" },
+              "require_continuation_on_cap": { "type": "boolean" }
             }
           },
           "incremental": {
@@ -190,17 +223,99 @@
             }
           },
           "computed_fields": { "type": "object" },
+          "headers": {
+            "type": "object",
+            "maxProperties": 8,
+            "additionalProperties": true
+          },
           "response_fields": { "type": "object" },
-          "projection": { "type": "string", "enum": ["schema", "passthrough"] },
-          "schema": { "type": "string" },
-          "conformance": {
+          "response_header_projection": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["headers_path", "values_path", "allowed_headers"],
+              "additionalProperties": false,
+              "properties": {
+                "headers_path": { "type": "string" },
+                "values_path": { "type": "string" },
+                "header_name": { "type": "string" },
+                "value_field": { "type": "string" },
+                "allowed_headers": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+              }
+            }
+          },
+          "date_window_fan_out": {
+            "type": "object",
+            "required": ["start_date_config_key", "end_date_config_key", "batch_size_config_key", "date_from_query_param", "date_to_query_param", "max_batch_days", "max_windows"],
+            "additionalProperties": false,
+            "properties": {
+              "start_date_config_key": { "type": "string" },
+              "end_date_config_key": { "type": "string" },
+              "batch_size_config_key": { "type": "string" },
+              "date_from_query_param": { "type": "string" },
+              "date_to_query_param": { "type": "string" },
+              "max_batch_days": { "type": "integer", "minimum": 1, "maximum": 365 },
+              "max_windows": { "type": "integer", "minimum": 1, "maximum": 600 }
+            }
+          },
+          "cartesian_config_fan_out": {
+            "type": "object",
+            "required": ["url_config_key", "strategy_config_key", "url_query_param", "strategy_query_param", "categories", "category_query_param", "max_combinations", "max_requests"],
+            "additionalProperties": false,
+            "properties": {
+              "url_config_key": { "type": "string" },
+              "strategy_config_key": { "type": "string" },
+              "url_query_param": { "type": "string" },
+              "strategy_query_param": { "type": "string" },
+              "categories": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+              "category_query_param": { "type": "string" },
+              "max_combinations": { "type": "integer", "minimum": 1 },
+              "max_requests": { "type": "integer", "minimum": 1 }
+            }
+          },
+          "response_error": {
             "type": "object",
             "additionalProperties": false,
             "properties": {
-              "skip_dynamic": { "type": "boolean" },
-              "reason": { "type": "string" }
+              "path": {"type": "string"},
+              "message_field": {"type": "string"},
+              "success_path": {"type": "string"}
             }
           },
+          "array_zip_projection": {
+            "type": "object",
+            "required": ["array_fields"],
+            "additionalProperties": false,
+            "properties": {
+              "static_fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["field", "path"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "field": {"type": "string"},
+                    "path": {"type": "string"}
+                  }
+                }
+              },
+              "array_fields": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": ["field", "path"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "field": {"type": "string"},
+                    "path": {"type": "string"}
+                  }
+                }
+              }
+            }
+          },
+          "projection": { "type": "string", "enum": ["schema", "passthrough"] },
+          "schema": { "type": "string" },
           "fan_out": {
             "type": "object",
             "required": ["ids_from", "into"],

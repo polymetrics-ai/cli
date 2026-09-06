@@ -106,28 +106,3 @@ func mapsEqual(left, right map[string]string) bool {
 	}
 	return true
 }
-
-// openCodeProjectionGateBlock returns the byte-identical shared gate block from a complete
-// generated OpenCode agent. Tests use it to compare all harnesses without adapter-specific prose.
-func openCodeProjectionGateBlock(content []byte) ([]byte, error) {
-	return extractCertificationGateBlock(content)
-}
-
-func extractCertificationGateBlock(content []byte) ([]byte, error) {
-	start := bytes.Index(content, []byte(certificationGateBeginMarker))
-	if start < 0 {
-		return nil, fmt.Errorf("connector certification gate start marker is missing")
-	}
-	if bytes.Contains(content[start+len(certificationGateBeginMarker):], []byte(certificationGateBeginMarker)) {
-		return nil, fmt.Errorf("multiple connector certification gate start markers found")
-	}
-	relativeEnd := bytes.Index(content[start:], []byte(certificationGateEndMarker))
-	if relativeEnd < 0 {
-		return nil, fmt.Errorf("connector certification gate end marker is missing")
-	}
-	end := start + relativeEnd + len(certificationGateEndMarker)
-	if end < len(content) && content[end] == '\n' {
-		end++
-	}
-	return content[start:end], nil
-}

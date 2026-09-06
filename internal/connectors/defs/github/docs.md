@@ -4,7 +4,7 @@ GitHub exposes connector-owned stream reads and approval-gated writes through fi
 operations. The generated connector manual and `pm connectors inspect github --json` own the current
 stream, action, and request-contract inventory.
 
-Certification status: GitHub is **not connector-certified**. The current source-pinned inventory's
+Validation status: GitHub is **not connector-validated**. The current source-pinned inventory's
 live-proof count is zero. The historical live certificate only verified the safe `create_label`
 lifecycle with read-back verification and cleanup; it does not certify the current connector surface.
 The GitHub CLI Surface reference owns current source-inventory and proof-status counts; destructive,

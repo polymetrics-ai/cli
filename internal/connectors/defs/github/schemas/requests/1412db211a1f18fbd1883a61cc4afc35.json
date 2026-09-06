@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "delivery_id": {
+      "type": "integer"
+    },
+    "hook_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "delivery_id",
+    "hook_id"
+  ],
+  "type": "object"
+}

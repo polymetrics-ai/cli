@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "inputs": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "ref": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "variables": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "variable_type": {
+            "enum": [
+              "env_var",
+              "file"
+            ],
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "ref"
+  ],
+  "type": "object"
+}

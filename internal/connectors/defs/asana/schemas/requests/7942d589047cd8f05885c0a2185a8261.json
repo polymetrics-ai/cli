@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "action_data": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "resource": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource"
+      ],
+      "type": "object"
+    },
+    "rule_trigger_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "rule_trigger_gid",
+    "data"
+  ],
+  "type": "object"
+}

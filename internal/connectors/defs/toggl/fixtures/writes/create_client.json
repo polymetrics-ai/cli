@@ -1,7 +1,0 @@
-{
-  "record": { "name": "Fixture Client" },
-  "expect": {
-    "method": "POST",
-    "path": "/workspaces/synthetic-conformance-value/clients"
-  }
-}

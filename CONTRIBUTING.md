@@ -39,7 +39,6 @@ pnpm run build
 - Title PRs with [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), for example `feat(connector): add linear` or `fix(github): repair pagination`.
 - Add or update tests for behavior changes.
 - Run `make verify` before requesting review.
-- When changing certification-harness or timing-gate code, also run `make certify-timing`; CI runs it before `make verify`.
 - Do not include credentials, API tokens, private URLs, customer data, or generated local state.
 - Update docs when CLI behavior, flags, output, connector setup, or supported workflows change.
 

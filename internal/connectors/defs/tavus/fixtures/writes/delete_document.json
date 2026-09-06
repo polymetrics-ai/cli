@@ -1,8 +1,0 @@
-{
-  "record": { "id": "document_fixture_1" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/documents/document_fixture_1"
-  },
-  "response": { "status": 200, "body": {} }
-}

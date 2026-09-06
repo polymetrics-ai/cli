@@ -48,8 +48,8 @@ func TestCobraRouterShellBuildsFreshHiddenWrapperTree(t *testing.T) {
 		"schedule":    false,
 		"worker":      true,
 	}
-	if len(expectedHidden) != len(cobraLegacyCommands(config.Config{})) {
-		t.Fatalf("expectedHidden covers %d commands, cobraLegacyCommands registers %d", len(expectedHidden), len(cobraLegacyCommands(config.Config{})))
+	if len(expectedHidden) != len(cobraLegacyCommands(config.Config{}, defaultAppOpeners())) {
+		t.Fatalf("expectedHidden covers %d commands, cobraLegacyCommands registers %d", len(expectedHidden), len(cobraLegacyCommands(config.Config{}, defaultAppOpeners())))
 	}
 
 	for _, root := range []*cobra.Command{first, second} {
@@ -427,7 +427,7 @@ func TestLeafHelpWithOtherFlagsRendersBeforeRequiredFlags(t *testing.T) {
 func legacyHelpCases(t *testing.T) []legacyHelpCase {
 	t.Helper()
 	seen := map[string]legacyHelpCase{}
-	for _, spec := range cobraLegacyCommands(config.Config{}) {
+	for _, spec := range cobraLegacyCommands(config.Config{}, defaultAppOpeners()) {
 		manual, ok := docs[spec.name]
 		if !ok {
 			t.Errorf("legacy wrapper %q has no manual; every executable wrapper must be discoverable", spec.name)

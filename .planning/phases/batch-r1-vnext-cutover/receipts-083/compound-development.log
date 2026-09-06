@@ -1,0 +1,24 @@
+=== RUN   TestCP11CompoundOpenedControlFrontiers
+=== RUN   TestCP11CompoundOpenedControlFrontiers/identity
+=== RUN   TestCP11CompoundOpenedControlFrontiers/stat
+=== RUN   TestCP11CompoundOpenedControlFrontiers/bounded-read
+--- PASS: TestCP11CompoundOpenedControlFrontiers (0.00s)
+    --- PASS: TestCP11CompoundOpenedControlFrontiers/identity (0.00s)
+    --- PASS: TestCP11CompoundOpenedControlFrontiers/stat (0.00s)
+    --- PASS: TestCP11CompoundOpenedControlFrontiers/bounded-read (0.00s)
+=== RUN   TestCP11CompoundRecordUnknownIdentityRetainsOwnedEffects
+=== RUN   TestCP11CompoundRecordUnknownIdentityRetainsOwnedEffects/prepared.json
+=== RUN   TestCP11CompoundRecordUnknownIdentityRetainsOwnedEffects/.connectorgen-control-authority-v3.json
+=== RUN   TestCP11CompoundRecordUnknownIdentityRetainsOwnedEffects/phase-0001.json
+--- PASS: TestCP11CompoundRecordUnknownIdentityRetainsOwnedEffects (0.00s)
+    --- PASS: TestCP11CompoundRecordUnknownIdentityRetainsOwnedEffects/prepared.json (0.00s)
+    --- PASS: TestCP11CompoundRecordUnknownIdentityRetainsOwnedEffects/.connectorgen-control-authority-v3.json (0.00s)
+    --- PASS: TestCP11CompoundRecordUnknownIdentityRetainsOwnedEffects/phase-0001.json (0.00s)
+=== RUN   TestCP11CompoundFailedPredecessorLink
+--- PASS: TestCP11CompoundFailedPredecessorLink (0.43s)
+=== RUN   TestCP11CompoundCapturePrimarySyncClose
+--- PASS: TestCP11CompoundCapturePrimarySyncClose (0.65s)
+=== RUN   TestCP11CompoundStagedActualSyncCloseCleanup
+--- PASS: TestCP11CompoundStagedActualSyncCloseCleanup (0.41s)
+PASS
+ok  	polymetrics.ai/cmd/connectorgen	2.446s

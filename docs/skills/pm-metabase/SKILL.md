@@ -7,7 +7,7 @@ description: Metabase connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using session-token authentication.
+Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using a declared session token.
 
 ## Icon
 
@@ -24,17 +24,42 @@ Reads Metabase cards, dashboards, collections, databases, and users through the 
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- instance_api_url (required)
+- username (required)
+- password (secret)
+- session_token (secret)
+
+## ETL Streams
+
+- cards:
+  - primary key: id
+  - fields: archived(boolean), collection_id(integer), created_at(string), creator_id(integer), database_id(integer), description(string), display(string), id(integer), name(string), query_type(string), updated_at(string)
+- dashboards:
+  - primary key: id
+  - fields: archived(boolean), collection_id(integer), created_at(string), creator_id(integer), description(string), id(integer), name(string), updated_at(string)
+- collections:
+  - primary key: id
+  - fields: archived(boolean), description(string), id(string), location(string), name(string), personal_owner_id(integer), slug(string)
+- databases:
+  - primary key: id
+  - fields: created_at(string), engine(string), id(integer), is_on_demand(boolean), is_sample(boolean), name(string), timezone(string), updated_at(string)
+- users:
+  - primary key: id
+  - fields: common_name(string), date_joined(string), email(string), first_name(string), id(integer), is_active(boolean), is_superuser(boolean), last_login(string), last_name(string), updated_at(string)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: external Metabase API reads through a declaration-bound tenant origin and session authentication
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

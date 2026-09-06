@@ -26,6 +26,11 @@ func New() Connector {
 	if err != nil {
 		panic("native/mysql: failed to load defs/mysql bundle: " + err.Error())
 	}
+	return NewFromBundle(bundle)
+}
+
+// NewFromBundle constructs MySQL from the manifest-selected execution bundle.
+func NewFromBundle(bundle engine.Bundle) Connector {
 	return Connector{Base: engine.NewBase(bundle)}
 }
 

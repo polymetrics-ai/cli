@@ -1,3 +1,0 @@
-# Installation-local HMAC key used only while turning a completed live run into
-# a publishable proof. It is never committed; every checkout creates its own.
-.fingerprint-salt

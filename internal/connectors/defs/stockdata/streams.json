@@ -247,10 +247,6 @@
         },
         "stamp_field": "uuid"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated UUID config this stream needs."
-      },
       "schema": "schemas/news_similar.json",
       "projection": "passthrough"
     },
@@ -272,10 +268,6 @@
           "path_var": "id"
         },
         "stamp_field": "uuid"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated UUID config this stream needs."
       },
       "schema": "schemas/news_by_uuid.json",
       "projection": "passthrough"

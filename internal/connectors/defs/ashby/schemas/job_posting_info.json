@@ -1,54 +1,301 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "job_posting_info",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The job posting's id"
+    "address": {
+      "properties": {
+        "postalAddress": {
+          "description": "The postal address of the job posting",
+          "properties": {
+            "addressCountry": {
+              "type": "string"
+            },
+            "addressLocality": {
+              "type": "string"
+            },
+            "addressRegion": {
+              "type": "string"
+            },
+            "postalCode": {
+              "type": "string"
+            },
+            "streetAddress": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
     },
-    "title": {
-      "type": "string",
-      "description": "The job posting's title"
+    "applicationConfirmationEmailTemplateId": {
+      "type": "string"
     },
-    "status": {
-      "type": "string",
-      "enum": [
-        "Draft",
-        "Published"
-      ]
+    "applicationDeadline": {
+      "format": "date-time",
+      "type": "string"
     },
-    "descriptionPlain": {
-      "type": "string",
-      "description": "A plaintext version of the job posting's description"
+    "applicationFormDefinition": {
+      "properties": {
+        "sections": {
+          "description": "The sections in the form definition",
+          "items": {
+            "properties": {
+              "descriptionHtml": {
+                "type": "string"
+              },
+              "descriptionPlain": {
+                "type": "string"
+              },
+              "fields": {
+                "description": "The fields in this form section",
+                "items": {
+                  "properties": {
+                    "descriptionHtml": {
+                      "type": "string"
+                    },
+                    "descriptionPlain": {
+                      "type": "string"
+                    },
+                    "field": {
+                      "properties": {
+                        "humanReadablePath": {
+                          "description": "The human-readable path for the form field",
+                          "type": "string"
+                        },
+                        "id": {
+                          "description": "The unique identifier for the form definition field",
+                          "type": "string"
+                        },
+                        "isNullable": {
+                          "description": "Whether the form field accepts null values",
+                          "type": "boolean"
+                        },
+                        "path": {
+                          "description": "The path used to submit values for this field",
+                          "type": "string"
+                        },
+                        "selectableValues": {
+                          "items": {
+                            "properties": {
+                              "label": {
+                                "description": "The display label for the selectable value",
+                                "type": "string"
+                              },
+                              "value": {
+                                "description": "The submitted value for the selectable option",
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "label",
+                              "value"
+                            ],
+                            "type": "object"
+                          },
+                          "type": "array"
+                        },
+                        "title": {
+                          "description": "The display title for the form field",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "The type of the form definition field",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "type",
+                        "path",
+                        "humanReadablePath",
+                        "title",
+                        "isNullable"
+                      ],
+                      "type": "object"
+                    },
+                    "isRequired": {
+                      "description": "Whether this form field is required",
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "isRequired",
+                    "field"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fields"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "sections"
+      ],
+      "type": "object"
+    },
+    "applicationLimitCalloutHtml": {
+      "type": "string"
+    },
+    "applyLink": {
+      "description": "The link to apply to the job posting",
+      "format": "uri",
+      "type": "string"
+    },
+    "compensation": {
+      "properties": {
+        "compensationTierSummary": {
+          "type": "string"
+        },
+        "compensationTiers": {
+          "description": "The compensation ranges that can be offered to applicants for this posting",
+          "items": {
+            "properties": {
+              "additionalInformation": {
+                "type": "string"
+              },
+              "components": {
+                "description": "The compensation components in this tier",
+                "items": {
+                  "properties": {
+                    "compensationType": {
+                      "description": "The type of compensation",
+                      "type": "string"
+                    },
+                    "currencyCode": {
+                      "type": "string"
+                    },
+                    "id": {
+                      "description": "The component id",
+                      "type": "string"
+                    },
+                    "interval": {
+                      "description": "The compensation interval",
+                      "type": "string"
+                    },
+                    "label": {
+                      "type": "string"
+                    },
+                    "maxValue": {
+                      "type": "number"
+                    },
+                    "minValue": {
+                      "type": "number"
+                    },
+                    "summary": {
+                      "description": "A human-readable summary of the compensation component",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "summary",
+                    "compensationType",
+                    "interval",
+                    "currencyCode",
+                    "minValue",
+                    "maxValue",
+                    "id"
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              "id": {
+                "description": "The unique identifier for the compensation tier",
+                "type": "string"
+              },
+              "tierSummary": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "tierSummary",
+              "title",
+              "additionalInformation",
+              "components"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "shouldDisplayCompensation": {
+          "description": "Whether compensation should be shown to applicants for this job posting",
+          "type": "boolean"
+        },
+        "summaryComponents": {
+          "description": "The summary compensation components for the job posting",
+          "items": {
+            "properties": {
+              "compensationType": {
+                "description": "The type of compensation",
+                "type": "string"
+              },
+              "currencyCode": {
+                "type": "string"
+              },
+              "interval": {
+                "description": "The compensation interval",
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "maxValue": {
+                "type": "number"
+              },
+              "minValue": {
+                "type": "number"
+              },
+              "summary": {
+                "description": "A human-readable summary of the compensation component",
+                "type": "string"
+              }
+            },
+            "required": [
+              "summary",
+              "compensationType",
+              "interval",
+              "currencyCode",
+              "minValue",
+              "maxValue"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "compensationTierSummary",
+        "summaryComponents",
+        "compensationTiers",
+        "shouldDisplayCompensation"
+      ],
+      "type": "object"
+    },
+    "departmentName": {
+      "description": "The name of the department associated with the job posting",
+      "type": "string"
     },
     "descriptionHtml": {
-      "type": "string",
-      "description": "An HTML version of the job posting's description"
-    },
-    "descriptionSocial": {
+      "description": "An HTML version of the job posting's description",
       "type": "string"
     },
     "descriptionParts": {
-      "type": "object",
       "properties": {
-        "descriptionOpening": {
-          "type": "object",
-          "properties": {
-            "html": {
-              "type": "string"
-            },
-            "plain": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "html",
-            "plain"
-          ]
-        },
         "descriptionBody": {
-          "type": "object",
           "properties": {
             "html": {
               "type": "string"
@@ -60,10 +307,10 @@
           "required": [
             "html",
             "plain"
-          ]
+          ],
+          "type": "object"
         },
         "descriptionClosing": {
-          "type": "object",
           "properties": {
             "html": {
               "type": "string"
@@ -75,89 +322,89 @@
           "required": [
             "html",
             "plain"
-          ]
+          ],
+          "type": "object"
+        },
+        "descriptionOpening": {
+          "properties": {
+            "html": {
+              "type": "string"
+            },
+            "plain": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "html",
+            "plain"
+          ],
+          "type": "object"
         }
       },
       "required": [
         "descriptionOpening",
         "descriptionBody",
         "descriptionClosing"
-      ]
+      ],
+      "type": "object"
     },
-    "departmentName": {
-      "type": "string",
-      "description": "The name of the department associated with the job posting"
-    },
-    "teamName": {
-      "type": "string",
-      "description": "The name of the team associated with the job posting"
-    },
-    "teamNameHierarchy": {
-      "type": "array",
-      "description": "The hierarchy of team names associated with the job posting",
-      "items": {
-        "type": "string"
-      }
-    },
-    "jobId": {
-      "type": "string",
-      "description": "The id of the job associated with the job posting"
-    },
-    "locationName": {
-      "type": "string",
-      "description": "The name of the primary location associated with the job posting"
-    },
-    "locationAddress": {
+    "descriptionPlain": {
+      "description": "A plaintext version of the job posting's description",
       "type": "string"
     },
-    "locationIds": {
-      "type": "object",
-      "properties": {
-        "primaryLocationId": {
-          "type": "string"
-        },
-        "secondaryLocationIds": {
-          "type": "array",
-          "description": "The secondary location ids for the job posting",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "required": [
-        "primaryLocationId",
-        "secondaryLocationIds"
-      ]
+    "descriptionSocial": {
+      "type": "string"
+    },
+    "employmentType": {
+      "description": "The employment type for the job posting",
+      "type": "string"
+    },
+    "externalLink": {
+      "format": "uri",
+      "type": "string"
+    },
+    "id": {
+      "description": "The job posting's id",
+      "type": "string"
+    },
+    "isListed": {
+      "description": "Whether or not the job posting is listed",
+      "type": "boolean"
+    },
+    "isRemote": {
+      "type": "boolean"
+    },
+    "job": {
+      "properties": {},
+      "type": "object"
+    },
+    "jobId": {
+      "description": "The id of the job associated with the job posting",
+      "type": "string"
     },
     "linkedData": {
-      "type": "object",
       "properties": {
         "@context": {
-          "type": "string",
-          "description": "The JSON-LD context"
+          "description": "The JSON-LD context",
+          "type": "string"
         },
         "@type": {
-          "type": "string",
-          "description": "The JSON-LD type"
-        },
-        "title": {
-          "type": "string",
-          "description": "The job posting's title"
-        },
-        "description": {
-          "type": "string",
-          "description": "The job posting's description"
+          "description": "The JSON-LD type",
+          "type": "string"
         },
         "datePosted": {
-          "type": "string",
-          "description": "The date the job posting was published"
+          "description": "The date the job posting was published",
+          "type": "string"
+        },
+        "description": {
+          "description": "The job posting's description",
+          "type": "string"
         },
         "employmentType": {
-          "type": "string",
-          "description": "The employment type for the job posting"
+          "description": "The employment type for the job posting",
+          "type": "string"
         },
         "hiringOrganization": {
-          "type": "object",
           "description": "The organization hiring for the job posting",
           "properties": {
             "@type": {
@@ -169,10 +416,10 @@
             "sameAs": {
               "type": "string"
             }
-          }
+          },
+          "type": "object"
         },
         "identifier": {
-          "type": "object",
           "description": "The job posting's identifier",
           "properties": {
             "@type": {
@@ -184,215 +431,88 @@
             "value": {
               "type": "string"
             }
-          }
+          },
+          "type": "object"
         },
         "jobLocation": {
-          "type": "object",
           "description": "The location of the job posting",
           "properties": {
             "@type": {
               "type": "string"
             },
             "address": {
-              "type": "object",
               "properties": {
                 "@type": {
                   "type": "string"
                 }
-              }
+              },
+              "type": "object"
             }
-          }
+          },
+          "type": "object"
+        },
+        "title": {
+          "description": "The job posting's title",
+          "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
-    "publishedDate": {
-      "type": "string",
-      "format": "date"
+    "locationAddress": {
+      "type": "string"
     },
-    "applicationDeadline": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "address": {
-      "type": "object",
+    "locationIds": {
       "properties": {
-        "postalAddress": {
-          "type": "object",
-          "description": "The postal address of the job posting",
-          "properties": {
-            "addressCountry": {
-              "type": "string"
-            },
-            "addressRegion": {
-              "type": "string"
-            },
-            "addressLocality": {
-              "type": "string"
-            },
-            "postalCode": {
-              "type": "string"
-            },
-            "streetAddress": {
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
-    "isRemote": {
-      "type": "boolean"
-    },
-    "workplaceType": {
-      "type": "string",
-      "enum": [
-        "OnSite",
-        "Hybrid",
-        "Remote"
-      ]
-    },
-    "employmentType": {
-      "type": "string",
-      "description": "The employment type for the job posting"
-    },
-    "applicationFormDefinition": {
-      "type": "object",
-      "properties": {
-        "sections": {
-          "type": "array",
-          "description": "The sections in the form definition",
+        "primaryLocationId": {
+          "type": "string"
+        },
+        "secondaryLocationIds": {
+          "description": "The secondary location ids for the job posting",
           "items": {
-            "type": "object",
-            "properties": {
-              "title": {
-                "type": "string"
-              },
-              "descriptionHtml": {
-                "type": "string"
-              },
-              "descriptionPlain": {
-                "type": "string"
-              },
-              "fields": {
-                "type": "array",
-                "description": "The fields in this form section",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "isRequired": {
-                      "type": "boolean",
-                      "description": "Whether this form field is required"
-                    },
-                    "descriptionHtml": {
-                      "type": "string"
-                    },
-                    "descriptionPlain": {
-                      "type": "string"
-                    },
-                    "field": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "string",
-                          "description": "The unique identifier for the form definition field"
-                        },
-                        "type": {
-                          "type": "string",
-                          "description": "The type of the form definition field"
-                        },
-                        "path": {
-                          "type": "string",
-                          "description": "The path used to submit values for this field"
-                        },
-                        "humanReadablePath": {
-                          "type": "string",
-                          "description": "The human-readable path for the form field"
-                        },
-                        "title": {
-                          "type": "string",
-                          "description": "The display title for the form field"
-                        },
-                        "isNullable": {
-                          "type": "boolean",
-                          "description": "Whether the form field accepts null values"
-                        },
-                        "selectableValues": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "label": {
-                                "type": "string",
-                                "description": "The display label for the selectable value"
-                              },
-                              "value": {
-                                "type": "string",
-                                "description": "The submitted value for the selectable option"
-                              }
-                            },
-                            "required": [
-                              "label",
-                              "value"
-                            ]
-                          }
-                        }
-                      },
-                      "required": [
-                        "id",
-                        "type",
-                        "path",
-                        "humanReadablePath",
-                        "title",
-                        "isNullable"
-                      ]
-                    }
-                  },
-                  "required": [
-                    "isRequired",
-                    "field"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "fields"
-            ]
-          }
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "required": [
-        "sections"
-      ]
+        "primaryLocationId",
+        "secondaryLocationIds"
+      ],
+      "type": "object"
+    },
+    "locationName": {
+      "description": "The name of the primary location associated with the job posting",
+      "type": "string"
+    },
+    "publishedDate": {
+      "format": "date",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "Draft",
+        "Published"
+      ],
+      "type": "string"
+    },
+    "suppressDescriptionClosing": {
+      "description": "Whether the job description closing from the brand is suppressed",
+      "type": "boolean"
+    },
+    "suppressDescriptionOpening": {
+      "description": "Whether the job description opening from the brand is suppressed",
+      "type": "boolean"
     },
     "surveyFormDefinitions": {
-      "type": "array",
       "description": "Additional survey forms collected alongside the application form",
       "items": {
-        "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the survey form definition"
-          },
-          "title": {
-            "type": "string",
-            "description": "The title of the survey form definition"
-          },
-          "isArchived": {
-            "type": "boolean",
-            "description": "Whether the survey form definition is archived"
-          },
           "formDefinition": {
-            "type": "object",
             "properties": {
               "sections": {
-                "type": "array",
                 "description": "The sections in the form definition",
                 "items": {
-                  "type": "object",
                   "properties": {
-                    "title": {
-                      "type": "string"
-                    },
                     "descriptionHtml": {
                       "type": "string"
                     },
@@ -400,15 +520,9 @@
                       "type": "string"
                     },
                     "fields": {
-                      "type": "array",
                       "description": "The fields in this form section",
                       "items": {
-                        "type": "object",
                         "properties": {
-                          "isRequired": {
-                            "type": "boolean",
-                            "description": "Whether this form field is required"
-                          },
                           "descriptionHtml": {
                             "type": "string"
                           },
@@ -416,51 +530,50 @@
                             "type": "string"
                           },
                           "field": {
-                            "type": "object",
                             "properties": {
-                              "id": {
-                                "type": "string",
-                                "description": "The unique identifier for the form definition field"
-                              },
-                              "type": {
-                                "type": "string",
-                                "description": "The type of the form definition field"
-                              },
-                              "path": {
-                                "type": "string",
-                                "description": "The path used to submit values for this field"
-                              },
                               "humanReadablePath": {
-                                "type": "string",
-                                "description": "The human-readable path for the form field"
+                                "description": "The human-readable path for the form field",
+                                "type": "string"
                               },
-                              "title": {
-                                "type": "string",
-                                "description": "The display title for the form field"
+                              "id": {
+                                "description": "The unique identifier for the form definition field",
+                                "type": "string"
                               },
                               "isNullable": {
-                                "type": "boolean",
-                                "description": "Whether the form field accepts null values"
+                                "description": "Whether the form field accepts null values",
+                                "type": "boolean"
+                              },
+                              "path": {
+                                "description": "The path used to submit values for this field",
+                                "type": "string"
                               },
                               "selectableValues": {
-                                "type": "array",
                                 "items": {
-                                  "type": "object",
                                   "properties": {
                                     "label": {
-                                      "type": "string",
-                                      "description": "The display label for the selectable value"
+                                      "description": "The display label for the selectable value",
+                                      "type": "string"
                                     },
                                     "value": {
-                                      "type": "string",
-                                      "description": "The submitted value for the selectable option"
+                                      "description": "The submitted value for the selectable option",
+                                      "type": "string"
                                     }
                                   },
                                   "required": [
                                     "label",
                                     "value"
-                                  ]
-                                }
+                                  ],
+                                  "type": "object"
+                                },
+                                "type": "array"
+                              },
+                              "title": {
+                                "description": "The display title for the form field",
+                                "type": "string"
+                              },
+                              "type": {
+                                "description": "The type of the form definition field",
+                                "type": "string"
                               }
                             },
                             "required": [
@@ -470,28 +583,48 @@
                               "humanReadablePath",
                               "title",
                               "isNullable"
-                            ]
+                            ],
+                            "type": "object"
+                          },
+                          "isRequired": {
+                            "description": "Whether this form field is required",
+                            "type": "boolean"
                           }
                         },
                         "required": [
                           "isRequired",
                           "field"
-                        ]
-                      }
+                        ],
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
+                    "title": {
+                      "type": "string"
                     }
                   },
                   "required": [
                     "fields"
-                  ]
-                }
+                  ],
+                  "type": "object"
+                },
+                "type": "array"
               }
             },
             "required": [
               "sections"
-            ]
+            ],
+            "type": "object"
+          },
+          "id": {
+            "description": "The unique identifier for the survey form definition",
+            "type": "string"
+          },
+          "isArchived": {
+            "description": "Whether the survey form definition is archived",
+            "type": "boolean"
           },
           "surveyType": {
-            "type": "string",
             "description": "The type of survey",
             "enum": [
               "EEOC",
@@ -501,7 +634,12 @@
               "Questionnaire",
               "QualityOfHire",
               "HiringManagerExperience"
-            ]
+            ],
+            "type": "string"
+          },
+          "title": {
+            "description": "The title of the survey form definition",
+            "type": "string"
           }
         },
         "required": [
@@ -510,180 +648,42 @@
           "isArchived",
           "formDefinition",
           "surveyType"
-        ]
-      }
-    },
-    "isListed": {
-      "type": "boolean",
-      "description": "Whether or not the job posting is listed"
-    },
-    "suppressDescriptionOpening": {
-      "type": "boolean",
-      "description": "Whether the job description opening from the brand is suppressed"
-    },
-    "suppressDescriptionClosing": {
-      "type": "boolean",
-      "description": "Whether the job description closing from the brand is suppressed"
-    },
-    "externalLink": {
-      "type": "string",
-      "format": "uri"
-    },
-    "applyLink": {
-      "type": "string",
-      "description": "The link to apply to the job posting",
-      "format": "uri"
-    },
-    "compensation": {
-      "type": "object",
-      "properties": {
-        "compensationTierSummary": {
-          "type": "string"
-        },
-        "summaryComponents": {
-          "type": "array",
-          "description": "The summary compensation components for the job posting",
-          "items": {
-            "type": "object",
-            "properties": {
-              "summary": {
-                "type": "string",
-                "description": "A human-readable summary of the compensation component"
-              },
-              "label": {
-                "type": "string"
-              },
-              "compensationType": {
-                "type": "string",
-                "description": "The type of compensation"
-              },
-              "interval": {
-                "type": "string",
-                "description": "The compensation interval"
-              },
-              "currencyCode": {
-                "type": "string"
-              },
-              "minValue": {
-                "type": "number"
-              },
-              "maxValue": {
-                "type": "number"
-              }
-            },
-            "required": [
-              "summary",
-              "compensationType",
-              "interval",
-              "currencyCode",
-              "minValue",
-              "maxValue"
-            ]
-          }
-        },
-        "compensationTiers": {
-          "type": "array",
-          "description": "The compensation ranges that can be offered to applicants for this posting",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "description": "The unique identifier for the compensation tier"
-              },
-              "tierSummary": {
-                "type": "string"
-              },
-              "title": {
-                "type": "string"
-              },
-              "additionalInformation": {
-                "type": "string"
-              },
-              "components": {
-                "type": "array",
-                "description": "The compensation components in this tier",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "summary": {
-                      "type": "string",
-                      "description": "A human-readable summary of the compensation component"
-                    },
-                    "label": {
-                      "type": "string"
-                    },
-                    "compensationType": {
-                      "type": "string",
-                      "description": "The type of compensation"
-                    },
-                    "interval": {
-                      "type": "string",
-                      "description": "The compensation interval"
-                    },
-                    "currencyCode": {
-                      "type": "string"
-                    },
-                    "minValue": {
-                      "type": "number"
-                    },
-                    "maxValue": {
-                      "type": "number"
-                    },
-                    "id": {
-                      "type": "string",
-                      "description": "The component id"
-                    }
-                  },
-                  "required": [
-                    "summary",
-                    "compensationType",
-                    "interval",
-                    "currencyCode",
-                    "minValue",
-                    "maxValue",
-                    "id"
-                  ]
-                }
-              }
-            },
-            "required": [
-              "id",
-              "tierSummary",
-              "title",
-              "additionalInformation",
-              "components"
-            ]
-          }
-        },
-        "shouldDisplayCompensation": {
-          "type": "boolean",
-          "description": "Whether compensation should be shown to applicants for this job posting"
-        }
+        ],
+        "type": "object"
       },
-      "required": [
-        "compensationTierSummary",
-        "summaryComponents",
-        "compensationTiers",
-        "shouldDisplayCompensation"
-      ]
+      "type": "array"
+    },
+    "teamName": {
+      "description": "The name of the team associated with the job posting",
+      "type": "string"
+    },
+    "teamNameHierarchy": {
+      "description": "The hierarchy of team names associated with the job posting",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "title": {
+      "description": "The job posting's title",
+      "type": "string"
     },
     "updatedAt": {
-      "type": "string",
       "description": "The date and time when the job posting was last updated",
-      "format": "date-time"
-    },
-    "applicationLimitCalloutHtml": {
+      "format": "date-time",
       "type": "string"
     },
-    "applicationConfirmationEmailTemplateId": {
+    "workplaceType": {
+      "enum": [
+        "OnSite",
+        "Hybrid",
+        "Remote"
+      ],
       "type": "string"
-    },
-    "job": {
-      "type": "object",
-      "properties": {}
     }
   },
+  "title": "job_posting_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

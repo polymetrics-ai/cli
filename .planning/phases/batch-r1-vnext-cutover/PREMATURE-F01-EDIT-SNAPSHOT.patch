@@ -1,0 +1,251 @@
+# Exact pre-correction working-tree patch (not for application)
+# baseline HEAD: 350831a44fb529dc6916551f1bfef3435342a315
+# source baseline: 7e014d00e2faf4ccf54e68b03dc1bb9c261463d3
+# SHA-256 of `git diff --no-ext-diff --binary -- cmd/connectorgen/vnext_publication_repair.go cmd/connectorgen/vnext_publication_repair_test.go` at capture: dfaecb733728b9aacbd6ce0cdacc32574ddf10fe6a9326b2fc1541507cc0df55
+
+diff --git a/cmd/connectorgen/vnext_publication_repair.go b/cmd/connectorgen/vnext_publication_repair.go
+index ad4a78da..3b095587 100644
+--- a/cmd/connectorgen/vnext_publication_repair.go
++++ b/cmd/connectorgen/vnext_publication_repair.go
+@@ -978,19 +978,28 @@ func vNextPublicationValidateControlRepairPhaseSemanticLocked(state *vNextPublic
+ 	return nil
+ }
+ 
+-func vNextPublicationValidateCaptureLocked(transaction *vNextPublicationDirectory, capture vNextPublicationControlRepairCapture) (resultErr error) {
+-	identity, err := transaction.identityAt(capture.Name, "publication control capture")
++func vNextPublicationOpenRecordedCaptureLocked(transaction *vNextPublicationDirectory, capture vNextPublicationControlRepairCapture) (directory *vNextPublicationDirectory, resultErr error) {
++	expected, err := capture.Identity.publicationIdentity(unix.S_IFDIR)
+ 	if err != nil {
+-		return err
++		return nil, err
+ 	}
+-	expected, err := capture.Identity.publicationIdentity(unix.S_IFDIR)
++	directory, err = transaction.openDirectory(capture.Name, "publication control capture")
+ 	if err != nil {
+-		return err
++		return nil, err
+ 	}
+-	if identity != expected {
+-		return fmt.Errorf("publication control capture identity changed")
++	actual, err := vNextPublicationIdentityFromFile(directory.file, "publication control capture")
++	if err == nil && actual != expected {
++		err = fmt.Errorf("publication control capture identity changed")
+ 	}
+-	directory, err := transaction.openDirectory(capture.Name, "publication control capture")
++	if err != nil {
++		vNextPublicationCloseAfter(&err, directory, "publication control capture")
++		return nil, err
++	}
++	return directory, nil
++}
++
++func vNextPublicationValidateCaptureLocked(transaction *vNextPublicationDirectory, capture vNextPublicationControlRepairCapture) (resultErr error) {
++	directory, err := vNextPublicationOpenRecordedCaptureLocked(transaction, capture)
+ 	if err != nil {
+ 		return err
+ 	}
+@@ -1008,13 +1017,6 @@ func vNextPublicationValidateCaptureLocked(transaction *vNextPublicationDirector
+ }
+ 
+ func vNextPublicationReadEmptyControlCaptureLocked(transaction *vNextPublicationDirectory, name string) (identity vNextPublicationIdentity, resultErr error) {
+-	identity, err := transaction.identityAt(name, "publication control capture")
+-	if err != nil {
+-		return vNextPublicationIdentity{}, err
+-	}
+-	if identity.mode != unix.S_IFDIR {
+-		return vNextPublicationIdentity{}, fmt.Errorf("publication control capture is not a directory")
+-	}
+ 	directory, err := transaction.openDirectory(name, "publication control capture")
+ 	if err != nil {
+ 		return vNextPublicationIdentity{}, err
+@@ -1025,13 +1027,10 @@ func vNextPublicationReadEmptyControlCaptureLocked(transaction *vNextPublication
+ 			resultErr = fmt.Errorf("close publication control capture: %w", closeErr)
+ 		}
+ 	}()
+-	actual, err := vNextPublicationIdentityFromFile(directory.file, "publication control capture")
++	identity, err = vNextPublicationIdentityFromFile(directory.file, "publication control capture")
+ 	if err != nil {
+ 		return vNextPublicationIdentity{}, err
+ 	}
+-	if actual != identity {
+-		return vNextPublicationIdentity{}, fmt.Errorf("publication control capture identity changed")
+-	}
+ 	entries, err := directory.readDir()
+ 	if err != nil {
+ 		return vNextPublicationIdentity{}, err
+@@ -1046,7 +1045,7 @@ func vNextPublicationValidateCapturedCandidateLocked(transaction *vNextPublicati
+ 	if err := vNextPublicationValidateCaptureLocked(transaction, capture); err != nil {
+ 		return err
+ 	}
+-	directory, err := transaction.openDirectory(capture.Name, "publication control capture")
++	directory, err := vNextPublicationOpenRecordedCaptureLocked(transaction, capture)
+ 	if err != nil {
+ 		return err
+ 	}
+@@ -1523,7 +1522,7 @@ func (p *vNextGenerationPublisher) completeControlCaptureLocked(operation *vNext
+ 	if err := vNextPublicationValidateCaptureLocked(transaction, capture); err != nil {
+ 		return err
+ 	}
+-	directory, err := transaction.openDirectory(capture.Name, "publication control capture")
++	directory, err := vNextPublicationOpenRecordedCaptureLocked(transaction, capture)
+ 	if err != nil {
+ 		return err
+ 	}
+diff --git a/cmd/connectorgen/vnext_publication_repair_test.go b/cmd/connectorgen/vnext_publication_repair_test.go
+index c73cadfd..b02f1fc1 100644
+--- a/cmd/connectorgen/vnext_publication_repair_test.go
++++ b/cmd/connectorgen/vnext_publication_repair_test.go
+@@ -5,6 +5,7 @@ import (
+ 	"context"
+ 	"encoding/json"
+ 	"errors"
++	"io"
+ 	"io/fs"
+ 	"os"
+ 	"path/filepath"
+@@ -1427,6 +1428,51 @@ func vNextPublicationReplacePrivateDirectoryForTest(t *testing.T, path string) {
+ 	}
+ }
+ 
++func TestVNextPublicationOpenRecordedCaptureRejectsSubstitutedDirectory(t *testing.T) {
++	root := t.TempDir()
++	transaction, err := vNextPublicationOpenDirectory(root, "publication control repair transaction")
++	if err != nil {
++		t.Fatal(err)
++	}
++	defer func() {
++		if closeErr := transaction.Close(); closeErr != nil {
++			t.Errorf("close transaction: %v", closeErr)
++		}
++	}()
++
++	const captureName = ".capture-001"
++	if err := unix.Mkdirat(int(transaction.file.Fd()), captureName, 0o700); err != nil {
++		t.Fatal(err)
++	}
++	captureDirectory, err := transaction.openDirectory(captureName, "publication control capture")
++	if err != nil {
++		t.Fatal(err)
++	}
++	identity, err := vNextPublicationIdentityFromFile(captureDirectory.file, "publication control capture")
++	if closeErr := captureDirectory.Close(); closeErr != nil && err == nil {
++		err = closeErr
++	}
++	if err != nil {
++		t.Fatal(err)
++	}
++	capture := vNextPublicationControlRepairCapture{
++		Attempt:  1,
++		Name:     captureName,
++		Identity: vNextPublicationRecordIdentity(identity),
++	}
++
++	capturePath := filepath.Join(root, captureName)
++	vNextPublicationReplacePrivateDirectoryForTest(t, capturePath)
++	if directory, openErr := vNextPublicationOpenRecordedCaptureLocked(transaction, capture); openErr == nil {
++		if closeErr := directory.Close(); closeErr != nil {
++			t.Errorf("close substituted capture: %v", closeErr)
++		}
++		t.Fatal("open recorded capture accepted a substituted directory")
++	} else if !strings.Contains(openErr.Error(), "capture identity changed") {
++		t.Fatalf("open recorded capture error = %v, want capture identity refusal", openErr)
++	}
++}
++
+ func vNextPublicationReplacePrivateFileForTest(t *testing.T, path string) {
+ 	t.Helper()
+ 	if err := os.Rename(path, path+".attacker-moved"); err != nil {
+@@ -1658,39 +1704,78 @@ func vNextPublicationTreeSnapshotForTest(t *testing.T, root string) []byte {
+ 		Payload []byte `json:"payload,omitempty"`
+ 	}
+ 	var entries []entry
+-	var visit func(string, string)
+-	visit = func(directory, relative string) {
+-		children, err := os.ReadDir(directory)
++	var visit func(*vNextPublicationDirectory, string)
++	visit = func(directory *vNextPublicationDirectory, relative string) {
++		defer func() {
++			if err := directory.Close(); err != nil {
++				t.Errorf("close snapshot directory %q: %v", relative, err)
++			}
++		}()
++		children, err := directory.readDir()
+ 		if err != nil {
+ 			t.Fatal(err)
+ 		}
+ 		for _, child := range children {
+-			path := filepath.Join(directory, child.Name())
+ 			name := child.Name()
+ 			if relative != "" {
+ 				name = filepath.Join(relative, name)
+ 			}
+-			var stat unix.Stat_t
+-			if err := unix.Lstat(path, &stat); err != nil {
++			observed, err := directory.identityAt(child.Name(), "snapshot member "+name)
++			if err != nil {
+ 				t.Fatal(err)
+ 			}
+-			snapshot := entry{Path: name, Device: uint64(stat.Dev), Inode: uint64(stat.Ino), Mode: uint32(stat.Mode)}
+-			if vNextPublicationStatIsDir(stat) {
++			snapshot := entry{Path: name, Device: observed.device, Inode: observed.inode, Mode: observed.mode}
++			switch observed.mode {
++			case unix.S_IFDIR:
++				childDirectory, err := directory.openDirectory(child.Name(), "snapshot directory "+name)
++				if err != nil {
++					t.Fatal(err)
++				}
++				actual, identityErr := vNextPublicationIdentityFromFile(childDirectory.file, "snapshot directory "+name)
++				if identityErr != nil {
++					_ = childDirectory.Close()
++					t.Fatal(identityErr)
++				}
++				if actual != observed {
++					_ = childDirectory.Close()
++					t.Fatalf("snapshot directory %q identity changed", name)
++				}
+ 				entries = append(entries, snapshot)
+-				visit(path, name)
+-				continue
+-			}
+-			if vNextPublicationStatIsRegular(stat) {
+-				payload, err := os.ReadFile(path)
++				visit(childDirectory, name)
++			case unix.S_IFREG:
++				file, err := directory.openRegular(child.Name(), "snapshot file "+name, unix.O_RDONLY)
+ 				if err != nil {
+ 					t.Fatal(err)
+ 				}
++				actual, identityErr := vNextPublicationIdentityFromFile(file, "snapshot file "+name)
++				if identityErr != nil {
++					_ = file.Close()
++					t.Fatal(identityErr)
++				}
++				if actual != observed {
++					_ = file.Close()
++					t.Fatalf("snapshot file %q identity changed", name)
++				}
++				payload, readErr := io.ReadAll(file)
++				closeErr := file.Close()
++				if readErr != nil {
++					t.Fatalf("read snapshot file %q: %v", name, readErr)
++				}
++				if closeErr != nil {
++					t.Fatalf("close snapshot file %q: %v", name, closeErr)
++				}
+ 				snapshot.Payload = payload
++				entries = append(entries, snapshot)
++			default:
++				entries = append(entries, snapshot)
+ 			}
+-			entries = append(entries, snapshot)
+ 		}
+ 	}
+-	visit(root, "")
++	directory, err := vNextPublicationOpenDirectory(root, "snapshot root")
++	if err != nil {
++		t.Fatal(err)
++	}
++	visit(directory, "")
+ 	snapshot, err := json.Marshal(entries)
+ 	if err != nil {
+ 		t.Fatal(err)

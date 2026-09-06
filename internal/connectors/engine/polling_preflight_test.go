@@ -55,13 +55,6 @@ func TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO(t *testing.T
 			want: `target polling executor "fixture-polling-apply-v1" is not registered`,
 		},
 		{
-			name: "missing immutable corpus evidence",
-			mutate: func(f *pollingPreflightFixture) {
-				f.source.evidence = PollingWatermarkConformanceEvidence{}
-			},
-			want: "source immutable polling conformance evidence is missing or stale",
-		},
-		{
 			name: "registered source reference mismatch",
 			mutate: func(f *pollingPreflightFixture) {
 				f.source.reference.ID = "different-polling-source-v1"
@@ -74,13 +67,6 @@ func TestPollingPreflightRefusesEachUnsafeDeclarationBeforeSourceIO(t *testing.T
 				f.apply.reference.ID = "different-polling-apply-v1"
 			},
 			want: "registered target polling executor does not match the declaration",
-		},
-		{
-			name: "target immutable corpus evidence missing",
-			mutate: func(f *pollingPreflightFixture) {
-				f.apply.evidence = PollingWatermarkConformanceEvidence{}
-			},
-			want: "target immutable polling conformance evidence is missing or stale",
 		},
 		{
 			name: "non lossless cursor codec",
@@ -261,16 +247,6 @@ func TestPollingModeEligibilitySweepsEveryImplementedPollingModeThroughRuntimePr
 		t.Fatalf("eligibility sweep triggered source I/O: reads=%d prepares=%d", fixture.source.reads, fixture.apply.prepared)
 	}
 
-	fixture.source.evidence = PollingWatermarkConformanceEvidence{}
-	eligibility = PollingModeEligibilityOf(context.Background(), fixture.registry, fixture.declaration, fixture.object)
-	for _, row := range eligibility {
-		if row.Status != "blocked" || row.Reason != "source immutable polling conformance evidence is missing or stale" {
-			t.Fatalf("eligibility for stale %q = %+v, want exact runtime-preflight refusal", row.Mode, row)
-		}
-	}
-	if fixture.source.reads != 0 || fixture.apply.prepared != 0 {
-		t.Fatalf("refused eligibility sweep triggered source I/O: reads=%d prepares=%d", fixture.source.reads, fixture.apply.prepared)
-	}
 }
 
 type pollingPreflightFixture struct {
@@ -323,8 +299,8 @@ func newPollingPreflightFixture(t *testing.T) *pollingPreflightFixture {
 			Strategies:              []connectors.PollingApplyStrategy{connectors.PollingApplyStrategyMerge, connectors.PollingApplyStrategyDedupeHistory},
 		},
 	}
-	source := &pollingPreflightSource{reference: declaration.Source.Executor, evidence: RequiredPollingWatermarkConformanceEvidence()}
-	apply := &pollingPreflightApply{reference: declaration.Target.Executor, evidence: RequiredPollingWatermarkConformanceEvidence()}
+	source := &pollingPreflightSource{reference: declaration.Source.Executor}
+	apply := &pollingPreflightApply{reference: declaration.Target.Executor}
 	fixture := &pollingPreflightFixture{
 		declaration: declaration,
 		object: connectors.PollingCatalogObject{
@@ -371,7 +347,6 @@ func (f *pollingPreflightFixture) syncAfterPreflight(resolved ResolvedPollingWat
 
 type pollingPreflightSource struct {
 	reference  connectors.TransportExecutorReference
-	evidence   PollingWatermarkConformanceEvidence
 	reads      int
 	emptyPages int
 	emitted    int
@@ -381,20 +356,11 @@ func (s *pollingPreflightSource) PollingSourceExecutorReference() connectors.Tra
 	return s.reference
 }
 
-func (s *pollingPreflightSource) PollingSourceConformanceEvidence() PollingWatermarkConformanceEvidence {
-	return s.evidence
-}
-
 type pollingPreflightApply struct {
 	reference connectors.TransportExecutorReference
-	evidence  PollingWatermarkConformanceEvidence
 	prepared  int
 }
 
 func (a *pollingPreflightApply) PollingApplyExecutorReference() connectors.TransportExecutorReference {
 	return a.reference
-}
-
-func (a *pollingPreflightApply) PollingApplyConformanceEvidence() PollingWatermarkConformanceEvidence {
-	return a.evidence
 }

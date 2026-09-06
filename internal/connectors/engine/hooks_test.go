@@ -78,62 +78,6 @@ var (
 	_ CheckHook  = (*fakeHooks)(nil)
 )
 
-func TestRegisterHooksAndHooksForRoundTrip(t *testing.T) {
-	t.Cleanup(func() { unregisterHooks("acme-test") })
-
-	want := &fakeHooks{name: "acme-test"}
-	RegisterHooks("acme-test", func() Hooks { return want })
-
-	got := HooksFor("acme-test")
-	if got == nil {
-		t.Fatalf("HooksFor(%q) = nil, want registered hooks", "acme-test")
-	}
-	if got.ConnectorName() != "acme-test" {
-		t.Fatalf("HooksFor(%q).ConnectorName() = %q, want %q", "acme-test", got.ConnectorName(), "acme-test")
-	}
-}
-
-func TestHooksForUnknownReturnsNilSafely(t *testing.T) {
-	got := HooksFor("does-not-exist-hooks")
-	if got != nil {
-		t.Fatalf("HooksFor(unknown) = %#v, want nil", got)
-	}
-}
-
-func TestRegisterHooksDuplicateNameOverwrites(t *testing.T) {
-	t.Cleanup(func() { unregisterHooks("dup-test") })
-
-	first := &fakeHooks{name: "dup-test-first"}
-	second := &fakeHooks{name: "dup-test-second"}
-
-	RegisterHooks("dup-test", func() Hooks { return first })
-	RegisterHooks("dup-test", func() Hooks { return second })
-
-	got := HooksFor("dup-test")
-	if got == nil {
-		t.Fatalf("HooksFor(dup-test) = nil after registration")
-	}
-	if got.ConnectorName() != "dup-test-second" {
-		t.Fatalf("HooksFor(dup-test).ConnectorName() = %q, want %q (last registration wins)", got.ConnectorName(), "dup-test-second")
-	}
-}
-
-func TestRegisterHooksFactoryInvokedPerCall(t *testing.T) {
-	t.Cleanup(func() { unregisterHooks("factory-test") })
-
-	calls := 0
-	RegisterHooks("factory-test", func() Hooks {
-		calls++
-		return &fakeHooks{name: "factory-test"}
-	})
-
-	_ = HooksFor("factory-test")
-	_ = HooksFor("factory-test")
-
-	if calls != 2 {
-		t.Fatalf("factory invoked %d times, want 2 (HooksFor calls the factory fresh each time)", calls)
-	}
-}
 
 func TestAuthHookDispatch(t *testing.T) {
 	wantAuth := connsdk.Bearer("tok")

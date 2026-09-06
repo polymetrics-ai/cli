@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "expected_head_sha": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "pull_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "pull_number"
+  ],
+  "type": "object"
+}

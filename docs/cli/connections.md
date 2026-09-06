@@ -12,11 +12,12 @@ DESCRIPTION
 
 DECLARATIVE TYPED DESTINATION ACTION
   --destination-action persists one exact eligible writes.json action for a
-  declarative_typed_destination stream. It is accepted only for that closed
-  destination adapter and is validated against the destination descriptor,
-  source binding, mode, acknowledgement, and evidence before catalog or
-  provider I/O. It is not an ETL run flag: a plan and run resolve only this
-  saved identity, so an invocation cannot substitute another action.
+  declarative_typed_destination or declarative_single_attempt_destination
+  stream. It is accepted only for that closed destination adapter and is
+  validated against the destination descriptor, source binding, mode,
+  acknowledgement, and evidence before catalog or provider I/O. It is not an
+  ETL run flag: a plan and run resolve only this saved identity, so an
+  invocation cannot substitute another action.
 
 TARGET COPY CAPACITY
   --target-copy-workers records the bounded target connection capacity for an
@@ -61,13 +62,13 @@ STREAM AND TABLE NAMES
 SYNC MODES
   full_refresh_append              read all source records and append them
   full_refresh_overwrite           read all source records and replace final output
-  full_refresh_overwrite_deduped   compatibility name for typed full_overwrite admission
+  full_refresh_overwrite_deduped   full overwrite with primary-key deduplication
   incremental_append               append records at or after the saved cursor
-  incremental_append_deduped       compatibility name for typed incremental_dedupe admission
-  incremental_dedupe               typed current-state dedupe for an admitted source-to-warehouse transport
-  incremental_dedupe_history       typed source-version history for an admitted source-to-warehouse transport
+  incremental_append_deduped       incremental append with primary-key deduplication
+  incremental_dedupe               current-state dedupe with a compatible source executor
+  incremental_dedupe_history       source-version history with a compatible source executor
 
-  Incremental modes and deduped compatibility names require --cursor. Deduped
+  Incremental modes require --cursor. Deduped
   modes require --primary-key. A static connector manifest advertises the full
   deduped compatibility name only with both fields, and incremental modes only
   with a declared incremental executor. The two deduped compatibility names use

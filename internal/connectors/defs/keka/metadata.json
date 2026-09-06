@@ -21,9 +21,5 @@
     "read": "external Keka HRMS API read of employee, attendance, leave, payroll, PSA, hiring, expense, asset, requisition, skill, and BGV data",
     "write": "live Keka API mutations can create or update employee, leave, payroll payment, client, project, performance, hiring, asset, skill, and BGV records",
     "approval": "reverse ETL writes require plan, preview, and approval token before live Keka mutations execute"
-  },
-  "conformance": {
-    "skip_dynamic": true,
-    "reason": "custom-auth-only (mode:custom AuthHook, no when-gated non-custom fallback); conformance synthetic config cannot route config.token_url to the replay server, so auth-resolving dynamic checks would fail before reaching streams. The Keka AuthHook token exchange is covered by archived parity evidence for keka for legacy paths; Pass B stream and write definitions are declarative and statically validated against the official Keka Postman documentation."
   }
 }

@@ -1,29 +1,20 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "numbers",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "number": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "state": {
-      "type": "string"
-    },
     "dateCreated": {
-      "type": "string"
+      "type": [
+        "string",
+        "number"
+      ]
     },
-    "lastUpdated": {
+    "id": {
       "type": "string"
     }
   },
+  "title": "numbers",
+  "type": "object",
+  "x-cursor-field": "dateCreated",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "dateCreated"
+  ]
 }

@@ -59,13 +59,27 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 	if !hasDeclaredSyncTransport(source, destination) {
 		return false, transportRouteDeclarationAbsent, nil
 	}
-	if a == nil || a.transports == nil {
+	if a == nil {
+		return false, transportRouteDeclared, fmt.Errorf("closed transport registry is unavailable")
+	}
+	if a.transports == nil && a.transportRegistry != nil {
+		if err := a.ensureTransportRegistry(); err != nil {
+			return false, transportRouteDeclared, err
+		}
+	}
+	if a.transports == nil {
 		return false, transportRouteDeclared, fmt.Errorf("closed transport registry is unavailable")
 	}
 	sourceDeclarative := isDeclarativeStreamTransportConnector(source)
 	destinationDescriptor, destinationDeclared := connectors.DestinationTransportDescriptorOf(destination)
 	destinationIssueLabel := destinationDeclared && destinationDescriptor.Executor == issueLabelDestinationReference
-	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) {
+	if isAsanaFullRefreshWarehouseRoute(source, destination, mode.ContractMode) {
+		// The event-token executor owns only proven incremental project-task
+		// semantics. Full refresh for every Asana stream retains the existing
+		// exhaustive connector Read -> local warehouse materializer route.
+		return false, transportRouteDeclarationAbsent, nil
+	}
+	if sourceDeclarative && isBoundedLocalWarehouseLegacyRoute(destination, mode.ContractMode) && !a.isExecutableFullSnapshotWarehouseTransport(source, destination, streamName, mode.ContractMode) {
 		// The local warehouse primitive owns a closed, bounded ordinary ETL
 		// representation for these executable modes. Its two dedupe modes are
 		// the only ones promoted to the registered transport executor below;
@@ -94,7 +108,7 @@ func (a *App) selectTransportRoute(conn Connection, streamName string, mode Sync
 			return true, transportRouteDeclared, nil
 		}
 		materializer, localWarehouse := destination.(connectors.LocalWarehouseMaterializer)
-		if localWarehouse && materializer.MaterializesLocalWarehouse() && isWarehouseDedupeContractMode(mode.ContractMode) {
+		if localWarehouse && materializer.MaterializesLocalWarehouse() && (isWarehouseDedupeContractMode(mode.ContractMode) || a.isExecutableFullSnapshotWarehouseTransport(source, destination, streamName, mode.ContractMode)) {
 			return true, transportRouteDeclared, nil
 		}
 		return false, transportRouteDeclared, &synctransport.DeclaredDestinationRouteError{
@@ -136,6 +150,61 @@ func isBoundedLocalWarehouseLegacyRoute(destination connectors.Connector, mode s
 	}
 	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
 	return ok && materializer.MaterializesLocalWarehouse()
+}
+
+// isExecutableFullSnapshotWarehouseTransport admits a full provider collection
+// from execution facts only. Full overwrite additionally requires the selected
+// destination executor to implement the existing run-scoped replacement port;
+// a descriptor cannot claim an executor capability that is not registered.
+func (a *App) isExecutableFullSnapshotWarehouseTransport(source, destination connectors.Connector, stream string, mode synccontract.Mode) bool {
+	if a == nil || a.transports == nil || !isLocalWarehouseDestination(destination) || !declaredFullSnapshotTransportSource(source, stream, mode) {
+		return false
+	}
+	materializer, ok := destination.(connectors.LocalWarehouseMaterializer)
+	if !ok || !materializer.MaterializesLocalWarehouse() {
+		return false
+	}
+	descriptor, ok := connectors.DestinationTransportDescriptorOf(destination)
+	if !ok {
+		return false
+	}
+	executor, ok := a.transports.RegisteredDestination(descriptor.Executor)
+	if !ok {
+		return false
+	}
+	if mode == synccontract.ModeFullOverwrite {
+		_, ok = executor.(synctransport.FullOverwriteDestination)
+	}
+	return ok
+}
+
+func declaredFullSnapshotTransportSource(source connectors.Connector, stream string, mode synccontract.Mode) bool {
+	if mode != synccontract.ModeFullOverwrite && mode != synccontract.ModeFullAppend {
+		return false
+	}
+	definition, ok := connectors.DefinitionOf(source)
+	if !ok || definition.SyncTransport == nil || definition.SyncTransport.Source == nil {
+		return false
+	}
+	transport := definition.SyncTransport.Source
+	if !declaredTransportMode(transport.Modes, mode) {
+		return false
+	}
+	for _, candidate := range transport.EligibleStreams {
+		if candidate == "*" || candidate == stream {
+			return true
+		}
+	}
+	return false
+}
+
+func declaredTransportMode(modes []synccontract.Mode, mode synccontract.Mode) bool {
+	for _, candidate := range modes {
+		if candidate == mode {
+			return true
+		}
+	}
+	return false
 }
 
 func isIssueLabelTransportConnector(connector connectors.Connector) bool {
@@ -228,8 +297,8 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	}
 	_, requiresManagedTargetApproval := resolved.Destination.(synctransport.ManagedTargetApprovalDestination)
 	_, requiresDefinitionOwnedApproval := resolved.Destination.(synctransport.DefinitionOwnedApprovalDestination)
-	if requiresDefinitionOwnedApproval && resolved.Destination.TransportExecutorReference() == declarativeTypedDestinationReference {
-		batchSize, err = declarativeTypedDestinationEffectiveBatchSize(source, destination, streamName, mode.ContractMode, resolved.ApplyStrategy, batchSize)
+	if requiresDefinitionOwnedApproval && isDeclarativeDefinitionOwnedDestination(resolved.Destination.TransportExecutorReference()) {
+		batchSize, err = declarativeDefinitionOwnedDestinationEffectiveBatchSize(source, destination, streamName, mode.ContractMode, resolved.ApplyStrategy, batchSize)
 		if err != nil {
 			return emptyResult, err
 		}
@@ -467,6 +536,11 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 	transportResult, err := synctransport.NewOrchestrator(a.transports).Run(ctx, transportRequest)
 	if err != nil {
 		err = sanitizeRuntimeError(err, sourceRuntime, destRuntime)
+		if requiresDefinitionOwnedApproval && isDeclarativeSingleAttemptDestination(resolved.Destination.TransportExecutorReference()) {
+			if revokeErr := a.revokeDeclarativeSingleAttemptDestinationAuthorization(approval.PlanID); revokeErr != nil {
+				err = errors.Join(err, fmt.Errorf("revoke declarative single-attempt authorization after failed delivery: %w", revokeErr))
+			}
+		}
 	}
 	transportMeasurement := transportPhaseMeasurement(transportResult)
 	if persistedEmptyPublication != nil {
@@ -693,7 +767,7 @@ func (a *App) runTransportETL(ctx context.Context, runID string, conn Connection
 // reconcileCommittedTransportStages retires only previously committed,
 // connection-owned worksets before the next closed transport can reach source
 // I/O. Ordinary Open deliberately leaves an accepted receipt observable for
-// recovery and certification evidence; a stage that needs eager disposal may
+// recovery and execution evidence; a stage that needs eager disposal may
 // separately opt into synctransport.RetirableWarehouseStage.
 func (a *App) reconcileCommittedTransportStages(ctx context.Context) error {
 	stage, ok := a.transportStage.(interface{ ReconcileCommitted(context.Context) error })

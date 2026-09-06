@@ -1,0 +1,24 @@
+=== RUN   TestCP11AllocationCallersRetainActualAB
+=== RUN   TestCP11AllocationCallersRetainActualAB/public-publish/empty
+=== RUN   TestCP11AllocationCallersRetainActualAB/public-publish/nonempty
+=== RUN   TestCP11AllocationCallersRetainActualAB/CURRENT/empty
+=== RUN   TestCP11AllocationCallersRetainActualAB/CURRENT/nonempty
+=== RUN   TestCP11AllocationCallersRetainActualAB/JOURNAL/empty
+=== RUN   TestCP11AllocationCallersRetainActualAB/JOURNAL/nonempty
+=== RUN   TestCP11AllocationCallersRetainActualAB/generation-prune/empty
+=== RUN   TestCP11AllocationCallersRetainActualAB/generation-prune/nonempty
+=== RUN   TestCP11AllocationCallersRetainActualAB/stage-recover/empty
+=== RUN   TestCP11AllocationCallersRetainActualAB/stage-recover/nonempty
+--- PASS: TestCP11AllocationCallersRetainActualAB (8.05s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/public-publish/empty (0.86s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/public-publish/nonempty (0.89s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/CURRENT/empty (0.72s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/CURRENT/nonempty (0.71s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/JOURNAL/empty (0.75s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/JOURNAL/nonempty (0.73s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/generation-prune/empty (0.86s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/generation-prune/nonempty (0.86s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/stage-recover/empty (0.83s)
+    --- PASS: TestCP11AllocationCallersRetainActualAB/stage-recover/nonempty (0.85s)
+PASS
+ok  	polymetrics.ai/cmd/connectorgen	9.013s

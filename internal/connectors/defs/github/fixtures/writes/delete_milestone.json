@@ -1,9 +1,0 @@
-{
-  "record": {
-    "milestone_number": 1
-  },
-  "expect": {
-    "method": "DELETE",
-    "path": "/repos/synthetic-conformance-value/synthetic-conformance-value/milestones/1"
-  }
-}

@@ -22,7 +22,7 @@
 // only caller.
 //
 // Still ships a defs bundle (internal/connectors/defs/faker/{metadata.json,
-// spec.json,api_surface.json,docs.md}) so identity/spec/docs stay uniform
+// spec.json,docs.md}) so identity/spec/docs stay uniform
 // with every other connector; metadata.json sets capabilities.dynamic_schema:
 // true and the bundle ships no streams.json (bundle.go's loadStreams only
 // tolerates a missing streams.json when dynamic_schema is true) — a
@@ -58,11 +58,16 @@ type Connector struct {
 // panics if the bundle fails to load — a broken build, not a runtime error
 // (mirrors native/postgres.New's identical contract).
 func New() Connector {
-	b, err := engine.Load(defs.FS, "faker")
+	bundle, err := engine.Load(defs.FS, "faker")
 	if err != nil {
 		panic("native/faker: failed to load defs/faker bundle: " + err.Error())
 	}
-	return Connector{Base: engine.NewBase(b)}
+	return NewFromBundle(bundle)
+}
+
+// NewFromBundle constructs Faker from the manifest-selected execution bundle.
+func NewFromBundle(bundle engine.Bundle) Connector {
+	return Connector{Base: engine.NewBase(bundle)}
 }
 
 // Check always succeeds (subject to context cancellation): this connector

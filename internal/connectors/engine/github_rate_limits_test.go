@@ -2,7 +2,6 @@ package engine
 
 import (
 	"context"
-	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -234,77 +233,6 @@ func TestGitHubDeclaredRateLimits(t *testing.T) {
 	}
 	if got, want := requests, 1; got != want {
 		t.Fatalf("unmatched local GitHub request count = %d, want %d", got, want)
-	}
-}
-
-func TestGitHubCertificationRatePoliciesFailClosedBeforeSend(t *testing.T) {
-	type policyExpectation struct {
-		id          string
-		method      string
-		path        string
-		authType    string
-		scopeConfig string
-		scopeValue  string
-		scopeKind   connsdk.RateLimitScopeSubjectKind
-	}
-	expectations := []policyExpectation{
-		{"certification-authenticated-user", http.MethodGet, "/repos/octocat/example", "token", "rate_limit_account", "octocat", connsdk.RateLimitScopeAccount},
-		{"certification-app-installation", http.MethodGet, "/repos/octocat/example", "github_app", "installation_id", "12345", connsdk.RateLimitScopeInstallation},
-		{"certification-actions-token", http.MethodGet, "/repos/octocat/example", "github_token", "rate_limit_repository", "octocat/example", connsdk.RateLimitScopeEndpoint},
-		{"certification-unauthenticated", http.MethodGet, "/repos/octocat/example", "public", "rate_limit_ip", "203.0.113.7", connsdk.RateLimitScopeIP},
-		{"certification-graphql-authenticated-user", http.MethodPost, "/graphql", "token", "rate_limit_account", "octocat", connsdk.RateLimitScopeAccount},
-		{"certification-graphql-app-installation", http.MethodPost, "/graphql", "github_app", "installation_id", "12345", connsdk.RateLimitScopeInstallation},
-		{"certification-graphql-actions-token", http.MethodPost, "/graphql", "github_token", "rate_limit_repository", "octocat/example", connsdk.RateLimitScopeEndpoint},
-	}
-	bundle, err := Load(defs.FS, "github")
-	if err != nil {
-		t.Fatalf("Load(defs.FS, github): %v", err)
-	}
-	var sends atomic.Int32
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		sends.Add(1)
-		w.WriteHeader(http.StatusOK)
-	}))
-	t.Cleanup(server.Close)
-	bundle.HTTP.URL = server.URL
-	bundle.HTTP.Auth = nil
-	policies := make(map[string]connsdk.RateLimitPolicy, len(bundle.RateLimits.Policies))
-	for _, policy := range bundle.RateLimits.Policies {
-		policies[policy.ID] = policy
-	}
-
-	for _, want := range expectations {
-		want := want
-		t.Run(want.id, func(t *testing.T) {
-			policy, ok := policies[want.id]
-			if !ok {
-				t.Fatalf("GitHub certification rate policy %q is absent", want.id)
-			}
-			if policy.Coordination != connsdk.RateLimitCoordinationRequireShared || !containsRateLimitName(policy.Selector.Tiers, "certification") {
-				t.Fatalf("certification policy %q coordination = %q selector=%+v, want require_shared certification tier", want.id, policy.Coordination, policy.Selector)
-			}
-			if policy.Scope.SubjectKind != want.scopeKind || policy.Scope.SubjectConfig != want.scopeConfig {
-				t.Fatalf("certification policy %q scope = %+v, want %q/%q", want.id, policy.Scope, want.scopeKind, want.scopeConfig)
-			}
-			cfg := githubRateLimitConfig(t, want.authType, want.scopeConfig, want.scopeValue)
-			cfg.Config["tier"] = "certification"
-			runtime, err := newRuntime(context.Background(), bundle, cfg, nil)
-			if err != nil {
-				t.Fatalf("newRuntime: %v", err)
-			}
-			requester, err := runtime.RequesterFor(want.method, want.path)
-			if err != nil {
-				t.Fatalf("RequesterFor: %v", err)
-			}
-			_, err = requester.Do(context.Background(), want.method, want.path, nil, map[string]any{"query": "fixed"})
-			var unavailable *coordination.SharedRateLimitUnavailableError
-			if !errors.As(err, &unavailable) || unavailable.Reason != coordination.SharedRateLimitCoordinatorNotConfigured {
-				t.Fatalf("certification request error = %v, want coordinator-not-configured pre-send refusal", err)
-			}
-			if got := sends.Load(); got != 0 {
-				t.Fatalf("refused certification policy %q sent %d provider requests, want 0", want.id, got)
-			}
-		})
 	}
 }
 

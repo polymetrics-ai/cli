@@ -10,14 +10,11 @@ import (
 )
 
 // MissingOperationRouteError is the fail-closed routing diagnostic returned
-// before a provider request can be built. It carries the source URL so the
-// command runner can retain its blocked-command presentation without parsing
-// an opaque URL construction error.
+// before a provider request can be built.
 type MissingOperationRouteError struct {
 	Connector string
 	Operation string
 	Route     string
-	SourceURL string
 	Reason    string
 }
 
@@ -29,18 +26,14 @@ func (e *MissingOperationRouteError) Error() string {
 	if e.Reason != "" {
 		parts = append(parts, e.Reason)
 	}
-	if e.SourceURL != "" {
-		parts = append(parts, "source="+e.SourceURL)
-	}
 	return strings.Join(parts, ": ")
 }
 
-func operationRouteFailure(b Bundle, operation, route, sourceURL, reason string) error {
+func operationRouteFailure(b Bundle, operation, route, reason string) error {
 	return &MissingOperationRouteError{
 		Connector: b.Name,
 		Operation: operation,
 		Route:     route,
-		SourceURL: sourceURL,
 		Reason:    reason,
 	}
 }
@@ -55,7 +48,7 @@ func validateOperationRoutes(b Bundle, streams []StreamSpec, writes []WriteActio
 	}
 
 	for _, stream := range streams {
-		if err := validateOperationRouteSelection(b, routes, stream.Route, stream.Name, stream.Path, ""); err != nil {
+		if err := validateOperationRouteSelection(b, routes, stream.Route, stream.Name, stream.Path); err != nil {
 			return err
 		}
 	}
@@ -63,13 +56,13 @@ func validateOperationRoutes(b Bundle, streams []StreamSpec, writes []WriteActio
 		if strings.TrimSpace(action.Route) != "" && strings.TrimSpace(action.BaseURL) != "" {
 			return fmt.Errorf("write action %q declares both route and base_url", action.Name)
 		}
-		if err := validateOperationRouteSelection(b, routes, action.Route, action.Name, action.Path, ""); err != nil {
+		if err := validateOperationRouteSelection(b, routes, action.Route, action.Name, action.Path); err != nil {
 			return err
 		}
 	}
 	for _, operation := range operations {
 		path := operationRoutePath(operation)
-		if err := validateOperationRouteSelection(b, routes, operation.Route, operation.ID, path, operation.SourceURL); err != nil {
+		if err := validateOperationRouteSelection(b, routes, operation.Route, operation.ID, path); err != nil {
 			return err
 		}
 	}
@@ -108,27 +101,27 @@ func declaredOperationRoutes(b Bundle) (map[string]OperationRouteSpec, error) {
 	return routes, nil
 }
 
-func validateOperationRouteSelection(b Bundle, routes map[string]OperationRouteSpec, selection, operation, path, sourceURL string) error {
+func validateOperationRouteSelection(b Bundle, routes map[string]OperationRouteSpec, selection, operation, path string) error {
 	selection = strings.TrimSpace(selection)
 	if selection == "" {
 		return nil
 	}
 	route, ok := routes[selection]
 	if !ok {
-		return operationRouteFailure(b, operation, selection, sourceURL, "route is not declared by streams.base.routes")
+		return operationRouteFailure(b, operation, selection, "route is not declared by streams.base.routes")
 	}
 	if version := strings.TrimSpace(route.Version); version != "" && !strings.HasPrefix(path, "/"+version+"/") && path != "/"+version {
-		return operationRouteFailure(b, operation, selection, sourceURL, fmt.Sprintf("version %q does not match declared path %q", version, path))
+		return operationRouteFailure(b, operation, selection, fmt.Sprintf("version %q does not match declared path %q", version, path))
 	}
 	return nil
 }
 
-func validateOperationRouteForOperation(b Bundle, selection, operation, path, sourceURL string) error {
+func validateOperationRouteForOperation(b Bundle, selection, operation, path string) error {
 	routes, err := declaredOperationRoutes(b)
 	if err != nil {
 		return err
 	}
-	return validateOperationRouteSelection(b, routes, selection, operation, path, sourceURL)
+	return validateOperationRouteSelection(b, routes, selection, operation, path)
 }
 
 func validateOperationRouteBase(baseURL string) error {
@@ -169,34 +162,41 @@ func operationRoutePath(operation OperationSpec) string {
 	return ""
 }
 
-func resolveOperationRoute(b Bundle, cfg connectors.RuntimeConfig, selection, operation, path, sourceURL string) (string, error) {
+func resolveOperationRoute(b Bundle, cfg connectors.RuntimeConfig, selection, operation, path string) (string, error) {
 	selection = strings.TrimSpace(selection)
 	if selection == "" {
+		if b.HTTP.TenantOrigin != nil {
+			baseURL, err := resolveTenantOrigin(*b.HTTP.TenantOrigin, cfg.Config)
+			if err != nil {
+				return "", operationRouteFailure(b, operation, "", "resolve declared tenant origin")
+			}
+			return baseURL, nil
+		}
 		baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
 		if err != nil {
-			return "", operationRouteFailure(b, operation, "", sourceURL, "resolve declared default base URL")
+			return "", operationRouteFailure(b, operation, "", "resolve declared default base URL")
 		}
 		if !isAbsoluteHTTPURL(baseURL) {
-			return "", operationRouteFailure(b, operation, "", sourceURL, "declared default base URL is invalid")
+			return "", operationRouteFailure(b, operation, "", "declared default base URL is invalid")
 		}
 		return baseURL, nil
 	}
 
 	routes, err := declaredOperationRoutes(b)
 	if err != nil {
-		return "", operationRouteFailure(b, operation, selection, sourceURL, err.Error())
+		return "", operationRouteFailure(b, operation, selection, err.Error())
 	}
-	if err := validateOperationRouteSelection(b, routes, selection, operation, path, sourceURL); err != nil {
+	if err := validateOperationRouteSelection(b, routes, selection, operation, path); err != nil {
 		return "", err
 	}
 	route := routes[selection]
 	baseURL, err := Interpolate(route.BaseURL, requestVars(cfg, nil, ""))
 	if err != nil {
-		return "", operationRouteFailure(b, operation, selection, sourceURL, "resolve declared route base URL")
+		return "", operationRouteFailure(b, operation, selection, "resolve declared route base URL")
 	}
 	parsed, err := url.Parse(baseURL)
 	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
-		return "", operationRouteFailure(b, operation, selection, sourceURL, "declared route base URL is invalid")
+		return "", operationRouteFailure(b, operation, selection, "declared route base URL is invalid")
 	}
 	// A version route deliberately selects a provider origin. Its version stays
 	// in the source-locked operation path, so a configured v2 base can never
@@ -211,80 +211,15 @@ func resolveOperationRoute(b Bundle, cfg connectors.RuntimeConfig, selection, op
 }
 
 func resolveStreamRoute(b Bundle, cfg connectors.RuntimeConfig, stream StreamSpec) (string, error) {
-	return resolveOperationRoute(b, cfg, stream.Route, stream.Name, stream.Path, "")
-}
-
-// preflightSourceBoundOperationOrigin prevents a source-bound operation from
-// inheriting a caller-selected base_url. The provider-relative operation path
-// is already sealed by source_operation; the origin must be equally
-// declaration-owned before authentication construction can begin.
-func preflightSourceBoundOperationOrigin(b Bundle, cfg connectors.RuntimeConfig, operation OperationSpec) error {
-	if operation.SourceOperation == nil {
-		return nil
-	}
-	path := operationRoutePath(operation)
-	return preflightSourceBoundRouteOrigin(b, cfg, operation.Route, operation.ID, path, operation.SourceURL)
-}
-
-func preflightSourceBoundStreamOrigin(b Bundle, cfg connectors.RuntimeConfig, stream StreamSpec) error {
-	var sourceBound *OperationSpec
-	for index := range b.Operations {
-		operation := &b.Operations[index]
-		if operation.Kind != "stream_etl" || operation.Composite == nil || operation.SourceOperation == nil {
-			continue
-		}
-		for _, step := range operation.Composite.Steps {
-			if step != "stream:"+stream.Name {
-				continue
-			}
-			if sourceBound != nil {
-				return fmt.Errorf("source-bound stream %q is selected by more than one source-bound operation", stream.Name)
-			}
-			sourceBound = operation
-		}
-	}
-	if sourceBound == nil {
-		return nil
-	}
-	return preflightSourceBoundRouteOrigin(b, cfg, stream.Route, stream.Name, stream.Path, sourceBound.SourceURL)
-}
-
-func preflightSourceBoundRouteOrigin(b Bundle, cfg connectors.RuntimeConfig, selection, operation, path, sourceURL string) error {
-	defaultConfig := materializeConfigDefaults(b, connectors.RuntimeConfig{})
-	expected, err := resolveOperationRoute(b, defaultConfig, selection, operation, path, sourceURL)
-	if err != nil {
-		return fmt.Errorf("source-bound provider operation %q cannot resolve its declared origin: %w", operation, err)
-	}
-	configured, err := resolveOperationRoute(b, materializeConfigDefaults(b, cfg), selection, operation, path, sourceURL)
-	if err != nil {
-		return fmt.Errorf("source-bound provider operation %q rejects configured origin: %w", operation, err)
-	}
-	expectedKey, err := sourceBoundBaseURLKey(expected)
-	if err != nil {
-		return fmt.Errorf("source-bound provider operation %q has an invalid declared origin", operation)
-	}
-	configuredKey, err := sourceBoundBaseURLKey(configured)
-	if err != nil || configuredKey != expectedKey {
-		return fmt.Errorf("source-bound provider operation %q rejects configured base_url override", operation)
-	}
-	return nil
-}
-
-func sourceBoundBaseURLKey(raw string) (string, error) {
-	parsed, err := url.Parse(strings.TrimSpace(raw))
-	if err != nil || parsed.Scheme == "" || parsed.Host == "" || (parsed.Scheme != "https" && parsed.Scheme != "http") || parsed.User != nil || parsed.RawQuery != "" || parsed.Fragment != "" {
-		return "", fmt.Errorf("invalid HTTP base URL")
-	}
-	path := strings.TrimRight(parsed.EscapedPath(), "/")
-	return strings.ToLower(parsed.Scheme) + "://" + strings.ToLower(parsed.Host) + path, nil
+	return resolveOperationRoute(b, cfg, stream.Route, stream.Name, stream.Path)
 }
 
 func resolveWriteActionRoute(b Bundle, cfg connectors.RuntimeConfig, action WriteAction) (string, error) {
 	if strings.TrimSpace(action.Route) != "" && strings.TrimSpace(action.BaseURL) != "" {
-		return "", operationRouteFailure(b, action.Name, action.Route, "", "write action declares both route and base_url")
+		return "", operationRouteFailure(b, action.Name, action.Route, "write action declares both route and base_url")
 	}
 	if strings.TrimSpace(action.Route) != "" {
-		return resolveOperationRoute(b, cfg, action.Route, action.Name, action.Path, "")
+		return resolveOperationRoute(b, cfg, action.Route, action.Name, action.Path)
 	}
 	if strings.TrimSpace(action.BaseURL) != "" {
 		if err := validateWriteActionBaseURL(-1, action); err != nil {
@@ -299,7 +234,7 @@ func resolveWriteActionRoute(b Bundle, cfg connectors.RuntimeConfig, action Writ
 		}
 		return baseURL, nil
 	}
-	return resolveOperationRoute(b, cfg, "", action.Name, action.Path, "")
+	return resolveOperationRoute(b, cfg, "", action.Name, action.Path)
 }
 
 // validateWriteActionSourceOrigin prevents a credential configured against one
@@ -311,7 +246,7 @@ func validateWriteActionSourceOrigin(b Bundle, cfg connectors.RuntimeConfig, act
 	if len(action.AllowedBaseURLOrigins) == 0 {
 		return nil
 	}
-	configured, err := resolveOperationRoute(b, cfg, "", action.Name, action.Path, "")
+	configured, err := resolveOperationRoute(b, cfg, "", action.Name, action.Path)
 	if err != nil {
 		return err
 	}
@@ -328,11 +263,11 @@ func validateWriteActionSourceOrigin(b Bundle, cfg connectors.RuntimeConfig, act
 	return fmt.Errorf("engine: write action %q refuses alternate origin because configured base origin %q is not declared", action.Name, origin)
 }
 
-func newRuntimeForOperationRoute(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks, selection, operation, path, sourceURL string) (*Runtime, error) {
+func newRuntimeForOperationRoute(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks, selection, operation, path string) (*Runtime, error) {
 	if err := ValidateExplicitEmptyRequiredSecretFields(b, cfg.Secrets); err != nil {
 		return nil, fmt.Errorf("engine: %w", err)
 	}
-	baseURL, err := resolveOperationRoute(b, cfg, selection, operation, path, sourceURL)
+	baseURL, err := resolveOperationRoute(b, cfg, selection, operation, path)
 	if err != nil {
 		return nil, err
 	}

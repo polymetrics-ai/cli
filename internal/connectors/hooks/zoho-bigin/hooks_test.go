@@ -102,7 +102,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderZohoBigin(t *testing.T) {
-	h := engine.HooksFor("zoho-bigin")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"zoho-bigin\") = nil, want registered hooks (hooks/zoho-bigin's init() must call engine.RegisterHooks)")
 	}

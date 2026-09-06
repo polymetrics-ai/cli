@@ -1,33 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "addresses",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "integer"
-    },
-    "id_customer": {
-      "type": "integer"
-    },
-    "id_country": {
-      "type": "integer"
-    },
-    "id_state": {
-      "type": "integer"
-    },
-    "firstname": {
-      "type": "string"
-    },
-    "lastname": {
-      "type": "string"
-    },
     "city": {
-      "type": "string"
-    },
-    "postcode": {
-      "type": "string"
-    },
-    "phone": {
       "type": "string"
     },
     "date_add": {
@@ -51,10 +25,36 @@
         "array",
         "null"
       ]
+    },
+    "firstname": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "id_country": {
+      "type": "integer"
+    },
+    "id_customer": {
+      "type": "integer"
+    },
+    "id_state": {
+      "type": "integer"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "postcode": {
+      "type": "string"
     }
   },
+  "title": "addresses",
+  "type": "object",
+  "x-cursor-field": "date_upd",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "date_upd"
+  ]
 }

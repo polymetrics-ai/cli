@@ -1,5 +1,0 @@
-{
-  "record": { "id": 444 },
-  "expect": { "method": "DELETE", "path": "/speaker/444" },
-  "response": { "status": 204, "body": {} }
-}

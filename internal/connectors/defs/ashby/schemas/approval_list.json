@@ -1,108 +1,108 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "approval_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the approval"
-    },
     "approvalDefinitionId": {
-      "type": "string",
-      "description": "The id of the approval definition associated with this approval"
+      "description": "The id of the approval definition associated with this approval",
+      "type": "string"
+    },
+    "completedAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "createdAt": {
+      "description": "The date and time when the approval was created",
+      "format": "date-time",
+      "type": "string"
     },
     "entityId": {
-      "type": "string",
-      "description": "The id of the approval entity, such as the id of the offer version"
+      "description": "The id of the approval entity, such as the id of the offer version",
+      "type": "string"
     },
     "entityType": {
-      "type": "string",
       "description": "The type of entity associated with this approval",
       "enum": [
         "Job",
         "Offer",
         "Opening"
-      ]
+      ],
+      "type": "string"
     },
-    "createdAt": {
-      "type": "string",
-      "description": "The date and time when the approval was created",
-      "format": "date-time"
-    },
-    "submittedAt": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "completedAt": {
-      "type": "string",
-      "format": "date-time"
+    "id": {
+      "description": "The unique identifier for the approval",
+      "type": "string"
     },
     "steps": {
-      "type": "array",
       "description": "The approval steps for this approval",
       "items": {
-        "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier for the approval step"
-          },
           "approvalsRequired": {
-            "type": "integer",
-            "description": "The number of approvers required to approve this step before the approval moves to the next step"
-          },
-          "completedAt": {
-            "type": "string",
-            "format": "date-time"
+            "description": "The number of approvers required to approve this step before the approval moves to the next step",
+            "type": "integer"
           },
           "approvers": {
-            "type": "array",
             "description": "An unordered list of users who can approve this step",
             "items": {
-              "type": "object",
               "properties": {
-                "id": {
-                  "type": "string",
-                  "description": "The unique identifier for the approval step approver"
-                },
-                "userId": {
-                  "type": "string",
-                  "description": "The id of a user who is an approver for this step"
+                "decidedAt": {
+                  "format": "date-time",
+                  "type": "string"
                 },
                 "decision": {
-                  "type": "string",
                   "description": "The approver's decision for this approval step",
                   "enum": [
                     "approve",
                     "reject",
                     "pending"
-                  ]
+                  ],
+                  "type": "string"
                 },
-                "decidedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                "id": {
+                  "description": "The unique identifier for the approval step approver",
+                  "type": "string"
                 },
                 "requestedAt": {
-                  "type": "string",
-                  "format": "date-time"
+                  "format": "date-time",
+                  "type": "string"
+                },
+                "userId": {
+                  "description": "The id of a user who is an approver for this step",
+                  "type": "string"
                 }
               },
               "required": [
                 "id",
                 "userId",
                 "decision"
-              ]
-            }
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "completedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "description": "The unique identifier for the approval step",
+            "type": "string"
           }
         },
         "required": [
           "id",
           "approvalsRequired",
           "approvers"
-        ]
-      }
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "submittedAt": {
+      "format": "date-time",
+      "type": "string"
     }
   },
+  "title": "approval_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

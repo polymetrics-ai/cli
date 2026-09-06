@@ -17,10 +17,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("google-calendar", func() engine.Hooks { return New() })
-}
-
 // Hooks implements the custom OAuth2 refresh-token AuthHook required by
 // Google Calendar's declarative HTTP bundle. It intentionally does not
 // override Check or ReadStream; fixture replay and live reads use the engine's
@@ -36,10 +32,6 @@ func New() engine.Hooks { return Hooks{} }
 func (Hooks) ConnectorName() string { return "google-calendar" }
 
 func (h Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, spec engine.AuthSpec) (connsdk.Authenticator, error) {
-	if fixtureAuth(cfg) {
-		return connsdk.AuthFunc(func(context.Context, *http.Request) error { return nil }), nil
-	}
-
 	vars := engine.Vars{Config: cfg.Config, Secrets: cfg.Secrets}
 	tokenURL, err := engine.Interpolate(spec.TokenURL, vars)
 	if err != nil {
@@ -79,10 +71,6 @@ func (h Hooks) Authenticator(ctx context.Context, cfg connectors.RuntimeConfig, 
 		client:       h.Client,
 		now:          h.Now,
 	}, nil
-}
-
-func fixtureAuth(cfg connectors.RuntimeConfig) bool {
-	return cfg.ProjectDir == "__polymetrics_conformance_fixture__"
 }
 
 func validateTokenEndpoint(raw string) error {

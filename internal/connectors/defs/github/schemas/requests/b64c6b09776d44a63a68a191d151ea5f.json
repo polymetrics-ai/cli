@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "actor_identifier": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "actor_type": {
+      "enum": [
+        "User",
+        "Team"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "role": {
+      "enum": [
+        "reader",
+        "writer",
+        "admin"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "space_number": {
+      "type": "integer"
+    },
+    "username": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "actor_identifier",
+    "actor_type",
+    "role",
+    "space_number",
+    "username"
+  ],
+  "type": "object"
+}

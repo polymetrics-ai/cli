@@ -8,10 +8,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"polymetrics.ai/internal/connectors"
@@ -44,9 +46,10 @@ type App struct {
 	deferredState           *state
 	deferredStateRevision   uint64
 	vault                   *vault.Vault
-	ephemeralCredentials    *CertificationEphemeralSession
 	approval                *projectWriteApprovalAuthority
 	registry                *connectors.Registry
+	transportRegistry       *connectors.Registry
+	transportMu             sync.Mutex
 	transports              *synctransport.Registry
 	transportStage          synctransport.WarehouseStage
 	sqlEngine               sqlQueryEngine
@@ -113,10 +116,8 @@ func InitProject(root string) error {
 			return fmt.Errorf("create %s: %w", dir, err)
 		}
 	}
-	if activeCertificationEphemeralSession(root) == nil {
-		if _, err := vault.Init(projectDir); err != nil {
-			return err
-		}
+	if _, err := vault.Init(projectDir); err != nil {
+		return err
 	}
 	configPath := filepath.Join(projectDir, "config.yaml")
 	if _, err := os.Stat(configPath); errors.Is(err, os.ErrNotExist) {
@@ -151,49 +152,66 @@ func InitProject(root string) error {
 }
 
 func Open(root string) (*App, error) {
-	return open(root, false)
+	return openWithRegistry(root, false, bundleregistry.NewRegistry)
 }
 
 func OpenForReverseExecution(root string) (*App, error) {
-	return open(root, true)
+	return openWithRegistry(root, true, bundleregistry.NewRegistry)
 }
 
-func open(root string, deferNormalization bool) (*App, error) {
+// OpenWithRegistry constructs an App with an explicitly supplied immutable registry.
+func OpenWithRegistry(root string, registry *connectors.Registry) (*App, error) {
+	return openWithRegistry(root, false, func() (*connectors.Registry, error) { return registry, nil })
+}
+
+// OpenForReverseExecutionWithRegistry constructs a read-only reverse-execution App with registry.
+func OpenForReverseExecutionWithRegistry(root string, registry *connectors.Registry) (*App, error) {
+	return openWithRegistry(root, true, func() (*connectors.Registry, error) { return registry, nil })
+}
+
+func openWithRegistry(root string, deferNormalization bool, newRegistry func() (*connectors.Registry, error)) (*App, error) {
+	return openWithRegistryWithStat(root, deferNormalization, newRegistry, os.Stat)
+}
+
+func openWithRegistryWithStat(root string, deferNormalization bool, newRegistry func() (*connectors.Registry, error), stat func(string) (fs.FileInfo, error)) (*App, error) {
+	if newRegistry == nil {
+		return nil, errors.New("connector registry factory is required")
+	}
+	if stat == nil {
+		return nil, errors.New("project stat function is required")
+	}
+	registry, err := newRegistry()
+	if err != nil {
+		return nil, fmt.Errorf("construct connector registry: %w", err)
+	}
+	if registry == nil {
+		return nil, errors.New("connector registry factory returned nil")
+	}
 	if root == "" {
 		root = "."
 	}
 	projectDir := filepath.Join(root, ".polymetrics")
-	info, err := os.Stat(projectDir)
+	info, err := stat(projectDir)
 	if err != nil {
 		return nil, fmt.Errorf("open project at %s: %w", projectDir, err)
 	}
 	if !info.IsDir() {
 		return nil, fmt.Errorf("%s is not a directory", projectDir)
 	}
-	ephemeralCredentials := activeCertificationEphemeralSession(root)
 	var v *vault.Vault
-	if ephemeralCredentials == nil {
-		if deferNormalization {
-			v, err = vault.OpenReadOnly(projectDir)
-		} else {
-			v, err = vault.Open(projectDir)
-		}
-		if err != nil {
-			return nil, err
-		}
-	}
-	var approval *projectWriteApprovalAuthority
-	if ephemeralCredentials != nil {
-		approval = ephemeralCredentials.writeApproval()
-		if approval == nil {
-			return nil, errors.New("certification ephemeral credential session is closed")
-		}
+	if deferNormalization {
+		v, err = vault.OpenReadOnly(projectDir)
 	} else {
-		approval, err = newProjectWriteApprovalAuthority(projectDir)
-		if err != nil {
-			return nil, err
-		}
+		v, err = vault.Open(projectDir)
 	}
+	if err != nil {
+		return nil, err
+	}
+	approval, err := newProjectWriteApprovalAuthority(projectDir)
+	if err != nil {
+		return nil, err
+	}
+
 	statePath := filepath.Join(projectDir, "state", "state.json")
 	a := &App{
 		root:                    root,
@@ -202,13 +220,13 @@ func open(root string, deferNormalization bool) (*App, error) {
 		store:                   newStateStore(statePath),
 		deferStateNormalization: deferNormalization,
 		vault:                   v,
-		ephemeralCredentials:    ephemeralCredentials,
 		approval:                approval,
-		registry:                connectors.NewRegistry(),
-		transports:              synctransport.NewRegistry(nil),
+		registry:                registry,
+		transportRegistry:       registry,
 		catalogs:                newCatalogStorage(projectDir),
 	}
 	a.sqlEngine = newSQLEngine(a)
+	a.transportStage = newConnectionWarehouseStage(a)
 	// state.json is atomically replaced by writers, so opening a current project
 	// can take a coherent read-only snapshot without contending on their legacy
 	// O_EXCL writer marker. This lets a second CLI construct its durable parking
@@ -229,9 +247,8 @@ func open(root string, deferNormalization bool) (*App, error) {
 		Store:  parkingStore,
 		Resume: a.resumeParkedRateLimitRun,
 	})
-	if err := a.composeTransportRegistry(); err != nil {
-		return nil, err
-	}
+	// Transport composition is deferred until a saved transport path needs it.
+	// Listing metadata and opening an App must not decode every connector bundle.
 	if err := a.rateParking.Start(context.Background()); err != nil {
 		return nil, fmt.Errorf("start durable rate parking: %w", err)
 	}
@@ -251,7 +268,11 @@ type IssueLabelTransportIdentity struct {
 // definition as the production composition root. Keeping this lookup here
 // prevents shared CLI code from carrying a provider name or endpoint policy.
 func DefaultIssueLabelTransportIdentity() (IssueLabelTransportIdentity, error) {
-	connector, _, err := issueLabelTransportEngine(bundleregistry.New())
+	registry, err := bundleregistry.NewRegistry()
+	if err != nil {
+		return IssueLabelTransportIdentity{}, err
+	}
+	connector, _, err := issueLabelTransportEngine(registry)
 	if err != nil {
 		return IssueLabelTransportIdentity{}, err
 	}
@@ -266,12 +287,12 @@ func (a *App) ProjectDir() string { return a.projectDir }
 
 func (a *App) projectRoot() string { return filepath.Dir(a.projectDir) }
 
-// connectorCommandRuntime gives the public binary-upload command one
-// documented confinement root: the project root a caller invokes pm in. The
-// application's .polymetrics directory remains private state storage and is
-// never a path callers must know to provide upload bytes.
+// connectorCommandRuntime gives public binary-upload and direct-write commands
+// one documented confinement root: the project root a caller invokes pm in.
+// The application's .polymetrics directory remains private state storage and
+// is never a path callers must know to provide attachment bytes.
 func (a *App) connectorCommandRuntime(intent string, runtime connectors.RuntimeConfig) connectors.RuntimeConfig {
-	if intent == "binary_upload" {
+	if intent == "binary_upload" || intent == "direct_write" {
 		runtime.ProjectDir = a.projectRoot()
 	}
 	return runtime
@@ -753,9 +774,6 @@ func newStateStore(path string) statestore.JSONStore[state] {
 }
 
 func (a *App) AddCredential(ctx context.Context, req AddCredentialRequest) (CredentialMeta, error) {
-	if a.ephemeralCredentials != nil {
-		return CredentialMeta{}, errors.New("certification ephemeral sessions do not persist credentials")
-	}
 	if strings.TrimSpace(req.Name) == "" {
 		return CredentialMeta{}, errors.New("credential name is required")
 	}
@@ -1138,12 +1156,12 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 			return Connection{}, modeErr
 		}
 		destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
-		if stream.DestinationAction != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+		if stream.DestinationAction != "" && (!declared || !isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor)) {
 			return Connection{}, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", name, destination.Name())
 		}
-		if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
-			if a.transports == nil {
-				return Connection{}, fmt.Errorf("declarative typed destination transport registry is unavailable")
+		if declared && isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor) {
+			if err := a.ensureTransportRegistry(); err != nil {
+				return Connection{}, err
 			}
 			resolved, preflightErr := a.transports.Preflight(synctransport.PreflightRequest{Source: source, Destination: destination, Stream: name, Mode: mode.ContractMode, DestinationAction: stream.DestinationAction})
 			if preflightErr != nil {
@@ -1170,7 +1188,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 		if stream.SyncMode == "" {
 			stream.SyncMode = DefaultUserFacingSyncMode
 		}
-		if isLegacySyncModeName(stream.SyncMode) && !postgresManagedTargetContractMode(source, destination, stream.SyncMode) {
+		if isLegacySyncModeName(stream.SyncMode) {
 			stream.LegacyCompatibility = true
 		}
 		mode, err := ParseStreamSyncMode(stream)
@@ -1211,7 +1229,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 				return Connection{}, err
 			}
 		}
-		if err := ValidateStreamSyncConfig(stream); err != nil {
+		if err := a.validateEndpointStreamSyncConfig(source, destination, name, stream, mode); err != nil {
 			return Connection{}, fmt.Errorf("validate stream %q: %w", name, err)
 		}
 		streamID, err := allocateUniquePrefixedID("stream", streamIDs)
@@ -1477,9 +1495,6 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 		return a.failRun(runID, err)
 	}
 	stream.SyncMode = mode.Name
-	if err := ValidateStreamSyncConfig(stream); err != nil {
-		return a.failRun(runID, err)
-	}
 	source, sourceCredential, sourceRuntime, err := a.resolveEndpointWithCredential(ctx, conn.Source)
 	if err != nil {
 		return a.failRun(runID, err)
@@ -1488,11 +1503,14 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if err != nil {
 		return a.failRun(runID, err)
 	}
+	if err := a.validateEndpointStreamSyncConfig(source, destination, req.Stream, stream, mode); err != nil {
+		return a.failRun(runID, err)
+	}
 	destinationDescriptor, declared := connectors.DestinationTransportDescriptorOf(destination)
-	if stream.DestinationAction != "" && (!declared || destinationDescriptor.Executor != declarativeTypedDestinationReference) {
+	if stream.DestinationAction != "" && (!declared || !isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor)) {
 		return a.failRun(runID, fmt.Errorf("stream %q selects destination_action but destination connector %q is not a declarative typed destination", req.Stream, destination.Name()))
 	}
-	if declared && destinationDescriptor.Executor == declarativeTypedDestinationReference {
+	if declared && isDeclarativeDefinitionOwnedDestination(destinationDescriptor.Executor) {
 		if a.transports == nil {
 			return a.failRun(runID, fmt.Errorf("declarative typed destination transport registry is unavailable"))
 		}
@@ -2787,10 +2805,8 @@ func (a *App) confirmationPolicyForAction(connectorName, actionName string) conn
 }
 
 func (a *App) confirmationPolicyForPlan(plan ReversePlan) connectors.WriteConfirmation {
-	// Prefer the current connector manifest so a local state edit cannot remove
-	// a destructive-action confirmation gate from an already-created plan. The
-	// stored plan challenge remains a compatibility fallback for older plans or
-	// connectors that are temporarily unavailable.
+	// Resolve confirmation from the current execution bundle so a local state
+	// edit cannot remove a destructive-action gate from an existing plan.
 	if plan.ConnectorCommandOperation != "" {
 		if connector, ok := a.registry.Get(plan.DestinationConnector); ok {
 			if provider, ok := connector.(connectors.OperationDirectWriteMetadataProvider); ok {
@@ -2805,10 +2821,7 @@ func (a *App) confirmationPolicyForPlan(plan ReversePlan) connectors.WriteConfir
 	if confirmation := a.confirmationPolicyForAction(plan.DestinationConnector, plan.Action); confirmation.Kind != "" {
 		return confirmation
 	}
-	if plan.ConfirmationPolicy.Kind != "" {
-		return plan.ConfirmationPolicy
-	}
-	return confirmationFromChallenge(plan.ConfirmationChallenge)
+	return connectors.WriteConfirmation{}
 }
 
 func (a *App) actionIsBatchable(connectorName, actionName string) bool {
@@ -3598,49 +3611,6 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 		}
 		return coordination.NewAuthCohortRuntime(ctx, a.authCohorts, identity.AuthCohortKey())
 	}
-	if a.ephemeralCredentials != nil {
-		credential, secrets, ok := a.ephemeralCredentials.credential(name)
-		if ok {
-			providerFamily, authProfile, err := credentialCoordinationDeclarations(credential.Connector, "", "")
-			if err != nil {
-				return CredentialMeta{}, connectors.RuntimeConfig{}, err
-			}
-			credential.ProviderFamily = providerFamily
-			credential.AuthProfile = authProfile
-			coordinationIdentity, err := a.newCoordinationIdentity(providerFamily, authProfile, credential.ID)
-			if err != nil {
-				return CredentialMeta{}, connectors.RuntimeConfig{}, err
-			}
-			config := cloneStringMap(credential.Config)
-			for key, value := range overlay {
-				config[key] = value
-			}
-			credentialRevision, err := a.approval.CredentialRevision(credential.ID, secrets)
-			if err != nil {
-				return CredentialMeta{}, connectors.RuntimeConfig{}, err
-			}
-			configurationDigest, err := a.approval.ConfigurationDigest(credential.ID, config)
-			if err != nil {
-				return CredentialMeta{}, connectors.RuntimeConfig{}, err
-			}
-			authAdmission, err := resolveAuthAdmission(coordinationIdentity)
-			if err != nil {
-				return CredentialMeta{}, connectors.RuntimeConfig{}, err
-			}
-			return credential, connectors.RuntimeConfig{
-				ProjectDir:              a.projectDir,
-				Config:                  config,
-				Secrets:                 secrets,
-				CoordinationIdentity:    coordinationIdentity,
-				CredentialRevision:      credentialRevision,
-				ConfigurationDigest:     configurationDigest,
-				WriteApprovalScope:      connectors.WriteApprovalScopeProject,
-				SecretStore:             ephemeralCertificationSecretStore{},
-				AuthenticationAdmission: authAdmission,
-				RateParkingAdmission:    parkingAdmission,
-			}, nil
-		}
-	}
 	cred, ok := a.findCredential(name)
 	if !ok {
 		return CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q not found", name)
@@ -3687,11 +3657,6 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 }
 
 func (a *App) findCredential(name string) (CredentialMeta, bool) {
-	if a.ephemeralCredentials != nil {
-		if credential, _, ok := a.ephemeralCredentials.credential(name); ok {
-			return credential, true
-		}
-	}
 	for _, cred := range a.state.Credentials {
 		if cred.Name == name || cred.ID == name {
 			return cred, true

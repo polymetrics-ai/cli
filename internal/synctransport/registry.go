@@ -16,17 +16,12 @@ type Registry struct {
 	mu           sync.RWMutex
 	sources      map[connectors.TransportExecutorReference]SourceExecutor
 	destinations map[connectors.TransportExecutorReference]DestinationExecutor
-	verifier     ConformanceVerifier
 }
 
-func NewRegistry(verifier ConformanceVerifier) *Registry {
-	if isNilInterface(verifier) {
-		verifier = unavailableConformanceVerifier{}
-	}
+func NewRegistry() *Registry {
 	return &Registry{
 		sources:      make(map[connectors.TransportExecutorReference]SourceExecutor),
 		destinations: make(map[connectors.TransportExecutorReference]DestinationExecutor),
-		verifier:     verifier,
 	}
 }
 
@@ -140,8 +135,8 @@ func (e *SourceStreamIneligibleError) Error() string {
 }
 
 // Preflight proves that both endpoint descriptors, closed families, exact
-// registrations, mode, strategy, acknowledgement policy, and independent
-// conformance verifier agree before a source executor can read.
+// registrations, mode, strategy, acknowledgement policy, and executor delivery
+// contracts agree before a source executor can read.
 func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error) {
 	if r == nil {
 		return ResolvedTransport{}, fmt.Errorf("transport registry is required")
@@ -206,7 +201,6 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	r.mu.RLock()
 	source, sourceRegistered := r.sources[sourceDescriptor.Executor]
 	destination, destinationRegistered := r.destinations[destinationDescriptor.Executor]
-	verifier := r.verifier
 	r.mu.RUnlock()
 	if !sourceRegistered || isNilInterface(source) {
 		return ResolvedTransport{}, fmt.Errorf("source transport executor %q is not registered", sourceDescriptor.Executor.ID)
@@ -223,26 +217,6 @@ func (r *Registry) Preflight(request PreflightRequest) (ResolvedTransport, error
 	if err := validateDeliveryCompatibility(request.Mode, strategy.Strategy, sourceDescriptor.Delivery, destinationDescriptor.Delivery); err != nil {
 		return ResolvedTransport{}, err
 	}
-	if isNilInterface(verifier) {
-		return ResolvedTransport{}, fmt.Errorf("external transport conformance verification is unavailable")
-	}
-	if err := verifier.VerifyTransportConformance(ConformanceVerification{
-		Role:          connectors.TransportRoleSource,
-		ConnectorName: request.Source.Name(),
-		Executor:      sourceDescriptor.Executor,
-		Evidence:      sourceDescriptor.Conformance,
-	}); err != nil {
-		return ResolvedTransport{}, fmt.Errorf("source transport conformance: %w", err)
-	}
-	if err := verifier.VerifyTransportConformance(ConformanceVerification{
-		Role:          connectors.TransportRoleDestination,
-		ConnectorName: request.Destination.Name(),
-		Executor:      destinationDescriptor.Executor,
-		Evidence:      destinationDescriptor.Conformance,
-	}); err != nil {
-		return ResolvedTransport{}, fmt.Errorf("destination transport conformance: %w", err)
-	}
-
 	return ResolvedTransport{
 		Source:                source,
 		Destination:           destination,
@@ -268,10 +242,21 @@ func validateDeliveryCompatibility(mode synccontract.Mode, strategy connectors.A
 	if source.Idempotency == connectors.DeliveryIdempotencyNone {
 		return fmt.Errorf("transport sync mode %q cannot replay a source declaring no idempotency", mode)
 	}
+	if destination.Idempotency == connectors.DeliveryIdempotencySingleAttempt {
+		if mode != synccontract.ModeFullAppend || strategy != connectors.ApplyStrategyAppend {
+			return fmt.Errorf("transport sync mode %q requires keyed destination idempotency; single_attempt supports only full_append", mode)
+		}
+		return nil
+	}
 	if destination.Idempotency != connectors.DeliveryIdempotencyKeyed {
 		return fmt.Errorf("transport sync mode %q requires keyed destination idempotency", mode)
 	}
-	if mode == synccontract.ModeIncrementalDedupe || mode == synccontract.ModeIncrementalDedupeHistory || mode == synccontract.ModeChangeCapture {
+	if mode == synccontract.ModeIncrementalDedupe {
+		if (source.Ordering != connectors.DeliveryOrderingSource && source.Ordering != connectors.DeliveryOrderingWindowCoalesced) || destination.Ordering != connectors.DeliveryOrderingSource {
+			return fmt.Errorf("transport sync mode %q requires source-ordered or token-window-coalesced source delivery and a source-ordered destination", mode)
+		}
+	}
+	if mode == synccontract.ModeIncrementalDedupeHistory || mode == synccontract.ModeChangeCapture {
 		if source.Ordering != connectors.DeliveryOrderingSource || destination.Ordering != connectors.DeliveryOrderingSource {
 			return fmt.Errorf("transport sync mode %q requires source-ordered delivery at both endpoints", mode)
 		}

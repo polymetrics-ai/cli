@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "metadata": {
+      "additionalProperties": true,
+      "maxProperties": 256,
+      "type": "object"
+    },
+    "space_number": {
+      "type": "integer"
+    },
+    "space_resource_id": {
+      "type": "integer"
+    },
+    "username": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "space_number",
+    "space_resource_id",
+    "username"
+  ],
+  "type": "object"
+}

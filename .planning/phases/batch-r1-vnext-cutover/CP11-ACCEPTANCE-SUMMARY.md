@@ -1,0 +1,22 @@
+# CP11 current acceptance projection — Firstmate087/088
+
+CP11 remains **unaccepted**. [CP11-ACCEPTANCE.json](CP11-ACCEPTANCE.json) is the current contract-to-assertion table; its119 stable supporting rows preserve the original audit/source/test/receipt records. Current proof groups bind exact source hashes, test declarations and assertion locations. Original range begins36e4d980de0d51d92fe74a68306845643596a6cb; audit bound7481d177 and was committed05385336. Design079 and coordinated083/087 govern this repair.
+
+| Finding | Current disposition | Concrete proof and remaining gate |
+| --- | --- | --- |
+|7481-01|Implemented; owner assertions bound|Explicit partial-open ownership; common writer owns one Close, bound incomplete cleanup, complete retention/final binding. Three record kinds × six frontiers; seven real phase callers × two targets × three frontiers; valid bootstrap/successor states and remaining result controls. Final coherent package and independent judgment pending.|
+|7481-02|Implemented; owner assertions bound|Separate actual open/completion/cleanup classes; only matching-A raw ENOTEMPTY permits intended retention. Pure retry and128 bound; eight actual prepared/current/committed/rollback/fresh-restoration consumers preserve compound causes and selected state. Final coherent package and independent judgment pending.|
+|7481-03|Proof implemented; owner assertions bound|Ten failed-allocation cells: Publish, direct CURRENT/JOURNAL, generation Prune, stage Recover × empty/nonempty DIRECTORY B. Actual opened A, actor B, raw controls/history/residue, one allocated-root Close and fresh recovery/retry. Existing later-cleanup tests remain complementary.|
+|7481-04|Proof implemented; owner assertions bound|Pre-fault expected full trees and stable history, new completed phase sequence/outcome, actual A/B captured at actor creation. Nine unheld schedules, held reader, early/late stage and separate Check. Counterexamples reject readable wrong root/inode/bytes/history/phase. Final package and semantic challenge pending.|
+|7481-05|Claims corrected; retained proof bound|Nested Publish is initial recovery. Mandatory nested Recover-stage/Prune-generation, four no-GC repetitions and actual child/quarantine Close remain. Post-Stat scope is real Stat plus injected completion, retained nested bytes/outer root; no natural failure, pre-operation child identity or nested final-prune claim.|
+|7481-06|Proof implemented; owner assertions bound|Record partial/short/Sync+Close; identity/Stat/bounded Read+Close; real failed Linkat+Close; capture primary+actual Sync completion+Close; staged actual writable/Sync completion+Close+cleanup. Exact resource-instance counts supplement finite-FD checks.058 staged writable class does not stipulate an additional unconditional Write-error matrix.|
+
+Completed focused receipts remain original source-bound observations: initial coordinated195/195 events normal/race104.920/145.784s;087 record9/9 events6.335/10.425s; allocation-consumer9/9 events12.699/19.727s; assertion/resource80/80 events51.863/72.478s. Later pending-Check/F03B assertions race3.299s are a development log, not a substitute for final combined validation. Parent/subtest event counts are not independent test or obligation counts.
+
+Full-repository introduced lint from the original base passed with0 issues after13 mechanical package diagnostics were corrected. Test-owned Close results are checked; unused DirectoryFromFD forwarding wrapper removed; test dispatch simplified. These final mechanical changes require the final source-bound package run. Old20 global/15 package/31 introduced observations retain their historical attribution; they are not current counts.
+
+All119 `closed` flags remain false because final gate reconciliation and independent Firstmate acceptance are pending. The reusable readiness-checker/negative-fixture framework is rescheduled off CP11's critical path by087; structural ID/reference/hash/symbol checks and actual semantic assertion/receipt inspection remain required. No provider-live, power-loss or Linux-runtime certification is claimed. Original preflight CACHED, scanner success and separate boundary-package CP29 debt remain distinct.
+
+Firstmate088 permits read-only review to overlap final deterministic validation on the frozen candidate. No source/test/dependency mutation during overlap. Firstmate authors the review prompt and reconciles the final verdict; no CP12, push, no-mistakes run or merge is authorized here.
+
+Delivery: https://github.com/polymetrics-ai/cli/pull/4294.

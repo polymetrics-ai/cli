@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "blob_download_timeout": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "checksum_mismatch_report_threshold": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "checksum_mismatch_self_heal_cooldown_minutes": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "container_repositories_max_capacity": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "enabled": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "files_max_capacity": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "integer"
+    },
+    "internal_url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "minimum_reverification_interval": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "repos_max_capacity": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "selective_sync_namespace_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "selective_sync_organization_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "selective_sync_shards": {
+      "items": {
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "selective_sync_type": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sync_object_storage": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "url": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "verification_max_capacity": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "type": "object"
+}

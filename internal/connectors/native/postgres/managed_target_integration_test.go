@@ -1185,7 +1185,6 @@ func newPostgresManagedTargetPollingApply(t *testing.T, write *database.Database
 	targetReference := connectors.TransportExecutorReference{Family: connectors.TransportExecutorFamilyNativeDatabase, ID: "postgres_managed_target_polling_target"}
 	apply, err := engine.NewDatabasePollingApplyExecutor(engine.DatabasePollingApplyConfig{
 		Reference:  targetReference,
-		Evidence:   engine.RequiredPollingWatermarkConformanceEvidence(),
 		Write:      write,
 		Definition: definition,
 		Control:    control,
@@ -1196,7 +1195,7 @@ func newPostgresManagedTargetPollingApply(t *testing.T, write *database.Database
 		t.Fatalf("could not construct PostgreSQL native polling target: %v", err)
 	}
 	registry := engine.NewPollingPreflightRegistry()
-	if err := registry.RegisterSource(&postgresManagedTargetPollingSource{reference: sourceReference, evidence: engine.RequiredPollingWatermarkConformanceEvidence(), definition: definition}); err != nil {
+	if err := registry.RegisterSource(&postgresManagedTargetPollingSource{reference: sourceReference, definition: definition}); err != nil {
 		t.Fatalf("could not register PostgreSQL polling source fixture: %v", err)
 	}
 	if err := registry.RegisterApply(apply); err != nil {
@@ -1261,16 +1260,11 @@ func postgresApplyManagedTargetPollingPage(t *testing.T, ctx context.Context, po
 
 type postgresManagedTargetPollingSource struct {
 	reference  connectors.TransportExecutorReference
-	evidence   engine.PollingWatermarkConformanceEvidence
 	definition database.Definition
 }
 
 func (s *postgresManagedTargetPollingSource) PollingSourceExecutorReference() connectors.TransportExecutorReference {
 	return s.reference
-}
-
-func (s *postgresManagedTargetPollingSource) PollingSourceConformanceEvidence() engine.PollingWatermarkConformanceEvidence {
-	return s.evidence
 }
 
 func (s *postgresManagedTargetPollingSource) PollingSourceDatabaseDefinition() database.Definition {

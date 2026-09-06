@@ -95,7 +95,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration -------------------------------------------------------
 
 func TestHooksRegisteredUnderGoogleForms(t *testing.T) {
-	h := engine.HooksFor("google-forms")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal(`engine.HooksFor("google-forms") = nil, want registered hooks (init() must call engine.RegisterHooks)`)
 	}

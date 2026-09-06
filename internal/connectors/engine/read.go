@@ -29,11 +29,16 @@ const defaultPageSize = 100
 const maxReadContinuationPages = 1_000_000
 
 type readContinuationPayload struct {
-	Version          int    `json:"version"`
-	Connector        string `json:"connector"`
-	Stream           string `json:"stream"`
-	DefinitionSHA256 string `json:"definition_sha256"`
-	SkippedPages     int    `json:"skipped_pages"`
+	Version          int               `json:"version"`
+	Connector        string            `json:"connector"`
+	Stream           string            `json:"stream"`
+	DefinitionSHA256 string            `json:"definition_sha256"`
+	Next             persistedNextPage `json:"next"`
+}
+
+type persistedNextPage struct {
+	URL   string     `json:"url,omitempty"`
+	Query url.Values `json:"query,omitempty"`
 }
 
 // Read executes a declarative stream read against b per design §B.4: resolve
@@ -68,6 +73,9 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if req.MaxPages < 0 {
 		return fmt.Errorf("engine: max pages must not be negative")
 	}
+	if req.MaxRequests < 0 {
+		return fmt.Errorf("engine: max requests must not be negative")
+	}
 	if req.Continuation != nil && !trackPaginationOutcome {
 		return fmt.Errorf("engine: source continuation requires tracked pagination outcome")
 	}
@@ -76,20 +84,13 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if err != nil {
 		return err
 	}
-	if err := preflightDeclaredSourceBoundStreamRead(b, stream); err != nil {
-		return err
-	}
-	if err := preflightSourceBoundStreamOrigin(b, req.Config, stream); err != nil {
-		return err
-	}
-
 	req.Config = materializeConfigDefaults(b, req.Config)
 
 	routeBaseURL, err := resolveStreamRoute(b, req.Config, stream)
 	if err != nil {
 		return err
 	}
-	rt, err := newRuntimeForOperationRoute(ctx, b, req.Config, h, stream.Route, stream.Name, stream.Path, "")
+	rt, err := newRuntimeForOperationRoute(ctx, b, req.Config, h, stream.Route, stream.Name, stream.Path)
 	if err != nil {
 		return err
 	}
@@ -99,6 +100,7 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if rt.Requester.BaseURL != routeBaseURL {
 		return fmt.Errorf("engine: resolved stream route base changed before execution")
 	}
+	attachReadRequestBudget(rt, req.MaxRequests)
 	if sleeper != nil {
 		rt.Requester.Sleep = sleeper
 	}
@@ -120,6 +122,18 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 }
 
 func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error, trackPaginationOutcome bool) error {
+	if stream.DateWindowFanOut != nil {
+		if trackPaginationOutcome && (req.MaxPages > 0 || req.Continuation != nil) {
+			return fmt.Errorf("engine: tracked pagination outcome does not support date-window fan-out stream %q", stream.Name)
+		}
+		return readDateWindowFanOut(ctx, b, stream, req, rt, h, emit)
+	}
+	if stream.CartesianConfigFanOut != nil {
+		if trackPaginationOutcome && (req.MaxPages > 0 || req.Continuation != nil) {
+			return fmt.Errorf("engine: tracked pagination outcome does not support cartesian config fan-out stream %q", stream.Name)
+		}
+		return readCartesianConfigFanOut(ctx, b, stream, req, rt, h, emit)
+	}
 	if stream.FanOut != nil {
 		if trackPaginationOutcome && (req.MaxPages > 0 || req.Continuation != nil) {
 			return fmt.Errorf("engine: tracked pagination outcome does not support fan-out stream %q", stream.Name)
@@ -135,9 +149,12 @@ func readDeclarative(ctx context.Context, b Bundle, stream StreamSpec, req conne
 // readOneSequence's behavior is byte-for-byte identical to the pre-fan-out
 // implementation when a stream declares no fan_out block at all.
 type fanoutContext struct {
-	id         string
-	queryParam string // FanOutInto.QueryParam, "" when unused
-	stampField string // FanOutSpec.StampField, "" when unset
+	id          string
+	queryParam  string // FanOutInto.QueryParam, "" when unused
+	stampField  string // FanOutSpec.StampField, "" when unset
+	queryParams map[string]string
+	queryLists  map[string][]string
+	stampFields map[string]string
 }
 
 // readFanOut resolves the fan-out id list EXACTLY ONCE (config CSV or one
@@ -164,6 +181,142 @@ func readFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors
 		if err := readOneSequence(ctx, b, stream, req, rt, h, emit, fc, false); err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+const dateWindowLayout = "2006-01-02"
+
+func readDateWindowFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error) error {
+	spec := stream.DateWindowFanOut
+	start, err := time.Parse(dateWindowLayout, req.Config.Config[spec.StartDateConfigKey])
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %s must be YYYY-MM-DD", spec.StartDateConfigKey)}
+	}
+	end, err := time.Parse(dateWindowLayout, req.Config.Config[spec.EndDateConfigKey])
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %s must be YYYY-MM-DD", spec.EndDateConfigKey)}
+	}
+	if end.Before(start) {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: errors.New("date_window_fan_out: terminal date precedes start date")}
+	}
+	batchDays, err := strconv.Atoi(req.Config.Config[spec.BatchSizeConfigKey])
+	if err != nil || batchDays < 1 || batchDays > spec.MaxBatchDays {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %s must be an integer between 1 and %d", spec.BatchSizeConfigKey, spec.MaxBatchDays)}
+	}
+	windows := 0
+	for windowStart := start; !windowStart.After(end); windowStart = windowStart.AddDate(0, 0, batchDays) {
+		windows++
+		if windows > spec.MaxWindows {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("date_window_fan_out: %d windows exceed declared maximum %d", windows, spec.MaxWindows)}
+		}
+	}
+	windowedStream := stream
+	windowedStream.DateWindowFanOut = nil
+	for windowStart := start; !windowStart.After(end); windowStart = windowStart.AddDate(0, 0, batchDays) {
+		windowEnd := windowStart.AddDate(0, 0, batchDays-1)
+		if windowEnd.After(end) {
+			windowEnd = end
+		}
+		fc := fanoutContext{queryParams: map[string]string{
+			spec.DateFromQueryParam: windowStart.Format(dateWindowLayout),
+			spec.DateToQueryParam:   windowEnd.Format(dateWindowLayout),
+		}}
+		if err := readOneSequence(ctx, b, windowedStream, req, rt, h, emit, fc, false); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func readCartesianConfigFanOut(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error) error {
+	spec := stream.CartesianConfigFanOut
+	urls, err := cartesianURLs(req.Config.Config[spec.URLConfigKey])
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	strategies, err := cartesianStrategies(req.Config.Config[spec.StrategyConfigKey])
+	if err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	if err := validateCartesianCategories(spec.Categories); err != nil {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	product := len(urls) * len(strategies)
+	if product > spec.MaxCombinations || product > spec.MaxRequests {
+		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("cartesian_config_fan_out: %d requests exceed declared bounds", product)}
+	}
+	for _, analyzedURL := range urls {
+		for _, strategy := range strategies {
+			fc := fanoutContext{
+				queryParams: map[string]string{spec.URLQueryParam: analyzedURL, spec.StrategyQueryParam: strategy},
+				queryLists:  map[string][]string{spec.CategoryQueryParam: spec.Categories},
+				stampFields: map[string]string{"url": analyzedURL, "strategy": strategy},
+			}
+			if err := readOneSequence(ctx, b, stream, req, rt, h, emit, fc, false); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func cartesianURLs(raw string) ([]string, error) {
+	values, err := cartesianList(raw)
+	if err != nil {
+		return nil, err
+	}
+	for _, value := range values {
+		parsed, err := url.Parse(value)
+		if err != nil || parsed.Scheme != "https" || parsed.Host == "" {
+			return nil, fmt.Errorf("cartesian_config_fan_out: invalid HTTPS URL %q", value)
+		}
+	}
+	return values, nil
+}
+
+func cartesianStrategies(raw string) ([]string, error) {
+	values, err := cartesianList(raw)
+	if err != nil {
+		return nil, err
+	}
+	for _, value := range values {
+		if value != "mobile" && value != "desktop" {
+			return nil, fmt.Errorf("cartesian_config_fan_out: invalid strategy %q", value)
+		}
+	}
+	return values, nil
+}
+
+func cartesianList(raw string) ([]string, error) {
+	parts := strings.Split(raw, ",")
+	seen := make(map[string]struct{}, len(parts))
+	values := make([]string, 0, len(parts))
+	for _, part := range parts {
+		value := strings.TrimSpace(part)
+		if value == "" {
+			return nil, errors.New("cartesian_config_fan_out: empty list entry")
+		}
+		if _, duplicate := seen[value]; duplicate {
+			return nil, fmt.Errorf("cartesian_config_fan_out: duplicate list entry %q", value)
+		}
+		seen[value] = struct{}{}
+		values = append(values, value)
+	}
+	return values, nil
+}
+
+func validateCartesianCategories(categories []string) error {
+	seen := make(map[string]struct{}, len(categories))
+	for _, category := range categories {
+		category = strings.TrimSpace(category)
+		if category == "" {
+			return errors.New("cartesian_config_fan_out: empty category")
+		}
+		if _, duplicate := seen[category]; duplicate {
+			return fmt.Errorf("cartesian_config_fan_out: duplicate category %q", category)
+		}
+		seen[category] = struct{}{}
 	}
 	return nil
 }
@@ -308,6 +461,30 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 // bundle author never declares twice, applied via the exact same
 // applyComputedFields code path as any other computed_fields entry.
 func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req connectors.ReadRequest, rt *Runtime, h Hooks, emit func(connectors.Record) error, fc fanoutContext, trackPaginationOutcome bool) error {
+	if len(stream.Headers) != 0 {
+		baseRequester := rt.baseRequester
+		if baseRequester == nil {
+			baseRequester = rt.Requester
+		}
+		requester := *baseRequester
+		headers := cloneResolvedHeaders(requester.DefaultHeaders)
+		if headers == nil {
+			headers = make(map[string]string, len(stream.Headers))
+		}
+		for name, value := range stream.Headers {
+			for existing := range headers {
+				if strings.EqualFold(existing, name) {
+					delete(headers, existing)
+				}
+			}
+			headers[name] = value
+		}
+		requester.DefaultHeaders = headers
+		runtime := *rt
+		runtime.baseRequester = &requester
+		runtime.Requester = &requester
+		rt = &runtime
+	}
 	schema := b.Schemas[stream.Name]
 
 	pag := stream.Pagination
@@ -338,6 +515,15 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	if fc.id != "" && fc.queryParam != "" {
 		baseQuery = cloneAndSetQuery(baseQuery, fc.queryParam, fc.id)
 	}
+	for name, value := range fc.queryParams {
+		baseQuery = cloneAndSetQuery(baseQuery, name, value)
+	}
+	for name, values := range fc.queryLists {
+		baseQuery.Del(name)
+		for _, value := range values {
+			baseQuery.Add(name, value)
+		}
+	}
 
 	rateLimit := b.HTTP.RateLimit
 	rl := newRateLimiter(rateLimit, rt.Requester.Sleep)
@@ -355,7 +541,7 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	maxPages := effectiveReadMaxPages(specForPaginator.MaxPages, req.MaxPages)
-	skippedPages, err := readContinuationSkippedPages(b, stream, req.Continuation)
+	resumePage, err := readContinuationPage(b, stream, req.Continuation)
 	if err != nil {
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
@@ -364,6 +550,12 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	pathVars.FanoutID = fc.id
 
 	page := paginator.Start()
+	if resumePage != nil {
+		if err := resumePaginator(paginator, resumePage); err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
+		}
+		page = resumePage
+	}
 	for pageNum := 0; page != nil; pageNum++ {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -372,12 +564,9 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		// Hard request-count cap, independent of page fullness: mirrors
 		// connsdk.Harvest's own maxPages parameter (paginate.go:201), checked
 		// before issuing the request for this page number. maxPages<=0 (the
-		// zero value, i.e. absent/unset) means unbounded — pagination is
-		// bounded only by the paginator's own short/empty-page stop signal,
-		// same as before this cap existed.
-		if maxPages > 0 && pageNum-skippedPages >= maxPages {
-			if trackPaginationOutcome {
-				continuation, err := newReadContinuation(b, stream, pageNum)
+		if maxPages > 0 && pageNum >= maxPages {
+			if trackPaginationOutcome || specForPaginator.RequireContinuationOnCap {
+				continuation, err := newReadContinuation(b, stream, page)
 				if err != nil {
 					return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 				}
@@ -407,7 +596,61 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			}
 			reqPath = resolved
 		}
-		query := mergeQuery(baseQuery, page.Query)
+		pageQuery := page.Query
+		queryCloned := false
+		if specForPaginator.BodyCursorField != "" && specForPaginator.CursorParam != "" {
+			pageQuery = url.Values{}
+			for key, values := range page.Query {
+				for _, value := range values {
+					pageQuery.Add(key, value)
+				}
+			}
+			queryCloned = true
+			pageQuery.Del(specForPaginator.CursorParam)
+		}
+		if specForPaginator.BodyPageField != "" && specForPaginator.PageParam != "" {
+			if !queryCloned {
+				pageQuery = url.Values{}
+				for key, values := range page.Query {
+					for _, value := range values {
+						pageQuery.Add(key, value)
+					}
+				}
+			}
+			pageQuery.Del(specForPaginator.PageParam)
+		}
+		if specForPaginator.BodyOffsetField != "" && specForPaginator.OffsetParam != "" {
+			if !queryCloned {
+				pageQuery = url.Values{}
+				for key, values := range page.Query {
+					for _, value := range values {
+						pageQuery.Add(key, value)
+					}
+				}
+			}
+			pageQuery.Del(specForPaginator.OffsetParam)
+		}
+		if specForPaginator.BodyLimitField != "" && specForPaginator.LimitParam != "" {
+			if !queryCloned {
+				pageQuery = url.Values{}
+				for key, values := range page.Query {
+					for _, value := range values {
+						pageQuery.Add(key, value)
+					}
+				}
+			}
+			pageQuery.Del(specForPaginator.LimitParam)
+		}
+		query := mergeQuery(baseQuery, pageQuery)
+		// Body-bound pagination owns its declared parameter names. Removing
+		// those keys after the final merge prevents inherited or caller query
+		// values from duplicating a form/JSON pagination field on the wire.
+		if specForPaginator.BodyOffsetField != "" && specForPaginator.OffsetParam != "" {
+			query.Del(specForPaginator.OffsetParam)
+		}
+		if specForPaginator.BodyLimitField != "" && specForPaginator.LimitParam != "" {
+			query.Del(specForPaginator.LimitParam)
+		}
 		body, err := buildStreamRequestBody(stream, req.Config, req.Query, page, specForPaginator, formattedLowerBound, fc)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
@@ -420,7 +663,17 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		}
 		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
 		pageStarted := time.Now()
-		resp, err := requester.Do(pageCtx, method, reqPath, query, body)
+		var resp *connsdk.Response
+		if stream.BodyType == "form" {
+			form, formErr := streamBodyForm(body)
+			if formErr != nil {
+				cancelPage()
+				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: formErr}
+			}
+			resp, err = requester.DoForm(pageCtx, method, reqPath, query, form)
+		} else {
+			resp, err = requester.Do(pageCtx, method, reqPath, query, body)
+		}
 		elapsed := time.Since(pageStarted)
 		cancelPage()
 		recordReadPageFetch(req, elapsed)
@@ -433,14 +686,25 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 				return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 			}
 		}
+		if err := declaredResponseError(resp.Body, stream.ResponseError); err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
 
 		rawRecords, err := extractRecords(resp.Body, stream.Records)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
-		if pageNum < skippedPages {
-			page = paginator.Next(resp, len(rawRecords))
-			continue
+		rawRecords, err = applyArrayZipProjection(rawRecords, stream.ArrayZipProjection)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
+		resolvedHeaderProjections, err := resolveResponseHeaderProjections(resp.Body, stream.ResponseHeaderProjection)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
+		}
+		rawRecords, err = applyResponseHeaderProjections(rawRecords, resolvedHeaderProjections)
+		if err != nil {
+			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
 		responseFields, err := extractResponseFields(resp.Body, stream.ResponseFields)
 		if err != nil {
@@ -452,6 +716,9 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 				return err
 			}
 			raw = mergeResponseFields(raw, responseFields)
+			if stream.Records.WrapField != "" {
+				raw = map[string]any{stream.Records.WrapField: raw}
+			}
 			if !passesFilter(raw, stream.Records.Filter) {
 				continue
 			}
@@ -467,6 +734,9 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 			}
 			if fc.id != "" && fc.stampField != "" {
 				projected[fc.stampField] = fc.id
+			}
+			for name, value := range fc.stampFields {
+				projected[name] = value
 			}
 
 			out := connectors.Record(projected)
@@ -518,16 +788,19 @@ func effectiveReadMaxPages(declared, requested int) int {
 	return declared
 }
 
-func newReadContinuation(b Bundle, stream StreamSpec, skippedPages int) (connectors.ReadContinuation, error) {
-	if skippedPages < 1 || skippedPages > maxReadContinuationPages {
-		return connectors.ReadContinuation{}, fmt.Errorf("engine: source continuation page count is out of bounds")
+func newReadContinuation(b Bundle, stream StreamSpec, next *connsdk.NextPage) (connectors.ReadContinuation, error) {
+	if next == nil {
+		return connectors.ReadContinuation{}, fmt.Errorf("engine: source continuation has no next provider page")
 	}
 	payload := readContinuationPayload{
-		Version:          1,
+		Version:          2,
 		Connector:        b.Name,
 		Stream:           stream.Name,
 		DefinitionSHA256: readContinuationDefinitionDigest(b, stream),
-		SkippedPages:     skippedPages,
+		Next: persistedNextPage{
+			URL:   next.URL,
+			Query: cloneContinuationQuery(next.Query),
+		},
 	}
 	encoded, err := json.Marshal(payload)
 	if err != nil {
@@ -536,29 +809,53 @@ func newReadContinuation(b Bundle, stream StreamSpec, skippedPages int) (connect
 	if len(encoded) > 4096 {
 		return connectors.ReadContinuation{}, fmt.Errorf("engine: source continuation exceeds its byte bound")
 	}
-	return connectors.ReadContinuation{Kind: "engine_pagination_v1", Token: encoded}, nil
+	return connectors.ReadContinuation{Kind: "engine_pagination_v2", Token: encoded}, nil
 }
 
-func readContinuationSkippedPages(b Bundle, stream StreamSpec, continuation *connectors.ReadContinuation) (int, error) {
-	if continuation == nil {
-		return 0, nil
+func cloneContinuationQuery(query url.Values) url.Values {
+	if len(query) == 0 {
+		return nil
 	}
-	if continuation.Kind != "engine_pagination_v1" || len(continuation.Token) == 0 || len(continuation.Token) > 4096 {
-		return 0, fmt.Errorf("engine: source continuation is invalid")
+	cloned := make(url.Values, len(query))
+	for name, values := range query {
+		cloned[name] = append([]string(nil), values...)
+	}
+	return cloned
+}
+
+func readContinuationPage(b Bundle, stream StreamSpec, continuation *connectors.ReadContinuation) (*connsdk.NextPage, error) {
+	if continuation == nil {
+		return nil, nil
+	}
+	if continuation.Kind != "engine_pagination_v2" || len(continuation.Token) == 0 || len(continuation.Token) > 4096 {
+		return nil, fmt.Errorf("engine: source continuation is invalid")
 	}
 	decoder := json.NewDecoder(bytes.NewReader(continuation.Token))
 	decoder.DisallowUnknownFields()
 	var payload readContinuationPayload
 	if err := decoder.Decode(&payload); err != nil {
-		return 0, fmt.Errorf("engine: decode source continuation: %w", err)
+		return nil, fmt.Errorf("engine: decode source continuation: %w", err)
 	}
 	if err := ensureReadContinuationEOF(decoder); err != nil {
-		return 0, err
+		return nil, err
 	}
-	if payload.Version != 1 || payload.Connector != b.Name || payload.Stream != stream.Name || payload.DefinitionSHA256 != readContinuationDefinitionDigest(b, stream) || payload.SkippedPages < 1 || payload.SkippedPages > maxReadContinuationPages {
-		return 0, fmt.Errorf("engine: source continuation does not match the declared stream")
+	if payload.Version != 2 || payload.Connector != b.Name || payload.Stream != stream.Name || payload.DefinitionSHA256 != readContinuationDefinitionDigest(b, stream) {
+		return nil, fmt.Errorf("engine: source continuation does not match the declared stream")
 	}
-	return payload.SkippedPages, nil
+	if payload.Next.URL == "" && len(payload.Next.Query) == 0 {
+		return nil, fmt.Errorf("engine: source continuation has no next provider page")
+	}
+	return &connsdk.NextPage{URL: payload.Next.URL, Query: cloneContinuationQuery(payload.Next.Query)}, nil
+}
+
+func resumePaginator(paginator connsdk.Paginator, next *connsdk.NextPage) error {
+	resumer, ok := paginator.(interface {
+		Resume(*connsdk.NextPage) error
+	})
+	if !ok {
+		return fmt.Errorf("engine: pagination strategy cannot resume a provider continuation")
+	}
+	return resumer.Resume(next)
 }
 
 func ensureReadContinuationEOF(decoder *json.Decoder) error {
@@ -589,17 +886,185 @@ func readContinuationDefinitionDigest(b Bundle, stream StreamSpec) string {
 }
 
 func buildStreamRequestBody(stream StreamSpec, cfg connectors.RuntimeConfig, query map[string]string, page *connsdk.NextPage, pag PaginationSpec, formattedLowerBound string, fc fanoutContext) (any, error) {
-	if stream.GraphQL == nil {
+	if stream.GraphQL != nil {
+		var cursor string
+		if page != nil && pag.CursorParam != "" {
+			cursor = page.Query.Get(pag.CursorParam)
+		}
+		vars := requestVars(cfg, nil, cursor, query)
+		vars.IncrementalLowerBound = formattedLowerBound
+		vars.FanoutID = fc.id
+		return buildGraphQLPayload(stream.GraphQL, vars)
+	}
+	if stream.Body == nil {
 		return nil, nil
 	}
-	var cursor string
-	if page != nil && pag.CursorParam != "" {
-		cursor = page.Query.Get(pag.CursorParam)
+	if len(stream.Body) == 0 {
+		if stream.BodyType == "json" {
+			return map[string]any{}, nil
+		}
+		return nil, nil
 	}
-	vars := requestVars(cfg, nil, cursor, query)
+	vars := requestVars(cfg, nil, "", query)
 	vars.IncrementalLowerBound = formattedLowerBound
 	vars.FanoutID = fc.id
-	return buildGraphQLPayload(stream.GraphQL, vars)
+	body, err := resolveStreamBodyMap(stream.Body, vars)
+	if err != nil {
+		return nil, err
+	}
+	if page != nil && pag.BodyCursorField != "" && pag.CursorParam != "" {
+		if cursor := page.Query.Get(pag.CursorParam); cursor != "" {
+			body[pag.BodyCursorField] = cursor
+		}
+	}
+	if page != nil && pag.BodyPageField != "" && pag.PageParam != "" {
+		if number := page.Query.Get(pag.PageParam); number != "" {
+			body[pag.BodyPageField] = number
+		}
+	}
+	if page != nil && pag.BodyOffsetField != "" && pag.OffsetParam != "" {
+		if offset := page.Query.Get(pag.OffsetParam); offset != "" {
+			body[pag.BodyOffsetField] = offset
+		}
+	}
+	if page != nil && pag.BodyLimitField != "" && pag.LimitParam != "" {
+		if limit := page.Query.Get(pag.LimitParam); limit != "" {
+			body[pag.BodyLimitField] = limit
+		}
+	}
+	if err := validateRequiredStreamBodyFields(stream.RequiredBodyFields, body); err != nil {
+		return nil, err
+	}
+	return body, nil
+}
+
+func resolveStreamBodyMap(body map[string]any, vars Vars) (map[string]any, error) {
+	resolved := make(map[string]any, len(body))
+	for key, value := range body {
+		if template, omitWhenAbsent, valueType, isOptional := optionalStreamBodyTemplate(value); isOptional {
+			copied, err := Interpolate(template, vars)
+			if err != nil {
+				if omitWhenAbsent {
+					continue
+				}
+				return nil, fmt.Errorf("resolve stream body %q: %w", key, err)
+			}
+			typed, err := coerceDeclaredBodyValue(copied, valueType)
+			if err != nil {
+				return nil, fmt.Errorf("resolve stream body %q: %w", key, err)
+			}
+			resolved[key] = typed
+			continue
+		}
+		copied, err := resolveStreamBodyValue(value, vars)
+		if err != nil {
+			return nil, fmt.Errorf("resolve stream body %q: %w", key, err)
+		}
+		resolved[key] = copied
+	}
+	return resolved, nil
+}
+
+func resolveStreamBodyValue(value any, vars Vars) (any, error) {
+	switch typed := value.(type) {
+	case string:
+		return Interpolate(typed, vars)
+	case map[string]any:
+		return resolveStreamBodyMap(typed, vars)
+	case []any:
+		resolved := make([]any, len(typed))
+		for index, item := range typed {
+			copied, err := resolveStreamBodyValue(item, vars)
+			if err != nil {
+				return nil, err
+			}
+			resolved[index] = copied
+		}
+		return resolved, nil
+	default:
+		return value, nil
+	}
+}
+
+func optionalStreamBodyTemplate(value any) (template string, omitWhenAbsent bool, valueType string, ok bool) {
+	object, ok := value.(map[string]any)
+	if !ok || len(object) < 2 || len(object) > 3 {
+		return "", false, "", false
+	}
+	template, templateOK := object["template"].(string)
+	omitWhenAbsent, omitOK := object["omit_when_absent"].(bool)
+	if !templateOK || !omitOK {
+		return "", false, "", false
+	}
+	if rawType, present := object["type"]; present {
+		var typeOK bool
+		valueType, typeOK = rawType.(string)
+		if !typeOK {
+			return "", false, "", false
+		}
+	}
+	return template, omitWhenAbsent, valueType, true
+}
+
+func coerceDeclaredBodyValue(value, valueType string) (any, error) {
+	switch valueType {
+	case "", "string", "enum":
+		return value, nil
+	case "integer":
+		integer, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			return nil, fmt.Errorf("expected integer")
+		}
+		return integer, nil
+	case "number":
+		number, err := strconv.ParseFloat(value, 64)
+		if err != nil {
+			return nil, fmt.Errorf("expected number")
+		}
+		return number, nil
+	case "boolean":
+		boolean, err := strconv.ParseBool(value)
+		if err != nil {
+			return nil, fmt.Errorf("expected boolean")
+		}
+		return boolean, nil
+	default:
+		return nil, fmt.Errorf("unsupported declared body value type %q", valueType)
+	}
+}
+
+func validateRequiredStreamBodyFields(required []string, body map[string]any) error {
+	for _, field := range required {
+		value, present := body[field]
+		if !present || value == nil || (fmt.Sprint(value) == "") {
+			return fmt.Errorf("declared stream body requires %q", field)
+		}
+	}
+	return nil
+}
+
+func streamBodyForm(body any) (url.Values, error) {
+	values := url.Values{}
+	if body == nil {
+		return values, nil
+	}
+	fields, ok := body.(map[string]any)
+	if !ok {
+		return nil, errors.New("declared form stream body must be an object")
+	}
+	for key, value := range fields {
+		switch typed := value.(type) {
+		case string:
+			values.Set(key, typed)
+		case json.Number:
+			values.Set(key, typed.String())
+		case float64, float32, int, int64, int32, bool:
+			values.Set(key, fmt.Sprint(typed))
+		default:
+			return nil, fmt.Errorf("declared form stream body field %q must be scalar", key)
+		}
+	}
+	return values, nil
 }
 
 // cloneAndSetQuery returns a copy of base with key set to value — used to
@@ -684,6 +1149,12 @@ func newRuntime(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h H
 	baseURL, err := Interpolate(b.HTTP.URL, requestVars(cfg, nil, ""))
 	if err != nil {
 		return nil, fmt.Errorf("engine: resolve base url: %w", err)
+	}
+	if b.HTTP.TenantOrigin != nil {
+		baseURL, err = resolveTenantOrigin(*b.HTTP.TenantOrigin, cfg.Config)
+		if err != nil {
+			return nil, fmt.Errorf("engine: resolve tenant origin: %w", err)
+		}
 	}
 	headers, err := resolveHeaders(b.HTTP.Headers, cfg, b.Spec)
 	if err != nil {
@@ -1534,6 +2005,215 @@ func extractResponseFields(body []byte, fields map[string]string) (map[string]an
 	return out, nil
 }
 
+type resolvedResponseHeaderProjection struct {
+	valuesPath string
+	valueField string
+	headers    []string
+}
+
+func resolveResponseHeaderProjections(body []byte, specs []ResponseHeaderProjectionSpec) ([]resolvedResponseHeaderProjection, error) {
+	if len(specs) == 0 {
+		return nil, nil
+	}
+	root, err := decodeJSONKeyed(body)
+	if err != nil {
+		return nil, err
+	}
+	resolved := make([]resolvedResponseHeaderProjection, 0, len(specs))
+	for index, spec := range specs {
+		headers, ok := selectPathKeyed(root, spec.HeadersPath).([]any)
+		if !ok {
+			return nil, fmt.Errorf("response_header_projection %d headers_path %q is not an array", index, spec.HeadersPath)
+		}
+		headerName := spec.HeaderName
+		if headerName == "" {
+			headerName = "name"
+		}
+		valueField := spec.ValueField
+		if valueField == "" {
+			valueField = "value"
+		}
+		allowed := make(map[string]struct{}, len(spec.AllowedHeaders))
+		for _, name := range spec.AllowedHeaders {
+			allowed[name] = struct{}{}
+		}
+		names := make([]string, len(headers))
+		seen := make(map[string]struct{}, len(headers))
+		for headerIndex, header := range headers {
+			object, ok := header.(map[string]any)
+			if !ok {
+				return nil, fmt.Errorf("response_header_projection %d header %d is not an object", index, headerIndex)
+			}
+			name, ok := object[headerName].(string)
+			if !ok || strings.TrimSpace(name) == "" {
+				return nil, fmt.Errorf("response_header_projection %d header %d is missing %q", index, headerIndex, headerName)
+			}
+			if _, allowed := allowed[name]; !allowed {
+				return nil, fmt.Errorf("response_header_projection %d has unknown response header %q", index, name)
+			}
+			if _, duplicate := seen[name]; duplicate {
+				return nil, fmt.Errorf("response_header_projection %d repeats response header %q", index, name)
+			}
+			seen[name] = struct{}{}
+			names[headerIndex] = name
+		}
+		if len(seen) != len(allowed) {
+			return nil, fmt.Errorf("response_header_projection %d response headers do not match declared headers", index)
+		}
+		resolved = append(resolved, resolvedResponseHeaderProjection{valuesPath: spec.ValuesPath, valueField: valueField, headers: names})
+	}
+	return resolved, nil
+
+}
+func applyResponseHeaderProjections(records []connsdk.Record, projections []resolvedResponseHeaderProjection) ([]connsdk.Record, error) {
+	if len(projections) == 0 {
+		return records, nil
+	}
+	projected := make([]connsdk.Record, len(records))
+	for recordIndex, raw := range records {
+		out := make(connsdk.Record, len(raw))
+		for key, value := range raw {
+			out[key] = value
+		}
+		for projectionIndex, projection := range projections {
+			values, ok := selectPathKeyed(map[string]any(raw), projection.valuesPath).([]any)
+			if !ok {
+				return nil, fmt.Errorf("response_header_projection %d record %d values_path %q is not an array", projectionIndex, recordIndex, projection.valuesPath)
+			}
+			if len(values) != len(projection.headers) {
+				return nil, fmt.Errorf("response_header_projection %d record %d has %d values for %d headers", projectionIndex, recordIndex, len(values), len(projection.headers))
+			}
+			for valueIndex, value := range values {
+				object, ok := value.(map[string]any)
+				if !ok {
+					return nil, fmt.Errorf("response_header_projection %d record %d value %d is not an object", projectionIndex, recordIndex, valueIndex)
+				}
+				fieldValue, present := object[projection.valueField]
+				if !present || fieldValue == nil {
+					return nil, fmt.Errorf("response_header_projection %d record %d value %d is missing %q", projectionIndex, recordIndex, valueIndex, projection.valueField)
+				}
+				header := projection.headers[valueIndex]
+				if _, exists := out[header]; exists {
+					return nil, fmt.Errorf("response_header_projection %d record %d would overwrite field %q", projectionIndex, recordIndex, header)
+				}
+				out[header] = fieldValue
+			}
+		}
+		projected[recordIndex] = out
+	}
+	return projected, nil
+}
+
+func applyArrayZipProjection(records []connsdk.Record, projection *ArrayZipProjectionSpec) ([]connsdk.Record, error) {
+	if projection == nil {
+		return records, nil
+	}
+	zipped := make([]connsdk.Record, 0, len(records))
+	for recordIndex, raw := range records {
+		static := make(connsdk.Record, len(projection.StaticFields))
+		for _, field := range projection.StaticFields {
+			value, ok := selectArrayZipPath(map[string]any(raw), field.Path)
+			if !ok || value == nil {
+				return nil, fmt.Errorf("array_zip_projection record %d static field %q is missing", recordIndex, field.Field)
+			}
+			switch value.(type) {
+			case map[string]any, []any:
+				return nil, fmt.Errorf("array_zip_projection record %d static field %q is not scalar", recordIndex, field.Field)
+			}
+			static[field.Field] = value
+		}
+
+		arrays := make([][]any, len(projection.ArrayFields))
+		length := -1
+		for fieldIndex, field := range projection.ArrayFields {
+			value, found := selectArrayZipPath(map[string]any(raw), field.Path)
+			if !found {
+				return nil, fmt.Errorf("array_zip_projection record %d array field %q is missing", recordIndex, field.Field)
+			}
+			array, ok := value.([]any)
+			if !ok {
+				return nil, fmt.Errorf("array_zip_projection record %d array field %q is not an array", recordIndex, field.Field)
+			}
+			if length == -1 {
+				length = len(array)
+			} else if len(array) != length {
+				return nil, fmt.Errorf("array_zip_projection record %d array field %q has %d values, want %d", recordIndex, field.Field, len(array), length)
+			}
+			arrays[fieldIndex] = array
+		}
+		for index := range length {
+			row := make(connsdk.Record, len(static)+len(projection.ArrayFields))
+			for field, value := range static {
+				row[field] = value
+			}
+			for fieldIndex, field := range projection.ArrayFields {
+				row[field.Field] = arrays[fieldIndex][index]
+			}
+			zipped = append(zipped, row)
+		}
+	}
+	return zipped, nil
+}
+
+func declaredResponseError(body []byte, spec *ResponseErrorSpec) error {
+	if spec == nil {
+		return nil
+	}
+	root, err := decodeJSONKeyed(body)
+	if err != nil {
+		return fmt.Errorf("response_error decode: %w", err)
+	}
+	if spec.SuccessPath != "" {
+		success, ok := selectPathKeyed(root, spec.SuccessPath).(bool)
+		if !ok {
+			return fmt.Errorf("response_error success_path %q is not a boolean", spec.SuccessPath)
+		}
+		if success {
+			return nil
+		}
+		message, err := declaredResponseErrorMessage(root, spec)
+		if err != nil {
+			return err
+		}
+		path := spec.Path
+		if path == "" {
+			path = spec.SuccessPath
+		}
+		return &DeclaredResponseError{Path: path, Message: message}
+	}
+	node := selectPathKeyed(root, spec.Path)
+	if node == nil {
+		return nil
+	}
+	message, err := declaredResponseErrorMessage(root, spec)
+	if err != nil {
+		return err
+	}
+	return &DeclaredResponseError{Path: spec.Path, Message: message}
+}
+
+func declaredResponseErrorMessage(root any, spec *ResponseErrorSpec) (string, error) {
+	if spec.MessageField == "" {
+		return "", nil
+	}
+	if spec.Path == "" {
+		return "", fmt.Errorf("response_error message_field %q requires path", spec.MessageField)
+	}
+	object, ok := selectPathKeyed(root, spec.Path).(map[string]any)
+	if !ok {
+		return "", fmt.Errorf("response_error path %q is not an object", spec.Path)
+	}
+	value, present := object[spec.MessageField]
+	if !present {
+		return "", fmt.Errorf("response_error path %q is missing %q", spec.Path, spec.MessageField)
+	}
+	message, ok := value.(string)
+	if !ok || strings.TrimSpace(message) == "" {
+		return "", fmt.Errorf("response_error path %q field %q is not a non-empty string", spec.Path, spec.MessageField)
+	}
+	return message, nil
+}
+
 func mergeResponseFields(raw map[string]any, fields map[string]any) map[string]any {
 	if len(fields) == 0 {
 		return raw
@@ -1640,6 +2320,36 @@ func selectPathKeyed(root any, path string) any {
 		}
 	}
 	return cur
+}
+
+func selectArrayZipPath(root any, path string) (any, bool) {
+	path = strings.TrimSpace(path)
+	if path == "" || path == "." {
+		return root, true
+	}
+	current := root
+	for _, segment := range strings.Split(path, ".") {
+		if segment == "" {
+			return nil, false
+		}
+		switch value := current.(type) {
+		case map[string]any:
+			var ok bool
+			current, ok = value[segment]
+			if !ok {
+				return nil, false
+			}
+		case []any:
+			index, err := strconv.Atoi(segment)
+			if err != nil || index < 0 || index >= len(value) {
+				return nil, false
+			}
+			current = value[index]
+		default:
+			return nil, false
+		}
+	}
+	return current, true
 }
 
 // passesFilter applies filter.field_absent / filter.field_equals to a raw
@@ -2034,15 +2744,77 @@ func Check(ctx context.Context, b Bundle, cfg connectors.RuntimeConfig, h Hooks)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
+	var checkBody any
+	if len(b.HTTP.Check.Body) > 0 {
+		resolved, err := resolveStreamBodyMap(b.HTTP.Check.Body, requestVars(cfg, nil, ""))
+		if err != nil {
+			return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("resolve check body: %w", err)}
+		}
+		checkBody = resolved
+	}
 	method := methodOrDefault(b.HTTP.Check.Method)
 	requester, err := rt.requesterFor(method, b.HTTP.Check.Path)
 	if err != nil {
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
-	_, err = requester.Do(ctx, method, checkPath, checkQuery, nil)
+	requester, err = requesterWithCheckSuccessStatuses(requester, b.HTTP.Check)
+	if err != nil {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: err}
+	}
+	if b.HTTP.Check.MaxBytes < 0 || b.HTTP.Check.MaxBytes > connsdk.DefaultMaxResponseBody {
+		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("check max_bytes must be between 1 and %d when declared", connsdk.DefaultMaxResponseBody)}
+	}
+	if b.HTTP.Check.MaxBytes > 0 {
+		response, requestErr := requester.DoLimited(ctx, method, checkPath, checkQuery, checkBody, b.HTTP.Check.MaxBytes)
+		if requestErr == nil && len(response.Body) > b.HTTP.Check.MaxBytes {
+			return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: fmt.Errorf("check response body exceeds declared max_bytes %d", b.HTTP.Check.MaxBytes)}
+		}
+		err = requestErr
+	} else if b.HTTP.Check.BodyType == "form" {
+		form, formErr := streamBodyForm(checkBody)
+		if formErr != nil {
+			return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Err: formErr}
+		}
+		_, err = requester.DoForm(ctx, method, checkPath, checkQuery, form)
+	} else {
+		_, err = requester.Do(ctx, method, checkPath, checkQuery, checkBody)
+	}
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		return &Error{Connector: b.Name, Page: -1, RecordIndex: -1, Class: class, Hint: hint, Err: err}
 	}
 	return nil
+}
+
+// requesterWithCheckSuccessStatuses applies the optional, declaration-owned
+// base-check status set without mutating the shared runtime requester. An
+// omitted set preserves the legacy generic-2xx acceptance policy; a declared
+// set accepts only exact HTTP codes, never an implicit range.
+func requesterWithCheckSuccessStatuses(requester *connsdk.Requester, check *RequestSpec) (*connsdk.Requester, error) {
+	if check == nil || len(check.SuccessStatuses) == 0 {
+		return requester, nil
+	}
+	accepted := make([]connsdk.StatusRange, 0, len(check.SuccessStatuses))
+	seen := make(map[int]struct{}, len(check.SuccessStatuses))
+	for _, declared := range check.SuccessStatuses {
+		status, err := connsdk.NormalizeExactHTTPStatus(declared)
+		if err != nil {
+			var rangeErr *connsdk.ExactHTTPStatusRangeError
+			if errors.As(err, &rangeErr) {
+				return nil, fmt.Errorf("check success status %q requires runtime gap: %s", declared, connsdk.ExactHTTPStatusRangeExecutionGap)
+			}
+			return nil, fmt.Errorf("check success status %q must be an unambiguous numeric HTTP status: %w", declared, err)
+		}
+		if status < http.StatusOK || status >= http.StatusMultipleChoices {
+			return nil, fmt.Errorf("check success status %q requires runtime gap: %s", declared, connsdk.ExactHTTPStatusNon2xxExecutionGap)
+		}
+		if _, duplicate := seen[status]; duplicate {
+			return nil, fmt.Errorf("check success status %q is duplicated", declared)
+		}
+		seen[status] = struct{}{}
+		accepted = append(accepted, connsdk.StatusRange{Min: status, Max: status})
+	}
+	clone := *requester
+	clone.AcceptedStatuses = accepted
+	return &clone, nil
 }

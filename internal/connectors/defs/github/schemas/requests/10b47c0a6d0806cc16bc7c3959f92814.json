@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "enablement": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "query_suite": {
+      "enum": [
+        "default",
+        "extended"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "security_product": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "enablement",
+    "org",
+    "security_product"
+  ],
+  "type": "object"
+}

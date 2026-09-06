@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "created_by": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "currency_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "parent": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "rate": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "resource": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
+  "title": "rates",
+  "type": "object",
+  "x-primary-key": [
+    "gid"
+  ]
+}

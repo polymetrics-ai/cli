@@ -40,20 +40,6 @@ const validMultipartRestWrite = `{
 
 func multipartRestWriteBundleFS(rest, kind string) fstest.MapFS {
 	fsys := fullValidBundleFS("acme")
-	fsys["acme/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
-		"api": "test API v1",
-		"endpoints": [{
-			"method": "POST",
-			"path": "/attachments",
-			"operation": {
-				"model": "destructive_action",
-				"status": "blocked",
-				"risk": "high",
-				"blocked_by_default": true,
-				"reason": "operation metadata is bound by the executor"
-			}
-		}]
-	}`)}
 	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
 		"operations": [{
 			"id": "acme.attachments.create",

@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_fields": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "due_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "html_notes": {
+          "type": "string"
+        },
+        "is_workspace_level": {
+          "type": "boolean"
+        },
+        "liked": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "start_on": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "team": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "time_period": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "workspace": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "goal_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "goal_gid",
+    "data"
+  ],
+  "type": "object"
+}

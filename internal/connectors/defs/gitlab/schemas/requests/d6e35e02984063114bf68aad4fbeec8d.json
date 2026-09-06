@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "system_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "token": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "token"
+  ],
+  "type": "object"
+}

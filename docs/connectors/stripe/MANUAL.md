@@ -82,7 +82,6 @@ SECURITY
 COMMAND SURFACE
   Read Stripe billing streams and safely plan customer write actions.
   Usage: pm stripe <command> [flags]
-  Source CLI: Stripe API (OpenAPI spec3 2026-07-29.dahlia)
   Global flags:
     --credential (string): Credential name to use for the Stripe request.
     --connection (string): Credential name alias used only when --credential is omitted; does not resolve pm connections.

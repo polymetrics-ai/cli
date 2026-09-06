@@ -1,7 +1,0 @@
-Red: go test -count=1 ./internal/app -run 'TestOpenComposesPostgresImplementedSharedPollingRoute'
-Result: FAIL (expected)
-transport_composition_test.go: production PostgreSQL polling status = "planned", want "implemented"
-
-The test opens the shipped App registry, obtains PostgreSQL from production composition, and
-checks the loaded bundle plus the registered outward source. It does not construct or register a
-polling component manually.

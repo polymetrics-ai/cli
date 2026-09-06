@@ -658,11 +658,11 @@ func operationGraphQLDirectRead(ctx context.Context, b Bundle, op OperationSpec,
 	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
 	defer cancel()
 	cfg := materializeConfigDefaults(b, req.Config)
-	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, op.GraphQL.Path, op.SourceURL)
+	baseURL, err := resolveOperationRoute(b, cfg, op.Route, op.ID, op.GraphQL.Path)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, op.GraphQL.Path, op.SourceURL)
+	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, op.GraphQL.Path)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}

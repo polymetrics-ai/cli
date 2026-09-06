@@ -21,8 +21,7 @@ import (
 // composition root never picks a connector by name or capability.
 func localWarehouseTransportDefinitionFactories(a *App) []synctransport.DefinitionFactory {
 	return []synctransport.DefinitionFactory{{
-		Reference:           connectors.LocalWarehouseDestinationTransportReference,
-		DestinationEvidence: connectors.LocalWarehouseDestinationTransportConformance,
+		Reference: connectors.LocalWarehouseDestinationTransportReference,
 		BuildDestination: func(connector connectors.Connector) (synctransport.DestinationExecutor, error) {
 			return newLocalWarehouseDestinationExecutor(a, connector)
 		},
@@ -212,7 +211,6 @@ func (e *localWarehouseDestinationExecutor) connectionOwnsLocalWarehouse(conn Co
 func isLocalWarehouseDestination(connector connectors.Connector) bool {
 	descriptor, ok := connectors.DestinationTransportDescriptorOf(connector)
 	return ok && descriptor.Executor == connectors.LocalWarehouseDestinationTransportReference &&
-		descriptor.Conformance == connectors.LocalWarehouseDestinationTransportConformance &&
 		descriptor.Acknowledgement == connectors.TransportAcknowledgementDurableWarehouse
 }
 
@@ -245,11 +243,14 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 	if deduped && len(stream.PrimaryKey) == 0 {
 		return nil, fmt.Errorf("local warehouse transport %q requires primary key fields", strategy.Mode)
 	}
-	if !deduped && len(workset.Tombstones) > 0 {
+	if !deduped && strategy.Mode != synccontract.ModeIncrementalAppend && len(workset.Tombstones) > 0 {
 		return nil, fmt.Errorf("local warehouse transport %q cannot apply tombstones", strategy.Mode)
 	}
 	if strategy.Strategy == connectors.ApplyStrategyDedupeHistory && stream.CursorField == "" {
 		return nil, fmt.Errorf("local warehouse transport %q requires a cursor field", strategy.Mode)
+	}
+	if strategy.Mode == synccontract.ModeIncrementalAppend && len(workset.CandidateCheckpoint.Position.Primary) == 0 {
+		return nil, fmt.Errorf("local warehouse transport %q requires a durable source checkpoint", strategy.Mode)
 	}
 	now := time.Now().UTC().Format(time.RFC3339Nano)
 	raw := make([]localRawRecord, 0, len(workset.Records)+len(workset.Tombstones))
@@ -263,9 +264,18 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 				return nil, fmt.Errorf("local warehouse transport record %d: %w", index, err)
 			}
 		}
-		cursor, err := recordCursor(cloned, stream.CursorField)
-		if err != nil {
-			return nil, fmt.Errorf("local warehouse transport record %d: %w", index, err)
+		cursor := ""
+		if strategy.Mode == synccontract.ModeIncrementalAppend {
+			// Incremental append is checkpointed by the provider token carried by
+			// the acknowledged workset. A row field is not a valid substitute for
+			// that source position.
+			cursor = string(workset.CandidateCheckpoint.Position.Primary)
+		} else if strategy.Strategy == connectors.ApplyStrategyDedupeHistory {
+			var err error
+			cursor, err = recordCursor(cloned, stream.CursorField)
+			if err != nil {
+				return nil, fmt.Errorf("local warehouse transport record %d: %w", index, err)
+			}
 		}
 		raw = append(raw, localRawRecord{
 			RawID:        fmt.Sprintf("%s:%012d", receipt.ID, index+1),
@@ -289,6 +299,12 @@ func localWarehouseTransportRawRecords(receipt synctransport.WarehouseReceipt, w
 		var key connectors.Record
 		if err := json.Unmarshal(tombstone.Key, &key); err != nil || key == nil {
 			return nil, fmt.Errorf("local warehouse transport tombstone %d has an invalid key", index)
+		}
+		if strategy.Mode == synccontract.ModeIncrementalAppend {
+			// Append preserves deletions as changelog rows rather than folding
+			// them away. The marker is added only by the warehouse materializer;
+			// the provider record emitted by the source remains untouched.
+			key["_polymetrics_deleted"] = true
 		}
 		primaryKey, err := primaryKeyTuple(key, stream.PrimaryKey)
 		if err != nil {

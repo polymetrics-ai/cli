@@ -1,19 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "prices",
-  "type": "object",
   "properties": {
-    "symbol": {
-      "type": "string"
+    "adjclose": {
+      "type": "number"
+    },
+    "close": {
+      "type": "number"
     },
     "currency": {
       "type": "string"
-    },
-    "timestamp": {
-      "type": "number"
-    },
-    "open": {
-      "type": "number"
     },
     "high": {
       "type": "number"
@@ -21,19 +16,24 @@
     "low": {
       "type": "number"
     },
-    "close": {
+    "open": {
+      "type": "number"
+    },
+    "symbol": {
+      "type": "string"
+    },
+    "timestamp": {
       "type": "number"
     },
     "volume": {
       "type": "number"
-    },
-    "adjclose": {
-      "type": "number"
     }
   },
+  "title": "prices",
+  "type": "object",
+  "x-cursor-field": "timestamp",
   "x-primary-key": [
     "symbol",
     "timestamp"
-  ],
-  "x-cursor-field": "timestamp"
+  ]
 }

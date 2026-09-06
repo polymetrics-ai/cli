@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "enabled": {
+      "type": "boolean"
+    },
+    "max_open_pull_requests": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "enabled"
+  ],
+  "type": "object"
+}

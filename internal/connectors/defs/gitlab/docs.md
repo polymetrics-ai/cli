@@ -1,11 +1,15 @@
 # Overview
 
-Reads GitLab projects, groups, users, and issues through the GitLab REST API v4.
+Runs GitLab REST API v4 through 582 source-bound direct reads, four ETL streams,
+and 381 source-bound mutations through direct-write and approval-gated reverse-ETL
+commands.
 
 Readable streams: `projects`, `groups`, `users`, `issues`.
 
-The provider-owned OpenAPI v3 inventory covers 1,745 callable GitLab operations. This G1 wave makes
-only the four existing stream reads executable; it does not add any new provider operation.
+The source-lock ledger retains 1,752 cited GitLab REST identities. This slice makes 582 direct reads,
+four ETL-only stream reads, and 381 mutations executable through one-request direct-write and
+approval-gated reverse-ETL command pairs. The remaining 785 source identities stay discoverable with
+cited named-foundation outcomes; no source identity is silently omitted.
 
 Service API documentation: https://docs.gitlab.com/ee/api/rest/.
 
@@ -54,22 +58,23 @@ Default pagination: follows RFC 5988 Link headers with rel=next.
 
 ## Write actions & risks
 
-The GitLab provider inventory includes 975 writes. `capabilities.write=false` until at least one
-GitLab write action is executable; the provider inventory is not an executable capability. This G1
-bundle declares no GitLab write action.
+GitLab retains 382 source-bound write actions. 381 have executable direct-write and reverse-ETL command
+pairs; one action remains a typed partial outcome because its retained JSON-Schema regex is not accepted
+by the current closed engine compiler. `capabilities.write=true` does not promote any other provider
+mutation.
 
-Read behavior: external GitLab API read of projects, groups, users, and issues. Any future write must
-use plan, preview, explicit approval, and execute. Output is not redacted by this connector.
+Read behavior: external GitLab API reads use the declared direct-read or ETL contract. Every materialized
+write requires plan, preview, explicit approval, and execute. Output is not redacted by this connector.
 
 ## Known limits
 
 - Batch defaults: read_page_size=50.
-- Provider inventory: 1,745 callable OpenAPI operations (770 reads; 975 writes), sourced from GitLab
-  OpenAPI 3.0.0 `info.version` `19.3.0-pre`, retrieved 2026-08-05.
-- Executable in G1: 4 stream-backed reads (`GET /projects`, `GET /groups`, `GET /users`, and
-  `GET /issues`).
-- Remaining provider operations: 1,618 need connector-owned declarations; 45 are blocked on the
-  named multipart/file-upload operation foundation; 64 are provider-restricted; and 14 are deprecated
-  justified exclusions. Each disposition is in `api_surface.json`; the four G1 command citations are
-  in `cli_surface.json`.
-- The next planned wave is a bounded collaboration read slice (no more than 20 operations).
+- Source-lock denominator: 1,752 cited REST identities from GitLab OpenAPI 3.0.0 `info.version`
+  `19.3.0-pre`, retrieved 2026-08-05.
+- Source mapping: 1,746 mapped identities and 6 blocked identities with no canonical runtime mapping;
+  the latter retain exact citations and named gaps rather than disappearing.
+- Runtime-enabled source rows: 967 — 582 direct reads, 4 ETL-only stream reads, and 381 mutations.
+- Blocked source rows: 785, each with one or more named foundations. The 1,845 `source_contract`
+  gap entries overlap by row and are not a source denominator.
+- `execution bundle`, `cli_surface.json`, and the operation-evidence artifact expose the command or
+  typed cited outcome for each source identity.

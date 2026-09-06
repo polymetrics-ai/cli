@@ -49,10 +49,6 @@ const (
 	maxPageSize     = 10000
 )
 
-func init() {
-	engine.RegisterHooks("google-ads", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is the google-ads bundle's Tier-2 hook set: StreamHook only (auth is
 // fully declarative via streams.json's bearer mode + base.headers -- see
 // docs.md "Auth setup").
@@ -87,7 +83,7 @@ var gaqlStreams = map[string]gaqlStream{
 // ReadStream implements engine.StreamHook, handling all 3 declared streams
 // (accessible_customers, campaigns, ad_groups) with handled=true always --
 // the declarative streams.json fallback is a structural "shadow" path
-// exercised only by conformance's dynamic checks (Hooks=nil there, and every
+// exercised only by fixture execution checks (Hooks=nil there, and every
 // stream carries a skip_dynamic marker -- see docs.md "Known limits").
 func (h Hooks) ReadStream(ctx context.Context, stream engine.StreamSpec, req connectors.ReadRequest, rt *engine.Runtime, emit func(connectors.Record) error) (bool, error) {
 	if err := ctx.Err(); err != nil {

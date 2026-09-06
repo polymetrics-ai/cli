@@ -1,49 +1,49 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "application_list_history",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the history event"
-    },
-    "stageId": {
-      "type": "string",
-      "description": "The id of the interview stage for this event"
-    },
-    "title": {
-      "type": "string",
-      "description": "The interview stage title for this event"
-    },
-    "enteredStageAt": {
-      "type": "string",
-      "description": "The timestamp the application entered this stage",
-      "format": "date-time"
-    },
-    "leftStageAt": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "stageNumber": {
-      "type": "integer",
-      "description": "The order of the history event in the application's history. 0 is the first event."
+    "actorId": {
+      "type": "string"
     },
     "allowedActions": {
-      "type": "array",
       "description": "Actions that can be performed on this history event via `application.updateHistory`.",
       "items": {
-        "type": "string",
         "enum": [
           "none",
           "delete",
           "set_entered_at"
-        ]
-      }
+        ],
+        "type": "string"
+      },
+      "type": "array"
     },
-    "actorId": {
+    "enteredStageAt": {
+      "description": "The timestamp the application entered this stage",
+      "format": "date-time",
+      "type": "string"
+    },
+    "id": {
+      "description": "The unique identifier for the history event",
+      "type": "string"
+    },
+    "leftStageAt": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "stageId": {
+      "description": "The id of the interview stage for this event",
+      "type": "string"
+    },
+    "stageNumber": {
+      "description": "The order of the history event in the application's history. 0 is the first event.",
+      "type": "integer"
+    },
+    "title": {
+      "description": "The interview stage title for this event",
       "type": "string"
     }
   },
+  "title": "application_list_history",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

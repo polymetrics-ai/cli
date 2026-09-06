@@ -1,0 +1,48 @@
+=== RUN   TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB
+=== RUN   TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/explicit-prune
+=== RUN   TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/no-journal-recover
+=== RUN   TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/publish-initial-recovery
+=== RUN   TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/open-transitive-recovery
+=== RUN   TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/prepared-new-selected-recover
+=== RUN   TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/committed-new-selected-recover
+=== RUN   TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/successful-publish-final-prune
+--- PASS: TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB (5.53s)
+    --- PASS: TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/explicit-prune (0.84s)
+    --- PASS: TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/no-journal-recover (0.77s)
+    --- PASS: TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/publish-initial-recovery (0.75s)
+    --- PASS: TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/open-transitive-recovery (0.75s)
+    --- PASS: TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/prepared-new-selected-recover (0.66s)
+    --- PASS: TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/committed-new-selected-recover (0.98s)
+    --- PASS: TestVNextPublicationUnheldDurableRowsRetainEmptyLeaseReplacementB/successful-publish-final-prune (0.77s)
+=== RUN   TestVNextPublicationCommittedJournalNewSelectedRecoveryRejectsLateLeaseReplacement
+--- PASS: TestVNextPublicationCommittedJournalNewSelectedRecoveryRejectsLateLeaseReplacement (0.75s)
+=== RUN   TestVNextPublicationSuccessfulPublishFinalPruneRejectsLateLeaseReplacement
+--- PASS: TestVNextPublicationSuccessfulPublishFinalPruneRejectsLateLeaseReplacement (0.75s)
+=== RUN   TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement
+=== RUN   TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement/empty-B
+=== RUN   TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement/nonempty-B
+--- PASS: TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement (1.11s)
+    --- PASS: TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement/empty-B (0.54s)
+    --- PASS: TestVNextPublicationFreshRejectedNewRecoveryRejectsLateLeaseReplacement/nonempty-B (0.57s)
+=== RUN   TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVariants
+=== RUN   TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVariants/empty-B
+=== RUN   TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVariants/nonempty-B
+--- PASS: TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVariants (1.54s)
+    --- PASS: TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVariants/empty-B (0.74s)
+    --- PASS: TestVNextPublicationImmediateRollbackRejectsLateLeaseReplacementIdentityVariants/nonempty-B (0.79s)
+=== RUN   TestVNextGenerationPublisherCheckIsReadOnly
+--- PASS: TestVNextGenerationPublisherCheckIsReadOnly (0.76s)
+=== RUN   TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers
+=== RUN   TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/prune
+=== RUN   TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/no_journal_recovery
+=== RUN   TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/publish_initial_recovery
+=== RUN   TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/open_transitive_recovery
+=== RUN   TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/prepared_journal/new-selected_recovery
+--- PASS: TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers (3.56s)
+    --- PASS: TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/prune (0.74s)
+    --- PASS: TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/no_journal_recovery (0.74s)
+    --- PASS: TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/publish_initial_recovery (0.74s)
+    --- PASS: TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/open_transitive_recovery (0.74s)
+    --- PASS: TestVNextGenerationPublisherRefusesLateLeaseReplacementAcrossPublicCleanupCallers/prepared_journal/new-selected_recovery (0.59s)
+PASS
+ok  	polymetrics.ai/cmd/connectorgen	14.940s

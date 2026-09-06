@@ -1,46 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "interview_info",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The unique identifier for the interview"
-    },
-    "title": {
-      "type": "string",
-      "description": "The internal title of the interview"
-    },
     "externalTitle": {
-      "type": "string",
-      "description": "The title of the interview shown to candidates"
+      "description": "The title of the interview shown to candidates",
+      "type": "string"
     },
-    "type": {
-      "type": "string",
-      "description": "The interview definition type, such as Interview, TakeHome, or Debrief",
-      "enum": [
-        "Assessment",
-        "Interview",
-        "InterviewWithoutSchedule",
-        "TakeHome",
-        "Debrief"
-      ]
+    "feedbackFormDefinitionId": {
+      "description": "The unique identifier for the feedback form definition used by this interview",
+      "type": "string"
     },
-    "isArchived": {
-      "type": "boolean",
-      "description": "Whether the interview is archived"
-    },
-    "isDebrief": {
-      "type": "boolean",
-      "description": "Whether the interview is a debrief"
-    },
-    "isFeedbackRequired": {
-      "type": "boolean",
-      "description": "Whether feedback is required for this interview"
-    },
-    "isFeedbackRequested": {
-      "type": "boolean",
-      "description": "Whether feedback is requested for this interview"
+    "id": {
+      "description": "The unique identifier for the interview",
+      "type": "string"
     },
     "instructionsHtml": {
       "type": "string"
@@ -48,14 +19,43 @@
     "instructionsPlain": {
       "type": "string"
     },
+    "isArchived": {
+      "description": "Whether the interview is archived",
+      "type": "boolean"
+    },
+    "isDebrief": {
+      "description": "Whether the interview is a debrief",
+      "type": "boolean"
+    },
+    "isFeedbackRequested": {
+      "description": "Whether feedback is requested for this interview",
+      "type": "boolean"
+    },
+    "isFeedbackRequired": {
+      "description": "Whether feedback is required for this interview",
+      "type": "boolean"
+    },
     "jobId": {
       "type": "string"
     },
-    "feedbackFormDefinitionId": {
-      "type": "string",
-      "description": "The unique identifier for the feedback form definition used by this interview"
+    "title": {
+      "description": "The internal title of the interview",
+      "type": "string"
+    },
+    "type": {
+      "description": "The interview definition type, such as Interview, TakeHome, or Debrief",
+      "enum": [
+        "Assessment",
+        "Interview",
+        "InterviewWithoutSchedule",
+        "TakeHome",
+        "Debrief"
+      ],
+      "type": "string"
     }
   },
+  "title": "interview_info",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

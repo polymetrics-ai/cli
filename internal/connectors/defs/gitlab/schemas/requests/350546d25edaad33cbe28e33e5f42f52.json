@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "merge_request_iid": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "project_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "review_output": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "workflow_id": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "merge_request_iid",
+    "project_id",
+    "review_output"
+  ],
+  "type": "object"
+}

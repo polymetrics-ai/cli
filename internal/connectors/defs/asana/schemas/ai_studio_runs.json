@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "credit_source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "credits_used": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "division": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rule": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "rule_owner": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "run_completed_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "run_started_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "triggered_by": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "triggering_container": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
+  "title": "ai_studio_runs",
+  "type": "object",
+  "x-primary-key": [
+    "gid"
+  ]
+}

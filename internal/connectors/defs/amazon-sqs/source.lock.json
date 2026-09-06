@@ -1,0 +1,145 @@
+{
+  "schema_version": 4,
+  "connector": "amazon-sqs",
+  "lanes": {
+    "binary_download": "unsupported",
+    "binary_upload": "unsupported",
+    "direct_read": "unsupported",
+    "direct_write": "unsupported",
+    "etl": "unsupported",
+    "reverse_etl": "unsupported",
+    "sync_transport": "unsupported"
+  },
+  "provider_evidence": {
+    "documentation": [
+      {
+        "role": "provider_reference",
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteQueue.html"
+      },
+      {
+        "role": "provider_reference",
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_PurgeQueue.html"
+      }
+    ]
+  },
+  "metadata": {
+    "name": "amazon-sqs",
+    "display_name": "Amazon SQS",
+    "description": "Retains evidence-backed visibility for DeleteQueue and PurgeQueue while their configured-queue actions lack a schema-4 typed record binding. No Amazon SQS provider action is executable from this bundle.",
+    "integration_type": "queue",
+    "docs_url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
+    "release_stage": "ga",
+    "capabilities": {
+      "check": false,
+      "read": false,
+      "write": false,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "risk": {
+      "read": "No provider read is executable from this bounded disposition bundle.",
+      "write": "DeleteQueue and PurgeQueue remain visible with evidence-backed unsupported typed-binding gaps; the runtime never sends a request for either command.",
+      "approval": "No write can reach planning, approval, or provider I/O from this bundle."
+    }
+  },
+  "config_schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "queue_url": {
+        "type": "string"
+      }
+    }
+  },
+  "cli": {
+    "tagline": "Amazon SQS queue actions with explicit runtime dispositions.",
+    "usage": "pm amazon-sqs <command>",
+    "groups": [
+      {
+        "id": "queue",
+        "title": "Queue actions",
+        "commands": [
+          "queue delete",
+          "queue purge"
+        ]
+      }
+    ]
+  },
+  "operations": [
+    {
+      "id": "amazon-sqs.delete-queue",
+      "source": {
+        "provider_operation": "DeleteQueue",
+        "method": "POST",
+        "path": "SQS.DeleteQueue",
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_DeleteQueue.html"
+      },
+      "commands": [
+        {
+          "order": 1,
+          "command": {
+            "path": "queue delete",
+            "summary": "DeleteQueue is visible but unsupported without a schema-4 typed configured-queue binding.",
+            "intent": "docs_only",
+            "availability": "unsupported_with_provider_evidence",
+            "api_surface": [
+              {
+                "method": "POST",
+                "path": "/SQS.DeleteQueue"
+              }
+            ],
+            "risk": "deletes the configured SQS queue",
+            "approval": "not executable",
+            "unsupported_disposition": {
+              "reason": "DeleteQueue relies on configured queue identity and has no schema-4 typed request-body binding for the generic runtime.",
+              "target": {
+                "source_id": "aws-sqs-deletequeue",
+                "operation_id": "DeleteQueue",
+                "method": "POST",
+                "path": "/SQS.DeleteQueue"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "amazon-sqs.purge-queue",
+      "source": {
+        "provider_operation": "PurgeQueue",
+        "method": "POST",
+        "path": "SQS.PurgeQueue",
+        "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_PurgeQueue.html"
+      },
+      "commands": [
+        {
+          "order": 2,
+          "command": {
+            "path": "queue purge",
+            "summary": "PurgeQueue is visible but unsupported without a schema-4 typed configured-queue binding.",
+            "intent": "docs_only",
+            "availability": "unsupported_with_provider_evidence",
+            "api_surface": [
+              {
+                "method": "POST",
+                "path": "/SQS.PurgeQueue"
+              }
+            ],
+            "risk": "purges all available messages from the configured queue",
+            "approval": "not executable",
+            "unsupported_disposition": {
+              "reason": "PurgeQueue relies on configured queue identity and has no schema-4 typed request-body binding for the generic runtime.",
+              "target": {
+                "source_id": "aws-sqs-purgequeue",
+                "operation_id": "PurgeQueue",
+                "method": "POST",
+                "path": "/SQS.PurgeQueue"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

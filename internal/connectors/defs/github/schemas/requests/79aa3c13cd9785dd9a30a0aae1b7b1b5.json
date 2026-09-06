@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "custom_pattern_settings": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "custom_pattern_version": {
+            "maxLength": 8192,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "push_protection_setting": {
+            "enum": [
+              "disabled",
+              "enabled"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "token_type": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "pattern_config_version": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provider_pattern_settings": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "push_protection_setting": {
+            "enum": [
+              "not-set",
+              "disabled",
+              "enabled"
+            ],
+            "maxLength": 8192,
+            "type": "string"
+          },
+          "token_type": {
+            "maxLength": 8192,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "maxItems": 256,
+      "type": "array"
+    }
+  },
+  "required": [
+    "org"
+  ],
+  "type": "object"
+}

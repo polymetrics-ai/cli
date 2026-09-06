@@ -1,20 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "folders",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "name": {
-      "type": "string"
-    },
-    "parent_id": {
-      "type": "string"
-    },
-    "group_id": {
-      "type": "string"
-    },
     "created": {
       "type": [
         "string",
@@ -26,6 +12,12 @@
         "null"
       ]
     },
+    "group_id": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
     "modified": {
       "type": [
         "string",
@@ -36,10 +28,18 @@
         "array",
         "null"
       ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "parent_id": {
+      "type": "string"
     }
   },
+  "title": "folders",
+  "type": "object",
+  "x-cursor-field": "modified",
   "x-primary-key": [
     "id"
-  ],
-  "x-cursor-field": "modified"
+  ]
 }

@@ -9,6 +9,7 @@
     "title": { "type": "string" },
     "type": { "type": "string", "enum": ["object"] },
     "required": { "type": "array", "items": { "type": "string" } },
-    "properties": { "type": "object" }
+    "properties": { "type": "object" },
+    "x-reject-unknown-config": { "type": "boolean" }
   }
 }

@@ -710,7 +710,6 @@ SECURITY
 COMMAND SURFACE
   Read Bitbucket Cloud resources and plan typed repository mutations safely.
   Usage: pm bitbucket <command> [flags]
-  Source CLI: Bitbucket Cloud REST API (OpenAPI 3.0 Bitbucket API 2.0)
   Global flags:
     --credential (string): Credential name to use for Bitbucket requests.
     --config (string_array): Connector config override as key=value.

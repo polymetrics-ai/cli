@@ -1,86 +1,178 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
-        "mode": "none"
+        "mode": "basic",
+        "password": "",
+        "username": "{{ secrets.access_key }}"
       }
     ],
+    "check": {
+      "method": "GET",
+      "path": "/customers",
+      "query": {
+        "display": "full",
+        "limit": "1",
+        "output_format": "JSON"
+      }
+    },
+    "error_map": [],
     "pagination": {
       "type": "none"
     },
-    "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
+    "tenant_origin": {
+      "allow_loopback_http": true,
+      "append_path": "/api",
+      "config_key": "url"
     },
-    "error_map": []
+    "url": "https://unused.invalid",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "incremental": {
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
+      },
+      "method": "GET",
       "name": "customers",
-      "method": "GET",
-      "path": "/__legacy_hook/customers",
-      "records": {
-        "path": "data"
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "type": "offset_count"
       },
-      "schema": "schemas/customers.json",
-      "incremental": {
-        "cursor_field": "date_upd",
-        "client_filtered": true
-      }
+      "path": "/customers",
+      "query": {
+        "display": "full",
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
+      },
+      "records": {
+        "path": "customers.customer"
+      },
+      "schema": "schemas/customers.json"
     },
     {
+      "incremental": {
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
+      },
+      "method": "GET",
       "name": "orders",
-      "method": "GET",
-      "path": "/__legacy_hook/orders",
-      "records": {
-        "path": "data"
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "type": "offset_count"
       },
-      "schema": "schemas/orders.json",
-      "incremental": {
-        "cursor_field": "date_upd",
-        "client_filtered": true
-      }
+      "path": "/orders",
+      "query": {
+        "display": "full",
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
+      },
+      "records": {
+        "path": "orders.order"
+      },
+      "schema": "schemas/orders.json"
     },
     {
+      "incremental": {
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
+      },
+      "method": "GET",
       "name": "products",
-      "method": "GET",
-      "path": "/__legacy_hook/products",
-      "records": {
-        "path": "data"
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "type": "offset_count"
       },
-      "schema": "schemas/products.json",
-      "incremental": {
-        "cursor_field": "date_upd",
-        "client_filtered": true
-      }
+      "path": "/products",
+      "query": {
+        "display": "full",
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
+      },
+      "records": {
+        "path": "products.product"
+      },
+      "schema": "schemas/products.json"
     },
     {
+      "incremental": {
+        "cursor_field": "date_upd",
+        "start_config_key": "start_date"
+      },
+      "method": "GET",
       "name": "addresses",
-      "method": "GET",
-      "path": "/__legacy_hook/addresses",
-      "records": {
-        "path": "data"
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "type": "offset_count"
       },
-      "schema": "schemas/addresses.json",
-      "incremental": {
-        "cursor_field": "date_upd",
-        "client_filtered": true
-      }
+      "path": "/addresses",
+      "query": {
+        "display": "full",
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
+      },
+      "records": {
+        "path": "addresses.address"
+      },
+      "schema": "schemas/addresses.json"
     },
     {
-      "name": "carts",
-      "method": "GET",
-      "path": "/__legacy_hook/carts",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/carts.json",
       "incremental": {
         "cursor_field": "date_upd",
-        "client_filtered": true
-      }
+        "start_config_key": "start_date"
+      },
+      "method": "GET",
+      "name": "carts",
+      "pagination": {
+        "limit_param": "limit",
+        "max_pages": 100,
+        "page_size": 100,
+        "require_continuation_on_cap": true,
+        "type": "offset_count"
+      },
+      "path": "/carts",
+      "query": {
+        "display": "full",
+        "filter[date_upd]": {
+          "omit_when_absent": true,
+          "template": "[{{ incremental.lower_bound }},]"
+        },
+        "output_format": "JSON",
+        "sort": "[date_upd_ASC]"
+      },
+      "records": {
+        "path": "carts.cart"
+      },
+      "schema": "schemas/carts.json"
     }
   ]
 }

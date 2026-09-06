@@ -1,60 +1,45 @@
-# Overview
+# Dixa Connector
 
-Reads Dixa conversations (and their queue, rating, and assignment projections) from the Dixa
-conversation_export API.
+## Overview
 
-Readable streams: `conversations`, `conversation_queue`, `conversation_rating`,
-`conversation_assignment`.
+Reads Dixa conversation export records through fixed bearer-authenticated export routes.
 
-This connector is read-only; no write actions are declared.
+Readable streams: `conversations`, `conversation_queue`, `conversation_rating`, `conversation_assignment`.
 
-Service API documentation: https://docs.dixa.io/openapi/.
+Service API documentation: https://docs.dixa.io/.
 
 ## Auth setup
 
 Connection fields:
 
-- `api_token` (required, secret, string); Dixa API token.
-- `base_url` (optional, string).
-- `batch_size` (optional, string); Number of days to batch into one request. Max 31.
-- `mode` (optional, string).
-- `start_date` (required, string); The connector pulls records updated from this date onwards.
+- `api_token` (optional, secret, string); Dixa API token.
+- `updated_after` (optional, string); Inclusive export lower bound in milliseconds.
+- `updated_before` (optional, string); Exclusive export upper bound in milliseconds.
 
-Secret fields are redacted in logs and write previews: `api_token`.
+Authentication uses declared mode(s): `bearer`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+## Execution contract
 
-Requests use the configured `base_url` value after applying defaults.
+Default stream pagination: `none`.
 
-Connection checks use a connector-managed request.
+Connection check: `GET /conversation_export`
+Check query: `updated_after`=`{{ config.updated_after }}`; `updated_before`=`{{ config.updated_before }}`.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `conversations`: GET connector-managed request path - records path `data`; incremental cursor
-  `updated_at`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `conversation_queue`: GET connector-managed request path - records path `data`; incremental cursor
-  `updated_at`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `conversation_rating`: GET connector-managed request path - records path `data`; incremental
-  cursor `updated_at`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
-- `conversation_assignment`: GET connector-managed request path - records path `data`; incremental
-  cursor `updated_at`; formatted as `rfc3339`; records at or before the lower bound are filtered
-  client-side.
+- `conversations`: `GET /conversation_export`; records `.`
+  - Query: `updated_after`=`{{ config.updated_after }}`; `updated_before`=`{{ config.updated_before }}`.
+  - Incremental cursor: `updated_at`.
+- `conversation_queue`: `GET /conversation_export`; records `.`
+  - Query: `updated_after`=`{{ config.updated_after }}`; `updated_before`=`{{ config.updated_before }}`.
+  - Incremental cursor: `updated_at`.
+- `conversation_rating`: `GET /conversation_export`; records `.`
+  - Query: `updated_after`=`{{ config.updated_after }}`; `updated_before`=`{{ config.updated_before }}`.
+  - Incremental cursor: `updated_at`.
+- `conversation_assignment`: `GET /conversation_export`; records `.`
+  - Query: `updated_after`=`{{ config.updated_after }}`; `updated_before`=`{{ config.updated_before }}`.
+  - Incremental cursor: `updated_at`.
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 4 stream-backed endpoint group(s).
-- Client-side incremental filtering is used for: `conversations`, `conversation_queue`,
-  `conversation_rating`, `conversation_assignment`.
+This connector's write surface is declared separately in the rendered execution bundle.

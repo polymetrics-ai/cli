@@ -95,7 +95,7 @@ func doAuthenticatedRequest(t *testing.T, auth interface {
 // --- registration ---------------------------------------------------------
 
 func TestHooksRegisteredUnderQuickbooks(t *testing.T) {
-	h := engine.HooksFor("quickbooks")
+	h := ExplicitFactory()
 	if h == nil {
 		t.Fatal("engine.HooksFor(\"quickbooks\") = nil, want registered hooks")
 	}

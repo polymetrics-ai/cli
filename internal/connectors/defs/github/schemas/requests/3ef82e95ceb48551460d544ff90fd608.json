@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "issue_field_id": {
+      "type": "integer"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "issue_field_id",
+    "org"
+  ],
+  "type": "object"
+}

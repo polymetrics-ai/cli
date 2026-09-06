@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "maxLength": 40,
+            "type": "string"
+          },
+          "identifier": {
+            "maxLength": 20,
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 20,
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "description",
+          "identifier"
+        ],
+        "type": "object"
+      },
+      "maxItems": 3,
+      "type": "array"
+    },
+    "check_run_id": {
+      "type": "integer"
+    },
+    "completed_at": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "conclusion": {
+      "enum": [
+        "action_required",
+        "cancelled",
+        "failure",
+        "neutral",
+        "success",
+        "skipped",
+        "stale",
+        "timed_out"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "details_url": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "external_id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "output": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "annotation_level": {
+                "enum": [
+                  "notice",
+                  "warning",
+                  "failure"
+                ],
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "end_column": {
+                "type": "integer"
+              },
+              "end_line": {
+                "type": "integer"
+              },
+              "message": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "path": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "raw_details": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "start_column": {
+                "type": "integer"
+              },
+              "start_line": {
+                "type": "integer"
+              },
+              "title": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "start_line",
+              "end_line",
+              "annotation_level",
+              "message"
+            ],
+            "type": "object"
+          },
+          "maxItems": 50,
+          "type": "array"
+        },
+        "images": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "alt": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "caption": {
+                "maxLength": 8192,
+                "type": "string"
+              },
+              "image_url": {
+                "maxLength": 8192,
+                "type": "string"
+              }
+            },
+            "required": [
+              "alt",
+              "image_url"
+            ],
+            "type": "object"
+          },
+          "maxItems": 256,
+          "type": "array"
+        },
+        "summary": {
+          "maxLength": 65535,
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 65535,
+          "type": "string"
+        },
+        "title": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "summary"
+      ],
+      "type": "object"
+    },
+    "started_at": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "queued",
+        "in_progress",
+        "completed",
+        "waiting",
+        "requested",
+        "pending"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "check_run_id"
+  ],
+  "type": "object"
+}

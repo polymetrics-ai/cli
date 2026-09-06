@@ -1,0 +1,4150 @@
+{
+  "schema_version": 1,
+  "purpose": "source-parent differential contract matrix for S1A execution facts",
+  "connectors": {
+    "apify-dataset": {
+      "auth": [
+        {
+          "mode": "bearer",
+          "token": "{{ secrets.token }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "apify-dataset.items",
+          "stream_name": "item_collection",
+          "path": "/datasets/{{ config.dataset_id }}/items",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ".",
+            "wrap_field": "data"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "apify-dataset.list",
+          "stream_name": "dataset_collection",
+          "path": "/datasets",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.items"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "createdAt"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "apify-dataset.get",
+          "stream_name": "dataset",
+          "path": "/datasets/{{ config.dataset_id }}",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data",
+            "single_object": true
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "modifiedAt"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "ashby": {
+      "auth": [
+        {
+          "mode": "basic",
+          "password": "",
+          "username": "{{ secrets.api_key }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "ashby.stream.candidates",
+          "stream_name": "candidates",
+          "path": "/candidate.list",
+          "method": "POST",
+          "body": {
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "createdBefore": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdBefore }}",
+              "type": "integer"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.jobs",
+          "stream_name": "jobs",
+          "path": "/job.list",
+          "method": "POST",
+          "body": {
+            "closedAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.closedAfter }}",
+              "type": "integer"
+            },
+            "closedBefore": {
+              "omit_when_absent": true,
+              "template": "{{ query.closedBefore }}",
+              "type": "integer"
+            },
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "includeUnpublishedJobPostingsIds": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeUnpublishedJobPostingsIds }}",
+              "type": "boolean"
+            },
+            "limit": 100,
+            "openedAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.openedAfter }}",
+              "type": "integer"
+            },
+            "openedBefore": {
+              "omit_when_absent": true,
+              "template": "{{ query.openedBefore }}",
+              "type": "integer"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.applications",
+          "stream_name": "applications",
+          "path": "/application.list",
+          "method": "POST",
+          "body": {
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "createdBefore": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdBefore }}",
+              "type": "integer"
+            },
+            "jobId": {
+              "omit_when_absent": true,
+              "template": "{{ query.jobId }}"
+            },
+            "limit": 100,
+            "status": {
+              "omit_when_absent": true,
+              "template": "{{ query.status }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.users",
+          "stream_name": "users",
+          "path": "/user.list",
+          "method": "POST",
+          "body": {
+            "includeDeactivated": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeDeactivated }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.api_key_info",
+          "stream_name": "api_key_info",
+          "path": "/apiKey.info",
+          "method": "POST",
+          "body": {},
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.audit_log_list",
+          "stream_name": "audit_log_list",
+          "path": "/auditLog.list",
+          "method": "POST",
+          "body": {
+            "endDate": {
+              "omit_when_absent": true,
+              "template": "{{ query.endDate }}"
+            },
+            "limit": 100,
+            "startDate": {
+              "omit_when_absent": true,
+              "template": "{{ query.startDate }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.application_info",
+          "stream_name": "application_info",
+          "path": "/application.info",
+          "method": "POST",
+          "body": {
+            "applicationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.applicationId }}"
+            },
+            "submittedFormInstanceId": {
+              "omit_when_absent": true,
+              "template": "{{ query.submittedFormInstanceId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.application_hiring_team_role_list",
+          "stream_name": "application_hiring_team_role_list",
+          "path": "/applicationHiringTeamRole.list",
+          "method": "POST",
+          "body": {
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.application_list_history",
+          "stream_name": "application_list_history",
+          "path": "/application.listHistory",
+          "method": "POST",
+          "body": {
+            "applicationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.applicationId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "applicationId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.application_list_criteria_evaluations",
+          "stream_name": "application_list_criteria_evaluations",
+          "path": "/application.listCriteriaEvaluations",
+          "method": "POST",
+          "body": {
+            "applicationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.applicationId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "applicationId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.application_feedback_list",
+          "stream_name": "application_feedback_list",
+          "path": "/applicationFeedback.list",
+          "method": "POST",
+          "body": {
+            "applicationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.applicationId }}"
+            },
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.candidate_info",
+          "stream_name": "candidate_info",
+          "path": "/candidate.info",
+          "method": "POST",
+          "body": {
+            "externalMappingId": {
+              "omit_when_absent": true,
+              "template": "{{ query.externalMappingId }}"
+            },
+            "id": {
+              "omit_when_absent": true,
+              "template": "{{ query.id }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.candidate_list_client_info",
+          "stream_name": "candidate_list_client_info",
+          "path": "/candidate.listClientInfo",
+          "method": "POST",
+          "body": {
+            "candidateId": {
+              "omit_when_absent": true,
+              "template": "{{ query.candidateId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "candidateId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.candidate_list_fraud_checks",
+          "stream_name": "candidate_list_fraud_checks",
+          "path": "/candidate.listFraudChecks",
+          "method": "POST",
+          "body": {
+            "candidateId": {
+              "omit_when_absent": true,
+              "template": "{{ query.candidateId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "candidateId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.candidate_list_notes",
+          "stream_name": "candidate_list_notes",
+          "path": "/candidate.listNotes",
+          "method": "POST",
+          "body": {
+            "candidateId": {
+              "omit_when_absent": true,
+              "template": "{{ query.candidateId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "candidateId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.candidate_list_projects",
+          "stream_name": "candidate_list_projects",
+          "path": "/candidate.listProjects",
+          "method": "POST",
+          "body": {
+            "candidateId": {
+              "omit_when_absent": true,
+              "template": "{{ query.candidateId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "candidateId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.candidate_tag_list",
+          "stream_name": "candidate_tag_list",
+          "path": "/candidateTag.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.communication_template_list",
+          "stream_name": "communication_template_list",
+          "path": "/communicationTemplate.list",
+          "method": "POST",
+          "body": {
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.feedback_form_definition_list",
+          "stream_name": "feedback_form_definition_list",
+          "path": "/feedbackFormDefinition.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.feedback_form_definition_info",
+          "stream_name": "feedback_form_definition_info",
+          "path": "/feedbackFormDefinition.info",
+          "method": "POST",
+          "body": {
+            "feedbackFormDefinitionId": {
+              "omit_when_absent": true,
+              "template": "{{ query.feedbackFormDefinitionId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "feedbackFormDefinitionId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.job_posting_list",
+          "stream_name": "job_posting_list",
+          "path": "/jobPosting.list",
+          "method": "POST",
+          "body": {
+            "department": {
+              "omit_when_absent": true,
+              "template": "{{ query.department }}"
+            },
+            "includeUnpublishedJobPostings": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeUnpublishedJobPostings }}",
+              "type": "boolean"
+            },
+            "jobBoardId": {
+              "omit_when_absent": true,
+              "template": "{{ query.jobBoardId }}"
+            },
+            "limit": 100,
+            "listedOnly": {
+              "omit_when_absent": true,
+              "template": "{{ query.listedOnly }}",
+              "type": "boolean"
+            },
+            "location": {
+              "omit_when_absent": true,
+              "template": "{{ query.location }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.job_posting_info",
+          "stream_name": "job_posting_info",
+          "path": "/jobPosting.info",
+          "method": "POST",
+          "body": {
+            "includeUnpublishedJobPostings": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeUnpublishedJobPostings }}",
+              "type": "boolean"
+            },
+            "jobBoardId": {
+              "omit_when_absent": true,
+              "template": "{{ query.jobBoardId }}"
+            },
+            "jobPostingId": {
+              "omit_when_absent": true,
+              "template": "{{ query.jobPostingId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "jobPostingId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.job_info",
+          "stream_name": "job_info",
+          "path": "/job.info",
+          "method": "POST",
+          "body": {
+            "id": {
+              "omit_when_absent": true,
+              "template": "{{ query.id }}"
+            },
+            "includeUnpublishedJobPostingsIds": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeUnpublishedJobPostingsIds }}",
+              "type": "boolean"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "id"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.job_board_list",
+          "stream_name": "job_board_list",
+          "path": "/jobBoard.list",
+          "method": "POST",
+          "body": {
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.job_interview_plan_info",
+          "stream_name": "job_interview_plan_info",
+          "path": "/jobInterviewPlan.info",
+          "method": "POST",
+          "body": {
+            "jobId": {
+              "omit_when_absent": true,
+              "template": "{{ query.jobId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "jobId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.job_template_list",
+          "stream_name": "job_template_list",
+          "path": "/jobTemplate.list",
+          "method": "POST",
+          "body": {
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.department_info",
+          "stream_name": "department_info",
+          "path": "/department.info",
+          "method": "POST",
+          "body": {
+            "departmentId": {
+              "omit_when_absent": true,
+              "template": "{{ query.departmentId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "departmentId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.department_list",
+          "stream_name": "department_list",
+          "path": "/department.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.location_list",
+          "stream_name": "location_list",
+          "path": "/location.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "includeLocationHierarchy": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeLocationHierarchy }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.location_info",
+          "stream_name": "location_info",
+          "path": "/location.info",
+          "method": "POST",
+          "body": {
+            "locationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.locationId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "locationId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_plan_list",
+          "stream_name": "interview_plan_list",
+          "path": "/interviewPlan.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_stage_list",
+          "stream_name": "interview_stage_list",
+          "path": "/interviewStage.list",
+          "method": "POST",
+          "body": {
+            "interviewPlanId": {
+              "omit_when_absent": true,
+              "template": "{{ query.interviewPlanId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "interviewPlanId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_stage_group_list",
+          "stream_name": "interview_stage_group_list",
+          "path": "/interviewStageGroup.list",
+          "method": "POST",
+          "body": {
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.offer_list",
+          "stream_name": "offer_list",
+          "path": "/offer.list",
+          "method": "POST",
+          "body": {
+            "applicationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.applicationId }}"
+            },
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.offer_info",
+          "stream_name": "offer_info",
+          "path": "/offer.info",
+          "method": "POST",
+          "body": {
+            "excludeFormDefinition": {
+              "omit_when_absent": true,
+              "template": "{{ query.excludeFormDefinition }}",
+              "type": "boolean"
+            },
+            "offerId": {
+              "omit_when_absent": true,
+              "template": "{{ query.offerId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "offerId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.opening_info",
+          "stream_name": "opening_info",
+          "path": "/opening.info",
+          "method": "POST",
+          "body": {
+            "openingId": {
+              "omit_when_absent": true,
+              "template": "{{ query.openingId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "openingId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.opening_list",
+          "stream_name": "opening_list",
+          "path": "/opening.list",
+          "method": "POST",
+          "body": {
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.project_info",
+          "stream_name": "project_info",
+          "path": "/project.info",
+          "method": "POST",
+          "body": {
+            "projectId": {
+              "omit_when_absent": true,
+              "template": "{{ query.projectId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "projectId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.project_list",
+          "stream_name": "project_list",
+          "path": "/project.list",
+          "method": "POST",
+          "body": {
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.source_list",
+          "stream_name": "source_list",
+          "path": "/source.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.source_tracking_link_list",
+          "stream_name": "source_tracking_link_list",
+          "path": "/sourceTrackingLink.list",
+          "method": "POST",
+          "body": {
+            "includeDisabled": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeDisabled }}",
+              "type": "boolean"
+            },
+            "limit": 100,
+            "sourceId": {
+              "omit_when_absent": true,
+              "template": "{{ query.sourceId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.archive_reason_list",
+          "stream_name": "archive_reason_list",
+          "path": "/archiveReason.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.brand_list",
+          "stream_name": "brand_list",
+          "path": "/brand.list",
+          "method": "POST",
+          "body": {
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.custom_field_list",
+          "stream_name": "custom_field_list",
+          "path": "/customField.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.custom_field_info",
+          "stream_name": "custom_field_info",
+          "path": "/customField.info",
+          "method": "POST",
+          "body": {
+            "customFieldId": {
+              "omit_when_absent": true,
+              "template": "{{ query.customFieldId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "customFieldId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.hiring_team_role_list",
+          "stream_name": "hiring_team_role_list",
+          "path": "/hiringTeamRole.list",
+          "method": "POST",
+          "body": {
+            "limit": 100,
+            "namesOnly": true
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.user_info",
+          "stream_name": "user_info",
+          "path": "/user.info",
+          "method": "POST",
+          "body": {
+            "userId": {
+              "omit_when_absent": true,
+              "template": "{{ query.userId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "userId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.user_list_interviewer_pauses",
+          "stream_name": "user_list_interviewer_pauses",
+          "path": "/user.listInterviewerPauses",
+          "method": "POST",
+          "body": {
+            "limit": 100,
+            "userId": {
+              "omit_when_absent": true,
+              "template": "{{ query.userId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "userId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.email_sender_list",
+          "stream_name": "email_sender_list",
+          "path": "/emailSender.list",
+          "method": "POST",
+          "body": {
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.sequence_info",
+          "stream_name": "sequence_info",
+          "path": "/sequence.info",
+          "method": "POST",
+          "body": {
+            "sequenceId": {
+              "omit_when_absent": true,
+              "template": "{{ query.sequenceId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "sequenceId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.sequence_list",
+          "stream_name": "sequence_list",
+          "path": "/sequence.list",
+          "method": "POST",
+          "body": {
+            "candidateId": {
+              "omit_when_absent": true,
+              "template": "{{ query.candidateId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.sequence_template_info",
+          "stream_name": "sequence_template_info",
+          "path": "/sequenceTemplate.info",
+          "method": "POST",
+          "body": {
+            "sequenceTemplateId": {
+              "omit_when_absent": true,
+              "template": "{{ query.sequenceTemplateId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "sequenceTemplateId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.sequence_template_list",
+          "stream_name": "sequence_template_list",
+          "path": "/sequenceTemplate.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_schedule_list",
+          "stream_name": "interview_schedule_list",
+          "path": "/interviewSchedule.list",
+          "method": "POST",
+          "body": {
+            "applicationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.applicationId }}"
+            },
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "interviewStageId": {
+              "omit_when_absent": true,
+              "template": "{{ query.interviewStageId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.take_home_assignment_list",
+          "stream_name": "take_home_assignment_list",
+          "path": "/takeHomeAssignment.list",
+          "method": "POST",
+          "body": {
+            "applicationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.applicationId }}"
+            },
+            "candidateId": {
+              "omit_when_absent": true,
+              "template": "{{ query.candidateId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.take_home_assignment_info",
+          "stream_name": "take_home_assignment_info",
+          "path": "/takeHomeAssignment.info",
+          "method": "POST",
+          "body": {
+            "takeHomeAssignmentId": {
+              "omit_when_absent": true,
+              "template": "{{ query.takeHomeAssignmentId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "takeHomeAssignmentId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_event_list",
+          "stream_name": "interview_event_list",
+          "path": "/interviewEvent.list",
+          "method": "POST",
+          "body": {
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "interviewScheduleId": {
+              "omit_when_absent": true,
+              "template": "{{ query.interviewScheduleId }}"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "interviewScheduleId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_briefing_info",
+          "stream_name": "interview_briefing_info",
+          "path": "/interviewBriefing.info",
+          "method": "POST",
+          "body": {
+            "interviewEventId": {
+              "omit_when_absent": true,
+              "template": "{{ query.interviewEventId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "interviewEventId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_info",
+          "stream_name": "interview_info",
+          "path": "/interview.info",
+          "method": "POST",
+          "body": {
+            "id": {
+              "omit_when_absent": true,
+              "template": "{{ query.id }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "id"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_list",
+          "stream_name": "interview_list",
+          "path": "/interview.list",
+          "method": "POST",
+          "body": {
+            "excludeArchivedScheduleTemplateInterviews": {
+              "omit_when_absent": true,
+              "template": "{{ query.excludeArchivedScheduleTemplateInterviews }}",
+              "type": "boolean"
+            },
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "includeNonSharedInterviews": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeNonSharedInterviews }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interview_stage_info",
+          "stream_name": "interview_stage_info",
+          "path": "/interviewStage.info",
+          "method": "POST",
+          "body": {
+            "interviewStageId": {
+              "omit_when_absent": true,
+              "template": "{{ query.interviewStageId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "interviewStageId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.survey_form_definition_info",
+          "stream_name": "survey_form_definition_info",
+          "path": "/surveyFormDefinition.info",
+          "method": "POST",
+          "body": {
+            "surveyFormDefinitionId": {
+              "omit_when_absent": true,
+              "template": "{{ query.surveyFormDefinitionId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "surveyFormDefinitionId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.survey_form_definition_list",
+          "stream_name": "survey_form_definition_list",
+          "path": "/surveyFormDefinition.list",
+          "method": "POST",
+          "body": {
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.survey_request_list",
+          "stream_name": "survey_request_list",
+          "path": "/surveyRequest.list",
+          "method": "POST",
+          "body": {
+            "applicationId": {
+              "omit_when_absent": true,
+              "template": "{{ query.applicationId }}"
+            },
+            "candidateId": {
+              "omit_when_absent": true,
+              "template": "{{ query.candidateId }}"
+            },
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "limit": 100,
+            "surveyType": {
+              "omit_when_absent": true,
+              "template": "{{ query.surveyType }}",
+              "type": "enum"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "surveyType"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.survey_submission_list",
+          "stream_name": "survey_submission_list",
+          "path": "/surveySubmission.list",
+          "method": "POST",
+          "body": {
+            "createdAfter": {
+              "omit_when_absent": true,
+              "template": "{{ query.createdAfter }}",
+              "type": "integer"
+            },
+            "limit": 100,
+            "surveyType": {
+              "omit_when_absent": true,
+              "template": "{{ query.surveyType }}",
+              "type": "enum"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "surveyType"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.webhook_info",
+          "stream_name": "webhook_info",
+          "path": "/webhook.info",
+          "method": "POST",
+          "body": {
+            "webhookId": {
+              "omit_when_absent": true,
+              "template": "{{ query.webhookId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "webhookId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interviewer_pool_list",
+          "stream_name": "interviewer_pool_list",
+          "path": "/interviewerPool.list",
+          "method": "POST",
+          "body": {
+            "includeArchivedPools": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchivedPools }}",
+              "type": "boolean"
+            },
+            "includeArchivedTrainingStages": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchivedTrainingStages }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.interviewer_pool_info",
+          "stream_name": "interviewer_pool_info",
+          "path": "/interviewerPool.info",
+          "method": "POST",
+          "body": {
+            "interviewerPoolId": {
+              "omit_when_absent": true,
+              "template": "{{ query.interviewerPoolId }}"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "interviewerPoolId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.close_reason_list",
+          "stream_name": "close_reason_list",
+          "path": "/closeReason.list",
+          "method": "POST",
+          "body": {
+            "includeArchived": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeArchived }}",
+              "type": "boolean"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.report_synchronous",
+          "stream_name": "report_synchronous",
+          "path": "/report.synchronous",
+          "method": "POST",
+          "body": {
+            "includeHeadersInData": {
+              "omit_when_absent": true,
+              "template": "{{ query.includeHeadersInData }}",
+              "type": "boolean"
+            },
+            "reportId": {
+              "omit_when_absent": true,
+              "template": "{{ query.reportId }}"
+            },
+            "resultStyle": {
+              "omit_when_absent": true,
+              "template": "{{ query.resultStyle }}",
+              "type": "enum"
+            }
+          },
+          "body_type": "json",
+          "required_body_fields": [
+            "reportId"
+          ],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        },
+        {
+          "operation_id": "ashby.stream.approval_list",
+          "stream_name": "approval_list",
+          "path": "/approval.list",
+          "method": "POST",
+          "body": {
+            "entityId": {
+              "omit_when_absent": true,
+              "template": "{{ query.entityId }}"
+            },
+            "entityType": {
+              "omit_when_absent": true,
+              "template": "{{ query.entityType }}",
+              "type": "enum"
+            },
+            "limit": 100
+          },
+          "body_type": "json",
+          "required_body_fields": [],
+          "records": {
+            "path": "results"
+          },
+          "incremental": null,
+          "response_error": {
+            "path": "errors",
+            "success_path": "success"
+          }
+        }
+      ]
+    },
+    "aws-cloudtrail": {
+      "auth": [
+        {
+          "access_key_id": "{{ secrets.aws_key_id }}",
+          "aws_region": "us-east-1",
+          "aws_service": "cloudtrail",
+          "mode": "aws_sigv4",
+          "secret_access_key": "{{ secrets.aws_secret_key }}",
+          "session_token": "{{ secrets.aws_session_token }}",
+          "when": "{{ secrets.aws_session_token }}"
+        },
+        {
+          "access_key_id": "{{ secrets.aws_key_id }}",
+          "aws_region": "us-east-1",
+          "aws_service": "cloudtrail",
+          "mode": "aws_sigv4",
+          "secret_access_key": "{{ secrets.aws_secret_key }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "cloudtrail.management-events",
+          "stream_name": "management_events",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "MaxResults": 50,
+            "StartTime": {
+              "omit_when_absent": true,
+              "template": "{{ incremental.lower_bound }}",
+              "type": "integer"
+            }
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "Events"
+          },
+          "incremental": {
+            "cursor_field": "EventTime",
+            "param_format": "unix_seconds",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "cloudtrail.read-only-events",
+          "stream_name": "read_only_events",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "LookupAttributes": [
+              {
+                "AttributeKey": "ReadOnly",
+                "AttributeValue": "true"
+              }
+            ],
+            "MaxResults": 50,
+            "StartTime": {
+              "omit_when_absent": true,
+              "template": "{{ incremental.lower_bound }}",
+              "type": "integer"
+            }
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "Events"
+          },
+          "incremental": {
+            "cursor_field": "EventTime",
+            "param_format": "unix_seconds",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "cloudtrail.write-only-events",
+          "stream_name": "write_only_events",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "LookupAttributes": [
+              {
+                "AttributeKey": "ReadOnly",
+                "AttributeValue": "false"
+              }
+            ],
+            "MaxResults": 50,
+            "StartTime": {
+              "omit_when_absent": true,
+              "template": "{{ incremental.lower_bound }}",
+              "type": "integer"
+            }
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "Events"
+          },
+          "incremental": {
+            "cursor_field": "EventTime",
+            "param_format": "unix_seconds",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "cloudtrail.console-logins",
+          "stream_name": "console_logins",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "LookupAttributes": [
+              {
+                "AttributeKey": "EventName",
+                "AttributeValue": "ConsoleLogin"
+              }
+            ],
+            "MaxResults": 50,
+            "StartTime": {
+              "omit_when_absent": true,
+              "template": "{{ incremental.lower_bound }}",
+              "type": "integer"
+            }
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "Events"
+          },
+          "incremental": {
+            "cursor_field": "EventTime",
+            "param_format": "unix_seconds",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "babelforce": {
+      "auth": [
+        {
+          "mode": "none"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "babelforce.calls",
+          "stream_name": "calls",
+          "path": "/calls/reporting/simple",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "items"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "dateCreated"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "babelforce.calls-extended",
+          "stream_name": "calls_extended",
+          "path": "/calls/reporting/extended",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "items"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "dateCreated"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "babelforce.recordings",
+          "stream_name": "recordings",
+          "path": "/recordings",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "items"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "dateCreated"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "babelforce.numbers",
+          "stream_name": "numbers",
+          "path": "/numbers",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "items"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "dateCreated"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "babelforce.users",
+          "stream_name": "users",
+          "path": "/users",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "items"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "dateCreated"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "basecamp": {
+      "auth": [
+        {
+          "mode": "bearer",
+          "token": "{{ secrets.access_token }}",
+          "when": "{{ secrets.access_token }}"
+        },
+        {
+          "client_id": "{{ secrets.client_id }}",
+          "client_secret": "{{ secrets.client_secret }}",
+          "mode": "oauth2_refresh_token",
+          "refresh_token": "{{ secrets.refresh_token }}",
+          "token_url": "https://launchpad.37signals.com/authorization/token"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "basecamp.projects",
+          "stream_name": "projects",
+          "path": "/projects.json",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "basecamp.people",
+          "stream_name": "people",
+          "path": "/people.json",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "basecamp.events",
+          "stream_name": "events",
+          "path": "/events.json",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "created_at"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "bunny-inc": {
+      "auth": [
+        {
+          "mode": "bearer",
+          "token": "{{ secrets.apikey }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "bunny.accounts",
+          "stream_name": "accounts",
+          "path": "/graphql",
+          "method": "POST",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.accounts.nodes"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updatedAt"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "bunny.contacts",
+          "stream_name": "contacts",
+          "path": "/graphql",
+          "method": "POST",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.contacts.nodes"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updatedAt"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "bunny.invoices",
+          "stream_name": "invoices",
+          "path": "/graphql",
+          "method": "POST",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.invoices.nodes"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updatedAt"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "bunny.payments",
+          "stream_name": "payments",
+          "path": "/graphql",
+          "method": "POST",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.payments.nodes"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updatedAt"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "bunny.subscriptions",
+          "stream_name": "subscriptions",
+          "path": "/graphql",
+          "method": "POST",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.subscriptions.nodes"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updatedAt"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "canny": {
+      "auth": [
+        {
+          "mode": "none"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "canny.boards",
+          "stream_name": "boards",
+          "path": "/boards/list",
+          "method": "POST",
+          "body": {
+            "apiKey": "{{ secrets.api_key }}"
+          },
+          "body_type": "form",
+          "required_body_fields": [],
+          "records": {
+            "path": "boards"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "created"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "canny.posts",
+          "stream_name": "posts",
+          "path": "/posts/list",
+          "method": "POST",
+          "body": {
+            "apiKey": "{{ secrets.api_key }}"
+          },
+          "body_type": "form",
+          "required_body_fields": [],
+          "records": {
+            "path": "posts"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "created"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "canny.comments",
+          "stream_name": "comments",
+          "path": "/comments/list",
+          "method": "POST",
+          "body": {
+            "apiKey": "{{ secrets.api_key }}"
+          },
+          "body_type": "form",
+          "required_body_fields": [],
+          "records": {
+            "path": "comments"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "created"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "canny.categories",
+          "stream_name": "categories",
+          "path": "/categories/list",
+          "method": "POST",
+          "body": {
+            "apiKey": "{{ secrets.api_key }}"
+          },
+          "body_type": "form",
+          "required_body_fields": [],
+          "records": {
+            "path": "categories"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "created"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "canny.companies",
+          "stream_name": "companies",
+          "path": "/companies/list",
+          "method": "POST",
+          "body": {
+            "apiKey": "{{ secrets.api_key }}"
+          },
+          "body_type": "form",
+          "required_body_fields": [],
+          "records": {
+            "path": "companies"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "created"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "copper": {
+      "auth": [
+        {
+          "mode": "none"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "copper.people",
+          "stream_name": "people",
+          "path": "/people/search",
+          "method": "POST",
+          "body": {
+            "page_size": 100
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "date_modified"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "copper.companies",
+          "stream_name": "companies",
+          "path": "/companies/search",
+          "method": "POST",
+          "body": {
+            "page_size": 100
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "date_modified"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "copper.opportunities",
+          "stream_name": "opportunities",
+          "path": "/opportunities/search",
+          "method": "POST",
+          "body": {
+            "page_size": 100
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "date_modified"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "copper.leads",
+          "stream_name": "leads",
+          "path": "/leads/search",
+          "method": "POST",
+          "body": {
+            "page_size": 100
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "date_modified"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "copper.tasks",
+          "stream_name": "tasks",
+          "path": "/tasks/search",
+          "method": "POST",
+          "body": {
+            "page_size": 100
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "date_modified"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "dixa": {
+      "auth": [
+        {
+          "mode": "bearer",
+          "token": "{{ secrets.api_token }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "dixa.conversations",
+          "stream_name": "conversations",
+          "path": "/conversation_export",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "dixa.queue",
+          "stream_name": "conversation_queue",
+          "path": "/conversation_export",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "dixa.rating",
+          "stream_name": "conversation_rating",
+          "path": "/conversation_export",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "dixa.assignment",
+          "stream_name": "conversation_assignment",
+          "path": "/conversation_export",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "fastbill": {
+      "auth": [
+        {
+          "mode": "basic",
+          "password": "{{ secrets.api_key }}",
+          "username": "{{ config.username }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "fastbill.customers",
+          "stream_name": "customers",
+          "path": "",
+          "method": "POST",
+          "body": {
+            "LIMIT": 100,
+            "SERVICE": "customer.get"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "RESPONSE.CUSTOMERS"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "fastbill.invoices",
+          "stream_name": "invoices",
+          "path": "",
+          "method": "POST",
+          "body": {
+            "LIMIT": 100,
+            "SERVICE": "invoice.get"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "RESPONSE.INVOICES"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "fastbill.products",
+          "stream_name": "products",
+          "path": "",
+          "method": "POST",
+          "body": {
+            "LIMIT": 100,
+            "SERVICE": "article.get"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "RESPONSE.ARTICLES"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "fastbill.recurring",
+          "stream_name": "recurring_invoices",
+          "path": "",
+          "method": "POST",
+          "body": {
+            "LIMIT": 100,
+            "SERVICE": "recurring.get"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "RESPONSE.INVOICES"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "fastbill.revenues",
+          "stream_name": "revenues",
+          "path": "",
+          "method": "POST",
+          "body": {
+            "LIMIT": 100,
+            "SERVICE": "revenue.get"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "RESPONSE.REVENUES"
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "feishu": {
+      "auth": [
+        {
+          "hook": "feishu",
+          "mode": "custom"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "feishu.records",
+          "stream_name": "records",
+          "path": "/open-apis/bitable/v1/apps/{{ secrets.app_token }}/tables/{{ config.table_id }}/records",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.items"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "feishu.tables",
+          "stream_name": "tables",
+          "path": "/open-apis/bitable/v1/apps/{{ secrets.app_token }}/tables",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.items"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "feishu.fields",
+          "stream_name": "fields",
+          "path": "/open-apis/bitable/v1/apps/{{ secrets.app_token }}/tables/{{ config.table_id }}/fields",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data.items"
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "free-agent-connector": {
+      "auth": [
+        {
+          "client_authentication": "basic",
+          "client_id": "{{ secrets.client_id }}",
+          "client_secret": "{{ secrets.client_secret }}",
+          "mode": "oauth2_refresh_token",
+          "refresh_token": "{{ secrets.client_refresh_token_2 }}",
+          "token_url": "https://api.freeagent.com/v2/token_endpoint"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "freeagent.contacts",
+          "stream_name": "contacts",
+          "path": "/contacts",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "contacts"
+          },
+          "incremental": {
+            "cursor_field": "updated_at",
+            "request_param": "updated_since"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "freeagent.invoices",
+          "stream_name": "invoices",
+          "path": "/invoices",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "invoices"
+          },
+          "incremental": {
+            "cursor_field": "updated_at",
+            "request_param": "updated_since"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "freeagent.bills",
+          "stream_name": "bills",
+          "path": "/bills",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "bills"
+          },
+          "incremental": {
+            "cursor_field": "updated_at",
+            "request_param": "updated_since"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "freeagent.projects",
+          "stream_name": "projects",
+          "path": "/projects",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "projects"
+          },
+          "incremental": {
+            "cursor_field": "updated_at",
+            "request_param": "updated_since"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "freeagent.tasks",
+          "stream_name": "tasks",
+          "path": "/tasks",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "tasks"
+          },
+          "incremental": {
+            "cursor_field": "updated_at",
+            "request_param": "updated_since"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "freightview": {
+      "auth": [
+        {
+          "client_id": "{{ secrets.client_id }}",
+          "client_secret": "{{ secrets.client_secret }}",
+          "mode": "oauth2_client_credentials",
+          "token_url": "https://api.freightview.com/v2.0/auth/token"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "freightview.shipments",
+          "stream_name": "shipments",
+          "path": "/shipments",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "shipments"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "freightview.quotes",
+          "stream_name": "quotes",
+          "path": "/shipments/{{ fanout.id }}/quotes",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "quotes"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "freightview.tracking",
+          "stream_name": "tracking",
+          "path": "/shipments/{{ fanout.id }}/tracking",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "google-analytics-data-api": {
+      "auth": [
+        {
+          "mode": "bearer",
+          "token": "{{ secrets.access_token }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "ga4.daily_active_users",
+          "stream_name": "daily_active_users",
+          "path": "/v1beta/properties/{{ config.property_ids }}:runReport",
+          "method": "POST",
+          "body": {
+            "dateRanges": [
+              {
+                "endDate": "{{ config.end_date }}",
+                "startDate": "{{ config.start_date }}"
+              }
+            ],
+            "dimensions": [
+              {
+                "name": "date"
+              }
+            ],
+            "keepEmptyRows": false,
+            "limit": "10000",
+            "metrics": [
+              {
+                "name": "activeUsers"
+              },
+              {
+                "name": "newUsers"
+              },
+              {
+                "name": "sessions"
+              }
+            ],
+            "offset": "0"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "rows"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "ga4.website_overview",
+          "stream_name": "website_overview",
+          "path": "/v1beta/properties/{{ config.property_ids }}:runReport",
+          "method": "POST",
+          "body": {
+            "dateRanges": [
+              {
+                "endDate": "{{ config.end_date }}",
+                "startDate": "{{ config.start_date }}"
+              }
+            ],
+            "dimensions": [
+              {
+                "name": "date"
+              }
+            ],
+            "keepEmptyRows": false,
+            "limit": "10000",
+            "metrics": [
+              {
+                "name": "activeUsers"
+              },
+              {
+                "name": "newUsers"
+              },
+              {
+                "name": "sessions"
+              },
+              {
+                "name": "screenPageViews"
+              },
+              {
+                "name": "averageSessionDuration"
+              },
+              {
+                "name": "bounceRate"
+              }
+            ],
+            "offset": "0"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "rows"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "ga4.traffic_sources",
+          "stream_name": "traffic_sources",
+          "path": "/v1beta/properties/{{ config.property_ids }}:runReport",
+          "method": "POST",
+          "body": {
+            "dateRanges": [
+              {
+                "endDate": "{{ config.end_date }}",
+                "startDate": "{{ config.start_date }}"
+              }
+            ],
+            "dimensions": [
+              {
+                "name": "date"
+              },
+              {
+                "name": "sessionSource"
+              },
+              {
+                "name": "sessionMedium"
+              }
+            ],
+            "keepEmptyRows": false,
+            "limit": "10000",
+            "metrics": [
+              {
+                "name": "sessions"
+              },
+              {
+                "name": "activeUsers"
+              },
+              {
+                "name": "newUsers"
+              },
+              {
+                "name": "engagedSessions"
+              }
+            ],
+            "offset": "0"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "rows"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "ga4.devices",
+          "stream_name": "devices",
+          "path": "/v1beta/properties/{{ config.property_ids }}:runReport",
+          "method": "POST",
+          "body": {
+            "dateRanges": [
+              {
+                "endDate": "{{ config.end_date }}",
+                "startDate": "{{ config.start_date }}"
+              }
+            ],
+            "dimensions": [
+              {
+                "name": "date"
+              },
+              {
+                "name": "deviceCategory"
+              },
+              {
+                "name": "operatingSystem"
+              },
+              {
+                "name": "browser"
+              }
+            ],
+            "keepEmptyRows": false,
+            "limit": "10000",
+            "metrics": [
+              {
+                "name": "activeUsers"
+              },
+              {
+                "name": "sessions"
+              },
+              {
+                "name": "screenPageViews"
+              }
+            ],
+            "offset": "0"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "rows"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "ga4.pages",
+          "stream_name": "pages",
+          "path": "/v1beta/properties/{{ config.property_ids }}:runReport",
+          "method": "POST",
+          "body": {
+            "dateRanges": [
+              {
+                "endDate": "{{ config.end_date }}",
+                "startDate": "{{ config.start_date }}"
+              }
+            ],
+            "dimensions": [
+              {
+                "name": "date"
+              },
+              {
+                "name": "pagePath"
+              },
+              {
+                "name": "pageTitle"
+              }
+            ],
+            "keepEmptyRows": false,
+            "limit": "10000",
+            "metrics": [
+              {
+                "name": "screenPageViews"
+              },
+              {
+                "name": "activeUsers"
+              },
+              {
+                "name": "averageSessionDuration"
+              }
+            ],
+            "offset": "0"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "rows"
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "google-classroom": {
+      "auth": [
+        {
+          "client_id": "{{ secrets.client_id }}",
+          "client_secret": "{{ secrets.client_secret }}",
+          "mode": "oauth2_refresh_token",
+          "refresh_token": "{{ secrets.client_refresh_token }}",
+          "token_url": "https://oauth2.googleapis.com/token"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "classroom.courses",
+          "stream_name": "courses",
+          "path": "/v1/courses",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "courses"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "classroom.teachers",
+          "stream_name": "teachers",
+          "path": "/v1/courses/{{ fanout.id }}/teachers",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "teachers"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "classroom.students",
+          "stream_name": "students",
+          "path": "/v1/courses/{{ fanout.id }}/students",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "students"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "classroom.course_work",
+          "stream_name": "course_work",
+          "path": "/v1/courses/{{ fanout.id }}/courseWork",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "courseWork"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "classroom.announcements",
+          "stream_name": "announcements",
+          "path": "/v1/courses/{{ fanout.id }}/announcements",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "announcements"
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "google-pagespeed-insights": {
+      "auth": [
+        {
+          "mode": "api_key_query",
+          "param": "key",
+          "value": "{{ secrets.api_key }}",
+          "when": "{{ secrets.api_key }}"
+        },
+        {
+          "mode": "none"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "google-pagespeed-insights.pagespeed-reports",
+          "stream_name": "pagespeed_reports",
+          "path": "/runPagespeed",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ".",
+            "single_object": true
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "less-annoying-crm": {
+      "auth": [
+        {
+          "header": "Authorization",
+          "mode": "api_key_header",
+          "prefix": "",
+          "value": "{{ secrets.api_key }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "less-annoying-crm.users",
+          "stream_name": "users",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "Function": "GetUsers"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "less-annoying-crm.contacts",
+          "stream_name": "contacts",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "Function": "GetContacts"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "Results"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "less-annoying-crm.tasks",
+          "stream_name": "tasks",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "Function": "GetTasks"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "Results"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "DateCreated"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "less-annoying-crm.notes",
+          "stream_name": "notes",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "Function": "GetNotes"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "Results"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "less-annoying-crm.events",
+          "stream_name": "events",
+          "path": "/",
+          "method": "POST",
+          "body": {
+            "Function": "GetEvents"
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "Results"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "DateUpdated"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "lokalise": {
+      "auth": [
+        {
+          "header": "X-Api-Token",
+          "mode": "api_key_header",
+          "value": "{{ secrets.api_key }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "lokalise.keys",
+          "stream_name": "keys",
+          "path": "/projects/{{ config.project_id }}/keys",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "keys"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "modified_at_timestamp"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "lokalise.languages",
+          "stream_name": "languages",
+          "path": "/projects/{{ config.project_id }}/languages",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "languages"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "lokalise.translations",
+          "stream_name": "translations",
+          "path": "/projects/{{ config.project_id }}/translations",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "translations"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "modified_at_timestamp"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "lokalise.contributors",
+          "stream_name": "contributors",
+          "path": "/projects/{{ config.project_id }}/contributors",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "contributors"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "lokalise.comments",
+          "stream_name": "comments",
+          "path": "/projects/{{ config.project_id }}/comments",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "comments"
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "mendeley": {
+      "auth": [
+        {
+          "client_id": "{{ secrets.client_id }}",
+          "client_secret": "{{ secrets.client_secret }}",
+          "mode": "oauth2_refresh_token",
+          "refresh_token": "{{ secrets.client_refresh_token }}",
+          "token_url": "https://api.mendeley.com/oauth/token"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "mendeley.documents",
+          "stream_name": "documents",
+          "path": "/documents",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "last_modified",
+            "request_param": "modified_since"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "mendeley.folders",
+          "stream_name": "folders",
+          "path": "/folders",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "modified",
+            "request_param": "modified_since"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "mendeley.groups",
+          "stream_name": "groups",
+          "path": "/groups",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "mendeley.annotations",
+          "stream_name": "annotations",
+          "path": "/annotations",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "last_modified",
+            "request_param": "modified_since"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "mercado-ads": {
+      "auth": [
+        {
+          "client_id": "{{ secrets.client_id }}",
+          "client_secret": "{{ secrets.client_secret }}",
+          "mode": "oauth2_refresh_token",
+          "refresh_token": "{{ secrets.client_refresh_token }}",
+          "token_url": "https://api.mercadolibre.com/oauth/token"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "mercado-ads.brand_advertisers",
+          "stream_name": "brand_advertisers",
+          "path": "/advertising/advertisers",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "advertisers"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "mercado-ads.display_advertisers",
+          "stream_name": "display_advertisers",
+          "path": "/advertising/advertisers",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "advertisers"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "mercado-ads.product_advertisers",
+          "stream_name": "product_advertisers",
+          "path": "/advertising/advertisers",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "advertisers"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "mercado-ads.brand_campaigns_metrics",
+          "stream_name": "brand_campaigns_metrics",
+          "path": "/advertising/advertisers/{{ config.advertiser_id }}/brand_ads/campaigns/{{ config.campaign_id }}/metrics",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "metrics"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "date",
+            "request_param": "date_from"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "mercado-ads.display_campaigns_metrics",
+          "stream_name": "display_campaigns_metrics",
+          "path": "/advertising/advertisers/{{ config.advertiser_id }}/display_ads/campaigns/{{ config.campaign_id }}/metrics",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "metrics"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "date",
+            "request_param": "date_from"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "mercado-ads.product_campaigns_metrics",
+          "stream_name": "product_campaigns_metrics",
+          "path": "/advertising/advertisers/{{ config.advertiser_id }}/product_ads/campaigns/{{ config.campaign_id }}/metrics",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "metrics"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "date",
+            "request_param": "date_from"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "metabase": {
+      "auth": [
+        {
+          "header": "X-Metabase-Session",
+          "mode": "api_key_header",
+          "value": "{{ secrets.session_token }}",
+          "when": "{{ secrets.session_token }}"
+        },
+        {
+          "mode": "declared_session",
+          "password": "{{ secrets.password }}",
+          "token_url": "https://unused.invalid/session",
+          "username": "{{ config.username }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "metabase.cards",
+          "stream_name": "cards",
+          "path": "/card",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "metabase.dashboards",
+          "stream_name": "dashboards",
+          "path": "/dashboard",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "metabase.collections",
+          "stream_name": "collections",
+          "path": "/collection",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "metabase.databases",
+          "stream_name": "databases",
+          "path": "/database",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "metabase.users",
+          "stream_name": "users",
+          "path": "/user",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "."
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "mode": {
+      "auth": [
+        {
+          "mode": "basic",
+          "password": "{{ secrets.api_secret }}",
+          "username": "{{ secrets.api_token }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "mode.spaces",
+          "stream_name": "spaces",
+          "path": "/{{ config.workspace }}/spaces",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "_embedded.spaces"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "mode.reports",
+          "stream_name": "reports",
+          "path": "/{{ config.workspace }}/reports",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "_embedded.reports"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "mode.data_sources",
+          "stream_name": "data_sources",
+          "path": "/{{ config.workspace }}/data_sources",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "_embedded.data_sources"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "mode.groups",
+          "stream_name": "groups",
+          "path": "/{{ config.workspace }}/groups",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "_embedded.groups"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "updated_at"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "mode.memberships",
+          "stream_name": "memberships",
+          "path": "/{{ config.workspace }}/memberships",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "_embedded.memberships"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "created_at"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "my-hours": {
+      "auth": [
+        {
+          "mode": "declared_password_token",
+          "password": "{{ secrets.password }}",
+          "token_url": "https://api2.myhours.com/api/tokens/login",
+          "username": "{{ config.email }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "my-hours.clients",
+          "stream_name": "clients",
+          "path": "/Clients",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "my-hours.projects",
+          "stream_name": "projects",
+          "path": "/Projects/getAll",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "my-hours.users",
+          "stream_name": "users",
+          "path": "/Users/getAll",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "my-hours.tags",
+          "stream_name": "tags",
+          "path": "/Tags",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "my-hours.time-logs",
+          "stream_name": "time_logs",
+          "path": "/Reports/activity",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": ""
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "pocket": {
+      "auth": [
+        {
+          "mode": "none"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "pocket.items",
+          "stream_name": "items",
+          "path": "/get",
+          "method": "POST",
+          "body": {
+            "access_token": "{{ secrets.access_token }}",
+            "consumer_key": "{{ secrets.consumer_key }}",
+            "count": 100,
+            "detailType": "{{ config.detail_type }}",
+            "offset": 0
+          },
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "key_field": "item_id",
+            "keyed_object": true,
+            "path": "list"
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "prestashop": {
+      "auth": [
+        {
+          "mode": "basic",
+          "password": "",
+          "username": "{{ secrets.access_key }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "prestashop.customers",
+          "stream_name": "customers",
+          "path": "/customers",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "customers.customer"
+          },
+          "incremental": {
+            "cursor_field": "date_upd",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "prestashop.orders",
+          "stream_name": "orders",
+          "path": "/orders",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "orders.order"
+          },
+          "incremental": {
+            "cursor_field": "date_upd",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "prestashop.products",
+          "stream_name": "products",
+          "path": "/products",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "products.product"
+          },
+          "incremental": {
+            "cursor_field": "date_upd",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "prestashop.addresses",
+          "stream_name": "addresses",
+          "path": "/addresses",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "addresses.address"
+          },
+          "incremental": {
+            "cursor_field": "date_upd",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        },
+        {
+          "operation_id": "prestashop.carts",
+          "stream_name": "carts",
+          "path": "/carts",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "carts.cart"
+          },
+          "incremental": {
+            "cursor_field": "date_upd",
+            "start_config_key": "start_date"
+          },
+          "response_error": null
+        }
+      ]
+    },
+    "rootly": {
+      "auth": [
+        {
+          "mode": "bearer",
+          "token": "{{ secrets.api_key }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "rootly.incidents",
+          "stream_name": "incidents",
+          "path": "/v1/incidents",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "rootly.services",
+          "stream_name": "services",
+          "path": "/v1/services",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "rootly.users",
+          "stream_name": "users",
+          "path": "/v1/users",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "data"
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "safetyculture": {
+      "auth": [
+        {
+          "mode": "bearer",
+          "token": "{{ secrets.access_token }}"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "safetyculture.audits",
+          "stream_name": "audits",
+          "path": "/audits",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "audits"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "safetyculture.templates",
+          "stream_name": "templates",
+          "path": "/templates",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "templates"
+          },
+          "incremental": null,
+          "response_error": null
+        },
+        {
+          "operation_id": "safetyculture.users",
+          "stream_name": "users",
+          "path": "/users",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "users"
+          },
+          "incremental": null,
+          "response_error": null
+        }
+      ]
+    },
+    "yahoo-finance-price": {
+      "auth": [
+        {
+          "mode": "none"
+        }
+      ],
+      "streams": [
+        {
+          "operation_id": "yahoo-finance-price.chart",
+          "stream_name": "prices",
+          "path": "/v8/finance/chart/{{ config.symbol }}",
+          "method": "GET",
+          "body": {},
+          "body_type": "",
+          "required_body_fields": [],
+          "records": {
+            "path": "chart.result"
+          },
+          "incremental": {
+            "client_filtered": true,
+            "cursor_field": "timestamp"
+          },
+          "response_error": {
+            "message_field": "description",
+            "path": "chart.error"
+          }
+        }
+      ]
+    }
+  }
+}

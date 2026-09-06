@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "insert_after": {
+          "type": "string"
+        },
+        "insert_before": {
+          "type": "string"
+        },
+        "item": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "item"
+      ],
+      "type": "object"
+    },
+    "portfolio_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "portfolio_gid",
+    "data"
+  ],
+  "type": "object"
+}

@@ -1,70 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "commits",
-  "type": "object",
-  "x-primary-key": [
-    "sha"
-  ],
-  "x-cursor-field": "commit_committer_date",
-  "required": [
-    "sha"
-  ],
   "properties": {
-    "repository": {
-      "type": "string",
-      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
-    },
-    "sha": {
-      "type": "string"
-    },
-    "node_id": {
-      "type": "string"
-    },
-    "html_url": {
-      "type": "string"
-    },
-    "url": {
-      "type": "string"
+    "author_id": {
+      "description": "Nested provider identifier preserved as its native JSON number.",
+      "type": [
+        "integer",
+        "null"
+      ]
     },
     "author_login": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "author_id": {
-      "type": [
-        "integer",
-        "null"
-      ],
-      "description": "Legacy emits this via nestedValue (raw JSON number). Sourced here via a bare computed_fields \"{{ record.<path>.id }}\" template, which now preserves the native JSON type (gap-loop cycle-1 typed computed_fields extraction, G0b RESOLVED) rather than stringifying it."
-    },
-    "committer_login": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "committer_id": {
-      "type": [
-        "integer",
-        "null"
-      ],
-      "description": "Legacy emits this via nestedValue (raw JSON number). Sourced here via a bare computed_fields \"{{ record.<path>.id }}\" template, which now preserves the native JSON type (gap-loop cycle-1 typed computed_fields extraction, G0b RESOLVED) rather than stringifying it."
-    },
-    "commit_message": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "commit_author_name": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "commit_author_email": {
       "type": [
         "string",
         "null"
@@ -76,7 +20,19 @@
         "null"
       ]
     },
-    "commit_committer_name": {
+    "commit_author_email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_author_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_committer_date": {
       "type": [
         "string",
         "null"
@@ -88,11 +44,55 @@
         "null"
       ]
     },
-    "commit_committer_date": {
+    "commit_committer_name": {
       "type": [
         "string",
         "null"
       ]
+    },
+    "commit_message": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "committer_id": {
+      "description": "Nested provider identifier preserved as its native JSON number.",
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "committer_login": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "html_url": {
+      "type": "string"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "repository": {
+      "description": "Repository marker derived from the configured owner and repository.",
+      "type": "string"
+    },
+    "sha": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
     }
-  }
+  },
+  "required": [
+    "sha"
+  ],
+  "title": "commits",
+  "type": "object",
+  "x-cursor-field": "commit_committer_date",
+  "x-primary-key": [
+    "sha"
+  ]
 }

@@ -1,8 +1,0 @@
-{
-  "record": { "id": "files_fixture_1", "name": "renamed-fixture-1.pdf" },
-  "expect": {
-    "method": "PUT",
-    "path": "/files/files_fixture_1",
-    "body": { "name": "renamed-fixture-1.pdf" }
-  }
-}

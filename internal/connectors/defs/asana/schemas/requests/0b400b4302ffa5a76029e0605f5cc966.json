@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "approval_status": {
+          "enum": [
+            "submitted",
+            "draft",
+            "approved",
+            "rejected"
+          ],
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "message": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "approval_status"
+      ],
+      "type": "object"
+    },
+    "opt_fields": {
+      "items": {
+        "enum": [
+          "approval_status",
+          "created_at",
+          "end_date",
+          "start_date",
+          "user",
+          "user.name",
+          "workspace",
+          "workspace.name"
+        ],
+        "maxLength": 8192,
+        "type": "string"
+      },
+      "maxItems": 256,
+      "type": "array"
+    },
+    "opt_pretty": {
+      "type": "boolean"
+    },
+    "timesheet_approval_status_gid": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "data",
+    "timesheet_approval_status_gid"
+  ],
+  "type": "object"
+}

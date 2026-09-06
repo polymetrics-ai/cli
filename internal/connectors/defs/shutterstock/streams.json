@@ -144,10 +144,6 @@
         },
         "stamp_field": "image_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/list_similar_images.json",
       "projection": "passthrough"
     },
@@ -168,10 +164,6 @@
           "query_param": "id"
         },
         "stamp_field": "image_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_image_recommendations.json",
       "projection": "passthrough"
@@ -203,10 +195,6 @@
         },
         "stamp_field": "image_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_image_list.json",
       "projection": "passthrough"
     },
@@ -228,10 +216,6 @@
           "path_var": "id"
         },
         "stamp_field": "image_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_image.json",
       "projection": "passthrough"
@@ -273,10 +257,6 @@
         },
         "stamp_field": "collection_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_image_collection.json",
       "projection": "passthrough"
     },
@@ -295,10 +275,6 @@
         },
         "stamp_field": "collection_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_image_collection_items.json",
       "projection": "passthrough"
     },
@@ -316,10 +292,6 @@
           "path_var": "id"
         },
         "stamp_field": "video_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/find_similar_videos.json",
       "projection": "passthrough"
@@ -351,10 +323,6 @@
         },
         "stamp_field": "video_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_video_list.json",
       "projection": "passthrough"
     },
@@ -376,10 +344,6 @@
           "path_var": "id"
         },
         "stamp_field": "video_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_video.json",
       "projection": "passthrough"
@@ -421,10 +385,6 @@
         },
         "stamp_field": "collection_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_video_collection.json",
       "projection": "passthrough"
     },
@@ -442,10 +402,6 @@
           "path_var": "id"
         },
         "stamp_field": "collection_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_video_collection_items.json",
       "projection": "passthrough"
@@ -468,10 +424,6 @@
         },
         "stamp_field": "audio_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_track_list.json",
       "projection": "passthrough"
     },
@@ -493,10 +445,6 @@
           "path_var": "id"
         },
         "stamp_field": "audio_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_track.json",
       "projection": "passthrough"
@@ -538,10 +486,6 @@
         },
         "stamp_field": "collection_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_track_collection.json",
       "projection": "passthrough"
     },
@@ -559,10 +503,6 @@
           "path_var": "id"
         },
         "stamp_field": "collection_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_track_collection_items.json",
       "projection": "passthrough"
@@ -613,10 +553,6 @@
         },
         "stamp_field": "sfx_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_sfx.json",
       "projection": "passthrough"
     },
@@ -637,10 +573,6 @@
           "query_param": "id"
         },
         "stamp_field": "sfx_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_sfx_list.json",
       "projection": "passthrough"
@@ -709,10 +641,6 @@
         },
         "stamp_field": "editorial_image_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_editorial_image.json",
       "projection": "passthrough"
     },
@@ -733,10 +661,6 @@
           "query_param": "id"
         },
         "stamp_field": "editorial_image_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_editorial_image_list.json",
       "projection": "passthrough"
@@ -778,10 +702,6 @@
         },
         "stamp_field": "livefeed_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_editorial_image_livefeed.json",
       "projection": "passthrough"
     },
@@ -799,10 +719,6 @@
           "path_var": "id"
         },
         "stamp_field": "livefeed_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_editorial_image_livefeed_items.json",
       "projection": "passthrough"
@@ -825,10 +741,6 @@
           "path_var": "id"
         },
         "stamp_field": "editorial_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_editorial.json",
       "projection": "passthrough"
@@ -861,10 +773,6 @@
         },
         "stamp_field": "livefeed_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_editorial_livefeed.json",
       "projection": "passthrough"
     },
@@ -882,10 +790,6 @@
           "path_var": "id"
         },
         "stamp_field": "livefeed_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_editorial_livefeed_items.json",
       "projection": "passthrough"
@@ -972,10 +876,6 @@
         },
         "stamp_field": "editorial_video_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_editorial_video.json",
       "projection": "passthrough"
     },
@@ -996,10 +896,6 @@
           "query_param": "id"
         },
         "stamp_field": "editorial_video_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_editorial_video_list.json",
       "projection": "passthrough"
@@ -1028,10 +924,6 @@
         },
         "stamp_field": "asset_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_similar_cv_images.json",
       "projection": "passthrough"
     },
@@ -1049,10 +941,6 @@
           "query_param": "asset_id"
         },
         "stamp_field": "asset_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_similar_cv_videos.json",
       "projection": "passthrough"
@@ -1121,10 +1009,6 @@
         },
         "stamp_field": "contributor_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_contributor.json",
       "projection": "passthrough"
     },
@@ -1142,10 +1026,6 @@
           "path_var": "id"
         },
         "stamp_field": "contributor_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_contributor_collections.json",
       "projection": "passthrough"
@@ -1169,10 +1049,6 @@
         },
         "stamp_field": "collection_id"
       },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
-      },
       "schema": "schemas/get_contributor_collection.json",
       "projection": "passthrough"
     },
@@ -1190,10 +1066,6 @@
           "path_var": "id"
         },
         "stamp_field": "collection_id"
-      },
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "Config-key fan-out stream; fixture replay does not inject the comma-separated ID config this stream needs."
       },
       "schema": "schemas/get_contributor_collection_items.json",
       "projection": "passthrough"

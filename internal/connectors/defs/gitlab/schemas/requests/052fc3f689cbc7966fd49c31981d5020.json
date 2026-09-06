@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "epic_iid": {
+      "type": "integer"
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "link_type": {
+      "enum": [
+        "relates_to",
+        "blocks",
+        "is_blocked_by"
+      ],
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "target_epic_iid": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "target_group_id": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "epic_iid",
+    "id",
+    "target_epic_iid",
+    "target_group_id"
+  ],
+  "type": "object"
+}

@@ -7,7 +7,7 @@ description: Mercado Ads connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Mercado Ads brand, display, and product advertisers and daily campaign metrics from the Mercado Libre Advertising API.
+Reads Mercado Ads advertiser and campaign metrics through fixed Advertising API routes.
 
 ## Icon
 
@@ -24,17 +24,52 @@ Reads Mercado Ads brand, display, and product advertisers and daily campaign met
 
 ## Authentication
 
-- No secret authentication is required for this connector.
+- Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 ## Configuration
 
-- No connector-specific config fields.
+- advertiser_id
+- campaign_id
+- end_date
+- lookback_days (required)
+- start_date
+- client_id (secret) (required)
+- client_refresh_token (secret) (required)
+- client_secret (secret) (required)
+
+## ETL Streams
+
+- brand_advertisers:
+  - primary key: advertiser_id
+  - fields: account_name(string), advertiser_id(integer), advertiser_name(string), site_id(string)
+- display_advertisers:
+  - primary key: advertiser_id
+  - fields: account_name(string), advertiser_id(integer), advertiser_name(string), site_id(string)
+- product_advertisers:
+  - primary key: advertiser_id
+  - fields: account_name(string), advertiser_id(integer), advertiser_name(string), site_id(string)
+- brand_campaigns_metrics:
+  - primary key: date, advertiser_id, campaign_id
+  - cursor: date
+  - fields: acos(number), advertiser_id(string), campaign_id(string), clicks(number), cost(number), cpc(number), ctr(number), date(string), direct_amount(number), indirect_amount(number), prints(number), total_amount(number), units_quantity(number)
+- display_campaigns_metrics:
+  - primary key: date, advertiser_id, campaign_id
+  - cursor: date
+  - fields: acos(number), advertiser_id(string), campaign_id(string), clicks(number), cost(number), cpc(number), ctr(number), date(string), direct_amount(number), indirect_amount(number), prints(number), total_amount(number), units_quantity(number)
+- product_campaigns_metrics:
+  - primary key: date, advertiser_id, campaign_id
+  - cursor: date
+  - fields: acos(number), advertiser_id(string), campaign_id(string), clicks(number), cost(number), cpc(number), ctr(number), date(string), direct_amount(number), indirect_amount(number), prints(number), total_amount(number), units_quantity(number)
+
+## Sync Modes
+
+- ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 ## Security
 
-- read risk: connector-specific
-- write risk: connector-specific
-- approval: external mutations require preview and approval
+- read risk: Bounded fixed-origin Advertising API reads use declared OAuth refresh-token authentication.
+- write risk: unsupported
+- approval: none; read-only
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 ## Commands

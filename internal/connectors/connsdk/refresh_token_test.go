@@ -94,6 +94,73 @@ func TestOAuth2RefreshTokenFirstExchangeSetsBearer(t *testing.T) {
 	}
 }
 
+func TestOAuth2RefreshTokenBasicClientAuthentication(t *testing.T) {
+	var (
+		form      map[string]string
+		clientID  string
+		clientKey string
+	)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		var ok bool
+		clientID, clientKey, ok = request.BasicAuth()
+		if !ok {
+			t.Fatal("token request omitted HTTP Basic client authentication")
+		}
+		if err := request.ParseForm(); err != nil {
+			t.Fatalf("parse token form: %v", err)
+		}
+		form = map[string]string{}
+		for key := range request.PostForm {
+			form[key] = request.PostForm.Get(key)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"access_token":"AT-basic","expires_in":3600}`))
+	}))
+	t.Cleanup(server.Close)
+
+	auth := &OAuth2RefreshToken{
+		TokenURL:             server.URL,
+		ClientID:             "client-id",
+		ClientSecret:         "client-secret",
+		ClientAuthentication: "basic",
+		RefreshToken:         "refresh-token",
+	}
+	request := newReq(t)
+	if err := auth.Apply(context.Background(), request); err != nil {
+		t.Fatalf("Apply: %v", err)
+	}
+	if clientID != "client-id" || clientKey != "client-secret" {
+		t.Fatalf("BasicAuth() = (%q, %q), want declared client credentials", clientID, clientKey)
+	}
+	if form["grant_type"] != "refresh_token" || form["refresh_token"] != "refresh-token" {
+		t.Fatalf("token form = %#v, want declared refresh-token grant", form)
+	}
+	if form["client_id"] != "" || form["client_secret"] != "" {
+		t.Fatalf("token form included Basic client credentials: %#v", form)
+	}
+	if got := request.Header.Get("Authorization"); got != "Bearer AT-basic" {
+		t.Fatalf("Authorization = %q, want exchanged bearer token", got)
+	}
+}
+
+func TestOAuth2RefreshTokenRejectsUnknownClientAuthenticationBeforeExchange(t *testing.T) {
+	server := newTokenServer(t, func(_ int, _ map[string]string, w http.ResponseWriter) {
+		t.Fatal("unsupported client authentication reached token endpoint")
+		w.WriteHeader(http.StatusInternalServerError)
+	})
+	auth := &OAuth2RefreshToken{
+		TokenURL:             server.URL,
+		ClientAuthentication: "unsupported",
+		RefreshToken:         "refresh-token",
+	}
+	if err := auth.Apply(context.Background(), newReq(t)); err == nil {
+		t.Fatal("Apply() accepted unsupported client authentication")
+	}
+	if got := server.callCount(); got != 0 {
+		t.Fatalf("token exchange calls = %d, want zero", got)
+	}
+}
+
 func TestOAuth2RefreshTokenPreservesFormCredentialBytes(t *testing.T) {
 	refreshToken := "refresh-token-canary\n"
 	clientID := "client-id-canary\n"

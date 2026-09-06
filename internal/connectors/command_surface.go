@@ -57,24 +57,14 @@ func decodeExactNumber(raw []byte) (json.Number, error) {
 	return number, nil
 }
 
-// CommandSurface is docs/help metadata for a provider-style connector command
-// tree. It is deliberately descriptive: execution is still controlled by the
-// connector's streams, write actions, and future approved dispatch paths.
+// CommandSurface is the rendered provider-style connector command tree.
 type CommandSurface struct {
 	Tagline     string
 	Usage       string
-	SourceCLI   *CommandSurfaceSource
 	Groups      []CommandSurfaceGroup
 	GlobalFlags []CommandSurfaceFlag
 	Commands    []CommandSurfaceCommand
 	HelpTopics  []CommandSurfaceHelpTopic
-}
-
-type CommandSurfaceSource struct {
-	Name      string
-	Docs      string
-	Reference string
-	Source    string
 }
 
 type CommandSurfaceGroup struct {
@@ -110,8 +100,8 @@ type CommandSurfaceFlag struct {
 	MaxItems int
 	MinItems int
 	// MaxBytes bounds the exact percent-encoded value for path/query targets and
-	// the raw UTF-8 bytes for record/config targets. It is projected from the
-	// source operation parameter or from the engine's conservative fallback and
+	// the raw UTF-8 bytes for record/config targets. It is rendered from the
+	// canonical operation parameter or from the engine's conservative limit and
 	// enforced again by the executor.
 	MaxBytes int
 	// MaxBytesOrigin and MaxBytesPolicyVersion identify MaxBytes as a PM
@@ -175,7 +165,7 @@ type CommandBindingIdentity struct {
 // CommandFoundation names the missing shared capability for a command that is
 // deliberately discoverable but not runnable. Component and Evidence are a
 // closed, locally checkable absence claim; Target binds that claim to exactly
-// one admitted source identity and provider target. It is declaration
+// one source identity and provider target. It is execution
 // metadata, not a request parameter, so dispatch can refuse before provider I/O.
 type CommandFoundation struct {
 	ID        string
@@ -207,13 +197,12 @@ const (
 	FoundationComponentTypedRequestBody        = "typed_request_body"
 	FoundationComponentTypedResponseDescriptor = "typed_response_descriptor"
 	FoundationComponentBinaryTransferBinding   = "binary_transfer_binding"
-	FoundationComponentSourceImporter          = "source_importer"
 	FoundationComponentRuntimeExecutor         = "runtime_executor"
 )
 
 // ValidCommandFoundationComponent reports whether component is a specific
-// implementation seam, not a provider policy, method, risk, retained source
-// artifact, or a runtime/live-certification state.
+// implementation seam, not a provider policy, method, risk, or authoring
+// evidence state.
 func ValidCommandFoundationComponent(component string) bool {
 	switch component {
 	case FoundationComponentTypedWriteAction,
@@ -221,7 +210,6 @@ func ValidCommandFoundationComponent(component string) bool {
 		FoundationComponentTypedRequestBody,
 		FoundationComponentTypedResponseDescriptor,
 		FoundationComponentBinaryTransferBinding,
-		FoundationComponentSourceImporter,
 		FoundationComponentRuntimeExecutor:
 		return true
 	default:
@@ -244,8 +232,6 @@ func ValidCommandFoundationEvidence(component, evidence string) bool {
 		return evidence == "response_descriptor_absent"
 	case FoundationComponentBinaryTransferBinding:
 		return evidence == "binary_transfer_binding_absent"
-	case FoundationComponentSourceImporter:
-		return evidence == "source_importer_absent"
 	case FoundationComponentRuntimeExecutor:
 		return evidence == "runtime_executor_absent"
 	default:
@@ -254,21 +240,18 @@ func ValidCommandFoundationEvidence(component, evidence string) bool {
 }
 
 type CommandSurfaceCommand struct {
-	Path            string
-	Summary         string
-	Intent          string
-	Availability    string
-	Stream          string
-	Write           string
-	Operation       string
-	SourceOperation string
-	SourceCLIPath   string
-	SourceURL       string
-	Flags           []CommandSurfaceFlag
-	Constraints     []CommandSurfaceConstraint
-	Examples        []string
-	APISurface      []CommandSurfaceEndpointRef
-	OutputPolicy    string
+	Path         string
+	Summary      string
+	Intent       string
+	Availability string
+	Stream       string
+	Write        string
+	Operation    string
+	Flags        []CommandSurfaceFlag
+	Constraints  []CommandSurfaceConstraint
+	Examples     []string
+	APISurface   []CommandSurfaceEndpointRef
+	OutputPolicy string
 	// RedactFields is retained for bundle compatibility. Commandrunner does not
 	// use it to mutate connector-command records or errors, or forward it to
 	// executor requests.

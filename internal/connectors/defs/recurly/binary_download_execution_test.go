@@ -62,7 +62,7 @@ func TestBinaryDownloadCommandsExecute(t *testing.T) {
 	if err != nil {
 		t.Fatalf("load Recurly bundle: %v", err)
 	}
-	connector := engine.New(bundle, engine.HooksFor(bundle.Name))
+	connector := engine.New(bundle, nil)
 	config := connectors.RuntimeConfig{
 		Config:  map[string]string{"base_url": server.URL},
 		Secrets: map[string]string{"api_key": "synthetic-test-api-key"},

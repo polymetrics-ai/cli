@@ -1,18 +1,29 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "pull_request_review_comments",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
-  "x-cursor-field": "updated_at",
-  "required": [
-    "id"
-  ],
   "properties": {
-    "repository": {
-      "type": "string",
-      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
+    "body": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": "string"
+    },
+    "diff_hunk": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "html_url": {
+      "type": "string"
     },
     "id": {
       "type": "integer"
@@ -20,15 +31,15 @@
     "node_id": {
       "type": "string"
     },
-    "pull_request_review_id": {
+    "original_commit_id": {
       "type": [
-        "integer",
+        "string",
         "null"
       ]
     },
-    "diff_hunk": {
+    "original_position": {
       "type": [
-        "string",
+        "integer",
         "null"
       ]
     },
@@ -44,47 +55,36 @@
         "null"
       ]
     },
-    "original_position": {
+    "pull_request_review_id": {
       "type": [
         "integer",
-        "null"
-      ]
-    },
-    "commit_id": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
-    "original_commit_id": {
-      "type": [
-        "string",
         "null"
       ]
     },
     "pull_request_url": {
       "type": "string"
     },
-    "html_url": {
+    "repository": {
+      "description": "Repository marker derived from the configured owner and repository.",
       "type": "string"
     },
-    "body": {
-      "type": [
-        "string",
-        "null"
-      ]
+    "updated_at": {
+      "type": "string"
     },
     "user_login": {
       "type": [
         "string",
         "null"
       ]
-    },
-    "created_at": {
-      "type": "string"
-    },
-    "updated_at": {
-      "type": "string"
     }
-  }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "pull_request_review_comments",
+  "type": "object",
+  "x-cursor-field": "updated_at",
+  "x-primary-key": [
+    "id"
+  ]
 }

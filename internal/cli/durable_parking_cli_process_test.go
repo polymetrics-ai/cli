@@ -1,4 +1,4 @@
-package cli_test
+package cli
 
 import (
 	"bytes"
@@ -15,25 +15,29 @@ import (
 	"testing"
 	"time"
 
-	"polymetrics.ai/internal/cli"
+	"polymetrics.ai/internal/app"
 	"polymetrics.ai/internal/connectors"
-	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/coordination"
 )
 
 const durableParkingCLIHelperEnv = "POLYMETRICS_DURABLE_PARKING_CLI_HELPER"
+const durableParkingCLIConnectorName = "github"
 
-func init() {
-	if os.Getenv(durableParkingCLIHelperEnv) == "" {
-		return
+func durableParkingCLIRegistry() *connectors.Registry {
+	registry := connectors.NewEmptyRegistry()
+	if err := registry.Register(durableParkingCLIEngineConnector()); err != nil {
+		panic(err)
 	}
-	connectors.RegisterDefaultRegistryBuilder(func() *connectors.Registry {
-		registry := bundleregistry.New()
-		registry.Register(durableParkingCLIEngineConnector())
-		return registry
-	})
+	if err := registry.Register(connectors.Warehouse{}); err != nil {
+		panic(err)
+	}
+	return registry
+}
+
+func durableParkingCLIOpen(root string) (*app.App, error) {
+	return app.OpenWithRegistry(root, durableParkingCLIRegistry())
 }
 
 func durableParkingCLIEngineConnector() connectors.Connector {
@@ -49,8 +53,8 @@ func durableParkingCLIEngineConnector() connectors.Connector {
 	}
 	limit, window := 1000, 60
 	return engine.New(engine.Bundle{
-		Name: "sample",
-		Metadata: engine.Metadata{Name: "sample", DisplayName: "Parking Fixture", IntegrationType: "source", Capabilities: engine.Capabilities{
+		Name: durableParkingCLIConnectorName,
+		Metadata: engine.Metadata{Name: durableParkingCLIConnectorName, DisplayName: "Parking Fixture", IntegrationType: "source", Capabilities: engine.Capabilities{
 			Check: true, Read: true,
 		}},
 		HTTP: engine.HTTPBase{
@@ -175,16 +179,16 @@ func runDurableParkingCLIHelper(t *testing.T, mode string) {
 	runID := os.Getenv("POLYMETRICS_DURABLE_PARKING_CLI_RUN")
 	run := func(args ...string) (int, string) {
 		var stdout, stderr bytes.Buffer
-		code := cli.Run(args, &stdout, &stderr)
+		code := runWithAppOpeners(args, &stdout, &stderr, durableParkingCLIOpen, durableParkingCLIOpen)
 		return code, stdout.String() + stderr.String()
 	}
 	switch mode {
 	case "setup":
 		commands := [][]string{
 			{"init", "--root", root, "--json"},
-			{"credentials", "add", "parking", "--connector", "sample", "--config", "account_id=fixture-account", "--root", root, "--json"},
+			{"credentials", "add", "parking", "--connector", durableParkingCLIConnectorName, "--config", "account_id=fixture-account", "--root", root, "--json"},
 			{"credentials", "add", "warehouse", "--connector", "warehouse", "--config", "path=" + filepath.Join(root, ".polymetrics", "warehouse"), "--root", root, "--json"},
-			{"connections", "create", "parking-cli", "--source", "sample:parking", "--destination", "warehouse:warehouse", "--stream", "customers", "--primary-key", "id", "--cursor", "updated_at", "--table", "parking_cli_customers", "--root", root, "--json"},
+			{"connections", "create", "parking-cli", "--source", durableParkingCLIConnectorName + ":parking", "--destination", "warehouse:warehouse", "--stream", "customers", "--primary-key", "id", "--cursor", "updated_at", "--table", "parking_cli_customers", "--root", root, "--json"},
 			{"etl", "run", "--connection", "parking-cli", "--stream", "customers", "--root", root, "--json"},
 		}
 		for _, args := range commands {

@@ -1,7 +1,0 @@
-{
-  "record": { "forwardingEmail": "fixture-forward-1@example.com" },
-  "expect": {
-    "method": "DELETE",
-    "path": "/users/synthetic-conformance-value/settings/forwardingAddresses/fixture-forward-1@example.com"
-  }
-}

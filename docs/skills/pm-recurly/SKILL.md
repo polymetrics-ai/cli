@@ -806,7 +806,6 @@ Reads Recurly accounts, subscriptions, invoices, transactions, catalog, usage, e
 
 - Recurly V3 API connector for accounts, subscriptions, invoices, transactions, catalog, previews, exports, and typed reverse ETL.
 - Usage: pm recurly <command> [flags] --json
-- Source CLI: Recurly API (https://recurly.com/developers/api/spec/v2021-02-25.yaml)
 - PM execution policy pm-request-contract-bounds-v1: each max N bytes qualifier is the effective PM request limit, not a provider schema assertion; path/query values are measured after exact wire encoding and rejected rather than truncated.
 - Global flags:
   - --approval-token-stdin (boolean): Read the approval token as one bounded line from standard input.

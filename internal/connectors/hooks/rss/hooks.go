@@ -25,10 +25,6 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func init() {
-	engine.RegisterHooks("rss", func() engine.Hooks { return Hooks{} })
-}
-
 // Hooks is rss's Tier-2 hook set: StreamHook (both reads) + CheckHook.
 type Hooks struct{}
 

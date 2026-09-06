@@ -1,42 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "deployments",
-  "type": "object",
-  "x-primary-key": [
-    "id"
-  ],
-  "x-cursor-field": "updated_at",
-  "required": [
-    "id"
-  ],
   "properties": {
-    "repository": {
-      "type": "string",
-      "description": "Legacy's config-derived per-record marker field (\"owner/repo\"), restored via computed_fields' now-available config.* reference (ENGINE_GAP G0, RESOLVED)."
-    },
-    "id": {
-      "type": "integer"
-    },
-    "node_id": {
+    "created_at": {
       "type": "string"
-    },
-    "sha": {
-      "type": "string"
-    },
-    "ref": {
-      "type": "string"
-    },
-    "task": {
-      "type": "string"
-    },
-    "environment": {
-      "type": "string"
-    },
-    "description": {
-      "type": [
-        "string",
-        "null"
-      ]
     },
     "creator_login": {
       "type": [
@@ -44,11 +10,45 @@
         "null"
       ]
     },
-    "created_at": {
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "environment": {
+      "type": "string"
+    },
+    "id": {
+      "type": "integer"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "ref": {
+      "type": "string"
+    },
+    "repository": {
+      "description": "Repository marker derived from the configured owner and repository.",
+      "type": "string"
+    },
+    "sha": {
+      "type": "string"
+    },
+    "task": {
       "type": "string"
     },
     "updated_at": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "deployments",
+  "type": "object",
+  "x-cursor-field": "updated_at",
+  "x-primary-key": [
+    "id"
+  ]
 }

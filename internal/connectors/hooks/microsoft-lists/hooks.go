@@ -86,10 +86,6 @@ var graphEndpoints = map[string]graphEndpoint{
 	},
 }
 
-func init() {
-	engine.RegisterHooks("microsoft-lists", func() engine.Hooks { return New() })
-}
-
 // Hooks implements engine.StreamHook for the microsoft-lists bundle. It has
 // no state of its own; every method is a pure function of its arguments.
 type Hooks struct{}

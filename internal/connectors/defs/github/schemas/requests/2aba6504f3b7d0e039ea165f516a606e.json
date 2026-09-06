@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "last_read_at": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [],
+  "type": "object"
+}

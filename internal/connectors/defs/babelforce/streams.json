@@ -1,86 +1,103 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
-    "user_agent": "polymetrics-go-cli",
     "auth": [
       {
         "mode": "none"
       }
     ],
-    "pagination": {
-      "type": "none"
-    },
     "check": {
       "method": "GET",
-      "path": "/__legacy_hook/check"
+      "path": "/calls/reporting/simple",
+      "query": {
+        "max": "1"
+      }
     },
-    "error_map": []
+    "error_map": [],
+    "headers": {
+      "X-Access-Key-ID": "{{ secrets.access_key_id }}",
+      "X-Auth-Access-Token": "{{ secrets.access_token }}"
+    },
+    "pagination": {
+      "max_pages": 100,
+      "page_param": "page",
+      "page_size": 100,
+      "size_param": "max",
+      "start_page": 1,
+      "type": "page_number"
+    },
+    "url": "https://{{ config.region }}.babelforce.com/api/v2",
+    "user_agent": "polymetrics-go-cli"
   },
   "streams": [
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "dateCreated"
+      },
+      "method": "GET",
       "name": "calls",
-      "method": "GET",
-      "path": "/__legacy_hook/calls",
+      "path": "/calls/reporting/simple",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "items"
       },
-      "schema": "schemas/calls.json",
-      "incremental": {
-        "cursor_field": "dateCreated",
-        "client_filtered": true
-      }
+      "schema": "schemas/calls.json"
     },
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "dateCreated"
+      },
+      "method": "GET",
       "name": "calls_extended",
-      "method": "GET",
-      "path": "/__legacy_hook/calls_extended",
+      "path": "/calls/reporting/extended",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "items"
       },
-      "schema": "schemas/calls_extended.json",
-      "incremental": {
-        "cursor_field": "dateCreated",
-        "client_filtered": true
-      }
+      "schema": "schemas/calls.json"
     },
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "dateCreated"
+      },
+      "method": "GET",
       "name": "recordings",
-      "method": "GET",
-      "path": "/__legacy_hook/recordings",
+      "path": "/recordings",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "items"
       },
-      "schema": "schemas/recordings.json",
-      "incremental": {
-        "cursor_field": "dateCreated",
-        "client_filtered": true
-      }
+      "schema": "schemas/recordings.json"
     },
     {
+      "incremental": {
+        "client_filtered": true,
+        "cursor_field": "dateCreated"
+      },
+      "method": "GET",
       "name": "numbers",
-      "method": "GET",
-      "path": "/__legacy_hook/numbers",
+      "path": "/numbers",
+      "projection": "passthrough",
       "records": {
-        "path": "data"
+        "path": "items"
       },
-      "schema": "schemas/numbers.json",
-      "incremental": {
-        "cursor_field": "dateCreated",
-        "client_filtered": true
-      }
+      "schema": "schemas/numbers.json"
     },
     {
-      "name": "users",
-      "method": "GET",
-      "path": "/__legacy_hook/users",
-      "records": {
-        "path": "data"
-      },
-      "schema": "schemas/users.json",
       "incremental": {
-        "cursor_field": "dateCreated",
-        "client_filtered": true
-      }
+        "client_filtered": true,
+        "cursor_field": "dateCreated"
+      },
+      "method": "GET",
+      "name": "users",
+      "path": "/users",
+      "projection": "passthrough",
+      "records": {
+        "path": "items"
+      },
+      "schema": "schemas/users.json"
     }
   ]
 }

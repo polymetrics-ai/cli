@@ -1,12 +1,6 @@
 {
   "tagline": "Sync Chatwoot conversations, contacts, inboxes, agents, teams and labels, and manage the full Chatwoot Application API support-desk surface from the command line.",
   "usage": "pm chatwoot <command> [flags]",
-  "source_cli": {
-    "name": "Chatwoot API",
-    "docs": "https://developers.chatwoot.com/api-reference",
-    "reference": "https://raw.githubusercontent.com/chatwoot/chatwoot/develop/swagger/swagger.json",
-    "source": "official bundled OpenAPI 3.1.0 document, retrieved 2026-08-07"
-  },
   "groups": [
     {
       "id": "account",
@@ -150,7 +144,6 @@
       "availability": "implemented",
       "operation": "chatwoot.account_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -169,7 +162,6 @@
       "availability": "implemented",
       "operation": "chatwoot.account_get_branded_email_layout",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -377,7 +369,6 @@
       "availability": "implemented",
       "operation": "chatwoot.agent_bots_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -396,7 +387,6 @@
       "availability": "implemented",
       "operation": "chatwoot.agent_bots_list",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -619,7 +609,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.audit_logs_list",
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -709,7 +698,6 @@
       "availability": "implemented",
       "operation": "chatwoot.automation_rules_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -727,7 +715,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.automation_rules_list",
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -856,7 +843,6 @@
       "availability": "implemented",
       "operation": "chatwoot.canned_responses_list",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1043,7 +1029,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.contacts_filter",
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1062,7 +1047,6 @@
       "availability": "implemented",
       "operation": "chatwoot.contacts_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1097,7 +1081,6 @@
       "availability": "implemented",
       "operation": "chatwoot.contacts_list_contactable_inboxes",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1116,7 +1099,6 @@
       "availability": "implemented",
       "operation": "chatwoot.contacts_list_conversations",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1135,7 +1117,6 @@
       "availability": "implemented",
       "operation": "chatwoot.contacts_list_labels",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1188,7 +1169,6 @@
       "availability": "implemented",
       "operation": "chatwoot.contacts_search",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1433,7 +1413,6 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "chatwoot.conversations_filter",
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1452,7 +1431,6 @@
       "availability": "implemented",
       "operation": "chatwoot.conversations_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1487,7 +1465,6 @@
       "availability": "implemented",
       "operation": "chatwoot.conversations_list_labels",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1506,7 +1483,6 @@
       "availability": "implemented",
       "operation": "chatwoot.conversations_list_reporting_events",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1525,7 +1501,6 @@
       "availability": "implemented",
       "operation": "chatwoot.conversations_meta",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1860,7 +1835,6 @@
       "availability": "implemented",
       "operation": "chatwoot.custom_attributes_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -1879,7 +1853,6 @@
       "availability": "implemented",
       "operation": "chatwoot.custom_attributes_list",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2032,7 +2005,6 @@
       "availability": "implemented",
       "operation": "chatwoot.custom_filters_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2051,7 +2023,6 @@
       "availability": "implemented",
       "operation": "chatwoot.custom_filters_list",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2143,7 +2114,6 @@
       "availability": "implemented",
       "operation": "chatwoot.inbox_members_list",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2230,7 +2200,6 @@
       "availability": "implemented",
       "operation": "chatwoot.inboxes_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2249,7 +2218,6 @@
       "availability": "implemented",
       "operation": "chatwoot.inboxes_get_agent_bot",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2284,7 +2252,6 @@
       "availability": "implemented",
       "operation": "chatwoot.inboxes_list_message_templates",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2402,7 +2369,6 @@
       "availability": "implemented",
       "operation": "chatwoot.integrations_list_apps",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2526,7 +2492,6 @@
       "availability": "implemented",
       "operation": "chatwoot.labels_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -2944,7 +2909,6 @@
       "availability": "implemented",
       "operation": "chatwoot.portals_list",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -3038,7 +3002,6 @@
       "availability": "implemented",
       "operation": "chatwoot.reporting_events_list",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -3156,7 +3119,6 @@
       "availability": "implemented",
       "operation": "chatwoot.teams_get",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -3191,7 +3153,6 @@
       "availability": "implemented",
       "operation": "chatwoot.teams_list_members",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {
@@ -3388,7 +3349,6 @@
       "availability": "implemented",
       "operation": "chatwoot.webhooks_list",
       "flags": [],
-      "source_url": "https://developers.chatwoot.com/api-reference",
       "output_policy": "json_redacted",
       "api_surface": [
         {

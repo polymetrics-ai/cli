@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "use_lfs": {
+      "enum": [
+        "opt_in",
+        "opt_out"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "use_lfs"
+  ],
+  "type": "object"
+}

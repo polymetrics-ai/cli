@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "approval_rule_id": {
+      "type": "integer"
+    },
+    "approvals_required": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "group_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    },
+    "id": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "rule_type": {
+      "maxLength": 8192,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "user_ids": {
+      "items": {
+        "type": "integer"
+      },
+      "maxItems": 256,
+      "type": [
+        "array",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "approval_rule_id",
+    "id"
+  ],
+  "type": "object"
+}

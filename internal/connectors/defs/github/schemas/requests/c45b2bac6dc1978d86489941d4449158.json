@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "message": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "object": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "tag": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "tagger": {
+      "additionalProperties": false,
+      "properties": {
+        "date": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "email": {
+          "maxLength": 8192,
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 8192,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "email"
+      ],
+      "type": "object"
+    },
+    "type": {
+      "enum": [
+        "commit",
+        "tree",
+        "blob"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "message",
+    "object",
+    "tag",
+    "type"
+  ],
+  "type": "object"
+}

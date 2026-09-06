@@ -1,65 +1,46 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"go/ast"
+	"go/format"
+	"go/parser"
+	"go/token"
 	"io"
 	"os"
 	"path/filepath"
 	"sort"
+	"strconv"
 	"strings"
+
+	"polymetrics.ai/internal/connectors/manifestidentity"
+	"polymetrics.ai/internal/connectors/native/nativeset"
 )
 
 const modulePath = "polymetrics.ai"
 
-// nativeSupportPackages are helper libraries below native/, not connector
-// implementations. They must be available to native connectors but have no
-// package-level registration side effect to wire into production binaries.
-var nativeSupportPackages = map[string]struct{}{
-	"dbtest": {},
-	"sqltls": {},
-}
-
-// genHookset regenerates hooks/hookset/hookset_gen.go under hooksRoot: a
-// blank import for every internal/connectors/hooks/<name> package except
-// hookset itself. Deterministic and byte-stable across reruns for the same
-// input tree (sorted package names, fixed header text, no timestamps).
+// genHookset validates each package-owned explicit hook factory and renders
+// the closed sorted catalog used by production construction.
 func genHookset(hooksRoot string) error {
-	pkgs, err := wiringPackageNames(hooksRoot, "hookset", nil)
+	packages, err := wiringPackageNames(hooksRoot, "hookset", nil)
 	if err != nil {
 		return fmt.Errorf("gen hookset: %w", err)
 	}
-	src := renderWiringFile(wiringFileSpec{
-		Package:     "hookset",
-		ImportsDoc:  "Package hookset blank-imports every internal/connectors/hooks/<name>\n// package so their init() functions run engine.RegisterHooks side effects.",
-		ImportsRoot: modulePath + "/internal/connectors/hooks",
-		Packages:    pkgs,
-	})
+	specs, err := hookFactorySpecs(hooksRoot, packages)
+	if err != nil {
+		return fmt.Errorf("gen hookset: %w", err)
+	}
+	src, err := renderHooksetFile(specs)
+	if err != nil {
+		return fmt.Errorf("gen hookset: %w", err)
+	}
 	return writeGenFile(filepath.Join(hooksRoot, "hookset", "hookset_gen.go"), src)
 }
 
-// genNativeset regenerates native/nativeset/nativeset_gen.go under
-// nativeRoot: a blank import for every runtime internal/connectors/native/<name>
-// package except nativeset itself.
-func genNativeset(nativeRoot string) error {
-	pkgs, err := wiringPackageNames(nativeRoot, "nativeset", nativeSupportPackages)
-	if err != nil {
-		return fmt.Errorf("gen nativeset: %w", err)
-	}
-	src := renderWiringFile(wiringFileSpec{
-		Package:     "nativeset",
-		ImportsDoc:  "Package nativeset blank-imports every runtime internal/connectors/native/<name>\n// Tier-3 component package so any package-level side effects (e.g. a\n// future documented registration) run in the built binary. In wave0 no\n// native package registers itself (see API-CONTRACT.md §6); this file is\n// pure wiring, regenerated deterministically as packages are added.",
-		ImportsRoot: modulePath + "/internal/connectors/native",
-		Packages:    pkgs,
-	})
-	return writeGenFile(filepath.Join(nativeRoot, "nativeset", "nativeset_gen.go"), src)
-}
-
-// wiringPackageNames returns the sorted directory names under root that are
-// neither selfName nor excluded and are plain directories (package declaration
-// sniffing is unnecessary for wave0's empty-or-single-package trees and would
-// only add a false sense of precision — a directory without a .go file simply
-// produces an import that fails to build, which is the correct, loud failure
-// mode for a malformed hooks/native tree).
+// wiringPackageNames returns the sorted plain package directories under root.
+// A directory without a Go package still produces an import that fails to build,
+// which makes a malformed hook tree fail loudly.
 func wiringPackageNames(root, selfName string, excluded map[string]struct{}) ([]string, error) {
 	entries, err := os.ReadDir(root)
 	if err != nil {
@@ -79,36 +60,299 @@ func wiringPackageNames(root, selfName string, excluded map[string]struct{}) ([]
 	return names, nil
 }
 
-// wiringFileSpec parametrizes the two near-identical generated wiring files.
-type wiringFileSpec struct {
-	Package     string
-	ImportsDoc  string
-	ImportsRoot string
-	Packages    []string
+type hookFactorySpec struct {
+	Name string
 }
 
-// renderWiringFile deterministically renders a "Code generated" wiring file:
-// fixed header, package clause, blank imports (or none), and nothing else —
-// no timestamps or non-deterministic ordering.
-func renderWiringFile(spec wiringFileSpec) string {
+func hookExtensionID(name string) string {
+	return "hook/" + name + ".v1"
+}
+
+func hookFactorySpecs(root string, packages []string) ([]hookFactorySpec, error) {
+	specs := make([]hookFactorySpec, 0, len(packages))
+	for _, name := range packages {
+		spec, err := readHookFactorySpec(filepath.Join(root, name), name)
+		if err != nil {
+			return nil, err
+		}
+		specs = append(specs, spec)
+	}
+	return specs, nil
+}
+
+func readHookFactorySpec(dir, wantName string) (hookFactorySpec, error) {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return hookFactorySpec{}, fmt.Errorf("read hook package %s: %w", wantName, err)
+	}
+	fset := token.NewFileSet()
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".go") || strings.HasSuffix(entry.Name(), "_test.go") {
+			continue
+		}
+		file, err := parser.ParseFile(fset, filepath.Join(dir, entry.Name()), nil, 0)
+		if err != nil {
+			return hookFactorySpec{}, fmt.Errorf("parse hook package %s: %w", wantName, err)
+		}
+		for _, declaration := range file.Decls {
+			function, ok := declaration.(*ast.FuncDecl)
+			if ok && function.Name.Name == "ExplicitFactory" {
+				return hookFactorySpec{Name: wantName}, nil
+			}
+		}
+	}
+	return hookFactorySpec{}, fmt.Errorf("hook package %s has no ExplicitFactory", wantName)
+}
+
+func renderHooksetFile(specs []hookFactorySpec) (string, error) {
+	aliases := make(map[string]struct{}, len(specs))
+	for _, spec := range specs {
+		alias := strings.NewReplacer("-", "_", ".", "_").Replace(spec.Name)
+		if _, exists := aliases[alias]; exists {
+			return "", fmt.Errorf("hook package alias collision for %q", spec.Name)
+		}
+		aliases[alias] = struct{}{}
+	}
+
 	var b strings.Builder
 	b.WriteString("// Code generated by connectorgen gen. DO NOT EDIT.\n")
 	b.WriteString("//\n")
-	b.WriteString("// " + spec.ImportsDoc + "\n")
+	b.WriteString("// Package hookset supplies explicit hook factories for production construction.\n")
 	b.WriteString("// It is regenerated deterministically by `go run ./cmd/connectorgen gen`.\n")
-	b.WriteString("package " + spec.Package + "\n")
-
-	if len(spec.Packages) == 0 {
-		return b.String()
+	b.WriteString("package hookset\n")
+	if len(specs) == 0 {
+		return b.String(), nil
 	}
-
-	b.WriteString("\n")
-	b.WriteString("import (\n")
-	for _, pkg := range spec.Packages {
-		b.WriteString("\t_ \"" + spec.ImportsRoot + "/" + pkg + "\"\n")
+	b.WriteString("\nimport (\n")
+	b.WriteString("\t\"polymetrics.ai/internal/connectors/engine\"\n")
+	for _, spec := range specs {
+		alias := strings.NewReplacer("-", "_", ".", "_").Replace(spec.Name)
+		b.WriteString("\t" + alias + " \"" + modulePath + "/internal/connectors/hooks/" + spec.Name + "\"\n")
 	}
-	b.WriteString(")\n")
-	return b.String()
+	b.WriteString(")\n\n")
+	b.WriteString("// Factory constructs one connector-owned hook set selected by an exact generated extension ID.\n")
+	b.WriteString("type Factory struct {\n\tID string\n\tConnector string\n\tNew func() engine.Hooks\n}\n\n")
+	b.WriteString("// Factories returns the closed, deterministic production hook inventory.\n")
+	b.WriteString("func Factories() []Factory {\n\treturn []Factory{\n")
+	for _, spec := range specs {
+		alias := strings.NewReplacer("-", "_", ".", "_").Replace(spec.Name)
+		b.WriteString("\t\t{ID: \"" + hookExtensionID(spec.Name) + "\", Connector: \"" + spec.Name + "\", New: " + alias + ".ExplicitFactory},\n")
+	}
+	b.WriteString("\t}\n}\n")
+	return b.String(), nil
+}
+
+type generatedManifestIndexEntry struct {
+	Connector      string
+	Generation     string
+	Digest         string
+	Executor       string
+	Extension      string
+	CommandUsage   string
+	CommandTagline string
+	Metadata       generatedManifestMetadata
+	Bytes          int
+}
+
+type generatedManifestMetadata struct {
+	Name            string                        `json:"name"`
+	DisplayName     string                        `json:"display_name"`
+	IntegrationType string                        `json:"integration_type"`
+	Description     string                        `json:"description"`
+	Capabilities    generatedManifestCapabilities `json:"capabilities"`
+}
+
+type generatedManifestCapabilities struct {
+	Check bool `json:"check"`
+	Read  bool `json:"read"`
+	Write bool `json:"write"`
+	Query bool `json:"query"`
+	CDC   bool `json:"cdc"`
+}
+
+type generatedCommandSummary struct {
+	Usage   string `json:"usage"`
+	Tagline string `json:"tagline"`
+}
+
+func genManifestIndex(defsRoot, hooksRoot, outputPath string) error {
+	extensions, err := generatedHookExtensions(hooksRoot)
+	if err != nil {
+		return fmt.Errorf("read generated hook extensions: %w", err)
+	}
+	executors, err := generatedNativeExecutors()
+	if err != nil {
+		return fmt.Errorf("read native manifest selections: %w", err)
+	}
+	entries, err := generatedManifestIndexEntries(defsRoot, extensions, executors)
+	if err != nil {
+		return fmt.Errorf("generate manifest index: %w", err)
+	}
+	source, err := renderManifestIndexFile(entries)
+	if err != nil {
+		return fmt.Errorf("render manifest index: %w", err)
+	}
+	if err := writeGenFile(outputPath, source); err != nil {
+		return fmt.Errorf("write manifest index: %w", err)
+	}
+	return nil
+}
+
+func generatedHookExtensions(hooksRoot string) (map[string]string, error) {
+	packages, err := wiringPackageNames(hooksRoot, "hookset", nil)
+	if err != nil {
+		return nil, err
+	}
+	specs, err := hookFactorySpecs(hooksRoot, packages)
+	if err != nil {
+		return nil, err
+	}
+	extensions := make(map[string]string, len(specs))
+	for _, spec := range specs {
+		if _, exists := extensions[spec.Name]; exists {
+			return nil, fmt.Errorf("duplicate hook extension connector %q", spec.Name)
+		}
+		extensions[spec.Name] = hookExtensionID(spec.Name)
+	}
+	return extensions, nil
+}
+
+func generatedNativeExecutors() (map[string]string, error) {
+	selections, err := nativeset.ManifestSelections()
+	if err != nil {
+		return nil, err
+	}
+	executors := make(map[string]string, len(selections))
+	for _, selection := range selections {
+		if selection.Connector == "" || selection.Executor == "" {
+			return nil, fmt.Errorf("native manifest selection is incomplete")
+		}
+		if _, exists := executors[selection.Connector]; exists {
+			return nil, fmt.Errorf("duplicate native manifest connector %q", selection.Connector)
+		}
+		executors[selection.Connector] = selection.Executor
+	}
+	return executors, nil
+}
+
+func generatedManifestIndexEntries(defsRoot string, extensions, executors map[string]string) ([]generatedManifestIndexEntry, error) {
+	dirs, err := os.ReadDir(defsRoot)
+	if err != nil {
+		return nil, fmt.Errorf("read execution definitions: %w", err)
+	}
+	entries := make([]generatedManifestIndexEntry, 0, len(dirs))
+	for _, dir := range dirs {
+		if !dir.IsDir() {
+			continue
+		}
+		entry, err := generateManifestIndexEntry(filepath.Join(defsRoot, dir.Name()), extensions, executors)
+		if err != nil {
+			return nil, err
+		}
+		entries = append(entries, entry)
+	}
+	sort.Slice(entries, func(i, j int) bool { return entries[i].Connector < entries[j].Connector })
+	return entries, nil
+}
+
+func generateManifestIndexEntry(dir string, extensions, executors map[string]string) (generatedManifestIndexEntry, error) {
+	metadataPath := filepath.Join(dir, "metadata.json")
+	rawMetadata, err := os.ReadFile(metadataPath)
+	if err != nil {
+		return generatedManifestIndexEntry{}, fmt.Errorf("read %s: %w", metadataPath, err)
+	}
+	var metadata generatedManifestMetadata
+	if err := json.Unmarshal(rawMetadata, &metadata); err != nil {
+		return generatedManifestIndexEntry{}, fmt.Errorf("decode %s: %w", metadataPath, err)
+	}
+	connector := strings.TrimSpace(metadata.Name)
+	if connector == "" {
+		return generatedManifestIndexEntry{}, fmt.Errorf("%s has no connector name", metadataPath)
+	}
+	if connector != filepath.Base(dir) {
+		return generatedManifestIndexEntry{}, fmt.Errorf("%s name %q does not match directory %q", metadataPath, connector, filepath.Base(dir))
+	}
+	identity, err := manifestidentity.ForFS(os.DirFS(filepath.Dir(dir)), connector, manifestidentity.EmbeddedGeneration)
+	if err != nil {
+		return generatedManifestIndexEntry{}, err
+	}
+	executor := executors[connector]
+	if executor == "" {
+		executor = "api_engine.v1"
+	}
+	commandUsage, commandTagline, err := generatedCommandSurfaceSummary(dir)
+	if err != nil {
+		return generatedManifestIndexEntry{}, err
+	}
+	return generatedManifestIndexEntry{
+		Connector:      connector,
+		Generation:     identity.Generation,
+		Digest:         identity.Digest,
+		Executor:       executor,
+		Extension:      extensions[connector],
+		CommandUsage:   commandUsage,
+		CommandTagline: commandTagline,
+		Metadata:       metadata,
+		Bytes:          identity.Bytes,
+	}, nil
+}
+func generatedCommandSurfaceSummary(dir string) (string, string, error) {
+	raw, err := os.ReadFile(filepath.Join(dir, "cli_surface.json"))
+	if os.IsNotExist(err) {
+		return "", "", nil
+	}
+	if err != nil {
+		return "", "", fmt.Errorf("read cli surface: %w", err)
+	}
+	var summary generatedCommandSummary
+	if err := json.Unmarshal(raw, &summary); err != nil {
+		return "", "", fmt.Errorf("decode cli surface: %w", err)
+	}
+	if summary.Tagline != "" && strings.TrimSpace(summary.Usage) == "" {
+		return "", "", fmt.Errorf("cli surface tagline has no usage")
+	}
+	return summary.Usage, summary.Tagline, nil
+}
+
+func generatedMetadataCDC(entry generatedManifestIndexEntry) bool {
+	return entry.Metadata.Capabilities.CDC
+}
+
+func renderManifestIndexFile(entries []generatedManifestIndexEntry) (string, error) {
+	var b strings.Builder
+	b.WriteString("// Code generated by connectorgen gen. DO NOT EDIT.\n")
+	b.WriteString("//\n")
+	b.WriteString("// GeneratedEntries is derived solely from rendered execution JSON.\n")
+	b.WriteString("package manifestindex\n\n")
+	b.WriteString("import \"polymetrics.ai/internal/connectors\"\n\n")
+	b.WriteString("func GeneratedEntries() []Entry {\n\treturn []Entry{\n")
+	for _, entry := range entries {
+		fmt.Fprintf(&b, "\t\t{Connector: %s, Generation: %s, Digest: %s, Executor: %s, Extension: %s, CommandUsage: %s, CommandTagline: %s, Metadata: connectors.Metadata{Name: %s, DisplayName: %s, IntegrationType: %s, Description: %s, Capabilities: connectors.Capabilities{Check: %t, Catalog: true, Read: %t, Write: %t, Query: %t, CDC: %t}}, Bytes: %d},\n",
+			strconv.Quote(entry.Connector),
+			strconv.Quote(entry.Generation),
+			strconv.Quote(entry.Digest),
+			strconv.Quote(entry.Executor),
+			strconv.Quote(entry.Extension),
+			strconv.Quote(entry.CommandUsage),
+			strconv.Quote(entry.CommandTagline),
+			strconv.Quote(entry.Metadata.Name),
+			strconv.Quote(entry.Metadata.DisplayName),
+			strconv.Quote(entry.Metadata.IntegrationType),
+			strconv.Quote(entry.Metadata.Description),
+			entry.Metadata.Capabilities.Check,
+			entry.Metadata.Capabilities.Read,
+			entry.Metadata.Capabilities.Write,
+			entry.Metadata.Capabilities.Query,
+			generatedMetadataCDC(entry),
+			entry.Bytes,
+		)
+	}
+	b.WriteString("\t}\n}\n")
+	formatted, err := format.Source([]byte(b.String()))
+	if err != nil {
+		return "", err
+	}
+	return string(formatted), nil
 }
 
 // writeGenFile writes src to path, creating parent directories as needed.
@@ -130,23 +374,21 @@ func runGen(args []string, stdout, stderr io.Writer) int {
 		logln(stderr, "connectorgen gen:", err)
 		return 1
 	}
-	return runGenAt(args, stdout, stderr,
-		filepath.Join(root, "internal/connectors/hooks"),
-		filepath.Join(root, "internal/connectors/native"),
-	)
+	return runGenAt(args, stdout, stderr, filepath.Join(root, "internal/connectors/hooks"))
 }
 
-// runGenAt is runGen with explicit hooks/native roots, used directly by
-// tests against scratch trees.
-func runGenAt(_ []string, stdout, stderr io.Writer, hooksRoot, nativeRoot string) int {
+// runGenAt is runGen with an explicit hooks root, used directly by tests
+// against scratch trees.
+func runGenAt(_ []string, stdout, stderr io.Writer, hooksRoot string) int {
 	if err := genHookset(hooksRoot); err != nil {
 		logln(stderr, "connectorgen gen:", err)
 		return 1
 	}
-	if err := genNativeset(nativeRoot); err != nil {
+	connectorsRoot := filepath.Dir(hooksRoot)
+	if err := genManifestIndex(filepath.Join(connectorsRoot, "defs"), hooksRoot, filepath.Join(connectorsRoot, "manifestindex", "index_gen.go")); err != nil {
 		logln(stderr, "connectorgen gen:", err)
 		return 1
 	}
-	logln(stdout, "connectorgen gen: wrote hookset_gen.go and nativeset_gen.go")
+	logln(stdout, "connectorgen gen: wrote hookset and manifest index")
 	return 0
 }

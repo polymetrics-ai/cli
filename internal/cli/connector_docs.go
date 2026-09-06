@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -31,21 +32,46 @@ func writeConnectorDocs(dir string, registry *connectors.Registry) error {
 		if !ok {
 			continue
 		}
-		connectorDir := filepath.Join(dir, meta.Name)
-		if err := os.MkdirAll(connectorDir, 0o755); err != nil {
-			return fmt.Errorf("create connector docs %s: %w", meta.Name, err)
-		}
-		manual := renderConnectorManual(meta.Name, connector)
-		if err := os.WriteFile(filepath.Join(connectorDir, "MANUAL.md"), []byte(manual), 0o644); err != nil {
-			return fmt.Errorf("write connector manual %s: %w", meta.Name, err)
-		}
-		skill := connectors.RenderConnectorSkill(connector)
-		if err := os.WriteFile(filepath.Join(connectorDir, "SKILL.md"), []byte(skill), 0o644); err != nil {
-			return fmt.Errorf("write connector skill %s: %w", meta.Name, err)
+		if err := writeOneConnectorDocs(dir, meta.Name, connector); err != nil {
+			return err
 		}
 	}
 	if err := os.WriteFile(filepath.Join(dir, "README.md"), []byte(index), 0o644); err != nil {
 		return fmt.Errorf("write connector docs index: %w", err)
+	}
+	return nil
+}
+
+// writeSelectedConnectorDocs writes only the named connector's manual, skill,
+// and icon asset. It deliberately leaves the all-connector catalog and every
+// other connector directory alone; use writeConnectorDocs for the full docs
+// publication pass.
+func writeSelectedConnectorDocs(dir, name string, registry *connectors.Registry) error {
+	connector, ok := registry.Get(name)
+	if !ok {
+		return fmt.Errorf("unknown connector %q", name)
+	}
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return fmt.Errorf("create connector docs dir: %w", err)
+	}
+	if err := copySelectedConnectorIconAsset(dir, name, connector); err != nil {
+		return err
+	}
+	return writeOneConnectorDocs(dir, name, connector)
+}
+
+func writeOneConnectorDocs(dir, name string, connector connectors.Connector) error {
+	connectorDir := filepath.Join(dir, name)
+	if err := os.MkdirAll(connectorDir, 0o755); err != nil {
+		return fmt.Errorf("create connector docs %s: %w", name, err)
+	}
+	manual := renderConnectorManual(name, connector)
+	if err := os.WriteFile(filepath.Join(connectorDir, "MANUAL.md"), []byte(manual), 0o644); err != nil {
+		return fmt.Errorf("write connector manual %s: %w", name, err)
+	}
+	skill := connectors.RenderConnectorSkill(connector)
+	if err := os.WriteFile(filepath.Join(connectorDir, "SKILL.md"), []byte(skill), 0o644); err != nil {
+		return fmt.Errorf("write connector skill %s: %w", name, err)
 	}
 	return nil
 }
@@ -74,29 +100,54 @@ func validateConnectorDocs(dir string, registry *connectors.Registry) error {
 		if !ok {
 			continue
 		}
-		if err := connectors.ValidateConnectorGuide(connector); err != nil {
+		if err := validateOneConnectorDocs(dir, meta.Name, connector, "pm docs generate"); err != nil {
 			return err
 		}
-		manualPath := filepath.Join(dir, meta.Name, "MANUAL.md")
-		manual, err := os.ReadFile(manualPath)
-		if err != nil {
-			return fmt.Errorf("connector %s missing manual at %s: %w", meta.Name, manualPath, err)
+	}
+	return nil
+}
+
+// validateSelectedConnectorDocs validates only the named connector's generated
+// files. Full catalog and all-connector validation remain owned by
+// validateConnectorDocs.
+func validateSelectedConnectorDocs(dir, name string, registry *connectors.Registry) error {
+	connector, ok := registry.Get(name)
+	if !ok {
+		return fmt.Errorf("unknown connector %q", name)
+	}
+	metadata := connectors.MetadataOf(connector)
+	if metadata.Icon == nil {
+		return fmt.Errorf("connector %s has no icon metadata", name)
+	}
+	if err := connectors.ValidateConnectorIcon(dir, name, *metadata.Icon); err != nil {
+		return err
+	}
+	return validateOneConnectorDocs(dir, name, connector, "pm docs connector generate --connector "+name)
+}
+
+func validateOneConnectorDocs(dir, name string, connector connectors.Connector, regenerationCommand string) error {
+	if err := connectors.ValidateConnectorGuide(connector); err != nil {
+		return err
+	}
+	manualPath := filepath.Join(dir, name, "MANUAL.md")
+	manual, err := os.ReadFile(manualPath)
+	if err != nil {
+		return fmt.Errorf("connector %s missing manual at %s: %w", name, manualPath, err)
+	}
+	for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "ICON", "SECURITY", "AGENT WORKFLOW"} {
+		if !strings.Contains(string(manual), required) {
+			return fmt.Errorf("connector %s manual missing %s", name, required)
 		}
-		for _, required := range []string{"NAME", "SYNOPSIS", "DESCRIPTION", "ICON", "SECURITY", "AGENT WORKFLOW"} {
-			if !strings.Contains(string(manual), required) {
-				return fmt.Errorf("connector %s manual missing %s", meta.Name, required)
-			}
-		}
-		expectedManual := connectors.RenderConnectorManual(connector)
-		if err := validateGeneratedConnectorIconMetadata(string(manual), expectedManual, "ICON\n", meta.Name, "manual"); err != nil {
-			return err
-		}
-		if string(manual) != renderConnectorManual(meta.Name, connector) {
-			return fmt.Errorf("connector %s manual is stale; run pm docs generate", meta.Name)
-		}
-		if err := validateConnectorSkillFile(dir, meta.Name, connector); err != nil {
-			return err
-		}
+	}
+	expectedManual := connectors.RenderConnectorManual(connector)
+	if err := validateGeneratedConnectorIconMetadata(string(manual), expectedManual, "ICON\n", name, "manual"); err != nil {
+		return err
+	}
+	if string(manual) != renderConnectorManual(name, connector) {
+		return fmt.Errorf("connector %s manual is stale; run %s", name, regenerationCommand)
+	}
+	if err := validateConnectorSkillFile(dir, name, connector, regenerationCommand); err != nil {
+		return err
 	}
 	return nil
 }
@@ -125,7 +176,7 @@ func renderConnectorManual(name string, connector connectors.Connector) string {
 	return "# pm connectors inspect " + name + "\n\n```text\n" + connectors.RenderConnectorManual(connector) + "\n```\n"
 }
 
-func validateConnectorSkillFile(dir, name string, connector connectors.Connector) error {
+func validateConnectorSkillFile(dir, name string, connector connectors.Connector, regenerationCommand string) error {
 	skillPath := filepath.Join(dir, name, "SKILL.md")
 	skill, err := os.ReadFile(skillPath)
 	if err != nil {
@@ -140,7 +191,7 @@ func validateConnectorSkillFile(dir, name string, connector connectors.Connector
 		return err
 	}
 	if string(skill) != connectors.RenderConnectorSkill(connector) {
-		return fmt.Errorf("connector %s skill is stale; run pm docs generate", name)
+		return fmt.Errorf("connector %s skill is stale; run %s", name, regenerationCommand)
 	}
 	return nil
 }
@@ -397,6 +448,38 @@ func copyConnectorIconAssets(connectorsDir string) error {
 		}
 		return copyFile(path, target)
 	})
+}
+
+func copySelectedConnectorIconAsset(connectorsDir, connectorName string, connector connectors.Connector) error {
+	metadata := connectors.MetadataOf(connector)
+	if metadata.Icon == nil {
+		return fmt.Errorf("connector icon %s: missing icon registry entry", connectorName)
+	}
+	iconPath := path.Clean(metadata.Icon.Path)
+	if iconPath != metadata.Icon.Path || strings.HasPrefix(iconPath, "../") || strings.HasPrefix(iconPath, "/") || !strings.HasPrefix(iconPath, "icons/") || path.Ext(iconPath) != ".svg" {
+		return fmt.Errorf("connector icon %s: invalid path %q", connectorName, metadata.Icon.Path)
+	}
+	srcRoot, err := connectorIconSourceDir(connectorsDir)
+	if err != nil {
+		return err
+	}
+	src := filepath.Join(srcRoot, filepath.FromSlash(strings.TrimPrefix(iconPath, "icons/")))
+	dst := filepath.Join(connectorsDir, filepath.FromSlash(iconPath))
+	if !pathWithin(srcRoot, src) || !pathWithin(connectorsDir, dst) {
+		return fmt.Errorf("connector icon %s path escapes its root", connectorName)
+	}
+	if samePath(src, dst) {
+		return nil
+	}
+	if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
+		return fmt.Errorf("create connector icon dir %s: %w", filepath.Dir(dst), err)
+	}
+	return copyFile(src, dst)
+}
+
+func pathWithin(root, target string) bool {
+	rel, err := filepath.Rel(root, target)
+	return err == nil && rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && !filepath.IsAbs(rel)
 }
 
 func connectorIconSourceDir(connectorsDir string) (string, error) {

@@ -3,7 +3,11 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "basic", "username": "{{ secrets.api_key }}", "password": "" }
+      {
+        "mode": "basic",
+        "username": "{{ secrets.api_key }}",
+        "password": ""
+      }
     ],
     "pagination": {
       "type": "page_number",
@@ -12,18 +16,33 @@
       "start_page": 1,
       "page_size": 50
     },
-    "check": { "method": "GET", "path": "/api/v2/items" },
+    "check": {
+      "method": "GET",
+      "path": "/api/v2/items"
+    },
     "error_map": [
-      { "status": 401, "hint": "opinion-stage api_key is missing or invalid; re-run pm credentials add opinion-stage" },
-      { "status": 403, "hint": "opinion-stage account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "opinion-stage rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "opinion-stage api_key is missing or invalid; re-run pm credentials add opinion-stage"
+      },
+      {
+        "status": 403,
+        "hint": "opinion-stage account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "opinion-stage rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "items",
       "path": "/api/v2/items",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "title": "{{ record.attributes.title }}",
         "status": "{{ record.attributes.status }}",
@@ -36,7 +55,9 @@
     {
       "name": "responses",
       "path": "/api/v2/items/{{ fanout.id }}/responses",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "answers": "{{ record.attributes.answers }}",
         "result": "{{ record.attributes.result }}",
@@ -48,21 +69,25 @@
       },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/api/v2/items", "records_path": "data", "id_field": "id" }
+          "request": {
+            "path": "/api/v2/items",
+            "records_path": "data",
+            "id_field": "id"
+          }
         },
-        "into": { "path_var": "id" },
+        "into": {
+          "path_var": "id"
+        },
         "stamp_field": "item_id"
       },
-      "schema": "schemas/responses.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
-      }
+      "schema": "schemas/responses.json"
     },
     {
       "name": "questions",
       "path": "/api/v2/items/{{ fanout.id }}/questions",
-      "records": { "path": "data" },
+      "records": {
+        "path": "data"
+      },
       "computed_fields": {
         "title": "{{ record.attributes.title }}",
         "kind": "{{ record.attributes.kind }}",
@@ -72,16 +97,18 @@
       },
       "fan_out": {
         "ids_from": {
-          "request": { "path": "/api/v2/items", "records_path": "data", "id_field": "id" }
+          "request": {
+            "path": "/api/v2/items",
+            "records_path": "data",
+            "id_field": "id"
+          }
         },
-        "into": { "path_var": "id" },
+        "into": {
+          "path_var": "id"
+        },
         "stamp_field": "item_id"
       },
-      "schema": "schemas/questions.json",
-      "conformance": {
-        "skip_dynamic": true,
-        "reason": "fan_out-driven stream: the id-listing preliminary request has no single fixed request path for dynamic conformance replay; static validation checks the fan_out path interpolation and fixture replay covers the request sequence."
-      }
+      "schema": "schemas/questions.json"
     }
   ]
 }

@@ -1,119 +1,106 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "job_template_list",
-  "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "The job template's unique identifier"
-    },
-    "title": {
-      "type": "string",
-      "description": "The title of the job template"
-    },
-    "status": {
-      "type": "string",
-      "enum": [
-        "Active",
-        "Inactive"
-      ]
-    },
-    "locationId": {
-      "type": "string",
-      "description": "The id of the location of the job template"
-    },
-    "departmentId": {
-      "type": "string",
-      "description": "The id of the department or team associated with the job template"
+    "createdAt": {
+      "description": "The timestamp when the job template was created",
+      "format": "date-time",
+      "type": "string"
     },
     "defaultInterviewPlanId": {
-      "type": "string",
-      "description": "The id of the default interview plan for this job template. A job cannot be opened without a default interview plan."
+      "description": "The id of the default interview plan for this job template. A job cannot be opened without a default interview plan.",
+      "type": "string"
+    },
+    "departmentId": {
+      "description": "The id of the department or team associated with the job template",
+      "type": "string"
+    },
+    "id": {
+      "description": "The job template's unique identifier",
+      "type": "string"
     },
     "interviewPlanIds": {
-      "type": "array",
       "description": "The ids of all interview plans associated with the job template",
       "items": {
         "type": "string"
-      }
+      },
+      "type": "array"
     },
     "location": {
-      "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the location"
-        },
-        "name": {
-          "type": "string",
-          "description": "The name of the location"
-        },
-        "externalName": {
-          "type": "string"
-        },
-        "isArchived": {
-          "type": "boolean",
-          "description": "Whether the location is archived"
-        },
-        "isRemote": {
-          "type": "boolean"
-        },
         "address": {
-          "type": "object",
           "description": "The address for the location",
           "properties": {
             "postalAddress": {
-              "type": "object",
               "description": "The postal address for the location",
               "properties": {
                 "addressCountry": {
-                  "type": "string",
-                  "description": "The country for the location address"
-                },
-                "addressRegion": {
-                  "type": "string",
-                  "description": "The region for the location address"
+                  "description": "The country for the location address",
+                  "type": "string"
                 },
                 "addressLocality": {
-                  "type": "string",
-                  "description": "The locality for the location address"
+                  "description": "The locality for the location address",
+                  "type": "string"
+                },
+                "addressRegion": {
+                  "description": "The region for the location address",
+                  "type": "string"
                 },
                 "postalCode": {
-                  "type": "string",
-                  "description": "The postal code for the location address"
+                  "description": "The postal code for the location address",
+                  "type": "string"
                 },
                 "streetAddress": {
-                  "type": "string",
-                  "description": "The street address for the location"
+                  "description": "The street address for the location",
+                  "type": "string"
                 }
-              }
+              },
+              "type": "object"
             }
           },
           "required": [
             "postalAddress"
-          ]
+          ],
+          "type": "object"
+        },
+        "externalName": {
+          "type": "string"
+        },
+        "extraData": {
+          "type": "object"
+        },
+        "id": {
+          "description": "The unique identifier for the location",
+          "type": "string"
+        },
+        "isArchived": {
+          "description": "Whether the location is archived",
+          "type": "boolean"
+        },
+        "isRemote": {
+          "type": "boolean"
+        },
+        "name": {
+          "description": "The name of the location",
+          "type": "string"
         },
         "parentLocationId": {
           "type": "string"
         },
         "type": {
-          "type": "string",
           "description": "The type of the location component",
           "enum": [
             "Location",
             "LocationHierarchy"
-          ]
+          ],
+          "type": "string"
         },
         "workplaceType": {
-          "type": "string",
           "enum": [
             "OnSite",
             "Hybrid",
             "Remote"
-          ]
-        },
-        "extraData": {
-          "type": "object"
+          ],
+          "type": "string"
         }
       },
       "required": [
@@ -127,19 +114,32 @@
         "type",
         "workplaceType",
         "extraData"
-      ]
+      ],
+      "type": "object"
     },
-    "createdAt": {
-      "type": "string",
-      "description": "The timestamp when the job template was created",
-      "format": "date-time"
+    "locationId": {
+      "description": "The id of the location of the job template",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "Active",
+        "Inactive"
+      ],
+      "type": "string"
+    },
+    "title": {
+      "description": "The title of the job template",
+      "type": "string"
     },
     "updatedAt": {
-      "type": "string",
       "description": "The timestamp when the job template was last updated",
-      "format": "date-time"
+      "format": "date-time",
+      "type": "string"
     }
   },
+  "title": "job_template_list",
+  "type": "object",
   "x-primary-key": [
     "id"
   ]

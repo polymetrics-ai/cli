@@ -1,0 +1,164 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "custom_field_gid": {
+      "type": "string"
+    },
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "currency_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "custom_label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "custom_label_position": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "date_value": {
+          "additionalProperties": false,
+          "properties": {
+            "date": {
+              "type": "string"
+            },
+            "date_time": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "description": {
+          "type": "string"
+        },
+        "enum_options": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "enum_value": {
+          "additionalProperties": false,
+          "properties": {
+            "color": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "format": {
+          "type": "string"
+        },
+        "has_notifications_enabled": {
+          "type": "boolean"
+        },
+        "id_prefix": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "input_restrictions": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "is_formula_field": {
+          "type": "boolean"
+        },
+        "multi_enum_values": {
+          "items": {
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "number_value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "owned_by_app": {
+          "type": "boolean"
+        },
+        "people_value": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "precision": {
+          "type": "integer"
+        },
+        "reference_value": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "text_value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "workspace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "workspace"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "custom_field_gid",
+    "data"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "access_level": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "member": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "parent": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "resource_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "gid"
+  ],
+  "title": "project_memberships",
+  "type": "object",
+  "x-primary-key": [
+    "gid"
+  ]
+}

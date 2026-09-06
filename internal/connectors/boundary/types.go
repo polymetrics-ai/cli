@@ -35,8 +35,6 @@ const (
 	RuleConnectorImport = "connector_import"
 	// RuleProviderPolicy catches provider-prefixed shared policy identifiers.
 	RuleProviderPolicy = "provider_policy"
-	// RuleProviderCertifyContract catches provider-owned certification contracts in shared certify code.
-	RuleProviderCertifyContract = "provider_certify_contract"
 	// RuleDocsExample catches provider-specific examples/resources embedded in shared Go docs/help generators.
 	RuleDocsExample = "docs_example"
 	// RuleLegacyAlias catches source-/destination-prefixed legacy connector aliases in shared code.

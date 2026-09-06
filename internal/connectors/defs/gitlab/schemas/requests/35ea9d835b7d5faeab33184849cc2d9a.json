@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "impersonation_token_id": {
+      "type": "integer"
+    },
+    "user_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "impersonation_token_id",
+    "user_id"
+  ],
+  "type": "object"
+}

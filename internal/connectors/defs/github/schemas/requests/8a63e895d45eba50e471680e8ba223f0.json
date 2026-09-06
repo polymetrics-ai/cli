@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "enterprise": {
+      "maxLength": 8192,
+      "type": "string"
+    },
+    "policy_state": {
+      "enum": [
+        "enabled_for_all_orgs",
+        "disabled_for_all_orgs",
+        "enabled_for_selected_orgs",
+        "configured_by_org_admins"
+      ],
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "enterprise",
+    "policy_state"
+  ],
+  "type": "object"
+}

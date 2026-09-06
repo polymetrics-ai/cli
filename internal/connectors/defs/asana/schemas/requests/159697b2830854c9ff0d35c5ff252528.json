@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "html_text": {
+          "type": "string"
+        },
+        "parent": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "status_type": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status_type",
+        "text"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "data"
+  ],
+  "type": "object"
+}

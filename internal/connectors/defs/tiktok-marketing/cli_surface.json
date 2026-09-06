@@ -7,40 +7,35 @@
       "summary": "Declared etl: GET /advertiser/info/.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-advertiser-info-1 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-campaign-get",
       "summary": "Declared etl: GET /campaign/get/.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-campaign-get-2 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-adgroup-get",
       "summary": "Declared etl: GET /adgroup/get/.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-adgroup-get-3 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-ad-get",
       "summary": "Declared etl: GET /ad/get/.",
       "intent": "etl",
       "availability": "partial",
-      "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-ad-get-4 has no declaration-owned executable etl route."
+      "notes": "Unavailable: no ETL executor is declared for this provider operation."
     },
     {
       "path": "operations get-report-integrated-get",
       "summary": "Declared direct read: GET /report/integrated/get/.",
       "intent": "direct_read",
       "availability": "partial",
-      "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.get-report-integrated-get-5 has no declaration-owned executable stream, direct-read, binary, or status route.",
+      "notes": "Unavailable: no bounded read executor is declared for this provider operation.",
       "api_surface": [
         {
           "method": "GET",
@@ -53,8 +48,7 @@
       "summary": "Declared direct write: POST /campaign/create/.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.post-campaign-create-6 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /campaign/create/.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     },
@@ -63,8 +57,7 @@
       "summary": "Declared direct write: POST /campaign/update/status/.",
       "intent": "direct_write",
       "availability": "partial",
-      "source_url": "https://business-api.tiktok.com/portal/docs?id=1740029169927169",
-      "notes": "Blocked: locked source operation tiktok-marketing.local-api-surface.post-campaign-update-status-7 has no declaration-owned executable direct_write route.",
+      "notes": "Unavailable: no bounded direct-write executor is declared for this provider operation.",
       "risk": "Declared provider mutation: POST /campaign/update/status/.",
       "approval": "direct_write commands require plan, preview, approval, execute"
     }

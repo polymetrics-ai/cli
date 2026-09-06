@@ -1,79 +1,94 @@
-# Connector Delivery Canon
+# Connector delivery canon
 
-**Status:** current and binding as of 2026-08-10. Read this page before
-planning, implementing, describing, or certifying a connector.
+**Status:** current and binding as of 2026-09-01.
 
-This index separates current decisions from retained historical material. A
-historical file is evidence, not a grant of capability. When it conflicts with
-this index or a later captain ruling, the current canon wins.
+This directory defines how a provider fact becomes a PM CLI connector. Current
+runtime capability is established by rendered execution JSON and executable
+proof, never by an evidence filename or external review state.
 
 ## Read in this order
 
-1. [Implementation procedure](IMPLEMENTATION-PROCEDURE.md) — the required
-   end-to-end path and its Foundation Check.
-2. [Remote reproducibility](REMOTE-REPRODUCIBILITY.md) — what a clean machine
-   can prove without provider access, and what it cannot.
-3. [Operation evidence](OPERATION-EVIDENCE.md) — generated source-operation
-   accounting and the fixed-100 executable regression gate.
-4. [Source-declaration admission](DECLARATION-ADMISSION.md) — the distinct,
-   provider-I/O-free completeness certificate for cited declaration rows.
-5. The mechanical authoring references:
-   [migration conventions](../migration/conventions.md),
-   [architecture v2 design](../architecture/connector-architecture-v2-design.md),
-   and [`AGENTS.md`](../../AGENTS.md).
+1. [source.lock vNext architecture](SOURCE-LOCK-VNEXT.md) — the only authoring
+   pipeline, schema-4 contract, canonical descriptor, seven lanes,
+   deterministic renderer, runtime boundary, errors, and proof requirements.
+2. [Implementation procedure](IMPLEMENTATION-PROCEDURE.md) — the required
+   connector-author and migration workflow.
+3. [Connector terminology](connector-terminology.md) — the shared vocabulary
+   for execution operations, streams, actions, lanes, and warehouse flows.
+4. [Remote reproducibility](REMOTE-REPRODUCIBILITY.md) — clean-clone checks and
+   the boundary around separately authorized live-provider tests.
+5. [Foundation Atlas](foundations/README.md) — shared executor inventory and the
+   approval rule for a genuine missing runtime foundation.
 
-## Binding source material
+The mechanical execution formats remain documented in
+[migration conventions](../migration/conventions.md), the
+[operation kernel](../architecture/connector-operation-kernel.md), and the
+[sync transport definition](../sync-transport-definition.md). Where an older
+document conflicts with the source-lock vNext architecture, vNext controls.
 
-| Source | What it decides |
-| --- | --- |
-| [captain rulings](../../data/captain.md) + [current corrections](../../data/CURRENT-CORRECTIONS.md) | The warehouse is always the mediator; source-to-destination hops are forbidden, including API → API and a connector to itself. Certification is all-or-nothing and cannot be granted by adding a file. The correction companion prevents preserved historical measurements from being reused as current counts. |
-| [database connector framework](../../data/cli-database-connector-framework-design-r1/report.md) | Typed database framework; PostgreSQL is the reference driver; no generic SQL executor, second sync-mode enum, or separate repository. |
-| [large-transaction CDC strategy](../../data/cli-cdc-large-transaction-strategy-r1/report.md) | PostgreSQL 14+ streamed `pgoutput` v2; bounded durable stage; receipt before acknowledgement; fail-closed quota; cursor fallback is rejected for CDC. |
-| [bidirectional changefeed design](../../data/cli-cdc-bidirectional-changefeed-design-r1/report.md) | One delivery contract with two honestly different producers; explicit tombstones only. |
-| [PostgreSQL parity issue tree r2](../../data/cli-postgres-parity-issue-tree-r2/report.md) | Parent issue #3972 and its **12** sub-issues, including #3987: the warehouse-only four-flow/seven-mode conformance gate. The source-pinned [r1 baseline](../../data/archive/cli-postgres-parity-issue-tree-r1/report.md) is archived because its 11-child dependency graph is no longer current. |
-| [daily-use Top 50 targets](../../data/cli-daily-use-top50-connectors-r1/report.md) | The 50 certification targets and the current quarantine evidence. |
+## Binding architecture
 
-The imported reports are source-pinned in
-[`data/CANON-MANIFEST.sha256`](../../data/CANON-MANIFEST.sha256). The
-`connector-canon-check` verification target checks those pins and the required
-canon entry points.
+- `source.lock.json` is immutable authoring/evidence input only.
+- The sole transformation is source lock → canonical per-operation descriptor
+  with shared schemas → deterministic execution JSON.
+- Runtime and runtime validation read execution JSON only.
+- Authoring publication is connector-local and descriptor-confined: verified
+  connector and generation descriptors remain no-follow for the complete
+  operation; a complete deterministic generation is staged under a durable
+  typed ownership marker and semantically revalidated by its recomputed content
+  address and exact closed tree. `CURRENT` and `JOURNAL` are protected by
+  retained terminal authority heads. A successor binds its predecessor terminal,
+  captures the syscall-time public occupant into a private no-replace slot, and
+  selects only a retained prior or intended inode through create-only linking;
+  logical absence never unlinks a public control. Unsupported capture primitives
+  and collisions fail closed without an overwrite fallback. Recovery and a
+  shared `--check` revalidate the complete authority graph, including private
+  record identities, before decoding either public control; pending, malformed,
+  retry-required, or divergent state fails closed.
+  `Flock` is held on a duplicate of the retained connector-directory inode, so
+  lock-file or anchor sibling replacement cannot create a second domain.
+  Destructive generation cleanup moves verified targets into a private
+  quarantine and rechecks them before deletion. Pathname replacement therefore
+  refuses rather than deleting a replacement. Recovery uses that one
+  journal/stage state machine; pruning starts only after integrity proves
+  publisher ownership and readers release their leases. Contended lock
+  acquisition rechecks cancellation after successful nonblocking acquisition
+  before mutation. This checkpoint does not materialize the checked-in corpus
+  or add a runtime `CURRENT` reader.
+- Every connector explicitly declares direct read, direct write, binary
+  download, binary upload, ETL, reverse ETL, and sync transport as
+  `implemented` or `unsupported`.
+- Existing commandrunner, protocol encoders, credential/approval boundary,
+  DuckDB/warehouse, and sync transport machinery execute those artifacts.
+- Direct operations remain interactive. ETL and reverse ETL remain saved,
+  warehouse-mediated pipelines. Sync composition always crosses the warehouse.
+- Only malformed/missing execution artifacts, ambiguous binding, missing real
+  executor/encoder, invalid bounded route/schema/invocation/auth/approval, or
+  incompatible sync executor/mode may block runtime.
+- A genuine shared runtime capability gap is reported before implementation;
+  it is never filled with a provider-specific shortcut.
 
-## Current, honest status
+## Required authoring commands
 
-- The accepted live-certification count is **zero**. A fixture, a generated
-  manual, an `api_surface.json`, or a `certification.json` contract is not live
-  proof and does not make a connector certified.
-- The accepted quarantine list has **15 entries**. Do not repeat the historical
-  “195 blocked providers” claim.
-- PostgreSQL parity is tracked by #3972 and its 12 child issues. #3987 now
-  gates certification on all four warehouse-mediated routes and all seven mode
-  outcomes; it does not alter active #3974. GitHub source-inventory counts are
-  generated from its merged source lock; the archived gap map remains void.
-- A capability is only implemented when its real runtime preflight and the
-  required flow foundations execute. A declaration is not a capability.
+```bash
+go run ./cmd/connectorgen lock-render <connector>
+go run ./cmd/connectorgen lock-render <connector> --check
+go run ./cmd/connectorgen validate internal/connectors/defs
+go build ./cmd/pm
+```
 
-`data/captain.md` retains earlier historical prose for auditability. Its
-[correction companion](../../data/CURRENT-CORRECTIONS.md) identifies the
-historical 195 and 17 measurements that must not be reused; the accepted current
-values above control.
+There is no command that reconstructs a lock from execution JSON. Migrations
+author the lock directly from provider facts, then review the first deterministic
+render as a closed generation. `lock-render --check` verifies an already
+published generation without writing; an intentionally unmaterialized reference
+corpus is covered by the in-memory renderer parity test rather than a flat-file
+fallback.
 
-## Retired and actively wrong material
+## Proof standard
 
-Nothing below was deleted. Archive copies preserve the reasoning that led to a
-decision, but must not be used to establish current state.
-
-| Material | Status and reason |
-| --- | --- |
-| [GitHub ETL/reverse-ETL gap map](../../data/archive/cli-github-etl-reverse-etl-gap-map-r1/report.md) | **SUPERSEDED — ACTIVELY WRONG for every coverage number.** It measured `main` (341 operations) rather than the GitHub parity branch (768). Its architecture observations are historical background only; do not cite its counts. |
-| [blocked-source recovery brief](../../data/archive/cli-blocked-source-recovery-tiers-r1/brief.md) | **SUPERSEDED — ACTIVELY WRONG.** Its “195 genuinely blocked” claim is unsubstantiated and contradicted by the accepted 15-entry quarantine list. |
-| [PostgreSQL parity tree r1](../../data/archive/cli-postgres-parity-issue-tree-r1/report.md) | **SUPERSEDED FOR EXECUTION SCOPE.** Its architecture diagnosis is retained, but its 11-child graph omitted #3987 and allowed certification before the warehouse-mediated four-flow/seven-mode proof. Use r2. |
-| [superseded repository planning](archive/superseded-repository-planning/) | July 2026 orchestration, project, roadmap, and research snapshots. They rely on stale inventories, old orchestration roles, and noncanonical commands. Their original entry points now point here. |
-| [migration handoff](archive/superseded-repository-planning/migration-handoff-codex-2026-07-04.md) | **SUPERSEDED.** It instructed workers to use a stale parallel rollout, obsolete PR state, and stale inventory/quarantine figures. The original handoff now points to this procedure. |
-| [superseded GSD material](archive/superseded-gsd/) | The old universal-programming-loop procedure and prompts. They prescribe an absent `programming-loop` command and role spawning, both contrary to the canonical delivery contract. |
-| `.planning/phases/**` other than the issue being delivered | Historical execution evidence. It can explain a past decision but cannot override the binding sources or this current procedure. |
-
-## What this index deliberately does not do
-
-It does not certify any connector, infer provider coverage from filenames, or
-merge claims from a live parity lane. Those require the procedure's Foundation
-Check, flow proof, and accepted live evidence.
+For every changed connector, show deterministic render equality, execution-only
+runtime inventory, provider-I/O-free discovery through the credential or
+approval boundary, malformed execution-artifact rejection, correct seven-lane
+surface, real encoder/executor reachability, DuckDB proofs for saved lanes, and
+focused plus affected broader green tests. External provider access is optional
+and requires separate authority; it is not runtime admission state.

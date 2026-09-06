@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "issue_field_values": {
+      "items": {},
+      "maxItems": 25,
+      "type": "array"
+    },
+    "issue_number": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "issue_number"
+  ],
+  "type": "object"
+}

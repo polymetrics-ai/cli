@@ -140,20 +140,6 @@ func multipartRestWriteDemoBundle() engine.Bundle {
 				},
 			},
 		}},
-		Surface: &engine.APISurface{
-			API: "multipart-restwrite-demo fixture",
-			Endpoints: []engine.SurfaceEndpoint{{
-				Method: http.MethodPost,
-				Path:   "/api/attachments",
-				Operation: &engine.SurfaceOperation{
-					Model:            "destructive_action",
-					Status:           "blocked",
-					Risk:             "high",
-					BlockedByDefault: true,
-					Reason:           "Bound by the typed multipart rest_write executor.",
-				},
-			}},
-		},
 		CLISurface: &engine.CLISurface{
 			Tagline: "Multipart REST write test fixture command.",
 			Usage:   "pm multipart-restwrite-demo attachment create [flags]",
@@ -605,7 +591,7 @@ func TestMultipartDirectWriteCommandPreflightPlanPreviewApprovalAndExecute(t *te
 	defer server.Close()
 
 	a := setupMultipartRestWriteDemoApp(t, ctx, server.URL)
-	if err := os.WriteFile(filepath.Join(a.ProjectDir(), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(filepath.Dir(a.ProjectDir()), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
 		t.Fatalf("WriteFile attachment: %v", err)
 	}
 	connector, ok := a.Registry().Get(multipartRestWriteDemoConnector)
@@ -680,7 +666,7 @@ func TestMultipartDirectWriteCommandRejectsChangedPayloadBeforeNetwork(t *testin
 	defer server.Close()
 
 	a := setupMultipartRestWriteDemoApp(t, ctx, server.URL)
-	attachment := filepath.Join(a.ProjectDir(), "attachment.txt")
+	attachment := filepath.Join(filepath.Dir(a.ProjectDir()), "attachment.txt")
 	if err := os.WriteFile(attachment, []byte("approved bytes"), 0o600); err != nil {
 		t.Fatalf("WriteFile approved attachment: %v", err)
 	}
@@ -726,7 +712,7 @@ func TestMultipartDirectWriteCommandBindsDeclaredUploadField(t *testing.T) {
 	defer server.Close()
 
 	a := setupMultipartRestWriteDemoAppWithBundle(t, ctx, server.URL, multipartRestWriteDemoBundleWithUploadField())
-	if err := os.WriteFile(filepath.Join(a.ProjectDir(), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
+	if err := os.WriteFile(filepath.Join(filepath.Dir(a.ProjectDir()), "attachment.txt"), []byte("fixture attachment bytes"), 0o600); err != nil {
 		t.Fatalf("WriteFile attachment: %v", err)
 	}
 	plan, preview, err := a.PlanConnectorCommand(ctx, app.PlanConnectorCommandRequest{
@@ -778,15 +764,6 @@ func TestMultipartDirectWritePreflightRejectsMissingContractAndLegacyFileUpload(
 		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
 		if err == nil || !strings.Contains(err.Error(), "not executable") {
 			t.Fatalf("Preflight missing multipart contract = %v, want executable-claim rejection", err)
-		}
-	})
-
-	t.Run("missing api surface endpoint remains blocked", func(t *testing.T) {
-		bundle := multipartRestWriteDemoBundle()
-		bundle.Surface = nil
-		err := commandrunner.Preflight(engine.New(bundle, nil), []string{"attachment", "create"})
-		if err == nil || !strings.Contains(err.Error(), "api_surface") {
-			t.Fatalf("Preflight missing api_surface = %v, want endpoint provenance rejection", err)
 		}
 	})
 

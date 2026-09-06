@@ -6,6 +6,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -544,7 +545,7 @@ func TestEndpointRequireSharedErrorSurvivesOperationFormatting(t *testing.T) {
 			method: http.MethodGet,
 			path:   "/lookup",
 			bundle: func(baseURL string) Bundle {
-				return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/lookup", MaxBytes: 1024}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/lookup", Operation: &SurfaceOperation{Model: "direct_read"}}}}}
+				return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{ID: "acme.lookup", Kind: "rest_read", Summary: "lookup", Risk: "low", Approval: "none", OutputPolicy: "json_redacted", REST: &RESTOperationSpec{Method: http.MethodGet, Path: "/lookup", MaxBytes: 1024}}}}
 			},
 			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
 				_, err := OperationDirectRead(context.Background(), bundle, connectors.OperationDirectReadRequest{Operation: "acme.lookup", Config: cfg}, nil)
@@ -566,7 +567,7 @@ func TestEndpointRequireSharedErrorSurvivesOperationFormatting(t *testing.T) {
 			method: http.MethodGet,
 			path:   "/file",
 			bundle: func(baseURL string) Bundle {
-				return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024, ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}}}}, Surface: &APISurface{Endpoints: []SurfaceEndpoint{{Method: http.MethodGet, Path: "/file", Operation: &SurfaceOperation{}}}}}
+				return Bundle{Name: "acme", HTTP: HTTPBase{URL: baseURL}, Operations: []OperationSpec{{ID: "acme.file", Kind: "binary_download", Summary: "file", Risk: "low", Approval: "none", Binary: &BinaryOperationSpec{Method: http.MethodGet, Path: "/file", MaxBytes: 1024, ContentTypes: []string{"application/octet-stream"}, Response: &OperationResponseSpec{SuccessStatuses: []string{"200"}}}}}}
 			},
 			run: func(bundle Bundle, cfg connectors.RuntimeConfig) error {
 				_, err := OperationBinaryDownload(context.Background(), bundle, BinaryDownloadRequest{Operation: "acme.file", Config: cfg, DestRoot: t.TempDir()}, nil)
@@ -687,23 +688,23 @@ func TestMixedRateLimitPoliciesExposePolicyScopedCoordination(t *testing.T) {
 	}
 }
 
-func TestCertificationOnlyRequireSharedPolicyKeepsDefaultInspectionProcessLocal(t *testing.T) {
-	bundle := withAllRateLimit(Bundle{Name: "certification-overlay", HTTP: HTTPBase{URL: "https://example.test"}})
-	certification := bundle.RateLimits.Policies[0]
-	certification.ID = "certification-shared"
-	certification.Coordination = connsdk.RateLimitCoordinationRequireShared
-	certification.Selector = connsdk.RateLimitSelector{Tiers: []string{"certification"}}
-	bundle.RateLimits.Policies = append(bundle.RateLimits.Policies, certification)
+func TestSelectorTierCannotWeakenRequireSharedInspection(t *testing.T) {
+	bundle := withAllRateLimit(Bundle{Name: "tiered-shared", HTTP: HTTPBase{URL: "https://example.test"}})
+	shared := bundle.RateLimits.Policies[0]
+	shared.ID = "tiered-shared"
+	shared.Coordination = connsdk.RateLimitCoordinationRequireShared
+	shared.Selector = connsdk.RateLimitSelector{Tiers: []string{"restricted"}}
+	bundle.RateLimits.Policies = append(bundle.RateLimits.Policies, shared)
 
 	status, ok := connectors.RateLimitCoordinationOf(New(bundle, nil))
 	if !ok {
-		t.Fatal("certification-only shared policy did not expose rate-limit coordination status")
+		t.Fatal("tiered shared policy did not expose rate-limit coordination status")
 	}
-	if got, want := status.Mode, connectors.RateLimitCoordinationProcessLocal; got != want {
-		t.Fatalf("certification-only shared policy inspect mode = %q, want %q", got, want)
+	if got, want := status.Mode, connectors.RateLimitCoordinationMixed; got != want {
+		t.Fatalf("tiered shared policy inspect mode = %q, want %q", got, want)
 	}
-	if got, want := status.Message, "Process-local rate-limit protection coordinates this pm process only; it is not shared across processes. Certification traffic requires shared rate-limit coordination and refuses before sending when the coordinator is unavailable."; got != want {
-		t.Fatalf("certification-only shared policy inspect message = %q, want %q", got, want)
+	if !strings.Contains(status.Message, "require_shared policies refuse before sending") {
+		t.Fatalf("tiered shared policy inspect message = %q, want generic require_shared refusal", status.Message)
 	}
 }
 

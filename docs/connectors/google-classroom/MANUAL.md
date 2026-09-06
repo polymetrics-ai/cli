@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector google-classroom [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Google Classroom courses, teachers, students, course work, and announcements through the Classroom REST API using an OAuth2 refresh token.
+  Reads Classroom courses and course-scoped resources through fixed REST routes and OAuth2 refresh-token authentication.
 
 ICON
   id: simple-icons-googleclassroom
@@ -30,15 +30,40 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  client_id (secret) (required)
+  client_refresh_token (secret) (required)
+  client_secret (secret) (required)
+
+ETL STREAMS
+  courses:
+    primary key: id
+    cursor: updateTime
+    fields: alternateLink(string), courseState(string), creationTime(string), description(string), id(string), name(string), ownerId(string), section(string), updateTime(string)
+  teachers:
+    primary key: courseId, userId
+    fields: courseId(string), emailAddress(string), fullName(string), photoUrl(string), userId(string)
+  students:
+    primary key: courseId, userId
+    fields: courseId(string), emailAddress(string), fullName(string), photoUrl(string), userId(string)
+  course_work:
+    primary key: id
+    cursor: updateTime
+    fields: alternateLink(string), courseId(string), creationTime(string), description(string), id(string), maxPoints(number), state(string), title(string), updateTime(string), workType(string)
+  announcements:
+    primary key: id
+    cursor: updateTime
+    fields: alternateLink(string), courseId(string), creationTime(string), creatorUserId(string), id(string), state(string), text(string), updateTime(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded Classroom reads use fixed OAuth2 and REST routes.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

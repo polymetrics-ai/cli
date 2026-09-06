@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "hosted_runner_id": {
+      "type": "integer"
+    },
+    "org": {
+      "maxLength": 8192,
+      "type": "string"
+    }
+  },
+  "required": [
+    "hosted_runner_id",
+    "org"
+  ],
+  "type": "object"
+}

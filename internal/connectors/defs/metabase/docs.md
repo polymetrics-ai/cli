@@ -1,11 +1,10 @@
-# Overview
+# Metabase Connector
 
-Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API
-using session-token authentication.
+## Overview
+
+Reads Metabase cards, dashboards, collections, databases, and users through the Metabase REST API using a declared session token.
 
 Readable streams: `cards`, `dashboards`, `collections`, `databases`, `users`.
-
-This connector is read-only; no write actions are declared.
 
 Service API documentation: https://www.metabase.com/docs/latest/api-documentation.
 
@@ -13,40 +12,27 @@ Service API documentation: https://www.metabase.com/docs/latest/api-documentatio
 
 Connection fields:
 
-- `base_url` (optional, string).
-- `instance_api_url` (required, string); URL to your metabase instance API.
-- `mode` (optional, string).
-- `password` (optional, secret, string).
-- `session_token` (optional, secret, string); To generate your session token, you need to run the
-  following command: ``` curl -X POST \ -H "Content-Type: application/json" \ -d '{"username":
-  "person@metabase.com", "password": "fakepassword"}' \ http://localhost:3000/api/session ``` Then
-  copy the value of the `id` field returned by a successful call to that API. Note that by default,
-  sessions are good for 14 days and needs to be regenerated.
-- `username` (required, string).
+- `instance_api_url` (required, string); Required Metabase instance HTTPS origin, or declared loopback HTTP for local testing.
+- `password` (optional, secret, string); Metabase password used only for the fixed declared session exchange when session_token is absent.
+- `session_token` (optional, secret, string); Existing Metabase session token sent only as X-Metabase-Session.
+- `username` (required, string);
 
-Secret fields are redacted in logs and write previews: `password`, `session_token`.
+Authentication uses declared mode(s): `api_key_header`, `declared_session`.
 
-Provide the secret fields listed above. Authentication is applied by the connector-specific
-implementation for this service.
+## Execution contract
 
-Requests use the configured `base_url` value after applying defaults.
+Default stream pagination: `none`.
 
-Connection checks use a connector-managed request.
+Connection check: `GET /card`
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
-
-- `cards`: GET connector-managed request path - records path `data`.
-- `dashboards`: GET connector-managed request path - records path `data`.
-- `collections`: GET connector-managed request path - records path `data`.
-- `databases`: GET connector-managed request path - records path `data`.
-- `users`: GET connector-managed request path - records path `data`.
+- `cards`: `GET /card`; records `.`
+- `dashboards`: `GET /dashboard`; records `.`
+- `collections`: `GET /collection`; records `.`
+- `databases`: `GET /database`; records `.`
+- `users`: `GET /user`; records `.`
 
 ## Write actions & risks
 
-This connector is read-only; no reverse-ETL write actions are declared.
-
-## Known limits
-
-- API coverage includes 5 stream-backed endpoint group(s).
+This connector's write surface is declared separately in the rendered execution bundle.

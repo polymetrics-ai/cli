@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector bunny-inc [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads Bunny subscription-billing data (accounts, contacts, invoices, payments, subscriptions) from the per-tenant Bunny GraphQL API.
+  Reads Bunny subscription-billing data through declared per-tenant GraphQL connection routes.
 
 ICON
   id: pm-sample
@@ -24,15 +24,41 @@ CAPABILITIES
   Integration type: api
 
 AUTHENTICATION
-  No secret authentication is required for this connector.
+  Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
-  No connector-specific config fields.
+  subdomain (required)
+  apikey (secret) (required)
+
+ETL STREAMS
+  accounts:
+    primary key: id
+    cursor: updatedAt
+    fields: id(string), updatedAt(string)
+  contacts:
+    primary key: id
+    cursor: updatedAt
+    fields: id(string), updatedAt(string)
+  invoices:
+    primary key: id
+    cursor: updatedAt
+    fields: id(string), updatedAt(string)
+  payments:
+    primary key: id
+    cursor: updatedAt
+    fields: id(string), updatedAt(string)
+  subscriptions:
+    primary key: id
+    cursor: updatedAt
+    fields: id(string), updatedAt(string)
+
+SYNC MODES
+  ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
 SECURITY
-  read risk: connector-specific
-  write risk: connector-specific
-  approval: external mutations require preview and approval
+  read risk: Bounded declared Bunny GraphQL reads use a source-validated tenant subdomain and bearer API key.
+  write risk: unsupported
+  approval: none; read-only
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
 
 EXAMPLES

@@ -1,3 +1,0 @@
-zapier-supported-storage
-zenefits
-zoho-books

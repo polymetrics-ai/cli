@@ -111,6 +111,10 @@ type OAuth2RefreshToken struct {
 	// ClientSecretRequired distinguishes an absent public-client secret from a
 	// declared but empty secret, which must be rejected before token emission.
 	ClientSecretRequired bool
+	// ClientAuthentication determines how client credentials reach the token
+	// endpoint: "body" (the default) includes them in the form, while "basic"
+	// sends HTTP Basic authorization and omits them from the form.
+	ClientAuthentication string
 	// RefreshToken is the initial refresh token. Required. On a provider that
 	// rotates, the value actually presented is the most recent one, not this.
 	RefreshToken string
@@ -266,25 +270,41 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 	if err := credential.RequireAuthenticationValue("OAuth2 refresh token", a.refreshToken); err != nil {
 		return "", fmt.Errorf("oauth2 refresh: %w", err)
 	}
-	if a.ClientID != "" {
+	clientAuthentication := strings.TrimSpace(a.ClientAuthentication)
+	switch clientAuthentication {
+	case "", "body":
+		clientAuthentication = "body"
+		if a.ClientID != "" {
+			if err := credential.RequireAuthenticationValue("OAuth2 client ID", a.ClientID); err != nil {
+				return "", fmt.Errorf("oauth2 refresh: %w", err)
+			}
+		}
+		if a.ClientSecret != "" || a.ClientSecretRequired {
+			if err := credential.RequireAuthenticationValue("OAuth2 client secret", a.ClientSecret); err != nil {
+				return "", fmt.Errorf("oauth2 refresh: %w", err)
+			}
+		}
+	case "basic":
 		if err := credential.RequireAuthenticationValue("OAuth2 client ID", a.ClientID); err != nil {
 			return "", fmt.Errorf("oauth2 refresh: %w", err)
 		}
-	}
-	if a.ClientSecret != "" || a.ClientSecretRequired {
 		if err := credential.RequireAuthenticationValue("OAuth2 client secret", a.ClientSecret); err != nil {
 			return "", fmt.Errorf("oauth2 refresh: %w", err)
 		}
+	default:
+		return "", fmt.Errorf("oauth2 refresh: unsupported client authentication %q", clientAuthentication)
 	}
 
 	form := url.Values{}
 	form.Set("grant_type", "refresh_token")
 	form.Set("refresh_token", a.refreshToken)
-	if a.ClientID != "" {
-		form.Set("client_id", a.ClientID)
-	}
-	if a.ClientSecret != "" {
-		form.Set("client_secret", a.ClientSecret)
+	if clientAuthentication == "body" {
+		if a.ClientID != "" {
+			form.Set("client_id", a.ClientID)
+		}
+		if a.ClientSecret != "" {
+			form.Set("client_secret", a.ClientSecret)
+		}
 	}
 	if len(a.Scopes) > 0 {
 		form.Set("scope", strings.Join(a.Scopes, " "))
@@ -301,16 +321,23 @@ func (a *OAuth2RefreshToken) exchangeLocked(ctx context.Context) (string, error)
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Accept", "application/json")
+	if clientAuthentication == "basic" {
+		req.SetBasicAuth(a.ClientID, a.ClientSecret)
+	}
 
 	if err := CheckRequestAdmission(ctx); err != nil {
 		return "", fmt.Errorf("oauth2 refresh: request admission: %w", err)
 	}
-	resp, err := a.httpClient().Do(req)
+	clientCopy := *a.httpClient()
+	clientCopy.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return http.ErrUseLastResponse
+	}
+	resp, err := clientCopy.Do(req)
 	if err != nil {
 		// url.Error embeds the request URL, which may itself carry a query.
 		return "", redact("oauth2 refresh: token request", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		// Status code only. A token endpoint's error body routinely echoes the

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "data": {
+      "additionalProperties": false,
+      "properties": {
+        "include": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "schedule_dates": {
+          "additionalProperties": false,
+          "properties": {
+            "due_on": {
+              "type": "string"
+            },
+            "should_skip_weekends": {
+              "type": "boolean"
+            },
+            "start_on": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "project_gid": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_gid",
+    "data"
+  ],
+  "type": "object"
+}

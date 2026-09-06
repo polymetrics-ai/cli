@@ -99,20 +99,6 @@ func graphQLOperationBundle(baseURL, kind string) Bundle {
 				Pagination:      pagination,
 			},
 		}},
-		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
-			Method: http.MethodPost,
-			Path:   "/graphql",
-			CoveredBy: &SurfaceCoverage{
-				Operations: []string{"acme.widgets." + strings.TrimPrefix(kind, "graphql_")},
-			},
-			Operation: &SurfaceOperation{
-				Model:            "direct_read",
-				Status:           "blocked",
-				Risk:             "low",
-				BlockedByDefault: true,
-				Reason:           "fixed GraphQL operation fixture",
-			},
-		}}},
 	}
 }
 
@@ -1362,16 +1348,6 @@ func TestValidateOperationDirectWriteMappingsAcceptsDeclaredGraphQLVariables(t *
 				t.Fatalf("ValidateOperationDirectWriteMappings error = %v, want %q", err, tc.wantErr)
 			}
 		})
-	}
-}
-
-func TestPreflightOperationDirectWriteRequiresNamedGraphQLTransportCoverage(t *testing.T) {
-	bundle := graphQLOperationBundle("http://127.0.0.1", "graphql_mutation")
-	bundle.Surface.Endpoints[0].CoveredBy.Operations = nil
-
-	err := PreflightOperationDirectWrite(bundle, "acme.widgets.mutation", http.MethodPost, "/graphql", "json_redacted")
-	if err == nil || !strings.Contains(err.Error(), "does not cover GraphQL operation") {
-		t.Fatalf("PreflightOperationDirectWrite missing named GraphQL transport coverage = %v, want fail-closed coverage rejection", err)
 	}
 }
 

@@ -25,6 +25,9 @@ func TestOpenInstallsIssueLabelWarehouseMediatedTransport(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if err := a.ensureTransportRegistry(); err != nil {
+		t.Fatal(err)
+	}
 
 	github, ok := a.registry.Get("github")
 	if !ok {
