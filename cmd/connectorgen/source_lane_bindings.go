@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/connectors/manifestidentity"
 )
@@ -122,29 +123,25 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				}
 				continue
 			}
-			if ref.Kind != "operation" {
+			observed, code := sourceLaneObserveTypedTarget(ref, node, facts.bindings)
+			if code != "" {
+				severity := sourceClaimSeverity(group.claimed)
+				if code == "target_shape_invalid" || code == "target_lane_mismatch" || code == "target_identity_mismatch" {
+					severity = "error"
+				}
+				add(code, severity)
+				continue
+			}
+			if facts.Protocol != "rest" {
 				add("target_contract_unverified", sourceClaimSeverity(group.claimed))
 				continue
 			}
-			var op engine.OperationSpec
-			if err := decodeStrictJSON(node, &op); err != nil {
-				add("target_shape_invalid", "error")
+			if strings.Contains(observed.RawPath, "{{") || observed.RawPath != observed.Binding.TransportPath {
+				add("target_path_projection_unverified", sourceClaimSeverity(group.claimed))
 				continue
 			}
-			if op.ID != ref.ID {
-				add("target_identity_mismatch", "error")
-				continue
-			}
-			if op.REST == nil || facts.Protocol != "rest" {
-				add("target_contract_unverified", sourceClaimSeverity(group.claimed))
-				continue
-			}
-			if op.REST.Method != facts.Method || !sourceLanePathsEqual(facts, op.REST.Path) {
+			if observed.Binding.TransportMethod != facts.Method || !sourceLanePathsEqual(facts, observed.RawPath) {
 				add("target_semantics_mismatch", "error")
-				continue
-			}
-			if (ref.Lane == "direct_read" && op.Kind != "rest_read") || (ref.Lane == "direct_write" && op.Kind != "rest_write") || (ref.Lane != "direct_read" && ref.Lane != "direct_write") {
-				add("target_lane_mismatch", "error")
 				continue
 			}
 			if facts.bindings == nil || ref.CanonicalID == "" || ref.CanonicalPointer == "" || ref.Generation == "" {
@@ -177,7 +174,11 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 			}
 			// Admission proves the current canonical target identity. The
 			// provider-to-target parameter/body/response join remains separate.
-			if code := sourceLaneRESTParameterContract(facts, *op.REST); code != "" {
+			if observed.REST == nil {
+				add("target_field_contract_unverified", sourceClaimSeverity(group.claimed))
+				continue
+			}
+			if code := sourceLaneRESTParameterContract(facts, *observed.REST); code != "" {
 				severity := sourceClaimSeverity(group.claimed)
 				if code == "target_parameter_mismatch" {
 					severity = "error"
@@ -185,7 +186,7 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				add(code, severity)
 				continue
 			}
-			if body := facts.Groups["request_body"]; (len(body) > 0 && string(body) != "null") || len(op.REST.Body) > 0 || len(op.REST.BodySchema) > 0 {
+			if body := facts.Groups["request_body"]; (len(body) > 0 && string(body) != "null") || len(observed.REST.Body) > 0 || len(observed.REST.BodySchema) > 0 {
 				add("target_request_contract_unverified", sourceClaimSeverity(group.claimed))
 				continue
 			}
@@ -555,4 +556,78 @@ func sourceLaneTargetPointer(raw []byte, ref sourceLaneTargetRef) (string, strin
 		return "", "target_absent"
 	}
 	return pointer, ""
+}
+
+type sourceLaneTypedTarget struct {
+	Binding engine.ResolvedCommandBinding
+	REST    *engine.RESTOperationSpec
+	RawPath string
+}
+
+func sourceLaneObserveTypedTarget(ref sourceLaneTargetRef, node []byte, inputs *sourceLaneBindingInputs) (sourceLaneTypedTarget, string) {
+	var result sourceLaneTypedTarget
+	if inputs == nil {
+		return result, "target_execution_unavailable"
+	}
+	bundle, exists := inputs.Bundles[ref.Connector]
+	if !exists {
+		return result, "target_execution_unavailable"
+	}
+	command := connectors.CommandSurfaceCommand{Path: ref.ID, Intent: ref.Lane}
+	switch ref.Kind {
+	case "operation":
+		var op engine.OperationSpec
+		if err := decodeStrictJSON(node, &op); err != nil {
+			return result, "target_shape_invalid"
+		}
+		if op.ID != ref.ID {
+			return result, "target_identity_mismatch"
+		}
+		if op.REST == nil {
+			return result, "target_contract_unverified"
+		}
+		if (ref.Lane == "direct_read" && op.Kind != "rest_read") || (ref.Lane == "direct_write" && op.Kind != "rest_write") || (ref.Lane != "direct_read" && ref.Lane != "direct_write") {
+			return result, "target_lane_mismatch"
+		}
+		command.Operation = ref.ID
+		result.REST = op.REST
+		result.RawPath = op.REST.Path
+	case "write":
+		var action engine.WriteAction
+		if err := decodeStrictJSON(node, &action); err != nil {
+			return result, "target_shape_invalid"
+		}
+		if action.Name != ref.ID {
+			return result, "target_identity_mismatch"
+		}
+		if ref.Lane != "direct_write" && ref.Lane != "reverse_etl" {
+			return result, "target_lane_mismatch"
+		}
+		command.Write = ref.ID
+		result.RawPath = action.Path
+	case "stream":
+		var stream engine.StreamSpec
+		if err := decodeStrictJSON(node, &stream); err != nil {
+			return result, "target_shape_invalid"
+		}
+		if stream.Name != ref.ID {
+			return result, "target_identity_mismatch"
+		}
+		if ref.Lane != "direct_read" && ref.Lane != "etl" {
+			return result, "target_lane_mismatch"
+		}
+		if stream.GraphQL != nil {
+			return result, "target_contract_unverified"
+		}
+		command.Stream = ref.ID
+		result.RawPath = stream.Path
+	default:
+		return result, "target_contract_unverified"
+	}
+	binding, err := engine.ResolveImplementedCommandBinding(bundle, command)
+	if err != nil {
+		return result, "target_binding_unresolved"
+	}
+	result.Binding = binding
+	return result, ""
 }

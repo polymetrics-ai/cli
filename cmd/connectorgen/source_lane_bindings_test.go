@@ -6,8 +6,11 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strconv"
 	"strings"
 	"testing"
+
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 func TestSourceLaneBindingClaims(t *testing.T) {
@@ -33,7 +36,7 @@ func TestSourceLaneBindingClaims(t *testing.T) {
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			facts := normalizeSourceFacts(row, doc, nil)
-			facts.bindings = &sourceLaneBindingInputs{Artifacts: map[string][]byte{artifact: raw}, Canonical: map[string]vNextCanonicalDescriptor{}}
+			facts.bindings = sourceBindingTestInputs(t, map[string][]byte{artifact: raw}, nil)
 			ref := sourceLaneTargetRef{Kind: "operation", Connector: "fixture", ID: tc.id, Lane: "direct_read", Artifact: artifact, Pointer: tc.pointer, ArtifactSHA256: tc.hash}
 			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Get widget"}
 			if tc.materialized {
@@ -72,7 +75,7 @@ func TestSourceLaneBindingCanonicalPositive(t *testing.T) {
 	row := retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}
 	doc := retainedSourceDocument{ID: "acme:primary", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
 	facts := normalizeSourceFacts(row, doc, nil)
-	facts.bindings = &sourceLaneBindingInputs{Artifacts: map[string][]byte{artifact: raw}, Canonical: map[string]vNextCanonicalDescriptor{"acme": descriptor}}
+	facts.bindings = sourceBindingTestInputs(t, map[string][]byte{artifact: raw}, map[string]vNextCanonicalDescriptor{"acme": descriptor})
 	ref := sourceLaneTargetRef{Kind: "operation", Connector: "acme", ID: "widgets.get", Lane: "direct_read", Artifact: artifact, Pointer: "/operations/0", ArtifactSHA256: sourceBytesHash(raw), CanonicalID: "operation:widgets.get", CanonicalPointer: "/operations/0/operation", Generation: descriptor.Staged.Identity.Digest}
 	annotation := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Get widgets", IntendedBindings: []sourceLaneTargetRef{ref}}
 	cells := classifySourceLanes(key, facts, &annotation)
@@ -114,7 +117,7 @@ func TestSourceLaneGitLabBridge(t *testing.T) {
 				t.Fatal(err)
 			}
 			artifact := "internal/connectors/defs/fixture/operations.json"
-			facts.bindings = &sourceLaneBindingInputs{Artifacts: map[string][]byte{artifact: raw}}
+			facts.bindings = sourceBindingTestInputs(t, map[string][]byte{artifact: raw}, nil)
 			ref := sourceLaneTargetRef{Kind: "operation", Connector: "fixture", ID: "project", Lane: "direct_read", Artifact: artifact, Pointer: "/operations/0"}
 			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Get project", IntendedBindings: []sourceLaneTargetRef{ref}}
 			cells := classifySourceLanes(key, facts, &a)
@@ -167,7 +170,7 @@ func TestSourceLaneBindingParameterContract(t *testing.T) {
 			facts := normalizeSourceFacts(row, doc, nil)
 			artifact := "internal/connectors/defs/acme/operations.json"
 			raw := descriptor.Staged.Outputs["operations.json"]
-			facts.bindings = &sourceLaneBindingInputs{Artifacts: map[string][]byte{artifact: raw}, Canonical: map[string]vNextCanonicalDescriptor{"acme": descriptor}}
+			facts.bindings = sourceBindingTestInputs(t, map[string][]byte{artifact: raw}, map[string]vNextCanonicalDescriptor{"acme": descriptor})
 			ref := sourceLaneTargetRef{Kind: "operation", Connector: "acme", ID: "widgets.get", Lane: "direct_read", Artifact: artifact, Pointer: "/operations/0", ArtifactSHA256: sourceBytesHash(raw), CanonicalID: "operation:widgets.get", CanonicalPointer: "/operations/0/operation", Generation: descriptor.Staged.Identity.Digest}
 			a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: "Get widgets", IntendedBindings: []sourceLaneTargetRef{ref}}
 			cell := requireSourceLane(t, classifySourceLanes(key, facts, &a), "direct_read", "applicable")
@@ -397,6 +400,115 @@ func TestSourceLaneReferenceCounterexample(t *testing.T) {
 		pointer, code := sourceLaneTargetPointer([]byte(tc.raw), sourceLaneTargetRef{Kind: "operation", ID: tc.id})
 		if pointer != tc.pointer || code != tc.code {
 			t.Errorf("%s: pointer/code=(%s,%s), want(%s,%s)", tc.name, pointer, code, tc.pointer, tc.code)
+		}
+	}
+}
+
+// sourceBindingTestInputs supplies the collector's typed boundary to unit
+// tests. Canonical positive cases use actual engine.Load; small refusal
+// fixtures explicitly decode only the target collection, without pretending
+// that those minimal fixtures are full admitted execution bundles.
+func sourceBindingTestInputs(t *testing.T, artifacts map[string][]byte, canonical map[string]vNextCanonicalDescriptor) *sourceLaneBindingInputs {
+	t.Helper()
+	inputs := &sourceLaneBindingInputs{Artifacts: artifacts, Canonical: canonical, Bundles: map[string]engine.Bundle{}}
+	for name, descriptor := range canonical {
+		bundle, err := engine.Load(newVNextExecutionFS(name, descriptor.Staged.Outputs), name)
+		if err != nil {
+			t.Fatal(err)
+		}
+		inputs.Bundles[name] = bundle
+	}
+	for name, raw := range artifacts {
+		parts := strings.Split(name, "/")
+		if len(parts) < 5 {
+			t.Fatal("invalid test artifact path")
+		}
+		connector := parts[3]
+		if _, exists := canonical[connector]; exists {
+			continue
+		}
+		bundle := inputs.Bundles[connector]
+		bundle.Name = connector
+		switch filepath.Base(name) {
+		case "operations.json":
+			var doc struct {
+				Operations []engine.OperationSpec `json:"operations"`
+			}
+			if err := json.Unmarshal(raw, &doc); err != nil {
+				t.Fatal(err)
+			}
+			bundle.Operations = doc.Operations
+		case "writes.json":
+			var doc struct {
+				Actions []engine.WriteAction `json:"actions"`
+			}
+			if err := json.Unmarshal(raw, &doc); err != nil {
+				t.Fatal(err)
+			}
+			bundle.Writes = doc.Actions
+		case "streams.json":
+			var doc struct {
+				Streams []engine.StreamSpec `json:"streams"`
+			}
+			if err := json.Unmarshal(raw, &doc); err != nil {
+				t.Fatal(err)
+			}
+			bundle.Streams = doc.Streams
+		}
+		inputs.Bundles[connector] = bundle
+	}
+	return inputs
+}
+
+func TestSourceLaneBindingDeclaredTargetKinds(t *testing.T) {
+	for _, tc := range []struct{ kind, lane, method, summary, file, collection string }{
+		{"write", "direct_write", "POST", "Create widget", "writes.json", "actions"},
+		{"stream", "etl", "GET", "List widgets", "streams.json", "streams"},
+	} {
+		for _, wrong := range []bool{false, true} {
+			t.Run(tc.kind+"/wrong="+strconv.FormatBool(wrong), func(t *testing.T) {
+				key := sourceOperationKey{Connector: "fixture", Inventory: "primary", ID: "provider.widgets"}
+				node, err := json.Marshal(map[string]any{"id": key.ID, "method": tc.method, "protocol": "rest", "path": "/widgets", "source_operation": map[string]any{"summary": tc.summary, "responses": map[string]any{"200": map[string]any{"content": map[string]any{"application/json": map[string]any{"schema": map[string]any{"type": "array", "items": map[string]any{"type": "object", "properties": map[string]any{"id": map[string]any{"type": "string"}}}}}}}}}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				row := retainedSourceOperation{Key: key, Observed: true, Node: node, Pointer: "/rest/operations/0"}
+				doc := retainedSourceDocument{ID: "fixture", Payload: json.RawMessage(`{"rest":{"operations":[` + string(node) + `]}}`)}
+				facts := normalizeSourceFacts(row, doc, nil)
+				targetPath := "/widgets"
+				if wrong {
+					targetPath = "/other"
+				}
+				target := map[string]any{"name": "widgets", "method": tc.method, "path": targetPath}
+				if tc.kind == "write" {
+					target["kind"] = "create"
+					target["body_type"] = "none"
+				} else {
+					target["records"] = map[string]any{"path": "."}
+				}
+				raw, err := json.Marshal(map[string]any{tc.collection: []any{target}})
+				if err != nil {
+					t.Fatal(err)
+				}
+				artifact := "internal/connectors/defs/fixture/" + tc.file
+				facts.bindings = sourceBindingTestInputs(t, map[string][]byte{artifact: raw}, nil)
+				ref := sourceLaneTargetRef{Kind: tc.kind, ID: "widgets", Connector: "fixture", Lane: tc.lane, Artifact: artifact}
+				a := sourceSemanticAnnotation{Key: key, Citation: facts.Refs["summary"], Clause: tc.summary, IntendedBindings: []sourceLaneTargetRef{ref}}
+				cell := requireSourceLane(t, classifySourceLanes(key, facts, &a), tc.lane, "applicable")
+				want := "target_contract_unverified"
+				if wrong {
+					want = "target_semantics_mismatch"
+				}
+				found := false
+				for _, d := range cell.Diagnostics {
+					if d.Code == want {
+						found = true
+					}
+				}
+				if !found {
+					t.Fatalf("%s target wrong=%v: want%s got%+v", tc.kind, wrong, want, cell.Diagnostics)
+				}
+			})
 		}
 	}
 }
