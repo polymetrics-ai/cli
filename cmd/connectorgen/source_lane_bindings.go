@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"sort"
+	"strconv"
 	"strings"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -89,9 +90,36 @@ func resolveSourceLaneBindings(key sourceOperationKey, facts sourceFacts, annota
 				add("target_digest_mismatch", "error")
 				continue
 			}
+			expectedPointer, code := sourceLaneTargetPointer(raw, ref)
+			if code == "target_absent" {
+				absent()
+				continue
+			}
+			if code != "" {
+				severity := sourceClaimSeverity(group.claimed)
+				if code != "target_contract_unverified" {
+					severity = "error"
+				}
+				add(code, severity)
+				continue
+			}
+			if ref.Pointer == "" && !group.claimed {
+				ref.Pointer = expectedPointer
+			}
 			node, err := sourceJSONPointer(raw, ref.Pointer)
 			if err != nil {
-				absent()
+				add("target_pointer_mismatch", "error")
+				continue
+			}
+			if ref.Pointer != expectedPointer {
+				var identity struct {
+					ID string `json:"id"`
+				}
+				if err := json.Unmarshal(node, &identity); err == nil && identity.ID != "" && identity.ID != ref.ID {
+					add("target_identity_mismatch", "error")
+				} else {
+					add("target_pointer_mismatch", "error")
+				}
 				continue
 			}
 			if ref.Kind != "operation" {
@@ -481,4 +509,50 @@ func collectSourceLaneBindings(ctx context.Context, repo string, cohort sourceLa
 		result.Canonical[name] = descriptor
 	}
 	return result
+}
+
+func sourceLaneTargetPointer(raw []byte, ref sourceLaneTargetRef) (string, string) {
+	collection, identity := "", ""
+	switch ref.Kind {
+	case "operation":
+		collection, identity = "operations", "id"
+	case "write":
+		collection, identity = "actions", "name"
+	case "stream":
+		collection, identity = "streams", "name"
+	case "command":
+		collection, identity = "commands", "path"
+	default:
+		return "", "target_contract_unverified"
+	}
+	var root map[string]json.RawMessage
+	if err := decodeSourceJSON(raw, &root); err != nil {
+		return "", "target_shape_invalid"
+	}
+	var nodes []json.RawMessage
+	if err := json.Unmarshal(root[collection], &nodes); err != nil {
+		return "", "target_shape_invalid"
+	}
+	pointer := ""
+	for i, node := range nodes {
+		var fields map[string]json.RawMessage
+		if err := json.Unmarshal(node, &fields); err != nil {
+			return "", "target_shape_invalid"
+		}
+		var id string
+		if err := json.Unmarshal(fields[identity], &id); err != nil {
+			return "", "target_shape_invalid"
+		}
+		if id != ref.ID {
+			continue
+		}
+		if pointer != "" {
+			return "", "target_identity_ambiguous"
+		}
+		pointer = "/" + collection + "/" + strconv.Itoa(i)
+	}
+	if pointer == "" {
+		return "", "target_absent"
+	}
+	return pointer, ""
 }

@@ -23,6 +23,8 @@ func TestSourceLaneBindingClaims(t *testing.T) {
 		want                    string
 	}{
 		{"matching observed endpoint", "read_widget", "/operations/0", "", false, "target_contract_unverified"},
+		{"existing target without authored pointer", "read_widget", "", "", false, "target_contract_unverified"},
+		{"existing target with missing pointer", "other_widget", "/operations/9", "", false, "target_pointer_mismatch"},
 		{"absent intended", "future_read", "/operations/9", "", false, "target_absent"},
 		{"dangling present", "future_read", "/operations/9", sourceBytesHash(raw), true, "materialized_target_absent"},
 		{"existing wrong endpoint", "other_widget", "/operations/1", sourceBytesHash(raw), true, "target_semantics_mismatch"},
@@ -383,4 +385,18 @@ func TestSourceLaneBindingCollectorCurrentClosedInputs(t *testing.T) {
 		}
 	}
 	// These are static input observations only, never executable lane proof.
+}
+
+func TestSourceLaneReferenceCounterexample(t *testing.T) {
+	for _, tc := range []struct{ name, raw, id, pointer, code string }{
+		{"exact operation", `{"operations":[{"id":"a"},{"id":"b"}]}`, "b", "/operations/1", ""},
+		{"duplicate operation", `{"operations":[{"id":"b"},{"id":"b"}]}`, "b", "", "target_identity_ambiguous"},
+		{"absent operation", `{"operations":[{"id":"a"}]}`, "b", "", "target_absent"},
+		{"wrong collection", `{"actions":[{"name":"b"}]}`, "b", "", "target_shape_invalid"},
+	} {
+		pointer, code := sourceLaneTargetPointer([]byte(tc.raw), sourceLaneTargetRef{Kind: "operation", ID: tc.id})
+		if pointer != tc.pointer || code != tc.code {
+			t.Errorf("%s: pointer/code=(%s,%s), want(%s,%s)", tc.name, pointer, code, tc.pointer, tc.code)
+		}
+	}
 }
