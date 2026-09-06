@@ -1397,3 +1397,69 @@ Only evidence aggregation/correction has occurred. No production/test repair
 has started. The complete audited set now awaits Firstmate's separately
 authored coordinated repair/proof scope; CP11 remains unaccepted and CP12
 has not begun.
+
+
+## 2026-09-06 — Firstmate079 ownership design and acceptance preparation
+
+The captain approved the review-loop recommendations and continuation of CP11.
+Firstmate079 supersedes the 077/078 research hold. Reviewed production, tests
+and dependencies remain `7481d1770a21cc95869fd10bf281f632af48c089`, tree
+`a2e583336ffa8ad86a0de95110259342bfa6dab0`, original base
+`36e4d980de0d51d92fe74a68306845643596a6cb`. The complete audited ledger is
+committed at `053853368a1514eaadf0b2411ab8740959559797`; all six findings remain
+open. Existing delivery: https://github.com/polymetrics-ai/cli/pull/4294.
+
+One fresh native `/root/cp11_ownership_design_079` was launched explicitly with
+`gpt-6-astra`, `reasoning_effort=xhigh`, `fork_turns=none`, using the entire
+Firstmate079 specialist prompt and the documented worker-owned GSD/native
+route. Its task is a bounded common-record ownership/result contract and
+collision-outcome design with regression boundaries, not another exhaustive
+review or implementation. Current GSD adapter sources/reference and required
+Go/review/evidence routing were reconciled before launch. No new runtime,
+dependency, provider or review-policy change is authorized by this preparation.
+
+[CP11-ACCEPTANCE.json](CP11-ACCEPTANCE.json) is the single current acceptance
+manifest. It binds original 051/058/063 contracts, immutable source paths,
+original desired RED/oracle and package receipts, and each obligation's caller,
+actual phase, object, first side effect, owner, independently expected state,
+permitted transitions, assertion location or explicit gap. Its draft contains
+119 addressable obligations across six findings, including retained bounded
+coverage. That count is accounting, not a test count or acceptance claim.
+All rows remain open or partial; no test name or package PASS closes a row.
+The manifest preserves all eleven cleanup schedules plus separate Check,
+DIRECTORY B versus regular lease-file B, held readers, explicit compound
+classes, and the optional nature of extra nested final-prune proof.
+
+Next: read and verify the complete design report/source/hash, then update the
+pending manifest design reference. Firstmate supplies the coherent implementation
+brief after reading that result, before any production/test/dependency edit.
+The installed discuss → plan --tdd → execute → verify/gap → independent review
+lifecycle remains mandatory for that work. No RED/GREEN is claimed for this
+JSON/planning-only preparation; no tests were rerun and no no-mistakes run owns
+the branch. Original-range lint and final coherent candidate gates remain open,
+with CP29 debt and every historical receipt distinction preserved.
+
+Firstmate080 was read and acknowledged. The captain-approved
+`QUALITY-EXECUTION-PLAN.md` and `ENGINEERING-EXECUTION-POLICY.md` now govern
+future execution. CP11 still requires the original-base full range; later
+accepted-baseline impact scopes and cumulative CP16/26/31 review are explicit
+approved policy. The architect's current scope is unchanged. Manifest references
+bind the received policy documents; their future QE actions are not claimed
+complete by this preparation. No generic checker/framework is introduced here.
+
+### Firstmate079 design completion / 081 compact evidence binding
+
+The full Astra/xhigh ownership design was read and bound in
+[CP11-ACCEPTANCE.json](CP11-ACCEPTANCE.json);
+[CP11-ACCEPTANCE-SUMMARY.md](CP11-ACCEPTANCE-SUMMARY.md) is the compact
+per-finding/caller projection for Firstmate-authored prompts. The report SHA-256
+is `35f8926266fdae784e88d429eeea0b27adcd114a1550ca47cd7dece3f592a417`.
+It selects explicit partial-open ownership, proven-owned incomplete-record cleanup,
+complete-authority retention, and separated collision/completion outcomes.
+There is no unresolved architecture/product question in that report. Its four
+dependency groups remain design input for the separate implementation brief,
+not authorization to edit production/tests. All architect commands are terminal;
+no child/session or new GREEN is claimed. External test-content and overlay hashes,
+virtual added paths, tested production SHA, and transcription versus original-tool
+receipt classes are explicit in the manifest. The 119 rows preserve six audited
+findings and existing variants; they are not 119 new defects or test requirements.
