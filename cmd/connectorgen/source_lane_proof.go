@@ -3,15 +3,12 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"io/fs"
 	"math"
 	"os"
-	"path"
 	"reflect"
 	"sort"
 	"strconv"
@@ -90,16 +87,8 @@ type sourceLaneProofPolicy struct {
 	// reader and cannot fabricate bytes, hashes, or accepted file identities.
 	afterRead func(sourceLaneProofReadEvent)
 }
-type sourceLaneProofReadEvent struct {
-	Path, Phase    string
-	Bytes, Charged int64
-	Success        bool
-	Before, After  os.FileInfo
-}
-type sourceLaneProofReadStats struct {
-	UniqueFiles, ReadCalls, FinalReads int
-	UniqueBytes, PhysicalCharged       int64
-}
+type sourceLaneProofReadEvent = sourceProofReadEvent
+type sourceLaneProofReadStats = sourceProofReadStats
 
 func newSourceLaneProofPolicy(keys []sourceOperationKey) (sourceLaneProofPolicy, error) {
 	p := sourceLaneProofPolicy{keys: map[sourceOperationKey]bool{}, limits: sourceLaneProofLimits{DocumentBytes: 128 << 20, UniqueBytes: 512 << 20, InputBytes: 4 << 20, TargetBytes: 64 << 20, Tuples: 131072, Files: 65536, Pins: 4096}}
@@ -181,147 +170,19 @@ func validateSourceLaneProofSet(inputs []sourceLaneProofInput, limit int) source
 	return set
 }
 
-type sourceLaneProofFile struct {
-	hash, code string
-	size       int64
-	info       os.FileInfo
-	result     sourceLaneProofResult
-	parsed     bool
-}
+// Preserve lane policy in the lane adapter; only file mechanics are shared.
 type sourceLaneProofCache struct {
-	ctx       context.Context
-	root      *os.Root
+	*sourceProofFileCache
 	policy    sourceLaneProofPolicy
-	files     map[string]*sourceLaneProofFile
-	order     []string
-	stats     sourceLaneProofReadStats
 	setChecks map[string]string
 	setPaths  map[string][]string
 }
 
-func sourceLaneProofFileInfo(root *os.Root, name string) (os.FileInfo, string) {
-	if !sourceLaneProofSafePath(name) {
-		return nil, "proof_input_invalid"
-	}
-	prefix := ""
-	var info os.FileInfo
-	for _, part := range strings.Split(name, "/") {
-		prefix = path.Join(prefix, part)
-		var err error
-		info, err = root.Lstat(prefix)
-		if errors.Is(err, fs.ErrNotExist) {
-			return nil, "missing"
-		}
-		if err != nil || info.Mode()&os.ModeSymlink != 0 {
-			return nil, "proof_input_invalid"
-		}
-	}
-	if !info.Mode().IsRegular() {
-		return nil, "proof_input_invalid"
-	}
-	return info, ""
-}
-
-// A successful call refunds proven unused reservation. A failed read retains
-// limit+lookahead as its conservative physical charge, even when bytes are nil.
-// Final content revalidation spends the same physical allowance, never free I/O.
-func (c *sourceLaneProofCache) read(name, phase string, cap int64) ([]byte, *sourceLaneProofFile) {
-	f := &sourceLaneProofFile{}
-	if c.ctx.Err() != nil {
-		f.code = "proof_cancelled"
-		return nil, f
-	}
-	before, code := sourceLaneProofFileInfo(c.root, name)
-	if code != "" {
-		f.code = code
-		return nil, f
-	}
-	limit := cap
-	if phase == "initial" {
-		limit = min(limit, c.policy.limits.UniqueBytes-c.stats.UniqueBytes)
-	}
-	physicalLimit := 2*c.policy.limits.UniqueBytes + 2*int64(c.policy.limits.Files)
-	limit = min(limit, physicalLimit-c.stats.PhysicalCharged-1)
-	if limit < 0 || limit == 0 && before.Size() > 0 {
-		f.code = "proof_read_budget_exceeded"
-		return nil, f
-	}
-	c.stats.PhysicalCharged += limit + 1
-	if phase == "initial" {
-		c.stats.UniqueBytes += limit
-	} else {
-		c.stats.FinalReads++
-	}
-	c.stats.ReadCalls++
-	raw, err := readSourceInput(c.root, name, limit)
-	after, afterCode := sourceLaneProofFileInfo(c.root, name)
-	charged := limit + 1
-	if err == nil {
-		charged = int64(len(raw))
-		c.stats.PhysicalCharged -= limit + 1 - charged
-		if phase == "initial" {
-			c.stats.UniqueBytes -= limit - charged
-		}
-	}
-	if err != nil {
-		f.code = "proof_input_invalid"
-	} else if afterCode != "" || !os.SameFile(before, after) {
-		f.code = "proof_file_changed"
-	} else {
-		f.hash = sourceBytesHash(raw)
-		f.size = int64(len(raw))
-		f.info = after
-	}
-	if c.policy.afterRead != nil {
-		c.policy.afterRead(sourceLaneProofReadEvent{Path: name, Phase: phase, Bytes: int64(len(raw)), Charged: charged, Success: err == nil, Before: before, After: after})
-	}
-	return raw, f
-}
-
-func (c *sourceLaneProofCache) get(name string, cap int64, receipt bool) ([]byte, *sourceLaneProofFile) {
-	if f, ok := c.files[name]; ok {
-		// Every successful unique path is identity-checked and content-rehashed
-		// at final return. Hits do not multiply I/O by the number of claims.
-		return nil, f
-	}
-	if len(c.files) >= c.policy.limits.Files {
-		return nil, &sourceLaneProofFile{code: "proof_file_limit_exceeded"}
-	}
-	raw, f := c.read(name, "initial", cap)
-	c.files[name] = f
-	c.order = append(c.order, name)
-	c.stats.UniqueFiles++
-	if receipt && f.code == "" {
-		f.result = parseSourceLaneProofResult(raw)
-		f.parsed = true
-	}
-	return raw, f
-}
-
-func (c *sourceLaneProofCache) finalize() {
-	for _, name := range c.order {
-		f := c.files[name]
-		if f.code != "" {
-			continue
-		}
-		if c.ctx.Err() != nil {
-			f.code = "proof_cancelled"
-			continue
-		}
-		info, code := sourceLaneProofFileInfo(c.root, name)
-		if code != "" || !os.SameFile(f.info, info) {
-			f.code = "proof_file_changed"
-			continue
-		}
-		_, current := c.read(name, "final", f.size)
-		if current.code != "" || current.hash != f.hash || !os.SameFile(current.info, f.info) {
-			if current.code == "proof_cancelled" {
-				f.code = current.code
-			} else {
-				f.code = "proof_file_changed"
-			}
-		}
-	}
+func newSourceLaneProofCache(ctx context.Context, root *os.Root, policy sourceLaneProofPolicy) sourceLaneProofCache {
+	return sourceLaneProofCache{sourceProofFileCache: &sourceProofFileCache{
+		ctx: ctx, root: root, limits: sourceProofFileLimits{UniqueBytes: policy.limits.UniqueBytes, Files: policy.limits.Files},
+		afterRead: policy.afterRead, files: map[string]*sourceProofFile{},
+	}, policy: policy}
 }
 
 // Decode incrementally, refusing array/count/depth growth before allocating
@@ -506,7 +367,7 @@ func loadSourceLaneProofs(ctx context.Context, repo string, policy sourceLanePro
 	// Read/validation failures already use the caller's existing result channel;
 	// teardown is not an additional source-consistency or proof-authority gate.
 	defer func() { _ = root.Close() }()
-	cache := sourceLaneProofCache{ctx: ctx, root: root, policy: policy, files: map[string]*sourceLaneProofFile{}}
+	cache := newSourceLaneProofCache(ctx, root, policy)
 	raw, doc := cache.get(sourceLaneProofPath, policy.limits.DocumentBytes, false)
 	if doc.code == "missing" {
 		return result
@@ -746,14 +607,8 @@ func assessSourceLaneProofFiles(cache *sourceLaneProofCache, r sourceLaneProofRe
 	return "", "", paths
 }
 
-func sourceLaneProofSafePath(p string) bool {
-	return validSourceID(p) && p != "." && path.Clean(p) == p && !path.IsAbs(p) && !strings.HasPrefix(p, "../") && !strings.Contains(p, "\\")
-}
-
-func sourceLaneProofDigest(s string) bool {
-	b, err := hex.DecodeString(s)
-	return err == nil && len(b) == 32 && strings.ToLower(s) == s
-}
+func sourceLaneProofSafePath(p string) bool { return sourceProofSafePath(p) }
+func sourceLaneProofDigest(s string) bool   { return sourceProofDigest(s) }
 
 func sourceLaneProofShape(r sourceLaneProofRecord) bool {
 	if !validSourceID(r.ID) || !validSourceID(r.Key.Connector) || !validSourceID(r.Key.Inventory) || !validSourceID(r.Key.ID) || !validSourceID(r.ObservableContract) || len(r.Limitations) == 0 || len(r.Targets) == 0 || len(r.Targets) > 64 || len(r.Inputs) > 4096 {
@@ -802,67 +657,8 @@ func sourceLaneProofShape(r sourceLaneProofRecord) bool {
 // The reviewed original receipt supplies execution authenticity; this checks
 // actual selected result events, not a PASS string or declaration. No code or
 // command from the document is ever executed.
-type sourceLaneProofTestResult struct {
-	runs, passes int
-	invalid      bool
-}
-type sourceLaneProofResult struct {
-	pkg   string
-	tests map[string]sourceLaneProofTestResult
-	valid bool
-}
-
-func parseSourceLaneProofResult(raw []byte) sourceLaneProofResult {
-	result := sourceLaneProofResult{tests: map[string]sourceLaneProofTestResult{}, valid: true}
-	packagePass := 0
-	for _, line := range bytes.Split(bytes.TrimSpace(raw), []byte{10}) {
-		var event struct {
-			Time        string
-			Action      string
-			Package     string
-			Test        string
-			Output      string
-			Elapsed     float64
-			FailedBuild string
-		}
-		if decodeStrictJSON(line, &event) != nil || event.Package == "" {
-			result.valid = false
-			break
-		}
-		if result.pkg == "" {
-			result.pkg = event.Package
-		}
-		if result.pkg != event.Package {
-			result.valid = false
-			break
-		}
-		switch event.Action {
-		case "start", "run", "pause", "cont", "output", "pass":
-		default:
-			result.valid = false
-		}
-		if event.Test != "" {
-			entry := result.tests[event.Test]
-			if event.Action == "run" {
-				entry.runs++
-				entry.invalid = entry.invalid || entry.passes != 0 || packagePass != 0
-			}
-			if event.Action == "pass" {
-				entry.passes++
-				entry.invalid = entry.invalid || entry.runs != 1 || packagePass != 0
-			}
-			result.tests[event.Test] = entry
-		}
-		if event.Test == "" && event.Action == "pass" {
-			packagePass++
-		}
-	}
-	result.valid = result.valid && packagePass == 1
-	return result
-}
-func (result sourceLaneProofResult) successful(r sourceLaneProofRecord) bool {
-	entry := result.tests[r.SelectedTest]
-	return result.valid && result.pkg == r.Package && entry.runs == 1 && entry.passes == 1 && !entry.invalid
+func (result sourceProofResult) successful(r sourceLaneProofRecord) bool {
+	return result.successfulSelection(r.Package, r.SelectedTest)
 }
 
 // assessSourceLaneProof preserves source membership and independently derived

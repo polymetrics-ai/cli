@@ -1,0 +1,12 @@
+{"Time":"2026-09-07T16:20:00.068778+05:30","Action":"start","Package":"polymetrics.ai/internal/connectors/engine"}
+{"Time":"2026-09-07T16:20:00.989743+05:30","Action":"run","Package":"polymetrics.ai/internal/connectors/engine","Test":"TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome"}
+{"Time":"2026-09-07T16:20:00.989814+05:30","Action":"output","Package":"polymetrics.ai/internal/connectors/engine","Test":"TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome","Output":"=== RUN   TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome\n"}
+{"Time":"2026-09-07T16:20:00.989939+05:30","Action":"run","Package":"polymetrics.ai/internal/connectors/engine","Test":"TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome/bad_rejects_undeclared_200"}
+{"Time":"2026-09-07T16:20:00.989958+05:30","Action":"output","Package":"polymetrics.ai/internal/connectors/engine","Test":"TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome/bad_rejects_undeclared_200","Output":"=== RUN   TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome/bad_rejects_undeclared_200\n"}
+{"Time":"2026-09-07T16:20:00.992695+05:30","Action":"output","Package":"polymetrics.ai/internal/connectors/engine","Test":"TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome/bad_rejects_undeclared_200","Output":"--- PASS: TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome/bad_rejects_undeclared_200 (0.00s)\n"}
+{"Time":"2026-09-07T16:20:00.992705+05:30","Action":"pass","Package":"polymetrics.ai/internal/connectors/engine","Test":"TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome/bad_rejects_undeclared_200","Elapsed":0}
+{"Time":"2026-09-07T16:20:00.992731+05:30","Action":"output","Package":"polymetrics.ai/internal/connectors/engine","Test":"TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome","Output":"--- PASS: TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome (0.00s)\n"}
+{"Time":"2026-09-07T16:20:00.992739+05:30","Action":"pass","Package":"polymetrics.ai/internal/connectors/engine","Test":"TestCheck_ExactSuccessStatusesPreserveDeclaredOutcome","Elapsed":0}
+{"Time":"2026-09-07T16:20:00.99279+05:30","Action":"output","Package":"polymetrics.ai/internal/connectors/engine","Output":"PASS\n"}
+{"Time":"2026-09-07T16:20:00.993369+05:30","Action":"output","Package":"polymetrics.ai/internal/connectors/engine","Output":"ok  \tpolymetrics.ai/internal/connectors/engine\t0.924s\n"}
+{"Time":"2026-09-07T16:20:00.993387+05:30","Action":"pass","Package":"polymetrics.ai/internal/connectors/engine","Elapsed":0.925}

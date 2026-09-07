@@ -13,3 +13,7 @@ Carried corrections locally implemented; CP13 register implementation remains pe
 - [ ] Separate checkpoint dispositions and acceptance; authorized working-branch integration/push and reachability verified.
 
 No existing test result is transferred merely from equal filename or green headline. No publication while combined review is pending.
+
+##141 pending feature verification
+
+All25 cases in PLAN.md and originalCP13-01..09 remain pending. Initial projection controls are infrastructure evidence only. Exact source/capture/receipt maps will identify later RED/GREEN frontiers; no package-wide or checkpoint PASS at adoption. Final manifest regeneration, source/lane no-promotion comparisons, schema/reader parity, full U/A/K/complement and35-example reconciliation, real stdout/check preservation and fresh combined judgment remain required.

@@ -418,7 +418,7 @@ func TestSourceLaneProofReadAccounting(t *testing.T) {
 		p.limits.InputBytes = 16
 		events := []sourceLaneProofReadEvent{}
 		p.afterRead = func(e sourceLaneProofReadEvent) { events = append(events, e) }
-		cache := sourceLaneProofCache{ctx: context.Background(), root: opened, policy: p, files: map[string]*sourceLaneProofFile{}}
+		cache := newSourceLaneProofCache(context.Background(), opened, p)
 		for i := 0; i < 8; i++ {
 			_, f := cache.get(name, 16, false)
 			if f.code != "proof_input_invalid" {
@@ -446,7 +446,7 @@ func TestSourceLaneProofReadAccounting(t *testing.T) {
 		p := proofFixturePolicy()
 		events := []sourceLaneProofReadEvent{}
 		p.afterRead = func(e sourceLaneProofReadEvent) { events = append(events, e) }
-		cache := sourceLaneProofCache{ctx: context.Background(), root: opened, policy: p, files: map[string]*sourceLaneProofFile{}}
+		cache := newSourceLaneProofCache(context.Background(), opened, p)
 		cache.get(name, 16, false)
 		cache.finalize()
 		expected := map[string]int64{name: 5}
@@ -1157,7 +1157,7 @@ func proofLoadFixture(root string, reviews []sourceLaneProofReview) sourceLanePr
 func proofReadWithBudget(root *os.Root, r sourceLaneProofRecord, budget *int64) (string, string) {
 	p := proofFixturePolicy()
 	p.limits.UniqueBytes = *budget
-	c := sourceLaneProofCache{ctx: context.Background(), root: root, policy: p, files: map[string]*sourceLaneProofFile{}}
+	c := newSourceLaneProofCache(context.Background(), root, p)
 	code, severity, _ := assessSourceLaneProofFiles(&c, r, r.Inputs)
 	*budget -= c.stats.UniqueBytes
 	return code, severity
