@@ -24,6 +24,7 @@ type sourceFoundationAtlasTest struct {
 
 type sourceFoundationAtlasEntry struct {
 	raw     json.RawMessage
+	pointer string
 	ID      string `json:"id"`
 	Layer   string `json:"layer"`
 	Status  string `json:"status"`
@@ -173,7 +174,7 @@ func readSourceFoundationAtlas(cache *sourceProofFileCache) (sourceFoundationAtl
 	if decodeSourceJSON(raw, &document) != nil || decodeStrictJSON(raw, &document) != nil || document.Schema != "./catalog.schema.json" || document.SchemaVersion != 1 || document.CatalogRevision < 1 || !document.Authority.AuthoringOnly || document.Authority.RuntimeInput || document.Authority.ProviderFactAuthority != "source_lock_vnext" || document.Authority.ConnectorSpecificSelection != "closed_definition_reference" || document.Authority.SharedRuntimeConnectorBranch || len(document.Foundations) == 0 {
 		return result, fmt.Errorf("foundation atlas: invalid catalogue")
 	}
-	for _, rawEntry := range document.Foundations {
+	for index, rawEntry := range document.Foundations {
 		var entry sourceFoundationAtlasEntry
 		if decodeStrictJSON(rawEntry, &entry) != nil || !validSourceID(entry.ID) || entry.Owner.PrimaryPackage == "" || len(entry.Owner.Files) == 0 || len(entry.Owner.Symbols) == 0 || len(entry.ProofTests) == 0 {
 			return result, fmt.Errorf("foundation atlas: invalid entry")
@@ -189,6 +190,7 @@ func readSourceFoundationAtlas(cache *sourceProofFileCache) (sourceFoundationAtl
 			}
 		}
 		entry.raw = rawEntry
+		entry.pointer = fmt.Sprintf("/foundations/%d", index)
 		result.entries[entry.ID] = entry
 	}
 	return result, nil

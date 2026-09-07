@@ -1204,7 +1204,7 @@
               "value_sha256": "6efbac2a3631a78ce1919b0dabee583435248bef6dbe424d162a7d43c9e7b45b"
             }
           ],
-          "statement": "Reconcile the retained registration or update requirement at paths[\"/v1/webhooks\"].post against the warehouse transport contract; registration alone does not establish receiver execution.",
+          "statement": "The retained POST /v1/webhooks registration requires a callback URL and event selection; the independently retained receiver gap remains unresolved and registration does not implement an inbound receiver.",
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
@@ -1218,21 +1218,35 @@
                   "pointer": "/supported_contracts/sync_modes",
                   "value_sha256": "75525380daccb562ea7c2d8df0f5f6905f89535bc48d329d4f5633f88d32348f"
                 },
-                "disposition": "unresolved",
-                "rationale": "The closed mode vocabulary is shared, but does not prove a matching source-role executor, callback receipt, or durable apply/ack behavior for this retained operation."
+                "disposition": "absent_shared_foundation",
+                "rationale": "The existing transport contract specifies warehouse-mediated modes; it does not supply the inbound webhook receiver retained by the source-owned cli-webhook-event-surface-foundation-r1 gap. This mismatch is independently established by the existing source-lane demand authority, not by missing proof."
               }
             ]
           },
-          "assessment": "unresolved",
+          "assessment": "absent_shared_foundation",
           "proof_ids": [],
-          "affected_artifacts": [],
+          "affected_artifacts": [
+            "internal/connectors/defs/vercel/source.lock.json",
+            "internal/connectors/defs/vercel/sync_transport.json"
+          ],
           "evidence_requirements": [
             "Exact source-role and mode intersection, bounded registration request and independently reviewed receiver contract evidence; preserve the existing receiver and exposure decision owners."
           ],
-          "decision_refs": []
+          "decision_refs": [
+            {
+              "id": "cli-batch1-vercel-inbound-sync-decision-r1",
+              "state": "pending",
+              "condition": ""
+            },
+            {
+              "id": "cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary",
+              "state": "conditional",
+              "condition": "If an approved receiver requires an exposed endpoint, resolve the separate product/exposure boundary."
+            }
+          ]
         }
       ],
-      "next_owner": "polymetrics.ai/internal/synctransport"
+      "next_owner": "cli-batch1-vercel-inbound-sync-decision-r1"
     }
   ]
 }

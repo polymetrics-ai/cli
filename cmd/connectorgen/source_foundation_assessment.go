@@ -22,6 +22,9 @@ type sourceFoundationRequirement struct {
 	AffectedArtifacts    []string                   `json:"affected_artifacts"`
 	EvidenceRequirements []string                   `json:"evidence_requirements"`
 	DecisionRefs         []sourceFoundationDecision `json:"decision_refs"`
+	FitBindings          []sourceLaneTargetRef      `json:"fit_bindings,omitempty"`
+	ProviderClause       *sourceFactRef             `json:"provider_clause,omitempty"`
+	SourceExclusion      *sourceFactRef             `json:"source_exclusion,omitempty"`
 }
 
 type sourceFoundationLookup struct {

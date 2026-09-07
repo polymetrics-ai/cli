@@ -217,3 +217,35 @@ Current-corpus reconciliation: the initial `obligations-current-corpus-144-01` f
 `obligations-lint-144-01`: exit0, 0/0 passing/run events, wall2.876712208992103s, rawSHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`.
 
 The corrected actual source build reconciles4343keys,30401cells,26 assessed/30375 unassessed, exact26 baseline, historical12 and separate Sentry registration. All lane states remain non-implemented with no proofRefs. This tests current source-bound accounting only, not complete requirement semantics or an executable/adopter claim. Canonical baseline pin is27715bytes/SHA2565c7b972ad6eccb01a6b2633ac7505d2467d5667c7cd7a873b018e0cef48a5b05, a projection of sealed140A data with duplicate citation occurrences normalized; original citation values and source identities remain intact.
+
+## Requirement result consumer144
+
+New infrastructure projects actual independently observed source assessments together with original current foundation captures/assertions/limitations, preserving authored status separately. `requirement-observation-144-01` passes1/1 (rawSHA bf8ad787c4a6ee712710cd7be38139a2721ea287d4109ad0b21cce32815e93f9;5.313214916997822s). This is initial infrastructure, not a claimed RED. The next grouped regression reaches that real consumer with vocabulary-for-executor, local-work-without-binding, absence-from-missing-proof, unsupported-provider-clause and unproven source-exclusion claims. Actual current source/lane classification and exact admitted binding relationships are reused; no runtime input or provider dispatch is added.
+
+Red: `requirement-classification-red-144-01`, 1/9 passing/run events,exit1,wall11.85067875002278s,rawSHA256 `967c186562f0b5691207c42b5d654b95fa1cf29fa1c5c5be74a4814bfc8700b7`.
+
+Green: `requirement-classification-green-144-01`, 9/9 passing/run events,exit0,wall12.020945833006408s,rawSHA256 `f988a2772c516393bb485b11c57cd30f786b1b529e27eaf9691a9fa018659f61`.
+
+All seven negatives reached the actual proof/source requirement consumer after a complete positive unresolved/current-proof control. GREEN retains exact scope/contract matching, separately validated binding evidence and source-exclusion/gap/clause requirements. This is only the first classification group: all resolved positive classes, source-fit facets, decision bindings and complete requirement/output matrix remain due. No final semantics acceptance is claimed.
+
+Requirement/Atlas follow-up evidence144 (counts overlap earlier groups and are not summed):
+
+`example-observation-144-01`: exit0, 2/2 passing/run events, wall5.511662000004435s, rawSHA256 `ddd48f55e567b28669437222adf2203e6929797be24c39cc320b040b24dbffb6`, changed_inputs_after=[].
+
+`requirement-positive-fit-144-01`: exit0, 4/4 passing/run events, wall8.883858165994752s, rawSHA256 `a5a04017eab7c4144f2b26b7177387734a16f176ed9ea5153f1c808d284f326d`, changed_inputs_after=[].
+
+`requirement-decisions-red-144-01`: exit1, 0/6 passing/run events, wall10.699978125019697s, rawSHA256 `af084b8a6124181ac8d2e8041d85bd8a74214aa2c66f8450a378bd70b891fc52`, changed_inputs_after=[].
+
+`requirement-decisions-green-144-01`: exit0, 6/6 passing/run events, wall11.078421167010674s, rawSHA256 `6ce8729749f257234051897d8d3119b7012e57704ca3cdb88cbd76e9681dda39`, changed_inputs_after=[].
+
+`requirement-current-corpus-144-01`: exit0, 1/1 passing/run events, wall66.28018320800038s, rawSHA256 `301da87ed5eeca2f0f5d34253d9a9a29c4e5c5918f38906bf292669f2917a29c`, changed_inputs_after=['cmd/connectorgen/source_foundation_requirements.go'].
+
+The example path preserves35 exact Atlas occurrences and complete file pins, with two explicit missing references; it does not yet establish source/adopter joins. Exact-binding positive tests reuse the real canonical producer/bundle loader/source binding classifier as lower-consumer evidence, not full independent source-input integration. The quoted mode vocabulary remains the only asserted mechanism and its executor-intersection limitations stay attached. The five decision negatives reach the actual consumer after valid pending/conditional controls; GREEN rejects invented owners/approval and lost exposure conditions.
+
+IMPORTANT CUSTODY LIMIT: requirement-current-corpus-144-01 returned1/1, but the owner added requirement output fields during its execution, and its original receipt correctly records source_foundation_requirements.go changed. It is NOT clean frozen-source verification. Preserve its original capture/snapshot; a frozen coherent follow-up is required before this slice is committed or claimed verified. No final-source GREEN is inferred from this run.
+
+Frozen requirement slice verification144: `requirements-coherent-144-01` passed155/155 events, exit0,112.87045070898603s, rawSHA256373360c0f246b88bd3596693e125d22cb2cb8285f7e76f63656d8f96d8629690, changed_inputs_after=[]. This includes the corrected full-corpus requirements/assertions and restores a clean frozen-source witness after the explicitly invalidated earlier run. `requirements-lint-144-01` exit0,0issues,5.084992207994219s,rawSHAe92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47.
+
+The parallel `requirements-vet-144-01` receipt launch failed before vet or command.json due to FileExistsError in the preserved runner’s shared content-addressed snapshot creation (object003bb7e703c98f2a50a3acac6d70834dcadd347815422f0a03c9f401106467af). Its empty run directory and original command-session output remain; no vet result exists for01. Subsequent receipt captures are serialized rather than changing the original runner. `requirements-vet-144-02` then passed exit0,1.0956147499964572s, empty outputSHAe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855, changed_inputs_after=[].
+
+These155 tests are scoped slice verification, not all25matrix completion, independent acceptance, full CLI/engine verification or final command generation. Source-fit facet reconciliation and all exact example/adopter joins, closed schemas, real source-demands command/check/preservation, final coherent manifest/register generation and terminal combined gates remain due.

@@ -136,4 +136,32 @@ func TestSourceFoundationObligationsCurrentCorpus(t *testing.T) {
 			}
 		}
 	}
+	requirements, err := buildSourceFoundationRequirements(t.Context(), repo, got.assessments)
+	if err != nil || len(requirements) != 26 {
+		t.Fatalf("current retained source requirements: %v", err)
+	}
+	byCell := map[sourceFoundationCell]sourceFoundationRequirementResult{}
+	for _, requirement := range requirements {
+		byCell[requirement.Identity] = requirement
+	}
+	historicalUnproven, historicalGap := 0, 0
+	for _, cell := range got.baseline.HistoricalReceiverCandidates {
+		row := byCell[cell]
+		switch row.SourceState {
+		case "mapped_unproven":
+			historicalUnproven++
+		case "missing_foundation":
+			historicalGap++
+		default:
+			t.Fatal("historical source receiver candidate lost its distinct state")
+		}
+	}
+	vercel := byCell[sourceFoundationCell{Key: sourceOperationKey{Connector: "vercel", Inventory: "primary", ID: "vercel.rest.createWebhook"}, Lane: "sync_transport"}]
+	sentry := byCell[got.baseline.SentryRegistration[0]]
+	if historicalUnproven != 11 || historicalGap != 1 || vercel.Status != "absent_shared_foundation" ||
+		vercel.SourceState != "missing_foundation" || len(vercel.GapRefs) != 1 || vercel.GapRefs[0] != "cli-webhook-event-surface-foundation-r1" ||
+		len(vercel.DecisionRefs) != 2 || len(vercel.RetainedDecisionOwners) != 2 ||
+		sentry.Status != "unresolved" || sentry.SourceState != "mapped_unproven" || len(sentry.GapRefs) != 0 {
+		t.Fatal("current Vercel authority/historical12/Sentry distinction drifted")
+	}
 }
