@@ -56,10 +56,11 @@ type sourceFoundationProofRecord struct {
 // Observation precedes admission. This type carries no accepted lane targets
 // and cannot be passed to the lane-proof reducer.
 type sourceFoundationProofObservation struct {
-	record sourceFoundationProofRecord
-	atlas  sourceFoundationAtlasEntry
-	status string
-	issues []sourceFoundationProofIssue
+	record    sourceFoundationProofRecord
+	atlas     sourceFoundationAtlasEntry
+	status    string
+	issues    []sourceFoundationProofIssue
+	mechanism string
 }
 
 type sourceFoundationProofDocument struct {
@@ -71,6 +72,7 @@ type sourceFoundationProofDocument struct {
 
 type sourceFoundationProofReview struct {
 	ID, RecordSHA256, InputClosureSHA256, AssertionSHA256 string
+	FitMechanism                                          string
 }
 
 // Only the trusted authoring caller supplies review authorization. None of

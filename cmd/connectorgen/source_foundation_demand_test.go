@@ -141,6 +141,25 @@ func TestSourceFoundationNoLanePromotion(t *testing.T) {
 				if err != nil || len(got) != 1 || got[0].Status != "unresolved" || got[0].Proofs[0].Status != "current" {
 					t.Fatalf("current narrow assertion control: %v", err)
 				}
+			} else if scenario == "missing" || scenario == "invalid" {
+				want := document.Assessments[0].Requirements[0]
+				if err != nil || len(got) != 1 || got[0].Status != "unresolved" || got[0].ID != want.ID || got[0].Statement != want.Statement ||
+					got[0].Identity != (sourceFoundationCell{Key: document.Assessments[0].Key, Lane: document.Assessments[0].Lane}) ||
+					!reflect.DeepEqual(got[0].SourceRefs, want.SourceRefs) || !reflect.DeepEqual(got[0].RequestedProofIDs, want.ProofIDs) || len(got[0].MechanismFits) != 0 {
+					t.Fatalf("%s evidence erased or promoted unresolved source demand: %v", scenario, err)
+				}
+				issue := sourceFoundationRequirementProofIssue{ID: proofs.Records[0].ID, Code: "proof_document_missing", Path: sourceFoundationProofPath}
+				if scenario == "invalid" {
+					issue.Code, issue.Path = "proof_input_stale", proofs.Records[0].Output.Path
+					if len(got[0].Proofs) != 1 || got[0].Proofs[0].Status != "proof_stale" {
+						t.Fatal("stale capture acquired current assertion authority")
+					}
+				} else if len(got[0].Proofs) != 0 {
+					t.Fatal("absent document invented assertion record")
+				}
+				if !reflect.DeepEqual(got[0].ProofIssues, []sourceFoundationRequirementProofIssue{issue}) {
+					t.Fatalf("wrong unavailable evidence: %+v", got[0].ProofIssues)
+				}
 			} else if err == nil {
 				t.Fatalf("%s evidence unexpectedly admitted", scenario)
 			}

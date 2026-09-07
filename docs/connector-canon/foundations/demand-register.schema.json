@@ -19,7 +19,8 @@
     "inputs",
     "foundation_proof_observations",
     "checks",
-    "foundation_proof_document"
+    "foundation_proof_document",
+    "source_admission"
   ],
   "properties": {
     "schema_version": {
@@ -121,6 +122,9 @@
           }
         }
       }
+    },
+    "source_admission": {
+      "$ref": "#/$defs/source_admission"
     }
   },
   "$defs": {
@@ -206,7 +210,8 @@
         "affected_artifacts",
         "fit_bindings",
         "requested_proof_ids",
-        "proof_issues"
+        "proof_issues",
+        "mechanism_fits"
       ],
       "properties": {
         "identity": {
@@ -327,6 +332,12 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/requirement_proof_issue"
+          }
+        },
+        "mechanism_fits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mechanism_fit"
           }
         }
       }
@@ -602,7 +613,12 @@
         "identity",
         "requirement_id",
         "binding",
-        "relationship"
+        "relationship",
+        "proof_id",
+        "mechanism",
+        "declaration_state",
+        "selectors",
+        "source_refs"
       ],
       "properties": {
         "atlas_id": {
@@ -627,6 +643,34 @@
             "existing_shared_capability",
             "connector_local_configuration"
           ]
+        },
+        "proof_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mechanism": {
+          "enum": [
+            "rest_write_structured_json_body",
+            "rest_write_static_api_key_header"
+          ]
+        },
+        "declaration_state": {
+          "enum": [
+            "materialized",
+            "canonical_intended"
+          ]
+        },
+        "selectors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selector"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+          }
         }
       }
     },
@@ -806,6 +850,195 @@
         "id": {
           "type": "string",
           "minLength": 1
+        }
+      }
+    },
+    "selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "pointer",
+        "artifact_sha256",
+        "value_sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string"
+        },
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "value_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "mechanism_fit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "proof_id",
+        "mechanism",
+        "declaration_state",
+        "selectors",
+        "source_refs",
+        "atlas_id",
+        "contract",
+        "binding"
+      ],
+      "properties": {
+        "proof_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mechanism": {
+          "enum": [
+            "rest_write_structured_json_body",
+            "rest_write_static_api_key_header"
+          ]
+        },
+        "declaration_state": {
+          "enum": [
+            "materialized",
+            "canonical_intended"
+          ]
+        },
+        "selectors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/selector"
+          }
+        },
+        "source_refs": {
+          "type": "array",
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+          }
+        },
+        "atlas_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract": {
+          "$ref": "assessments.schema.json#/$defs/contract"
+        },
+        "binding": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/target_ref"
+        }
+      }
+    },
+    "missing_command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "binding",
+        "local_requirement_ids"
+      ],
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "binding": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/target_ref"
+        },
+        "local_requirement_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "missing_cli": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "connector",
+        "path",
+        "source_lock",
+        "partial_generation",
+        "canonical_generation",
+        "intended_cli",
+        "affected",
+        "diagnostic_indices"
+      ],
+      "properties": {
+        "connector": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_lock": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+        },
+        "partial_generation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "canonical_generation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intended_cli": {
+          "$ref": "../source-lane-manifest.schema.json#/$defs/pin"
+        },
+        "affected": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/missing_command"
+          }
+        },
+        "diagnostic_indices": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "source_admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "current_validation",
+        "current_diagnostics",
+        "missing_cli"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "current_valid",
+            "canonical_intended_missing_cli"
+          ]
+        },
+        "current_validation": {
+          "$ref": "../source-lane-manifest.schema.json#/properties/validation"
+        },
+        "current_diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "../source-lane-manifest.schema.json#/$defs/diagnostic"
+          }
+        },
+        "missing_cli": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/missing_cli"
+          }
         }
       }
     }

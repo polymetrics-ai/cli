@@ -97,6 +97,39 @@ for index, proof in enumerate(document["foundation_proof_observations"]):
     candidate["foundation_proof_observations"][index]["status"] = "current"
     candidate["foundation_proof_observations"][index]["issues"] = [{"code": "proof_input_missing", "path": "go.sum"}]
     check(f"record {index} current with unavailable issue", candidate, False)
+# New155 objects are closed and every scalar/array/object is present and
+# non-null. Exercise the actual materialized/missing report supplied by Go.
+nested_paths = [("source_admission",)]
+if document["source_admission"]["missing_cli"]:
+    nested_paths += [("source_admission", "missing_cli", 0),
+                     ("source_admission", "missing_cli", 0, "affected", 0)]
+for i, requirement in enumerate(document["requirements"]):
+    if requirement["mechanism_fits"]:
+        nested_paths += [("requirements", i, "mechanism_fits", 0),
+                         ("requirements", i, "mechanism_fits", 0, "selectors", 0)]
+if document["adopter_relations"]:
+    nested_paths.append(("adopter_relations", 0))
+for path in nested_paths:
+    target = document
+    for part in path:
+        target = target[part]
+    for field in target:
+        for mutation in ("absent", "null"):
+            candidate = copy.deepcopy(document)
+            observed = candidate
+            for part in path:
+                observed = observed[part]
+            if mutation == "absent":
+                del observed[field]
+            else:
+                observed[field] = None
+            check(f"nested {path} {field} {mutation}", candidate, False)
+    candidate = copy.deepcopy(document)
+    observed = candidate
+    for part in path:
+        observed = observed[part]
+    observed["runtime_authority"] = True
+    check(f"closed nested {path}", candidate, False)
 if args.document.read_bytes() != raw:
     raise SystemExit("input document changed during schema observation")
 for pin, path in zip(pins, paths):

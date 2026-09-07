@@ -35,17 +35,22 @@ type sourceFoundationObligationDocument struct {
 }
 
 type sourceFoundationDemandInputs struct {
-	assessments sourceFoundationAssessmentObservations
-	baseline    sourceFoundationObligationDocument
-	baselinePin sourceArtifactPin
-	commandPins []sourceArtifactPin
+	admissionCache *sourceProofFileCache
+	assessments    sourceFoundationAssessmentObservations
+	baseline       sourceFoundationObligationDocument
+	baselinePin    sourceArtifactPin
+	commandPins    []sourceArtifactPin
 }
 
 // The expected pin is supplied by the source-owned policy, never by the
 // authored assessment document or command-line input.
 func observeSourceFoundationDemandInputs(ctx context.Context, repo, assessments string, universe sourceFoundationUniverse, expected sourceArtifactPin) (sourceFoundationDemandInputs, error) {
+	return observeSourceFoundationDemandInputsWithCache(ctx, repo, assessments, universe, expected, nil)
+}
+
+func observeSourceFoundationDemandInputsWithCache(ctx context.Context, repo, assessments string, universe sourceFoundationUniverse, expected sourceArtifactPin, shared *sourceProofFileCache) (sourceFoundationDemandInputs, error) {
 	var result sourceFoundationDemandInputs
-	observed, err := observeSourceFoundationAssessments(ctx, repo, assessments, universe)
+	observed, err := observeSourceFoundationAssessmentsWithCache(ctx, repo, assessments, universe, shared)
 	if err != nil {
 		return result, err
 	}
@@ -76,7 +81,7 @@ func observeSourceFoundationDemandInputs(ctx context.Context, repo, assessments 
 	if file.code != "" {
 		return result, fmt.Errorf("foundation obligation baseline changed")
 	}
-	return sourceFoundationDemandInputs{assessments: observed, baseline: document, baselinePin: expected}, nil
+	return sourceFoundationDemandInputs{admissionCache: shared, assessments: observed, baseline: document, baselinePin: expected}, nil
 }
 
 func validateSourceFoundationObligations(ctx context.Context, baseline sourceFoundationObligationDocument, observed sourceFoundationAssessmentObservations) error {

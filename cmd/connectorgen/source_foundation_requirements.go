@@ -12,6 +12,7 @@ import (
 // Evidence availability, authored assessment and resolved requirement status
 // remain separate. A current assertion never becomes a lane proof reference.
 type sourceFoundationRequirementResult struct {
+	MechanismFits          []sourceFoundationMechanismFit          `json:"mechanism_fits"`
 	Identity               sourceFoundationCell                    `json:"identity"`
 	ID                     string                                  `json:"id"`
 	Statement              string                                  `json:"statement"`
@@ -42,6 +43,7 @@ type sourceFoundationRequirementProofIssue struct {
 }
 
 type sourceFoundationAssertionResult struct {
+	mechanism   string
 	ID          string                      `json:"id"`
 	AtlasID     string                      `json:"atlas_id"`
 	Contract    sourceFoundationContractRef `json:"contract"`
@@ -50,7 +52,19 @@ type sourceFoundationAssertionResult struct {
 	Limitations []string                    `json:"limitations"`
 }
 
-func buildSourceFoundationRequirements(ctx context.Context, repo string, observed sourceFoundationAssessmentObservations) ([]sourceFoundationRequirementResult, error) {
+func buildSourceFoundationRequirements(ctx context.Context, repo string, observed sourceFoundationAssessmentObservations) (result []sourceFoundationRequirementResult, err error) {
+	err = sourceFoundationAdmissionWithRoot(ctx, repo, observed.universe.admission, func() error {
+		var buildErr error
+		result, buildErr = buildSourceFoundationRequirementsCurrent(ctx, repo, observed)
+		return buildErr
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func buildSourceFoundationRequirementsCurrent(ctx context.Context, repo string, observed sourceFoundationAssessmentObservations) ([]sourceFoundationRequirementResult, error) {
 	batch, err := readSourceFoundationProofBatch(ctx, repo, reviewedSourceFoundationProofs(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("foundation requirement proof observations: %w", err)
@@ -81,7 +95,8 @@ func buildSourceFoundationRequirementsBatch(ctx context.Context, observed source
 				Statement: requirement.Statement, AuthoredAssessment: requirement.Assessment,
 				SourceRefs: append([]sourceFactRef{}, requirement.SourceRefs...), Proofs: []sourceFoundationAssertionResult{},
 				RequestedProofIDs: append([]string{}, requirement.ProofIDs...), ProofIssues: []sourceFoundationRequirementProofIssue{},
-				NextOwner: cell.NextOwner, MissingEvidence: append([]string{}, requirement.EvidenceRequirements...),
+				MechanismFits: []sourceFoundationMechanismFit{},
+				NextOwner:     cell.NextOwner, MissingEvidence: append([]string{}, requirement.EvidenceRequirements...),
 				DecisionRefs: append([]sourceFoundationDecision{}, requirement.DecisionRefs...), GapRefs: []string{}, RetainedDecisionOwners: []string{},
 				AtlasLookup: requirement.AtlasLookup, AffectedArtifacts: append([]string{}, requirement.AffectedArtifacts...),
 				FitBindings: append([]sourceLaneTargetRef{}, requirement.FitBindings...), ProviderClause: requirement.ProviderClause, SourceExclusion: requirement.SourceExclusion,
@@ -122,7 +137,7 @@ func buildSourceFoundationRequirementsBatch(ctx context.Context, observed source
 					row.MissingEvidence = append(row.MissingEvidence, issue.Code+": "+id+" ("+issue.Path+")")
 				}
 				row.Proofs = append(row.Proofs, sourceFoundationAssertionResult{ID: id, AtlasID: proof.record.AtlasID,
-					Contract: proof.record.Contract, Assertion: proof.record.Assertion.Statement, Status: proof.status,
+					Contract: proof.record.Contract, Assertion: proof.record.Assertion.Statement, Status: proof.status, mechanism: proof.mechanism,
 					Limitations: append([]string{}, proof.record.Limitations...),
 				})
 			}
@@ -130,7 +145,37 @@ func buildSourceFoundationRequirementsBatch(ctx context.Context, observed source
 			if err != nil {
 				return nil, fmt.Errorf("foundation requirement %s: %w", requirement.ID, err)
 			}
+			if row.Status == "existing_shared_capability" || row.Status == "connector_local_configuration" {
+				row.MechanismFits, err = sourceFoundationMechanismFits(requirement, cell, sourceRows[cell.Key], row.Proofs, observed)
+				if err != nil {
+					return nil, fmt.Errorf("foundation requirement %s: %w", requirement.ID, err)
+				}
+			}
 			result = append(result, row)
+		}
+	}
+	// A canonical-intended shared fit retains the separately validated local
+	// command deficit in the same source cell; it cannot erase that local work.
+	for _, row := range result {
+		if row.Status != "existing_shared_capability" {
+			continue
+		}
+		for _, fit := range row.MechanismFits {
+			if fit.DeclarationState != "canonical_intended" {
+				continue
+			}
+			companion := false
+			for _, local := range result {
+				if local.Identity != row.Identity || local.Status != "connector_local_configuration" {
+					continue
+				}
+				for _, localFit := range local.MechanismFits {
+					companion = companion || localFit.DeclarationState == "canonical_intended" && localFit.Binding.Kind == "command" && localFit.Binding.CanonicalID == fit.Binding.CanonicalID && localFit.Binding.Generation == fit.Binding.Generation && sourceFoundationAdmissionFit(observed.universe.admission, local.Identity, localFit.Binding)
+				}
+			}
+			if !companion {
+				return nil, fmt.Errorf("canonical intended shared fit lacks its validated local CLI deficit")
+			}
 		}
 	}
 	sort.Slice(result, func(i, j int) bool {
@@ -193,20 +238,11 @@ func resolveSourceFoundationRequirement(requirement sourceFoundationRequirement,
 				return "", fmt.Errorf("reviewed assertion does not cover the stated requirement")
 			}
 		}
-		available := lane.References
+		available := append(append([]sourceLaneTargetRef{}, lane.References...), lane.IntendedBindings...)
 		if requirement.Assessment == "connector_local_configuration" {
 			available = lane.IntendedBindings
 		}
 		for i, binding := range requirement.FitBindings {
-			for _, proof := range proofs {
-				entry, exists := observed.atlas.entries[proof.AtlasID]
-				if !exists || len(entry.Selection.Selectors) == 0 ||
-					!slices.ContainsFunc(entry.Selection.DefinitionFiles, func(pattern string) bool {
-						return strings.ReplaceAll(pattern, "<connector>", binding.Connector) == binding.Artifact
-					}) {
-					return "", fmt.Errorf("configuration fit is outside the Atlas declaration selection")
-				}
-			}
 			matches := func(candidate sourceLaneTargetRef) bool { return sourceLaneTargetRefEqual(binding, candidate) }
 			if !slices.ContainsFunc(available, matches) || slices.ContainsFunc(requirement.FitBindings[:i], matches) {
 				return "", fmt.Errorf("configuration fit is not an exact independently reconciled binding")

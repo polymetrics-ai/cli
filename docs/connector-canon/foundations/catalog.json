@@ -1691,6 +1691,18 @@
           {
             "file": "internal/connectors/engine/write_prepare.go",
             "name": "prepareCanonicalMultipartSpec"
+          },
+          {
+            "file": "internal/connectors/engine/direct_write.go",
+            "name": "OperationDirectWrite"
+          },
+          {
+            "file": "internal/connectors/engine/direct_write.go",
+            "name": "prepareOperationDirectWrite"
+          },
+          {
+            "file": "internal/connectors/engine/direct_write.go",
+            "name": "bindOperationDirectWriteHTTPMutations"
           }
         ]
       },
@@ -1759,7 +1771,7 @@
       },
       "constraints": [
         "A direct command must remain bounded and must not own a warehouse checkpoint or saved sync lifecycle.",
-        "Structured JSON command flags are available only for action-backed direct writes, never as a generic operation body or HTTP escape hatch.",
+        "Structured JSON command flags support bounded named fields of declared, preflighted fixed REST operations and action-backed direct writes; raw or generic bodies and arbitrary HTTP remain prohibited.",
         "Declared batches cannot accept caller-authored methods, paths, raw bodies, query-bearing subrequests, nested batches, or undeclared actions.",
         "Request fields, media types, response policies, and retry behavior must be declared and source-backed.",
         "Provider-unrestricted upload media requires an explicit declaration and remains path-confined, byte-bounded, digest-bound, previewed, and approval-gated.",
@@ -1890,6 +1902,26 @@
           "package": "./internal/connectors/bundleregistry",
           "file": "internal/connectors/bundleregistry/executor_authority_test.go",
           "name": "TestProductionCannyGenericCheckAndRead"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/structured_rest_body_test.go",
+          "name": "TestOperationDirectWriteStructuredRESTBodyIsExactAndPreviewBound"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/structured_rest_body_test.go",
+          "name": "TestOperationDirectWriteBindsStaticHTTPMutationsBeforeApproval"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/structured_rest_body_test.go",
+          "name": "TestValidateOperationDirectWriteCLIFlagsUsesCanonicalStructuredSchema"
+        },
+        {
+          "package": "./internal/connectors/commandrunner",
+          "file": "internal/connectors/commandrunner/runner_test.go",
+          "name": "TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody"
         }
       ],
       "known_gap_refs": [

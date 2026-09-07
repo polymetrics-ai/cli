@@ -79,6 +79,33 @@ owners. Missing files or absent exact source/selector joins stay
 `example_unresolved`; they do not fabricate provider identities or foundation gaps.
 Adopter relations derive from actual admitted requirement/proof/binding tuples.
 
+A current proof must fit the exact mechanism selected by its source-owned review,
+not merely share an Atlas owner file. `mechanism_fits` and adopter relations name
+the proof, exact binding, source citations, and pinned declaration selectors.
+Structured REST body and static API-key header fits remain separate assertions.
+
+`source_admission` preserves the actual source report's validation and complete
+diagnostics. Normally its kind is `current_valid`. A narrowly verified whole
+missing canonical CLI file may produce `canonical_intended_missing_cli` while
+its current execution report remains invalid. The authoring reader verifies the
+partial and complete generations, every supporting artifact, the full lost
+command surface, exact source-reference diagnostics, and independently required
+local work. Deriving this witness adds one observed replay of the actual source
+producer and bounded file reads; ordinary materialized reports keep their existing
+path. The reader checks file identities, required absence, and the execution
+namespace before returning a register. A source report containing only intended
+command references can remain valid while the CLI file is absent. Requesting a
+canonical-intended fit still requires the same witness and completed local
+accounting during assessment. Arbitrary invalid source reports remain refused.
+
+Such fits say `canonical_intended`, and `intended_cli` pins staged bytes rather
+than pretending the file exists. Shared reuse still requires the distinct,
+verified local-configuration companion; a merely unresolved local row accounts
+for work but authorizes no reuse or adopter. The original `source-lanes` report
+and check retain their actual validation and exit status, including exit 1 for
+invalid reports. A successful `source-demands` check validates the authoring
+report, not executable connector completeness.
+
 These authoring records never change lane applicability, accepted execution
 targets, lane proof refs or runtime availability. Receiver scope remains with
 `cli-batch1-vercel-inbound-sync-decision-r1`; exposure is a separate conditional

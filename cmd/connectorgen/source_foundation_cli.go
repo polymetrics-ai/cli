@@ -140,6 +140,10 @@ func runSourceDemandsObserved(ctx context.Context, args []string, stdout, stderr
 		logln(stderr, "source-demands:", err)
 		return 1
 	}
+	if err := revalidateSourceFoundationAdmission(&cache, inputs.assessments.universe.admission); err != nil {
+		logln(stderr, "source-demands:", err)
+		return 1
+	}
 	missingExamples := map[string]bool{}
 	for _, entry := range inputs.assessments.atlas.entries {
 		for _, example := range entry.ConsumerExamples {
@@ -202,13 +206,17 @@ func runSourceDemandsObserved(ctx context.Context, args []string, stdout, stderr
 	// Spend the shared physical-read allowance on final content/identity
 	// verification before either successful check return or the single write.
 	cache.finalize()
+	if err := revalidateSourceFoundationAdmission(&cache, inputs.assessments.universe.admission); err != nil {
+		logln(stderr, "source-demands:", err)
+		return 1
+	}
 	if ctx.Err() != nil {
 		logln(stderr, "source-demands: canceled")
 		return 1
 	}
 	for _, name := range cache.order {
 		file := cache.files[name]
-		if (missingExamples[name] || missingProofs[name]) && file.code == "missing" {
+		if (missingExamples[name] || missingProofs[name] || sourceFoundationRequiredAbsent(inputs.assessments.universe.admission, name)) && file.code == "missing" {
 			if _, code := sourceProofFileInfo(root, name); code == "missing" {
 				continue
 			}
@@ -239,7 +247,7 @@ func loadSourceFoundationCommandInputs(ctx context.Context, o sourceFoundationCo
 	if annotationFile.code != "" || decodeSourceJSON(annotationRaw, &annotations) != nil || decodeStrictJSON(annotationRaw, &annotations) != nil || annotations.SchemaVersion != 1 || annotations.Annotations == nil {
 		return result, fmt.Errorf("source annotation document invalid")
 	}
-	universe, err := buildSourceFoundationUniverse(ctx, o.repo, cohort, annotations.Annotations)
+	universe, err := buildSourceFoundationUniverseWithCache(ctx, o.repo, cohort, annotations.Annotations, cache)
 	if err != nil {
 		return result, err
 	}
@@ -298,7 +306,7 @@ func loadSourceFoundationCommandInputs(ctx context.Context, o sourceFoundationCo
 	if err := observeSourceFoundationCommandPin(cache, baseline, 4<<20); err != nil {
 		return result, err
 	}
-	result, err = observeSourceFoundationDemandInputs(ctx, o.repo, o.assessments, universe, baseline)
+	result, err = observeSourceFoundationDemandInputsWithCache(ctx, o.repo, o.assessments, universe, baseline, cache)
 	if err != nil {
 		return result, err
 	}

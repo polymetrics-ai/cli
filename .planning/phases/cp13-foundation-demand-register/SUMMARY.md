@@ -75,12 +75,16 @@ coverage:
         ref: "cmd/connectorgen: TestSourceFoundationRegisterCurrentKnownRelation; exact receipts in VERIFICATION.md and TDD-LEDGER.md"
         status: pass
 ---
-# CP13 local implementation summary
+# CP13 corrected local implementation summary
 
-Retained provider evidence now feeds a separate authoring foundation assessment/proof consumer and deterministic source-demands register. The single Atlas remains authoritative; runtime and lane-proof authority are unchanged. The current artifact explicitly retains25 unresolved requirements, one existing Vercel gap, the complete source/lane complement and unresolved example joins.
+The final150/154 correction wave is implemented and locally verified. The authoring demand consumer now binds body/auth reuse to exact mechanisms and source/canonical selectors, derives the narrowly permitted whole-CLI-missing admission from real source/engine observations, requires complete local command accounting, and revalidates input identity/absence/namespace before output. Optional absent/stale proofs preserve unresolved demand. Planned proof file roles are order independent; decision decoder/schema preserve required empty pending conditions while refusing malformed/null/omitted values.
 
-All nine original obligations and25 matrix families are mapped in VERIFICATION.md. Normal263 events and Firstmate147’s complete successful disjoint race263 union are recorded with original source pins. A later separate shared/local same-cell control passes normal/race1/1. Full A/B, closed schema, independent census and real default/explicit saved-file preservation pass. Original failed20m race and every earlier setup/RED/failed-GREEN receipt remain failed/historical with their exact scope.
+The original148 report accepted CP11/CP12 and left five CP13 findings. Their corrections and all original CP13-01..09 obligations remain subject to a fresh independent judgment. No acceptance, runtime capability or provider certification is inferred from local tests.
 
-This coverage block classifies only the automated authoring deliverables. It does not approve existing receiver/exposure decisions, certify providers, accept CP11/CP12/CP13, or authorize integration before combined closure. The original carried corrections and complete138 reviews remain required inputs to Firstmate’s freshly bound independent review.
+Normal and race each cover the same478 unique identities across87parents, including all original263 and later147. Failed normal/interrupted race commands retain their original status; bounded unchanged-parent reuse and complete reruns of affected parents are documented in VERIFICATION.md. Separate CP12 shared consumers pass101normal/101race. Corpus schema79cases, source/demand A/B, saved check, vet/lint/build/docs/agent-contract checks pass. Exact input pins, failures and test identities are in the final candidate packet.
 
-The source snapshot and committed candidate binding are supplied in the owner’s combined handoff; post-test planning documentation does not create new behavioral execution evidence. Required skills, inline GSD fallback, help/docs parity and historical-reuse limitations are recorded in PLAN.md, TDD-LEDGER.md and VERIFICATION.md.
+The current register retains U30401/A26/complement30375/K26,25unresolved requirements and one existing Vercel gap,35Atlas examples and0adopters. Four narrow proof observations do not promote any source lane:0implemented. Current generated hashes and the unchanged independent baseline are recorded in VERIFICATION.md. Missing example joins, receiver decisions and separate exposure conditions remain explicit.
+
+The original nine-item and25-family contract-to-evidence tables remain authoritative in PLAN.md and VERIFICATION.md. The final appendix supersedes historical144/147 candidate hashes and test counts, without rewriting their evidence. The sole-owner inline GSD fallback and required skills remain recorded in PLAN.md. Authoring help/schema/docs parity is covered; no PM runtime/App/manual/website consumer changed.
+
+Next: freeze the coherent committed correction and submit it to Firstmate for the final bound independent Astra/xhigh review. Firstmate156 governs carrying0–4 final corrections across the next checkpoint; it does not waive any correction or permit self-acceptance.

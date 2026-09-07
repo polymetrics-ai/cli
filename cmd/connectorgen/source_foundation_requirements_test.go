@@ -147,47 +147,36 @@ func TestSourceFoundationRequirementExactBindingFit(t *testing.T) {
 			name = "local missing artifact"
 		}
 		t.Run(name, func(t *testing.T) {
-			repo, universe, document, proofs := sourceFoundationRequirementsFixture(t)
-			observed, err := observeSourceFoundationAssessments(t.Context(), repo, sourceFoundationAssessmentsPath, universe)
+			repo, _, inputs, _ := sourceFoundationCombinedFixture153(t, local)
+			got, err := buildSourceFoundationRequirements(t.Context(), repo, inputs.assessments)
 			if err != nil {
 				t.Fatal(err)
 			}
-			// Exercise the existing canonical producer, engine bundle loader,
-			// source normalization and exact binding consumer. No hand-authored
-			// accepted target is substituted into the classifier's result.
-			key, facts, annotation := sourceBindingREST118A(t, "[]", "{}")
-			wantReferences := 1
+			id := "shared-structured-body"
+			status := "existing_shared_capability"
+			state := "materialized"
 			if local {
-				delete(facts.bindings.Artifacts, annotation.IntendedBindings[0].Artifact)
-				wantReferences = 0
+				id = "local-command-artifact"
+				status = "connector_local_configuration"
+				state = "canonical_intended"
 			}
-			cell := sourceBindingOutcome099F(t, key, facts, annotation, wantReferences)
-			assessment := document.Assessments[0]
-			assessment.Key, assessment.Lane = key, cell.Lane
-			requirement := &assessment.Requirements[0]
-			requirement.Statement = proofs.Records[1].Assertion.Statement
-			requirement.ProofIDs = []string{proofs.Records[1].ID}
-			requirement.AtlasLookup.Candidates[0].AtlasID = proofs.Records[1].AtlasID
-			requirement.AtlasLookup.Candidates[0].Contract = proofs.Records[1].Contract
-			requirement.Assessment = "existing_shared_capability"
-			if local {
-				requirement.Assessment = "connector_local_configuration"
+			found := false
+			for _, r := range got {
+				if r.ID == id {
+					found = true
+					if r.Status != status || len(r.Proofs) != 1 || r.Proofs[0].ID != "runtime.direct-execution.v1.structured-rest-body" || len(r.Proofs[0].Limitations) == 0 || len(r.MechanismFits) != 1 || r.MechanismFits[0].DeclarationState != state || r.MechanismFits[0].Mechanism != "rest_write_structured_json_body" {
+						t.Fatal("exact reviewed body assertion/binding not retained")
+					}
+					if local && (r.MechanismFits[0].Binding.Kind != "command" || r.AffectedArtifacts[0] != "internal/connectors/defs/acme/cli_surface.json") {
+						t.Fatal("local exact missing command lost")
+					}
+					if r.SourceState != "mapped_unproven" {
+						t.Fatal("authoring fit promoted source execution")
+					}
+				}
 			}
-			requirement.SourceRefs = []sourceFactRef{facts.Refs["responses"]}
-			requirement.FitBindings = annotation.IntendedBindings
-			requirement.AffectedArtifacts = []string{annotation.IntendedBindings[0].Artifact}
-			universe.manifest.SourceOperations = []sourceLaneManifestRow{{Source: retainedSourceOperation{Key: key}, Facts: facts, Lanes: []sourceLaneCell{cell}}}
-			observed.universe = universe
-			observed.authored = []sourceFoundationCellAssessment{assessment}
-			got, err := buildSourceFoundationRequirements(t.Context(), repo, observed)
-			if err != nil || len(got) != 1 || got[0].Status != requirement.Assessment || len(got[0].Proofs) != 1 ||
-				got[0].Proofs[0].Assertion != requirement.Statement || len(got[0].Proofs[0].Limitations) == 0 {
-				t.Fatalf("exact narrow assertion/binding result: %v", err)
-			}
-			// The result retains only the quoted conditional check-status assertion.
-			// It does not certify this read operation or promote its source lane.
-			if cell.State != "mapped_unproven" || len(cell.ProofRefs) != 0 {
-				t.Fatal("requirement result changed lane proof authority")
+			if !found {
+				t.Fatal("independent exact requirement absent")
 			}
 		})
 	}

@@ -110,7 +110,7 @@ func observePreparedSourceFoundationProofs(cache *sourceProofFileCache, atlas so
 	batch := sourceFoundationProofBatch{document: observed, records: []sourceFoundationProofObservation{}, pins: []sourceArtifactPin{}}
 	reviews := map[string]sourceFoundationProofReview{}
 	for _, review := range catalog.Reviews {
-		if _, exists := reviews[review.ID]; exists || !validSourceID(review.ID) || !sourceProofDigest(review.RecordSHA256) || !sourceProofDigest(review.InputClosureSHA256) || !sourceProofDigest(review.AssertionSHA256) {
+		if _, exists := reviews[review.ID]; exists || !validSourceID(review.ID) || !sourceProofDigest(review.RecordSHA256) || !sourceProofDigest(review.InputClosureSHA256) || !sourceProofDigest(review.AssertionSHA256) || !sourceFoundationKnownMechanism(review.FitMechanism) {
 			return batch, fmt.Errorf("foundation review catalogue invalid")
 		}
 		reviews[review.ID] = review
@@ -165,9 +165,12 @@ func observePreparedSourceFoundationProofs(cache *sourceProofFileCache, atlas so
 		if err := executions.validate(record); err != nil {
 			return batch, err
 		}
-		status := "unreviewed"
+		status, mechanism := "unreviewed", ""
 		if review, exists := reviews[record.ID]; exists && sourceFoundationReviewMatches(record, review) {
-			status = "current"
+			if !sourceFoundationMechanismRecord(record, review.FitMechanism) {
+				return batch, fmt.Errorf("reviewed assertion mechanism subject mismatch")
+			}
+			status, mechanism = "current", review.FitMechanism
 		}
 		if len(issues) > 0 {
 			status = "proof_stale"
@@ -177,7 +180,7 @@ func observePreparedSourceFoundationProofs(cache *sourceProofFileCache, atlas so
 				status = "proof_unavailable"
 			}
 		}
-		batch.records = append(batch.records, sourceFoundationProofObservation{record: record, atlas: entry, status: status, issues: issues})
+		batch.records = append(batch.records, sourceFoundationProofObservation{record: record, atlas: entry, status: status, issues: issues, mechanism: mechanism})
 	}
 	for _, name := range names {
 		file := cache.files[name]

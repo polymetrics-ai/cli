@@ -14,6 +14,11 @@ import (
 
 func sourceFoundationProofObservationFixture(t *testing.T) (string, sourceFoundationProofDocument) {
 	t.Helper()
+	return sourceFoundationProofFixture153(t, false)
+}
+
+func sourceFoundationProofFixture153(t *testing.T, complete bool) (string, sourceFoundationProofDocument) {
+	t.Helper()
 	repo, _ := sourceFoundationUniverseFixture(t)
 	project, err := repoRoot()
 	if err != nil {
@@ -26,6 +31,15 @@ func sourceFoundationProofObservationFixture(t *testing.T) (string, sourceFounda
 	var document sourceFoundationProofDocument
 	if err := json.Unmarshal(raw, &document); err != nil {
 		t.Fatal(err)
+	}
+	if !complete {
+		retained := []sourceFoundationProofRecord{}
+		for _, record := range document.Records {
+			if record.ID == "transport.sync-contract.v1.mode-vocabulary" || record.ID == "runtime.direct-execution.v1.reject-undeclared-check-status" {
+				retained = append(retained, record)
+			}
+		}
+		document.Records = retained
 	}
 	// Later declaration tests reach real confined source files. These copies
 	// come from the unchanged recorded test/owner inputs, not fabricated ASTs.
@@ -339,12 +353,12 @@ func TestSourceFoundationProofReviewedAssertions(t *testing.T) {
 }
 
 func TestSourceFoundationProofRecordCapacity(t *testing.T) {
-	repo, document := sourceFoundationProofObservationFixture(t)
+	repo, document := sourceFoundationProofFixture153(t, true)
 	writeSourceFoundationObservationFixture(t, repo, document)
-	if control, err := readSourceFoundationProofObservations(t.Context(), repo); err != nil || len(control) != 2 {
-		t.Fatalf("two reviewed record control unavailable: %v", err)
+	if control, err := readSourceFoundationProofObservations(t.Context(), repo); err != nil || len(control) != 4 || len(reviewedSourceFoundationProofs().Reviews) != 4 {
+		t.Fatalf("four reviewed record control unavailable: %v", err)
 	}
-	// The third value is deliberately malformed. Capacity must be refused
+	// The fifth value is deliberately malformed. Capacity must be refused
 	// before decoding/allocating that out-of-policy record, not afterward.
 	raw, err := json.Marshal(document)
 	if err != nil {
@@ -425,7 +439,7 @@ func TestSourceFoundationProofRequiredWireMembers(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if _, err := decodeSourceFoundationProofDocument(t.Context(), original, 2); err != nil {
+	if _, err := decodeSourceFoundationProofDocument(t.Context(), original, 4); err != nil {
 		t.Fatal(err)
 	}
 	for _, path := range []string{"atlas/bytes", "records/0/capture/bytes", "records/0/output/bytes", "records/0/inputs/0/bytes", "records/0/test/selected", "records/0/assertion/start_line", "records/0/owner_symbols/0/name"} {
@@ -461,7 +475,7 @@ func TestSourceFoundationProofRequiredWireMembers(t *testing.T) {
 				if err != nil {
 					t.Fatal(err)
 				}
-				if _, err := decodeSourceFoundationProofDocument(t.Context(), raw, 2); err == nil {
+				if _, err := decodeSourceFoundationProofDocument(t.Context(), raw, 4); err == nil {
 					t.Fatal("required wire member lost through zero-value normalization")
 				}
 			})

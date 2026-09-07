@@ -11,22 +11,23 @@ import (
 // The register is an authoring observation. None of its types can be supplied
 // to the lane reducer as accepted execution or proof authority.
 type sourceFoundationRegister struct {
-	ProofDocument sourceFoundationProofDocumentObservation `json:"foundation_proof_document"`
-	SchemaVersion int                                      `json:"schema_version"`
-	Kind          string                                   `json:"kind"`
-	Atlas         sourceArtifactPin                        `json:"atlas"`
-	Assessments   sourceArtifactPin                        `json:"assessments"`
-	Baseline      sourceArtifactPin                        `json:"baseline"`
-	SourceSHA256  string                                   `json:"source_manifest_content_sha256"`
-	Coverage      sourceFoundationCoverage                 `json:"coverage"`
-	Known         []sourceFoundationKnownState             `json:"known_obligations"`
-	Requirements  []sourceFoundationRequirementResult      `json:"requirements"`
-	Facets        []sourceFoundationFacet                  `json:"source_fit"`
-	Examples      []sourceFoundationExample                `json:"atlas_examples"`
-	Adopters      []sourceFoundationAdoption               `json:"adopter_relations"`
-	Inputs        []sourceArtifactPin                      `json:"inputs"`
-	Proofs        []sourceFoundationObservedProof          `json:"foundation_proof_observations"`
-	Checks        sourceFoundationRegisterChecks           `json:"checks"`
+	SourceAdmission sourceFoundationAdmission                `json:"source_admission"`
+	ProofDocument   sourceFoundationProofDocumentObservation `json:"foundation_proof_document"`
+	SchemaVersion   int                                      `json:"schema_version"`
+	Kind            string                                   `json:"kind"`
+	Atlas           sourceArtifactPin                        `json:"atlas"`
+	Assessments     sourceArtifactPin                        `json:"assessments"`
+	Baseline        sourceArtifactPin                        `json:"baseline"`
+	SourceSHA256    string                                   `json:"source_manifest_content_sha256"`
+	Coverage        sourceFoundationCoverage                 `json:"coverage"`
+	Known           []sourceFoundationKnownState             `json:"known_obligations"`
+	Requirements    []sourceFoundationRequirementResult      `json:"requirements"`
+	Facets          []sourceFoundationFacet                  `json:"source_fit"`
+	Examples        []sourceFoundationExample                `json:"atlas_examples"`
+	Adopters        []sourceFoundationAdoption               `json:"adopter_relations"`
+	Inputs          []sourceArtifactPin                      `json:"inputs"`
+	Proofs          []sourceFoundationObservedProof          `json:"foundation_proof_observations"`
+	Checks          sourceFoundationRegisterChecks           `json:"checks"`
 }
 
 type sourceFoundationObservedProof struct {
@@ -56,15 +57,45 @@ type sourceFoundationKnownState struct {
 }
 
 type sourceFoundationAdoption struct {
-	AtlasID      string                      `json:"atlas_id"`
-	Contract     sourceFoundationContractRef `json:"contract"`
-	Identity     sourceFoundationCell        `json:"identity"`
-	Requirement  string                      `json:"requirement_id"`
-	Binding      sourceLaneTargetRef         `json:"binding"`
-	Relationship string                      `json:"relationship"`
+	ProofID          string                      `json:"proof_id"`
+	Mechanism        string                      `json:"mechanism"`
+	DeclarationState string                      `json:"declaration_state"`
+	Selectors        []sourceFoundationSelector  `json:"selectors"`
+	SourceRefs       []sourceFactRef             `json:"source_refs"`
+	AtlasID          string                      `json:"atlas_id"`
+	Contract         sourceFoundationContractRef `json:"contract"`
+	Identity         sourceFoundationCell        `json:"identity"`
+	Requirement      string                      `json:"requirement_id"`
+	Binding          sourceLaneTargetRef         `json:"binding"`
+	Relationship     string                      `json:"relationship"`
 }
 
-func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sourceFoundationDemandInputs) (sourceFoundationRegister, error) {
+func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sourceFoundationDemandInputs) (result sourceFoundationRegister, err error) {
+	build := func() error {
+		var buildErr error
+		result, buildErr = buildSourceFoundationRegisterCurrent(ctx, repo, inputs)
+		return buildErr
+	}
+	if inputs.admissionCache != nil {
+		// The command owns final content/identity/namespace validation before its
+		// one output write. Nested reconstruction shares that bounded observation.
+		err = revalidateSourceFoundationAdmission(inputs.admissionCache, inputs.assessments.universe.admission)
+		if err == nil {
+			err = build()
+		}
+		if err == nil {
+			err = revalidateSourceFoundationAdmission(inputs.admissionCache, inputs.assessments.universe.admission)
+		}
+	} else {
+		err = sourceFoundationAdmissionWithRoot(ctx, repo, inputs.assessments.universe.admission, build)
+	}
+	if err != nil {
+		return sourceFoundationRegister{}, err
+	}
+	return result, nil
+}
+
+func buildSourceFoundationRegisterCurrent(ctx context.Context, repo string, inputs sourceFoundationDemandInputs) (sourceFoundationRegister, error) {
 	var result sourceFoundationRegister
 	observed := inputs.assessments
 	if err := validateSourceFoundationObligations(ctx, inputs.baseline, observed); err != nil {
@@ -103,6 +134,10 @@ func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sour
 		SourceSHA256: sourceBytesHash(source), Coverage: coverage, Requirements: requirements, Facets: facets, Examples: examples,
 		Known: []sourceFoundationKnownState{}, Adopters: []sourceFoundationAdoption{},
 		Inputs: append([]sourceArtifactPin{}, inputs.commandPins...), Proofs: []sourceFoundationObservedProof{}}
+	result.SourceAdmission = sourceFoundationCurrentAdmission(observed.universe.manifest)
+	if observed.universe.admission != nil {
+		result.SourceAdmission = observed.universe.admission.observation
+	}
 	for _, pin := range batch.pins {
 		found := false
 		for _, prior := range result.Inputs {
@@ -193,18 +228,15 @@ func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sour
 		if requirement.Status != "existing_shared_capability" && requirement.Status != "connector_local_configuration" {
 			continue
 		}
-		for _, proof := range requirement.Proofs {
-			for _, binding := range requirement.FitBindings {
-				row := sourceFoundationAdoption{AtlasID: proof.AtlasID, Contract: proof.Contract, Identity: requirement.Identity,
-					Requirement: requirement.ID, Binding: binding, Relationship: requirement.Status}
-				encoded, err := json.Marshal(row)
-				if err != nil {
-					return sourceFoundationRegister{}, err
-				}
-				if !seen[string(encoded)] {
-					seen[string(encoded)] = true
-					result.Adopters = append(result.Adopters, row)
-				}
+		for _, fit := range requirement.MechanismFits {
+			row := sourceFoundationAdoption{ProofID: fit.ProofID, Mechanism: fit.Mechanism, DeclarationState: fit.DeclarationState, Selectors: append([]sourceFoundationSelector{}, fit.Selectors...), SourceRefs: append([]sourceFactRef{}, fit.SourceRefs...), AtlasID: fit.AtlasID, Contract: fit.Contract, Identity: requirement.Identity, Requirement: requirement.ID, Binding: fit.Binding, Relationship: requirement.Status}
+			encoded, err := json.Marshal(row)
+			if err != nil {
+				return sourceFoundationRegister{}, err
+			}
+			if !seen[string(encoded)] {
+				seen[string(encoded)] = true
+				result.Adopters = append(result.Adopters, row)
 			}
 		}
 	}
@@ -227,7 +259,7 @@ func sourceFoundationRegisterCompletion(register sourceFoundationRegister, atlas
 		}
 		if requirement.Status == "existing_shared_capability" || requirement.Status == "connector_local_configuration" {
 			result.SelectedReuseRequirements++
-			if len(requirement.Proofs) == 0 || len(requirement.FitBindings) == 0 {
+			if len(requirement.Proofs) == 0 || len(requirement.FitBindings) == 0 || len(requirement.MechanismFits) != len(requirement.Proofs)*len(requirement.FitBindings) {
 				result.SelectedReuseProofComplete = false
 			}
 			for _, proof := range requirement.Proofs {

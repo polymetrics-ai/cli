@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"os"
 	"slices"
@@ -89,6 +90,10 @@ type sourceFoundationAssessmentObservations struct {
 }
 
 func observeSourceFoundationAssessments(ctx context.Context, repo, name string, universe sourceFoundationUniverse) (sourceFoundationAssessmentObservations, error) {
+	return observeSourceFoundationAssessmentsWithCache(ctx, repo, name, universe, nil)
+}
+
+func observeSourceFoundationAssessmentsWithCache(ctx context.Context, repo, name string, universe sourceFoundationUniverse, shared *sourceProofFileCache) (sourceFoundationAssessmentObservations, error) {
 	var result sourceFoundationAssessmentObservations
 	if err := ctx.Err(); err != nil {
 		return result, err
@@ -118,12 +123,26 @@ func observeSourceFoundationAssessments(ctx context.Context, repo, name string, 
 	if err := validateSourceFoundationAssessmentObservations(ctx, document.Assessments, universe, atlas); err != nil {
 		return result, err
 	}
+	witnessCache := &cache
+	if shared != nil {
+		witnessCache = shared
+	}
+	universe, err = sourceFoundationAdmissionAssessments(ctx, repo, universe, document.Assessments, witnessCache)
+	if err != nil {
+		return result, err
+	}
+	if err := revalidateSourceFoundationAdmission(witnessCache, universe.admission); err != nil {
+		return result, err
+	}
 	cache.finalize()
+	if err := revalidateSourceFoundationAdmission(witnessCache, universe.admission); err != nil {
+		return result, err
+	}
 	if err := ctx.Err(); err != nil {
 		return result, err
 	}
 	for _, path := range cache.order {
-		if cache.files[path].code != "" {
+		if cache.files[path].code != "" && (cache.files[path].code != "missing" || !sourceFoundationRequiredAbsent(universe.admission, path)) {
 			return result, fmt.Errorf("foundation assessment input changed")
 		}
 	}
@@ -248,6 +267,24 @@ func sourceFoundationRequirementCitation(facts sourceFacts, document retainedSou
 	if exists && ref.Section == "" && operation.Section == "" && operation.DocumentID == ref.DocumentID &&
 		(ref.Pointer == operation.Pointer || strings.HasPrefix(ref.Pointer, operation.Pointer+"/")) {
 		owned = true
+	}
+	// A referenced global scheme is the exact direct child of the normalized
+	// group. Its name must be selected by this operation's own security facts;
+	// arbitrary global siblings and nested properties are not operation evidence.
+	if group, exists := facts.Refs["security_schemes"]; exists &&
+		ref.DocumentID == group.DocumentID && ref.Section == group.Section {
+		var alternatives []map[string]json.RawMessage
+		var schemes map[string]json.RawMessage
+		if json.Unmarshal(facts.Groups["security"], &alternatives) == nil &&
+			json.Unmarshal(facts.Groups["security_schemes"], &schemes) == nil {
+			for _, alternative := range alternatives {
+				for name := range alternative {
+					if _, present := schemes[name]; present && ref.Pointer == group.Pointer+"/"+escapeSourcePointer(name) {
+						owned = true
+					}
+				}
+			}
+		}
 	}
 	if !owned || !sourceProofDigest(ref.ValueSHA256) {
 		return false
