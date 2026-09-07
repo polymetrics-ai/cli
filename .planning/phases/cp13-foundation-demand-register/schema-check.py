@@ -60,6 +60,28 @@ for field in ("fit_bindings", "provider_clause", "source_exclusion"):
     candidate["assessments"][0]["requirements"][0][field] = None
     cases.append((f"optional {field} null matches Go pointer/slice", candidate, True))
 
+# The pending receiver's required condition has a legitimate empty value.
+# Exercise the real complete document rather than validating a copied grammar.
+for mutation in ("explicit_empty", "absent", "null", "unknown_field"):
+    candidate = copy.deepcopy(document)
+    decisions = [
+        decision
+        for assessment in candidate["assessments"]
+        for requirement in assessment["requirements"]
+        for decision in requirement["decision_refs"]
+        if decision["id"] == "cli-batch1-vercel-inbound-sync-decision-r1"
+    ]
+    assert decisions, "actual pending receiver decision control missing"
+    for decision in decisions:
+        assert decision["state"] == "pending" and decision["condition"] == ""
+        if mutation == "absent":
+            del decision["condition"]
+        elif mutation == "null":
+            decision["condition"] = None
+        elif mutation == "unknown_field":
+            decision["approved"] = True
+    cases.append((f"pending decision condition {mutation}", candidate, mutation == "explicit_empty"))
+
 failed = 0
 for name, candidate, expected in cases:
     actual = validator.is_valid(candidate)
