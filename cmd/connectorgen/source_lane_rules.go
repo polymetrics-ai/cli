@@ -545,7 +545,13 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 	_ = json.Unmarshal(node["format"], &format)
 	result := sourceShape{Known: typ != "" || len(node["properties"]) > 0}
 	unresolved := false
-	cardinalityConstrained := typ != "" || len(node["properties"]) > 0
+	local := sourceLocalShapeEvidence(node)
+	// Structural aggregation already evaluates same-node composition below.
+	// Establish the local base without allowing an unsupported type/member to
+	// disappear into an agreeing branch; selected item/path adapters stay stricter.
+	base := local
+	base.HasComposition = false
+	cardinalityConstrained := local.TypeState != sourceLocalTypeAbsent || local.PropertiesState != sourceLocalMemberAbsent || local.HasItems || local.PrefixState != sourceLocalPrefixAbsent
 	switch typ {
 	case "string", "number", "integer", "boolean", "null":
 		result.Cardinality = sourceNoncollection
@@ -556,17 +562,15 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 	}
 	if typ == "array" {
 		item, valid := sourceResolveObject(facts, node["items"], copySourceSeen(seen), depth+1)
-		var itemType string
-		if valid {
-			_ = json.Unmarshal(item["type"], &itemType)
-		}
-		if valid && len(item["allOf"]) == 0 && len(item["oneOf"]) == 0 && len(item["anyOf"]) == 0 {
-			if itemType == "object" || len(item["properties"]) > 0 {
+		if valid && base.arrayCoverage() == sourceLocalArrayUniform {
+			itemShape := sourceLocalShapeEvidence(item)
+			switch itemShape.object() {
+			case sourceLocalObjectEstablished:
 				result.Cardinality = sourceCollection
-			}
-			switch itemType {
-			case "string", "number", "integer", "boolean", "null":
-				result.Cardinality = sourceNoncollection
+			case sourceLocalKnownNonobject:
+				if itemShape.Type != "array" {
+					result.Cardinality = sourceNoncollection
+				}
 			}
 		}
 		shape := sourceSchemaShape(facts, node["items"], copySourceSeen(seen), depth+1)
@@ -574,7 +578,7 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 		unresolved = unresolved || !shape.Known
 	}
 	var props map[string]json.RawMessage
-	closedObject := (typ == "object" || len(node["properties"]) > 0) && string(node["additionalProperties"]) == "false"
+	closedObject := base.object() == sourceLocalObjectEstablished && string(node["additionalProperties"]) == "false"
 	fixedProperties := true
 	if len(node["properties"]) > 0 && (json.Unmarshal(node["properties"], &props) != nil || props == nil) {
 		fixedProperties = false
@@ -637,7 +641,7 @@ func sourceSchemaShape(facts sourceFacts, raw json.RawMessage, seen map[string]b
 	if cardinalityUnresolved {
 		result.Cardinality = sourceCollectionUnknown
 	}
-	result.Envelope = result.Cardinality == sourceCollectionUnknown && (typ == "object" || (typ == "" && len(node["properties"]) > 0))
+	result.Envelope = result.Cardinality == sourceCollectionUnknown && local.object() == sourceLocalObjectEstablished
 	if facts.analysis != nil {
 		facts.analysis.Shapes[cacheKey] = result
 	}

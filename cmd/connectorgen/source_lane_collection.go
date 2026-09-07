@@ -182,38 +182,139 @@ func sourceCollectionCitationAt(facts sourceFacts, document, pointer string) (so
 	return sourceFactRef{DocumentID: document, Pointer: pointer, ValueSHA256: sourceBytesHash(canonical)}, true
 }
 
-// Object keywords cannot override an explicit nonobject type. Compositions
-// and unsupported type encodings require reasoning outside this contract.
-func sourceCollectionObjectCode(node map[string]json.RawMessage) string {
-	const unknown = "source_collection_interpretation_unresolved"
-	const invalid = "source_collection_interpretation_invalid"
-	for _, name := range []string{"allOf", "oneOf", "anyOf"} {
-		if _, exists := node[name]; exists {
-			return unknown
-		}
-	}
-	if raw, exists := node["type"]; exists {
+// sourceLocalShape holds only decoded facts from one already-resolved node.
+// It owns no traversal, source read, cache or analysis budget. Consumers retain
+// their separate cardinality, diagnostic and checked-lineage obligations.
+type sourceLocalTypeState uint8
+
+const (
+	sourceLocalTypeAbsent sourceLocalTypeState = iota
+	sourceLocalTypeSupported
+	sourceLocalTypeUnsupported
+)
+
+type sourceLocalMemberState uint8
+
+const (
+	sourceLocalMemberAbsent sourceLocalMemberState = iota
+	sourceLocalMemberValid
+	sourceLocalMemberMalformed
+)
+
+type sourceLocalPrefixState uint8
+
+const (
+	sourceLocalPrefixAbsent sourceLocalPrefixState = iota
+	sourceLocalPrefixEmpty
+	sourceLocalPrefixNonempty
+	sourceLocalPrefixMalformed
+)
+
+type sourceLocalObjectState uint8
+
+const (
+	sourceLocalObjectUnverified sourceLocalObjectState = iota
+	sourceLocalObjectEstablished
+	sourceLocalKnownNonobject
+)
+
+type sourceLocalArrayCoverage uint8
+
+const (
+	sourceLocalArrayUnverified sourceLocalArrayCoverage = iota
+	sourceLocalArrayUniform
+	sourceLocalArrayPrefixOrTail
+)
+
+type sourceLocalShape struct {
+	Type            string
+	TypeState       sourceLocalTypeState
+	Properties      map[string]json.RawMessage
+	PropertiesState sourceLocalMemberState
+	Prefix          []json.RawMessage
+	PrefixState     sourceLocalPrefixState
+	HasItems        bool
+	HasComposition  bool
+}
+
+func sourceLocalShapeEvidence(node map[string]json.RawMessage) sourceLocalShape {
+	var shape sourceLocalShape
+	if raw, present := node["type"]; present {
+		shape.TypeState = sourceLocalTypeUnsupported
 		var typ string
-		if json.Unmarshal(raw, &typ) != nil {
-			return unknown
-		}
-		switch typ {
-		case "object":
-			return ""
-		case "array", "string", "number", "integer", "boolean", "null":
-			return invalid
-		default:
-			return unknown
+		if json.Unmarshal(raw, &typ) == nil {
+			switch typ {
+			case "object", "array", "string", "number", "integer", "boolean", "null":
+				shape.Type, shape.TypeState = typ, sourceLocalTypeSupported
+			}
 		}
 	}
-	var props map[string]json.RawMessage
-	if raw, exists := node["properties"]; exists {
-		if json.Unmarshal(raw, &props) != nil || props == nil {
-			return unknown
+	if raw, present := node["properties"]; present {
+		shape.PropertiesState = sourceLocalMemberMalformed
+		if json.Unmarshal(raw, &shape.Properties) == nil && shape.Properties != nil {
+			shape.PropertiesState = sourceLocalMemberValid
 		}
+	}
+	if raw, present := node["prefixItems"]; present {
+		shape.PrefixState = sourceLocalPrefixMalformed
+		if json.Unmarshal(raw, &shape.Prefix) == nil && shape.Prefix != nil {
+			shape.PrefixState = sourceLocalPrefixEmpty
+			if len(shape.Prefix) > 0 {
+				shape.PrefixState = sourceLocalPrefixNonempty
+			}
+		}
+	}
+	_, shape.HasItems = node["items"]
+	for _, name := range []string{"allOf", "oneOf", "anyOf"} {
+		if _, present := node[name]; present {
+			shape.HasComposition = true
+		}
+	}
+	return shape
+}
+
+func (s sourceLocalShape) object() sourceLocalObjectState {
+	if s.HasComposition || s.TypeState == sourceLocalTypeUnsupported || s.PropertiesState == sourceLocalMemberMalformed {
+		return sourceLocalObjectUnverified
+	}
+	if s.TypeState == sourceLocalTypeSupported {
+		if s.Type == "object" {
+			return sourceLocalObjectEstablished
+		}
+		return sourceLocalKnownNonobject
+	}
+	if s.HasItems || s.PrefixState != sourceLocalPrefixAbsent {
+		return sourceLocalObjectUnverified
+	}
+	if s.PropertiesState == sourceLocalMemberValid {
+		return sourceLocalObjectEstablished
+	}
+	return sourceLocalObjectUnverified
+}
+
+func (s sourceLocalShape) arrayCoverage() sourceLocalArrayCoverage {
+	if s.HasComposition || s.TypeState != sourceLocalTypeSupported || s.Type != "array" || s.PropertiesState == sourceLocalMemberMalformed {
+		return sourceLocalArrayUnverified
+	}
+	switch s.PrefixState {
+	case sourceLocalPrefixAbsent, sourceLocalPrefixEmpty:
+		return sourceLocalArrayUniform
+	case sourceLocalPrefixNonempty:
+		return sourceLocalArrayPrefixOrTail
+	default:
+		return sourceLocalArrayUnverified
+	}
+}
+
+func sourceCollectionObjectCode(node map[string]json.RawMessage) string {
+	switch sourceLocalShapeEvidence(node).object() {
+	case sourceLocalObjectEstablished:
 		return ""
+	case sourceLocalKnownNonobject:
+		return "source_collection_interpretation_invalid"
+	default:
+		return "source_collection_interpretation_unresolved"
 	}
-	return invalid
 }
 
 func validateSourceResponseInterpretation(facts sourceFacts, semantics string, scope sourceCollectionScope, a sourceResponseInterpretation) (sourceCollectionKind, []sourceFactRef, string) {
@@ -281,12 +382,17 @@ func validateSourceResponseInterpretation(facts sourceFacts, semantics string, s
 				return sourceCollectionUnknown, nil, unknown
 			}
 		}
-		var typ string
-		_ = json.Unmarshal(node["type"], &typ)
-		if typ != "array" {
-			return sourceCollectionUnknown, nil, invalid
+		shape := sourceLocalShapeEvidence(node)
+		if shape.HasComposition || shape.TypeState == sourceLocalTypeUnsupported || shape.PropertiesState == sourceLocalMemberMalformed {
+			return sourceCollectionUnknown, nil, unknown
 		}
-		if len(node["allOf"]) > 0 || len(node["oneOf"]) > 0 || len(node["anyOf"]) > 0 || len(node["prefixItems"]) > 0 {
+		if shape.Type != "array" {
+			if shape.object() == sourceLocalObjectEstablished || shape.object() == sourceLocalKnownNonobject {
+				return sourceCollectionUnknown, nil, invalid
+			}
+			return sourceCollectionUnknown, nil, unknown
+		}
+		if shape.arrayCoverage() != sourceLocalArrayUniform {
 			return sourceCollectionUnknown, nil, unknown
 		}
 		if ref, ok := sourceCollectionCitationAt(facts, scope.Ref.DocumentID, pointer); ok {

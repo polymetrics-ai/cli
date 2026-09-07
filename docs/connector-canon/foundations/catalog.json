@@ -261,6 +261,10 @@
             "name": "sourceCollectionObjectCode"
           },
           {
+            "file": "cmd/connectorgen/source_lane_collection.go",
+            "name": "sourceLocalShapeEvidence"
+          },
+          {
             "file": "cmd/connectorgen/source_lane_bindings.go",
             "name": "sourceLaneSchemaProjection"
           },
@@ -1088,6 +1092,41 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_projection132_test.go",
           "name": "TestSourceLane132CheckedStateBoundaries"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection137_test.go",
+          "name": "TestSourceLane137CollectionInvariant"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection137_test.go",
+          "name": "TestSourceLane137CollectionInterpretationAgreement"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection137_test.go",
+          "name": "TestSourceLane137CollectionAdmission"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection137_test.go",
+          "name": "TestSourceLane137CollectionOracleFalsification"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection137_test.go",
+          "name": "TestSourceLane137CollectionScopesAndSemantics"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection137_test.go",
+          "name": "TestSourceLane137LocalShapeEvidence"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_collection137_test.go",
+          "name": "TestSourceLane137CollectionSuccessMedia"
         }
       ],
       "publication_guarantee_proofs": [

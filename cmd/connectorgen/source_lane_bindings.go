@@ -1177,23 +1177,13 @@ func sourceLaneCheckedProjectionNode(node map[string]json.RawMessage) (sourceLan
 			state = sourceLaneLineageUnverified
 		}
 	}
-	if raw, exists := node["type"]; exists {
-		if json.Unmarshal(raw, &result.Type) != nil {
-			state = sourceLaneLineageUnverified
-		}
-		switch result.Type {
-		case "object", "array", "string", "number", "integer", "boolean", "null":
-		default:
-			state = sourceLaneLineageUnverified
-		}
+	local := sourceLocalShapeEvidence(node)
+	result.Type, result.Properties, result.Prefix = local.Type, local.Properties, local.Prefix
+	if local.TypeState == sourceLocalTypeUnsupported || local.PropertiesState == sourceLocalMemberMalformed || local.PrefixState == sourceLocalPrefixMalformed {
+		state = sourceLaneLineageUnverified
 	}
-	if raw, exists := node["properties"]; exists {
-		if json.Unmarshal(raw, &result.Properties) != nil || result.Properties == nil {
-			state = sourceLaneLineageUnverified
-		}
-		if result.Type != "" && result.Type != "object" && state == sourceLaneLineageSupported {
-			state = sourceLaneLineageContradictory
-		}
+	if local.PropertiesState == sourceLocalMemberValid && local.TypeState == sourceLocalTypeSupported && local.Type != "object" && state == sourceLaneLineageSupported {
+		state = sourceLaneLineageContradictory
 	}
 	if raw, exists := node["required"]; exists {
 		var entries []json.RawMessage
@@ -1216,19 +1206,8 @@ func sourceLaneCheckedProjectionNode(node map[string]json.RawMessage) (sourceLan
 			seen[name] = true
 		}
 	}
-	if raw, exists := node["prefixItems"]; exists {
-		if json.Unmarshal(raw, &result.Prefix) != nil || result.Prefix == nil {
-			state = sourceLaneLineageUnverified
-		}
-	}
-
-	if result.Type == "" {
-		if _, items := node["items"]; items {
-			state = sourceLaneLineageUnverified
-		}
-		if _, prefix := node["prefixItems"]; prefix {
-			state = sourceLaneLineageUnverified
-		}
+	if local.TypeState == sourceLocalTypeAbsent && (local.HasItems || local.PrefixState != sourceLocalPrefixAbsent) {
+		state = sourceLaneLineageUnverified
 	}
 	if result.MaxItems != nil && *result.MaxItems < result.MinItems {
 		state = sourceLaneLineageContradictory
@@ -1359,7 +1338,7 @@ func sourceLaneSchemaProjection(facts sourceFacts, root sourceFactRef, wanted st
 		}
 		if items, exists := node["items"]; exists && shape.Type == "array" {
 			coverage := "uniform"
-			if len(shape.Prefix) > 0 {
+			if sourceLocalShapeEvidence(node).arrayCoverage() == sourceLocalArrayPrefixOrTail {
 				coverage = "tail"
 			}
 			descend(pointer+"/items", items, sourceLaneProjectionStep{Coordinate: "[]", Coverage: coverage, MinItems: shape.MinItems, MaxItems: shape.MaxItems})
@@ -1826,7 +1805,7 @@ func sourceLaneGraphQLVariablesContract(facts sourceFacts, ref sourceLaneTargetR
 	}
 	shape, state := sourceLaneCheckedProjectionNode(root)
 	var props = shape.Properties
-	if state != sourceLaneLineageSupported || sourceCollectionObjectCode(root) != "" || props == nil {
+	if state != sourceLaneLineageSupported || sourceLocalShapeEvidence(root).object() != sourceLocalObjectEstablished || props == nil {
 		add("source_schema_unverified")
 		return issues
 	}
@@ -2381,7 +2360,7 @@ func sourceLaneRecordCoordinate(facts sourceFacts, anchor json.RawMessage, strea
 			return nil, "target_record_projection_mismatch"
 		}
 		if index < len(fields) {
-			if sourceCollectionObjectCode(node) != "" || shape.Properties[fields[index]] == nil {
+			if sourceLocalShapeEvidence(node).object() != sourceLocalObjectEstablished || shape.Properties[fields[index]] == nil {
 				return nil, "target_record_projection_mismatch"
 			}
 			raw = shape.Properties[fields[index]]
@@ -2392,11 +2371,11 @@ func sourceLaneRecordCoordinate(facts sourceFacts, anchor json.RawMessage, strea
 			if stream.Records.SingleObject {
 				return nil, "target_record_projection_mismatch"
 			}
-			if len(shape.Prefix) > 0 {
+			if sourceLocalShapeEvidence(node).arrayCoverage() != sourceLocalArrayUniform {
 				return nil, "target_record_projection_unverified"
 			}
 			coordinate = append(coordinate, "[]")
-		} else if sourceCollectionObjectCode(node) != "" {
+		} else if sourceLocalShapeEvidence(node).object() != sourceLocalObjectEstablished {
 			return nil, "target_record_projection_unverified"
 		}
 	}

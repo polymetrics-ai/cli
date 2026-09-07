@@ -172,7 +172,19 @@ cycles, unsupported conjunctions and traversal limits retain scoped deficits.
 Every intermediate named-property wrapper must have a supported object shape.
 Explicit array or scalar types cannot become objects merely by declaring
 `properties`; object inference from properties applies only when type is absent.
-The same rule protects selected single resources and collection record items.
+The same local shape evidence governs structural collection classification and
+selected single resources and collection record items. Present unsupported types
+and malformed properties stay unresolved; a bare `{}` supplies no object identity.
+Properties-only object inference requires a valid map and no competing typeless
+items or prefix. Empty `prefixItems: []` has the same uniform-items meaning as an
+absent prefix. Nonempty or malformed prefixes cannot establish whole-array
+collection coverage from their tail, even if every described prefix item is an
+object. Fixed-index projection remains a separate supported coordinate.
+
+The common evidence decoder does no reference traversal or source I/O. Existing
+bounded resolvers establish each local node; checked binding projection retains
+its stricter ancestry, keyword, requiredness, bounds and physical-use checks.
+Object cardinality alone never admits a field mapping or executable reference.
 Unknown envelopes without an interpretation emit
 `source_collection_interpretation_missing`. Other unresolved response scopes
 emit `source_collection_scope_unknown`, including unresolved siblings of a
