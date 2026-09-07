@@ -228,8 +228,23 @@ schema branch or exhausted bound cannot establish uniqueness. Literal referring
 occurrences select their own use sites without borrowing that unproved uniqueness.
 A definition registry nested beneath the schema root is still a physical
 definition, not a literal property/item occurrence.
-Budget-consuming property traversal is sorted and preserves the selected
-instance coordinate and requiredness through each supported ancestor.
+A syntactically direct pointer is only a traversal hint. The join carries checked
+property/item/fixed-index steps, requiredness and array bounds separately from
+physical-search completeness. Selected ancestors must have supported semantics;
+malformed requiredness, unsupported composition and unknown reference/scope
+keywords remain unverified even when encoded as scalar JSON. Unselected stored
+definitions do not become instance uses, and unrelated unknown siblings do not
+invalidate an independently selected direct path.
+
+Local reference pointers use the same closed escape/index syntax in uncached and
+cached lookup, preserving literal citation hashes and document prefixes. Uniform
+items, fixed prefix positions and tail-only items have distinct coverage: a tail
+schema cannot certify all records returned from a prefix-plus-tail array.
+Record extraction and GraphQL variable placement check supported ancestry;
+GraphQL uncertainty is not reported as a proven variable mismatch. Missing or
+malformed target selectors remain pointer mismatches, while unsupported target
+semantics remain unverified. Budget-consuming property traversal is sorted,
+reference cycles are path-local, and the original visit/depth bounds remain.
 
 Canonical-operation checks read already-observed source-lock bytes from a
 separate authoring map. Execution artifacts never contain those bytes. A valid

@@ -425,3 +425,31 @@ R1 storage/use/root refs; R2 selected ancestors; R3 scalar unknown edges; R4 uni
 
 Red: pending augmented owner-managed complete R1–R10 matrix on unchanged production; original131 private diagnostic REDs independently adopted, not relabeled.
 Green: pending same augmented assertions after coherent implementation; all130 fixes and original evidence preserved.
+
+
+## Firstmate132 coherent checked-occurrence implementation
+
+Authority: full131 selected design and R1–R10 adopted/committed bae80873296cca416385df4172eab5917adda688 before production. Parent Astra/medium executes existing GSD plan--tdd/execute/verify inline non-Pi path; no new role. Source language/runtime/provider scope unchanged. Required Go how-to/testing/design/structs/errors/security/safety/CLI/docs skills and pinned connector/exhaustive review routing retained.
+
+Red: complete original-behavior matrix-red captured208 selected/168 pass, exit1/6.633381875s, raw5b7baa9bf55022f07730ef21424fbafa173850278419d0f1cbc47f5721b97010. Original131 three overlays remain immutable and distinct. Two GraphQL fixture admission failures (lane/CLI tagline) remain setup failures. Final admitted delegation tests reached actual builder; known name/template mismatches already passed.
+
+Green: focused-complete-green373/373, exit0/20.724774625s, rawff44b93b9b2c4d827d080fd33ea440e753486a1b972b683e716ef9216c37e302. Captured under receipts-cp12-correction-132 with complete test/source/dependency inputs, all changed_inputs_after empty. New state boundary tests are later-edge evidence: state-boundary-red17/14 exit1/4.7954975s raw9cd1bb5734d1b23f60b6ad1a228d6ccb39c405298943870cdac71851dd974aa8; malformed required null member and absent supported array type corrected before this GREEN.
+
+Refactor/compatibility: explicit occurrence steps preserve literal/physical identity, presence and uniform/fixed/tail coverage; selected semantic state separated from complete use search. Shared pointer guard preserves closed local escape/canonical-index syntax in direct/cached lookup and resolver. Record/GraphQL consumers reuse checked node semantics; unknown target projection differs from missing selector. No publication/file-write/provider/runtime path added. Ancestor reads/admission precede binding refusal; fixture owns inputs, production owns only bounded reads/memory. Exact independent snapshots compare actual retained/admitted bytes after complete repeated builder return.
+
+Disclosed test corrections:099FSchemaOracle fixed-prefix case formerly used type object with prefixItems; only its fixture now uses an actual array, preserving all old test names and escaped/property/root assertions. New sibling proof assertion compares against a separate empty-proof-input assessment, since reducer appends diagnostics and is not an idempotence contract. The first corrected matrix exposed this test issue, not a production preservation defect. Ref-resolution in-place map reuse briefly retained old keys; unchanged valid-ref controls caught it, and each loop now allocates a fresh node. All intermediate failing receipts remain. No forced-green, historical RED relabel, budget reduction or dropped original parent.
+
+| Obligation | Actual assertion/consumer | Evidence and disposition |
+| --- | --- | --- |
+| R1 | 132StorageBuilder: $defs/definitions/components unique, duplicate, literal, unused unknown, malformed registry/selected, root ref; actual admitted builder + independent proof; preserved130 parents | matrix-red and focused-complete-green; existing malformed selected/unique/duplicate controls already passed, no fabricated RED |
+| R2 | Ownership131SelectedAncestor exact source key/7cells, source pointer/code/severity, reference/nonpromotion; valid/unrelated siblings | original131 plus augmented matrix-red; focused-complete-green |
+| R3 | Ownership131ScalarEdgeAndTuple physical dynamic ref + 132SelectedDirectUnknownSibling four direct controls | physical unknown deficit, exact valid direct reference preserved; original131/augmented RED to focused GREEN |
+| R4 | tail-only record consumer refusal, empty prefix, 132PointersAndConsumers fixed index/alias/absence and actual record coordinate | original131 + matrix RED/GREEN; target_record_projection_unverified pinned at actual record consumer |
+| R5 | Ownership131GraphQLRoot;132GraphQLDelegation write/command/schema/canonical and name/template mismatch controls | actual canonical admission/load + builder/reducer; four composed delegates failed after disclosed setup correction; matching positives and known mismatches pass GREEN |
+| R6 | local-ref literal citation/hash;132PointersAndConsumers embedded/raw prefixes, escaped/empty names, indices, root/nested missing/external/cycle;132CheckedStateBoundaries cached lookup +127/129 root chains | actual embedded builder valid/invalid tilde; narrow raw-prefix/cache helpers plus retained099F compatibility; same selected bounds retained |
+| R7 | complete099F body/envelope/sibling/multiple/selector/registry/JSON-array/GraphQL/incomplete coverage/claims plus130 body and actual132 delegates | full focused-complete-green; actual body/record/variables target fixtures admitted before binding; no runtime change |
+| R8 | 132SiblingIdentityAndSeverity good stream/bad schema both orders, intended/materialized, exact identity/code/pointer/severity + independent proof | affected lane unpromoted, other lanes equal independent reducer baseline; full retained byte snapshots before/after each repeated builder |
+| R9 | whole130PhysicalProjectionBuilder unchanged4100 budget/129 flat refs and complete report repeat; every ownership131Build repeats full report;132 selected root bound/cache controls | unchanged original bounds; later controls explicitly later evidence; full final normal/race pending |
+| R10 | Ownership131SnapshotOracleControl deliberately readable wrong bytes then fixture-owned restoration | adopted original passing oracle plus focused GREEN; byte-only preservation, no inode/recovery claim |
+
+Final full normal, serial exact-name race partitions, A/B generated artifact adoption/checks, final static/introduced lint and separate fresh full-range independent closure remain pending. Existing artifactc527 remains prior-source until regenerated after final Atlas/docs freeze.

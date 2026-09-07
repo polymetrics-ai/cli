@@ -334,6 +334,12 @@ type sourceShapeAnalysis struct {
 }
 
 func sourceAnalysisPointer(facts sourceFacts, pointer string) (json.RawMessage, error) {
+	if !sourceLaneProjectionPointer(pointer) {
+		return nil, fmt.Errorf("invalid local source pointer")
+	}
+	if pointer == "" {
+		return append(json.RawMessage(nil), facts.Document...), nil
+	}
 	if facts.analysis == nil {
 		return sourceJSONPointer(facts.Document, pointer)
 	}
@@ -354,7 +360,7 @@ func sourceAnalysisPointer(facts sourceFacts, pointer string) (json.RawMessage, 
 			}
 		case []any:
 			index, err := strconv.Atoi(part)
-			if err != nil || index < 0 || index >= len(node) {
+			if err != nil || index < 0 || index >= len(node) || strconv.Itoa(index) != part {
 				return nil, fmt.Errorf("source reference index invalid")
 			}
 			value = node[index]
@@ -486,7 +492,7 @@ func sourceResolveObject(facts sourceFacts, raw json.RawMessage, seen map[string
 		if !sourceReferenceAnnotationSiblings(node) {
 			return nil, false
 		}
-		if err := json.Unmarshal(rawRef, &ref); err != nil || !strings.HasPrefix(ref, "#/") || seen[ref] {
+		if err := json.Unmarshal(rawRef, &ref); err != nil || !strings.HasPrefix(ref, "#/") || !sourceLaneProjectionPointer(ref[1:]) || seen[ref] {
 			return nil, false
 		}
 		seen[ref] = true

@@ -218,7 +218,7 @@ func sourceJSONPointer(document []byte, pointer string) (json.RawMessage, error)
 	if pointer == "" {
 		return append(json.RawMessage(nil), document...), nil
 	}
-	if !strings.HasPrefix(pointer, "/") {
+	if !sourceLaneProjectionPointer(pointer) {
 		return nil, fmt.Errorf("invalid local source pointer")
 	}
 	current := json.RawMessage(document)

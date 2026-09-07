@@ -267,6 +267,18 @@
           {
             "file": "cmd/connectorgen/source_lane_bindings.go",
             "name": "sourceLaneLiteralProjectionOccurrence"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_bindings.go",
+            "name": "sourceLaneCheckedProjectionNode"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_bindings.go",
+            "name": "sourceLaneRecordCoordinate"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_bindings.go",
+            "name": "sourceLaneGraphQLVariablesContract"
           }
         ]
       },
@@ -1021,6 +1033,61 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_projection130_test.go",
           "name": "TestSourceLane130NestedDefinitionProjection"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection131_test.go",
+          "name": "TestSourceLaneOwnership131SelectedAncestor"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection131_test.go",
+          "name": "TestSourceLaneOwnership131ScalarEdgeAndTuple"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection131_test.go",
+          "name": "TestSourceLaneOwnership131GraphQLRoot"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection131_test.go",
+          "name": "TestSourceLaneOwnership131LocalRefEscape"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection131_test.go",
+          "name": "TestSourceLaneOwnership131SnapshotOracleControl"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection132_test.go",
+          "name": "TestSourceLane132StorageBuilder"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection132_test.go",
+          "name": "TestSourceLane132PointersAndConsumers"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection132_test.go",
+          "name": "TestSourceLane132SiblingIdentityAndSeverity"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection132_test.go",
+          "name": "TestSourceLane132SelectedDirectUnknownSibling"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection132_test.go",
+          "name": "TestSourceLane132GraphQLDelegation"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection132_test.go",
+          "name": "TestSourceLane132CheckedStateBoundaries"
         }
       ],
       "publication_guarantee_proofs": [

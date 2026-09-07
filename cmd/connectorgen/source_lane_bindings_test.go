@@ -817,6 +817,12 @@ func TestSourceLaneBinding099FSchemaOracle(t *testing.T) {
 	for _, pointer := range []string{"/properties/a~1b", "/properties/x~0y", "/prefixItems/0", ""} {
 		t.Run("coordinate "+pointer, func(t *testing.T) {
 			raw := json.RawMessage(`{"type":"object","properties":{"a/b":{"type":"string"},"x~y":{"type":"integer"}},"prefixItems":[{"type":"boolean"}]}`)
+			// Fixed positions require an actual array occurrence. This oracle
+			// formerly exercised pointer syntax against object+prefixItems;
+			// checked lineage now validates the consumed instance shape.
+			if pointer == "/prefixItems/0" {
+				raw = json.RawMessage(`{"type":"array","prefixItems":[{"type":"boolean"}]}`)
+			}
 			projection, code := sourceLaneTargetProjection(raw, pointer)
 			if code != "" || len(projection.Raw) == 0 {
 				t.Fatalf("valid literal schema coordinate not resolved: %s", code)

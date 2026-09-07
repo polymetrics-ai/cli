@@ -1059,9 +1059,10 @@ func sourceLaneLinkedCitation(facts sourceFacts, root, wanted string) string {
 // A projection retains the instance coordinate and each ancestor's presence
 // condition. A schema pointer is never treated as an instance path.
 type sourceLaneProjection struct {
-	Raw      json.RawMessage
-	Path     []string
-	Required []bool
+	Raw        json.RawMessage
+	Path       []string
+	Required   []bool
+	Occurrence sourceLaneOccurrence
 }
 
 // Only supported structural edges identify a literal instance occurrence.
@@ -1099,118 +1100,295 @@ func sourceLaneLiteralProjectionOccurrence(root, wanted string) bool {
 	return true
 }
 
+// Occurrence semantics and physical-search completeness are independent: one
+// observed use is not unique until every relevant search branch is accounted for.
+type sourceLaneLineageState uint8
+
+const (
+	sourceLaneLineageSupported sourceLaneLineageState = iota
+	sourceLaneLineageContradictory
+	sourceLaneLineageUnverified
+)
+
+type sourceLaneProjectionStep struct {
+	Coordinate string
+	Required   bool
+	Coverage   string // property, uniform, fixed, or tail
+	MinItems   int
+	MaxItems   *int
+}
+
+type sourceLaneOccurrence struct {
+	Literal  string
+	Physical string
+	Steps    []sourceLaneProjectionStep
+	State    sourceLaneLineageState
+}
+
+type sourceLaneProjectionNode struct {
+	Properties map[string]json.RawMessage
+	Required   []string
+	Prefix     []json.RawMessage
+	Type       string
+	MinItems   int
+	MaxItems   *int
+}
+
+// Classify edge meaning independently of its JSON encoding. Definition storage
+// is not an application; its container must still be a well-formed registry.
+func sourceLaneCheckedProjectionNode(node map[string]json.RawMessage) (sourceLaneProjectionNode, sourceLaneLineageState) {
+	var result sourceLaneProjectionNode
+	state := sourceLaneLineageSupported
+	for key, value := range node {
+		switch key {
+		case "$ref", "properties", "items", "prefixItems", "required", "type":
+		case "$defs", "definitions":
+			var registry map[string]json.RawMessage
+			if json.Unmarshal(value, &registry) != nil || registry == nil {
+				state = sourceLaneLineageUnverified
+			}
+		case "title", "description", "example", "examples", "$comment", "default", "enum", "const", "format", "pattern", "minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum", "multipleOf", "minLength", "maxLength", "minProperties", "maxProperties":
+			// These constraints/annotations do not create instance-use edges. Exact
+			// leaf constraint equivalence remains the schema comparison's contract.
+		case "additionalProperties":
+			var allowed bool
+			if json.Unmarshal(value, &allowed) != nil || string(bytes.TrimSpace(value)) == "null" {
+				state = sourceLaneLineageUnverified
+			}
+		case "nullable", "uniqueItems", "deprecated", "readOnly", "writeOnly":
+			var flag bool
+			if json.Unmarshal(value, &flag) != nil || string(bytes.TrimSpace(value)) == "null" {
+				state = sourceLaneLineageUnverified
+			}
+		case "minItems", "maxItems":
+			var count int
+			if json.Unmarshal(value, &count) != nil || count < 0 || string(bytes.TrimSpace(value)) == "null" {
+				state = sourceLaneLineageUnverified
+				continue
+			}
+			if key == "minItems" {
+				result.MinItems = count
+			} else {
+				result.MaxItems = &count
+			}
+		default:
+			// Includes scalar-valued ref/scope/applicator keywords. None are silently
+			// interpreted as harmless annotations or as definitely another use.
+			state = sourceLaneLineageUnverified
+		}
+	}
+	if raw, exists := node["type"]; exists {
+		if json.Unmarshal(raw, &result.Type) != nil {
+			state = sourceLaneLineageUnverified
+		}
+		switch result.Type {
+		case "object", "array", "string", "number", "integer", "boolean", "null":
+		default:
+			state = sourceLaneLineageUnverified
+		}
+	}
+	if raw, exists := node["properties"]; exists {
+		if json.Unmarshal(raw, &result.Properties) != nil || result.Properties == nil {
+			state = sourceLaneLineageUnverified
+		}
+		if result.Type != "" && result.Type != "object" && state == sourceLaneLineageSupported {
+			state = sourceLaneLineageContradictory
+		}
+	}
+	if raw, exists := node["required"]; exists {
+		var entries []json.RawMessage
+		if json.Unmarshal(raw, &entries) != nil || entries == nil {
+			state = sourceLaneLineageUnverified
+		}
+		for _, entry := range entries {
+			var name string
+			if len(bytes.TrimSpace(entry)) == 0 || bytes.TrimSpace(entry)[0] != '"' || json.Unmarshal(entry, &name) != nil {
+				state = sourceLaneLineageUnverified
+				continue
+			}
+			result.Required = append(result.Required, name)
+		}
+		seen := map[string]bool{}
+		for _, name := range result.Required {
+			if seen[name] {
+				state = sourceLaneLineageUnverified
+			}
+			seen[name] = true
+		}
+	}
+	if raw, exists := node["prefixItems"]; exists {
+		if json.Unmarshal(raw, &result.Prefix) != nil || result.Prefix == nil {
+			state = sourceLaneLineageUnverified
+		}
+	}
+
+	if result.Type == "" {
+		if _, items := node["items"]; items {
+			state = sourceLaneLineageUnverified
+		}
+		if _, prefix := node["prefixItems"]; prefix {
+			state = sourceLaneLineageUnverified
+		}
+	}
+	if result.MaxItems != nil && *result.MaxItems < result.MinItems {
+		state = sourceLaneLineageContradictory
+	}
+	return result, state
+}
+
 func sourceLaneSchemaProjection(facts sourceFacts, root sourceFactRef, wanted string) (sourceLaneProjection, string) {
 	var found []sourceLaneProjection
 	visits := 0
-	unresolved := false
-	// A literal occurrence selects its own use site. A physical component
-	// outside that subtree needs a complete search proving unique ownership.
+	incomplete := false
+	contradictory := false
 	direct := sourceLaneLiteralProjectionOccurrence(root.Pointer, wanted)
-	var walk func(string, json.RawMessage, []string, []bool, map[string]bool, int)
-	walk = func(pointer string, raw json.RawMessage, coordinate []string, required []bool, seen map[string]bool, depth int) {
+	var walk func(string, json.RawMessage, sourceLaneOccurrence, map[string]bool, int)
+	walk = func(pointer string, raw json.RawMessage, lineage sourceLaneOccurrence, seen map[string]bool, depth int) {
 		if direct && pointer != wanted && !strings.HasPrefix(wanted, pointer+"/") {
 			return
 		}
 		visits++
 		if visits > 4096 || depth > 128 {
-			unresolved = true
+			incomplete = true
 			return
 		}
 		var node map[string]json.RawMessage
 		if decodeSourceJSON(raw, &node) != nil || node == nil {
-			unresolved = true
-			return
-		}
-		if pointer == wanted {
-			found = append(found, sourceLaneProjection{raw, append([]string{}, coordinate...), append([]bool{}, required...)})
+			incomplete = true
 			return
 		}
 		if seen[pointer] {
-			unresolved = true
+			incomplete = true
 			return
 		}
-		next := map[string]bool{}
+		next := make(map[string]bool, len(seen)+1)
 		for k, v := range seen {
 			next[k] = v
 		}
 		next[pointer] = true
-		if !direct {
-			for _, name := range []string{"allOf", "oneOf", "anyOf"} {
-				if _, exists := node[name]; exists {
-					// No composition solver: skipped branches cannot establish
-					// that a found physical component has exactly one use.
-					unresolved = true
-				}
-			}
-			// A skipped structured keyword may contain another schema use.
-			// Literal annotations and definition registries are not use sites;
-			// supported structural keywords are visited explicitly below.
-			for name, value := range node {
-				switch name {
-				case "properties", "items", "prefixItems", "$defs", "definitions", "required", "type", "enum", "const", "default", "examples", "example", "title", "description":
-					continue
-				}
-				var structured any
-				if json.Unmarshal(value, &structured) == nil {
-					switch structured.(type) {
-					case map[string]any, []any:
-						unresolved = true
-					}
-				}
-			}
-		}
-		if edge, ok := node["$ref"]; ok {
+		literalRaw := raw
+		// Selecting the literal ref node keeps its identity, but never bypasses
+		// validation of the consumed reference, siblings or resolved node semantics.
+		if edge, exists := node["$ref"]; exists {
 			var ref string
-			if json.Unmarshal(edge, &ref) != nil || !strings.HasPrefix(ref, "#/") {
-				unresolved = true
+			if !sourceReferenceAnnotationSiblings(node) || json.Unmarshal(edge, &ref) != nil || !strings.HasPrefix(ref, "#/") || !sourceLaneProjectionPointer(ref[1:]) {
+				incomplete = true
 				return
 			}
-			refPointer := facts.RefPrefix + ref[1:]
-			refRaw, err := sourceJSONPointer(facts.Document, refPointer)
+			physical := facts.RefPrefix + ref[1:]
+			value, err := sourceJSONPointer(facts.Document, physical)
 			if err != nil {
-				unresolved = true
-			} else {
-				walk(refPointer, refRaw, coordinate, required, next, depth+1)
+				incomplete = true
+				return
+			}
+			if pointer != wanted {
+				walk(physical, value, lineage, next, depth+1)
+				return
+			}
+			for {
+				visits++
+				depth++
+				if visits > 4096 || depth > 128 || next[physical] {
+					incomplete = true
+					return
+				}
+				next[physical] = true
+				node = nil
+				if decodeSourceJSON(value, &node) != nil || node == nil {
+					incomplete = true
+					return
+				}
+				lineage.Physical = physical
+				edge, more := node["$ref"]
+				if !more {
+					break
+				}
+				if !sourceReferenceAnnotationSiblings(node) || json.Unmarshal(edge, &ref) != nil || !strings.HasPrefix(ref, "#/") || !sourceLaneProjectionPointer(ref[1:]) {
+					incomplete = true
+					return
+				}
+				physical = facts.RefPrefix + ref[1:]
+				value, err = sourceJSONPointer(facts.Document, physical)
+				if err != nil {
+					incomplete = true
+					return
+				}
 			}
 		}
-		var props map[string]json.RawMessage
-		if raw, exists := node["properties"]; exists && (json.Unmarshal(raw, &props) != nil || props == nil) {
-			unresolved = true
+		shape, state := sourceLaneCheckedProjectionNode(node)
+		if state == sourceLaneLineageUnverified {
+			incomplete = true
 		}
-		var req []string
-		_ = json.Unmarshal(node["required"], &req)
-		names := make([]string, 0, len(props))
-		for name := range props {
+		if state == sourceLaneLineageContradictory {
+			contradictory = true
+		}
+		lineage.State = state
+		if pointer == wanted {
+			if state != sourceLaneLineageSupported {
+				return
+			}
+			lineage.Literal = pointer
+			if lineage.Physical == "" {
+				lineage.Physical = pointer
+			}
+			projection := sourceLaneProjection{Raw: literalRaw, Path: []string{}, Required: []bool{}, Occurrence: lineage}
+			for _, step := range lineage.Steps {
+				projection.Path = append(projection.Path, step.Coordinate)
+				projection.Required = append(projection.Required, step.Required)
+			}
+			found = append(found, projection)
+			return
+		}
+		// Unknown branches may still establish two distinct known uses during a
+		// physical search. They cannot make a selected lineage supported.
+		if state != sourceLaneLineageSupported {
+			return
+		}
+		descend := func(child string, value json.RawMessage, step sourceLaneProjectionStep) {
+			branch := lineage
+			branch.Steps = append(append([]sourceLaneProjectionStep{}, lineage.Steps...), step)
+			walk(child, value, branch, next, depth+1)
+		}
+		names := make([]string, 0, len(shape.Properties))
+		for name := range shape.Properties {
 			names = append(names, name)
 		}
 		sort.Strings(names)
 		for _, name := range names {
-			walk(pointer+"/properties/"+escapeSourcePointer(name), props[name], append(append([]string{}, coordinate...), name), append(append([]bool{}, required...), sourceLaneContains(req, name)), next, depth+1)
+			descend(pointer+"/properties/"+escapeSourcePointer(name), shape.Properties[name], sourceLaneProjectionStep{Coordinate: name, Required: sourceLaneContains(shape.Required, name), Coverage: "property"})
 		}
-		if _, ok := node["items"]; ok {
-			walk(pointer+"/items", node["items"], append(append([]string{}, coordinate...), "[]"), append(append([]bool{}, required...), false), next, depth+1)
-		}
-		var tuple []json.RawMessage
-		if json.Unmarshal(node["prefixItems"], &tuple) == nil {
-			for i := range tuple {
-				walk(pointer+"/prefixItems/"+strconv.Itoa(i), tuple[i], append(append([]string{}, coordinate...), "["+strconv.Itoa(i)+"]"), append(append([]bool{}, required...), false), next, depth+1)
+		if items, exists := node["items"]; exists && shape.Type == "array" {
+			coverage := "uniform"
+			if len(shape.Prefix) > 0 {
+				coverage = "tail"
 			}
-		} else if _, exists := node["prefixItems"]; exists {
-			unresolved = true
+			descend(pointer+"/items", items, sourceLaneProjectionStep{Coordinate: "[]", Coverage: coverage, MinItems: shape.MinItems, MaxItems: shape.MaxItems})
 		}
+		for i, item := range shape.Prefix {
+			if shape.Type != "array" {
+				break
+			}
+			if shape.MaxItems != nil && i >= *shape.MaxItems {
+				continue
+			}
+			descend(pointer+"/prefixItems/"+strconv.Itoa(i), item, sourceLaneProjectionStep{Coordinate: "[" + strconv.Itoa(i) + "]", Required: i < shape.MinItems, Coverage: "fixed", MinItems: shape.MinItems, MaxItems: shape.MaxItems})
+		}
+	}
+	if !sourceLaneProjectionPointer(root.Pointer) || !sourceLaneProjectionPointer(wanted) {
+		return sourceLaneProjection{}, "source_binding_scope_mismatch"
 	}
 	raw, err := sourceJSONPointer(facts.Document, root.Pointer)
 	if err != nil {
 		return sourceLaneProjection{}, "source_schema_unverified"
 	}
-	walk(root.Pointer, raw, nil, nil, map[string]bool{}, 0)
+	walk(root.Pointer, raw, sourceLaneOccurrence{}, map[string]bool{}, 0)
 	if len(found) > 1 {
 		return sourceLaneProjection{}, "source_projection_ambiguous"
 	}
-	if unresolved {
+	if incomplete {
 		return sourceLaneProjection{}, "source_schema_unverified"
 	}
-	if len(found) == 1 {
+	if len(found) == 1 && !contradictory {
 		return found[0], ""
 	}
 	return sourceLaneProjection{}, "source_binding_scope_mismatch"
@@ -1220,8 +1398,14 @@ func sourceLaneTargetProjection(raw json.RawMessage, pointer string) (sourceLane
 	if !sourceLaneProjectionPointer(pointer) {
 		return sourceLaneProjection{}, "target_schema_pointer_mismatch"
 	}
+	if _, err := sourceJSONPointer(raw, pointer); err != nil {
+		return sourceLaneProjection{}, "target_schema_pointer_mismatch"
+	}
 	facts := sourceFacts{Document: raw}
 	projection, code := sourceLaneSchemaProjection(facts, sourceFactRef{Pointer: ""}, pointer)
+	if code == "source_schema_unverified" {
+		return projection, "target_schema_unverified"
+	}
 	if code != "" {
 		return projection, "target_schema_pointer_mismatch"
 	}
@@ -1640,15 +1824,21 @@ func sourceLaneGraphQLVariablesContract(facts sourceFacts, ref sourceLaneTargetR
 		add("source_schema_unverified")
 		return issues
 	}
-	var props map[string]json.RawMessage
-	if json.Unmarshal(root["properties"], &props) != nil {
+	shape, state := sourceLaneCheckedProjectionNode(root)
+	var props = shape.Properties
+	if state != sourceLaneLineageSupported || sourceCollectionObjectCode(root) != "" || props == nil {
 		add("source_schema_unverified")
 		return issues
 	}
 	if len(props) != len(graphql.Variables) {
 		add("target_graphql_variable_mismatch")
 	}
+	names := make([]string, 0, len(props))
 	for name := range props {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
 		value, exists := graphql.Variables[name]
 		if !exists {
 			add("target_graphql_variable_mismatch")
@@ -1665,13 +1855,19 @@ func sourceLaneGraphQLVariablesContract(facts sourceFacts, ref sourceLaneTargetR
 			continue
 		}
 		matched := false
+		unverified := false
 		for _, m := range ref.FieldMappings {
 			projection, c := sourceLaneSchemaProjection(facts, *ref.SourceSchema, m.Source.Pointer)
+			if c == "source_schema_unverified" {
+				unverified = true
+			}
 			if c == "" && len(projection.Path) == 1 && projection.Path[0] == name && m.Target.Pointer != nil && m.Target.Kind == kind && *m.Target.Pointer == pointer {
 				matched = true
 			}
 		}
-		if !matched {
+		if !matched && unverified {
+			add("source_schema_unverified")
+		} else if !matched {
 			add("target_graphql_variable_mismatch")
 		}
 	}
@@ -2168,33 +2364,43 @@ func sourceLaneRecordCoordinate(facts sourceFacts, anchor json.RawMessage, strea
 	if stream.Records.Filter != nil || stream.Records.KeyedObject || stream.Records.WrapField != "" || stream.ArrayZipProjection != nil || len(stream.ComputedFields) > 0 || len(stream.ResponseFields) > 0 || stream.Projection == "passthrough" {
 		return nil, "target_record_projection_unverified"
 	}
-	node, ok := sourceResolveObject(facts, anchor, map[string]bool{}, 0)
-	if !ok {
-		return nil, "source_schema_unverified"
-	}
+	raw := anchor
 	coordinate := []string{}
+	fields := []string{}
 	if stream.Records.Path != "" && stream.Records.Path != "." {
-		for _, field := range strings.Split(stream.Records.Path, ".") {
-			var props map[string]json.RawMessage
-			if json.Unmarshal(node["properties"], &props) != nil || props[field] == nil {
-				return nil, "target_record_projection_mismatch"
-			}
-			node, ok = sourceResolveObject(facts, props[field], map[string]bool{}, 0)
-			if !ok {
-				return nil, "source_schema_unverified"
-			}
-			coordinate = append(coordinate, field)
-		}
+		fields = strings.Split(stream.Records.Path, ".")
 	}
-	var typ string
-	_ = json.Unmarshal(node["type"], &typ)
-	if typ == "array" {
-		if stream.Records.SingleObject {
+	for index := 0; index <= len(fields); index++ {
+		node, ok := sourceResolveObject(facts, raw, map[string]bool{}, 0)
+		if !ok {
+			return nil, "source_schema_unverified"
+		}
+		shape, state := sourceLaneCheckedProjectionNode(node)
+		if state == sourceLaneLineageUnverified {
+			return nil, "source_schema_unverified"
+		}
+		if state == sourceLaneLineageContradictory {
 			return nil, "target_record_projection_mismatch"
 		}
-		coordinate = append(coordinate, "[]")
-	} else if typ != "object" {
-		return nil, "target_record_projection_unverified"
+		if index < len(fields) {
+			if sourceCollectionObjectCode(node) != "" || shape.Properties[fields[index]] == nil {
+				return nil, "target_record_projection_mismatch"
+			}
+			raw = shape.Properties[fields[index]]
+			coordinate = append(coordinate, fields[index])
+			continue
+		}
+		if shape.Type == "array" {
+			if stream.Records.SingleObject {
+				return nil, "target_record_projection_mismatch"
+			}
+			if len(shape.Prefix) > 0 {
+				return nil, "target_record_projection_unverified"
+			}
+			coordinate = append(coordinate, "[]")
+		} else if sourceCollectionObjectCode(node) != "" {
+			return nil, "target_record_projection_unverified"
+		}
 	}
 	return coordinate, ""
 }
