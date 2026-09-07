@@ -12,25 +12,33 @@ import (
 // Evidence availability, authored assessment and resolved requirement status
 // remain separate. A current assertion never becomes a lane proof reference.
 type sourceFoundationRequirementResult struct {
-	Identity               sourceFoundationCell              `json:"identity"`
-	ID                     string                            `json:"id"`
-	Statement              string                            `json:"statement"`
-	AuthoredAssessment     string                            `json:"authored_assessment"`
-	Status                 string                            `json:"status"`
-	SourceRefs             []sourceFactRef                   `json:"source_refs"`
-	Proofs                 []sourceFoundationAssertionResult `json:"proofs"`
-	NextOwner              string                            `json:"next_owner"`
-	MissingEvidence        []string                          `json:"missing_evidence"`
-	DecisionRefs           []sourceFoundationDecision        `json:"decision_refs"`
-	SourceState            string                            `json:"source_state"`
-	SourceApplicability    string                            `json:"source_applicability"`
-	GapRefs                []string                          `json:"gap_refs"`
-	RetainedDecisionOwners []string                          `json:"retained_decision_owners"`
-	AtlasLookup            sourceFoundationLookup            `json:"atlas_lookup"`
-	AffectedArtifacts      []string                          `json:"affected_artifacts"`
-	FitBindings            []sourceLaneTargetRef             `json:"fit_bindings"`
-	ProviderClause         *sourceFactRef                    `json:"provider_clause,omitempty"`
-	SourceExclusion        *sourceFactRef                    `json:"source_exclusion,omitempty"`
+	Identity               sourceFoundationCell                    `json:"identity"`
+	ID                     string                                  `json:"id"`
+	Statement              string                                  `json:"statement"`
+	AuthoredAssessment     string                                  `json:"authored_assessment"`
+	Status                 string                                  `json:"status"`
+	SourceRefs             []sourceFactRef                         `json:"source_refs"`
+	Proofs                 []sourceFoundationAssertionResult       `json:"proofs"`
+	RequestedProofIDs      []string                                `json:"requested_proof_ids"`
+	ProofIssues            []sourceFoundationRequirementProofIssue `json:"proof_issues"`
+	NextOwner              string                                  `json:"next_owner"`
+	MissingEvidence        []string                                `json:"missing_evidence"`
+	DecisionRefs           []sourceFoundationDecision              `json:"decision_refs"`
+	SourceState            string                                  `json:"source_state"`
+	SourceApplicability    string                                  `json:"source_applicability"`
+	GapRefs                []string                                `json:"gap_refs"`
+	RetainedDecisionOwners []string                                `json:"retained_decision_owners"`
+	AtlasLookup            sourceFoundationLookup                  `json:"atlas_lookup"`
+	AffectedArtifacts      []string                                `json:"affected_artifacts"`
+	FitBindings            []sourceLaneTargetRef                   `json:"fit_bindings"`
+	ProviderClause         *sourceFactRef                          `json:"provider_clause,omitempty"`
+	SourceExclusion        *sourceFactRef                          `json:"source_exclusion,omitempty"`
+}
+
+type sourceFoundationRequirementProofIssue struct {
+	ID   string `json:"id"`
+	Code string `json:"code"`
+	Path string `json:"path"`
 }
 
 type sourceFoundationAssertionResult struct {
@@ -43,14 +51,16 @@ type sourceFoundationAssertionResult struct {
 }
 
 func buildSourceFoundationRequirements(ctx context.Context, repo string, observed sourceFoundationAssessmentObservations) ([]sourceFoundationRequirementResult, error) {
-	proofs, err := readSourceFoundationProofObservations(ctx, repo)
+	batch, err := readSourceFoundationProofBatch(ctx, repo, reviewedSourceFoundationProofs(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("foundation requirement proof observations: %w", err)
 	}
-	return buildSourceFoundationRequirementsObserved(ctx, observed, proofs)
+	return buildSourceFoundationRequirementsBatch(ctx, observed, batch)
 }
 
-func buildSourceFoundationRequirementsObserved(ctx context.Context, observed sourceFoundationAssessmentObservations, proofs []sourceFoundationProofObservation) ([]sourceFoundationRequirementResult, error) {
+func buildSourceFoundationRequirementsBatch(ctx context.Context, observed sourceFoundationAssessmentObservations, batch sourceFoundationProofBatch) ([]sourceFoundationRequirementResult, error) {
+	proofs := batch.records
+
 	var err error
 	byID := map[string]sourceFoundationProofObservation{}
 	for _, proof := range proofs {
@@ -70,6 +80,7 @@ func buildSourceFoundationRequirementsObserved(ctx context.Context, observed sou
 				Identity: sourceFoundationCell{Key: cell.Key, Lane: cell.Lane}, ID: requirement.ID,
 				Statement: requirement.Statement, AuthoredAssessment: requirement.Assessment,
 				SourceRefs: append([]sourceFactRef{}, requirement.SourceRefs...), Proofs: []sourceFoundationAssertionResult{},
+				RequestedProofIDs: append([]string{}, requirement.ProofIDs...), ProofIssues: []sourceFoundationRequirementProofIssue{},
 				NextOwner: cell.NextOwner, MissingEvidence: append([]string{}, requirement.EvidenceRequirements...),
 				DecisionRefs: append([]sourceFoundationDecision{}, requirement.DecisionRefs...), GapRefs: []string{}, RetainedDecisionOwners: []string{},
 				AtlasLookup: requirement.AtlasLookup, AffectedArtifacts: append([]string{}, requirement.AffectedArtifacts...),
@@ -93,12 +104,22 @@ func buildSourceFoundationRequirementsObserved(ctx context.Context, observed sou
 			for _, id := range requirement.ProofIDs {
 				proof, exists := byID[id]
 				if !exists {
-					return nil, fmt.Errorf("foundation requirement proof unknown: %s", id)
+					code := "proof_record_missing"
+					if batch.document.Status == "proof_unavailable" {
+						code = "proof_document_missing"
+					}
+					row.ProofIssues = append(row.ProofIssues, sourceFoundationRequirementProofIssue{ID: id, Code: code, Path: sourceFoundationProofPath})
+					row.MissingEvidence = append(row.MissingEvidence, code+": "+id+" ("+sourceFoundationProofPath+")")
+					continue
 				}
 				if !slices.ContainsFunc(requirement.AtlasLookup.Candidates, func(candidate sourceFoundationLookupCandidate) bool {
 					return candidate.AtlasID == proof.record.AtlasID && candidate.Contract == proof.record.Contract
 				}) {
 					return nil, fmt.Errorf("foundation requirement proof outside examined contract")
+				}
+				for _, issue := range proof.issues {
+					row.ProofIssues = append(row.ProofIssues, sourceFoundationRequirementProofIssue{ID: id, Code: issue.Code, Path: issue.Path})
+					row.MissingEvidence = append(row.MissingEvidence, issue.Code+": "+id+" ("+issue.Path+")")
 				}
 				row.Proofs = append(row.Proofs, sourceFoundationAssertionResult{ID: id, AtlasID: proof.record.AtlasID,
 					Contract: proof.record.Contract, Assertion: proof.record.Assertion.Statement, Status: proof.status,
@@ -162,7 +183,7 @@ func resolveSourceFoundationRequirement(requirement sourceFoundationRequirement,
 	case "unresolved":
 		return "unresolved", nil
 	case "existing_shared_capability", "connector_local_configuration":
-		if len(proofs) == 0 || len(requirement.FitBindings) == 0 {
+		if len(proofs) == 0 || len(proofs) != len(requirement.ProofIDs) || len(requirement.FitBindings) == 0 {
 			return "", fmt.Errorf("shared assertion or exact source configuration fit missing")
 		}
 		for _, proof := range proofs {

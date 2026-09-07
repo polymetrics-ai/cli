@@ -67,10 +67,36 @@ for location in ("root", "requirement", "lookup", "facet", "known", "proof", "in
     candidate = copy.deepcopy(document)
     targets = {"root": candidate, "requirement": candidate["requirements"][0],
                "lookup": candidate["requirements"][0]["atlas_lookup"], "facet": candidate["source_fit"][0],
-               "known": candidate["known_obligations"][0], "proof": candidate["foundation_proof_observations"][0]["record"],
+               "known": candidate["known_obligations"][0], "proof": candidate["foundation_proof_observations"][0]["record"] if candidate["foundation_proof_observations"] else None,
                "input": candidate["inputs"][0], "example": candidate["atlas_examples"][0], "checks": candidate["checks"]}
+    if targets[location] is None:
+        continue  # No fabricated record in a valid absent-proof report.
     targets[location]["runtime_authority"] = True
     check(f"closed {location}", candidate, False)
+for container, fields in ((document["foundation_proof_document"], ("path", "status", "issues")),
+                          (document["requirements"][0], ("requested_proof_ids", "proof_issues"))):
+    for field in fields:
+        for mutation in ("absent", "null"):
+            candidate = copy.deepcopy(document)
+            target = candidate["foundation_proof_document"] if container is document["foundation_proof_document"] else candidate["requirements"][0]
+            if mutation == "absent":
+                del target[field]
+            else:
+                target[field] = None
+            check(f"availability {field} {mutation}", candidate, False)
+for index, proof in enumerate(document["foundation_proof_observations"]):
+    for mutation in ("absent", "null"):
+        candidate = copy.deepcopy(document)
+        target = candidate["foundation_proof_observations"][index]
+        if mutation == "absent":
+            del target["issues"]
+        else:
+            target["issues"] = None
+        check(f"record {index} issues {mutation}", candidate, False)
+    candidate = copy.deepcopy(document)
+    candidate["foundation_proof_observations"][index]["status"] = "current"
+    candidate["foundation_proof_observations"][index]["issues"] = [{"code": "proof_input_missing", "path": "go.sum"}]
+    check(f"record {index} current with unavailable issue", candidate, False)
 if args.document.read_bytes() != raw:
     raise SystemExit("input document changed during schema observation")
 for pin, path in zip(pins, paths):

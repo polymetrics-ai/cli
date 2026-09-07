@@ -18,7 +18,8 @@
     "adopter_relations",
     "inputs",
     "foundation_proof_observations",
-    "checks"
+    "checks",
+    "foundation_proof_document"
   ],
   "properties": {
     "schema_version": {
@@ -94,6 +95,32 @@
     },
     "checks": {
       "$ref": "#/$defs/checks"
+    },
+    "foundation_proof_document": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "status",
+        "issues"
+      ],
+      "properties": {
+        "path": {
+          "const": "docs/connector-canon/foundations/proofs.json"
+        },
+        "status": {
+          "enum": [
+            "present",
+            "proof_unavailable"
+          ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/proof_issue"
+          }
+        }
+      }
     }
   },
   "$defs": {
@@ -143,7 +170,9 @@
         "status": {
           "enum": [
             "current",
-            "unreviewed"
+            "unreviewed",
+            "proof_unavailable",
+            "proof_stale"
           ]
         },
         "limitations": {
@@ -175,7 +204,9 @@
         "retained_decision_owners",
         "atlas_lookup",
         "affected_artifacts",
-        "fit_bindings"
+        "fit_bindings",
+        "requested_proof_ids",
+        "proof_issues"
       ],
       "properties": {
         "identity": {
@@ -283,6 +314,20 @@
         },
         "source_exclusion": {
           "$ref": "../source-lane-manifest.schema.json#/$defs/fact_ref"
+        },
+        "requested_proof_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "proof_issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/requirement_proof_issue"
+          }
         }
       }
     },
@@ -672,7 +717,8 @@
       "additionalProperties": false,
       "required": [
         "record",
-        "status"
+        "status",
+        "issues"
       ],
       "properties": {
         "record": {
@@ -681,8 +727,85 @@
         "status": {
           "enum": [
             "current",
-            "unreviewed"
+            "unreviewed",
+            "proof_unavailable",
+            "proof_stale"
           ]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/proof_issue"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "current"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "issues": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "proof_issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "path"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "proof_document_missing",
+            "proof_record_missing",
+            "proof_input_missing",
+            "proof_input_stale",
+            "proof_atlas_pin_stale"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "requirement_proof_issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "code",
+        "path"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "proof_document_missing",
+            "proof_record_missing",
+            "proof_input_missing",
+            "proof_input_stale",
+            "proof_atlas_pin_stale"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

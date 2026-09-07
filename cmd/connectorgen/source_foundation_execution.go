@@ -52,8 +52,9 @@ type sourceFoundationExecutions struct {
 }
 
 func (s *sourceFoundationExecutions) validate(r sourceFoundationProofRecord) error {
-	if s.module == "" {
-		raw, file := s.cache.get("go.mod", 4<<20, false)
+	moduleCurrent := sourceFoundationInputCurrent(s.cache, r.Inputs, "go.mod")
+	if moduleCurrent && s.module == "" {
+		raw, file := s.cache.getContent("go.mod", 4<<20)
 		if file.code != "" {
 			return fmt.Errorf("foundation module input unavailable")
 		}
@@ -68,32 +69,45 @@ func (s *sourceFoundationExecutions) validate(r sourceFoundationProofRecord) err
 			return fmt.Errorf("foundation module declaration invalid")
 		}
 	}
-	capture, err := s.capture(r.Capture)
-	if err != nil {
-		return err
-	}
-	if !sourceFoundationCaptureCommand(capture.Command, r.Test) {
-		return fmt.Errorf("foundation original command invalid")
-	}
-	if capture.OutputSHA256 != r.Output.SHA256 || capture.OutputBytes != r.Output.Bytes {
-		return fmt.Errorf("foundation original output identity mismatch")
-	}
-	for _, input := range r.Inputs {
-		original, exists := capture.Inputs[input.Path]
-		if !exists || original.SHA256 != input.SHA256 || original.Bytes != input.Bytes || original.Snapshot == "" {
-			return fmt.Errorf("foundation captured input mismatch")
+	captureCurrent := sourceFoundationPinCurrent(s.cache, r.Capture)
+	var capture sourceFoundationCapture
+	if captureCurrent {
+		var err error
+		capture, err = s.capture(r.Capture)
+		if err != nil {
+			return err
 		}
-		_, file := s.cache.get(input.Path, 4<<20, false)
-		if file.code != "" || file.hash != input.SHA256 || file.size != input.Bytes {
-			return fmt.Errorf("foundation current input unavailable or changed")
+		if !sourceFoundationCaptureCommand(capture.Command, r.Test) {
+			return fmt.Errorf("foundation original command invalid")
+		}
+		if capture.OutputSHA256 != r.Output.SHA256 || capture.OutputBytes != r.Output.Bytes {
+			return fmt.Errorf("foundation original output identity mismatch")
+		}
+		for _, input := range r.Inputs {
+			original, exists := capture.Inputs[input.Path]
+			if !exists || original.SHA256 != input.SHA256 || original.Bytes != input.Bytes || original.Snapshot == "" {
+				return fmt.Errorf("foundation captured input mismatch")
+			}
 		}
 	}
-	_, output := s.cache.get(r.Output.Path, 4<<20, true)
-	if output.code != "" || output.hash != r.Output.SHA256 || output.size != r.Output.Bytes || !output.parsed {
-		return fmt.Errorf("foundation output unavailable or changed")
+	if !sourceFoundationPinCurrent(s.cache, r.Output) {
+		return nil
+	}
+	raw, output := s.cache.getContent(r.Output.Path, 4<<20)
+	if output.code != "" {
+		return fmt.Errorf("foundation output unavailable")
+	}
+	if !output.parsed {
+		output.result = parseSourceProofResult(raw)
+		output.parsed = true
 	}
 	result := output.result
-	pkg := s.module + "/" + strings.TrimPrefix(r.Test.Package, "./")
+	// Even when a missing module prevents the module/package join, a present
+	// claimed result must contain the exact successful selected test events.
+	pkg := result.pkg
+	if moduleCurrent {
+		pkg = s.module + "/" + strings.TrimPrefix(r.Test.Package, "./")
+	}
 	if !result.successfulSelection(pkg, r.Test.Selected) || !result.successfulSelection(pkg, r.Test.Symbol) {
 		return fmt.Errorf("foundation selected result invalid")
 	}
@@ -101,14 +115,14 @@ func (s *sourceFoundationExecutions) validate(r sourceFoundationProofRecord) err
 	for _, test := range result.tests {
 		runs, passes = runs+test.runs, passes+test.passes
 	}
-	if capture.SelectedEvents != runs || capture.PassingEvents != passes {
+	if captureCurrent && (capture.SelectedEvents != runs || capture.PassingEvents != passes) {
 		return fmt.Errorf("foundation original event counts mismatch")
 	}
-	return nil
+	return s.cache.ctx.Err()
 }
 
 func (s *sourceFoundationExecutions) capture(pin sourceArtifactPin) (sourceFoundationCapture, error) {
-	raw, file := s.cache.get(pin.Path, 64<<20, false)
+	raw, file := s.cache.getContent(pin.Path, 64<<20)
 	if file.code != "" || file.hash != pin.SHA256 || file.size != pin.Bytes {
 		return sourceFoundationCapture{}, fmt.Errorf("foundation original capture unavailable or changed")
 	}

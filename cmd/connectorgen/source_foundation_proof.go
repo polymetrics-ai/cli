@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"go/token"
-	"os"
 	"strings"
 )
 
@@ -60,6 +59,7 @@ type sourceFoundationProofObservation struct {
 	record sourceFoundationProofRecord
 	atlas  sourceFoundationAtlasEntry
 	status string
+	issues []sourceFoundationProofIssue
 }
 
 type sourceFoundationProofDocument struct {
@@ -103,75 +103,8 @@ func readSourceFoundationProofsObserved(ctx context.Context, repo string, catalo
 	if err := ctx.Err(); err != nil {
 		return nil, err
 	}
-	reviews := map[string]sourceFoundationProofReview{}
-	for _, review := range catalog.Reviews {
-		if _, duplicate := reviews[review.ID]; duplicate || !validSourceID(review.ID) || !sourceProofDigest(review.RecordSHA256) || !sourceProofDigest(review.InputClosureSHA256) || !sourceProofDigest(review.AssertionSHA256) {
-			return nil, fmt.Errorf("foundation review catalogue invalid")
-		}
-		reviews[review.ID] = review
-	}
-	root, err := os.OpenRoot(repo)
-	if err != nil {
-		return nil, fmt.Errorf("foundation proof root: %w", err)
-	}
-	defer func() { _ = root.Close() }() // Read-only directory authority; no durable writes.
-	cache := sourceProofFileCache{
-		ctx: ctx, root: root, limits: sourceProofFileLimits{UniqueBytes: 512 << 20, Files: 65536},
-		files: map[string]*sourceProofFile{}, afterRead: observer,
-	}
-	atlas, err := readSourceFoundationAtlas(&cache)
-	if err != nil {
-		return nil, err
-	}
-	raw, file := cache.get(sourceFoundationProofPath, 128<<20, false)
-	if file.code != "" {
-		return nil, fmt.Errorf("foundation proof document: %s", file.code)
-	}
-	document, err := decodeSourceFoundationProofDocument(ctx, raw, len(catalog.Reviews))
-	if err != nil {
-		return nil, err
-	}
-	if document.Atlas != atlas.pin {
-		return nil, fmt.Errorf("foundation proof document invalid")
-	}
-	observations := make([]sourceFoundationProofObservation, 0, len(document.Records))
-	ids := map[string]bool{}
-	type selection struct{ atlas, contract, file, selected string }
-	selections := map[selection]bool{}
-	declarations := map[string]sourceFoundationDeclaration{}
-	executions := sourceFoundationExecutions{cache: &cache, captures: map[string]sourceFoundationCapture{}}
-	for _, record := range document.Records {
-		key := selection{record.AtlasID, record.Contract.Pointer, record.Test.File, record.Test.Selected}
-		if !sourceFoundationProofRecordShape(record) || ids[record.ID] || selections[key] {
-			return nil, fmt.Errorf("foundation proof record invalid or duplicate")
-		}
-		ids[record.ID], selections[key] = true, true
-		entry, exists := atlas.entries[record.AtlasID]
-		if !exists {
-			return nil, fmt.Errorf("foundation proof atlas entry unavailable")
-		}
-		if err := validateSourceFoundationProofAtlas(&cache, declarations, record, entry); err != nil {
-			return nil, err
-		}
-		if err := executions.validate(record); err != nil {
-			return nil, err
-		}
-		status := "unreviewed"
-		if review, exists := reviews[record.ID]; exists && sourceFoundationReviewMatches(record, review) {
-			status = "current"
-		}
-		observations = append(observations, sourceFoundationProofObservation{record: record, atlas: entry, status: status})
-	}
-	cache.finalize()
-	if err := ctx.Err(); err != nil {
-		return nil, err
-	}
-	for _, name := range cache.order {
-		if cache.files[name].code != "" {
-			return nil, fmt.Errorf("foundation proof observation changed")
-		}
-	}
-	return observations, nil
+	batch, err := readSourceFoundationProofBatch(ctx, repo, catalog, observer)
+	return batch.records, err
 }
 
 func sourceFoundationReviewMatches(record sourceFoundationProofRecord, review sourceFoundationProofReview) bool {

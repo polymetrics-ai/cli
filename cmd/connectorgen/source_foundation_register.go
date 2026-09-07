@@ -11,26 +11,28 @@ import (
 // The register is an authoring observation. None of its types can be supplied
 // to the lane reducer as accepted execution or proof authority.
 type sourceFoundationRegister struct {
-	SchemaVersion int                                 `json:"schema_version"`
-	Kind          string                              `json:"kind"`
-	Atlas         sourceArtifactPin                   `json:"atlas"`
-	Assessments   sourceArtifactPin                   `json:"assessments"`
-	Baseline      sourceArtifactPin                   `json:"baseline"`
-	SourceSHA256  string                              `json:"source_manifest_content_sha256"`
-	Coverage      sourceFoundationCoverage            `json:"coverage"`
-	Known         []sourceFoundationKnownState        `json:"known_obligations"`
-	Requirements  []sourceFoundationRequirementResult `json:"requirements"`
-	Facets        []sourceFoundationFacet             `json:"source_fit"`
-	Examples      []sourceFoundationExample           `json:"atlas_examples"`
-	Adopters      []sourceFoundationAdoption          `json:"adopter_relations"`
-	Inputs        []sourceArtifactPin                 `json:"inputs"`
-	Proofs        []sourceFoundationObservedProof     `json:"foundation_proof_observations"`
-	Checks        sourceFoundationRegisterChecks      `json:"checks"`
+	ProofDocument sourceFoundationProofDocumentObservation `json:"foundation_proof_document"`
+	SchemaVersion int                                      `json:"schema_version"`
+	Kind          string                                   `json:"kind"`
+	Atlas         sourceArtifactPin                        `json:"atlas"`
+	Assessments   sourceArtifactPin                        `json:"assessments"`
+	Baseline      sourceArtifactPin                        `json:"baseline"`
+	SourceSHA256  string                                   `json:"source_manifest_content_sha256"`
+	Coverage      sourceFoundationCoverage                 `json:"coverage"`
+	Known         []sourceFoundationKnownState             `json:"known_obligations"`
+	Requirements  []sourceFoundationRequirementResult      `json:"requirements"`
+	Facets        []sourceFoundationFacet                  `json:"source_fit"`
+	Examples      []sourceFoundationExample                `json:"atlas_examples"`
+	Adopters      []sourceFoundationAdoption               `json:"adopter_relations"`
+	Inputs        []sourceArtifactPin                      `json:"inputs"`
+	Proofs        []sourceFoundationObservedProof          `json:"foundation_proof_observations"`
+	Checks        sourceFoundationRegisterChecks           `json:"checks"`
 }
 
 type sourceFoundationObservedProof struct {
-	Record sourceFoundationProofRecord `json:"record"`
-	Status string                      `json:"status"`
+	Record sourceFoundationProofRecord  `json:"record"`
+	Status string                       `json:"status"`
+	Issues []sourceFoundationProofIssue `json:"issues"`
 }
 
 type sourceFoundationRegisterChecks struct {
@@ -75,11 +77,12 @@ func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sour
 	if err := validateSourceFoundationCoverage(coverage, observed); err != nil {
 		return result, err
 	}
-	proofs, err := readSourceFoundationProofObservations(ctx, repo)
+	batch, err := readSourceFoundationProofBatch(ctx, repo, reviewedSourceFoundationProofs(), nil)
 	if err != nil {
 		return result, err
 	}
-	requirements, err := buildSourceFoundationRequirementsObserved(ctx, observed, proofs)
+	proofs := batch.records
+	requirements, err := buildSourceFoundationRequirementsBatch(ctx, observed, batch)
 	if err != nil {
 		return result, err
 	}
@@ -96,12 +99,27 @@ func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sour
 		return result, fmt.Errorf("foundation source manifest encoding: %w", err)
 	}
 	result = sourceFoundationRegister{SchemaVersion: 1, Kind: "foundation_demand_register",
-		Atlas: observed.atlas.pin, Assessments: observed.pin, Baseline: inputs.baselinePin,
+		ProofDocument: batch.document, Atlas: observed.atlas.pin, Assessments: observed.pin, Baseline: inputs.baselinePin,
 		SourceSHA256: sourceBytesHash(source), Coverage: coverage, Requirements: requirements, Facets: facets, Examples: examples,
 		Known: []sourceFoundationKnownState{}, Adopters: []sourceFoundationAdoption{},
 		Inputs: append([]sourceArtifactPin{}, inputs.commandPins...), Proofs: []sourceFoundationObservedProof{}}
+	for _, pin := range batch.pins {
+		found := false
+		for _, prior := range result.Inputs {
+			if prior.Path == pin.Path {
+				if prior != pin {
+					return sourceFoundationRegister{}, fmt.Errorf("foundation proof input changed between readers")
+				}
+				found = true
+			}
+		}
+		if !found {
+			result.Inputs = append(result.Inputs, pin)
+		}
+	}
+	sort.Slice(result.Inputs, func(i, j int) bool { return result.Inputs[i].Path < result.Inputs[j].Path })
 	for _, proof := range proofs {
-		result.Proofs = append(result.Proofs, sourceFoundationObservedProof{Record: proof.record, Status: proof.status})
+		result.Proofs = append(result.Proofs, sourceFoundationObservedProof{Record: proof.record, Status: proof.status, Issues: append([]sourceFoundationProofIssue{}, proof.issues...)})
 	}
 	sort.Slice(result.Proofs, func(i, j int) bool { return result.Proofs[i].Record.ID < result.Proofs[j].Record.ID })
 	historical, sentry := map[sourceFoundationCell]bool{}, map[sourceFoundationCell]bool{}

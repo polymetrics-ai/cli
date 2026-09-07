@@ -79,7 +79,7 @@ type sourceFoundationDeclaration struct {
 	lines *token.FileSet
 }
 
-func validateSourceFoundationProofAtlas(cache *sourceProofFileCache, parsed map[string]sourceFoundationDeclaration, r sourceFoundationProofRecord, entry sourceFoundationAtlasEntry) error {
+func validateSourceFoundationProofMembership(r sourceFoundationProofRecord, entry sourceFoundationAtlasEntry) error {
 	if entry.Status != "available" {
 		return fmt.Errorf("foundation atlas entry not available")
 	}
@@ -95,6 +95,29 @@ func validateSourceFoundationProofAtlas(cache *sourceProofFileCache, parsed map[
 		if !slices.Contains(entry.Owner.Files, owner.File) || !slices.Contains(entry.Owner.Symbols, owner) {
 			return fmt.Errorf("foundation owner not declared by atlas entry")
 		}
+		found := false
+		for _, input := range r.Inputs {
+			found = found || input.Path == owner.File && input.Role == "code"
+		}
+		if !found {
+			return fmt.Errorf("foundation declaration input missing")
+		}
+	}
+	want := sourceFoundationAtlasTest{File: r.Test.File, Name: r.Test.Symbol, Package: r.Test.Package}
+	if !slices.Contains(entry.ProofTests, want) {
+		return fmt.Errorf("foundation test not registered by atlas entry")
+	}
+	return nil
+}
+
+func validateSourceFoundationProofAtlas(cache *sourceProofFileCache, parsed map[string]sourceFoundationDeclaration, r sourceFoundationProofRecord, entry sourceFoundationAtlasEntry) error {
+	if err := validateSourceFoundationProofMembership(r, entry); err != nil {
+		return err
+	}
+	for _, owner := range r.OwnerSymbols {
+		if !sourceFoundationInputCurrent(cache, r.Inputs, owner.File) {
+			continue
+		}
 		declaration, err := sourceFoundationPinnedDeclaration(cache, parsed, r.Inputs, owner.File, "code")
 		if err != nil {
 			return err
@@ -103,9 +126,8 @@ func validateSourceFoundationProofAtlas(cache *sourceProofFileCache, parsed map[
 			return fmt.Errorf("foundation owner declaration unavailable")
 		}
 	}
-	wantTest := sourceFoundationAtlasTest{File: r.Test.File, Name: r.Test.Symbol, Package: r.Test.Package}
-	if !slices.Contains(entry.ProofTests, wantTest) {
-		return fmt.Errorf("foundation test not registered by atlas entry")
+	if !sourceFoundationInputCurrent(cache, r.Inputs, r.Test.File) {
+		return nil
 	}
 	declaration, err := sourceFoundationPinnedDeclaration(cache, parsed, r.Inputs, r.Test.File, "test")
 	if err != nil {
@@ -138,12 +160,15 @@ func sourceFoundationPinnedDeclaration(cache *sourceProofFileCache, parsed map[s
 	if pin.Path == "" {
 		return sourceFoundationDeclaration{}, fmt.Errorf("foundation declaration input missing")
 	}
-	raw, file := cache.get(name, 4<<20, false)
+	raw, file := cache.getContent(name, 4<<20)
 	if file.code != "" || file.hash != pin.SHA256 || file.size != pin.Bytes {
 		return sourceFoundationDeclaration{}, fmt.Errorf("foundation declaration input changed")
 	}
 	if declaration, ok := parsed[name]; ok {
 		return declaration, nil
+	}
+	if err := cache.ctx.Err(); err != nil {
+		return sourceFoundationDeclaration{}, err
 	}
 	lines := token.NewFileSet()
 	// An explicit reader prevents a nil cache-hit slice from being interpreted
@@ -151,6 +176,9 @@ func sourceFoundationPinnedDeclaration(cache *sourceProofFileCache, parsed map[s
 	fileAST, err := parser.ParseFile(lines, name, bytes.NewReader(raw), 0)
 	if err != nil {
 		return sourceFoundationDeclaration{}, fmt.Errorf("foundation declaration parse: %w", err)
+	}
+	if err := cache.ctx.Err(); err != nil {
+		return sourceFoundationDeclaration{}, err
 	}
 	declaration := sourceFoundationDeclaration{file: fileAST, lines: lines}
 	parsed[name] = declaration
@@ -161,7 +189,10 @@ func sourceFoundationPinnedDeclaration(cache *sourceProofFileCache, parsed map[s
 // examples remain reconciliation work and cannot erase a valid Atlas owner.
 func readSourceFoundationAtlas(cache *sourceProofFileCache) (sourceFoundationAtlas, error) {
 	result := sourceFoundationAtlas{entries: map[string]sourceFoundationAtlasEntry{}}
-	raw, file := cache.get(sourceDemandAtlasPath, 64<<20, false)
+	if err := cache.plan(sourceDemandAtlasPath, 64<<20, true); err != nil {
+		return result, err
+	}
+	raw, file := cache.getContent(sourceDemandAtlasPath, 64<<20)
 	if file.code != "" {
 		return result, fmt.Errorf("foundation atlas: %s", file.code)
 	}

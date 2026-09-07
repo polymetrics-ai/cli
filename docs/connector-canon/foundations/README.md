@@ -62,6 +62,17 @@ it never executes their commands or adopts their historical working directories.
 A top-level mode-vocabulary assertion does not establish an executor/mode
 intersection. A selected refusal subtest does not prove its unselected siblings.
 
+Missing optional proof documents, selected records or evidence files retain the
+unresolved demand and its source identity, citations and next owner. The report
+separates `requested_proof_ids` from observed records and records typed
+`proof_issues`. Present historical pins whose bytes have changed produce
+`proof_stale`; missing evidence produces `proof_unavailable`. Actual input pins
+describe observed bytes, including stale files. An absent file has no invented
+input pin or assertion. Resolved shared/local claims still require current proof.
+Malformed evidence, unsafe paths, capacity violations, cancellation and changes
+during observation refuse the complete report. Required current source and Atlas
+joins remain strict, including when an optional proof refers to the same file.
+
 The register keeps those narrow proof observations separate from resolved reuse
 requirements. Atlas examples retain their literal files, occurrence hashes and
 owners. Missing files or absent exact source/selector joins stay

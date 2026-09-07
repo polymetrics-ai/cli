@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"io/fs"
 	"os"
 	"path"
@@ -39,7 +40,55 @@ type sourceProofFileCache struct {
 	files     map[string]*sourceProofFile
 	order     []string
 	stats     sourceProofReadStats
+	plans     map[string]sourceProofFilePlan
+	contents  map[string][]byte
 }
+type sourceProofFilePlan struct {
+	cap     int64
+	content bool
+}
+
+// Plan every byte consumer before a hash-only observation can discard bytes.
+// Multiple roles share one observation and the smallest declared cap.
+func (c *sourceProofFileCache) plan(name string, cap int64, content bool) error {
+	if !sourceProofSafePath(name) || cap < 0 {
+		return fmt.Errorf("proof file role invalid")
+	}
+	if c.plans == nil {
+		c.plans = map[string]sourceProofFilePlan{}
+		c.contents = map[string][]byte{}
+	}
+	previous, exists := c.plans[name]
+	if !exists && len(c.plans) >= c.limits.Files {
+		return fmt.Errorf("proof file role capacity exceeded")
+	}
+	if exists {
+		cap, content = min(cap, previous.cap), content || previous.content
+	}
+	if file, read := c.files[name]; read && file.code == "" {
+		if file.size > cap {
+			return fmt.Errorf("proof file overlapping role cap exceeded")
+		}
+		if _, retained := c.contents[name]; content && !retained {
+			return fmt.Errorf("proof byte role registered after hash-only observation")
+		}
+	}
+	c.plans[name] = sourceProofFilePlan{cap: cap, content: content}
+	return nil
+}
+
+func (c *sourceProofFileCache) getContent(name string, cap int64) ([]byte, *sourceProofFile) {
+	plan, exists := c.plans[name]
+	if !exists || !plan.content {
+		return nil, &sourceProofFile{code: "proof_content_unplanned"}
+	}
+	_, file := c.get(name, cap, false)
+	if file.code != "" {
+		return nil, file
+	}
+	return c.contents[name], file
+}
+
 type sourceProofFileLimits struct {
 	UniqueBytes int64
 	Files       int
@@ -125,9 +174,19 @@ func (c *sourceProofFileCache) read(name, phase string, cap int64) ([]byte, *sou
 }
 
 func (c *sourceProofFileCache) get(name string, cap int64, receipt bool) ([]byte, *sourceProofFile) {
+	if c.ctx.Err() != nil {
+		return nil, &sourceProofFile{code: "proof_cancelled"}
+	}
+	plan, planned := c.plans[name]
+	if planned {
+		cap = min(cap, plan.cap)
+	}
 	if f, ok := c.files[name]; ok {
 		// Every successful unique path is identity-checked and content-rehashed
 		// at final return. Hits do not multiply I/O by the number of claims.
+		if planned && f.code == "" && f.size > cap {
+			return nil, &sourceProofFile{code: "proof_role_cap_exceeded"}
+		}
 		return nil, f
 	}
 	if len(c.files) >= c.limits.Files {
@@ -137,6 +196,9 @@ func (c *sourceProofFileCache) get(name string, cap int64, receipt bool) ([]byte
 	c.files[name] = f
 	c.order = append(c.order, name)
 	c.stats.UniqueFiles++
+	if planned && plan.content && f.code == "" {
+		c.contents[name] = raw
+	}
 	if receipt && f.code == "" {
 		f.result = parseSourceProofResult(raw)
 		f.parsed = true

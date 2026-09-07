@@ -147,7 +147,21 @@ func TestSourceFoundationProofOriginalExecution(t *testing.T) {
 			}
 			r.Capture.SHA256, r.Capture.Bytes = sourceBytesHash(raw), int64(len(raw))
 			writeSourceFoundationObservationFixture(t, repo, document)
-			if got, err := readSourceFoundationProofObservations(t.Context(), repo); err == nil || len(got) != 0 {
+			got, err := readSourceFoundationProofObservations(t.Context(), repo)
+			if scenario == "missing dependency" || scenario == "changed dependency" {
+				want := "proof_stale"
+				if scenario == "missing dependency" {
+					want = "proof_unavailable"
+				}
+				if err != nil || len(got) != 2 {
+					t.Fatalf("typed optional dependency observation lost: %v", err)
+				}
+				for _, proof := range got {
+					if proof.status != want || len(proof.issues) != 1 || proof.issues[0].Path != "go.sum" {
+						t.Fatalf("optional dependency status/issue: %+v", proof)
+					}
+				}
+			} else if err == nil || len(got) != 0 {
 				t.Fatalf("invalid execution/input survived real proof reader: observations=%d error=%v", len(got), err)
 			}
 		})
@@ -169,6 +183,7 @@ func TestSourceFoundationProofObservation(t *testing.T) {
 	repo, document := sourceFoundationProofObservationFixture(t)
 	writeSourceFoundationObservationFixture(t, repo, document)
 	got, err := readSourceFoundationProofObservations(t.Context(), repo)
+	sort.Slice(got, func(i, j int) bool { return got[i].record.ID > got[j].record.ID })
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -240,7 +255,17 @@ func TestSourceFoundationProofClosedObservations(t *testing.T) {
 			}
 			tc.mutate(&document)
 			writeSourceFoundationObservationFixture(t, repo, document)
-			if got, err := readSourceFoundationProofObservations(t.Context(), repo); err == nil || len(got) != 0 {
+			got, err := readSourceFoundationProofObservations(t.Context(), repo)
+			if tc.name == "stale atlas control" {
+				if err != nil || len(got) != 2 {
+					t.Fatalf("stale optional Atlas envelope erased records: %v", err)
+				}
+				for _, proof := range got {
+					if proof.status != "proof_stale" || len(proof.issues) != 1 || proof.issues[0].Code != "proof_atlas_pin_stale" {
+						t.Fatalf("stale Atlas observation invalid: %+v", proof)
+					}
+				}
+			} else if err == nil || len(got) != 0 {
 				t.Fatalf("malformed foundation record survived actual observation frontier: observations=%d error=%v", len(got), err)
 			}
 		})
@@ -299,6 +324,7 @@ func TestSourceFoundationProofReviewedAssertions(t *testing.T) {
 			}
 			writeSourceFoundationObservationFixture(t, repo, document)
 			got, err := readSourceFoundationProofObservations(t.Context(), repo)
+			sort.Slice(got, func(i, j int) bool { return got[i].record.ID > got[j].record.ID })
 			if err != nil || len(got) != 2 {
 				t.Fatalf("real capture/result/input frontier not reached: %v", err)
 			}
@@ -582,7 +608,7 @@ func TestSourceFoundationProofBoundedMetadata(t *testing.T) {
 				t.Fatalf("initial physical reads = %d", initial)
 			}
 			if extra == 0 {
-				if readErr != nil || len(got) != 2 || got[0].status != "unreviewed" || final != 1 || charge != 64<<20 {
+				if readErr != nil || len(got) != 2 || got[1].status != "unreviewed" || final != 1 || charge != 64<<20 {
 					t.Fatalf("exact typed metadata bound: observations=%d final=%d charge=%d error=%v", len(got), final, charge, readErr)
 				}
 			} else if readErr == nil || len(got) != 0 || final != 0 || charge != (64<<20)+1 {
@@ -608,6 +634,7 @@ func TestSourceFoundationProofDuplicateTupleWithinCapacity(t *testing.T) {
 			}
 			writeSourceFoundationObservationFixture(t, repo, document)
 			got, err := readSourceFoundationProofObservations(t.Context(), repo)
+			sort.Slice(got, func(i, j int) bool { return got[i].record.ID > got[j].record.ID })
 			if err == nil || len(got) != 0 || !strings.Contains(err.Error(), "record invalid or duplicate") {
 				t.Fatalf("two distinct IDs sharing tuple did not reach tuple refusal: observations=%d error=%v", len(got), err)
 			}

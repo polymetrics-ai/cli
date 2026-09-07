@@ -136,8 +136,26 @@ func assertSourceFoundationUnavailableRegister150(t *testing.T, got, control sou
 	}
 	r, want := got.Requirements[0], control.Requirements[0]
 	if r.Identity != want.Identity || r.ID != want.ID || r.Status != "unresolved" || r.NextOwner != want.NextOwner ||
-		!reflect.DeepEqual(r.SourceRefs, want.SourceRefs) || len(r.MissingEvidence) == 0 || len(r.Proofs) != 1 || r.Proofs[0].Status == "current" {
+		!reflect.DeepEqual(r.SourceRefs, want.SourceRefs) || len(r.MissingEvidence) == 0 {
 		t.Fatalf("unavailable proof erased source identity/owner/evidence or remained current: %+v", r)
+	}
+	raw, err := json.Marshal(r)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var wire map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &wire); err != nil {
+		t.Fatal(err)
+	}
+	var requested []string
+	var issues []map[string]string
+	if json.Unmarshal(wire["requested_proof_ids"], &requested) != nil || len(requested) != 1 || requested[0] != want.Proofs[0].ID ||
+		json.Unmarshal(wire["proof_issues"], &issues) != nil || len(issues) == 0 || issues[0]["id"] != requested[0] {
+		t.Fatal("unavailable proof lost exact requested ID or typed issue")
+	}
+	absent := issues[0]["code"] == "proof_document_missing" || issues[0]["code"] == "proof_record_missing"
+	if absent && len(r.Proofs) != 0 || !absent && (len(r.Proofs) != 1 || r.Proofs[0].Status == "current") {
+		t.Fatal("absent evidence fabricated a record or present unavailable evidence became current")
 	}
 }
 

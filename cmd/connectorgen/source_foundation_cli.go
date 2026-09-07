@@ -102,6 +102,39 @@ func runSourceDemandsObserved(ctx context.Context, args []string, stdout, stderr
 	cache := sourceProofFileCache{ctx: ctx, root: root,
 		limits: sourceProofFileLimits{UniqueBytes: 512 << 20, Files: 65536},
 		files:  map[string]*sourceProofFile{}, afterRead: observer}
+	// Plan command byte roles before proof preloading can observe any overlap.
+	for _, role := range []struct {
+		name string
+		cap  int64
+	}{{o.cohort, 64 << 20}, {sourceLaneAnnotationsPath, 64 << 20}, {o.manifest, 512 << 20}} {
+		if err := cache.plan(role.name, role.cap, true); err != nil {
+			logln(stderr, "source-demands:", err)
+			return 1
+		}
+	}
+	if o.check {
+		if err := cache.plan(o.checkPath, 512<<20, true); err != nil {
+			logln(stderr, "source-demands:", err)
+			return 1
+		}
+	}
+	catalog := reviewedSourceFoundationProofs()
+	atlas, document, documentObservation, err := prepareSourceFoundationProofs(&cache, catalog)
+	if err != nil {
+		logln(stderr, "source-demands:", err)
+		return 1
+	}
+	preloaded, err := observePreparedSourceFoundationProofs(&cache, atlas, document, documentObservation, catalog)
+	if err != nil {
+		logln(stderr, "source-demands:", err)
+		return 1
+	}
+	missingProofs := map[string]bool{}
+	for _, name := range cache.order {
+		if cache.files[name].code == "missing" {
+			missingProofs[name] = true
+		}
+	}
 	inputs, err := loadSourceFoundationCommandInputs(ctx, o, baseline, &cache)
 	if err != nil {
 		logln(stderr, "source-demands:", err)
@@ -133,6 +166,22 @@ func runSourceDemandsObserved(ctx context.Context, args []string, stdout, stderr
 		logln(stderr, "source-demands:", err)
 		return 1
 	}
+	expectedProofs := []sourceFoundationObservedProof{}
+	for _, proof := range preloaded.records {
+		expectedProofs = append(expectedProofs, sourceFoundationObservedProof{Record: proof.record, Status: proof.status, Issues: proof.issues})
+	}
+	wanted, _ := json.Marshal(struct {
+		Document sourceFoundationProofDocumentObservation
+		Proofs   []sourceFoundationObservedProof
+	}{preloaded.document, expectedProofs})
+	actual, _ := json.Marshal(struct {
+		Document sourceFoundationProofDocumentObservation
+		Proofs   []sourceFoundationObservedProof
+	}{register.ProofDocument, register.Proofs})
+	if !bytes.Equal(wanted, actual) {
+		logln(stderr, "source-demands: proof observations changed between readers")
+		return 1
+	}
 	raw, err := json.Marshal(register)
 	if err != nil {
 		logln(stderr, "source-demands: register encoding failed")
@@ -144,7 +193,7 @@ func runSourceDemandsObserved(ctx context.Context, args []string, stdout, stderr
 		return 1
 	}
 	if o.check {
-		candidate, file := cache.get(o.checkPath, 512<<20, false)
+		candidate, file := cache.getContent(o.checkPath, 512<<20)
 		if file.code != "" || validateSourceFoundationRegister(ctx, o.repo, candidate, inputs) != nil || !bytes.Equal(candidate, raw) {
 			logln(stderr, "source-demands: saved register invalid or changed")
 			return 1
@@ -159,7 +208,7 @@ func runSourceDemandsObserved(ctx context.Context, args []string, stdout, stderr
 	}
 	for _, name := range cache.order {
 		file := cache.files[name]
-		if missingExamples[name] && file.code == "missing" {
+		if (missingExamples[name] || missingProofs[name]) && file.code == "missing" {
 			if _, code := sourceProofFileInfo(root, name); code == "missing" {
 				continue
 			}
@@ -177,12 +226,12 @@ func runSourceDemandsObserved(ctx context.Context, args []string, stdout, stderr
 
 func loadSourceFoundationCommandInputs(ctx context.Context, o sourceFoundationCommandOptions, baseline sourceArtifactPin, cache *sourceProofFileCache) (sourceFoundationDemandInputs, error) {
 	var result sourceFoundationDemandInputs
-	cohortRaw, cohortFile := cache.get(o.cohort, 64<<20, false)
+	cohortRaw, cohortFile := cache.getContent(o.cohort, 64<<20)
 	var cohort sourceLaneCohort
 	if cohortFile.code != "" || decodeSourceJSON(cohortRaw, &cohort) != nil || decodeStrictJSON(cohortRaw, &cohort) != nil || validateSourceLaneCohort(cohort) != nil {
 		return result, fmt.Errorf("cohort anchor invalid")
 	}
-	annotationRaw, annotationFile := cache.get(sourceLaneAnnotationsPath, 64<<20, false)
+	annotationRaw, annotationFile := cache.getContent(sourceLaneAnnotationsPath, 64<<20)
 	var annotations struct {
 		SchemaVersion int                        `json:"schema_version"`
 		Annotations   []sourceSemanticAnnotation `json:"annotations"`
@@ -198,7 +247,7 @@ func loadSourceFoundationCommandInputs(ctx context.Context, o sourceFoundationCo
 		sourceArtifactPin{Path: o.cohort, SHA256: sourceBytesHash(cohortRaw), Bytes: int64(len(cohortRaw))},
 		sourceArtifactPin{Path: sourceLaneAnnotationsPath, SHA256: sourceBytesHash(annotationRaw), Bytes: int64(len(annotationRaw))})
 	sort.Slice(universe.manifest.Inputs, func(i, j int) bool { return universe.manifest.Inputs[i].Path < universe.manifest.Inputs[j].Path })
-	manifestRaw, manifestFile := cache.get(o.manifest, 512<<20, false)
+	manifestRaw, manifestFile := cache.getContent(o.manifest, 512<<20)
 	var manifest sourceLaneManifest
 	if manifestFile.code != "" || decodeSourceJSON(manifestRaw, &manifest) != nil || decodeStrictJSON(manifestRaw, &manifest) != nil {
 		return result, fmt.Errorf("source manifest invalid")
@@ -249,9 +298,6 @@ func loadSourceFoundationCommandInputs(ctx context.Context, o sourceFoundationCo
 	if err := observeSourceFoundationCommandPin(cache, baseline, 4<<20); err != nil {
 		return result, err
 	}
-	if err := observeSourceFoundationCommandProofs(ctx, cache); err != nil {
-		return result, err
-	}
 	result, err = observeSourceFoundationDemandInputs(ctx, o.repo, o.assessments, universe, baseline)
 	if err != nil {
 		return result, err
@@ -272,37 +318,12 @@ func writeSourceFoundationBytes(stdout, stderr io.Writer, raw []byte) int {
 }
 
 func observeSourceFoundationCommandPin(cache *sourceProofFileCache, pin sourceArtifactPin, limit int64) error {
+	if err := cache.plan(pin.Path, limit, false); err != nil {
+		return err
+	}
 	_, file := cache.get(pin.Path, limit, false)
 	if file.code != "" || file.hash != pin.SHA256 || file.size != pin.Bytes {
 		return fmt.Errorf("foundation command input pin mismatch: %s", pin.Path)
-	}
-	return nil
-}
-
-func observeSourceFoundationCommandProofs(ctx context.Context, cache *sourceProofFileCache) error {
-	raw, file := cache.get(sourceFoundationProofPath, 128<<20, false)
-	if file.code != "" {
-		return fmt.Errorf("foundation command proof input invalid")
-	}
-	document, err := decodeSourceFoundationProofDocument(ctx, raw, len(reviewedSourceFoundationProofs().Reviews))
-	if err != nil {
-		return err
-	}
-	if err := observeSourceFoundationCommandPin(cache, document.Atlas, 64<<20); err != nil {
-		return err
-	}
-	for _, record := range document.Records {
-		for _, pin := range []sourceArtifactPin{record.Capture, record.Output} {
-			if err := observeSourceFoundationCommandPin(cache, pin, 64<<20); err != nil {
-				return err
-			}
-		}
-		for _, input := range record.Inputs {
-			pin := sourceArtifactPin{Path: input.Path, SHA256: input.SHA256, Bytes: input.Bytes}
-			if err := observeSourceFoundationCommandPin(cache, pin, 64<<20); err != nil {
-				return err
-			}
-		}
 	}
 	return nil
 }
