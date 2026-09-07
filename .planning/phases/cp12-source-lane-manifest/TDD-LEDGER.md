@@ -356,3 +356,12 @@ The prior complete non-corpus source run passed595/595 at its original snapshot;
 - `cr02-ref-conjunction-red`: exit1, 5/1 selected/passed, 4.835406125s, raw SHA256 `53961e00fdd51fff54b7317f3112c1780cf528dcec8e48997876e44f69c8a31a`, changed inputs `[]`.
 
 Green: `cr02-ref-conjunction-green` exit0,224/224 selected/passed,34.795876042s, raw SHA256 `b70b214839e147debd71f081d9649a41933e22dba223bff8e31ab99bfef9bea5`, unchanged captured inputs. This includes the full binding fixture group plus composition, budget and collection controls. Final source normal/race and artifact verification follow the coherent commit.
+
+
+## Correction130 pre-edit obligations
+
+Sealed127 complete ledger adopted before tests/production: CR08 fix_created609acfde (intermediate composition), CR10 fix_created609acfde (explicit nonobject type), CR09 initial_snapshot_miss7ae74f1a (incomplete component lineage). The private127 overlay failures are independent discovery, not owner130 RED. Full plan and exact contracts in PLAN130 section; no production correction yet.
+
+Red: PENDING genuine owner GroupA desired-behavior builder/evidence counterexamples and GroupB admitted builder/consumer/proof cases, with complete new test bytes captured before execution. Positive controls must reach the same phases. Each failure will retain exact assertion/cause and source/test/dependency receipt.
+
+Green: PENDING same original assertions after coherent GroupA and GroupB repairs. No current-source normal/race/artifact receipt exists yet. Original127 dispositions close CR01/03/04/05/06/07/WR01 on87 only; CR02 remains blocking via08/10; WR02 historical limitation121 stays immutable. Full source normal+predeclared serial whole-parent race union and artifact/static checks follow actual corrected source. CP12-05/06/07 unresolved; CP12-09 unaccepted.
