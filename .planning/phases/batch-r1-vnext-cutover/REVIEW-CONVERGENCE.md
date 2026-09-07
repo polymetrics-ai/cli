@@ -2268,3 +2268,7 @@ The remaining uncertainty is specific: the proposed test-only implementation and
 Return this complete report and its terminal SHA-256 only to the canonical Firstmate owner. **No fix, CP11 acceptance, next-phase advancement, captain-facing publication, merge or no-mistakes completion is authorized by this report alone.**
 
 <!-- END IMMUTABLE COMPLETE091 AUDIT -->
+
+## Firstmate139 complete carry-forward into CP13
+
+Captain-authorized CP13 implementation begins from reviewed2e364954/tree24d78d74 with all three final138 invariants: CP11 WR-138A-01 and CP12 CR-12/WR-138B-01. CR-02 links toCR-12 without duplicate counting; CR-11/136 closed. Complete verbatim final narratives, causality, all sibling obligations and nine CP13 items are committed before behavior edits in ../cp13-foundation-demand-register/{REVIEW-CONVERGENCE,PLAN,TDD-LEDGER,VERIFICATION}.md. This adds current work without rewriting original119IDs/28groups,49-path scope or historical receipts. Red: pending actual permanent pre-edit139 execution. Green: pending. CP11/CP12 remain carried/unaccepted until combined closure beforeCP14;139 supersedes the older CP12-before-CP13 start gate.
