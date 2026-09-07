@@ -51,3 +51,13 @@ No CP14 RED/GREEN yet. Initial inspection and inherited passing receipts are not
 ## Firstmate159 adoption
 
 Full159 assigns this complete CP14 scope after verified integration; it preserves the existing intake. Both carried corrections are part of this checkpoint. CR-158-01 requires a permanent pre-fix actual-consumer RED then same-expectation GREEN; WR-158-01 may already be correct production and must be labeled a coverage extension unless a genuine defect is reached. No manufactured RED, extra CP13-only review or bulk202-receipt replay. Commit this obligation/review ledger before behavioral edits.
+
+## Executable carry slice: CR-158-01
+
+Plan-phase --tdd and execute-phase sources/prompts resolved and read at the same official adapter version above. Inline fallback remains sole-owner, non-Pi execution. No new dependency or runtime foundation.
+
+1. Add permanent actual source-demands regression using the complete retained fixture and a separately pinned baseline without the admission-required cell. Establish positive control, then assert exact known-cell membership, observed source citations/document pins, baseline overlap deduplication and preserved baseline flags. Expected identities come from the independent fixture/control, not authored assessments. Capture genuine pre-fix failure with unchanged production.
+2. In buildSourceFoundationRegisterCurrent, union completed admission affected identities into the existing independent required-cell selection. Reuse current observed source rows for state, citations and document pins; baseline rows keep their flags. Do not consult assessment membership or intended argv.
+3. Rerun unchanged expectations, focused adjacent admission/register controls and race. Preserve every failed attempt and raw receipt. Update TDD/verification; correction remains pending the combined CP14 independent review.
+
+Inline plan check: this changes only authoring known-obligation output; existing reader custody must complete before the union. It does not alter U/A, requirements, source lane authority or runtime execution. The fixture must prove the admitted cell is outside baseline and the command reaches complete admission, so a parser/setup refusal cannot count as RED. WR-158-01 and all seven CP14 items remain separate pending tasks in the single manifest.

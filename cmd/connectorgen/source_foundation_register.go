@@ -183,11 +183,21 @@ func buildSourceFoundationRegisterCurrent(ctx context.Context, repo string, inpu
 	for _, row := range result.Known {
 		knownCells[row.Identity] = true
 	}
+	// Completed admission independently requires local work. Its affected cells
+	// belong to K even when the pinned historical baseline predates them.
+	admissionRequired := map[sourceFoundationCell]bool{}
+	if observed.universe.admission != nil {
+		for _, group := range observed.universe.admission.observation.MissingCLI {
+			for _, affected := range group.Affected {
+				admissionRequired[affected.Identity] = true
+			}
+		}
+	}
 	for _, source := range observed.universe.manifest.SourceOperations {
 		registrationRef, registration := sourceRegistrationDemand(source.Facts)
 		for _, lane := range source.Lanes {
 			identity := sourceFoundationCell{Key: source.Source.Key, Lane: lane.Lane}
-			required := slices.Contains(lane.OwnerRefs, "CP13") || len(lane.GapRefs) != 0 || registration && lane.Lane == "sync_transport"
+			required := admissionRequired[identity] || slices.Contains(lane.OwnerRefs, "CP13") || len(lane.GapRefs) != 0 || registration && lane.Lane == "sync_transport"
 			if !required || knownCells[identity] {
 				continue
 			}
