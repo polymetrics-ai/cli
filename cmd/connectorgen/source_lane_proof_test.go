@@ -61,7 +61,9 @@ func TestSourceLaneProofBatchFixture(t *testing.T) {
 				}
 				seen[id] = true
 				w.Header().Set("Content-Type", "application/json")
-				fmt.Fprintf(w, `[{"id":%q},{"id":%q}]`, id+"-A", id+"-B")
+				if _, err := fmt.Fprintf(w, `[{"id":%q},{"id":%q}]`, id+"-A", id+"-B"); err != nil {
+					t.Errorf("write fixture response: %v", err)
+				}
 			}))
 			defer server.Close()
 			for i := 0; i < group.count; i++ {
@@ -387,7 +389,11 @@ func TestSourceLaneProofReadAccounting(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer opened.Close()
+	defer func() {
+		if err := opened.Close(); err != nil {
+			t.Errorf("close fixture root: %v", err)
+		}
+	}()
 	before, err := opened.Stat(name)
 	if err != nil {
 		t.Fatal(err)
@@ -894,7 +900,11 @@ func TestSourceLaneProofAdditionalControls(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer opened.Close()
+		defer func() {
+			if err := opened.Close(); err != nil {
+				t.Errorf("close fixture root: %v", err)
+			}
+		}()
 		budget := int64(0)
 		code, severity := proofReadWithBudget(opened, r, &budget)
 		if code != "proof_read_budget_exceeded" || severity != "error" {

@@ -533,7 +533,7 @@ func sourceLaneIdentityPart(value string) bool {
 		return false
 	}
 	for _, c := range value {
-		if !((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.') {
+		if (c < 'a' || c > 'z') && (c < '0' || c > '9') && c != '-' && c != '_' && c != '.' {
 			return false
 		}
 	}

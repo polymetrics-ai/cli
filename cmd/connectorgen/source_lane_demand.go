@@ -54,7 +54,10 @@ func loadSourceDemandAtlas(ctx context.Context, repo string) (map[string]string,
 	if err != nil {
 		return owners, sourceArtifactPin{}
 	}
-	defer root.Close()
+	// This confinement handle is read-only: no data is flushed by Close.
+	// Read/validation failures already use the caller's existing result channel;
+	// teardown is not an additional source-consistency or proof-authority gate.
+	defer func() { _ = root.Close() }()
 	raw, err := readSourceInput(root, sourceDemandAtlasPath, 64<<20)
 	if err != nil {
 		return owners, sourceArtifactPin{}

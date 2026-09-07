@@ -59,7 +59,6 @@ type sourceLaneProofReview struct {
 type sourceLaneProofInputs struct {
 	Records           []sourceLaneProofRecord
 	Diagnostics       []sourceLaneDiagnostic
-	reviews           []sourceLaneProofReview
 	accepted          map[string]bool
 	byCell            map[sourceLaneProofCell]sourceLaneProofRecord
 	diagnosticsByCell map[sourceLaneProofCell][]sourceLaneDiagnostic
@@ -166,11 +165,12 @@ func validateSourceLaneProofSet(inputs []sourceLaneProofInput, limit int) source
 				set.tests[in.Path] = true
 			}
 		case "dependency":
-			if in.Path == "go.mod" {
+			switch in.Path {
+			case "go.mod":
 				mod = true
-			} else if in.Path == "go.sum" {
+			case "go.sum":
 				sum = true
-			} else {
+			default:
 				return set
 			}
 		default:
@@ -502,7 +502,10 @@ func loadSourceLaneProofs(ctx context.Context, repo string, policy sourceLanePro
 		add(sourceLaneProofRecord{}, "proof_root_unavailable", "error")
 		return result
 	}
-	defer root.Close()
+	// This confinement handle is read-only: no data is flushed by Close.
+	// Read/validation failures already use the caller's existing result channel;
+	// teardown is not an additional source-consistency or proof-authority gate.
+	defer func() { _ = root.Close() }()
 	cache := sourceLaneProofCache{ctx: ctx, root: root, policy: policy, files: map[string]*sourceLaneProofFile{}}
 	raw, doc := cache.get(sourceLaneProofPath, policy.limits.DocumentBytes, false)
 	if doc.code == "missing" {
@@ -860,9 +863,6 @@ func parseSourceLaneProofResult(raw []byte) sourceLaneProofResult {
 func (result sourceLaneProofResult) successful(r sourceLaneProofRecord) bool {
 	entry := result.tests[r.SelectedTest]
 	return result.valid && result.pkg == r.Package && entry.runs == 1 && entry.passes == 1 && !entry.invalid
-}
-func sourceLaneProofSuccessfulResult(raw []byte, r sourceLaneProofRecord) bool {
-	return parseSourceLaneProofResult(raw).successful(r)
 }
 
 // assessSourceLaneProof preserves source membership and independently derived

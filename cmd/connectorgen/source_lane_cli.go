@@ -70,7 +70,10 @@ func runSourceLanesContext(ctx context.Context, args []string, stdout, stderr io
 		logln(stderr, "source-lanes: repository unavailable")
 		return 1
 	}
-	defer root.Close()
+	// This confinement handle is read-only: no data is flushed by Close.
+	// Read/validation failures already use the caller's existing result channel;
+	// teardown is not an additional source-consistency or proof-authority gate.
+	defer func() { _ = root.Close() }()
 	cohortRaw, err := readSourceInput(root, sourceLaneCohortPath, 64<<20)
 	var cohort sourceLaneCohort
 	if err != nil || decodeSourceJSON(cohortRaw, &cohort) != nil || decodeStrictJSON(cohortRaw, &cohort) != nil || validateSourceLaneCohort(cohort) != nil {

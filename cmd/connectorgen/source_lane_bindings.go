@@ -2327,9 +2327,7 @@ func sourceLaneProjectionContract(facts sourceFacts, a sourceSemanticAnnotation,
 			}
 			if target.Write != nil && target.Write.BodyType == "json_array" {
 				coordinate := []string{}
-				for _, field := range strings.Split(target.Write.BodyField, ".") {
-					coordinate = append(coordinate, field)
-				}
+				coordinate = append(coordinate, strings.Split(target.Write.BodyField, ".")...)
 				if len(source.Path) != 0 || !reflect.DeepEqual(actual.Path, coordinate) {
 					add("target_body_projection_mismatch", m.Source.Pointer)
 				}

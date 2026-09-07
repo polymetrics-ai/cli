@@ -164,12 +164,14 @@ func classifySourceLanes(key sourceOperationKey, facts sourceFacts, annotation *
 	} else if request.Known {
 		set(3, false, "known_nonbinary_request", "request_body", "source_operation")
 	}
-	if semantics == "mutation" {
+	switch semantics {
+	case "mutation":
 		set(4, false, "source_mutation", "method", "summary")
-	} else if semantics == "read" {
-		if response.Cardinality == sourceCollection {
+	case "read":
+		switch response.Cardinality {
+		case sourceCollection:
 			set(4, true, "source_record_collection", "responses")
-		} else if response.Cardinality == sourceNoncollection {
+		case sourceNoncollection:
 			set(4, false, "fixed_noncollection_read", "responses")
 		}
 	}
@@ -676,7 +678,7 @@ func sourceRegistrationDemand(facts sourceFacts) (sourceFactRef, bool) {
 		// Only the first sentence names the action; later examples cannot turn an
 		// unrelated mutation into a registration claim.
 		clause := strings.SplitN(text, ".", 2)[0]
-		for _, word := range strings.FieldsFunc(clause, func(r rune) bool { return !(r >= 'a' && r <= 'z') }) {
+		for _, word := range strings.FieldsFunc(clause, func(r rune) bool { return r < 'a' || r > 'z' }) {
 			if word == "webhook" || word == "webhooks" || word == "hook" || word == "hooks" {
 				return ref, true
 			}

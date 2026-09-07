@@ -223,9 +223,10 @@ func summarizeSourceLaneManifest(result *sourceLaneManifest) {
 	})
 	result.Validation = sourceLaneValidation{Status: "valid"}
 	for _, d := range result.Diagnostics {
-		if d.Severity == "error" {
+		switch d.Severity {
+		case "error":
 			result.Validation.Errors++
-		} else if d.Severity == "deficit" {
+		case "deficit":
 			result.Validation.Deficits++
 		}
 	}

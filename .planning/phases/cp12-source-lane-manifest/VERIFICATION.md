@@ -180,3 +180,73 @@ Actual A/B source-lanes generations exit0 in55.019512334/54.136262334s, raw rece
 Census capture exception: initial assertions completed but the private capture wrapper parsed a pretty-JSON scalar as an event and failed before persisting nested exit. Original command/raw/census/runner retained with capture-failure.json; no original exit invented. Narrow dictionary-event parser fix, then explicit final-artifact-census-verified exit0/10.611587791s/raw a94f0aaf9369a37a3d62107a74bba4e5465300240480f612257c4087b279f1d5. This justified repeat is disclosed, not a lost-receipt PASS.
 
 Current Atlas/admission/docs56/56, runtime-input isolation1/1, vet, connectorgen/PM builds, agentcontract and authoring help all exit0 on6aa source with unchanged inputs. Correction-only introduced lint49..current PASS; original CP12-range lint reports15 pre-existing source sites, all exact lines independently verified at49 and retained in preexisting-lint-source-bindings.json. Original-range lint is not green and needs Firstmate reconciliation; no outside132 repair. Final candidate/default --check, serial race receipts and independent exact-SHA closure remain pending under126 overlap. No self-acceptance or CP13.
+
+
+## Firstmate133 original unaccepted CP12 lint gate
+
+Full133 adopted6956bytes/SHA2566227577ca2cb7bff30aaa2502b9ce3eefbec23aad6113c14dbb2634a03d67f79. All eight files carrying the15 diagnostics are absent at original base9c642b873b6a1ba3a4fe55fd7509715050c5b71c (exact git-show statuses retained in lint-original-base-attribution-133.json). Therefore every issue belongs to unaccepted CP12 despite predating49; none is deferred. Original command/config/environment/result remain captured in introduced-lint. Minimal prescribed correction under existing GSD/TDD; no new role, contract or suppression.
+
+Red: original-base lint exit1/15issues retained; mechanical simplification/dead-code removal does not invent behavioral RED. Three production roots are read-only confinement handles: all validation/read errors already use existing return/diagnostic channels; closing the handle flushes no written data and is not a proof-authority or durability gate. Keep one deferred Close, explicitly disregard only its read-only teardown result with local rationale, preserving prior primary errors and result semantics. Do not add a new root-close guarantee or silently alter proof classification. Test-owned roots instead check Close via t.Errorf; response Fprintf checks write error through existing test failure channel. No fixture assertion weakened.
+
+Simplify seven predicates/switches/append mechanically; remove unused private reviews field and unused successful-result wrapper only after exact repo symbol search (no callers); live review catalog/parser/successful method remain. Green: pending original-range lint rerun and full affected source/proof/CLI tests, then necessary final source normal/race/artifact gates. Prior769 normal,373 focused/A-B/static and candidate --check7d6 remain source-bound prior-candidate evidence. Candidate --check completed exit0/76.580589417s/raw ee78d87bb499fa7a22ac0e693f9e632f63a1969e7d871e43b72d9efba4630443 with exact full bytes/hash/inode/type/mtime/status preservation before edits. Prior complete handoff/seals copied with custody map under cp12-correction-132-prior-7d6b0643; freeze superseded by explicit133.
+
+Original15 diagnostics, verbatim:
+
+```text
+cmd/connectorgen/source_lane_cli.go:73:18: Error return value of `root.Close` is not checked (errcheck)
+	defer root.Close()
+	                ^
+cmd/connectorgen/source_lane_demand.go:57:18: Error return value of `root.Close` is not checked (errcheck)
+	defer root.Close()
+	                ^
+cmd/connectorgen/source_lane_proof.go:505:18: Error return value of `root.Close` is not checked (errcheck)
+	defer root.Close()
+	                ^
+cmd/connectorgen/source_lane_proof_test.go:64:16: Error return value of `fmt.Fprintf` is not checked (errcheck)
+				fmt.Fprintf(w, `[{"id":%q},{"id":%q}]`, id+"-A", id+"-B")
+				           ^
+cmd/connectorgen/source_lane_proof_test.go:390:20: Error return value of `opened.Close` is not checked (errcheck)
+	defer opened.Close()
+	                  ^
+cmd/connectorgen/source_lane_proof_test.go:897:21: Error return value of `opened.Close` is not checked (errcheck)
+		defer opened.Close()
+		                  ^
+cmd/connectorgen/source_inventory.go:536:6: QF1001: could apply De Morgan's law (staticcheck)
+		if !((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.') {
+		   ^
+cmd/connectorgen/source_lane_bindings.go:2330:5: S1011: should replace loop with coordinate = append(coordinate, strings.Split(target.Write.BodyField, ".")...) (staticcheck)
+				for _, field := range strings.Split(target.Write.BodyField, ".") {
+				^
+cmd/connectorgen/source_lane_manifest.go:226:3: QF1003: could use tagged switch on d.Severity (staticcheck)
+		if d.Severity == "error" {
+		^
+cmd/connectorgen/source_lane_proof.go:169:4: QF1003: could use tagged switch on in.Path (staticcheck)
+			if in.Path == "go.mod" {
+			^
+cmd/connectorgen/source_lane_rules.go:167:2: QF1003: could use tagged switch on semantics (staticcheck)
+	if semantics == "mutation" {
+	^
+cmd/connectorgen/source_lane_rules.go:170:3: QF1003: could use tagged switch on response.Cardinality (staticcheck)
+		if response.Cardinality == sourceCollection {
+		^
+cmd/connectorgen/source_lane_rules.go:679:78: QF1001: could apply De Morgan's law (staticcheck)
+		for _, word := range strings.FieldsFunc(clause, func(r rune) bool { return !(r >= 'a' && r <= 'z') }) {
+		                                                                           ^
+cmd/connectorgen/source_lane_proof.go:62:2: field reviews is unused (unused)
+	reviews           []sourceLaneProofReview
+	^
+cmd/connectorgen/source_lane_proof.go:864:6: func sourceLaneProofSuccessfulResult is unused (unused)
+func sourceLaneProofSuccessfulResult(raw []byte, r sourceLaneProofRecord) bool {
+     ^
+15 issues:
+* errcheck: 6
+* staticcheck: 7
+* unused: 2
+```
+
+
+### Firstmate133 correction GREEN
+
+Green: original CP12-range lint (`--new-from-rev=9c642b873b6a1ba3a4fe55fd7509715050c5b71c ./cmd/connectorgen`) exit0, 0 issues, 3.795615999988513s, raw SHA256 e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47. All15 in-scope findings dispositioned in receipts-cp12-correction-132/lint-dispositions-133.json; original FAIL and baseline-absence attribution retained.
+
+Affected proof/CLI/inventory/checked-occurrence focused run: 347 selected/347 passed, exit0, 29.329526290996s, raw SHA256 be04a58024567e22dcb6548d739907245496973567e6a15ab2f3cfdda1e5c927. Exact dirty source inputs captured under lint-133-focused-green and unchanged throughout. No new production functions, states or error edges; three existing read-only teardown results explicitly retain existing policy. Three fixture error checks now report through t.Errorf without replacing earlier failures or closing twice. Seven equivalent simplifications and two verified dead private members removed. Final source normal/name census, A/B/checks and serial race remain pending; no acceptance claim.
