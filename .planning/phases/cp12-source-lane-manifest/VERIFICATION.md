@@ -169,3 +169,14 @@ Disclosed test corrections:099FSchemaOracle fixed-prefix case formerly used type
 | R10 | Ownership131SnapshotOracleControl deliberately readable wrong bytes then fixture-owned restoration | adopted original passing oracle plus focused GREEN; byte-only preservation, no inode/recovery claim |
 
 Final full normal, serial exact-name race partitions, A/B generated artifact adoption/checks, final static/introduced lint and separate fresh full-range independent closure remain pending. Existing artifactc527 remains prior-source until regenerated after final Atlas/docs freeze.
+
+
+##132 final normal and complete artifact adoption
+
+Behavioral source6aa5c7c9de4d5a07dac0be7923ef2eaf6f8cf096/tree d4777e6ceac38e5b2d1857f32b57061417d0de84: full Source/Retained normal769/769 PASS201.714666291s/raw cbaa3a676453b4fd60d185674b72f44a69194bef630bf42b45806a3c37b23a5c. Exact653 predecessor names all retained,116 additions, zero omissions. Seven serial whole-parent race groups predeclared with exact769-name union; corpus/full100000-budget parent remain whole and separate. Race not yet run.
+
+Actual A/B source-lanes generations exit0 in55.019512334/54.136262334s, raw receipts cc806cb1d7c4ea2555a9843bb78dd8b072ce3b37f85a82399dea7e9430eea0fd/dc95c44c2a7c5f7b935aad6c80f5c0de7805aacefa41fc17dd01a38af5a15868. Every byte equals: 101749993 bytes, SHA256 b769dff4f43b3175a5045a0169ba42422bc45776987ef288ad984eab2eb35a1e. Closed schema, all4343 independent keys,30401 ordered cells,14 documents/17 actual byte/hash pins verified. Full before/after semantic comparison: zero changed cells/classifications/diagnostics, source documents identical; only Atlas pin updated. Adopted through generated stdout candidate to normal tracked artifact; full artifact-adoption.json preserved. Previous c527 artifact is historical.
+
+Census capture exception: initial assertions completed but the private capture wrapper parsed a pretty-JSON scalar as an event and failed before persisting nested exit. Original command/raw/census/runner retained with capture-failure.json; no original exit invented. Narrow dictionary-event parser fix, then explicit final-artifact-census-verified exit0/10.611587791s/raw a94f0aaf9369a37a3d62107a74bba4e5465300240480f612257c4087b279f1d5. This justified repeat is disclosed, not a lost-receipt PASS.
+
+Current Atlas/admission/docs56/56, runtime-input isolation1/1, vet, connectorgen/PM builds, agentcontract and authoring help all exit0 on6aa source with unchanged inputs. Correction-only introduced lint49..current PASS; original CP12-range lint reports15 pre-existing source sites, all exact lines independently verified at49 and retained in preexisting-lint-source-bindings.json. Original-range lint is not green and needs Firstmate reconciliation; no outside132 repair. Final candidate/default --check, serial race receipts and independent exact-SHA closure remain pending under126 overlap. No self-acceptance or CP13.
