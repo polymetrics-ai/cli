@@ -365,3 +365,14 @@ Sealed127 complete ledger adopted before tests/production: CR08 fix_created609ac
 Red: PENDING genuine owner GroupA desired-behavior builder/evidence counterexamples and GroupB admitted builder/consumer/proof cases, with complete new test bytes captured before execution. Positive controls must reach the same phases. Each failure will retain exact assertion/cause and source/test/dependency receipt.
 
 Green: PENDING same original assertions after coherent GroupA and GroupB repairs. No current-source normal/race/artifact receipt exists yet. Original127 dispositions close CR01/03/04/05/06/07/WR01 on87 only; CR02 remains blocking via08/10; WR02 historical limitation121 stays immutable. Full source normal+predeclared serial whole-parent race union and artifact/static checks follow actual corrected source. CP12-05/06/07 unresolved; CP12-09 unaccepted.
+
+
+## GroupA CR08/CR10 current130 RED/GREEN
+
+Actual retained loader/builder and independent emitted-source oracle cover25 cases: six intermediate compositions at two depths, explicit nonobject single/item/wrapper cases, unsupported type encodings and four supported object/type-absent/deeper positives. Original127 probes untouched. First owner test added/captured before production edits; all assertions retained. Source/direct/sibling equality is asserted against actual before-builder state.
+
+Red: group-a-red exit1, 26/8 selected/passed, 5.937751167s, raw SHA256 4701ce2dcda00bd9523ab124237eed84976c52999e6bdb513c671ff81def32c8. Complete input CAS/command/raw/receipt at /Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/receipts-cp12-correction-130/group-a-red; changed inputs empty.
+
+Green: group-a-green exit0, 100/100 selected/passed, 14.934612375s, raw SHA256 e201f4c5b6b0b3e92509eeb0eafd89cf60fea3a57cd0cffedaf163fc345f5d93. Complete input CAS/command/raw/receipt at /Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/receipts-cp12-correction-130/group-a-green; changed inputs empty.
+
+RED includes17 failing cases plus failed parent, eight passing controls; no setup/admission failure credited. GREEN100/100 includes all122, original CR03 and integrated binding/proof controls. sourceCollectionObjectCode consistently enforces supported effective object shape at wrappers/items/single resource; no schema solver/runtime or source bytes changed. GroupB CR09 and full final gates remain pending; not independent closure.

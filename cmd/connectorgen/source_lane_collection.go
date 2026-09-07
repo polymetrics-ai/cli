@@ -182,6 +182,40 @@ func sourceCollectionCitationAt(facts sourceFacts, document, pointer string) (so
 	return sourceFactRef{DocumentID: document, Pointer: pointer, ValueSHA256: sourceBytesHash(canonical)}, true
 }
 
+// Object keywords cannot override an explicit nonobject type. Compositions
+// and unsupported type encodings require reasoning outside this contract.
+func sourceCollectionObjectCode(node map[string]json.RawMessage) string {
+	const unknown = "source_collection_interpretation_unresolved"
+	const invalid = "source_collection_interpretation_invalid"
+	for _, name := range []string{"allOf", "oneOf", "anyOf"} {
+		if _, exists := node[name]; exists {
+			return unknown
+		}
+	}
+	if raw, exists := node["type"]; exists {
+		var typ string
+		if json.Unmarshal(raw, &typ) != nil {
+			return unknown
+		}
+		switch typ {
+		case "object":
+			return ""
+		case "array", "string", "number", "integer", "boolean", "null":
+			return invalid
+		default:
+			return unknown
+		}
+	}
+	var props map[string]json.RawMessage
+	if raw, exists := node["properties"]; exists {
+		if json.Unmarshal(raw, &props) != nil || props == nil {
+			return unknown
+		}
+		return ""
+	}
+	return invalid
+}
+
 func validateSourceResponseInterpretation(facts sourceFacts, semantics string, scope sourceCollectionScope, a sourceResponseInterpretation) (sourceCollectionKind, []sourceFactRef, string) {
 	invalid := "source_collection_interpretation_invalid"
 	unknown := "source_collection_interpretation_unresolved"
@@ -226,10 +260,8 @@ func validateSourceResponseInterpretation(facts sourceFacts, semantics string, s
 			if name == "*" || name == "[]" {
 				return sourceCollectionUnknown, nil, invalid
 			}
-			var wrapperType string
-			_ = json.Unmarshal(node["type"], &wrapperType)
-			if wrapperType != "" && wrapperType != "object" {
-				return sourceCollectionUnknown, nil, invalid
+			if code := sourceCollectionObjectCode(node); code != "" {
+				return sourceCollectionUnknown, nil, code
 			}
 			var props map[string]json.RawMessage
 			if json.Unmarshal(node["properties"], &props) != nil || props == nil {
@@ -265,22 +297,15 @@ func validateSourceResponseInterpretation(facts sourceFacts, semantics string, s
 		if !ok {
 			return sourceCollectionUnknown, nil, unknown
 		}
-		var itemType string
-		_ = json.Unmarshal(item["type"], &itemType)
-		if itemType != "object" && len(item["properties"]) == 0 {
-			return sourceCollectionUnknown, nil, invalid
-		}
-		if len(item["allOf"]) > 0 || len(item["oneOf"]) > 0 || len(item["anyOf"]) > 0 {
-			return sourceCollectionUnknown, nil, unknown
+		if code := sourceCollectionObjectCode(item); code != "" {
+			return sourceCollectionUnknown, nil, code
 		}
 		if ref, ok := sourceCollectionCitationAt(facts, scope.Ref.DocumentID, itemPointer); ok {
 			refs = append(refs, ref)
 		}
 	} else {
-		var typ string
-		_ = json.Unmarshal(node["type"], &typ)
-		if typ != "object" && len(node["properties"]) == 0 {
-			return sourceCollectionUnknown, nil, invalid
+		if code := sourceCollectionObjectCode(node); code != "" {
+			return sourceCollectionUnknown, nil, code
 		}
 	}
 	owned := a.Citation == facts.Refs["summary"] || a.Citation == facts.Refs["description"]
