@@ -376,3 +376,26 @@ Red: group-a-red exit1, 26/8 selected/passed, 5.937751167s, raw SHA256 4701ce2dc
 Green: group-a-green exit0, 100/100 selected/passed, 14.934612375s, raw SHA256 e201f4c5b6b0b3e92509eeb0eafd89cf60fea3a57cd0cffedaf163fc345f5d93. Complete input CAS/command/raw/receipt at /Users/karthiksivadas/pm-cli-agent-workspace/data/cli-batch1-pi-takeover/receipts-cp12-correction-130/group-a-green; changed inputs empty.
 
 RED includes17 failing cases plus failed parent, eight passing controls; no setup/admission failure credited. GREEN100/100 includes all122, original CR03 and integrated binding/proof controls. sourceCollectionObjectCode consistently enforces supported effective object shape at wrappers/items/single resource; no schema solver/runtime or source bytes changed. GroupB CR09 and full final gates remain pending; not independent closure.
+
+
+## GroupB CR09 complete130 correction
+
+The same source-ownership invariant covers physical components hidden in composition, unresolved references, exhausted search and skipped structured schema branches. Direct referring occurrences retain their literal use-site selection. Sorted property visits and raw-child traversal preserve coordinates/requiredness and avoid repeatedly decoding whole documents; no bound or fixture reduction. Supported body consumers remain protected, actual typed GraphQL consumer and retained admitted stream/proof counterexamples now refuse incomplete uniqueness.
+
+group-b-red: exit1; 11/6 selected/passed; 116.014814583s; raw SHA256 5fc979f38986831e9173152943dbd7167e2aa9bd463dbef19301219a45cc6a18; full command/source/test CAS/receipt under receipts-cp12-correction-130/group-b-red; changed inputs empty.
+
+group-b-complete-red: exit1; 17/11 selected/passed; 117.266033791s; raw SHA256 7419201fdf5b006a28b65fb0112ab0732b0ab58f811c2990307e1bf386be25c7; full command/source/test CAS/receipt under receipts-cp12-correction-130/group-b-complete-red; changed inputs empty.
+
+group-b-green: exit0; 202/202 selected/passed; 19.480668250s; raw SHA256 6ff941314586a89102653b0d2a5a672b553335f2b503fba17f452f09c734124c; full command/source/test CAS/receipt under receipts-cp12-correction-130/group-b-green; changed inputs empty.
+
+group-b-search-siblings-red: exit1; 0/0 selected/passed; 1.079643500s; raw SHA256 0f4738f4204c5e678515752b84d919cc52df024f58d438c4d548742f71d1cf14; full command/source/test CAS/receipt under receipts-cp12-correction-130/group-b-search-siblings-red; changed inputs empty.
+
+group-b-search-siblings-red-built: exit1; 5/2 selected/passed; 4.827829625s; raw SHA256 15322f2bce43a8807fc669410f128ddd590caf00a8afdbe83760d1256a331531; full command/source/test CAS/receipt under receipts-cp12-correction-130/group-b-search-siblings-red-built; changed inputs empty.
+
+group-b-complete-green: exit0; 206/206 selected/passed; 20.084751416s; raw SHA256 f04273e2e876fb23a95dbc408d5461e68fa415d649104d587346adb50bc7fbff; full command/source/test CAS/receipt under receipts-cp12-correction-130/group-b-complete-green; changed inputs empty.
+
+Red: group-b-complete-red retains all actual admitted/builder assertions and reaches composition/unresolved/depth incorrect references plus GraphQL variable-placement failure. Depth was adapted from an earlier source-nesting-limit setup failure into flat retained reference chains; original setup remains recorded. Body controls already passed and are not defect RED. Budget cases already refused in this original run; they are a required bounded sibling control, not a separately reproduced fourth127 finding.
+
+Red: final traversal disconfirmation found additionalProperties second use and malformed prefixItems also skipped by the same physical-ownership search. The first added test placement failed compilation (0 tests), explicitly not RED. Corrected-test search-siblings-red-built reaches both actual retained builder/proof defects, preserving two direct positives. This is the same CR09 completeness invariant, not a new product/schema solver requirement. Original127 findings/probes remain unchanged. All these assertions persist through final GREEN; the budget adds a later equal-byte repeat assertion, not claimed original RED.
+
+Green: group-b-complete-green206/206 includes all original bindings, GroupA and the actual integrated builder/proof boundary. Read-only fixture snapshots, literal source pins and exact keys/seven lanes survive. No source archive, real annotation or runtime changes. Full final normal/race/Atlas/artifact checks remain pending; implementation claims remain subject to independently authored closure.

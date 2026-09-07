@@ -169,6 +169,10 @@ request/error/foreign occurrences, stale hashes, duplicate or conflicting claims
 scalar selections and collection claims on mutations. Human review establishes
 the cited clause's meaning; the code does not interpret English. External refs,
 cycles, unsupported conjunctions and traversal limits retain scoped deficits.
+Every intermediate named-property wrapper must have a supported object shape.
+Explicit array or scalar types cannot become objects merely by declaring
+`properties`; object inference from properties applies only when type is absent.
+The same rule protects selected single resources and collection record items.
 Unknown envelopes without an interpretation emit
 `source_collection_interpretation_missing`. Other unresolved response scopes
 emit `source_collection_scope_unknown`, including unresolved siblings of a
@@ -219,6 +223,11 @@ Separate successful response scopes retain separate references; an accepted
 schema observation alone does not complete executable coverage. Source-schema
 traversal is limited to 4,096 visits and 128 levels. Unsupported compositions,
 ambiguous ownership, external references and missing consumers remain explicit.
+A physical component citation needs a complete ownership search: a skipped
+schema branch or exhausted bound cannot establish uniqueness. Literal referring
+occurrences select their own use sites without borrowing that unproved uniqueness.
+Budget-consuming property traversal is sorted and preserves the selected
+instance coordinate and requiredness through each supported ancestor.
 
 Canonical-operation checks read already-observed source-lock bytes from a
 separate authoring map. Execution artifacts never contain those bytes. A valid

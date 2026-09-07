@@ -1068,15 +1068,16 @@ func sourceLaneSchemaProjection(facts sourceFacts, root sourceFactRef, wanted st
 	var found []sourceLaneProjection
 	visits := 0
 	unresolved := false
-	var walk func(string, []string, []bool, map[string]bool, int)
-	walk = func(pointer string, coordinate []string, required []bool, seen map[string]bool, depth int) {
-		visits++
-		if visits > 4096 || depth > 128 {
-			unresolved = true
+	// A literal occurrence selects its own use site. A physical component
+	// outside that subtree needs a complete search proving unique ownership.
+	direct := wanted == root.Pointer || strings.HasPrefix(wanted, root.Pointer+"/")
+	var walk func(string, json.RawMessage, []string, []bool, map[string]bool, int)
+	walk = func(pointer string, raw json.RawMessage, coordinate []string, required []bool, seen map[string]bool, depth int) {
+		if direct && pointer != wanted && !strings.HasPrefix(wanted, pointer+"/") {
 			return
 		}
-		raw, err := sourceJSONPointer(facts.Document, pointer)
-		if err != nil {
+		visits++
+		if visits > 4096 || depth > 128 {
 			unresolved = true
 			return
 		}
@@ -1098,40 +1099,84 @@ func sourceLaneSchemaProjection(facts sourceFacts, root sourceFactRef, wanted st
 			next[k] = v
 		}
 		next[pointer] = true
+		if !direct {
+			for _, name := range []string{"allOf", "oneOf", "anyOf"} {
+				if _, exists := node[name]; exists {
+					// No composition solver: skipped branches cannot establish
+					// that a found physical component has exactly one use.
+					unresolved = true
+				}
+			}
+			// A skipped structured keyword may contain another schema use.
+			// Literal annotations and definition registries are not use sites;
+			// supported structural keywords are visited explicitly below.
+			for name, value := range node {
+				switch name {
+				case "properties", "items", "prefixItems", "$defs", "definitions", "required", "type", "enum", "const", "default", "examples", "example", "title", "description":
+					continue
+				}
+				var structured any
+				if json.Unmarshal(value, &structured) == nil {
+					switch structured.(type) {
+					case map[string]any, []any:
+						unresolved = true
+					}
+				}
+			}
+		}
 		if edge, ok := node["$ref"]; ok {
 			var ref string
 			if json.Unmarshal(edge, &ref) != nil || !strings.HasPrefix(ref, "#/") {
 				unresolved = true
 				return
 			}
-			walk(facts.RefPrefix+ref[1:], coordinate, required, next, depth+1)
+			refPointer := facts.RefPrefix + ref[1:]
+			refRaw, err := sourceJSONPointer(facts.Document, refPointer)
+			if err != nil {
+				unresolved = true
+			} else {
+				walk(refPointer, refRaw, coordinate, required, next, depth+1)
+			}
 		}
 		var props map[string]json.RawMessage
-		_ = json.Unmarshal(node["properties"], &props)
+		if raw, exists := node["properties"]; exists && (json.Unmarshal(raw, &props) != nil || props == nil) {
+			unresolved = true
+		}
 		var req []string
 		_ = json.Unmarshal(node["required"], &req)
+		names := make([]string, 0, len(props))
 		for name := range props {
-			walk(pointer+"/properties/"+escapeSourcePointer(name), append(append([]string{}, coordinate...), name), append(append([]bool{}, required...), sourceLaneContains(req, name)), next, depth+1)
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			walk(pointer+"/properties/"+escapeSourcePointer(name), props[name], append(append([]string{}, coordinate...), name), append(append([]bool{}, required...), sourceLaneContains(req, name)), next, depth+1)
 		}
 		if _, ok := node["items"]; ok {
-			walk(pointer+"/items", append(append([]string{}, coordinate...), "[]"), append(append([]bool{}, required...), false), next, depth+1)
+			walk(pointer+"/items", node["items"], append(append([]string{}, coordinate...), "[]"), append(append([]bool{}, required...), false), next, depth+1)
 		}
 		var tuple []json.RawMessage
 		if json.Unmarshal(node["prefixItems"], &tuple) == nil {
 			for i := range tuple {
-				walk(pointer+"/prefixItems/"+strconv.Itoa(i), append(append([]string{}, coordinate...), "["+strconv.Itoa(i)+"]"), append(append([]bool{}, required...), false), next, depth+1)
+				walk(pointer+"/prefixItems/"+strconv.Itoa(i), tuple[i], append(append([]string{}, coordinate...), "["+strconv.Itoa(i)+"]"), append(append([]bool{}, required...), false), next, depth+1)
 			}
+		} else if _, exists := node["prefixItems"]; exists {
+			unresolved = true
 		}
 	}
-	walk(root.Pointer, nil, nil, map[string]bool{}, 0)
+	raw, err := sourceJSONPointer(facts.Document, root.Pointer)
+	if err != nil {
+		return sourceLaneProjection{}, "source_schema_unverified"
+	}
+	walk(root.Pointer, raw, nil, nil, map[string]bool{}, 0)
 	if len(found) > 1 {
 		return sourceLaneProjection{}, "source_projection_ambiguous"
 	}
-	if len(found) == 1 {
-		return found[0], ""
-	}
 	if unresolved {
 		return sourceLaneProjection{}, "source_schema_unverified"
+	}
+	if len(found) == 1 {
+		return found[0], ""
 	}
 	return sourceLaneProjection{}, "source_binding_scope_mismatch"
 }

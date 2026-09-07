@@ -255,6 +255,14 @@
           {
             "file": "cmd/connectorgen/source_lane_collection.go",
             "name": "validateSourceLaneInterpretationEvidence"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_collection.go",
+            "name": "sourceCollectionObjectCode"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_bindings.go",
+            "name": "sourceLaneSchemaProjection"
           }
         ]
       },
@@ -984,6 +992,26 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_collection_test.go",
           "name": "TestSourceLane122IndependentInterpretationEvidence"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_correction130_test.go",
+          "name": "TestSourceLane130CollectionEffectiveObjects"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection130_test.go",
+          "name": "TestSourceLane130PhysicalProjectionBuilder"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection130_test.go",
+          "name": "TestSourceLane130BodyProjectionConsumer"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection130_test.go",
+          "name": "TestSourceLane130GraphQLProjectionConsumer"
         }
       ],
       "publication_guarantee_proofs": [
