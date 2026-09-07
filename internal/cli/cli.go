@@ -916,8 +916,15 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 	if err := connectors.RejectLegacyConnectorName(connectorName); err != nil {
 		return err
 	}
-	connector, ok := registry.Get(connectorName)
-	if !ok {
+	connector, err := registry.Resolve(ctx, connectorName)
+	if err != nil {
+		// Metadata distinguishes an unknown name from a selected bundle whose
+		// construction failed. Preserve the latter's inspectable causes.
+		for _, metadata := range registry.List() {
+			if metadata.Name == connectorName {
+				return fmt.Errorf("resolve connector %q: %w", connectorName, err)
+			}
+		}
 		return usageErrorf("unknown command %q", connectorName)
 	}
 	surfaceProvider, ok := connector.(connectors.CommandSurfaceProvider)

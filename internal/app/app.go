@@ -2160,9 +2160,9 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if err := connectors.RejectLegacyConnectorName(req.Connector); err != nil {
 		return ReversePlan{}, nil, err
 	}
-	preflightConnector, ok := a.registry.Get(req.Connector)
-	if !ok {
-		return ReversePlan{}, nil, fmt.Errorf("connector %q not found", req.Connector)
+	preflightConnector, err := a.registry.Resolve(ctx, req.Connector)
+	if err != nil {
+		return ReversePlan{}, nil, err
 	}
 	if err := commandrunner.PreflightRequest(preflightConnector, commandrunner.Request{
 		Path: req.Path, Flags: req.Flags, Config: connectors.RuntimeConfig{Config: req.Config},
