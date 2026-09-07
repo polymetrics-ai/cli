@@ -41,7 +41,8 @@ coverage. Copilot feedback is review input, not approval.
 | --- | --- | --- |
 | Non-draft PR opened/reopened/ready by a trusted author | `claude_auto` | Wait for the automatic review. Do not post a manual command. |
 | Automatic review did not run (untrusted author) or new unreviewed commits need another pass | `claude_manual` | A maintainer posts one `@claude review` when the fallback condition applies. |
-| Claude review run failed or subscription quota is exhausted and review coverage blocks progress | `copilot_backup` | Request Copilot once, then disposition Copilot comments like other review comments. |
+| The claude-review Action cannot run at all (missing/empty `ANTHROPIC_API_KEY` secret, errored workflow runs) but Claude itself is available locally | `claude_local` | Run `scripts/claude-local-review.sh <pr>` — first-party `claude` CLI (default `claude-opus-4-8`, operator subscription, never a gateway). Posts one consolidated review comment with the reviewed head SHA and a durable copy under `.planning/reviews/`. Disposition findings like any Claude review; comment-only, approval stays human. |
+| Claude review (Action, manual, and local CLI) failed or subscription quota is exhausted and review coverage blocks progress | `copilot_backup` | Request Copilot once, then disposition Copilot comments like other review comments. |
 | Claude and Copilot are both unavailable, or the change crosses a human gate | `human` | Record `needs_human`; do not weaken the gate. |
 
 ## Claude Unavailability Handling
