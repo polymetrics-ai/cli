@@ -216,3 +216,45 @@ func TestSourceLane130GraphQLProjectionConsumer(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceLane130NestedDefinitionProjection(t *testing.T) {
+	for _, duplicate := range []bool{false, true} {
+		for _, occurrence := range []bool{false, true} {
+			t.Run(fmt.Sprintf("duplicate=%t/occurrence=%t", duplicate, occurrence), func(t *testing.T) {
+				schema := map[string]any{
+					"type": "object", "$defs": map[string]any{"Record": map[string]any{"type": "object"}},
+					"properties": map[string]any{"data": map[string]any{"type": "array", "items": map[string]any{"$ref": "#/$defs/Record"}}},
+				}
+				if duplicate {
+					schema["properties"].(map[string]any)["other"] = map[string]any{"$ref": "#/$defs/Record"}
+				}
+				raw, err := json.Marshal(schema)
+				if err != nil {
+					t.Fatal(err)
+				}
+				pointer := "/$defs/Record"
+				if occurrence {
+					pointer = "/properties/data/items"
+				}
+				projection, code := sourceLaneSchemaProjection(sourceFacts{Document: raw}, sourceFactRef{Pointer: ""}, pointer)
+				if duplicate && !occurrence {
+					if code != "source_projection_ambiguous" {
+						t.Errorf("physical nested definition did not retain ambiguity: %s", code)
+					}
+				} else if code != "" || !reflect.DeepEqual(projection.Path, []string{"data", "[]"}) {
+					t.Errorf("valid local use-site projection lost: code=%s path=%v", code, projection.Path)
+				}
+				// The actual effective-target projection consumer uses the same
+				// raw-root/local-ref shape; definition storage is not a coordinate.
+				target, targetCode := sourceLaneTargetProjection(raw, pointer)
+				if duplicate && !occurrence {
+					if targetCode == "" {
+						t.Error("ambiguous target definition accepted")
+					}
+				} else if targetCode != "" || !reflect.DeepEqual(target.Path, []string{"data", "[]"}) {
+					t.Errorf("effective target local projection lost: code=%s path=%v", targetCode, target.Path)
+				}
+			})
+		}
+	}
+}

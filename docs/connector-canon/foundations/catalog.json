@@ -263,6 +263,10 @@
           {
             "file": "cmd/connectorgen/source_lane_bindings.go",
             "name": "sourceLaneSchemaProjection"
+          },
+          {
+            "file": "cmd/connectorgen/source_lane_bindings.go",
+            "name": "sourceLaneLiteralProjectionOccurrence"
           }
         ]
       },
@@ -1012,6 +1016,11 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_projection130_test.go",
           "name": "TestSourceLane130GraphQLProjectionConsumer"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_lane_projection130_test.go",
+          "name": "TestSourceLane130NestedDefinitionProjection"
         }
       ],
       "publication_guarantee_proofs": [

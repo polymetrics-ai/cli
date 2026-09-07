@@ -1064,13 +1064,48 @@ type sourceLaneProjection struct {
 	Required []bool
 }
 
+// Only supported structural edges identify a literal instance occurrence.
+// A definition stored below the schema root still needs reference-use search.
+func sourceLaneLiteralProjectionOccurrence(root, wanted string) bool {
+	if wanted == root {
+		return true
+	}
+	if !strings.HasPrefix(wanted, root+"/") {
+		return false
+	}
+	parts := strings.Split(strings.TrimPrefix(wanted, root+"/"), "/")
+	for i := 0; i < len(parts); {
+		switch parts[i] {
+		case "properties":
+			if i+1 >= len(parts) {
+				return false
+			}
+			i += 2
+		case "items":
+			i++
+		case "prefixItems":
+			if i+1 >= len(parts) {
+				return false
+			}
+			index, err := strconv.Atoi(parts[i+1])
+			if err != nil || index < 0 || strconv.Itoa(index) != parts[i+1] {
+				return false
+			}
+			i += 2
+		default:
+			return false
+		}
+	}
+	return true
+}
+
 func sourceLaneSchemaProjection(facts sourceFacts, root sourceFactRef, wanted string) (sourceLaneProjection, string) {
 	var found []sourceLaneProjection
 	visits := 0
 	unresolved := false
 	// A literal occurrence selects its own use site. A physical component
 	// outside that subtree needs a complete search proving unique ownership.
-	direct := wanted == root.Pointer || strings.HasPrefix(wanted, root.Pointer+"/")
+	direct := sourceLaneLiteralProjectionOccurrence(root.Pointer, wanted)
 	var walk func(string, json.RawMessage, []string, []bool, map[string]bool, int)
 	walk = func(pointer string, raw json.RawMessage, coordinate []string, required []bool, seen map[string]bool, depth int) {
 		if direct && pointer != wanted && !strings.HasPrefix(wanted, pointer+"/") {

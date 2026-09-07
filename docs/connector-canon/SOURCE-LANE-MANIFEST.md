@@ -226,6 +226,8 @@ ambiguous ownership, external references and missing consumers remain explicit.
 A physical component citation needs a complete ownership search: a skipped
 schema branch or exhausted bound cannot establish uniqueness. Literal referring
 occurrences select their own use sites without borrowing that unproved uniqueness.
+A definition registry nested beneath the schema root is still a physical
+definition, not a literal property/item occurrence.
 Budget-consuming property traversal is sorted and preserves the selected
 instance coordinate and requiredness through each supported ancestor.
 
