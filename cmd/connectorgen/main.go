@@ -42,7 +42,7 @@ func main() {
 }
 
 func runMain(args []string, stdout, stderr io.Writer) int {
-	if len(args) == 0 || (args[0] != "lock-render" && args[0] != "source-lanes") {
+	if len(args) == 0 || (args[0] != "lock-render" && args[0] != "source-lanes" && args[0] != "source-demands") {
 		return run(args, stdout, stderr)
 	}
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
@@ -65,6 +65,8 @@ func runContext(ctx context.Context, args []string, stdout, stderr io.Writer) in
 	switch args[0] {
 	case "source-lanes":
 		return runSourceLanesContext(ctx, args, stdout, stderr)
+	case "source-demands":
+		return runSourceDemandsContext(ctx, args, stdout, stderr)
 	case "validate":
 		return runValidate(args, stdout, stderr)
 	case "boundary":
@@ -105,7 +107,8 @@ func usage() string {
   connectorgen ownership [repo-root] [--json] [--base <ref>] [--scope-file <path>]
 	connectorgen gen
 	connectorgen lock-render <connector> [--defs <dir>] [--check]
-	connectorgen source-lanes [--repo <dir>] [--check [--manifest <relative-path>]]`
+	connectorgen source-lanes [--repo <dir>] [--check [--manifest <relative-path>]]
+	connectorgen source-demands [--repo <dir>] [--cohort <relative-path>] [--manifest <relative-source-manifest>] [--assessments <relative-path>] [--check [<relative-register>]]`
 }
 
 // runValidate implements `connectorgen validate [dir] [--json]`.

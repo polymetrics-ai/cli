@@ -293,3 +293,45 @@ The original RED has two failed child assertions plus their failed parent; the p
 Verification: `facet-baseline-vet-144-01`, exit0, wall1.0995941659784876s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, changed_inputs_after=[].
 
 Verification: `facet-baseline-lint-144-01`, exit0, wall2.760065292008221s, rawSHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`, changed_inputs_after=[].
+
+## CP13 aggregate register and independent output oracle144
+
+The compileable aggregate builds actual requirements/proof observations, four source facets, all Atlas example occurrences, exact coverage and known source/decision states. Adopter relations derive only from admitted requirement/proof/binding tuples; no example name supplies a provider identity. Initial infrastructure and closed-reader controls are not pre-edit RED.
+
+Infrastructure/verification: `register-observation-144-01`, exit0, 1/1 passing/run Go events, wall5.769839707994834s, rawSHA256 `25f28613a95780a0fb48fc6df86b0f49f48ca2c466bf6a6b921702b6ced5d183`, changed_inputs_after=[].
+
+Infrastructure/verification: `register-reader-observation-144-01`, exit0, 1/1 passing/run Go events, wall5.639111459022388s, rawSHA256 `1bc9a7c7e5119bc53e0f6206d598312e81e67672181b24e115792393566248ef`, changed_inputs_after=[].
+
+Red: `register-output-oracle-red-144-01`, exit1, 1/12 passing/run Go events, wall6.226252167019993s, rawSHA256 `5cd14fb340a3d84ed3132b92886f1bcedd4269c97c686e884c5ebf2b79c63c65`, changed_inputs_after=[].
+
+Green: `register-output-oracle-green-144-01`, exit0, 12/12 passing/run Go events, wall11.446433999983128s, rawSHA256 `4b7869b5677b7750b3006e6c42b061502443986bdf643ef3018c8f91e86d6e97`, changed_inputs_after=[].
+
+RED retained the positive aggregate observation and failed ten child assertions plus their parent at the actual closed-document reader. Each candidate retained coherent coverage but forged independent known identity, requirement assertion/source state, example/facet/adopter membership or source/baseline pin. GREEN reconstructs from retained input authority and actual confined readers before whole-result comparison; the unchanged assertions pass12/12. The two-source fixture has14independently retained lane cells; no lane mutation or fixture receipt execution occurs. Command/output preservation and complete final-input revalidation remain separate pending obligations.
+
+## CP13 current-known union and real command boundaries144
+
+The register must emit current independently known source obligations as well as the retained historical baseline. An actual source.b PUT/update-webhook-header fixture establishes a current additional obligation, with a source-cited assessment, while the independent fixture baseline still retains onlysource.a. RED reaches the real register and observes the missing current row; GREEN retains both identities and the unproven source state.
+
+Red: `register-current-known-red-144-01`, exit1, 1/2 passing/run Go events, wall6.611370250000618s, rawSHA256 `c9895eaa50a640c2c3ec0c2eaf999751987cf1d10912157988622943bcae2eab`, changed_inputs_after=[].
+
+Green: `register-current-known-green-144-01`, exit0, 13/13 passing/run Go events, wall12.095646749978187s, rawSHA256 `895ddb1f37b86a3f04f5b39e48896fa6f2fb25bb1a8b1ff0231f90d62ded9753`, changed_inputs_after=[].
+
+Infrastructure/verification: `demands-command-observation-144-01`, exit0, 7/7 passing/run Go events, wall7.093495917011751s, rawSHA256 `748b2e6bfea3eaf2dfd41fde671eae527767b3a4eafec4ad8d3ad57fc52cb8c3`, changed_inputs_after=[].
+
+Infrastructure/verification: `demands-command-custody-observation-144-01`, exit0, 7/7 passing/run Go events, wall7.157156291010324s, rawSHA256 `e8cfec2444daca807e4d21fafe97a7c6c668065d73c24235022eb282edd00c21`, changed_inputs_after=[].
+
+Red: `demands-final-custody-red-144-01`, exit1, 1/5 passing/run Go events, wall10.227947084000334s, rawSHA256 `dead54f384c60ae0b839416bbf310bbbe0b01c969d4bf14f21d3560cbc71664a`, changed_inputs_after=[].
+
+Green: `demands-final-custody-green-144-01`, exit0, 11/11 passing/run Go events, wall10.610564500006149s, rawSHA256 `7174b6cc96c243b471094fb025e5124087a69d8cb8b8c92ff21ce2ea55741de4`, changed_inputs_after=[].
+
+Verification: `demands-output-check-cancel-144-01`, exit0, 12/12 passing/run Go events, wall17.18971337500261s, rawSHA256 `62114df3a931a6c5a2029301c75067f814deae0ee7639fde5056ade53e72d507`, changed_inputs_after=[].
+
+The source-demands command has fixed source-owned baseline/Atlas/proof authority, explicit source-manifest/cohort/assessment inputs and optional read-only candidate/default check. Real fixtures first execute source-lanes to supply the validated source report. Generation fully builds and validates before one stdout write. The CLI exposes no receiver/runtime authority.
+
+Final-custody RED establishes completed manifest/cohort reads followed by the actual successful assessment read, then substitutes either an equivalent-byte new inode or changed bytes in the original manifest inode. Original independent inode/bytes witnesses prove each fault, and the command initially incorrectly emits success. GREEN reuses the bounded shared file cache for final charged rehash/identity verification before stdout or successful check. The unchanged three child assertions plus parent/positive control are preserved; the broader command11/11 is not summed with overlapping groups. All resources are invocation-owned read-only handles; no durable publication is claimed. Replacement bytes remain untouched.
+
+Later12/12 output/check/cancellation verification reaches the real command: attempted full output and written prefixes for complete/short/partial-error/full-error writers, cancellation after actual initial/final reads, and exact/coherently forged/unknown-field/byte-drift candidate checks. Default and explicit check retain pre-call full bytes, device/inode identity, mode and mtime. These later passing controls are not retroactive RED. Schema, completion predicates, complete corpus generation and final matrix/combined judgment remain pending.
+
+Verification: `demands-command-vet-144-01`, exit0, wall1.0908394159923773s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, changed_inputs_after=[].
+
+Verification: `demands-command-lint-144-01`, exit0, wall2.7858158340095542s, rawSHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`, changed_inputs_after=[].
