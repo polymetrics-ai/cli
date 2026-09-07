@@ -16,6 +16,13 @@ func sourceFoundationAssessmentFixture(t *testing.T) (string, sourceFoundationUn
 	if err != nil {
 		t.Fatal(err)
 	}
+	document := sourceFoundationAssessmentDocumentFixture(t, universe)
+	writeSourceFoundationAssessmentFixture(t, repo, document)
+	return repo, universe, document
+}
+
+func sourceFoundationAssessmentDocumentFixture(t *testing.T, universe sourceFoundationUniverse) sourceFoundationAssessmentDocument {
+	t.Helper()
 	ref, exists := universe.manifest.SourceOperations[0].Facts.Refs["source_operation"]
 	if !exists {
 		t.Fatal("actual retained operation citation missing")
@@ -34,8 +41,7 @@ func sourceFoundationAssessmentFixture(t *testing.T) (string, sourceFoundationUn
 				EvidenceRequirements: []string{"source-backed executor and mode fit"}, DecisionRefs: []sourceFoundationDecision{},
 			}},
 		}}}
-	writeSourceFoundationAssessmentFixture(t, repo, document)
-	return repo, universe, document
+	return document
 }
 
 func writeSourceFoundationAssessmentFixture(t *testing.T, repo string, document sourceFoundationAssessmentDocument) []byte {
@@ -144,5 +150,66 @@ func TestSourceFoundationAssessmentAdmission(t *testing.T) {
 				t.Fatalf("invalid assessment reached returned observation: rows=%d error=%v", len(got.authored), err)
 			}
 		})
+	}
+}
+
+func TestSourceFoundationAssessmentKnownOmission(t *testing.T) {
+	repo, cohort := sourceFoundationUniverseFixture(t)
+	name := filepath.Join(repo, "source.json")
+	raw, err := os.ReadFile(name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var source map[string]any
+	if err := json.Unmarshal(raw, &source); err != nil {
+		t.Fatal(err)
+	}
+	// A current extra update/header requirement, not a copied historical
+	// receiver label, must enter K through the actual retained-source producer.
+	rows := source["rest"].(map[string]any)["operations"].([]any)
+	for _, value := range rows {
+		row := value.(map[string]any)
+		if row["id"] == "source.b" {
+			row["method"] = "put"
+			row["source_operation"].(map[string]any)["summary"] = "Update webhook headers"
+		}
+	}
+	raw, err = json.Marshal(source)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(name, raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+	universe, err := buildSourceFoundationUniverse(t.Context(), repo, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var required sourceLaneManifestRow
+	for _, row := range universe.manifest.SourceOperations {
+		if row.Source.Key.ID == "source.b" {
+			required = row
+		}
+	}
+	ref, demanded := sourceRegistrationDemand(required.Facts)
+	if !demanded || required.Lanes[6].State != "mapped_unproven" {
+		t.Fatal("source producer did not establish the intended extra obligation")
+	}
+	document := sourceFoundationAssessmentDocumentFixture(t, universe)
+	writeSourceFoundationAssessmentFixture(t, repo, document)
+	got, err := observeSourceFoundationAssessments(t.Context(), repo, sourceFoundationAssessmentsPath, universe)
+	if err == nil || len(got.authored) != 0 {
+		t.Errorf("omitting independently known update/header cell returned %d assessments: %v", len(got.authored), err)
+	}
+	complete := document.Assessments[0]
+	complete.Key = required.Source.Key
+	complete.Requirements = append([]sourceFoundationRequirement{}, complete.Requirements...)
+	complete.Requirements[0].SourceRefs = []sourceFactRef{ref}
+	document.Assessments = append(document.Assessments, complete)
+	writeSourceFoundationAssessmentFixture(t, repo, document)
+	got, err = observeSourceFoundationAssessments(t.Context(), repo, sourceFoundationAssessmentsPath, universe)
+	if err != nil || len(got.authored) != 2 {
+		t.Fatalf("source-cited unresolved known requirement refused: rows=%d error=%v", len(got.authored), err)
 	}
 }

@@ -1,0 +1,139 @@
+package main
+
+import (
+	"encoding/json"
+	"os"
+	"path/filepath"
+	"reflect"
+	"testing"
+)
+
+func sourceFoundationObligationsFixture(t *testing.T, repo string, universe sourceFoundationUniverse) (sourceFoundationObligationDocument, sourceArtifactPin) {
+	t.Helper()
+	row := universe.manifest.SourceOperations[0]
+	cell := sourceFoundationCell{Key: row.Source.Key, Lane: "sync_transport"}
+	document := sourceFoundationObligationDocument{SchemaVersion: 1, Kind: "foundation_known_obligations",
+		BaselineManifest:             sourceArtifactPin{Path: sourceLaneManifestPath, SHA256: sourceBytesHash([]byte("independently retained fixture manifest")), Bytes: 39},
+		SourceEvidenceSHA256:         sourceBytesHash([]byte("independent fixture requirement")),
+		Obligations:                  []sourceFoundationKnownObligation{{Identity: cell, Source: row.Source, SourceRefs: []sourceFactRef{row.Facts.Refs["source_operation"]}}},
+		HistoricalReceiverCandidates: []sourceFoundationCell{cell}, SentryRegistration: []sourceFoundationCell{}}
+	return document, writeSourceFoundationObligationsFixture(t, repo, document)
+}
+
+func writeSourceFoundationObligationsFixture(t *testing.T, repo string, document sourceFoundationObligationDocument) sourceArtifactPin {
+	t.Helper()
+	raw, err := json.Marshal(document)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(repo, sourceFoundationObligationsPath), raw, 0600); err != nil {
+		t.Fatal(err)
+	}
+	return sourceArtifactPin{Path: sourceFoundationObligationsPath, SHA256: sourceBytesHash(raw), Bytes: int64(len(raw))}
+}
+
+func TestSourceFoundationObligationsObservation(t *testing.T) {
+	repo, universe, _ := sourceFoundationAssessmentFixture(t)
+	document, pin := sourceFoundationObligationsFixture(t, repo, universe)
+	got, err := observeSourceFoundationDemandInputs(t.Context(), repo, sourceFoundationAssessmentsPath, universe, pin)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Node is a private parsed-source cache, deliberately absent from JSON.
+	document.Obligations[0].Source.Node = nil
+	if !reflect.DeepEqual(got.baseline, document) || got.baselinePin != pin || len(got.assessments.authored) != 1 {
+		t.Fatal("actual independent baseline/source/assessment observation lost")
+	}
+}
+
+func TestSourceFoundationObligationsAdmission(t *testing.T) {
+	for _, scenario := range []string{"omitted independent cell", "duplicate obligation", "wrong source identity", "wrong source pointer", "wrong citation", "missing citations", "missing historical member", "missing sentry member", "rewritten seed without policy"} {
+		t.Run(scenario, func(t *testing.T) {
+			repo, universe, _ := sourceFoundationAssessmentFixture(t)
+			document, pin := sourceFoundationObligationsFixture(t, repo, universe)
+			if _, err := observeSourceFoundationDemandInputs(t.Context(), repo, sourceFoundationAssessmentsPath, universe, pin); err != nil {
+				t.Fatalf("complete positive control: %v", err)
+			}
+			second := universe.manifest.SourceOperations[1]
+			secondCell := sourceFoundationCell{Key: second.Source.Key, Lane: "sync_transport"}
+			switch scenario {
+			case "omitted independent cell":
+				// This real retained source is deliberately not selected by the
+				// current registration heuristic. Historical policy still owns it.
+				document.Obligations = append(document.Obligations, sourceFoundationKnownObligation{Identity: secondCell, Source: second.Source,
+					SourceRefs: []sourceFactRef{second.Facts.Refs["source_operation"]}})
+			case "duplicate obligation":
+				document.Obligations = append(document.Obligations, document.Obligations[0])
+			case "wrong source identity":
+				document.Obligations[0].Source.Key = second.Source.Key
+			case "wrong source pointer":
+				document.Obligations[0].Source.Pointer = second.Source.Pointer
+			case "wrong citation":
+				document.Obligations[0].SourceRefs[0] = second.Facts.Refs["source_operation"]
+			case "missing citations":
+				document.Obligations[0].SourceRefs = []sourceFactRef{}
+			case "missing historical member":
+				document.HistoricalReceiverCandidates = append(document.HistoricalReceiverCandidates, secondCell)
+			case "missing sentry member":
+				document.SentryRegistration = append(document.SentryRegistration, secondCell)
+			case "rewritten seed without policy":
+				document.Obligations = []sourceFoundationKnownObligation{}
+			}
+			updated := writeSourceFoundationObligationsFixture(t, repo, document)
+			if scenario != "rewritten seed without policy" {
+				pin = updated // independent test policy, never authored assessment authority
+			}
+			if _, err := observeSourceFoundationDemandInputs(t.Context(), repo, sourceFoundationAssessmentsPath, universe, pin); err == nil {
+				t.Errorf("real demand input reader accepted %s", scenario)
+			}
+		})
+	}
+}
+
+func TestSourceFoundationObligationsCurrentCorpus(t *testing.T) {
+	repo, err := repoRoot()
+	if err != nil {
+		t.Fatal(err)
+	}
+	root, err := os.OpenRoot(repo)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer func() { _ = root.Close() }()
+	raw, err := readSourceInput(root, sourceLaneCohortPath, 64<<20)
+	var cohort sourceLaneCohort
+	if err != nil || decodeStrictJSON(raw, &cohort) != nil {
+		t.Fatalf("actual cohort: %v", err)
+	}
+	raw, err = readSourceInput(root, sourceLaneAnnotationsPath, 64<<20)
+	var annotations struct {
+		SchemaVersion int                        `json:"schema_version"`
+		Annotations   []sourceSemanticAnnotation `json:"annotations"`
+	}
+	if err != nil || decodeStrictJSON(raw, &annotations) != nil {
+		t.Fatalf("actual annotations: %v", err)
+	}
+	universe, err := buildSourceFoundationUniverse(t.Context(), repo, cohort, annotations.Annotations)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := observeSourceFoundationDemandInputs(t.Context(), repo, sourceFoundationAssessmentsPath, universe, sourceFoundationBaselinePin())
+	if err != nil {
+		t.Fatal(err)
+	}
+	coverage, err := buildSourceFoundationCoverage(got.assessments)
+	if err != nil || validateSourceFoundationCoverage(coverage, got.assessments) != nil {
+		t.Fatalf("actual current corpus membership: %v", err)
+	}
+	if coverage.UniverseCount != 30401 || len(universe.manifest.SourceOperations) != 4343 || len(coverage.Assessed) != 26 ||
+		len(coverage.Unassessed) != 30375 || len(got.baseline.HistoricalReceiverCandidates) != 12 || len(got.baseline.SentryRegistration) != 1 {
+		t.Fatal("retained cohort/baseline accounting changed without explicit reconciliation")
+	}
+	for _, row := range universe.manifest.SourceOperations {
+		for _, lane := range row.Lanes {
+			if lane.State == "implemented" || len(lane.ProofRefs) != 0 {
+				t.Fatal("authoring foundation reconciliation promoted runtime authority")
+			}
+		}
+	}
+}

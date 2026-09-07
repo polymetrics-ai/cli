@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -159,6 +160,19 @@ func validateSourceFoundationAssessmentObservations(ctx context.Context, assessm
 				if !sourceProofSafePath(artifact) {
 					return fmt.Errorf("foundation affected artifact path invalid")
 				}
+			}
+		}
+	}
+	// Known source requirements are independent of the editable assessment
+	// array. Preserve registration/update facts even when a candidate omits
+	// both its assessment and a copied owner label.
+	for _, row := range universe.manifest.SourceOperations {
+		_, registration := sourceRegistrationDemand(row.Facts)
+		for _, lane := range row.Lanes {
+			required := slices.Contains(lane.OwnerRefs, "CP13") || len(lane.GapRefs) != 0 ||
+				registration && lane.Lane == "sync_transport"
+			if required && !seen[sourceFoundationCell{Key: row.Source.Key, Lane: lane.Lane}] {
+				return fmt.Errorf("foundation known source requirement missing: %s/%s", row.Source.Key.ID, lane.Lane)
 			}
 		}
 	}

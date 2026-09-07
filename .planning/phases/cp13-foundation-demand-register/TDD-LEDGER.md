@@ -183,3 +183,37 @@ Adapter observation144: `scripts/gsd doctor` reports the historical missing
 execute-phase source/prompt resolution succeed. The existing named inline
 sole-writer fallback continues with actual phase PLAN/TDD and current141/144
 assignment. No missing prompt was synthesized and no adapter PASS is claimed.
+
+## Current known-source omission144
+
+Red: assessment-known-omission-red-144-01,1/0,exit1,wall5.029511916975025s,rawSHA256 af0d55459a0372fb3a440478d05abc1276eabb40f545587b8c23b2b5c0726190. Actual retained PUT summary Update webhook headers enters the original source classifier, while omitting that independent source.b/sync_transport requirement incorrectly returned the source.a-only assessment. The complete two-assessment positive control also executed.
+
+Green: assessment-known-omission-green-144-01,22/22,exit0,wall5.348603833001107s,rawSHA256 d4233d735dd33758d840f99004534cf90a333042f4d0745f3d6757ce7d2700fe. Same omission regression and full existing assessment family; no inputs changed during runs. This verifies current source-derived K only; independent sealed26 baseline, historical12/Sentry and exact U-minus-A generation remain due.
+
+Next coverage slice retains independent sealed baseline in canonical evidence and binds its exact source-cell/citation memberships separately from editable authored assessments. It also derives exact U/A/complement and rejects coherent forged membership/digests through the real input consumer. No count becomes runtime authority.
+
+## Independent obligation baseline and membership144
+
+The sealed140A26-cell seed was projected into canonical `batch1-foundation-obligations.json` with original source identities/citations, separate historical12 and Sentry membership, and a source-owned exact file pin. The initial observation path reads this bound input and real assessments; it does not invent a no-op failing stub.
+
+Infrastructure/verification: `coverage-membership-144-01`, 11/11 passing/run events, exit0, wall4.69891354200081s, rawSHA256 `b2b1fcea68acc00423b28db3833bf0e232c7afdd99bea3b8117b330d963a2e6d`.
+
+Infrastructure/verification: `obligations-observation-144-01`, 1/1 passing/run events, exit0, wall4.821638749999693s, rawSHA256 `0f5aa3897723b314c4a3136277c737a6f1f18fe992e470e20aeab0d7dbae0122`.
+
+Red: `obligations-admission-red-144-01`, 2/11 passing/run events, exit1, wall5.01781462499639s, rawSHA256 `9815505c380c62ac5885a6913a3d0cd97450c115c694a335d8ab84fd6ddef9cc`.
+
+Green: `obligations-admission-green-144-01`, 11/11 passing/run events, exit0, wall5.079992916987976s, rawSHA256 `ff2df72c7d34d5c831a62c3a5042fb6b30f0dc9682cca2644aa784448e56e9e6`.
+
+The admission RED observes eight semantic violations through the real reader; unchanged seed-pin tampering rejection and the complete positive control already pass. GREEN reconciles exact retained identities/citations and independently required membership, including historical subsets. Coverage falsification11/11 is later verification, not pre-edit behavioural RED. None of these counts is CP13 acceptance or a receiver authority claim. The current26 authored rows remain unresolved transport assessments; MIME/auth/body/paging, exact proof-to-requirement fit, all35 example joins, generated output and terminal whole-unit checks remain due.
+
+Current-corpus reconciliation: the initial `obligations-current-corpus-144-01` failed because my canonical projection repeated Vercel summary citations copied from distinct original diagnostic rows. The original140A evidence is unchanged; only the new canonical source_refs lists were deduplicated. Duplicate admission remains rejected. This is input-projection correction, not a new production behavioural RED.
+
+`obligations-current-corpus-144-01`: exit1, 0/1 passing/run events, wall62.94755583300139s, rawSHA256 `4a0c33bf38ea3d3fd276cb09537b33d61f731fed29b343283a15c131d87ad84c`.
+
+`obligations-current-corpus-144-02`: exit0, 1/1 passing/run events, wall64.81163204100449s, rawSHA256 `6686937c6d8660c5cbbefa7e61fb5a5e223da03626dfe445998914aaa972edc8`.
+
+`obligations-vet-144-01`: exit0, 0/0 passing/run events, wall1.254336708021583s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+
+`obligations-lint-144-01`: exit0, 0/0 passing/run events, wall2.876712208992103s, rawSHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`.
+
+The corrected actual source build reconciles4343keys,30401cells,26 assessed/30375 unassessed, exact26 baseline, historical12 and separate Sentry registration. All lane states remain non-implemented with no proofRefs. This tests current source-bound accounting only, not complete requirement semantics or an executable/adopter claim. Canonical baseline pin is27715bytes/SHA2565c7b972ad6eccb01a6b2633ac7505d2467d5667c7cd7a873b018e0cef48a5b05, a projection of sealed140A data with duplicate citation occurrences normalized; original citation values and source identities remain intact.
