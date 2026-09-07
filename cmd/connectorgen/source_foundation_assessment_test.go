@@ -213,3 +213,35 @@ func TestSourceFoundationAssessmentKnownOmission(t *testing.T) {
 		t.Fatalf("source-cited unresolved known requirement refused: rows=%d error=%v", len(got.authored), err)
 	}
 }
+
+func TestSourceFoundationAssessmentRequiredDecisionFields(t *testing.T) {
+	for _, scenario := range []string{"absent", "null"} {
+		t.Run(scenario, func(t *testing.T) {
+			repo, universe, document := sourceFoundationAssessmentFixture(t)
+			if _, err := observeSourceFoundationAssessments(t.Context(), repo, sourceFoundationAssessmentsPath, universe); err != nil {
+				t.Fatalf("explicit empty decision array control: %v", err)
+			}
+			raw := writeSourceFoundationAssessmentFixture(t, repo, document)
+			var wire map[string]any
+			if err := json.Unmarshal(raw, &wire); err != nil {
+				t.Fatal(err)
+			}
+			requirement := wire["assessments"].([]any)[0].(map[string]any)["requirements"].([]any)[0].(map[string]any)
+			if scenario == "absent" {
+				delete(requirement, "decision_refs")
+			} else {
+				requirement["decision_refs"] = nil
+			}
+			raw, err := json.Marshal(wire)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(filepath.Join(repo, sourceFoundationAssessmentsPath), raw, 0600); err != nil {
+				t.Fatal(err)
+			}
+			if got, err := observeSourceFoundationAssessments(t.Context(), repo, sourceFoundationAssessmentsPath, universe); err == nil || len(got.authored) != 0 {
+				t.Fatalf("actual closed reader accepted %s decision_refs", scenario)
+			}
+		})
+	}
+}

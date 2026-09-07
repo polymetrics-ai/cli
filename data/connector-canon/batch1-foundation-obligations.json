@@ -37,6 +37,18 @@
           "pointer": "/paths/~1webhooks~1{webhook_gid}/put/summary",
           "value_sha256": "e1cc682898eabb370bb0418ec4e2aeaa160c5ed4f1a7598490600762c2a8347b"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/asana/sources/artifacts/cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56.artifact",
+          "sha256": "cb3b90f4e0af56035eab0c648974f625b942a28a7144aa6c2326e38ca0bb3d56",
+          "bytes": 3066750
+        },
+        {
+          "path": "internal/connectors/defs/asana/sources/asana-operation-source-lock.json",
+          "sha256": "eb5517f0f1456e4cacb03d4f705fd2244a1ccf6113a9c0d67e29ed2417e407c4",
+          "bytes": 90915
+        }
       ]
     },
     {
@@ -67,6 +79,13 @@
           "document_id": "bitbucket:primary",
           "pointer": "/rest/operations/223/source_operation/summary",
           "value_sha256": "a52f0af7f6278d64dde4e6f69ed980b189d7cff58e1ea14cdbd9e0de6fa69015"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+          "sha256": "0cd529630a96b1c9fd2a75081d83302dcd651c7d665f3c780719ba4eed80b627",
+          "bytes": 1394073
         }
       ]
     },
@@ -99,6 +118,13 @@
           "pointer": "/rest/operations/248/source_operation/summary",
           "value_sha256": "d4e5fa6c509563b8d616ab5e6499d41a43af7c776ca90f3d1a512b6228aaed9d"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+          "sha256": "0cd529630a96b1c9fd2a75081d83302dcd651c7d665f3c780719ba4eed80b627",
+          "bytes": 1394073
+        }
       ]
     },
     {
@@ -129,6 +155,13 @@
           "document_id": "bitbucket:primary",
           "pointer": "/rest/operations/265/source_operation/summary",
           "value_sha256": "07a4a3ac18111ea69b9ba1774aa4f8cdd0b779464eea747825942cf5964ff866"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+          "sha256": "0cd529630a96b1c9fd2a75081d83302dcd651c7d665f3c780719ba4eed80b627",
+          "bytes": 1394073
         }
       ]
     },
@@ -161,6 +194,13 @@
           "pointer": "/rest/operations/289/source_operation/summary",
           "value_sha256": "f2b374c4456e1da445e3c88c575962bb911b434aa1b9b2e6d325201948ff537e"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+          "sha256": "0cd529630a96b1c9fd2a75081d83302dcd651c7d665f3c780719ba4eed80b627",
+          "bytes": 1394073
+        }
       ]
     },
     {
@@ -191,6 +231,13 @@
           "document_id": "circleci:primary",
           "pointer": "/rest/operations/101/source_operation/summary",
           "value_sha256": "4937bf8824165338c87ca15145f199a76609f4bf751633fbd00477a726788389"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
+          "sha256": "06527eb0012ba8f3396074fb048dad1352f8f0d0c29de9c795a0df9f3be5ca60",
+          "bytes": 638203
         }
       ]
     },
@@ -223,6 +270,13 @@
           "pointer": "/rest/operations/103/source_operation/summary",
           "value_sha256": "b92de814f32279cc0cbcfbd8a8c9de6eec20720d54185fed23cc42524d4de1f2"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/circleci/sources/circleci-operation-source-lock.json",
+          "sha256": "06527eb0012ba8f3396074fb048dad1352f8f0d0c29de9c795a0df9f3be5ca60",
+          "bytes": 638203
+        }
       ]
     },
     {
@@ -253,6 +307,13 @@
           "document_id": "gitlab:primary",
           "pointer": "/rest/operations/1067/source_operation/summary",
           "value_sha256": "fbf4bf6f615847a0e80b2ce28c0db6c250c1beff7feb15afc9caea865a505d15"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
         }
       ]
     },
@@ -285,6 +346,13 @@
           "pointer": "/rest/operations/1107/source_operation/summary",
           "value_sha256": "12fb8fc7b3ad24cc76400648bd9e595660b0059b556b39d11847efdf9ae2f7d5"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
+        }
       ]
     },
     {
@@ -315,6 +383,13 @@
           "document_id": "gitlab:primary",
           "pointer": "/rest/operations/1108/source_operation/description",
           "value_sha256": "7c870300a389404aeccd1d10b47aa59eaf34fedb9ad9d46475e65c2161c8114a"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
         }
       ]
     },
@@ -347,6 +422,13 @@
           "pointer": "/rest/operations/1196/source_operation/summary",
           "value_sha256": "6c1a92f88ecf656a1a67976357c3f2eb1090b398fa18136eab11240e7a455ae0"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
+        }
       ]
     },
     {
@@ -377,6 +459,13 @@
           "document_id": "gitlab:primary",
           "pointer": "/rest/operations/1463/source_operation/summary",
           "value_sha256": "658a03c66d2a4dd2b674a949496fc22e903fa651a31451a5d68baf160008efdf"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
         }
       ]
     },
@@ -409,6 +498,13 @@
           "pointer": "/rest/operations/1464/source_operation/description",
           "value_sha256": "d5329794c84925d542f62b242ddb98374df7163b4e8e6f84c100e09ecd8572d8"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
+        }
       ]
     },
     {
@@ -439,6 +535,13 @@
           "document_id": "gitlab:primary",
           "pointer": "/rest/operations/1465/source_operation/description",
           "value_sha256": "b46693de79374335861e0d35c4c1301df842abf20329e55aa57d06e01eeacccc"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
         }
       ]
     },
@@ -471,6 +574,13 @@
           "pointer": "/rest/operations/1532/source_operation/summary",
           "value_sha256": "e03bca30e1b577c075e560abbfba8255b4b6c8a49eeea570b699ef082eaf6d0b"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
+        }
       ]
     },
     {
@@ -501,6 +611,13 @@
           "document_id": "gitlab:primary",
           "pointer": "/rest/operations/1533/source_operation/description",
           "value_sha256": "d5329794c84925d542f62b242ddb98374df7163b4e8e6f84c100e09ecd8572d8"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
         }
       ]
     },
@@ -533,6 +650,13 @@
           "pointer": "/rest/operations/1534/source_operation/description",
           "value_sha256": "b46693de79374335861e0d35c4c1301df842abf20329e55aa57d06e01eeacccc"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
+        }
       ]
     },
     {
@@ -563,6 +687,13 @@
           "document_id": "gitlab:primary",
           "pointer": "/rest/operations/1565/source_operation/summary",
           "value_sha256": "a0545223aad4f54df9e4c5bc142a7b9bbd292644a508032d95f5f7a238938363"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
         }
       ]
     },
@@ -595,6 +726,13 @@
           "pointer": "/rest/operations/1566/source_operation/description",
           "value_sha256": "d5329794c84925d542f62b242ddb98374df7163b4e8e6f84c100e09ecd8572d8"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
+        }
       ]
     },
     {
@@ -625,6 +763,13 @@
           "document_id": "gitlab:primary",
           "pointer": "/rest/operations/1567/source_operation/description",
           "value_sha256": "b46693de79374335861e0d35c4c1301df842abf20329e55aa57d06e01eeacccc"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/gitlab/sources/gitlab-operation-source-lock.json",
+          "sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d",
+          "bytes": 5783052
         }
       ]
     },
@@ -657,6 +802,13 @@
           "pointer": "/rest/operations/539/source_operation/summary",
           "value_sha256": "8f2fd0e8009d7cc3062c12a7fcc26482b2f7c51e588f012b4ddc06bbcf834fdb"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/jira/sources/jira-operation-source-lock.json",
+          "sha256": "d37a87d79d658bca06707a787dda1dfd0c0c78527140c3d8f1d8d26426175290",
+          "bytes": 3540790
+        }
       ]
     },
     {
@@ -687,6 +839,13 @@
           "document_id": "sentry:primary",
           "pointer": "/rest/operations/195/source_operation/description",
           "value_sha256": "422e85d087acedaf2f81e854bdaf3698a8cb2ef40307f36ac44b0093808ccd7d"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
+          "sha256": "383633e6c8403b78c44d9841cd271ec49dbbcecc5778f6c74db1ec162ef1a059",
+          "bytes": 4134778
         }
       ]
     },
@@ -719,6 +878,13 @@
           "pointer": "/rest/operations/197/source_operation/description",
           "value_sha256": "e3075154d88c7e2c40bc94cd53dc3ef5ba5798f95595d2c5dd633b792235a163"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/sentry/sources/sentry-operation-source-lock.json",
+          "sha256": "383633e6c8403b78c44d9841cd271ec49dbbcecc5778f6c74db1ec162ef1a059",
+          "bytes": 4134778
+        }
       ]
     },
     {
@@ -750,6 +916,13 @@
           "pointer": "/rest/operations/585/source_operation/summary",
           "value_sha256": "fb0f3bd9d4567ee40dc93d482059fd31b700ec67f699af285849fa1dad41191f"
         }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
+          "sha256": "8ce51371f04d6df6e87d3fb6f7924b52d1f61714ec8f0b88f6a3fd12fd205eb6",
+          "bytes": 8529716
+        }
       ]
     },
     {
@@ -780,6 +953,13 @@
           "document_id": "stripe:primary",
           "pointer": "/rest/operations/588/source_operation/summary",
           "value_sha256": "bc742946310a4c1d142b3e13af92d8eacc852fef2ff489baece8c25ad000b540"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/stripe/sources/stripe-operation-source-lock.json",
+          "sha256": "8ce51371f04d6df6e87d3fb6f7924b52d1f61714ec8f0b88f6a3fd12fd205eb6",
+          "bytes": 8529716
         }
       ]
     },
@@ -816,6 +996,13 @@
           "document_id": "vercel:primary",
           "pointer": "/rest/operations/381/source_operation/requestBody",
           "value_sha256": "6efbac2a3631a78ce1919b0dabee583435248bef6dbe424d162a7d43c9e7b45b"
+        }
+      ],
+      "source_document_pins": [
+        {
+          "path": "internal/connectors/defs/vercel/sources/vercel-operation-source-lock.json",
+          "sha256": "2eb0130c9357c90cf74e6b47da48eac3768fec3ae3de9b15890b24a2d3f10f4e",
+          "bytes": 11039226
         }
       ]
     }
@@ -927,5 +1114,6 @@
       },
       "lane": "sync_transport"
     }
-  ]
+  ],
+  "baseline_universe_sha256": "de290d79330a10205438b0ebdc101de62877e03735c67741c6b148f1ea13c3c1"
 }

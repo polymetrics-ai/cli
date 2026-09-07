@@ -17,6 +17,15 @@ func sourceFoundationObligationsFixture(t *testing.T, repo string, universe sour
 		SourceEvidenceSHA256:         sourceBytesHash([]byte("independent fixture requirement")),
 		Obligations:                  []sourceFoundationKnownObligation{{Identity: cell, Source: row.Source, SourceRefs: []sourceFactRef{row.Facts.Refs["source_operation"]}}},
 		HistoricalReceiverCandidates: []sourceFoundationCell{cell}, SentryRegistration: []sourceFoundationCell{}}
+	var err error
+	document.BaselineUniverseSHA256, err = sourceFoundationCellsHash(universe.cells)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, source := range universe.manifest.Documents {
+		document.Obligations[0].SourceDocumentPins = append(document.Obligations[0].SourceDocumentPins,
+			sourceArtifactPin{Path: source.Path, SHA256: source.RetainedFileSHA256, Bytes: source.Bytes})
+	}
 	return document, writeSourceFoundationObligationsFixture(t, repo, document)
 }
 
@@ -43,6 +52,65 @@ func TestSourceFoundationObligationsObservation(t *testing.T) {
 	document.Obligations[0].Source.Node = nil
 	if !reflect.DeepEqual(got.baseline, document) || got.baselinePin != pin || len(got.assessments.authored) != 1 {
 		t.Fatal("actual independent baseline/source/assessment observation lost")
+	}
+}
+
+func TestSourceFoundationObligationsIndependentInputPins(t *testing.T) {
+	for _, scenario := range []string{"changed uncited source bytes", "same-count unassessed key replacement"} {
+		t.Run(scenario, func(t *testing.T) {
+			repo, cohort := sourceFoundationUniverseFixture(t)
+			universe, err := buildSourceFoundationUniverse(t.Context(), repo, cohort, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			writeSourceFoundationAssessmentFixture(t, repo, sourceFoundationAssessmentDocumentFixture(t, universe))
+			baseline, pin := sourceFoundationObligationsFixture(t, repo, universe)
+			if _, err := observeSourceFoundationDemandInputs(t.Context(), repo, sourceFoundationAssessmentsPath, universe, pin); err != nil {
+				t.Fatalf("original independently bound source/control: %v", err)
+			}
+			path := filepath.Join(repo, "source.json")
+			raw, err := os.ReadFile(path)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var source map[string]any
+			if err := json.Unmarshal(raw, &source); err != nil {
+				t.Fatal(err)
+			}
+			if scenario == "changed uncited source bytes" {
+				source["x-cp13-uncited-note"] = "changed retained metadata"
+			} else {
+				for _, value := range source["rest"].(map[string]any)["operations"].([]any) {
+					operation := value.(map[string]any)
+					if operation["id"] == "source.b" {
+						operation["id"] = "source.other"
+					}
+				}
+				cohort.Inventories[0].ExpectedIDs = []string{"source.a", "source.other"}
+			}
+			raw, err = json.Marshal(source)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(path, raw, 0600); err != nil {
+				t.Fatal(err)
+			}
+			cohort.Inventories[0].SHA256 = sourceBytesHash(raw)
+			current, err := buildSourceFoundationUniverse(t.Context(), repo, cohort, nil)
+			if err != nil {
+				t.Fatalf("current source producer must succeed before independent baseline check: %v", err)
+			}
+			if scenario == "same-count unassessed key replacement" {
+				// Rebind the file in the independent fixture policy to isolate
+				// the original full-universe identity invariant from file custody.
+				baseline.Obligations[0].SourceDocumentPins[0].SHA256 = sourceBytesHash(raw)
+				baseline.Obligations[0].SourceDocumentPins[0].Bytes = int64(len(raw))
+				pin = writeSourceFoundationObligationsFixture(t, repo, baseline)
+			}
+			if got, err := observeSourceFoundationDemandInputs(t.Context(), repo, sourceFoundationAssessmentsPath, current, pin); err == nil || len(got.assessments.authored) != 0 {
+				t.Errorf("actual demand input consumer accepted %s", scenario)
+			}
+		})
 	}
 }
 

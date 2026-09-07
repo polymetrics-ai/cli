@@ -13,13 +13,14 @@ const sourceFoundationObligationsPath = "data/connector-canon/batch1-foundation-
 // assessments. It is authoring policy, not a list of approved receivers.
 func sourceFoundationBaselinePin() sourceArtifactPin {
 	return sourceArtifactPin{Path: sourceFoundationObligationsPath,
-		SHA256: "5c7b972ad6eccb01a6b2633ac7505d2467d5667c7cd7a873b018e0cef48a5b05", Bytes: 27715}
+		SHA256: "689cba12122d3e516c1a45abcd09f6af56e3e3a076f2b71e96c4f9db4547f25f", Bytes: 35162}
 }
 
 type sourceFoundationKnownObligation struct {
-	Identity   sourceFoundationCell    `json:"identity"`
-	Source     retainedSourceOperation `json:"source"`
-	SourceRefs []sourceFactRef         `json:"source_refs"`
+	Identity           sourceFoundationCell    `json:"identity"`
+	Source             retainedSourceOperation `json:"source"`
+	SourceRefs         []sourceFactRef         `json:"source_refs"`
+	SourceDocumentPins []sourceArtifactPin     `json:"source_document_pins"`
 }
 
 type sourceFoundationObligationDocument struct {
@@ -27,6 +28,7 @@ type sourceFoundationObligationDocument struct {
 	Kind                         string                            `json:"kind"`
 	BaselineManifest             sourceArtifactPin                 `json:"baseline_manifest"`
 	SourceEvidenceSHA256         string                            `json:"source_evidence_sha256"`
+	BaselineUniverseSHA256       string                            `json:"baseline_universe_sha256"`
 	Obligations                  []sourceFoundationKnownObligation `json:"obligations"`
 	HistoricalReceiverCandidates []sourceFoundationCell            `json:"historical_receiver_candidates"`
 	SentryRegistration           []sourceFoundationCell            `json:"sentry_registration"`
@@ -77,6 +79,10 @@ func observeSourceFoundationDemandInputs(ctx context.Context, repo, assessments 
 }
 
 func validateSourceFoundationObligations(ctx context.Context, baseline sourceFoundationObligationDocument, observed sourceFoundationAssessmentObservations) error {
+	digest, err := sourceFoundationCellsHash(observed.universe.cells)
+	if err != nil || digest != baseline.BaselineUniverseSHA256 {
+		return fmt.Errorf("foundation independent source universe changed without retained disposition")
+	}
 	rows := map[sourceOperationKey]sourceLaneManifestRow{}
 	for _, row := range observed.universe.manifest.SourceOperations {
 		rows[row.Source.Key] = row
@@ -108,11 +114,33 @@ func validateSourceFoundationObligations(ctx context.Context, baseline sourceFou
 			return fmt.Errorf("foundation independent obligation source changed without retained disposition")
 		}
 		refs := map[sourceFactRef]bool{}
+		documentIDs := map[string]bool{current.DocumentID: true}
+		if current.RawDocumentID != "" {
+			documentIDs[current.RawDocumentID] = true
+		}
 		for _, ref := range obligation.SourceRefs {
 			if refs[ref] || !sourceFoundationRequirementCitation(row.Facts, documents[ref.DocumentID], ref) {
 				return fmt.Errorf("foundation independent obligation citation changed without retained disposition")
 			}
 			refs[ref] = true
+			documentIDs[ref.DocumentID] = true
+		}
+		expectedPins := map[sourceArtifactPin]bool{}
+		for id := range documentIDs {
+			document, exists := documents[id]
+			if !exists {
+				return fmt.Errorf("foundation independent obligation source document missing")
+			}
+			expectedPins[sourceArtifactPin{Path: document.Path, SHA256: document.RetainedFileSHA256, Bytes: document.Bytes}] = true
+		}
+		if len(obligation.SourceDocumentPins) != len(expectedPins) {
+			return fmt.Errorf("foundation independent obligation source document pins incomplete")
+		}
+		for _, pin := range obligation.SourceDocumentPins {
+			if !expectedPins[pin] {
+				return fmt.Errorf("foundation independent obligation source document changed without retained disposition")
+			}
+			delete(expectedPins, pin)
 		}
 	}
 	// These historical contracts remain separate even while they overlap K.

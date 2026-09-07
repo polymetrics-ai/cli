@@ -249,3 +249,47 @@ Frozen requirement slice verification144: `requirements-coherent-144-01` passed1
 The parallel `requirements-vet-144-01` receipt launch failed before vet or command.json due to FileExistsError in the preserved runner’s shared content-addressed snapshot creation (object003bb7e703c98f2a50a3acac6d70834dcadd347815422f0a03c9f401106467af). Its empty run directory and original command-session output remain; no vet result exists for01. Subsequent receipt captures are serialized rather than changing the original runner. `requirements-vet-144-02` then passed exit0,1.0956147499964572s, empty outputSHAe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855, changed_inputs_after=[].
 
 These155 tests are scoped slice verification, not all25matrix completion, independent acceptance, full CLI/engine verification or final command generation. Source-fit facet reconciliation and all exact example/adopter joins, closed schemas, real source-demands command/check/preservation, final coherent manifest/register generation and terminal combined gates remain due.
+
+## Closed assessment schema and source facets144
+
+The assessment schema reuses existing source-lane key/ref/target definitions and keeps optional null fields aligned with the Go representation. The required decision_refs array has explicit absent/null reader regressions; empty remains valid. The local schema checker uses already installed jsonschema4.25.1/referencing0.37.0, a closed local resource registry and no retrieval/network callback; no product/build dependency was installed.
+
+Red: `assessment-required-fields-red-144-01`,exit1, 0/3 passing/run Go events,wall4.842419458000222s,rawSHA256 `7a460e462b96e6c6a632bcb6420915098d7b76da0a1eadead3836449ed041ed2`, changed_inputs_after=[].
+
+Green: `assessment-required-fields-green-144-01`,exit0, 25/25 passing/run Go events,wall5.208220624976093s,rawSHA256 `6cf6eabff6852415292237e64fa86a89e5ab6b25f37ed524d36af60cd9d60f60`, changed_inputs_after=[].
+
+Infrastructure/verification: `assessment-schema-144-01`,exit0, 0/0 passing/run Go events,wall0.17563662497559562s,rawSHA256 `2a6fb3e526047bcf54fbc2c43a06439d3e1370b6d0a992a0b9f15ee63b884da8`, changed_inputs_after=[].
+
+Infrastructure/verification: `facet-observation-144-01`,exit0, 1/1 passing/run Go events,wall4.723063457990065s,rawSHA256 `8b4f3ec30802dd8e15e215f05c371713ab93fd55ed540e2d60b63ef028cc15af`, changed_inputs_after=[].
+
+Red: `facet-semantics-red-144-01`,exit1, 1/5 passing/run Go events,wall4.8648445419967175s,rawSHA256 `1afafe4952df1a3dcc35da2edc3590c02f5232b246e09c3c9b3f523b1ae39f14`, changed_inputs_after=[].
+
+Green: `facet-semantics-green-144-01`,exit0, 5/5 passing/run Go events,wall4.933056834008312s,rawSHA256 `61592b73a4529b6a9d64557613e8fe84c7426b49cf1c83c2b6796d2851f2b33c`, changed_inputs_after=[].
+
+Infrastructure/verification: `facet-fit-infrastructure-144-01`,exit0, 17/17 passing/run Go events,wall5.0447887079790235s,rawSHA256 `32dec7bdcbbe950243d08126b13c89892353ef1d23d2e750e1037b2e603a3882`, changed_inputs_after=[].
+
+Red: `facet-fit-custody-red-144-01`,exit1, 0/3 passing/run Go events,wall4.798540999996476s,rawSHA256 `aa058bffb6c3a6a91e4f40a126b9cb81d77e7cbaa8873b21550501cfe4510abb`, changed_inputs_after=[].
+
+Green: `facet-fit-custody-green-144-01`,exit0, 25/25 passing/run Go events,wall4.823942709015682s,rawSHA256 `b3c82abce762039c0cd93d2bd41e12a05d8cee693c5590816e8d51b927a1564c`, changed_inputs_after=[].
+
+The schema script has26 independently expected cases and zero failures; zero Go events are not a zero-test Go PASS claim. Facet semantics RED reaches actual retained-source normalization and projection: response media/malformed-status uncertainty, auth scopes/anonymous alternatives and required-body flags were omitted. GREEN preserves these observations without inferring runtime support. Exact fit adds the existing canonical body matcher and bounded auth scheme/placement comparison; the seventeen infrastructure/positive/control events are not pre-edit RED. Binding custody RED observes an equivalent-JSON artifact replacement and a wrong binding pin incorrectly retaining a current body fit; GREEN rechecks exact admitted artifact bytes before consuming the target. Auth fitting never resolves credentials or conditions and never maps OAuth scope/acquisition to a bearer injection. Paging names remain insufficient evidence of provider window/cursor/termination semantics.
+
+These are authoring observations and narrow configuration fits, not complete source-role/executor proof or CP13 acceptance. Actual command/check/register generation, exact adopter joins, remaining matrix coverage and whole-unit terminal verification remain due.
+
+## CP13-01/06 independent baseline source custody144
+
+The source-owned baseline now retains the original complete universe digest and exact source-document pins for each of the26 obligations. These were projected from the already pinned original manifest, not recomputed from a changed candidate. The full universe remains4343keys×7lanes. Actual source normalization can succeed after an uncited metadata edit or same-count replacement of an unassessed key; independent demand admission must still refuse inherited baseline authority. Fixture controls establish valid source production before each negative.
+
+Infrastructure/verification: `obligation-pin-observation-144-01`, exit0, 1/1 passing/run Go events, wall5.100670292013092s, rawSHA256 `7085c34c6048fbdb28ca80f0c11f1dde95b74356d84a41567c632a899a067627`, changed_inputs_after=[].
+
+Red: `obligation-input-pins-red-144-01`, exit1, 1/4 passing/run Go events, wall4.86204408298363s, rawSHA256 `9491e39b7305a16e9a9d8354dca955410d873144510c32b2b1305e2c114958ab`, changed_inputs_after=[].
+
+Green: `obligation-input-pins-green-144-01`, exit0, 4/4 passing/run Go events, wall4.831934415997239s, rawSHA256 `87eb73badd14b2bd265bb6e2b72d076d844b453e2a3617428f64a048ab190055`, changed_inputs_after=[].
+
+Current-corpus verification: `obligation-input-pins-corpus-144-01`, exit0, 15/15 passing/run Go events, wall63.18949508399237s, rawSHA256 `5ae00fdfb7b9d3e870ee4839e1f61d9326308ebc88b194b9390414167229adb0`, changed_inputs_after=[].
+
+The original RED has two failed child assertions plus their failed parent; the positive observation passes. GREEN keeps the assertions unchanged. Current-corpus15/15 includes actual26seed/historical12/Sentry/current-requirement reconciliation. This does not imply CP13 completion or independent acceptance.
+
+Verification: `facet-baseline-vet-144-01`, exit0, wall1.0995941659784876s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, changed_inputs_after=[].
+
+Verification: `facet-baseline-lint-144-01`, exit0, wall2.760065292008221s, rawSHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`, changed_inputs_after=[].

@@ -143,7 +143,7 @@ func validateSourceFoundationAssessmentObservations(ctx context.Context, assessm
 		ids := map[string]bool{}
 		for _, requirement := range assessment.Requirements {
 			if !validSourceID(requirement.ID) || ids[requirement.ID] || strings.TrimSpace(requirement.Statement) == "" ||
-				len(requirement.SourceRefs) == 0 || !sourceFoundationAssessmentStatus(requirement.Assessment) ||
+				len(requirement.SourceRefs) == 0 || requirement.DecisionRefs == nil || !sourceFoundationAssessmentStatus(requirement.Assessment) ||
 				!sourceFoundationUniqueText(requirement.EvidenceRequirements, true) ||
 				!sourceFoundationUniqueText(requirement.ProofIDs, false) || !sourceFoundationUniqueText(requirement.AffectedArtifacts, false) {
 				return fmt.Errorf("foundation requirement identity or evidence invalid")
