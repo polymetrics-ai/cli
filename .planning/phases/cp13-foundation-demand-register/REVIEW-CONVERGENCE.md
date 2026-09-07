@@ -70,3 +70,104 @@ Every case retained both literal keys `(fixture,primary,source.a)` and `(fixture
 
 **Limit:** all six tracked annotations omit this selector; the complete current manifest and annotation envelope validate. This is authoring schema interoperability, not provider behavior, proof promotion or runtime data loss.
 
+
+## Complete review148 frozen correction ledger — Firstmate150
+
+Reviewed code b41c6eaaeceba77ac57b19c014083eaf76cc0ec5, tree48f6051c200a67d2e43c46564a9ec6fb6e66764f. Complete independent report104621bytes/SHA2569d6660ce319add752b55f64af4558e953ed60ac028ec6e038bcec871520381c7, fresh Astra/xhigh native01a07ca7-85d7-7d23-800c-d66003e1af5d, run cp11-cp12-cp13-final-148-b41c6eaa-20260907T160957Z. Owner read every byte and verified22 sealed artifacts plus original terminal event. Firstmate150 (18277bytes/SHA256c3f15cae614146ab70dfd7b15134ea31a3b7929a008dbc71fe01cfa1e25b908d) authorizes this entire coordinated correction wave. Original private reviewer artifacts remain immutable.
+
+Firstmate separately accepted CP11 and CP12 at b41c6eaa; accepted original contracts and affected consumers remain protected. CP13 remains unaccepted. This artifact-only checkpoint precedes production corrections and permanent regression edits. All five findings are confirmed and dispositioned for correction, with their original severity and scope preserved; no extra generic audit or per-finding review. The following original finding narratives are retained verbatim from the complete report.
+
+## Critical issues
+
+### CR-148-01: Valid proof order can cause an empty-source declaration parse
+
+Kind: authoring correctness defect, independently reproduced. Direct impact is failed generation, not runtime execution or data loss.
+
+The selected 140/141 contract requires valid exact reviewed proof controls and deterministic admission independent of record ordering. The closed proofs schema does not assign authority to array order.
+
+Entry-to-effect: `readSourceFoundationProofsObserved` iterates records; `sourceFoundationExecutions.validate` caches every input; a later record's `sourceFoundationPinnedDeclaration` calls `cache.get` for its owner. `source_proof_files.go:get` returns nil bytes on a hit. If the file was an earlier input but not an earlier parsed owner/test, the declaration map has no entry and `parser.ParseFile` receives an empty reader.
+
+The two actual records overlap on `internal/synccontract/mode.go`: it is an engine proof input and the Mode proof's owner. Reversing the existing valid records should preserve both current observations, yet the code path appears to reject the Mode declaration. The default order happens to parse Mode first.
+
+Affected siblings: any later foundation owner/test file previously consumed as another record's dependency; shared hashing callers do not require cached raw bytes and are not claimed affected.
+
+Proposed correction: make parsed declaration acquisition independent of cache traversal order, retaining bounded original bytes or explicitly providing a charged, identity-checked reread; test both actual record orders and overlapping helper-to-owner/test transitions. Do not replace the empty reader with implicit filename reads.
+
+Exact location: `/Users/karthiksivadas/.treehouse/cli-6bae67/2/cli/cmd/connectorgen/source_foundation_atlas.go:141-151`, with `source_proof_files.go:127-131` and `source_foundation_execution.go:75-84` in the reached chain.
+
+Terminal probe: `go test -overlay /Users/karthiksivadas/pm-cli-agent-workspace/data/review-runs/cp11-cp12-cp13-final-148-b41c6eaa-20260907T160957Z/probes/order-overlay.json -json -count=1 -timeout 20m ./cmd/connectorgen -run '^TestReview148ProofRecordOrder$'`. Exit 1; 3 run / 1 pass / 2 fail events including parent; package elapsed 1.755s. The original-valid-order child passed with both observations current. The reversed-same-valid-records child failed at the actual declaration consumer: `foundation declaration parse: internal/synccontract/mode.go:1:1: expected 'package', found 'EOF'`. The overlay adds one virtual test file and replaces no source file. Existing real-reader fixture copies the actual two reviewed records and original captures/inputs into `t.TempDir`; only array order differs.
+
+Original tool-returned JSONL saved as [order-output.jsonl](probes/order-output.jsonl), 3,289 bytes, SHA256 `fea08a29d9dc9d1d13c57dc85942feb69a62e1d2a6cb36182b6821e7a7cff932`. Probe source 943 bytes/SHA256 `ab4d8503b315fe4e8f25669592a0029d6f3161f545d5bde6e98f08da1fac5a5a`; overlay 246 bytes/SHA256 `7f43bc06bfe7d901a93de66dde1654e301e3aa4d7c564ec281b25a3193fa45ba`. Whole-command walltime was not measured; package elapsed is not substituted for it.
+
+Causality: newly introduced CP13 declaration consumer/cache interaction. Existing CP12 hash/result-only cache semantics are not thereby disproved. No source repair. Post-probe all 75 candidate path byte/hash pins still match and tracked Git status remains clean.
+
+Disposition history: 2026-09-07T16:21:23Z static candidate; 2026-09-07T16:23:02Z confirmed with the original valid control and same-record permutation counterexample.
+
+### CR-148-02: Missing/stale optional proof aborts independent demand reconciliation
+
+**Classification:** BLOCKER; medium authoring correctness impact; CP13 acceptance blocking. No runtime lane promotion or production data loss is alleged.
+
+**Locations/call path:** `cmd/connectorgen/source_foundation_register.go:79-81` propagates any proof observation error before constructing the register. `source_foundation_proof.go:118-120` treats a missing document as fatal; `source_foundation_execution.go:77-84` treats missing/stale inputs as fatal; `source_foundation_requirements.go` rejects missing referenced records before resolving an explicitly unresolved requirement. The actual command additionally rejects missing proof in `source_foundation_cli.go:282` and its input-pin loop before reaching the register.
+
+**Existing contract:** Selected140 report lines123 and130-131 explicitly requires visible unavailable/stale proof while retaining source cell, known demand and next owner. Missing optional document or selected record must produce proof_unavailable. Only a purported resolved reuse is invalid. CP13-09 requires independent source/configuration work to continue. This is not a request to accept malformed documents, skip custody checks or weaken resolved proof.
+
+**Independent expected behavior:** An otherwise valid two-source/fourteen-cell register with one explicitly unresolved demand remains available when the optional evidence document, a selected record or a dependency is absent/stale. Its proof cannot be current and its source/owner/membership must remain intact.
+
+**Observed:** Private virtual Go tests use the actual source/Atlas/register fixture and first pass the valid complete register control in each case. Four single faults then return a zero register: missing document → "foundation proof document: missing"; missing selected record → "foundation requirement proof unknown: transport.sync-contract.v1.mode-vocabulary"; missing/stale go.sum → "foundation current input unavailable or changed". A fifth actual command case first passes source-demands, removes only optional proofs.json, then returns code1, zero stdout and "foundation command proof input invalid".
+
+**Reproducer/custody:** `probes/unavailable148_test.go` and `probes/unavailable-overlay.json` add only a nonexistent virtual test file, using private temporary fixtures; no production overlay or repository mutation. Command: `go test -overlay <run>/probes/unavailable-overlay.json -json -count=1 -timeout 20m ./cmd/connectorgen -run '^TestReview148UnavailableProof'`. Actual terminal session35872, chunk1d8a0a, exit1; six run/six fail events including parent, zero pass events (each positive control completes before its negative within the same test). Package elapsed4.396s. Original full raw tool output remains in this review conversation; this journal quotes failure excerpts and does not label them a separately captured full receipt.
+
+**Sibling scope and cause:** Initial CP13 consumer defect. Covers standalone proof observations, requirement construction, aggregate register and command preload, including present catalog with missing selected record and independent dependency changes. Existing CP12 optional lane-proof behavior and source-lane reducer are separate; neither was changed by this finding.
+
+**Fix:** Represent missing/stale optional evidence as non-authorizing typed observations, preserve unresolved demands and full U/A/K/complement, and reject only resolved reuse that relies on unavailable evidence. Thread those states through command input custody and register schema/check. Keep cancellation, malformed/unsafe inputs and in-flight substitution refusals atomic. Add real command and register controls for each unavailable sibling.
+
+### CR-148-03: Declaration file membership accepts an unrelated exact-contract proof
+
+**Classification:** BLOCKER; medium authoring correctness impact. CP13-02/03/04 source-fit/adopter claims are affected; runtime lanes remain unpromoted.
+
+**Location:** `cmd/connectorgen/source_foundation_requirements.go:179-202`, especially183-188; `source_foundation_register.go:171-190` derives adopter relations from these admitted tuples. A nonempty selector description plus a definition-file match never establishes that the selected source operation uses the exact proven mechanism/contract.
+
+**Existing contract:** Firstmate148 explicitly forbids representing file membership as complete selector semantics. Selected140 requires a real source/config selector joined to the relevant existing owner/proof. The proof's own limitation says no direct operation behavior is proven. Its exact assertion is about a bundle declaring **check** status204.
+
+**Actual counterexample:** The permanent positive fixture `sourceBindingREST118A` produces a real canonical `operation:widgets.get` GET /widgets operation with response status204. Its separate HTTP.Check is GET /check with **no** success_statuses. `engine.Check` reads HTTP.Check and `requesterWithCheckSuccessStatuses` returns the default requester when those statuses are absent (`internal/connectors/engine/read.go:2736-2760,2794`). Thus the selected /widgets declaration neither selects Check nor declares the Check-status contract. Nevertheless copying the Check proof's exact assertion into the requirement yields existing_shared_capability; removing operations.json yields connector_local_configuration. Both are accepted solely because operations.json belongs to the broad Atlas entry's file list.
+
+**Independent probe:** `probes/selector148_test.go`, virtual test only. Real Atlas/two-current-proof controls and canonical source/binding controls complete first; shared and local cases both reach the production requirement builder and falsely resolve. Actual terminal session80727/chunkdbbe2f exit1, three run/three fail events including parent; package elapsed2.770s. Full output: `probes/selector-current-output.jsonl`. Command: `go test -overlay <run>/probes/selector-overlay.json -json -count=1 -timeout 20m ./cmd/connectorgen -run '^TestReview148ContractSelectorFit$'`.
+
+**Disclosed fixture correction:** The first private probe expected no HTTP.Check; the shared minimal fixture actually declares a separate default /check. That run failed during setup, before the tested consumer, and is retained as `probes/selector-fixture-setup-output.jsonl` (session97603, exit1, elapsed1.930s). The corrected probe asserts the actual separate path and default status configuration. Neither run is owner pre-edit RED.
+
+**Sibling scope/causality:** The same gate serves existing_shared_capability and connector_local_configuration, and every proof×binding adopter relation. The later144 file guard closes the original streams.json versus sync_transport.json mismatch but leaves this same-file/different-contract family. Permanent ExactBindingFit and SharedAndLocalAspects positives use this unrelated Check proof, so their passing receipts do not establish the promised relationship.
+
+**Fix:** Verify an exact contract-specific selector/configuration relationship to the source requirement before resolving reuse or deriving an adopter. A broad Atlas entry/file match and quoted assertion are navigation only. Keep unrelated proof visible without resolved fit; add valid controls whose actual selected declaration executes the proven mechanism and counterexamples in the same allowed file using another mechanism/configuration.
+
+## Warnings
+
+### WR-148-01: Required combined auth/body source-fit control remains unproved
+
+**Classification:** WARNING, acceptance-blocking missing mandatory evidence. This is a test-reliability/acceptance gap, not a claim of production criticality.
+
+**Locations:** `cmd/connectorgen/source_foundation_aspects_test.go:5-78`; selected matrix `.planning/phases/cp13-foundation-demand-register/PLAN.md:82`; `source_foundation_fits_test.go:10-106`.
+
+**Required and actual scope:** DemandMultipleAspects expressly requires a source body/auth requirement using an existing shared owner plus a local declaration deficit under the same source/lane. The later147 test selects one GET204 operation and its missing CLI command. Both requirements quote the Check-status assertion and cite responses. Neither requirement has request-body/auth facts, neither calls the facet-fit consumer, and no body/auth proof is selected. The independent auth tests exercise isolated scheme/placement observation; the body test exercises one separate canonical body match. Those controls do not establish the combined requirement promised by this matrix.
+
+**Evidence:** Original normal1/1 and race1/1 receipts `requirement-shared-local-{normal,race}-147-01` are genuine later execution; their raw pins and source snapshots are verified in `probes/receipt-audit.json`. They are not initial RED and their names/counts are insufficient to close the missing auth/body behavior. CR-148-03 separately identifies the false Check-proof fit in their current fixture; this warning records the remaining required coverage even after that defect is corrected.
+
+**Expected/fix:** Add a real retained-source/canonical-declaration fixture containing the requested body/auth requirements and a distinct local configuration deficit. Trace source facts, actual shared selector/mechanism proof and exact missing artifact to two independent results in one cell, with controls that fail if either requirement is dropped or the unrelated proof is borrowed. Capture actual terminal normal/race evidence without relabeling the existing later147 or prior setup failures.
+
+### WR-148-02: Pending receiver condition disagrees between the schema and Go reader
+
+**Classification:** WARNING; low authoring wire-consistency impact, not independently acceptance-blocking. No receiver approval or runtime authority is gained.
+
+**Locations:** `cmd/connectorgen/source_foundation_assessment.go:92-100` decodes required decision.condition into a string; `source_foundation_requirements.go:132-138` only checks its resulting zero value. `docs/connector-canon/foundations/assessments.schema.json` decision first alternative requires condition equal to the explicit empty string.
+
+**Observed/expected:** The published schema accepts the complete pending receiver decision and rejects omitted or null condition. The real assessment reader and requirement builder accept both omitted and null condition, normalizing either to empty string in output. Unlike the optional GraphQL contract repaired139, this new closed required member has no nullable/omission contract.
+
+**Reproducer:** `probes/decision-parity148_test.go` and overlay add only a virtual test. In each case, a real retained-source/Atlas/assessment control with explicit empty condition reaches the builder successfully; the only mutation deletes or nulls condition. Both desired-refusal cases fail because the builder accepts them. Terminal session52218/chunk1b5532, exit1, three run/three fail events including parent; terminal Go package elapsed2.841s. Full raw output `probes/decision-parity-output.jsonl`. Separate installed Draft202012Validator applied to the actual published decision schema returns complete=true, absent=false, null=false. No network/schema retrieval or source write.
+
+**Sibling scope/cause:** New CP13 wire decoder mismatch. Receiver ID/state already require nonempty exact values; exposure condition is nonempty and rejects both zero-value forms. The required decision_refs array has its own139/144 admission tests; those do not cover the nested empty-valued condition.
+
+**Fix:** Preserve required/non-null member presence when decoding a decision, or explicitly reconcile the published grammar if omission is intentionally equivalent. Keep unknown-field rejection and pending/conditional meaning. Add the same complete/absent/null cases to real schema/reader parity checks.
+
+
+### Owner timing clarification150
+
+The review table labels772.983/622.740 as Go elapsed. They are original capture wall durations (772.9833497500222/622.7402766250016 seconds). Original raw receipts remain authoritative; no evidence rerun, original report rewrite or semantic disposition change.
