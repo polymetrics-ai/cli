@@ -45,6 +45,25 @@ type sourceFoundationDecision struct {
 	Condition string `json:"condition"`
 }
 
+// A pending decision has an explicitly empty condition, not an omitted or
+// null wire member. Keep programmatic string values while retaining presence
+// and the closed, duplicate-free JSON contract at the actual decoder.
+func (d *sourceFoundationDecision) UnmarshalJSON(raw []byte) error {
+	if _, err := sourceFoundationRequiredObject(raw, "id", "state", "condition"); err != nil {
+		return fmt.Errorf("foundation decision: %w", err)
+	}
+	type decisionValue sourceFoundationDecision
+	var value decisionValue
+	if err := decodeSourceJSON(raw, &value); err != nil {
+		return fmt.Errorf("foundation decision: %w", err)
+	}
+	if err := decodeStrictJSON(raw, &value); err != nil {
+		return fmt.Errorf("foundation decision: %w", err)
+	}
+	*d = sourceFoundationDecision(value)
+	return nil
+}
+
 type sourceFoundationCellAssessment struct {
 	Key          sourceOperationKey            `json:"key"`
 	Lane         string                        `json:"lane"`

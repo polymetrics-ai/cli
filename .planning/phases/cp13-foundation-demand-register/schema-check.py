@@ -82,6 +82,30 @@ for mutation in ("explicit_empty", "absent", "null", "unknown_field"):
             decision["approved"] = True
     cases.append((f"pending decision condition {mutation}", candidate, mutation == "explicit_empty"))
 
+def unique_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON member")
+        result[key] = value
+    return result
+
+
+# Identical raw cases feed the permanent Go CLI test. Duplicate JSON members
+# are rejected before schema validation, matching the existing closed reader.
+wire_cases = json.loads(
+    (root / "cmd/connectorgen/testdata/source-foundation-decision-150.json").read_bytes()
+)
+for case in wire_cases:
+    candidate = copy.deepcopy(document)
+    try:
+        decisions = json.loads(case["wire"], object_pairs_hook=unique_object)
+    except ValueError:
+        candidate = None
+    else:
+        candidate["assessments"][0]["requirements"][0]["decision_refs"] = decisions
+    cases.append((f"shared decision wire {case['name']}", candidate, case["valid"]))
+
 failed = 0
 for name, candidate, expected in cases:
     actual = validator.is_valid(candidate)
