@@ -38,6 +38,14 @@ func sourceFoundationCombinedRetainedProfile155(t *testing.T, missingCLI bool, p
 		Operation: json.RawMessage(`{"id":"widgets.create","kind":"rest_write","summary":"Create a widget","risk":"high","approval":"plan-preview-confirm-execute","output_policy":"json","mutation_class":"create","batchable":false,"rest":{"method":"POST","path":"/workspaces/{workspace_id}/widgets","content_type":"application/json","max_bytes":1024,"response":{"success_statuses":["204"]},"parameters":[{"name":"workspace_id","in":"path","type":"string","required":true},{"name":"dry_run","in":"query","type":"boolean"}],"body_schema":` + string(lock.Schemas["schemas/request.json"]) + `}}`),
 		Commands:  []vNextCommandDescriptor{{Order: 0, Command: json.RawMessage(`{"path":"widgets create","summary":"Create a widget","intent":"direct_write","availability":"implemented","operation":"widgets.create","api_surface":[{"method":"POST","path":"/workspaces/{workspace_id}/widgets"}],"output_policy":"json","flags":[{"name":"workspace-id","type":"string","maps_to":"path.workspace_id","required":true},{"name":"dry-run","type":"boolean","maps_to":"query.dry_run"},{"name":"label","type":"string","maps_to":"body.label","required":true},{"name":"attributes","type":"json","maps_to":"body.attributes","required":true},{"name":"targets","type":"json","maps_to":"body.targets","required":true}]}`)}},
 	}}
+	if profile == "sibling159" {
+		lock.Operations = append(lock.Operations, vNextOperationDescriptor{
+			ID: "operation:widgets.remove", OperationOrder: 1,
+			Source:    json.RawMessage(`{"provider_operation":"removeOther","method":"DELETE","path":"/other"}`),
+			Commands:  []vNextCommandDescriptor{{Order: 1, Command: json.RawMessage(`{"path":"widgets remove","summary":"Remove another item","intent":"direct_write","availability":"implemented","operation":"widgets.remove","api_surface":[{"method":"DELETE","path":"/other"}],"output_policy":"json","flags":[]}`)}},
+			Operation: json.RawMessage(`{"id":"widgets.remove","kind":"rest_write","summary":"Remove another item","risk":"high","approval":"plan-preview-confirm-execute","output_policy":"json","mutation_class":"delete","batchable":false,"rest":{"method":"DELETE","path":"/other","max_bytes":1024,"response":{"success_statuses":["204"]},"parameters":[]}}`),
+		})
+	}
 	if profile == "joined" || profile == "unjoined" {
 		var second map[string]any
 		if json.Unmarshal(lock.Operations[0].Commands[0].Command, &second) != nil {
@@ -120,6 +128,15 @@ func sourceFoundationCombinedRetainedProfile155(t *testing.T, missingCLI bool, p
 		t.Fatal(err)
 	}
 	connector := engine.New(bundle, nil)
+	if profile == "sibling159" {
+		if err := commandrunner.Preflight(connector, []string{"widgets", "remove"}); err != nil {
+			t.Fatalf("real sibling runtime preflight: %v", err)
+		}
+		write, err := commandrunner.BuildWriteCommand(t.Context(), connector, commandrunner.Request{Path: []string{"widgets", "remove"}, Flags: map[string][]string{}})
+		if err != nil {
+			t.Fatalf("real sibling write selection: %+v %v", write, err)
+		}
+	}
 	paths := [][]string{{"widgets", "create"}}
 	if profile == "joined" || profile == "unjoined" {
 		paths = append(paths, []string{"widgets", "create-secondary"})
@@ -145,6 +162,11 @@ func sourceFoundationCombinedRetainedProfile155(t *testing.T, missingCLI bool, p
 	}
 	if profile == "body_form" {
 		sourceRaw = bytes.ReplaceAll(sourceRaw, []byte(`"application/json"`), []byte(`"application/x-www-form-urlencoded"`))
+	}
+	if profile == "sibling159" {
+		sourceRaw = bytes.ReplaceAll(sourceRaw,
+			[]byte(`"operation_id":"getOther","protocol":"rest","method":"get","path":"/other","source_operation":{"summary":"Get another item",`),
+			[]byte(`"operation_id":"removeOther","protocol":"rest","method":"delete","path":"/other","source_operation":{"summary":"Remove another item","security":[],`))
 	}
 	// Source auth negatives retain current canonical execution and exact citations.
 	// They reach the requirement mechanism consumer, not a stale binding check.
@@ -200,11 +222,28 @@ func sourceFoundationCombinedRetainedProfile155(t *testing.T, missingCLI bool, p
 		annotation.IntendedBindings = append(annotation.IntendedBindings, secondCommand)
 	}
 	annotations := []sourceSemanticAnnotation{annotation}
+	if profile == "sibling159" {
+		other := universe.manifest.SourceOperations[1]
+		annotations = append(annotations, sourceSemanticAnnotation{Key: other.Source.Key, Citation: other.Facts.Refs["summary"], Clause: "Remove another item", IntendedBindings: []sourceLaneTargetRef{{
+			Kind: "operation", Connector: "acme", ID: "widgets.remove", Lane: "direct_write", Artifact: prefix + "operations.json", Pointer: "/operations/1",
+			ArtifactSHA256: sourceBytesHash(descriptor.Staged.Outputs["operations.json"]), CanonicalID: "operation:widgets.remove", CanonicalPointer: "/operations/1/operation", Generation: descriptor.Staged.Identity.Digest,
+		}}})
+		otherCommand := annotations[1].IntendedBindings[0]
+		otherCommand.Kind, otherCommand.ID, otherCommand.Artifact, otherCommand.Pointer, otherCommand.CanonicalPointer = "command", "widgets remove", prefix+"cli_surface.json", "/commands/1", "/operations/1/commands/0"
+		otherCommand.ArtifactSHA256 = sourceBytesHash(descriptor.Staged.Outputs["cli_surface.json"])
+		annotations[1].IntendedBindings = append(annotations[1].IntendedBindings, otherCommand)
+	}
 	universe, err = buildSourceFoundationUniverse(t.Context(), repo, cohort, annotations)
 	if err != nil {
 		t.Fatal(err)
 	}
 	complete := requireSourceLane(t, universe.manifest.SourceOperations[0].Lanes, "direct_write", "applicable")
+	if profile == "sibling159" {
+		other := requireSourceLane(t, universe.manifest.SourceOperations[1].Lanes, "direct_write", "applicable")
+		if len(other.References) != 2 {
+			t.Fatalf("second real canonical operation did not reach exact source admission: %+v", other.Diagnostics)
+		}
+	}
 	expectedReferences := 2
 	if profile == "joined" {
 		expectedReferences = 3
@@ -244,6 +283,11 @@ func sourceFoundationCombinedRetainedProfile155(t *testing.T, missingCLI bool, p
 			secondLocal.EvidenceRequirements = []string{"materialize the exact secondary canonical CLI artifact"}
 			assessment.Assessments[0].Requirements = append(assessment.Assessments[0].Requirements, secondLocal)
 		}
+	}
+	if missingCLI && profile == "sibling159" {
+		other := universe.manifest.SourceOperations[1]
+		local := sourceFoundationRequirement{ID: "local-remove-command-artifact", SourceRefs: []sourceFactRef{other.Facts.Refs["summary"]}, Statement: "Materialize the exact canonical remove command", AtlasLookup: sourceFoundationLookup{Atlas: universe.atlasPin, Candidates: []sourceFoundationLookupCandidate{{AtlasID: authReq.AtlasLookup.Candidates[0].AtlasID, Contract: authReq.AtlasLookup.Candidates[0].Contract, Disposition: "unresolved", Rationale: "Reviewed static auth does not cover the explicitly unauthenticated remove source; exact local artifact remains required"}}}, Assessment: "unresolved", ProofIDs: []string{}, AffectedArtifacts: []string{prefix + "cli_surface.json"}, EvidenceRequirements: []string{"materialize the exact canonical remove CLI artifact; body/auth proof does not apply"}, DecisionRefs: []sourceFoundationDecision{}, FitBindings: []sourceLaneTargetRef{annotations[1].IntendedBindings[1]}}
+		assessment.Assessments = append(assessment.Assessments, sourceFoundationCellAssessment{Key: other.Source.Key, Lane: "direct_write", NextOwner: "polymetrics.ai/internal/connectors/engine", Requirements: []sourceFoundationRequirement{local}})
 	}
 	writeSourceFoundationAssessmentFixture(t, repo, assessment)
 	raw, err = json.Marshal(cohort)
@@ -288,8 +332,13 @@ func sourceFoundationCombinedRetainedProfile155(t *testing.T, missingCLI bool, p
 			t.Fatalf("missing CLI source-lanes exit=%d: %s", code, diag.String())
 		}
 		var actual sourceLaneManifest
-		if json.Unmarshal(manifest.Bytes(), &actual) != nil || actual.Validation.Status != "invalid" || actual.Validation.Errors != 1 || actual.Validation.Deficits != map[bool]int{true: 5, false: 4}[profile == "joined"] {
-			t.Fatal("actual missing-file producer diagnostics changed")
+		if err := json.Unmarshal(manifest.Bytes(), &actual); err != nil {
+			t.Fatal(err)
+		}
+		if profile == "single" || profile == "sibling159" {
+			sourceFoundationMissingDiagnostics160(t, actual, profile == "sibling159")
+		} else if actual.Validation.Status != "invalid" || actual.Validation.Errors != 1 || actual.Validation.Deficits != map[bool]int{true: 5, false: 4}[profile == "joined"] {
+			t.Fatalf("actual missing-file producer diagnostics changed: validation=%+v diagnostics=%+v", actual.Validation, actual.Diagnostics)
 		}
 		cell := requireSourceLane(t, actual.SourceOperations[0].Lanes, "direct_write", "applicable")
 		if len(cell.References) != 0 {
