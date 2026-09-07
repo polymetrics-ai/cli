@@ -65,14 +65,21 @@ For route selection and fallback behavior, also read
    - `accepted`: the requested change is correct and will be implemented.
    - `accepted_with_modification`: the concern is valid, but the implementation should differ.
    - `declined`: the request is wrong, unsafe, already covered, or conflicts with project rules.
+     When declining because the current behavior is intended, cite the doc that records that intent
+     and update it if it is missing or stale (see step 9).
    - `deferred`: the request is valid but intentionally belongs in a follow-up issue or PR.
    - `needs_human`: the request crosses a human gate or requires product/security judgment.
-8. Reply to the review item before resolving it:
+8. Reply to every actionable finding before resolving it — including the ones you fix. No finding is
+   silently actioned or ignored; a reader must see, per finding, whether it was fixed and why:
    - reply directly to inline review comments whenever possible
    - use a top-level PR disposition summary for the top-level Claude summary comment
-   - explain the reason, not only the action
+   - state the disposition and explain the reason, not only the action
    - cite tests, source links, issue scope, or project rules when they decide the disposition
-9. Implement accepted fixes in the same PR only when they are in scope for the linked issue.
+9. Implement accepted fixes in the same PR only when they are in scope for the linked issue. When a
+   fix — or a declined-because-intended decision — changes or clarifies behavior, CLI surface,
+   flags, output, config, or shared contracts, update the corresponding docs and website in the same
+   PR per `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`. Do not leave docs
+   contradicting the code after a disposition.
 10. For deferred work, create or reference a follow-up issue and explain why it is not part of this
    PR.
 11. Rerun targeted verification after each fix batch, then rerun broader verification when review
