@@ -385,6 +385,22 @@ func sourceRequestShape(facts sourceFacts) sourceShape {
 	return sourceContentShape(facts, body["content"])
 }
 
+// Only exact successful codes and the retained 2XX range can establish a
+// successful response contract. A malformed key remains an unknown scope;
+// ignoring it would incorrectly make a valid sibling's proof exhaustive.
+func sourceResponseStatus(status string) (success, known bool) {
+	if status == "default" {
+		return false, true
+	}
+	if len(status) != 3 || status[0] < '1' || status[0] > '5' {
+		return false, false
+	}
+	if status[1:] != "XX" && (status[1] < '0' || status[1] > '9' || status[2] < '0' || status[2] > '9') {
+		return false, false
+	}
+	return status[0] == '2', true
+}
+
 func sourceResponseShape(facts sourceFacts) sourceShape {
 	var responses map[string]json.RawMessage
 	if err := json.Unmarshal(facts.Groups["responses"], &responses); err != nil || len(responses) == 0 {
@@ -398,7 +414,12 @@ func sourceResponseShape(facts sourceFacts) sourceShape {
 	}
 	sort.Strings(keys)
 	for _, status := range keys {
-		if !strings.HasPrefix(status, "2") {
+		success, known := sourceResponseStatus(status)
+		if !known {
+			result.Known = false
+			result.Cardinality = mergeSourceCollection(result.Cardinality, sourceCollectionUnknown)
+		}
+		if !success {
 			continue
 		}
 		found = true

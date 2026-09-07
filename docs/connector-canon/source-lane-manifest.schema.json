@@ -1165,7 +1165,14 @@
           }
         },
         "graphql": {
-          "$ref": "#/$defs/graphql_refs"
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/graphql_refs"
+            }
+          ]
         },
         "response_interpretations": {
           "type": "array",

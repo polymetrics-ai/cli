@@ -265,12 +265,17 @@ func sourceLaneCheckCoverage(key sourceOperationKey, facts sourceFacts, a source
 			mediaAt(root, owner.Pointer, true)
 		} else {
 			for status, value := range root {
-				if len(status) == 3 && status[0] == '2' {
+				success, known := sourceResponseStatus(status)
+				pointer := owner.Pointer + "/" + escapeSourcePointer(status)
+				if !known {
+					unknownScopes = append(unknownScopes, pointer)
+				}
+				if success {
 					node, ok := sourceResolveObject(facts, value, map[string]bool{}, 0)
 					if !ok {
-						unknownScopes = append(unknownScopes, owner.Pointer+"/"+status)
+						unknownScopes = append(unknownScopes, pointer)
 					} else if status != "204" && status != "205" {
-						mediaAt(node, owner.Pointer+"/"+status, false)
+						mediaAt(node, pointer, false)
 					}
 				}
 			}
@@ -2079,7 +2084,11 @@ func sourceLaneNoResponseBody(facts sourceFacts) bool {
 	}
 	success := false
 	for status, raw := range responses {
-		if len(status) != 3 || status[0] != '2' {
+		isSuccess, known := sourceResponseStatus(status)
+		if !known {
+			return false
+		}
+		if !isSuccess {
 			continue
 		}
 		success = true

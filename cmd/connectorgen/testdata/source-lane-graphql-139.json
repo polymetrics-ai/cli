@@ -1,0 +1,226 @@
+[
+  {
+    "name": "absent",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause"
+    },
+    "valid": true
+  },
+  {
+    "name": "null",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": null
+    },
+    "valid": true
+  },
+  {
+    "name": "empty",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": {}
+    },
+    "valid": true
+  },
+  {
+    "name": "nullable members",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": {
+        "document": null,
+        "operation_name": null,
+        "request_schema": null
+      }
+    },
+    "valid": true
+  },
+  {
+    "name": "valid citation",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": {
+        "document": {
+          "document_id": "fixture:graphql",
+          "pointer": "/operation/document",
+          "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    },
+    "valid": true
+  },
+  {
+    "name": "empty citation",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": {
+        "document": {}
+      }
+    },
+    "valid": false
+  },
+  {
+    "name": "unknown field",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": {
+        "root_field": "widgets"
+      }
+    },
+    "valid": false
+  },
+  {
+    "name": "wrong scalar",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": "document"
+    },
+    "valid": false
+  },
+  {
+    "name": "wrong array",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": []
+    },
+    "valid": false
+  },
+  {
+    "name": "bad pointer",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": {
+        "document": {
+          "document_id": "fixture:graphql",
+          "pointer": "/bad~2",
+          "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    },
+    "valid": false
+  },
+  {
+    "name": "rendered citation",
+    "annotation": {
+      "key": {
+        "connector": "fixture",
+        "inventory": "primary",
+        "id": "source.a"
+      },
+      "citation": {
+        "document_id": "fixture:graphql",
+        "pointer": "/operation/document",
+        "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "clause": "Retained source clause",
+      "graphql": {
+        "document": {
+          "document_id": "fixture:graphql",
+          "pointer": "/operation/document",
+          "value_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "section": "#heading"
+        }
+      }
+    },
+    "valid": false
+  }
+]

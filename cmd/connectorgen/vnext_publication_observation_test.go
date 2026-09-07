@@ -98,7 +98,7 @@ func TestVNextPublicationTreeSnapshotRefusesReplacementChild(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := os.WriteFile(witnessPath, payload, 0o600); err != nil {
+		if err := vNextPublicationWriteReadyForTest(witnessPath, payload); err != nil {
 			t.Fatal(err)
 		}
 	}

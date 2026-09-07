@@ -126,10 +126,14 @@ func sourceCollectionScopes(facts sourceFacts) []sourceCollectionScope {
 	sort.Strings(statuses)
 	scopes := []sourceCollectionScope{}
 	for _, status := range statuses {
-		if len(status) != 3 || status[0] != '2' {
+		success, known := sourceResponseStatus(status)
+		responsePointer := owner.Pointer + "/" + escapeSourcePointer(status)
+		if !known {
+			scopes = append(scopes, sourceCollectionScope{ResponsePointer: responsePointer, UnknownPointer: responsePointer})
+		}
+		if !success {
 			continue
 		}
-		responsePointer := owner.Pointer + "/" + escapeSourcePointer(status)
 		response, actual, _, ok := sourceCollectionObjectAt(facts, responsePointer)
 		if !ok {
 			scopes = append(scopes, sourceCollectionScope{ResponsePointer: responsePointer})

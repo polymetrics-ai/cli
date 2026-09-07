@@ -177,7 +177,7 @@ func vNextPublicationContentionChild(t *testing.T, scenario string) {
 					writeErr = err
 					return
 				}
-				writeErr = os.WriteFile(ackPath, payload, 0o600)
+				writeErr = vNextPublicationWriteReadyForTest(ackPath, payload)
 			})
 			return writeErr
 		},

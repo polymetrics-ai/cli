@@ -212,8 +212,14 @@ provider fields.
 Absent or null optional citations and absent, null or empty mapping lists carry
 no additional facts. A present citation must include its document, pointer and
 literal value digest. Optional GraphQL selectors cite the retained operation
-name, document and request schema; an empty selector object supplies no facts.
+name, document and request schema; an absent, null or empty selector object
+supplies no facts. Present selector objects remain closed to unknown fields.
 They introduce no provider-envelope format or alternate GraphQL parser.
+
+`python3 scripts/tests/source-lane-graphql-parity.py` checks the published schema
+with an installed Python `jsonschema` Draft 2020-12 validator and runs the actual
+Go annotation-reader matrix. It requires all eleven literal cases to run and
+compares both validators with their expected outcomes; it installs no packages.
 
 Target identity compares every scalar and pointed value. Mapping order and
 nil-versus-empty lists do not change identity. Duplicate, conflicting and

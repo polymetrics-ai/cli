@@ -148,7 +148,7 @@ func vNextPublicationSafeWitnessChild(t *testing.T, scenario string) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if err := os.WriteFile(witnessPath, encoded, 0o600); err != nil {
+		if err := vNextPublicationWriteReadyForTest(witnessPath, encoded); err != nil {
 			t.Fatal(err)
 		}
 	}
