@@ -35,6 +35,121 @@ func sourceFoundationCommandFixture(t *testing.T) (string, sourceArtifactPin) {
 	return repo, inputs.baselinePin
 }
 
+func sourceFoundationBoundCommandFixture(t *testing.T) (string, sourceArtifactPin, string) {
+	t.Helper()
+	repo, _, _, _ := sourceFoundationRequirementsFixture(t)
+	key, facts, _ := sourceBindingFixture099F(t, "body", nil)
+	for _, files := range []map[string][]byte{facts.bindings.Authoring, facts.bindings.Artifacts} {
+		for name, raw := range files {
+			path := filepath.Join(repo, name)
+			if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(path, raw, 0600); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	_, cohort := sourceInventoryFixture(t, []string{"source.b", "source.a"}, 2)
+	cohort.Inventories[0].Connector = key.Connector
+	sourceRaw, err := os.ReadFile(filepath.Join(repo, "source.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var retained map[string]any
+	if err := json.Unmarshal(sourceRaw, &retained); err != nil {
+		t.Fatal(err)
+	}
+	retained["connector"] = key.Connector
+	sourceRaw, err = json.Marshal(retained)
+	if err != nil {
+		t.Fatal(err)
+	}
+	proofWrite(t, repo, "source.json", sourceRaw)
+	cohort.Inventories[0].SHA256 = sourceBytesHash(sourceRaw)
+	universe, err := buildSourceFoundationUniverse(t.Context(), repo, cohort, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, exists := universe.manifest.SourceOperations[0].Facts.bindings.Bundles[key.Connector]; !exists {
+		t.Fatal("actual source reader did not load the valid canonical execution bundle")
+	}
+	assessment := sourceFoundationAssessmentDocumentFixture(t, universe)
+	assessment.Assessments[0].Key = universe.manifest.SourceOperations[0].Source.Key
+	writeSourceFoundationAssessmentFixture(t, repo, assessment)
+	_, baseline := sourceFoundationObligationsFixture(t, repo, universe)
+	raw, err := json.Marshal(cohort)
+	if err != nil {
+		t.Fatal(err)
+	}
+	proofWrite(t, repo, sourceLaneCohortPath, raw)
+	proofWrite(t, repo, sourceLaneAnnotationsPath, []byte(`{"schema_version":1,"annotations":[]}`))
+	var manifest, diagnostic bytes.Buffer
+	if code := runSourceLanesContext(t.Context(), []string{"source-lanes", "--repo", repo}, &manifest, &diagnostic); code != 0 {
+		t.Fatalf("actual bound source generation: %s", diagnostic.String())
+	}
+	proofWrite(t, repo, sourceLaneManifestPath, manifest.Bytes())
+	return repo, baseline, "internal/connectors/defs/" + key.Connector + "/spec.json"
+}
+
+func TestSourceDemandsCommandBindingInputCustody(t *testing.T) {
+	repo, baseline, name := sourceFoundationBoundCommandFixture(t)
+	path := filepath.Join(repo, name)
+	original, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	before, err := os.Stat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var output, diagnostic bytes.Buffer
+	args := []string{"source-demands", "--repo", repo}
+	if code := runSourceDemandsPolicy(t.Context(), args, &output, &diagnostic, baseline); code != 0 {
+		t.Fatalf("actual source/canonical/bundle control: %s", diagnostic.String())
+	}
+	var register sourceFoundationRegister
+	if err := json.Unmarshal(output.Bytes(), &register); err != nil {
+		t.Fatal(err)
+	}
+	t.Run("consumed declaration pin", func(t *testing.T) {
+		want := sourceArtifactPin{Path: name, SHA256: sourceBytesHash(original), Bytes: int64(len(original))}
+		found := false
+		for _, pin := range register.Inputs {
+			found = found || pin == want
+		}
+		if !found {
+			t.Error("actual command omitted the consumed execution declaration input pin")
+		}
+	})
+	t.Run("replacement after source observation", func(t *testing.T) {
+		fired := false
+		observer := func(event sourceProofReadEvent) {
+			if fired || event.Path != sourceFoundationAssessmentsPath || event.Phase != "initial" || !event.Success {
+				return
+			}
+			fired = true
+			proofWrite(t, repo, name+".replacement", original)
+			if err := os.Rename(path+".replacement", path); err != nil {
+				t.Fatal(err)
+			}
+		}
+		output.Reset()
+		code := runSourceDemandsObserved(t.Context(), args, &output, &diagnostic, baseline, observer)
+		after, err := os.Stat(path)
+		if err != nil || !fired || os.SameFile(before, after) {
+			t.Fatal("actual successful source/assessment read did not establish the replacement inode")
+		}
+		current, err := os.ReadFile(path)
+		if err != nil || !bytes.Equal(current, original) {
+			t.Fatal("later declaration replacement was rewritten")
+		}
+		if code == 0 || output.Len() != 0 {
+			t.Error("actual command emitted stale reconciliation after declaration replacement")
+		}
+	})
+}
+
 func TestSourceDemandsCommandOutputAndCancellation(t *testing.T) {
 	repo, baseline := sourceFoundationCommandFixture(t)
 	args := []string{"source-demands", "--repo", repo}
@@ -159,6 +274,20 @@ func TestSourceDemandsCommandObservation(t *testing.T) {
 		len(register.Known) != 1 || len(register.Requirements) != 1 || len(register.Facets) != 4 || len(register.Examples) != 35 || len(register.Adopters) != 0 ||
 		register.Requirements[0].Status != "unresolved" || register.Requirements[0].Proofs[0].Status != "current" {
 		t.Fatal("actual command output lost bounded source/requirement observations")
+	}
+	sourceBytes, err := os.ReadFile(filepath.Join(repo, sourceLaneManifestPath))
+	if err != nil {
+		t.Fatal(err)
+	}
+	wantPin := sourceArtifactPin{Path: sourceLaneManifestPath, SHA256: sourceBytesHash(sourceBytes), Bytes: int64(len(sourceBytes))}
+	found := false
+	for _, pin := range register.Inputs {
+		if pin == wantPin {
+			found = true
+		}
+	}
+	if !found || len(register.Proofs) != 2 || register.Checks.SelectedReuseRequirements != 0 || register.Checks.UnresolvedRequirements != 1 {
+		t.Fatal("actual source file pin or separate proof/requirement accounting missing")
 	}
 	path := filepath.Join(repo, sourceFoundationRegisterPath)
 	if err := os.WriteFile(path, output.Bytes(), 0600); err != nil {

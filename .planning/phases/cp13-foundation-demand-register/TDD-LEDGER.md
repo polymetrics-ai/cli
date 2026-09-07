@@ -335,3 +335,107 @@ Later12/12 output/check/cancellation verification reaches the real command: atte
 Verification: `demands-command-vet-144-01`, exit0, wall1.0908394159923773s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, changed_inputs_after=[].
 
 Verification: `demands-command-lint-144-01`, exit0, wall2.7858158340095542s, rawSHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`, changed_inputs_after=[].
+
+## Actual command binary build correction144
+
+`source-manifest-generate-144-01` failed before command execution: production source_foundation_atlas.go referenced vNextPublicationGuaranteeProof, whose sole declaration remained in vnext_lock_test.go. Package go test/vet/lint include test declarations and did not witness a runnable non-test binary. This is a real build failure, not behavioural RED, and generated no valid manifest (raw127bytes, SHA256d3d0d1b086d9842cd8c88a7e8a442a191aed93f67b4b400d951fdf840465f414, exit1, wall0.6960150829982013s, unchanged inputs). Move the same shared Atlas wire struct into source_foundation_atlas.go; retain the existing publication test validator and all proof mappings. This completes the existing141 shared declaration move, with no change to publication behavior. Verify the actual binary build before retrying generation.
+
+## Explicit register authority, zero-field wire fidelity and consumed declaration custody144
+
+The register now carries complete command-observed input pins, original narrow foundation proof records/status separately from selected requirement claims, and four distinct completion predicates. Selected reuse count0 is explicit; true selected_reuse_proof_complete with no selected reuse is not a claim that unresolved requirements or CP13 are accepted. Current register requirements retain25unresolved and the original Vercel gap; known/examples/source-fit reconciliation is visibility, not implementation.
+
+Verification: `register-pins-predicates-144-01`, exit0, 58/58 passing/run Go events, wall44.83385237501352s, rawSHA256 `e1d783e0fa23082573e0cb52bd5ed5575cb4a88f3459f5a8c3ede727615754d7`, changed_inputs_after=[].
+
+Red: `register-zero-fields-red-144-01`, exit1, 1/6 passing/run Go events, wall9.056949292018544s, rawSHA256 `304205c8ee1dca06d9ac36566cb72c342c7821e68d0180911c2598327fb5fc89`, changed_inputs_after=[].
+
+Green: `register-zero-fields-green-144-01`, exit0, 21/21 passing/run Go events, wall16.658524957980262s, rawSHA256 `e7840f8aaf8645ac8ad7ef03677d867cee4b88e0d2e3e75df2d4337ca0f93b40`, changed_inputs_after=[].
+
+Binary build verification: `demands-binary-build-144-01`, exit0, 0/0 passing/run Go events, wall6.601714999997057s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, changed_inputs_after=[].
+
+Actual source generation: `source-manifest-generate-144-02`, exit0, 0/0 passing/run Go events, wall61.323895999987144s, rawSHA256 `29dd14f5974911543f7b176b72bafabe02c79a1d984dfd139191f6b2d9076bbb`, changed_inputs_after=[].
+
+Intermediate register generation: `demand-register-generate-A-144-01`, exit0, 0/0 passing/run Go events, wall93.76559512500535s, rawSHA256 `16391394327ba3ed4e48b337c4a3ea6f012803daaeb0728b1e8af20808871691`, changed_inputs_after=[].
+
+Fixture setup failure; not behavioural RED: `demands-binding-custody-red-144-01`, exit1, 0/1 passing/run Go events, wall5.169082208012696s, rawSHA256 `930430a572155329bd6f4837f2a6a0270620d320096a4eef818b16729fbf5d97`, changed_inputs_after=[].
+
+Fixture setup failure; not behavioural RED: `demands-binding-custody-red-144-02`, exit1, 0/1 passing/run Go events, wall5.0556835000170395s, rawSHA256 `e5f91809318a3dd3ece1fa4d9f398d22d145c3b86c569a6b229b327c96503af7`, changed_inputs_after=[].
+
+Red: `demands-binding-custody-red-144-03`, exit1, 0/3 passing/run Go events, wall7.0052642920054495s, rawSHA256 `cb8c5b39b8074342c44a33be2a31f1996750f1c9217ff3e963dfd42697ddfc37`, changed_inputs_after=[].
+
+Green: `demands-binding-custody-green-144-01`, exit0, 26/26 passing/run Go events, wall26.374017834023107s, rawSHA256 `b1ded5af2738d09cb2d740a4d878c81ea9398892693e4665fe6f3dbe873b34ae`, changed_inputs_after=[].
+
+Required-zero-field RED demonstrates omitted/null integer0 and booleanfalse fields losing wire presence through Go zero values. GREEN compares canonical original wire JSON to independently reconstructed expected output; it does not remarshal away the missing fields.
+
+The real source-lanes command regenerated101749993bytes exactly equal to the existing tracked SHA29dd14f5974911543f7b176b72bafabe02c79a1d984dfd139191f6b2d9076bbb. No overwrite or source/lane change was needed:4341primary+2supplements,30401cells, zero implemented. The intermediate register generation returned4449461bytes, exact U30401/A26/complement30375/K26,104facets,35examples/two missing references, two available narrow C2 records and zero selected reuse/adopters. It predates the declaration-custody correction and is not the final A/B candidate.
+
+Binding-custody setup01 mismatched retained connector versus cohort, then setup02 left the assessment key at the old fixture connector. Neither reached the intended frontier and neither is behavioural RED. The corrected03 fixture loads actual canonical lock outputs and a valid engine bundle, then the real source-lanes report and foundation demand command. Its positive command succeeds before two negative assertions: the consumed spec.json pin is missing, and an equivalent-byte new inode substituted after the real assessment read still emits success. GREEN pins all actually consumed canonical/engine artifact bytes (including schema/HTTP siblings) from the independent source binding collection into the shared bounded cache before that frontier, and revalidates at final output. It preserves the replacement inode/bytes and changes no lane authority. Assertions in03 and GREEN are unchanged. Later whole-command26/26 overlaps earlier controls and is not summed.
+
+## Atlas declaration selection guard144
+
+Red: `requirement-atlas-selector-red-144-01`, exit1, 3/4 passing/run Go events, wall7.084494707989506s, rawSHA256 `7af8063df1ac83a7f6d29ba5f33b7f09c1d2aea6af0bf3f08c8a0187d1d0d807`, changed_inputs_after=[]. The real canonical stream/source binding plus original current mode-vocabulary proof incorrectly resolves shared reuse although that Atlas owner selects only sync_transport.json. The unresolved control remains observable. Add the necessary exact Atlas declaration-file selection guard to the existing requirement consumer; it does not infer every textual selector or widen proof scope. Correct the earlier positive fixture (whose old receipts remain historical) to an actual direct-execution declaration and its narrow conditional status assertion; no lane certification follows.
+
+Green: `requirement-atlas-selector-green-144-01`, exit0, 12/12 passing/run Go events, wall13.152949458017247s, rawSHA256 `5a26315bc1ad743fff82f81eb3d5b727e1ae3e18048972b6433b91da60ec6039`, changed_inputs_after=[]. The original unrelated-selector negative is unchanged; the old positive is explicitly corrected to direct-execution scope. Exact artifact selection is a necessary condition, not a claim that every free-text Atlas selector is now executable admission.
+
+Later matrix verification planned: same retained fourteen cells through missing/current/unrelated/invalid foundation proof reads, independent existing lane-proof fixture/reducer control, and multiple separately retained requirement rows/provider-clause identity. These are later verification, not retroactive RED.
+
+Later provider/aspects verification attempt `requirement-provider-aspects-144-01` failed fixture citation setup before classification (exit1, 0/1, rawSHA2562d78d0bed4873bd74f7979e10dbd4322f354734826f38aa4e92e835a68e92994). The reused099F pointer helper hard-codes its original fixture document ID. Bind the test citation to the actual retained source document ID; retain the full failed attempt as setup, not behavioural RED.
+
+Later verification: `register-schema-144-01`, exit0, 0/0 passing/run Go events, wall85.34038737500669s, rawSHA256 `7a19a3950810a0732a1df074b31a1ffcf3b596fc69471b32176acacf4f00523e`, changed_inputs_after=[].
+
+Later verification: `demands-lane-isolation-144-01`, exit0, 6/6 passing/run Go events, wall6.931825500010746s, rawSHA256 `f3ffffc81848da1d110167adedcf807c734e6d289f0e525124ffa7e3687cd775`, changed_inputs_after=[].
+
+Later verification: `requirement-provider-aspects-144-02`, exit0, 1/1 passing/run Go events, wall5.352960874995915s, rawSHA256 `46d6595e235e79d123f227047187e8c1aaacf960f25348528684ee5d936d1872`, changed_inputs_after=[].
+
+Register schema verification has44 Python cases (not Go test events) on the preserved intermediate full-corpus output. Lane isolation compares complete original source/lane reports across four foundation-proof states and executes the separate existing bounded-record lane fixture/reducer control. Provider/aspects verifies retained exact clause identity, two independently classified requirements, and same-text sibling refusal; it does not claim the specific combined auth/body shared+local fixture is covered.
+
+## Coherent full verification144 and race runtime limit
+
+Normal: foundation-command-normal-144-01,263/263, exit0, wall147.1654946669878s, rawSHAf22c0db6e8cf0918c375e931f800141bdfe3b2f4711119bdb69ba32ba38c875e, unchanged inputs.
+
+Race attempt: foundation-command-race-144-01 hit the actual20m package timeout during TestSourceFoundationRegisterIndependentOutputOracle/invented_completion. Exit1,211/213 passing/run events, wall1209.6618673340126s, rawSHAc4c4ed2e3f04c3578ba7eaa18382236f61994f8ac971da893730689010f199cc, unchanged inputs. Full corpus reconciliation passed before timeout; there was no assertion failure or race report before the timeout. This is NOT a completed package race gate. Preserve its full output and all completed event meanings.
+
+Proportionate follow-up: retain full-corpus normal and original completed race test evidence; execute the bounded foundation/command matrix with -skip '^TestSourceFoundationObligationsCurrentCorpus$'. All assertions remain unchanged. The timeout justifies repeating the bounded package to obtain a terminal race result rather than increasing the required20m timeout or repeatedly rebuilding the pure full-corpus source projection. This is a declared command split, not a scope/acceptance waiver.
+
+## Firstmate147 complete passing race union
+
+Firstmate147 supersedes crediting any completed event from the timed-out package as a passing partition. RACE-PARTITIONS-147.json records all50 top-level tests/all263 parent-child events from normal, concrete disjoint sets, original argv/launch chronology, source hashes and resource observation. The bounded command began before147 and its complete actual262-event set exactly matches its recorded49 top-level set; the new corpus command uses the exact anchored selector. No assertions or timeout changed.
+
+Passing partition `foundation-command-bounded-race-144-01`: exit0, 262/262, wall772.9833497500222s, rawSHA256 `6038dbd8afc525fd9a113567960b004d1eef50e2cedc8c5ab286765d43089911`, unchanged inputs.
+
+Passing partition `foundation-command-corpus-race-147-01`: exit0, 1/1, wall622.7402766250016s, rawSHA256 `634cdeca63a458e6b1406c8987c657b2031fefdb764883c874114babed4d8dd8`, unchanged inputs.
+
+Exact Counter equality proves runs=passes=expected in each successful command, no fail/skip events, terminal package pass, no overlapping selected event, no missing/unintended case and union=all263 original normal events. The original failed20m command remains failed, with no passing-partition credit.
+
+## Remaining multiple-requirement matrix control147
+
+After the complete263-event normal/race union, the matrix mapping exposed that the later provider/unresolved pair did not test shared reuse and local configuration simultaneously in one cell. Add a separate test file with an actual canonical direct-operation/CLI pair, preserving one accepted operation binding and one missing command declaration. Use the existing current conditional status assertion without claiming source execution or auth/body proof. No production or existing test assertion changes. This is later matrix verification, not original RED. Its own normal/race results are additive named evidence after the263 baseline, never silently relabeled as part of that earlier union.
+
+Terminal verification `foundation-command-vet-144-01`: exit0, 0/0 Go pass/run events, wall1.0793219579791185s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, unchanged captured inputs.
+
+Terminal verification `foundation-command-lint-144-01`: exit0, 0/0 Go pass/run events, wall3.4166778340004385s, rawSHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`, unchanged captured inputs.
+
+Terminal verification `demand-register-generate-A-144-02`: exit0, 0/0 Go pass/run events, wall95.78665662498679s, rawSHA256 `045bc1855a7375b9c4537655502fe98d1e22400f31edf42247d487bc2f61b1f6`, unchanged captured inputs.
+
+Terminal verification `demand-register-generate-B-144-01`: exit0, 0/0 Go pass/run events, wall94.09594058300718s, rawSHA256 `045bc1855a7375b9c4537655502fe98d1e22400f31edf42247d487bc2f61b1f6`, unchanged captured inputs.
+
+Terminal verification `register-current-census-144-01`: exit0, 0/0 Go pass/run events, wall0.20030170801328495s, rawSHA256 `cf29b3a70bb9b8288d16f5a00bedb90a276a588322a184932ffa16e110e4100d`, unchanged captured inputs.
+
+Terminal verification `register-schema-current-144-01`: exit0, 0/0 Go pass/run events, wall85.2766932079976s, rawSHA256 `396fe4b388f151ce638fad141a54b8706a86d695b746ddadf9c4cdc72023f4ce`, unchanged captured inputs.
+
+Terminal verification `source-demands-binary-help-144-01`: exit0, 0/0 Go pass/run events, wall0.6998557499900926s, rawSHA256 `7dff690f695e4aaf602674059ece7bc11d8f4d38f8cc13de6873f4f88f3e45ed`, unchanged captured inputs.
+
+Terminal verification `saved-register-default-check-147-01`: exit0, 0/0 Go pass/run events, wall95.365415999986s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, unchanged captured inputs.
+
+Terminal verification `saved-register-explicit-check-147-01`: exit0, 0/0 Go pass/run events, wall95.5723062909965s, rawSHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`, unchanged captured inputs.
+
+Terminal verification `requirement-shared-local-normal-147-01`: exit0, 1/1 Go pass/run events, wall5.380898208008148s, rawSHA256 `f63fc7f897a8a816f1b5b59dd3b176f58a1815b702a3f9079f9a955e1ca67e69`, unchanged captured inputs.
+
+Terminal verification `requirement-shared-local-race-147-01`: exit0, 1/1 Go pass/run events, wall13.213129374984419s, rawSHA256 `aa64b595267266666f0f99b5640cae9401e6bf4bc21c50e2b5066f23c63aaf81`, unchanged captured inputs.
+
+Terminal verification `foundation-final-test-lint-147-01`: exit0, 0/0 Go pass/run events, wall2.9046383330132812s, rawSHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`, unchanged captured inputs.
+
+The A/B outputs are byte-identical4593937bytes/SHA045bc1855a7375b9c4537655502fe98d1e22400f31edf42247d487bc2f61b1f6. The independent census reconstructs U from retained cohort expected IDs and seven literal lanes, exact A/complement/K,104facets/35examples, and all1095 current file pins. Schema-current has44 actual Python cases, not Go events. Exclusive creation installed only these generated bytes at the documented default register path; no existing file was clobbered. Default and explicit actual Go commands returned0, and their independent before/after complete bytes/hash, device/inode, mode and mtime_ns all match. Original private preservation JSON records retain those values.
+
+The additional shared/local matrix test first admits both real canonical operation and command bindings, then removes only the command artifact in its fixture. The independent operation reference survives, and one cell emits both shared and local requirement rows with the exact original conditional assertion. It does not prove a read execution or auth/body encoder. Normal/race each1/1 are separate later evidence; the original263-event union is not relabeled264. Only the new test file was added after that union, with no existing production/test assertion change.
+
+GSD verify-work sources and generated prompt were resolved/read at official20297a8ff941378b8615a5d3e8629e52c10a0f9d. Execute the established inline/non-Pi sole-owner fallback using the actual automated command/test evidence; independent review/acceptance remains Firstmate-bound. fm-ensure-agents-md.sh returned unchanged; no project memory churn.

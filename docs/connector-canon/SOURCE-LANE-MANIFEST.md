@@ -44,6 +44,55 @@ anchored rows and seven cells with errors. An invalid cohort anchor cannot
 supply trustworthy membership, so it produces an error without a fabricated
 report. A short or failed stdout write fails the command.
 
+## Foundation demand register
+
+The separate authoring command joins this retained report to the
+[Foundation Atlas](foundations/README.md), sparse source-cited requirements and
+scoped assertion records:
+
+```bash
+go run ./cmd/connectorgen source-demands --help
+go run ./cmd/connectorgen source-demands > candidate-source-demands.json
+go run ./cmd/connectorgen source-demands --check candidate-source-demands.json
+go run ./cmd/connectorgen source-demands --check
+```
+
+Capture generation into a fresh candidate and inspect its successful result
+before replacing `data/connector-canon/batch1-foundation-demand-register.json`.
+The command itself writes only one complete stdout result after validation;
+short writes and partial or full-write errors fail. Check mode writes no files
+and compares the complete saved output against independently retained inputs.
+It checks input content and file identity again before returning success.
+
+For **source-demands**, `--manifest <relative-path>` names the input source/lane
+report, in either generation or check mode. That report is checked against
+current retained inputs. `--cohort` and `--assessments` select confined relative
+authoring inputs; `--repo` selects their root. Optional `--check <relative-path>`
+selects the saved demand register; bare `--check` uses the tracked register above.
+Atlas, baseline and proof-review authority have no caller-selectable override.
+
+The report preserves the independent source universe, sparse assessed set and
+exact complement, historical and current known obligations, all literal Atlas
+examples, MIME/auth/body/paging observations and separate requirement results.
+It records actual input pins and original narrow proof observations. Existing
+implementation, connector-local configuration, provider limitation, absent
+shared foundation, unresolved work and source-backed no-demand are distinct.
+Missing proof alone cannot establish missing implementation.
+
+Four results remain separate: `structural_valid`, `coverage_accounted`,
+`required_reconciliation_complete` and `selected_reuse_proof_complete`. Their
+authority is authoring consistency. With zero selected reuse requirements, the
+last result is true without proving a reuse claim; the selected and unresolved
+counts remain explicit. Unresolved requirements and unassessed cells do not
+become executable, and these results do not accept a checkpoint or authorize a
+receiver. Runtime continues to read only admitted execution JSON.
+
+The wire contracts are the [assessment schema](foundations/assessments.schema.json),
+[proof schema](foundations/proofs.schema.json) and
+[register schema](foundations/demand-register.schema.json). The Go consumer also
+checks exact source/contract/proof joins and reconstructs the expected report;
+JSON schema validation alone cannot establish those relationships.
+
 ## Inputs and evidence boundaries
 
 - `data/connector-canon/batch1-source-lane-cohort.json` independently pins exact

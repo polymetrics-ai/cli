@@ -38,6 +38,7 @@ type sourceFoundationDemandInputs struct {
 	assessments sourceFoundationAssessmentObservations
 	baseline    sourceFoundationObligationDocument
 	baselinePin sourceArtifactPin
+	commandPins []sourceArtifactPin
 }
 
 // The expected pin is supplied by the source-owned policy, never by the

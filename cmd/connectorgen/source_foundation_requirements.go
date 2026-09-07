@@ -47,6 +47,11 @@ func buildSourceFoundationRequirements(ctx context.Context, repo string, observe
 	if err != nil {
 		return nil, fmt.Errorf("foundation requirement proof observations: %w", err)
 	}
+	return buildSourceFoundationRequirementsObserved(ctx, observed, proofs)
+}
+
+func buildSourceFoundationRequirementsObserved(ctx context.Context, observed sourceFoundationAssessmentObservations, proofs []sourceFoundationProofObservation) ([]sourceFoundationRequirementResult, error) {
+	var err error
 	byID := map[string]sourceFoundationProofObservation{}
 	for _, proof := range proofs {
 		byID[proof.record.ID] = proof
@@ -172,6 +177,15 @@ func resolveSourceFoundationRequirement(requirement sourceFoundationRequirement,
 			available = lane.IntendedBindings
 		}
 		for i, binding := range requirement.FitBindings {
+			for _, proof := range proofs {
+				entry, exists := observed.atlas.entries[proof.AtlasID]
+				if !exists || len(entry.Selection.Selectors) == 0 ||
+					!slices.ContainsFunc(entry.Selection.DefinitionFiles, func(pattern string) bool {
+						return strings.ReplaceAll(pattern, "<connector>", binding.Connector) == binding.Artifact
+					}) {
+					return "", fmt.Errorf("configuration fit is outside the Atlas declaration selection")
+				}
+			}
 			matches := func(candidate sourceLaneTargetRef) bool { return sourceLaneTargetRefEqual(binding, candidate) }
 			if !slices.ContainsFunc(available, matches) || slices.ContainsFunc(requirement.FitBindings[:i], matches) {
 				return "", fmt.Errorf("configuration fit is not an exact independently reconciled binding")

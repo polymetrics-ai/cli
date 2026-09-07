@@ -22,6 +22,14 @@ type sourceFoundationAtlasTest struct {
 	Name    string `json:"name"`
 }
 
+// Shared Atlas wire declaration: both the authoring binary and publication
+// contract tests consume these same guarantee-to-proof relationships.
+type vNextPublicationGuaranteeProof struct {
+	Guarantees []string `json:"guarantees"`
+	Positive   string   `json:"positive"`
+	Negative   string   `json:"negative"`
+}
+
 type sourceFoundationAtlasEntry struct {
 	raw     json.RawMessage
 	pointer string

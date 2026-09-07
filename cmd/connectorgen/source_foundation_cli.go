@@ -121,6 +121,13 @@ func runSourceDemandsObserved(ctx context.Context, args []string, stdout, stderr
 			}
 		}
 	}
+	for _, name := range cache.order {
+		file := cache.files[name]
+		if file.code == "" {
+			inputs.commandPins = append(inputs.commandPins, sourceArtifactPin{Path: name, SHA256: file.hash, Bytes: file.size})
+		}
+	}
+	sort.Slice(inputs.commandPins, func(i, j int) bool { return inputs.commandPins[i].Path < inputs.commandPins[j].Path })
 	register, err := buildSourceFoundationRegister(ctx, o.repo, inputs)
 	if err != nil {
 		logln(stderr, "source-demands:", err)
@@ -201,6 +208,37 @@ func loadSourceFoundationCommandInputs(ctx context.Context, o sourceFoundationCo
 	}
 	for _, pin := range universe.manifest.Inputs {
 		if err := observeSourceFoundationCommandPin(cache, pin, 64<<20); err != nil {
+			return result, err
+		}
+	}
+	// Source/lane reconciliation also consumed canonical locks and execution
+	// declarations. Retain their actual observed bytes, including HTTP/schema
+	// siblings used by a fit, rather than pinning only a selected target file.
+	bindingPins := map[string]sourceArtifactPin{}
+	seenBindings := map[*sourceLaneBindingInputs]bool{}
+	for _, row := range universe.manifest.SourceOperations {
+		bindings := row.Facts.bindings
+		if bindings == nil || seenBindings[bindings] {
+			continue
+		}
+		seenBindings[bindings] = true
+		for _, files := range []map[string][]byte{bindings.Authoring, bindings.Artifacts} {
+			for name, raw := range files {
+				pin := sourceArtifactPin{Path: name, SHA256: sourceBytesHash(raw), Bytes: int64(len(raw))}
+				if previous, exists := bindingPins[name]; exists && previous != pin {
+					return result, fmt.Errorf("source binding input observations disagree")
+				}
+				bindingPins[name] = pin
+			}
+		}
+	}
+	names := make([]string, 0, len(bindingPins))
+	for name := range bindingPins {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		if err := observeSourceFoundationCommandPin(cache, bindingPins[name], 64<<20); err != nil {
 			return result, err
 		}
 	}

@@ -16,12 +16,6 @@ import (
 
 var vNextReferenceLockConnectors = []string{"asana", "github", "gitlab"}
 
-type vNextPublicationGuaranteeProof struct {
-	Guarantees []string `json:"guarantees"`
-	Positive   string   `json:"positive"`
-	Negative   string   `json:"negative"`
-}
-
 func validateVNextPublicationProofContract(publicationGuarantees, proofNames []string, mappings []vNextPublicationGuaranteeProof) error {
 	if len(publicationGuarantees) == 0 {
 		return fmt.Errorf("source-lock Foundation Atlas publication contract declares zero guarantees")

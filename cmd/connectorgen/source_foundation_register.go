@@ -23,6 +23,24 @@ type sourceFoundationRegister struct {
 	Facets        []sourceFoundationFacet             `json:"source_fit"`
 	Examples      []sourceFoundationExample           `json:"atlas_examples"`
 	Adopters      []sourceFoundationAdoption          `json:"adopter_relations"`
+	Inputs        []sourceArtifactPin                 `json:"inputs"`
+	Proofs        []sourceFoundationObservedProof     `json:"foundation_proof_observations"`
+	Checks        sourceFoundationRegisterChecks      `json:"checks"`
+}
+
+type sourceFoundationObservedProof struct {
+	Record sourceFoundationProofRecord `json:"record"`
+	Status string                      `json:"status"`
+}
+
+type sourceFoundationRegisterChecks struct {
+	StructuralValid            bool   `json:"structural_valid"`
+	CoverageAccounted          bool   `json:"coverage_accounted"`
+	RequiredReconciliation     bool   `json:"required_reconciliation_complete"`
+	SelectedReuseProofComplete bool   `json:"selected_reuse_proof_complete"`
+	SelectedReuseRequirements  int    `json:"selected_reuse_requirements"`
+	UnresolvedRequirements     int    `json:"unresolved_requirements"`
+	Authority                  string `json:"authority"`
 }
 
 type sourceFoundationKnownState struct {
@@ -57,7 +75,11 @@ func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sour
 	if err := validateSourceFoundationCoverage(coverage, observed); err != nil {
 		return result, err
 	}
-	requirements, err := buildSourceFoundationRequirements(ctx, repo, observed)
+	proofs, err := readSourceFoundationProofObservations(ctx, repo)
+	if err != nil {
+		return result, err
+	}
+	requirements, err := buildSourceFoundationRequirementsObserved(ctx, observed, proofs)
 	if err != nil {
 		return result, err
 	}
@@ -76,7 +98,12 @@ func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sour
 	result = sourceFoundationRegister{SchemaVersion: 1, Kind: "foundation_demand_register",
 		Atlas: observed.atlas.pin, Assessments: observed.pin, Baseline: inputs.baselinePin,
 		SourceSHA256: sourceBytesHash(source), Coverage: coverage, Requirements: requirements, Facets: facets, Examples: examples,
-		Known: []sourceFoundationKnownState{}, Adopters: []sourceFoundationAdoption{}}
+		Known: []sourceFoundationKnownState{}, Adopters: []sourceFoundationAdoption{},
+		Inputs: append([]sourceArtifactPin{}, inputs.commandPins...), Proofs: []sourceFoundationObservedProof{}}
+	for _, proof := range proofs {
+		result.Proofs = append(result.Proofs, sourceFoundationObservedProof{Record: proof.record, Status: proof.status})
+	}
+	sort.Slice(result.Proofs, func(i, j int) bool { return result.Proofs[i].Record.ID < result.Proofs[j].Record.ID })
 	historical, sentry := map[sourceFoundationCell]bool{}, map[sourceFoundationCell]bool{}
 	for _, cell := range inputs.baseline.HistoricalReceiverCandidates {
 		historical[cell] = true
@@ -166,5 +193,54 @@ func buildSourceFoundationRegister(ctx context.Context, repo string, inputs sour
 	if err := ctx.Err(); err != nil {
 		return sourceFoundationRegister{}, err
 	}
+	result.Checks = sourceFoundationRegisterCompletion(result, observed.atlas)
 	return result, nil
+}
+
+func sourceFoundationRegisterCompletion(register sourceFoundationRegister, atlas sourceFoundationAtlas) sourceFoundationRegisterChecks {
+	result := sourceFoundationRegisterChecks{StructuralValid: true, CoverageAccounted: true,
+		RequiredReconciliation: true, SelectedReuseProofComplete: true,
+		Authority: "authoring_consistency_only; no lane authority or checkpoint acceptance"}
+	requirements := map[sourceFoundationCell]int{}
+	for _, requirement := range register.Requirements {
+		requirements[requirement.Identity]++
+		if requirement.Status == "unresolved" {
+			result.UnresolvedRequirements++
+		}
+		if requirement.Status == "existing_shared_capability" || requirement.Status == "connector_local_configuration" {
+			result.SelectedReuseRequirements++
+			if len(requirement.Proofs) == 0 || len(requirement.FitBindings) == 0 {
+				result.SelectedReuseProofComplete = false
+			}
+			for _, proof := range requirement.Proofs {
+				if proof.Status != "current" || proof.Assertion != requirement.Statement {
+					result.SelectedReuseProofComplete = false
+				}
+			}
+		}
+	}
+	for _, known := range register.Known {
+		if requirements[known.Identity] == 0 {
+			result.RequiredReconciliation = false
+		}
+	}
+	for _, cell := range register.Coverage.Assessed {
+		kinds := map[string]bool{}
+		for _, facet := range register.Facets {
+			if facet.Identity == cell {
+				kinds[facet.Kind] = true
+			}
+		}
+		if !kinds["mime"] || !kinds["auth"] || !kinds["body"] || !kinds["paging"] {
+			result.RequiredReconciliation = false
+		}
+	}
+	examples := 0
+	for _, entry := range atlas.entries {
+		examples += len(entry.ConsumerExamples)
+	}
+	if len(register.Examples) != examples {
+		result.RequiredReconciliation = false
+	}
+	return result
 }

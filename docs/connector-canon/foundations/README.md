@@ -9,7 +9,7 @@ encoder, executor, warehouse contract, or composition path already exists.
 - The [source.lock vNext architecture](../SOURCE-LOCK-VNEXT.md) owns connector
   authoring and the runtime boundary.
 
-The Atlas is never loaded by the CLI. It does not contain provider operations,
+The `pm` runtime never loads the Atlas; authoring tools may read it. It does not contain provider operations,
 does not grant command availability, and cannot suppress execution. Provider
 facts are retained in immutable provider evidence and the connector's schema-4
 source lock. The [retained source/lane report](../SOURCE-LANE-MANIFEST.md) accounts
@@ -37,6 +37,43 @@ A connector-specific provider behavior selects a closed connector-owned
 adapter through an existing definition reference. Shared runtime must not
 branch on connector name. Do not create a generic HTTP, SQL, webhook, or binary
 escape hatch to fill a connector-local gap.
+
+## Source demand register and scoped assertion evidence
+
+`connectorgen source-demands` reads the sole Atlas together with retained source
+facts and sparse [cell assessments](../../../data/connector-canon/batch1-foundation-assessments.json).
+It generates an authoring report under the closed
+[demand register schema](demand-register.schema.json). See the
+[generation and check instructions](../SOURCE-LANE-MANIFEST.md#foundation-demand-register).
+
+The independent universe is every retained source key crossed with seven lanes.
+Authored assessments and their exact unassessed complement remain separate.
+Current source-owned obligations are reconciled with the independently pinned
+[historical baseline](../../../data/connector-canon/batch1-foundation-obligations.json);
+neither an omitted assessment nor a rewritten count removes an obligation.
+Each requirement retains its source citations, examined Atlas contract occurrence,
+owner, source/configuration evidence, missing proof and existing decision refs.
+
+[Foundation assertion records](proofs.json) follow their own
+[closed schema](proofs.schema.json). The authoring reader checks actual registered
+owner/test declarations, selected run/pass events, original capture/output/input
+pins and a source-owned reviewed assertion binding. It reads receipts as data;
+it never executes their commands or adopts their historical working directories.
+A top-level mode-vocabulary assertion does not establish an executor/mode
+intersection. A selected refusal subtest does not prove its unselected siblings.
+
+The register keeps those narrow proof observations separate from resolved reuse
+requirements. Atlas examples retain their literal files, occurrence hashes and
+owners. Missing files or absent exact source/selector joins stay
+`example_unresolved`; they do not fabricate provider identities or foundation gaps.
+Adopter relations derive from actual admitted requirement/proof/binding tuples.
+
+These authoring records never change lane applicability, accepted execution
+targets, lane proof refs or runtime availability. Receiver scope remains with
+`cli-batch1-vercel-inbound-sync-decision-r1`; exposure is a separate conditional
+decision owned by
+`cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary`.
+Neither reference approves a receiver, hosted relay or live endpoint.
 
 ## Maintenance
 

@@ -32,7 +32,13 @@ func validateSourceFoundationRegister(ctx context.Context, repo string, raw []by
 	if err != nil {
 		return err
 	}
-	got, err := json.Marshal(candidate)
+	// Compare the original wire object, not a remarshaled Go struct: decoding
+	// null/absent scalars into zero values must not erase required-field drift.
+	got, err := canonicalSourceJSON(raw)
+	if err != nil {
+		return err
+	}
+	want, err = canonicalSourceJSON(want)
 	if err != nil {
 		return err
 	}

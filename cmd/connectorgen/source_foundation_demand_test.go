@@ -111,3 +111,58 @@ func TestSourceFoundationUniverseInvalidInputs(t *testing.T) {
 		})
 	}
 }
+
+func TestSourceFoundationNoLanePromotion(t *testing.T) {
+	for _, scenario := range []string{"missing", "current", "unrelated", "invalid"} {
+		t.Run(scenario, func(t *testing.T) {
+			repo, universe, document, proofs := sourceFoundationRequirementsFixture(t)
+			_, cohort := sourceInventoryFixture(t, []string{"source.b", "source.a"}, 2)
+			before, err := buildSourceLaneManifest(t.Context(), repo, cohort, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			switch scenario {
+			case "missing":
+				if err := os.Remove(filepath.Join(repo, sourceFoundationProofPath)); err != nil {
+					t.Fatal(err)
+				}
+			case "unrelated":
+				document.Assessments[0].Requirements[0].ProofIDs = []string{proofs.Records[1].ID}
+				writeSourceFoundationAssessmentFixture(t, repo, document)
+			case "invalid":
+				proofWrite(t, repo, proofs.Records[0].Output.Path, []byte("not a test result"))
+			}
+			observed, err := observeSourceFoundationAssessments(t.Context(), repo, sourceFoundationAssessmentsPath, universe)
+			if err != nil {
+				t.Fatal(err)
+			}
+			got, err := buildSourceFoundationRequirements(t.Context(), repo, observed)
+			if scenario == "current" {
+				if err != nil || len(got) != 1 || got[0].Status != "unresolved" || got[0].Proofs[0].Status != "current" {
+					t.Fatalf("current narrow assertion control: %v", err)
+				}
+			} else if err == nil {
+				t.Fatalf("%s evidence unexpectedly admitted", scenario)
+			}
+			after, err := buildSourceFoundationUniverse(t.Context(), repo, cohort, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !sourceLaneJSONEqual(before, after.manifest) || len(after.cells) != 14 {
+				t.Fatal("foundation proof state changed original full source/lane projection")
+			}
+		})
+	}
+	t.Run("separate existing lane proof", func(t *testing.T) {
+		// The existing fixture actually executes bounded HTTP/record assertions.
+		// Its explicit fixture review and target reducer boundary are not a
+		// provider source-binding or foundation-proof acceptance.
+		repo, record, cells := proofFixture(t)
+		proofDocument(t, repo, []sourceLaneProofRecord{record})
+		inputs := proofLoadFixture(repo, []sourceLaneProofReview{{Record: record, Fixture: true}})
+		got := assessSourceLaneProof(record.Key, cells, inputs)
+		if len(inputs.Diagnostics) != 0 || got[0].State != "implemented" || len(got[0].ProofRefs) != 1 || got[0].ProofRefs[0] != record.ID {
+			t.Fatalf("existing separate lane-proof authority regressed: %+v", inputs.Diagnostics)
+		}
+	})
+}

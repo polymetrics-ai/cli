@@ -96,6 +96,11 @@ func TestSourceFoundationRegisterObservation(t *testing.T) {
 		!reflect.DeepEqual(got.Known[0].SourceRefs, inputs.baseline.Obligations[0].SourceRefs) {
 		t.Fatal("known obligation source custody lost")
 	}
+	if len(got.Proofs) != 2 || got.Proofs[0].Status != "current" || got.Proofs[1].Status != "current" ||
+		!got.Checks.StructuralValid || !got.Checks.CoverageAccounted || !got.Checks.RequiredReconciliation || !got.Checks.SelectedReuseProofComplete ||
+		got.Checks.SelectedReuseRequirements != 0 || got.Checks.UnresolvedRequirements != 1 || got.Checks.Authority != "authoring_consistency_only; no lane authority or checkpoint acceptance" {
+		t.Fatal("available narrow proof observations and unresolved requirement accounting were conflated")
+	}
 	after, err := json.Marshal(inputs.assessments.universe.manifest)
 	if err != nil || string(before) != string(after) {
 		t.Fatal("foundation register mutated source/lane authority")
@@ -126,7 +131,7 @@ func TestSourceFoundationRegisterIndependentOutputOracle(t *testing.T) {
 	if err := validateSourceFoundationRegister(t.Context(), repo, controlRaw, inputs); err != nil {
 		t.Fatalf("complete retained source/report control: %v", err)
 	}
-	for _, scenario := range []string{"omitted known obligation", "wrong known source identity", "broadened assertion", "implemented source state", "omitted example", "invented adopter", "missing source facet", "changed baseline pin", "changed source digest", "null required relations"} {
+	for _, scenario := range []string{"omitted known obligation", "wrong known source identity", "broadened assertion", "implemented source state", "omitted example", "invented adopter", "missing source facet", "changed baseline pin", "changed source digest", "null required relations", "invented completion", "omitted available proof", "fabricated input pin"} {
 		t.Run(scenario, func(t *testing.T) {
 			var candidate sourceFoundationRegister
 			if err := json.Unmarshal(controlRaw, &candidate); err != nil {
@@ -153,6 +158,13 @@ func TestSourceFoundationRegisterIndependentOutputOracle(t *testing.T) {
 				candidate.SourceSHA256 = sourceBytesHash([]byte("replacement source manifest"))
 			case "null required relations":
 				candidate.Adopters = nil
+			case "invented completion":
+				candidate.Checks.SelectedReuseRequirements = 1
+				candidate.Checks.UnresolvedRequirements = 0
+			case "omitted available proof":
+				candidate.Proofs = candidate.Proofs[1:]
+			case "fabricated input pin":
+				candidate.Inputs = []sourceArtifactPin{{Path: "fiction.json", SHA256: sourceBytesHash(nil), Bytes: 0}}
 			}
 			// Complete JSON and self-consistent membership summaries remain
 			// valid. Refusal must compare these claims with independent inputs.
@@ -164,5 +176,46 @@ func TestSourceFoundationRegisterIndependentOutputOracle(t *testing.T) {
 				t.Errorf("actual closed register reader accepted %s", scenario)
 			}
 		})
+	}
+}
+
+func TestSourceFoundationRegisterRequiredZeroFields(t *testing.T) {
+	repo, inputs := sourceFoundationRegisterFixture(t)
+	control, err := buildSourceFoundationRegister(t.Context(), repo, inputs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	controlRaw, err := json.Marshal(control)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := validateSourceFoundationRegister(t.Context(), repo, controlRaw, inputs); err != nil {
+		t.Fatal(err)
+	}
+	for _, field := range []string{"selected_reuse_requirements", "sentry_registration"} {
+		for _, mutation := range []string{"absent", "null"} {
+			t.Run(field+"/"+mutation, func(t *testing.T) {
+				var wire map[string]any
+				if err := json.Unmarshal(controlRaw, &wire); err != nil {
+					t.Fatal(err)
+				}
+				object := wire["checks"].(map[string]any)
+				if field == "sentry_registration" {
+					object = wire["known_obligations"].([]any)[0].(map[string]any)
+				}
+				if mutation == "absent" {
+					delete(object, field)
+				} else {
+					object[field] = nil
+				}
+				raw, err := json.Marshal(wire)
+				if err != nil {
+					t.Fatal(err)
+				}
+				if err := validateSourceFoundationRegister(t.Context(), repo, raw, inputs); err == nil {
+					t.Errorf("actual register reader accepted %s required zero field %s", mutation, field)
+				}
+			})
+		}
 	}
 }
