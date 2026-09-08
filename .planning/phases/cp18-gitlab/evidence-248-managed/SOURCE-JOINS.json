@@ -1,0 +1,150 @@
+[
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "getApiV4Groups"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/294",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "target": {
+      "kind": "stream",
+      "id": "groups"
+    },
+    "role": "source to local warehouse",
+    "evidence": {
+      "receipt": "managed-corrected248/RECEIPT.json",
+      "mode_cases": {
+        "full_append": {
+          "tests": [
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/groups/complete",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/groups/second_404",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/groups/repeated_link",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/groups/malformed_link",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/groups/foreign_link"
+          ],
+          "result": "healthy exact3IDs;404 exact2 acknowledged IDs/ordinal2; invalid continuation exact3IDs/ordinal3, failure returned"
+        },
+        "full_overwrite": {
+          "test": "TestBatch1CP18GitLabLane248ManagedETLCollections/full_overwrite/groups/complete",
+          "result": "zero-I/O mode refusal;16 downstream fault cases across4sources blocked"
+        }
+      }
+    },
+    "source_C2_promotion": false
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "getApiV4Issues"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/438",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "target": {
+      "kind": "stream",
+      "id": "issues"
+    },
+    "role": "source to local warehouse",
+    "evidence": {
+      "receipt": "managed-corrected248/RECEIPT.json",
+      "mode_cases": {
+        "full_append": {
+          "tests": [
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/issues/complete",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/issues/second_404",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/issues/repeated_link",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/issues/malformed_link",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/issues/foreign_link"
+          ],
+          "result": "healthy exact3IDs;404 exact2 acknowledged IDs/ordinal2; invalid continuation exact3IDs/ordinal3, failure returned"
+        },
+        "full_overwrite": {
+          "test": "TestBatch1CP18GitLabLane248ManagedETLCollections/full_overwrite/issues/complete",
+          "result": "zero-I/O mode refusal;16 downstream fault cases across4sources blocked"
+        }
+      }
+    },
+    "source_C2_promotion": false
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "getApiV4Projects"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/492",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "target": {
+      "kind": "stream",
+      "id": "projects"
+    },
+    "role": "source to local warehouse",
+    "evidence": {
+      "receipt": "managed-corrected248/RECEIPT.json",
+      "mode_cases": {
+        "full_append": {
+          "tests": [
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/projects/complete",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/projects/second_404",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/projects/repeated_link",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/projects/malformed_link",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/projects/foreign_link"
+          ],
+          "result": "healthy exact3IDs;404 exact2 acknowledged IDs/ordinal2; invalid continuation exact3IDs/ordinal3, failure returned"
+        },
+        "full_overwrite": {
+          "test": "TestBatch1CP18GitLabLane248ManagedETLCollections/full_overwrite/projects/complete",
+          "result": "zero-I/O mode refusal;16 downstream fault cases across4sources blocked"
+        }
+      }
+    },
+    "source_C2_promotion": false
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "getApiV4Users"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/926",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "target": {
+      "kind": "stream",
+      "id": "users"
+    },
+    "role": "source to local warehouse",
+    "evidence": {
+      "receipt": "managed-corrected248/RECEIPT.json",
+      "mode_cases": {
+        "full_append": {
+          "tests": [
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/users/complete",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/users/second_404",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/users/repeated_link",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/users/malformed_link",
+            "TestBatch1CP18GitLabLane248ManagedETLCollections/full_append/users/foreign_link"
+          ],
+          "result": "healthy exact3IDs;404 exact2 acknowledged IDs/ordinal2; invalid continuation exact3IDs/ordinal3, failure returned"
+        },
+        "full_overwrite": {
+          "test": "TestBatch1CP18GitLabLane248ManagedETLCollections/full_overwrite/users/complete",
+          "result": "zero-I/O mode refusal;16 downstream fault cases across4sources blocked"
+        }
+      }
+    },
+    "source_C2_promotion": false
+  }
+]

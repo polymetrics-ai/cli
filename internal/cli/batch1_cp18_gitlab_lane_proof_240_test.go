@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"path/filepath"
 	"reflect"
 	"sort"
@@ -88,8 +89,22 @@ func TestBatch1CP18GitLabLane240ManagedModeAdmission(t *testing.T) {
 // Explicit Link pages hold three independently expected IDs. The saved legacy
 // overwrite path must not publish page one on a subsequent retrieval failure.
 func TestBatch1CP18GitLabLane240ETLCollections(t *testing.T) {
+	cp18Lane248ETLCollections(t, "full_refresh_overwrite")
+}
+
+func TestBatch1CP18GitLabLane248ManagedETLCollections(t *testing.T) {
+	for _, mode := range []string{"full_overwrite", "full_append"} {
+		t.Run(mode, func(t *testing.T) { cp18Lane248ETLCollections(t, mode) })
+	}
+}
+
+func cp18Lane248ETLCollections(t *testing.T, mode string) {
 	for _, stream := range []string{"projects", "groups", "users", "issues"} {
-		for _, fault := range []string{"complete", "second_404", "repeated_link", "malformed_link", "foreign_link"} {
+		faults := []string{"complete", "second_404", "repeated_link", "malformed_link", "foreign_link"}
+		if mode == "full_overwrite" {
+			faults = []string{"complete"}
+		} // Refused before retrieval; downstream faults remain blocked.
+		for _, fault := range faults {
 			t.Run(stream+"/"+fault, func(t *testing.T) {
 				firstBody, lastBody := `[{"id":101,"created_at":"2026-01-01T00:00:00Z"},{"id":202,"created_at":"2026-01-02T00:00:00Z"}]`, `[{"id":303,"created_at":"2026-01-03T00:00:00Z"}]`
 				if stream == "projects" {
@@ -149,11 +164,18 @@ func TestBatch1CP18GitLabLane240ETLCollections(t *testing.T) {
 				t.Cleanup(server.Close)
 				root := cp18Lane240Project(t, server.URL)
 				runCLI(t, []string{"credentials", "add", "cp18-warehouse240", "--connector", "warehouse", "--config", "path=" + filepath.Join(root, ".polymetrics", "warehouse"), "--root", root, "--json"})
-				runCLI(t, []string{"connections", "create", "cp18_etl240", "--source", "gitlab:cp18-lane240", "--destination", "warehouse:cp18-warehouse240", "--stream", stream, "--sync-mode", "full_refresh_overwrite", "--table", "cp18_rows240", "--root", root, "--json"})
+				runCLI(t, []string{"connections", "create", "cp18_etl240", "--source", "gitlab:cp18-lane240", "--destination", "warehouse:cp18-warehouse240", "--stream", stream, "--sync-mode", mode, "--table", "cp18_rows240", "--root", root, "--json"})
 				out, diag, code := cp18Lane240Run([]string{"etl", "run", "--connection", "cp18_etl240", "--stream", stream, "--batch-size", "1", "--root", root, "--json"})
 				mu.Lock()
 				wire := append([]string(nil), paths...)
 				mu.Unlock()
+				if mode == "full_overwrite" {
+					if code == 0 || len(wire) != 0 || foreignSends.Load() != 0 || !strings.Contains(out+diag, "no matching closed source/destination transport has registered compatible executors") {
+						t.Fatalf("unregistered full_overwrite composition refusal changed: code=%d wire=%v %s %s", code, wire, out, diag)
+					}
+					t.Log("actual full_overwrite source/warehouse combination refused before HTTP; no pagination/publication execution claim")
+					return
+				}
 				wantWire := []string{"/api/v4/" + stream + "?per_page=50", "/api/v4/" + stream + "?page=2&per_page=50"}
 				if !reflect.DeepEqual(wire, wantWire) || foreignSends.Load() != 0 {
 					t.Fatalf("wire=%q foreign=%d want=%q code=%d stdout=%s stderr=%s", wire, foreignSends.Load(), wantWire, code, out, diag)
@@ -165,8 +187,40 @@ func TestBatch1CP18GitLabLane240ETLCollections(t *testing.T) {
 				t.Cleanup(func() { _ = application.Close() })
 				rows, queryErr := application.QueryTable(context.Background(), app.QueryTableRequest{Connection: "cp18_etl240", Table: "cp18_rows240", Limit: 10})
 				if fault != "complete" {
+					if mode == "full_append" {
+						// Canonical append acknowledges each fetched page. A later
+						// retrieval failure preserves exactly the acknowledged page.
+						var ids []string
+						for _, row := range rows {
+							ids = append(ids, fmt.Sprint(row["id"]))
+						}
+						sort.Strings(ids)
+						wantIDs := []string{"101", "202", "303"}
+						if fault == "second_404" {
+							wantIDs = []string{"101", "202"}
+						}
+						if code == 0 || queryErr != nil || !reflect.DeepEqual(ids, wantIDs) {
+							t.Fatalf("append did not retain exactly acknowledged page: code=%d ids=%v query=%v %s %s", code, ids, queryErr, out, diag)
+						}
+						rawState, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+						if err != nil {
+							t.Fatal(err)
+						}
+						var state struct {
+							Streams map[string]app.StreamState `json:"stream_states"`
+						}
+						if err := json.Unmarshal(rawState, &state); err != nil {
+							t.Fatal(err)
+						}
+						checkpoint := state.Streams["cp18_etl240:"+stream].Checkpoint
+						if checkpoint == nil || checkpoint.CommittedAt == nil || string(checkpoint.Position.Primary) != fmt.Sprintf("%020d", len(wantIDs)) {
+							t.Fatalf("acknowledged records/checkpoint mismatch: ids=%v checkpoint=%+v", ids, checkpoint)
+						}
+						t.Logf("reached %s second page; sends=2 foreign=0 exact acknowledged IDs=%v", fault, ids)
+						return
+					}
 					if code == 0 || queryErr == nil || len(rows) != 0 {
-						t.Fatalf("failed retrieval published: code=%d rows=%v query=%v %s %s", code, rows, queryErr, out, diag)
+						t.Fatalf("failed retrieval published: mode=%s code=%d rows=%v query=%v %s %s", mode, code, rows, queryErr, out, diag)
 					}
 					t.Logf("reached %s second page; sends=2 foreign=0 no materialized table; diagnostic=%s %s", fault, out, diag)
 					return

@@ -1,0 +1,122 @@
+package engine_test
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"sync/atomic"
+	"testing"
+
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
+)
+
+// A real production loader is used. Missing descriptors are declaration REDs,
+// not binary execution or unsupported-provider proof. No fixture bundle is made.
+func TestBatch1CP18GitLabLane240BinaryDownload(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		limit    int64
+		overflow bool
+	}{{"exact_bytes", 17, false}, {"response_limit", 16, true}} {
+		t.Run(tc.name, func(t *testing.T) {
+			payload := []byte{0, 255, 128, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 0, 42, 254}
+			var sends atomic.Int64
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				sends.Add(1)
+				if r.Method != "GET" || r.URL.RequestURI() != "/api/v4/projects/42/repository/files/fixture.bin/raw?ref=main" || r.Header.Get("Authorization") != "Bearer cp18-binary-fake" {
+					t.Errorf("unexpected binary wire %s %s auth=%q", r.Method, r.URL.RequestURI(), r.Header.Get("Authorization"))
+				}
+				w.Header().Set("Content-Type", "application/octet-stream")
+				_, _ = w.Write(payload)
+			}))
+			t.Cleanup(server.Close)
+			bundle, err := engine.Load(defs.FS, "gitlab")
+			if err != nil {
+				t.Fatal(err)
+			}
+			operation := ""
+			for _, op := range bundle.Operations {
+				if op.Binary != nil && op.Binary.Method == "GET" && op.Binary.Path == "/projects/{id}/repository/files/{file_path}/raw" {
+					operation = op.ID
+				}
+			}
+			if operation == "" {
+				t.Fatalf("source gitlab.docs.repository_files.raw_download: production loader has no binary descriptor for GET /projects/{id}/repository/files/{file_path}/raw; physical_sends=%d; exact bytes/media/limit proof blocked", sends.Load())
+			}
+			dest := t.TempDir()
+			result, err := engine.OperationBinaryDownload(context.Background(), bundle, engine.BinaryDownloadRequest{Operation: operation, Config: connectors.RuntimeConfig{Config: map[string]string{"base_url": server.URL + "/api/v4"}, Secrets: map[string]string{"access_token": "cp18-binary-fake"}}, PathParams: map[string]string{"id": "42", "file_path": "fixture.bin"}, Query: map[string]string{"ref": "main"}, DestRoot: dest, FileName: "fixture.bin", MaxBytes: tc.limit}, nil)
+			if sends.Load() != 1 {
+				t.Fatalf("binary sends=%d want1", sends.Load())
+			}
+			if tc.overflow {
+				if err == nil {
+					t.Fatal("oversized response accepted")
+				}
+				entries, readErr := os.ReadDir(dest)
+				if readErr != nil || len(entries) != 0 {
+					t.Fatalf("failed download retained files: %v %v", entries, readErr)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			file, _ := result.Record["file_path"].(string)
+			got, err := os.ReadFile(file)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !bytes.Equal(got, payload) {
+				t.Fatalf("binary bytes=%x want=%x", got, payload)
+			}
+			digest := sha256.Sum256(payload)
+			t.Logf("binary bytes=%d sha256=%s status=%d", len(got), hex.EncodeToString(digest[:]), result.Status)
+		})
+	}
+}
+
+func TestBatch1CP18GitLabLane240BinaryUploadAdmission(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "gitlab")
+	if err != nil {
+		t.Fatal(err)
+	}
+	const route = "/projects/{{ record.id }}/packages/generic/{{ record.package_name }}/{{ record.package_version }}/{{ record.file_name }}"
+	for _, action := range bundle.Writes {
+		if action.Method == "PUT" && action.Path == route && action.BinaryUpload != nil {
+			t.Logf("source gitlab.docs.generic_packages.upload_file has action=%s; byte/approval execution remains a separate required witness", action.Name)
+			return
+		}
+	}
+	t.Fatal("source gitlab.docs.generic_packages.upload_file: real loader has no typed binary-upload action for retained PUT route; physical_sends=0; source compiler mapping blocks file/media/approval execution")
+}
+
+// Source224 pins the four handlers as authenticated package-read URL listings.
+// Existing mutation actions with the same source routes cannot prove these reads.
+func TestBatch1CP18GitLabLane240ConanReadAdmission(t *testing.T) {
+	bundle, err := engine.Load(defs.FS, "gitlab")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tc := range []struct{ id, path string }{
+		{"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls", "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls"},
+		{"postApiV4PackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls", "/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls"},
+		{"postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelPackagesConanPackageReferenceUploadUrls", "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/packages/{conan_package_reference}/upload_urls"},
+		{"postApiV4ProjectsIdPackagesConanV1ConansPackageNamePackageVersionPackageUsernamePackageChannelUploadUrls", "/projects/{id}/packages/conan/v1/conans/{package_name}/{package_version}/{package_username}/{package_channel}/upload_urls"},
+	} {
+		t.Run(tc.id, func(t *testing.T) {
+			for _, op := range bundle.Operations {
+				if op.Kind == "rest_read" && op.REST != nil && op.REST.Method == "POST" && op.REST.Path == tc.path {
+					t.Logf("read projection=%s; authenticated root-map request execution remains separate", op.ID)
+					return
+				}
+			}
+			t.Fatalf("source224 authenticated Conan read has no production rest_read POST %s; loader succeeded; no I/O; current saved mutation names are not source-read proof", tc.path)
+		})
+	}
+}
