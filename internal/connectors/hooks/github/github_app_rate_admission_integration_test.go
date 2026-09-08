@@ -125,8 +125,6 @@ func TestGitHubAppAuthRateAdmissionHelperProcess(t *testing.T) {
 
 	shared := coordination.OpenSharedRateLimitRegistry(addr)
 	defer func() { _ = shared.Close() }()
-	engine.ConfigureSharedRateLimitRegistry(shared)
-	defer engine.ConfigureSharedRateLimitRegistry(nil)
 
 	bundle := requireSharedGitHubAppBundle(t)
 	for i := range bundle.RateLimits.Policies {
@@ -143,6 +141,7 @@ func TestGitHubAppAuthRateAdmissionHelperProcess(t *testing.T) {
 		}}
 	}
 	cfg := githubAppAuthAdmissionConfig(t)
+	cfg.SharedRateLimits = shared
 	cfg.Config["base_url"] = baseURL
 	cfg.Config["installation_id"] = scope
 

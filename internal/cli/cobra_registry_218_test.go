@@ -79,6 +79,10 @@ func TestCobraSuppliedRegistryIdentity218(t *testing.T) {
 	if err := executeRootCmd(root, []string{"help"}); err != nil {
 		t.Fatal(err)
 	}
+	setManualHelp(root, "", &out, false, registry)
+	if err := root.Help(); err != nil {
+		t.Fatal(err)
+	}
 	if !strings.Contains(out.String(), "oracle218") || acquired != 0 {
 		t.Fatalf("supplied metadata lost or laziness broken; acquisitions=%d", acquired)
 	}

@@ -16,7 +16,6 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
-	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/coordination"
 	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/perf"
@@ -37,6 +36,10 @@ const (
 )
 
 type appOpeners struct {
+	newRegistry    func() (*connectors.Registry, error)
+	runtimeOptions app.RuntimeOptions
+	newSharedScope func(string) coordination.OwnedSharedRateLimitClient
+
 	registryFallback func() *connectors.Registry
 	open             func(string) (*app.App, error)
 	reverse          func(string) (*app.App, error)
@@ -85,7 +88,10 @@ func runWithPreflightRegistryAndApprovalReader(args []string, stdout, stderr io.
 }
 
 func run(args []string, stdout, stderr io.Writer, openers appOpeners) int {
-	ctx := context.Background()
+	ctx := openers.runtimeOptions.Context
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	root, jsonOut, cleanArgs := parseGlobal(args)
 	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
 	// Source inspection consumes compiled metadata only. Keep the registered
@@ -132,9 +138,32 @@ func run(args []string, stdout, stderr io.Writer, openers appOpeners) int {
 	if err := validateApprovalCarrierBeforeDispatch(cleanArgs); err != nil {
 		return writeError(stdout, stderr, err, cfg.JSON)
 	}
-	engine.ConfigureSharedRateLimitRegistry(coordination.OpenSharedRateLimitRegistry(cfg.Runtime.DragonflyAddr))
+	lifecycle, cancel := context.WithCancel(ctx)
+	defer cancel()
+	openers.runtimeOptions.Context = lifecycle
+	if openers.runtimeOptions.SharedRateLimits == nil {
+		factory := openers.newSharedScope
+		if factory == nil {
+			factory = func(addr string) coordination.OwnedSharedRateLimitClient {
+				return coordination.NewSharedRateLimitScope(addr, coordination.SharedRateLimitScopeOptions{})
+			}
+		}
+		scope := factory(cfg.Runtime.DragonflyAddr)
+		// Every owned App finishes parking teardown before withApp returns; the
+		// invocation scope is last. Cleanup cannot change an acknowledged result.
+		defer func() {
+			if err := scope.Close(); err != nil {
+				_, _ = fmt.Fprintln(stderr, "warning: invocation resource cleanup failed")
+			}
+		}()
+		openers.runtimeOptions.SharedRateLimits = scope
+	}
 	if openers.mode == appOpenerProduction && openers.registry == nil {
-		registry, registryErr := bundleregistry.NewRegistry()
+		factory := openers.newRegistry
+		if factory == nil {
+			factory = bundleregistry.NewRegistry
+		}
+		registry, registryErr := factory()
 		if registryErr != nil {
 			return writeError(stdout, stderr, fmt.Errorf("construct connector registry: %w", registryErr), cfg.JSON)
 		}
@@ -1049,7 +1078,7 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 		if usePreflightRegistry {
 			return withReverseExecutionAppRegistry(root, registry, func(a *app.App) error {
 				return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
-			})
+			}, openers.runtimeOptions)
 		}
 		return withReverseExecutionApp(openers, root, func(a *app.App) error {
 			return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
@@ -1058,7 +1087,7 @@ func runMaybeConnectorCommandWithRegistry(ctx context.Context, root, connectorNa
 	if usePreflightRegistry {
 		return withAppRegistry(root, registry, func(a *app.App) error {
 			return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
-		})
+		}, openers.runtimeOptions)
 	}
 	return withApp(openers, root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, preparedCommandFlags, approval, stdout, stderr, jsonOut)
@@ -2186,10 +2215,10 @@ func directConnector(ctx context.Context, a *app.App, args []string) (connectors
 	if credential := flags.first("credential"); credential != "" {
 		return a.ResolveConnectorCredential(ctx, name, credential, config)
 	}
-	return connector, connectors.RuntimeConfig{
+	return connector, a.ExecutableRuntime(connectors.RuntimeConfig{
 		ProjectDir: a.ProjectDir(),
 		Config:     config,
-	}, nil
+	}), nil
 }
 
 func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
@@ -2731,7 +2760,15 @@ func appRegistry() *connectors.Registry {
 
 func withApp(openers appOpeners, root string, fn func(*app.App) error) error {
 	if openers.mode == appOpenerProduction && openers.registry != nil {
-		return withAppRegistry(root, openers.registry, fn)
+		return withAppRegistry(root, openers.registry, fn, openers.runtimeOptions)
+	}
+	if openers.mode == appOpenerProduction {
+		a, err := app.OpenWithRuntime(root, openers.runtimeOptions)
+		if err != nil {
+			return err
+		}
+		defer func() { _ = a.Close() }()
+		return fn(a)
 	}
 	a, err := openers.open(root)
 	if err != nil {
@@ -2742,7 +2779,15 @@ func withApp(openers appOpeners, root string, fn func(*app.App) error) error {
 
 func withReverseExecutionApp(openers appOpeners, root string, fn func(*app.App) error) error {
 	if openers.mode == appOpenerProduction && openers.registry != nil {
-		return withReverseExecutionAppRegistry(root, openers.registry, fn)
+		return withReverseExecutionAppRegistry(root, openers.registry, fn, openers.runtimeOptions)
+	}
+	if openers.mode == appOpenerProduction {
+		a, err := app.OpenForReverseExecutionWithRuntime(root, openers.runtimeOptions)
+		if err != nil {
+			return err
+		}
+		defer func() { _ = a.Close() }()
+		return fn(a)
 	}
 	a, err := openers.reverse(root)
 	if err != nil {
@@ -2751,19 +2796,29 @@ func withReverseExecutionApp(openers appOpeners, root string, fn func(*app.App) 
 	return fn(a)
 }
 
-func withAppRegistry(root string, registry *connectors.Registry, fn func(*app.App) error) error {
-	a, err := app.OpenWithRegistry(root, registry)
+func withAppRegistry(root string, registry *connectors.Registry, fn func(*app.App) error, candidates ...app.RuntimeOptions) error {
+	options := app.RuntimeOptions{}
+	if len(candidates) == 1 {
+		options = candidates[0]
+	}
+	a, err := app.OpenWithRegistryAndRuntime(root, registry, options)
 	if err != nil {
 		return err
 	}
+	defer func() { _ = a.Close() }()
 	return fn(a)
 }
 
-func withReverseExecutionAppRegistry(root string, registry *connectors.Registry, fn func(*app.App) error) error {
-	a, err := app.OpenForReverseExecutionWithRegistry(root, registry)
+func withReverseExecutionAppRegistry(root string, registry *connectors.Registry, fn func(*app.App) error, candidates ...app.RuntimeOptions) error {
+	options := app.RuntimeOptions{}
+	if len(candidates) == 1 {
+		options = candidates[0]
+	}
+	a, err := app.OpenForReverseExecutionWithRegistryAndRuntime(root, registry, options)
 	if err != nil {
 		return err
 	}
+	defer func() { _ = a.Close() }()
 	return fn(a)
 }
 

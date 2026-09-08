@@ -11,6 +11,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/connsdk"
 )
 
@@ -19,6 +20,7 @@ import (
 type SharedRateLimitUnavailableReason string
 
 const (
+	SharedRateLimitCoordinatorClosed        SharedRateLimitUnavailableReason = "coordinator_closed"
 	SharedRateLimitCoordinatorNotConfigured SharedRateLimitUnavailableReason = "coordinator_not_configured"
 	SharedRateLimitCoordinatorUnreachable   SharedRateLimitUnavailableReason = "coordinator_unreachable"
 	SharedRateLimitRouteUnresolved          SharedRateLimitUnavailableReason = "route_unresolved"
@@ -558,3 +560,13 @@ if state.blocked_until and state.blocked_until > now then ttl = math.max(ttl, st
 redis.call('PSETEX', KEYS[1], ttl, cjson.encode(state))
 return 1
 `)
+
+// ResolveRateLimit adapts the existing availability and opaque-key owners to a
+// borrowed runtime capability. Availability remains caller-context scoped.
+func (r *SharedRateLimitRegistry) ResolveRateLimit(ctx context.Context, connector, policyID string, scope connectors.RateLimitScopeKey, budgets []connsdk.RateLimitBudget) (connsdk.RateLimitAdmission, connsdk.RateLimitObserver, error) {
+	if err := r.EnsureAvailable(ctx); err != nil {
+		return nil, nil, err
+	}
+	limiter := r.Limiter(RateLimitKey{Connector: connector, PolicyID: policyID, Scope: scope}, budgets)
+	return limiter, limiter, nil
+}

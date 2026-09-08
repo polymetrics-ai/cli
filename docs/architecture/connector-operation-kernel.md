@@ -25,6 +25,9 @@ caller-supplied GraphQL executor.
 
 ## Runtime contract
 
+[App and invocation lifetime](app-lifecycle.md) defines ownership of borrowed
+runtime capabilities and durable parking cleanup.
+
 - Routes, verbs, GraphQL documents, request schemas, response schemas, output
   policies, pagination, headers, redirect rules, and byte caps are fixed by
   the rendered execution bundle.
