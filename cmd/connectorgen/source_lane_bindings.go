@@ -2356,39 +2356,49 @@ func sourceLaneRecordCoordinate(facts sourceFacts, anchor json.RawMessage, strea
 	if stream.Records.Path != "" && stream.Records.Path != "." {
 		fields = strings.Split(stream.Records.Path, ".")
 	}
-	for index := 0; index <= len(fields); index++ {
-		node, ok := sourceResolveObject(facts, raw, map[string]bool{}, 0)
-		if !ok {
-			return nil, "source_schema_unverified"
+	for _, field := range fields {
+		node, shape, code := sourceLaneRecordProjectionNode(facts, raw)
+		if code != "" {
+			return nil, code
 		}
-		shape, state := sourceLaneCheckedProjectionNode(node)
-		if state == sourceLaneLineageUnverified {
-			return nil, "source_schema_unverified"
-		}
-		if state == sourceLaneLineageContradictory {
+		if sourceLocalShapeEvidence(node).object() != sourceLocalObjectEstablished || shape.Properties[field] == nil {
 			return nil, "target_record_projection_mismatch"
 		}
-		if index < len(fields) {
-			if sourceLocalShapeEvidence(node).object() != sourceLocalObjectEstablished || shape.Properties[fields[index]] == nil {
-				return nil, "target_record_projection_mismatch"
-			}
-			raw = shape.Properties[fields[index]]
-			coordinate = append(coordinate, fields[index])
-			continue
+		raw = shape.Properties[field]
+		coordinate = append(coordinate, field)
+	}
+	// The selected node must be validated even when no fields were traversed.
+	node, shape, code := sourceLaneRecordProjectionNode(facts, raw)
+	if code != "" {
+		return nil, code
+	}
+	if shape.Type == "array" {
+		if stream.Records.SingleObject {
+			return nil, "target_record_projection_mismatch"
 		}
-		if shape.Type == "array" {
-			if stream.Records.SingleObject {
-				return nil, "target_record_projection_mismatch"
-			}
-			if sourceLocalShapeEvidence(node).arrayCoverage() != sourceLocalArrayUniform {
-				return nil, "target_record_projection_unverified"
-			}
-			coordinate = append(coordinate, "[]")
-		} else if sourceLocalShapeEvidence(node).object() != sourceLocalObjectEstablished {
+		if sourceLocalShapeEvidence(node).arrayCoverage() != sourceLocalArrayUniform {
 			return nil, "target_record_projection_unverified"
 		}
+		coordinate = append(coordinate, "[]")
+	} else if sourceLocalShapeEvidence(node).object() != sourceLocalObjectEstablished {
+		return nil, "target_record_projection_unverified"
 	}
 	return coordinate, ""
+}
+
+func sourceLaneRecordProjectionNode(facts sourceFacts, raw json.RawMessage) (map[string]json.RawMessage, sourceLaneProjectionNode, string) {
+	node, ok := sourceResolveObject(facts, raw, map[string]bool{}, 0)
+	if !ok {
+		return nil, sourceLaneProjectionNode{}, "source_schema_unverified"
+	}
+	shape, state := sourceLaneCheckedProjectionNode(node)
+	if state == sourceLaneLineageUnverified {
+		return nil, sourceLaneProjectionNode{}, "source_schema_unverified"
+	}
+	if state == sourceLaneLineageContradictory {
+		return nil, sourceLaneProjectionNode{}, "target_record_projection_mismatch"
+	}
+	return node, shape, ""
 }
 
 func sourceLaneBodyContract(facts sourceFacts, ref sourceLaneTargetRef, target sourceLaneTypedTarget) string {
