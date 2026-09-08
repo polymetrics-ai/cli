@@ -102,9 +102,10 @@ func (*CredentialRejectedError) Error() string {
 // The zero value is usable once Client/BaseURL are set; sensible defaults are
 // applied for the rest on first use.
 type MultipartForm struct {
-	Fields   map[string]string
-	Files    []MultipartFile
-	MaxBytes int64
+	MaxMetadataBytes *int64
+	Fields           map[string]string
+	Files            []MultipartFile
+	MaxBytes         int64
 }
 
 type MultipartFile struct {
@@ -119,7 +120,8 @@ type MultipartFile struct {
 	Root    *os.Root
 	RelPath string
 
-	FileName string
+	FilenameEncoding string
+	FileName         string
 	// ContentType is the part header the bundle declares. When AllowedMediaTypes
 	// bounds the part, the sent header is replaced by the type the bytes actually
 	// sniffed as, so ContentType is then the authoring intent rather than the
@@ -772,8 +774,14 @@ func (r *Requester) doMultipart(ctx context.Context, method, path string, query 
 }
 
 func validateMultipartForm(form MultipartForm) error {
+	if form.MaxMetadataBytes != nil && *form.MaxMetadataBytes <= 0 {
+		return fmt.Errorf("multipart metadata budget must be positive")
+	}
 	var total int64
 	for i, file := range form.Files {
+		if _, _, err := MultipartFileNames(file); err != nil {
+			return err
+		}
 		if strings.TrimSpace(file.FieldName) == "" {
 			return fmt.Errorf("multipart file %d field name is required", i)
 		}
@@ -820,6 +828,12 @@ func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (Mu
 	}
 	var total int64
 	for i, file := range form.Files {
+		logical, _, err := MultipartFileNames(file)
+		if err != nil {
+			cleanup()
+			return MultipartForm{}, func() {}, err
+		}
+		prepared.Files[i].FileName = logical
 		if !file.needsSnapshot() {
 			info, err := file.stat()
 			if err != nil {
@@ -1030,6 +1044,7 @@ func (w *multipartLimitWriter) Write(p []byte) (int, error) {
 }
 
 func multipartBoundary(form MultipartForm) (string, error) {
+	var fileBytes int64
 	counter := &multipartCountingWriter{}
 	writer := multipart.NewWriter(counter)
 	keys := make([]string, 0, len(form.Fields))
@@ -1043,7 +1058,11 @@ func multipartBoundary(form MultipartForm) (string, error) {
 		}
 	}
 	for _, file := range form.Files {
-		if _, err := writer.CreatePart(multipartFileHeader(file)); err != nil {
+		header, err := multipartFileHeader(file)
+		if err != nil {
+			return "", err
+		}
+		if _, err := writer.CreatePart(header); err != nil {
 			return "", err
 		}
 		info, err := file.stat()
@@ -1053,9 +1072,13 @@ func multipartBoundary(form MultipartForm) (string, error) {
 		if err := counter.add(info.Size()); err != nil {
 			return "", err
 		}
+		fileBytes += info.Size()
 	}
 	if err := writer.Close(); err != nil {
 		return "", err
+	}
+	if form.MaxMetadataBytes != nil && counter.size-fileBytes > *form.MaxMetadataBytes {
+		return "", fmt.Errorf("multipart metadata too large: %d bytes exceeds limit %d", counter.size-fileBytes, *form.MaxMetadataBytes)
 	}
 	if form.MaxBytes > 0 && counter.size > form.MaxBytes {
 		return "", fmt.Errorf("multipart payload too large: %d bytes exceeds limit %d", counter.size, form.MaxBytes)
@@ -1139,7 +1162,11 @@ func writeMultipartForm(mw *multipart.Writer, form MultipartForm) error {
 }
 
 func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64) (int64, error) {
-	part, err := mw.CreatePart(multipartFileHeader(file))
+	header, err := multipartFileHeader(file)
+	if err != nil {
+		return 0, err
+	}
+	part, err := mw.CreatePart(header)
 	if err != nil {
 		return 0, err
 	}
@@ -1170,17 +1197,17 @@ func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64
 	return written, nil
 }
 
-func multipartFileHeader(file MultipartFile) textproto.MIMEHeader {
-	name := file.FileName
-	if strings.TrimSpace(name) == "" {
-		name = filepath.Base(file.sourceName())
+func multipartFileHeader(file MultipartFile) (textproto.MIMEHeader, error) {
+	_, name, err := MultipartFileNames(file)
+	if err != nil {
+		return nil, err
 	}
 	header := make(textproto.MIMEHeader)
 	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
 	if file.ContentType != "" {
 		header.Set("Content-Type", file.ContentType)
 	}
-	return header
+	return header, nil
 }
 
 // do is the shared request core for Do/DoForm. payload is the already-encoded

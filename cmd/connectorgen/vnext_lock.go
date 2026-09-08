@@ -322,8 +322,8 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		}
 		descriptor.Source = cloneRawJSON(descriptor.Source)
 		descriptor.Stream = cloneRawJSON(descriptor.Stream)
-		descriptor.Write = cloneRawJSON(descriptor.Write)
-		descriptor.Operation = cloneRawJSON(descriptor.Operation)
+		descriptor.Write = canonicalMultipartFilenamePolicy(descriptor.Write, false)
+		descriptor.Operation = canonicalMultipartFilenamePolicy(descriptor.Operation, true)
 	}
 	executionNames := make([]string, 0, len(lock.Execution))
 	for name := range lock.Execution {

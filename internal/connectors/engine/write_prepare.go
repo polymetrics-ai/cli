@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 type declarativeWriteDefinition struct {
@@ -25,6 +26,9 @@ type declarativeWriteDefinition struct {
 }
 
 type canonicalMultipartFile struct {
+	FilenameEncoding  string                             `json:"filename_encoding,omitempty"`
+	LogicalFilename   string                             `json:"logical_filename,omitempty"`
+	WireFilename      string                             `json:"wire_filename,omitempty"`
 	FieldName         string                             `json:"field_name"`
 	SourcePathDigest  string                             `json:"source_path_digest"`
 	ContentSHA256     string                             `json:"content_sha256,omitempty"`
@@ -470,11 +474,24 @@ func prepareCanonicalMultipartSpec(subject string, multipart *MultipartSpec, rec
 		if !ok || strings.TrimSpace(path) == "" {
 			return nil, fmt.Errorf("engine: %s: multipart file part %q requires a file path string", subject, part.Name)
 		}
+		logical, wire, err := connsdk.MultipartFileNames(connsdk.MultipartFile{FieldName: part.Name, Path: path, FilenameEncoding: part.FilenameEncoding})
+		if err != nil {
+			return nil, err
+		}
+		encoding := part.FilenameEncoding
+		if encoding == "identity" {
+			encoding = ""
+		}
+		// Preserve legacy default identities; new policy binds both names.
+		if encoding == "" {
+			logical, wire = "", ""
+		}
 		approved := cfg.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(recordIndex, part.Field)]
 		if requirePayloadApproval && strings.TrimSpace(approved) == "" {
 			return nil, fmt.Errorf("engine: %s: multipart file part %q is missing its approved payload digest", subject, part.Name)
 		}
 		files = append(files, canonicalMultipartFile{
+			FilenameEncoding: encoding, LogicalFilename: logical, WireFilename: wire,
 			FieldName:         part.Name,
 			SourcePathDigest:  digestBytes([]byte(filepath.Clean(path))),
 			ContentSHA256:     approved,
@@ -485,10 +502,11 @@ func prepareCanonicalMultipartSpec(subject string, multipart *MultipartSpec, rec
 		})
 	}
 	return struct {
-		MaxBytes int64                    `json:"max_bytes,omitempty"`
-		Fields   map[string]string        `json:"fields,omitempty"`
-		Files    []canonicalMultipartFile `json:"files,omitempty"`
-	}{MaxBytes: multipart.MaxBytes, Fields: fields, Files: files}, nil
+		MaxMetadataBytes *int64                   `json:"max_metadata_bytes,omitempty"`
+		MaxBytes         int64                    `json:"max_bytes,omitempty"`
+		Fields           map[string]string        `json:"fields,omitempty"`
+		Files            []canonicalMultipartFile `json:"files,omitempty"`
+	}{MaxBytes: multipart.MaxBytes, MaxMetadataBytes: multipart.MaxMetadataBytes, Fields: fields, Files: files}, nil
 }
 
 func prepareCanonicalBase64Upload(action WriteAction, record connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, requirePayloadApproval bool) (any, error) {

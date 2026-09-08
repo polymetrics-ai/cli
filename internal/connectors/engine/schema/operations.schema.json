@@ -193,6 +193,7 @@
                 "additionalProperties": false,
                 "properties": {
                   "max_bytes": { "type": "integer" },
+                  "max_metadata_bytes": { "type": "integer" },
                   "parts": {
                     "type": "array",
                     "minItems": 1,
@@ -205,6 +206,7 @@
                         "type": { "type": "string", "enum": ["field", "file"] },
                         "field": { "type": "string" },
                         "content_type": { "type": "string" },
+                        "filename_encoding": { "type": "string" },
                         "media_policy": { "type": "string", "enum": ["provider_unrestricted"] },
                         "allowed_media_types": {
                           "type": "array",

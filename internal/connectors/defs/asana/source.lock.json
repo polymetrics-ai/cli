@@ -38762,7 +38762,8 @@
         "kind": "create",
         "method": "POST",
         "multipart": {
-          "max_bytes": 104857600,
+          "max_bytes": 104923136,
+          "max_metadata_bytes": 65536,
           "parts": [
             {
               "field": "parent",
@@ -38772,6 +38773,7 @@
             },
             {
               "field": "file_path",
+              "filename_encoding": "url_percent_utf8",
               "max_bytes": 104857600,
               "media_policy": "provider_unrestricted",
               "name": "file",

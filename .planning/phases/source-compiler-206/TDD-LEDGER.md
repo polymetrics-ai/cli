@@ -115,3 +115,59 @@ Merged complete child history through e5e8282db90c200e5ce743f6aab4798d3f5e6f2e w
 Integration Green: source-lifecycle-integration-206-01, exit0, 88/88 events under race, 23.081438541998068s, raw SHA256 a79fcb278f71c9c851b6ee81e8902e53df5c4ecfb4d3d30b322d6ed1aa3d1199, input drift [].
 
 Integration Green: source-lifecycle-cli-integration-206-01, exit0, 16/16 events under race, 11.906851583000389s, raw SHA256 957d560beaf018f0e9c80f644fd39673af7711c92bea0decd7ba96a9fa0be030, input drift [].
+
+Scalar Red: source-scalar-red-206-01 refused all three valid source-only scalar fixtures at publication (0/4, raw76ff771e5b474088b0bbb97105b6ea297dd77ad9d8d90e0484a31c16893e5f52). Extend existing typed scalar/ExactNumber projection, preserving raw bounds and safe provider identifiers. No new runtime numeric validator.
+
+Scalar GREEN01 exposed actual wire defect: source minimum9007199254740993 rounded during shared renderRawJSON/rawJSONValue float64 conversion; direct consumer sent forbidden9007199254740992. Original expected literal reached server (not merely a count mismatch). Keep exact numeric tokens through canonical output helpers with UseNumber, including CLI root rendering; existing ExactNumber then enforces the actual source bounds. Original integer/boolean fixtures passed, bigint did not (2/4, rawe2f4ac93b6dd962d2c3861ec9703d06c29ba51348d81fbec697c043b04796d09).
+
+Saved scalar follow-through: prior scalar successes prove literal valid saved wire and direct invalid-bound refusal only. Actual selected engine.Connector.Read now must reject the same invalid scalar before I/O. Existing ValidateConfiguration deliberately validates enum/pattern/format only; test this consumer before claiming source-typed saved inputs complete.
+
+217 actual serializer Red: multipart-policy-red-217-01 2/12 passes; rawd82e44babe4abec94dc9d51c6ce03f3a390da5a2c7103e38e119ca76504e48dd. Inert policy fields compiled before this wire RED; no encoder behavior was changed before original capture. ASCII/default control passed. Implement same pure logical/wire helper at validation/snapshot/header/count/stream, and count real non-file metadata independently of payload bytes. Engine source/admission/approval propagation remains pending.
+
+### Multipart217 transport policy witness
+
+Red: `multipart-policy-red-217-01` reached actual multipart wire and metadata consumer: 2/12 passing events, exit 1; raw SHA256 d82e44babe4abec94dc9d51c6ce03f3a390da5a2c7103e38e119ca76504e48dd.
+
+Green: original `multipart-policy-green-217-01`, exit 0, 12/12 events, 0.9020977499967557 seconds; raw SHA256 05c4944d68634c81ef156c3ec09e4a09f04117612ea9296c4ea64d0a31146813; source inputs unchanged. This proves selected transport cases only; engine admission, prepared identity, Asana aliases and full envelope limits remain.
+
+Firstmate230 selects the final223 common contract (REPORT SHA256 32ec9239f94683cb8b938d5dfe951a5499350a4e5733e588c1745b52522b7b52), preserving actual newer compiler interfaces and 229 E3 ownership. No independent acceptance is implied.
+
+Multipart admission first probe `multipart-admission-red-217-01` only hit the still-closed metaschema: healthy new fields refused, so its negative passes are NOT semantic RED. Add inert typed properties, then exercise actual cross-field consumers before validation repair.
+
+### 217 engine admission and wire follow-through
+
+Red: `multipart-admission-red-217-02` exit 1, 5/19 events, raw SHA256 d3a1af924f4381c22771e03887fd27986358bfed2f8418b24b9fc0db28ef2448, inputs unchanged=True.
+
+Green: `multipart-admission-green-217-01` exit 0, 32/32 events, raw SHA256 e55700357d6ab13476d89b047df516a214c56e3a7765638e15c637e27937fc16, inputs unchanged=True.
+
+Red: `multipart-engine-wire-red-217-01` exit 1, 0/1 events, raw SHA256 4a1b3c8b3e581d72fdf96443db2a7d8f98dcfd476a38af9ee4bc1fdb0818689e, inputs unchanged=True.
+
+Green: `multipart-engine-wire-green-217-01` exit 0, 33/33 events, raw SHA256 c6a2ea715eb10673d01477c1d00e2347dd8bc02bfd07f33e4a86fd14e018c469, inputs unchanged=True.
+
+Red: `multipart-preview-red-217-01` exit 1, 0/1 events, raw SHA256 21952f390b03c65716a83fe7b913f7010241c38fa58719aed73b8e5113b60d9e, inputs unchanged=True.
+
+Green: `multipart-preview-green-217-01` exit 0, 34/34 events, raw SHA256 58cc2e0324de1f1d77705c2c4555b9f85769fee2e3bd14311e5f8b1c387dc1f6, inputs unchanged=True.
+
+Admission RED02 passes both healthy profiles and reaches cross-field defects (not unknown-field/schema refusal). Wire RED sends literal unencoded Unicode filename despite selected percent policy. Preview RED accepts a control-containing basename; corrected shared preparation refuses before approval. GREEN selections overlap and are not added. Full Asana exact file/envelope boundaries, alias generation, canonical default normalization and remaining217 repeated families are still open.
+
+Asana alias probe01 failed before wire because the fixture did not re-supply deliberately withheld parent/file-path values. This is a fixture correction, not filename RED; preserve original receipt, then run actual wire probe02 with WithheldFlags.
+
+### 217 exact aliases, envelope, canonical default and affected gates
+
+- `asana-multipart-alias-red-217-02`: exit 1; events 0/3; wall 4.228565416000492; raw SHA256 `c6bb6be68fcf2320de6d62c23606014cd5080300bc9fb01004283c0ea522e043`; changed inputs 0.
+- `asana-multipart-alias-green-217-01`: exit 1; events 0/3; wall 4.209396791000472; raw SHA256 `917394bf9457821bb51a81fd36dfca32a8e946350ccb39dc6844611be4d2ce20`; changed inputs 0.
+- `asana-multipart-alias-green-217-02`: exit 0; events 3/3; wall 5.5180786669989175; raw SHA256 `d91771b78bac3726957a1a248471181d4187dfc66a701112387ebe0550355d95`; changed inputs 0.
+- `multipart-envelope-proof-217-01`: exit 0; events 13/13; wall 1.1520903749988065; raw SHA256 `290aec1b0d59d97360723fd0b7a51a8c2a02aae743dbbb79e7059477c0ace3a8`; changed inputs 0.
+- `multipart-affected-race-217-01`: exit 0; events 53/53; wall 17.861994541999593; raw SHA256 `124e24e6a25d72ff89143bc8776d4a5e351cc31c99ac06ba75a2eff544754b7c`; changed inputs 0.
+- `multipart-vet-217-01`: exit 0; events 0/0; wall 1.4905842920015857; raw SHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`; changed inputs 0.
+- `multipart-canonical-red-217-01`: exit 1; events 0/1; wall 6.7805183329983265; raw SHA256 `3bf54dfd351bd51d6cc73c2b6ebda62b76ec9b74e461eec7642cc4a0c0b85110`; changed inputs 0.
+- `multipart-canonical-green-217-01`: exit 0; events 5/5; wall 15.648295625000173; raw SHA256 `1059b7e0fd478d7d6c0ea31c707089c6fa6235354125b2bb9b4d01f08c58b18f`; changed inputs 0.
+- `multipart-canonical-scope-red-217-01`: exit 1; events 0/1; wall 5.097106666999025; raw SHA256 `479cec73ca140b0e144b3709e8b1ba932dd11fa2dc67c9a7ec9334a3341734f5`; changed inputs 0.
+- `multipart-canonical-scope-green-217-01`: exit 0; events 2/2; wall 19.6027686669986; raw SHA256 `661c78887cdc08c34e8aa0bf8292dcb867082ae939ddc34afe7274b85213c500`; changed inputs 0.
+- `multipart-atlas-217-01`: exit 0; events 20/20; wall 5.764061334000871; raw SHA256 `16905cdeaf93b05cc2e0e6c6def5b22ce1ea4d1b9ea92994dbfdad0ee2414077`; changed inputs 0.
+- `multipart-lint-217-01`: exit 0; events 0/0; wall 33.33208787499825; raw SHA256 `e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47`; changed inputs 0.
+- `multipart-approval-policy-217-01`: exit 0; events 1/1; wall 9.470042917000683; raw SHA256 `c079070fc3b6b76890a1adce54a4528cbf99b40543717cf9d3da2135116a9d99`; changed inputs 0.
+
+Asana RED02 reached both real aliases; GREEN01 still used unchanged embedded bytes because publication alone does not transfer the corpus. Isolated unchanged-lock render/check, exact comparison and writes.json-only transfer then gen produced GREEN02. `multipart217-transfer/transfer.json` preserves source/generation and every compared destination hash plus original writes bytes. Counts overlap.
+
+Canonical RED detects explicit default producing different execution bytes. The first canonical GREEN covers saved action and reference corpus; subsequent nested-operation control found a new implementation map-alias defect, retained as scope RED and corrected before scope race GREEN. Scope test is a focused new-helper regression, not an independent provider result. Final multipart policy approval test proves stale filename policy refuses before send, then original approved policy succeeds. Exact envelope proof is post-implementation evidence, not relabeled pre-edit RED. Native232 binary and GOTOOLCHAIN=local used from alias GREEN02 onward; earlier history remains unchanged.

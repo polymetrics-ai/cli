@@ -1483,7 +1483,8 @@
           "internal/connectors/manifeststore/bundle_store.go",
           "internal/connectors/polling_watermark.go",
           "internal/connectors/sync_transport.go",
-          "internal/connectors/engine/command_endpoint.go"
+          "internal/connectors/engine/command_endpoint.go",
+          "internal/connectors/engine/multipart_policy.go"
         ],
         "symbols": [
           {
@@ -1557,6 +1558,10 @@
           {
             "file": "internal/connectors/engine/command_endpoint.go",
             "name": "ValidateCommandEndpoint"
+          },
+          {
+            "file": "internal/connectors/engine/multipart_policy.go",
+            "name": "validateMultipartEnvelope"
           }
         ]
       },
@@ -1635,7 +1640,8 @@
         "Diagnostic <member:N> denotes a zero-based member ordinal among sorted untrusted keys, not a literal JSON Pointer or a serialized member name.",
         "Invalid execution bundles retain internal error classification; source visibility and unsupported-lane dispositions remain separate.",
         "Database declaration diagnostics retain schema-owned $.field[index] coordinates; @byte:N identifies an unknown member token end without publishing member text.",
-        "Generic and root command-target path/method refusals retain safe exact command-owner JSON coordinates and inspectable causes through the App and CLI."
+        "Generic and root command-target path/method refusals retain safe exact command-owner JSON coordinates and inspectable causes through the App and CLI.",
+        "Explicit multipart metadata budgets are positive and whole envelopes equal the checked sum of file caps plus metadata; filename encoding is closed and file-only."
       ],
       "non_goals": [
         "Importing provider documentation.",
@@ -1825,6 +1831,11 @@
           "package": "./internal/cli",
           "file": "internal/cli/diagnostic_coordinates_173_test.go",
           "name": "TestCLIDiagnosticCoordinates173"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_policy217_test.go",
+          "name": "TestMultipartPolicyAdmission217"
         }
       ],
       "known_gap_refs": [],
@@ -1874,7 +1885,8 @@
           "internal/connectors/source_visibility.go",
           "internal/app/lifecycle.go",
           "internal/coordination/shared_rate_limit_scope.go",
-          "internal/connectors/engine/rate_limit_runtime.go"
+          "internal/connectors/engine/rate_limit_runtime.go",
+          "internal/connectors/connsdk/multipart_filename.go"
         ],
         "symbols": [
           {
@@ -1980,6 +1992,10 @@
           {
             "file": "internal/connectors/engine/rate_limit_runtime.go",
             "name": "newRateLimitResolverWithContext"
+          },
+          {
+            "file": "internal/connectors/connsdk/multipart_filename.go",
+            "name": "MultipartFileNames"
           }
         ]
       },
@@ -2056,7 +2072,8 @@
         "A declared base-check success_statuses set contains unambiguous numeric spellings that normalize to exact 2xx codes and executes exact matches only; non-2xx values require the named exact response-status non-2xx execution gap, and response-status ranges/classes require the named exact response-status range execution gap. Omitted status metadata retains the legacy generic 2xx policy.",
         "A declared base-check max_bytes is between 1 and the existing 64 MiB requester cap and uses that bounded requester path; omitted max_bytes retains the legacy response bound.",
         "Selected source visibility uses one bounded gzip member with cancellation, exact decoded size and digest, checked EOF/CRC and no trailing bytes; ordinary execution does not decode this metadata. Encoding never grants lane authority.",
-        "Executable runtimes borrow an invocation-owned shared rate-limit coordinator through RuntimeConfig.SharedRateLimits. Required shared policies fail closed without it; owned Apps cancel and join parked work before the invocation closes its lazily created client. Metadata/preflight do not create that client."
+        "Executable runtimes borrow an invocation-owned shared rate-limit coordinator through RuntimeConfig.SharedRateLimits. Required shared policies fail closed without it; owned Apps cancel and join parked work before the invocation closes its lazily created client. Metadata/preflight do not create that client.",
+        "Multipart percent encoding affects only the ordinary wire filename; original file custody remains unchanged. Metadata, file and total bounds are separate; nondefault prepared identity binds policy and logical/wire names."
       ],
       "non_goals": [
         "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
@@ -2226,6 +2243,21 @@
           "package": "./internal/coordination",
           "file": "internal/coordination/shared_rate_limit_scope_218_test.go",
           "name": "TestSharedRateLimitScopeOwnership218"
+        },
+        {
+          "package": "./internal/connectors/connsdk",
+          "file": "internal/connectors/connsdk/multipart_policy217_test.go",
+          "name": "TestMultipartExactFileEnvelope217"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_policy217_test.go",
+          "name": "TestMultipartPolicyWire217"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_policy217_test.go",
+          "name": "TestMultipartPolicyPreviewName217"
         }
       ],
       "known_gap_refs": [
