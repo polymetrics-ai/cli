@@ -44,10 +44,13 @@ func sourceFoundationProofFixture153(t *testing.T, complete bool) (string, sourc
 	// Later declaration tests reach real confined source files. These copies
 	// come from the unchanged recorded test/owner inputs, not fabricated ASTs.
 	paths := map[string]bool{}
+	pins := map[string]sourceArtifactPin{document.Atlas.Path: document.Atlas}
+	paths[document.Atlas.Path] = true
 	for _, record := range document.Records {
 		paths[record.Test.File] = true
 		for _, input := range record.Inputs {
 			paths[input.Path] = true
+			pins[input.Path] = sourceArtifactPin{Path: input.Path, SHA256: input.SHA256, Bytes: input.Bytes}
 		}
 		paths[record.Capture.Path] = true
 		paths[record.Output.Path] = true
@@ -56,9 +59,17 @@ func sourceFoundationProofFixture153(t *testing.T, complete bool) (string, sourc
 		}
 	}
 	for name := range paths {
-		contents, err := os.ReadFile(filepath.Join(project, name))
+		inputPath := filepath.Join(project, name)
+		pin, frozen := pins[name]
+		if frozen {
+			inputPath = filepath.Join(project, "cmd/connectorgen/testdata/foundation-proof-inputs-153", pin.SHA256+".artifact")
+		}
+		contents, err := os.ReadFile(inputPath)
 		if err != nil {
 			t.Fatal(err)
+		}
+		if frozen && (int64(len(contents)) != pin.Bytes || sourceBytesHash(contents) != pin.SHA256) {
+			t.Fatalf("original proof fixture pin %s does not match retained bytes", name)
 		}
 		if err := os.MkdirAll(filepath.Dir(filepath.Join(repo, name)), 0700); err != nil {
 			t.Fatal(err)
@@ -66,19 +77,6 @@ func sourceFoundationProofFixture153(t *testing.T, complete bool) (string, sourc
 		if err := os.WriteFile(filepath.Join(repo, name), contents, 0600); err != nil {
 			t.Fatal(err)
 		}
-	}
-	// The original proof captured these bytes. The live registry and Atlas
-	// now include CP14 metadata; copying them would make this positive fixture
-	// stale. Retain the exact recorded inputs without promoting a new proof.
-	for _, pin := range []sourceArtifactPin{
-		document.Atlas,
-		{Path: "internal/connectors/connectors.go", SHA256: "c3d447c603628929911a6d2cf6716285da8597eb3bb8aee9715ba3a533441362", Bytes: 138075},
-	} {
-		raw, err := os.ReadFile(filepath.Join(project, "cmd/connectorgen/testdata/foundation-proof-inputs-153", pin.SHA256+".artifact"))
-		if err != nil || int64(len(raw)) != pin.Bytes || sourceBytesHash(raw) != pin.SHA256 {
-			t.Fatalf("original proof fixture pin %s: %v", pin.Path, err)
-		}
-		proofWrite(t, repo, pin.Path, raw)
 	}
 	return repo, document
 }

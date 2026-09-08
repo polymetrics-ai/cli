@@ -3112,7 +3112,7 @@
       "flags": [
         {
           "maps_to": "query.plan_name",
-          "name": "plan-name",
+          "name": "provider-plan-name",
           "type": "enum",
           "values": [
             "default",
@@ -24534,7 +24534,7 @@
       "flags": [
         {
           "maps_to": "record.file_name",
-          "name": "file-name",
+          "name": "provider-file-name",
           "required": true,
           "type": "enum",
           "values": [
@@ -24607,7 +24607,7 @@
         },
         {
           "maps_to": "record.file_name",
-          "name": "file-name",
+          "name": "provider-file-name",
           "required": true,
           "type": "enum",
           "values": [
@@ -31444,7 +31444,7 @@
         {
           "maps_to": "record.file_name",
           "max_bytes": 32768,
-          "name": "file-name",
+          "name": "provider-file-name",
           "required": true,
           "type": "string"
         },
@@ -33054,7 +33054,7 @@
         },
         {
           "maps_to": "record.plan_name",
-          "name": "plan-name",
+          "name": "provider-plan-name",
           "required": true,
           "type": "enum",
           "values": [
@@ -37025,7 +37025,7 @@
         },
         {
           "maps_to": "record.plan",
-          "name": "plan",
+          "name": "provider-plan",
           "required": true,
           "type": "enum",
           "values": [
@@ -37065,7 +37065,7 @@
         },
         {
           "maps_to": "record.plan",
-          "name": "plan",
+          "name": "provider-plan",
           "required": true,
           "type": "enum",
           "values": [
@@ -40249,7 +40249,7 @@
         {
           "maps_to": "record.file_name",
           "max_bytes": 32768,
-          "name": "file-name",
+          "name": "provider-file-name",
           "type": "string"
         },
         {
@@ -50915,7 +50915,7 @@
         {
           "maps_to": "record.file_name",
           "max_bytes": 32768,
-          "name": "file-name",
+          "name": "provider-file-name",
           "required": true,
           "type": "string"
         },
@@ -52957,7 +52957,7 @@
         },
         {
           "maps_to": "record.plan_name",
-          "name": "plan-name",
+          "name": "provider-plan-name",
           "required": true,
           "type": "enum",
           "values": [
@@ -56928,7 +56928,7 @@
         },
         {
           "maps_to": "record.plan",
-          "name": "plan",
+          "name": "provider-plan",
           "required": true,
           "type": "enum",
           "values": [
@@ -56968,7 +56968,7 @@
         },
         {
           "maps_to": "record.plan",
-          "name": "plan",
+          "name": "provider-plan",
           "required": true,
           "type": "enum",
           "values": [
@@ -59073,7 +59073,7 @@
       "flags": [
         {
           "maps_to": "record.file_name",
-          "name": "file-name",
+          "name": "provider-file-name",
           "required": true,
           "type": "enum",
           "values": [
@@ -59146,7 +59146,7 @@
         },
         {
           "maps_to": "record.file_name",
-          "name": "file-name",
+          "name": "provider-file-name",
           "required": true,
           "type": "enum",
           "values": [
@@ -60387,7 +60387,7 @@
         {
           "maps_to": "record.file_name",
           "max_bytes": 32768,
-          "name": "file-name",
+          "name": "provider-file-name",
           "type": "string"
         },
         {

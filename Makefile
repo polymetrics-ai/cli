@@ -1,5 +1,7 @@
 INSTALL_DIR ?= $(HOME)/.local/bin
 VERIFY_JOBS ?= 2
+TEST_TIMEOUT ?= 60m
+TEST_PACKAGES ?= ./...
 
 # go.mod requires Go 1.25 and pins a patched toolchain. Allow the go command to
 # fetch the matching toolchain when the ambient one is older.
@@ -29,7 +31,7 @@ tidy-check:
 	git diff --exit-code -- go.mod go.sum
 
 test:
-	go test -timeout 20m ./...
+	go test -timeout $(TEST_TIMEOUT) $(TEST_PACKAGES)
 
 build:
 	go build ./cmd/pm

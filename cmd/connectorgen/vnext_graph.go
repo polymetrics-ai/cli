@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/connectors/manifestidentity"
 )
@@ -67,10 +68,11 @@ type vNextCanonicalRuntimeOperation struct {
 }
 
 type vNextCanonicalCommand struct {
-	Index int
-	Order int
-	Raw   json.RawMessage
-	Spec  engine.CLICommand
+	Index       int
+	Order       int
+	Raw         json.RawMessage
+	Spec        engine.CLICommand
+	FlagAliases []vNextFlagAlias
 }
 
 func buildVNextCanonicalGraph(descriptor vNextCanonicalDescriptor, providerEvidence, authoredCLI json.RawMessage) (vNextCanonicalGraph, error) {
@@ -187,10 +189,11 @@ func buildVNextCanonicalOperation(index int, authored vNextOperationDescriptor) 
 			return vNextCanonicalOperation{}, vNextGraphError(vNextOperationPointer(index, "commands", fmt.Sprint(commandIndex)), err)
 		}
 		operation.Commands = append(operation.Commands, vNextCanonicalCommand{
-			Index: commandIndex,
-			Order: authoredCommand.Order,
-			Raw:   cloneRawJSON(authoredCommand.Command),
-			Spec:  command,
+			Index:       commandIndex,
+			Order:       authoredCommand.Order,
+			Raw:         cloneRawJSON(authoredCommand.Command),
+			Spec:        command,
+			FlagAliases: append([]vNextFlagAlias(nil), authoredCommand.FlagAliases...),
 		})
 	}
 	return operation, nil
@@ -238,6 +241,9 @@ func validateVNextCanonicalAliases(operations []vNextCanonicalOperation) error {
 	commands := make(map[string]vNextCanonicalCommand)
 	for _, operation := range operations {
 		for _, command := range operation.Commands {
+			if _, err := commandrunner.CommandPathSegments(command.Spec.Path); err != nil {
+				return vNextGraphError(vNextOperationPointer(operation.Index, "commands", fmt.Sprint(command.Index), "path"), err)
+			}
 			alias := vNextCommandAlias(command.Spec.Path)
 			if alias == "" {
 				return vNextGraphError(vNextOperationPointer(operation.Index, "commands", fmt.Sprint(command.Index), "path"), fmt.Errorf("command path is required"))

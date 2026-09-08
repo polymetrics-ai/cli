@@ -60,7 +60,7 @@ func TestSourceVisibilityCarriedReferenceShape165(t *testing.T) {
 					t.Fatal(err)
 				}
 				artifact := original
-				artifact.Payload = string(raw)
+				artifact.Payload = sourceFixtureGzip174(t, raw)
 				artifact.Bytes = len(raw)
 				artifact.SHA256 = sourceBytesHash(raw)
 				if _, err := connectors.DecodeSourceVisibility(t.Context(), artifact); err != nil {
@@ -147,7 +147,7 @@ func TestSourceVisibilityCarriedReferenceShape165(t *testing.T) {
 					t.Fatal(e)
 				}
 				a := original
-				a.Payload = string(raw)
+				a.Payload = sourceFixtureGzip174(t, raw)
 				a.Bytes = len(raw)
 				a.SHA256 = sourceBytesHash(raw)
 				loads := 0
@@ -251,7 +251,7 @@ func TestSourceVisibilityReferenceCoordinates165(t *testing.T) {
 						t.Fatal(err)
 					}
 					a := original
-					a.Payload = string(raw)
+					a.Payload = sourceFixtureGzip174(t, raw)
 					a.Bytes = len(raw)
 					a.SHA256 = sourceBytesHash(raw)
 					_, err = connectors.DecodeSourceVisibility(t.Context(), a)
@@ -312,7 +312,7 @@ func TestSourceVisibilityReferenceCitationShape165(t *testing.T) {
 					t.Fatal(err)
 				}
 				a := original
-				a.Payload = string(raw)
+				a.Payload = sourceFixtureGzip174(t, raw)
 				a.Bytes = len(raw)
 				a.SHA256 = sourceBytesHash(raw)
 				_, err = connectors.DecodeSourceVisibility(t.Context(), a)
@@ -333,11 +333,22 @@ func TestSourceVisibilityCLIFixture165(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	raw, err := json.Marshal(projections["acme"])
+	artifact := projections["acme"]
+	artifact.Payload = string(sourceFixtureRaw174(t, artifact.Payload))
+	artifact.Encoding = ""
+	raw, err := json.Marshal(artifact)
 	if err != nil {
 		t.Fatal(err)
 	}
 	expected, err := os.ReadFile("../../internal/cli/testdata/source-visibility-shape-165.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var retained connectors.SourceVisibilityArtifact
+	if err := json.Unmarshal(expected, &retained); err != nil {
+		t.Fatal(err)
+	}
+	expected, err = json.Marshal(retained)
 	if err != nil {
 		t.Fatal(err)
 	}

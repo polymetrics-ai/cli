@@ -1,0 +1,7 @@
+# CP16 / CP19 Bitbucket source reachability
+
+The adjacent JSON records all297 retained source keys and exact current command-to-provider endpoint joins. It is planning evidence, not an authoring input or capability grant. Current paths remain five commands, three implemented; the real registry/built binary sweep tests credential, declared partial and invalid/unknown boundaries separately.
+
+The historical50-reach/28-invalid report concerned an isolated overlay that was explicitly not committed. Its complete row identities cannot be reconstructed from the retained tree, so this inventory does not pretend to enumerate them or substitute five for that historical count. The recoverable parameter regression families are preserved through current canonical declarations: literal endpoint, named path parameter, distinct parameter names, invalid raw braces/whitespace, exact flag mappings, real renderer/leased generation/parser/resolver, and source-admission binding failures. The retired projector is not restored. Valid current aliases are unchanged.
+
+CP19 owns the full297-operation source/artifact/runtime-proof chain and final complete Bitbucket reachability sweep after those operations are generated. Firstmate binds that worker after CP16; the canonical programme owner retains integration custody. Both currently planned commands remain declared blocks, and absent exact retained joins (if any) remain visible in the JSON. No claim of complete Bitbucket executable parity follows from CP16.

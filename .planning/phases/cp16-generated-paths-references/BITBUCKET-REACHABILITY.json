@@ -1,0 +1,3122 @@
+{
+  "scope": "CP16 current reachability evidence; CP19 owns complete Bitbucket chain",
+  "historical_count": {
+    "commands": 50,
+    "invalid": 28,
+    "fixture_custody": "historical isolated overlay not committed; unavailable for complete row enumeration",
+    "commit": "60f85ae948fa1e48708c1b9dc9c371ee4187f8de"
+  },
+  "retained_source": {
+    "path": "internal/connectors/defs/bitbucket/sources/bitbucket-operation-source-lock.json",
+    "sha256": "0cd529630a96b1c9fd2a75081d83302dcd651c7d665f3c780719ba4eed80b627",
+    "bytes": 1394073,
+    "primary_operations": 297
+  },
+  "current_commands": [
+    {
+      "command": "repositories list",
+      "availability": "implemented",
+      "targets": [
+        {
+          "method": "GET",
+          "path": "/repositories"
+        }
+      ],
+      "exact_retained_source_matches": [
+        {
+          "connector": "bitbucket",
+          "inventory": "primary",
+          "id": "bitbucket.rest.get_/repositories"
+        }
+      ],
+      "parameter_flags": []
+    },
+    {
+      "command": "repositories create",
+      "availability": "implemented",
+      "targets": [
+        {
+          "method": "POST",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "exact_retained_source_matches": [
+        {
+          "connector": "bitbucket",
+          "inventory": "primary",
+          "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "parameter_flags": [
+        {
+          "name": "workspace",
+          "maps_to": "record.workspace",
+          "required": null,
+          "type": "string"
+        },
+        {
+          "name": "repo-slug",
+          "maps_to": "record.repo_slug",
+          "required": null,
+          "type": "string"
+        },
+        {
+          "name": "scm",
+          "maps_to": "record.scm",
+          "required": null,
+          "type": "enum"
+        },
+        {
+          "name": "private",
+          "maps_to": "record.is_private",
+          "required": null,
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "command": "repositories delete",
+      "availability": "implemented",
+      "targets": [
+        {
+          "method": "DELETE",
+          "path": "/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "exact_retained_source_matches": [
+        {
+          "connector": "bitbucket",
+          "inventory": "primary",
+          "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}"
+        }
+      ],
+      "parameter_flags": [
+        {
+          "name": "workspace",
+          "maps_to": "record.workspace",
+          "required": null,
+          "type": "string"
+        },
+        {
+          "name": "repo-slug",
+          "maps_to": "record.repo_slug",
+          "required": null,
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "command": "search code",
+      "availability": "planned",
+      "targets": [
+        {
+          "method": "GET",
+          "path": "/teams/{username}/search/code"
+        }
+      ],
+      "exact_retained_source_matches": [
+        {
+          "connector": "bitbucket",
+          "inventory": "primary",
+          "id": "searchTeam"
+        }
+      ],
+      "parameter_flags": []
+    },
+    {
+      "command": "downloads get",
+      "availability": "planned",
+      "targets": [
+        {
+          "method": "GET",
+          "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+        }
+      ],
+      "exact_retained_source_matches": [
+        {
+          "connector": "bitbucket",
+          "inventory": "primary",
+          "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+        }
+      ],
+      "parameter_flags": []
+    }
+  ],
+  "full_cp19_source_set": [
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/addon"
+      },
+      "pointer": "/rest/operations/0",
+      "method": "DELETE",
+      "path": "/addon"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}"
+      },
+      "pointer": "/rest/operations/1",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+      },
+      "pointer": "/rest/operations/2",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+      },
+      "pointer": "/rest/operations/3",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/4",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+      },
+      "pointer": "/rest/operations/8",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+      },
+      "pointer": "/rest/operations/9",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+      },
+      "pointer": "/rest/operations/11",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+      },
+      "pointer": "/rest/operations/13",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+      },
+      "pointer": "/rest/operations/14",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+      },
+      "pointer": "/rest/operations/15",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+      },
+      "pointer": "/rest/operations/24",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/25",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+      },
+      "pointer": "/rest/operations/26",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+      },
+      "pointer": "/rest/operations/27",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+      },
+      "pointer": "/rest/operations/28",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/refs/branches/{name}"
+      },
+      "pointer": "/rest/operations/30",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/repositories/{workspace}/{repo_slug}/refs/tags/{name}"
+      },
+      "pointer": "/rest/operations/31",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/snippets/{workspace}/{encoded_id}"
+      },
+      "pointer": "/rest/operations/32",
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/33",
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/snippets/{workspace}/{encoded_id}/watch"
+      },
+      "pointer": "/rest/operations/34",
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/watch"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/snippets/{workspace}/{encoded_id}/{node_id}"
+      },
+      "pointer": "/rest/operations/35",
+      "method": "DELETE",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/users/{selected_user}/gpg-keys/{fingerprint}"
+      },
+      "pointer": "/rest/operations/37",
+      "method": "DELETE",
+      "path": "/users/{selected_user}/gpg-keys/{fingerprint}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/users/{selected_user}/ssh-keys/{key_id}"
+      },
+      "pointer": "/rest/operations/40",
+      "method": "DELETE",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/hooks/{uid}"
+      },
+      "pointer": "/rest/operations/41",
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/hooks/{uid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}"
+      },
+      "pointer": "/rest/operations/44",
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+      },
+      "pointer": "/rest/operations/45",
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}"
+      },
+      "pointer": "/rest/operations/46",
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+      },
+      "pointer": "/rest/operations/47",
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.delete_/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+      },
+      "pointer": "/rest/operations/48",
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/addon/{addon_key}/client-key"
+      },
+      "pointer": "/rest/operations/49",
+      "method": "GET",
+      "path": "/addon/{addon_key}/client-key"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/hook_events"
+      },
+      "pointer": "/rest/operations/50",
+      "method": "GET",
+      "path": "/hook_events"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/hook_events/{subject_type}"
+      },
+      "pointer": "/rest/operations/51",
+      "method": "GET",
+      "path": "/hook_events/{subject_type}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories"
+      },
+      "pointer": "/rest/operations/52",
+      "method": "GET",
+      "path": "/repositories"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}"
+      },
+      "pointer": "/rest/operations/53",
+      "method": "GET",
+      "path": "/repositories/{workspace}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}"
+      },
+      "pointer": "/rest/operations/54",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/branch-restrictions"
+      },
+      "pointer": "/rest/operations/55",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+      },
+      "pointer": "/rest/operations/56",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/branching-model"
+      },
+      "pointer": "/rest/operations/57",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/branching-model/settings"
+      },
+      "pointer": "/rest/operations/58",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}"
+      },
+      "pointer": "/rest/operations/59",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
+      },
+      "pointer": "/rest/operations/60",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/61",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses"
+      },
+      "pointer": "/rest/operations/68",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
+      },
+      "pointer": "/rest/operations/69",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commits"
+      },
+      "pointer": "/rest/operations/70",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commits"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/commits/{revision}"
+      },
+      "pointer": "/rest/operations/71",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/default-reviewers"
+      },
+      "pointer": "/rest/operations/72",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+      },
+      "pointer": "/rest/operations/73",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/deploy-keys"
+      },
+      "pointer": "/rest/operations/74",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+      },
+      "pointer": "/rest/operations/75",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/diff/{spec}"
+      },
+      "pointer": "/rest/operations/79",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/diffstat/{spec}"
+      },
+      "pointer": "/rest/operations/80",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/diffstat/{spec}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads"
+      },
+      "pointer": "/rest/operations/81",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+      },
+      "pointer": "/rest/operations/82",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/effective-branching-model"
+      },
+      "pointer": "/rest/operations/83",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/effective-branching-model"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/effective-default-reviewers"
+      },
+      "pointer": "/rest/operations/84",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/effective-default-reviewers"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/file-conflicts/{spec}"
+      },
+      "pointer": "/rest/operations/87",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/file-conflicts/{spec}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/filehistory/{commit}/{path}"
+      },
+      "pointer": "/rest/operations/88",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/filehistory/{commit}/{path}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/forks"
+      },
+      "pointer": "/rest/operations/89",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/forks"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/hooks"
+      },
+      "pointer": "/rest/operations/90",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+      },
+      "pointer": "/rest/operations/91",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/merge-base/{revspec}"
+      },
+      "pointer": "/rest/operations/92",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/merge-base/{revspec}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/override-settings"
+      },
+      "pointer": "/rest/operations/93",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/override-settings"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/patch/{spec}"
+      },
+      "pointer": "/rest/operations/94",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/permissions-config/groups"
+      },
+      "pointer": "/rest/operations/95",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+      },
+      "pointer": "/rest/operations/96",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/permissions-config/users"
+      },
+      "pointer": "/rest/operations/97",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+      },
+      "pointer": "/rest/operations/98",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests"
+      },
+      "pointer": "/rest/operations/122",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/activity"
+      },
+      "pointer": "/rest/operations/123",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/activity"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+      },
+      "pointer": "/rest/operations/124",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity"
+      },
+      "pointer": "/rest/operations/125",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
+      },
+      "pointer": "/rest/operations/126",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/127",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits"
+      },
+      "pointer": "/rest/operations/128",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts"
+      },
+      "pointer": "/rest/operations/129",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff"
+      },
+      "pointer": "/rest/operations/130",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat"
+      },
+      "pointer": "/rest/operations/131",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}"
+      },
+      "pointer": "/rest/operations/132",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch"
+      },
+      "pointer": "/rest/operations/133",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/statuses"
+      },
+      "pointer": "/rest/operations/134",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/statuses"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
+      },
+      "pointer": "/rest/operations/135",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+      },
+      "pointer": "/rest/operations/136",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs"
+      },
+      "pointer": "/rest/operations/138",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs/branches"
+      },
+      "pointer": "/rest/operations/139",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs/branches/{name}"
+      },
+      "pointer": "/rest/operations/140",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches/{name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs/tags"
+      },
+      "pointer": "/rest/operations/141",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/refs/tags/{name}"
+      },
+      "pointer": "/rest/operations/142",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags/{name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/src"
+      },
+      "pointer": "/rest/operations/143",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/src"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/src/{commit}/{path}"
+      },
+      "pointer": "/rest/operations/144",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/repositories/{workspace}/{repo_slug}/watchers"
+      },
+      "pointer": "/rest/operations/145",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/watchers"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets"
+      },
+      "pointer": "/rest/operations/146",
+      "method": "GET",
+      "path": "/snippets"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}"
+      },
+      "pointer": "/rest/operations/147",
+      "method": "GET",
+      "path": "/snippets/{workspace}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}"
+      },
+      "pointer": "/rest/operations/148",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/comments"
+      },
+      "pointer": "/rest/operations/149",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/comments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/150",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/commits"
+      },
+      "pointer": "/rest/operations/151",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/commits"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/commits/{revision}"
+      },
+      "pointer": "/rest/operations/152",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/commits/{revision}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/files/{path}"
+      },
+      "pointer": "/rest/operations/153",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/files/{path}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/watch"
+      },
+      "pointer": "/rest/operations/154",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/watch"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/watchers"
+      },
+      "pointer": "/rest/operations/155",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/watchers"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{node_id}"
+      },
+      "pointer": "/rest/operations/156",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}"
+      },
+      "pointer": "/rest/operations/157",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{revision}/diff"
+      },
+      "pointer": "/rest/operations/158",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/snippets/{workspace}/{encoded_id}/{revision}/patch"
+      },
+      "pointer": "/rest/operations/159",
+      "method": "GET",
+      "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/user"
+      },
+      "pointer": "/rest/operations/163",
+      "method": "GET",
+      "path": "/user"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/user/emails"
+      },
+      "pointer": "/rest/operations/164",
+      "method": "GET",
+      "path": "/user/emails"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/user/emails/{email}"
+      },
+      "pointer": "/rest/operations/165",
+      "method": "GET",
+      "path": "/user/emails/{email}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/user/permissions/repositories"
+      },
+      "pointer": "/rest/operations/166",
+      "method": "GET",
+      "path": "/user/permissions/repositories"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/user/workspaces"
+      },
+      "pointer": "/rest/operations/167",
+      "method": "GET",
+      "path": "/user/workspaces"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/user/workspaces/{workspace}/permission"
+      },
+      "pointer": "/rest/operations/168",
+      "method": "GET",
+      "path": "/user/workspaces/{workspace}/permission"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/user/workspaces/{workspace}/permissions/repositories"
+      },
+      "pointer": "/rest/operations/169",
+      "method": "GET",
+      "path": "/user/workspaces/{workspace}/permissions/repositories"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/users/{selected_user}"
+      },
+      "pointer": "/rest/operations/170",
+      "method": "GET",
+      "path": "/users/{selected_user}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/users/{selected_user}/gpg-keys"
+      },
+      "pointer": "/rest/operations/171",
+      "method": "GET",
+      "path": "/users/{selected_user}/gpg-keys"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/users/{selected_user}/gpg-keys/{fingerprint}"
+      },
+      "pointer": "/rest/operations/172",
+      "method": "GET",
+      "path": "/users/{selected_user}/gpg-keys/{fingerprint}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/users/{selected_user}/ssh-keys"
+      },
+      "pointer": "/rest/operations/177",
+      "method": "GET",
+      "path": "/users/{selected_user}/ssh-keys"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/users/{selected_user}/ssh-keys/{key_id}"
+      },
+      "pointer": "/rest/operations/178",
+      "method": "GET",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces"
+      },
+      "pointer": "/rest/operations/179",
+      "method": "GET",
+      "path": "/workspaces"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}"
+      },
+      "pointer": "/rest/operations/180",
+      "method": "GET",
+      "path": "/workspaces/{workspace}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/hooks"
+      },
+      "pointer": "/rest/operations/181",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/hooks"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/hooks/{uid}"
+      },
+      "pointer": "/rest/operations/182",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/hooks/{uid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/members"
+      },
+      "pointer": "/rest/operations/183",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/members"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/members/{member}"
+      },
+      "pointer": "/rest/operations/184",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/members/{member}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/permissions"
+      },
+      "pointer": "/rest/operations/185",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/permissions/repositories"
+      },
+      "pointer": "/rest/operations/186",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions/repositories"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/permissions/repositories/{repo_slug}"
+      },
+      "pointer": "/rest/operations/187",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/permissions/repositories/{repo_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects"
+      },
+      "pointer": "/rest/operations/194",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}"
+      },
+      "pointer": "/rest/operations/195",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/branching-model"
+      },
+      "pointer": "/rest/operations/196",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+      },
+      "pointer": "/rest/operations/197",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/default-reviewers"
+      },
+      "pointer": "/rest/operations/198",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+      },
+      "pointer": "/rest/operations/199",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/deploy-keys"
+      },
+      "pointer": "/rest/operations/200",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}"
+      },
+      "pointer": "/rest/operations/201",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys/{key_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups"
+      },
+      "pointer": "/rest/operations/202",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+      },
+      "pointer": "/rest/operations/203",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/permissions-config/users"
+      },
+      "pointer": "/rest/operations/204",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+      },
+      "pointer": "/rest/operations/205",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/pullrequests/{selected_user}"
+      },
+      "pointer": "/rest/operations/206",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pullrequests/{selected_user}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.get_/workspaces/{workspace}/settings/gpg/public-key"
+      },
+      "pointer": "/rest/operations/208",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/settings/gpg/public-key"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}"
+      },
+      "pointer": "/rest/operations/209",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/branch-restrictions"
+      },
+      "pointer": "/rest/operations/210",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+      },
+      "pointer": "/rest/operations/211",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
+      },
+      "pointer": "/rest/operations/212",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
+      },
+      "pointer": "/rest/operations/214",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commits"
+      },
+      "pointer": "/rest/operations/215",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commits"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/commits/{revision}"
+      },
+      "pointer": "/rest/operations/216",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/deploy-keys"
+      },
+      "pointer": "/rest/operations/217",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/downloads"
+      },
+      "pointer": "/rest/operations/219",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/downloads"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/forks"
+      },
+      "pointer": "/rest/operations/222",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/forks"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/hooks"
+      },
+      "pointer": "/rest/operations/223",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests"
+      },
+      "pointer": "/rest/operations/230",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+      },
+      "pointer": "/rest/operations/231",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
+      },
+      "pointer": "/rest/operations/232",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+      },
+      "pointer": "/rest/operations/233",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
+      },
+      "pointer": "/rest/operations/234",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
+      },
+      "pointer": "/rest/operations/235",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+      },
+      "pointer": "/rest/operations/236",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
+      },
+      "pointer": "/rest/operations/237",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/refs/branches"
+      },
+      "pointer": "/rest/operations/238",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/branches"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/refs/tags"
+      },
+      "pointer": "/rest/operations/239",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/refs/tags"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/repositories/{workspace}/{repo_slug}/src"
+      },
+      "pointer": "/rest/operations/240",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/src"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/snippets"
+      },
+      "pointer": "/rest/operations/241",
+      "method": "POST",
+      "path": "/snippets"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/snippets/{workspace}"
+      },
+      "pointer": "/rest/operations/242",
+      "method": "POST",
+      "path": "/snippets/{workspace}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/snippets/{workspace}/{encoded_id}/comments"
+      },
+      "pointer": "/rest/operations/243",
+      "method": "POST",
+      "path": "/snippets/{workspace}/{encoded_id}/comments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/users/{selected_user}/gpg-keys"
+      },
+      "pointer": "/rest/operations/245",
+      "method": "POST",
+      "path": "/users/{selected_user}/gpg-keys"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/users/{selected_user}/ssh-keys"
+      },
+      "pointer": "/rest/operations/247",
+      "method": "POST",
+      "path": "/users/{selected_user}/ssh-keys"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/workspaces/{workspace}/hooks"
+      },
+      "pointer": "/rest/operations/248",
+      "method": "POST",
+      "path": "/workspaces/{workspace}/hooks"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/workspaces/{workspace}/projects"
+      },
+      "pointer": "/rest/operations/251",
+      "method": "POST",
+      "path": "/workspaces/{workspace}/projects"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.post_/workspaces/{workspace}/projects/{project_key}/deploy-keys"
+      },
+      "pointer": "/rest/operations/252",
+      "method": "POST",
+      "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/addon"
+      },
+      "pointer": "/rest/operations/253",
+      "method": "PUT",
+      "path": "/addon"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}"
+      },
+      "pointer": "/rest/operations/254",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+      },
+      "pointer": "/rest/operations/255",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/branching-model/settings"
+      },
+      "pointer": "/rest/operations/256",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/257",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
+      },
+      "pointer": "/rest/operations/261",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+      },
+      "pointer": "/rest/operations/262",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+      },
+      "pointer": "/rest/operations/263",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+      },
+      "pointer": "/rest/operations/265",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/override-settings"
+      },
+      "pointer": "/rest/operations/266",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/override-settings"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+      },
+      "pointer": "/rest/operations/267",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+      },
+      "pointer": "/rest/operations/268",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+      },
+      "pointer": "/rest/operations/277",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/278",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+      },
+      "pointer": "/rest/operations/279",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}"
+      },
+      "pointer": "/rest/operations/281",
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+      },
+      "pointer": "/rest/operations/282",
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}/watch"
+      },
+      "pointer": "/rest/operations/283",
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/watch"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/snippets/{workspace}/{encoded_id}/{node_id}"
+      },
+      "pointer": "/rest/operations/284",
+      "method": "PUT",
+      "path": "/snippets/{workspace}/{encoded_id}/{node_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/users/{selected_user}/ssh-keys/{key_id}"
+      },
+      "pointer": "/rest/operations/288",
+      "method": "PUT",
+      "path": "/users/{selected_user}/ssh-keys/{key_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/hooks/{uid}"
+      },
+      "pointer": "/rest/operations/289",
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/hooks/{uid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}"
+      },
+      "pointer": "/rest/operations/292",
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+      },
+      "pointer": "/rest/operations/293",
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+      },
+      "pointer": "/rest/operations/294",
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+      },
+      "pointer": "/rest/operations/295",
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bitbucket.rest.put_/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+      },
+      "pointer": "/rest/operations/296",
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "bulkCreateOrUpdateAnnotations"
+      },
+      "pointer": "/rest/operations/213",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createDeploymentVariable"
+      },
+      "pointer": "/rest/operations/218",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createEnvironment"
+      },
+      "pointer": "/rest/operations/220",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/environments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createOrUpdateAnnotation"
+      },
+      "pointer": "/rest/operations/260",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createOrUpdateReport"
+      },
+      "pointer": "/rest/operations/259",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createPipelineForRepository"
+      },
+      "pointer": "/rest/operations/224",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createPipelineVariableForTeam"
+      },
+      "pointer": "/rest/operations/244",
+      "method": "POST",
+      "path": "/teams/{username}/pipelines_config/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createPipelineVariableForUser"
+      },
+      "pointer": "/rest/operations/246",
+      "method": "POST",
+      "path": "/users/{selected_user}/pipelines_config/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createPipelineVariableForWorkspace"
+      },
+      "pointer": "/rest/operations/250",
+      "method": "POST",
+      "path": "/workspaces/{workspace}/pipelines-config/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createRepositoryPipelineKnownHost"
+      },
+      "pointer": "/rest/operations/228",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createRepositoryPipelineSchedule"
+      },
+      "pointer": "/rest/operations/227",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createRepositoryPipelineVariable"
+      },
+      "pointer": "/rest/operations/229",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createRepositoryRunner"
+      },
+      "pointer": "/rest/operations/225",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "createWorkspaceRunner"
+      },
+      "pointer": "/rest/operations/249",
+      "method": "POST",
+      "path": "/workspaces/{workspace}/pipelines-config/runners"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteAnnotation"
+      },
+      "pointer": "/rest/operations/7",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteCommitHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/5",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteDeploymentVariable"
+      },
+      "pointer": "/rest/operations/10",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteEnvironmentForRepository"
+      },
+      "pointer": "/rest/operations/12",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deletePipelineVariableForTeam"
+      },
+      "pointer": "/rest/operations/36",
+      "method": "DELETE",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deletePipelineVariableForUser"
+      },
+      "pointer": "/rest/operations/38",
+      "method": "DELETE",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deletePipelineVariableForWorkspace"
+      },
+      "pointer": "/rest/operations/43",
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deletePullRequestHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/29",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteReport"
+      },
+      "pointer": "/rest/operations/6",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteRepositoryHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/23",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteRepositoryPipelineCache"
+      },
+      "pointer": "/rest/operations/17",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteRepositoryPipelineCaches"
+      },
+      "pointer": "/rest/operations/16",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteRepositoryPipelineKeyPair"
+      },
+      "pointer": "/rest/operations/20",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteRepositoryPipelineKnownHost"
+      },
+      "pointer": "/rest/operations/21",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteRepositoryPipelineSchedule"
+      },
+      "pointer": "/rest/operations/19",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteRepositoryPipelineVariable"
+      },
+      "pointer": "/rest/operations/22",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteRepositoryRunner"
+      },
+      "pointer": "/rest/operations/18",
+      "method": "DELETE",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteUserHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/39",
+      "method": "DELETE",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "deleteWorkspaceRunner"
+      },
+      "pointer": "/rest/operations/42",
+      "method": "DELETE",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getAnnotation"
+      },
+      "pointer": "/rest/operations/67",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getAnnotationsForReport"
+      },
+      "pointer": "/rest/operations/66",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getCommitHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/62",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getDeploymentForRepository"
+      },
+      "pointer": "/rest/operations/77",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments/{deployment_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getDeploymentVariables"
+      },
+      "pointer": "/rest/operations/78",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getDeploymentsForRepository"
+      },
+      "pointer": "/rest/operations/76",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getEnvironmentForRepository"
+      },
+      "pointer": "/rest/operations/86",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getEnvironmentsForRepository"
+      },
+      "pointer": "/rest/operations/85",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/environments"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getOIDCConfiguration"
+      },
+      "pointer": "/rest/operations/188",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getOIDCKeys"
+      },
+      "pointer": "/rest/operations/189",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineContainerLog"
+      },
+      "pointer": "/rest/operations/108",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineForRepository"
+      },
+      "pointer": "/rest/operations/104",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineStepForRepository"
+      },
+      "pointer": "/rest/operations/106",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineStepLogForRepository"
+      },
+      "pointer": "/rest/operations/107",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineStepsForRepository"
+      },
+      "pointer": "/rest/operations/105",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineTestReportTestCaseReasons"
+      },
+      "pointer": "/rest/operations/111",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineTestReportTestCases"
+      },
+      "pointer": "/rest/operations/110",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineTestReports"
+      },
+      "pointer": "/rest/operations/109",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineVariableForTeam"
+      },
+      "pointer": "/rest/operations/161",
+      "method": "GET",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineVariableForUser"
+      },
+      "pointer": "/rest/operations/174",
+      "method": "GET",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineVariableForWorkspace"
+      },
+      "pointer": "/rest/operations/193",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineVariablesForTeam"
+      },
+      "pointer": "/rest/operations/160",
+      "method": "GET",
+      "path": "/teams/{username}/pipelines_config/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineVariablesForUser"
+      },
+      "pointer": "/rest/operations/173",
+      "method": "GET",
+      "path": "/users/{selected_user}/pipelines_config/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelineVariablesForWorkspace"
+      },
+      "pointer": "/rest/operations/192",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPipelinesForRepository"
+      },
+      "pointer": "/rest/operations/99",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPullRequestHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/137",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getPullrequestsForCommit"
+      },
+      "pointer": "/rest/operations/63",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/pullrequests"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getReport"
+      },
+      "pointer": "/rest/operations/65",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getReportsForCommit"
+      },
+      "pointer": "/rest/operations/64",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/121",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineCacheContentURI"
+      },
+      "pointer": "/rest/operations/101",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches/{cache_uuid}/content-uri"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineCaches"
+      },
+      "pointer": "/rest/operations/100",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/caches"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineConfig"
+      },
+      "pointer": "/rest/operations/112",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineKnownHost"
+      },
+      "pointer": "/rest/operations/118",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineKnownHosts"
+      },
+      "pointer": "/rest/operations/117",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineSchedule"
+      },
+      "pointer": "/rest/operations/114",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineScheduleExecutions"
+      },
+      "pointer": "/rest/operations/115",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}/executions"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineSchedules"
+      },
+      "pointer": "/rest/operations/113",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineSshKeyPair"
+      },
+      "pointer": "/rest/operations/116",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineVariable"
+      },
+      "pointer": "/rest/operations/120",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryPipelineVariables"
+      },
+      "pointer": "/rest/operations/119",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryRunner"
+      },
+      "pointer": "/rest/operations/103",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getRepositoryRunners"
+      },
+      "pointer": "/rest/operations/102",
+      "method": "GET",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getWorkspaceRunner"
+      },
+      "pointer": "/rest/operations/191",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "getWorkspaceRunners"
+      },
+      "pointer": "/rest/operations/190",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/pipelines-config/runners"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "retrieveUserHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/175",
+      "method": "GET",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "searchAccount"
+      },
+      "pointer": "/rest/operations/176",
+      "method": "GET",
+      "path": "/users/{selected_user}/search/code"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "searchTeam"
+      },
+      "pointer": "/rest/operations/162",
+      "method": "GET",
+      "path": "/teams/{username}/search/code"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "searchWorkspace"
+      },
+      "pointer": "/rest/operations/207",
+      "method": "GET",
+      "path": "/workspaces/{workspace}/search/code"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "stopPipeline"
+      },
+      "pointer": "/rest/operations/226",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateCommitHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/258",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateDeploymentVariable"
+      },
+      "pointer": "/rest/operations/264",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateEnvironmentForRepository"
+      },
+      "pointer": "/rest/operations/221",
+      "method": "POST",
+      "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updatePipelineVariableForTeam"
+      },
+      "pointer": "/rest/operations/285",
+      "method": "PUT",
+      "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updatePipelineVariableForUser"
+      },
+      "pointer": "/rest/operations/286",
+      "method": "PUT",
+      "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updatePipelineVariableForWorkspace"
+      },
+      "pointer": "/rest/operations/291",
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updatePullRequestHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/280",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateRepositoryBuildNumber"
+      },
+      "pointer": "/rest/operations/271",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateRepositoryHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/276",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateRepositoryPipelineConfig"
+      },
+      "pointer": "/rest/operations/270",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateRepositoryPipelineKeyPair"
+      },
+      "pointer": "/rest/operations/273",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateRepositoryPipelineKnownHost"
+      },
+      "pointer": "/rest/operations/274",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateRepositoryPipelineSchedule"
+      },
+      "pointer": "/rest/operations/272",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateRepositoryPipelineVariable"
+      },
+      "pointer": "/rest/operations/275",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateRepositoryRunner"
+      },
+      "pointer": "/rest/operations/269",
+      "method": "PUT",
+      "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateUserHostedPropertyValue"
+      },
+      "pointer": "/rest/operations/287",
+      "method": "PUT",
+      "path": "/users/{selected_user}/properties/{app_key}/{property_name}"
+    },
+    {
+      "key": {
+        "connector": "bitbucket",
+        "inventory": "primary",
+        "id": "updateWorkspaceRunner"
+      },
+      "pointer": "/rest/operations/290",
+      "method": "PUT",
+      "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+    }
+  ],
+  "followup": {
+    "owner": "Firstmate-assigned CP19 Bitbucket connector worker after CP16 acceptance; canonical programme owner integrates shared changes",
+    "requirement": "Generate and sweep every one of these297source operations through all seven separate lanes and source/artifact/runtime-proof chains; current5commands/3implemented do not discharge that scope",
+    "runtime_authority": false
+  }
+}

@@ -1,6 +1,8 @@
 package connectors
 
 import (
+	"bytes"
+	"compress/gzip"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -42,6 +44,7 @@ type SourceVisibilityArtifact struct {
 	Connector, Coverage, CohortID string
 	Bytes                         int
 	SHA256, KeySHA256, Payload    string
+	Encoding                      string
 }
 type SourceDocumentRef struct {
 	DocumentID             string `json:"document_id"`
@@ -311,15 +314,22 @@ func DecodeSourceVisibility(ctx context.Context, artifact SourceVisibilityArtifa
 		return fail(errors.New("source artifact header invalid"))
 	}
 	if artifact.Coverage == "not_in_cohort" {
-		if artifact.Payload != "" || artifact.Bytes != 0 || artifact.SHA256 != "" || artifact.KeySHA256 != "" {
+		if artifact.Encoding != "" || artifact.Payload != "" || artifact.Bytes != 0 || artifact.SHA256 != "" || artifact.KeySHA256 != "" {
 			return fail(errors.New("non-cohort payload is not empty"))
 		}
 		return SourceVisibility{SchemaVersion: 1, Connector: artifact.Connector, Coverage: "not_in_cohort", CohortID: artifact.CohortID, Documents: []SourceDocumentRef{}, Citations: []SourceFactCitation{}, Operations: []SourceOperationObservation{}}, nil
 	}
-	if artifact.Coverage != "in_cohort" || artifact.Bytes <= 0 || artifact.Bytes > SourceVisibilityConnectorLimit || len(artifact.Payload) != artifact.Bytes || sourceHash([]byte(artifact.Payload)) != artifact.SHA256 {
+	if artifact.Coverage != "in_cohort" || artifact.Encoding != "gzip" || artifact.Bytes <= 0 || artifact.Bytes > SourceVisibilityConnectorLimit || len(artifact.Payload) == 0 || len(artifact.Payload) > SourceVisibilityTotalLimit {
 		return fail(errors.New("source payload coverage/size/digest invalid"))
 	}
-	d := json.NewDecoder(strings.NewReader(artifact.Payload))
+	raw, err := decodeSourceVisibilityPayload(ctx, artifact)
+	if err != nil {
+		return fail(err)
+	}
+	if sourceHash(raw) != artifact.SHA256 {
+		return fail(errors.New("source payload digest invalid"))
+	}
+	d := json.NewDecoder(bytes.NewReader(raw))
 	nodes := 0
 	if e := validateSourceJSON(d, 0, &nodes); e != nil {
 		return fail(e)
@@ -327,13 +337,13 @@ func DecodeSourceVisibility(ctx context.Context, artifact SourceVisibilityArtifa
 	if _, e := d.Token(); e != io.EOF {
 		return fail(errors.New("source payload trailing value"))
 	}
-	d = json.NewDecoder(strings.NewReader(artifact.Payload))
+	d = json.NewDecoder(bytes.NewReader(raw))
 	d.DisallowUnknownFields()
 	if e := d.Decode(&result); e != nil {
 		return fail(e)
 	}
 	var fields any
-	if err := json.Unmarshal([]byte(artifact.Payload), &fields); err != nil {
+	if err := json.Unmarshal(raw, &fields); err != nil {
 		return fail(err)
 	}
 	if err := validateSourceRequired(fields, reflect.TypeFor[SourceVisibility]()); err != nil {
@@ -349,6 +359,45 @@ func DecodeSourceVisibility(ctx context.Context, artifact SourceVisibilityArtifa
 		return SourceVisibility{}, e
 	}
 	return result, nil
+}
+
+// The encoded string is immutable. Only selected access expands it, and both
+// declared size and the actual single-member EOF are required before JSON use.
+func decodeSourceVisibilityPayload(ctx context.Context, artifact SourceVisibilityArtifact) ([]byte, error) {
+	encoded := strings.NewReader(artifact.Payload)
+	r, err := gzip.NewReader(encoded)
+	if err != nil {
+		return nil, errors.New("source gzip header invalid")
+	}
+	defer func() { _ = r.Close() }() // In-memory reader cleanup; integrity is checked while reading through EOF.
+	r.Multistream(false)
+	var raw bytes.Buffer
+	raw.Grow(artifact.Bytes)
+	var chunk [32 << 10]byte
+	for {
+		if err := ctx.Err(); err != nil {
+			return nil, err
+		}
+		remaining := artifact.Bytes + 1 - raw.Len()
+		if remaining > len(chunk) {
+			remaining = len(chunk)
+		}
+		n, readErr := r.Read(chunk[:remaining])
+		_, _ = raw.Write(chunk[:n])
+		if raw.Len() > artifact.Bytes {
+			return nil, errors.New("source gzip decoded size invalid")
+		}
+		if readErr == io.EOF {
+			break
+		}
+		if readErr != nil {
+			return nil, errors.New("source gzip stream invalid")
+		}
+	}
+	if raw.Len() != artifact.Bytes || encoded.Len() != 0 {
+		return nil, errors.New("source gzip size or trailing data invalid")
+	}
+	return raw.Bytes(), nil
 }
 
 func ValidateSourceVisibility(v SourceVisibility) error {

@@ -37,6 +37,7 @@ type vNextSourceExecutionProvenance struct {
 	FieldPath  string
 	TargetKind string
 	TargetID   string
+	FlagAlias  *vNextFlagAlias `json:",omitempty"`
 }
 
 // vNextSemanticAdmissionInput supplies facts that cannot truthfully be
@@ -190,6 +191,10 @@ func vNextBuildSemanticProvenance(descriptor vNextCanonicalDescriptor, outputs m
 			return nil, err
 		}
 		for _, command := range source.Commands {
+			if source.Index < 0 || source.Index >= len(descriptor.Operations) || command.Index < 0 || command.Index >= len(descriptor.Operations[source.Index].Commands) ||
+				!reflect.DeepEqual(command.FlagAliases, descriptor.Operations[source.Index].Commands[command.Index].FlagAliases) {
+				return nil, vNextSemanticOperationError(source, vNextOperationPointer(source.Index, "commands", fmt.Sprint(command.Index), "flags"), "reserved flag alias provenance does not bind original source command")
+			}
 			alias := vNextCommandAlias(command.Spec.Path)
 			loaded, found := commands[alias]
 			if !found || !vNextJSONEquivalent(loaded, command.Spec) {
@@ -216,6 +221,9 @@ func vNextBuildSemanticProvenance(descriptor vNextCanonicalDescriptor, outputs m
 				return nil, err
 			}
 			provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextProvenanceOperationPointer(source, "commands", fmt.Sprint(command.Index)), TargetKind: "command", TargetID: command.Spec.Path})
+			for _, alias := range command.FlagAliases {
+				provenance = append(provenance, vNextSourceExecutionProvenance{SourceID: source.ID, FieldPath: vNextProvenanceOperationPointer(source, "commands", fmt.Sprint(command.Index), "flags", fmt.Sprint(alias.FlagIndex)), TargetKind: "provider_flag_alias", TargetID: alias.CanonicalName, FlagAlias: &alias})
+			}
 		}
 	}
 	sort.Slice(provenance, func(left, right int) bool {

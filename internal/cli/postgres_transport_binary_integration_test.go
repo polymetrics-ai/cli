@@ -184,7 +184,7 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	addPostgresTransportCredential(t, binary, root, endpoint, "pg-target", postgresTransportTargetDB)
 	addPostgresTransportCredentialForUser(t, binary, root, endpoint, "pg-target-denied", postgresTransportTargetDB, "pm_transport_denied")
 	addPostgresTransportCredentialForUser(t, binary, root, endpoint, "pg-target-missing-user", postgresTransportTargetDB, "pm_transport_missing_user")
-	mustPostgresTransportPM(t, binary, "",
+	connectionOutput173 := mustPostgresTransportPM(t, binary, "",
 		"connections", "create", "postgres-to-postgres",
 		"--source", "postgres:pg-source", "--destination", "postgres:pg-target",
 		"--stream", "public.events", "--sync-mode", "incremental_upsert",
@@ -214,7 +214,9 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	}
 	t.Logf("independent target read-back: %s.%s rows=%d sample=(%d,%d,%q)", schema, relation, count, firstSample.ID, firstSample.Sequence, firstSample.Label)
 	assertPostgresTransportWarehouse(t, root)
+	assertPostgresTransportPhysical173(t, root, transportConnectionIDFromOutput(t, connectionOutput173))
 	checkpointBeforeTokenReplay := postgresTransportStreamStates(t, root)
+	warehouseBeforeTokenReplay := transportWarehouseFiles173(t, root)
 	replayOutput, replayErr := runTransportPM(binary, firstApproved.Token+"\n",
 		"etl", "run", "--connection", "postgres-to-postgres", "--stream", "public.events",
 		"--batch-size", "1000", "--approval-plan", firstApproved.PlanID,
@@ -229,8 +231,8 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if refusedReplayCount != count || refusedReplayDelivery != delivery {
 		t.Fatalf("consumed-token refusal changed target: rows %d->%d delivery %q->%q", count, refusedReplayCount, delivery, refusedReplayDelivery)
 	}
-	if checkpointAfterTokenReplay := postgresTransportStreamStates(t, root); checkpointAfterTokenReplay != checkpointBeforeTokenReplay {
-		t.Fatalf("consumed-token refusal advanced checkpoint: before=%s after=%s", checkpointBeforeTokenReplay, checkpointAfterTokenReplay)
+	if err := transportRetirement173(checkpointBeforeTokenReplay, postgresTransportStreamStates(t, root), warehouseBeforeTokenReplay, transportWarehouseFiles173(t, root), 2); err != nil {
+		t.Fatalf("consumed-token refusal violated checkpoint/owned retirement: %v", err)
 	}
 
 	secondRun := runApprovedPostgresTransportBinary(t, binary, root, "postgres-to-postgres", "public.events", 1000).Run
@@ -257,6 +259,7 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 
 	schemaDriftApproval := preparePostgresTransportApproval(t, binary, root, "postgres-to-postgres", "public.events")
 	checkpointBeforeSchemaDrift := postgresTransportStreamStates(t, root)
+	warehouseBeforeSchemaDrift173 := transportWarehouseFiles173(t, root)
 	if _, err := admin.Exec(ctx, `ALTER TABLE public.events ADD COLUMN drifted text`); err != nil {
 		t.Fatalf("inject live source schema drift: %v", err)
 	}
@@ -268,8 +271,8 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if driftCount != count || driftDelivery != delivery {
 		t.Fatalf("schema-drift refusal changed target: rows %d->%d delivery %q->%q", count, driftCount, delivery, driftDelivery)
 	}
-	if checkpointAfterDrift := postgresTransportStreamStates(t, root); checkpointAfterDrift != checkpointBeforeSchemaDrift {
-		t.Fatalf("schema-drift refusal advanced checkpoint: before=%s after=%s", checkpointBeforeSchemaDrift, checkpointAfterDrift)
+	if err := transportRetirement173(checkpointBeforeSchemaDrift, postgresTransportStreamStates(t, root), warehouseBeforeSchemaDrift173, transportWarehouseFiles173(t, root), 1); err != nil {
+		t.Fatalf("schema-drift refusal violated checkpoint/owned retirement: %v", err)
 	}
 	if _, err := admin.Exec(ctx, `ALTER TABLE public.events DROP COLUMN drifted`); err != nil {
 		t.Fatalf("restore live source schema after drift refusal: %v", err)
@@ -297,7 +300,7 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		t.Fatalf("write post-barrier transaction: %v", err)
 	}
 	waitForPostgresTransportCondition(t, bootstrapProcess, func() bool {
-		return postgresTransportLabelCount(t, ctx, target, "post-barrier-insert") == 1 && postgresTransportLabelCount(t, ctx, target, "bootstrap") == 0 && postgresTransportStreamStates(t, root) != bootstrapBarrierState
+		return postgresTransportLabelCount(t, ctx, target, "post-barrier-insert") == 1 && postgresTransportLabelCount(t, ctx, target, "bootstrap") == 0 && postgresCheckpointAdvanced173(t, bootstrapBarrierState, postgresTransportStreamStates(t, root), "postgres-bootstrap:public.bootstrap_events")
 	}, "post-barrier transaction in target and an advanced LSN checkpoint")
 	postBarrierState := postgresTransportStreamStates(t, root)
 	atInterruptionCounts := postgresTransportBusinessCounts(t, ctx, target)
@@ -305,6 +308,19 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		t.Fatalf("managed target rows at CDC interruption = %v, want CDC/control [1 1001]", atInterruptionCounts)
 	}
 	bootstrapProcess.killAndWait(t)
+	// SIGKILL cannot durably mark a running owner terminal. The accepted lease
+	// contract excludes successors until its stored deadline, even after Wait.
+	beforeEarlyResume173 := postgresTransportStreamStates(t, root)
+	filesBeforeEarlyResume173 := transportWarehouseFiles173(t, root)
+	earlyApproval173 := preparePostgresTransportApproval(t, binary, root, "postgres-bootstrap", "public.bootstrap_events")
+	earlyOutput173, earlyErr173 := runPostgresTransportApproval(binary, root, "postgres-bootstrap", "public.bootstrap_events", 1000, earlyApproval173)
+	if earlyErr173 == nil || !strings.Contains(earlyOutput173, "transport stream work is already owned by another process") {
+		t.Fatal("unexpired killed-owner lease did not refuse the successor")
+	}
+	if postgresTransportStreamStates(t, root) != beforeEarlyResume173 || !reflect.DeepEqual(filesBeforeEarlyResume173, transportWarehouseFiles173(t, root)) || !samePostgresTransportCounts(atInterruptionCounts, postgresTransportBusinessCounts(t, ctx, target)) {
+		t.Fatal("unexpired successor refusal changed durable source/warehouse/target state")
+	}
+	waitPostgresLeaseExpiry173(t, ctx, root, "postgres-bootstrap:public.bootstrap_events")
 
 	resumeApproval := preparePostgresTransportApproval(t, binary, root, "postgres-bootstrap", "public.bootstrap_events")
 	resumeProcess := startPostgresTransportApproval(t, binary, root, "postgres-bootstrap", "public.bootstrap_events", 1000, resumeApproval)
@@ -313,7 +329,7 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 		t.Fatalf("write resumed change after process death: %v", err)
 	}
 	waitForPostgresTransportCondition(t, resumeProcess, func() bool {
-		return postgresTransportLabelCount(t, ctx, target, "resumed-after-process-death") == 1 && postgresTransportStreamStates(t, root) != postBarrierState
+		return postgresTransportLabelCount(t, ctx, target, "resumed-after-process-death") == 1 && postgresCheckpointAdvanced173(t, postBarrierState, postgresTransportStreamStates(t, root), "postgres-bootstrap:public.bootstrap_events")
 	}, "resumed CDC row and checkpoint after process restart")
 	resumeProcess.killAndWait(t)
 	afterRestartCounts := postgresTransportBusinessCounts(t, ctx, target)
@@ -2608,5 +2624,131 @@ func assertPostgresTransportWarehouse(t *testing.T, root string) {
 		if !found {
 			t.Fatalf("connection warehouse has no %s artifact", extension)
 		}
+	}
+}
+
+// The disposable source is independently seeded with exactly IDs1..1001 and
+// their sequence/label formulas. Check every returned physical record in both
+// staged pages, not only a sample or a nonempty receipt digest.
+func assertPostgresTransportPhysical173(t *testing.T, root, owner string) {
+	t.Helper()
+	seen := map[int]bool{}
+	sizes := []int{}
+	err := filepath.WalkDir(filepath.Join(root, ".polymetrics", "warehouse"), func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if entry.IsDir() || filepath.Base(filepath.Dir(path)) != "transport" {
+			return nil
+		}
+		raw, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		var manifest struct {
+			ID          string `json:"id"`
+			Owner       string `json:"owner"`
+			Stream      string `json:"stream"`
+			Source      string `json:"source_name"`
+			Destination string `json:"destination_name"`
+			Records     int    `json:"records"`
+			WAL         string `json:"wal_sha256"`
+			Parquet     string `json:"parquet_sha256"`
+		}
+		if err := json.Unmarshal(raw, &manifest); err != nil {
+			return err
+		}
+		base := filepath.Dir(filepath.Dir(path))
+		if manifest.Owner != owner || filepath.Base(base) != owner || filepath.Base(filepath.Dir(base)) != "postgres" || manifest.Stream != "public.events" || manifest.Source != "postgres" || manifest.Destination != "postgres" {
+			return fmt.Errorf("physical stage ownership or source identity differs")
+		}
+		ownerRaw, err := os.ReadFile(filepath.Join(base, "owner.json"))
+		if err != nil {
+			return err
+		}
+		var identity warehouse.Owner
+		if err := json.Unmarshal(ownerRaw, &identity); err != nil {
+			return err
+		}
+		if identity.Connection != owner || identity.Connector != "postgres" || identity.Workspace != filepath.Base(filepath.Dir(filepath.Dir(base))) {
+			return fmt.Errorf("structural owner metadata differs")
+		}
+		wal := filepath.Join(base, "wal", "transport-"+manifest.ID+".jsonl")
+		parquet := filepath.Join(base, "tables", "transport-"+manifest.ID+".parquet")
+		raw, err = os.ReadFile(wal)
+		if err != nil {
+			return err
+		}
+		decoder := json.NewDecoder(bytes.NewReader(raw))
+		expected := []map[string]any{}
+		for {
+			var row struct {
+				Record map[string]any `json:"record"`
+			}
+			if err := decoder.Decode(&row); err == io.EOF {
+				break
+			} else if err != nil {
+				return err
+			}
+			id, ok := row.Record["id"].(float64)
+			if !ok || id < 1 || id > 1001 || id != float64(int(id)) || seen[int(id)] {
+				return fmt.Errorf("missing, wrong or repeated source id")
+			}
+			seen[int(id)] = true
+			expected = append(expected, map[string]any{"id": int(id), "sequence": int(id) * 10, "label": fmt.Sprintf("event-%d", int(id))})
+		}
+		if len(expected) != manifest.Records {
+			return fmt.Errorf("stage record count differs")
+		}
+		sizes = append(sizes, len(expected))
+		return transportPhysicalRows173(t.Context(), wal, parquet, manifest.WAL, manifest.Parquet, expected)
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	sort.Ints(sizes)
+	if !reflect.DeepEqual(sizes, []int{1, 1000}) || len(seen) != 1001 {
+		t.Fatalf("physical page membership sizes=%v unique=%d", sizes, len(seen))
+	}
+}
+
+func postgresCheckpointAdvanced173(t *testing.T, before, after, key string) bool {
+	t.Helper()
+	var oldState, newState map[string]pmapp.StreamState
+	if err := json.Unmarshal([]byte(before), &oldState); err != nil {
+		t.Fatal(err)
+	}
+	if err := json.Unmarshal([]byte(after), &newState); err != nil {
+		t.Fatal(err)
+	}
+	old, current := oldState[key].Checkpoint, newState[key].Checkpoint
+	return old != nil && current != nil && current.Mechanism == "logical_replication" && old.Mechanism == current.Mechanism && reflect.DeepEqual(old.Source, current.Source) && !reflect.DeepEqual(old.Position, current.Position) && old.CommittedAt != nil && current.CommittedAt != nil && current.CommittedAt.After(*old.CommittedAt)
+}
+
+func waitPostgresLeaseExpiry173(t *testing.T, ctx context.Context, root, key string) {
+	t.Helper()
+	before := postgresTransportStreamStates(t, root)
+	var states map[string]pmapp.StreamState
+	if err := json.Unmarshal([]byte(before), &states); err != nil {
+		t.Fatal(err)
+	}
+	state := states[key]
+	if state.ActiveWorkID == "" || state.ActiveWorkFence <= 0 || state.ActiveWorkLeaseUntil == nil {
+		t.Fatal("killed source has no durable lease identity")
+	}
+	delay := time.Until(*state.ActiveWorkLeaseUntil)
+	if delay <= 0 || delay > 3*time.Minute {
+		t.Fatal("unexpected durable lease deadline")
+	}
+	t.Logf("successor waits for recorded killed-owner lease expiry: %s", delay.Round(time.Second))
+	timer := time.NewTimer(delay + 10*time.Millisecond)
+	defer timer.Stop()
+	select {
+	case <-ctx.Done():
+		t.Fatal(ctx.Err())
+	case <-timer.C:
+	}
+	if postgresTransportStreamStates(t, root) != before {
+		t.Fatal("state changed while killed owner lease expired")
 	}
 }

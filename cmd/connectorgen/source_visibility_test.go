@@ -2,10 +2,17 @@ package main
 
 import (
 	"bytes"
+	"compress/gzip"
 	"encoding/json"
+	"go/ast"
+	"go/parser"
+	"go/token"
+	"io"
 	"os"
 	"path/filepath"
 	"polymetrics.ai/internal/connectors"
+	"reflect"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -28,11 +35,59 @@ func TestSourceVisibilityPublicGeneration162(t *testing.T) {
 	if !strings.Contains(string(raw), `Connector: "acme"`) || !strings.Contains(string(raw), `Executor: "api_engine.v1"`) {
 		t.Fatal("real execution index control missing")
 	}
-	for _, want := range []string{"SourceVisibility:", "source.a", "source.b", "direct_read", "direct_write", "binary_download", "binary_upload", "etl", "reverse_etl", "sync_transport"} {
-		if !strings.Contains(string(raw), want) {
-			t.Errorf("public generation omitted required source metadata %q", want)
+	// Inspect actual generated Go literals, independently of the runtime decoder.
+	parsed, err := parser.ParseFile(token.NewFileSet(), "index_gen.go", raw, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var payloads []string
+	ast.Inspect(parsed, func(n ast.Node) bool {
+		kv, ok := n.(*ast.KeyValueExpr)
+		if !ok {
+			return true
+		}
+		key, ok := kv.Key.(*ast.Ident)
+		if !ok || key.Name != "Payload" {
+			return true
+		}
+		lit, ok := kv.Value.(*ast.BasicLit)
+		if !ok {
+			t.Fatal("payload not literal")
+		}
+		value, err := strconv.Unquote(lit.Value)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if value != "" {
+			payloads = append(payloads, value)
+		}
+		return true
+	})
+	if len(payloads) != 1 {
+		t.Fatalf("expected exactly acme payload, got %d", len(payloads))
+	}
+	var visibility connectors.SourceVisibility
+	if err := json.Unmarshal(sourceFixtureRaw174(t, payloads[0]), &visibility); err != nil {
+		t.Fatal(err)
+	}
+	if visibility.Connector != "acme" || visibility.OperationCount != 2 || visibility.CellCount != 14 {
+		t.Fatal("complete generated identity missing")
+	}
+	var ids []string
+	for _, operation := range visibility.Operations {
+		ids = append(ids, operation.Source.ID)
+		var lanes []string
+		for _, cell := range operation.Cells {
+			lanes = append(lanes, string(cell.Lane))
+		}
+		if !reflect.DeepEqual(lanes, []string{"direct_read", "direct_write", "binary_download", "binary_upload", "etl", "reverse_etl", "sync_transport"}) {
+			t.Fatalf("generated lanes differ: %v", lanes)
 		}
 	}
+	if !reflect.DeepEqual(ids, []string{"source.a", "source.b"}) {
+		t.Fatalf("generated source identities differ: %v", ids)
+	}
+
 }
 
 func TestSourceVisibilityGenerationPreservesOutputs162(t *testing.T) {
@@ -119,7 +174,7 @@ func TestSourceVisibilityProjectionOracles162(t *testing.T) {
 		t.Fatalf("real projection positive: %v", err)
 	}
 	var projected connectors.SourceVisibility
-	if err := json.Unmarshal([]byte(positive["acme"].Payload), &projected); err != nil {
+	if err := json.Unmarshal(sourceFixtureRaw174(t, positive["acme"].Payload), &projected); err != nil {
 		t.Fatal(err)
 	}
 	matched := 0
@@ -188,4 +243,36 @@ func TestSourceVisibilityProjectionOracles162(t *testing.T) {
 			}
 		})
 	}
+}
+
+func sourceFixtureGzip174(t *testing.T, raw []byte) string {
+	t.Helper()
+	var b bytes.Buffer
+	w := gzip.NewWriter(&b)
+	if _, err := w.Write(raw); err != nil {
+		t.Fatal(err)
+	}
+	if err := w.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return b.String()
+}
+
+func sourceFixtureRaw174(t *testing.T, payload string) []byte {
+	t.Helper()
+	r, err := gzip.NewReader(strings.NewReader(payload))
+	if err != nil {
+		t.Fatal(err)
+	}
+	raw, err := io.ReadAll(io.LimitReader(r, connectors.SourceVisibilityConnectorLimit+1))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := r.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if len(raw) > connectors.SourceVisibilityConnectorLimit {
+		t.Fatal("fixture over budget")
+	}
+	return raw
 }

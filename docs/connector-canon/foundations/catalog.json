@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 50,
+  "catalog_revision": 52,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -59,7 +59,9 @@
           "cmd/connectorgen/source_lane_cli.go",
           "cmd/connectorgen/source_lane_collection.go",
           "cmd/connectorgen/source_visibility.go",
-          "cmd/connectorgen/source_visibility_capabilities.go"
+          "cmd/connectorgen/source_visibility_capabilities.go",
+          "cmd/connectorgen/vnext_flag_ownership.go",
+          "internal/connectors/command_flag_ownership.go"
         ],
         "symbols": [
           {
@@ -297,6 +299,26 @@
           {
             "file": "cmd/connectorgen/source_visibility_capabilities.go",
             "name": "generateSourceCapabilities"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_graph.go",
+            "name": "validateVNextCanonicalAliases"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_flag_ownership.go",
+            "name": "projectVNextCommandFlags"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_flag_ownership.go",
+            "name": "validateVNextProjectedCommands"
+          },
+          {
+            "file": "internal/connectors/command_flag_ownership.go",
+            "name": "ConnectorControlFlag"
+          },
+          {
+            "file": "internal/connectors/command_flag_ownership.go",
+            "name": "IsSharedCommandControl"
           }
         ]
       },
@@ -418,7 +440,9 @@
         "Source-lanes generation buffers a complete report to stdout; check compares a confined candidate without writing. Its report, inventory, annotations and behavioral-proof records are authoring-only and never runtime inputs.",
         "The source-lanes report grants confirmed receiver-demand attribution only through an annotation-triggered exact join to its source-owned demand catalog, retained operation/citation identities, the consumed Atlas owner and the duplicate-free existing decision-owner set. Pending receiver and exposure decisions remain pending; this grants no executable capability.",
         "Source-lane collection cardinality is independent from binary shape; ambiguous envelopes require exact successful-response interpretations with separate instance record pointers and literal source/support/array/item citations. Unknown sibling scopes retain deficits, and an independent retained-source/original-annotation check prevents generated agreement from supplying interpretation authority.",
-        "Source visibility preserves every independently pinned source key and seven lanes, exact retained citations and scoped uncertainty. Selected diagnostic metadata is distinct from execution identity and cannot gate ordinary valid commands. Invalid source inputs are refused before generated output writes; this does not claim transactional publication across generator output files."
+        "Source visibility preserves every independently pinned source key and seven lanes, exact retained citations and scoped uncertainty. Selected diagnostic metadata is distinct from execution identity and cannot gate ordinary valid commands. Invalid source inputs are refused before generated output writes; this does not claim transactional publication across generator output files.",
+        "Every authored command path, including planned, unsupported and deferred paths, must pass the shared exact CommandPathSegments parser before normalized alias collision admission; validation never rewrites a declared name.",
+        "Canonical authoring reserves the shared closed PM control namespace. Conflicting provider flags receive deterministic unoccupied provider- aliases, preserving MapsTo and all other metadata. Only the exact optional nonrepeatable non-EnvOnly integer limit-to-limit tuple on stream-backed ETL/direct-read may share a control name. Final render and admission independently reject reserved provider names or changed source-bound alias metadata; alias provenance is authoring-only."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -1158,6 +1182,41 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_visibility_test.go",
           "name": "TestSourceVisibilityProjectionOracles162"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_command_paths_173_test.go",
+          "name": "TestVNextCanonicalCommandPaths173"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_command_paths_173_test.go",
+          "name": "TestVNextGeneratedParameterPaths173"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_flag_ownership_181_test.go",
+          "name": "TestVNextFlagOwnershipCohort181"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_flag_namespace_182_test.go",
+          "name": "TestVNextFlagNamespace182"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_flag_namespace_182_test.go",
+          "name": "TestVNextReservedFlagAdmissionBypass182"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_flag_integrity_182_test.go",
+          "name": "TestVNextFlagAliasIntegrity182"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_flag_integrity_182_test.go",
+          "name": "TestVNextFlagAliasSourceReorder182"
         }
       ],
       "publication_guarantee_proofs": [
@@ -1412,7 +1471,8 @@
           "internal/connectors/manifestindex/index_gen.go",
           "internal/connectors/manifeststore/bundle_store.go",
           "internal/connectors/polling_watermark.go",
-          "internal/connectors/sync_transport.go"
+          "internal/connectors/sync_transport.go",
+          "internal/connectors/engine/command_endpoint.go"
         ],
         "symbols": [
           {
@@ -1482,6 +1542,10 @@
           {
             "file": "internal/connectors/engine/schema.go",
             "name": "CompileSchema"
+          },
+          {
+            "file": "internal/connectors/engine/command_endpoint.go",
+            "name": "ValidateCommandEndpoint"
           }
         ]
       },
@@ -1559,7 +1623,8 @@
         "Runtime loads projected definitions, not provider source locks or this Atlas.",
         "Diagnostic <member:N> denotes a zero-based member ordinal among sorted untrusted keys, not a literal JSON Pointer or a serialized member name.",
         "Invalid execution bundles retain internal error classification; source visibility and unsupported-lane dispositions remain separate.",
-        "Database declaration diagnostics retain schema-owned $.field[index] coordinates; @byte:N identifies an unknown member token end without publishing member text."
+        "Database declaration diagnostics retain schema-owned $.field[index] coordinates; @byte:N identifies an unknown member token end without publishing member text.",
+        "Generic and root command-target path/method refusals retain safe exact command-owner JSON coordinates and inspectable causes through the App and CLI."
       ],
       "non_goals": [
         "Importing provider documentation.",
@@ -1734,6 +1799,21 @@
           "package": "./internal/connectors/manifeststore",
           "file": "internal/connectors/manifeststore/bundle_diagnostics_165_test.go",
           "name": "TestDiagnosticLoaderUnexpectedOutcomes171"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/command_endpoint_diagnostics_173_test.go",
+          "name": "TestCLITargetSemanticSiblings173"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/diagnostic_coordinates_173_test.go",
+          "name": "TestAppDiagnosticCoordinates173"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/diagnostic_coordinates_173_test.go",
+          "name": "TestCLIDiagnosticCoordinates173"
         }
       ],
       "known_gap_refs": [],
@@ -1864,6 +1944,10 @@
           {
             "file": "internal/connectors/source_visibility.go",
             "name": "(*Registry).PreflightSource"
+          },
+          {
+            "file": "internal/connectors/source_visibility.go",
+            "name": "decodeSourceVisibilityPayload"
           }
         ]
       },
@@ -1938,7 +2022,8 @@
         "Provider-unrestricted upload media requires an explicit declaration and remains path-confined, byte-bounded, digest-bound, previewed, and approval-gated.",
         "Binary upload uses typed write-action variants; binary download uses a declared successful response and byte bound.",
         "A declared base-check success_statuses set contains unambiguous numeric spellings that normalize to exact 2xx codes and executes exact matches only; non-2xx values require the named exact response-status non-2xx execution gap, and response-status ranges/classes require the named exact response-status range execution gap. Omitted status metadata retains the legacy generic 2xx policy.",
-        "A declared base-check max_bytes is between 1 and the existing 64 MiB requester cap and uses that bounded requester path; omitted max_bytes retains the legacy response bound."
+        "A declared base-check max_bytes is between 1 and the existing 64 MiB requester cap and uses that bounded requester path; omitted max_bytes retains the legacy response bound.",
+        "Selected source visibility uses one bounded gzip member with cancellation, exact decoded size and digest, checked EOF/CRC and no trailing bytes; ordinary execution does not decode this metadata. Encoding never grants lane authority."
       ],
       "non_goals": [
         "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
@@ -2088,6 +2173,11 @@
           "package": "./internal/cli",
           "file": "internal/cli/source_visibility_test.go",
           "name": "TestSourceVisibilityDoesNotGateRealRead162"
+        },
+        {
+          "package": "./internal/connectors",
+          "file": "internal/connectors/source_visibility_codec_174_test.go",
+          "name": "TestSourceVisibilityGzipConsumer174"
         }
       ],
       "known_gap_refs": [
@@ -3230,6 +3320,21 @@
           "package": "./internal/warehouse",
           "file": "internal/warehouse/parquet_test.go",
           "name": "TestReadAllEmptyObjectTableStopsOnEmitterError"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/transport_physical_oracle_173_test.go",
+          "name": "TestTransportPhysicalOracle173"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/transport_physical_oracle_173_test.go",
+          "name": "TestTransportRetirementOracle173"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/postgres_checkpoint_oracle_173_test.go",
+          "name": "TestPostgresCheckpointAdvanceOracle173"
         }
       ],
       "known_gap_refs": [],
@@ -3345,7 +3450,8 @@
       "constraints": [
         "Reverse ETL always reads warehouse rows and never substitutes a live API source.",
         "One warehouse row must map deterministically to one bounded request for bulk execution.",
-        "Provider retry safety, idempotency, and read-back behavior must be declared truthfully and cannot be inferred from local plan hashes."
+        "Provider retry safety, idempotency, and read-back behavior must be declared truthfully and cannot be inferred from local plan hashes.",
+        "Closed PostgreSQL managed-target transport plans retain destructive confirmation through persisted preview, plan-seal verification and grant issuance, independently of standalone action policy."
       ],
       "non_goals": [
         "A generic HTTP write tool or API-to-API shortcut.",
@@ -3398,6 +3504,11 @@
           "package": "./internal/app",
           "file": "internal/app/transport_confirmation_171_test.go",
           "name": "TestDefinitionOwnedTransportConfirmation171"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/postgres_confirmation_173_test.go",
+          "name": "TestPostgresTransportPersistedConfirmation173"
         }
       ],
       "known_gap_refs": [],

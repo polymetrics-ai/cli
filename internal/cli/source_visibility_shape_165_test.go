@@ -2,6 +2,7 @@ package cli
 
 import (
 	"bytes"
+	"compress/gzip"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -24,6 +25,8 @@ func TestSourceVisibilityShapePublicRoute165(t *testing.T) {
 	if err := json.Unmarshal(raw, &original); err != nil {
 		t.Fatal(err)
 	}
+	original.Payload = sourceFixtureGzip174(t, []byte(original.Payload))
+	original.Encoding = "gzip"
 	// This artifact is checked against actual canonical generation by connectorgen.
 	for _, tc := range []struct {
 		name   string
@@ -63,7 +66,7 @@ func TestSourceVisibilityShapePublicRoute165(t *testing.T) {
 					t.Fatal(err)
 				}
 				artifact := original
-				artifact.Payload = string(payload)
+				artifact.Payload = sourceFixtureGzip174(t, payload)
 				artifact.Bytes = len(payload)
 				sum := sha256.Sum256(payload)
 				artifact.SHA256 = hex.EncodeToString(sum[:])
@@ -103,4 +106,17 @@ func TestSourceVisibilityShapePublicRoute165(t *testing.T) {
 			})
 		}
 	}
+}
+
+func sourceFixtureGzip174(t *testing.T, raw []byte) string {
+	t.Helper()
+	var b bytes.Buffer
+	w := gzip.NewWriter(&b)
+	if _, err := w.Write(raw); err != nil {
+		t.Fatal(err)
+	}
+	if err := w.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return b.String()
 }

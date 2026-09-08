@@ -1,0 +1,223 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "writes.json",
+  "type": "object",
+  "required": ["actions"],
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "kind", "method", "path", "record_schema", "risk"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "kind": { "type": "string", "enum": ["create", "update", "upsert", "delete", "custom"] },
+          "method": { "type": "string" },
+          "path": { "type": "string" },
+          "base_url": { "type": "string", "pattern": "^https?://[^/?#]+/?$" },
+          "allowed_base_url_origins": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "pattern": "^https?://[^/?#]+/?$" }
+          },
+          "route": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+          "path_fields": { "type": "array", "items": { "type": "string" } },
+          "query": { "type": "object" },
+          "redact_fields": { "type": "array", "items": { "type": "string" } },
+          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart", "base64_upload", "binary_upload", "declared_batch"] },
+          "success_statuses": { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 200, "maximum": 299 } },
+          "body_required": { "type": "boolean" },
+          "body_fields": { "type": "array", "items": { "type": "string" } },
+          "body_field": { "type": "string" },
+          "body_schema": { "type": "object" },
+          "graphql": {
+            "type": "object",
+            "required": ["document", "operation_name"],
+            "additionalProperties": false,
+            "properties": {
+              "document": { "type": "string" },
+              "operation_name": { "type": "string" },
+              "variables": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          },
+          "multipart": {
+            "type": "object",
+            "required": ["parts"],
+            "additionalProperties": false,
+            "properties": {
+              "max_bytes": { "type": "integer" },
+              "parts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "type", "field"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": { "type": "string" },
+                    "type": { "type": "string", "enum": ["field", "file"] },
+                    "field": { "type": "string" },
+                    "content_type": { "type": "string" },
+                    "media_policy": { "type": "string", "enum": ["provider_unrestricted"] },
+                    "allowed_media_types": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": { "type": "string" }
+                    },
+                    "required": { "type": "boolean" },
+                    "max_bytes": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "base64_upload": {
+            "type": "object",
+            "required": ["source_field", "content_field", "max_decoded_bytes"],
+            "additionalProperties": false,
+            "properties": {
+              "source": { "type": "string", "enum": ["path", "base64"] },
+              "source_field": { "type": "string" },
+              "content_field": { "type": "string" },
+              "max_decoded_bytes": { "type": "integer" },
+              "max_encoded_bytes": { "type": "integer" },
+              "allowed_media_types": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "binary_upload": {
+            "type": "object",
+            "required": ["source_field", "max_bytes"],
+            "additionalProperties": false,
+            "properties": {
+              "source_field": { "type": "string" },
+              "max_bytes": { "type": "integer" },
+              "allowed_media_types": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              }
+            }
+          },
+          "declared_batch": {
+            "type": "object",
+            "required": [
+              "max_actions",
+              "allowed_actions",
+              "allowed_methods",
+              "provider_envelope_field",
+              "provider_actions_field",
+              "provider_method_field",
+              "provider_path_field",
+              "provider_data_field",
+              "inner_body_field",
+              "response_envelope_field",
+              "response_status_field"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "max_actions": { "type": "integer", "minimum": 1, "maximum": 64 },
+              "allowed_actions": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+              },
+              "allowed_methods": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "enum": ["POST", "PUT", "PATCH", "DELETE"] }
+              },
+              "provider_envelope_field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+              "provider_actions_field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+              "provider_method_field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+              "provider_path_field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+              "provider_data_field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+              "inner_body_field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+              "response_envelope_field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" },
+              "response_status_field": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$" }
+            }
+          },
+          "record_schema": { "type": "object" },
+          "idempotency_key_header": { "type": "string", "pattern": "^[!#$%&'*+.^_`|~0-9A-Za-z-]+$" },
+          "dynamic_fields": {
+            "type": "object",
+            "required": ["field", "key_pattern"],
+            "additionalProperties": false,
+            "properties": {
+              "field": { "type": "string" },
+              "key_pattern": { "type": "string" },
+              "max_keys": { "type": "integer" },
+              "value_types": {
+                "type": "array",
+                "items": { "type": "string", "enum": ["string", "number", "boolean", "null"] }
+              },
+              "max_value_bytes": { "type": "integer" },
+              "target": { "type": "string", "enum": ["inline", "nested"] }
+            }
+          },
+          "delete": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "idempotent": { "type": "boolean" },
+              "missing_ok_status": { "type": "array", "items": { "type": "integer" } }
+            }
+          },
+          "risk": { "type": "string" },
+          "batchable": { "type": "boolean", "default": true },
+          "confirm": { "type": "string", "enum": ["", "destructive"] },
+          "confirmation": {
+            "type": "object",
+            "required": ["kind"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": { "type": "string", "enum": ["destructive"] }
+            }
+          },
+          "transport_binding": {
+            "type": "object",
+            "required": ["capability", "role", "modes", "inputs"],
+            "additionalProperties": false,
+            "properties": {
+              "capability": { "type": "string", "enum": ["issue_label"] },
+              "role": { "type": "string", "enum": ["apply", "replace", "cleanup"] },
+              "modes": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "enum": ["full_append", "full_overwrite", "incremental_upsert"] }
+              },
+              "inputs": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "required": ["input", "field", "shape"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "input": { "type": "string", "enum": ["target_issue", "label"] },
+                    "field": { "type": "string", "pattern": ".+" },
+                    "shape": { "type": "string", "enum": ["scalar", "singleton_array"] }
+                  }
+                }
+              }
+            }
+          },
+          "hook": { "type": "string" },
+          "hook_fields": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "pattern": ".+" }
+          }
+        }
+      }
+    }
+  }
+}

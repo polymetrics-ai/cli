@@ -342,7 +342,7 @@ func renderManifestIndexFile(entries []generatedManifestIndexEntry) (string, err
 	b.WriteString("import \"polymetrics.ai/internal/connectors\"\n\n")
 	b.WriteString("func GeneratedEntries() []Entry {\n\treturn []Entry{\n")
 	for _, entry := range entries {
-		fmt.Fprintf(&b, "\t\t{Connector: %s, Generation: %s, Digest: %s, Executor: %s, Extension: %s, CommandUsage: %s, CommandTagline: %s, Metadata: connectors.Metadata{Name: %s, DisplayName: %s, IntegrationType: %s, Description: %s, Capabilities: connectors.Capabilities{Check: %t, Catalog: true, Read: %t, Write: %t, Query: %t, CDC: %t}}, Bytes: %d, SourceVisibility: connectors.SourceVisibilityArtifact{SchemaVersion: %d, Connector: %q, Coverage: %q, CohortID: %q, Bytes: %d, SHA256: %q, KeySHA256: %q, Payload: %q}},\n",
+		fmt.Fprintf(&b, "\t\t{Connector: %s, Generation: %s, Digest: %s, Executor: %s, Extension: %s, CommandUsage: %s, CommandTagline: %s, Metadata: connectors.Metadata{Name: %s, DisplayName: %s, IntegrationType: %s, Description: %s, Capabilities: connectors.Capabilities{Check: %t, Catalog: true, Read: %t, Write: %t, Query: %t, CDC: %t}}, Bytes: %d, SourceVisibility: connectors.SourceVisibilityArtifact{SchemaVersion: %d, Connector: %q, Coverage: %q, CohortID: %q, Bytes: %d, SHA256: %q, KeySHA256: %q, Encoding: %q, Payload: %q}},\n",
 			strconv.Quote(entry.Connector),
 			strconv.Quote(entry.Generation),
 			strconv.Quote(entry.Digest),
@@ -360,7 +360,7 @@ func renderManifestIndexFile(entries []generatedManifestIndexEntry) (string, err
 			entry.Metadata.Capabilities.Query,
 			generatedMetadataCDC(entry),
 			entry.Bytes,
-			entry.SourceVisibility.SchemaVersion, entry.SourceVisibility.Connector, entry.SourceVisibility.Coverage, entry.SourceVisibility.CohortID, entry.SourceVisibility.Bytes, entry.SourceVisibility.SHA256, entry.SourceVisibility.KeySHA256, entry.SourceVisibility.Payload,
+			entry.SourceVisibility.SchemaVersion, entry.SourceVisibility.Connector, entry.SourceVisibility.Coverage, entry.SourceVisibility.CohortID, entry.SourceVisibility.Bytes, entry.SourceVisibility.SHA256, entry.SourceVisibility.KeySHA256, entry.SourceVisibility.Encoding, entry.SourceVisibility.Payload,
 		)
 	}
 	b.WriteString("\t}\n}\n")

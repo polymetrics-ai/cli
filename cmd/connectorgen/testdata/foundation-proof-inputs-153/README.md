@@ -23,3 +23,7 @@ continue to observe actual changed inputs as stale.
     "fixture": "c3d447c603628929911a6d2cf6716285da8597eb3bb8aee9715ba3a533441362.artifact"
   }
 ]
+
+## Complete frozen input closure (CI-175-01)
+
+`inputs.json` records all231 original execution inputs plus the Atlas. Every file was recovered from the recorded `172cf0cce679b46e81671de03a12e63f019dfd6c` commit and independently checked against the unchanged proof document byte count and SHA256 before retention. The proof-reader fixture verifies every input before copying it into its disposable root. Captures and outputs remain their original separately pinned records. This replaces the former two-file exception and prevents newer live source edits from corrupting a historical positive fixture. These files are not compiled or executed as product code and cannot establish current-corpus proof.

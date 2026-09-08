@@ -311,6 +311,41 @@ Authors create schema-4 locks directly from immutable provider facts. There is
 no execution-JSON-to-lock importer: such a reverse path would create a second
 source of truth and could silently preserve obsolete runtime fields.
 
+### Reserved command flags
+
+`internal/connectors/command_flag_ownership.go` defines the closed PM control
+namespace shared by authoring and CLI preparation. A provider parameter with a
+reserved name receives a generated `provider-` prefix; occupied names receive
+another prefix until the name is free. Existing safe names are preserved.
+Allocation reserves every original flag name and proceeds in stable name/target
+order. For example, provider `plan` becomes `provider-plan`, while `--plan`
+continues to select the PM plan workflow. The provider's `MapsTo` field, request
+key, schema and remaining flag metadata do not change.
+
+The sole shared tuple is an optional, nonrepeatable, non-EnvOnly integer
+`limit` mapped to `limit` on a stream-backed ETL or direct-read command.
+Canonicalization rejects invalid or duplicate raw names. Final rendering and
+admission independently check the reserved namespace and bind each alias to
+its original source command. Source coordinates and alias provenance stay in
+authoring evidence; runtime receives ordinary execution flags and mappings.
+
+### Updating the embedded corpus
+
+`lock-render` publishes an admitted authoring generation; it does not copy that
+generation into the embedded repository corpus. A corpus update therefore has
+an explicit owner: render from the unchanged reviewed lock into an isolated
+authoring root, verify its source identity and complete generation integrity,
+compare every generated execution file with the embedded destination, and
+review the exact expected semantic delta. Transfer only the approved execution
+artifact bytes, retaining destination before/after hashes and the original
+snapshot. Do not transfer publication controls or authoring provenance.
+
+For CP16 the approved transfer contains only GitHub and GitLab
+`cli_surface.json`, with seven and fifteen provider flag name changes
+respectively. Run the existing `connectorgen gen` after the transfer to refresh
+derived indexes, then verify reference rendering and actual command consumers.
+There is currently no automatic embedded-corpus transfer command.
+
 ## 4. Runtime boundary
 
 `internal/connectors/defs` embeds execution JSON only. Its inventory rejects

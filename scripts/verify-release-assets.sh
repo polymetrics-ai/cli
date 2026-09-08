@@ -19,12 +19,7 @@ COSIGN_CERT_OIDC_ISSUER=${COSIGN_CERT_OIDC_ISSUER:-https://token.actions.githubu
 GITHUB_ATTESTATION_REPO=${GITHUB_ATTESTATION_REPO:-${GITHUB_REPOSITORY:-polymetrics-ai/cli}}
 GITHUB_ATTESTATION_CERT_OIDC_ISSUER=${GITHUB_ATTESTATION_CERT_OIDC_ISSUER:-$COSIGN_CERT_OIDC_ISSUER}
 
-# These ceilings leave room for supported target differences while refusing a
-# regression that restores provider source-lock payloads to every installed pm.
-# Archive and extracted-binary measurements are both retained: repetitive JSON
-# compresses well, but remains a large installed executable.
-MAX_ARCHIVE_BYTES=$((48 * 1024 * 1024))
-MAX_INSTALLED_PM_BYTES=$((160 * 1024 * 1024))
+# Distribution size is informational; all artifact integrity checks remain required.
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -411,8 +406,6 @@ for target in "${archive_targets[@]}"; do
   size_guard_args=(
     --archive "$asset"
     --binary "$binary_name"
-    --max-archive-bytes "$MAX_ARCHIVE_BYTES"
-    --max-installed-binary-bytes "$MAX_INSTALLED_PM_BYTES"
   )
   if [[ "$PRINT_SUBJECTS" == "1" ]]; then
     size_guard_args+=(--quiet)

@@ -19,6 +19,20 @@ bindings, not an independent permission layer; see the [connector delivery canon
 
 ## Current surface
 
+Provider flags that collide with PM workflow controls have distinct generated
+names. For example, `pm github interaction-limits set --provider-limit
+contributors_only` supplies GitHub's `limit` field, while PM keeps its own
+`--limit` control. Webhook commands use `--provider-config` for the provider's
+JSON configuration; `--config key=value` remains PM configuration. Command help
+and connector inspection show the generated names. Writes retain the normal
+plan, preview, approval and, where required, destructive-confirmation workflow.
+
+The shared authoring rule also applies to GitLab's `--provider-plan`,
+`--provider-plan-name` and `--provider-file-name`. It changes the public flag
+name while preserving the declared provider request key. Reserved-name checks
+run again during rendering and admission; no runtime alias table or provider
+name switch is involved.
+
 {/* generated:current-surface — regenerate with `pnpm run gen:website-data`; do not hand-edit */}
 
 | Metric | Value |

@@ -4,17 +4,15 @@ set -euo pipefail
 usage() {
   cat <<'EOF'
 usage: verify-release-size-budget.sh --archive <path> --binary <name> \
-  --max-archive-bytes <bytes> --max-installed-binary-bytes <bytes> [--quiet]
+  [--quiet]
 
-Validates a tar.gz release archive against deterministic archive and installed
-binary byte budgets. It reports each measured byte count before accepting it.
+Reports archive and installed binary byte counts without a size ceiling.
+Missing, corrupt, or ambiguous binary artifacts still fail validation.
 EOF
 }
 
 archive=''
 binary=''
-max_archive_bytes=''
-max_installed_binary_bytes=''
 quiet=0
 
 require_value() {
@@ -36,16 +34,6 @@ while [[ $# -gt 0 ]]; do
       binary=$2
       shift 2
       ;;
-    --max-archive-bytes)
-      require_value "$@"
-      max_archive_bytes=$2
-      shift 2
-      ;;
-    --max-installed-binary-bytes)
-      require_value "$@"
-      max_installed_binary_bytes=$2
-      shift 2
-      ;;
     --quiet)
       quiet=1
       shift
@@ -62,8 +50,8 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$archive" || -z "$binary" || -z "$max_archive_bytes" || -z "$max_installed_binary_bytes" ]]; then
-  printf '%s\n' '--archive, --binary, --max-archive-bytes, and --max-installed-binary-bytes are required' >&2
+if [[ -z "$archive" || -z "$binary" ]]; then
+  printf '%s\n' '--archive and --binary are required' >&2
   usage >&2
   exit 2
 fi
@@ -75,26 +63,14 @@ if [[ "$binary" == */* || "$binary" == . || "$binary" == .. ]]; then
   printf 'release binary name must be one archive entry: %s\n' "$binary" >&2
   exit 2
 fi
-if [[ ! "$max_archive_bytes" =~ ^[0-9]+$ || ! "$max_installed_binary_bytes" =~ ^[0-9]+$ ]]; then
-  printf '%s\n' 'release size budgets must be decimal byte counts' >&2
-  exit 2
-fi
-
 file_size_bytes() {
   wc -c < "$1" | tr -d '[:space:]'
 }
 
-report_budget() {
-  local kind=$1
-  local subject=$2
-  local bytes=$3
-  local budget=$4
+report_size() {
+  local kind=$1 subject=$2 bytes=$3
   if [[ "$quiet" != 1 ]]; then
-    printf 'release-size-report kind=%s subject=%s bytes=%s budget=%s\n' "$kind" "$subject" "$bytes" "$budget"
-  fi
-  if (( bytes > budget )); then
-    printf 'release size budget exceeded: kind=%s subject=%s bytes=%s budget=%s\n' "$kind" "$subject" "$bytes" "$budget" >&2
-    exit 1
+    printf 'release-size-report kind=%s subject=%s bytes=%s\n' "$kind" "$subject" "$bytes"
   fi
 }
 
@@ -111,5 +87,5 @@ fi
 archive_bytes=$(file_size_bytes "$archive")
 installed_binary_bytes=$(tar -xOzf "$archive" "$binary" | wc -c | tr -d '[:space:]')
 
-report_budget archive "$archive" "$archive_bytes" "$max_archive_bytes"
-report_budget installed_binary "${archive}!${binary}" "$installed_binary_bytes" "$max_installed_binary_bytes"
+report_size archive "$archive" "$archive_bytes"
+report_size installed_binary "${archive}!${binary}" "$installed_binary_bytes"

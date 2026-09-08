@@ -26,7 +26,7 @@ func sourceArtifact162(t *testing.T, name string) connectors.SourceVisibilityArt
 func sourceMutated162(t *testing.T, a connectors.SourceVisibilityArtifact, mutate func(map[string]any)) connectors.SourceVisibilityArtifact {
 	t.Helper()
 	var v map[string]any
-	if err := json.Unmarshal([]byte(a.Payload), &v); err != nil {
+	if err := json.Unmarshal(sourceRaw174(t, a.Payload), &v); err != nil {
 		t.Fatal(err)
 	}
 	mutate(v)
@@ -35,7 +35,8 @@ func sourceMutated162(t *testing.T, a connectors.SourceVisibilityArtifact, mutat
 		t.Fatal(err)
 	}
 	sum := sha256.Sum256(raw)
-	a.Payload = string(raw)
+	a.Payload = sourceGzip174(t, raw)
+	a.Encoding = "gzip"
 	a.Bytes = len(raw)
 	a.SHA256 = hex.EncodeToString(sum[:])
 	return a
@@ -168,9 +169,10 @@ func TestSourceVisibilityResourceAndText163(t *testing.T) {
 		{"digest_mismatch", func(a *connectors.SourceVisibilityArtifact) { a.SHA256 = strings.Repeat("0", 64) }},
 		{"key_mismatch", func(a *connectors.SourceVisibilityArtifact) { a.KeySHA256 = strings.Repeat("0", 64) }},
 		{"duplicate_member", func(a *connectors.SourceVisibilityArtifact) {
-			a.Payload = strings.Replace(a.Payload, `"schema_version":1`, `"schema_version":1,"schema_version":1`, 1)
-			a.Bytes = len(a.Payload)
-			h := sha256.Sum256([]byte(a.Payload))
+			raw := []byte(strings.Replace(string(sourceRaw174(t, a.Payload)), `"schema_version":1`, `"schema_version":1,"schema_version":1`, 1))
+			a.Payload = sourceGzip174(t, raw)
+			a.Bytes = len(raw)
+			h := sha256.Sum256(raw)
 			a.SHA256 = hex.EncodeToString(h[:])
 		}},
 	} {

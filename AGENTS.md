@@ -265,6 +265,14 @@ This fact explained a defect nobody could see; do not rediscover it the hard way
 
 ## Connector Authoring Is Lock-First
 
+PM control names belong to the shared registry in
+`internal/connectors/command_flag_ownership.go`. Canonical authoring assigns
+conflicting provider flags deterministic aliases through
+`cmd/connectorgen/vnext_flag_ownership.go`, preserving provider mappings and
+safe existing spellings. Flag validation uses the command runner's
+`safety.ValidateIdentifier`, not the narrower connector-name grammar. Follow
+`docs/connector-canon/SOURCE-LOCK-VNEXT.md` for admission and corpus updates.
+
 Author execution facts once in
 `internal/connectors/defs/<connector>/source.lock.json`. Use canonical operations
 to attach streams, writes, direct/binary operations, commands, and shared
@@ -388,14 +396,18 @@ Use local gates before handing off code:
 ```bash
 gofmt -w cmd internal
 go vet ./...
-go test -timeout 20m ./...
+make test
 go build ./cmd/pm
 make verify
 ```
 
-Always pass `-timeout 20m`, as the `test` Makefile target does. `internal/cli` exceeds Go's 10-minute
-default on a loaded machine, and the timeout panic it produces is a goroutine dump that reads exactly
-like a hang in whichever test happened to be running.
+Use the Makefile's configurable `TEST_TIMEOUT` (default `60m`) for the growing full suite
+and complete registry sweeps. Go applies that budget to each package test binary, so
+both full CLI sweeps share it in `make test`; separately selected sweeps each receive
+their own budget. Keep focused package/test selections at `-timeout 20m` unless their
+own documented bound differs. A timeout is a failed, incomplete run, not a hang diagnosis.
+Go's build cache may be reused; required fresh invocation/cold-process proofs use
+`-count=1` so successful test-result replay cannot replace execution.
 
 Agents running under a per-command timeout should not run `go test ./...` or `make verify` (which
 includes it) as a single command: the suite spans 550+ connectors and `internal/cli` alone takes

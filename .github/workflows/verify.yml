@@ -15,6 +15,8 @@ env:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    # Full CLI package budget plus remaining gates and tool/setup margin.
+    timeout-minutes: 105
     steps:
       - name: Configure git defaults
         run: git config --global init.defaultBranch main
@@ -26,11 +28,12 @@ jobs:
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
           go-version: '1.26.6'
-          cache: false
+          # Persist Go build/module work; fresh sweep receipts still use -count=1.
+          cache: true
 
       - name: Install golangci-lint
         run: |
-          go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${GOLANGCI_LINT_VERSION}
+          go install "github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${GOLANGCI_LINT_VERSION}"
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
           "$(go env GOPATH)/bin/golangci-lint" --version
 
@@ -44,7 +47,16 @@ jobs:
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
           "$(go env GOPATH)/bin/nfpm" --version
 
+      # The proof-reader schema parity tests invoke the independent Python
+      # validator; install its recorded versions rather than runner globals.
+      - name: Install schema test tools
+        run: |
+          python3 -m venv "$RUNNER_TEMP/pm-schema-tests"
+          "$RUNNER_TEMP/pm-schema-tests/bin/python" -m pip install -r scripts/schema-test-requirements.txt
+          echo "$RUNNER_TEMP/pm-schema-tests/bin" >> "$GITHUB_PATH"
+
       - name: Verify
+        timeout-minutes: 90
         run: make verify
 
       - name: Check generated files

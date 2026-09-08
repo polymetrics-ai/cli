@@ -1670,12 +1670,10 @@ func writeConnectorCommandResultEnvelope(stdout, stderr io.Writer, jsonOut bool,
 func connectorCommandFlags(values map[string][]string) map[string][]string {
 	commandFlags := map[string][]string{}
 	for name, entries := range values {
-		switch name {
-		case "_", "credential", "connection", "config", "limit", "max-bytes", "plan", "preview", "approve", "approval-token-stdin", "confirm", "plan-name", "dest-root", "file-name", "from-env":
+		if connectors.ConnectorControlFlag(name) == connectors.PMConnectorControl {
 			continue
-		default:
-			commandFlags[name] = append([]string(nil), entries...)
 		}
+		commandFlags[name] = append([]string(nil), entries...)
 	}
 	return commandFlags
 }

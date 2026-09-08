@@ -3340,12 +3340,12 @@ func loadCLISurface(sub fs.FS, dirName string) (*CLISurface, json.RawMessage, er
 	for index, command := range surface.Commands {
 		if command.Foundation != nil {
 			if err := ValidateCommandEndpoint(command.Foundation.Target.Method, command.Foundation.Target.Path); err != nil {
-				return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: command %d foundation target: %w", dirName, index, err)
+				return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: command %d foundation target: %w", dirName, index, diagnosticWithin(fmt.Sprintf("/commands/%d/foundation_gap/target", index), err))
 			}
 		}
 		if command.Unsupported != nil {
 			if err := ValidateCommandEndpoint(command.Unsupported.Target.Method, command.Unsupported.Target.Path); err != nil {
-				return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: command %d unsupported target: %w", dirName, index, err)
+				return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: command %d unsupported target: %w", dirName, index, diagnosticWithin(fmt.Sprintf("/commands/%d/unsupported_disposition/target", index), err))
 			}
 		}
 	}

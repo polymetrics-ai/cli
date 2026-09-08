@@ -1073,6 +1073,16 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 		return nil
 	}
 	surface := b.CLISurface
+	// A projection may contain thousands of operation-backed flags. Resolve
+	// their exact IDs once per call instead of linearly scanning the bundle for
+	// every flag. Keep first-match semantics and fresh projection ownership;
+	// this index never outlives the current immutable bundle read.
+	operations := make(map[string]int, len(b.Operations))
+	for i := range b.Operations {
+		if _, exists := operations[b.Operations[i].ID]; !exists {
+			operations[b.Operations[i].ID] = i
+		}
+	}
 	out := &connectors.CommandSurface{
 		Tagline:     surface.Tagline,
 		Usage:       surface.Usage,
@@ -1094,7 +1104,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 	for _, cmd := range surface.Commands {
 		flags := make([]connectors.CommandSurfaceFlag, 0, len(cmd.Flags))
 		for _, flag := range cmd.Flags {
-			flags = append(flags, commandSurfaceOperationFlag(b, cmd, flag))
+			flags = append(flags, commandSurfaceOperationFlag(b, operations, cmd, flag))
 		}
 		out.Commands = append(out.Commands, connectors.CommandSurfaceCommand{
 			Path:         cmd.Path,
@@ -1212,7 +1222,7 @@ func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 	return projected
 }
 
-func commandSurfaceOperationFlag(b Bundle, cmd CLICommand, flag CLIFlag) connectors.CommandSurfaceFlag {
+func commandSurfaceOperationFlag(b Bundle, operations map[string]int, cmd CLICommand, flag CLIFlag) connectors.CommandSurfaceFlag {
 	projected := commandSurfaceFlag(flag)
 	location, name, ok := strings.Cut(strings.TrimSpace(flag.MapsTo), ".")
 	if !ok || (location != "path" && location != "query") || name == "" {
@@ -1228,8 +1238,12 @@ func commandSurfaceOperationFlag(b Bundle, cmd CLICommand, flag CLIFlag) connect
 	if strings.TrimSpace(cmd.Operation) == "" {
 		return projected
 	}
-	op, err := findOperation(b, cmd.Operation)
-	if err != nil || op.REST == nil {
+	index, found := operations[cmd.Operation]
+	if !found {
+		return projected
+	}
+	op := b.Operations[index]
+	if op.REST == nil {
 		return projected
 	}
 	parameters, err := operationParametersForLocation(op, location)

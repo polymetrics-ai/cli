@@ -7513,7 +7513,7 @@
         {
           "maps_to": "record.config",
           "max_bytes": 1048576,
-          "name": "config",
+          "name": "provider-config",
           "type": "json"
         },
         {
@@ -7841,7 +7841,7 @@
         {
           "maps_to": "record.config",
           "max_bytes": 1048576,
-          "name": "config",
+          "name": "provider-config",
           "type": "json"
         },
         {
@@ -29792,7 +29792,7 @@
         },
         {
           "maps_to": "record.limit",
-          "name": "limit",
+          "name": "provider-limit",
           "required": true,
           "type": "enum",
           "values": [
@@ -29961,7 +29961,7 @@
         },
         {
           "maps_to": "record.limit",
-          "name": "limit",
+          "name": "provider-limit",
           "required": true,
           "summary": "Sets limit.",
           "type": "enum",
@@ -30003,7 +30003,7 @@
         },
         {
           "maps_to": "record.limit",
-          "name": "limit",
+          "name": "provider-limit",
           "required": true,
           "summary": "Sets limit.",
           "type": "enum",
@@ -34157,7 +34157,7 @@
         {
           "maps_to": "record.config",
           "max_bytes": 1048576,
-          "name": "config",
+          "name": "provider-config",
           "required": true,
           "type": "json"
         },
@@ -37223,7 +37223,7 @@
         {
           "maps_to": "record.config",
           "max_bytes": 1048576,
-          "name": "config",
+          "name": "provider-config",
           "type": "json"
         },
         {

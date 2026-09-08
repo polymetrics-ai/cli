@@ -1,6 +1,8 @@
 package app
 
 import (
+	"bytes"
+	"compress/gzip"
 	"context"
 	"crypto/sha256"
 	"encoding/hex"
@@ -77,7 +79,7 @@ func TestSourceVisibilityAppPublicBoundaries162(t *testing.T) {
 func TestSourceVisibilityAppMalformedCause163(t *testing.T) {
 	raw := `{"schema_version":1,"operations":!}`
 	h := sha256.Sum256([]byte(raw))
-	a := connectors.SourceVisibilityArtifact{SchemaVersion: 1, Connector: "asana", Coverage: "in_cohort", Bytes: len(raw), Payload: raw, SHA256: hex.EncodeToString(h[:])}
+	a := connectors.SourceVisibilityArtifact{SchemaVersion: 1, Connector: "asana", Coverage: "in_cohort", Bytes: len(raw), Payload: sourceFixtureGzip174(t, []byte(raw)), Encoding: "gzip", SHA256: hex.EncodeToString(h[:])}
 	loads := 0
 	r, err := connectors.NewLazyRegistryWithEntries([]connectors.LazyRegistryEntry{{Metadata: connectors.Metadata{Name: "asana"}, SourceVisibility: a}}, func(context.Context, string) (connectors.Connector, error) {
 		loads++
@@ -93,4 +95,17 @@ func TestSourceVisibilityAppMalformedCause163(t *testing.T) {
 	if !errors.As(err, &data) || !errors.As(err, &syntax) || loads != 0 {
 		t.Fatalf("actual decode cause lost/crossed boundary: %v loads=%d", err, loads)
 	}
+}
+
+func sourceFixtureGzip174(t *testing.T, raw []byte) string {
+	t.Helper()
+	var b bytes.Buffer
+	w := gzip.NewWriter(&b)
+	if _, err := w.Write(raw); err != nil {
+		t.Fatal(err)
+	}
+	if err := w.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return b.String()
 }

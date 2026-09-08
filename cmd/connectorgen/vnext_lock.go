@@ -57,8 +57,10 @@ type vNextOperationDescriptor struct {
 }
 
 type vNextCommandDescriptor struct {
-	Order   int             `json:"order"`
-	Command json.RawMessage `json:"command"`
+	Order           int              `json:"order"`
+	Command         json.RawMessage  `json:"command"`
+	AuthoredCommand json.RawMessage  `json:"-"`
+	FlagAliases     []vNextFlagAlias `json:"-"`
 }
 
 type vNextSchemaReferences struct {
@@ -289,6 +291,7 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 				return vNextCanonicalDescriptor{}, err
 			}
 		}
+		descriptor.Commands = append([]vNextCommandDescriptor(nil), descriptor.Commands...)
 		for commandIndex := range descriptor.Commands {
 			if err := validateRawJSONObject(fmt.Sprintf("operation %s command %d", descriptor.ID, commandIndex), descriptor.Commands[commandIndex].Command); err != nil {
 				return vNextCanonicalDescriptor{}, err
@@ -296,7 +299,13 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 			if err := rejectVNextLegacyExecutionEvidence(fmt.Sprintf("operation %s command %d", descriptor.ID, commandIndex), descriptor.Commands[commandIndex].Command); err != nil {
 				return vNextCanonicalDescriptor{}, err
 			}
-			descriptor.Commands[commandIndex].Command = cloneRawJSON(descriptor.Commands[commandIndex].Command)
+			command := &descriptor.Commands[commandIndex]
+			command.AuthoredCommand = cloneRawJSON(command.Command)
+			projected, aliases, err := projectVNextCommandFlags(command.Command, descriptor.ID, index, commandIndex)
+			if err != nil {
+				return vNextCanonicalDescriptor{}, vNextGraphError(vNextOperationPointer(index, "commands", fmt.Sprint(commandIndex), "flags"), err)
+			}
+			command.Command, command.FlagAliases = projected, aliases
 		}
 		descriptor.Source = cloneRawJSON(descriptor.Source)
 		descriptor.Stream = cloneRawJSON(descriptor.Stream)
@@ -357,6 +366,9 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 }
 
 func renderVNextExecutionBundle(descriptor vNextCanonicalDescriptor) (map[string][]byte, error) {
+	if err := validateVNextProjectedCommands(descriptor); err != nil {
+		return nil, err
+	}
 	outputs := make(map[string][]byte, 8+len(descriptor.Schemas)+len(descriptor.Execution))
 	var err error
 	if outputs["metadata.json"], err = renderRawJSON(descriptor.Metadata); err != nil {

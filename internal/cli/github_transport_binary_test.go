@@ -546,6 +546,20 @@ func assertTransportWarehouseArtifacts(t *testing.T, root, wantOwner string) {
 	if manifest.ID == "" || manifest.Owner != wantOwner || manifest.Generation <= 0 || manifest.Records != 1 || manifest.WALSHA256 == "" || manifest.ParquetSHA256 == "" || manifest.ContentSHA256 == "" {
 		t.Fatal("transport manifest is not a complete one-record connection-owned durable receipt")
 	}
+	if filepath.Base(filepath.Dir(filepath.Dir(manifests[0]))) != wantOwner {
+		t.Fatal("transport manifest is outside structural connection owner")
+	}
+	// Expected schema projection and computed fields are fixed by the retained
+	// issues declaration, independently of the returned warehouse records.
+	expected := faithfulIssue(4081001, nil)
+	delete(expected, "user")
+	expected["repository"] = "acme/widgets"
+	expected["user_id"] = 1
+	expected["user_login"] = "fixture"
+	if err := transportPhysicalRows173(t.Context(), wals[0], parquets[0], manifest.WALSHA256, manifest.ParquetSHA256, []map[string]any{expected}); err != nil {
+		t.Fatalf("actual source -> WAL -> Parquet proof: %v", err)
+	}
+
 }
 
 func assertTransportCheckpoint(t *testing.T, root, runID, wantConnection string) {

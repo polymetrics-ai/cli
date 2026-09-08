@@ -164,7 +164,7 @@ release pull request for the same version.
 - Eligible history and Conventional Commit bump detection:
   [`scripts/release-please-pm-filter.py`](../scripts/release-please-pm-filter.py)
 - Archive/package assembly, expected asset names, and deterministic archive/
-  installed-binary byte-budget reports:
+  installed-binary byte measurements (informational, with no fixed release size ceiling):
   [`scripts/assemble-release-assets.sh`](../scripts/assemble-release-assets.sh),
   [`scripts/verify-release-assets.sh`](../scripts/verify-release-assets.sh), and
   [`scripts/verify-release-size-budget.sh`](../scripts/verify-release-size-budget.sh)
