@@ -22,3 +22,6 @@ No new public CLI flags; documented page/page-cursor semantics extended to admit
 
 ## Final integration ownership
 Parent tip982304b2d normally merged after direct checkpoint81c8b3ae4; inherited compiler/multipart/Atlas changes remain parent provenance. Owned saved bridge adds private StreamSpec.preparedBodyPagination and prepareStreamBodyPagination before runtime setup; parent prepares its input snapshot immediately before that call. Existing Atlas runtime.direct-execution.v1 and warehouse.stage-etl.v1 are extended through declared seams; parent owns same-integration Atlas/source projection updates and independent code review. No new CLI flags; page/page-cursor public semantics retained, documented/source exposure remains parent integration.
+
+## Mixed query-size/body-position gap
+Before final handoff, independent literal offset-limit controls exercise query-owned caller size3 with body-owned offset. Plan-phase --gaps / execute-phase --gaps-only prompts retained. Direct must send page2 body position3 with query limit3; saved must request body offsets0/3, limit3 and five IDs. Resolve effective query size before compiling the body pagination window in both preparations; do not alter legacy Query/Requester merging.

@@ -294,6 +294,7 @@ func prepareBodyPagingRequest(b Bundle, op OperationSpec, body any, query url.Va
 	if size <= 0 {
 		size = defaultPageSize
 	}
+	size = effectiveDirectReadPageSize(plan.spec, size, query)
 	initial, size, err := plan.initial(body, size, maxBytes)
 	if err != nil {
 		return nil, err
@@ -387,15 +388,16 @@ func prepareStreamBodyPagination(b Bundle, stream StreamSpec, req connectors.Rea
 	if size <= 0 {
 		size = defaultPageSize
 	}
-	initial, size, err := plan.initial(body, size, maxOperationDirectReadBytes)
-	if err != nil {
-		return stream, err
-	}
 	query, err := buildInitialQuery(stream, req)
 	if err != nil {
 		return stream, err
 	}
 	if err := plan.refuseQuery(query); err != nil {
+		return stream, err
+	}
+	size = effectiveDirectReadPageSize(*spec, size, query)
+	initial, size, err := plan.initial(body, size, maxOperationDirectReadBytes)
+	if err != nil {
 		return stream, err
 	}
 	// Keep original source body and request_inputs declaration in identity while

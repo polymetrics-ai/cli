@@ -671,3 +671,66 @@ func TestBodyPagingRequiredAndBounds233(t *testing.T) {
 		})
 	}
 }
+
+func TestBodyPagingQuerySize233(t *testing.T) {
+	op := bodyPagingOperation233()
+	op.REST.Body = nil
+	op.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"position":{"type":"integer","minimum":0,"maximum":100}},"required":["position"]}`)
+	op.REST.Pagination = &PaginationSpec{Type: "offset_limit", OffsetParam: "offset", LimitParam: "limit", BodyOffsetField: "position", PageSize: 2}
+	op.REST.PaginationParameters = []OperationParameter{{Name: "limit", In: "query", Type: "integer"}}
+	op.REST.Parameters = op.REST.PaginationParameters
+	var sends atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sends.Add(1)
+		raw, _ := io.ReadAll(r.Body)
+		if string(raw) != `{"position":3}` || r.URL.RawQuery != "limit=3" {
+			t.Errorf("effective query size must drive body offset: query=%s body=%s", r.URL.RawQuery, raw)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, `{"data":[{"id":"four"}]}`)
+	}))
+	defer server.Close()
+	b := newTestBundle(t, server, StreamSpec{})
+	b.Operations = []OperationSpec{op}
+	result, err := OperationDirectRead(t.Context(), b, connectors.OperationDirectReadRequest{Operation: op.ID, Page: 2, Query: map[string]string{"limit": "3"}}, nil)
+	if err != nil || sends.Load() != 1 || result.Page.Size != 3 || !result.Page.Complete {
+		t.Fatalf("err=%v sends=%d page=%+v", err, sends.Load(), result.Page)
+	}
+}
+
+func TestBodyPagingSavedQuerySize233(t *testing.T) {
+	rawSchema := json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"position":{"type":"integer","minimum":0,"maximum":100}},"required":["position"]}`)
+	spec := &PaginationSpec{Type: "offset_limit", OffsetParam: "offset", LimitParam: "limit", BodyOffsetField: "position", PageSize: 2}
+	var sends atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		n := sends.Add(1)
+		raw, _ := io.ReadAll(r.Body)
+		want := `{"position":0}`
+		response := `{"data":[{"id":"10100"},{"id":"10200"},{"id":"10300"}]}`
+		if n == 2 {
+			want = `{"position":3}`
+			response = `{"data":[{"id":"10400"},{"id":"10500"}]}`
+		}
+		if n > 2 || string(raw) != want || r.URL.RawQuery != "limit=3" {
+			t.Errorf("effective saved size query=%s body=%s sends=%d", r.URL.RawQuery, raw, n)
+			w.WriteHeader(400)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, response)
+	}))
+	defer server.Close()
+	b := newTestBundle(t, server, StreamSpec{Method: "POST", BodyType: "json", Pagination: spec})
+	b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
+	b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: rawSchema}
+	b.Streams[0].preparedReadBody = map[string]any{}
+	b.Streams[0].preparedReadBodyPresent = true
+	rows, err := readAll(t, t.Context(), b, connectors.ReadRequest{Stream: "widgets", Query: map[string]string{"limit": "3"}}, nil)
+	var ids []string
+	for _, row := range rows {
+		ids = append(ids, fmt.Sprint(row["id"]))
+	}
+	if err != nil || sends.Load() != 2 || !reflect.DeepEqual(ids, []string{"10100", "10200", "10300", "10400", "10500"}) {
+		t.Fatalf("err=%v sends=%d ids=%v", err, sends.Load(), ids)
+	}
+}

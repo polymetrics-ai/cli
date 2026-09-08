@@ -7,3 +7,5 @@ Seven scoped lint findings are4 original229 baseline and3 parent234 inert fields
 Actual saved HTTP tests consume the selected compiled-input-plan/prepared-body interface through explicit synthetic plans. Parent234 must populate those through generated request_inputs Load/preflight, call body placement admission against properties.body and prepare before this slice's runtime guard, then validate full final request envelope and prove App/vault/warehouse boundary. No generated saved loader or App acceptance is claimed by bridge tests.
 
 Scope: typed top-level object fields for cursor/page_number/offset_limit; no nested placement/variant flattening, body URL/Link navigation, source terminal/missing-next/Link dialect, hook/form/mutation/timeout/retry change. Source input schemas, scalar codecs, generated files, App and Atlas/source/help integration remain parent-owned.
+
+Final helper correction: mixed query-size/body-offset wire controls caught and fixed before handoff. Latest normal412/412 and body race82/82, vet pass, same7 baseline lint findings. CLI compatibility14/14 also passed. Prior successful receipts retained with their own exact source, not relabeled.
