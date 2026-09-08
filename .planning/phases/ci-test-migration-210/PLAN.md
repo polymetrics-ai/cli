@@ -2,7 +2,7 @@
 
 ## Task Delivery Header
 - Issue: Parent cli-batch1-pi-takeover, Firstmate210 delegated test/evidence scope.
-- Base branch: fm/cli-batch1-pi-takeover-r1 (parent integration ownership; this child creates no PR).
+- Base branch: Not applicable: no child PR; parent supplied exact base commit6f9366b4 and owns eventual target.
 - Merges into: Parent-owned integration only; no child merge or push authorized.
 - Delivery: Local test-only commits plus source-bound handoff for independent review.
 - Working branch: fm/cli-batch1-ci-tests210, initial6f9366b4904ad7c54914ca14cbbab21e0b5e35f6.

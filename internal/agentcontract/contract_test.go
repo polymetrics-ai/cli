@@ -331,7 +331,7 @@ func TestRenderIsStableAndConnectorInheritsBase(t *testing.T) {
 	if gotSHA256 != expectedSHA256 {
 		t.Fatalf("base rendering hash = %s, update expected hash after intentional canonical change", gotSHA256)
 	}
-	const expectedConnectorSHA256 = "b7cc34c401b4de6c3eaf61fd0c08dd10b137a1bacb60ba1246c65dbc7018301c"
+	const expectedConnectorSHA256 = "c8a06a688db0b8f55f313e471791938063ba55ec08631a10904d1762fd0c2f6d"
 	gotConnectorSHA256 := fmt.Sprintf("%x", sha256.Sum256(connector))
 	if gotConnectorSHA256 != expectedConnectorSHA256 {
 		t.Fatalf("connector rendering hash = %s, update expected hash after intentional canonical change", gotConnectorSHA256)

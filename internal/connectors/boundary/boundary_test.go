@@ -443,7 +443,15 @@ func TestScanFailsClosedWhenConnectorMetadataCannotLoad(t *testing.T) {
 			for path, content := range tt.files {
 				writeFixtureFile(t, root, path, content)
 			}
-			_, err := Scan(root, Options{Now: fixedNow})
+			report, err := Scan(root, Options{Now: fixedNow})
+			if tt.name == "invalid cli surface" {
+				// Citation artifacts no longer supply scanner lexemes. Execution
+				// CLI validation remains covered by the actual engine loader.
+				if err != nil || report.ConnectorsLoaded != 1 || report.Outcome != OutcomeClean {
+					t.Fatalf("metadata-only scan consulted CLI citation artifact: report=%+v err=%v", report, err)
+				}
+				return
+			}
 			var cfgErr *ConfigError
 			if !errors.As(err, &cfgErr) {
 				t.Fatalf("Scan error = %v, want ConfigError", err)

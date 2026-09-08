@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/manifestindex"
 	"polymetrics.ai/internal/synccontract"
 	"polymetrics.ai/internal/syncplan"
@@ -169,12 +170,32 @@ func TestVNextSemanticAdmissionStagesGitHubProductionHookEntry(t *testing.T) {
 	if err != nil {
 		t.Fatalf("admit GitHub source lock: %v", err)
 	}
-	if !reflect.DeepEqual(stage.Manifest, expected) {
+	if !reflect.DeepEqual(vNextExecutionEntry210(stage.Manifest), vNextExecutionEntry210(expected)) {
 		t.Fatalf("staged GitHub manifest = %#v, want exact production entry %#v", stage.Manifest, expected)
 	}
 	indexed, found := stage.Index.Lookup("github")
-	if !found || !reflect.DeepEqual(indexed, expected) {
+	if !found || !reflect.DeepEqual(vNextExecutionEntry210(indexed), vNextExecutionEntry210(expected)) {
 		t.Fatalf("staged GitHub manifest index = %#v, found=%t, want exact production entry %#v", indexed, found, expected)
+	}
+	// Diagnostic-only metadata is neither execution identity nor authoring input.
+	for _, diagnostic := range []connectors.SourceVisibilityArtifact{
+		{SchemaVersion: 1, Connector: "unrelated", Coverage: "not_in_cohort"},
+		{SchemaVersion: 99, Connector: "github", Payload: "malformed diagnostic payload"},
+	} {
+		input := expected
+		input.SourceVisibility = diagnostic
+		independent, err := admitVNextCanonicalDescriptor(canonical, vNextSemanticAdmissionInput{Manifest: &input})
+		if err != nil {
+			t.Fatalf("unrelated source diagnostic changed execution admission: %v", err)
+		}
+		indexed, found := independent.Index.Lookup("github")
+		if !found || !reflect.DeepEqual(vNextExecutionEntry210(independent.Manifest), vNextExecutionEntry210(expected)) ||
+			!reflect.DeepEqual(vNextExecutionEntry210(indexed), vNextExecutionEntry210(expected)) {
+			t.Fatal("source diagnostic changed complete staged/indexed execution identity")
+		}
+		if independent.Manifest.SourceVisibility != (connectors.SourceVisibilityArtifact{}) || input.SourceVisibility != diagnostic {
+			t.Fatal("execution admission copied or mutated independent source diagnostic metadata")
+		}
 	}
 	if stage.Manifest.Extension != "hook/github.v1" {
 		t.Fatalf("staged GitHub extension = %q, want hook/github.v1", stage.Manifest.Extension)
@@ -445,4 +466,12 @@ func operationDirectReadLockForSemanticAdmissionTest() vNextSourceLock {
 	}}
 	lock.CLI = json.RawMessage(`{"usage":"pm acme <command>","tagline":"Acme commands"}`)
 	return lock
+}
+
+// Preserve every Entry field (including future additions), excluding only the
+// explicitly independent source diagnostic payload. Never use this to construct
+// production admission input or to skip selected source-inspection validation.
+func vNextExecutionEntry210(entry manifestindex.Entry) manifestindex.Entry {
+	entry.SourceVisibility = connectors.SourceVisibilityArtifact{}
+	return entry
 }

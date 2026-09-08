@@ -43,9 +43,13 @@ func TestVNextPublicationTreeSnapshotRefusesReplacementChild(t *testing.T) {
 	}
 
 	type witness struct {
-		AInode uint64 `json:"a_inode"`
-		BInode uint64 `json:"b_inode"`
-		Mode   string `json:"mode"`
+		AInode  uint64 `json:"a_inode"`
+		BInode  uint64 `json:"b_inode"`
+		Mode    string `json:"mode"`
+		ADevice uint64 `json:"a_device"`
+		BDevice uint64 `json:"b_device"`
+		AMode   uint32 `json:"a_mode"`
+		BMode   uint32 `json:"b_mode"`
 	}
 	fired := false
 	vNextPublicationSnapshotAfterObservationForTest = func(directory *vNextPublicationDirectory, name string, originalA vNextPublicationIdentity) {
@@ -55,7 +59,7 @@ func TestVNextPublicationTreeSnapshotRefusesReplacementChild(t *testing.T) {
 		fired = true
 		switch mode {
 		case "fifo":
-			if err := os.Remove(target); err != nil {
+			if err := os.Rename(target, target+"-A"); err != nil {
 				t.Fatal(err)
 			}
 			if err := unix.Mkfifo(target, 0o600); err != nil {
@@ -66,7 +70,7 @@ func TestVNextPublicationTreeSnapshotRefusesReplacementChild(t *testing.T) {
 			if err := os.WriteFile(external, secret, 0o600); err != nil {
 				t.Fatal(err)
 			}
-			if err := os.Remove(target); err != nil {
+			if err := os.Rename(target, target+"-A"); err != nil {
 				t.Fatal(err)
 			}
 			if err := os.Symlink(external, target); err != nil {
@@ -83,6 +87,16 @@ func TestVNextPublicationTreeSnapshotRefusesReplacementChild(t *testing.T) {
 				t.Fatal(err)
 			}
 		}
+		retainedA, err := directory.identityAt(name+"-A", "retained original A")
+		if err != nil || retainedA != originalA {
+			t.Fatal("fixture did not retain the exact observed original A")
+		}
+		if mode != "directory" {
+			retainedBytes, err := os.ReadFile(target + "-A")
+			if err != nil || !bytes.Equal(retainedBytes, []byte("original-A")) {
+				t.Fatal("retained original A bytes changed")
+			}
+		}
 		replacementB, err := directory.identityAt(name, "replacement B")
 		if err != nil {
 			t.Fatal(err)
@@ -94,7 +108,7 @@ func TestVNextPublicationTreeSnapshotRefusesReplacementChild(t *testing.T) {
 		if witnessPath == "" {
 			t.Fatal("missing safe snapshot witness path")
 		}
-		payload, err := json.Marshal(witness{AInode: originalA.inode, BInode: replacementB.inode, Mode: mode})
+		payload, err := json.Marshal(witness{AInode: originalA.inode, BInode: replacementB.inode, Mode: mode, ADevice: originalA.device, BDevice: replacementB.device, AMode: originalA.mode, BMode: replacementB.mode})
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -128,11 +142,15 @@ func TestVNextPublicationTreeSnapshotRefusesAtoBReplacement(t *testing.T) {
 				payload, err := os.ReadFile(witnessPath)
 				if err == nil {
 					var actual struct {
-						AInode uint64 `json:"a_inode"`
-						BInode uint64 `json:"b_inode"`
-						Mode   string `json:"mode"`
+						AInode  uint64 `json:"a_inode"`
+						BInode  uint64 `json:"b_inode"`
+						Mode    string `json:"mode"`
+						ADevice uint64 `json:"a_device"`
+						BDevice uint64 `json:"b_device"`
+						AMode   uint32 `json:"a_mode"`
+						BMode   uint32 `json:"b_mode"`
 					}
-					if err := json.Unmarshal(payload, &actual); err != nil || actual.Mode != mode || actual.AInode == actual.BInode {
+					if err := json.Unmarshal(payload, &actual); err != nil || actual.Mode != mode || !vNextDistinctLiveReplacement210(actual.ADevice, actual.AInode, actual.AMode, actual.BDevice, actual.BInode, actual.BMode, mode) {
 						t.Fatalf("invalid safe snapshot boundary witness %q: %#v %v", payload, actual, err)
 					}
 					break
@@ -194,4 +212,40 @@ func TestVNextPublicationTreeSnapshotRetainsNestedRegularBytes(t *testing.T) {
 		}
 	}
 	t.Fatal("snapshot omitted nested regular-file bytes")
+}
+
+func vNextDistinctLiveReplacement210(aDevice, aInode uint64, aMode uint32, bDevice, bInode uint64, bMode uint32, mode string) bool {
+	if aInode == 0 || bInode == 0 || (aDevice == bDevice && aInode == bInode) {
+		return false
+	}
+	switch mode {
+	case "fifo":
+		return aMode == unix.S_IFREG && bMode == unix.S_IFIFO
+	case "symlink":
+		return aMode == unix.S_IFREG && bMode == unix.S_IFLNK
+	case "directory":
+		return aMode == unix.S_IFDIR && bMode == unix.S_IFDIR
+	default:
+		return false
+	}
+}
+
+func TestVNextLiveReplacementWitnessRejectsWrongIdentity210(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		a, b   uint64
+		am, bm uint32
+		want   bool
+	}{
+		{"distinct live files", 11, 12, unix.S_IFREG, unix.S_IFIFO, true},
+		{"reused inode", 11, 11, unix.S_IFREG, unix.S_IFIFO, false},
+		{"wrong original type", 11, 12, unix.S_IFDIR, unix.S_IFIFO, false},
+		{"wrong replacement type", 11, 12, unix.S_IFREG, unix.S_IFREG, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := vNextDistinctLiveReplacement210(1, tc.a, tc.am, 1, tc.b, tc.bm, "fifo"); got != tc.want {
+				t.Fatal("witness accepted incorrect identity/type state")
+			}
+		})
+	}
 }
