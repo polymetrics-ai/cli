@@ -455,16 +455,8 @@ func ValidateSourceVisibility(v SourceVisibility) error {
 					default:
 						return bad("artifact reference kind invalid")
 					}
-					if ref.SchemaRole != "" && ref.SchemaRole != "request" && ref.SchemaRole != "response" && ref.SchemaRole != "record" {
-						return bad("artifact schema role invalid")
-					}
-					if ref.SourceSchema != nil && !cite(*ref.SourceSchema) {
-						return bad("artifact source schema citation invalid")
-					}
-					for _, mapping := range ref.FieldMappings {
-						if !cite(mapping.SourceCitation) || (mapping.TargetKind != "schema" && mapping.TargetKind != "config" && mapping.TargetKind != "parameter") || (mapping.TargetPointer != nil && !sourcePointer(*mapping.TargetPointer)) {
-							return bad("artifact field mapping invalid")
-						}
+					if err := sourceArtifactProjectionShape(v, ref); err != nil {
+						return bad(err.Error())
 					}
 					if ref.Role != group.role || ref.Connector != v.Connector || ref.Lane != c.Lane || !sourceText(ref.ID) || !sourcePath(ref.Artifact) || !sourcePointer(ref.Pointer) || !sourceHashValid(ref.ArtifactSHA256) || !sourceText(ref.CanonicalID) || !sourcePointer(ref.CanonicalPointer) || !sourceText(ref.Generation) {
 						return bad("artifact reference invalid")
@@ -611,4 +603,86 @@ func (r *Registry) PreflightSource(ctx context.Context, selection SourceCellSele
 		return SourceCellPreflight{}, err
 	}
 	return preflightSourceCell(view)
+}
+
+// sourceArtifactProjectionShape checks the closed projected representation only.
+// Keep this aligned with connectorgen sourceLaneTargetRefShape; citations and
+// coordinates are already projected data, never a reason to load authoring files.
+func sourceArtifactProjectionShape(v SourceVisibility, ref SourceArtifactRef) error {
+	validCitation := func(i int) bool {
+		if i < 0 || i >= len(v.Citations) {
+			return false
+		}
+		citation := v.Citations[i]
+		return citation.Section == "" && citation.Part == "" && strings.Count(citation.Pointer, "/") <= 256
+	}
+	switch ref.SchemaRole {
+	case "", "request", "response", "record":
+	default:
+		return errors.New("artifact schema role invalid")
+	}
+	if ref.Kind == "sync_transport" && (ref.SchemaRole != "" || ref.SourceSchema != nil || len(ref.FieldMappings) > 0) {
+		return fmt.Errorf("transport descriptor has schema projection")
+	}
+	if ref.SourceSchema != nil && (!validCitation(*ref.SourceSchema) || ref.SchemaRole == "") {
+		return fmt.Errorf("invalid source schema citation or role")
+	}
+	type coordinate struct{ owner, pointer string }
+	sources := make([]coordinate, 0, len(ref.FieldMappings))
+	targets := make([]coordinate, 0, len(ref.FieldMappings))
+	for _, mapping := range ref.FieldMappings {
+		if !validCitation(mapping.SourceCitation) || mapping.TargetPointer == nil || !sourcePointer(*mapping.TargetPointer) || strings.Count(*mapping.TargetPointer, "/") > 256 {
+			return fmt.Errorf("invalid field citation or target pointer")
+		}
+		pointer := *mapping.TargetPointer
+		switch mapping.TargetKind {
+		case "schema":
+			if ref.SchemaRole == "" {
+				return fmt.Errorf("schema field has no role")
+			}
+		case "config":
+			if pointer == "" {
+				return fmt.Errorf("config root is not a field binding")
+			}
+		case "parameter":
+			parts := strings.Split(pointer, "/")
+			if len(parts) != 3 || (parts[1] != "parameters" && parts[1] != "pagination_parameters") {
+				return fmt.Errorf("invalid parameter coordinate")
+			}
+			index := parts[2]
+			if index == "" || (len(index) > 1 && index[0] == '0') {
+				return fmt.Errorf("invalid parameter index")
+			}
+			for _, digit := range index {
+				if digit < '0' || digit > '9' {
+					return fmt.Errorf("invalid parameter index")
+				}
+			}
+		default:
+			return fmt.Errorf("unknown field target kind")
+		}
+		sources = append(sources, coordinate{v.Citations[mapping.SourceCitation].DocumentID, v.Citations[mapping.SourceCitation].Pointer})
+		targets = append(targets, coordinate{mapping.TargetKind, pointer})
+	}
+	for _, coordinates := range [][]coordinate{sources, targets} {
+		sort.Slice(coordinates, func(i, j int) bool {
+			if coordinates[i].owner != coordinates[j].owner {
+				return coordinates[i].owner < coordinates[j].owner
+			}
+			return coordinates[i].pointer < coordinates[j].pointer
+		})
+		seen := map[coordinate]bool{}
+		for _, current := range coordinates {
+			if seen[current] {
+				return fmt.Errorf("duplicate conflicting or overlapping field mappings")
+			}
+			for i := range current.pointer {
+				if current.pointer[i] == '/' && seen[coordinate{current.owner, current.pointer[:i]}] {
+					return fmt.Errorf("duplicate conflicting or overlapping field mappings")
+				}
+			}
+			seen[current] = true
+		}
+	}
+	return nil
 }
