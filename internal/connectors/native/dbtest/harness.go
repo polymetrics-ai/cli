@@ -90,6 +90,8 @@ type Config struct {
 	// Image is a pinned image reference. A ":latest" or untagged reference is
 	// refused so a surprise upstream bump cannot change a run's result.
 	Image string
+	// ImagePolicy selects "pull" (also the default) or "cache-only".
+	ImagePolicy string
 	// ContainerPort is the port the engine listens on inside the container.
 	// The host port is always dynamically allocated, never this one.
 	ContainerPort int
@@ -140,6 +142,8 @@ const maxExpectedImageBytes = uint64(1) << 40
 type Report struct {
 	DiskFreeBefore uint64
 	DiskFreeAfter  uint64
+	ImagePolicy    string
+	ImageID        string
 }
 
 type targetIdentity struct {
@@ -193,6 +197,19 @@ func New(config Config) (*Harness, error) {
 	if !pinnedImage(config.Image) {
 		return nil, errors.New("database test harness requires a safe pinned image tag")
 	}
+	if config.ImagePolicy == "" {
+		config.ImagePolicy = "pull"
+	}
+	if config.ImagePolicy != "pull" && config.ImagePolicy != "cache-only" {
+		return nil, errors.New("database test harness image policy must be pull or cache-only")
+	}
+	if config.ImagePolicy == "cache-only" {
+		for _, arg := range config.ContainerArgs {
+			if arg == "--pull" || strings.HasPrefix(arg, "--pull=") {
+				return nil, errors.New("cache-only database test image policy cannot be overridden by container arguments")
+			}
+		}
+	}
 	if config.ContainerPort < 1 || config.ContainerPort > 65535 {
 		return nil, errors.New("database test harness requires a valid container port")
 	}
@@ -238,7 +255,7 @@ func New(config Config) (*Harness, error) {
 	}, nil
 }
 
-// Start pulls the configured source image, tags it under one generated image
+// Start resolves the configured source image according to ImagePolicy, tags it under one generated image
 // reference, starts one loopback-published container with an anonymous data
 // volume, and returns its dynamically assigned, non-default port. A pull
 // that would have to download the image is refused when the target image store
@@ -300,6 +317,7 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	}
 	h.mu.Lock()
 	h.report.DiskFreeBefore = free
+	h.report.ImagePolicy = h.config.ImagePolicy
 	h.mu.Unlock()
 
 	sourceAbsent, err := h.resourceAbsent(ctx, "image", "inspect", h.config.Image)
@@ -307,12 +325,17 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		return Endpoint{}, fmt.Errorf("inspect %s test source image: %w", h.config.Engine, err)
 	}
 	if sourceAbsent {
+		if h.config.ImagePolicy == "cache-only" {
+			return Endpoint{}, errors.New("cache-only database test image is absent from the selected runtime")
+		}
 		if err := h.assertPullHeadroom(free); err != nil {
 			return Endpoint{}, err
 		}
 	}
-	if _, err := h.runOnVerifiedTarget(ctx, "pull", h.config.Image); err != nil {
-		return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
+	if h.config.ImagePolicy == "pull" {
+		if _, err := h.runOnVerifiedTarget(ctx, "pull", h.config.Image); err != nil {
+			return Endpoint{}, fmt.Errorf("pull %s test image: %w", h.config.Engine, err)
+		}
 	}
 	sourceImageID, err := h.imageID(ctx, h.config.Image)
 	if err != nil {
@@ -323,6 +346,7 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 	}
 	h.mu.Lock()
 	h.runImageID = sourceImageID
+	h.report.ImageID = sourceImageID
 	h.mu.Unlock()
 	if _, err := h.runOnVerifiedTarget(ctx, "image", "tag", sourceImageID, h.runImage); err != nil {
 		return Endpoint{}, fmt.Errorf("tag %s test image: %w", h.config.Engine, err)
@@ -340,6 +364,9 @@ func (h *Harness) Start(ctx context.Context) (endpoint Endpoint, startErr error)
 		"--name", h.containerName,
 		"--volume", h.config.DataVolumePath,
 		"--publish", "127.0.0.1::" + strconv.Itoa(h.config.ContainerPort),
+	}
+	if h.config.ImagePolicy == "cache-only" {
+		args = append([]string{"run", "--pull=never"}, args[1:]...)
 	}
 	args = append(args, h.config.ContainerArgs...)
 	args = append(args, "--label", databaseContainerOwnerLabel+"="+h.containerOwner)
@@ -844,7 +871,7 @@ func safeContainerStorePath(raw string) (string, error) {
 	return raw, nil
 }
 
-// Report returns the aggregate disk measurement for this run.
+// Report returns the disk measurements and selected immutable image for this run.
 func (h *Harness) Report() Report {
 	h.mu.Lock()
 	defer h.mu.Unlock()

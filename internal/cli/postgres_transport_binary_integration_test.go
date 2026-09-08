@@ -147,6 +147,8 @@ func TestPMBinaryExecutesPostgresWarehousePostgres(t *testing.T) {
 	if err != nil {
 		t.Fatalf("start PostgreSQL transport harness: %v", err)
 	}
+	imageReport := harness.Report()
+	t.Logf("database test image policy=%s immutable_id=%s", imageReport.ImagePolicy, imageReport.ImageID)
 	admin := waitForPostgresTransport(t, ctx, endpoint, postgresTransportSourceDB, postgresTransportUser)
 	if _, err := admin.Exec(ctx, "CREATE DATABASE "+postgresTransportTargetDB); err != nil {
 		t.Fatalf("create isolated target database: %v", err)
@@ -2358,6 +2360,7 @@ func newPostgresTransportHarness(t *testing.T) *dbtest.Harness {
 	t.Helper()
 	harness, err := dbtest.New(dbtest.Config{
 		Engine: "postgres-transport", Image: postgresTransportImage,
+		ImagePolicy:   os.Getenv("POLYMETRICS_DATABASE_IMAGE_POLICY"),
 		ContainerPort: 5432, DataVolumePath: "/var/lib/postgresql/data",
 		ContainerRuntime:   dbtest.Runtime(strings.TrimSpace(os.Getenv("POLYMETRICS_CONTAINER_RUNTIME"))),
 		ContainerEndpoint:  strings.TrimSpace(os.Getenv("POLYMETRICS_CONTAINER_ENDPOINT")),

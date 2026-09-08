@@ -93,3 +93,19 @@ image bytes, and direct local endpoint plus engine and container arguments in on
 the test tagged `databaseintegration`, create a non-default loopback endpoint, seed data that
 exceeds one page, and defer `Close` immediately after `New`. Engines run sequentially unless a bounded
 `SetMaxConcurrentEngines` value is deliberately selected.
+
+### Reusing an explicitly selected cached image
+
+`Config.ImagePolicy` accepts `pull` (the default, including an empty value) or
+`cache-only`. Cache-only requires the configured pinned image in the explicitly
+selected local daemon. It performs no pull and starts the inspected immutable
+image ID with `--pull=never`; an absent/unreadable image or mismatched generated
+reference fails before database startup. It retains target identity, capacity,
+owned tagging and cleanup checks. Competing `--pull` container arguments are
+refused. `Harness.Report` includes the chosen policy and immutable image ID.
+
+The tagged CLI PostgreSQL transport harness reads
+`POLYMETRICS_DATABASE_IMAGE_POLICY=cache-only` for this opt-in. It still requires
+`POLYMETRICS_DATABASE_INTEGRATION=1`, an explicit runtime and local endpoint, and
+fresh `go test -count=1` execution. This reuses image bytes, not test results.
+Other harness callers can select the same policy through `Config`.
