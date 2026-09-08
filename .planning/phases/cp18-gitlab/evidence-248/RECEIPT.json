@@ -1,0 +1,314 @@
+{
+  "head": "06f41ff6405952f8e89ffaf12364aa0b77f4e9eb",
+  "tree": "ea961b6773fd82d8aa71d8c68dadd0e28476c879",
+  "command": [
+    "/Users/karthiksivadas/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.6.darwin-arm64/bin/go",
+    "test",
+    "-json",
+    "-count=1",
+    "-timeout",
+    "20m",
+    "./internal/cli",
+    "-run",
+    "^TestBatch1CP18GitLabLane240(ETLCollections|ManagedModeAdmission|ReceiptOracle)$"
+  ],
+  "go_version": "go version go1.26.6 darwin/arm64",
+  "go_sha256": "a1c83801d1756c3eca78366c6b585f2c21c20694fb1c7eb92c446a0580420412",
+  "go_env": {
+    "CC": "clang",
+    "CGO_ENABLED": "1",
+    "GOARCH": "arm64",
+    "GOCACHE": "/Users/karthiksivadas/Library/Caches/go-build",
+    "GOOS": "darwin",
+    "GOTOOLCHAIN": "local",
+    "GOVERSION": "go1.26.6"
+  },
+  "cache": "retained warm build cache; fresh -count=1 tests",
+  "before_uncommitted": [
+    {
+      "path": "internal/cli/batch1_cp18_gitlab_lane_proof_240_pending_test.go",
+      "sha256": "6c4b4ab647f86592b6a982347b20e481530e411dea2a200f48be81b36b838e7d",
+      "bytes": 7308
+    },
+    {
+      "path": "internal/cli/batch1_cp18_gitlab_lane_proof_240_test.go",
+      "sha256": "6575c142ba6a4a896b42c818f1d1214be3b6271defe36f2947de494ef94e63e6",
+      "bytes": 11486
+    },
+    {
+      "path": "internal/connectors/engine/batch1_cp18_gitlab_lane_proof_240_test.go",
+      "sha256": "4fdb83ec1abcb624e66320208647e2f3c285e052212ef1224c9a1188d0917180",
+      "bytes": 5844
+    },
+    {
+      "path": ".planning/phases/cp18-gitlab/PLAN.md",
+      "sha256": "0b2cfa1d0101edfb30e95b210570385a6d8a9cb942c657877487c755f9c12acb",
+      "bytes": 4113
+    }
+  ],
+  "exit_code": 0,
+  "seconds": 72.14614391326904,
+  "output_sha256": "5e819cd79085cebd02aa9a7ee89cf35ceb242ebbeeb88351ef0d2fbdfb0f6b47",
+  "output_bytes": 124060,
+  "test_events": [
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/source/full_overwrite",
+      "Action": "pass",
+      "Elapsed": 0.62
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/source/full_append",
+      "Action": "pass",
+      "Elapsed": 0.61
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/source/incremental_append",
+      "Action": "pass",
+      "Elapsed": 0.6
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/source/incremental_upsert",
+      "Action": "pass",
+      "Elapsed": 2.19
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/source/incremental_dedupe",
+      "Action": "pass",
+      "Elapsed": 2.17
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/source/incremental_dedupe_history",
+      "Action": "pass",
+      "Elapsed": 2.16
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/source/change_capture",
+      "Action": "pass",
+      "Elapsed": 2.16
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/destination/full_overwrite",
+      "Action": "pass",
+      "Elapsed": 2.14
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/destination/full_append",
+      "Action": "pass",
+      "Elapsed": 2.14
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/destination/incremental_append",
+      "Action": "pass",
+      "Elapsed": 2.14
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/destination/incremental_upsert",
+      "Action": "pass",
+      "Elapsed": 2.14
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/destination/incremental_dedupe",
+      "Action": "pass",
+      "Elapsed": 2.16
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/destination/incremental_dedupe_history",
+      "Action": "pass",
+      "Elapsed": 2.14
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission/destination/change_capture",
+      "Action": "pass",
+      "Elapsed": 2.17
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ManagedModeAdmission",
+      "Action": "pass",
+      "Elapsed": 25.56
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/projects/complete",
+      "Action": "pass",
+      "Elapsed": 2.06
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/projects/second_404",
+      "Action": "pass",
+      "Elapsed": 2.05
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/projects/repeated_link",
+      "Action": "pass",
+      "Elapsed": 2.19
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/projects/malformed_link",
+      "Action": "pass",
+      "Elapsed": 2.08
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/projects/foreign_link",
+      "Action": "pass",
+      "Elapsed": 2.12
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/groups/complete",
+      "Action": "pass",
+      "Elapsed": 2.06
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/groups/second_404",
+      "Action": "pass",
+      "Elapsed": 2.02
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/groups/repeated_link",
+      "Action": "pass",
+      "Elapsed": 2.05
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/groups/malformed_link",
+      "Action": "pass",
+      "Elapsed": 2.03
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/groups/foreign_link",
+      "Action": "pass",
+      "Elapsed": 2.03
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/users/complete",
+      "Action": "pass",
+      "Elapsed": 2.06
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/users/second_404",
+      "Action": "pass",
+      "Elapsed": 2.05
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/users/repeated_link",
+      "Action": "pass",
+      "Elapsed": 2.1
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/users/malformed_link",
+      "Action": "pass",
+      "Elapsed": 2.12
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/users/foreign_link",
+      "Action": "pass",
+      "Elapsed": 2.03
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/issues/complete",
+      "Action": "pass",
+      "Elapsed": 2.05
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/issues/second_404",
+      "Action": "pass",
+      "Elapsed": 2.04
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/issues/repeated_link",
+      "Action": "pass",
+      "Elapsed": 2.04
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/issues/malformed_link",
+      "Action": "pass",
+      "Elapsed": 2.04
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections/issues/foreign_link",
+      "Action": "pass",
+      "Elapsed": 2.04
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ETLCollections",
+      "Action": "pass",
+      "Elapsed": 41.28
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ReceiptOracle/healthy",
+      "Action": "pass",
+      "Elapsed": 0
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ReceiptOracle/wrong_status",
+      "Action": "pass",
+      "Elapsed": 0
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ReceiptOracle/wrong_plan",
+      "Action": "pass",
+      "Elapsed": 0
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ReceiptOracle/missing_response",
+      "Action": "pass",
+      "Elapsed": 0
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ReceiptOracle/failed_record",
+      "Action": "pass",
+      "Elapsed": 0
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ReceiptOracle/invented_body",
+      "Action": "pass",
+      "Elapsed": 0
+    },
+    {
+      "Package": "polymetrics.ai/internal/cli",
+      "Test": "TestBatch1CP18GitLabLane240ReceiptOracle",
+      "Action": "pass",
+      "Elapsed": 0
+    }
+  ],
+  "changed_after": []
+}

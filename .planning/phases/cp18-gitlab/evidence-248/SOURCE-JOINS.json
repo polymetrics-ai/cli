@@ -1,0 +1,118 @@
+[
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "getApiV4Groups"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/294",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "GET",
+    "path": "/api/v4/groups",
+    "lane": "etl",
+    "execution_target": {
+      "kind": "stream",
+      "id": "groups"
+    },
+    "role": "source to local warehouse",
+    "mode": "full_refresh_overwrite",
+    "selected_tests": [
+      "TestBatch1CP18GitLabLane240ETLCollections/groups/complete",
+      "TestBatch1CP18GitLabLane240ETLCollections/groups/second_404",
+      "TestBatch1CP18GitLabLane240ETLCollections/groups/repeated_link",
+      "TestBatch1CP18GitLabLane240ETLCollections/groups/malformed_link",
+      "TestBatch1CP18GitLabLane240ETLCollections/groups/foreign_link"
+    ],
+    "claim": "partial production-path coverage; not complete variants or C2 admission"
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "getApiV4Issues"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/438",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "GET",
+    "path": "/api/v4/issues",
+    "lane": "etl",
+    "execution_target": {
+      "kind": "stream",
+      "id": "issues"
+    },
+    "role": "source to local warehouse",
+    "mode": "full_refresh_overwrite",
+    "selected_tests": [
+      "TestBatch1CP18GitLabLane240ETLCollections/issues/complete",
+      "TestBatch1CP18GitLabLane240ETLCollections/issues/second_404",
+      "TestBatch1CP18GitLabLane240ETLCollections/issues/repeated_link",
+      "TestBatch1CP18GitLabLane240ETLCollections/issues/malformed_link",
+      "TestBatch1CP18GitLabLane240ETLCollections/issues/foreign_link"
+    ],
+    "claim": "partial production-path coverage; not complete variants or C2 admission"
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "getApiV4Projects"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/492",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "GET",
+    "path": "/api/v4/projects",
+    "lane": "etl",
+    "execution_target": {
+      "kind": "stream",
+      "id": "projects"
+    },
+    "role": "source to local warehouse",
+    "mode": "full_refresh_overwrite",
+    "selected_tests": [
+      "TestBatch1CP18GitLabLane240ETLCollections/projects/complete",
+      "TestBatch1CP18GitLabLane240ETLCollections/projects/second_404",
+      "TestBatch1CP18GitLabLane240ETLCollections/projects/repeated_link",
+      "TestBatch1CP18GitLabLane240ETLCollections/projects/malformed_link",
+      "TestBatch1CP18GitLabLane240ETLCollections/projects/foreign_link"
+    ],
+    "claim": "partial production-path coverage; not complete variants or C2 admission"
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "getApiV4Users"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/926",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "GET",
+    "path": "/api/v4/users",
+    "lane": "etl",
+    "execution_target": {
+      "kind": "stream",
+      "id": "users"
+    },
+    "role": "source to local warehouse",
+    "mode": "full_refresh_overwrite",
+    "selected_tests": [
+      "TestBatch1CP18GitLabLane240ETLCollections/users/complete",
+      "TestBatch1CP18GitLabLane240ETLCollections/users/second_404",
+      "TestBatch1CP18GitLabLane240ETLCollections/users/repeated_link",
+      "TestBatch1CP18GitLabLane240ETLCollections/users/malformed_link",
+      "TestBatch1CP18GitLabLane240ETLCollections/users/foreign_link"
+    ],
+    "claim": "partial production-path coverage; not complete variants or C2 admission"
+  }
+]
