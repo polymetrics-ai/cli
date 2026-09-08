@@ -254,3 +254,9 @@ Original CR-164-01 remains protected by its existing permanent representation-sh
 
 
 Final171 local validation completes the remaining local gates in the checkpoint table: full current App/CLI normal, full affected packages normal/race, final App39 normal/race, CLI77 race, lint/vet/build/Atlas/generated/docs/smoke all pass with exact scope recorded in VERIFICATION.md. The one later test-fixture registration check and its final witness are explicit. Each CR-170-01..07 disposition is owner-implemented/locally-verified and awaits fresh171 independent judgment; no self-acceptance. All historical finding files and failed receipts remain unchanged.
+
+## Complete independent corrected review171 — artifact-only return
+
+Reviewed code SHA baedc5254266d0cbcc55fda3e86a4d8e64f5b57f, tree8a8f56541683620751c6ef521c642bc46931771c, full base29b790d741255ed6642a0bd5071d7b6e6cfc3bb8. REVIEW-171.md is the verbatim independent report, SHA256473b8b812ba62053e7d34b4aec2d6357d9935e11c53e906441b70017f4ca71c8. Actual fresh gsd-code-reviewer Astra/xhigh native01a08066-d46e-7710-b95d-251dc1a5ac1f is terminal, all source unchanged.
+
+Complete final required set: CR-171-01 (low production diagnostic omission) and CR-171-02 (low help-oracle warning; same remaining CR-170-06/BD-CP15-169-03 invariant). Six other170 findings resolved; CR164 preserved. Both remain required CP16 carries under Firstmate173. Captain156 permits normal R1 integration with disclosed carryover; this record does not declare CP15 correctness accepted. Full source/probe/receipt/native seal lives in the assigned review171 journal.
