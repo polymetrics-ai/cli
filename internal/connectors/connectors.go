@@ -2950,7 +2950,7 @@ type registryFlight struct {
 type Registry struct {
 	mu                    sync.RWMutex
 	connectors            map[string]Connector
-	metadata              map[string]Metadata
+	metadata              map[string]LazyRegistryEntry
 	commandSummaries      map[string]CommandSummary
 	resolver              RegistryResolver
 	flights               map[string]*registryFlight
@@ -2960,7 +2960,7 @@ type Registry struct {
 func NewEmptyRegistry() *Registry {
 	return &Registry{
 		connectors:       make(map[string]Connector),
-		metadata:         make(map[string]Metadata),
+		metadata:         make(map[string]LazyRegistryEntry),
 		commandSummaries: make(map[string]CommandSummary),
 		flights:          make(map[string]*registryFlight),
 	}
@@ -2968,13 +2968,27 @@ func NewEmptyRegistry() *Registry {
 
 // NewLazyRegistry records a closed metadata inventory without constructing its
 // connector implementations. Resolve constructs only a named listed connector.
+type LazyRegistryEntry struct {
+	Metadata         Metadata
+	SourceVisibility SourceVisibilityArtifact
+}
+
 func NewLazyRegistry(metadata []Metadata, resolver RegistryResolver, commandSummaries ...CommandSummary) (*Registry, error) {
+	entries := make([]LazyRegistryEntry, len(metadata))
+	for i, meta := range metadata {
+		entries[i] = LazyRegistryEntry{Metadata: meta, SourceVisibility: SourceVisibilityArtifact{SchemaVersion: 1, Connector: meta.Name, Coverage: "not_provided"}}
+	}
+	return NewLazyRegistryWithEntries(entries, resolver, commandSummaries...)
+}
+
+func NewLazyRegistryWithEntries(entries []LazyRegistryEntry, resolver RegistryResolver, commandSummaries ...CommandSummary) (*Registry, error) {
 	if resolver == nil {
 		return nil, errors.New("lazy registry resolver is required")
 	}
 	registry := NewEmptyRegistry()
 	registry.resolver = resolver
-	for _, meta := range metadata {
+	for _, entry := range entries {
+		meta := entry.Metadata
 		name := strings.TrimSpace(meta.Name)
 		if name == "" || name != meta.Name || hasLegacyIconConnectorPrefix(name) {
 			return nil, fmt.Errorf("lazy registry metadata name %q is invalid", meta.Name)
@@ -2983,7 +2997,8 @@ func NewLazyRegistry(metadata []Metadata, resolver RegistryResolver, commandSumm
 			return nil, fmt.Errorf("duplicate lazy registry metadata %q", name)
 		}
 		meta.Name = name
-		registry.metadata[name] = MetadataWithIcon(meta)
+		entry.Metadata = MetadataWithIcon(meta)
+		registry.metadata[name] = entry
 	}
 	for _, summary := range commandSummaries {
 		if summary.Connector == "" || strings.TrimSpace(summary.Connector) != summary.Connector || strings.TrimSpace(summary.Usage) == "" {
@@ -3031,7 +3046,7 @@ func (r *Registry) Register(c Connector) error {
 		return fmt.Errorf("connector %q is already registered", name)
 	}
 	r.connectors[name] = c
-	r.metadata[name] = metadata
+	r.metadata[name] = LazyRegistryEntry{Metadata: metadata, SourceVisibility: SourceVisibilityArtifact{SchemaVersion: 1, Connector: name, Coverage: "not_provided"}}
 	r.iconCoverageValidated = false
 	return nil
 }
@@ -3117,7 +3132,7 @@ func (r *Registry) List() []Metadata {
 	r.mu.RLock()
 	out := make([]Metadata, 0, len(r.metadata))
 	for _, metadata := range r.metadata {
-		out = append(out, cloneRegistryMetadata(metadata))
+		out = append(out, cloneRegistryMetadata(metadata.Metadata))
 	}
 	r.mu.RUnlock()
 	sort.Slice(out, func(i, j int) bool { return out[i].Name < out[j].Name })

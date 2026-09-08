@@ -121,13 +121,13 @@ func (c *Construction) BuildRegistry() (*connectors.Registry, error) {
 	if err := c.validateEntries(entries); err != nil {
 		return nil, err
 	}
-	metadata := make([]connectors.Metadata, 0, len(entries))
+	metadata := make([]connectors.LazyRegistryEntry, 0, len(entries))
 	summaries := make([]connectors.CommandSummary, 0, len(entries))
 	for _, entry := range entries {
 		if entry.Metadata.Name != entry.Connector {
 			return nil, fmt.Errorf("manifest entry %q has incomplete metadata", entry.Connector)
 		}
-		metadata = append(metadata, entry.Metadata)
+		metadata = append(metadata, connectors.LazyRegistryEntry{Metadata: entry.Metadata, SourceVisibility: entry.SourceVisibility})
 		if entry.CommandUsage != "" {
 			summaries = append(summaries, connectors.CommandSummary{
 				Connector: entry.Connector,
@@ -136,7 +136,7 @@ func (c *Construction) BuildRegistry() (*connectors.Registry, error) {
 			})
 		}
 	}
-	registry, err := connectors.NewLazyRegistry(metadata, c.construct, summaries...)
+	registry, err := connectors.NewLazyRegistryWithEntries(metadata, c.construct, summaries...)
 	if err != nil {
 		return nil, fmt.Errorf("create lazy connector registry: %w", err)
 	}

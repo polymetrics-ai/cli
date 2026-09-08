@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/connsdk"
 	"polymetrics.ai/internal/credential"
@@ -78,6 +79,22 @@ func classifyError(err error) *cliError {
 	var ce *cliError
 	if errors.As(err, &ce) {
 		return ce
+	}
+	var sourceSelection *connectors.SourceSelectionError
+	if errors.As(err, &sourceSelection) {
+		category := categoryInternal
+		if sourceSelection.Kind == "incompatible" {
+			category = categoryValidation
+		}
+		return &cliError{category: category, code: sourceSelection.Code, message: sourceSelection.Error(), err: err}
+	}
+	var sourceInput *connectors.SourceSelectionInputError
+	if errors.As(err, &sourceInput) {
+		return &cliError{category: categoryUsage, code: sourceInput.Code, message: sourceInput.Error(), err: err}
+	}
+	var sourceData *connectors.SourceVisibilityDataError
+	if errors.As(err, &sourceData) {
+		return &cliError{category: categoryInternal, code: "source_visibility_invalid", message: sourceData.Error(), err: err}
 	}
 	var missingRequiredFlag *commandrunner.MissingRequiredFlagError
 	if errors.As(err, &missingRequiredFlag) {
@@ -165,11 +182,12 @@ func writeError(stdout, stderr io.Writer, err error, jsonOut bool) int {
 	public := publicErrorEnvelope(ce)
 	message, _ := public["message"].(string)
 	if jsonOut {
-		_ = writeJSON(stdout, envelope{
-			"api_version": apiVersion,
-			"kind":        "Error",
-			"error":       public,
-		})
+		response := envelope{"api_version": apiVersion, "kind": "Error", "error": public}
+		if selection, ok := public["source_selection"]; ok {
+			response["source_selection"] = selection
+			delete(public, "source_selection")
+		}
+		_ = writeJSON(stdout, response)
 	}
 	_, _ = fmt.Fprintf(stderr, "error: %s\n", message)
 	return exitCodeFor(ce)
@@ -180,9 +198,14 @@ func publicErrorEnvelope(err error) envelope {
 	if ce == nil {
 		return nil
 	}
-	return envelope{
+	result := envelope{
 		"category": string(ce.category),
 		"code":     ce.code,
 		"message":  safety.SanitizeTerminal(safety.RedactErrorText(ce.Error())),
 	}
+	var source *connectors.SourceSelectionError
+	if errors.As(err, &source) {
+		result["source_selection"] = source
+	}
+	return result
 }

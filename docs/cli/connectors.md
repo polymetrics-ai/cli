@@ -6,6 +6,8 @@ SYNOPSIS
   pm connectors list [--all] [--json]
   pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
+  pm connectors inspect <name> --sources [--json]
+  pm connectors inspect <name> --inventory <inventory> --source-id <id> --lane <lane> [--preflight] [--json]
   pm connectors help <name>
 
 DESCRIPTION
@@ -22,6 +24,44 @@ DESCRIPTION
   unsupported lanes. Run pm connectors inspect <name> to see write=true/false,
   ETL STREAMS, REVERSE ETL ACTIONS, and sync transport without reading
   credentials.
+
+  RETAINED SOURCE INSPECTION
+  --sources lists the retained cohort's complete source operations and all seven
+  lanes, including writes, removals and source-excluded lanes. Each observation
+  includes its full connector/inventory/source identity, facts and citations.
+  Non-cohort connectors explicitly report not_in_cohort; this is not a claim
+  about the provider's complete API. The catalog never executes an operation.
+
+  Select exactly one cell with --inventory, --source-id and --lane. Source IDs
+  are opaque: quote them when needed and use the complete inventory and ID from
+  discovery. Lane is direct_read, direct_write, binary_download, binary_upload,
+  etl, reverse_etl or sync_transport. No source ID is treated as a command path.
+  Without --preflight this is informational inspection (exit 0). --preflight
+  attempts source/lane selection and reports the current typed disposition:
+    source_mapping_unproven (exit 1): the source-to-capability association is
+      unresolved; an existing ordinary command may still be supported.
+    missing_foundation (exit 1): a precisely scoped, source-backed demand under
+      its named owner remains unresolved. This does not approve a receiver.
+    source_lane_not_applicable (exit 3): the retained source excludes this lane;
+      catalog state remains not_applicable.
+  A future binding_observed result means an admitted association was observed,
+  with execution_checked=false. It is never an execution certificate.
+
+  Source inspection uses compiled safe metadata before project config, vault,
+  state, approval/stdin, execution construction or provider access. --root is
+  accepted without opening that root; global flags/environment still select
+  root/JSON bootstrap options. Malformed selected metadata remains a real error.
+  Ordinary commands continue to use their execution bundles independently of
+  source visibility, proof status or missing source associations.
+
+  --sources cannot combine with tuple flags or --preflight. Tuple flags require
+  explicit values exactly once. --sources and --preflight are presence flags.
+  Unknown, incomplete, duplicate or conflicting selectors are usage errors
+  (exit 2). Source flags belong only to connectors inspect. Help exits 0 without
+  selecting a cell. In --json mode a refusal writes one Error envelope with
+  source_selection on stdout and a sanitized error line on stderr. Text refusals
+  write no successful result to stdout. Citations establish operation identity;
+  absent lane evidence is explicitly unresolved, never invented.
 
   JSON inspection also projects the closed sync_transport source and
   destination eligibility. A structurally valid destination that declares

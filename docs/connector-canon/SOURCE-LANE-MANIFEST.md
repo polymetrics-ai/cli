@@ -85,7 +85,11 @@ authority is authoring consistency. With zero selected reuse requirements, the
 last result is true without proving a reuse claim; the selected and unresolved
 counts remain explicit. Unresolved requirements and unassessed cells do not
 become executable, and these results do not accept a checkpoint or authorize a
-receiver. Runtime continues to read only admitted execution JSON.
+receiver. Runtime execution continues to read only admitted execution JSON. The build-time
+`connectorgen gen` path separately compiles bounded source visibility metadata for
+`pm connectors inspect --sources` and exact source/lane inspection. This safe
+diagnostic projection does not load the source report, Atlas or proof files at
+runtime and cannot gate an ordinary valid command.
 
 The wire contracts are the [assessment schema](foundations/assessments.schema.json),
 [proof schema](foundations/proofs.schema.json) and

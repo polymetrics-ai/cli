@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 47,
+  "catalog_revision": 48,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -57,7 +57,9 @@
           "cmd/connectorgen/source_lane_proof.go",
           "cmd/connectorgen/source_lane_manifest.go",
           "cmd/connectorgen/source_lane_cli.go",
-          "cmd/connectorgen/source_lane_collection.go"
+          "cmd/connectorgen/source_lane_collection.go",
+          "cmd/connectorgen/source_visibility.go",
+          "cmd/connectorgen/source_visibility_capabilities.go"
         ],
         "symbols": [
           {
@@ -283,6 +285,18 @@
           {
             "file": "cmd/connectorgen/source_lane_bindings.go",
             "name": "sourceLaneGraphQLVariablesContract"
+          },
+          {
+            "file": "cmd/connectorgen/source_visibility.go",
+            "name": "buildSourceVisibility"
+          },
+          {
+            "file": "cmd/connectorgen/source_visibility.go",
+            "name": "projectSourceVisibility"
+          },
+          {
+            "file": "cmd/connectorgen/source_visibility_capabilities.go",
+            "name": "generateSourceCapabilities"
           }
         ]
       },
@@ -380,9 +394,10 @@
           "connectorgen lock-render <connector>",
           "connectorgen lock-render <connector> --check",
           "connectorgen source-lanes",
-          "connectorgen source-lanes --check"
+          "connectorgen source-lanes --check",
+          "connectorgen gen"
         ],
-        "notes": "Schema-4 source.lock.json remains the execution-authoring input; rendered execution JSON remains the sole runtime input. The separate authoring-only source-lanes report reads independently pinned retained provider evidence, annotations and scoped proof records. Its read-only check neither admits execution nor publishes a generation. Authoring publication selects one closed generation through CURRENT and does not materialize the checked-in corpus or add a runtime CURRENT reader."
+        "notes": "Schema-4 source.lock.json remains the execution-authoring input; rendered execution JSON remains the sole runtime execution input. The separate authoring-only source-lanes report reads independently pinned retained provider evidence, annotations and scoped proof records. Its read-only check neither admits execution nor publishes a generation. Authoring publication selects one closed generation through CURRENT and does not materialize the checked-in corpus or add a runtime CURRENT reader. The same generator separately compiles bounded retained-source diagnostic metadata into the existing manifest inventory; it does not add execution fields or runtime authoring reads."
       },
       "constraints": [
         "Unknown root and execution fields fail strict decoding.",
@@ -402,7 +417,8 @@
         "Retained source membership comes from exact pinned cohort keys; missing inputs retain anchored rows and seven unresolved cells, with expected and observed totals separate. Report consistency and schema validity do not establish executable capability.",
         "Source-lanes generation buffers a complete report to stdout; check compares a confined candidate without writing. Its report, inventory, annotations and behavioral-proof records are authoring-only and never runtime inputs.",
         "The source-lanes report grants confirmed receiver-demand attribution only through an annotation-triggered exact join to its source-owned demand catalog, retained operation/citation identities, the consumed Atlas owner and the duplicate-free existing decision-owner set. Pending receiver and exposure decisions remain pending; this grants no executable capability.",
-        "Source-lane collection cardinality is independent from binary shape; ambiguous envelopes require exact successful-response interpretations with separate instance record pointers and literal source/support/array/item citations. Unknown sibling scopes retain deficits, and an independent retained-source/original-annotation check prevents generated agreement from supplying interpretation authority."
+        "Source-lane collection cardinality is independent from binary shape; ambiguous envelopes require exact successful-response interpretations with separate instance record pointers and literal source/support/array/item citations. Unknown sibling scopes retain deficits, and an independent retained-source/original-annotation check prevents generated agreement from supplying interpretation authority.",
+        "Source visibility preserves every independently pinned source key and seven lanes, exact retained citations and scoped uncertainty. Selected diagnostic metadata is distinct from execution identity and cannot gate ordinary valid commands. Invalid source inputs are refused before generated output writes; this does not claim transactional publication across generator output files."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -1127,6 +1143,21 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_lane_collection137_test.go",
           "name": "TestSourceLane137CollectionSuccessMedia"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_visibility_test.go",
+          "name": "TestSourceVisibilityPublicGeneration162"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_visibility_test.go",
+          "name": "TestSourceVisibilityGenerationPreservesOutputs162"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_visibility_test.go",
+          "name": "TestSourceVisibilityProjectionOracles162"
         }
       ],
       "publication_guarantee_proofs": [
@@ -1625,7 +1656,8 @@
           "internal/connectors/engine/direct_write.go",
           "internal/connectors/engine/structured_rest_body.go",
           "internal/connectors/engine/write.go",
-          "internal/connectors/engine/write_prepare.go"
+          "internal/connectors/engine/write_prepare.go",
+          "internal/connectors/source_visibility.go"
         ],
         "symbols": [
           {
@@ -1703,6 +1735,14 @@
           {
             "file": "internal/connectors/engine/direct_write.go",
             "name": "bindOperationDirectWriteHTTPMutations"
+          },
+          {
+            "file": "internal/connectors/source_visibility.go",
+            "name": "(*Registry).SourceVisibility"
+          },
+          {
+            "file": "internal/connectors/source_visibility.go",
+            "name": "(*Registry).PreflightSource"
           }
         ]
       },
@@ -1767,7 +1807,7 @@
           "stream ID",
           "write action name and request kind"
         ],
-        "notes": "The command runner resolves one exact declared binding and delegates to the common engine; unsupported or deferred bindings stop before provider I/O."
+        "notes": "The command runner resolves one exact declared binding and delegates to the common engine; unsupported or deferred bindings stop before provider I/O. Source-only tuple inspection/preflight selects safe generated metadata in the same registry before execution construction. Its diagnostic refusals do not change ordinary command resolution or executor availability."
       },
       "constraints": [
         "A direct command must remain bounded and must not own a warehouse checkpoint or saved sync lifecycle.",
@@ -1922,6 +1962,11 @@
           "package": "./internal/connectors/commandrunner",
           "file": "internal/connectors/commandrunner/runner_test.go",
           "name": "TestBuildOperationDirectWriteCommandSupportsDeclaredStructuredRESTBody"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/source_visibility_test.go",
+          "name": "TestSourceVisibilityDoesNotGateRealRead162"
         }
       ],
       "known_gap_refs": [

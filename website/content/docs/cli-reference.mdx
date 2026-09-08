@@ -255,10 +255,42 @@ metadata, streams, actions, command bindings, request limits, rate-limit
 coordination, and configured sync roles without resolving credentials or
 contacting a provider.
 
-The embedded runtime inventory contains execution JSON only. Source locks and
-provider citations are authoring input. A command executes only with one
+Execution consumes execution JSON. Source locks remain authoring inputs; source
+inspection consumes a separate safe projection compiled into metadata. A command executes only with one
 unambiguous binding and a registered encoder/executor; malformed invocation,
 route/schema, approval, or auth fails before provider I/O.
+
+### Retained source operations
+
+```bash
+pm connectors inspect asana --sources --json
+pm connectors inspect asana --inventory primary --source-id asana.rest.removeCustomFieldSettingForGoal --lane direct_write --preflight --json
+```
+
+Source discovery includes every retained operation and all seven lanes, including
+writes, removals and excluded lanes. Select the exact connector, inventory,
+source ID and lane shown in discovery. IDs are opaque and never become command
+paths. Outside the retained cohort, discovery reports `not_in_cohort`.
+
+Omit `--preflight` for informational inspection (exit 0). Add it to attempt a
+source/lane selection: `source_mapping_unproven` and `missing_foundation` exit 1;
+a source-backed excluded lane returns `source_lane_not_applicable` and exits 3.
+Mapping uncertainty does not mean an existing ordinary command is unsupported.
+A named foundation demand does not approve a receiver or replace its owner.
+An admitted `binding_observed` result has `execution_checked=false`.
+
+`--sources` and `--preflight` are presence flags. Tuple values are required once;
+unknown, incomplete, duplicate or conflicting selectors exit 2. Help exits 0
+without selecting a cell. JSON refusals return one `Error` envelope containing
+`source_selection` on stdout and a sanitized error line on stderr; text refusals
+write no successful stdout result. Operation citations remain visible when lane
+evidence is unresolved. Malformed selected metadata remains an error.
+
+This source-only path uses compiled metadata before reading project config,
+vault/state, approval input or execution bundles. It does not contact providers.
+`--root` remains accepted without opening it; global flag/environment bootstrap
+options still apply. Ordinary command execution is independent of this metadata
+and its proof status.
 
 For declared rate-limit policies, `process_local` protects requests in the
 current process and `require_shared` refuses before sending when its configured

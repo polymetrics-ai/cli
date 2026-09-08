@@ -67,6 +67,19 @@ func sourceFoundationProofFixture153(t *testing.T, complete bool) (string, sourc
 			t.Fatal(err)
 		}
 	}
+	// The original proof captured these bytes. The live registry and Atlas
+	// now include CP14 metadata; copying them would make this positive fixture
+	// stale. Retain the exact recorded inputs without promoting a new proof.
+	for _, pin := range []sourceArtifactPin{
+		document.Atlas,
+		{Path: "internal/connectors/connectors.go", SHA256: "c3d447c603628929911a6d2cf6716285da8597eb3bb8aee9715ba3a533441362", Bytes: 138075},
+	} {
+		raw, err := os.ReadFile(filepath.Join(project, "cmd/connectorgen/testdata/foundation-proof-inputs-153", pin.SHA256+".artifact"))
+		if err != nil || int64(len(raw)) != pin.Bytes || sourceBytesHash(raw) != pin.SHA256 {
+			t.Fatalf("original proof fixture pin %s: %v", pin.Path, err)
+		}
+		proofWrite(t, repo, pin.Path, raw)
+	}
 	return repo, document
 }
 

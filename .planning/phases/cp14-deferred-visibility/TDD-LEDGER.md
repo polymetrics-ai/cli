@@ -39,3 +39,59 @@ CP14-03 Green: original App and CLI selected-data regressions each1/1 with test-
 CR-158-01 rerun after actual shared-fixture delta: cp14-known-after-helper-normal-160-01 and race-160-01 each1/1. Original RED retained at its original source, new witness binds final sibling helper.
 
 Owner runner mistake preserved: receipts-cp13-141/cp13-141-run-unused-name contains command capture with empty argv and empty output, subprocess never started and no terminal receipt was produced; original runner raised IndexError. Private cp14-empty-runner-invocation-160.json pins those files. This is no test or behavioral evidence.
+
+## Firstmate162 source visibility group — planned
+
+Red: pending actual existing CLI/generator consumer assertions for absent source projection and typed preflight; original source and positive execution controls retained. New Go interfaces will not be used as compile-failure RED.
+Green: pending complete adopted design161 implementation and same-assertion rerun. All acceptance matrix rows in PLAN.md remain open. Normal selected inspection cause preservation is included in the same invariant group.
+
+### Source visibility actual initial RED162
+
+Red: cp14-public-cli-red-162-01 exits1,4 selected events/0pass; actual Run returns exit0 ordinary Connector for mapped Asana remove, source-excluded read, and exact Vercel gap. Raw4766bytes SHA939707029f99e56881088847a082d72a37f1d322bfdcf190b5863cd55bb81b47. Generator cp14-public-generation-red-162-02 exits1,1/0: valid retained two-operation fixture and real execution index succeed, required source metadata is absent. Raw3967bytes SHA28a385ca99b1480fce47279e1500bd1f4429ad54625b35cf5458e8a7f903f13b. Both source captures unchanged after.
+
+Generator01 capture collided with concurrent snapshot creation before Go subprocess; no terminal test receipt, no RED claim. Partial directory preserved; serial02 completed actual semantic RED. Original runner unchanged. Green: pending implementation.
+
+### Reached inspection sibling and initial projection GREEN162
+
+Red: inspection162-01 fails actual engine-loaded malformed operations.json for inspect/help/man/docs (5events/0pass), after each valid embedded GitHub inspection control. Raw5731bytes SHA19cedaa54b0ce46d6f03170dbdc7b4cbe78296c44109a14b0320d653023150ac.
+Green: same test-source after Registry.Resolve preservation,5/5, raw4575bytes SHA30015b7fe416259c3c2449835479196278f2b9184d47f1b2a791fa0fe7451306. Actual compound causes, unknown and canceled paths checked. No broad catalog/CP15 refactor.
+
+Green: unchanged initial public-generation assertion passes1/1 in cp14-projection-first-green-162-01, raw1277bytes SHA305b5a732ba8d79d89e725bc7d4edc60038a370bebdd81d62c66baf723b4fda7. This is the initial two-operation metadata-presence witness, not complete tuple/citation validation or whole CP14 acceptance. Real-corpus generation and stricter independent/oracle controls remain pending.
+
+Capability bootstrap162-01 runs actual connectorgen gen, exit0, no tests. It emits the Atlas-derived enum through existing generation; no behavior GREEN inferred. Its then-untracked generator helper was not included in the original runner input list: retain that evidence limitation rather than claiming full initial capture. Subsequent projection capture includes staged new production files.
+
+### First actual public source GREEN and strict negative group162
+
+Green: original public selector test unchanged from RED, cp14-public-cli-first-green-162-01,4/4, raw3694bytes SHAb2cde696a6170408de912bc39176496deb734a263afb860c6b8900c260758e4a. Actual mapped/remove, source-lane incompatibility and scoped gap now return expected typed JSON/nonzero exits. This is initial coverage, not the full public boundary matrix.
+
+Actual full generation162-01 completes61.027s, output changes only generated manifestindex among captured inputs. Projection payload22594778bytes total, largest GitLab9123582bytes, below64MiB/32MiB limits; all4343keys/30401cells measured. Mechanical size record cp14-projection-size-162.json does not establish independent tuple equality.
+
+Red: strict-selected162-01,14events/10pass, actual selected decoder accepts missing identity-citation member, wrong known Atlas gap owner and forged gap ID. Raw13454bytes SHAe77df10ef24b35c77f8dea8d2cad056670f7158574cec48c10e7fee93ea1dd51. Other schema/duplicate/candidate/citation/anti-alias/cancel controls pass. Coherent repair adds required-member validation and generated exact demand/citation/owner metadata; no receiver runtime change. Green pending.
+
+### Public boundaries, generation preservation and parity162
+
+Red/Green: root config bypass1/0→1/1 (source-root162-01): actual malformed project config blocks normal version positive while source-only selection reaches typed mapping outcome without opening root. Generator preservation1/0→1/1 proves invalid source input leaves all prior generated outputs unchanged. Help parity1/0→1/1 covers actual root/manual/inspect/source-help routes, then docs generate succeeds.
+
+Controls: strict selected14/14; public complete independent tuple/lane equality plus original selector5/5; App method/package entry1/1; generator prior execution-identity/rate-limit controls plus projection4/4. CLI frontier/read01 has11/10 due mistaken expected per_page2; no production defect or RED claimed. Corrected oracle retains actual per_page100 with a three-record fixture and exact two returned records under --limit2;02 passes11/11. All original outcomes retained.
+
+Red: projection oracle group162-01,9/4, actual candidate consumer accepts forged identity/lane citations and fails to enumerate missing+unexpected keys together. First Green01 fails9/7: lane citations still unchecked. Completed selected-operation fact-closure/retained-byte verification and added valid-hash sibling-lane refusal yield Green02,10/10. Same original assertions preserved with one added sibling case; no assertion weakening.
+
+Lint01 fails2 malformed path struct tags introduced by import edit; mechanical correction preserves json path names, repeat pending. Exact commands/raw hashes/timing/event counts and source-bound original receipts indexed in private cp14-162-progress-receipts.json; no summation of overlapping groups.
+
+## Firstmate163 continuity and remaining strict controls
+
+163 adopted after compaction; all existing source and receipts preserved. Header ownership and human refusal original1/0→1/1 remain source-bound162 evidence; sorted-citation generation changed index only. Next coherent negative group exercises real selected decoder output text safety, identity document ownership and resource/header/duplicate-member bounds before implementation. Complete final affected checks remain pending.
+
+Text/bounds163-01 actual decoder RED10/5 includes three reached unsafe-display failures, five passing resource/header controls, and one invalid test assumption: operation identity can cite a distinct retained raw document instead of the inventory document. Removed that unsupported document-equality oracle after tracing normalizeSourceFacts, rather than restricting valid source provenance. The three original unsafe-text assertions remain unchanged; generator exact retained-document/value ownership tests retain their independent scope. GREEN is therefore a nine-event scope, not same-file ten-event proof.
+
+The strict-text group and preceding strict-selected group now pass22/22 in text-bounds-green163-01. Diagnostic artifact projection additionally retains original schema roles, source-schema and field mapping citations (including citation-sort remapping); this is completion of the adopted diagnostic lineage contract, not a new admitted binding claim or manufactured behavioral RED. Atlas revision48 records the actual existing authoring/registry seams and proof tests; no new foundation/receiver or execution contract is added. Prior Atlas-bound reports remain historical until current regeneration.
+
+Final generator normal163-02 retained44/40 failure: three carry fixture controls plus their parent were refused because live Registry/Atlas bytes no longer match original proof pins. This is proof-fixture setup drift, not a failure of the original CR/WR invariant. Historical positive fixtures now copy hash-checked original Atlas47 and connectors.go from172cf0cc into their disposable root. Captures/review allowlist are unchanged; current-source readers still report stale evidence. The exact original320765bytes live under testdata/foundation-proof-inputs-153, with provenance README. No new mechanism-proof acceptance is claimed.
+
+Complementary coverage/unknown controls pass normal/race; the full selected identity union is713/713 in both modes. Scoped lint caught SA1012 on the intentional nil-context negative call. Added one line-local staticcheck suppression documenting that deliberate invalid-input test; no production or assertion change. Preserve lint163-01 failure and final repeat; this is not a production RED.
+
+## Final source-output completion contract (CP14-02/04/07)
+
+Static final tracing found new human source output helpers discard writer errors. Planned public regression: real Run over exact source inspection and catalog discovery, unchanged positive output first, then bounded stdout failures before any byte, after a retained prefix, at full-write completion, and short nil-error writes. Verify actual fault reached, exact emitted prefix/full bytes and nonzero return. JSON serves an existing error-propagation control, with the same short-write guard. Source-only output owns no durable state; partial stdout cannot be rolled back and must not be reported as success. Fix only the new source-output path; no broad output framework or runtime execution changes. Current authoring check/gen receipts remain frozen until terminal before test/source edits.
+
+Output group163-01 genuine RED16/3→GREEN16/16: exact test file unchanged, only source_visibility.go changed. All first-byte, partial, full-completion-error and short-nil-write assertions now pass; JSON error cases were original controls. Final CLI normal/race44/44, vet/lint/build/docs all pass. Source manifests do not name this CLI output file as a generation input; prior current report checks and A/B generated equality remain compatible. Full final selected identity union729/729 normal and729/729 race, exact same package/test set, with raw index cp14-final-test-identities-163-v2.json.

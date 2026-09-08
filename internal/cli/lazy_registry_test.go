@@ -135,3 +135,52 @@ func TestCLICommandSelectionBoundaries160(t *testing.T) {
 		t.Fatalf("valid selection did not reach manual: %v loads=%d", err, loads)
 	}
 }
+
+func TestCLIInspectionPreservesSelectedDataError162(t *testing.T) {
+	valid, err := engine.Load(defs.FS, "github")
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, action := range []string{"inspect", "help", "man", "docs"} {
+		t.Run(action, func(t *testing.T) {
+			good := connectors.NewEmptyRegistry()
+			if err := good.Register(engine.New(valid, nil)); err != nil {
+				t.Fatal(err)
+			}
+			var out, diag bytes.Buffer
+			if err := runConnectorsWithRegistry(t.Context(), t.TempDir(), []string{action, "github"}, &out, &diag, true, good); err != nil || !strings.Contains(out.String(), `"kind": "Connector"`) {
+				t.Fatalf("real inspection positive: %v %s", err, &out)
+			}
+			sentinel := errors.New("inspection-selected-data-sentinel")
+			var cause error
+			loads := 0
+			registry, err := connectors.NewLazyRegistry(good.List(), func(context.Context, string) (connectors.Connector, error) {
+				loads++
+				_, failure := engine.Load(malformedSelectedBundleFS160{defs.FS}, "github")
+				if failure == nil || !strings.Contains(failure.Error(), "operations.json") {
+					t.Fatalf("actual malformed loader: %v", failure)
+				}
+				cause = errors.Join(sentinel, failure)
+				return nil, cause
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			out.Reset()
+			err = runConnectorsWithRegistry(t.Context(), t.TempDir(), []string{action, "github"}, &out, &diag, true, registry)
+			if loads != 1 || !errors.Is(err, sentinel) || !errors.Is(err, cause) || out.Len() != 0 {
+				t.Fatalf("selected inspection lost cause: %v loads=%d stdout=%q", err, loads, &out)
+			}
+			ctx, cancel := context.WithCancel(t.Context())
+			cancel()
+			err = runConnectorsWithRegistry(ctx, t.TempDir(), []string{action, "github"}, &out, &diag, false, registry)
+			if !errors.Is(err, context.Canceled) || loads != 1 {
+				t.Fatalf("canceled inspection loaded: %v loads=%d", err, loads)
+			}
+			err = runConnectorsWithRegistry(t.Context(), t.TempDir(), []string{action, "absent-connector"}, &out, &diag, false, registry)
+			if err == nil || err.Error() != `connector "absent-connector" not found` || loads != 1 {
+				t.Fatalf("unknown inspection changed: %v loads=%d", err, loads)
+			}
+		})
+	}
+}

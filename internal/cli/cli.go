@@ -87,6 +87,26 @@ func run(args []string, stdout, stderr io.Writer, openers appOpeners) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
 	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
+	// Source inspection consumes compiled metadata only. Keep the registered
+	// router, but do not discover project config or initialize coordination for
+	// this branch. --root remains an opaque bootstrap option here.
+	if len(cleanArgs) > 0 && cleanArgs[0] == "connectors" && hasSourceSelectionFlags(parseFlags(cleanArgs[1:])) {
+		bootstrap, err := config.ResolveBootstrap(opts)
+		if err != nil {
+			return writeError(stdout, stderr, err, jsonOut)
+		}
+		if openers.registry == nil {
+			openers.registry, err = bundleregistry.NewRegistry()
+			if err != nil {
+				return writeError(stdout, stderr, err, bootstrap.JSON)
+			}
+		}
+		cmd := newRootCmd(ctx, config.Config{Root: bootstrap.Root, JSON: bootstrap.JSON}, stdout, stderr, openers)
+		if err := executeRootCmd(cmd, cleanArgs); err != nil {
+			return writeError(stdout, stderr, mapCobraErr(err), bootstrap.JSON)
+		}
+		return 0
+	}
 	if err := validateRawApprovalCarrierArgs(args); err != nil {
 		jsonError := jsonOut
 		bootstrap, bootstrapErr := config.ResolveBootstrap(opts)
@@ -311,6 +331,10 @@ func runConnectorsWithRegistry(ctx context.Context, root string, args []string, 
 	if len(args) == 0 {
 		return errUsage
 	}
+	sourceFlags := parseFlags(args[1:])
+	if hasSourceSelectionFlags(sourceFlags) && args[0] != "inspect" {
+		return usageErrorf("source selection flags require connectors inspect")
+	}
 	switch args[0] {
 	case "list":
 		flags := parseFlags(args[1:])
@@ -358,7 +382,15 @@ func runConnectorsWithRegistry(ctx context.Context, root string, args []string, 
 		if err := connectors.RejectLegacyConnectorName(args[1]); err != nil {
 			return err
 		}
-		if c, ok := registry.Get(args[1]); ok {
+		flags := parseFlags(args[2:])
+		if hasSourceSelectionFlags(flags) {
+			return runConnectorSourceInspection(ctx, args[1], flags, stdout, jsonOut, registry)
+		}
+		c, err := registry.Resolve(ctx, args[1])
+		if err != nil {
+			return err
+		}
+		{
 			if jsonOut {
 				response := envelope{
 					"kind":           "Connector",
@@ -386,7 +418,6 @@ func runConnectorsWithRegistry(ctx context.Context, root string, args []string, 
 			}
 			return nil
 		}
-		return fmt.Errorf("connector %q not found", args[1])
 	default:
 		return errUsage
 	}

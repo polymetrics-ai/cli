@@ -9,7 +9,7 @@ import (
 )
 
 func TestGenWritesDeterministicManifestIndex(t *testing.T) {
-	root := t.TempDir()
+	root := sourceVisibilityGenerationRoot162(t)
 	hooksRoot := filepath.Join(root, "internal", "connectors", "hooks")
 	if err := os.MkdirAll(hooksRoot, 0o755); err != nil {
 		t.Fatal(err)
@@ -46,7 +46,7 @@ func TestGenWritesDeterministicManifestIndex(t *testing.T) {
 }
 
 func TestGeneratedManifestIndexDigestIncludesRateLimits(t *testing.T) {
-	root := t.TempDir()
+	root := sourceVisibilityGenerationRoot162(t)
 	hooksRoot := filepath.Join(root, "internal", "connectors", "hooks")
 	defsRoot := filepath.Join(root, "internal", "connectors", "defs", "alpha")
 	if err := os.MkdirAll(hooksRoot, 0o755); err != nil {

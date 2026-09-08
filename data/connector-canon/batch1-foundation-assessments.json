@@ -3,8 +3,8 @@
   "kind": "foundation_cell_assessments",
   "atlas": {
     "path": "docs/connector-canon/foundations/catalog.json",
-    "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-    "bytes": 182690
+    "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+    "bytes": 185135
   },
   "assessments": [
     {
@@ -28,8 +28,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -75,8 +75,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -122,8 +122,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -169,8 +169,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -216,8 +216,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -263,8 +263,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -310,8 +310,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -357,8 +357,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -404,8 +404,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -451,8 +451,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -498,8 +498,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -545,8 +545,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -592,8 +592,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -639,8 +639,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -686,8 +686,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -733,8 +733,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -780,8 +780,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -827,8 +827,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -874,8 +874,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -921,8 +921,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -968,8 +968,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -1015,8 +1015,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -1062,8 +1062,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -1109,8 +1109,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -1156,8 +1156,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {
@@ -1208,8 +1208,8 @@
           "atlas_lookup": {
             "atlas": {
               "path": "docs/connector-canon/foundations/catalog.json",
-              "sha256": "77bdc26f357bc57490f98cffb7df2ca427f4041429f38b225df63688ea9a6b92",
-              "bytes": 182690
+              "sha256": "c9f359d7ead54299cf3a6519ed1faf871eb7850c8d7f478141a53b8a709f85d9",
+              "bytes": 185135
             },
             "candidates": [
               {

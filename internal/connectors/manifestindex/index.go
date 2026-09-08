@@ -40,6 +40,7 @@ type Entry struct {
 	CommandUsage, CommandTagline                       string
 	Metadata                                           connectors.Metadata
 	Bytes                                              int
+	SourceVisibility                                   connectors.SourceVisibilityArtifact
 }
 type Index struct{ entries []Entry }
 

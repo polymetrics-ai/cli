@@ -29,8 +29,12 @@ Read `docs/connector-canon/INDEX.md` and
 `docs/connector-canon/SOURCE-LOCK-VNEXT.md` before connector work. The only
 authoring pipeline is immutable schema-4 `source.lock.json` → canonical
 per-operation descriptors with shared schemas → deterministic execution JSON.
-Runtime reads execution JSON only. Do not add a second reader, fallback, feature
-flag, evidence gate, or connector-specific runtime bypass.
+Runtime execution reads execution JSON only. Do not add a second execution
+reader, fallback, feature flag, evidence gate, or connector-specific runtime bypass.
+
+Source-only inspection uses safe generated manifest metadata through the existing
+registry; it never reads source locks, proof records or the Atlas at runtime and
+cannot gate ordinary execution. See `docs/cli/connectors.md` for its exact selector.
 
 ## Foundation Atlas Discovery Is Mandatory
 

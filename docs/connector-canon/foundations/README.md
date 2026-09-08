@@ -113,6 +113,17 @@ decision owned by
 `cli-plan-webhook-receiver-foundation-r1-decision-webhook-exposure-product-boundary`.
 Neither reference approves a receiver, hosted relay or live endpoint.
 
+## Compiled source visibility
+
+`connectorgen gen` projects retained source identities, seven-lane observations
+and scoped citations into immutable metadata alongside the existing manifest
+index. The compiled capability table validates diagnostic IDs; it does not
+register executors. Source inspection decodes only the selected connector's
+bounded payload and refuses malformed metadata before execution construction.
+Ordinary commands retain their separate execution identity and resolver path,
+even when source diagnostic metadata is unavailable or invalid. See the
+[connector CLI manual](../../cli/connectors.md) for the exact tuple selector.
+
 ## Maintenance
 
 Update the matching entry in the same change when a shared contract, selection,
