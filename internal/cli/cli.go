@@ -37,11 +37,12 @@ const (
 )
 
 type appOpeners struct {
-	open           func(string) (*app.App, error)
-	reverse        func(string) (*app.App, error)
-	registry       *connectors.Registry
-	approvalReader io.Reader
-	mode           appOpenerMode
+	registryFallback func() *connectors.Registry
+	open             func(string) (*app.App, error)
+	reverse          func(string) (*app.App, error)
+	registry         *connectors.Registry
+	approvalReader   io.Reader
+	mode             appOpenerMode
 }
 
 func defaultAppOpeners() appOpeners {

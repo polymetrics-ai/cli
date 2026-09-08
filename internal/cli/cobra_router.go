@@ -14,6 +14,21 @@ import (
 	"polymetrics.ai/internal/connectors"
 )
 
+// cobraRegistrySource keeps construction scoped to one fresh command tree.
+// The factory is instance-owned; it never caches a registry or command verdict.
+type cobraRegistrySource struct {
+	registry *connectors.Registry
+	fallback func() *connectors.Registry
+}
+
+func registrySource(registries []*connectors.Registry) cobraRegistrySource {
+	source := cobraRegistrySource{fallback: appRegistry}
+	if len(registries) == 1 {
+		source.registry = registries[0]
+	}
+	return source
+}
+
 type cobraLegacyHandler func(context.Context, string, []string, io.Writer, bool) error
 type cobraLegacyManualResolver func([]string) (string, bool)
 
@@ -45,12 +60,16 @@ func markCobraLegacyError(err error) error {
 
 func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer, candidates ...appOpeners) *cobra.Command {
 	openers := selectAppOpeners(candidates...)
-	if openers.mode == appOpenerProduction && openers.registry == nil {
-		openers.registry = appRegistry()
+	source := cobraRegistrySource{registry: openers.registry, fallback: openers.registryFallback}
+	if source.fallback == nil {
+		source.fallback = appRegistry
 	}
-	registry := openers.registry
-	if registry == nil {
-		registry = appRegistry()
+	if source.registry == nil {
+		source.registry = source.fallback()
+	}
+	registry := source.registry
+	if openers.mode == appOpenerProduction {
+		openers.registry = registry
 	}
 	root := cfg.Root
 	jsonOut := cfg.JSON
@@ -78,9 +97,9 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 	cmd.SetErr(stderr)
 	cmd.PersistentFlags().String("root", root, "project root (parsed by the legacy global parser)")
 	cmd.PersistentFlags().Bool("json", jsonOut, "write machine-readable JSON output (parsed by the legacy global parser)")
-	setManualHelp(cmd, "", stdout, jsonOut, registry)
+	source.setManualHelp(cmd, "", stdout, jsonOut)
 	for _, spec := range cobraLegacyCommandsWithRegistry(cfg, openers, registry, stderr) {
-		cmd.AddCommand(newLegacyCobraCommand(ctx, root, stdout, jsonOut, spec, registry))
+		cmd.AddCommand(source.newLegacyCommand(ctx, root, stdout, jsonOut, spec))
 	}
 	return cmd
 }
@@ -185,9 +204,13 @@ func cobraLegacyCommandsWithRegistry(cfg config.Config, openers appOpeners, regi
 }
 
 func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, spec cobraLegacyCommand, registries ...*connectors.Registry) *cobra.Command {
-	registry := appRegistry()
-	if len(registries) == 1 && registries[0] != nil {
-		registry = registries[0]
+	return registrySource(registries).newLegacyCommand(ctx, root, stdout, jsonOut, spec)
+}
+
+func (source cobraRegistrySource) newLegacyCommand(ctx context.Context, root string, stdout io.Writer, jsonOut bool, spec cobraLegacyCommand) *cobra.Command {
+	registry := source.registry
+	if registry == nil {
+		registry = source.fallback()
 	}
 	cmd := &cobra.Command{
 		Use:                spec.name,
@@ -217,7 +240,7 @@ func newLegacyCobraCommand(ctx context.Context, root string, stdout io.Writer, j
 			return markCobraLegacyError(spec.handler(ctx, root, args, stdout, jsonOut))
 		},
 	}
-	setManualHelp(cmd, spec.name, stdout, jsonOut, registry)
+	cobraRegistrySource{registry: registry, fallback: source.fallback}.setManualHelp(cmd, spec.name, stdout, jsonOut)
 	return cmd
 }
 
@@ -233,9 +256,13 @@ func runManualAliasWithRegistry(args []string, stdout io.Writer, jsonOut bool, r
 }
 
 func setManualHelp(cmd *cobra.Command, topic string, stdout io.Writer, jsonOut bool, registries ...*connectors.Registry) {
-	registry := appRegistry()
-	if len(registries) == 1 && registries[0] != nil {
-		registry = registries[0]
+	registrySource(registries).setManualHelp(cmd, topic, stdout, jsonOut)
+}
+
+func (source cobraRegistrySource) setManualHelp(cmd *cobra.Command, topic string, stdout io.Writer, jsonOut bool) {
+	registry := source.registry
+	if registry == nil {
+		registry = source.fallback()
 	}
 	cmd.SetHelpFunc(func(_ *cobra.Command, _ []string) {
 		_ = writeManualTopicWithRegistry(topic, stdout, jsonOut, registry)
