@@ -41,6 +41,12 @@ func compilePaginationRequestPlacement(spec PaginationSpec, raw json.RawMessage)
 	fail := func(err error) (*paginationRequestPlacement, error) {
 		return nil, diagnosticAt("/rest/pagination", "pagination_body_invalid", "invalid typed body pagination placement", err)
 	}
+	switch spec.Type {
+	case "cursor", "page_number", "offset_limit":
+		// These strategies expose the existing typed cursor/page/offset roles.
+	default:
+		return fail(fmt.Errorf("pagination strategy has no admitted typed body navigation"))
+	}
 	var root map[string]any
 	dec := json.NewDecoder(bytes.NewReader(raw))
 	dec.UseNumber()
@@ -122,6 +128,11 @@ func compilePaginationRequestPlacement(spec PaginationSpec, raw json.RawMessage)
 	if err != nil {
 		return fail(err)
 	}
+	for name, value := range p.defaults {
+		if err := p.schema.node.properties[name].validate(value, "/body/"+name); err != nil {
+			return fail(fmt.Errorf("invalid body default: %w", err))
+		}
+	}
 	return p, nil
 }
 
@@ -140,6 +151,13 @@ func (p *paginationRequestPlacement) initial(body any, size, maxBytes int) (map[
 		if _, exists := initial[k]; !exists {
 			initial[k] = copyRecordValue(v)
 		}
+	}
+	rawInitial, err := json.Marshal(initial)
+	if err != nil {
+		return nil, 0, err
+	}
+	if len(rawInitial) > maxBytes {
+		return nil, 0, fmt.Errorf("initial pagination body exceeds request byte bound")
 	}
 	for name, value := range initial {
 		if node := p.schema.node.properties[name]; node != nil {
@@ -269,6 +287,9 @@ func prepareBodyPagingRequest(b Bundle, op OperationSpec, body any, query url.Va
 	if err := plan.refuseQuery(query); err != nil {
 		return nil, err
 	}
+	if err := refuseConflictingPagingInput(callerPagingParams(plan.spec, plan.spec.Type, query), directReadWalk{page: page, pageCursor: cursor}, plan.spec.Type); err != nil {
+		return nil, err
+	}
 	size := plan.spec.PageSize
 	if size <= 0 {
 		size = defaultPageSize
@@ -289,7 +310,14 @@ func prepareBodyPagingRequest(b Bundle, op OperationSpec, body any, query url.Va
 	if err != nil {
 		return nil, err
 	}
-	paginator, err := newPaginator(plan.spec, size, "")
+	if resume == nil && plan.spec.Type == "cursor" {
+		if token, ok := initial[plan.spec.BodyCursorField].(string); ok && token != "" {
+			resume = &connsdk.NextPage{Query: url.Values{plan.spec.CursorParam: []string{token}}}
+		}
+	}
+	walkSpec := plan.spec
+	walkSpec.PageSize = size
+	paginator, err := newPaginator(walkSpec, size, "")
 	if err != nil {
 		return nil, err
 	}
@@ -324,4 +352,98 @@ func prepareBodyPagingRequest(b Bundle, op OperationSpec, body any, query url.Va
 		return nil, err
 	}
 	return &bodyPagingRequest{plan: plan, initial: initial, size: size, identity: identity, binding: b, resume: resume}, nil
+}
+
+// prepareStreamBodyPagination consumes the detached input snapshot supplied by
+// request_inputs preparation. Legacy streams without that contract retain their
+// established body behavior; no endpoint-based operation inference is used.
+func prepareStreamBodyPagination(b Bundle, stream StreamSpec, req connectors.ReadRequest) (StreamSpec, error) {
+	spec := stream.Pagination
+	if spec == nil {
+		spec = b.HTTP.Pagination
+	}
+	if spec == nil || !hasPaginationBody(*spec) || stream.RequestInputs == nil {
+		return stream, nil
+	}
+	raw, err := streamRequestBodySchema(stream)
+	if err != nil {
+		return stream, err
+	}
+	if methodOrDefault(stream.Method) != http.MethodPost || (stream.BodyType != "" && stream.BodyType != "json") || stream.GraphQL != nil {
+		return stream, fmt.Errorf("typed body pagination requires JSON POST stream")
+	}
+	plan, err := compilePaginationRequestPlacement(*spec, raw)
+	if err != nil {
+		return stream, err
+	}
+	body := stream.preparedReadBody
+	if !stream.preparedReadBodyPresent {
+		body, err = resolveStreamBodyMap(stream.Body, requestVars(req.Config, nil, "", req.Query))
+		if err != nil {
+			return stream, err
+		}
+	}
+	size := spec.PageSize
+	if size <= 0 {
+		size = defaultPageSize
+	}
+	initial, size, err := plan.initial(body, size, maxOperationDirectReadBytes)
+	if err != nil {
+		return stream, err
+	}
+	query, err := buildInitialQuery(stream, req)
+	if err != nil {
+		return stream, err
+	}
+	if err := plan.refuseQuery(query); err != nil {
+		return stream, err
+	}
+	// Keep original source body and request_inputs declaration in identity while
+	// binding effective initial values and the selected loaded schema bytes.
+	identity := stream
+	identity.Body = map[string]any{"declaration": stream.Body, "input": initial, "body_schema": raw, "input_schema": stream.inputPlan.raw}
+	identity.Query = map[string]QueryParam{}
+	for k, values := range query {
+		identity.Query[k] = QueryParam{Template: strings.Join(values, "\x00")}
+	}
+	base, err := resolveStreamRoute(b, req.Config, stream)
+	if err != nil {
+		return stream, err
+	}
+	binding := b
+	binding.HTTP.URL = base
+	resume, err := readContinuationPage(binding, identity, req.Continuation)
+	if err != nil {
+		return stream, err
+	}
+	if resume == nil && spec.Type == "cursor" {
+		if token, ok := initial[spec.BodyCursorField].(string); ok && token != "" {
+			resume = &connsdk.NextPage{Query: url.Values{spec.CursorParam: []string{token}}}
+		}
+	}
+	walk := *spec
+	walk.PageSize = size
+	paginator, err := newPaginator(walk, size, recordsPathOf(stream.Records))
+	if err != nil {
+		return stream, err
+	}
+	next := paginator.Start()
+	if resume != nil {
+		for _, role := range plan.roles {
+			if !role.size {
+				if _, exists := initial[role.field]; exists && req.Continuation != nil {
+					return stream, fmt.Errorf("body field %q conflicts with source continuation", role.field)
+				}
+			}
+		}
+		if err := resumePaginator(paginator, resume); err != nil {
+			return stream, err
+		}
+		next = resume
+	}
+	if _, _, err := plan.compose(initial, mergeQuery(declaredSizeQuery(*spec, size), next.Query), maxOperationDirectReadBytes); err != nil {
+		return stream, err
+	}
+	stream.preparedBodyPagination = &bodyPagingRequest{plan: plan, initial: initial, size: size, identity: identity, binding: binding, resume: resume}
+	return stream, nil
 }

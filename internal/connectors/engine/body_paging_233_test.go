@@ -1,7 +1,9 @@
 package engine
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,6 +16,7 @@ import (
 	"testing/fstest"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 // Jira retained source d37a87d79d658bca06707a787dda1dfd0c0c78527140c3d8f1d8d26426175290,
@@ -116,7 +119,7 @@ func TestBodyPagingDirect233(t *testing.T) {
 		}
 		req.PageCursor = result.Page.NextCursor
 	}
-	if !reflect.DeepEqual(ids, []string{"10100", "10200", "10300", "10400", "10500"}) {
+	if !bodyPagingObservationMatches233(ids, bodies) {
 		t.Fatalf("identities=%v", ids)
 	}
 }
@@ -137,6 +140,16 @@ func TestBodyPagingInvalidAdmission233(t *testing.T) {
 		{"nested_field", func(op *OperationSpec) { op.REST.Pagination.BodyCursorField = "paging.nextPageToken" }},
 		{"wrong_strategy", func(op *OperationSpec) { op.REST.Pagination.BodyPageField = "maxResults" }},
 		{"two_sizes", func(op *OperationSpec) { op.REST.Pagination.LimitParam = "otherSize" }},
+		{"unaddressable_body_strategy", func(op *OperationSpec) {
+			op.REST.Pagination.Type = "next_url"
+			op.REST.Pagination.NextURLPath = "next"
+			op.REST.Pagination.BodyCursorField = ""
+			op.REST.Pagination.CursorParam = ""
+			op.REST.Pagination.TokenPath = ""
+		}},
+		{"invalid_default", func(op *OperationSpec) {
+			op.REST.BodySchema = json.RawMessage(strings.ReplaceAll(string(op.REST.BodySchema), `"maximum":10000`, `"maximum":1`))
+		}},
 		{"fake_query_source", func(op *OperationSpec) {
 			op.REST.PaginationParameters = []OperationParameter{{Name: "nextPageToken", In: "query", Type: "string"}}
 		}},
@@ -336,6 +349,324 @@ func TestBodyPagingCapsule233(t *testing.T) {
 				if err == nil || sends.Load() != want {
 					t.Fatalf("drift/loop err=%v sends=%d want%d", err, sends.Load(), want)
 				}
+			}
+		})
+	}
+}
+
+// This bridge exercises exported Read against the selected234 compiled-plan
+// interface. Full generated request_inputs loader/population remains parent234
+// ownership; the synthetic plan below is explicit, not loaded-source proof.
+func TestBodyPagingSaved233(t *testing.T) {
+	op := bodyPagingOperation233()
+	var sends atomic.Int32
+	wants := []string{`{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2}`, `{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2,"nextPageToken":"jira-next-2"}`, `{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2,"nextPageToken":"jira-next-3"}`}
+	responses := []string{`{"data":[{"id":"10100"},{"id":"10200"}],"nextPageToken":"jira-next-2"}`, `{"data":[{"id":"10300"},{"id":"10400"}],"nextPageToken":"jira-next-3"}`, `{"data":[{"id":"10500"}],"nextPageToken":null}`}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		i := int(sends.Add(1)) - 1
+		raw, _ := io.ReadAll(r.Body)
+		if i >= 3 || r.Method != "POST" || r.URL.RawQuery != "" || string(raw) != wants[i] {
+			t.Errorf("send%d %s %s body=%s", i+1, r.Method, r.URL.RawQuery, raw)
+			w.WriteHeader(400)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, responses[i])
+	}))
+	defer server.Close()
+	b := newTestBundle(t, server, StreamSpec{Method: "POST", BodyType: "json", Pagination: op.REST.Pagination})
+	b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
+	b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: op.REST.BodySchema}
+	b.Streams[0].preparedReadBody = op.REST.Body
+	b.Streams[0].preparedReadBodyPresent = true
+	rows, err := readAll(t, t.Context(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
+	var ids []string
+	for _, row := range rows {
+		ids = append(ids, fmt.Sprint(row["id"]))
+	}
+	if err != nil || sends.Load() != 3 || !reflect.DeepEqual(ids, []string{"10100", "10200", "10300", "10400", "10500"}) {
+		t.Fatalf("saved err=%v sends=%d ids=%v", err, sends.Load(), ids)
+	}
+}
+
+type bodyPagingFrontier233 struct{ calls int }
+
+func (h *bodyPagingFrontier233) ConnectorName() string { return "acme" }
+func (h *bodyPagingFrontier233) Authenticator(context.Context, connectors.RuntimeConfig, AuthSpec) (connsdk.Authenticator, error) {
+	h.calls++
+	return nil, fmt.Errorf("healthy authentication frontier")
+}
+
+func TestBodyPagingPreRuntime233(t *testing.T) {
+	for _, mode := range []string{"direct", "saved"} {
+		for _, invalid := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/invalid_%v", mode, invalid), func(t *testing.T) {
+				var sends atomic.Int32
+				server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { sends.Add(1); w.WriteHeader(500) }))
+				defer server.Close()
+				op := bodyPagingOperation233()
+				body := cloneAnyMap(op.REST.Body)
+				if invalid {
+					body["maxResults"] = "invalid"
+				}
+				b := newTestBundle(t, server, StreamSpec{Method: "POST", BodyType: "json", Pagination: op.REST.Pagination})
+				b.HTTP.Auth = []AuthSpec{{Mode: "custom", Hook: "acme"}}
+				h := &bodyPagingFrontier233{}
+				var err error
+				if mode == "direct" {
+					b.Operations = []OperationSpec{op}
+					_, err = OperationDirectRead(t.Context(), b, connectors.OperationDirectReadRequest{Operation: op.ID, Body: body}, h)
+				} else {
+					b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
+					b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: op.REST.BodySchema}
+					b.Streams[0].preparedReadBody = body
+					b.Streams[0].preparedReadBodyPresent = true
+					_, err = readAll(t, t.Context(), b, connectors.ReadRequest{Stream: "widgets"}, h)
+				}
+				want := 1
+				if invalid {
+					want = 0
+				}
+				if err == nil || h.calls != want || sends.Load() != 0 {
+					t.Fatalf("err=%v auth=%d want%d sends=%d", err, h.calls, want, sends.Load())
+				}
+			})
+		}
+	}
+}
+
+func TestBodyPagingSavedCapsule233(t *testing.T) {
+	for _, change := range []string{"healthy", "body", "query", "schema", "malformed_later"} {
+		t.Run(change, func(t *testing.T) {
+			var sends atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				n := sends.Add(1)
+				raw, _ := io.ReadAll(r.Body)
+				w.Header().Set("Content-Type", "application/json")
+				if n == 1 {
+					token := "next"
+					if change == "malformed_later" {
+						token = strings.Repeat("x", 65)
+					}
+					_, _ = fmt.Fprintf(w, `{"data":[{"id":"10100"},{"id":"10200"}],"nextPageToken":%q}`, token)
+					return
+				}
+				if n == 2 {
+					if !strings.Contains(string(raw), `"nextPageToken":"next"`) {
+						t.Errorf("resume body=%s", raw)
+					}
+					_, _ = io.WriteString(w, `{"data":[{"id":"10300"},{"id":"10400"}],"nextPageToken":"last"}`)
+				} else {
+					_, _ = io.WriteString(w, `{"data":[{"id":"10500"}],"nextPageToken":null}`)
+				}
+			}))
+			defer server.Close()
+			op := bodyPagingOperation233()
+			b := newTestBundle(t, server, StreamSpec{Method: "POST", BodyType: "json", Pagination: op.REST.Pagination})
+			b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
+			b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: op.REST.BodySchema}
+			b.Streams[0].preparedReadBody = op.REST.Body
+			b.Streams[0].preparedReadBodyPresent = true
+			req := connectors.ReadRequest{Stream: "widgets", MaxPages: 1}
+			var ids []string
+			emit := func(r connectors.Record) error { ids = append(ids, fmt.Sprint(r["id"])); return nil }
+			err := ReadWithOutcome(t.Context(), b, req, nil, emit)
+			if change == "malformed_later" {
+				if err == nil || sends.Load() != 1 {
+					t.Fatalf("malformed err=%v sends=%d", err, sends.Load())
+				}
+				return
+			}
+			var stopped *connectors.ReadBudgetStoppedError
+			if !errors.As(err, &stopped) || sends.Load() != 1 {
+				t.Fatalf("cap err=%v sends=%d", err, sends.Load())
+			}
+			req.Continuation = &stopped.Continuation
+			req.MaxPages = 0
+			switch change {
+			case "body":
+				body := cloneAnyMap(op.REST.Body)
+				body["maxResults"] = 1
+				b.Streams[0].preparedReadBody = body
+			case "query":
+				req.Query = map[string]string{"filter": "changed"}
+			case "schema":
+				b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: json.RawMessage(strings.ReplaceAll(string(op.REST.BodySchema), `"maximum":10000`, `"maximum":9999`))}
+			}
+			err = ReadWithOutcome(t.Context(), b, req, nil, emit)
+			if change != "healthy" {
+				if err == nil || sends.Load() != 1 {
+					t.Fatalf("changed input err=%v sends=%d", err, sends.Load())
+				}
+				return
+			}
+			if err != nil || sends.Load() != 3 || !reflect.DeepEqual(ids, []string{"10100", "10200", "10300", "10400", "10500"}) {
+				t.Fatalf("resumed err=%v sends=%d ids=%v", err, sends.Load(), ids)
+			}
+		})
+	}
+}
+
+func TestBodyPagingAddressable233(t *testing.T) {
+	for _, strategy := range []string{"page_number", "offset_limit"} {
+		t.Run(strategy, func(t *testing.T) {
+			op := bodyPagingOperation233()
+			op.REST.Body = nil
+			op.REST.BodySchema = json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"position":{"type":"integer","minimum":0,"maximum":3},"maxResults":{"type":"integer","minimum":1,"maximum":5,"default":3}},"required":["position","maxResults"]}`)
+			spec := &PaginationSpec{Type: strategy, PageSize: 2, BodyLimitField: "maxResults"}
+			want := `{"maxResults":3,"position":2}`
+			if strategy == "page_number" {
+				spec.PageParam = "page"
+				spec.SizeParam = "size"
+				spec.BodyPageField = "position"
+			} else {
+				spec.OffsetParam = "offset"
+				spec.LimitParam = "limit"
+				spec.BodyOffsetField = "position"
+				want = `{"maxResults":3,"position":3}`
+			}
+			op.REST.Pagination = spec
+			var sends atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				sends.Add(1)
+				raw, _ := io.ReadAll(r.Body)
+				if string(raw) != want || r.URL.RawQuery != "" {
+					t.Errorf("body=%s query=%s", raw, r.URL.RawQuery)
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = io.WriteString(w, `{"data":[{"id":"last"}]}`)
+			}))
+			defer server.Close()
+			b := newTestBundle(t, server, StreamSpec{})
+			b.Operations = []OperationSpec{op}
+			result, err := OperationDirectRead(t.Context(), b, connectors.OperationDirectReadRequest{Operation: op.ID, Page: 2}, nil)
+			if err != nil || sends.Load() != 1 || result.Page.Size != 3 || !result.Page.Complete {
+				t.Fatalf("err=%v sends=%d page=%+v", err, sends.Load(), result.Page)
+			}
+		})
+	}
+}
+
+func TestBodyPagingRawCursor233(t *testing.T) {
+	op := bodyPagingOperation233()
+	op.REST.Pagination.BodyLimitField = ""
+	op.REST.Pagination.SizeParam = ""
+	// A raw source cursor is an initial position; repeating that response token
+	// must not offer the same page again, even without any size query to allocate.
+	var sends atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sends.Add(1)
+		raw, _ := io.ReadAll(r.Body)
+		if !strings.Contains(string(raw), `"nextPageToken":"raw"`) {
+			t.Errorf("raw cursor location=%s", raw)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, `{"data":[{"id":"same"}],"nextPageToken":"raw"}`)
+	}))
+	defer server.Close()
+	b := newTestBundle(t, server, StreamSpec{})
+	b.Operations = []OperationSpec{op}
+	_, err := OperationDirectRead(t.Context(), b, connectors.OperationDirectReadRequest{Operation: op.ID, Body: map[string]any{"nextPageToken": "raw"}}, nil)
+	if err == nil || sends.Load() != 1 {
+		t.Fatalf("raw resume loop err=%v sends=%d", err, sends.Load())
+	}
+}
+
+func bodyPagingObservationMatches233(ids, bodies []string) bool {
+	return reflect.DeepEqual(ids, []string{"10100", "10200", "10300", "10400", "10500"}) && reflect.DeepEqual(bodies, []string{
+		`{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2}`,
+		`{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2,"nextPageToken":"jira-next-2"}`,
+		`{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2,"nextPageToken":"jira-next-3"}`,
+	})
+}
+func TestBodyPagingOracle233(t *testing.T) {
+	for _, change := range []string{"healthy", "same_count_wrong_ids", "duplicate_id", "omitted_id", "changed_body_location"} {
+		t.Run(change, func(t *testing.T) {
+			ids := []string{"10100", "10200", "10300", "10400", "10500"}
+			bodies := []string{`{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2}`, `{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2,"nextPageToken":"jira-next-2"}`, `{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2,"nextPageToken":"jira-next-3"}`}
+			switch change {
+			case "same_count_wrong_ids":
+				ids[2] = "other"
+			case "duplicate_id":
+				ids[2] = ids[1]
+			case "omitted_id":
+				ids = ids[:4]
+			case "changed_body_location":
+				bodies[1] = strings.ReplaceAll(bodies[1], `"nextPageToken"`, `"cursor"`)
+			}
+			if bodyPagingObservationMatches233(ids, bodies) != (change == "healthy") {
+				t.Fatal("literal ID/body oracle failed independent perturbation")
+			}
+		})
+	}
+}
+
+func TestBodyPagingSourceDefault233(t *testing.T) {
+	for _, explicit := range []bool{false, true} {
+		t.Run(fmt.Sprintf("explicit_%v", explicit), func(t *testing.T) {
+			op := bodyPagingOperation233()
+			op.REST.BodySchema = json.RawMessage(strings.ReplaceAll(string(op.REST.BodySchema), `"default":2`, `"default":1000`))
+			want := `{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":1000}`
+			var body map[string]any
+			if explicit {
+				body = map[string]any{"maxResults": 2}
+				want = `{"issueIdsOrKeys":["10100","10200","10300","10400","10500"],"maxResults":2}`
+			}
+			var sends atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				sends.Add(1)
+				raw, _ := io.ReadAll(r.Body)
+				if string(raw) != want {
+					t.Errorf("source default/override body=%s", raw)
+				}
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = io.WriteString(w, `{"data":[{"id":"source-control"}],"nextPageToken":null}`)
+			}))
+			defer server.Close()
+			b := newTestBundle(t, server, StreamSpec{})
+			b.Operations = []OperationSpec{op}
+			result, err := OperationDirectRead(t.Context(), b, connectors.OperationDirectReadRequest{Operation: op.ID, Body: body}, nil)
+			wantSize := 1000
+			if explicit {
+				wantSize = 2
+			}
+			if err != nil || sends.Load() != 1 || result.Page.Size != wantSize {
+				t.Fatalf("err=%v sends=%d page=%+v", err, sends.Load(), result.Page)
+			}
+		})
+	}
+}
+
+func TestBodyPagingRequiredAndBounds233(t *testing.T) {
+	for _, tc := range []string{"healthy", "required_omitted", "request_bound", "wrong_body_root", "unselected_variant"} {
+		t.Run(tc, func(t *testing.T) {
+			var sends atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				sends.Add(1)
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = io.WriteString(w, `{"data":[{"id":"healthy"}],"nextPageToken":null}`)
+			}))
+			defer server.Close()
+			op := bodyPagingOperation233()
+			switch tc {
+			case "required_omitted":
+				op.REST.Body = nil
+			case "request_bound":
+				op.REST.MaxBytes = 32
+			case "wrong_body_root":
+				op.REST.BodySchema = json.RawMessage(`{"type":"array","items":{"type":"string"},"maxItems":5}`)
+			case "unselected_variant":
+				op.REST.BodySchema = json.RawMessage(`{"oneOf":[{"type":"object"},{"type":"null"}]}`)
+			}
+			b := newTestBundle(t, server, StreamSpec{})
+			b.Operations = []OperationSpec{op}
+			_, err := OperationDirectRead(t.Context(), b, connectors.OperationDirectReadRequest{Operation: op.ID}, nil)
+			if tc == "healthy" {
+				if err != nil || sends.Load() != 1 {
+					t.Fatalf("healthy err=%v sends=%d", err, sends.Load())
+				}
+			} else if err == nil || sends.Load() != 0 {
+				t.Fatalf("invalid err=%v sends=%d", err, sends.Load())
 			}
 		})
 	}

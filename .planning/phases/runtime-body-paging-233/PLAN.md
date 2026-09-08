@@ -2,7 +2,7 @@
 
 Manual inline GSD fallback: same isolated worker, no new roles authorized; installed discuss/plan --tdd/execute/verify prompts resolved in private evidence. Parent owns independent review. Skills retained from229: golang-how-to, testing, CLI, design-patterns, structs-interfaces, error-handling, safety, security, context/concurrency.
 
-Scope: existing BodyCursor/Page/Offset/Limit roles compiled once; typed JSON object only. Query inventory excludes body roles. Safe rest_read POST only. Direct one-page composition and source-bound capsule, saved shared helper; no completion/variant/form/Requester changes. Saved typed schema declaration depends on parent231 seam; do not invent matching by endpoint.
+Scope: existing BodyCursor/Page/Offset/Limit roles compiled once; typed JSON object only. Query inventory excludes body roles. Safe rest_read POST only. Direct one-page composition and source-bound capsule, saved shared helper; no completion/variant/form/Requester changes. Selected234 bridge consumes streamRequestBodySchema plus private preparedReadBody/presence from immutable compiled request_inputs; no matching by endpoint or duplicate BodySchema declaration.
 
 ## TDD plan
 1. Actual source-bound Jira-like operation body-only cursor admission RED, healthy nonpaging POST at same frontier.
@@ -19,3 +19,6 @@ Scope: existing BodyCursor/Page/Offset/Limit roles compiled once; typed JSON obj
 | Fail before side effects | fake | local auth/runtime/send counters with healthy same-frontier peer; intentionally invalid source/input must never reach provider |
 
 No new public CLI flags; documented page/page-cursor semantics extended to admitted POST. Parent owns source/help/Atlas integration. Base f84ff59a, branch fm/cli-batch1-ci-tests210; local commits then parent integration only.
+
+## Final integration ownership
+Parent tip982304b2d normally merged after direct checkpoint81c8b3ae4; inherited compiler/multipart/Atlas changes remain parent provenance. Owned saved bridge adds private StreamSpec.preparedBodyPagination and prepareStreamBodyPagination before runtime setup; parent prepares its input snapshot immediately before that call. Existing Atlas runtime.direct-execution.v1 and warehouse.stage-etl.v1 are extended through declared seams; parent owns same-integration Atlas/source projection updates and independent code review. No new CLI flags; page/page-cursor public semantics retained, documented/source exposure remains parent integration.

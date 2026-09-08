@@ -342,6 +342,7 @@ type RateLimitSpec struct {
 
 // StreamSpec is one entry in streams.json's "streams" array.
 type StreamSpec struct {
+	preparedBodyPagination   *bodyPagingRequest
 	RequestInputs            *RequestInputContract `json:"request_inputs,omitempty"`
 	inputPlan                *compiledRequestInputPlan
 	preparedReadBody         any
