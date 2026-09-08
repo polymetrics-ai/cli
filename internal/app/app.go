@@ -1478,6 +1478,9 @@ func (a *App) RunETL(ctx context.Context, req RunETLRequest) (Run, error) {
 	if delivered, pending := a.deliveredReconciliationFor(req.Connection, req.Stream); pending {
 		return a.reconcileDeliveredTransportRun(ctx, delivered)
 	}
+	if err := a.validateETLReadInputs(ctx, conn.Source, req.Stream); err != nil {
+		return Run{}, err
+	}
 	transportAdmissionFence := a.state.StreamStates[streamStateKey(req.Connection, req.Stream)].ActiveWorkFence
 	if a.connectionMaterializesLocalWarehouse(conn) {
 		if err := a.validateConfiguredLocalWarehouseDestinationTables(); err != nil {

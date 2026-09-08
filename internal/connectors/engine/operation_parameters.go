@@ -193,7 +193,7 @@ func operationBinaryDownloadQuery(op OperationSpec, requested map[string]string)
 }
 
 func validateOperationParameterWireValue(op OperationSpec, parameter OperationParameter, location, value string) error {
-	if location == "query" && parameter.Required && strings.TrimSpace(value) == "" {
+	if location == "query" && parameter.Required && strings.TrimSpace(value) == "" && (op.REST == nil || op.REST.RequestInputs == nil) {
 		return fmt.Errorf("operation %q requires non-blank query parameter %q", op.ID, parameter.Name)
 	}
 	if err := safety.RejectDangerousChars(value, location+" parameter "+parameter.Name); err != nil {

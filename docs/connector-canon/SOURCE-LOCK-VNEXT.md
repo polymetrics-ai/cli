@@ -505,3 +505,29 @@ Command path segments must remain positional through the real hand parser. The s
 A file part may declare `filename_encoding: "url_percent_utf8"` to percent-encode UTF-8 bytes in the ordinary filename parameter. The original basename remains the local file identity; encoding never changes a local path. Omitted policy preserves identity encoding. Control characters, invalid UTF-8 and path-like filename overrides are refused before approval preparation or transport. Prepared nondefault profiles bind logical and wire names with the policy.
 
 An explicit positive `max_metadata_bytes` bounds serialized framing, headers and scalar fields separately from file bytes. In that profile `max_bytes` must exactly equal this budget plus all declared file-part bounds, using checked arithmetic. This does not increase the provider file limit. Asana declares a 104857600-byte file cap, 65536-byte PM metadata budget and 104923136-byte total envelope for both aliases sharing `upload_attachment_file`. These are bounded local-fixture proofs, not provider-live certification; repeated and remote-path multipart families remain separate work.
+
+
+### Scoped generated request inputs
+
+The source compiler derives `schema_refs.input` and a selected stream/REST
+`request_inputs` contract from effective inherited/overridden parameters.
+The input schema is a placed envelope with required `path`, `query`, and
+`header` objects; member requiredness remains inside each object. It is separate
+from the record schema and the existing request-body role. Generated references
+must match the loaded compiled schema and its publication provenance.
+
+Operation input constraints belong to this selected contract, not global
+connection configuration. Saved aliases and direct wire coordinates feed the
+same scalar preparation. Exact integers/decimals retain their JSON lexemes;
+`source_scalar_v1` boolean text is exactly `true` or `false`. Missing values,
+explicit empty strings, and defaults are distinct. Existing unannotated
+connection/flag behavior remains unchanged. Wider body, union, format and
+source-variant lowering must be implemented and verified through their selected
+consumers; these scalar witnesses do not certify those shapes.
+
+`ReadInputValidator` accepts only stream and non-secret input maps. Saved ETL
+calls it after delivered-run reconciliation and before run creation or source
+and destination credential resolution. Runtime continues to consume execution
+JSON only; source locks, documentary evidence and the Atlas remain authoring
+inputs. These authoring additions introduce no public command or runtime help
+namespace.

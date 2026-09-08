@@ -65,6 +65,7 @@ type vNextCommandDescriptor struct {
 }
 
 type vNextSchemaReferences struct {
+	Input    string `json:"input,omitempty"`
 	Request  string `json:"request,omitempty"`
 	Response string `json:"response,omitempty"`
 	Record   string `json:"record,omitempty"`
@@ -278,6 +279,7 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 			{role: "request", reference: descriptor.SchemaRefs.Request},
 			{role: "response", reference: descriptor.SchemaRefs.Response},
 			{role: "record", reference: descriptor.SchemaRefs.Record},
+			{role: "input", reference: descriptor.SchemaRefs.Input},
 		} {
 			if schemaRef.reference == "" {
 				continue
@@ -447,7 +449,9 @@ func renderVNextExecutionBundle(descriptor vNextCanonicalDescriptor) (map[string
 		})
 		var cli map[string]any
 		if len(descriptor.CLI) != 0 {
-			if err := json.Unmarshal(descriptor.CLI, &cli); err != nil {
+			decoder := json.NewDecoder(bytes.NewReader(descriptor.CLI))
+			decoder.UseNumber()
+			if err := decoder.Decode(&cli); err != nil {
 				return nil, err
 			}
 		} else {
@@ -626,7 +630,9 @@ func rawJSONValue(raw json.RawMessage) any {
 		return map[string]any{}
 	}
 	var value any
-	_ = json.Unmarshal(raw, &value)
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	_ = decoder.Decode(&value)
 	return value
 }
 
@@ -640,7 +646,9 @@ func rawJSONValues(raws []json.RawMessage) []any {
 
 func renderRawJSON(raw json.RawMessage) ([]byte, error) {
 	var value any
-	if err := json.Unmarshal(raw, &value); err != nil {
+	decoder := json.NewDecoder(bytes.NewReader(raw))
+	decoder.UseNumber()
+	if err := decoder.Decode(&value); err != nil {
 		return nil, err
 	}
 	return renderJSONObject(value)

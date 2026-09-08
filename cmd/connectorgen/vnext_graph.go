@@ -201,6 +201,29 @@ func buildVNextCanonicalOperation(index int, authored vNextOperationDescriptor) 
 }
 
 func validateVNextSchemaRoles(operation vNextCanonicalOperation, schemas map[string]json.RawMessage) error {
+	if operation.SchemaRefs.Input == "" && (operation.Stream != nil && operation.Stream.Spec.RequestInputs != nil || operation.Operation != nil && operation.Operation.Spec.REST != nil && operation.Operation.Spec.REST.RequestInputs != nil) {
+		return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "input"), fmt.Errorf("selected request input contract lacks its canonical schema role"))
+	}
+	if reference := operation.SchemaRefs.Input; reference != "" {
+		matched := false
+		if operation.Stream != nil {
+			contract := operation.Stream.Spec.RequestInputs
+			if contract == nil || contract.Schema != reference {
+				return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "input"), fmt.Errorf("input schema does not match selected stream"))
+			}
+			matched = true
+		}
+		if operation.Operation != nil && operation.Operation.Spec.REST != nil {
+			contract := operation.Operation.Spec.REST.RequestInputs
+			if contract == nil || contract.Schema != reference {
+				return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "input"), fmt.Errorf("input schema does not match selected operation"))
+			}
+			matched = true
+		}
+		if !matched {
+			return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "input"), fmt.Errorf("input schema has no selected request consumer"))
+		}
+	}
 	if reference := operation.SchemaRefs.Request; reference != "" {
 		if operation.Write == nil && operation.Operation == nil {
 			return vNextGraphError(vNextOperationPointer(operation.Index, "schema_refs", "request"), fmt.Errorf("request schema %q has no write or operation binding", reference))
@@ -227,6 +250,7 @@ func validateVNextSchemaRoles(operation vNextCanonicalOperation, schemas map[str
 		{name: "request", reference: operation.SchemaRefs.Request},
 		{name: "response", reference: operation.SchemaRefs.Response},
 		{name: "record", reference: operation.SchemaRefs.Record},
+		{name: "input", reference: operation.SchemaRefs.Input},
 	} {
 		if role.reference == "" {
 			continue

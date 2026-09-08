@@ -1147,6 +1147,7 @@ type CLICommandGroup struct {
 
 // CLIFlag describes one command or global flag.
 type CLIFlag struct {
+	InputCodec      string                  `json:"input_codec,omitempty"`
 	Name            string                  `json:"name"`
 	Type            string                  `json:"type"`
 	Summary         string                  `json:"summary,omitempty"`
@@ -1506,10 +1507,18 @@ func loadBundle(fsys fs.FS, dirName string) (loaded Bundle, loadErr error) {
 		return Bundle{}, err
 	}
 
+	if err := loadRequestInputPlans(sub, streams, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+
 	currentFile = "cli_surface.json"
 	cliSurface, rawCLISurface, err := loadCLISurface(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
+	}
+
+	if err := validateRequestInputCommands(cliSurface, streams, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
 	}
 
 	currentFile = "rate_limits.json"

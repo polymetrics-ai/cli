@@ -85,6 +85,10 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 		return err
 	}
 	req.Config = materializeConfigDefaults(b, req.Config)
+	stream, req, err = prepareReadInputs(stream, req)
+	if err != nil {
+		return err
+	}
 
 	routeBaseURL, err := resolveStreamRoute(b, req.Config, stream)
 	if err != nil {

@@ -194,6 +194,7 @@
                 "type": "object",
                 "additionalProperties": true
               },
+              "request_inputs": {"type":"object","required":["version","schema","bindings"],"additionalProperties":false,"properties":{"version":{"type":"integer","enum":[1]},"schema":{"type":"string"},"bindings":{"type":"array","items":{"type":"object","required":["in"],"additionalProperties":false,"properties":{"config_key":{"type":"string"},"in":{"type":"string","enum":["path","query","header","body"]},"name":{"type":"string"},"pointer":{"type":"string"}}}}}},
               "body_schema": { "type": "object" },
               "multipart": {
                 "type": "object",

@@ -53,10 +53,17 @@ func TestSourceProjection206UnsupportedSourceSemantics(t *testing.T) {
 	}
 }
 
+func TestSourceProjection206ScalarInputs(t *testing.T) {
+	for _, variant := range []string{"query_integer", "query_bigint", "query_decimal", "query_boolean"} {
+		t.Run(variant, func(t *testing.T) { sourceProjectionPublishedRead206(t, "direct_"+variant, false) })
+	}
+}
+
 func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal bool) {
 	t.Helper()
 	direct := strings.HasPrefix(variant, "direct_")
 	variant = strings.TrimPrefix(variant, "direct_")
+	variant, selectedBad, selectBad := strings.Cut(variant, "|")
 	var requests []string
 	var requestMu sync.Mutex
 	requestSnapshot := func() []string {
@@ -95,7 +102,7 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	case "response_status":
 		source = bytes.Replace(source, []byte(`"200"`), []byte(`"201"`), 1)
 	}
-	inputVariant := variant == "inherited_path" || variant == "operation_override" || variant == "optional_query_absent" || variant == "optional_query_present" || variant == "missing_path"
+	inputVariant := strings.HasPrefix(variant, "query_") || variant == "inherited_path" || variant == "operation_override" || variant == "optional_query_absent" || variant == "optional_query_present" || variant == "missing_path"
 	expectedPath, expectedWire := "/widgets", "GET /widgets"
 	runtimeConfig := map[string]string{}
 	expectedName := "widgets"
@@ -128,6 +135,29 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 				override["schema"] = map[string]any{"type": "string", "enum": []any{"acme"}}
 				operation["parameters"] = []any{override}
 			}
+		} else if strings.HasPrefix(variant, "query_") {
+			schema := map[string]any{"type": "integer", "minimum": json.Number("1"), "maximum": json.Number("5")}
+			runtimeConfig["page_size"] = "3"
+			expectedWire = "GET /widgets?page_size=3"
+			if variant == "query_bigint" {
+				schema["minimum"] = json.Number("9007199254740993")
+				schema["maximum"] = json.Number("9007199254740995")
+				runtimeConfig["page_size"] = "9007199254740994"
+				expectedWire = "GET /widgets?page_size=9007199254740994"
+			}
+			if variant == "query_decimal" {
+				schema["type"] = "number"
+				schema["minimum"] = json.Number("0.10000000000000001")
+				schema["maximum"] = json.Number("0.10000000000000003")
+				runtimeConfig["page_size"] = "0.10000000000000002"
+				expectedWire = "GET /widgets?page_size=0.10000000000000002"
+			}
+			if variant == "query_boolean" {
+				schema = map[string]any{"type": "boolean"}
+				runtimeConfig["page_size"] = "false"
+				expectedWire = "GET /widgets?page_size=false"
+			}
+			operation["parameters"] = []any{map[string]any{"in": "query", "name": "page_size", "required": false, "schema": schema}}
 		} else {
 			operation["parameters"] = []any{map[string]any{"in": "query", "name": "owner-id", "required": false, "schema": map[string]any{"type": "string"}}}
 			if variant == "optional_query_present" {
@@ -186,6 +216,25 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 		Semantics: []vNextSourceProjectionSemantic{{Source: vNextSourceProjectionKey{Inventory: "primary", ID: "fixture.widgets"}, Collection: &vNextSourceProjectionCollection{
 			Records: vNextSourceCoordinate{Response: &vNextSourceResponseCoordinate{Status: "200", Media: "application/json", Pointer: &pointer}}, PrimaryKey: []string{"/id"},
 		}}},
+	}
+	if strings.HasPrefix(variant, "document_") {
+		documentary := []byte("Doc: widgets returns three records. An example is not membership.")
+		if err := os.WriteFile(filepath.Join(connector, "sources", "guide.txt"), documentary, 0600); err != nil {
+			t.Fatal(err)
+		}
+		lock.SourceProjection.Documents = []vNextSourceProjectionDocument{{ID: "guide", Path: "sources/guide.txt", SHA256: sourceBytesHash(documentary), Bytes: int64(len(documentary)), Format: "text", SourceURL: "https://docs.example.test/widgets", Revision: "fixture1", RetrievedAt: "2026-09-09T00:00:00Z"}}
+		span := &sourceFactSpan{Offset: 5, Length: 7, SHA256: sourceBytesHash([]byte("widgets"))}
+		lock.SourceProjection.Semantics[0].Evidence = []sourceFactRef{{DocumentID: "guide", Span: span}}
+		switch variant {
+		case "document_bad_pin":
+			lock.SourceProjection.Documents[0].SHA256 = strings.Repeat("a", 64)
+		case "document_bad_span":
+			span.SHA256 = strings.Repeat("a", 64)
+		case "document_outside_span":
+			span.Offset = int64(len(documentary))
+		case "document_conflicting_selector":
+			lock.SourceProjection.Semantics[0].Evidence[0].Pointer = "/fake"
+		}
 	}
 	if variant == "response_media" {
 		lock.SourceProjection.Semantics[0].Collection.Records.Response.Media = "application/xml"
@@ -249,11 +298,45 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	}
 	if variant == "operation_override" {
 		var schema map[string]any
-		if err := json.Unmarshal(execution["spec.json"], &schema); err != nil {
+		contract := bundle.Streams[0].RequestInputs
+		if contract == nil {
+			t.Fatal("missing selected request input contract")
+		}
+		if err := json.Unmarshal(execution[contract.Schema], &schema); err != nil {
 			t.Fatal(err)
 		}
-		if !reflect.DeepEqual(schema["properties"].(map[string]any)["namespace"].(map[string]any)["enum"], []any{"acme"}) {
+		pathSchema := schema["properties"].(map[string]any)["path"].(map[string]any)
+		if !reflect.DeepEqual(pathSchema["properties"].(map[string]any)["namespace"].(map[string]any)["enum"], []any{"acme"}) {
 			t.Fatal("operation override constraint lost")
+		}
+		badConfig := map[string]string{}
+		for key, value := range runtimeConfig {
+			badConfig[key] = value
+		}
+		badConfig["namespace"] = "wrong"
+		badRows := 0
+		badErr := engine.Read(t.Context(), bundle, connectors.ReadRequest{Stream: expectedName, Config: connectors.RuntimeConfig{Config: badConfig}}, nil, func(connectors.Record) error { badRows++; return nil })
+		if badErr == nil || badRows != 0 || len(requestSnapshot()) != 0 {
+			t.Fatalf("overridden enum did not refuse before I/O: %v rows=%d requests=%v", badErr, badRows, requestSnapshot())
+		}
+	}
+	if bundle.Streams[0].RequestInputs != nil {
+		rawProvenance, err := handle.ReadFile("provenance.json")
+		if err != nil {
+			t.Fatal(err)
+		}
+		var provenance []vNextSourceExecutionProvenance
+		if err := json.Unmarshal(rawProvenance, &provenance); err != nil {
+			t.Fatal(err)
+		}
+		foundInput := false
+		for _, row := range provenance {
+			if row.TargetKind == "schema" && row.TargetID == bundle.Streams[0].RequestInputs.Schema && strings.HasSuffix(row.FieldPath, "/schema_refs/input") {
+				foundInput = true
+			}
+		}
+		if !foundInput {
+			t.Fatal("published request input schema lost source-to-execution provenance")
 		}
 	}
 	var ids []string
@@ -290,6 +373,33 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 		if err != nil {
 			t.Fatal(err)
 		}
+		if strings.HasPrefix(variant, "query_") {
+			invalid := []string{"0", "6", "not-an-integer"}
+			if variant == "query_bigint" {
+				invalid = []string{"9007199254740992", "9007199254740996", "9007199254740994.5"}
+			}
+			if variant == "query_decimal" {
+				invalid = []string{"0.10000000000000000", "0.10000000000000004", "1/10"}
+			}
+			if variant == "query_boolean" {
+				invalid = []string{"not-a-boolean"}
+			}
+			if selectBad {
+				invalid = []string{selectedBad}
+			}
+			for _, bad := range invalid {
+				_, badErr := commandrunner.Run(t.Context(), consumer, commandrunner.Request{Path: []string{"api", expectedCommand}, Flags: map[string][]string{"page_size": {bad}}}, nil)
+				if badErr == nil || len(requestSnapshot()) != 2 {
+					t.Fatalf("invalid scalar %q error=%v requests=%v", bad, badErr, requestSnapshot())
+				}
+				emitted := 0
+				savedErr := consumer.Read(t.Context(), connectors.ReadRequest{Stream: expectedName, Config: connectors.RuntimeConfig{Config: map[string]string{"page_size": bad}}}, func(connectors.Record) error { emitted++; return nil })
+				if savedErr == nil || emitted != 0 || len(requestSnapshot()) != 2 {
+					t.Fatalf("invalid saved scalar %q error=%v emitted=%d requests=%v", bad, savedErr, emitted, requestSnapshot())
+				}
+
+			}
+		}
 		if result.DirectRead == nil {
 			t.Fatal("generated direct command returned no direct result")
 		}
@@ -299,6 +409,28 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 		}
 		if string(body) != `{"data":[{"id":"alpha"},{"id":"bravo"},{"id":"charlie"}]}` || !reflect.DeepEqual(requestSnapshot(), []string{expectedWire, expectedWire}) {
 			t.Fatalf("direct body=%s requests=%v", body, requestSnapshot())
+		}
+	}
+}
+
+func TestSourceProjectionDocumentClosure230(t *testing.T) {
+	for _, variant := range []string{"document_healthy", "document_bad_pin", "document_bad_span", "document_outside_span", "document_conflicting_selector"} {
+		t.Run(variant, func(t *testing.T) { sourceProjectionPublishedRead206(t, variant, variant != "document_healthy") })
+	}
+}
+
+func TestSourceProjectionAdditionalScalarInvalid234(t *testing.T) {
+	for _, tc := range []struct {
+		kind   string
+		values []string
+	}{
+		{"query_integer", []string{"6", "not-an-integer"}},
+		{"query_bigint", []string{"9007199254740996", "9007199254740994.5"}},
+		{"query_decimal", []string{"0.10000000000000004", "1/10"}},
+		{"query_boolean", []string{"1", "TRUE", ""}},
+	} {
+		for _, bad := range tc.values {
+			t.Run(tc.kind+"/"+bad, func(t *testing.T) { sourceProjectionPublishedRead206(t, "direct_"+tc.kind+"|"+bad, false) })
 		}
 	}
 }

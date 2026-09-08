@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 53,
+  "catalog_revision": 54,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -61,7 +61,8 @@
           "cmd/connectorgen/source_visibility.go",
           "cmd/connectorgen/source_visibility_capabilities.go",
           "cmd/connectorgen/vnext_flag_ownership.go",
-          "internal/connectors/command_flag_ownership.go"
+          "internal/connectors/command_flag_ownership.go",
+          "cmd/connectorgen/vnext_source_request_inputs.go"
         ],
         "symbols": [
           {
@@ -319,6 +320,10 @@
           {
             "file": "internal/connectors/command_flag_ownership.go",
             "name": "IsSharedCommandControl"
+          },
+          {
+            "file": "cmd/connectorgen/vnext_source_request_inputs.go",
+            "name": "sourceProjectionInputContract"
           }
         ]
       },
@@ -443,7 +448,8 @@
         "Source visibility preserves every independently pinned source key and seven lanes, exact retained citations and scoped uncertainty. Selected diagnostic metadata is distinct from execution identity and cannot gate ordinary valid commands. Invalid source inputs are refused before generated output writes; this does not claim transactional publication across generator output files.",
         "Every authored command path, including planned, unsupported and deferred paths, must pass the shared exact CommandPathSegments parser before normalized alias collision admission; validation never rewrites a declared name.",
         "Canonical authoring reserves the shared closed PM control namespace. Conflicting provider flags receive deterministic unoccupied provider- aliases, preserving MapsTo and all other metadata. Only the exact optional nonrepeatable non-EnvOnly integer limit-to-limit tuple on stream-backed ETL/direct-read may share a control name. Final render and admission independently reject reserved provider names or changed source-bound alias metadata; alias provenance is authoring-only.",
-        "Command path segments are positional tokens: the shared guard rejects every --prefixed segment at any position before publication, while legal flag-name grammar and provider request mappings remain separate."
+        "Command path segments are positional tokens: the shared guard rejects every --prefixed segment at any position before publication, while legal flag-name grammar and provider request mappings remain separate.",
+        "Generated scalar request inputs use a per-consumer schema_refs.input role joined to the loaded request_inputs schema and source-to-execution provenance; operation constraints are not promoted into connection-wide configuration."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -1228,6 +1234,11 @@
           "package": "./internal/cli",
           "file": "internal/cli/command_path_tokens_194_test.go",
           "name": "TestCommandPathPositionalTokens194"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_projection_pipeline206_test.go",
+          "name": "TestSourceProjection206ScalarInputs"
         }
       ],
       "publication_guarantee_proofs": [
@@ -1484,7 +1495,8 @@
           "internal/connectors/polling_watermark.go",
           "internal/connectors/sync_transport.go",
           "internal/connectors/engine/command_endpoint.go",
-          "internal/connectors/engine/multipart_policy.go"
+          "internal/connectors/engine/multipart_policy.go",
+          "internal/connectors/engine/request_inputs_load.go"
         ],
         "symbols": [
           {
@@ -1562,6 +1574,10 @@
           {
             "file": "internal/connectors/engine/multipart_policy.go",
             "name": "validateMultipartEnvelope"
+          },
+          {
+            "file": "internal/connectors/engine/request_inputs_load.go",
+            "name": "loadRequestInputPlans"
           }
         ]
       },
@@ -1641,7 +1657,8 @@
         "Invalid execution bundles retain internal error classification; source visibility and unsupported-lane dispositions remain separate.",
         "Database declaration diagnostics retain schema-owned $.field[index] coordinates; @byte:N identifies an unknown member token end without publishing member text.",
         "Generic and root command-target path/method refusals retain safe exact command-owner JSON coordinates and inspectable causes through the App and CLI.",
-        "Explicit multipart metadata budgets are positive and whole envelopes equal the checked sum of file caps plus metadata; filename encoding is closed and file-only."
+        "Explicit multipart metadata budgets are positive and whole envelopes equal the checked sum of file caps plus metadata; filename encoding is closed and file-only.",
+        "Opt-in request_inputs schemas are confined, bounded and compiled into detached plans; named bindings must exist and saved aliases must match their selected wire templates. This does not prove unsupported source variants or grant runtime source access."
       ],
       "non_goals": [
         "Importing provider documentation.",
@@ -1836,6 +1853,11 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/multipart_policy217_test.go",
           "name": "TestMultipartPolicyAdmission217"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/request_inputs_test.go",
+          "name": "TestLoadRequestInputContract234"
         }
       ],
       "known_gap_refs": [],
@@ -1886,7 +1908,9 @@
           "internal/app/lifecycle.go",
           "internal/coordination/shared_rate_limit_scope.go",
           "internal/connectors/engine/rate_limit_runtime.go",
-          "internal/connectors/connsdk/multipart_filename.go"
+          "internal/connectors/connsdk/multipart_filename.go",
+          "internal/connectors/source_scalar.go",
+          "internal/connectors/engine/request_inputs_prepare.go"
         ],
         "symbols": [
           {
@@ -1996,6 +2020,14 @@
           {
             "file": "internal/connectors/connsdk/multipart_filename.go",
             "name": "MultipartFileNames"
+          },
+          {
+            "file": "internal/connectors/source_scalar.go",
+            "name": "DecodeSourceScalar"
+          },
+          {
+            "file": "internal/connectors/engine/request_inputs_prepare.go",
+            "name": "prepareOperationReadInputs"
           }
         ]
       },
@@ -2073,7 +2105,8 @@
         "A declared base-check max_bytes is between 1 and the existing 64 MiB requester cap and uses that bounded requester path; omitted max_bytes retains the legacy response bound.",
         "Selected source visibility uses one bounded gzip member with cancellation, exact decoded size and digest, checked EOF/CRC and no trailing bytes; ordinary execution does not decode this metadata. Encoding never grants lane authority.",
         "Executable runtimes borrow an invocation-owned shared rate-limit coordinator through RuntimeConfig.SharedRateLimits. Required shared policies fail closed without it; owned Apps cancel and join parked work before the invocation closes its lazily created client. Metadata/preflight do not create that client.",
-        "Multipart percent encoding affects only the ordinary wire filename; original file custody remains unchanged. Metadata, file and total bounds are separate; nondefault prepared identity binds policy and logical/wire names."
+        "Multipart percent encoding affects only the ordinary wire filename; original file custody remains unchanged. Metadata, file and total bounds are separate; nondefault prepared identity binds policy and logical/wire names.",
+        "Generated source_scalar_v1 values retain exact numeric lexemes and strict boolean spelling. Opt-in direct and saved input validation precedes runtime construction; absent-contract legacy coercion remains unchanged. Named body/variant lowering remains a separately required consumer contract."
       ],
       "non_goals": [
         "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
@@ -2258,6 +2291,16 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/multipart_policy217_test.go",
           "name": "TestMultipartPolicyPreviewName217"
+        },
+        {
+          "package": "./internal/connectors/commandrunner",
+          "file": "internal/connectors/commandrunner/source_scalar_test.go",
+          "name": "TestGeneratedSourceScalarCodec234"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/request_inputs_test.go",
+          "name": "TestOperationDirectReadInputContract234"
         }
       ],
       "known_gap_refs": [
@@ -3205,7 +3248,8 @@
           "internal/app/transport_dispatch.go",
           "internal/warehouse/artifact.go",
           "internal/warehouse/layout.go",
-          "internal/warehouse/parquet.go"
+          "internal/warehouse/parquet.go",
+          "internal/app/read_input_preflight.go"
         ],
         "symbols": [
           {
@@ -3251,6 +3295,10 @@
           {
             "file": "internal/warehouse/parquet.go",
             "name": "NormalizeValue"
+          },
+          {
+            "file": "internal/app/read_input_preflight.go",
+            "name": "(*App).validateETLReadInputs"
           }
         ]
       },
@@ -3323,7 +3371,8 @@
         "full_append and full_overwrite are local execution policies selected by the connection; they do not assert a provider cursor, ordering, delete, or idempotency semantic.",
         "Incremental modes still require an admitted provider cursor or event executor; warehouse materialization cannot manufacture one.",
         "Dedupe history requires a declared row cursor; incremental append requires a durable candidate checkpoint.",
-        "Change capture requires its typed source and transport path and is not implied by ordinary materialization."
+        "Change capture requires its typed source and transport path and is not implied by ordinary materialization.",
+        "For selected ReadInputValidator consumers, ordinary saved ETL validates credential metadata plus endpoint overrides after delivered-run reconciliation and before beginRun or source/destination credential resolution; validation carries no secret or runtime capability."
       ],
       "non_goals": [
         "A Postgres warehouse or generic SQL destination.",
@@ -3420,6 +3469,11 @@
           "package": "./internal/cli",
           "file": "internal/cli/postgres_checkpoint_oracle_173_test.go",
           "name": "TestPostgresCheckpointAdvanceOracle173"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/read_input_preflight_test.go",
+          "name": "TestRunETLReadInputPreSecret234"
         }
       ],
       "known_gap_refs": [],

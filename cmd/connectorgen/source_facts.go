@@ -13,11 +13,12 @@ import (
 )
 
 type sourceFactRef struct {
-	Section     string `json:"section,omitempty"`
-	Part        string `json:"part,omitempty"`
-	DocumentID  string `json:"document_id"`
-	Pointer     string `json:"pointer"`
-	ValueSHA256 string `json:"value_sha256"`
+	Span        *sourceFactSpan `json:"span,omitempty"`
+	Section     string          `json:"section,omitempty"`
+	Part        string          `json:"part,omitempty"`
+	DocumentID  string          `json:"document_id"`
+	Pointer     string          `json:"pointer"`
+	ValueSHA256 string          `json:"value_sha256"`
 }
 
 type sourceParameterFact struct {
@@ -561,6 +562,9 @@ func sourceRenderedSection(markup []byte, section string) (string, string, error
 // Rendered selectors are checked against the same bounded section parser;
 // ordinary source facts continue to use exact local JSON pointers.
 func resolveSourceFactValue(document retainedSourceDocument, ref sourceFactRef) (json.RawMessage, error) {
+	if ref.Span != nil {
+		return nil, fmt.Errorf("raw byte citation is not a canonical JSON value selector")
+	}
 	if document.ID != ref.DocumentID {
 		return nil, fmt.Errorf("source document identity mismatch")
 	}
@@ -686,4 +690,10 @@ func sourceDocumentPointer(document retainedSourceDocument, pointer string) (jso
 	}
 	facts := sourceFacts{Document: document.Payload, analysis: &sourceShapeAnalysis{Root: view.ReferenceRoot}}
 	return sourceAnalysisPointer(facts, pointer)
+}
+
+type sourceFactSpan struct {
+	Offset int64  `json:"offset"`
+	Length int64  `json:"length"`
+	SHA256 string `json:"sha256"`
 }

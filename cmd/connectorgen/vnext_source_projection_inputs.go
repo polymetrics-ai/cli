@@ -15,6 +15,7 @@ import (
 	"golang.org/x/sys/unix"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
+	"polymetrics.ai/internal/safety"
 )
 
 type vNextSourceProjectionInputs struct {
@@ -133,6 +134,9 @@ func (inputs *vNextSourceProjectionInputs) inventory(lock vNextSourceLock) (reta
 	if len(inventory.Diagnostics) != 0 {
 		return retainedSourceInventory{}, fmt.Errorf("source_projection inventory refused: %s", inventory.Diagnostics[0].Code)
 	}
+	if err := inputs.loadDocuments(lock, &inventory); err != nil {
+		return retainedSourceInventory{}, err
+	}
 	return inventory, nil
 }
 
@@ -144,6 +148,17 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 	documents := map[string]retainedSourceDocument{}
 	for _, document := range inventory.Documents {
 		documents[document.ID] = document
+	}
+	for _, semantic := range lock.SourceProjection.Semantics {
+		for _, ref := range semantic.Evidence {
+			doc, ok := documents[ref.DocumentID]
+			if !ok {
+				return vNextSourceLock{}, fmt.Errorf("source_projection citation document missing")
+			}
+			if err := validateSourceProjectionCitation(doc, ref); err != nil {
+				return vNextSourceLock{}, err
+			}
+		}
 	}
 	lowered := lock
 	lowered.SourceProjection = nil
@@ -214,7 +229,12 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 			return vNextSourceLock{}, fmt.Errorf("source_projection source %q: %w", row.Key.ID, err)
 		}
 		lowered.ConfigSchema = configSchema
-		stream, err := json.Marshal(map[string]any{"name": name, "path": streamPath, "query": query, "records": map[string]string{"path": recordPath}, "schema": schemaPath})
+		inputSchema, inputContract, err := sourceProjectionInputContract(facts)
+		if err != nil {
+			return vNextSourceLock{}, err
+		}
+		lowered.Schemas[inputContract.Schema] = inputSchema
+		stream, err := json.Marshal(map[string]any{"name": name, "path": streamPath, "query": query, "request_inputs": inputContract, "records": map[string]string{"path": recordPath}, "schema": schemaPath})
 		if err != nil {
 			return vNextSourceLock{}, err
 		}
@@ -222,11 +242,31 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 		if err != nil {
 			return vNextSourceLock{}, err
 		}
-		descriptor := vNextOperationDescriptor{ID: "stream:" + name, Source: source, Stream: stream, SchemaRefs: vNextSchemaReferences{Record: schemaPath}}
+		descriptor := vNextOperationDescriptor{ID: "stream:" + name, Source: source, Stream: stream, SchemaRefs: vNextSchemaReferences{Record: schemaPath, Input: inputContract.Schema}}
 		if lock.Lanes["direct_read"] == "implemented" {
 			operation, command, err := sourceProjectionDirectInput(facts, name)
 			if err != nil {
 				return vNextSourceLock{}, fmt.Errorf("source_projection source %q: %w", row.Key.ID, err)
+			}
+			var operationFields map[string]json.RawMessage
+			if err := decodeSourceJSON(operation, &operationFields); err != nil {
+				return vNextSourceLock{}, err
+			}
+			var restFields map[string]json.RawMessage
+			if err := decodeSourceJSON(operationFields["rest"], &restFields); err != nil {
+				return vNextSourceLock{}, err
+			}
+			restFields["request_inputs"], err = json.Marshal(inputContract)
+			if err != nil {
+				return vNextSourceLock{}, err
+			}
+			operationFields["rest"], err = json.Marshal(restFields)
+			if err != nil {
+				return vNextSourceLock{}, err
+			}
+			operation, err = json.Marshal(operationFields)
+			if err != nil {
+				return vNextSourceLock{}, err
 			}
 			descriptor.Operation = operation
 			descriptor.Commands = []vNextCommandDescriptor{{Command: command}}
@@ -352,7 +392,7 @@ func sourceProjectionStreamInputs(facts sourceFacts, configSchema json.RawMessag
 	query := map[string]any{}
 	locations := map[string]string{}
 	for _, parameter := range facts.Parameters {
-		if !namePattern.MatchString(parameter.Name) || (parameter.In != "path" && parameter.In != "query") {
+		if safety.ValidateIdentifier(parameter.Name, "source parameter") != nil || (parameter.In != "path" && parameter.In != "query") {
 			return "", nil, nil, fmt.Errorf("parameter requires an unsupported stream binding")
 		}
 		if previous, exists := locations[parameter.Name]; exists && previous != parameter.In {
@@ -363,7 +403,7 @@ func sourceProjectionStreamInputs(facts sourceFacts, configSchema json.RawMessag
 		if !ok {
 			return "", nil, nil, fmt.Errorf("parameter does not resolve")
 		}
-		schema, ok := sourceProjectionTypedSchema(facts, node["schema"], "string")
+		schema, _, ok := sourceProjectionScalarSchema(facts, node["schema"])
 		if !ok {
 			return "", nil, nil, fmt.Errorf("parameter requires an unsupported stream schema")
 		}
@@ -391,7 +431,6 @@ func sourceProjectionStreamInputs(facts sourceFacts, configSchema json.RawMessag
 				return "", nil, nil, fmt.Errorf("source parameter conflicts with an existing configuration schema")
 			}
 		}
-		properties[parameter.Name] = rendered
 		template := "{{ config." + parameter.Name + " }}"
 		if parameter.In == "path" {
 			placeholder := "{" + parameter.Name + "}"
@@ -420,7 +459,7 @@ func sourceProjectionDirectInput(facts sourceFacts, name string) (json.RawMessag
 		if !ok {
 			return nil, nil, fmt.Errorf("direct parameter does not resolve")
 		}
-		schema, ok := sourceProjectionTypedSchema(facts, node["schema"], "string")
+		schema, kind, ok := sourceProjectionScalarSchema(facts, node["schema"])
 		if !ok {
 			return nil, nil, fmt.Errorf("direct parameter schema is not yet lowered")
 		}
@@ -428,13 +467,18 @@ func sourceProjectionDirectInput(facts sourceFacts, name string) (json.RawMessag
 		// dialect. Broader source schemas require the matching typed consumer.
 		for field := range schema {
 			switch field {
-			case "type", "description", "title", "enum":
+			case "type", "description", "title", "enum", "minimum", "maximum":
 			default:
 				return nil, nil, fmt.Errorf("direct parameter schema keyword %q is not yet lowered", field)
 			}
 		}
-		parameter := map[string]any{"name": p.Name, "in": p.In, "type": "string", "required": p.Required}
-		flag := map[string]any{"name": p.Name, "type": "string", "summary": p.Name, "required": p.Required, "maps_to": p.In + "." + p.Name}
+		parameter := map[string]any{"name": p.Name, "in": p.In, "type": kind, "required": p.Required}
+		flag := map[string]any{"name": p.Name, "type": kind, "input_codec": "source_scalar_v1", "summary": p.Name, "required": p.Required, "maps_to": p.In + "." + p.Name}
+		for _, bound := range []string{"minimum", "maximum"} {
+			if raw := schema[bound]; len(raw) != 0 {
+				parameter[bound], flag[bound] = raw, raw
+			}
+		}
 		if raw := schema["enum"]; len(raw) != 0 {
 			var values []string
 			if err := decodeSourceJSON(raw, &values); err != nil || len(values) == 0 {
@@ -582,4 +626,15 @@ func sourceProjectionDefaultName(identity string) string {
 		name.WriteByte(c)
 	}
 	return name.String()
+}
+
+// sourceProjectionScalarSchema preserves the declared scalar kind and exact
+// numeric lexemes. Serialization and richer constraints retain their own gates.
+func sourceProjectionScalarSchema(facts sourceFacts, raw json.RawMessage) (map[string]json.RawMessage, string, bool) {
+	for _, kind := range []string{"string", "integer", "number", "boolean"} {
+		if schema, ok := sourceProjectionTypedSchema(facts, raw, kind); ok {
+			return schema, kind, true
+		}
+	}
+	return nil, "", false
 }

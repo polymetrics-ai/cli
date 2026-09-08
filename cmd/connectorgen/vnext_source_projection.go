@@ -9,6 +9,7 @@ import (
 // vNextSourceProjection is authoring input, never a runtime execution reader.
 // Its derived output must enter the existing canonical graph.
 type vNextSourceProjection struct {
+	Documents   []vNextSourceProjectionDocument  `json:"documents,omitempty"`
 	Version     int                              `json:"version"`
 	Inventories []vNextSourceProjectionInventory `json:"inventories"`
 	Semantics   []vNextSourceProjectionSemantic  `json:"semantics,omitempty"`
@@ -101,6 +102,9 @@ func validateVNextSourceProjection(lock vNextSourceLock, members map[string]json
 			return fmt.Errorf("source_projection retained byte budget exceeded")
 		}
 	}
+	if err := validateSourceProjectionDocuments(p); err != nil {
+		return err
+	}
 	if len(p.Semantics) > 100000 {
 		return fmt.Errorf("source_projection semantic budget exceeded")
 	}
@@ -145,4 +149,16 @@ func validateVNextSourceProjection(lock vNextSourceLock, members map[string]json
 		}
 	}
 	return nil
+}
+
+// vNextSourceProjectionDocument is inert documentary evidence, never membership.
+type vNextSourceProjectionDocument struct {
+	ID          string `json:"id"`
+	Path        string `json:"path"`
+	SHA256      string `json:"sha256"`
+	Bytes       int64  `json:"bytes"`
+	Format      string `json:"format"`
+	SourceURL   string `json:"source_url"`
+	Revision    string `json:"revision"`
+	RetrievedAt string `json:"retrieved_at"`
 }
