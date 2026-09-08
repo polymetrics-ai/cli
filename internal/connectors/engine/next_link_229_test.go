@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -14,6 +15,7 @@ import (
 	"sync"
 	"sync/atomic"
 	"testing"
+	"testing/fstest"
 )
 
 // Literal CP21 page positions and named identities, independent of composition.
@@ -508,5 +510,63 @@ func TestNextLinkEncodedURLBound229(t *testing.T) {
 	_, err := readAll(t, t.Context(), b, connectors.ReadRequest{Stream: "widgets"}, nil)
 	if err == nil || sends.Load() != 1 {
 		t.Fatalf("next URL byte bound err=%v sends=%d", err, sends.Load())
+	}
+}
+
+func TestNextLinkLoadedDescriptor229(t *testing.T) {
+	for _, location := range []string{"base", "stream", "operation"} {
+		for _, invalid := range []bool{false, true} {
+			t.Run(fmt.Sprintf("%s/invalid_%v", location, invalid), func(t *testing.T) {
+				fsys := fullValidBundleFS("acme")
+				policy := map[string]any{"allowed": []string{"filter"}, "retain": []string{"filter"}}
+				if invalid {
+					policy["arbitrary"] = true
+				}
+				pagination := map[string]any{"type": "next_url", "next_url_path": "next", "page_param": "position", "next_url_query": policy}
+				if location == "operation" {
+					operations := map[string]any{"operations": []any{map[string]any{"id": "acme.list", "kind": "rest_read", "summary": "List", "risk": "low", "approval": "none", "output_policy": "json_redacted", "rest": map[string]any{"method": "GET", "path": "/widgets", "max_bytes": 1024, "pagination": pagination, "pagination_parameters": []any{map[string]any{"name": "position", "in": "query", "type": "string"}, map[string]any{"name": "filter", "in": "query", "type": "string"}}}}}}
+					raw, err := json.Marshal(operations)
+					if err != nil {
+						t.Fatal(err)
+					}
+					fsys["acme/operations.json"] = &fstest.MapFile{Data: raw}
+				} else {
+					var doc map[string]any
+					if err := json.Unmarshal(fsys["acme/streams.json"].Data, &doc); err != nil {
+						t.Fatal(err)
+					}
+					if location == "base" {
+						doc["base"].(map[string]any)["pagination"] = pagination
+					} else {
+						doc["streams"].([]any)[0].(map[string]any)["pagination"] = pagination
+					}
+					raw, err := json.Marshal(doc)
+					if err != nil {
+						t.Fatal(err)
+					}
+					fsys["acme/streams.json"] = &fstest.MapFile{Data: raw}
+				}
+				b, err := Load(fsys, "acme")
+				if invalid {
+					if err == nil {
+						t.Fatal("unknown query-contract field admitted")
+					}
+					return
+				}
+				if err != nil {
+					t.Fatalf("closed next-link descriptor rejected by actual loader: %v", err)
+				}
+				spec := b.HTTP.Pagination
+				if location == "stream" {
+					spec = b.Streams[0].Pagination
+				}
+				if location == "operation" {
+					spec = b.Operations[0].REST.Pagination
+				}
+				if spec.NextURLQuery == nil || !reflect.DeepEqual(spec.NextURLQuery.Allowed, []string{"filter"}) || !reflect.DeepEqual(spec.NextURLQuery.Retain, []string{"filter"}) {
+					t.Fatal("loaded descriptor lost closed ownership")
+				}
+			})
+		}
 	}
 }
