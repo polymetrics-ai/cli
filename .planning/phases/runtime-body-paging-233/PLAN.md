@@ -25,3 +25,6 @@ Parent tip982304b2d normally merged after direct checkpoint81c8b3ae4; inherited 
 
 ## Mixed query-size/body-position gap
 Before final handoff, independent literal offset-limit controls exercise query-owned caller size3 with body-owned offset. Plan-phase --gaps / execute-phase --gaps-only prompts retained. Direct must send page2 body position3 with query limit3; saved must request body offsets0/3, limit3 and five IDs. Resolve effective query size before compiling the body pagination window in both preparations; do not alter legacy Query/Requester merging.
+
+## Resolved path identity gap
+Direct and saved healthy same-path controls pass, while changed path values incorrectly reuse a capsule and send twice (resolved-path-red / resolved-saved-path-red). Bind resolved path and origin alongside complete original operation/stream/HTTP declaration and selected input schema. Parent pre-input preparation still owns later-derived fan-out path availability; this slice handles caller-known typed object requests without guessing unresolved values.

@@ -239,12 +239,16 @@ func bodyPagingOperationPlan(op OperationSpec) (*paginationRequestPlacement, err
 // Reuse the existing bounded definition-bound continuation payload. Binding the
 // effective initial body and query makes a changed filter/default/placement
 // reject before constructing a runtime. The body itself is never in the token.
-func bodyPagingIdentity(op OperationSpec, body map[string]any, query url.Values) StreamSpec {
+func bodyPagingIdentity(b Bundle, op OperationSpec, body map[string]any, query url.Values, requestPath string) StreamSpec {
 	q := make(map[string]QueryParam, len(query))
 	for k, v := range query {
 		q[k] = QueryParam{Template: strings.Join(v, "\x00")}
 	}
-	return StreamSpec{Name: op.ID, Method: op.REST.Method, Path: op.REST.Path, Body: map[string]any{"input": body, "schema": op.REST.BodySchema}, Query: q, Pagination: op.REST.Pagination}
+	identityBody := map[string]any{"input": body, "operation": op, "http": b.HTTP, "schema": op.REST.BodySchema}
+	if op.REST.inputPlan != nil {
+		identityBody["input_schema"] = op.REST.inputPlan.raw
+	}
+	return StreamSpec{Name: op.ID, Method: op.REST.Method, Path: requestPath, Body: identityBody, Query: q, Pagination: op.REST.Pagination}
 }
 
 const bodyPagingCursorPrefix = "engine_body_v2:"
@@ -279,7 +283,7 @@ type bodyPagingRequest struct {
 	resume   *connsdk.NextPage
 }
 
-func prepareBodyPagingRequest(b Bundle, op OperationSpec, body any, query url.Values, page int, cursor string, maxBytes int) (*bodyPagingRequest, error) {
+func prepareBodyPagingRequest(b Bundle, op OperationSpec, body any, query url.Values, page int, cursor string, maxBytes int, baseURL, requestPath string) (*bodyPagingRequest, error) {
 	plan, err := bodyPagingOperationPlan(op)
 	if err != nil || plan == nil {
 		return nil, err
@@ -306,8 +310,10 @@ func prepareBodyPagingRequest(b Bundle, op OperationSpec, body any, query url.Va
 			}
 		}
 	}
-	identity := bodyPagingIdentity(op, initial, query)
-	resume, err := decodeBodyPagingCursor(b, identity, cursor)
+	identity := bodyPagingIdentity(b, op, initial, query, requestPath)
+	binding := b
+	binding.HTTP.URL = baseURL
+	resume, err := decodeBodyPagingCursor(binding, identity, cursor)
 	if err != nil {
 		return nil, err
 	}
@@ -352,7 +358,7 @@ func prepareBodyPagingRequest(b Bundle, op OperationSpec, body any, query url.Va
 	if _, _, err := plan.compose(initial, mergeQuery(declaredSizeQuery(plan.spec, size), next.Query), maxBytes); err != nil {
 		return nil, err
 	}
-	return &bodyPagingRequest{plan: plan, initial: initial, size: size, identity: identity, binding: b, resume: resume}, nil
+	return &bodyPagingRequest{plan: plan, initial: initial, size: size, identity: identity, binding: binding, resume: resume}, nil
 }
 
 // prepareStreamBodyPagination consumes the detached input snapshot supplied by
@@ -403,7 +409,11 @@ func prepareStreamBodyPagination(b Bundle, stream StreamSpec, req connectors.Rea
 	// Keep original source body and request_inputs declaration in identity while
 	// binding effective initial values and the selected loaded schema bytes.
 	identity := stream
-	identity.Body = map[string]any{"declaration": stream.Body, "input": initial, "body_schema": raw, "input_schema": stream.inputPlan.raw}
+	identity.Body = map[string]any{"declaration": stream, "http": b.HTTP, "input": initial, "body_schema": raw, "input_schema": stream.inputPlan.raw}
+	identity.Path, err = InterpolatePath(stream.Path, requestVars(req.Config, nil, ""))
+	if err != nil {
+		return stream, err
+	}
 	identity.Query = map[string]QueryParam{}
 	for k, values := range query {
 		identity.Query[k] = QueryParam{Template: strings.Join(values, "\x00")}

@@ -22,3 +22,8 @@ The five-ID fixture narrows cursor length to64 and uses a synthetic default2 for
 ## Final mixed placement gap closure
 Red: mixed-size-red was fixture admission/setup (caller size lacked rest.parameters) and reached no wire; not a behavioral RED. After inspecting the actual parameter contract, mixed-size-red-02 reaches both physical consumers: direct sends query limit3/body position2; saved overwrites caller query with limit2. Independent expected bodies require position3 and size3.
 Green: final-mixed-normal412/412, final-mixed-race82/82, final-mixed-vet pass; final-mixed-lint retains exactly the7 independently pinned baseline/inherited findings. Preparations resolve effective query size before body placement/paginator construction; declared body size still has its exclusive destination and caller precedence. Source18/18 and CLI14/14/Requester6/6 compatibility receipts retained; no source/CLI/Requester implementation changed by this helper-only correction.
+
+## Resolved path closure
+Red: resolved-path-red and resolved-saved-path-red each preserve a healthy same-path resume, then prove changed caller path values incorrectly send twice. Green: final-identity-normal418/418, final-identity-race88/88 and final-identity-vet pass. The direct helper now takes resolved baseURL/requestPath and binds them together with full original operation/HTTP declaration and selected input schema; saved caller-known paths bind through existing InterpolatePath plus original stream/HTTP declaration.
+
+Latest scoped lint6 findings:4 original229 plus2 parent234 compiled schema/bindings fields awaiting population. REST inputPlan is now consumed for capsule identity, so its old unused finding disappeared through actual use. No warning suppression or unrelated change.

@@ -125,9 +125,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	identityBundle := b
-	identityBundle.HTTP.URL = baseURL
-	bodyPaging, err := prepareBodyPagingRequest(identityBundle, op, body, query, req.Page, req.PageCursor, maxBytes)
+	bodyPaging, err := prepareBodyPagingRequest(b, op, body, query, req.Page, req.PageCursor, maxBytes, baseURL, resolvedPath)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}

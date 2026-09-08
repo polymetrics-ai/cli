@@ -734,3 +734,87 @@ func TestBodyPagingSavedQuerySize233(t *testing.T) {
 		t.Fatalf("err=%v sends=%d ids=%v", err, sends.Load(), ids)
 	}
 }
+
+func TestBodyPagingPathCapsule233(t *testing.T) {
+	for _, changed := range []bool{false, true} {
+		t.Run(fmt.Sprintf("changed_%v", changed), func(t *testing.T) {
+			var sends atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				n := sends.Add(1)
+				w.Header().Set("Content-Type", "application/json")
+				if n == 1 {
+					_, _ = io.WriteString(w, `{"data":[{"id":"one"}],"nextPageToken":"next"}`)
+				} else {
+					_, _ = io.WriteString(w, `{"data":[{"id":"two"}],"nextPageToken":null}`)
+				}
+			}))
+			defer server.Close()
+			op := bodyPagingOperation233()
+			op.REST.Path = "/scopes/{id}/widgets"
+			op.REST.Parameters = []OperationParameter{{Name: "id", In: "path", Type: "string", Required: true}}
+			b := newTestBundle(t, server, StreamSpec{})
+			b.Operations = []OperationSpec{op}
+			req := connectors.OperationDirectReadRequest{Operation: op.ID, PathParams: map[string]string{"id": "a"}}
+			first, err := OperationDirectRead(t.Context(), b, req, nil)
+			if err != nil || sends.Load() != 1 || first.Page.NextCursor == "" {
+				t.Fatalf("healthy first err=%v sends=%d page=%+v", err, sends.Load(), first.Page)
+			}
+			req.PageCursor = first.Page.NextCursor
+			if changed {
+				req.PathParams["id"] = "b"
+			}
+			_, err = OperationDirectRead(t.Context(), b, req, nil)
+			if changed {
+				if err == nil || sends.Load() != 1 {
+					t.Fatalf("changed resolved path accepted: err=%v sends=%d", err, sends.Load())
+				}
+			} else if err != nil || sends.Load() != 2 {
+				t.Fatalf("healthy same-path resume err=%v sends=%d", err, sends.Load())
+			}
+		})
+	}
+}
+
+func TestBodyPagingSavedPathCapsule233(t *testing.T) {
+	for _, changed := range []bool{false, true} {
+		t.Run(fmt.Sprintf("changed_%v", changed), func(t *testing.T) {
+			var sends atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				n := sends.Add(1)
+				w.Header().Set("Content-Type", "application/json")
+				if n == 1 {
+					_, _ = io.WriteString(w, `{"data":[{"id":"one"}],"nextPageToken":"next"}`)
+				} else {
+					_, _ = io.WriteString(w, `{"data":[{"id":"two"}],"nextPageToken":null}`)
+				}
+			}))
+			defer server.Close()
+			op := bodyPagingOperation233()
+			b := newTestBundle(t, server, StreamSpec{Method: "POST", Path: "/scopes/{{ config.scope }}/widgets", BodyType: "json", Pagination: op.REST.Pagination})
+			b.Streams[0].RequestInputs = &RequestInputContract{Version: 1, Schema: "schemas/input.json"}
+			b.Streams[0].inputPlan = &compiledRequestInputPlan{bodySchema: op.REST.BodySchema}
+			b.Streams[0].preparedReadBody = op.REST.Body
+			b.Streams[0].preparedReadBodyPresent = true
+			req := connectors.ReadRequest{Stream: "widgets", MaxPages: 1, Config: connectors.RuntimeConfig{Config: map[string]string{"scope": "a"}}}
+			emit := func(connectors.Record) error { return nil }
+			err := ReadWithOutcome(t.Context(), b, req, nil, emit)
+			var stopped *connectors.ReadBudgetStoppedError
+			if !errors.As(err, &stopped) || sends.Load() != 1 {
+				t.Fatalf("healthy initial err=%v sends=%d", err, sends.Load())
+			}
+			req.Continuation = &stopped.Continuation
+			req.MaxPages = 0
+			if changed {
+				req.Config.Config["scope"] = "b"
+			}
+			err = ReadWithOutcome(t.Context(), b, req, nil, emit)
+			if changed {
+				if err == nil || sends.Load() != 1 {
+					t.Fatalf("changed saved path err=%v sends=%d", err, sends.Load())
+				}
+			} else if err != nil || sends.Load() != 2 {
+				t.Fatalf("healthy saved path err=%v sends=%d", err, sends.Load())
+			}
+		})
+	}
+}
