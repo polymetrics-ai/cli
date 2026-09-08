@@ -51,6 +51,20 @@ func runLockRenderContextWithHooks(ctx context.Context, args []string, stdout, s
 		logf(stderr, "connectorgen lock-render: parse source lock: %v\n", err)
 		return 1
 	}
+	var sourceInputs *vNextSourceProjectionInputs
+	if lock.SourceProjection != nil {
+		sourceInputs = &vNextSourceProjectionInputs{ctx: ctx, directory: operation.connector, retained: map[string][]byte{}}
+		inventory, inputErr := sourceInputs.inventory(lock)
+		if inputErr != nil {
+			logf(stderr, "connectorgen lock-render: retained source: %v\n", inputErr)
+			return 1
+		}
+		lock, err = lowerVNextSourceProjection(lock, inventory)
+		if err != nil {
+			logf(stderr, "connectorgen lock-render: lower retained source: %v\n", err)
+			return 1
+		}
+	}
 	canonical, err := canonicalizeVNextSourceLock(lock)
 	if err != nil {
 		logf(stderr, "connectorgen lock-render: %v\n", err)
@@ -77,6 +91,12 @@ func runLockRenderContextWithHooks(ctx context.Context, args []string, stdout, s
 	if !bytes.Equal(raw, lockedRaw) {
 		logf(stderr, "connectorgen lock-render: source lock changed during admission; retry\n")
 		return 1
+	}
+	if sourceInputs != nil {
+		if err := sourceInputs.revalidate(); err != nil {
+			logf(stderr, "connectorgen lock-render: revalidate retained source: %v\n", err)
+			return 1
+		}
 	}
 	if err := operation.openGenerations(ctx, create); err != nil {
 		logf(stderr, "connectorgen lock-render: open generation root: %v\n", err)

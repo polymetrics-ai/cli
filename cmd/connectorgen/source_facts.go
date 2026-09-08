@@ -116,6 +116,10 @@ func normalizeSourceFactsObserved(row retainedSourceOperation, doc retainedSourc
 			facts.Diagnostics = append(facts.Diagnostics, "source_operation_invalid")
 			return facts
 		}
+		// Archived operations retain path-item parameters separately from the
+		// operation scope. Preserve both so the shared reducer can apply the
+		// same override and duplicate rules as a raw OpenAPI document.
+		group("path_parameters", operation["path_parameters"], doc.ID, operationPointer+"/path_parameters")
 	} else if rawDoc != nil && rawDoc.ContentType == "text/html" {
 		return normalizeRenderedSourceFacts(row, *rawDoc, facts)
 	} else if rawDoc != nil {

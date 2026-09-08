@@ -29,8 +29,9 @@ provider-specific exception.
 The [retained source/lane report](SOURCE-LANE-MANIFEST.md) accounts for provider
 archives before they have executable forms. It is an authoring-only evidence
 projection, not a second execution-lock dialect or a runtime admission gate.
-Historical archive envelopes remain confined to that report; schema4 below
-continues to govern every executable authoring unit.
+The additive schema4 source_projection arm can also consume pinned retained
+archives during authoring, lowering supported shapes into the same canonical
+graph. Runtime still consumes only execution JSON.
 
 ## 1. Source-lock document
 
@@ -49,6 +50,7 @@ a closed schema decoded with unknown-field rejection and currently has
 | `http` | Optional shared HTTP base, auth candidates, check route, headers, pagination, and error mapping for `streams.json`. |
 | `schemas` | Shared registry keyed by safe `schemas/...json` paths. |
 | `operations` | Canonical per-operation authoring units described below. |
+| `source_projection` | Alternative version-1 authoring input: pinned retained inventories and source-keyed typed semantics. It cannot coexist with `operations`, `schemas`, `cli`, or `execution`, including explicit null fields. Unsupported source shapes are refused. |
 | `cli` | Optional command-surface root fields other than operation-bound commands. |
 | `execution` | Optional named execution objects: `changefeed.json`, `polling_watermark.json`, `sync_transport.json`, `rate_limits.json`, or `database.json`. No other name is accepted. |
 
@@ -57,6 +59,24 @@ input and render it, rather than mutating it during runtime or after credential
 resolution. Provider documentation may be cited in `provider_evidence` or an
 operation's `source` object. Citations do not grant execution capability and
 are not copied into execution JSON.
+
+### Saved action eligibility
+
+The reverse_etl lane is checked against the loaded selected runtime's typed
+`PreflightSavedWriteAction`, independently of CLI command intents. A concrete
+record schema, supported encoder and batchable action establish a saved
+candidate. Legacy nil batchability remains supported for typed record actions;
+no-input actions require explicit batchability. Valid individual-only actions
+remain available to their direct command path. Malformed actions remain errors.
+App planning, preview and bulk execution use the same optional declarative
+preflight before warehouse acquisition or provider I/O. This does not grant
+managed transport modes, provider retries or bypass approval.
+
+The source projection lowerer currently covers bounded JSON GET collection
+reads with scoped string inputs and required JSON POST bodies with explicit
+one_request/single_attempt write semantics. Full schema composition, parameter
+variants, compatibility aliases and source-only provider migration remain under
+implementation; unsupported shapes fail admission and are not silently erased.
 
 ### Canonical operation unit
 
@@ -479,3 +499,9 @@ operational confidence but never becomes runtime admission state.
 ### Positional command tokens
 
 Command path segments must remain positional through the real hand parser. The shared command-path guard refuses every segment beginning `--`, including global, PM and arbitrary option spellings at any position. Single-hyphen and other safe literal aliases retain their existing grammar. This does not change provider flag-name validation or source request keys. Canonical validation applies this guard to every availability before publication.
+
+### Closed multipart filename and envelope policy
+
+A file part may declare `filename_encoding: "url_percent_utf8"` to percent-encode UTF-8 bytes in the ordinary filename parameter. The original basename remains the local file identity; encoding never changes a local path. Omitted policy preserves identity encoding. Control characters, invalid UTF-8 and path-like filename overrides are refused before approval preparation or transport. Prepared nondefault profiles bind logical and wire names with the policy.
+
+An explicit positive `max_metadata_bytes` bounds serialized framing, headers and scalar fields separately from file bytes. In that profile `max_bytes` must exactly equal this budget plus all declared file-part bounds, using checked arithmetic. This does not increase the provider file limit. Asana declares a 104857600-byte file cap, 65536-byte PM metadata budget and 104923136-byte total envelope for both aliases sharing `upload_attachment_file`. These are bounded local-fixture proofs, not provider-live certification; repeated and remote-path multipart families remain separate work.

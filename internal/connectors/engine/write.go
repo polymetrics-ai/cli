@@ -1346,7 +1346,7 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 	if action.Multipart == nil {
 		return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart spec is required", action.Name)
 	}
-	form := connsdk.MultipartForm{Fields: map[string]string{}, MaxBytes: action.Multipart.MaxBytes}
+	form := connsdk.MultipartForm{Fields: map[string]string{}, MaxBytes: action.Multipart.MaxBytes, MaxMetadataBytes: action.Multipart.MaxMetadataBytes}
 	var total int64
 	for _, part := range action.Multipart.Parts {
 		value, err := resolveRecordPathValue(map[string]any(rec), strings.Split(part.Field, "."))
@@ -1383,7 +1383,8 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, recordInde
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart payload too large: %d bytes exceeds limit %d", action.Name, total, action.Multipart.MaxBytes)
 			}
 			form.Files = append(form.Files, connsdk.MultipartFile{
-				FieldName: part.Name,
+				FieldName:        part.Name,
+				FilenameEncoding: part.FilenameEncoding,
 				// Root and RelPath, not an absolute path: every later Stat and
 				// Open re-checks containment instead of trusting this one.
 				Root:              root,

@@ -1483,7 +1483,8 @@
           "internal/connectors/manifeststore/bundle_store.go",
           "internal/connectors/polling_watermark.go",
           "internal/connectors/sync_transport.go",
-          "internal/connectors/engine/command_endpoint.go"
+          "internal/connectors/engine/command_endpoint.go",
+          "internal/connectors/engine/multipart_policy.go"
         ],
         "symbols": [
           {
@@ -1557,6 +1558,10 @@
           {
             "file": "internal/connectors/engine/command_endpoint.go",
             "name": "ValidateCommandEndpoint"
+          },
+          {
+            "file": "internal/connectors/engine/multipart_policy.go",
+            "name": "validateMultipartEnvelope"
           }
         ]
       },
@@ -1635,7 +1640,8 @@
         "Diagnostic <member:N> denotes a zero-based member ordinal among sorted untrusted keys, not a literal JSON Pointer or a serialized member name.",
         "Invalid execution bundles retain internal error classification; source visibility and unsupported-lane dispositions remain separate.",
         "Database declaration diagnostics retain schema-owned $.field[index] coordinates; @byte:N identifies an unknown member token end without publishing member text.",
-        "Generic and root command-target path/method refusals retain safe exact command-owner JSON coordinates and inspectable causes through the App and CLI."
+        "Generic and root command-target path/method refusals retain safe exact command-owner JSON coordinates and inspectable causes through the App and CLI.",
+        "Explicit multipart metadata budgets are positive and whole envelopes equal the checked sum of file caps plus metadata; filename encoding is closed and file-only."
       ],
       "non_goals": [
         "Importing provider documentation.",
@@ -1825,6 +1831,11 @@
           "package": "./internal/cli",
           "file": "internal/cli/diagnostic_coordinates_173_test.go",
           "name": "TestCLIDiagnosticCoordinates173"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_policy217_test.go",
+          "name": "TestMultipartPolicyAdmission217"
         }
       ],
       "known_gap_refs": [],
@@ -1846,7 +1857,9 @@
         "supporting_packages": [
           "polymetrics.ai/internal/connectors",
           "polymetrics.ai/internal/connectors/commandrunner",
-          "polymetrics.ai/internal/connectors/connsdk"
+          "polymetrics.ai/internal/connectors/connsdk",
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/coordination"
         ],
         "files": [
           "internal/connectors/commandrunner/runner.go",
@@ -1869,7 +1882,11 @@
           "internal/connectors/engine/structured_rest_body.go",
           "internal/connectors/engine/write.go",
           "internal/connectors/engine/write_prepare.go",
-          "internal/connectors/source_visibility.go"
+          "internal/connectors/source_visibility.go",
+          "internal/app/lifecycle.go",
+          "internal/coordination/shared_rate_limit_scope.go",
+          "internal/connectors/engine/rate_limit_runtime.go",
+          "internal/connectors/connsdk/multipart_filename.go"
         ],
         "symbols": [
           {
@@ -1959,6 +1976,26 @@
           {
             "file": "internal/connectors/source_visibility.go",
             "name": "decodeSourceVisibilityPayload"
+          },
+          {
+            "file": "internal/app/lifecycle.go",
+            "name": "(*App).ExecutableRuntime"
+          },
+          {
+            "file": "internal/app/lifecycle.go",
+            "name": "(*App).Close"
+          },
+          {
+            "file": "internal/coordination/shared_rate_limit_scope.go",
+            "name": "NewSharedRateLimitScope"
+          },
+          {
+            "file": "internal/connectors/engine/rate_limit_runtime.go",
+            "name": "newRateLimitResolverWithContext"
+          },
+          {
+            "file": "internal/connectors/connsdk/multipart_filename.go",
+            "name": "MultipartFileNames"
           }
         ]
       },
@@ -2034,7 +2071,9 @@
         "Binary upload uses typed write-action variants; binary download uses a declared successful response and byte bound.",
         "A declared base-check success_statuses set contains unambiguous numeric spellings that normalize to exact 2xx codes and executes exact matches only; non-2xx values require the named exact response-status non-2xx execution gap, and response-status ranges/classes require the named exact response-status range execution gap. Omitted status metadata retains the legacy generic 2xx policy.",
         "A declared base-check max_bytes is between 1 and the existing 64 MiB requester cap and uses that bounded requester path; omitted max_bytes retains the legacy response bound.",
-        "Selected source visibility uses one bounded gzip member with cancellation, exact decoded size and digest, checked EOF/CRC and no trailing bytes; ordinary execution does not decode this metadata. Encoding never grants lane authority."
+        "Selected source visibility uses one bounded gzip member with cancellation, exact decoded size and digest, checked EOF/CRC and no trailing bytes; ordinary execution does not decode this metadata. Encoding never grants lane authority.",
+        "Executable runtimes borrow an invocation-owned shared rate-limit coordinator through RuntimeConfig.SharedRateLimits. Required shared policies fail closed without it; owned Apps cancel and join parked work before the invocation closes its lazily created client. Metadata/preflight do not create that client.",
+        "Multipart percent encoding affects only the ordinary wire filename; original file custody remains unchanged. Metadata, file and total bounds are separate; nondefault prepared identity binds policy and logical/wire names."
       ],
       "non_goals": [
         "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
@@ -2189,6 +2228,36 @@
           "package": "./internal/connectors",
           "file": "internal/connectors/source_visibility_codec_174_test.go",
           "name": "TestSourceVisibilityGzipConsumer174"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/lifecycle_218_test.go",
+          "name": "TestAppBorrowedRuntime218"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/invocation_ownership_218_test.go",
+          "name": "TestCLIConcurrentInvocationOwnership218"
+        },
+        {
+          "package": "./internal/coordination",
+          "file": "internal/coordination/shared_rate_limit_scope_218_test.go",
+          "name": "TestSharedRateLimitScopeOwnership218"
+        },
+        {
+          "package": "./internal/connectors/connsdk",
+          "file": "internal/connectors/connsdk/multipart_policy217_test.go",
+          "name": "TestMultipartExactFileEnvelope217"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_policy217_test.go",
+          "name": "TestMultipartPolicyWire217"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/multipart_policy217_test.go",
+          "name": "TestMultipartPolicyPreviewName217"
         }
       ],
       "known_gap_refs": [
@@ -3371,7 +3440,8 @@
       "owner": {
         "primary_package": "polymetrics.ai/internal/app",
         "supporting_packages": [
-          "polymetrics.ai/internal/connectors"
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/connectors/engine"
         ],
         "files": [
           "internal/app/app.go",
@@ -3380,7 +3450,8 @@
           "internal/app/reverse_acknowledgement.go",
           "internal/app/reverse_batchable.go",
           "internal/app/types.go",
-          "internal/app/write_approval.go"
+          "internal/app/write_approval.go",
+          "internal/connectors/engine/saved_write_preflight.go"
         ],
         "symbols": [
           {
@@ -3414,6 +3485,10 @@
           {
             "file": "internal/app/app.go",
             "name": "(*App).confirmationPolicyForPlan"
+          },
+          {
+            "file": "internal/connectors/engine/saved_write_preflight.go",
+            "name": "(*Connector).PreflightSavedWriteAction"
           }
         ]
       },
@@ -3461,13 +3536,14 @@
           "typed destination transport action",
           "write action or connector command binding"
         ],
-        "notes": "Bulk reverse ETL selects a batchable write action; single-command plans may execute non-batchable bounded actions through the same plan and approval lifecycle."
+        "notes": "Bulk reverse ETL selects a loaded typed batchable write action through PreflightSavedWriteAction independently of CLI command intents. Single-command plans may execute valid non-batchable or no-input actions through the same plan and approval lifecycle."
       },
       "constraints": [
         "Reverse ETL always reads warehouse rows and never substitutes a live API source.",
         "One warehouse row must map deterministically to one bounded request for bulk execution.",
         "Provider retry safety, idempotency, and read-back behavior must be declared truthfully and cannot be inferred from local plan hashes.",
-        "Closed PostgreSQL managed-target transport plans retain destructive confirmation through persisted preview, plan-seal verification and grant issuance, independently of standalone action policy."
+        "Closed PostgreSQL managed-target transport plans retain destructive confirmation through persisted preview, plan-seal verification and grant issuance, independently of standalone action policy.",
+        "Saved declarative preflight requires concrete record and encoder contracts; no-input actions require explicit saved batchability. Selected closed prepared-write and record-mapping hooks retain engine-owned request preparation. Preflight performs no provider I/O."
       ],
       "non_goals": [
         "A generic HTTP write tool or API-to-API shortcut.",
@@ -3525,6 +3601,16 @@
           "package": "./internal/app",
           "file": "internal/app/postgres_confirmation_173_test.go",
           "name": "TestPostgresTransportPersistedConfirmation173"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/asana_saved206_test.go",
+          "name": "TestAsanaSavedTypedActionApproval206"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/saved_write_preflight206_test.go",
+          "name": "TestSavedPreflightSelectedHookContracts206"
         }
       ],
       "known_gap_refs": [],

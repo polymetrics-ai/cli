@@ -342,6 +342,10 @@ type RateLimitSpec struct {
 
 // StreamSpec is one entry in streams.json's "streams" array.
 type StreamSpec struct {
+	RequestInputs            *RequestInputContract `json:"request_inputs,omitempty"`
+	inputPlan                *compiledRequestInputPlan
+	preparedReadBody         any
+	preparedReadBodyPresent  bool
 	Name                     string                         `json:"name"`
 	Route                    string                         `json:"route,omitempty"`
 	Method                   string                         `json:"method,omitempty"` // default GET
@@ -741,8 +745,9 @@ type GraphQLRequestSpec struct {
 
 // DeleteSpec describes idempotent-delete semantics for a delete write action.
 type MultipartSpec struct {
-	MaxBytes int64               `json:"max_bytes,omitempty"`
-	Parts    []MultipartPartSpec `json:"parts,omitempty"`
+	MaxMetadataBytes *int64              `json:"max_metadata_bytes,omitempty"`
+	MaxBytes         int64               `json:"max_bytes,omitempty"`
+	Parts            []MultipartPartSpec `json:"parts,omitempty"`
 }
 
 // DeclaredBatchSpec describes a closed provider batch envelope over existing
@@ -820,11 +825,12 @@ type BinaryUploadSpec struct {
 }
 
 type MultipartPartSpec struct {
-	Name        string                             `json:"name"`
-	Type        string                             `json:"type"`
-	Field       string                             `json:"field"`
-	ContentType string                             `json:"content_type,omitempty"`
-	MediaPolicy connectors.BinaryUploadMediaPolicy `json:"media_policy,omitempty"`
+	FilenameEncoding string                             `json:"filename_encoding,omitempty"`
+	Name             string                             `json:"name"`
+	Type             string                             `json:"type"`
+	Field            string                             `json:"field"`
+	ContentType      string                             `json:"content_type,omitempty"`
+	MediaPolicy      connectors.BinaryUploadMediaPolicy `json:"media_policy,omitempty"`
 	// AllowedMediaTypes bounds what the part's bytes may sniff as. ContentType
 	// is what the bundle asserts to the provider; this is what makes that
 	// assertion checkable. Absent means unconstrained; present and empty is a
@@ -917,10 +923,12 @@ type OperationParameter struct {
 }
 
 type RESTOperationSpec struct {
-	Method      string `json:"method"`
-	Path        string `json:"path"`
-	ContentType string `json:"content_type,omitempty"`
-	MaxBytes    int    `json:"max_bytes,omitempty"`
+	RequestInputs *RequestInputContract `json:"request_inputs,omitempty"`
+	inputPlan     *compiledRequestInputPlan
+	Method        string `json:"method"`
+	Path          string `json:"path"`
+	ContentType   string `json:"content_type,omitempty"`
+	MaxBytes      int    `json:"max_bytes,omitempty"`
 	// Pagination is a direct-read operation's own pager. It deliberately
 	// shadows neither HTTP.Pagination nor streams.json: an API commonly mixes
 	// page/page_size and startIndex/count endpoints, and using the connector
@@ -2152,6 +2160,9 @@ func validateWriteBodies(actions []WriteAction) error {
 			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
 				return diagnosticAt(fmt.Sprintf("/actions/%d/multipart/parts", i), "write_multipart_parts_required", "multipart body requires nonempty multipart.parts", fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name))
 			}
+			if err := validateMultipartEnvelope(action.Multipart); err != nil {
+				return diagnosticWithin(fmt.Sprintf("/actions/%d/multipart", i), err)
+			}
 			for j, part := range action.Multipart.Parts {
 				if strings.TrimSpace(part.Name) == "" || strings.TrimSpace(part.Field) == "" {
 					return diagnosticAt(fmt.Sprintf("/actions/%d/multipart/parts/%d", i, j), "write_multipart_binding_required", "multipart part requires nonblank name and field", fmt.Errorf("action %d (%q) multipart part %d requires name and field", i, action.Name, j))
@@ -2872,6 +2883,9 @@ func validateOperationMultipartSemantics(i int, op OperationSpec) error {
 	}
 
 	multipart := op.REST.Multipart
+	if err := validateMultipartEnvelope(multipart); err != nil {
+		return diagnosticWithin(fmt.Sprintf("/operations/%d/rest/multipart", i), err)
+	}
 	if multipart.MaxBytes <= 0 {
 		return diagnosticAt(fmt.Sprintf("/operations/%d/rest/multipart/max_bytes", i), "multipart_aggregate_bound_invalid", "multipart requires positive aggregate max_bytes", fmt.Errorf("operation %d (%q) rest.multipart requires a positive aggregate max_bytes", i, op.ID))
 	}

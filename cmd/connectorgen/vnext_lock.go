@@ -38,6 +38,7 @@ type vNextSourceLock struct {
 	Operations       []vNextOperationDescriptor `json:"operations,omitempty"`
 	CLI              json.RawMessage            `json:"cli,omitempty"`
 	Execution        map[string]json.RawMessage `json:"execution,omitempty"`
+	SourceProjection *vNextSourceProjection     `json:"source_projection,omitempty"`
 }
 
 // vNextOperationDescriptor is the canonical per-operation authoring unit. A
@@ -87,6 +88,15 @@ func decodeVNextSourceLock(raw []byte) (vNextSourceLock, error) {
 	var lock vNextSourceLock
 	if err := decodeStrictJSON(raw, &lock); err != nil {
 		return vNextSourceLock{}, err
+	}
+	var members map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &members); err != nil {
+		return vNextSourceLock{}, err
+	}
+	if _, present := members["source_projection"]; present {
+		if err := validateVNextSourceProjection(lock, members); err != nil {
+			return vNextSourceLock{}, err
+		}
 	}
 	return lock, nil
 }
@@ -185,6 +195,9 @@ func rejectDuplicateJSONValue(decoder *json.Decoder, token json.Token) error {
 }
 
 func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor, error) {
+	if lock.SourceProjection != nil {
+		return vNextCanonicalDescriptor{}, fmt.Errorf("source_projection requires retained-source lowering before canonicalization")
+	}
 	if lock.SchemaVersion != vNextSourceLockSchemaVersion {
 		return vNextCanonicalDescriptor{}, fmt.Errorf("source lock schema_version %d is unsupported; want %d", lock.SchemaVersion, vNextSourceLockSchemaVersion)
 	}
@@ -203,7 +216,7 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		if state != "implemented" && state != "unsupported" {
 			return vNextCanonicalDescriptor{}, fmt.Errorf("source lock lane %q has invalid state %q", lane, state)
 		}
-		if observedLanes[lane] != (state == "implemented") {
+		if lane != "reverse_etl" && observedLanes[lane] != (state == "implemented") {
 			return vNextCanonicalDescriptor{}, fmt.Errorf("source lock lane %q is %s but its authored execution content says implemented=%t", lane, state, observedLanes[lane])
 		}
 	}
@@ -309,8 +322,8 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		}
 		descriptor.Source = cloneRawJSON(descriptor.Source)
 		descriptor.Stream = cloneRawJSON(descriptor.Stream)
-		descriptor.Write = cloneRawJSON(descriptor.Write)
-		descriptor.Operation = cloneRawJSON(descriptor.Operation)
+		descriptor.Write = canonicalMultipartFilenamePolicy(descriptor.Write, false)
+		descriptor.Operation = canonicalMultipartFilenamePolicy(descriptor.Operation, true)
 	}
 	executionNames := make([]string, 0, len(lock.Execution))
 	for name := range lock.Execution {
