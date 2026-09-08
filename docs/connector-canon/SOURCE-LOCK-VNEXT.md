@@ -475,3 +475,7 @@ A reference connector is green only when all of the following are demonstrated:
 Live provider credentials are not required for deterministic authoring or
 runtime reachability proofs. If live proof is separately authorized, it adds
 operational confidence but never becomes runtime admission state.
+
+### Positional command tokens
+
+Command path segments must remain positional through the real hand parser. The shared command-path guard refuses every segment beginning `--`, including global, PM and arbitrary option spellings at any position. Single-hyphen and other safe literal aliases retain their existing grammar. This does not change provider flag-name validation or source request keys. Canonical validation applies this guard to every availability before publication.

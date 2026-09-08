@@ -1315,6 +1315,9 @@ func validateCommandPath(path []string) error {
 		return &BlockedCommandError{Reason: "missing command path"}
 	}
 	for i, part := range path {
+		if strings.HasPrefix(part, "--") {
+			return fmt.Errorf("command path segment %d must be positional, not an option", i+1)
+		}
 		if err := safety.ValidateIdentifier(part, fmt.Sprintf("command path segment %d", i+1)); err != nil {
 			return err
 		}

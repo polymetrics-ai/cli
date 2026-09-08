@@ -26,6 +26,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5"
 
 	pmapp "polymetrics.ai/internal/app"
@@ -2722,7 +2723,23 @@ func postgresCheckpointAdvanced173(t *testing.T, before, after, key string) bool
 		t.Fatal(err)
 	}
 	old, current := oldState[key].Checkpoint, newState[key].Checkpoint
-	return old != nil && current != nil && current.Mechanism == "logical_replication" && old.Mechanism == current.Mechanism && reflect.DeepEqual(old.Source, current.Source) && !reflect.DeepEqual(old.Position, current.Position) && old.CommittedAt != nil && current.CommittedAt != nil && current.CommittedAt.After(*old.CommittedAt)
+	if old == nil || current == nil || old.Mechanism != "logical_replication" || old.Mechanism != current.Mechanism || old.Source.Engine != "postgres" || old.Source.Validate() != nil || old.Source != current.Source {
+		return false
+	}
+	if old.StateVersion == 0 || old.StateVersion != current.StateVersion || old.SchemaVersion == "" || old.SchemaVersion != current.SchemaVersion || old.ProtocolVersion == "" || old.ProtocolVersion != current.ProtocolVersion || len(old.SourceGeneration) == 0 || !bytes.Equal(old.SourceGeneration, current.SourceGeneration) {
+		return false
+	}
+	if old.SnapshotBarrier == nil || old.SnapshotBarrier.Kind != "postgres_logical_slot" || len(old.SnapshotBarrier.Token) == 0 || !reflect.DeepEqual(old.SnapshotBarrier, current.SnapshotBarrier) || old.CommittedAt == nil || current.CommittedAt == nil || !current.CommittedAt.After(*old.CommittedAt) {
+		return false
+	}
+	previous, err := pglogrepl.ParseLSN(string(old.Position.Primary))
+	if err != nil {
+		return false
+	}
+	next, err := pglogrepl.ParseLSN(string(current.Position.Primary))
+	// These witnesses insert separate committed transactions: a changed tie
+	// breaker or timestamp at the same transaction-end LSN is not advancement.
+	return err == nil && next > previous
 }
 
 func waitPostgresLeaseExpiry173(t *testing.T, ctx context.Context, root, key string) {

@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 52,
+  "catalog_revision": 53,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -442,7 +442,8 @@
         "Source-lane collection cardinality is independent from binary shape; ambiguous envelopes require exact successful-response interpretations with separate instance record pointers and literal source/support/array/item citations. Unknown sibling scopes retain deficits, and an independent retained-source/original-annotation check prevents generated agreement from supplying interpretation authority.",
         "Source visibility preserves every independently pinned source key and seven lanes, exact retained citations and scoped uncertainty. Selected diagnostic metadata is distinct from execution identity and cannot gate ordinary valid commands. Invalid source inputs are refused before generated output writes; this does not claim transactional publication across generator output files.",
         "Every authored command path, including planned, unsupported and deferred paths, must pass the shared exact CommandPathSegments parser before normalized alias collision admission; validation never rewrites a declared name.",
-        "Canonical authoring reserves the shared closed PM control namespace. Conflicting provider flags receive deterministic unoccupied provider- aliases, preserving MapsTo and all other metadata. Only the exact optional nonrepeatable non-EnvOnly integer limit-to-limit tuple on stream-backed ETL/direct-read may share a control name. Final render and admission independently reject reserved provider names or changed source-bound alias metadata; alias provenance is authoring-only."
+        "Canonical authoring reserves the shared closed PM control namespace. Conflicting provider flags receive deterministic unoccupied provider- aliases, preserving MapsTo and all other metadata. Only the exact optional nonrepeatable non-EnvOnly integer limit-to-limit tuple on stream-backed ETL/direct-read may share a control name. Final render and admission independently reject reserved provider names or changed source-bound alias metadata; alias provenance is authoring-only.",
+        "Command path segments are positional tokens: the shared guard rejects every --prefixed segment at any position before publication, while legal flag-name grammar and provider request mappings remain separate."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -1217,6 +1218,16 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/vnext_flag_integrity_182_test.go",
           "name": "TestVNextFlagAliasSourceReorder182"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/vnext_command_tokens_194_test.go",
+          "name": "TestVNextFlagLikeCommandPublicationRejected194"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/command_path_tokens_194_test.go",
+          "name": "TestCommandPathPositionalTokens194"
         }
       ],
       "publication_guarantee_proofs": [
@@ -3085,6 +3096,11 @@
           "package": "./internal/app",
           "file": "internal/app/transport_dispatch_test.go",
           "name": "TestRunETLTransportCommitsAcknowledgedPageBeforeCancellation"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/postgres_checkpoint_oracle_173_test.go",
+          "name": "TestPostgresCheckpointMonotonicity194"
         }
       ],
       "known_gap_refs": [

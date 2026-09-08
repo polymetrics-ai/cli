@@ -23,6 +23,12 @@ func TestVNextCanonicalCommandPaths173(t *testing.T) {
 			valid      bool
 		}{
 			{"authored_alias", "repositories list", true},
+			{"global_prefix", "--json repositories", false},
+			{"help_suffix", "repositories --help", false},
+			{"arbitrary_middle", "repositories --provider-id list", false},
+			{"root_suffix", "repositories list --root", false},
+			{"dotted_alias", "repositories dotted.name", true},
+			{"single_hyphen_literal", "repositories -literal", true},
 			{"parameter_name_alias", "repositories repo-slug delete", true},
 			{"raw_parameter", "repositories {repo_slug} delete", false},
 			{"slash_endpoint", "repositories /workspace/repo", false},
