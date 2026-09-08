@@ -1,0 +1,127 @@
+[
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "postApiV4GroupsIdExport"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/1065",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "POST",
+    "path": "/api/v4/groups/{id}/export",
+    "lane": "direct_write",
+    "actual_targets": [
+      {
+        "command": "api direct-op-504f5354202f6170692f76342f67726f7570732f7b69647d2f6578706f7274",
+        "action": "source_write_504f5354202f67726f7570732f7b69647d2f6578706f7274",
+        "intent": "direct_write",
+        "availability": "implemented"
+      }
+    ],
+    "selected_test": "TestBatch1CP18GitLabLane240StatusWrites/postApiV4GroupsIdExport",
+    "claim": "partial source-path status/approval/single-send coverage; no full variants or C2 admission"
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "postApiV4ProjectsIdMergeRequestsMergeRequestIidStatusChecksExternalStatusCheckIdRetry"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/1250",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "POST",
+    "path": "/api/v4/projects/{id}/merge_requests/{merge_request_iid}/status_checks/{external_status_check_id}/retry",
+    "lane": "direct_write",
+    "actual_targets": [
+      {
+        "command": "api direct-op-504f5354202f6170692f76342f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b6d657267655f726571756573745f6969647d2f7374617475735f636865636b732f7b65787465726e616c5f7374617475735f636865636b5f69647d2f7265747279",
+        "action": "source_write_504f5354202f70726f6a656374732f7b69647d2f6d657267655f72657175657374732f7b6d657267655f726571756573745f6969647d2f7374617475735f636865636b732f7b65787465726e616c5f7374617475735f636865636b5f69647d2f7265747279",
+        "intent": "direct_write",
+        "availability": "implemented"
+      }
+    ],
+    "selected_test": "TestBatch1CP18GitLabLane240StatusWrites/postApiV4ProjectsIdMergeRequestsMergeRequestIidStatusChecksExternalStatusCheckIdRetry",
+    "claim": "partial source-path status/approval/single-send coverage; no full variants or C2 admission"
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "postApiV4UserGpgKeysKeyIdRevoke"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/1391",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "POST",
+    "path": "/api/v4/user/gpg_keys/{key_id}/revoke",
+    "lane": "direct_write",
+    "actual_targets": [
+      {
+        "command": "api direct-op-504f5354202f6170692f76342f757365722f6770675f6b6579732f7b6b65795f69647d2f7265766f6b65",
+        "action": "source_write_504f5354202f757365722f6770675f6b6579732f7b6b65795f69647d2f7265766f6b65",
+        "intent": "direct_write",
+        "availability": "implemented"
+      }
+    ],
+    "selected_test": "TestBatch1CP18GitLabLane240StatusWrites/postApiV4UserGpgKeysKeyIdRevoke",
+    "claim": "partial source-path status/approval/single-send coverage; no full variants or C2 admission"
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "postApiV4UsersIdGpgKeysKeyIdRevoke"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/1406",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "POST",
+    "path": "/api/v4/users/{id}/gpg_keys/{key_id}/revoke",
+    "lane": "direct_write",
+    "actual_targets": [
+      {
+        "command": "api direct-op-504f5354202f6170692f76342f75736572732f7b69647d2f6770675f6b6579732f7b6b65795f69647d2f7265766f6b65",
+        "action": "source_write_504f5354202f75736572732f7b69647d2f6770675f6b6579732f7b6b65795f69647d2f7265766f6b65",
+        "intent": "direct_write",
+        "availability": "implemented"
+      }
+    ],
+    "selected_test": "TestBatch1CP18GitLabLane240StatusWrites/postApiV4UsersIdGpgKeysKeyIdRevoke",
+    "claim": "partial source-path status/approval/single-send coverage; no full variants or C2 admission"
+  },
+  {
+    "source": {
+      "connector": "gitlab",
+      "inventory": "primary",
+      "id": "postApiV4UsersIdSupportPinRevoke"
+    },
+    "source_evidence": {
+      "document": "primary",
+      "pointer": "/rest/operations/1408",
+      "document_sha256": "de7010cc2a2088b8da33f50312db4d5129fd167b53ef1e028ccf72cae5c72b8d"
+    },
+    "method": "POST",
+    "path": "/api/v4/users/{id}/support_pin/revoke",
+    "lane": "direct_write",
+    "actual_targets": [
+      {
+        "command": "api direct-op-504f5354202f6170692f76342f75736572732f7b69647d2f737570706f72745f70696e2f7265766f6b65",
+        "action": "source_write_504f5354202f75736572732f7b69647d2f737570706f72745f70696e2f7265766f6b65",
+        "intent": "direct_write",
+        "availability": "implemented"
+      }
+    ],
+    "selected_test": "TestBatch1CP18GitLabLane240StatusWrites/postApiV4UsersIdSupportPinRevoke",
+    "claim": "partial source-path status/approval/single-send coverage; no full variants or C2 admission"
+  }
+]
