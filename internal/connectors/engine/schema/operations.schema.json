@@ -115,6 +115,10 @@
                   "last_record_field": { "type": "string" },
                   "stop_path": { "type": "string" },
                   "next_url_path": { "type": "string" },
+                  "body_cursor_field": {"type": "string", "minLength": 1},
+                  "body_page_field": {"type": "string", "minLength": 1},
+                  "body_offset_field": {"type": "string", "minLength": 1},
+                  "body_limit_field": {"type": "string", "minLength": 1},
                   "next_url_query": {
                     "type": "object",
                     "additionalProperties": false,

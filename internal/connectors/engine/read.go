@@ -94,6 +94,10 @@ func readWithSleeper(ctx context.Context, b Bundle, req connectors.ReadRequest, 
 	if err != nil {
 		return err
 	}
+	stream, err = prepareStreamBodyPagination(b, stream, req)
+	if err != nil {
+		return err
+	}
 	rt, err := newRuntimeForOperationRoute(ctx, b, req.Config, h, stream.Route, stream.Name, stream.Path)
 	if err != nil {
 		return err
@@ -515,6 +519,10 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	if pag != nil {
 		specForPaginator = *pag
 	}
+	if stream.preparedBodyPagination != nil {
+		pageSize = stream.preparedBodyPagination.size
+		specForPaginator.PageSize = pageSize
+	}
 	paginator, err := newPaginator(specForPaginator, pageSize, recordsPathOf(stream.Records))
 	if err != nil {
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
@@ -557,7 +565,14 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 
 	maxPages := effectiveReadMaxPages(specForPaginator.MaxPages, req.MaxPages)
-	resumePage, err := readContinuationPage(b, stream, req.Continuation)
+	continuationBundle, continuationStream := b, stream
+	if state := stream.preparedBodyPagination; state != nil {
+		continuationBundle, continuationStream = state.binding, state.identity
+	}
+	resumePage, err := readContinuationPage(continuationBundle, continuationStream, req.Continuation)
+	if state := stream.preparedBodyPagination; state != nil && req.Continuation == nil {
+		resumePage = state.resume
+	}
 	if err != nil {
 		return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 	}
@@ -586,7 +601,7 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		// before issuing the request for this page number. maxPages<=0 (the
 		if maxPages > 0 && pageNum >= maxPages {
 			if trackPaginationOutcome || specForPaginator.RequireContinuationOnCap {
-				continuation, err := newReadContinuation(b, stream, page)
+				continuation, err := newReadContinuation(continuationBundle, continuationStream, page)
 				if err != nil {
 					return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 				}
@@ -671,7 +686,14 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		if specForPaginator.BodyLimitField != "" && specForPaginator.LimitParam != "" {
 			query.Del(specForPaginator.LimitParam)
 		}
-		body, err := buildStreamRequestBody(stream, req.Config, req.Query, page, specForPaginator, formattedLowerBound, fc)
+		var body any
+		var err error
+		if state := stream.preparedBodyPagination; state != nil {
+			query = mergeQuery(baseQuery, mergeQuery(declaredSizeQuery(specForPaginator, pageSize), page.Query))
+			body, query, err = state.plan.compose(state.initial, query, maxOperationDirectReadBytes)
+		} else {
+			body, err = buildStreamRequestBody(stream, req.Config, req.Query, page, specForPaginator, formattedLowerBound, fc)
+		}
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
@@ -781,6 +803,11 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		}
 
 		page = paginator.Next(resp, len(rawRecords))
+		if state := stream.preparedBodyPagination; state != nil && page != nil {
+			if _, _, err := state.plan.compose(state.initial, page.Query, maxOperationDirectReadBytes); err != nil {
+				return err
+			}
+		}
 		page, err = nextLinks.continuation(page)
 		if err != nil {
 			return err
