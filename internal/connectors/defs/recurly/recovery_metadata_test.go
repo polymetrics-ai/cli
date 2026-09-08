@@ -194,7 +194,7 @@ func schemaPropertyType(t *testing.T, raw json.RawMessage) any {
 
 func loadRecoveryFixture(t *testing.T, stream string) map[string]any {
 	t.Helper()
-	content, err := os.ReadFile(filepath.Join("fixtures", "streams", stream, "page_1.json"))
+	content, err := os.ReadFile(filepath.Join("testdata", "historical-210", "fixtures", "streams", stream, "page_1.json"))
 	if err != nil {
 		t.Fatalf("read fixture for %q: %v", stream, err)
 	}

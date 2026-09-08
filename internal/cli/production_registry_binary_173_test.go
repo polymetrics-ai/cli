@@ -12,6 +12,7 @@ import (
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/engine"
+	"reflect"
 	"sort"
 	"strings"
 	"testing"
@@ -52,6 +53,7 @@ func TestProductionRegistryBuiltPaths173(t *testing.T) {
 		t.Fatalf("init: %v %s", err, out)
 	}
 	checked := 0
+	var preparedMembers, selectedMembers []string
 	for _, meta := range registry.List() {
 		connector, ok := registry.Get(meta.Name)
 		if !ok {
@@ -64,9 +66,11 @@ func TestProductionRegistryBuiltPaths173(t *testing.T) {
 		checked += len(provider.CommandSurface().Commands)
 		t.Run(meta.Name, func(t *testing.T) {
 			for _, decl := range provider.CommandSurface().Commands {
-				fixtureArgs := productionFixtureArgs178(t, meta.Name, decl, bundles)
-				fixtureArgs, fixtureEnv := productionFixtureCarrier178(decl, fixtureArgs)
 				t.Run(decl.Path, func(t *testing.T) {
+					selectedMembers = append(selectedMembers, meta.Name+"/"+decl.Path)
+					preparedMembers = append(preparedMembers, meta.Name+"/"+decl.Path)
+					fixtureArgs := productionFixtureArgs178(t, meta.Name, decl, bundles)
+					fixtureArgs, fixtureEnv := productionFixtureCarrier178(decl, fixtureArgs)
 					t.Parallel()
 					path, err := commandrunner.CommandPathSegments(decl.Path)
 					if err != nil {
@@ -131,6 +135,13 @@ func TestProductionRegistryBuiltPaths173(t *testing.T) {
 			}
 		})
 	}
+	if len(selectedMembers) == 0 {
+		t.Fatal("no fresh-process members selected")
+	}
+	if !reflect.DeepEqual(preparedMembers, selectedMembers) {
+		t.Fatalf("fixture preparation does not match exact selected members: prepared=%d selected=%d", len(preparedMembers), len(selectedMembers))
+	}
+	t.Logf("fixture_preparation_members=%d selected_members=%d", len(preparedMembers), len(selectedMembers))
 	if checked != 13856 {
 		t.Fatalf("production command membership=%d want13856", checked)
 	}

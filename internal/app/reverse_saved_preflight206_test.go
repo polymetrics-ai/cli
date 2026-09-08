@@ -39,6 +39,7 @@ func TestPlanReverseETLChecksSelectedSavedPreflight206(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(func() { _ = a.Close() })
 	_, err = a.PlanReverseETL(t.Context(), app.PlanReverseETLRequest{Name: "preflight", SourceTable: "not_created", DestinationConnector: humanProxyConnector, DestinationCredential: "humanproxy-local", Action: "sync_profile", Mappings: map[string]string{"name": "name"}})
 	if !errors.Is(err, failure) || len(probe.calls) != 1 || probe.calls[0] != "sync_profile" {
 		t.Fatalf("selected preflight error=%v calls=%v; must refuse before source acquisition", err, probe.calls)

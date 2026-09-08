@@ -38,6 +38,9 @@ const (
 var errStateRevisionConflict = errors.New("project state changed in another process")
 
 type App struct {
+	sharedRateLimits        connectors.SharedRateLimitCoordinator
+	lifecycleCancel         context.CancelFunc
+	closeOnce               sync.Once
 	root                    string
 	projectDir              string
 	statePath               string
@@ -174,7 +177,7 @@ func openWithRegistry(root string, deferNormalization bool, newRegistry func() (
 	return openWithRegistryWithStat(root, deferNormalization, newRegistry, os.Stat)
 }
 
-func openWithRegistryWithStat(root string, deferNormalization bool, newRegistry func() (*connectors.Registry, error), stat func(string) (fs.FileInfo, error)) (*App, error) {
+func openWithRegistryWithStat(root string, deferNormalization bool, newRegistry func() (*connectors.Registry, error), stat func(string) (fs.FileInfo, error), runtimeOptions ...RuntimeOptions) (*App, error) {
 	if newRegistry == nil {
 		return nil, errors.New("connector registry factory is required")
 	}
@@ -214,7 +217,18 @@ func openWithRegistryWithStat(root string, deferNormalization bool, newRegistry 
 	}
 
 	statePath := filepath.Join(projectDir, "state", "state.json")
+	options := RuntimeOptions{}
+	if len(runtimeOptions) == 1 {
+		options = runtimeOptions[0]
+	}
+	lifecycle := options.Context
+	if lifecycle == nil {
+		lifecycle = context.Background()
+	}
+	lifecycle, cancel := context.WithCancel(lifecycle)
 	a := &App{
+		sharedRateLimits:        options.SharedRateLimits,
+		lifecycleCancel:         cancel,
 		root:                    root,
 		projectDir:              projectDir,
 		statePath:               statePath,
@@ -226,6 +240,12 @@ func openWithRegistryWithStat(root string, deferNormalization bool, newRegistry 
 		transportRegistry:       registry,
 		catalogs:                newCatalogStorage(projectDir),
 	}
+	success := false
+	defer func() {
+		if !success {
+			_ = a.Close()
+		}
+	}()
 	a.sqlEngine = newSQLEngine(a)
 	a.transportStage = newConnectionWarehouseStage(a)
 	// state.json is atomically replaced by writers, so opening a current project
@@ -248,11 +268,18 @@ func openWithRegistryWithStat(root string, deferNormalization bool, newRegistry 
 		Store:  parkingStore,
 		Resume: a.resumeParkedRateLimitRun,
 	})
+	if options.newParking != nil {
+		a.rateParking = options.newParking(a, parkingStore)
+	}
 	// Transport composition is deferred until a saved transport path needs it.
 	// Listing metadata and opening an App must not decode every connector bundle.
-	if err := a.rateParking.Start(context.Background()); err != nil {
+	if err := a.rateParking.Start(lifecycle); err != nil {
 		return nil, fmt.Errorf("start durable rate parking: %w", err)
 	}
+	if err := lifecycle.Err(); err != nil {
+		return nil, err
+	}
+	success = true
 	return a, nil
 }
 
@@ -3660,6 +3687,7 @@ func (a *App) resolveCredential(ctx context.Context, name string, overlay map[st
 		SecretStore:             a.credentialSecretStore(cred.ID),
 		AuthenticationAdmission: authAdmission,
 		RateParkingAdmission:    parkingAdmission,
+		SharedRateLimits:        a.sharedRateLimits,
 	}, nil
 }
 

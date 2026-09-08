@@ -58,8 +58,6 @@ func TestRateLimitCoordinationSchemaAllowsOnlyExplicitRequireShared(t *testing.T
 func TestRequireSharedRateLimitPolicyRefusesWithoutCoordinator(t *testing.T) {
 	bundle := withAllRateLimit(Bundle{Name: "shared-required", HTTP: HTTPBase{URL: "https://example.test"}})
 	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	_, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	var refusal *connsdk.RateBudgetRefusalError
@@ -78,8 +76,6 @@ func TestRequireSharedRateLimitPolicyRefusesWithoutCoordinator(t *testing.T) {
 func TestRequireSharedRateLimitPolicyPreservesCanceledContext(t *testing.T) {
 	bundle := withAllRateLimit(Bundle{Name: "shared-required-canceled", HTTP: HTTPBase{URL: "https://example.test"}})
 	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel()
 	_, err := newRuntime(ctx, bundle, rateLimitTestConfig(t), nil)
@@ -104,8 +100,6 @@ func TestEndpointRequireSharedPolicyGatesHookRequesterAtSend(t *testing.T) {
 	bundle := withAllRateLimit(Bundle{Name: "endpoint-shared-required", HTTP: HTTPBase{URL: server.URL}})
 	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
 	bundle.RateLimits.Policies[0].Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/hook/{id}"}}}
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	if err != nil {
@@ -218,8 +212,6 @@ func TestEndpointRequireSharedPolicyGatesInterpolatedRequesterPathAtSend(t *test
 	bundle := withAllRateLimit(Bundle{Name: "interpolated-endpoint-shared-required", HTTP: HTTPBase{URL: server.URL}})
 	bundle.RateLimits.Policies[0].Coordination = connsdk.RateLimitCoordinationRequireShared
 	bundle.RateLimits.Policies[0].Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/widgets/special"}}}
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	if err != nil {
@@ -273,8 +265,6 @@ func TestEndpointRequireSharedPolicyGatesEscapedAndBasePrefixedPathsAtSend(t *te
 	local.Coordination = ""
 	local.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/start"}}}
 	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{local, shared}
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	if err != nil {
@@ -349,8 +339,6 @@ func TestEndpointSharedRateLimitAdmissionUsesRedirectDestination(t *testing.T) {
 	shared.Coordination = connsdk.RateLimitCoordinationRequireShared
 	shared.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
 	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{local, shared}
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	if err != nil {
@@ -399,8 +387,6 @@ func TestEndpointLocalRateLimitAdmissionAllowsRedirectDestination(t *testing.T) 
 	destination.ID = "repos-local"
 	destination.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
 	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{start, destination}
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	if err != nil {
@@ -446,8 +432,6 @@ func TestEndpointSharedRateLimitAdmissionCanonicalizesBasePrefixedRedirectDestin
 	shared.Coordination = connsdk.RateLimitCoordinationRequireShared
 	shared.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/repos/{id}"}}}
 	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{local, shared}
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	if err != nil {
@@ -585,8 +569,6 @@ func TestEndpointRequireSharedErrorSurvivesOperationFormatting(t *testing.T) {
 			policy := &bundle.RateLimits.Policies[0]
 			policy.Coordination = connsdk.RateLimitCoordinationRequireShared
 			policy.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: tt.method, Path: tt.path}}}
-			restore := replaceSharedRateLimitRegistryForTest(nil)
-			t.Cleanup(restore)
 			cfg := rateLimitTestConfig(t)
 			cfg.Config["base_url"] = server.URL
 			err := tt.run(bundle, cfg)
@@ -606,8 +588,6 @@ func TestEndpointRequireSharedErrorSurvivesOperationFormatting(t *testing.T) {
 
 func TestLocalRateLimitPolicyNeverInheritsSharedRequirement(t *testing.T) {
 	bundle := withAllRateLimit(Bundle{Name: "local-default", HTTP: HTTPBase{URL: "https://example.test"}})
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	if err != nil {
@@ -647,8 +627,6 @@ func TestMixedRateLimitPoliciesExposePolicyScopedCoordination(t *testing.T) {
 	shared.Coordination = connsdk.RateLimitCoordinationRequireShared
 	shared.Selector = connsdk.RateLimitSelector{Endpoints: []connsdk.RateLimitEndpointSelector{{Method: http.MethodGet, Path: "/admin"}}}
 	bundle.RateLimits.Policies = []connsdk.RateLimitPolicy{local, shared}
-	restore := replaceSharedRateLimitRegistryForTest(nil)
-	t.Cleanup(restore)
 
 	runtime, err := newRuntime(context.Background(), bundle, rateLimitTestConfig(t), nil)
 	if err != nil {

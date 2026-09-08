@@ -107,3 +107,11 @@ Green: source-saved-reference-green-206-04 preserves exact reference execution o
 source-saved-new-lint-206-01: exit0, 0/0 test events, raw SHA256 e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47, input drift [].
 
 source-saved-atlas-206-01: exit0, 20/20 test events, raw SHA256 904f70444dad14381d22ea7e3332c04f4f63ec4183919c4b50a42df14bb007ed, input drift [].
+
+## Normal210/218 integration
+
+Merged complete child history through e5e8282db90c200e5ce743f6aab4798d3f5e6f2e without conflicts, preserving sourcecompiler/saved preflight changes. Read full210/218 handoffs and inspected changed production lifecycle/rate/CLI seams. No removed shared-rate global calls remain in cmd/internal. Parent-owned new App tests now Close Apps through218 lifecycle; Atlas runtime owner/proofs updated. Child29 receipts preserve actual darwin/amd64 attribution and14 hash-only early untracked variants; parent fresh verification is darwin/arm64. This is integration validation, not independent review.
+
+Integration Green: source-lifecycle-integration-206-01, exit0, 88/88 events under race, 23.081438541998068s, raw SHA256 a79fcb278f71c9c851b6ee81e8902e53df5c4ecfb4d3d30b322d6ed1aa3d1199, input drift [].
+
+Integration Green: source-lifecycle-cli-integration-206-01, exit0, 16/16 events under race, 11.906851583000389s, raw SHA256 957d560beaf018f0e9c80f644fd39673af7711c92bea0decd7ba96a9fa0be030, input drift [].

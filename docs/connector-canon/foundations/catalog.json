@@ -1846,7 +1846,9 @@
         "supporting_packages": [
           "polymetrics.ai/internal/connectors",
           "polymetrics.ai/internal/connectors/commandrunner",
-          "polymetrics.ai/internal/connectors/connsdk"
+          "polymetrics.ai/internal/connectors/connsdk",
+          "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/coordination"
         ],
         "files": [
           "internal/connectors/commandrunner/runner.go",
@@ -1869,7 +1871,10 @@
           "internal/connectors/engine/structured_rest_body.go",
           "internal/connectors/engine/write.go",
           "internal/connectors/engine/write_prepare.go",
-          "internal/connectors/source_visibility.go"
+          "internal/connectors/source_visibility.go",
+          "internal/app/lifecycle.go",
+          "internal/coordination/shared_rate_limit_scope.go",
+          "internal/connectors/engine/rate_limit_runtime.go"
         ],
         "symbols": [
           {
@@ -1959,6 +1964,22 @@
           {
             "file": "internal/connectors/source_visibility.go",
             "name": "decodeSourceVisibilityPayload"
+          },
+          {
+            "file": "internal/app/lifecycle.go",
+            "name": "(*App).ExecutableRuntime"
+          },
+          {
+            "file": "internal/app/lifecycle.go",
+            "name": "(*App).Close"
+          },
+          {
+            "file": "internal/coordination/shared_rate_limit_scope.go",
+            "name": "NewSharedRateLimitScope"
+          },
+          {
+            "file": "internal/connectors/engine/rate_limit_runtime.go",
+            "name": "newRateLimitResolverWithContext"
           }
         ]
       },
@@ -2034,7 +2055,8 @@
         "Binary upload uses typed write-action variants; binary download uses a declared successful response and byte bound.",
         "A declared base-check success_statuses set contains unambiguous numeric spellings that normalize to exact 2xx codes and executes exact matches only; non-2xx values require the named exact response-status non-2xx execution gap, and response-status ranges/classes require the named exact response-status range execution gap. Omitted status metadata retains the legacy generic 2xx policy.",
         "A declared base-check max_bytes is between 1 and the existing 64 MiB requester cap and uses that bounded requester path; omitted max_bytes retains the legacy response bound.",
-        "Selected source visibility uses one bounded gzip member with cancellation, exact decoded size and digest, checked EOF/CRC and no trailing bytes; ordinary execution does not decode this metadata. Encoding never grants lane authority."
+        "Selected source visibility uses one bounded gzip member with cancellation, exact decoded size and digest, checked EOF/CRC and no trailing bytes; ordinary execution does not decode this metadata. Encoding never grants lane authority.",
+        "Executable runtimes borrow an invocation-owned shared rate-limit coordinator through RuntimeConfig.SharedRateLimits. Required shared policies fail closed without it; owned Apps cancel and join parked work before the invocation closes its lazily created client. Metadata/preflight do not create that client."
       ],
       "non_goals": [
         "Bulk ETL, warehouse materialization, scheduling, or flow orchestration.",
@@ -2189,6 +2211,21 @@
           "package": "./internal/connectors",
           "file": "internal/connectors/source_visibility_codec_174_test.go",
           "name": "TestSourceVisibilityGzipConsumer174"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/lifecycle_218_test.go",
+          "name": "TestAppBorrowedRuntime218"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/invocation_ownership_218_test.go",
+          "name": "TestCLIConcurrentInvocationOwnership218"
+        },
+        {
+          "package": "./internal/coordination",
+          "file": "internal/coordination/shared_rate_limit_scope_218_test.go",
+          "name": "TestSharedRateLimitScopeOwnership218"
         }
       ],
       "known_gap_refs": [

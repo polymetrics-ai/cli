@@ -1,4 +1,4 @@
-package credential
+package credential_test
 
 import (
 	"go/ast"
@@ -11,6 +11,9 @@ import (
 )
 
 func TestRegisteredCredentialRoutesDoNotTrimSecretBytes(t *testing.T) {
+	for _, name := range []string{"safetyculture", "canny"} {
+		t.Run(name, func(t *testing.T) { testRegisteredCredentialBytes210(t, name) })
+	}
 	_, thisFile, _, ok := runtime.Caller(0)
 	if !ok {
 		t.Fatal("runtime.Caller() failed")
@@ -20,35 +23,6 @@ func TestRegisteredCredentialRoutesDoNotTrimSecretBytes(t *testing.T) {
 		path     string
 		isSecret func(ast.Expr) bool
 	}{
-		{
-			path: filepath.Join("internal", "connectors", "native", "safetyculture", "safetyculture.go"),
-			isSecret: func(expr ast.Expr) bool {
-				if ident, ok := expr.(*ast.Ident); ok && ident.Name == "token" {
-					return true
-				}
-				call, ok := expr.(*ast.CallExpr)
-				if !ok || len(call.Args) != 2 {
-					return false
-				}
-				name, nameOK := call.Fun.(*ast.Ident)
-				key, keyOK := call.Args[1].(*ast.BasicLit)
-				return nameOK && keyOK && name.Name == "secret" && key.Value == `"access_token"`
-			},
-		},
-		{
-			path: filepath.Join("internal", "connectors", "native", "canny", "canny.go"),
-			isSecret: func(expr ast.Expr) bool {
-				if ident, ok := expr.(*ast.Ident); ok && ident.Name == "secret" {
-					return true
-				}
-				call, ok := expr.(*ast.CallExpr)
-				if !ok {
-					return false
-				}
-				name, ok := call.Fun.(*ast.Ident)
-				return ok && name.Name == "cannySecret"
-			},
-		},
 		{
 			path: filepath.Join("internal", "connectors", "hooks", "amazon-ads", "hooks.go"),
 			isSecret: func(expr ast.Expr) bool {

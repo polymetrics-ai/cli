@@ -26,7 +26,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jackc/pglogrepl"
 	"github.com/jackc/pgx/v5"
 
 	pmapp "polymetrics.ai/internal/app"
@@ -2735,14 +2734,43 @@ func postgresCheckpointAdvanced173(t *testing.T, before, after, key string) bool
 	if old.SnapshotBarrier == nil || old.SnapshotBarrier.Kind != "postgres_logical_slot" || len(old.SnapshotBarrier.Token) == 0 || !reflect.DeepEqual(old.SnapshotBarrier, current.SnapshotBarrier) || old.CommittedAt == nil || current.CommittedAt == nil || !current.CommittedAt.After(*old.CommittedAt) {
 		return false
 	}
-	previous, err := pglogrepl.ParseLSN(string(old.Position.Primary))
+	previous, err := parsePostgresCheckpointLSN218(string(old.Position.Primary))
 	if err != nil {
 		return false
 	}
-	next, err := pglogrepl.ParseLSN(string(current.Position.Primary))
+	next, err := parsePostgresCheckpointLSN218(string(current.Position.Primary))
 	// These witnesses insert separate committed transactions: a changed tie
 	// breaker or timestamp at the same transaction-end LSN is not advancement.
 	return err == nil && next > previous
+}
+
+// parsePostgresCheckpointLSN218 validates the entire observation before numeric
+// comparison. Permissive scanning can certify trailing or overwide tokens.
+func parsePostgresCheckpointLSN218(token string) (uint64, error) {
+	upper, lower, found := strings.Cut(token, "/")
+	if !found {
+		return 0, errors.New("invalid checkpoint LSN")
+	}
+	for _, half := range []string{upper, lower} {
+		if len(half) == 0 || len(half) > 8 {
+			return 0, errors.New("invalid checkpoint LSN")
+		}
+		for i := 0; i < len(half); i++ {
+			b := half[i]
+			if !(b >= '0' && b <= '9' || b >= 'A' && b <= 'F' || b >= 'a' && b <= 'f') {
+				return 0, errors.New("invalid checkpoint LSN")
+			}
+		}
+	}
+	high, err := strconv.ParseUint(upper, 16, 32)
+	if err != nil {
+		return 0, err
+	}
+	low, err := strconv.ParseUint(lower, 16, 32)
+	if err != nil {
+		return 0, err
+	}
+	return high<<32 | low, nil
 }
 
 func waitPostgresLeaseExpiry173(t *testing.T, ctx context.Context, root, key string) {

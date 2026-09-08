@@ -332,7 +332,16 @@ type SecretStore interface {
 	PutSecret(ctx context.Context, key, value string) error
 }
 
+// SharedRateLimitCoordinator is borrowed by executable runtimes. The caller
+// owns its lifetime; consumers cannot close it. BudgetCoordinator is distinct.
+// A successful resolution supplies both admission and observation handles.
+type SharedRateLimitCoordinator interface {
+	ResolveRateLimit(context.Context, string, string, RateLimitScopeKey, []connsdk.RateLimitBudget) (connsdk.RateLimitAdmission, connsdk.RateLimitObserver, error)
+}
+
 type RuntimeConfig struct {
+	SharedRateLimits SharedRateLimitCoordinator `json:"-"`
+
 	ProjectDir string            `json:"-"`
 	Config     map[string]string `json:"config"`
 	Secrets    map[string]string `json:"-"`

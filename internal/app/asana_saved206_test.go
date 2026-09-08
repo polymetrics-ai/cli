@@ -36,6 +36,7 @@ func TestAsanaSavedTypedActionApproval206(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(func() { _ = a.Close() })
 	ctx := t.Context()
 	if _, err = a.AddCredential(ctx, app.AddCredentialRequest{Name: "asana-local", Connector: "asana", Config: map[string]string{"base_url": server.URL}, Secrets: map[string]string{"access_token": "synthetic-local-only"}}); err != nil {
 		t.Fatal(err)
@@ -60,6 +61,7 @@ func TestAsanaSavedTypedActionApproval206(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	t.Cleanup(func() { _ = reopened.Close() })
 	if _, err = reopened.RunReverseETL(ctx, app.RunReverseETLRequest{PlanID: plan.ID}); err == nil {
 		t.Fatal("missing approval accepted")
 	}
