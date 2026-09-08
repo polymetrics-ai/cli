@@ -68,7 +68,7 @@ func admitVNextCanonicalDescriptor(descriptor vNextCanonicalDescriptor, input vN
 	}
 	bundle, err := engine.Load(newVNextExecutionFS(descriptor.Connector, outputs), descriptor.Connector)
 	if err != nil {
-		return vNextStagedGeneration{}, vNextGraphError(vNextStaticValidationPointer(descriptor, err.Error()), fmt.Errorf("static execution validation: %w", err))
+		return vNextStagedGeneration{}, vNextGraphError(vNextStaticValidationPointer(descriptor, err), fmt.Errorf("static execution validation: %w", err))
 	}
 
 	selection, err := vNextSelectedRuntime(descriptor.Connector)

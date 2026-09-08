@@ -38,6 +38,7 @@ type vNextSourceLock struct {
 	Operations       []vNextOperationDescriptor `json:"operations,omitempty"`
 	CLI              json.RawMessage            `json:"cli,omitempty"`
 	Execution        map[string]json.RawMessage `json:"execution,omitempty"`
+	SourceProjection *vNextSourceProjection     `json:"source_projection,omitempty"`
 }
 
 // vNextOperationDescriptor is the canonical per-operation authoring unit. A
@@ -87,6 +88,15 @@ func decodeVNextSourceLock(raw []byte) (vNextSourceLock, error) {
 	var lock vNextSourceLock
 	if err := decodeStrictJSON(raw, &lock); err != nil {
 		return vNextSourceLock{}, err
+	}
+	var members map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &members); err != nil {
+		return vNextSourceLock{}, err
+	}
+	if _, present := members["source_projection"]; present {
+		if err := validateVNextSourceProjection(lock, members); err != nil {
+			return vNextSourceLock{}, err
+		}
 	}
 	return lock, nil
 }
@@ -185,6 +195,9 @@ func rejectDuplicateJSONValue(decoder *json.Decoder, token json.Token) error {
 }
 
 func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor, error) {
+	if lock.SourceProjection != nil {
+		return vNextCanonicalDescriptor{}, fmt.Errorf("source_projection requires retained-source lowering before canonicalization")
+	}
 	if lock.SchemaVersion != vNextSourceLockSchemaVersion {
 		return vNextCanonicalDescriptor{}, fmt.Errorf("source lock schema_version %d is unsupported; want %d", lock.SchemaVersion, vNextSourceLockSchemaVersion)
 	}

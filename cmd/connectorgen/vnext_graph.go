@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/fs"
 	"path"
@@ -271,7 +272,14 @@ func validateVNextCanonicalGraph(descriptor *vNextCanonicalDescriptor) error {
 	return nil
 }
 
-func vNextStaticValidationPointer(descriptor vNextCanonicalDescriptor, message string) string {
+func vNextStaticValidationPointer(descriptor vNextCanonicalDescriptor, err error) string {
+	var located interface {
+		BundleLocation() (string, string, string, string)
+	}
+	if !errors.As(err, &located) {
+		return "/operations"
+	}
+	_, _, file, field := located.BundleLocation()
 	type collection struct {
 		file       string
 		name       string
@@ -290,13 +298,13 @@ func vNextStaticValidationPointer(descriptor vNextCanonicalDescriptor, message s
 		})},
 	}
 	for _, candidate := range collections {
-		index, suffix, found := vNextStaticValidationIndex(message, candidate.file, candidate.name)
+		index, suffix, found := vNextStaticValidationIndex(file, field, candidate.file, candidate.name)
 		if !found || index >= len(candidate.operations) {
 			continue
 		}
 		return vNextOperationPointer(candidate.operations[index], candidate.lane) + suffix
 	}
-	index, suffix, found := vNextStaticValidationIndex(message, "cli_surface.json", "commands")
+	index, suffix, found := vNextStaticValidationIndex(file, field, "cli_surface.json", "commands")
 	if found {
 		commands := vNextOrderedCommandOperationIndexes(descriptor.Operations)
 		if index < len(commands) {
@@ -306,28 +314,20 @@ func vNextStaticValidationPointer(descriptor vNextCanonicalDescriptor, message s
 	return "/operations"
 }
 
-func vNextStaticValidationIndex(message, file, collection string) (int, string, bool) {
-	marker := file + ": /" + collection + "/"
-	start := strings.Index(message, marker)
-	if start < 0 {
+func vNextStaticValidationIndex(file, field, expectedFile, collection string) (int, string, bool) {
+	prefix := "/" + collection + "/"
+	if file != expectedFile || !strings.HasPrefix(field, prefix) {
 		return 0, "", false
 	}
-	value := message[start+len(marker):]
-	indexText, suffix, nested := strings.Cut(value, "/")
-	if !nested {
-		indexText, suffix, _ = strings.Cut(value, ":")
-	}
+	indexText, suffix, nested := strings.Cut(strings.TrimPrefix(field, prefix), "/")
 	index, err := strconv.Atoi(indexText)
-	if err != nil {
+	if err != nil || index < 0 || strconv.Itoa(index) != indexText {
 		return 0, "", false
 	}
-	if suffix == "" {
-		return index, "", true
+	if nested {
+		return index, "/" + suffix, true
 	}
-	if colon := strings.IndexByte(suffix, ':'); colon >= 0 {
-		suffix = suffix[:colon]
-	}
-	return index, "/" + suffix, true
+	return index, "", true
 }
 
 func vNextOrderedLaneOperationIndexes(operations []vNextOperationDescriptor, lane func(vNextOperationDescriptor) (int, json.RawMessage)) []int {

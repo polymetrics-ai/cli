@@ -97,6 +97,12 @@ func loadRetainedSourceInventory(ctx context.Context, repo string, cohort source
 }
 
 func loadRetainedSourceInventoryWithNodeLimits(ctx context.Context, repo string, cohort sourceLaneCohort, documentLimit, aggregateLimit int64) retainedSourceInventory {
+	return loadRetainedSourceInventoryUsingReader(ctx, repo, cohort, documentLimit, aggregateLimit, nil)
+}
+
+// A supplied reader retains the caller's directory authority across admission
+// and publication. The inventory parser and all identity/budget checks stay shared.
+func loadRetainedSourceInventoryUsingReader(ctx context.Context, repo string, cohort sourceLaneCohort, documentLimit, aggregateLimit int64, read func(string, int64) ([]byte, error)) retainedSourceInventory {
 	result := retainedSourceInventory{Operations: []retainedSourceOperation{}, Documents: []retainedSourceDocument{}, Diagnostics: []sourceLaneDiagnostic{}}
 	if err := validateSourceLaneCohort(cohort); err != nil {
 		result.Diagnostics = append(result.Diagnostics, sourceLaneDiagnostic{Lanes: sourceLaneNames(), Stage: "inventory", Code: "cohort_anchor_invalid", Owner: "batch1", Severity: "error"})
@@ -120,15 +126,18 @@ func loadRetainedSourceInventoryWithNodeLimits(ctx context.Context, repo string,
 			result.Operations[n].Diagnostics = append(result.Operations[n].Diagnostics, d)
 		}
 	}
-	root, err := os.OpenRoot(repo)
-	if err != nil {
-		for key := range index {
-			add(key, "source_root_unavailable", "")
+	if read == nil {
+		root, err := os.OpenRoot(repo)
+		if err != nil {
+			for key := range index {
+				add(key, "source_root_unavailable", "")
+			}
+			sortSourceInventory(&result)
+			return result
 		}
-		sortSourceInventory(&result)
-		return result
+		defer func() { _ = root.Close() }() // Read-only authority; no durable writes.
+		read = func(name string, limit int64) ([]byte, error) { return readSourceInput(root, name, limit) }
 	}
-	defer func() { _ = root.Close() }() // Root holds read-only directory authority, no durable writes.
 	var totalBytes, totalNodes int64
 	checkNodes := func(data []byte) string {
 		remaining := min(documentLimit, aggregateLimit-totalNodes)
@@ -158,7 +167,7 @@ func loadRetainedSourceInventoryWithNodeLimits(ctx context.Context, repo string,
 			fail("source_canceled")
 			continue
 		}
-		data, err := readSourceInput(root, anchor.Path, 64<<20)
+		data, err := read(anchor.Path, 64<<20)
 		if err != nil {
 			fail("source_unavailable")
 			continue
@@ -175,7 +184,7 @@ func loadRetainedSourceInventoryWithNodeLimits(ctx context.Context, repo string,
 		validArtifacts := true
 		artifactBytes := map[string][]byte{}
 		for _, pin := range anchor.Artifacts {
-			raw, readErr := readSourceInput(root, pin.Path, 64<<20)
+			raw, readErr := read(pin.Path, 64<<20)
 			artifactBytes[pin.Path] = raw
 			totalBytes += int64(len(raw))
 			if readErr != nil || int64(len(raw)) != pin.Bytes || sourceBytesHash(raw) != pin.SHA256 || totalBytes > 512<<20 {
