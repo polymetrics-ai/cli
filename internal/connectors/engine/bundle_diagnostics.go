@@ -12,6 +12,8 @@ import (
 // and must never be serialized into public diagnostics. Field uses fixed JSON
 // Pointer components; <member:N> denotes an untrusted member's zero-based
 // ordinal among sorted keys, not a literal JSON Pointer or the member's name.
+// Database definitions retain their schema-owned $.field[index] coordinates;
+// @byte:N identifies the end offset of an unknown member token without its text.
 type BundleDiagnosticError struct {
 	Connector  string `json:"connector"`
 	Generation string `json:"generation"`

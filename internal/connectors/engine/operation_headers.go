@@ -433,8 +433,9 @@ func validateOperationRuntimeHeaderIsolation(base HTTPBase, operations []Operati
 	if len(runtimeHeaders) == 0 {
 		return nil
 	}
-	for _, operation := range operations {
-		for _, parameter := range operationParameters(operation) {
+	for operationIndex, operation := range operations {
+		block, _ := operationExecutionBlock(operation)
+		for parameterIndex, parameter := range operationParameters(operation) {
 			if parameter.In != "header" {
 				continue
 			}
@@ -443,7 +444,7 @@ func validateOperationRuntimeHeaderIsolation(base HTTPBase, operations []Operati
 				continue
 			}
 			if _, protected := runtimeHeaders[canonical]; protected {
-				return fmt.Errorf("operation %q header parameter %q is protected and runtime-owned", operation.ID, parameter.Name)
+				return diagnosticAt(fmt.Sprintf("/operations/%d/%s/parameters/%d/name", operationIndex, block, parameterIndex), "parameter_header_protected", "request header is protected and runtime-owned", fmt.Errorf("operation %q header parameter %q is protected and runtime-owned", operation.ID, parameter.Name))
 			}
 		}
 	}

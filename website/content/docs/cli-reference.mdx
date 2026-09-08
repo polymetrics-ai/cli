@@ -255,6 +255,20 @@ metadata, streams, actions, command bindings, request limits, rate-limit
 coordination, and configured sync roles without resolving credentials or
 contacting a provider.
 
+List and catalog use safe metadata without decoding unselected bundles. Selecting
+an invalid execution bundle fails before its executor is constructed or a provider
+request is sent, with `internal_error` and exit `1`. With `--json`, `error.bundle`
+contains `connector`, `generation`, `digest`, `file`, `field`, `reason_code`, and
+`reason`. Text output reports the safe location and reason. Raw declaration values
+and internal error causes are not printed.
+
+In diagnostic fields, `/` identifies the file root. Trusted property names and
+array positions identify nested fields. `<member:N>` denotes an untrusted object's
+member at zero-based position `N` among sorted keys; this is diagnostic notation,
+not a literal JSON Pointer. Database definitions use `$.field[index]` paths;
+`@byte:N` marks the end byte offset of an unknown member token. Source-lane
+refusals keep their separate codes below.
+
 Execution consumes execution JSON. Source locks remain authoring inputs; source
 inspection consumes a separate safe projection compiled into metadata. A command executes only with one
 unambiguous binding and a registered encoder/executor; malformed invocation,

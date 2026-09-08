@@ -94,3 +94,61 @@ func TestBundleSchemaReferenceDiagnostic168(t *testing.T) {
 		})
 	}
 }
+
+func TestBundlePureJoinedOptionalAbsence169(t *testing.T) {
+	for _, file := range []string{"changefeed.json", "polling_watermark.json", "sync_transport.json", "database.json"} {
+		for _, nested := range []bool{false, true} {
+			name := file + "/single"
+			if nested {
+				name = file + "/nested"
+			}
+			t.Run(name, func(t *testing.T) {
+				original := fullValidBundleFS("acme")
+				if _, e := fs.Stat(original, "acme/"+file); !errors.Is(e, fs.ErrNotExist) {
+					t.Fatalf("fixture optional file must actually be absent: %v", e)
+				}
+				control, e := Load(original, "acme")
+				if e != nil {
+					t.Fatal(e)
+				}
+				cause := errors.Join(&fs.PathError{Op: "open", Path: "private-sentinel-167", Err: fs.ErrNotExist}, nil)
+				if nested {
+					cause = errors.Join(errors.Join(cause, nil), nil)
+				}
+				files := &bundleStatFault167{FS: original, target: "acme/" + file, fault: cause}
+				got, e := Load(files, "acme")
+				if files.faults != 1 || files.phase != "open" || files.identityReads == 0 {
+					t.Fatalf("did not reach optional loader Open: faults=%d phase=%s", files.faults, files.phase)
+				}
+				if e != nil || got.Identity != control.Identity || got.Name != "acme" {
+					t.Errorf("pure joined absence changed healthy execution: %v", e)
+				}
+			})
+		}
+	}
+}
+
+type absenceCycle169 struct{}
+
+func (e *absenceCycle169) Error() string { return "absence cycle" }
+func (e *absenceCycle169) Unwrap() error { return e }
+func TestBundleAbsenceGraphBounds169(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		err  error
+		want bool
+	}{
+		{"single_join", errors.Join(fs.ErrNotExist, nil), true},
+		{"nested_join", errors.Join(errors.Join(fs.ErrNotExist, nil), nil), true},
+		{"compound_permission", errors.Join(fs.ErrNotExist, fs.ErrPermission), false},
+		{"two_absence_causes", errors.Join(fs.ErrNotExist, fs.ErrNotExist), false},
+		{"nil", nil, false},
+		{"cycle", &absenceCycle169{}, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := bundlePureAbsence(tc.err); got != tc.want {
+				t.Errorf("pure absence=%t want %t", got, tc.want)
+			}
+		})
+	}
+}

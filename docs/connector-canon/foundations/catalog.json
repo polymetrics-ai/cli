@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 48,
+  "catalog_revision": 49,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -1377,6 +1377,9 @@
         "primary_package": "polymetrics.ai/internal/connectors/bundleregistry",
         "supporting_packages": [
           "polymetrics.ai/internal/app",
+          "polymetrics.ai/internal/cli",
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/connectors/database",
           "polymetrics.ai/internal/connectors/defs",
           "polymetrics.ai/internal/connectors/engine",
           "polymetrics.ai/internal/connectors/manifestidentity",
@@ -1386,18 +1389,30 @@
         "files": [
           "cmd/connectorgen/gen.go",
           "internal/app/app.go",
+          "internal/cli/errors.go",
           "internal/connectors/bundleregistry/factories.go",
           "internal/connectors/bundleregistry/hooks.go",
           "internal/connectors/bundleregistry/registry.go",
+          "internal/connectors/connectors.go",
+          "internal/connectors/database/definition.go",
           "internal/connectors/defs/defs.go",
+          "internal/connectors/engine/binary_read.go",
           "internal/connectors/engine/bundle.go",
+          "internal/connectors/engine/bundle_diagnostics.go",
+          "internal/connectors/engine/direct_read.go",
+          "internal/connectors/engine/operation_headers.go",
+          "internal/connectors/engine/operation_parameters.go",
+          "internal/connectors/engine/operation_route.go",
+          "internal/connectors/engine/schema.go",
           "internal/connectors/engine/schema/operations.schema.json",
           "internal/connectors/engine/schema/writes.schema.json",
           "internal/connectors/hooks/hookset/hookset_gen.go",
+          "internal/connectors/manifestidentity/identity.go",
           "internal/connectors/manifestindex/index.go",
           "internal/connectors/manifestindex/index_gen.go",
-          "internal/connectors/manifestidentity/identity.go",
-          "internal/connectors/manifeststore/bundle_store.go"
+          "internal/connectors/manifeststore/bundle_store.go",
+          "internal/connectors/polling_watermark.go",
+          "internal/connectors/sync_transport.go"
         ],
         "symbols": [
           {
@@ -1447,6 +1462,26 @@
           {
             "file": "internal/connectors/engine/bundle.go",
             "name": "validateMultipartMediaTypes"
+          },
+          {
+            "file": "internal/connectors/engine/bundle_diagnostics.go",
+            "name": "BundleDiagnosticError"
+          },
+          {
+            "file": "internal/connectors/engine/bundle_diagnostics.go",
+            "name": "SafeBundleError"
+          },
+          {
+            "file": "internal/connectors/database/definition.go",
+            "name": "Load"
+          },
+          {
+            "file": "internal/connectors/polling_watermark.go",
+            "name": "declarationDiagnosticFailure"
+          },
+          {
+            "file": "internal/connectors/engine/schema.go",
+            "name": "CompileSchema"
           }
         ]
       },
@@ -1491,7 +1526,10 @@
           "declared batches can select only their source-backed allow-listed actions and methods",
           "a connector with read disabled may omit streams.json while readable connectors still require it",
           "unrestricted upload media is available only through an explicit typed provider policy",
-          "one registry combines declarative connectors with generated explicit extension factories and sealed native compatibility adapters"
+          "one registry combines declarative connectors with generated explicit extension factories and sealed native compatibility adapters",
+          "selected bundle diagnostics preserve connector, generation and digest while publishing only safe file, field and producer-owned reason metadata",
+          "public CLI and App diagnostics retain the original internal cause graph without serializing its raw declaration values",
+          "optional execution files tolerate pure absence while preserving permission and compound I/O failures"
         ]
       },
       "selection": {
@@ -1518,7 +1556,10 @@
         "A declared batch cannot select arbitrary HTTP methods, paths, bodies, nested batches, or undeclared actions.",
         "Provider-unrestricted media must be an explicit source-backed policy on a file part and cannot coexist with an allow-list or fixed content type.",
         "Loading a definition does not prove its declared executor is implemented.",
-        "Runtime loads projected definitions, not provider source locks or this Atlas."
+        "Runtime loads projected definitions, not provider source locks or this Atlas.",
+        "Diagnostic <member:N> denotes a zero-based member ordinal among sorted untrusted keys, not a literal JSON Pointer or a serialized member name.",
+        "Invalid execution bundles retain internal error classification; source visibility and unsupported-lane dispositions remain separate.",
+        "Database declaration diagnostics retain schema-owned $.field[index] coordinates; @byte:N identifies an unknown member token end without publishing member text."
       ],
       "non_goals": [
         "Importing provider documentation.",
@@ -1613,6 +1654,71 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/amazon_sqs_disposition_test.go",
           "name": "TestAmazonSQSDispositionBundleLoads"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_public_diagnostics_167_test.go",
+          "name": "TestBundlePublicDiagnostic167"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_public_diagnostics_167_test.go",
+          "name": "TestBundlePublicRateRules167"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_io_diagnostics_167_test.go",
+          "name": "TestBundleOptionalStatFailure167"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_execution_boundary_168_test.go",
+          "name": "TestSelectedMalformedBundlePhysicalBoundary168"
+        },
+        {
+          "package": "./internal/connectors/manifeststore",
+          "file": "internal/connectors/manifeststore/bundle_diagnostics_165_test.go",
+          "name": "TestBundleDiagnosticJoinedSelected168"
+        },
+        {
+          "package": "./internal/connectors/bundleregistry",
+          "file": "internal/connectors/bundleregistry/bundle_diagnostics_168_test.go",
+          "name": "TestConstructionSelectedDiagnostic168"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/bundle_public_diagnostics_167_test.go",
+          "name": "TestAppPublicBundleDiagnostic167"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/bundle_public_diagnostics_167_test.go",
+          "name": "TestCLISelectedStoreBundleDiagnostic168"
+        },
+        {
+          "package": "./internal/cli",
+          "file": "internal/cli/bundle_public_diagnostics_167_test.go",
+          "name": "TestCLILazyMalformedUnselected168"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_public_diagnostics_167_test.go",
+          "name": "TestBundlePublicPollingChangefeed168"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_public_diagnostics_167_test.go",
+          "name": "TestBundlePublicDatabase168"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_public_diagnostics_167_test.go",
+          "name": "TestBundleDatabaseReadCause168"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/bundle_public_diagnostics_167_test.go",
+          "name": "TestBundleMixedLoadAllAndSourceIndependence169"
         }
       ],
       "known_gap_refs": [],

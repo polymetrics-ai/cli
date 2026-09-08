@@ -2623,26 +2623,26 @@ type ChangefeedExecutor interface {
 // bundle-load time and never treats an incomplete declaration as executable.
 func (d ChangefeedDescriptor) Validate() error {
 	if !d.Status.valid() {
-		return fmt.Errorf("unsupported changefeed status %q", d.Status)
+		return declarationDiagnosticFailure("/status", "changefeed_status_invalid", "changefeed status is not supported", fmt.Errorf("unsupported changefeed status %q", d.Status))
 	}
 	if !d.Mechanism.valid() {
-		return fmt.Errorf("unsupported changefeed mechanism %q", d.Mechanism)
+		return declarationDiagnosticFailure("/mechanism", "changefeed_mechanism_invalid", "changefeed mechanism is not supported", fmt.Errorf("unsupported changefeed mechanism %q", d.Mechanism))
 	}
 	if strings.TrimSpace(d.Source.ArtifactURL) == "" || strings.TrimSpace(d.Source.ArtifactVersion) == "" || strings.TrimSpace(d.Source.RetrievedAt) == "" {
-		return errors.New("changefeed source requires artifact_url, artifact_version, and retrieved_at")
+		return declarationDiagnosticFailure("/source", "changefeed_source_required", "changefeed source requires nonblank artifact_url, artifact_version and retrieved_at", errors.New("changefeed source requires artifact_url, artifact_version, and retrieved_at"))
 	}
 	artifactURL, err := url.ParseRequestURI(d.Source.ArtifactURL)
 	if err != nil || artifactURL.Host == "" || (artifactURL.Scheme != "http" && artifactURL.Scheme != "https") {
-		return errors.New("changefeed source artifact_url must be an absolute http or https URL")
+		return declarationDiagnosticFailure("/source/artifact_url", "changefeed_source_url", "changefeed source artifact_url must be an absolute HTTP or HTTPS URL", errors.New("changefeed source artifact_url must be an absolute http or https URL"))
 	}
 	if _, err := time.Parse("2006-01-02", d.Source.RetrievedAt); err != nil {
-		return fmt.Errorf("changefeed source retrieved_at must be an ISO-8601 date: %w", err)
+		return declarationDiagnosticFailure("/source/retrieved_at", "changefeed_source_date", "changefeed source retrieved_at must be an ISO-8601 date", fmt.Errorf("changefeed source retrieved_at must be an ISO-8601 date: %w", err))
 	}
 
 	switch d.Status {
 	case ChangefeedStatusImplemented:
 		if d.Executor == nil || strings.TrimSpace(d.Executor.Kind) == "" || strings.TrimSpace(d.Executor.ID) == "" {
-			return errors.New("implemented changefeed requires a named executor")
+			return declarationDiagnosticFailure("/executor", "changefeed_executor_required", "implemented changefeed requires a named executor", errors.New("implemented changefeed requires a named executor"))
 		}
 		if err := validateChangefeedCheckpoint(d.Checkpoint); err != nil {
 			return err
@@ -2651,18 +2651,18 @@ func (d ChangefeedDescriptor) Validate() error {
 			return err
 		}
 		if err := validateChangefeedKeys("streams", d.Streams); err != nil {
-			return err
+			return declarationDiagnosticWithin("/streams", err)
 		}
 		if d.Mechanism == ChangefeedMechanismPollingWatermark {
 			if err := validatePollingWatermark(d); err != nil {
 				return err
 			}
 		} else if d.PollingWatermark != nil {
-			return errors.New("polling_watermark declaration requires polling_watermark mechanism")
+			return declarationDiagnosticFailure("/mechanism", "changefeed_polling_mechanism", "polling_watermark declaration requires polling_watermark mechanism", errors.New("polling_watermark declaration requires polling_watermark mechanism"))
 		}
 	case ChangefeedStatusUnsupported:
 		if strings.TrimSpace(d.Reason) == "" {
-			return errors.New("unsupported changefeed requires a reason")
+			return declarationDiagnosticFailure("/reason", "changefeed_reason_required", "unsupported changefeed requires a nonblank reason", errors.New("unsupported changefeed requires a reason"))
 		}
 		if d.Executor != nil || d.Checkpoint != nil || d.Delivery != nil || d.PollingWatermark != nil {
 			return declarationDiagnosticFailure("/status", "changefeed_unsupported_execution", "unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark", errors.New("unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark"))
@@ -2760,16 +2760,16 @@ func (m ChangefeedMechanism) valid() bool {
 
 func validateChangefeedCheckpoint(checkpoint *ChangefeedCheckpoint) error {
 	if checkpoint == nil || strings.TrimSpace(checkpoint.Kind) == "" || strings.TrimSpace(checkpoint.CommitAfter) == "" || strings.TrimSpace(checkpoint.OnInvalid) == "" || len(checkpoint.Keys) == 0 {
-		return errors.New("implemented changefeed requires checkpoint kind, keys, commit_after, and on_invalid")
+		return declarationDiagnosticFailure("/checkpoint", "changefeed_checkpoint_required", "implemented changefeed requires checkpoint kind, keys, commit_after and on_invalid", errors.New("implemented changefeed requires checkpoint kind, keys, commit_after, and on_invalid"))
 	}
 	seen := make(map[string]struct{}, len(checkpoint.Keys))
-	for _, key := range checkpoint.Keys {
+	for keyIndex, key := range checkpoint.Keys {
 		key = strings.TrimSpace(key)
 		if key == "" {
-			return errors.New("changefeed checkpoint keys cannot be empty")
+			return declarationDiagnosticFailure(fmt.Sprintf("/checkpoint/keys/%d", keyIndex), "changefeed_key_blank", "changefeed key must not be blank", errors.New("changefeed checkpoint keys cannot be empty"))
 		}
 		if _, ok := seen[key]; ok {
-			return fmt.Errorf("changefeed checkpoint key %q is duplicated", key)
+			return declarationDiagnosticFailure(fmt.Sprintf("/checkpoint/keys/%d", keyIndex), "changefeed_key_duplicate", "changefeed key must be unique", fmt.Errorf("changefeed checkpoint key %q is duplicated", key))
 		}
 		seen[key] = struct{}{}
 	}
@@ -2778,10 +2778,10 @@ func validateChangefeedCheckpoint(checkpoint *ChangefeedCheckpoint) error {
 
 func validateChangefeedDelivery(delivery *ChangefeedDelivery) error {
 	if delivery == nil || strings.TrimSpace(delivery.Ordering) == "" || strings.TrimSpace(delivery.Duplicates) == "" || strings.TrimSpace(delivery.Deletes) == "" {
-		return errors.New("implemented changefeed requires ordering, duplicates, and deletes guarantees")
+		return declarationDiagnosticFailure("/delivery", "changefeed_delivery_required", "implemented changefeed requires ordering, duplicates and deletes guarantees", errors.New("implemented changefeed requires ordering, duplicates, and deletes guarantees"))
 	}
 	if err := validateChangefeedKeys("delivery dedupe_key", delivery.DedupeKey); err != nil {
-		return err
+		return declarationDiagnosticWithin("/delivery/dedupe_key", err)
 	}
 	return nil
 }
@@ -2789,91 +2789,91 @@ func validateChangefeedDelivery(delivery *ChangefeedDelivery) error {
 func validatePollingWatermark(d ChangefeedDescriptor) error {
 	polling := d.PollingWatermark
 	if polling == nil {
-		return errors.New("implemented polling_watermark changefeed requires polling_watermark declaration")
+		return declarationDiagnosticFailure("/polling_watermark", "changefeed_polling_required", "implemented polling changefeed requires polling_watermark declaration", errors.New("implemented polling_watermark changefeed requires polling_watermark declaration"))
 	}
 	if d.Executor == nil || d.Executor.Kind != "engine" || d.Executor.ID != "polling_watermark" {
-		return errors.New("implemented polling_watermark changefeed requires executor engine/polling_watermark")
+		return declarationDiagnosticFailure("/executor", "changefeed_polling_executor", "polling changefeed requires executor engine/polling_watermark", errors.New("implemented polling_watermark changefeed requires executor engine/polling_watermark"))
 	}
 	if err := validatePollingWatermarkPath("watermark path", polling.Watermark.Path); err != nil {
-		return err
+		return declarationDiagnosticWithin("/polling_watermark/watermark/path", err)
 	}
 	if err := validatePollingWatermarkPath("tie_breaker path", polling.TieBreaker.Path); err != nil {
-		return err
+		return declarationDiagnosticWithin("/polling_watermark/tie_breaker/path", err)
 	}
 	switch polling.Watermark.Kind {
 	case "timestamp", "monotonic_sequence", "opaque_cursor":
 	default:
-		return fmt.Errorf("unsupported polling watermark kind %q", polling.Watermark.Kind)
+		return declarationDiagnosticFailure("/polling_watermark/watermark/kind", "changefeed_polling_kind", "polling watermark kind must be supported", fmt.Errorf("unsupported polling watermark kind %q", polling.Watermark.Kind))
 	}
 	if polling.Boundary != "inclusive" {
-		return errors.New("polling watermark boundary must be inclusive to prevent tie loss")
+		return declarationDiagnosticFailure("/polling_watermark/boundary", "changefeed_polling_boundary", "polling watermark boundary must be inclusive", errors.New("polling watermark boundary must be inclusive to prevent tie loss"))
 	}
 	if polling.SafetyLagSeconds < 0 {
-		return errors.New("polling watermark safety_lag_seconds cannot be negative")
+		return declarationDiagnosticFailure("/polling_watermark/safety_lag_seconds", "changefeed_polling_lag_negative", "polling safety_lag_seconds must not be negative", errors.New("polling watermark safety_lag_seconds cannot be negative"))
 	}
 	if int64(polling.SafetyLagSeconds) > maxPollingWatermarkSafetyLagSeconds {
-		return fmt.Errorf("polling watermark safety_lag_seconds exceeds the maximum duration-safe value of %d", maxPollingWatermarkSafetyLagSeconds)
+		return declarationDiagnosticFailure("/polling_watermark/safety_lag_seconds", "changefeed_polling_lag_overflow", "polling safety_lag_seconds must fit a time duration", fmt.Errorf("polling watermark safety_lag_seconds exceeds the maximum duration-safe value of %d", maxPollingWatermarkSafetyLagSeconds))
 	}
 	if polling.Watermark.Kind != "timestamp" && polling.SafetyLagSeconds != 0 {
-		return errors.New("polling watermark safety_lag_seconds is only valid for timestamp watermarks")
+		return declarationDiagnosticFailure("/polling_watermark/safety_lag_seconds", "changefeed_polling_lag_kind", "safety_lag_seconds is only valid for timestamp watermarks", errors.New("polling watermark safety_lag_seconds is only valid for timestamp watermarks"))
 	}
 	if polling.PageSize <= 0 || polling.MaxPages <= 0 || polling.RequestBudget <= 0 {
-		return errors.New("polling watermark requires positive page_size, max_pages, and request_budget")
+		return declarationDiagnosticFailure("/polling_watermark", "changefeed_polling_bounds", "polling requires positive page_size, max_pages and request_budget", errors.New("polling watermark requires positive page_size, max_pages, and request_budget"))
 	}
 	if polling.DeletionEndpoint != nil && polling.RequestBudget < 2 {
-		return errors.New("polling watermark deletion_endpoint requires request_budget of at least 2")
+		return declarationDiagnosticFailure("/polling_watermark/request_budget", "changefeed_polling_delete_budget", "deletion endpoint requires request_budget of at least 2", errors.New("polling watermark deletion_endpoint requires request_budget of at least 2"))
 	}
 	if d.Checkpoint == nil || !sameStrings(d.Checkpoint.Keys, []string{polling.Watermark.Path, polling.TieBreaker.Path}) {
-		return errors.New("polling watermark checkpoint keys must be watermark path then tie_breaker path")
+		return declarationDiagnosticFailure("/checkpoint/keys", "changefeed_polling_checkpoint", "checkpoint keys must be watermark path then tie_breaker path", errors.New("polling watermark checkpoint keys must be watermark path then tie_breaker path"))
 	}
 	if d.Delivery == nil || d.Delivery.Duplicates != "at_least_once" {
-		return errors.New("polling watermark delivery must declare duplicates at_least_once")
+		return declarationDiagnosticFailure("/delivery/duplicates", "changefeed_polling_duplicates", "polling delivery duplicates must be at_least_once", errors.New("polling watermark delivery must declare duplicates at_least_once"))
 	}
 	if polling.SoftDelete != nil && polling.DeletionEndpoint != nil {
-		return errors.New("polling watermark may declare either soft_delete or deletion_endpoint, not both")
+		return declarationDiagnosticFailure("/polling_watermark", "changefeed_polling_delete_conflict", "polling may declare soft_delete or deletion_endpoint, but not both", errors.New("polling watermark may declare either soft_delete or deletion_endpoint, not both"))
 	}
 	if polling.SoftDelete != nil {
 		if err := validatePollingWatermarkPath("soft_delete path", polling.SoftDelete.Path); err != nil {
-			return err
+			return declarationDiagnosticWithin("/polling_watermark/soft_delete/path", err)
 		}
 	}
 	if polling.DeletionEndpoint != nil {
 		if err := validatePollingWatermarkEndpointPath(polling.DeletionEndpoint.Path); err != nil {
-			return err
+			return declarationDiagnosticWithin("/polling_watermark/deletion_endpoint/path", err)
 		}
 		if err := validatePollingWatermarkPath("deletion_endpoint records_path", polling.DeletionEndpoint.RecordsPath); err != nil {
-			return err
+			return declarationDiagnosticWithin("/polling_watermark/deletion_endpoint/records_path", err)
 		}
 	}
 	if polling.SoftDelete == nil && polling.DeletionEndpoint == nil && d.Delivery.Deletes != "not_available" {
 		return declarationDiagnosticFailure("/delivery/deletes", "polling_hard_deletes_unobservable", "polling watermark hard deletes are not observable; delivery deletes must be not_available", errors.New("polling watermark hard deletes are not observable; delivery deletes must be not_available"))
 	}
 	if (polling.SoftDelete != nil || polling.DeletionEndpoint != nil) && d.Delivery.Deletes != "tombstone" {
-		return errors.New("polling watermark observable deletes must declare tombstone delivery")
+		return declarationDiagnosticFailure("/delivery/deletes", "changefeed_polling_tombstones", "observable polling deletes require tombstone delivery", errors.New("polling watermark observable deletes must declare tombstone delivery"))
 	}
 	return nil
 }
 
 func validatePollingWatermarkEndpointPath(path string) error {
 	if !strings.HasPrefix(path, "/") || strings.Contains(path, "//") || strings.Contains(path, "..") || strings.ContainsAny(path, "\r\n?#") {
-		return fmt.Errorf("polling watermark deletion_endpoint path %q is not a safe connector-relative path", path)
+		return declarationDiagnosticFailure("", "changefeed_polling_endpoint", "deletion endpoint must be a safe connector-relative path", fmt.Errorf("polling watermark deletion_endpoint path %q is not a safe connector-relative path", path))
 	}
 	return nil
 }
 
 func validatePollingWatermarkPath(name, path string) error {
 	if strings.TrimSpace(path) == "" {
-		return fmt.Errorf("polling watermark %s is required", name)
+		return declarationDiagnosticFailure("", "changefeed_polling_path", "polling field path must contain safe nonempty identifier segments", fmt.Errorf("polling watermark %s is required", name))
 	}
 	for _, segment := range strings.Split(path, ".") {
 		if segment == "" {
-			return fmt.Errorf("polling watermark %s contains an empty path segment", name)
+			return declarationDiagnosticFailure("", "changefeed_polling_path", "polling field path must contain safe nonempty identifier segments", fmt.Errorf("polling watermark %s contains an empty path segment", name))
 		}
 		for index, runeValue := range segment {
 			if (runeValue >= 'a' && runeValue <= 'z') || (runeValue >= 'A' && runeValue <= 'Z') || runeValue == '_' || runeValue == '-' || (index > 0 && runeValue >= '0' && runeValue <= '9') {
 				continue
 			}
-			return fmt.Errorf("polling watermark %s contains unsafe path segment %q", name, segment)
+			return declarationDiagnosticFailure("", "changefeed_polling_path", "polling field path must contain safe nonempty identifier segments", fmt.Errorf("polling watermark %s contains unsafe path segment %q", name, segment))
 		}
 	}
 	return nil
@@ -2881,16 +2881,16 @@ func validatePollingWatermarkPath(name, path string) error {
 
 func validateChangefeedKeys(name string, keys []string) error {
 	if len(keys) == 0 {
-		return fmt.Errorf("implemented changefeed requires %s", name)
+		return declarationDiagnosticFailure("", "changefeed_keys_required", "implemented changefeed requires nonempty keys", fmt.Errorf("implemented changefeed requires %s", name))
 	}
 	seen := make(map[string]struct{}, len(keys))
-	for _, key := range keys {
+	for keyIndex, key := range keys {
 		key = strings.TrimSpace(key)
 		if key == "" {
-			return fmt.Errorf("changefeed %s cannot contain empty values", name)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", keyIndex), "changefeed_key_blank", "changefeed key must not be blank", fmt.Errorf("changefeed %s cannot contain empty values", name))
 		}
 		if _, ok := seen[key]; ok {
-			return fmt.Errorf("changefeed %s value %q is duplicated", name, key)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", keyIndex), "changefeed_key_duplicate", "changefeed key must be unique", fmt.Errorf("changefeed %s value %q is duplicated", name, key))
 		}
 		seen[key] = struct{}{}
 	}

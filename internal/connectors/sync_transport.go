@@ -163,22 +163,22 @@ func (m TombstoneRecordMapping) Validate() error {
 	switch m.Image {
 	case TombstoneRecordMappingImageKey, TombstoneRecordMappingImageBefore:
 	default:
-		return fmt.Errorf("unsupported tombstone record mapping image %q", m.Image)
+		return declarationDiagnosticFailure("/image", "tombstone_image_invalid", "tombstone mapping image must be key or before", fmt.Errorf("unsupported tombstone record mapping image %q", m.Image))
 	}
 	if len(m.Inputs) == 0 {
-		return fmt.Errorf("tombstone record mapping requires at least one input field")
+		return declarationDiagnosticFailure("/inputs", "tombstone_inputs_required", "tombstone mapping requires at least one input field", fmt.Errorf("tombstone record mapping requires at least one input field"))
 	}
 	seenInputs := make(map[string]struct{}, len(m.Inputs))
 	seenFields := make(map[string]struct{}, len(m.Inputs))
-	for _, input := range m.Inputs {
+	for inputIndex, input := range m.Inputs {
 		if input.Input == "" || input.Field == "" {
-			return fmt.Errorf("tombstone record mapping requires non-empty input and field names")
+			return declarationDiagnosticFailure(fmt.Sprintf("/inputs/%d", inputIndex), "tombstone_fields_required", "tombstone mapping requires nonempty input and field names", fmt.Errorf("tombstone record mapping requires non-empty input and field names"))
 		}
 		if _, duplicate := seenInputs[input.Input]; duplicate {
-			return fmt.Errorf("tombstone record mapping duplicates input %q", input.Input)
+			return declarationDiagnosticFailure(fmt.Sprintf("/inputs/%d/input", inputIndex), "tombstone_input_duplicate", "tombstone mapping input must be unique", fmt.Errorf("tombstone record mapping duplicates input %q", input.Input))
 		}
 		if _, duplicate := seenFields[input.Field]; duplicate {
-			return fmt.Errorf("tombstone record mapping duplicates field %q", input.Field)
+			return declarationDiagnosticFailure(fmt.Sprintf("/inputs/%d/field", inputIndex), "tombstone_field_duplicate", "tombstone mapping field must be unique", fmt.Errorf("tombstone record mapping duplicates field %q", input.Field))
 		}
 		seenInputs[input.Input] = struct{}{}
 		seenFields[input.Field] = struct{}{}
@@ -274,63 +274,63 @@ func (m SourceRecordMapping) Validate() error {
 	switch m.Kind {
 	case SourceRecordMappingKindConfigMatch:
 		if !isConcreteTransportIdentifier(m.ConfigKey) || !isConcreteTransportIdentifier(m.RecordField) {
-			return fmt.Errorf("config_match source record mapping requires concrete config_key and record_field")
+			return declarationDiagnosticFailure("", "mapping_config_fields_required", "config_match mapping requires concrete config_key and record_field", fmt.Errorf("config_match source record mapping requires concrete config_key and record_field"))
 		}
 		if len(m.Inputs) != 0 {
-			return fmt.Errorf("config_match source record mapping does not accept input fields")
+			return declarationDiagnosticFailure("/inputs", "mapping_config_inputs_forbidden", "config_match mapping must not declare input fields", fmt.Errorf("config_match source record mapping does not accept input fields"))
 		}
 	case SourceRecordMappingKindInputFields:
 		if m.ConfigKey != "" || m.RecordField != "" {
-			return fmt.Errorf("input_fields source record mapping does not accept config_match fields")
+			return declarationDiagnosticFailure("", "mapping_input_config_forbidden", "input_fields mapping must not declare config_match fields", fmt.Errorf("input_fields source record mapping does not accept config_match fields"))
 		}
 		if len(m.Inputs) == 0 {
-			return fmt.Errorf("input_fields source record mapping requires at least one input field")
+			return declarationDiagnosticFailure("/inputs", "mapping_inputs_required", "source mapping requires at least one input field", fmt.Errorf("input_fields source record mapping requires at least one input field"))
 		}
 		seenInputs := make(map[string]struct{}, len(m.Inputs))
 		seenFields := make(map[string]struct{}, len(m.Inputs))
-		for _, input := range m.Inputs {
+		for inputIndex, input := range m.Inputs {
 			if input.Input == "" || input.Field == "" {
-				return fmt.Errorf("input_fields source record mapping requires non-empty input and field names")
+				return declarationDiagnosticFailure(fmt.Sprintf("/inputs/%d", inputIndex), "mapping_input_fields_required", "source mapping requires nonempty input and field names", fmt.Errorf("input_fields source record mapping requires non-empty input and field names"))
 			}
 			if _, duplicate := seenInputs[input.Input]; duplicate {
-				return fmt.Errorf("input_fields source record mapping duplicates input %q", input.Input)
+				return declarationDiagnosticFailure(fmt.Sprintf("/inputs/%d/input", inputIndex), "mapping_input_duplicate", "source mapping input must be unique", fmt.Errorf("input_fields source record mapping duplicates input %q", input.Input))
 			}
 			if _, duplicate := seenFields[input.Field]; duplicate {
-				return fmt.Errorf("input_fields source record mapping duplicates field %q", input.Field)
+				return declarationDiagnosticFailure(fmt.Sprintf("/inputs/%d/field", inputIndex), "mapping_field_duplicate", "source mapping field must be unique", fmt.Errorf("input_fields source record mapping duplicates field %q", input.Field))
 			}
 			seenInputs[input.Input] = struct{}{}
 			seenFields[input.Field] = struct{}{}
 		}
 	default:
-		return fmt.Errorf("unsupported source record mapping kind %q", m.Kind)
+		return declarationDiagnosticFailure("/kind", "mapping_kind_invalid", "source record mapping kind is not supported", fmt.Errorf("unsupported source record mapping kind %q", m.Kind))
 	}
 	return nil
 }
 
 func (b DestinationSourceBinding) Validate() error {
 	if b.Action != "" && !isConcreteTransportIdentifier(b.Action) {
-		return fmt.Errorf("destination source binding action must be a concrete identifier")
+		return declarationDiagnosticFailure("/action", "source_binding_action_invalid", "source binding action must be a concrete identifier", fmt.Errorf("destination source binding action must be a concrete identifier"))
 	}
 	if err := b.Executor.Validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/executor", err)
 	}
 	if err := validateSourceTransportStreams(b.EligibleStreams); err != nil {
-		return err
+		return declarationDiagnosticWithin("/eligible_streams", err)
 	}
 	if b.Batch != nil {
 		if err := b.Batch.Validate(); err != nil {
-			return err
+			return declarationDiagnosticWithin("/batch", err)
 		}
 	}
 	hasRecordMapping := b.RecordMapping.Kind != ""
 	hasTombstoneMapping := b.TombstoneMapping != nil
 	if hasRecordMapping == hasTombstoneMapping {
-		return fmt.Errorf("destination source binding requires exactly one record_mapping or tombstone_mapping")
+		return declarationDiagnosticFailure("", "source_binding_mapping_required", "source binding requires exactly one record_mapping or tombstone_mapping", fmt.Errorf("destination source binding requires exactly one record_mapping or tombstone_mapping"))
 	}
 	if hasRecordMapping {
-		return b.RecordMapping.Validate()
+		return declarationDiagnosticWithin("/record_mapping", b.RecordMapping.Validate())
 	}
-	return b.TombstoneMapping.Validate()
+	return declarationDiagnosticWithin("/tombstone_mapping", b.TombstoneMapping.Validate())
 }
 
 // DestinationReadBackField maps one field in provider state to the
@@ -354,16 +354,16 @@ type DestinationReceiptLocator struct {
 
 func (l DestinationReceiptLocator) Validate() error {
 	if l.ResponseIndex < 0 || l.ResponseIndex > 1023 {
-		return fmt.Errorf("destination receipt locator response_index must be between 0 and 1023")
+		return declarationDiagnosticFailure("/response_index", "receipt_locator_index_invalid", "receipt locator response_index must be between 0 and 1023", fmt.Errorf("destination receipt locator response_index must be between 0 and 1023"))
 	}
 	if !isConcreteTransportIdentifier(l.BodyField) || !isConcreteTransportIdentifier(l.QueryParameter) {
-		return fmt.Errorf("destination receipt locator requires concrete body_field and query_parameter")
+		return declarationDiagnosticFailure("", "receipt_locator_fields_invalid", "receipt locator requires concrete body_field and query_parameter", fmt.Errorf("destination receipt locator requires concrete body_field and query_parameter"))
 	}
 	if l.MaxValueBytes < 1 || l.MaxValueBytes > 4096 {
-		return fmt.Errorf("destination receipt locator max_value_bytes must be between 1 and 4096")
+		return declarationDiagnosticFailure("/max_value_bytes", "receipt_locator_bytes_invalid", "receipt locator max_value_bytes must be between 1 and 4096", fmt.Errorf("destination receipt locator max_value_bytes must be between 1 and 4096"))
 	}
 	if l.MaxPages < 1 || l.MaxPages > 10 {
-		return fmt.Errorf("destination receipt locator max_pages must be between 1 and 10")
+		return declarationDiagnosticFailure("/max_pages", "receipt_locator_pages_invalid", "receipt locator max_pages must be between 1 and 10", fmt.Errorf("destination receipt locator max_pages must be between 1 and 10"))
 	}
 	return nil
 }
@@ -398,72 +398,72 @@ type DestinationTombstoneReadBackPolicy struct {
 
 func (p DestinationTombstoneReadBackPolicy) Validate() error {
 	if !isConcreteTransportIdentifier(p.Operation) {
-		return fmt.Errorf("destination tombstone read-back requires a concrete operation")
+		return declarationDiagnosticFailure("/operation", "readback_operation_invalid", "read-back requires a concrete operation", fmt.Errorf("destination tombstone read-back requires a concrete operation"))
 	}
 	if p.MaxRecords < 1 || p.MaxRecords > 10000 {
-		return fmt.Errorf("destination tombstone read-back max_records must be between 1 and 10000")
+		return declarationDiagnosticFailure("/max_records", "readback_records_invalid", "read-back max_records must be between 1 and 10000", fmt.Errorf("destination tombstone read-back max_records must be between 1 and 10000"))
 	}
 	if p.MaxAttempts < 1 || p.MaxAttempts > 10 {
-		return fmt.Errorf("destination tombstone read-back max_attempts must be between 1 and 10")
+		return declarationDiagnosticFailure("/max_attempts", "readback_attempts_invalid", "read-back max_attempts must be between 1 and 10", fmt.Errorf("destination tombstone read-back max_attempts must be between 1 and 10"))
 	}
 	if p.TimeoutMilliseconds < 1 || p.TimeoutMilliseconds > 60000 {
-		return fmt.Errorf("destination tombstone read-back timeout_milliseconds must be between 1 and 60000")
+		return declarationDiagnosticFailure("/timeout_milliseconds", "readback_timeout_invalid", "read-back timeout_milliseconds must be between 1 and 60000", fmt.Errorf("destination tombstone read-back timeout_milliseconds must be between 1 and 60000"))
 	}
 	if p.RetryDelayMilliseconds < 0 || p.RetryDelayMilliseconds > 10000 {
-		return fmt.Errorf("destination tombstone read-back retry_delay_milliseconds must be between 0 and 10000")
+		return declarationDiagnosticFailure("/retry_delay_milliseconds", "readback_delay_invalid", "read-back retry_delay_milliseconds must be between 0 and 10000", fmt.Errorf("destination tombstone read-back retry_delay_milliseconds must be between 0 and 10000"))
 	}
 	if err := validateDestinationReadBackFields("tombstone identity", p.Identity); err != nil {
-		return err
+		return declarationDiagnosticWithin("/identity", err)
 	}
 	if err := p.ReceiptLocator.Validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/receipt_locator", err)
 	}
 	return nil
 }
 
 func (p DestinationReadBackPolicy) Validate() error {
 	if !isConcreteTransportIdentifier(p.Operation) {
-		return fmt.Errorf("destination read-back requires a concrete operation")
+		return declarationDiagnosticFailure("/operation", "readback_operation_invalid", "read-back requires a concrete operation", fmt.Errorf("destination read-back requires a concrete operation"))
 	}
 	if p.MaxRecords < 1 || p.MaxRecords > 10000 {
-		return fmt.Errorf("destination read-back max_records must be between 1 and 10000")
+		return declarationDiagnosticFailure("/max_records", "readback_records_invalid", "read-back max_records must be between 1 and 10000", fmt.Errorf("destination read-back max_records must be between 1 and 10000"))
 	}
 	if p.MaxAttempts < 1 || p.MaxAttempts > 10 {
-		return fmt.Errorf("destination read-back max_attempts must be between 1 and 10")
+		return declarationDiagnosticFailure("/max_attempts", "readback_attempts_invalid", "read-back max_attempts must be between 1 and 10", fmt.Errorf("destination read-back max_attempts must be between 1 and 10"))
 	}
 	if p.TimeoutMilliseconds < 1 || p.TimeoutMilliseconds > 60000 {
-		return fmt.Errorf("destination read-back timeout_milliseconds must be between 1 and 60000")
+		return declarationDiagnosticFailure("/timeout_milliseconds", "readback_timeout_invalid", "read-back timeout_milliseconds must be between 1 and 60000", fmt.Errorf("destination read-back timeout_milliseconds must be between 1 and 60000"))
 	}
 	if p.RetryDelayMilliseconds < 0 || p.RetryDelayMilliseconds > 10000 {
-		return fmt.Errorf("destination read-back retry_delay_milliseconds must be between 0 and 10000")
+		return declarationDiagnosticFailure("/retry_delay_milliseconds", "readback_delay_invalid", "read-back retry_delay_milliseconds must be between 0 and 10000", fmt.Errorf("destination read-back retry_delay_milliseconds must be between 0 and 10000"))
 	}
 	if err := validateDestinationReadBackFields("identity", p.Identity); err != nil {
-		return err
+		return declarationDiagnosticWithin("/identity", err)
 	}
 	if err := validateDestinationReadBackFields("expected", p.Expected); err != nil {
-		return err
+		return declarationDiagnosticWithin("/expected", err)
 	}
 	if err := p.ReceiptLocator.Validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/receipt_locator", err)
 	}
 	return nil
 }
 
 func validateDestinationReadBackFields(kind string, fields []DestinationReadBackField) error {
 	if len(fields) == 0 {
-		return fmt.Errorf("destination read-back %s fields are required", kind)
+		return declarationDiagnosticFailure("", "readback_fields_required", "read-back fields must be nonempty", fmt.Errorf("destination read-back %s fields are required", kind))
 	}
 	provider := make(map[string]struct{}, len(fields))
 	expected := make(map[string]struct{}, len(fields))
-	for _, field := range fields {
+	for fieldIndex, field := range fields {
 		if strings.TrimSpace(field.ProviderField) == "" || len(field.ProviderField) > 256 || strings.TrimSpace(field.ExpectedField) == "" || len(field.ExpectedField) > 256 {
-			return fmt.Errorf("destination read-back %s fields require concrete provider and expected names", kind)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", fieldIndex), "readback_field_invalid", "read-back requires nonblank provider and expected names of at most 256 bytes", fmt.Errorf("destination read-back %s fields require concrete provider and expected names", kind))
 		}
 		if _, duplicate := provider[field.ProviderField]; duplicate {
-			return fmt.Errorf("destination read-back %s duplicates provider field %q", kind, field.ProviderField)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d/provider_field", fieldIndex), "readback_provider_duplicate", "read-back provider field must be unique", fmt.Errorf("destination read-back %s duplicates provider field %q", kind, field.ProviderField))
 		}
 		if _, duplicate := expected[field.ExpectedField]; duplicate {
-			return fmt.Errorf("destination read-back %s duplicates expected field %q", kind, field.ExpectedField)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d/expected_field", fieldIndex), "readback_expected_duplicate", "read-back expected field must be unique", fmt.Errorf("destination read-back %s duplicates expected field %q", kind, field.ExpectedField))
 		}
 		provider[field.ProviderField] = struct{}{}
 		expected[field.ExpectedField] = struct{}{}
@@ -520,10 +520,10 @@ func (r TransportExecutorReference) Validate() error {
 		TransportExecutorFamilyNativeDatabase, TransportExecutorFamilyFile,
 		TransportExecutorFamilyQueue:
 	default:
-		return fmt.Errorf("unsupported transport executor family %q", r.Family)
+		return declarationDiagnosticFailure("/family", "transport_executor_family", "transport executor family is not supported", fmt.Errorf("unsupported transport executor family %q", r.Family))
 	}
 	if !isConcreteTransportIdentifier(r.ID) {
-		return fmt.Errorf("transport executor requires a concrete executor ID")
+		return declarationDiagnosticFailure("/id", "transport_executor_id", "transport executor requires a concrete ID", fmt.Errorf("transport executor requires a concrete executor ID"))
 	}
 	return nil
 }
@@ -558,17 +558,17 @@ func (d DeliveryGuarantees) Validate() error {
 	switch d.Idempotency {
 	case DeliveryIdempotencyKeyed, DeliveryIdempotencyAtLeastOnce, DeliveryIdempotencySingleAttempt, DeliveryIdempotencyNone:
 	default:
-		return fmt.Errorf("unsupported transport idempotency guarantee %q", d.Idempotency)
+		return declarationDiagnosticFailure("/idempotency", "transport_idempotency_invalid", "transport idempotency guarantee is not supported", fmt.Errorf("unsupported transport idempotency guarantee %q", d.Idempotency))
 	}
 	switch d.Ordering {
 	case DeliveryOrderingSource, DeliveryOrderingWindowCoalesced, DeliveryOrderingUnordered:
 	default:
-		return fmt.Errorf("unsupported transport ordering guarantee %q", d.Ordering)
+		return declarationDiagnosticFailure("/ordering", "transport_ordering_invalid", "transport ordering guarantee is not supported", fmt.Errorf("unsupported transport ordering guarantee %q", d.Ordering))
 	}
 	switch d.Deletes {
 	case DeliveryDeletesTombstone, DeliveryDeletesUnavailable:
 	default:
-		return fmt.Errorf("unsupported transport delete guarantee %q", d.Deletes)
+		return declarationDiagnosticFailure("/deletes", "transport_deletes_invalid", "transport delete guarantee is not supported", fmt.Errorf("unsupported transport delete guarantee %q", d.Deletes))
 	}
 	return nil
 }
@@ -579,25 +579,25 @@ func (s ApplyStrategy) Validate() error {
 		ApplyStrategyDedupeHistory, ApplyStrategyChangeApply:
 		return nil
 	default:
-		return fmt.Errorf("unsupported destination apply strategy %q", s)
+		return declarationDiagnosticFailure("", "transport_strategy_invalid", "apply strategy is not supported", fmt.Errorf("unsupported destination apply strategy %q", s))
 	}
 }
 
 func (d SourceTransportDescriptor) Validate() error {
 	if err := d.Executor.Validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/executor", err)
 	}
 	if err := validateSourceTransportStreams(d.EligibleStreams); err != nil {
-		return err
+		return declarationDiagnosticWithin("/eligible_streams", err)
 	}
 	if err := validateTransportModes(d.Modes); err != nil {
-		return err
+		return declarationDiagnosticWithin("/modes", err)
 	}
 	if err := d.Delivery.Validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/delivery", err)
 	}
 	if d.Delivery.Idempotency == DeliveryIdempotencySingleAttempt {
-		return fmt.Errorf("source transport cannot declare single_attempt delivery")
+		return declarationDiagnosticFailure("/delivery/idempotency", "source_single_attempt_forbidden", "source transport cannot declare single_attempt delivery", fmt.Errorf("source transport cannot declare single_attempt delivery"))
 	}
 	return nil
 }
@@ -606,9 +606,9 @@ func validateSourceTransportStreams(streams []string) error {
 	if len(streams) == 1 && streams[0] == "*" {
 		return nil
 	}
-	for _, stream := range streams {
+	for streamIndex, stream := range streams {
 		if stream == "*" {
-			return fmt.Errorf("source eligible stream wildcard must be the only entry")
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", streamIndex), "transport_stream_wildcard", "source stream wildcard must be the only entry", fmt.Errorf("source eligible stream wildcard must be the only entry"))
 		}
 	}
 	return validateTransportNames("source eligible stream", streams)
@@ -616,60 +616,61 @@ func validateSourceTransportStreams(streams []string) error {
 
 func (d DestinationTransportDescriptor) Validate() error {
 	if d.CopyWorkerMaximum < 0 || d.CopyWorkerMaximum > 8 {
-		return fmt.Errorf("destination transport copy worker maximum must be zero or between 1 and 8")
+		return declarationDiagnosticFailure("/copy_worker_maximum", "transport_copy_bound", "copy worker maximum must be zero or between 1 and 8", fmt.Errorf("destination transport copy worker maximum must be zero or between 1 and 8"))
 	}
 	if err := d.Executor.Validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/executor", err)
 	}
 	if err := validateTransportNames("destination eligible action", d.EligibleActions); err != nil {
-		return err
+		return declarationDiagnosticWithin("/eligible_actions", err)
 	}
 	if err := validateDestinationTransportModes(d.Modes); err != nil {
-		return err
+		return declarationDiagnosticWithin("/modes", err)
 	}
 	if err := d.Delivery.Validate(); err != nil {
-		return err
+		return declarationDiagnosticWithin("/delivery", err)
 	}
 	if err := validateDestinationSourceBindings(d.SourceBindings); err != nil {
-		return err
+		return declarationDiagnosticWithin("/source_bindings", err)
 	}
 	if d.ReadBack != nil {
 		if err := d.ReadBack.Validate(); err != nil {
-			return err
+			return declarationDiagnosticWithin("/read_back", err)
 		}
 	}
 	if d.TombstoneReadBack != nil {
 		if err := d.TombstoneReadBack.Validate(); err != nil {
-			return err
+			return declarationDiagnosticWithin("/tombstone_read_back", err)
 		}
 	}
 	switch d.Acknowledgement {
 	case TransportAcknowledgementDurableWarehouse, TransportAcknowledgementNone:
 	default:
-		return fmt.Errorf("unsupported destination acknowledgement policy %q", d.Acknowledgement)
+		return declarationDiagnosticFailure("/acknowledgement", "transport_acknowledgement_invalid", "destination acknowledgement policy is not supported", fmt.Errorf("unsupported destination acknowledgement policy %q", d.Acknowledgement))
 	}
 
 	strategies := make(map[synccontract.Mode]struct{}, len(d.ApplyStrategies))
 	strategyActions := make(map[synccontract.Mode]map[string]struct{}, len(d.ApplyStrategies))
 	declaredActions := make(map[string]struct{}, len(d.ApplyStrategies)*2)
-	for _, strategy := range d.ApplyStrategies {
+	for strategyIndex, strategy := range d.ApplyStrategies {
+		strategyPath := fmt.Sprintf("/apply_strategies/%d", strategyIndex)
 		if err := strategy.Mode.Validate(); err != nil {
-			return err
+			return declarationDiagnosticFailure(strategyPath+"/mode", "transport_mode_invalid", "transport sync mode is not supported", err)
 		}
 		if !containsTransportMode(d.Modes, strategy.Mode) {
-			return fmt.Errorf("destination apply strategy mode %q is not a declared destination mode", strategy.Mode)
+			return declarationDiagnosticFailure(strategyPath+"/mode", "transport_strategy_mode", "apply strategy mode must be a declared destination mode", fmt.Errorf("destination apply strategy mode %q is not a declared destination mode", strategy.Mode))
 		}
 		if err := strategy.Strategy.Validate(); err != nil {
-			return err
+			return declarationDiagnosticWithin(strategyPath+"/strategy", err)
 		}
 		if strategy.ReadBack != nil {
 			if err := strategy.ReadBack.Validate(); err != nil {
-				return fmt.Errorf("destination action %q read-back: %w", strategy.Action, err)
+				return declarationDiagnosticWithin(strategyPath+"/read_back", fmt.Errorf("destination action %q read-back: %w", strategy.Action, err))
 			}
 		}
 		if strategy.TombstoneReadBack != nil {
 			if err := strategy.TombstoneReadBack.Validate(); err != nil {
-				return fmt.Errorf("destination tombstone action %q read-back: %w", strategy.TombstoneAction, err)
+				return declarationDiagnosticWithin(strategyPath+"/tombstone_read_back", fmt.Errorf("destination tombstone action %q read-back: %w", strategy.TombstoneAction, err))
 			}
 		}
 		if strategy.Mode == synccontract.ModeChangeCapture && strategy.Strategy != ApplyStrategyChangeApply {
@@ -679,19 +680,19 @@ func (d DestinationTransportDescriptor) Validate() error {
 			return fmt.Errorf("destination change_apply strategy is only valid for change_capture mode")
 		}
 		if !containsTransportName(d.EligibleActions, strategy.Action) {
-			return fmt.Errorf("destination apply strategy action %q is not an eligible action", strategy.Action)
+			return declarationDiagnosticFailure(strategyPath+"/action", "transport_strategy_action", "apply strategy action must be an eligible action", fmt.Errorf("destination apply strategy action %q is not an eligible action", strategy.Action))
 		}
 		if strategy.TombstoneAction != "" && !containsTransportName(d.EligibleActions, strategy.TombstoneAction) {
-			return fmt.Errorf("destination tombstone action %q is not an eligible action", strategy.TombstoneAction)
+			return declarationDiagnosticFailure(strategyPath+"/tombstone_action", "transport_tombstone_action", "tombstone action must be an eligible action", fmt.Errorf("destination tombstone action %q is not an eligible action", strategy.TombstoneAction))
 		}
 		if strategy.TombstoneAction == strategy.Action && strategy.TombstoneAction != "" {
-			return fmt.Errorf("destination tombstone action %q cannot equal its ordinary apply action", strategy.Action)
+			return declarationDiagnosticFailure(strategyPath+"/tombstone_action", "transport_tombstone_conflict", "tombstone action must differ from its ordinary apply action", fmt.Errorf("destination tombstone action %q cannot equal its ordinary apply action", strategy.Action))
 		}
 		if strategyActions[strategy.Mode] == nil {
 			strategyActions[strategy.Mode] = make(map[string]struct{})
 		}
 		if _, exists := strategyActions[strategy.Mode][strategy.Action]; exists {
-			return fmt.Errorf("destination transport declares duplicate apply strategy action %q for sync mode %q", strategy.Action, strategy.Mode)
+			return declarationDiagnosticFailure(strategyPath+"/action", "transport_strategy_duplicate", "apply strategy action must be unique within its sync mode", fmt.Errorf("destination transport declares duplicate apply strategy action %q for sync mode %q", strategy.Action, strategy.Mode))
 		}
 		strategyActions[strategy.Mode][strategy.Action] = struct{}{}
 		declaredActions[strategy.Action] = struct{}{}
@@ -700,14 +701,14 @@ func (d DestinationTransportDescriptor) Validate() error {
 		}
 		strategies[strategy.Mode] = struct{}{}
 	}
-	for _, mode := range d.Modes {
+	for modeIndex, mode := range d.Modes {
 		if _, exists := strategies[mode]; !exists {
-			return fmt.Errorf("destination transport is missing declared apply strategy for sync mode %q", mode)
+			return declarationDiagnosticFailure(fmt.Sprintf("/modes/%d", modeIndex), "transport_strategy_missing", "destination sync mode requires a declared apply strategy", fmt.Errorf("destination transport is missing declared apply strategy for sync mode %q", mode))
 		}
 	}
-	for _, action := range d.EligibleActions {
+	for actionIndex, action := range d.EligibleActions {
 		if _, found := declaredActions[action]; !found {
-			return fmt.Errorf("destination eligible action %q has no declared apply strategy", action)
+			return declarationDiagnosticFailure(fmt.Sprintf("/eligible_actions/%d", actionIndex), "transport_action_strategy_missing", "eligible destination action requires a declared apply strategy", fmt.Errorf("destination eligible action %q has no declared apply strategy", action))
 		}
 	}
 	for action := range declaredActions {
@@ -715,12 +716,12 @@ func (d DestinationTransportDescriptor) Validate() error {
 			return fmt.Errorf("destination apply strategy action %q is not an eligible action", action)
 		}
 	}
-	for _, binding := range d.SourceBindings {
+	for bindingIndex, binding := range d.SourceBindings {
 		if binding.Action == "" {
 			continue
 		}
 		if _, found := declaredActions[binding.Action]; !found {
-			return fmt.Errorf("destination source binding action %q has no reachable apply strategy", binding.Action)
+			return declarationDiagnosticFailure(fmt.Sprintf("/source_bindings/%d/action", bindingIndex), "transport_binding_action_unreachable", "source binding action requires a reachable apply strategy", fmt.Errorf("destination source binding action %q has no reachable apply strategy", binding.Action))
 		}
 	}
 	return nil
@@ -730,8 +731,10 @@ func validateDestinationTransportModes(modes []synccontract.Mode) error {
 	if err := validateTransportModes(modes); err != nil {
 		return err
 	}
-	if containsTransportMode(modes, synccontract.ModeChangeCapture) {
-		return fmt.Errorf("destination transport cannot declare change_capture mode; change capture is source-only into the connection warehouse")
+	for modeIndex, mode := range modes {
+		if mode == synccontract.ModeChangeCapture {
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", modeIndex), "destination_change_capture_forbidden", "change_capture is source-only into the connection warehouse", fmt.Errorf("destination transport cannot declare change_capture mode; change capture is source-only into the connection warehouse"))
+		}
 	}
 	return nil
 }
@@ -739,7 +742,7 @@ func validateDestinationTransportModes(modes []synccontract.Mode) error {
 func validateDestinationSourceBindings(bindings []DestinationSourceBinding) error {
 	for index, binding := range bindings {
 		if err := binding.Validate(); err != nil {
-			return fmt.Errorf("destination source binding: %w", err)
+			return declarationDiagnosticWithin(fmt.Sprintf("/%d", index), fmt.Errorf("destination source binding: %w", err))
 		}
 		for previousIndex := 0; previousIndex < index; previousIndex++ {
 			previous := bindings[previousIndex]
@@ -747,9 +750,9 @@ func validateDestinationSourceBindings(bindings []DestinationSourceBinding) erro
 				continue
 			}
 			if binding.Action == "" {
-				return fmt.Errorf("destination source binding duplicates legacy executor %q stream selection", binding.Executor.ID)
+				return declarationDiagnosticFailure(fmt.Sprintf("/%d", index), "source_binding_duplicate", "source bindings must not overlap for the same executor and action", fmt.Errorf("destination source binding duplicates legacy executor %q stream selection", binding.Executor.ID))
 			}
-			return fmt.Errorf("destination source binding duplicates action %q for executor %q stream selection", binding.Action, binding.Executor.ID)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", index), "source_binding_duplicate", "source bindings must not overlap for the same executor and action", fmt.Errorf("destination source binding duplicates action %q for executor %q stream selection", binding.Action, binding.Executor.ID))
 		}
 	}
 	return nil
@@ -861,16 +864,16 @@ func (d DestinationTransportDescriptor) ApplyStrategyForAction(mode synccontract
 
 func (d SyncTransportDescriptor) Validate() error {
 	if d.Source == nil && d.Destination == nil {
-		return fmt.Errorf("sync transport descriptor must declare a source or destination transport")
+		return declarationDiagnosticFailure("", "transport_role_required", "source or destination transport must be declared", fmt.Errorf("sync transport descriptor must declare a source or destination transport"))
 	}
 	if d.Source != nil {
 		if err := d.Source.Validate(); err != nil {
-			return fmt.Errorf("source transport: %w", err)
+			return declarationDiagnosticWithin("/source_transport", fmt.Errorf("source transport: %w", err))
 		}
 	}
 	if d.Destination != nil {
 		if err := d.Destination.Validate(); err != nil {
-			return fmt.Errorf("destination transport: %w", err)
+			return declarationDiagnosticWithin("/destination_transport", fmt.Errorf("destination transport: %w", err))
 		}
 	}
 	return nil
@@ -1024,15 +1027,15 @@ func SyncTransportEligibilityOf(c Connector) SyncTransportEligibility {
 
 func validateTransportModes(modes []synccontract.Mode) error {
 	if len(modes) == 0 {
-		return fmt.Errorf("transport descriptor requires at least one sync mode")
+		return declarationDiagnosticFailure("", "transport_modes_required", "transport requires at least one sync mode", fmt.Errorf("transport descriptor requires at least one sync mode"))
 	}
 	seen := make(map[synccontract.Mode]struct{}, len(modes))
-	for _, mode := range modes {
+	for modeIndex, mode := range modes {
 		if err := mode.Validate(); err != nil {
-			return err
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", modeIndex), "transport_mode_invalid", "transport sync mode is not supported", err)
 		}
 		if _, exists := seen[mode]; exists {
-			return fmt.Errorf("transport descriptor declares duplicate sync mode %q", mode)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", modeIndex), "transport_mode_duplicate", "transport sync mode must be unique", fmt.Errorf("transport descriptor declares duplicate sync mode %q", mode))
 		}
 		seen[mode] = struct{}{}
 	}
@@ -1041,15 +1044,15 @@ func validateTransportModes(modes []synccontract.Mode) error {
 
 func validateTransportNames(label string, names []string) error {
 	if len(names) == 0 {
-		return fmt.Errorf("%s requires at least one name", label)
+		return declarationDiagnosticFailure("", "transport_names_required", "transport requires at least one name", fmt.Errorf("%s requires at least one name", label))
 	}
 	seen := make(map[string]struct{}, len(names))
-	for _, name := range names {
+	for nameIndex, name := range names {
 		if !isConcreteTransportIdentifier(name) {
-			return fmt.Errorf("%s %q must be a concrete identifier", label, name)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", nameIndex), "transport_name_invalid", "transport name must be a concrete identifier", fmt.Errorf("%s %q must be a concrete identifier", label, name))
 		}
 		if _, exists := seen[name]; exists {
-			return fmt.Errorf("%s %q is duplicated", label, name)
+			return declarationDiagnosticFailure(fmt.Sprintf("/%d", nameIndex), "transport_name_duplicate", "transport name must be unique", fmt.Errorf("%s %q is duplicated", label, name))
 		}
 		seen[name] = struct{}{}
 	}

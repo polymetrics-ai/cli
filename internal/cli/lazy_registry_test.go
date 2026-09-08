@@ -101,7 +101,7 @@ func TestCLICommandPreservesSelectedDataError160(t *testing.T) {
 	out.Reset()
 	diag.Reset()
 	code := runWithPreflightRegistry([]string{"github", "label", "delete", "--root", root}, &out, &diag, registry)
-	if code == 0 || !strings.Contains(diag.String(), "selected-bundle-sentinel") || !strings.Contains(diag.String(), "operations.json") || strings.Contains(diag.String(), "unknown command") || out.Len() != 0 {
+	if code != 1 || strings.Contains(diag.String(), "selected-bundle-sentinel") || !strings.Contains(diag.String(), "malformed JSON") || !strings.Contains(diag.String(), "operations.json") || strings.Contains(diag.String(), "unknown command") || out.Len() != 0 {
 		t.Fatalf("public CLI erased selected-data reason: stdout=%q stderr=%q", out.String(), diag.String())
 	}
 }

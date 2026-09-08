@@ -25,6 +25,20 @@ DESCRIPTION
   ETL STREAMS, REVERSE ETL ACTIONS, and sync transport without reading
   credentials.
 
+  BUNDLE DIAGNOSTICS
+  List and catalog use safe metadata without decoding unselected bundles.
+  Selecting an invalid execution bundle fails before its executor is constructed
+  or a provider request is sent. This remains internal_error (exit 1).
+  In --json mode, error.bundle carries connector, generation, digest, file,
+  field, reason_code and reason. Text output reports the safe location and
+  reason; raw declaration values and internal error causes are not printed.
+  A field of / identifies the file root. Trusted property names and array
+  positions identify nested fields. <member:N> identifies an untrusted object's
+  member by zero-based position among sorted keys; it is diagnostic notation,
+  not a literal JSON Pointer. Database definitions use $.field[index] paths;
+  @byte:N marks the end byte offset of an unknown member token.
+  Source-lane refusals retain their own codes below.
+
   RETAINED SOURCE INSPECTION
   --sources lists the retained cohort's complete source operations and all seven
   lanes, including writes, removals and source-excluded lanes. Each observation

@@ -1183,5 +1183,16 @@
       "disposition": "restored direct Error assertions; private producer API preserves original text and does not expose BundleDiagnosticError"
     }
   ],
-  "restored_public_expressions": 7
+  "restored_public_expressions": 7,
+  "additional_assertion_migrations": [
+    {
+      "id": "AM-169-01",
+      "file": "internal/cli/lazy_registry_test.go",
+      "test": "TestCLICommandPreservesSelectedDataError160",
+      "disposition": "Retain errors.Is checks for original joined sentinel and observed graph at Go frontier; public output now requires malformed JSON/operations.json/exit1 and forbids joined sentinel, per adopted166 secrecy contract.",
+      "original_failure": "cp15-cli-normal-169-01",
+      "baseline_control": "cp15-cli-baseline-169-01",
+      "denominator": "Supplementary migration; original95 expression denominator unchanged."
+    }
+  ]
 }

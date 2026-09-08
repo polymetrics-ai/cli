@@ -3,9 +3,14 @@ package engine
 import (
 	"encoding/json"
 	"errors"
+	"io/fs"
+	"strconv"
 	"strings"
 	"testing"
 	"testing/fstest"
+
+	"polymetrics.ai/internal/connectors/database"
+	"polymetrics.ai/internal/connectors/defs"
 )
 
 // Expectations are fixed at the consumer, never derived from the producer's
@@ -409,6 +414,20 @@ func TestBundlePublicDynamicFields168(t *testing.T) {
 
 func TestBundlePublicWriteSemantics168(t *testing.T) {
 	for _, tc := range []struct{ name, patch, field, code, reason string }{
+		{"success_duplicate", `{"success_statuses":[200,200]}`, "/actions/0/success_statuses/1", "write_status_duplicate", "write success status must be unique"},
+		{"origin_duplicate", `{"base_url":"https://example.com","allowed_base_url_origins":["https://example.com","https://EXAMPLE.com"]}`, "/actions/0/allowed_base_url_origins/1", "write_allowed_origin_duplicate", "allowed origin must be unique"},
+		{"multipart_missing", `{"body_type":"multipart"}`, "/actions/0/multipart/parts", "write_multipart_parts_required", "multipart body requires nonempty multipart.parts"},
+		{"multipart_blank", `{"body_type":"multipart","multipart":{"parts":[{"name":" ","type":"field","field":"field"}]}}`, "/actions/0/multipart/parts/0", "write_multipart_binding_required", "multipart part requires nonblank name and field"},
+		{"base64_source_blank", `{"body_type":"base64_upload","base64_upload":{"source_field":" ","content_field":"content","max_decoded_bytes":10}}`, "/actions/0/base64_upload/source_field", "base64_source_field_required", "base64_upload requires a nonblank source_field"},
+		{"base64_content_blank", `{"body_type":"base64_upload","base64_upload":{"source_field":"file","content_field":" ","max_decoded_bytes":10}}`, "/actions/0/base64_upload/content_field", "base64_content_field_required", "base64_upload requires a nonblank content_field"},
+		{"base64_ceiling", `{"body_type":"base64_upload","base64_upload":{"source_field":"file","content_field":"content","max_decoded_bytes":16777217}}`, "/actions/0/base64_upload/max_decoded_bytes", "base64_decoded_ceiling", "base64_upload max_decoded_bytes must not exceed 16777216"},
+		{"hook_missing", `{"hook_fields":["custom"]}`, "/actions/0/hook", "write_hook_required", "hook_fields requires hook"},
+		{"hook_blank", `{"hook":"test-hook","hook_fields":[" "]}`, "/actions/0/hook_fields/0", "write_hook_field_invalid", "hook field must be nonblank and trimmed"},
+		{"hook_duplicate", `{"hook":"test-hook","hook_fields":["custom","custom"],"record_schema":{"type":"object","properties":{"custom":{"type":"string"}}}}`, "/actions/0/hook_fields/1", "write_hook_field_duplicate", "hook field must be unique"},
+		{"hook_undeclared", `{"hook":"test-hook","hook_fields":["private-sentinel-167"]}`, "/actions/0/hook_fields/0", "write_hook_field_undeclared", "hook field must be declared in record_schema"},
+		{"hook_overlap", `{"hook":"test-hook","hook_fields":["custom"],"body_fields":["custom"],"record_schema":{"type":"object","properties":{"custom":{"type":"string"}}}}`, "/actions/0/hook_fields/0", "write_hook_field_overlap", "hook field must not overlap the primary request contract"},
+		{"binary_media", `{"body_type":"binary_upload","binary_upload":{"source_field":"file","max_bytes":10,"allowed_media_types":["private-sentinel-167;="]}}`, "/actions/0/binary_upload/allowed_media_types/0", "upload_media_type_invalid", "allowed upload media type must be valid"},
+		{"multipart_media", `{"body_type":"multipart","multipart":{"parts":[{"name":"file","type":"file","field":"file","allowed_media_types":["private-sentinel-167;="]}]}}`, "/actions/0/multipart/parts/0/allowed_media_types/0", "multipart_media_type_invalid", "allowed media type is invalid"},
 		{"body_required", `{"body_type":"form","body_required":true}`, "/actions/0/body_required", "write_body_required_type", "body_required requires body_type json"},
 		{"idempotency_header", `{"idempotency_key_header":"private-sentinel-167 bad"}`, "/actions/0/idempotency_key_header", "pattern_mismatch", "value does not match the required pattern"},
 		{"graphql_conflict", `{"graphql":{"document":"mutation Update { ok }","operation_name":"Update","variables":{}}}`, "/actions/0/body_type", "write_graphql_type_conflict", "graphql requires matching body_type"},
@@ -544,6 +563,9 @@ func TestBundlePublicOperationRules168(t *testing.T) {
 		{"pager_source_unused", `{"rest":{"method":"GET","path":"/widgets","pagination":{"type":"offset_limit","limit_param":"limit","offset_param":"offset","page_size":10},"pagination_parameters":[{"name":"limit","in":"query"},{"name":"offset","in":"query"},{"name":"private_sentinel_167","in":"query"}]}}`, "/operations/0/rest/pagination_parameters", "pagination_source_mismatch", "pagination controls must exactly match source pagination_parameters"},
 		{"binary_content_type", `{"kind":"binary_download","rest":null,"binary":{"method":"GET","path":"/widgets","max_bytes":10,"content_types":["private-sentinel-167"]}}`, "/operations/0/binary/content_types/0", "binary_content_type_invalid", "declared binary content type must be a valid media range"},
 		{"binary_charset", `{"kind":"binary_download","rest":null,"binary":{"method":"GET","path":"/widgets","max_bytes":10,"charset":"private-sentinel-167;="}}`, "/operations/0/binary/charset", "binary_charset_invalid", "declared binary charset must be valid"},
+		{"text_plain_body", `{"rest":{"method":"POST","path":"/widgets","content_type":"text/plain","body_schema":{"type":"string"},"body":{"private-sentinel-167":true}}}`, "/operations/0/rest/body", "text_plain_body_forbidden", "text/plain direct read must not declare rest.body"},
+		{"text_plain_schema", `{"rest":{"method":"POST","path":"/widgets","content_type":"text/plain","body_schema":{"type":"object"}}}`, "/operations/0/rest/body_schema/type", "text_plain_schema_type", "text/plain direct read requires a root string body_schema"},
+		{"secret_response_pair", `{"sensitive_policy":{"response_secret_field":"private-sentinel-167"}}`, "/operations/0/sensitive_policy", "sensitive_response_pair", "response_secret_field and response_secret_store_key must be declared together"},
 		{"read_method", `{"rest":{"method":"PUT","path":"/widgets"}}`, "/operations/0/rest/method", "rest_read_method_invalid", "rest_read method must be GET or POST"},
 		{"read_body", `{"rest":{"method":"POST","path":"/widgets"}}`, "/operations/0/rest/body_schema", "rest_read_schema_required", "rest_read POST must declare body_schema"},
 		{"read_mutation", `{"mutation_class":"create"}`, "/operations/0/mutation_class", "rest_read_mutation_forbidden", "rest_read must not declare a mutating mutation_class"},
@@ -587,6 +609,7 @@ func TestBundlePublicOperationRules168(t *testing.T) {
 
 func TestBundlePublicOperationHeaders168(t *testing.T) {
 	for _, tc := range []struct{ name, key, data, field, code, reason string }{
+		{"runtime_owned", "parameters", `[{"name":"X-Runtime-Token","in":"header","type":"string","max_bytes":64,"schema":{"type":"string"}}]`, "/rest/parameters/0/name", "parameter_header_protected", "request header is protected and runtime-owned"},
 		{"protected", "parameters", `[{"name":"Authorization","in":"header","type":"string","max_bytes":64,"schema":{"type":"string"}}]`, "/rest/parameters/0/name", "parameter_header_protected", "request header is protected and runtime-owned"},
 		{"duplicate", "parameters", `[{"name":"X-Test","in":"header","type":"string","max_bytes":64,"schema":{"type":"string"}},{"name":"x-test","in":"header","type":"string","max_bytes":64,"schema":{"type":"string"}}]`, "/rest/parameters/1/name", "parameter_header_duplicate", "request header must be unique ignoring case"},
 		{"missing_schema", "parameters", `[{"name":"X-Test","in":"header","type":"string","max_bytes":64}]`, "/rest/parameters/0/schema", "parameter_header_schema_required", "request header requires a bounded string schema"},
@@ -609,11 +632,486 @@ func TestBundlePublicOperationHeaders168(t *testing.T) {
 				t.Fatal(err)
 			}
 			files := fullValidBundleFS("acme")
+			if tc.name == "runtime_owned" {
+				var streams map[string]any
+				if err := json.Unmarshal([]byte(validStreams), &streams); err != nil {
+					t.Fatal(err)
+				}
+				streams["base"].(map[string]any)["headers"] = map[string]any{"X-Runtime-Token": "{{ secrets.token }}"}
+				data, err := json.Marshal(streams)
+				if err != nil {
+					t.Fatal(err)
+				}
+				files["acme/streams.json"] = &fstest.MapFile{Data: data}
+			}
 			files["acme/operations.json"] = &fstest.MapFile{Data: raw}
 			_, err = Load(files, "acme")
 			if !publicBundleMatches167(err, "operations.json", "/operations/0"+tc.field, tc.code, tc.reason) {
 				t.Errorf("wrong public diagnostic: %v", err)
 			}
 		})
+	}
+}
+
+func TestBundlePublicChangefeed168(t *testing.T) {
+	const baseline = `{"status":"implemented","mechanism":"logical_replication","source":{"artifact_url":"https://example.com/source","artifact_version":"v1","retrieved_at":"2026-09-01"},"executor":{"kind":"native","id":"acme-logical"},"checkpoint":{"kind":"lsn","keys":["lsn"],"commit_after":"warehouse_durable","on_invalid":"fail"},"delivery":{"ordering":"per_stream","duplicates":"at_least_once","deletes":"tombstone","dedupe_key":["id"]},"streams":["widgets"]}`
+	load := func(patch string) error {
+		var doc, changes map[string]any
+		if err := json.Unmarshal([]byte(baseline), &doc); err != nil {
+			t.Fatal(err)
+		}
+		if err := json.Unmarshal([]byte(patch), &changes); err != nil {
+			t.Fatal(err)
+		}
+		for k, v := range changes {
+			if v == nil {
+				delete(doc, k)
+			} else {
+				doc[k] = v
+			}
+		}
+		raw, err := json.Marshal(doc)
+		if err != nil {
+			t.Fatal(err)
+		}
+		files := fullValidBundleFS("acme")
+		files["acme/changefeed.json"] = &fstest.MapFile{Data: raw}
+		_, err = Load(files, "acme")
+		return err
+	}
+	if err := load(`{}`); err != nil {
+		t.Fatalf("healthy changefeed fixture: %v", err)
+	}
+	for _, tc := range []struct{ name, patch, field, code, reason string }{
+		{"source_blank", `{"source":{"artifact_url":"https://example.com/source","artifact_version":" ","retrieved_at":"2026-09-01"}}`, "/source", "changefeed_source_required", "changefeed source requires nonblank artifact_url, artifact_version and retrieved_at"},
+		{"source_url", `{"source":{"artifact_url":"private-sentinel-167","artifact_version":"v1","retrieved_at":"2026-09-01"}}`, "/source/artifact_url", "format_mismatch", "value does not match the required format"},
+		{"source_scheme", `{"source":{"artifact_url":"ftp://example.com/source","artifact_version":"v1","retrieved_at":"2026-09-01"}}`, "/source/artifact_url", "changefeed_source_url", "changefeed source artifact_url must be an absolute HTTP or HTTPS URL"},
+		{"source_date", `{"source":{"artifact_url":"https://example.com/source","artifact_version":"v1","retrieved_at":"private-sentinel-167"}}`, "/source/retrieved_at", "changefeed_source_date", "changefeed source retrieved_at must be an ISO-8601 date"},
+		{"executor", `{"executor":null}`, "/executor", "changefeed_executor_required", "implemented changefeed requires a named executor"},
+		{"checkpoint", `{"checkpoint":null}`, "/checkpoint", "changefeed_checkpoint_required", "implemented changefeed requires checkpoint kind, keys, commit_after and on_invalid"},
+		{"checkpoint_blank", `{"checkpoint":{"kind":"lsn","keys":[" "],"commit_after":"warehouse_durable","on_invalid":"fail"}}`, "/checkpoint/keys/0", "changefeed_key_blank", "changefeed key must not be blank"},
+		{"checkpoint_duplicate", `{"checkpoint":{"kind":"lsn","keys":["private-sentinel-167","private-sentinel-167"],"commit_after":"warehouse_durable","on_invalid":"fail"}}`, "/checkpoint/keys/1", "changefeed_key_duplicate", "changefeed key must be unique"},
+		{"delivery", `{"delivery":null}`, "/delivery", "changefeed_delivery_required", "implemented changefeed requires ordering, duplicates and deletes guarantees"},
+		{"dedupe_duplicate", `{"delivery":{"ordering":"per_stream","duplicates":"at_least_once","deletes":"tombstone","dedupe_key":["private-sentinel-167","private-sentinel-167"]}}`, "/delivery/dedupe_key/1", "changefeed_key_duplicate", "changefeed key must be unique"},
+		{"streams_duplicate", `{"streams":["private-sentinel-167","private-sentinel-167"]}`, "/streams/1", "changefeed_key_duplicate", "changefeed key must be unique"},
+		{"reason", `{"status":"unsupported","reason":" "}`, "/reason", "changefeed_reason_required", "unsupported changefeed requires a nonblank reason"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := load(tc.patch)
+			if !publicBundleMatches167(err, "changefeed.json", tc.field, tc.code, tc.reason) {
+				t.Errorf("wrong public diagnostic: %v", err)
+			}
+		})
+	}
+}
+
+func TestBundlePublicTransportBasics168(t *testing.T) {
+	const source = `{"executor":{"family":"native_api","id":"acme_snapshot_source"},"eligible_streams":["widgets"],"modes":["full_append"],"delivery":{"idempotency":"at_least_once","ordering":"source_ordered","deletes":"not_available"}}`
+	const destination = `{"executor":{"family":"native_database","id":"acme_stage_destination"},"eligible_actions":["stage_append"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"},"acknowledgement":"durable_warehouse","apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append"}]}`
+	for _, tc := range []struct{ name, role, patch, field, code, reason string }{
+		{"empty", "", `{}`, "/", "transport_role_required", "source or destination transport must be declared"},
+		{"strategy_unknown_mode", "destination_transport", `{"apply_strategies":[{"mode":"private-sentinel-167","strategy":"append","action":"stage_append"}]}`, "/destination_transport/apply_strategies/0/mode", "transport_mode_invalid", "transport sync mode is not supported"},
+		{"strategy_unknown_kind", "destination_transport", `{"apply_strategies":[{"mode":"full_append","strategy":"private-sentinel-167","action":"stage_append"}]}`, "/destination_transport/apply_strategies/0/strategy", "transport_strategy_invalid", "apply strategy is not supported"},
+		{"destination_change_capture", "destination_transport", `{"modes":["change_capture"]}`, "/destination_transport/modes/0", "destination_change_capture_forbidden", "change_capture is source-only into the connection warehouse"},
+		{"source_executor", "source_transport", `{"executor":{"family":"native_api","id":" "}}`, "/source_transport/executor/id", "transport_executor_id", "transport executor requires a concrete ID"},
+		{"source_wildcard", "source_transport", `{"eligible_streams":["*","widgets"]}`, "/source_transport/eligible_streams/0", "transport_stream_wildcard", "source stream wildcard must be the only entry"},
+		{"source_duplicate", "source_transport", `{"eligible_streams":["private-sentinel-167","private-sentinel-167"]}`, "/source_transport/eligible_streams/1", "transport_name_duplicate", "transport name must be unique"},
+		{"source_modes", "source_transport", `{"modes":["full_append","full_append"]}`, "/source_transport/modes/1", "transport_mode_duplicate", "transport sync mode must be unique"},
+		{"source_delivery", "source_transport", `{"delivery":{"idempotency":"single_attempt","ordering":"source_ordered","deletes":"not_available"}}`, "/source_transport/delivery/idempotency", "source_single_attempt_forbidden", "source transport cannot declare single_attempt delivery"},
+		{"destination_duplicate", "destination_transport", `{"eligible_actions":["stage_append","stage_append"]}`, "/destination_transport/eligible_actions/1", "transport_name_duplicate", "transport name must be unique"},
+		{"destination_modes", "destination_transport", `{"modes":["full_append","full_append"]}`, "/destination_transport/modes/1", "transport_mode_duplicate", "transport sync mode must be unique"},
+		{"strategy_mode", "destination_transport", `{"apply_strategies":[{"mode":"full_overwrite","strategy":"replace","action":"stage_append"}]}`, "/destination_transport/apply_strategies/0/mode", "transport_strategy_mode", "apply strategy mode must be a declared destination mode"},
+		{"strategy_action", "destination_transport", `{"apply_strategies":[{"mode":"full_append","strategy":"append","action":"private-sentinel-167"}]}`, "/destination_transport/apply_strategies/0/action", "transport_strategy_action", "apply strategy action must be an eligible action"},
+		{"strategy_tombstone", "destination_transport", `{"apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append","tombstone_action":"private-sentinel-167"}]}`, "/destination_transport/apply_strategies/0/tombstone_action", "transport_tombstone_action", "tombstone action must be an eligible action"},
+		{"strategy_same_tombstone", "destination_transport", `{"apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append","tombstone_action":"stage_append"}]}`, "/destination_transport/apply_strategies/0/tombstone_action", "transport_tombstone_conflict", "tombstone action must differ from its ordinary apply action"},
+		{"strategy_duplicate", "destination_transport", `{"apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append"},{"mode":"full_append","strategy":"append","action":"stage_append"}]}`, "/destination_transport/apply_strategies/1/action", "transport_strategy_duplicate", "apply strategy action must be unique within its sync mode"},
+		{"strategy_missing_mode", "destination_transport", `{"modes":["full_append","incremental_append"]}`, "/destination_transport/modes/1", "transport_strategy_missing", "destination sync mode requires a declared apply strategy"},
+		{"strategy_missing_action", "destination_transport", `{"eligible_actions":["stage_append","private-sentinel-167"]}`, "/destination_transport/eligible_actions/1", "transport_action_strategy_missing", "eligible destination action requires a declared apply strategy"},
+		{"copy_database", "destination_transport", `{"copy_worker_maximum":1}`, "/destination_transport/copy_worker_maximum", "copy_database_required", "copy_worker_maximum requires a database resource declaration"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			base := source
+			if tc.role == "destination_transport" {
+				base = destination
+			}
+			var role, patch map[string]any
+			if err := json.Unmarshal([]byte(base), &role); err != nil {
+				t.Fatal(err)
+			}
+			if err := json.Unmarshal([]byte(tc.patch), &patch); err != nil {
+				t.Fatal(err)
+			}
+			for k, v := range patch {
+				role[k] = v
+			}
+			document := map[string]any{"schema_version": 1}
+			if tc.role != "" {
+				document[tc.role] = role
+			}
+			raw, err := json.Marshal(document)
+			if err != nil {
+				t.Fatal(err)
+			}
+			files := fullValidBundleFS("acme")
+			files["acme/sync_transport.json"] = &fstest.MapFile{Data: raw}
+			_, err = Load(files, "acme")
+			if !publicBundleMatches167(err, "sync_transport.json", tc.field, tc.code, tc.reason) {
+				t.Errorf("wrong public diagnostic: %v", err)
+			}
+		})
+	}
+}
+
+func TestBundlePublicSourceBindings168(t *testing.T) {
+	const binding = `{"executor":{"family":"native_api","id":"acme_source"},"eligible_streams":["widgets"],"record_mapping":{"kind":"input_fields","inputs":[{"input":"widget_id","field":"id"}]}}`
+	for _, tc := range []struct {
+		name, patch, field, code, reason string
+		duplicate                        bool
+	}{
+		{"executor", `{"executor":{"family":"native_api","id":" "}}`, "/executor/id", "transport_executor_id", "transport executor requires a concrete ID", false},
+		{"streams", `{"eligible_streams":["widgets","widgets"]}`, "/eligible_streams/1", "transport_name_duplicate", "transport name must be unique", false},
+		{"config_inputs", `{"record_mapping":{"kind":"config_match","config_key":"workspace","record_field":"workspace","inputs":[{"input":"id","field":"id"}]}}`, "/record_mapping/inputs", "mapping_config_inputs_forbidden", "config_match mapping must not declare input fields", false},
+		{"input_config", `{"record_mapping":{"kind":"input_fields","config_key":"workspace","inputs":[{"input":"id","field":"id"}]}}`, "/record_mapping", "mapping_input_config_forbidden", "input_fields mapping must not declare config_match fields", false},
+		{"input_duplicate", `{"record_mapping":{"kind":"input_fields","inputs":[{"input":"private-sentinel-167","field":"id"},{"input":"private-sentinel-167","field":"name"}]}}`, "/record_mapping/inputs/1/input", "mapping_input_duplicate", "source mapping input must be unique", false},
+		{"field_duplicate", `{"record_mapping":{"kind":"input_fields","inputs":[{"input":"id","field":"private-sentinel-167"},{"input":"name","field":"private-sentinel-167"}]}}`, "/record_mapping/inputs/1/field", "mapping_field_duplicate", "source mapping field must be unique", false},
+		{"tombstone_blank", `{"record_mapping":null,"tombstone_mapping":{"image":"key","inputs":[{"input":"","field":"id"}]}}`, "/tombstone_mapping/inputs/0", "tombstone_fields_required", "tombstone mapping requires nonempty input and field names", false},
+		{"tombstone_input", `{"record_mapping":null,"tombstone_mapping":{"image":"key","inputs":[{"input":"private-sentinel-167","field":"id"},{"input":"private-sentinel-167","field":"name"}]}}`, "/tombstone_mapping/inputs/1/input", "tombstone_input_duplicate", "tombstone mapping input must be unique", false},
+		{"tombstone_field", `{"record_mapping":null,"tombstone_mapping":{"image":"key","inputs":[{"input":"id","field":"private-sentinel-167"},{"input":"name","field":"private-sentinel-167"}]}}`, "/tombstone_mapping/inputs/1/field", "tombstone_field_duplicate", "tombstone mapping field must be unique", false},
+		{"overlap", `{}`, "", "source_binding_duplicate", "source bindings must not overlap for the same executor and action", true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var b, patch map[string]any
+			if err := json.Unmarshal([]byte(binding), &b); err != nil {
+				t.Fatal(err)
+			}
+			if err := json.Unmarshal([]byte(tc.patch), &patch); err != nil {
+				t.Fatal(err)
+			}
+			for k, v := range patch {
+				if v == nil {
+					delete(b, k)
+				} else {
+					b[k] = v
+				}
+			}
+			bindings := []any{b}
+			index := "0"
+			if tc.duplicate {
+				bindings = append(bindings, b)
+				index = "1"
+			}
+			var destination map[string]any
+			if err := json.Unmarshal([]byte(`{"executor":{"family":"native_database","id":"acme_stage_destination"},"eligible_actions":["stage_append"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"},"acknowledgement":"durable_warehouse","apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append"}]}`), &destination); err != nil {
+				t.Fatal(err)
+			}
+			destination["source_bindings"] = bindings
+			raw, err := json.Marshal(map[string]any{"schema_version": 1, "destination_transport": destination})
+			if err != nil {
+				t.Fatal(err)
+			}
+			files := fullValidBundleFS("acme")
+			files["acme/sync_transport.json"] = &fstest.MapFile{Data: raw}
+			_, err = Load(files, "acme")
+			if !publicBundleMatches167(err, "sync_transport.json", "/destination_transport/source_bindings/"+index+tc.field, tc.code, tc.reason) {
+				t.Errorf("wrong public diagnostic: %v", err)
+			}
+		})
+	}
+}
+
+func TestBundlePublicReadBack168(t *testing.T) {
+	for _, owner := range []string{"read_back", "tombstone_read_back", "strategy_read_back", "strategy_tombstone_read_back"} {
+		t.Run(owner, func(t *testing.T) {
+			load := func(patch string) error {
+				var policy, changes, destination map[string]any
+				if err := json.Unmarshal([]byte(`{"operation":"read_widget","identity":[{"provider_field":"id","expected_field":"id"}],"expected":[{"provider_field":"name","expected_field":"name"}],"max_records":10,"max_attempts":2,"timeout_milliseconds":1000,"receipt_locator":{"response_index":0,"body_field":"id","query_parameter":"id","max_value_bytes":128,"max_pages":2}}`), &policy); err != nil {
+					t.Fatal(err)
+				}
+				if strings.Contains(owner, "tombstone") {
+					delete(policy, "expected")
+				}
+				if err := json.Unmarshal([]byte(patch), &changes); err != nil {
+					t.Fatal(err)
+				}
+				for k, v := range changes {
+					policy[k] = v
+				}
+				if err := json.Unmarshal([]byte(`{"executor":{"family":"native_database","id":"acme_stage_destination"},"eligible_actions":["stage_append"],"modes":["full_append"],"delivery":{"idempotency":"keyed","ordering":"source_ordered","deletes":"not_available"},"acknowledgement":"durable_warehouse","apply_strategies":[{"mode":"full_append","strategy":"append","action":"stage_append"}]}`), &destination); err != nil {
+					t.Fatal(err)
+				}
+				key := strings.TrimPrefix(owner, "strategy_")
+				if strings.HasPrefix(owner, "strategy_") {
+					destination["apply_strategies"].([]any)[0].(map[string]any)[key] = policy
+				} else {
+					destination[key] = policy
+				}
+				raw, err := json.Marshal(map[string]any{"schema_version": 1, "destination_transport": destination})
+				if err != nil {
+					t.Fatal(err)
+				}
+				files := fullValidBundleFS("acme")
+				files["acme/sync_transport.json"] = &fstest.MapFile{Data: raw}
+				_, err = Load(files, "acme")
+				return err
+			}
+			if err := load(`{}`); err != nil {
+				t.Fatalf("healthy read-back fixture: %v", err)
+			}
+			prefix := "/destination_transport/" + owner
+			if strings.HasPrefix(owner, "strategy_") {
+				prefix = "/destination_transport/apply_strategies/0/" + strings.TrimPrefix(owner, "strategy_")
+			}
+			for _, tc := range []struct{ name, patch, field, code, reason string }{
+				{"operation", `{"operation":" "}`, "/operation", "readback_operation_invalid", "read-back requires a concrete operation"},
+				{"records", `{"max_records":0}`, "/max_records", "readback_records_invalid", "read-back max_records must be between 1 and 10000"},
+				{"attempts", `{"max_attempts":0}`, "/max_attempts", "readback_attempts_invalid", "read-back max_attempts must be between 1 and 10"},
+				{"timeout", `{"timeout_milliseconds":0}`, "/timeout_milliseconds", "readback_timeout_invalid", "read-back timeout_milliseconds must be between 1 and 60000"},
+				{"delay", `{"retry_delay_milliseconds":-1}`, "/retry_delay_milliseconds", "readback_delay_invalid", "read-back retry_delay_milliseconds must be between 0 and 10000"},
+				{"provider_duplicate", `{"identity":[{"provider_field":"private-sentinel-167","expected_field":"id"},{"provider_field":"private-sentinel-167","expected_field":"name"}]}`, "/identity/1/provider_field", "readback_provider_duplicate", "read-back provider field must be unique"},
+				{"expected_duplicate", `{"identity":[{"provider_field":"id","expected_field":"private-sentinel-167"},{"provider_field":"name","expected_field":"private-sentinel-167"}]}`, "/identity/1/expected_field", "readback_expected_duplicate", "read-back expected field must be unique"},
+				{"locator_index", `{"receipt_locator":{"response_index":-1,"body_field":"id","query_parameter":"id","max_value_bytes":128,"max_pages":2}}`, "/receipt_locator/response_index", "receipt_locator_index_invalid", "receipt locator response_index must be between 0 and 1023"},
+				{"locator_fields", `{"receipt_locator":{"response_index":0,"body_field":" ","query_parameter":"id","max_value_bytes":128,"max_pages":2}}`, "/receipt_locator", "receipt_locator_fields_invalid", "receipt locator requires concrete body_field and query_parameter"},
+				{"locator_bytes", `{"receipt_locator":{"response_index":0,"body_field":"id","query_parameter":"id","max_value_bytes":0,"max_pages":2}}`, "/receipt_locator/max_value_bytes", "receipt_locator_bytes_invalid", "receipt locator max_value_bytes must be between 1 and 4096"},
+				{"locator_pages", `{"receipt_locator":{"response_index":0,"body_field":"id","query_parameter":"id","max_value_bytes":128,"max_pages":0}}`, "/receipt_locator/max_pages", "receipt_locator_pages_invalid", "receipt locator max_pages must be between 1 and 10"},
+			} {
+				t.Run(tc.name, func(t *testing.T) {
+					err := load(tc.patch)
+					if !publicBundleMatches167(err, "sync_transport.json", prefix+tc.field, tc.code, tc.reason) {
+						t.Errorf("wrong public diagnostic: %v", err)
+					}
+				})
+			}
+		})
+	}
+}
+
+func TestBundlePublicStreamGraphQLSiblings168(t *testing.T) {
+	for _, tc := range []struct{ name, field, code, reason string }{
+		{"body", "/streams/0", "stream_graphql_body_conflict", "stream must not declare both body and graphql"},
+		{"method", "/streams/0/method", "stream_graphql_method", "GraphQL stream method must be POST"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var doc map[string]any
+			if err := json.Unmarshal([]byte(validStreams), &doc); err != nil {
+				t.Fatal(err)
+			}
+			stream := doc["streams"].([]any)[0].(map[string]any)
+			stream["method"] = "POST"
+			stream["graphql"] = map[string]any{"document": "query Widgets { widgets { id } }", "operation_name": "Widgets", "variables": map[string]any{}}
+			if tc.name == "body" {
+				stream["body"] = map[string]any{"private-sentinel-167": "private-sentinel-167"}
+			} else {
+				stream["method"] = "GET"
+			}
+			raw, err := json.Marshal(doc)
+			if err != nil {
+				t.Fatal(err)
+			}
+			files := fullValidBundleFS("acme")
+			files["acme/streams.json"] = &fstest.MapFile{Data: raw}
+			_, err = Load(files, "acme")
+			if !publicBundleMatches167(err, "streams.json", tc.field, tc.code, tc.reason) {
+				t.Errorf("wrong public diagnostic: %v", err)
+			}
+		})
+	}
+}
+
+func TestBundlePublicPollingChangefeed168(t *testing.T) {
+	const baseline = `{"status":"implemented","mechanism":"polling_watermark","source":{"artifact_url":"https://example.com/source","artifact_version":"v1","retrieved_at":"2026-09-01"},"executor":{"kind":"engine","id":"polling_watermark"},"checkpoint":{"kind":"watermark","keys":["updated_at","id"],"commit_after":"warehouse_durable","on_invalid":"fail"},"delivery":{"ordering":"per_stream","duplicates":"at_least_once","deletes":"not_available","dedupe_key":["id"]},"streams":["widgets"],"polling_watermark":{"watermark":{"kind":"timestamp","path":"updated_at"},"tie_breaker":{"path":"id"},"boundary":"inclusive","safety_lag_seconds":0,"page_size":10,"max_pages":2,"request_budget":2}}`
+	load := func(scope, patch string) error {
+		var doc, changes map[string]any
+		if err := json.Unmarshal([]byte(baseline), &doc); err != nil {
+			t.Fatal(err)
+		}
+		if err := json.Unmarshal([]byte(patch), &changes); err != nil {
+			t.Fatal(err)
+		}
+		target := doc
+		if scope == "polling" {
+			target = doc["polling_watermark"].(map[string]any)
+		}
+		for k, v := range changes {
+			if v == nil {
+				delete(target, k)
+			} else {
+				target[k] = v
+			}
+		}
+		raw, err := json.Marshal(doc)
+		if err != nil {
+			t.Fatal(err)
+		}
+		files := fullValidBundleFS("acme")
+		files["acme/changefeed.json"] = &fstest.MapFile{Data: raw}
+		_, err = Load(files, "acme")
+		return err
+	}
+	if err := load("root", `{}`); err != nil {
+		t.Fatalf("healthy polling changefeed fixture: %v", err)
+	}
+	for _, tc := range []struct{ name, scope, patch, field, code, reason string }{
+		{"missing", "root", `{"polling_watermark":null}`, "/polling_watermark", "changefeed_polling_required", "implemented polling changefeed requires polling_watermark declaration"},
+		{"executor", "root", `{"executor":{"kind":"native","id":"polling_watermark"}}`, "/executor", "changefeed_polling_executor", "polling changefeed requires executor engine/polling_watermark"},
+		{"watermark_path", "polling", `{"watermark":{"kind":"timestamp","path":"private-sentinel-167..x"}}`, "/polling_watermark/watermark/path", "changefeed_polling_path", "polling field path must contain safe nonempty identifier segments"},
+		{"tie_path", "polling", `{"tie_breaker":{"path":" "}}`, "/polling_watermark/tie_breaker/path", "changefeed_polling_path", "polling field path must contain safe nonempty identifier segments"},
+		{"negative_lag", "polling", `{"safety_lag_seconds":-1}`, "/polling_watermark/safety_lag_seconds", "changefeed_polling_lag_negative", "polling safety_lag_seconds must not be negative"},
+		{"overflow_lag", "polling", `{"safety_lag_seconds":9223372037}`, "/polling_watermark/safety_lag_seconds", "changefeed_polling_lag_overflow", "polling safety_lag_seconds must fit a time duration"},
+		{"lag_kind", "polling", `{"watermark":{"kind":"monotonic_sequence","path":"updated_at"},"safety_lag_seconds":1}`, "/polling_watermark/safety_lag_seconds", "changefeed_polling_lag_kind", "safety_lag_seconds is only valid for timestamp watermarks"},
+		{"page_bound", "polling", `{"page_size":0}`, "/polling_watermark", "changefeed_polling_bounds", "polling requires positive page_size, max_pages and request_budget"},
+		{"delete_budget", "polling", `{"request_budget":1,"deletion_endpoint":{"path":"/deleted","records_path":"data"}}`, "/polling_watermark/request_budget", "changefeed_polling_delete_budget", "deletion endpoint requires request_budget of at least 2"},
+		{"checkpoint", "root", `{"checkpoint":{"kind":"watermark","keys":["id","updated_at"],"commit_after":"warehouse_durable","on_invalid":"fail"}}`, "/checkpoint/keys", "changefeed_polling_checkpoint", "checkpoint keys must be watermark path then tie_breaker path"},
+		{"duplicates", "root", `{"delivery":{"ordering":"per_stream","duplicates":"none","deletes":"not_available","dedupe_key":["id"]}}`, "/delivery/duplicates", "changefeed_polling_duplicates", "polling delivery duplicates must be at_least_once"},
+		{"delete_conflict", "polling", `{"soft_delete":{"path":"deleted"},"deletion_endpoint":{"path":"/deleted","records_path":"data"}}`, "/polling_watermark", "changefeed_polling_delete_conflict", "polling may declare soft_delete or deletion_endpoint, but not both"},
+		{"soft_path", "polling", `{"soft_delete":{"path":"a..b"}}`, "/polling_watermark/soft_delete/path", "changefeed_polling_path", "polling field path must contain safe nonempty identifier segments"},
+		{"endpoint_path", "polling", `{"deletion_endpoint":{"path":"/../private-sentinel-167","records_path":"data"}}`, "/polling_watermark/deletion_endpoint/path", "changefeed_polling_endpoint", "deletion endpoint must be a safe connector-relative path"},
+		{"endpoint_records", "polling", `{"deletion_endpoint":{"path":"/deleted","records_path":"a..b"}}`, "/polling_watermark/deletion_endpoint/records_path", "changefeed_polling_path", "polling field path must contain safe nonempty identifier segments"},
+		{"observable_deletes", "polling", `{"soft_delete":{"path":"deleted"}}`, "/delivery/deletes", "changefeed_polling_tombstones", "observable polling deletes require tombstone delivery"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := load(tc.scope, tc.patch)
+			if !publicBundleMatches167(err, "changefeed.json", tc.field, tc.code, tc.reason) {
+				t.Errorf("wrong public diagnostic: %v", err)
+			}
+		})
+	}
+}
+
+func TestBundlePublicDatabase168(t *testing.T) {
+	baseline, err := fs.ReadFile(defs.FS, "postgres/database.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	load := func(raw []byte) error {
+		files := fullValidBundleFS("acme")
+		files["acme/database.json"] = &fstest.MapFile{Data: raw}
+		_, err := Load(files, "acme")
+		return err
+	}
+	if err := load(baseline); err != nil {
+		t.Fatalf("healthy database fixture: %v", err)
+	}
+	for _, tc := range []struct{ name, old, replacement, path, reason string }{
+		{"null", `"driver": {`, `"driver": null, "ignored": {`, "$.driver", "null is not permitted"},
+		{"unknown", `"id": "postgres"`, `"private-sentinel-167": "secret"`, "$.driver", "unknown member is not permitted"},
+		{"case_alias", `"id": "postgres"`, `"ID": "postgres"`, "$.driver.id", "case-aliased member is not permitted"},
+		{"duplicate", `"id": "postgres"`, `"id": "postgres", "id":"private-sentinel-167"`, "$.driver.id", "duplicate member is not permitted"},
+		{"required", `"id": "postgres",`, ``, "$.driver.id", "required member is missing"},
+		{"integer_type", `"api_version": 1`, `"api_version": "private-sentinel-167"`, "$.driver.api_version", "JSON must match the closed schema"},
+		{"minimum", `"max_bytes": 63`, `"max_bytes": 0`, "$.identifiers.max_bytes", "value violates the declared minimum"},
+		{"maximum", `"max_bytes": 63`, `"max_bytes": 999999999`, "$.identifiers.max_bytes", "value violates the declared maximum"},
+		{"enum", `"schema_version": 1`, `"schema_version": 2`, "$.schema_version", "value violates the declared enum"},
+		{"driver", `"id": "postgres"`, `"id": "private-sentinel-167 bad"`, "$.driver", "database driver declaration is invalid"},
+		{"catalog", `["schema", "relation"]`, `["relation", "schema"]`, "$.catalog", "database catalog qualification policy is invalid"},
+		{"identifiers", `"quote_style": "double_quote"`, `"quote_style": "private-sentinel-167"`, "$.identifiers", "database identifier policy is invalid"},
+		{"resources", `"default": 2, "maximum": 8`, `"default": 9, "maximum": 8`, "$.resources", "database resource policy is invalid"},
+		{"native", `"name": "int2"`, `"name": "private-sentinel-167 bad"`, "$.type_mappings[0]", "database type mapping is invalid"},
+		{"logical", `"kind": "signed_integer", "bits": 16`, `"kind": "private-sentinel-167"`, "$.type_mappings[0].logical", "database logical type declaration is invalid"},
+		{"mapping_duplicate", `"name": "int4"`, `"name": "int2"`, "$.type_mappings[1]", "database definition contains duplicate native type mappings"},
+		{"mode", `"full_overwrite"`, `"private-sentinel-167"`, "$.admitted_modes[0]", "database definition declares an unsupported sync mode"},
+		{"mode_duplicate", `"full_append"`, `"full_overwrite"`, "$.admitted_modes[1]", "database definition declares a duplicate sync mode"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if !strings.Contains(string(baseline), tc.old) {
+				t.Fatal("fixture replacement did not match")
+			}
+			raw := strings.Replace(string(baseline), tc.old, tc.replacement, 1)
+			expectedPath := tc.path
+			if tc.name == "unknown" {
+				expectedPath += "@byte:" + strconv.Itoa(strings.Index(raw, `"private-sentinel-167"`)+len(`"private-sentinel-167"`))
+			}
+			err := load([]byte(raw))
+			if !publicBundleMatches167(err, "database.json", expectedPath, "database_definition_invalid", tc.reason) {
+				t.Errorf("wrong public diagnostic: %v", err)
+			}
+			if !errors.Is(err, database.ErrInvalidDefinition) {
+				t.Errorf("lost database sentinel: %v", err)
+			}
+		})
+	}
+}
+
+type databaseReadFailure168 struct {
+	fs.FS
+	failure error
+	reads   *int
+}
+
+func (f databaseReadFailure168) ReadFile(name string) ([]byte, error) {
+	if name == "acme/database.json" {
+		*f.reads++
+		if *f.reads > 1 {
+			return nil, f.failure
+		}
+	}
+	return fs.ReadFile(f.FS, name)
+}
+func TestBundleDatabaseReadCause168(t *testing.T) {
+	files := fullValidBundleFS("acme")
+	files["acme/database.json"] = &fstest.MapFile{Data: []byte(`{}`)}
+	sentinel := errors.New("private-sentinel-167 read failure")
+	reads := 0
+	_, err := Load(databaseReadFailure168{FS: files, failure: sentinel, reads: &reads}, "acme")
+	if reads != 2 {
+		t.Fatalf("database read observer saw %d reads, want identity then loader", reads)
+	}
+	if !errors.Is(err, sentinel) {
+		t.Errorf("lost original read failure: %v", err)
+	}
+	if !publicBundleMatches167(err, "database.json", "$", "database_definition_invalid", "database.json is unavailable") {
+		t.Errorf("wrong public diagnostic: %v", err)
+	}
+}
+
+func TestBundleMixedLoadAllAndSourceIndependence169(t *testing.T) {
+	files := fullValidBundleFS("acme")
+	for _, name := range []string{"beta", "broken-rate", "broken-stream"} {
+		for path, file := range fullValidBundleFS(name) {
+			files[path] = file
+		}
+	}
+	files["broken-rate/rate_limits.json"] = &fstest.MapFile{Data: []byte(`{"state":}`)}
+	files["broken-stream/streams.json"] = &fstest.MapFile{Data: []byte(`{"base":}`)}
+	before, err := Load(files, "acme")
+	if err != nil {
+		t.Fatalf("healthy selected control: %v", err)
+	}
+	// These deliberately malformed authoring inputs must not participate in the
+	// execution identity or decoder. No source evidence can promote execution.
+	files["acme/source.lock.json"] = &fstest.MapFile{Data: []byte(`private-sentinel-167 invalid source`)}
+	files["acme/source.proof.json"] = &fstest.MapFile{Data: []byte(`private-sentinel-167 invalid proof`)}
+	after, err := Load(files, "acme")
+	if err != nil {
+		t.Fatalf("source-only files changed healthy selection: %v", err)
+	}
+	if before.Identity != after.Identity || before.Name != after.Name || len(after.Streams) != len(before.Streams) {
+		t.Fatalf("source-only files changed execution projection: before=%+v after=%+v", before.Identity, after.Identity)
+	}
+	bundles, err := LoadAll(files)
+	var all *LoadAllError
+	if !errors.As(err, &all) {
+		t.Fatalf("missing aggregate failure: %v", err)
+	}
+	if len(bundles) != 2 || bundles[0].Name != "acme" || bundles[1].Name != "beta" {
+		t.Fatalf("wrong retained healthy identities: %v", bundles)
+	}
+	failures := all.GetFailures()
+	if len(failures) != 2 {
+		t.Fatalf("wrong failure count: %v", failures)
+	}
+	for i, want := range []struct{ name, file string }{{"broken-rate", "rate_limits.json"}, {"broken-stream", "streams.json"}} {
+		failure := failures[i]
+		var d *BundleDiagnosticError
+		var syntax *json.SyntaxError
+		if failure.Name != want.name || !errors.As(failure.Err, &d) || !errors.As(failure.Err, &syntax) {
+			t.Fatalf("wrong per-failure graph: %v", failure)
+		}
+		if d.Connector != want.name || d.Generation != "embedded-v1" || d.File != want.file || d.Field != "/" || d.ReasonCode != "invalid_json" || d.Reason != "malformed JSON" || syntax.Offset == 0 {
+			t.Fatalf("wrong per-failure safe metadata: %+v", d)
+		}
+		raw, e := json.Marshal(d)
+		if e != nil || strings.Contains(string(raw)+err.Error(), "private-sentinel-167") {
+			t.Fatalf("unsafe aggregate or selected projection: %s %v", raw, err)
+		}
 	}
 }

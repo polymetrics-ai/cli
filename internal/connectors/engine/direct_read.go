@@ -933,19 +933,19 @@ func closeOperationDirectReadSchemaNode(operation string, node map[string]any, p
 // full validateOperationDirectReadPOSTContract preflight.
 func validateOperationDirectReadTextPlainContract(op OperationSpec) error {
 	if op.REST == nil {
-		return fmt.Errorf("operation direct read POST requires rest declaration")
+		return diagnosticAt("/rest", "text_plain_rest_required", "text/plain direct read requires rest declaration", fmt.Errorf("operation direct read POST requires rest declaration"))
 	}
 	if op.Kind != "rest_read" {
-		return fmt.Errorf("operation direct read POST text/plain content_type requires rest_read")
+		return diagnosticAt("/kind", "text_plain_kind_invalid", "text/plain direct read requires rest_read", fmt.Errorf("operation direct read POST text/plain content_type requires rest_read"))
 	}
 	if len(op.REST.Body) != 0 {
-		return fmt.Errorf("operation direct read POST text/plain content_type must not declare rest.body")
+		return diagnosticAt("/rest/body", "text_plain_body_forbidden", "text/plain direct read must not declare rest.body", fmt.Errorf("operation direct read POST text/plain content_type must not declare rest.body"))
 	}
 	if !bodySchemaHasRootString(op.REST.BodySchema) {
-		return fmt.Errorf("operation direct read POST text/plain content_type requires a root string body_schema")
+		return diagnosticAt("/rest/body_schema/type", "text_plain_schema_type", "text/plain direct read requires a root string body_schema", fmt.Errorf("operation direct read POST text/plain content_type requires a root string body_schema"))
 	}
 	if _, err := CompileSchema(op.REST.BodySchema); err != nil {
-		return fmt.Errorf("operation direct read body_schema: %w", err)
+		return diagnosticWithin("/rest/body_schema", fmt.Errorf("operation direct read body_schema: %w", err))
 	}
 	return nil
 }

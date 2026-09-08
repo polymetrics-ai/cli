@@ -1720,11 +1720,11 @@ func validateCopyWorkerMaximum(transport *connectors.SyncTransportDescriptor, de
 		return nil
 	}
 	if definition == nil {
-		return fmt.Errorf("copy_worker_maximum requires a database resource declaration")
+		return diagnosticAt("/destination_transport/copy_worker_maximum", "copy_database_required", "copy_worker_maximum requires a database resource declaration", fmt.Errorf("copy_worker_maximum requires a database resource declaration"))
 	}
 	poolMaximum := definition.Resources().Pool.Maximum
 	if transport.Destination.CopyWorkerMaximum > poolMaximum {
-		return fmt.Errorf("copy_worker_maximum exceeds declared database pool maximum %d", poolMaximum)
+		return diagnosticAt("/destination_transport/copy_worker_maximum", "copy_pool_bound", "copy_worker_maximum must not exceed the declared database pool maximum", fmt.Errorf("copy_worker_maximum exceeds declared database pool maximum %d", poolMaximum))
 	}
 	return nil
 }
@@ -1845,10 +1845,10 @@ func validateStreamGraphQL(streams []StreamSpec) error {
 			continue
 		}
 		if len(stream.Body) > 0 {
-			return fmt.Errorf("stream %d (%q) cannot declare both body and graphql", i, stream.Name)
+			return diagnosticAt(fmt.Sprintf("/streams/%d", i), "stream_graphql_body_conflict", "stream must not declare both body and graphql", fmt.Errorf("stream %d (%q) cannot declare both body and graphql", i, stream.Name))
 		}
 		if method := strings.ToUpper(methodOrDefault(stream.Method)); method != "POST" {
-			return fmt.Errorf("stream %d (%q) graphql stream method must be POST, got %s", i, stream.Name, method)
+			return diagnosticAt(fmt.Sprintf("/streams/%d/method", i), "stream_graphql_method", "GraphQL stream method must be POST", fmt.Errorf("stream %d (%q) graphql stream method must be POST, got %s", i, stream.Name, method))
 		}
 		if err := validateGraphQLSpec(stream.GraphQL, "query"); err != nil {
 			return diagnosticWithin(fmt.Sprintf("/streams/%d/graphql", i), fmt.Errorf("stream %d (%q): %w", i, stream.Name, err))
@@ -2146,11 +2146,11 @@ func validateWriteBodies(actions []WriteAction) error {
 			}
 		case "multipart":
 			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
-				return fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name)
+				return diagnosticAt(fmt.Sprintf("/actions/%d/multipart/parts", i), "write_multipart_parts_required", "multipart body requires nonempty multipart.parts", fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name))
 			}
 			for j, part := range action.Multipart.Parts {
 				if strings.TrimSpace(part.Name) == "" || strings.TrimSpace(part.Field) == "" {
-					return fmt.Errorf("action %d (%q) multipart part %d requires name and field", i, action.Name, j)
+					return diagnosticAt(fmt.Sprintf("/actions/%d/multipart/parts/%d", i, j), "write_multipart_binding_required", "multipart part requires nonblank name and field", fmt.Errorf("action %d (%q) multipart part %d requires name and field", i, action.Name, j))
 				}
 				switch part.Type {
 				case "field", "file":
@@ -2158,7 +2158,7 @@ func validateWriteBodies(actions []WriteAction) error {
 					return fmt.Errorf("action %d (%q) multipart part %d has unsupported type %q", i, action.Name, j, part.Type)
 				}
 				if err := validateMultipartMediaTypes(part); err != nil {
-					return fmt.Errorf("action %d (%q) multipart part %d: %w", i, action.Name, j, err)
+					return diagnosticWithin(fmt.Sprintf("/actions/%d/multipart/parts/%d", i, j), fmt.Errorf("action %d (%q) multipart part %d: %w", i, action.Name, j, err))
 				}
 			}
 		}
@@ -2252,26 +2252,26 @@ func validateWriteHookFields(i int, action WriteAction) error {
 		return nil
 	}
 	if strings.TrimSpace(action.Hook) == "" {
-		return fmt.Errorf("action %d (%q) hook_fields requires hook", i, action.Name)
+		return diagnosticAt(fmt.Sprintf("/actions/%d/hook", i), "write_hook_required", "hook_fields requires hook", fmt.Errorf("action %d (%q) hook_fields requires hook", i, action.Name))
 	}
 	properties, _, err := recordSchemaTopLevelProperties(action.RecordSchema)
 	if err != nil {
-		return fmt.Errorf("action %d (%q) hook_fields record_schema: %w", i, action.Name, err)
+		return diagnosticAt(fmt.Sprintf("/actions/%d/record_schema", i), "write_hook_schema_invalid", "hook fields require an object record_schema with valid properties", fmt.Errorf("action %d (%q) hook_fields record_schema: %w", i, action.Name, err))
 	}
 	seen := make(map[string]struct{}, len(action.HookFields))
-	for _, field := range action.HookFields {
+	for fieldIndex, field := range action.HookFields {
 		if strings.TrimSpace(field) == "" || strings.TrimSpace(field) != field {
-			return fmt.Errorf("action %d (%q) hook_fields contains an invalid field", i, action.Name)
+			return diagnosticAt(fmt.Sprintf("/actions/%d/hook_fields/%d", i, fieldIndex), "write_hook_field_invalid", "hook field must be nonblank and trimmed", fmt.Errorf("action %d (%q) hook_fields contains an invalid field", i, action.Name))
 		}
 		if _, duplicate := seen[field]; duplicate {
-			return fmt.Errorf("action %d (%q) hook_fields duplicates %q", i, action.Name, field)
+			return diagnosticAt(fmt.Sprintf("/actions/%d/hook_fields/%d", i, fieldIndex), "write_hook_field_duplicate", "hook field must be unique", fmt.Errorf("action %d (%q) hook_fields duplicates %q", i, action.Name, field))
 		}
 		seen[field] = struct{}{}
 		if _, declared := properties[field]; !declared {
-			return fmt.Errorf("action %d (%q) hook_fields field %q is absent from record_schema", i, action.Name, field)
+			return diagnosticAt(fmt.Sprintf("/actions/%d/hook_fields/%d", i, fieldIndex), "write_hook_field_undeclared", "hook field must be declared in record_schema", fmt.Errorf("action %d (%q) hook_fields field %q is absent from record_schema", i, action.Name, field))
 		}
 		if containsWriteField(action.PathFields, field) || containsWriteField(action.BodyFields, field) || action.BodyField == field {
-			return fmt.Errorf("action %d (%q) hook_fields field %q overlaps the primary request contract", i, action.Name, field)
+			return diagnosticAt(fmt.Sprintf("/actions/%d/hook_fields/%d", i, fieldIndex), "write_hook_field_overlap", "hook field must not overlap the primary request contract", fmt.Errorf("action %d (%q) hook_fields field %q overlaps the primary request contract", i, action.Name, field))
 		}
 	}
 	return nil
@@ -2301,13 +2301,13 @@ func validateWriteActionBaseURL(i int, action WriteAction) error {
 		}
 	}
 	seen := make(map[string]struct{}, len(action.AllowedBaseURLOrigins))
-	for _, raw := range action.AllowedBaseURLOrigins {
+	for originIndex, raw := range action.AllowedBaseURLOrigins {
 		origin, err := fixedHTTPOrigin(raw)
 		if err != nil || raw != strings.TrimSpace(raw) || strings.Contains(raw, "{{") {
-			return fmt.Errorf("action %d (%q) allowed_base_url_origins entries must be fixed absolute HTTP origins", i, action.Name)
+			return diagnosticAt(fmt.Sprintf("/actions/%d/allowed_base_url_origins/%d", i, originIndex), "write_allowed_origin_invalid", "allowed origin must be one fixed absolute HTTP origin", fmt.Errorf("action %d (%q) allowed_base_url_origins entries must be fixed absolute HTTP origins", i, action.Name))
 		}
 		if _, duplicate := seen[origin]; duplicate {
-			return fmt.Errorf("action %d (%q) allowed_base_url_origins must not repeat %q", i, action.Name, raw)
+			return diagnosticAt(fmt.Sprintf("/actions/%d/allowed_base_url_origins/%d", i, originIndex), "write_allowed_origin_duplicate", "allowed origin must be unique", fmt.Errorf("action %d (%q) allowed_base_url_origins must not repeat %q", i, action.Name, raw))
 		}
 		seen[origin] = struct{}{}
 	}
@@ -2324,12 +2324,12 @@ func fixedHTTPOrigin(raw string) (string, error) {
 
 func validateWriteActionSuccessStatuses(i int, action WriteAction) error {
 	seen := make(map[int]struct{}, len(action.SuccessStatuses))
-	for _, status := range action.SuccessStatuses {
+	for statusIndex, status := range action.SuccessStatuses {
 		if status < http.StatusOK || status >= http.StatusMultipleChoices {
-			return fmt.Errorf("action %d (%q) success_statuses entry %d must be a 2xx status", i, action.Name, status)
+			return diagnosticAt(fmt.Sprintf("/actions/%d/success_statuses/%d", i, statusIndex), "write_status_invalid", "write success status must be a 2xx status", fmt.Errorf("action %d (%q) success_statuses entry %d must be a 2xx status", i, action.Name, status))
 		}
 		if _, duplicate := seen[status]; duplicate {
-			return fmt.Errorf("action %d (%q) success_statuses repeats %d", i, action.Name, status)
+			return diagnosticAt(fmt.Sprintf("/actions/%d/success_statuses/%d", i, statusIndex), "write_status_duplicate", "write success status must be unique", fmt.Errorf("action %d (%q) success_statuses repeats %d", i, action.Name, status))
 		}
 		seen[status] = struct{}{}
 	}
@@ -2348,7 +2348,7 @@ func validateBinaryUploadSpec(i int, action WriteAction) error {
 		return diagnosticAt(fmt.Sprintf("/actions/%d/binary_upload/max_bytes", i), "binary_upload_bound_invalid", "binary_upload max_bytes must be between 1 and 67108864", fmt.Errorf("action %d (%q) binary_upload max_bytes must be between 1 and %d", i, action.Name, maxBinaryUploadBytes))
 	}
 	if err := validateOptionalUploadMediaTypes(spec.AllowedMediaTypes); err != nil {
-		return fmt.Errorf("action %d (%q) binary_upload %w", i, action.Name, err)
+		return diagnosticWithin(fmt.Sprintf("/actions/%d/binary_upload", i), fmt.Errorf("action %d (%q) binary_upload %w", i, action.Name, err))
 	}
 	return nil
 }
@@ -2368,10 +2368,10 @@ func validateBase64UploadSpec(i int, action WriteAction) error {
 		return fmt.Errorf("action %d (%q) base64_upload source must be path or base64, got %q", i, action.Name, spec.Source)
 	}
 	if strings.TrimSpace(spec.SourceField) == "" {
-		return fmt.Errorf("action %d (%q) base64_upload requires source_field", i, action.Name)
+		return diagnosticAt(fmt.Sprintf("/actions/%d/base64_upload/source_field", i), "base64_source_field_required", "base64_upload requires a nonblank source_field", fmt.Errorf("action %d (%q) base64_upload requires source_field", i, action.Name))
 	}
 	if strings.TrimSpace(spec.ContentField) == "" {
-		return fmt.Errorf("action %d (%q) base64_upload requires content_field", i, action.Name)
+		return diagnosticAt(fmt.Sprintf("/actions/%d/base64_upload/content_field", i), "base64_content_field_required", "base64_upload requires a nonblank content_field", fmt.Errorf("action %d (%q) base64_upload requires content_field", i, action.Name))
 	}
 	// In path mode the source field holds a local filesystem path. Naming the
 	// same field as the content target would mean the removal and the
@@ -2385,7 +2385,7 @@ func validateBase64UploadSpec(i int, action WriteAction) error {
 		return diagnosticAt(fmt.Sprintf("/actions/%d/base64_upload/max_decoded_bytes", i), "base64_decoded_bound_invalid", "base64_upload requires positive max_decoded_bytes", fmt.Errorf("action %d (%q) base64_upload requires positive max_decoded_bytes", i, action.Name))
 	}
 	if spec.MaxDecodedBytes > maxBase64UploadDecodedBytes {
-		return fmt.Errorf("action %d (%q) base64_upload max_decoded_bytes %d exceeds the engine ceiling %d", i, action.Name, spec.MaxDecodedBytes, maxBase64UploadDecodedBytes)
+		return diagnosticAt(fmt.Sprintf("/actions/%d/base64_upload/max_decoded_bytes", i), "base64_decoded_ceiling", "base64_upload max_decoded_bytes must not exceed 16777216", fmt.Errorf("action %d (%q) base64_upload max_decoded_bytes %d exceeds the engine ceiling %d", i, action.Name, spec.MaxDecodedBytes, maxBase64UploadDecodedBytes))
 	}
 	// An encoded bound below the encoded length of the decoded bound can never
 	// be satisfied by a payload at the decoded bound, so the pair is
@@ -2398,7 +2398,7 @@ func validateBase64UploadSpec(i int, action WriteAction) error {
 		}
 	}
 	if err := validateOptionalUploadMediaTypes(spec.AllowedMediaTypes); err != nil {
-		return fmt.Errorf("action %d (%q) base64_upload %w", i, action.Name, err)
+		return diagnosticWithin(fmt.Sprintf("/actions/%d/base64_upload", i), fmt.Errorf("action %d (%q) base64_upload %w", i, action.Name, err))
 	}
 	return nil
 }
@@ -2411,11 +2411,11 @@ func validateOptionalUploadMediaTypes(mediaTypes []string) error {
 		return nil
 	}
 	if len(mediaTypes) == 0 {
-		return fmt.Errorf("allowed_media_types must not be empty; omit it to leave the action unconstrained")
+		return diagnosticAt("/allowed_media_types", "upload_media_types_empty", "allowed_media_types must not be empty", fmt.Errorf("allowed_media_types must not be empty; omit it to leave the action unconstrained"))
 	}
-	for _, raw := range mediaTypes {
+	for mediaIndex, raw := range mediaTypes {
 		if _, _, err := mime.ParseMediaType(raw); err != nil {
-			return fmt.Errorf("allowed_media_types entry %q is not a valid media type: %w", raw, err)
+			return diagnosticAt(fmt.Sprintf("/allowed_media_types/%d", mediaIndex), "upload_media_type_invalid", "allowed upload media type must be valid", fmt.Errorf("allowed_media_types entry %q is not a valid media type: %w", raw, err))
 		}
 	}
 	return nil
@@ -3039,7 +3039,7 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		// executable-contract validation only when a command names it.
 		if method == "POST" && operationDirectReadContentType(op) == "text/plain" {
 			if err := validateOperationDirectReadTextPlainContract(op); err != nil {
-				return fmt.Errorf("operation %d (%q) rest_read POST: %w", i, op.ID, err)
+				return diagnosticWithin(fmt.Sprintf("/operations/%d", i), fmt.Errorf("operation %d (%q) rest_read POST: %w", i, op.ID, err))
 			}
 		}
 		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
@@ -3281,7 +3281,7 @@ func validateSensitivePolicy(i int, op OperationSpec) error {
 		return diagnosticAt(fmt.Sprintf("/operations/%d/sensitive_policy/approval_mode", i), "sensitive_approval_invalid", "secret writes require typed_confirmation", fmt.Errorf("operation %d (%q) sensitive_policy approval_mode must be typed_confirmation for secret writes", i, op.ID))
 	}
 	if (p.ResponseSecretField == "") != (p.ResponseSecretStoreKey == "") {
-		return fmt.Errorf("operation %d (%q) sensitive_policy response_secret_field and response_secret_store_key must be declared together", i, op.ID)
+		return diagnosticAt(fmt.Sprintf("/operations/%d/sensitive_policy", i), "sensitive_response_pair", "response_secret_field and response_secret_store_key must be declared together", fmt.Errorf("operation %d (%q) sensitive_policy response_secret_field and response_secret_store_key must be declared together", i, op.ID))
 	}
 	return nil
 }
@@ -3383,15 +3383,21 @@ func bundleFilePresent(fsys fs.FS, name string) (bool, error) {
 	return true, nil
 }
 
-// Follow only single-cause absence wrappers. Joined failures retain their full
-// graph and never become an optional-file success, even if one branch is absent.
+// Follow only single-cause absence wrappers, including transparent one-cause
+// joins. Multiple actual causes never become an optional-file success, even
+// when one branch is absent. The depth bound also refuses cyclic wrappers.
 func bundlePureAbsence(err error) bool {
 	for depth := 0; depth < 64 && err != nil; depth++ {
 		if err == fs.ErrNotExist {
 			return true
 		}
-		if _, compound := err.(interface{ Unwrap() []error }); compound {
-			return false
+		if joined, ok := err.(interface{ Unwrap() []error }); ok {
+			children := joined.Unwrap()
+			if len(children) != 1 {
+				return false
+			}
+			err = children[0]
+			continue
 		}
 		wrapper, ok := err.(interface{ Unwrap() error })
 		if !ok {
