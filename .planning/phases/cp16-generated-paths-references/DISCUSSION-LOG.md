@@ -1,0 +1,9 @@
+# CP16 context and discussion
+
+Firstmate173 supplies complete scope and decisions; no repeat user intake is needed. Base147690998756202aa07302eba82a775a9e62f96a/tree56cbb03ba8f4376206fe66bbbb00e5ca54e63e7c is normal-pushed R1, then preserving branch fm/cli-top100-declaration-batch-r1-cp16. CP15 is integrated, not correctness accepted; complete171 carries are CR-171-01 and CR-171-02 (remaining CR-170-06/BD-CP15-169-03 alias). Reviewer171 is terminal and source/probe/report sealed.
+
+The live issue4344 still describes sourceProjectionGeneratedCommandPath and historical50/28 Bitbucket. Current code no longer contains that function; current Bitbucket has five declared commands and no schema4 source.lock.json. The retained sources/bitbucket-operation-source-lock.json and297 source operations remain authoritative evidence. Reconcile exact historical members to current source before selecting a projector seam; do not hand-edit derived surfaces or restore retired runtime readers. Current vNext renderer preserves declared command paths and canonical aliases merely normalize whitespace/case.
+
+Source research will bind existing owners and affected mappings. Both full App/registry API and authorized disposable database verticals remain required, distinct from existing selection and synthetic-stage tests. No live provider/customer database, new dependency, runtime service, receiver or architectural expansion is granted. Shared source work stays sole-owner.
+
+GSD discuss-phase and plan-phase --tdd resolved and generated through scripts/gsd, official20297a8ff941378b8615a5d3e8629e52c10a0f9d. Non-Pi inline execution follows existing documented adapter fallback and Firstmate sole-writer/prompt contract; skill-suggested generic database scanning children are not launched. The preassigned fresh173 GSD review is the sole final reviewer. No new package recommended.
