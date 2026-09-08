@@ -288,7 +288,8 @@ type PaginationSpec struct {
 	LastRecordField string `json:"last_record_field,omitempty"` // cursor: token from last record (stripe)
 	StopPath        string `json:"stop_path,omitempty"`         // cursor: falsy body value stops (stripe)
 
-	NextURLPath string `json:"next_url_path,omitempty"` // next_url type
+	NextURLQuery *NextURLQuerySpec `json:"next_url_query,omitempty"`
+	NextURLPath  string            `json:"next_url_path,omitempty"` // next_url type
 	// BodyCursorField moves a cursor paginator token into the declared JSON
 	// request body instead of sending it as a query parameter.
 	BodyCursorField string `json:"body_cursor_field,omitempty"`
@@ -1789,6 +1790,9 @@ func loadStreams(sub fs.FS, dirName string, metadata Metadata) (HTTPBase, []Stre
 	if err := validateResponseErrors(doc.Streams); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
+	if err := validateNextLinkPagination(doc.Base.Pagination, doc.Streams); err != nil {
+		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
+	}
 	if err := validateOffsetCountPagination(doc.Base.Pagination, doc.Streams); err != nil {
 		return HTTPBase{}, nil, fmt.Errorf("load bundle %s: streams.json: %w", dirName, err)
 	}
@@ -3166,6 +3170,9 @@ func validateRESTOperationPagination(op OperationSpec) error {
 		return diagnosticAt("/rest/pagination", "pagination_kind_invalid", "pagination is only supported by rest_read operations", fmt.Errorf("pagination is only supported by rest_read operations"))
 	}
 	spec := *op.REST.Pagination
+	if err := validateNextURLQuery(spec); err != nil {
+		return diagnosticAt("/rest/pagination/next_url_query", "next_url_query_invalid", "invalid next-link ownership", err)
+	}
 	if _, err := newPaginator(spec, spec.PageSize, ""); err != nil {
 		return diagnosticAt("/rest/pagination", "pagination_invalid", "pagination declaration does not satisfy its strategy requirements", fmt.Errorf("pagination is invalid: %w", err))
 	}
@@ -3231,6 +3238,8 @@ func restPaginationQueryParameters(spec PaginationSpec) []string {
 		appendName(valueOrDefault(spec.CountParam, defaultStartIndexCount))
 		appendName(spec.SizeParam)
 	case "next_url":
+		appendName(spec.PageParam)
+		appendName(spec.CursorParam)
 		appendName(spec.SizeParam)
 		appendName(spec.LimitParam)
 		appendName(spec.OffsetParam)
@@ -3238,6 +3247,11 @@ func restPaginationQueryParameters(spec PaginationSpec) []string {
 		appendName(spec.SizeParam)
 	case "none", "":
 		// These have no operation query mechanics to verify.
+	}
+	if spec.NextURLQuery != nil {
+		for _, name := range spec.NextURLQuery.Allowed {
+			appendName(name)
+		}
 	}
 	return names
 }

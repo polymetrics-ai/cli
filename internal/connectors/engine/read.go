@@ -395,6 +395,10 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 
 	maxPages := effectiveReadMaxPages(specForPaginator.MaxPages, req.MaxPages)
 	var ids []string
+	nextLinks, err := newNextLinkRequests(specForPaginator, rt.Requester.BaseURL, nil)
+	if err != nil {
+		return nil, err
+	}
 	page := paginator.Start()
 	for pageNum := 0; page != nil; pageNum++ {
 		if err := ctx.Err(); err != nil {
@@ -419,9 +423,13 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 		if err != nil {
 			return nil, fmt.Errorf("fan_out: ids_from.request: %w", err)
 		}
+		reqPath, query, err := nextLinks.request(reqPath, page.Query, page.URL != "")
+		if err != nil {
+			return nil, err
+		}
 		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
 		pageStarted := time.Now()
-		resp, err := requester.Do(pageCtx, http.MethodGet, reqPath, page.Query, nil)
+		resp, err := requester.Do(pageCtx, http.MethodGet, reqPath, query, nil)
 		elapsed := time.Since(pageStarted)
 		cancelPage()
 		recordReadPageFetch(req, elapsed)
@@ -441,6 +449,10 @@ func fanOutIDsFromRequest(ctx context.Context, b Bundle, stream StreamSpec, req 
 		}
 
 		page = paginator.Next(resp, len(records))
+		page, err = nextLinks.continuation(page)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if guard, ok := paginator.(interface{ Err() error }); ok {
 		if err := guard.Err(); err != nil {
@@ -549,6 +561,10 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	pathVars := requestVars(req.Config, nil, "")
 	pathVars.FanoutID = fc.id
 
+	nextLinks, err := newNextLinkRequests(specForPaginator, rt.Requester.BaseURL, baseQuery)
+	if err != nil {
+		return err
+	}
 	page := paginator.Start()
 	if resumePage != nil {
 		if err := resumePaginator(paginator, resumePage); err != nil {
@@ -661,6 +677,10 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: pageNum, RecordIndex: -1, Err: err}
 		}
+		reqPath, query, err = nextLinks.request(reqPath, query, page.URL != "")
+		if err != nil {
+			return err
+		}
 		pageCtx, cancelPage := readPageContext(ctx, req.PageDeadline)
 		pageStarted := time.Now()
 		var resp *connsdk.Response
@@ -757,6 +777,10 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 		}
 
 		page = paginator.Next(resp, len(rawRecords))
+		page, err = nextLinks.continuation(page)
+		if err != nil {
+			return err
+		}
 	}
 
 	if guard, ok := paginator.(interface{ Err() error }); ok {

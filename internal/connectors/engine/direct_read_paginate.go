@@ -164,6 +164,10 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	walkSpec := spec
 	walkSpec.PageSize = pageSize
 
+	nextLinks, err := newNextLinkRequests(spec, requester.BaseURL, mergeQuery(declaredSizeQuery(spec, pageSize), w.query))
+	if err != nil {
+		return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
+	}
 	paginator, paginatorErr := newPaginator(walkSpec, pageSize, "")
 	mode := resolveDirectReadPageMode(spec, w.method, paginatorErr)
 	strategy := mode.strategy
@@ -227,10 +231,8 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 				return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
 			}
 			reqPath = admitted
-			// The cursor URL carries the query of the page it continues, and
-			// the requester merges these over it. Dropping the caller's own
-			// flags here would silently narrow the next page to something the
-			// caller never asked for.
+			// Shared next-link composition below retains only explicitly
+			// declared missing filters; returned positions and bytes win.
 			query = w.query
 		case w.pageCursor != "":
 			query = mergeQuery(cursorQuery(spec, w.pageCursor), query)
@@ -244,6 +246,14 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	// all, and those requests still receive the provider's own default.
 	sizeSent := directReadRequestedSize(spec, strategy, query)
 
+	reqPath, query, err = nextLinks.request(reqPath, query, w.pageCursor != "" && nextLinks.active())
+	if err != nil {
+		return nil, connectors.DirectReadPage{}, nil, errDirectReadPagination{err: err}
+	}
+	if nextLinks.active() && w.pageCursor != "" {
+		effective, _ := url.Parse(reqPath)
+		sizeSent = directReadRequestedSize(spec, strategy, effective.Query())
+	}
 	var resp *connsdk.Response
 	if w.bodyContentType == "text/plain" {
 		text, ok := w.body.(string)
@@ -315,6 +325,10 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		lrc.recordsPath = collection
 	}
 	next := paginator.Next(resp, len(items))
+	next, err = nextLinks.continuation(next)
+	if err != nil {
+		return nil, connectors.DirectReadPage{}, resp, errDirectReadPagination{err: err}
+	}
 	if guard, ok := paginator.(interface{ Err() error }); ok {
 		if err := guard.Err(); err != nil {
 			return nil, connectors.DirectReadPage{}, resp, errDirectReadPagination{err: err}
@@ -396,7 +410,7 @@ func pagingParamsForStrategy(spec PaginationSpec, strategy string) (navigation, 
 		// A next URL is still the sole public navigation channel. These names
 		// are only the provider-owned query controls the engine may put on page
 		// one and admit from a returned continuation URL.
-		return []string{spec.OffsetParam}, []string{spec.SizeParam, spec.LimitParam}
+		return []string{spec.PageParam, spec.CursorParam, spec.OffsetParam}, []string{spec.SizeParam, spec.LimitParam}
 	case "link_header":
 		return nil, []string{spec.SizeParam}
 	default:
@@ -516,14 +530,16 @@ func admitDirectReadCursorURL(baseURL, requestPath, cursor string, spec Paginati
 		if _, ok := allowed[name]; !ok {
 			return "", fmt.Errorf("page cursor query parameter %q is not declared by this command's continuation contract", name)
 		}
-		if len(entries) != 1 {
+		if len(entries) != 1 && spec.NextURLQuery == nil {
 			return "", fmt.Errorf("page cursor repeats continuation query parameter %q", name)
 		}
 		if err := safety.RejectDangerousChars(name, "page cursor query parameter"); err != nil {
 			return "", err
 		}
-		if err := safety.RejectDangerousChars(entries[0], "page cursor query value"); err != nil {
-			return "", err
+		for _, entry := range entries {
+			if err := safety.RejectDangerousChars(entry, "page cursor query value"); err != nil {
+				return "", err
+			}
 		}
 	}
 	return cursor, nil
@@ -537,6 +553,11 @@ func admitDirectReadCursorURL(baseURL, requestPath, cursor string, spec Paginati
 // authority.
 func cursorURLAllowedQueryKeys(spec PaginationSpec, strategy string, callerQuery url.Values) map[string]struct{} {
 	allowed := make(map[string]struct{}, len(callerQuery)+4)
+	if spec.NextURLQuery != nil {
+		for _, name := range spec.NextURLQuery.Allowed {
+			allowed[name] = struct{}{}
+		}
+	}
 	for name := range callerQuery {
 		allowed[name] = struct{}{}
 	}
