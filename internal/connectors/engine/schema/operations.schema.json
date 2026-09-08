@@ -115,6 +115,14 @@
                   "last_record_field": { "type": "string" },
                   "stop_path": { "type": "string" },
                   "next_url_path": { "type": "string" },
+                  "next_url_query": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "allowed": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+                      "retain": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+                    }
+                  },
                   "start_index_param": { "type": "string" },
                   "count_param": { "type": "string" },
                   "total_path": { "type": "string" },

@@ -1423,6 +1423,9 @@ func TestDirectReadCursorURLKeepsTheCallerQuery(t *testing.T) {
 	fx, srv := startLinkHeaderFixture(t)
 	b := linkHeaderBundle(srv.URL, false)
 
+	// Retention is explicit under the selected shared source contract.
+	b.HTTP.Pagination.NextURLQuery = &NextURLQuerySpec{Allowed: []string{"state"}, Retain: []string{"state"}}
+
 	first, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
 		Method:       http.MethodGet,
 		Path:         linkHeaderFixturePath,
