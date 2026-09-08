@@ -342,6 +342,7 @@ type RateLimitSpec struct {
 
 // StreamSpec is one entry in streams.json's "streams" array.
 type StreamSpec struct {
+	preparedBodyPagination   *bodyPagingRequest
 	RequestInputs            *RequestInputContract `json:"request_inputs,omitempty"`
 	inputPlan                *compiledRequestInputPlan
 	preparedReadBody         any
@@ -3190,8 +3191,11 @@ func validateRESTOperationPagination(op OperationSpec) error {
 	if _, err := newPaginator(spec, spec.PageSize, ""); err != nil {
 		return diagnosticAt("/rest/pagination", "pagination_invalid", "pagination declaration does not satisfy its strategy requirements", fmt.Errorf("pagination is invalid: %w", err))
 	}
+	if _, err := bodyPagingOperationPlan(op); err != nil {
+		return err
+	}
 	expected := restPaginationQueryParameters(spec)
-	if len(expected) == 0 {
+	if len(expected) == 0 && len(op.REST.PaginationParameters) == 0 {
 		return nil
 	}
 	expectedSet := make(map[string]struct{}, len(expected))
@@ -3266,6 +3270,29 @@ func restPaginationQueryParameters(spec PaginationSpec) []string {
 		for _, name := range spec.NextURLQuery.Allowed {
 			appendName(name)
 		}
+	}
+	if hasPaginationBody(spec) {
+		bodyKeys := map[string]bool{}
+		if spec.BodyCursorField != "" {
+			bodyKeys[spec.CursorParam] = true
+		}
+		if spec.BodyPageField != "" {
+			bodyKeys[spec.PageParam] = true
+		}
+		if spec.BodyOffsetField != "" {
+			bodyKeys[spec.OffsetParam] = true
+		}
+		if spec.BodyLimitField != "" {
+			bodyKeys[spec.LimitParam] = true
+			bodyKeys[spec.SizeParam] = true
+		}
+		filtered := names[:0]
+		for _, name := range names {
+			if !bodyKeys[name] {
+				filtered = append(filtered, name)
+			}
+		}
+		names = filtered
 	}
 	return names
 }

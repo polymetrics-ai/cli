@@ -125,12 +125,17 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	bodyPaging, err := prepareBodyPagingRequest(b, op, body, query, req.Page, req.PageCursor, maxBytes, baseURL, resolvedPath)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
 	rt, err := newRuntimeForOperationRoute(ctx, b, cfg, h, op.Route, op.ID, op.REST.Path)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, baseURL)
 	decoded, pageInfo, resp, err := readDirectPage(ctx, b, rt, directReadWalk{
+		bodyPaging:      bodyPaging,
 		method:          method,
 		declaredPat:     op.REST.Path,
 		requestPath:     requestPath,
@@ -794,6 +799,13 @@ func operationReadBody(op OperationSpec, overrides map[string]any, rawBody *stri
 	body := cloneAnyMap(op.REST.Body)
 	for key, value := range overrides {
 		body[key] = value
+	}
+	if plan, err := bodyPagingOperationPlan(op); err != nil {
+		return nil, err
+	} else if plan != nil {
+		// The shared paging preparation validates the complete effective body
+		// after defaults/navigation are inserted, before runtime construction.
+		return body, nil
 	}
 	if len(op.REST.BodySchema) > 0 {
 		var schema *Schema

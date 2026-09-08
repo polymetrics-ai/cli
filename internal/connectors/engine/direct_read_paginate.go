@@ -51,6 +51,7 @@ func isAddressableStrategy(t string) bool {
 // (DirectRead and OperationDirectRead) fill it identically, so neither can
 // drift from the other's page contract.
 type directReadWalk struct {
+	bodyPaging      *bodyPagingRequest
 	method          string
 	declaredPat     string
 	requestPath     string
@@ -161,6 +162,9 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	// the effective size BEFORE building the paginator so the threshold and the
 	// request cannot disagree by construction.
 	pageSize = effectiveDirectReadPageSize(spec, pageSize, w.query)
+	if w.bodyPaging != nil {
+		pageSize = w.bodyPaging.size
+	}
 	walkSpec := spec
 	walkSpec.PageSize = pageSize
 
@@ -170,6 +174,9 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	}
 	paginator, paginatorErr := newPaginator(walkSpec, pageSize, "")
 	mode := resolveDirectReadPageMode(spec, w.method, paginatorErr)
+	if w.bodyPaging != nil && paginatorErr == nil {
+		mode = directReadPageMode{strategy: spec.Type, pageable: true}
+	}
 	strategy := mode.strategy
 
 	if err := validateDirectReadPageRequest(mode, w); err != nil {
@@ -234,6 +241,11 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 			// Shared next-link composition below retains only explicitly
 			// declared missing filters; returned positions and bytes win.
 			query = w.query
+		case w.bodyPaging != nil && w.bodyPaging.resume != nil:
+			if err := resumePaginator(paginator, w.bodyPaging.resume); err != nil {
+				return nil, connectors.DirectReadPage{}, nil, err
+			}
+			query = mergeQuery(w.bodyPaging.resume.Query, query)
 		case w.pageCursor != "":
 			query = mergeQuery(cursorQuery(spec, w.pageCursor), query)
 		default:
@@ -241,10 +253,30 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		}
 	}
 
+	if w.bodyPaging != nil {
+		state := w.bodyPaging
+		if w.pageCursor == "" && w.page == 0 {
+			for _, role := range state.plan.roles {
+				if !role.size {
+					if value, ok := state.initial[role.field]; ok {
+						query.Set(role.key, fmt.Sprint(value))
+						callerNavigated = true
+					}
+				}
+			}
+		}
+		w.body, query, err = state.plan.compose(state.initial, query, w.maxBytes)
+		if err != nil {
+			return nil, connectors.DirectReadPage{}, nil, err
+		}
+	}
 	// Only a size that is actually on the wire may be reported as the page
 	// size: 143 of the paginating bundles declare no size/limit/count param at
 	// all, and those requests still receive the provider's own default.
 	sizeSent := directReadRequestedSize(spec, strategy, query)
+	if w.bodyPaging != nil && spec.BodyLimitField != "" {
+		sizeSent = pageSize
+	}
 
 	reqPath, query, err = nextLinks.request(reqPath, query, w.pageCursor != "" && nextLinks.active())
 	if err != nil {
@@ -353,6 +385,23 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 		return decoded, page, resp, nil
 	}
 
+	if w.bodyPaging != nil {
+		state := w.bodyPaging
+		if _, _, err := state.plan.compose(state.initial, next.Query, w.maxBytes); err != nil {
+			return nil, connectors.DirectReadPage{}, resp, err
+		}
+		if !isAddressableStrategy(strategy) {
+			cursor, err := encodeBodyPagingCursor(state.binding, state.identity, next)
+			if err != nil {
+				return nil, connectors.DirectReadPage{}, resp, err
+			}
+			page.HasMore = true
+			page.Complete = false
+			page.Reason = directReadReasonMorePages
+			page.NextCursor = cursor
+			return decoded, page, resp, nil
+		}
+	}
 	page.HasMore = true
 	page.Complete = false
 	page.Reason = directReadReasonMorePages
