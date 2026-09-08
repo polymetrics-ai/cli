@@ -475,3 +475,38 @@ func vNextExecutionEntry210(entry manifestindex.Entry) manifestindex.Entry {
 	entry.SourceVisibility = connectors.SourceVisibilityArtifact{}
 	return entry
 }
+
+func TestVNextExecutionEntryProjectionRejectsChangedFields210(t *testing.T) {
+	var expected manifestindex.Entry
+	for _, entry := range manifestindex.GeneratedEntries() {
+		if entry.Connector == "github" {
+			expected = entry
+			break
+		}
+	}
+	if expected.Connector == "" {
+		t.Fatal("production GitHub execution identity missing")
+	}
+	fields := reflect.TypeOf(expected)
+	for i := 0; i < fields.NumField(); i++ {
+		field := fields.Field(i)
+		t.Run(field.Name, func(t *testing.T) {
+			changed := expected
+			value := reflect.ValueOf(&changed).Elem().Field(i)
+			if field.Name == "SourceVisibility" {
+				changed.SourceVisibility = connectors.SourceVisibilityArtifact{SchemaVersion: 99, Connector: "unrelated"}
+				if !reflect.DeepEqual(vNextExecutionEntry210(expected), vNextExecutionEntry210(changed)) {
+					t.Fatal("diagnostic metadata entered execution comparison")
+				}
+				return
+			}
+			if value.IsZero() {
+				t.Fatal("execution field needs an independent nonzero counterexample")
+			}
+			value.Set(reflect.Zero(value.Type()))
+			if reflect.DeepEqual(vNextExecutionEntry210(expected), vNextExecutionEntry210(changed)) {
+				t.Fatal("execution comparison accepted changed field")
+			}
+		})
+	}
+}

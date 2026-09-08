@@ -1,0 +1,589 @@
+{
+  "source_commit": "2008509f40c90de5d041aa944b19fedfecc15533",
+  "selection": "93 declared stream first pages, list_sites second page, two mutation-query write fixtures, operation-scoped retry record",
+  "upstream_openapi_status": "Historical retry record pins OAS SHA and JSON coordinates; raw OAS not retained in Git. No current provider verification claimed.",
+  "files": [
+    {
+      "path": "RECURLY-WRITE-RETRY-RESEARCH.json",
+      "original_path": ".planning/phases/recurly-parity-resume-r1/RECURLY-WRITE-RETRY-RESEARCH.json",
+      "bytes": 20467,
+      "sha256": "ddcb501d70f9c068b8b41316b0b6c08c74a2836f679006ad181fa75150b9a944"
+    },
+    {
+      "path": "fixtures/streams/accounts/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/accounts/page_1.json",
+      "bytes": 749,
+      "sha256": "8fac99bbc62033fbeee5e3ceae9b5c32a2d40b5aebdc29ab84a4e1fcbbb15a7b"
+    },
+    {
+      "path": "fixtures/streams/get_a_billing_info/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_a_billing_info/page_1.json",
+      "bytes": 445,
+      "sha256": "01329501ee9f0fb0867e12b9100b8796077ad7501909217e920296627f12ca72"
+    },
+    {
+      "path": "fixtures/streams/get_account/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_account/page_1.json",
+      "bytes": 458,
+      "sha256": "7c2937ac2e633caec22d06e2a899daa1a0682dba496c395cfd5d4ab64d05d701"
+    },
+    {
+      "path": "fixtures/streams/get_account_acquisition/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_account_acquisition/page_1.json",
+      "bytes": 415,
+      "sha256": "cfb60f935c40471dbd53080f8fff25adb6fc257e2e4f38695e371907a8d71a9f"
+    },
+    {
+      "path": "fixtures/streams/get_account_balance/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_account_balance/page_1.json",
+      "bytes": 352,
+      "sha256": "ffe6d128c8f0d5ee5f7ab3504cbc4eeaf6e88552fd01d982efb18545730af2df"
+    },
+    {
+      "path": "fixtures/streams/get_account_external_account/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_account_external_account/page_1.json",
+      "bytes": 451,
+      "sha256": "fae3a51a5e3062e9f2ec9a81ce0ca6512fcc9517afcc398db325dcac3e6f8a57"
+    },
+    {
+      "path": "fixtures/streams/get_account_note/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_account_note/page_1.json",
+      "bytes": 429,
+      "sha256": "c03ba3784e4d5ca7fb51797fe4a6afedf128eebe3299b49089096b82068336fb"
+    },
+    {
+      "path": "fixtures/streams/get_add_on/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_add_on/page_1.json",
+      "bytes": 487,
+      "sha256": "b311166c1346ed006cbfcb908dfa74560fa112f2fcd980f67b8b288097dbcf13"
+    },
+    {
+      "path": "fixtures/streams/get_billing_info/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_billing_info/page_1.json",
+      "bytes": 416,
+      "sha256": "1f075afc6acf1df745bf689b6de98db240a19535809ebee63690d31568055dcc"
+    },
+    {
+      "path": "fixtures/streams/get_business_entity/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_business_entity/page_1.json",
+      "bytes": 472,
+      "sha256": "efa52af195c465d93cb4e6442933fd0e1c992ca6e797d6e65b36a8699f5b3c83"
+    },
+    {
+      "path": "fixtures/streams/get_coupon/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_coupon/page_1.json",
+      "bytes": 488,
+      "sha256": "6136b7e7b0fd6896ad68d6e980954bc419701649bac81d84f02a794e353f3c2b"
+    },
+    {
+      "path": "fixtures/streams/get_coupon_redemption/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_coupon_redemption/page_1.json",
+      "bytes": 475,
+      "sha256": "22bf9f9f71deafbef1df1f564a7d563d980cc7da8ba437b14521bfb67e8d7725"
+    },
+    {
+      "path": "fixtures/streams/get_credit_payment/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_credit_payment/page_1.json",
+      "bytes": 410,
+      "sha256": "9181c8f3e5e3eedd07f8e598f7ad1356955adc720125e53f74252cef90f15227"
+    },
+    {
+      "path": "fixtures/streams/get_custom_field_definition/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_custom_field_definition/page_1.json",
+      "bytes": 449,
+      "sha256": "1360907a540947a1fb1bef076b2e7228c342c16590f7af9c168aa62153f6cade"
+    },
+    {
+      "path": "fixtures/streams/get_dunning_campaign/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_dunning_campaign/page_1.json",
+      "bytes": 472,
+      "sha256": "eaa45cd77a45288371f6faad6279e1451d2969ac5be3ad4e6fa261c0f8fd27ba"
+    },
+    {
+      "path": "fixtures/streams/get_external_product/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_external_product/page_1.json",
+      "bytes": 442,
+      "sha256": "6bdfc5bfea8e18ff5b188635bf1925ed4305dcd57b40d5cc4598116104f2a63a"
+    },
+    {
+      "path": "fixtures/streams/get_external_product_external_product_reference/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_external_product_external_product_reference/page_1.json",
+      "bytes": 468,
+      "sha256": "7e1bc079c265d29fdc05d3b6a54ca4bcd5f698700b260c514494a4f10c724e59"
+    },
+    {
+      "path": "fixtures/streams/get_external_subscription/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_external_subscription/page_1.json",
+      "bytes": 442,
+      "sha256": "72066c5d8f1154d32e4953bee996c11faa39214d12da79f571ab6a281e5472be"
+    },
+    {
+      "path": "fixtures/streams/get_external_subscription_external_payment_phase/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_external_subscription_external_payment_phase/page_1.json",
+      "bytes": 469,
+      "sha256": "b8a93169051a285b5cf3e06cee3afc4270eb39c6789d04b912eac5ff7136a32f"
+    },
+    {
+      "path": "fixtures/streams/get_general_ledger_account/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_general_ledger_account/page_1.json",
+      "bytes": 456,
+      "sha256": "66859aa6fa69315e48e47312e2224e307d438e08a0c5ff05f32510c6aa5d69c7"
+    },
+    {
+      "path": "fixtures/streams/get_gift_card/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_gift_card/page_1.json",
+      "bytes": 405,
+      "sha256": "c332931f82b8142476a63dc093d3ea9fa6127762f477c36ae33a71cdf4ac7d6c"
+    },
+    {
+      "path": "fixtures/streams/get_invoice/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_invoice/page_1.json",
+      "bytes": 426,
+      "sha256": "eabd42f22b42ccc31c73c5d517db592b2a705d2fe5b23495de2650faa47f9bf0"
+    },
+    {
+      "path": "fixtures/streams/get_invoice_template/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_invoice_template/page_1.json",
+      "bytes": 438,
+      "sha256": "ea401de3f0c35cc05ca0685ff4a2610776781dcc920bd9752fcac69e6044684b"
+    },
+    {
+      "path": "fixtures/streams/get_item/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_item/page_1.json",
+      "bytes": 485,
+      "sha256": "21777b598237c192a2a422fa4f06e428537d750c0441dfa07585457ea0ad9223"
+    },
+    {
+      "path": "fixtures/streams/get_line_item/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_line_item/page_1.json",
+      "bytes": 432,
+      "sha256": "69238847b9ded672d37864f37c23730e03ff4f344064df05ca8d97320c4715c0"
+    },
+    {
+      "path": "fixtures/streams/get_measured_unit/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_measured_unit/page_1.json",
+      "bytes": 464,
+      "sha256": "ebe5a909a248fba0ff2038d60936957f527976179f7bd8e566fbc42d8439b720"
+    },
+    {
+      "path": "fixtures/streams/get_performance_obligation/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_performance_obligation/page_1.json",
+      "bytes": 414,
+      "sha256": "7e7244b39a6d39220a3d4e5f21b724b48178b5ae722fd20479dc4dbad98e811a"
+    },
+    {
+      "path": "fixtures/streams/get_performance_obligations/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_performance_obligations/page_1.json",
+      "bytes": 446,
+      "sha256": "fc6102c1fba6ad6d12b977d2332ec501dfcedfdda3b0947785c87402c69984f3"
+    },
+    {
+      "path": "fixtures/streams/get_plan/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_plan/page_1.json",
+      "bytes": 485,
+      "sha256": "0a03bac9c37a9917aecb10453a589bd8a8d29b84c34737fbb310830684589036"
+    },
+    {
+      "path": "fixtures/streams/get_plan_add_on/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_plan_add_on/page_1.json",
+      "bytes": 521,
+      "sha256": "942218ccba44df1c06c320c35b75c674e36b47b3f66ae91191d21c0a1285f801"
+    },
+    {
+      "path": "fixtures/streams/get_price_segment/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_price_segment/page_1.json",
+      "bytes": 351,
+      "sha256": "ce59a49e19fa1508cf2a371bbf4fd568ec78ac716e8e6577425a35ecfda2c20d"
+    },
+    {
+      "path": "fixtures/streams/get_shipping_address/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_shipping_address/page_1.json",
+      "bytes": 450,
+      "sha256": "121d34072318f77eaef4560e64a31f1c3ccd0f23af4301b9fb9bf2c89efd28fc"
+    },
+    {
+      "path": "fixtures/streams/get_shipping_method/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_shipping_method/page_1.json",
+      "bytes": 471,
+      "sha256": "6f460cefe8ef355e485f055df2b7bfbb59ba881459bee13f92ad283556e8c5b3"
+    },
+    {
+      "path": "fixtures/streams/get_site/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_site/page_1.json",
+      "bytes": 400,
+      "sha256": "4a45a87bd9fb1d01ab3810b7cd9565a49740d0bbe28994cec5ddb09c076158b7"
+    },
+    {
+      "path": "fixtures/streams/get_subscription/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_subscription/page_1.json",
+      "bytes": 433,
+      "sha256": "f9788687ad7391dbb984e9d3626c58e6ba00e2d997713d2b1068ea5beaff4720"
+    },
+    {
+      "path": "fixtures/streams/get_subscription_change/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_subscription_change/page_1.json",
+      "bytes": 415,
+      "sha256": "ced489ee57a9aec19a743f8ebbad0007770ff74c7c260788007e53a14d5d99b9"
+    },
+    {
+      "path": "fixtures/streams/get_subscription_coupon_redemption/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_subscription_coupon_redemption/page_1.json",
+      "bytes": 480,
+      "sha256": "23bc8dcc426bd4c49430cca33ead7f192e89fcaa9e58a622df0dfe8333eddce6"
+    },
+    {
+      "path": "fixtures/streams/get_transaction/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_transaction/page_1.json",
+      "bytes": 407,
+      "sha256": "ea07802dbab209faf8e7d9f2ce2cf1ed374208c75b76a1a3c358bbef7b895817"
+    },
+    {
+      "path": "fixtures/streams/get_unique_coupon_code/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_unique_coupon_code/page_1.json",
+      "bytes": 470,
+      "sha256": "2d370d0009452b223c1af5237ff02b7a2af9eedb71595cc7e6b8be6e8a5f7b1b"
+    },
+    {
+      "path": "fixtures/streams/get_usage/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/get_usage/page_1.json",
+      "bytes": 400,
+      "sha256": "3c702d73222cff17a2977cd772356d9333483249a2ab707b645985ff876eab05"
+    },
+    {
+      "path": "fixtures/streams/invoices/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/invoices/page_1.json",
+      "bytes": 835,
+      "sha256": "39a41c28f6d13af90d2de05b9fb44639b487c7437c64f437355fa4b17c3eb050"
+    },
+    {
+      "path": "fixtures/streams/list_account_acquisition/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_acquisition/page_1.json",
+      "bytes": 439,
+      "sha256": "24aaabd08fc6f53baa85c10d218d795dd8753b1f8d06b3f0762cdd46e289dc16"
+    },
+    {
+      "path": "fixtures/streams/list_account_coupon_redemptions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_coupon_redemptions/page_1.json",
+      "bytes": 511,
+      "sha256": "8253e2eed4035310224fd54761a6c856ad926ffcc1e73ef8d724823f968f1167"
+    },
+    {
+      "path": "fixtures/streams/list_account_credit_payments/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_credit_payments/page_1.json",
+      "bytes": 479,
+      "sha256": "791690e732d85b13a1e303ddf32f45bb52764ef7b1d6437ff85d82e9866bbeb6"
+    },
+    {
+      "path": "fixtures/streams/list_account_external_account/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_external_account/page_1.json",
+      "bytes": 483,
+      "sha256": "776642c10631d434963feeaf418a78fefc952371fc2f7beca6b5a826ab93d23f"
+    },
+    {
+      "path": "fixtures/streams/list_account_external_invoices/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_external_invoices/page_1.json",
+      "bytes": 508,
+      "sha256": "251892cd77f3aa6124d757b0e4e2d13da04742ffa226517e73b539c732ff0976"
+    },
+    {
+      "path": "fixtures/streams/list_account_external_subscriptions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_external_subscriptions/page_1.json",
+      "bytes": 515,
+      "sha256": "b7a2aab5d9614f976e7f57720eebfa387f83b683bb54dad51b72eef4824bbaf2"
+    },
+    {
+      "path": "fixtures/streams/list_account_invoices/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_invoices/page_1.json",
+      "bytes": 499,
+      "sha256": "9eda706811ed5e5b33573bbe1de2c6807541307575cafd5d018157a6d1b42d34"
+    },
+    {
+      "path": "fixtures/streams/list_account_line_items/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_line_items/page_1.json",
+      "bytes": 505,
+      "sha256": "7cbe9282155de07f2c22bfde5c992c197e6d319868126b0909b3f3823447f693"
+    },
+    {
+      "path": "fixtures/streams/list_account_notes/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_notes/page_1.json",
+      "bytes": 461,
+      "sha256": "9229f66586f5ec1c233aca93462589cc8038d0c616e63e1da4d754353a50b909"
+    },
+    {
+      "path": "fixtures/streams/list_account_subscriptions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_subscriptions/page_1.json",
+      "bytes": 506,
+      "sha256": "6310bedfe22d81c1be245c711b26b71508405c7a9f3815661c37e249bd63c77c"
+    },
+    {
+      "path": "fixtures/streams/list_account_transactions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_account_transactions/page_1.json",
+      "bytes": 476,
+      "sha256": "841d36d290d536cfd2841fd0705fbc26809160d95efbd850447b79a91fa44572"
+    },
+    {
+      "path": "fixtures/streams/list_active_coupon_redemptions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_active_coupon_redemptions/page_1.json",
+      "bytes": 518,
+      "sha256": "8a13f1af7c480d21af1af7954706ce04e1ab8f6f0effefeba6fc36b23dc86d73"
+    },
+    {
+      "path": "fixtures/streams/list_add_ons/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_add_ons/page_1.json",
+      "bytes": 531,
+      "sha256": "445011bf513fa80b80d99a1299a7f8cc6424fde2ea02accd793d2ca2f7b09d81"
+    },
+    {
+      "path": "fixtures/streams/list_billing_infos/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_billing_infos/page_1.json",
+      "bytes": 477,
+      "sha256": "2642fe042acce1dd050d780977d952da27ab54401b7c518600b1c733d71a3434"
+    },
+    {
+      "path": "fixtures/streams/list_business_entities/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_business_entities/page_1.json",
+      "bytes": 512,
+      "sha256": "4eb2f376959cf85dce992479eed2a36d566b2f6a33f9fb7fff3c5e1d7b851951"
+    },
+    {
+      "path": "fixtures/streams/list_business_entity_invoices/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_business_entity_invoices/page_1.json",
+      "bytes": 508,
+      "sha256": "9bf32c94baf6b9f4f4fd64c630d84e6a222ed075a7e175298fdc5968a7cabba6"
+    },
+    {
+      "path": "fixtures/streams/list_child_accounts/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_child_accounts/page_1.json",
+      "bytes": 535,
+      "sha256": "7cbee3bb0e969d3a74332ce2ab0692a189194324db4760b609aad3eff4a28b8b"
+    },
+    {
+      "path": "fixtures/streams/list_coupons/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_coupons/page_1.json",
+      "bytes": 532,
+      "sha256": "728df2575815c0143e20c5d482181214962c4b60cf5bceb5ce46568442619b1f"
+    },
+    {
+      "path": "fixtures/streams/list_credit_payments/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_credit_payments/page_1.json",
+      "bytes": 442,
+      "sha256": "3834fd2de8cacf8e9471489d4e42003b322a34127c732947f70a27d3e9ec34b6"
+    },
+    {
+      "path": "fixtures/streams/list_custom_field_definitions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_custom_field_definitions/page_1.json",
+      "bytes": 485,
+      "sha256": "56c5ccaabeaaafdf0571beed7f9485277d063331a5effda0856a1c2d109e555a"
+    },
+    {
+      "path": "fixtures/streams/list_dunning_campaigns/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_dunning_campaigns/page_1.json",
+      "bytes": 512,
+      "sha256": "a7d05ebacdd8a09d35aa43b0b9112368e247d5ea6f342d6ffc606491df5f30b0"
+    },
+    {
+      "path": "fixtures/streams/list_entitlements/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_entitlements/page_1.json",
+      "bytes": 525,
+      "sha256": "c9f0779ea57ddf5448c6628bc98845eaae9fa720b34c1226332181c82daeac11"
+    },
+    {
+      "path": "fixtures/streams/list_external_invoices/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_external_invoices/page_1.json",
+      "bytes": 471,
+      "sha256": "046cf258062023966e28ab89ebdd0ec80753b6b5e9fab3374376aac176290979"
+    },
+    {
+      "path": "fixtures/streams/list_external_product_external_product_references/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_external_product_external_product_references/page_1.json",
+      "bytes": 500,
+      "sha256": "8df21fad8e843ebbb112e613953c1584368ff3eac87af28a1ffe7336da945466"
+    },
+    {
+      "path": "fixtures/streams/list_external_products/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_external_products/page_1.json",
+      "bytes": 478,
+      "sha256": "7461555817ec4d25865954fb8e83f1342b4f035645c962e78ccc598bf76a6039"
+    },
+    {
+      "path": "fixtures/streams/list_external_subscription_external_invoices/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_external_subscription_external_invoices/page_1.json",
+      "bytes": 522,
+      "sha256": "f37a08facfd7dd4cae304043d3361e6b30ba05c3efc2320002d7a7d8aa1917fb"
+    },
+    {
+      "path": "fixtures/streams/list_external_subscription_external_payment_phases/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_external_subscription_external_payment_phases/page_1.json",
+      "bytes": 501,
+      "sha256": "ef050a7f997c36c5bfadd3865b36425877af45f260f764a90f5a034712ba0d05"
+    },
+    {
+      "path": "fixtures/streams/list_external_subscriptions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_external_subscriptions/page_1.json",
+      "bytes": 478,
+      "sha256": "b3a2c5e9e3ee640c6e243fd6d8b526634a742bfd006e582f5bb51fcddda94b3f"
+    },
+    {
+      "path": "fixtures/streams/list_general_ledger_accounts/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_general_ledger_accounts/page_1.json",
+      "bytes": 492,
+      "sha256": "b36cb4aab8994b766852444375ebac7caf83d2da31093480db637af09eed39cb"
+    },
+    {
+      "path": "fixtures/streams/list_gift_cards/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_gift_cards/page_1.json",
+      "bytes": 437,
+      "sha256": "162a3f8950dff9a533d350bdc3584dccf7487048d6f400b6380c8ef6003be4b3"
+    },
+    {
+      "path": "fixtures/streams/list_invoice_coupon_redemptions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_invoice_coupon_redemptions/page_1.json",
+      "bytes": 511,
+      "sha256": "792bc0f9f36c40df4d4f7e3e7fcd23bc40a696dcb6973af0f93315945ae12631"
+    },
+    {
+      "path": "fixtures/streams/list_invoice_line_items/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_invoice_line_items/page_1.json",
+      "bytes": 505,
+      "sha256": "fc7793e0bf695696ce23dec79a3cc1f31842508963bfdab9aaf7eeb7e2deedea"
+    },
+    {
+      "path": "fixtures/streams/list_invoice_template_accounts/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_invoice_template_accounts/page_1.json",
+      "bytes": 544,
+      "sha256": "0eb3be2284c578cf8b729b72779b0d17763d3517e4436b553843e8ef596ffe29"
+    },
+    {
+      "path": "fixtures/streams/list_invoice_templates/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_invoice_templates/page_1.json",
+      "bytes": 474,
+      "sha256": "1dc43b06abb2aba831c86d00f531c938a7f6dc9075c33dcae142d0be3376dc88"
+    },
+    {
+      "path": "fixtures/streams/list_items/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_items/page_1.json",
+      "bytes": 529,
+      "sha256": "924bc48c6c43212b0b0266479c6cddb7f21875cf16ec292a0936f5e25c21b95a"
+    },
+    {
+      "path": "fixtures/streams/list_line_items/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_line_items/page_1.json",
+      "bytes": 468,
+      "sha256": "d6642b078bf917a1f8c264ab384f8eb0d6bec36a4a7942864e1d2936f66a941b"
+    },
+    {
+      "path": "fixtures/streams/list_measured_unit/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_measured_unit/page_1.json",
+      "bytes": 504,
+      "sha256": "a80abbf8cc9f9b18ab4365bea3259d81d611ab31dbf78b0bc645253e6910b191"
+    },
+    {
+      "path": "fixtures/streams/list_plan_add_ons/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_plan_add_ons/page_1.json",
+      "bytes": 565,
+      "sha256": "e86dea1d10c84aa7ac740a8ec283721781f6fdad0999f6586de5bc039292d61b"
+    },
+    {
+      "path": "fixtures/streams/list_price_segments/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_price_segments/page_1.json",
+      "bytes": 379,
+      "sha256": "f11858f085ad732da4ae7e97c73f4175a9763ddf8ac032e1f322e95435b683d0"
+    },
+    {
+      "path": "fixtures/streams/list_related_invoices/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_related_invoices/page_1.json",
+      "bytes": 507,
+      "sha256": "15ff15814faccd096663fc5f25d139cec78940e0352688a2ce53f2cbc97a3bf6"
+    },
+    {
+      "path": "fixtures/streams/list_shipping_addresses/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_shipping_addresses/page_1.json",
+      "bytes": 482,
+      "sha256": "01fe53074feb28d5cb7e4e674e9ecaac71d09da664afd2c2a2e1eb4b4fd9c9f3"
+    },
+    {
+      "path": "fixtures/streams/list_shipping_methods/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_shipping_methods/page_1.json",
+      "bytes": 511,
+      "sha256": "de9f17e1caf019bcd32b81a02121abab08b895409183e9a754666be6b26e00ba"
+    },
+    {
+      "path": "fixtures/streams/list_sites/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_sites/page_1.json",
+      "bytes": 524,
+      "sha256": "c989dfa466feeb448fe3ca8ab5dedd2bd665c361e19307b76d4088fd0f5e5936"
+    },
+    {
+      "path": "fixtures/streams/list_sites/page_2.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_sites/page_2.json",
+      "bytes": 470,
+      "sha256": "beb758f80644175f5285bea5c55f8ae9d557b89477a3a82c174b37626d92d5da"
+    },
+    {
+      "path": "fixtures/streams/list_subscription_coupon_redemptions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_subscription_coupon_redemptions/page_1.json",
+      "bytes": 516,
+      "sha256": "3531dcbb8b3e6273bbec7540d210f76fa225d97595459add2cfcaecaf42508a4"
+    },
+    {
+      "path": "fixtures/streams/list_subscription_invoices/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_subscription_invoices/page_1.json",
+      "bytes": 504,
+      "sha256": "4c6c9897f32a8c7dce1363830a826f123d9443adc14c6e2d053d9a537c9e6ad5"
+    },
+    {
+      "path": "fixtures/streams/list_subscription_line_items/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_subscription_line_items/page_1.json",
+      "bytes": 510,
+      "sha256": "c6ed66706994572858299b87081fb061526b7327210a42e059cb2d0c94e011ee"
+    },
+    {
+      "path": "fixtures/streams/list_unique_coupon_codes/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_unique_coupon_codes/page_1.json",
+      "bytes": 546,
+      "sha256": "0214025ee9c932755defe07e27bde08eb17500fb43185ce11e8c4f8a9476efff"
+    },
+    {
+      "path": "fixtures/streams/list_usage/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/list_usage/page_1.json",
+      "bytes": 510,
+      "sha256": "d4bd3f13d6ac207aeb07380782f8b15dd1071079eeaeeff33684908a8576778c"
+    },
+    {
+      "path": "fixtures/streams/plans/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/plans/page_1.json",
+      "bytes": 646,
+      "sha256": "e1a076f74feeca69bf17ec3e376dc442d7b904969a1d35e684d86595cef6637c"
+    },
+    {
+      "path": "fixtures/streams/show_external_invoice/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/show_external_invoice/page_1.json",
+      "bytes": 435,
+      "sha256": "beec17424633f3b082369c53803927963dc636327d755eb17d31ecfaef57cb12"
+    },
+    {
+      "path": "fixtures/streams/subscriptions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/subscriptions/page_1.json",
+      "bytes": 1168,
+      "sha256": "9cd277ad6f42ed02e4e8faeed98f6ad61e44b5789630a13d379791e295fff1b8"
+    },
+    {
+      "path": "fixtures/streams/transactions/page_1.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/streams/transactions/page_1.json",
+      "bytes": 850,
+      "sha256": "a42c64c425efdd19791a7fc9519ccab07150c8a06e2912b1927796d2c70893a2"
+    },
+    {
+      "path": "fixtures/writes/deactivate_account.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/writes/deactivate_account.json",
+      "bytes": 474,
+      "sha256": "368a0557716879bcd2758472ae9ca7a8508a2226f373e9b1ff3103e10cf914ed"
+    },
+    {
+      "path": "fixtures/writes/terminate_subscription.json",
+      "original_path": "internal/connectors/defs/recurly/fixtures/writes/terminate_subscription.json",
+      "bytes": 518,
+      "sha256": "7c1b8bfa963b3ea6036563076bc60eda541ecbde0d26c2cd01b050f92b405246"
+    }
+  ]
+}
