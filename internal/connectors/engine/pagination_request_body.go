@@ -257,6 +257,9 @@ func decodeBodyPagingCursor(b Bundle, identity StreamSpec, cursor string) (*conn
 	if cursor == "" {
 		return nil, nil
 	}
+	if err := connectors.ValidateDirectReadPageCursor(cursor); err != nil {
+		return nil, err
+	}
 	if !strings.HasPrefix(cursor, bodyPagingCursorPrefix) {
 		return nil, fmt.Errorf("body pagination requires its definition-bound page cursor")
 	}

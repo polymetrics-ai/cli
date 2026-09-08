@@ -11,3 +11,5 @@ Scope: typed top-level object fields for cursor/page_number/offset_limit; no nes
 Final helper correction: mixed query-size/body-offset wire controls caught and fixed before handoff. Latest normal412/412 and body race82/82, vet pass, same7 baseline lint findings. CLI compatibility14/14 also passed. Prior successful receipts retained with their own exact source, not relabeled.
 
 Latest terminal validation after resolved-path gap: normal418/418, body race88/88, vet pass;6 baseline/inherited lint findings remain. Full generated saved request input loading/preparation, effective header/derived fan-out input identity and App frontier remain parent234 integration obligations; this bounded bridge proves caller-known path/query/body/origin identity and static descriptor changes, not a complete generated-input acceptance.
+
+Final decoder-bound checkpoint: bounded-final-normal419/419 and bounded-final-race89/89 pass on the final production/test bytes. Existing cursor length validation runs before base64 decoding; oversized input reaches zero sends. Earlier vet/lint and compatibility receipts retain their actual source checkpoints.

@@ -27,3 +27,6 @@ Green: final-mixed-normal412/412, final-mixed-race82/82, final-mixed-vet pass; f
 Red: resolved-path-red and resolved-saved-path-red each preserve a healthy same-path resume, then prove changed caller path values incorrectly send twice. Green: final-identity-normal418/418, final-identity-race88/88 and final-identity-vet pass. The direct helper now takes resolved baseURL/requestPath and binds them together with full original operation/HTTP declaration and selected input schema; saved caller-known paths bind through existing InterpolatePath plus original stream/HTTP declaration.
 
 Latest scoped lint6 findings:4 original229 plus2 parent234 compiled schema/bindings fields awaiting population. REST inputPlan is now consumed for capsule identity, so its old unused finding disappeared through actual use. No warning suppression or unrelated change.
+
+## Decoder allocation bound
+Static boundedness safeguard: the new early body-capsule decoder now invokes the existing ValidateDirectReadPageCursor length guard before base64 allocation. The former path already refused oversized input after decoding; this is not claimed as a newly reproduced behavioral RED. The added oversized-capsule control proves zero sends. Green: bounded-final-normal419/419 and bounded-final-race89/89, both fresh native1.26.6 with stable source receipts.

@@ -202,6 +202,7 @@ func TestBodyPagingInput233(t *testing.T) {
 		{name: "pm_page", page: 2, bad: true},
 		{name: "raw_and_pm_cursor", body: map[string]any{"nextPageToken": "raw"}, cursor: "invalid", bad: true},
 		{name: "malformed_capsule", cursor: "engine_body_v2:!", bad: true},
+		{name: "oversized_capsule", cursor: bodyPagingCursorPrefix + strings.Repeat("a", 16385), bad: true},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
