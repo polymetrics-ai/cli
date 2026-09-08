@@ -342,6 +342,10 @@ type RateLimitSpec struct {
 
 // StreamSpec is one entry in streams.json's "streams" array.
 type StreamSpec struct {
+	RequestInputs            *RequestInputContract `json:"request_inputs,omitempty"`
+	inputPlan                *compiledRequestInputPlan
+	preparedReadBody         any
+	preparedReadBodyPresent  bool
 	Name                     string                         `json:"name"`
 	Route                    string                         `json:"route,omitempty"`
 	Method                   string                         `json:"method,omitempty"` // default GET
@@ -919,10 +923,12 @@ type OperationParameter struct {
 }
 
 type RESTOperationSpec struct {
-	Method      string `json:"method"`
-	Path        string `json:"path"`
-	ContentType string `json:"content_type,omitempty"`
-	MaxBytes    int    `json:"max_bytes,omitempty"`
+	RequestInputs *RequestInputContract `json:"request_inputs,omitempty"`
+	inputPlan     *compiledRequestInputPlan
+	Method        string `json:"method"`
+	Path          string `json:"path"`
+	ContentType   string `json:"content_type,omitempty"`
+	MaxBytes      int    `json:"max_bytes,omitempty"`
 	// Pagination is a direct-read operation's own pager. It deliberately
 	// shadows neither HTTP.Pagination nor streams.json: an API commonly mixes
 	// page/page_size and startIndex/count endpoints, and using the connector
