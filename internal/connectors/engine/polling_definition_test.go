@@ -67,7 +67,9 @@ func TestBundleRejectsPollingWatermarkForAPIBundle(t *testing.T) {
 	if err == nil {
 		t.Fatal("Load succeeded, want API-bundle polling watermark refusal")
 	}
-	if got, want := err.Error(), `load bundle acme: polling_watermark.json requires metadata integration_type "database"`; got != want {
+	// Exact historical authoring text stays in Cause; the adopted public contract
+	// is independently checked by TestBundlePublicPolling167.
+	if got, want := bundleCauseText165(err), `load bundle acme: polling_watermark.json requires metadata integration_type "database"`; got != want {
 		t.Fatalf("Load error = %q, want %q", got, want)
 	}
 }

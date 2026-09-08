@@ -19,6 +19,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/coordination"
 	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/safety"
@@ -308,9 +309,9 @@ func (a *App) Connector(name string) (connectors.Metadata, error) {
 	if err := connectors.RejectLegacyConnectorName(name); err != nil {
 		return connectors.Metadata{}, err
 	}
-	c, ok := a.registry.Get(name)
-	if !ok {
-		return connectors.Metadata{}, fmt.Errorf("connector %q not found", name)
+	c, err := a.registry.Resolve(context.Background(), name)
+	if err != nil {
+		return connectors.Metadata{}, engine.SafeBundleError(err)
 	}
 	return c.Metadata(), nil
 }
@@ -2162,7 +2163,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	}
 	preflightConnector, err := a.registry.Resolve(ctx, req.Connector)
 	if err != nil {
-		return ReversePlan{}, nil, err
+		return ReversePlan{}, nil, engine.SafeBundleError(err)
 	}
 	if err := commandrunner.PreflightRequest(preflightConnector, commandrunner.Request{
 		Path: req.Path, Flags: req.Flags, Config: connectors.RuntimeConfig{Config: req.Config},
@@ -3582,9 +3583,9 @@ func (a *App) resolveEndpointWithCredential(ctx context.Context, endpoint Endpoi
 	if endpoint.Connector != "" && endpoint.Connector != cred.Connector {
 		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("credential %q is for connector %q, not %q", endpoint.Credential, cred.Connector, endpoint.Connector)
 	}
-	connector, ok := a.registry.Get(cred.Connector)
-	if !ok {
-		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, fmt.Errorf("connector %q not found", cred.Connector)
+	connector, err := a.registry.Resolve(ctx, cred.Connector)
+	if err != nil {
+		return nil, CredentialMeta{}, connectors.RuntimeConfig{}, engine.SafeBundleError(err)
 	}
 	return connector, cred, runtime, nil
 }

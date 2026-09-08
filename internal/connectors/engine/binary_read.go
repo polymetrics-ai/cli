@@ -341,17 +341,17 @@ func operationBinaryDownloadSpec(b Bundle, operation string) (OperationSpec, err
 
 func validateOperationBinaryContentTypes(op OperationSpec) error {
 	if op.Binary == nil {
-		return fmt.Errorf("operation has no binary declaration")
+		return diagnosticAt("/binary", "binary_declaration_required", "operation requires binary declaration", fmt.Errorf("operation has no binary declaration"))
 	}
-	for _, declared := range op.Binary.ContentTypes {
+	for contentIndex, declared := range op.Binary.ContentTypes {
 		mediaType, _, err := mime.ParseMediaType(strings.TrimSpace(declared))
 		if err != nil || !validOperationMediaRange(mediaType) {
-			return fmt.Errorf("content type %q is not a valid media type", declared)
+			return diagnosticAt(fmt.Sprintf("/binary/content_types/%d", contentIndex), "binary_content_type_invalid", "declared binary content type must be a valid media range", fmt.Errorf("content type %q is not a valid media type", declared))
 		}
 	}
 	if charset := strings.TrimSpace(op.Binary.Charset); charset != "" {
 		if _, _, err := mime.ParseMediaType("text/plain; charset=" + charset); err != nil {
-			return fmt.Errorf("charset %q is invalid", op.Binary.Charset)
+			return diagnosticAt("/binary/charset", "binary_charset_invalid", "declared binary charset must be valid", fmt.Errorf("charset %q is invalid", op.Binary.Charset))
 		}
 	}
 	return nil

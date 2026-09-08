@@ -10,6 +10,7 @@ import (
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/commandrunner"
 	"polymetrics.ai/internal/connectors/connsdk"
+	"polymetrics.ai/internal/connectors/engine"
 	"polymetrics.ai/internal/credential"
 	"polymetrics.ai/internal/flow"
 	"polymetrics.ai/internal/safety"
@@ -75,6 +76,15 @@ func alreadyReportedExecutionError(err error) error {
 func classifyError(err error) *cliError {
 	if err == nil {
 		return nil
+	}
+	var diagnostic *engine.BundleDiagnosticError
+	if errors.As(err, &diagnostic) {
+		result := &cliError{category: categoryInternal, code: "internal_error", message: diagnostic.Error(), err: err}
+		var prior *cliError
+		if errors.As(err, &prior) {
+			result.alreadyReported = prior.alreadyReported
+		}
+		return result
 	}
 	var ce *cliError
 	if errors.As(err, &ce) {
@@ -202,6 +212,12 @@ func publicErrorEnvelope(err error) envelope {
 		"category": string(ce.category),
 		"code":     ce.code,
 		"message":  safety.SanitizeTerminal(safety.RedactErrorText(ce.Error())),
+	}
+	var diagnostic *engine.BundleDiagnosticError
+	if errors.As(err, &diagnostic) {
+		projection := *diagnostic
+		projection.Cause = nil
+		result["bundle"] = &projection
 	}
 	var source *connectors.SourceSelectionError
 	if errors.As(err, &source) {

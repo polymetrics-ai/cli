@@ -2665,7 +2665,7 @@ func (d ChangefeedDescriptor) Validate() error {
 			return errors.New("unsupported changefeed requires a reason")
 		}
 		if d.Executor != nil || d.Checkpoint != nil || d.Delivery != nil || d.PollingWatermark != nil {
-			return errors.New("unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark")
+			return declarationDiagnosticFailure("/status", "changefeed_unsupported_execution", "unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark", errors.New("unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark"))
 		}
 	}
 	return nil
@@ -2846,7 +2846,7 @@ func validatePollingWatermark(d ChangefeedDescriptor) error {
 		}
 	}
 	if polling.SoftDelete == nil && polling.DeletionEndpoint == nil && d.Delivery.Deletes != "not_available" {
-		return errors.New("polling watermark hard deletes are not observable; delivery deletes must be not_available")
+		return declarationDiagnosticFailure("/delivery/deletes", "polling_hard_deletes_unobservable", "polling watermark hard deletes are not observable; delivery deletes must be not_available", errors.New("polling watermark hard deletes are not observable; delivery deletes must be not_available"))
 	}
 	if (polling.SoftDelete != nil || polling.DeletionEndpoint != nil) && d.Delivery.Deletes != "tombstone" {
 		return errors.New("polling watermark observable deletes must declare tombstone delivery")

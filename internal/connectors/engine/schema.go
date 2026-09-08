@@ -2,6 +2,7 @@ package engine
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -26,6 +27,8 @@ type Schema struct {
 
 // schemaNode is the compiled representation of one (sub-)schema object.
 type schemaNode struct {
+	// Set only for embedded, code-owned bundle meta-schemas.
+	trustedProperties bool
 	// types holds the accepted JSON types ("string", "number", "integer",
 	// "boolean", "object", "array", "null"); empty means "any type".
 	types []string
@@ -177,7 +180,7 @@ func compileStructuredRESTBodySchemaDocument(raw json.RawMessage) (*Schema, erro
 func compileSchema(raw json.RawMessage, allowPrefixItems bool) (*Schema, error) {
 	var m map[string]json.RawMessage
 	if err := json.Unmarshal(raw, &m); err != nil {
-		return nil, fmt.Errorf("compile schema: invalid json: %w", err)
+		return nil, diagnosticAt("", "invalid_json", "malformed JSON", fmt.Errorf("compile schema: invalid json: %w", err))
 	}
 	node, err := compileNode(m, allowPrefixItems)
 	if err != nil {
@@ -187,11 +190,11 @@ func compileSchema(raw json.RawMessage, allowPrefixItems bool) (*Schema, error) 
 }
 
 func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNode, error) {
-	for k := range m {
+	for ordinal, k := range sortedDiagnosticKeys(m) {
 		if annotationKeywords[k] || structuralKeywords[k] || (allowPrefixItems && k == "prefixItems") {
 			continue
 		}
-		return nil, fmt.Errorf("compile schema: unknown keyword %q", k)
+		return nil, diagnosticAt(diagnosticMember(ordinal), "unknown_schema_keyword", "unknown schema keyword", fmt.Errorf("compile schema: unknown keyword %q", k))
 	}
 
 	n := &schemaNode{additionalProperties: true}
@@ -207,7 +210,7 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if raw, ok := m["required"]; ok {
 		var req []string
 		if err := json.Unmarshal(raw, &req); err != nil {
-			return nil, fmt.Errorf("compile schema: required: %w", err)
+			return nil, diagnosticAt("/required", "schema_keyword_shape_invalid", "required must be an array of property names", fmt.Errorf("compile schema: required: %w", err))
 		}
 		n.required = req
 	}
@@ -215,13 +218,13 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if raw, ok := m["properties"]; ok {
 		var props map[string]map[string]json.RawMessage
 		if err := json.Unmarshal(raw, &props); err != nil {
-			return nil, fmt.Errorf("compile schema: properties: %w", err)
+			return nil, diagnosticAt("/properties", "schema_keyword_shape_invalid", "properties must be an object of schemas", fmt.Errorf("compile schema: properties: %w", err))
 		}
 		n.properties = make(map[string]*schemaNode, len(props))
-		for name, sub := range props {
-			child, err := compileNode(sub, allowPrefixItems)
+		for ordinal, name := range sortedDiagnosticKeys(props) {
+			child, err := compileNode(props[name], allowPrefixItems)
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: properties.%s: %w", name, err)
+				return nil, diagnosticWithin("/properties"+diagnosticMember(ordinal), fmt.Errorf("compile schema: properties.%s: %w", name, err))
 			}
 			n.properties[name] = child
 		}
@@ -231,9 +234,9 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		var props map[string]map[string]json.RawMessage
 		if err := json.Unmarshal(raw, &props); err != nil || props == nil {
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: patternProperties: %w", err)
+				return nil, diagnosticAt("/patternProperties", "schema_keyword_shape_invalid", "patternProperties must be an object of schemas", fmt.Errorf("compile schema: patternProperties: %w", err))
 			}
-			return nil, fmt.Errorf("compile schema: patternProperties must be an object")
+			return nil, diagnosticAt("/patternProperties", "schema_keyword_shape_invalid", "patternProperties must be an object of schemas", fmt.Errorf("compile schema: patternProperties must be an object"))
 		}
 		patterns := make([]string, 0, len(props))
 		for pattern := range props {
@@ -241,14 +244,14 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		}
 		sort.Strings(patterns)
 		n.patternProperties = make([]schemaPatternProperty, 0, len(patterns))
-		for _, pattern := range patterns {
+		for ordinal, pattern := range patterns {
 			compiled, err := regexp.Compile(pattern)
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: patternProperties.%q: %w", pattern, err)
+				return nil, diagnosticAt("/patternProperties"+diagnosticMember(ordinal), "schema_pattern_invalid", "schema pattern cannot be compiled", fmt.Errorf("compile schema: patternProperties.%q: %w", pattern, err))
 			}
 			child, err := compileNode(props[pattern], allowPrefixItems)
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: patternProperties.%s: %w", pattern, err)
+				return nil, diagnosticWithin("/patternProperties"+diagnosticMember(ordinal), fmt.Errorf("compile schema: patternProperties.%s: %w", pattern, err))
 			}
 			n.patternProperties = append(n.patternProperties, schemaPatternProperty{pattern: compiled, schema: child})
 		}
@@ -257,11 +260,11 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if raw, ok := m["items"]; ok {
 		var sub map[string]json.RawMessage
 		if err := json.Unmarshal(raw, &sub); err != nil {
-			return nil, fmt.Errorf("compile schema: items: %w", err)
+			return nil, diagnosticAt("/items", "schema_keyword_shape_invalid", "items must be a schema object", fmt.Errorf("compile schema: items: %w", err))
 		}
 		child, err := compileNode(sub, allowPrefixItems)
 		if err != nil {
-			return nil, fmt.Errorf("compile schema: items: %w", err)
+			return nil, diagnosticWithin("/items", fmt.Errorf("compile schema: items: %w", err))
 		}
 		n.items = child
 	}
@@ -270,18 +273,18 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		var subs []map[string]json.RawMessage
 		if err := json.Unmarshal(raw, &subs); err != nil || len(subs) == 0 {
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: oneOf: %w", err)
+				return nil, diagnosticAt("/oneOf", "schema_keyword_shape_invalid", "oneOf must be an array of schema objects", fmt.Errorf("compile schema: oneOf: %w", err))
 			}
-			return nil, fmt.Errorf("compile schema: oneOf must contain at least one schema object")
+			return nil, diagnosticAt("/oneOf", "schema_alternatives_empty", "oneOf must contain at least one schema object", fmt.Errorf("compile schema: oneOf must contain at least one schema object"))
 		}
 		n.oneOf = make([]*schemaNode, len(subs))
 		for index, sub := range subs {
 			if sub == nil {
-				return nil, fmt.Errorf("compile schema: oneOf.%d must be a schema object", index)
+				return nil, diagnosticAt(fmt.Sprintf("/oneOf/%d", index), "schema_keyword_shape_invalid", "alternative must be a schema object", fmt.Errorf("compile schema: oneOf.%d must be a schema object", index))
 			}
 			child, err := compileNode(sub, allowPrefixItems)
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: oneOf.%d: %w", index, err)
+				return nil, diagnosticWithin(fmt.Sprintf("/oneOf/%d", index), fmt.Errorf("compile schema: oneOf.%d: %w", index, err))
 			}
 			n.oneOf[index] = child
 		}
@@ -291,18 +294,18 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		var subs []map[string]json.RawMessage
 		if err := json.Unmarshal(raw, &subs); err != nil || subs == nil {
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: prefixItems: %w", err)
+				return nil, diagnosticAt("/prefixItems", "schema_keyword_shape_invalid", "prefixItems must be an array of schema objects", fmt.Errorf("compile schema: prefixItems: %w", err))
 			}
-			return nil, fmt.Errorf("compile schema: prefixItems must be an array")
+			return nil, diagnosticAt("/prefixItems", "schema_keyword_shape_invalid", "prefixItems must be an array of schema objects", fmt.Errorf("compile schema: prefixItems must be an array"))
 		}
 		n.prefixItems = make([]*schemaNode, len(subs))
 		for index, sub := range subs {
 			if sub == nil {
-				return nil, fmt.Errorf("compile schema: prefixItems.%d must be a schema object", index)
+				return nil, diagnosticAt(fmt.Sprintf("/prefixItems/%d", index), "schema_keyword_shape_invalid", "alternative must be a schema object", fmt.Errorf("compile schema: prefixItems.%d must be a schema object", index))
 			}
 			child, err := compileNode(sub, allowPrefixItems)
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: prefixItems.%d: %w", index, err)
+				return nil, diagnosticWithin(fmt.Sprintf("/prefixItems/%d", index), fmt.Errorf("compile schema: prefixItems.%d: %w", index, err))
 			}
 			n.prefixItems[index] = child
 		}
@@ -313,7 +316,7 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		dec := json.NewDecoder(strings.NewReader(string(raw)))
 		dec.UseNumber()
 		if err := dec.Decode(&vals); err != nil {
-			return nil, fmt.Errorf("compile schema: enum: %w", err)
+			return nil, diagnosticAt("/enum", "schema_keyword_shape_invalid", "enum must be an array", fmt.Errorf("compile schema: enum: %w", err))
 		}
 		n.enum = vals
 	}
@@ -321,14 +324,14 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if raw, ok := m["pattern"]; ok {
 		var pat string
 		if err := json.Unmarshal(raw, &pat); err != nil {
-			return nil, fmt.Errorf("compile schema: pattern: %w", err)
+			return nil, diagnosticAt("/pattern", "schema_keyword_shape_invalid", "pattern must be a string", fmt.Errorf("compile schema: pattern: %w", err))
 		}
 		if policy, ok := unicodeScalarNoLFPolicyForPattern(pat); ok {
 			n.unicodeScalarNoLF = policy
 		} else {
 			re, err := regexp.Compile(pat)
 			if err != nil {
-				return nil, fmt.Errorf("compile schema: pattern %q: %w", pat, err)
+				return nil, diagnosticAt("/pattern", "schema_pattern_invalid", "schema pattern cannot be compiled", fmt.Errorf("compile schema: pattern %q: %w", pat, err))
 			}
 			n.pattern = re
 		}
@@ -339,7 +342,7 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 
 	if raw, ok := m["format"]; ok {
 		if err := json.Unmarshal(raw, &n.format); err != nil {
-			return nil, fmt.Errorf("compile schema: format: %w", err)
+			return nil, diagnosticAt("/format", "schema_keyword_shape_invalid", "format must be a string", fmt.Errorf("compile schema: format: %w", err))
 		}
 	}
 
@@ -360,7 +363,7 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		n.hasMaxProperties = true
 	}
 	if n.hasMinProperties && n.hasMaxProperties && n.maxProperties < n.minProperties {
-		return nil, fmt.Errorf("compile schema: maxProperties %d is below minProperties %d", n.maxProperties, n.minProperties)
+		return nil, diagnosticAt("/maxProperties", "schema_bounds_conflict", "maxProperties must not be below minProperties", fmt.Errorf("compile schema: maxProperties %d is below minProperties %d", n.maxProperties, n.minProperties))
 	}
 
 	if err := compileArrayCardinality(m, n); err != nil {
@@ -375,7 +378,7 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 		dec := json.NewDecoder(strings.NewReader(string(raw)))
 		dec.UseNumber()
 		if err := dec.Decode(&def); err != nil {
-			return nil, fmt.Errorf("compile schema: default: %w", err)
+			return nil, diagnosticAt("/default", "schema_keyword_shape_invalid", "default must be a JSON value", fmt.Errorf("compile schema: default: %w", err))
 		}
 		n.defaultVal = def
 		n.hasDefault = true
@@ -384,7 +387,7 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if raw, ok := m["additionalProperties"]; ok {
 		var ap bool
 		if err := json.Unmarshal(raw, &ap); err != nil {
-			return nil, fmt.Errorf("compile schema: additionalProperties: only bool form supported: %w", err)
+			return nil, diagnosticAt("/additionalProperties", "schema_keyword_shape_invalid", "additionalProperties must be a boolean", fmt.Errorf("compile schema: additionalProperties: only bool form supported: %w", err))
 		}
 		n.additionalProperties = ap
 		n.hasAdditionalProps = true
@@ -393,14 +396,14 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if raw, ok := m["x-secret"]; ok {
 		var secret bool
 		if err := json.Unmarshal(raw, &secret); err != nil {
-			return nil, fmt.Errorf("compile schema: x-secret: %w", err)
+			return nil, diagnosticAt("/x-secret", "schema_keyword_shape_invalid", "x-secret must be a boolean", fmt.Errorf("compile schema: x-secret: %w", err))
 		}
 		n.secret = secret
 	}
 	if raw, ok := m["x-reject-unknown-config"]; ok {
 		var reject bool
 		if err := json.Unmarshal(raw, &reject); err != nil {
-			return nil, fmt.Errorf("compile schema: x-reject-unknown-config: %w", err)
+			return nil, diagnosticAt("/x-reject-unknown-config", "schema_keyword_shape_invalid", "x-reject-unknown-config must be a boolean", fmt.Errorf("compile schema: x-reject-unknown-config: %w", err))
 		}
 		n.rejectUnknownConfig = reject
 	}
@@ -408,7 +411,7 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if raw, ok := m["x-primary-key"]; ok {
 		var pk []string
 		if err := json.Unmarshal(raw, &pk); err != nil {
-			return nil, fmt.Errorf("compile schema: x-primary-key: %w", err)
+			return nil, diagnosticAt("/x-primary-key", "schema_keyword_shape_invalid", "x-primary-key must be an array of property names", fmt.Errorf("compile schema: x-primary-key: %w", err))
 		}
 		n.primaryKey = pk
 	}
@@ -416,7 +419,7 @@ func compileNode(m map[string]json.RawMessage, allowPrefixItems bool) (*schemaNo
 	if raw, ok := m["x-cursor-field"]; ok {
 		var cf string
 		if err := json.Unmarshal(raw, &cf); err != nil {
-			return nil, fmt.Errorf("compile schema: x-cursor-field: %w", err)
+			return nil, diagnosticAt("/x-cursor-field", "schema_keyword_shape_invalid", "x-cursor-field must be a string", fmt.Errorf("compile schema: x-cursor-field: %w", err))
 		}
 		n.cursorField = cf
 	}
@@ -446,7 +449,7 @@ func compileStringLength(m map[string]json.RawMessage, n *schemaNode) error {
 		n.hasMaxLength = true
 	}
 	if n.hasMinLength && n.hasMaxLength && n.maxLength < n.minLength {
-		return fmt.Errorf("compile schema: maxLength %d is below minLength %d", n.maxLength, n.minLength)
+		return diagnosticAt("/maxLength", "schema_bounds_conflict", "maxLength must not be below minLength", fmt.Errorf("compile schema: maxLength %d is below minLength %d", n.maxLength, n.minLength))
 	}
 	return nil
 }
@@ -514,7 +517,7 @@ func compileArrayCardinality(m map[string]json.RawMessage, n *schemaNode) error 
 		n.hasMaxItems = true
 	}
 	if n.hasMinItems && n.hasMaxItems && n.maxItems < n.minItems {
-		return fmt.Errorf("compile schema: maxItems %d is below minItems %d", n.maxItems, n.minItems)
+		return diagnosticAt("/maxItems", "schema_bounds_conflict", "maxItems must not be below minItems", fmt.Errorf("compile schema: maxItems %d is below minItems %d", n.maxItems, n.minItems))
 	}
 	return nil
 }
@@ -532,18 +535,18 @@ func compileNumericRange(m map[string]json.RawMessage, n *schemaNode) error {
 		decoder.UseNumber()
 		var value any
 		if err := decoder.Decode(&value); err != nil {
-			return nil, false, fmt.Errorf("compile schema: %s: %w", keyword, err)
+			return nil, false, diagnosticAt("/"+keyword, "schema_number_invalid", "schema bound must be a finite number", fmt.Errorf("compile schema: %s: %w", keyword, err))
 		}
 		if err := requireEOF(decoder, "compile schema: "+keyword); err != nil {
-			return nil, false, err
+			return nil, false, diagnosticAt("/"+keyword, "schema_number_invalid", "schema bound must be a finite number", err)
 		}
 		number, ok := value.(json.Number)
 		if !ok {
-			return nil, false, fmt.Errorf("compile schema: %s must be a number", keyword)
+			return nil, false, diagnosticAt("/"+keyword, "schema_number_invalid", "schema bound must be a finite number", fmt.Errorf("compile schema: %s must be a number", keyword))
 		}
 		rat, ok := exactNumber(number)
 		if !ok {
-			return nil, false, fmt.Errorf("compile schema: %s must be a finite number", keyword)
+			return nil, false, diagnosticAt("/"+keyword, "schema_number_invalid", "schema bound must be a finite number", fmt.Errorf("compile schema: %s must be a finite number", keyword))
 		}
 		return rat, true, nil
 	}
@@ -556,7 +559,7 @@ func compileNumericRange(m map[string]json.RawMessage, n *schemaNode) error {
 		return err
 	}
 	if hasMinimum && hasMaximum && maximum.Cmp(minimum) < 0 {
-		return fmt.Errorf("compile schema: maximum %s is below minimum %s", maximum.RatString(), minimum.RatString())
+		return diagnosticAt("/maximum", "schema_bounds_conflict", "maximum must not be below minimum", fmt.Errorf("compile schema: maximum %s is below minimum %s", maximum.RatString(), minimum.RatString()))
 	}
 	n.minimum, n.hasMinimum = minimum, hasMinimum
 	n.maximum, n.hasMaximum = maximum, hasMaximum
@@ -577,10 +580,10 @@ func requireEOF(decoder *json.Decoder, label string) error {
 func compileNonNegativeInt(raw json.RawMessage, keyword string) (int, error) {
 	var v int
 	if err := json.Unmarshal(raw, &v); err != nil {
-		return 0, fmt.Errorf("compile schema: %s: %w", keyword, err)
+		return 0, diagnosticAt("/"+keyword, "schema_bound_invalid", "schema bound must be a non-negative integer", fmt.Errorf("compile schema: %s: %w", keyword, err))
 	}
 	if v < 0 {
-		return 0, fmt.Errorf("compile schema: %s must be non-negative, got %d", keyword, v)
+		return 0, diagnosticAt("/"+keyword, "schema_bound_invalid", "schema bound must be a non-negative integer", fmt.Errorf("compile schema: %s must be non-negative, got %d", keyword, v))
 	}
 	return v, nil
 }
@@ -589,17 +592,17 @@ func compileTypes(raw json.RawMessage) ([]string, error) {
 	var single string
 	if err := json.Unmarshal(raw, &single); err == nil {
 		if !validTypes[single] {
-			return nil, fmt.Errorf("compile schema: unknown type %q", single)
+			return nil, diagnosticAt("/type", "schema_type_invalid", "schema type is not supported", fmt.Errorf("compile schema: unknown type %q", single))
 		}
 		return []string{single}, nil
 	}
 	var multi []string
 	if err := json.Unmarshal(raw, &multi); err != nil {
-		return nil, fmt.Errorf("compile schema: type: %w", err)
+		return nil, diagnosticAt("/type", "schema_type_invalid", "schema type is not supported", fmt.Errorf("compile schema: type: %w", err))
 	}
 	for _, t := range multi {
 		if !validTypes[t] {
-			return nil, fmt.Errorf("compile schema: unknown type %q", t)
+			return nil, diagnosticAt("/type", "schema_type_invalid", "schema type is not supported", fmt.Errorf("compile schema: unknown type %q", t))
 		}
 	}
 	return multi, nil
@@ -613,18 +616,28 @@ func (s *Schema) Validate(v any) error {
 }
 
 func (n *schemaNode) validate(v any, path string) error {
+	return n.validateAt(v, path, path)
+}
+
+func (n *schemaNode) validateAt(v any, path, safePath string) (validationErr error) {
+	defer func() {
+		var located *schemaValidationError
+		if validationErr != nil && !errors.As(validationErr, &located) {
+			validationErr = &schemaValidationError{path: safePath, code: "schema_validation_failed", reason: "schema validation failed", cause: validationErr}
+		}
+	}()
 	if len(n.types) > 0 && !typeMatches(v, n.types) {
-		return fmt.Errorf("%s: value does not match type %v", displayPath(path), n.types)
+		return diagnosticAt(safePath, "type_mismatch", "value does not match the required type", fmt.Errorf("%s: value does not match type %v", displayPath(path), n.types))
 	}
 	if len(n.oneOf) != 0 {
 		matches := 0
 		for _, alternative := range n.oneOf {
-			if err := alternative.validate(v, path); err == nil {
+			if err := alternative.validateAt(v, path, safePath); err == nil {
 				matches++
 			}
 		}
 		if matches != 1 {
-			return fmt.Errorf("%s: oneOf expected exactly one schema match, got %d", displayPath(path), matches)
+			return diagnosticAt(safePath, "one_of_mismatch", "expected exactly one schema alternative", fmt.Errorf("%s: oneOf expected exactly one schema match, got %d", displayPath(path), matches))
 		}
 	}
 
@@ -637,15 +650,15 @@ func (n *schemaNode) validate(v any, path string) error {
 			}
 		}
 		if !matched {
-			return fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum)
+			return diagnosticAt(safePath, "enum_mismatch", "value is not an allowed alternative", fmt.Errorf("%s: value not in enum %v", displayPath(path), n.enum))
 		}
 	}
 	if number, ok := exactNumber(v); ok {
 		if n.hasMinimum && number.Cmp(n.minimum) < 0 {
-			return fmt.Errorf("%s: minimum %s not satisfied (got %s)", displayPath(path), n.minimum.RatString(), number.RatString())
+			return diagnosticAt(safePath, "minimum_not_satisfied", "value is below the minimum", fmt.Errorf("%s: minimum %s not satisfied (got %s)", displayPath(path), n.minimum.RatString(), number.RatString()))
 		}
 		if n.hasMaximum && number.Cmp(n.maximum) > 0 {
-			return fmt.Errorf("%s: maximum %s exceeded (got %s)", displayPath(path), n.maximum.RatString(), number.RatString())
+			return diagnosticAt(safePath, "maximum_exceeded", "value exceeds the maximum", fmt.Errorf("%s: maximum %s exceeded (got %s)", displayPath(path), n.maximum.RatString(), number.RatString()))
 		}
 	}
 
@@ -653,23 +666,23 @@ func (n *schemaNode) validate(v any, path string) error {
 	case string:
 		if n.unicodeScalarNoLF != nil {
 			if err := n.unicodeScalarNoLF.validate(val); err != nil {
-				return fmt.Errorf("%s: %w", displayPath(path), err)
+				return diagnosticAt(safePath, "unicode_policy_mismatch", "value does not satisfy the closed Unicode-scalar no-LF policy", fmt.Errorf("%s: %w", displayPath(path), err))
 			}
 		}
 		if n.pattern != nil && !n.pattern.MatchString(val) {
-			return fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String())
+			return diagnosticAt(safePath, "pattern_mismatch", "value does not match the required pattern", fmt.Errorf("%s: value does not match pattern %q", displayPath(path), n.pattern.String()))
 		}
 		if n.hasMinLength && len([]rune(val)) < n.minLength {
-			return fmt.Errorf("%s: minLength %d not satisfied (got %d)", displayPath(path), n.minLength, len([]rune(val)))
+			return diagnosticAt(safePath, "string_too_short", "string is too short", fmt.Errorf("%s: minLength %d not satisfied (got %d)", displayPath(path), n.minLength, len([]rune(val))))
 		}
 		if n.hasMaxLength && len([]rune(val)) > n.maxLength {
-			return fmt.Errorf("%s: maxLength %d exceeded (got %d)", displayPath(path), n.maxLength, len([]rune(val)))
+			return diagnosticAt(safePath, "string_too_long", "string is too long", fmt.Errorf("%s: maxLength %d exceeded (got %d)", displayPath(path), n.maxLength, len([]rune(val))))
 		}
 		if n.format == "uri" && !validURI(val) {
-			return fmt.Errorf("%s: value does not match format %q", displayPath(path), n.format)
+			return diagnosticAt(safePath, "format_mismatch", "value does not match the required format", fmt.Errorf("%s: value does not match format %q", displayPath(path), n.format))
 		}
 	case map[string]any:
-		if err := n.validateObject(val, path); err != nil {
+		if err := n.validateObject(val, path, safePath); err != nil {
 			return err
 		}
 	}
@@ -679,18 +692,18 @@ func (n *schemaNode) validate(v any, path string) error {
 		// required + minItems, exactly as it is in real draft-07 — enforcing on
 		// an absent value instead would silently change the meaning of every
 		// optional array field already declared in a bundle.
-		if err := n.validateArrayCardinality(len(elems), path); err != nil {
+		if err := n.validateArrayCardinality(len(elems), path, safePath); err != nil {
 			return err
 		}
 		for i, elem := range elems {
 			if i < len(n.prefixItems) {
-				if err := n.prefixItems[i].validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+				if err := n.prefixItems[i].validateAt(elem, fmt.Sprintf("%s/%d", path, i), fmt.Sprintf("%s/%d", safePath, i)); err != nil {
 					return err
 				}
 				continue
 			}
 			if n.items != nil {
-				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+				if err := n.items.validateAt(elem, fmt.Sprintf("%s/%d", path, i), fmt.Sprintf("%s/%d", safePath, i)); err != nil {
 					return err
 				}
 			}
@@ -710,27 +723,31 @@ func validURI(value string) bool {
 	return err == nil && parsed.IsAbs()
 }
 
-func (n *schemaNode) validateArrayCardinality(count int, path string) error {
+func (n *schemaNode) validateArrayCardinality(count int, path, safePath string) error {
 	if n.hasMinItems && count < n.minItems {
-		return fmt.Errorf("%s: minItems %d not satisfied (got %d)", displayPath(path), n.minItems, count)
+		return diagnosticAt(safePath, "array_too_short", "array has too few items", fmt.Errorf("%s: minItems %d not satisfied (got %d)", displayPath(path), n.minItems, count))
 	}
 	if n.hasMaxItems && count > n.maxItems {
-		return fmt.Errorf("%s: maxItems %d exceeded (got %d)", displayPath(path), n.maxItems, count)
+		return diagnosticAt(safePath, "array_too_long", "array has too many items", fmt.Errorf("%s: maxItems %d exceeded (got %d)", displayPath(path), n.maxItems, count))
 	}
 	return nil
 }
 
-func (n *schemaNode) validateObject(obj map[string]any, path string) error {
+func (n *schemaNode) validateObject(obj map[string]any, path, safePath string) error {
 	if n.hasMinProperties && len(obj) < n.minProperties {
-		return fmt.Errorf("%s: minProperties %d not satisfied (got %d)", displayPath(path), n.minProperties, len(obj))
+		return diagnosticAt(safePath, "object_too_small", "object has too few properties", fmt.Errorf("%s: minProperties %d not satisfied (got %d)", displayPath(path), n.minProperties, len(obj)))
 	}
 	if n.hasMaxProperties && len(obj) > n.maxProperties {
-		return fmt.Errorf("%s: maxProperties %d exceeded (got %d)", displayPath(path), n.maxProperties, len(obj))
+		return diagnosticAt(safePath, "object_too_large", "object has too many properties", fmt.Errorf("%s: maxProperties %d exceeded (got %d)", displayPath(path), n.maxProperties, len(obj)))
 	}
 
-	for _, req := range n.required {
+	for index, req := range n.required {
 		if _, ok := obj[req]; !ok {
-			return fmt.Errorf("%s/%s: required property missing", displayPath(path), req)
+			location := fmt.Sprintf("%s/required/%d", safePath, index)
+			if n.trustedProperties {
+				location = safePath + diagnosticProperty(req)
+			}
+			return diagnosticAt(location, "required_property_missing", "required property is missing", fmt.Errorf("%s/%s: required property missing", displayPath(path), req))
 		}
 	}
 
@@ -739,11 +756,16 @@ func (n *schemaNode) validateObject(obj map[string]any, path string) error {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
-	for _, k := range keys {
+	for ordinal, k := range keys {
+		memberPath := safePath + diagnosticMember(ordinal)
 		declared := false
 		if child, ok := n.properties[k]; ok {
 			declared = true
-			if err := child.validate(obj[k], path+"/"+k); err != nil {
+			childPath := memberPath
+			if n.trustedProperties {
+				childPath = safePath + diagnosticProperty(k)
+			}
+			if err := child.validateAt(obj[k], path+"/"+k, childPath); err != nil {
 				return err
 			}
 		}
@@ -752,12 +774,12 @@ func (n *schemaNode) validateObject(obj map[string]any, path string) error {
 				continue
 			}
 			declared = true
-			if err := pattern.schema.validate(obj[k], path+"/"+k); err != nil {
+			if err := pattern.schema.validateAt(obj[k], path+"/"+k, memberPath); err != nil {
 				return err
 			}
 		}
 		if n.hasAdditionalProps && !n.additionalProperties && !declared {
-			return fmt.Errorf("%s/%s: additional property not allowed", displayPath(path), k)
+			return diagnosticAt(memberPath, "unknown_property", "additional property is not allowed", fmt.Errorf("%s/%s: additional property not allowed", displayPath(path), k))
 		}
 	}
 

@@ -272,6 +272,15 @@ func (s *BundleStore) oldestUnheldLocked() *list.Element {
 func (s *BundleStore) load(key bundleIdentity, entry manifestindex.Entry, pending *bundleFlight) {
 	loaded, err := s.loader(pending.ctx, entry)
 	bundle := loaded.Bundle
+	var diagnostic *engine.BundleDiagnosticError
+	if errors.As(err, &diagnostic) {
+		bound := *diagnostic
+		bound.Connector = entry.Connector
+		bound.Generation = entry.Generation
+		bound.Digest = entry.Digest
+		bound.Cause = err
+		err = &bound
+	}
 	if err == nil && !loadedIdentityMatches(entry, loaded) {
 		err = fmt.Errorf("%w: loaded generation for %q", ErrBundleIdentityMismatch, entry.Connector)
 	}

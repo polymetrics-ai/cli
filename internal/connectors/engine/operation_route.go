@@ -44,26 +44,26 @@ func operationRouteFailure(b Bundle, operation, route, reason string) error {
 func validateOperationRoutes(b Bundle, streams []StreamSpec, writes []WriteAction, operations []OperationSpec) error {
 	routes, err := declaredOperationRoutes(b)
 	if err != nil {
-		return err
+		return &bundleFileError{file: "streams.json", cause: err}
 	}
 
-	for _, stream := range streams {
+	for index, stream := range streams {
 		if err := validateOperationRouteSelection(b, routes, stream.Route, stream.Name, stream.Path); err != nil {
-			return err
+			return &bundleFileError{file: "streams.json", cause: diagnosticAt(fmt.Sprintf("/streams/%d/route", index), "route_selection_invalid", "route must select a declared route with a matching version", err)}
 		}
 	}
-	for _, action := range writes {
+	for index, action := range writes {
 		if strings.TrimSpace(action.Route) != "" && strings.TrimSpace(action.BaseURL) != "" {
-			return fmt.Errorf("write action %q declares both route and base_url", action.Name)
+			return &bundleFileError{file: "writes.json", cause: diagnosticAt(fmt.Sprintf("/actions/%d/route", index), "route_base_conflict", "write action cannot declare both route and base_url", fmt.Errorf("write action %q declares both route and base_url", action.Name))}
 		}
 		if err := validateOperationRouteSelection(b, routes, action.Route, action.Name, action.Path); err != nil {
-			return err
+			return &bundleFileError{file: "writes.json", cause: diagnosticAt(fmt.Sprintf("/actions/%d/route", index), "route_selection_invalid", "route must select a declared route with a matching version", err)}
 		}
 	}
-	for _, operation := range operations {
+	for index, operation := range operations {
 		path := operationRoutePath(operation)
 		if err := validateOperationRouteSelection(b, routes, operation.Route, operation.ID, path); err != nil {
-			return err
+			return &bundleFileError{file: "operations.json", cause: diagnosticAt(fmt.Sprintf("/operations/%d/route", index), "route_selection_invalid", "route must select a declared route with a matching version", err)}
 		}
 	}
 	return nil
@@ -84,16 +84,16 @@ func declaredOperationRoutes(b Bundle) (map[string]OperationRouteSpec, error) {
 			return nil, fmt.Errorf("base route %d name %q must not contain surrounding whitespace", i, route.Name)
 		}
 		if err := validateOperationRouteBase(route.BaseURL); err != nil {
-			return nil, fmt.Errorf("base route %q: %w", name, err)
+			return nil, diagnosticAt(fmt.Sprintf("/base/routes/%d/base_url", i), "route_origin_invalid", "route base_url must be a fixed HTTP origin or the declared base_url template", fmt.Errorf("base route %q: %w", name, err))
 		}
 		if err := validateOperationRouteVersion(route.Version); err != nil {
-			return nil, fmt.Errorf("base route %q: %w", name, err)
+			return nil, diagnosticAt(fmt.Sprintf("/base/routes/%d/version", i), "route_version_invalid", "route version must be one path segment", fmt.Errorf("base route %q: %w", name, err))
 		}
 		if prior, exists := routes[name]; exists {
 			if prior.BaseURL != route.BaseURL || prior.Version != route.Version {
-				return nil, fmt.Errorf("base route %q declares conflicting bases", name)
+				return nil, diagnosticAt(fmt.Sprintf("/base/routes/%d/name", i), "route_name_duplicate", "route name is duplicated", fmt.Errorf("base route %q declares conflicting bases", name))
 			}
-			return nil, fmt.Errorf("base route %q is declared more than once", name)
+			return nil, diagnosticAt(fmt.Sprintf("/base/routes/%d/name", i), "route_name_duplicate", "route name is duplicated", fmt.Errorf("base route %q is declared more than once", name))
 		}
 		routes[name] = route
 	}

@@ -206,6 +206,12 @@ func TestBundleLoadAcceptsDeclaredStaticVendorStreamHeaders(t *testing.T) {
 }
 
 func TestBundleLoadRejectsUnsafeStaticStreamHeaders(t *testing.T) {
+	public := map[string]struct{ field, code, reason string }{
+		"authorization": {"/streams/0/headers/<member:0>", "stream_header_unsupported", "only fixed Accept headers are supported"},
+		"interpolation": {"/streams/0/headers/Accept", "stream_header_dynamic", "Accept header must be static"},
+		"generic media": {"/streams/0/headers/Accept", "stream_header_media_invalid", "Accept header must be one fixed vendor JSON media type"},
+		"parameters":    {"/streams/0/headers/Accept", "stream_header_media_invalid", "Accept header must be one fixed vendor JSON media type"},
+	}
 	for _, testCase := range []struct {
 		name    string
 		headers string
@@ -219,7 +225,12 @@ func TestBundleLoadRejectsUnsafeStaticStreamHeaders(t *testing.T) {
 		t.Run(testCase.name, func(t *testing.T) {
 			fsys := fullValidBundleFS("acme")
 			fsys["acme/streams.json"] = &fstest.MapFile{Data: []byte(strings.Replace(validStreams, `"schema": "schemas/widgets.json"`, `"headers": `+testCase.headers+`, "schema": "schemas/widgets.json"`, 1))}
-			if _, err := Load(fsys, "acme"); err == nil || !strings.Contains(err.Error(), testCase.want) {
+			_, err := Load(fsys, "acme")
+			want, ok := public[testCase.name]
+			if !ok || !publicBundleMatches167(err, "streams.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public header diagnostic: %v", err)
+			}
+			if err == nil || !strings.Contains(bundleCauseText165(err), testCase.want) {
 				t.Fatalf("Load error = %v, want %q", err, testCase.want)
 			}
 		})
@@ -254,7 +265,11 @@ func TestBundleLoadRejectsDuplicateWriteActionNames(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
-	if err == nil || !strings.Contains(err.Error(), `duplicates write action name "apply_widget"`) {
+	if !publicBundleMatches167(err, "writes.json", "/actions/1/name", "write_name_duplicate", "write action name is duplicated") {
+		t.Fatalf("wrong public declaration diagnostic: %v", err)
+	}
+
+	if err == nil || !strings.Contains(bundleCauseText165(err), `duplicates write action name "apply_widget"`) {
 		t.Fatalf("Load duplicate action names error = %v, want duplicate-name rejection", err)
 	}
 }
@@ -428,7 +443,11 @@ func TestBundleLoadRejectsUnsupportedChangefeedWithExecutor(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
-	if err == nil || !strings.Contains(err.Error(), "unsupported changefeed cannot declare an executor") {
+	if !publicBundleMatches167(err, "changefeed.json", "/status", "changefeed_unsupported_execution", "unsupported changefeed cannot declare an executor, checkpoint, delivery, or polling watermark") {
+		t.Fatalf("wrong public declaration diagnostic: %v", err)
+	}
+
+	if err == nil || !strings.Contains(bundleCauseText165(err), "unsupported changefeed cannot declare an executor") {
 		t.Fatalf("Load error = %v, want unsupported executor rejection", err)
 	}
 }
@@ -665,6 +684,34 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 		},
 	}
 
+	public := map[string]struct{ field, code, reason string }{
+		"policy lacks provider source":                                           {"/policies/0/source", "required_property_missing", "required property is missing"},
+		"policy scope must name a non-secret config key":                         {"/policies/0/scope/subject_config", "required_property_missing", "required property is missing"},
+		"policy scope kind must be declared":                                     {"/policies/0/scope/subject_kind", "enum_mismatch", "value is not an allowed alternative"},
+		"policy scope config must exist in spec":                                 {"/policies/0/scope/subject_config", "scope_property_absent", "subject_config must name a spec.json property"},
+		"policy scope config cannot be secret":                                   {"/policies/0/scope/subject_config", "scope_property_secret", "subject_config must name a non-secret spec.json property"},
+		"retrieval date is not a date":                                           {"/policies/0/source/retrieved_at", "source_date_invalid", "retrieved_at must be an ISO date"},
+		"unknown cannot publish a policy":                                        {"/reason", "reason_required", "state requires a nonblank reason"},
+		"not applicable requires a reason":                                       {"/reason", "reason_required", "state requires a nonblank reason"},
+		"all selector cannot exclude endpoints":                                  {"/policies/0/selector", "selector_conflict", "all cannot be combined with endpoint, tier, or auth selectors"},
+		"leaky bucket needs a positive restore rate":                             {"/policies/0/budgets/1/restore_per_second", "positive_number_required", "value must be a positive number"},
+		"policy cannot declare multiple cost headers":                            {"/policies/0/budgets/1/cost/response_header", "cost_headers_conflict", "cost response_header must name at most one header per policy"},
+		"provider source cannot carry credentials":                               {"/policies/0/source/url", "source_url_invalid", "source URL must be absolute HTTPS without userinfo or query parameters"},
+		"provider source cannot carry credential-like query parameters":          {"/policies/0/source/url", "source_url_invalid", "source URL must be absolute HTTPS without userinfo or query parameters"},
+		"provider source cannot carry credential-like fragment parameters":       {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry access key fragment parameters":            {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry hyphenated access key fragment parameters": {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry dotted access key fragment parameters":     {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry api token fragment parameters":             {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry hyphenated api token fragment parameters":  {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot carry dotted api token fragment parameters":      {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"provider source cannot hide credential-like fragment parameters":        {"/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters"},
+		"endpoint must be connector relative":                                    {"/policies/0/selector/endpoints/0/path", "selector_path_invalid", "endpoint path must be rooted and connector-relative"},
+		"endpoint path cannot carry outer whitespace":                            {"/policies/0/selector/endpoints/0/path", "selector_path_invalid", "endpoint path must be rooted and connector-relative"},
+		"cost header must be an HTTP field name":                                 {"/policies/0/budgets/0/cost/response_header", "cost_header_invalid", "cost response_header must be an HTTP field name"},
+		"cost header cannot be whitespace":                                       {"/policies/0/budgets/0/cost/response_header", "cost_header_invalid", "cost response_header must be an HTTP field name"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fsys := fullValidBundleFS("acme")
@@ -673,7 +720,12 @@ func TestBundleLoadRejectsUncitedOrMalformedRateLimits(t *testing.T) {
 			if err == nil {
 				t.Fatal("Load: expected error")
 			}
-			if !strings.Contains(err.Error(), "rate_limits.json") || !strings.Contains(err.Error(), tt.want) {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "rate_limits.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public rate diagnostic: %v", err)
+			}
+
+			if !strings.Contains(bundleCauseText165(err), "rate_limits.json") || !strings.Contains(bundleCauseText165(err), tt.want) {
 				t.Fatalf("Load error = %q, want rate_limits.json and %q", err, tt.want)
 			}
 		})
@@ -704,11 +756,15 @@ func TestBundleLoadRejectsOverlappingRateLimitCostHeaders(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "rate_limits.json", "/policies/1/budgets", "policy_cost_headers_conflict", "overlapping policies must not declare different cost response headers") {
+		t.Fatalf("wrong public rate diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatal("Load: expected overlapping actual-cost headers to be rejected")
 	}
 	for _, want := range []string{"rate_limits.json", "connector-points", "graphql-points"} {
-		if !strings.Contains(err.Error(), want) {
+		if !strings.Contains(bundleCauseText165(err), want) {
 			t.Fatalf("Load error = %q, want %q", err, want)
 		}
 	}
@@ -786,7 +842,11 @@ func TestBundleLoadRejectsCredentialLikeRateLimitFragmentKeyVariants(t *testing.
 			))}
 
 			_, err := Load(fsys, "acme")
-			if err == nil || !strings.Contains(err.Error(), "credential-like fragment") {
+			if !publicBundleMatches167(err, "rate_limits.json", "/policies/0/source/url", "source_url_fragment_invalid", "source URL must not carry credential-like fragment parameters") {
+				t.Fatalf("wrong public rate diagnostic: %v", err)
+			}
+
+			if err == nil || !strings.Contains(bundleCauseText165(err), "credential-like fragment") {
 				t.Fatalf("Load error = %v, want credential-like fragment rejection", err)
 			}
 		})
@@ -897,11 +957,15 @@ func TestBundleLoadRejectsGraphQLWriteWithoutGraphQLBlock(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "writes.json", "/actions/0/graphql", "write_graphql_missing", "body_type graphql requires graphql") {
+		t.Fatalf("wrong public declaration diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("Load: expected body_type graphql without graphql block to fail")
 	}
-	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "body_type graphql requires graphql") {
-		t.Fatalf("Load error = %q, want graphql block requirement", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "writes.json") || !strings.Contains(bundleCauseText165(err), "body_type graphql requires graphql") {
+		t.Fatalf("Load error = %q, want graphql block requirement", bundleCauseText165(err))
 	}
 }
 
@@ -928,8 +992,8 @@ func TestBundleLoadRejectsTemplatedGraphQLDocument(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected templated GraphQL document to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "fixed bundle metadata") {
-		t.Fatalf("Load error = %q, want fixed document rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "fixed bundle metadata") {
+		t.Fatalf("Load error = %q, want fixed document rejection", bundleCauseText165(err))
 	}
 }
 
@@ -955,11 +1019,15 @@ func TestBundleLoadRejectsGraphQLWriteQueryDocument(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "writes.json", "/actions/0/graphql/document", "graphql_document_kind_invalid", "GraphQL document must match the declared operation kind") {
+		t.Fatalf("wrong public diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("Load: expected query document in write action to fail")
 	}
-	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "must start with mutation") {
-		t.Fatalf("Load error = %q, want mutation document rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "writes.json") || !strings.Contains(bundleCauseText165(err), "must start with mutation") {
+		t.Fatalf("Load error = %q, want mutation document rejection", bundleCauseText165(err))
 	}
 }
 
@@ -989,8 +1057,8 @@ func TestBundleLoadRejectsGraphQLVariableUnsupportedType(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected unsupported GraphQL variable type to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "unsupported type") {
-		t.Fatalf("Load error = %q, want unsupported type rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "unsupported type") {
+		t.Fatalf("Load error = %q, want unsupported type rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1048,8 +1116,8 @@ func TestBundleLoadRejectsGraphQLVariableDefaultNonString(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected non-string default to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default must be a string") {
-		t.Fatalf("Load error = %q, want default string rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "default must be a string") {
+		t.Fatalf("Load error = %q, want default string rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1079,8 +1147,8 @@ func TestBundleLoadRejectsGraphQLVariableOmitWhenEmptyNonBoolean(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected non-boolean omit_when_empty to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "omit_when_empty must be a boolean") {
-		t.Fatalf("Load error = %q, want omit_when_empty boolean rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "omit_when_empty must be a boolean") {
+		t.Fatalf("Load error = %q, want omit_when_empty boolean rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1110,8 +1178,8 @@ func TestBundleLoadRejectsGraphQLVariableDefaultTypeMismatch(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected default/type mismatch to fail")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "default") {
-		t.Fatalf("Load error = %q, want default/type mismatch rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "default") {
+		t.Fatalf("Load error = %q, want default/type mismatch rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1390,13 +1458,26 @@ func TestBundleLoadRejectsInvalidStatusAndTextExportDeclarations(t *testing.T) {
 		},
 	}
 
+	public := map[string]struct{ field, code, reason string }{
+		"status cannot declare JSON response body policy": {"/operations/0/output_policy", "status_output_invalid", "rest_status output_policy must be status"},
+		"status cannot declare a request body":            {"/operations/0/rest", "status_body_forbidden", "rest_status must not declare a request body"},
+		"status requires HEAD":                            {"/operations/0/rest/method", "status_method_invalid", "rest_status method must be HEAD"},
+		"text export requires a positive byte bound":      {"/operations/0/binary/max_bytes", "text_export_bound_invalid", "text_export must declare positive max_bytes"},
+		"text export requires the binary execution block": {"/operations/0/kind", "operation_execution_kind_mismatch", "execution block must match the operation kind"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			fsys := fullValidBundleFS("acme")
 			fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{"operations":[` + tt.operation + `]}`)}
 
 			_, err := Load(fsys, "acme")
-			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "operations.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public status/export diagnostic: %v", err)
+			}
+
+			if err == nil || !strings.Contains(bundleCauseText165(err), tt.wantErr) {
 				t.Fatalf("Load error = %v, want %q", err, tt.wantErr)
 			}
 		})
@@ -1468,10 +1549,14 @@ func TestBundleLoadRejectsUnsafeOperationKind(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected unsafe operation kind to be rejected")
 	}
-	if !strings.Contains(err.Error(), "operations.json") ||
-		!strings.Contains(err.Error(), "/operations/0/kind") ||
-		!strings.Contains(err.Error(), "not in enum") {
-		t.Fatalf("Load error = %q, want operations.json kind enum rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/kind", "enum_mismatch", "value is not an allowed alternative") {
+		t.Fatalf("wrong public operation kind diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "operations.json") ||
+		!strings.Contains(bundleCauseText165(err), "/operations/0/kind") ||
+		!strings.Contains(bundleCauseText165(err), "not in enum") {
+		t.Fatalf("Load error = %q, want operations.json kind enum rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1498,10 +1583,10 @@ func TestBundleLoadRejectsOperationWithoutMatchingBlock(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected graphql_query without graphql block to be rejected")
 	}
-	if !strings.Contains(err.Error(), "operations.json") ||
-		!strings.Contains(err.Error(), "graphql_query") ||
-		!strings.Contains(err.Error(), "graphql") {
-		t.Fatalf("Load error = %q, want operations.json matching-block rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "operations.json") ||
+		!strings.Contains(bundleCauseText165(err), "graphql_query") ||
+		!strings.Contains(bundleCauseText165(err), "graphql") {
+		t.Fatalf("Load error = %q, want operations.json matching-block rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1529,12 +1614,16 @@ func TestBundleLoadRejectsOperationWithMultipleExecutionBlocks(t *testing.T) {
 	}`)}
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "operations.json", "/operations/0", "operation_execution_count_invalid", "operation must declare exactly one execution block") {
+		t.Fatalf("wrong public diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("Load: expected operation with multiple execution blocks to be rejected")
 	}
-	if !strings.Contains(err.Error(), "operations.json") ||
-		!strings.Contains(err.Error(), "exactly one execution block") {
-		t.Fatalf("Load error = %q, want operations.json single-block rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "operations.json") ||
+		!strings.Contains(bundleCauseText165(err), "exactly one execution block") {
+		t.Fatalf("Load error = %q, want operations.json single-block rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1561,11 +1650,11 @@ func TestBundleLoadRejectsSecretOperationWithoutPolicy(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected secret-sensitive operation without sensitive_policy to be rejected")
 	}
-	if !strings.Contains(err.Error(), "sensitive_policy") {
-		t.Fatalf("Load error = %q, want sensitive_policy rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "sensitive_policy") {
+		t.Fatalf("Load error = %q, want sensitive_policy rejection", bundleCauseText165(err))
 	}
-	if strings.Contains(err.Error(), "redact_fields") {
-		t.Fatalf("Load error = %q, must not require redact_fields", err.Error())
+	if strings.Contains(bundleCauseText165(err), "redact_fields") {
+		t.Fatalf("Load error = %q, must not require redact_fields", bundleCauseText165(err))
 	}
 }
 
@@ -1578,8 +1667,12 @@ func TestBundleLoadRejectsInlineInputModeForSecretOperation(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected inline input_mode for a secret operation to be rejected")
 	}
-	if !strings.Contains(err.Error(), "inline") || !strings.Contains(err.Error(), "input_mode") {
-		t.Fatalf("Load error = %q, want inline input_mode rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/sensitive_policy/input_mode", "sensitive_input_inline", "secret input must come from env, file, or stdin") {
+		t.Fatalf("wrong public operation diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "inline") || !strings.Contains(bundleCauseText165(err), "input_mode") {
+		t.Fatalf("Load error = %q, want inline input_mode rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1628,8 +1721,12 @@ func TestBundleLoadRejectsSecretOperationWithoutTypedConfirmation(t *testing.T) 
 	if err == nil {
 		t.Fatalf("Load: expected secret operation without typed_confirmation to be rejected")
 	}
-	if !strings.Contains(err.Error(), "typed_confirmation") {
-		t.Fatalf("Load error = %q, want typed_confirmation rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/sensitive_policy/approval_mode", "sensitive_approval_invalid", "secret writes require typed_confirmation") {
+		t.Fatalf("wrong public operation diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "typed_confirmation") {
+		t.Fatalf("Load error = %q, want typed_confirmation rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1727,9 +1824,9 @@ func TestBundleLoadRejectsDuplicateOperationIDs(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected duplicate operation IDs to be rejected")
 	}
-	if !strings.Contains(err.Error(), "operations.json") ||
-		!strings.Contains(err.Error(), "duplicate operation id") {
-		t.Fatalf("Load error = %q, want duplicate operation id rejection", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "operations.json") ||
+		!strings.Contains(bundleCauseText165(err), "duplicate operation id") {
+		t.Fatalf("Load error = %q, want duplicate operation id rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1757,8 +1854,12 @@ func TestBundleLoadRejectsRestWriteWithReadMethod(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected rest_write with GET to be rejected")
 	}
-	if !strings.Contains(err.Error(), "rest_write method must be mutating") {
-		t.Fatalf("Load error = %q, want rest_write method rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/rest/method", "rest_write_method_invalid", "rest_write method must be mutating") {
+		t.Fatalf("wrong public operation diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "rest_write method must be mutating") {
+		t.Fatalf("Load error = %q, want rest_write method rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1785,8 +1886,12 @@ func TestBundleLoadRejectsBinaryDownloadWithoutPositiveLimit(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected binary_download without max_bytes to be rejected")
 	}
-	if !strings.Contains(err.Error(), "binary_download must declare positive max_bytes") {
-		t.Fatalf("Load error = %q, want binary max_bytes rejection", err.Error())
+	if !publicBundleMatches167(err, "operations.json", "/operations/0/binary/max_bytes", "binary_bound_invalid", "binary_download must declare positive max_bytes") {
+		t.Fatalf("wrong public operation diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "binary_download must declare positive max_bytes") {
+		t.Fatalf("Load error = %q, want binary max_bytes rejection", bundleCauseText165(err))
 	}
 }
 
@@ -1846,8 +1951,12 @@ func TestBundleLoadRejectsUnknownCLISurfaceCommandKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown cli_surface command key")
 	}
-	if !strings.Contains(err.Error(), "cli_surface.json") || !strings.Contains(err.Error(), "surprise") {
-		t.Fatalf("Load error = %q, want it to name cli_surface.json and surprise", err.Error())
+	if !publicBundleMatches167(err, "cli_surface.json", "/commands/0/<member:5>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "cli_surface.json") || !strings.Contains(bundleCauseText165(err), "surprise") {
+		t.Fatalf("Load error = %q, want it to name cli_surface.json and surprise", bundleCauseText165(err))
 	}
 }
 
@@ -1872,6 +1981,10 @@ func TestBundleLoadStreamsRequiredWithoutDynamicSchema(t *testing.T) {
 	delete(fsys, "acme/streams.json")
 
 	_, err := Load(fsys, "acme")
+	if !publicBundleMatches167(err, "streams.json", "/", "bundle_file_missing", "readable connector requires streams.json unless dynamic_schema is declared") {
+		t.Fatalf("wrong public declaration diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("expected error: streams.json required when dynamic_schema=false")
 	}
@@ -1888,8 +2001,8 @@ func TestBundleLoadDirNameMismatch(t *testing.T) {
 	if err == nil {
 		t.Fatalf("expected dir-name/metadata.name mismatch error")
 	}
-	if !strings.Contains(err.Error(), "actual-dir") || !strings.Contains(err.Error(), "declared-name") {
-		t.Fatalf("error %q does not name both dir and metadata name", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "actual-dir") || !strings.Contains(bundleCauseText165(err), "declared-name") {
+		t.Fatalf("error %q does not name both dir and metadata name", bundleCauseText165(err))
 	}
 }
 
@@ -1898,11 +2011,16 @@ func TestBundleLoadBadNameRegex(t *testing.T) {
 	fsys["Source-GitHub/metadata.json"] = &fstest.MapFile{Data: []byte(validMetadata("Source-GitHub"))}
 
 	_, err := Load(fsys, "Source-GitHub")
+	var diagnostic *BundleDiagnosticError
+	if !errors.As(err, &diagnostic) || diagnostic.Connector != "Source-GitHub" || diagnostic.Generation != "embedded-v1" || diagnostic.File != "metadata.json" || diagnostic.Field != "/name" || diagnostic.ReasonCode != "pattern_mismatch" || diagnostic.Reason != "value does not match the required pattern" {
+		t.Fatalf("wrong public name diagnostic: %v", err)
+	}
+
 	if err == nil {
 		t.Fatalf("expected bad name regex error")
 	}
-	if !strings.Contains(err.Error(), "Source-GitHub") {
-		t.Fatalf("error %q does not name the offending value", err.Error())
+	if !strings.Contains(bundleCauseText165(err), "Source-GitHub") {
+		t.Fatalf("error %q does not name the offending value", bundleCauseText165(err))
 	}
 }
 
@@ -2219,8 +2337,12 @@ func TestBundleLoadRejectsUnknownBaseLevelKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown base-level key %q, got nil", "query")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "query") {
-		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", err.Error(), "query")
+	if !publicBundleMatches167(err, "streams.json", "/base/<member:1>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "query") {
+		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", bundleCauseText165(err), "query")
 	}
 }
 
@@ -2331,8 +2453,12 @@ func TestBundleLoadRejectsUnknownStreamLevelKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown stream-level key %q, got nil", "not_a_real_field")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "not_a_real_field") {
-		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", err.Error(), "not_a_real_field")
+	if !publicBundleMatches167(err, "streams.json", "/streams/0/<member:1>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "not_a_real_field") {
+		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", bundleCauseText165(err), "not_a_real_field")
 	}
 }
 
@@ -2353,8 +2479,12 @@ func TestBundleLoadRejectsUnknownAuthCandidateKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown auth-candidate key %q (note: valid key is \"scopes\", not \"scope\"), got nil", "scope")
 	}
-	if !strings.Contains(err.Error(), "streams.json") || !strings.Contains(err.Error(), "scope") {
-		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", err.Error(), "scope")
+	if !publicBundleMatches167(err, "streams.json", "/base/auth/0/<member:1>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "streams.json") || !strings.Contains(bundleCauseText165(err), "scope") {
+		t.Fatalf("Load error = %q, want it to name streams.json and the unknown key %q", bundleCauseText165(err), "scope")
 	}
 }
 
@@ -2386,8 +2516,12 @@ func TestBundleLoadRejectsUnknownWritesActionKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown writes-action key %q, got nil", "retries")
 	}
-	if !strings.Contains(err.Error(), "writes.json") || !strings.Contains(err.Error(), "retries") {
-		t.Fatalf("Load error = %q, want it to name writes.json and the unknown key %q", err.Error(), "retries")
+	if !publicBundleMatches167(err, "writes.json", "/actions/0/<member:5>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "writes.json") || !strings.Contains(bundleCauseText165(err), "retries") {
+		t.Fatalf("Load error = %q, want it to name writes.json and the unknown key %q", bundleCauseText165(err), "retries")
 	}
 }
 
@@ -2513,8 +2647,12 @@ func TestBundleLoadRejectsUnknownMetadataTopLevelKey(t *testing.T) {
 	if err == nil {
 		t.Fatalf("Load: expected an error for unknown metadata.json top-level key %q, got nil", "maintainer")
 	}
-	if !strings.Contains(err.Error(), "metadata.json") || !strings.Contains(err.Error(), "maintainer") {
-		t.Fatalf("Load error = %q, want it to name metadata.json and the unknown key %q", err.Error(), "maintainer")
+	if !publicBundleMatches167(err, "metadata.json", "/<member:4>", "unknown_property", "additional property is not allowed") {
+		t.Fatalf("wrong public unknown-property diagnostic: %v", err)
+	}
+
+	if !strings.Contains(bundleCauseText165(err), "metadata.json") || !strings.Contains(bundleCauseText165(err), "maintainer") {
+		t.Fatalf("Load error = %q, want it to name metadata.json and the unknown key %q", bundleCauseText165(err), "maintainer")
 	}
 }
 
@@ -2858,6 +2996,12 @@ func TestBundleLoadRejectsUnenforceableRequiredQuery(t *testing.T) {
 		{name: "missing any_of", group: `{}`},
 		{name: "blank parameter name", group: `{"any_of": ["email", "  "]}`},
 	}
+	public := map[string]struct{ field, code, reason string }{
+		"empty any_of":         {"/operations/0/rest/required_query/0/any_of", "array_too_short", "array has too few items"},
+		"missing any_of":       {"/operations/0/rest/required_query/0/any_of", "required_property_missing", "required property is missing"},
+		"blank parameter name": {"/operations/0/rest/required_query/0/any_of/1", "required_query_name_blank", "required query parameter name must not be blank"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := Load(operationsBundleFS(t, `{
@@ -2879,7 +3023,12 @@ func TestBundleLoadRejectsUnenforceableRequiredQuery(t *testing.T) {
 			if err == nil {
 				t.Fatal("want load error: a group that can never be satisfied is unenforceable and must fail loudly")
 			}
-			if !strings.Contains(err.Error(), "required_query") {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "operations.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public constraint diagnostic: %v", err)
+			}
+
+			if !strings.Contains(bundleCauseText165(err), "required_query") {
 				t.Fatalf("error should name required_query, got %v", err)
 			}
 		})
@@ -2978,13 +3127,28 @@ func TestBundleLoadRejectsInvalidBase64UploadAction(t *testing.T) {
 			want: "max_encoded_bytes",
 		},
 	}
+	public := map[string]struct{ field, code, reason string }{
+		"body_type without spec":                         {"/actions/0/base64_upload", "base64_spec_missing", "body_type base64_upload requires base64_upload"},
+		"spec without body_type":                         {"/actions/0/body_type", "base64_body_type_conflict", "base64_upload requires matching body_type"},
+		"missing content_field":                          {"/actions/0/base64_upload/content_field", "required_property_missing", "required property is missing"},
+		"non-positive max_decoded_bytes":                 {"/actions/0/base64_upload/max_decoded_bytes", "base64_decoded_bound_invalid", "base64_upload requires positive max_decoded_bytes"},
+		"unknown source mode":                            {"/actions/0/base64_upload/source", "enum_mismatch", "value is not an allowed alternative"},
+		"source_field equals content_field in path mode": {"/actions/0/base64_upload/source_field", "base64_fields_conflict", "source_field and content_field must differ in path mode"},
+		"unsatisfiable encoded bound":                    {"/actions/0/base64_upload/max_encoded_bytes", "base64_encoded_bound_invalid", "max_encoded_bytes must hold the encoded decoded-byte bound"},
+	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := Load(base64UploadBundleFS(t, tt.action), "acme")
 			if err == nil {
 				t.Fatal("want load error, got nil")
 			}
-			if !strings.Contains(err.Error(), tt.want) {
+			want, ok := public[tt.name]
+			if !ok || !publicBundleMatches167(err, "writes.json", want.field, want.code, want.reason) {
+				t.Fatalf("wrong public constraint diagnostic: %v", err)
+			}
+
+			if !strings.Contains(bundleCauseText165(err), tt.want) {
 				t.Fatalf("error should mention %q, got %v", tt.want, err)
 			}
 		})
