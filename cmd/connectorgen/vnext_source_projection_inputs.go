@@ -9,10 +9,12 @@ import (
 	"io"
 	"path"
 	"sort"
+	"strconv"
 	"strings"
 
 	"golang.org/x/sys/unix"
 	"polymetrics.ai/internal/connectors/commandrunner"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 type vNextSourceProjectionInputs struct {
@@ -150,7 +152,7 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 	for _, row := range inventory.Operations {
 		key := vNextSourceProjectionKey{Inventory: row.Key.Inventory, ID: row.Key.ID}
 		semantic, exists := semantics[key]
-		if !exists || semantic.Collection == nil || (semantic.Effect != "" && semantic.Effect != "read") {
+		if !exists {
 			return vNextSourceLock{}, fmt.Errorf("source_projection source %q has unresolved execution semantics", row.Key.ID)
 		}
 		delete(semantics, key)
@@ -163,6 +165,17 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 			rawDocument = &document
 		}
 		facts := normalizeSourceFacts(row, documents[row.DocumentID], rawDocument)
+		if semantic.Write != nil {
+			descriptor, err := sourceProjectionTypedWrite(facts, semantic.Write, row.Key)
+			if err != nil {
+				return vNextSourceLock{}, fmt.Errorf("source_projection source %q: %w", row.Key.ID, err)
+			}
+			lowered.Operations = append(lowered.Operations, descriptor)
+			continue
+		}
+		if semantic.Collection == nil || (semantic.Effect != "" && semantic.Effect != "read") {
+			return vNextSourceLock{}, fmt.Errorf("source_projection source %q has unresolved collection semantics", row.Key.ID)
+		}
 		if facts.Status != "available" || len(facts.Diagnostics) != 0 || facts.Protocol != "rest" || facts.Method != "GET" {
 			return vNextSourceLock{}, fmt.Errorf("source_projection source %q has an unsupported source shape", row.Key.ID)
 		}
@@ -185,9 +198,11 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 			}
 			name = identity
 		}
+		name = sourceProjectionDefaultName(name)
 		if !namePattern.MatchString(name) {
 			return vNextSourceLock{}, fmt.Errorf("source_projection source %q requires supported generated identity", row.Key.ID)
 		}
+		name = strings.ReplaceAll(name, "-", "_")
 		recordSchema, recordPath, err := sourceProjectionRecordSchema(facts, semantic.Collection)
 		if err != nil {
 			return vNextSourceLock{}, fmt.Errorf("source_projection source %q: %w", row.Key.ID, err)
@@ -434,6 +449,137 @@ func sourceProjectionDirectInput(facts sourceFacts, name string) (json.RawMessag
 	if err != nil {
 		return nil, nil, err
 	}
-	command, err := json.Marshal(map[string]any{"path": "api " + name, "summary": name, "intent": "direct_read", "availability": "implemented", "operation": name, "api_surface": []map[string]string{{"method": facts.Method, "path": facts.Path}}, "output_policy": "json_redacted", "flags": flags})
+	command, err := json.Marshal(map[string]any{"path": "api " + sourceProjectionDefaultName(name), "summary": name, "intent": "direct_read", "availability": "implemented", "operation": name, "api_surface": []map[string]string{{"method": facts.Method, "path": facts.Path}}, "output_policy": "json_redacted", "flags": flags})
 	return operation, command, err
+}
+
+func sourceProjectionTypedWrite(facts sourceFacts, semantics *vNextSourceProjectionWrite, key sourceOperationKey) (vNextOperationDescriptor, error) {
+	if facts.Status != "available" || len(facts.Diagnostics) != 0 || facts.Protocol != "rest" || facts.Method != "POST" || len(facts.Parameters) != 0 {
+		return vNextOperationDescriptor{}, fmt.Errorf("typed mutation source shape is not yet lowered")
+	}
+	operation, ok := sourceResolveObject(facts, facts.Groups["source_operation"], map[string]bool{}, 0)
+	if !ok {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation operation does not resolve")
+	}
+	name := facts.OperationID
+	if raw, present := operation["operationId"]; present {
+		var inner string
+		if err := json.Unmarshal(raw, &inner); err != nil || inner == "" || (name != "" && name != inner) {
+			return vNextOperationDescriptor{}, fmt.Errorf("inconsistent mutation operation identity")
+		}
+		name = inner
+	}
+	name = sourceProjectionDefaultName(name)
+	if !namePattern.MatchString(name) {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation identity requires name reconciliation")
+	}
+	name = strings.ReplaceAll(name, "-", "_")
+	body, ok := sourceResolveObject(facts, facts.Groups["request_body"], map[string]bool{}, 0)
+	if !ok {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation request body does not resolve")
+	}
+	var content map[string]json.RawMessage
+	if err := decodeSourceJSON(body["content"], &content); err != nil || len(content) != 1 {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation request media requires accounted variants")
+	}
+	media, ok := sourceResolveObject(facts, content["application/json"], map[string]bool{}, 0)
+	if !ok {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation media is not yet lowered")
+	}
+	schema, ok := sourceProjectionTypedSchema(facts, media["schema"], "object")
+	if !ok {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation schema requires supported object projection")
+	}
+	encoded, err := json.Marshal(schema)
+	if err != nil {
+		return vNextOperationDescriptor{}, err
+	}
+	if _, err := engine.CompileSchema(encoded); err != nil {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation schema projection: %w", err)
+	}
+	var properties map[string]json.RawMessage
+	if err := decodeSourceJSON(schema["properties"], &properties); err != nil || len(properties) == 0 {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation requires concrete typed fields")
+	}
+	fields := make([]string, 0, len(properties))
+	for field := range properties {
+		if !namePattern.MatchString(field) {
+			return vNextOperationDescriptor{}, fmt.Errorf("mutation field requires source-coordinate alias")
+		}
+		fields = append(fields, field)
+	}
+	sort.Strings(fields)
+	var required bool
+	if raw := body["required"]; len(raw) != 0 {
+		if err := json.Unmarshal(raw, &required); err != nil {
+			return vNextOperationDescriptor{}, err
+		}
+	}
+	if !required {
+		return vNextOperationDescriptor{}, fmt.Errorf("optional mutation body requires an accounted absent-body variant")
+	}
+	var responses map[string]json.RawMessage
+	if err := decodeSourceJSON(facts.Groups["responses"], &responses); err != nil {
+		return vNextOperationDescriptor{}, err
+	}
+	var statuses []int
+	for status := range responses {
+		code, err := strconv.Atoi(status)
+		if err == nil && len(status) == 3 && code >= 200 && code < 300 {
+			statuses = append(statuses, code)
+		} else if strings.HasPrefix(status, "2") {
+			return vNextOperationDescriptor{}, fmt.Errorf("mutation success status family is not yet lowered")
+		}
+	}
+	if len(statuses) == 0 {
+		return vNextOperationDescriptor{}, fmt.Errorf("mutation requires concrete source success statuses")
+	}
+	sort.Ints(statuses)
+	// The existing unkeyed, non-delete writeRequester disables retries. No
+	// source promise of provider idempotency or managed transport is invented.
+	action, err := json.Marshal(engine.WriteAction{Name: name, Kind: "custom", Method: facts.Method, Path: facts.Path, Risk: semantics.Risk, Batchable: semantics.Batchable, BodyType: "json", BodyRequired: required, BodyFields: fields, BodySchema: encoded, RecordSchema: encoded, SuccessStatuses: statuses})
+	if err != nil {
+		return vNextOperationDescriptor{}, err
+	}
+	source, err := json.Marshal(key)
+	if err != nil {
+		return vNextOperationDescriptor{}, err
+	}
+	return vNextOperationDescriptor{ID: "write:" + name, Source: source, Write: action}, nil
+}
+
+// sourceProjectionDefaultName realizes the ordinary ASCII kebab spelling.
+// Exact baseline aliases and collision reservations are separate source joins.
+func sourceProjectionDefaultName(identity string) string {
+	var name strings.Builder
+	separator := false
+	for i := 0; i < len(identity); i++ {
+		c := identity[i]
+		if c < 32 || c >= 127 {
+			return ""
+		}
+		upper := c >= 'A' && c <= 'Z'
+		lower := c >= 'a' && c <= 'z'
+		digit := c >= '0' && c <= '9'
+		if !upper && !lower && !digit {
+			separator = name.Len() > 0
+			continue
+		}
+		if upper && i > 0 {
+			previous := identity[i-1]
+			nextLower := i+1 < len(identity) && identity[i+1] >= 'a' && identity[i+1] <= 'z'
+			if (previous >= 'a' && previous <= 'z') || (previous >= '0' && previous <= '9') || (previous >= 'A' && previous <= 'Z' && nextLower) {
+				separator = name.Len() > 0
+			}
+		}
+		if separator {
+			name.WriteByte('-')
+			separator = false
+		}
+		if upper {
+			c += 'a' - 'A'
+		}
+		name.WriteByte(c)
+	}
+	return name.String()
 }

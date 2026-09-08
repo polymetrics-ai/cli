@@ -154,6 +154,12 @@ use it merely because provider idempotency, a read-back endpoint, or scheduled
 automation is absent. Provider-documented idempotent delete and missing-ok
 semantics may support their declared retry policy, but must be cited.
 
+Saved lane admission uses the selected declarative runtime's
+`PreflightSavedWriteAction`, independently of reverse command presence. A valid
+individual-only action is an ineligible saved candidate; malformed schema or
+encoder contracts remain errors. Genuine no-input actions require explicit
+saved batchability. See `docs/connector-canon/SOURCE-LOCK-VNEXT.md`.
+
 ## 9. Add managed transport only after saved execution works
 
 Do not confuse generic saved reverse-ETL execution with an optional managed

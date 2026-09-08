@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"reflect"
@@ -76,6 +77,19 @@ func admitVNextCanonicalDescriptor(descriptor vNextCanonicalDescriptor, input vN
 		return vNextStagedGeneration{}, vNextSemanticRootError(descriptor, "/connector", "select runtime: %v", err)
 	}
 	runtime := engine.New(bundle, selection.Hooks)
+	savedEligible := false
+	for _, action := range bundle.Writes {
+		if err := runtime.PreflightSavedWriteAction(action.Name); err != nil {
+			if errors.Is(err, engine.ErrSavedWriteNonBatchable) || errors.Is(err, engine.ErrSavedWriteNoInputBatchability) {
+				continue
+			}
+			return vNextStagedGeneration{}, vNextSemanticRootError(descriptor, "/lanes/reverse_etl", "saved action %q: %v", action.Name, err)
+		}
+		savedEligible = true
+	}
+	if savedEligible != (descriptor.Lanes["reverse_etl"] == "implemented") {
+		return vNextStagedGeneration{}, vNextSemanticRootError(descriptor, "/lanes/reverse_etl", "declared saved lane disagrees with loaded typed action eligibility")
+	}
 	provenance, err := vNextBuildSemanticProvenance(descriptor, outputs, bundle, runtime)
 	if err != nil {
 		return vNextStagedGeneration{}, err

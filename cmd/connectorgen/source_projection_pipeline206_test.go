@@ -22,6 +22,10 @@ func TestSourceProjection206SourceOnlyPublishedRead(t *testing.T) {
 	sourceProjectionPublishedRead206(t, "", false)
 }
 
+func TestSourceProjection206DefaultCommandName(t *testing.T) {
+	sourceProjectionPublishedRead206(t, "direct_camel_identity", false)
+}
+
 func TestSourceProjection206ArchivedOperationIdentity(t *testing.T) {
 	t.Run("envelope_identity", func(t *testing.T) { sourceProjectionPublishedRead206(t, "envelope_identity", false) })
 	t.Run("contradictory_identity", func(t *testing.T) { sourceProjectionPublishedRead206(t, "contradictory_identity", true) })
@@ -75,6 +79,8 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	}
 	source := []byte(`{"schema_version":2,"connector":"acme","rest":{"operations":[{"id":"fixture.widgets","method":"GET","path":"/widgets","protocol":"rest","source_operation":{"operationId":"widgets","responses":{"200":{"description":"Page","content":{"application/json":{"schema":{"type":"object","required":["data"],"properties":{"data":{"type":"array","items":{"type":"object","required":["id"],"properties":{"id":{"type":"string"}}}}}}}}}}}}]},"counts":{"total":1}}`)
 	switch variant {
+	case "camel_identity":
+		source = bytes.Replace(source, []byte(`"operationId":"widgets"`), []byte(`"operationId":"listWidgets"`), 1)
 	case "envelope_identity":
 		source = bytes.Replace(source, []byte(`"protocol":"rest"`), []byte(`"protocol":"rest","operation_id":"widgets"`), 1)
 		source = bytes.Replace(source, []byte(`"operationId":"widgets",`), nil, 1)
@@ -92,6 +98,12 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	inputVariant := variant == "inherited_path" || variant == "operation_override" || variant == "optional_query_absent" || variant == "optional_query_present" || variant == "missing_path"
 	expectedPath, expectedWire := "/widgets", "GET /widgets"
 	runtimeConfig := map[string]string{}
+	expectedName := "widgets"
+	expectedCommand := "widgets"
+	if variant == "camel_identity" {
+		expectedName = "list_widgets"
+		expectedCommand = "list-widgets"
+	}
 	if inputVariant {
 		var envelope map[string]any
 		if err := json.Unmarshal(source, &envelope); err != nil {
@@ -232,7 +244,7 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(bundle.Streams) != 1 || bundle.Streams[0].Name != "widgets" || bundle.Streams[0].Path != expectedPath {
+	if len(bundle.Streams) != 1 || bundle.Streams[0].Name != expectedName || bundle.Streams[0].Path != expectedPath {
 		t.Fatalf("source route/identity not preserved: %+v", bundle.Streams)
 	}
 	if variant == "operation_override" {
@@ -245,7 +257,7 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 		}
 	}
 	var ids []string
-	readErr := engine.Read(context.Background(), bundle, connectors.ReadRequest{Stream: "widgets", Config: connectors.RuntimeConfig{Config: runtimeConfig}}, nil, func(record connectors.Record) error {
+	readErr := engine.Read(context.Background(), bundle, connectors.ReadRequest{Stream: expectedName, Config: connectors.RuntimeConfig{Config: runtimeConfig}}, nil, func(record connectors.Record) error {
 		id, ok := record["id"].(string)
 		if !ok {
 			t.Error("returned record lost string identity")
@@ -267,14 +279,14 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	}
 	if direct {
 		consumer := engine.New(bundle, nil)
-		if err := commandrunner.Preflight(consumer, []string{"api", "widgets"}); err != nil {
+		if err := commandrunner.Preflight(consumer, []string{"api", expectedCommand}); err != nil {
 			t.Fatalf("generated direct preflight: %v", err)
 		}
 		flags := map[string][]string{}
 		for key, value := range runtimeConfig {
 			flags[key] = []string{value}
 		}
-		result, err := commandrunner.Run(t.Context(), consumer, commandrunner.Request{Path: []string{"api", "widgets"}, Flags: flags}, nil)
+		result, err := commandrunner.Run(t.Context(), consumer, commandrunner.Request{Path: []string{"api", expectedCommand}, Flags: flags}, nil)
 		if err != nil {
 			t.Fatal(err)
 		}

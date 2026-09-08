@@ -57,3 +57,53 @@ Envelope Red reached actual canonical publication: envelope-only name refused an
 - source-inputs-new-lint-206-01: exit0, 0/0 test events, 3.2993250420004188s, raw SHA256 e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47, input drift [].
 
 Whole-package lint retains15 existing findings in orderedjson.go/validate.go/vnext_lock.go/vnext_admission.go; none is in the new projection implementation. New-from-reviewed-base lint passes. Full original20-findings/8-files baseline remains separate; no baseline cleanup or global lint PASS is claimed. Vet is a successful static command with zero test events, not behavioural proof.
+
+App source-saved-app-red-206-01 and green-01 used an invalid replacement-registration fixture: Registry.Register rejects duplicates and its error was ignored. Those results do NOT prove App preflight behavior. Corrected fixture registers the probe once in NewEmptyRegistry and checks registration. A fresh controlled old-guard comparison is captured after temporarily removing only the new owned preflight block; this is a post-edit causal comparison, not invented pre-edit chronology. Reapply the same block after the valid failure.
+
+The first mutation GREEN attempt hit the source operation naming guard before publication. The initial fixture assumed an underscore saved name without a baseline compatibility pin; corrected expected default to create-widget per196A kebab naming, preserving retained operationId create_widget. New actual command/mutation name RED covers listWidgets and create_widget reaching that same guard. Baseline alias reservations/collision fallback remain required and unimplemented; no naming-compatibility proof is claimed.
+
+Naming correction to preceding note: strict engine streams/actions require ^[a-z][a-z0-9_]*$, while196A prescribes kebab for public command paths. GREEN02 exposed this real admission failure. Internal derived names therefore use underscore separators; command path uses kebab. create_widget expectation restored for its internal saved action, independently of baseline compatibility (still pending). Both failed GREEN attempts retained; none is provider behavior proof.
+
+Saved preflight affected Red: source-mutation-boundaries-green-206-01 retained exit1, 88/91 events: existing Asana declared batch was validated without its referenced action closure, and GitHub closed PreparedWriteHook actions were incorrectly classified as untyped solely by nonempty Hook. Repair reuses the existing full bundle body validator and requires the selected PreparedWriteHook plus exact WriteHookClassifier for hook-backed saved actions; no hook is invoked during preflight. Full runtime prepared-plan validation remains unchanged.
+
+Affected GREEN02 still failed 81/84: Asana unsupported lane is now correctly diagnosed by the loaded predicate (196A8.3 explicitly requires migration), and GitHub repo is a valid direct no-input action without explicit saved batchability. Preserve direct eligibility and return a typed ineligible-saved diagnostic; admission may ignore only this valid-negative candidate, while App bulk preflight refuses it. Added implemented/unsupported no-input controls. Asana root lane corrected only after all loaded actions passed the predicate; this is eligibility, not saved execution acceptance.
+
+## Original U4 / typed mutation receipt index
+
+All names retain original meaning: failed GREEN attempts are failures; invalid App duplicate-registration fixture is not behavior proof, and control-red-02 is the disclosed post-edit causal comparison. Parent/child event counts overlap.
+
+- source-mutation-boundaries-green-206-01: exit1, 88/91 events, 17.005394625000918s, raw SHA256 bd43dd8e9f1ef6a773908c0f720d87b7b83c4b59c9f133a53b2de7cc8d91d117, changed inputs [].
+- source-mutation-boundaries-green-206-02: exit1, 81/84 events, 19.235251250000147s, raw SHA256 088e91d0506bd580d36eefc57bfb660d3fea231100a23553acf0d3aec5b85043, changed inputs [].
+- source-mutation-boundaries-red-206-01: exit1, 2/4 events, 6.356128625000565s, raw SHA256 b8252fa3145ca18eca71e2095394701ab027e89dc6f06205e95547aca6114351, changed inputs [].
+- source-mutation-green-206-01: exit1, 0/1 events, 5.113448791998962s, raw SHA256 cfee2c05438515c6e64cf3a82f4380643dd98766b67450a3154ca8fd91e41fa3, changed inputs [].
+- source-mutation-green-206-02: exit1, 0/2 events, 8.020177250000415s, raw SHA256 0c204d3a4fd23fc866dbfee0d3f5f3f887c8ce69454e764c5082033563bfbe58, changed inputs [].
+- source-mutation-green-206-03: exit0, 2/2 events, 5.931950625003083s, raw SHA256 7340f7f45197a3d52fc617def9df020dbdd891eca65c211d68e2f2db7ab5cf0b, changed inputs [].
+- source-mutation-red-206-01: exit1, 0/1 events, 5.175328000001173s, raw SHA256 e370501b4e21fcb6f7961e6cc71e4b94c14c091d1a976094140c517744f293e2, changed inputs [].
+- source-operation-name-red-206-01: exit1, 0/2 events, 5.1109843339982035s, raw SHA256 1b5738f60f40d174b06258f8f390125360393c368cc04362d3b7ae3ab118af66, changed inputs [].
+- source-saved-app-control-red-206-02: exit1, 0/1 events, 4.758334834001289s, raw SHA256 240b0a5aa1beb374708c2195a788fa2eaad8933045cbb995677e49e9777555f3, changed inputs [].
+- source-saved-app-green-206-01: exit1, 2/3 events, 7.099838374999308s, raw SHA256 2be056a58dc35708fafbdf12626d78ad7c4d924f1d46d323ad1ff37c9639f90c, changed inputs [].
+- source-saved-app-green-206-02: exit0, 3/3 events, 3.9057307920011226s, raw SHA256 3b1fa617207da5745803eb626cddc92c1157791610eb69af4a6159d1d52a448c, changed inputs [].
+- source-saved-app-red-206-01: exit1, 0/1 events, 4.79108133400041s, raw SHA256 ad12506d58dbbef075628cc749fe749ab3b6f94013a11dc61d1f062d78a2873a, changed inputs [].
+- source-saved-lane-green-206-01: exit0, 6/6 events, 7.240582333999555s, raw SHA256 564a46e719d51bb35ec543791f63ecc19c13094d0dfcddf5a5815d723c7104d6, changed inputs [].
+- source-saved-lane-negative-206-01: exit0, 12/12 events, 5.613868791999266s, raw SHA256 b258930bcf92d44c52c58802077f12f59c4056c7acccfa0a0868badcd9ecc2f1, changed inputs [].
+- source-saved-lane-red-206-01: exit1, 2/6 events, 5.188652292001279s, raw SHA256 493690cc00e8f87b23db5d4f5e1f4f26e7c4defaa7934ee122d2349d86401c4f, changed inputs [].
+
+Reference GREEN03: Asana migrated root now passes unchanged execution comparison. GitHub unarchive_repo identified the second existing closed seam, WriteRecordHook (record mapping before frozen request; no transport override). Preserve this declaration-owned encoder alongside PreparedWriteHook, without invoking either in preflight. Missing schema and legacy unprepared transport remain refused.
+
+Asana saved witness01 reached approval check with an invalid fixture token: PreviewReversePlan reads the stored redacted plan and does not return the originally issued secret token. Preserve original issued token locally for execute; do not alter production approval behavior. First run is fixture failure, not product RED.
+
+## Saved action reference and App follow-through
+
+Green: source-saved-reference-green-206-04 preserves exact reference execution output sets. Asana declaration changes only reverse lane after typed eligibility; GitHub closed hooks/no-input direct case remains compatible. source-asana-saved-206-02 proves actual selected App two-row request bodies, no-send planning/preview/missing approval, reopened successful run and no duplicate replay. This uses shipped Asana execution, not source-only Asana lowering. Focused race includes selected hook nonexecution panic controls and missing-schema refusals.
+
+- source-asana-saved-206-01: exit1, 3/4 events, 5.0313159999968775s, raw SHA256 99bac9b3f26e2fe729e3b33acfeb463d49e434a5796aa08dad3e29646322d170, input drift [].
+- source-asana-saved-206-02: exit0, 4/4 events, 4.130764417001046s, raw SHA256 60835062280255edeb4c95a610a375fe9f75c1905cde83757b6c0b75ae5d70b0, input drift [].
+- source-saved-mutation-race-206-01: exit0, 30/30 events, 21.890127417002077s, raw SHA256 74db8b5afccb593812b5c8a6bcbbe1e0df900f446bb036fe19046b3d9feb8b32, input drift [].
+- source-saved-new-lint-206-01: exit0, 0/0 events, 6.038096457999927s, raw SHA256 e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47, input drift [].
+- source-saved-reference-green-206-03: exit1, 83/85 events, 19.419493790999695s, raw SHA256 3f472934fb10c755f9f9569b11eb186f9d2eb87608a791056e51364f3901881a, input drift [].
+- source-saved-reference-green-206-04: exit0, 17/17 events, 16.656211624998832s, raw SHA256 a309f6c683903fb7e8a25238f95aae180ecaeb9786aa03143d3ce626a08540a0, input drift [].
+- source-saved-vet-206-01: exit0, 0/0 events, 1.6921158750010363s, raw SHA256 e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855, input drift [].
+
+source-saved-new-lint-206-01: exit0, 0/0 test events, raw SHA256 e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47, input drift [].
+
+source-saved-atlas-206-01: exit0, 20/20 test events, raw SHA256 904f70444dad14381d22ea7e3332c04f4f63ec4183919c4b50a42df14bb007ed, input drift [].

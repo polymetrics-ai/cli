@@ -216,7 +216,7 @@ func canonicalizeVNextSourceLock(lock vNextSourceLock) (vNextCanonicalDescriptor
 		if state != "implemented" && state != "unsupported" {
 			return vNextCanonicalDescriptor{}, fmt.Errorf("source lock lane %q has invalid state %q", lane, state)
 		}
-		if observedLanes[lane] != (state == "implemented") {
+		if lane != "reverse_etl" && observedLanes[lane] != (state == "implemented") {
 			return vNextCanonicalDescriptor{}, fmt.Errorf("source lock lane %q is %s but its authored execution content says implemented=%t", lane, state, observedLanes[lane])
 		}
 	}

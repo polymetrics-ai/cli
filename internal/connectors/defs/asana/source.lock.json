@@ -7,7 +7,7 @@
     "direct_read": "implemented",
     "direct_write": "implemented",
     "etl": "implemented",
-    "reverse_etl": "unsupported",
+    "reverse_etl": "implemented",
     "sync_transport": "implemented"
   },
   "provider_evidence": {

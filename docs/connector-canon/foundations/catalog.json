@@ -3371,7 +3371,8 @@
       "owner": {
         "primary_package": "polymetrics.ai/internal/app",
         "supporting_packages": [
-          "polymetrics.ai/internal/connectors"
+          "polymetrics.ai/internal/connectors",
+          "polymetrics.ai/internal/connectors/engine"
         ],
         "files": [
           "internal/app/app.go",
@@ -3380,7 +3381,8 @@
           "internal/app/reverse_acknowledgement.go",
           "internal/app/reverse_batchable.go",
           "internal/app/types.go",
-          "internal/app/write_approval.go"
+          "internal/app/write_approval.go",
+          "internal/connectors/engine/saved_write_preflight.go"
         ],
         "symbols": [
           {
@@ -3414,6 +3416,10 @@
           {
             "file": "internal/app/app.go",
             "name": "(*App).confirmationPolicyForPlan"
+          },
+          {
+            "file": "internal/connectors/engine/saved_write_preflight.go",
+            "name": "(*Connector).PreflightSavedWriteAction"
           }
         ]
       },
@@ -3461,13 +3467,14 @@
           "typed destination transport action",
           "write action or connector command binding"
         ],
-        "notes": "Bulk reverse ETL selects a batchable write action; single-command plans may execute non-batchable bounded actions through the same plan and approval lifecycle."
+        "notes": "Bulk reverse ETL selects a loaded typed batchable write action through PreflightSavedWriteAction independently of CLI command intents. Single-command plans may execute valid non-batchable or no-input actions through the same plan and approval lifecycle."
       },
       "constraints": [
         "Reverse ETL always reads warehouse rows and never substitutes a live API source.",
         "One warehouse row must map deterministically to one bounded request for bulk execution.",
         "Provider retry safety, idempotency, and read-back behavior must be declared truthfully and cannot be inferred from local plan hashes.",
-        "Closed PostgreSQL managed-target transport plans retain destructive confirmation through persisted preview, plan-seal verification and grant issuance, independently of standalone action policy."
+        "Closed PostgreSQL managed-target transport plans retain destructive confirmation through persisted preview, plan-seal verification and grant issuance, independently of standalone action policy.",
+        "Saved declarative preflight requires concrete record and encoder contracts; no-input actions require explicit saved batchability. Selected closed prepared-write and record-mapping hooks retain engine-owned request preparation. Preflight performs no provider I/O."
       ],
       "non_goals": [
         "A generic HTTP write tool or API-to-API shortcut.",
@@ -3525,6 +3532,16 @@
           "package": "./internal/app",
           "file": "internal/app/postgres_confirmation_173_test.go",
           "name": "TestPostgresTransportPersistedConfirmation173"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/asana_saved206_test.go",
+          "name": "TestAsanaSavedTypedActionApproval206"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/saved_write_preflight206_test.go",
+          "name": "TestSavedPreflightSelectedHookContracts206"
         }
       ],
       "known_gap_refs": [],
