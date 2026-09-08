@@ -2806,6 +2806,12 @@ func (a *App) confirmationPolicyForAction(connectorName, actionName string) conn
 }
 
 func (a *App) confirmationPolicyForPlan(plan ReversePlan) connectors.WriteConfirmation {
+	// Transport approval is destructive even when its underlying standalone
+	// action is ordinary. Current definition binding and the authenticated seal
+	// are checked separately before preview, authorization, and execution.
+	if plan.Mode == reversePlanModeDeclarativeTypedDestinationTransport {
+		return connectors.WriteConfirmation{Kind: connectors.ConfirmationKindDestructive}
+	}
 	// Resolve confirmation from the current execution bundle so a local state
 	// edit cannot remove a destructive-action gate from an existing plan.
 	if plan.ConnectorCommandOperation != "" {

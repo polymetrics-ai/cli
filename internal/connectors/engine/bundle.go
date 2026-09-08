@@ -2584,7 +2584,7 @@ func validateMultipartMediaTypes(part MultipartPartSpec) error {
 		return diagnosticAt("/allowed_media_types", "multipart_media_types_empty", "allowed_media_types must not be empty", fmt.Errorf("allowed_media_types must not be empty; omit it to leave the part unconstrained"))
 	}
 	if part.Type != "file" {
-		return diagnosticAt("/media_policy", "multipart_media_policy_type_invalid", "media policy is only meaningful on a file part", fmt.Errorf("allowed_media_types is only meaningful on a file part, got type %q", part.Type))
+		return diagnosticAt("/allowed_media_types", "multipart_media_types_type_invalid", "allowed_media_types is only meaningful on a file part", fmt.Errorf("allowed_media_types is only meaningful on a file part, got type %q", part.Type))
 	}
 	parsed := make([]string, 0, len(part.AllowedMediaTypes))
 	for index, raw := range part.AllowedMediaTypes {

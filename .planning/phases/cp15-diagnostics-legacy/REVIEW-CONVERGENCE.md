@@ -235,3 +235,22 @@ Authority: Firstmate170 complete-review and baseline-disposition contract; adopt
 
 Final review disposition at 2026-09-08T08:24:28Z: confirmed, acceptance_blocker=true. No production repair was performed. Evidence and siblings above remain the basis of this judgment.
 
+
+## Firstmate171 owner disposition checkpoint
+
+The immutable seven originals above remain the finding authority. These are implemented dispositions pending broad validation and fresh exact-SHA review, not owner acceptance:
+
+| Finding | Correction and actual focused evidence | Remaining gate |
+|---|---|---|
+| CR-170-01 / BD-CP15-168-01 | Shared current policy recognizes the closed typed-destination transport mode as destructive; standalone actions unchanged. Permanent two-executor App RED then unchanged-test GREEN; ten tamper controls and all five original recovery/result/tombstone tests pass. | Full App, selected race, independent review |
+| CR-170-02 | Field allowlist rejection points to allowed_media_types with its fixed safe reason/code. Both action and operation real Load controls, selected App/CLI, cause preservation and isolated tuple falsifiers pass. Separate media_policy branch unchanged. | Affected full/race and independent review |
+| CR-170-03 | Existing non-change-capture/change_apply refusal gains exact strategy coordinate and useful safe reason/code while preserving original cause. Valid append and selected App/CLI controls pass. Opposite mismatch remains rejected by earlier source-only mode validation. | Affected full/race and independent review |
+| CR-170-04 / BD-CP15-169-01 | Test asserts normalized static binding versus dynamic binding plus actual preflight qualification. Removal/eligibility falsifiers pass. Production help unchanged. | Full CLI and independent review |
+| CR-170-05 / BD-CP15-169-02 | Obsolete Asana origin refusal tests replaced with current configurable operation's actual project/vault ordering and healthy local returned-row/one-request control. Setup failures remain separately recorded. | Full CLI/race and independent review |
+| CR-170-06 / BD-CP15-169-03 | ETL help asserts present modes, refusal/compatibility meaning, history fields and fixed alias mapping. Mode removal and misleading execution perturbations fail the oracle. | Full CLI and independent review |
+| CR-170-07 | Async loader callbacks return actual errors without Fatal; main goroutine validates identity/cause after bounded completion. Plain non-diagnostic failure and success controls terminate. No production store lifecycle change. | Store race and independent review |
+
+Original CR-164-01 remains protected by its existing permanent representation-shape regression and independently resolved170 disposition. Original seven CP15 obligations, D1–D14 and95+AM-169-01 assertion accounting remain required. None is replaced by a count of new tests.
+
+
+Final171 local validation completes the remaining local gates in the checkpoint table: full current App/CLI normal, full affected packages normal/race, final App39 normal/race, CLI77 race, lint/vet/build/Atlas/generated/docs/smoke all pass with exact scope recorded in VERIFICATION.md. The one later test-fixture registration check and its final witness are explicit. Each CR-170-01..07 disposition is owner-implemented/locally-verified and awaits fresh171 independent judgment; no self-acceptance. All historical finding files and failed receipts remain unchanged.

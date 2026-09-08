@@ -5,7 +5,7 @@ coverage:
     requirement: CP15-01
     verification:
       - kind: integration
-        ref: "D1,D2,D6,D7,D8,D10,D11,D14; final engine normal/race2081 and selected store81"
+        ref: "D1,D2,D6,D7,D8,D10,D11,D14; current affected full engine/store/connectors/registry normal/race2303; final App39 normal/race"
         status: pass
     human_judgment: true
     rationale: "Firstmate-bound fresh independent review and explicit acceptance remain required."
@@ -14,8 +14,8 @@ coverage:
     requirement: CP15-02
     verification:
       - kind: integration
-        ref: "D2,D12,D13 selected consumer receipts; full App known approval debt"
-        status: fail
+        ref: "D2,D12,D13; full App691 and CLI28806 normal; selected App39 and CLI77 race"
+        status: pass
     human_judgment: true
     rationale: "Firstmate-bound fresh independent review and explicit acceptance remain required."
   - id: CP15-03
@@ -59,8 +59,8 @@ coverage:
     requirement: CP15-07
     verification:
       - kind: integration
-        ref: "D1–D14; full CLI contains four unresolved baseline failures"
-        status: fail
+        ref: "D1–D14; full CLI28806 normal and selected77 race; all four baseline cases corrected"
+        status: pass
     human_judgment: true
     rationale: "Firstmate-bound fresh independent review and explicit acceptance remain required."
   - id: CR-164-01
@@ -68,7 +68,7 @@ coverage:
     requirement: CR-164-01
     verification:
       - kind: integration
-        ref: "2c13f068 original117 normal/race; current selected CLI race"
+        ref: "2c13f068 original117 normal/race; current selected CLI77 race; independently resolved170"
         status: pass
     human_judgment: true
     rationale: "Firstmate-bound fresh independent review and explicit acceptance remain required."
@@ -76,10 +76,10 @@ coverage:
 
 # CP15 owner implementation summary
 
-The seven original obligations and CR-164-01 are implemented and mapped in PLAN.md/VERIFICATION.md. This is an owner evidence handoff for independent review, not accepted correctness or all-checks-green. Every original failed attempt remains in the immutable receipt index; counts include Go parent events and are not requirement counts.
+The seven original obligations and CR-164-01 are mapped in PLAN.md/VERIFICATION.md. All seven170 corrections have owner implementation and current behavioral/oracle evidence. This is a handoff for the preassigned independent171 review, not CP15 acceptance. Every original failed/setup attempt remains in the immutable receipt index; parent/subtest events are not requirement counts.
 
-BD-CP15-168-01 remains unresolved CP16-owned approval debt by Firstmate169. Additional BD-CP15-169-01..03 are provisional CLI baseline observations awaiting explicit disposition and independent grouping. Full App and CLI checks remain failed. No filtering or derived baseline comparison converts them to pass.
+Firstmate171 supersedes the provisional169 CP16 carry disposition for BD-CP15-168-01 and all three CLI baseline observations. They are corrected together here under CR-170-01..07. Full App691/691 and CLI28806/28806 normal passed. Final test-only Register error-check cleanup is independently covered by selected App39 normal/race and final lint/vet; no production source changed after those full runs. Current CLI77 race and full affected engine/store/connectors/registry2303 normal/race passed. See exact applicability in VERIFICATION.md.
 
-The official verify-work command was resolved and its generated prompt executed inline under the existing documented non-Pi/no-unassigned-role fallback. Automated witnesses establish the observations in VERIFICATION.md; all original obligations route to judgment through the coverage block. No new reviewer is spawned; Firstmate supplies the final prompt and run ID.
+The official verify-work workflow runs inline under the existing documented non-Pi/no-unassigned-role fallback. All eight coverage entries continue to require independent judgment. Firstmate171 supplied the unchanged final reviewer prompt and run ID in advance; the canonical owner launches it only after committed source binding and terminal checks.
 
-Final source/command hashes and applicability are delivered in cp15-candidate-165.json and its receipt index after all captures terminate and the coherent candidate is committed. No provider-live, customer DB, service, full CI, no-mistakes, integration or main merge is claimed.
+Final source/command hashes and applicability are delivered in cp15-candidate-171.json and cp15-final-receipt-index-171.json after final binding. No provider-live, customer DB, service, full CI, no-mistakes, integration or main merge is claimed.

@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 49,
+  "catalog_revision": 50,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -1719,6 +1719,21 @@
           "package": "./internal/connectors/engine",
           "file": "internal/connectors/engine/bundle_public_diagnostics_167_test.go",
           "name": "TestBundleMixedLoadAllAndSourceIndependence169"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/diagnostic_coordinates_171_test.go",
+          "name": "TestMultipartFieldDiagnosticCoordinates171"
+        },
+        {
+          "package": "./internal/connectors/engine",
+          "file": "internal/connectors/engine/diagnostic_coordinates_171_test.go",
+          "name": "TestChangeApplyDiagnosticCoordinates171"
+        },
+        {
+          "package": "./internal/connectors/manifeststore",
+          "file": "internal/connectors/manifeststore/bundle_diagnostics_165_test.go",
+          "name": "TestDiagnosticLoaderUnexpectedOutcomes171"
         }
       ],
       "known_gap_refs": [],
@@ -3274,6 +3289,10 @@
           {
             "file": "internal/app/types.go",
             "name": "ReverseRun"
+          },
+          {
+            "file": "internal/app/app.go",
+            "name": "(*App).confirmationPolicyForPlan"
           }
         ]
       },
@@ -3301,7 +3320,8 @@
           "approved source rows and payloads are hash-bound before execution",
           "approval consumption is atomic and non-replayable",
           "destructive writes require persisted preview and confirmation",
-          "source table ownership is pinned at plan time"
+          "source table ownership is pinned at plan time",
+          "definition-selected typed destination transport plans require destructive confirmation even when the standalone action is ordinary"
         ]
       },
       "selection": {
@@ -3373,6 +3393,11 @@
           "package": "./internal/app",
           "file": "internal/app/foundations_integration_test.go",
           "name": "TestFoundationRollupPreservesMultiActionReverseETLComposition"
+        },
+        {
+          "package": "./internal/app",
+          "file": "internal/app/transport_confirmation_171_test.go",
+          "name": "TestDefinitionOwnedTransportConfirmation171"
         }
       ],
       "known_gap_refs": [],

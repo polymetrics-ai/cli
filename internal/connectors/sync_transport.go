@@ -677,7 +677,7 @@ func (d DestinationTransportDescriptor) Validate() error {
 			return fmt.Errorf("destination change_capture mode requires change_apply strategy, got %q", strategy.Strategy)
 		}
 		if strategy.Mode != synccontract.ModeChangeCapture && strategy.Strategy == ApplyStrategyChangeApply {
-			return fmt.Errorf("destination change_apply strategy is only valid for change_capture mode")
+			return declarationDiagnosticFailure(strategyPath+"/strategy", "transport_strategy_mode_conflict", "change_apply strategy is only valid for change_capture mode", fmt.Errorf("destination change_apply strategy is only valid for change_capture mode"))
 		}
 		if !containsTransportName(d.EligibleActions, strategy.Action) {
 			return declarationDiagnosticFailure(strategyPath+"/action", "transport_strategy_action", "apply strategy action must be an eligible action", fmt.Errorf("destination apply strategy action %q is not an eligible action", strategy.Action))

@@ -197,13 +197,7 @@ func TestPollingHelpDistinguishesStaticDeclarationsFromDynamicRuntimeEligibility
 	if code != 0 {
 		t.Fatalf("Run(connectors) code = %d stderr = %s", code, stderr.String())
 	}
-	if bytes.Contains(stdout.Bytes(), []byte("A planned, unsupported, or absent declaration\n  does not implement a polling mode.")) {
-		t.Fatalf("connectors help denies dynamically constructed polling declarations: %s", stdout.String())
-	}
-	if !bytes.Contains(stdout.Bytes(), []byte("declaration alone does not implement a polling mode")) {
-		t.Fatalf("connectors help omitted static declaration scope: %s", stdout.String())
-	}
-	if !bytes.Contains(stdout.Bytes(), []byte("constructs an implemented declaration per selected catalog object")) {
-		t.Fatalf("connectors help omitted dynamic runtime eligibility: %s", stdout.String())
+	if !pollingHelpContract171(stdout.String()) {
+		t.Fatalf("connectors help lost static binding/dynamic preflight contract: %s", stdout.String())
 	}
 }
