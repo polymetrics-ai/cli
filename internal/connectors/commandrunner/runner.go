@@ -2649,6 +2649,32 @@ func coerceDeclaredPlainTextBodyFlagValue(flag connectors.CommandSurfaceFlag, va
 }
 
 func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
+	if flag.InputCodec != "" {
+		if flag.InputCodec != "source_scalar_v1" {
+			return nil, fmt.Errorf("flag --%s has unknown input codec", flag.Name)
+		}
+		if len(values) == 0 {
+			return nil, fmt.Errorf("flag --%s has no value", flag.Name)
+		}
+		var decoded any
+		for _, raw := range values {
+			var err error
+			decoded, err = connectors.DecodeSourceScalar(flag.Type, raw, maxStructuredJSONFlagBytes)
+			if err != nil {
+				return nil, fmt.Errorf("flag --%s: %w", flag.Name, err)
+			}
+			if err = safety.RejectDangerousChars(raw, "flag value"); err != nil {
+				return nil, err
+			}
+			if err = validateCommandFlagEncodedBytes(flag, raw); err != nil {
+				return nil, err
+			}
+			if err = validateFlagValue(flag, raw); err != nil {
+				return nil, err
+			}
+		}
+		return decoded, nil
+	}
 	clean := make([]string, 0, len(values))
 	for _, value := range values {
 		if err := safety.RejectDangerousChars(value, "flag value"); err != nil {
@@ -2721,24 +2747,13 @@ func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, 
 	}
 }
 
-// parseExactJSONNumber accepts exactly one JSON numeric lexeme and represents
-// it as a rational for comparisons. Unlike ParseFloat it preserves provider
-// identifiers and decimal coefficients past 53 bits, including exponent
-// forms, until the sealed JSON encoder sends the same lexeme onward.
+// parseExactJSONNumber delegates the shared lossless numeric representation.
 func parseExactJSONNumber(value string) (*big.Rat, bool) {
-	if !json.Valid([]byte(value)) {
-		return nil, false
-	}
-	rational, ok := new(big.Rat).SetString(value)
-	return rational, ok
+	return connectors.ParseExactJSONNumber(value)
 }
 
 func parseExactJSONInteger(value string) (*big.Int, bool) {
-	if !json.Valid([]byte(value)) {
-		return nil, false
-	}
-	integer, ok := new(big.Int).SetString(value, 10)
-	return integer, ok
+	return connectors.ParseExactJSONInteger(value)
 }
 
 func validateCommandFlagEncodedBytes(flag connectors.CommandSurfaceFlag, value string) error {

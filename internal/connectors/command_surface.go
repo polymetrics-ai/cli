@@ -74,6 +74,8 @@ type CommandSurfaceGroup struct {
 }
 
 type CommandSurfaceFlag struct {
+	// InputCodec opts generated inputs into the shared source scalar grammar.
+	InputCodec string
 	Name       string
 	Type       string
 	Summary    string
