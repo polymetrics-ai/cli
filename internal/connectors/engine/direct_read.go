@@ -76,6 +76,9 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		commandQueryFields = bindingFieldSet(req.CommandBindings.Query)
 	}
 	if op.Kind == "graphql_query" {
+		if len(req.QueryValues) != 0 {
+			return connectors.DirectReadResult{}, fmt.Errorf("fixed GraphQL query does not accept structured query overrides")
+		}
 		if len(req.Headers) != 0 || len(req.HeaderValues) != 0 {
 			return connectors.DirectReadResult{}, fmt.Errorf("operation %q fixed GraphQL query does not accept request header overrides", op.ID)
 		}
@@ -102,7 +105,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err := requireOperationQueryGroups(op, queryMap); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	query, err := operationDirectReadQueryValues(op, queryMap)
+	query, err := operationTypedQuery(op, queryMap, req.QueryValues)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
@@ -144,6 +147,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 		declaredPat:     op.REST.Path,
 		requestPath:     requestPath,
 		query:           query,
+		structuredQuery: req.QueryValues,
 		body:            body,
 		bodyContentType: operationDirectReadContentType(op),
 		headers:         headers,
@@ -647,6 +651,9 @@ func validateOperationDirectReadQueryFields(op OperationSpec, queryFields []stri
 		}
 		if _, declared := parameters[field]; !declared {
 			if _, commandDeclared := commandFields[field]; commandDeclared {
+				continue
+			}
+			if selectedStructuredQuery(op.REST.inputPlan, field) {
 				continue
 			}
 			return fmt.Errorf("operation %q query parameter %q is not source-declared in rest.parameters", op.ID, field)

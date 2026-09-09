@@ -345,6 +345,8 @@ type StreamSpec struct {
 	preparedBodyPagination   *bodyPagingRequest
 	RequestInputs            *RequestInputContract `json:"request_inputs,omitempty"`
 	inputPlan                *compiledRequestInputPlan
+	preparedQueryValues      map[string]any
+	preparedQueryPairs       url.Values
 	preparedReadBody         any
 	preparedReadBodyPresent  bool
 	Name                     string                         `json:"name"`

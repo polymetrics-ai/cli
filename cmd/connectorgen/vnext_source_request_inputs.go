@@ -7,7 +7,7 @@ import (
 	"polymetrics.ai/internal/connectors/engine"
 )
 
-func sourceProjectionInputContract(facts sourceFacts) (json.RawMessage, *engine.RequestInputContract, error) {
+func sourceProjectionInputContract(facts sourceFacts, overrides map[string]engine.FormFieldEncoding) (json.RawMessage, *engine.RequestInputContract, error) {
 	containers := map[string]map[string]any{}
 	properties := map[string]any{}
 	for _, location := range []string{"path", "query", "header"} {
@@ -16,6 +16,8 @@ func sourceProjectionInputContract(facts sourceFacts) (json.RawMessage, *engine.
 		properties[location] = container
 	}
 	bindings := []engine.RequestInputBinding{}
+	queryFields := map[string]engine.FormFieldEncoding{}
+	hasStructured := false
 	for _, parameter := range facts.Parameters {
 		container := containers[parameter.In]
 		if container == nil {
@@ -25,9 +27,13 @@ func sourceProjectionInputContract(facts sourceFacts) (json.RawMessage, *engine.
 		if !ok {
 			return nil, nil, fmt.Errorf("source parameter does not resolve")
 		}
-		schema, _, ok := sourceProjectionScalarSchema(facts, node["schema"])
-		if !ok {
-			return nil, nil, fmt.Errorf("source parameter requires a supported scalar schema")
+		schema, kind, encoding, err := sourceProjectionQueryShape(facts, node, parameter.In, parameter.Name, overrides)
+		if err != nil {
+			return nil, nil, err
+		}
+		if parameter.In == "query" {
+			queryFields[parameter.Name] = encoding
+			hasStructured = hasStructured || kind == "object" || kind == "array"
 		}
 		container["properties"].(map[string]any)[parameter.Name] = schema
 		if parameter.Required {
@@ -40,5 +46,9 @@ func sourceProjectionInputContract(facts sourceFacts) (json.RawMessage, *engine.
 	if err != nil {
 		return nil, nil, err
 	}
-	return raw, &engine.RequestInputContract{Version: 1, Schema: "schemas/" + sourceBytesHash(raw) + ".json", Bindings: bindings}, nil
+	contract := &engine.RequestInputContract{Version: 1, Schema: "schemas/" + sourceBytesHash(raw) + ".json", Bindings: bindings}
+	if hasStructured {
+		contract.QueryEncoding = &engine.FormEncoding{Version: 1, MaxDepth: 32, MaxMembers: 10000, MaxItems: 10000, MaxPairs: 10000, MaxBytes: 64 << 10, Fields: queryFields}
+	}
+	return raw, contract, nil
 }

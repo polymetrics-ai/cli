@@ -59,6 +59,20 @@ func TestSourceProjection206ScalarInputs(t *testing.T) {
 	}
 }
 
+func TestSourceProjectionTypedQuery255(t *testing.T) {
+	for _, variant := range []string{"typed_query_map255", "typed_query_repeated255", "typed_query_bracket255", "typed_query_default255"} {
+		t.Run(variant, func(t *testing.T) { sourceProjectionPublishedRead206(t, "direct_"+variant, false) })
+	}
+}
+
+func TestSourceProjectionTypedQueryAuthority255(t *testing.T) {
+	for _, variant := range []string{"missing_evidence", "wrong_span", "unknown_parameter", "explicit_style", "unknown_mode"} {
+		t.Run(variant, func(t *testing.T) {
+			sourceProjectionPublishedRead206(t, "direct_typed_query_bracket255|"+variant, true)
+		})
+	}
+}
+
 func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal bool) {
 	t.Helper()
 	direct := strings.HasPrefix(variant, "direct_")
@@ -102,7 +116,7 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	case "response_status":
 		source = bytes.Replace(source, []byte(`"200"`), []byte(`"201"`), 1)
 	}
-	inputVariant := strings.HasPrefix(variant, "query_") || variant == "inherited_path" || variant == "operation_override" || variant == "optional_query_absent" || variant == "optional_query_present" || variant == "missing_path"
+	inputVariant := strings.HasPrefix(variant, "typed_query_") || strings.HasPrefix(variant, "query_") || variant == "inherited_path" || variant == "operation_override" || variant == "optional_query_absent" || variant == "optional_query_present" || variant == "missing_path"
 	expectedPath, expectedWire := "/widgets", "GET /widgets"
 	runtimeConfig := map[string]string{}
 	expectedName := "widgets"
@@ -135,6 +149,32 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 				override["schema"] = map[string]any{"type": "string", "enum": []any{"acme"}}
 				operation["parameters"] = []any{override}
 			}
+		} else if strings.HasPrefix(variant, "typed_query_") {
+			parameter := map[string]any{"in": "query", "name": "filter", "required": true, "style": "deepObject", "explode": true,
+				"schema": map[string]any{"type": "object", "additionalProperties": false, "required": []string{"owner", "tag"}, "properties": map[string]any{"owner": map[string]any{"type": "string"}, "tag": map[string]any{"type": "string"}}}}
+			runtimeConfig["filter"] = `{"tag":"x&y", "owner":"a+b c"}`
+			expectedWire = "GET /widgets?filter%5Bowner%5D=a%2Bb+c&filter%5Btag%5D=x%26y"
+			if variant == "typed_query_repeated255" || variant == "typed_query_bracket255" {
+				parameter["style"] = "form"
+				parameter["schema"] = map[string]any{"type": "array", "minItems": 1, "maxItems": 3, "items": map[string]any{"type": "string"}}
+				runtimeConfig["filter"] = `["a+b c","x&y","a+b c"]`
+				expectedWire = "GET /widgets?filter=a%2Bb+c&filter=x%26y&filter=a%2Bb+c"
+			}
+			if variant == "typed_query_bracket255" {
+				delete(parameter, "style")
+				delete(parameter, "explode")
+				if selectedBad == "explicit_style" {
+					parameter["style"] = "form"
+					parameter["explode"] = true
+				}
+				expectedWire = "GET /widgets?filter%5B%5D=a%2Bb+c&filter%5B%5D=x%26y&filter%5B%5D=a%2Bb+c"
+			}
+			if variant == "typed_query_default255" {
+				parameter["required"] = false
+				parameter["schema"].(map[string]any)["default"] = map[string]any{"tag": "x&y", "owner": "a+b c"}
+				delete(runtimeConfig, "filter")
+			}
+			operation["parameters"] = []any{parameter}
 		} else if strings.HasPrefix(variant, "query_") {
 			schema := map[string]any{"type": "integer", "minimum": json.Number("1"), "maximum": json.Number("5")}
 			runtimeConfig["page_size"] = "3"
@@ -242,9 +282,41 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	if variant == "response_status" {
 		lock.SourceProjection.Semantics[0].Collection.Records.Response.Status = "201"
 	}
+	if variant == "typed_query_bracket255" {
+		evidence := []byte("Array filters use repeated filter[] keys; nonempty arrays only.")
+		if err := os.WriteFile(filepath.Join(connector, "sources", "query-policy.txt"), evidence, 0600); err != nil {
+			t.Fatal(err)
+		}
+		lock.SourceProjection.Documents = []vNextSourceProjectionDocument{{ID: "query-policy", Path: "sources/query-policy.txt", SHA256: sourceBytesHash(evidence), Bytes: int64(len(evidence)), Format: "text", SourceURL: "https://docs.example.test/query", Revision: "fixture1", RetrievedAt: "2026-09-09T00:00:00Z"}}
+		lock.SourceProjection.Semantics[0].Evidence = []sourceFactRef{{DocumentID: "query-policy", Span: &sourceFactSpan{Offset: 0, Length: int64(len(evidence)), SHA256: sourceBytesHash(evidence)}}}
+	}
 	raw, err := json.Marshal(lock)
 	if err != nil {
 		t.Fatal(err)
+	}
+	if variant == "typed_query_bracket255" {
+		var document map[string]any
+		if err := json.Unmarshal(raw, &document); err != nil {
+			t.Fatal(err)
+		}
+		projection := document["source_projection"].(map[string]any)
+		semantic := projection["semantics"].([]any)[0].(map[string]any)
+		semantic["query_encoding"] = map[string]any{"filter": map[string]any{"mode": "bracket_repeated", "empty_array": "omit", "null": "reject"}}
+		switch selectedBad {
+		case "missing_evidence":
+			delete(semantic, "evidence")
+		case "wrong_span":
+			semantic["evidence"].([]any)[0].(map[string]any)["span"].(map[string]any)["sha256"] = strings.Repeat("a", 64)
+		case "unknown_parameter":
+			semantic["query_encoding"] = map[string]any{"other": map[string]any{"mode": "bracket_repeated", "empty_array": "omit", "null": "reject"}}
+		case "unknown_mode":
+			semantic["query_encoding"].(map[string]any)["filter"].(map[string]any)["mode"] = "automatic"
+		}
+
+		raw, err = json.Marshal(document)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 	if err := os.WriteFile(filepath.Join(connector, "source.lock.json"), raw, 0o600); err != nil {
 		t.Fatal(err)
@@ -292,6 +364,47 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	bundle, err := engine.Load(newVNextExecutionFS("acme", execution), "acme")
 	if err != nil {
 		t.Fatal(err)
+	}
+	if variant == "typed_query_map255" {
+		for _, field := range []string{"format", "values", "minimum", "maximum", "min_items", "max_items"} {
+			t.Run("contradictory_flag_"+field, func(t *testing.T) {
+				var surface map[string]any
+				if err := json.Unmarshal(execution["cli_surface.json"], &surface); err != nil {
+					t.Fatal(err)
+				}
+				for _, command := range surface["commands"].([]any) {
+					for _, rawFlag := range command.(map[string]any)["flags"].([]any) {
+						flag := rawFlag.(map[string]any)
+						if flag["name"] != "filter" {
+							continue
+						}
+						switch field {
+						case "format":
+							flag[field] = "date-time"
+						case "values":
+							flag[field] = []string{"contradiction"}
+						default:
+							flag[field] = 1
+						}
+					}
+				}
+				raw, err := json.Marshal(surface)
+				if err != nil {
+					t.Fatal(err)
+				}
+				candidate := map[string][]byte{}
+				for name, value := range execution {
+					candidate[name] = value
+				}
+				candidate["cli_surface.json"] = raw
+				if _, err := engine.Load(newVNextExecutionFS("acme", candidate), "acme"); err == nil {
+					t.Fatalf("contradictory structured flag %s admitted", field)
+				}
+				if len(requestSnapshot()) != 0 {
+					t.Fatal("admission sent HTTP")
+				}
+			})
+		}
 	}
 	if len(bundle.Streams) != 1 || bundle.Streams[0].Name != expectedName || bundle.Streams[0].Path != expectedPath {
 		t.Fatalf("source route/identity not preserved: %+v", bundle.Streams)
@@ -372,6 +485,38 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 		result, err := commandrunner.Run(t.Context(), consumer, commandrunner.Request{Path: []string{"api", expectedCommand}, Flags: flags}, nil)
 		if err != nil {
 			t.Fatal(err)
+		}
+		if strings.HasPrefix(variant, "typed_query_") {
+			invalid := []string{`null`, `[]`, `{}`, `{"owner":"x","tag":7}`, `{"owner":"x","tag":"y","extra":"z"}`, `{"owner":"first","owner":"second","tag":"y"}`, `{"owner":"x","tag":"y"} {}`}
+			if variant == "typed_query_repeated255" || variant == "typed_query_bracket255" {
+				invalid = []string{`null`, `{}`, `[]`, `["a","b","c","d"]`, `["a",7]`, `["a"] []`}
+			}
+			for _, bad := range invalid {
+				_, badErr := commandrunner.Run(t.Context(), consumer, commandrunner.Request{Path: []string{"api", expectedCommand}, Flags: map[string][]string{"filter": {bad}}}, nil)
+				if badErr == nil || len(requestSnapshot()) != 2 {
+					t.Fatalf("invalid typed query %q: error=%v requests=%v", bad, badErr, requestSnapshot())
+				}
+				emitted := 0
+				savedErr := consumer.Read(t.Context(), connectors.ReadRequest{Stream: expectedName, Config: connectors.RuntimeConfig{Config: map[string]string{"filter": bad}}}, func(connectors.Record) error { emitted++; return nil })
+				if savedErr == nil || emitted != 0 || len(requestSnapshot()) != 2 {
+					t.Fatalf("invalid saved typed query %q: error=%v rows=%d requests=%v", bad, savedErr, emitted, requestSnapshot())
+				}
+			}
+		}
+		if variant == "typed_query_map255" {
+			for i := range bundle.CLISurface.Commands {
+				for j := range bundle.CLISurface.Commands[i].Flags {
+					flag := &bundle.CLISurface.Commands[i].Flags[j]
+					if flag.Name == "filter" {
+						flag.MaxBytes = 8
+					}
+				}
+			}
+			bounded := engine.New(bundle, nil)
+			_, capErr := commandrunner.Run(t.Context(), bounded, commandrunner.Request{Path: []string{"api", expectedCommand}, Flags: flags}, nil)
+			if capErr == nil || len(requestSnapshot()) != 2 {
+				t.Fatalf("selected flag byte cap bypassed: %v requests=%v", capErr, requestSnapshot())
+			}
 		}
 		if strings.HasPrefix(variant, "query_") {
 			invalid := []string{"0", "6", "not-an-integer"}

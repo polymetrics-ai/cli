@@ -80,7 +80,11 @@ func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest, pagination
 		}
 		if !present && node.hasDefault {
 			var err error
-			raw, err = requestInputScalarText(node.defaultVal)
+			if binding.In == "query" && selectedStructuredQuery(plan, binding.Name) {
+				raw, err = structuredInputText(plan, node.defaultVal)
+			} else {
+				raw, err = requestInputScalarText(node.defaultVal)
+			}
 			if err != nil {
 				return stream, req, err
 			}
@@ -96,7 +100,7 @@ func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest, pagination
 			return stream, req, fmt.Errorf("request inputs exceed aggregate preparation budget")
 		}
 		scalarBytes += len(raw)
-		value, err := connectors.DecodeSourceScalar(node.types[0], raw, 1<<20)
+		value, err := decodeSelectedRequestInput(plan, binding, node.types[0], raw)
 		if err != nil {
 			return stream, req, fmt.Errorf("request input %s/%s: %w", binding.In, binding.Name, err)
 		}
@@ -166,6 +170,14 @@ func prepareReadInputs(stream StreamSpec, req connectors.ReadRequest, pagination
 		return stream, req, fmt.Errorf("request inputs violate the selected schema")
 	}
 
+	if plan.queryEncoding != nil {
+		values := envelope["query"].(map[string]any)
+		pairs, _, err := encodeTypedForm(plan.queryEncoding, plan.querySchema, values, nil)
+		if err != nil {
+			return stream, req, fmt.Errorf("query encoding: %w", err)
+		}
+		stream.preparedQueryValues, stream.preparedQueryPairs = values, pairs
+	}
 	return stream, req, nil
 }
 
@@ -207,6 +219,9 @@ func (c *Connector) ValidateReadInputs(ctx context.Context, req connectors.ReadI
 
 func prepareOperationReadInputs(op OperationSpec, req connectors.OperationDirectReadRequest) (connectors.OperationDirectReadRequest, error) {
 	if op.REST == nil || op.REST.RequestInputs == nil {
+		if len(req.QueryValues) != 0 {
+			return req, fmt.Errorf("structured query values require selected request inputs")
+		}
 		return req, nil
 	}
 	plan := op.REST.inputPlan
@@ -224,6 +239,22 @@ func prepareOperationReadInputs(op OperationSpec, req connectors.OperationDirect
 	req.Headers = maps.Clone(req.Headers)
 	if req.Headers == nil {
 		req.Headers = map[string]string{}
+	}
+	if len(req.QueryValues) != 0 {
+		values, err := prepareOperationStructuredValues(plan, req.QueryValues)
+		if err != nil {
+			return req, err
+		}
+		for name, value := range values {
+			if _, exists := req.Query[name]; exists {
+				return req, fmt.Errorf("conflicting scalar and structured query channels")
+			}
+			encoded, err := json.Marshal(value)
+			if err != nil {
+				return req, fmt.Errorf("invalid structured query value")
+			}
+			req.Query[name] = string(encoded)
+		}
 	}
 	// Both direct and saved adapters feed the same selected scalar preparation.
 	// Aliases remain local implementation coordinates, never new wire names.
@@ -258,7 +289,7 @@ func prepareOperationReadInputs(op OperationSpec, req connectors.OperationDirect
 	if len(req.HeaderValues) != 0 {
 		return req, fmt.Errorf("scalar request inputs do not accept repeated header values")
 	}
-	_, prepared, err := prepareReadInputs(StreamSpec{RequestInputs: op.REST.RequestInputs, inputPlan: plan}, connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: config}, Query: req.Query}, op.REST.Pagination)
+	preparedStream, prepared, err := prepareReadInputs(StreamSpec{RequestInputs: op.REST.RequestInputs, inputPlan: plan}, connectors.ReadRequest{Config: connectors.RuntimeConfig{Config: config}, Query: req.Query}, op.REST.Pagination)
 	if err != nil {
 		return req, err
 	}
@@ -276,6 +307,13 @@ func prepareOperationReadInputs(op OperationSpec, req connectors.OperationDirect
 			req.Headers[binding.Name] = value
 		}
 	}
+	req.QueryValues = map[string]any{}
+	for name, value := range preparedStream.preparedQueryValues {
+		if selectedStructuredQuery(plan, name) {
+			req.QueryValues[name] = value
+			delete(req.Query, name)
+		}
+	}
 	return req, nil
 }
 
@@ -290,8 +328,18 @@ func validateEffectiveReadInputs(stream StreamSpec, req connectors.ReadRequest, 
 		return fmt.Errorf("request input contract is not compiled")
 	}
 	envelope := map[string]any{"path": map[string]any{}, "query": map[string]any{}, "header": map[string]any{}}
+	encodedKnown, err := validatePreparedStructuredQuery(stream, query)
+	if err != nil {
+		return err
+	}
 	for _, binding := range plan.bindings {
 		if binding.In == "body" {
+			continue
+		}
+		if binding.In == "query" && selectedStructuredQuery(plan, binding.Name) {
+			if value, present := stream.preparedQueryValues[binding.Name]; present {
+				envelope["query"].(map[string]any)[binding.Name] = value
+			}
 			continue
 		}
 		raw, present := req.Config.Config[binding.ConfigKey]
@@ -322,7 +370,7 @@ func validateEffectiveReadInputs(stream StreamSpec, req connectors.ReadRequest, 
 		envelope[binding.In].(map[string]any)[binding.Name] = value
 	}
 	for name := range query {
-		if _, exists := plan.schema.node.properties["query"].properties[name]; !exists {
+		if _, exists := plan.schema.node.properties["query"].properties[name]; !exists && !encodedKnown[name] {
 			return fmt.Errorf("effective request contains undeclared query input")
 		}
 	}

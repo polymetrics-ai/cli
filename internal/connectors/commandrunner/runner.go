@@ -141,6 +141,10 @@ type structuredJSONRecordStringArmPreflighter interface {
 // structuredJSONOperationBodyPreflighter is intentionally an operation
 // contract rather than a generic JSON parser. The engine owns the source
 // schema, body mapping, and recursive bounds for the named field.
+type structuredJSONOperationQueryPreflighter interface {
+	PreflightOperationStructuredQueryField(operation, field string) error
+}
+
 type structuredJSONOperationBodyPreflighter interface {
 	PreflightOperationStructuredJSONBodyField(operation, field string) error
 }
@@ -801,6 +805,16 @@ func preflightStructuredJSONFlags(connector connectors.Connector, cmd connectors
 		if flag.Type != "json" {
 			continue
 		}
+		if cmd.Intent == "direct_read" && cmd.Operation != "" && strings.HasPrefix(flag.MapsTo, "query.") {
+			preflight, ok := connector.(structuredJSONOperationQueryPreflighter)
+			if !ok || flag.InputCodec != "source_structured_v1" || flag.AllowBareString {
+				return fmt.Errorf("structured query flag requires selected input preflight")
+			}
+			if err := preflight.PreflightOperationStructuredQueryField(cmd.Operation, strings.TrimPrefix(flag.MapsTo, "query.")); err != nil {
+				return err
+			}
+			continue
+		}
 		switch {
 		case (cmd.Intent == "reverse_etl" || cmd.Intent == "direct_write" || cmd.Intent == "binary_upload") && strings.TrimSpace(cmd.Write) != "":
 			field, ok := strings.CutPrefix(flag.MapsTo, "record.")
@@ -979,6 +993,23 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
 		return Result{}, err
 	}
+	queryValues := map[string]any{}
+	for _, flag := range cmd.Flags {
+		if flag.InputCodec != "source_structured_v1" {
+			continue
+		}
+		values, present := req.Flags[flag.Name]
+		if !present {
+			continue
+		}
+		value, err := coerceCommandFlagValue(cmd, flag, values)
+		if err != nil {
+			return Result{}, err
+		}
+		name := strings.TrimPrefix(flag.MapsTo, "query.")
+		queryValues[name] = value
+		delete(query, name)
+	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
 		maxBytes = MaxOperationDirectReadBytes
@@ -987,10 +1018,11 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		maxBytes = MaxOperationDirectReadBytes
 	}
 	direct, err := reader.OperationDirectRead(ctx, connectors.OperationDirectReadRequest{
-		Operation:  cmd.Operation,
-		Config:     req.Config,
-		PathParams: pathParams,
-		Query:      query,
+		Operation:   cmd.Operation,
+		Config:      req.Config,
+		PathParams:  pathParams,
+		Query:       query,
+		QueryValues: queryValues,
 		CommandBindings: &connectors.OperationDirectReadBindings{
 			Path:  operationMappedFields(cmd, "path."),
 			Query: operationMappedFields(cmd, "query."),
@@ -2607,6 +2639,27 @@ func coerceCommandFlagValue(cmd connectors.CommandSurfaceCommand, flag connector
 	actionBackedDirectWrite := cmd.Intent == "direct_write" && strings.TrimSpace(cmd.Write) != ""
 	if (cmd.Intent == "reverse_etl" || cmd.Intent == "binary_upload" || actionBackedDirectWrite) && strings.HasPrefix(flag.MapsTo, "record.") {
 		return coerceRecordFlagValue(flag, values)
+	}
+	if cmd.Intent == "direct_read" && cmd.Operation != "" && strings.HasPrefix(flag.MapsTo, "query.") && flag.Type == "json" && flag.InputCodec == "source_structured_v1" {
+		if len(values) != 1 {
+			return nil, fmt.Errorf("structured query flag requires exactly one value")
+		}
+		raw := values[0]
+		if err := safety.RejectDangerousChars(raw, "query flag"); err != nil {
+			return nil, err
+		}
+		kind := "object"
+		if strings.HasPrefix(strings.TrimSpace(raw), "[") {
+			kind = "array"
+		}
+		maxBytes := maxStructuredJSONFlagBytes
+		if flag.MaxBytes > 0 && flag.MaxBytes < maxBytes {
+			maxBytes = flag.MaxBytes
+		}
+		if err := validateCommandFlagEncodedBytes(flag, raw); err != nil {
+			return nil, err
+		}
+		return connectors.DecodeSourceStructured(kind, raw, maxBytes)
 	}
 	if flag.Type == "json" && isDeclaredStructuredJSONOperationBodyFlag(cmd, flag) {
 		return coerceDeclaredStructuredJSONRecordFlagValue(flag, values)

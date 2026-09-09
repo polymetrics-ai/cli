@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"polymetrics.ai/internal/connectors/engine"
 	"strings"
 )
 
@@ -54,11 +55,12 @@ type vNextSourceProjectionKey struct {
 }
 
 type vNextSourceProjectionSemantic struct {
-	Source     vNextSourceProjectionKey         `json:"source"`
-	Effect     string                           `json:"effect,omitempty"`
-	Collection *vNextSourceProjectionCollection `json:"collection,omitempty"`
-	Write      *vNextSourceProjectionWrite      `json:"write,omitempty"`
-	Evidence   []sourceFactRef                  `json:"evidence,omitempty"`
+	QueryEncoding map[string]engine.FormFieldEncoding `json:"query_encoding,omitempty"`
+	Source        vNextSourceProjectionKey            `json:"source"`
+	Effect        string                              `json:"effect,omitempty"`
+	Collection    *vNextSourceProjectionCollection    `json:"collection,omitempty"`
+	Write         *vNextSourceProjectionWrite         `json:"write,omitempty"`
+	Evidence      []sourceFactRef                     `json:"evidence,omitempty"`
 }
 
 type vNextSourceProjectionWrite struct {
@@ -145,6 +147,9 @@ func validateVNextSourceProjection(lock vNextSourceLock, members map[string]json
 		seen[semantic.Source] = true
 		if semantic.Effect != "" && semantic.Effect != "read" && semantic.Effect != "mutation" {
 			return fmt.Errorf("source_projection semantic %d has invalid effect", index)
+		}
+		if len(semantic.QueryEncoding) > 0 && (semantic.Collection == nil || semantic.Write != nil || len(semantic.Evidence) == 0) {
+			return fmt.Errorf("source query dialect requires cited selected read semantics")
 		}
 		if write := semantic.Write; write != nil {
 			if semantic.Effect != "mutation" || semantic.Collection != nil || write.RowDelivery != "one_request" || write.Batchable == nil || write.Retry != "single_attempt" {

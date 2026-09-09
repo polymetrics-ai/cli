@@ -161,7 +161,20 @@ func loadRequestInputPlan(fsys fs.FS, contract *RequestInputContract) (*compiled
 	if err := json.Unmarshal(raw, &envelope); err != nil {
 		return nil, err
 	}
-	return &compiledRequestInputPlan{schema: schema, raw: append(json.RawMessage(nil), raw...), bodySchema: append(json.RawMessage(nil), envelope.Properties["body"]...), bindings: append([]RequestInputBinding(nil), contract.Bindings...)}, nil
+	var queryEncoding *FormEncoding
+	if contract.QueryEncoding != nil {
+		encoded, err := json.Marshal(contract.QueryEncoding)
+		if err != nil {
+			return nil, fmt.Errorf("invalid query encoding")
+		}
+		if err := json.Unmarshal(encoded, &queryEncoding); err != nil {
+			return nil, fmt.Errorf("invalid query encoding")
+		}
+		if err := validateFormEncoding(queryEncoding, envelope.Properties["query"], nil); err != nil {
+			return nil, fmt.Errorf("query encoding: %w", err)
+		}
+	}
+	return &compiledRequestInputPlan{queryEncoding: queryEncoding, querySchema: append(json.RawMessage(nil), envelope.Properties["query"]...), schema: schema, raw: append(json.RawMessage(nil), raw...), bodySchema: append(json.RawMessage(nil), envelope.Properties["body"]...), bindings: append([]RequestInputBinding(nil), contract.Bindings...)}, nil
 }
 
 func requestInputObject(node *schemaNode) bool {
