@@ -134,3 +134,51 @@ TDD plan, before production edits:
 Red: pending actual production consumer run. Green: pending implementation.
 Remaining234 resource/authority closure, structured query255, approval243 and
 completion/proof244 remain independent required obligations.
+
+
+## CP18-252-07 typed query execution plan — Firstmate255
+
+Scope remains37 exact source identities/67 variants in the original gap file;
+QUERY-255-context.json pins it and the retained REST179–224/groups463–467
+provider text. Inspection only; no executed RED or per-source serialization
+acceptance yet. Source arrays/hashes cannot pass through scalar stringification.
+
+Reuse preserved235 typed_form.go at0a6886973 as the bounded pair serializer;
+keep its form write activation and243 approval repair separate. Preserve the
+original implementation and receipts. Extend its explicit array dialect for
+bracket-suffixed repeated scalar keys; repeated unsuffixed and indexed arrays
+remain distinct. No generic flattening or JSON-looking string success claim.
+
+Before production consumer changes, write an independent generated/source →
+loader → commandrunner/engine/App matrix. Source schema remains derived from
+actual parameters; reviewed query encoding semantics describe only noninferable
+wire dialect and PM resource limits, never maps_to or source membership. The
+existing selected request-input envelope owns query schema, aliases, defaults
+and final validation. A typed query-value channel preserves object/array values
+and exact numbers; legacy scalar Query remains unchanged. Conflicting channels,
+undeclared parameters, wrong types and unsupported encoding refuse pre-I/O.
+
+Required complete grouped cases: scalar legacy healthy control; ordered duplicate
+scalar arrays with bracket/repeated/indexed distinction; deterministic named/map
+objects; indexed array-of-objects; explicit empty/null/absence policies; exact
+big integers/decimals; UTF8 and + & = / escaping; ambiguous bracket-bearing map
+keys and encoded-coordinate collisions; depth/member/item/pair/input/final-wire
+budgets; source/command/schema binding mismatch; cold/warm loaded execution;
+caller mutation isolation; saved metadata validation before vault; direct one-page
+and saved pagination effective-query identity, later-link ownership and zero
+foreign sends. Literal expected bytes/pairs and returned IDs are independent of
+the serializer. Blocked downstream cases are labelled at their actual frontier.
+
+GSD discuss/plan/execute continues inline under248's no-new-helper policy. No
+provider-specific executor, live credential, new foundation architecture or source
+capability promotion. Red: pending actual production path. Green: pending.
+
+Firstmate261 adds provisional running252 scalar input groups to this same work: per_page200 source identities, max_results2, limit1 have reached undeclared-query refusal before I/O; scope3 is currently join inspection, not another observed guard. Frozen84f6d456/remaining-cli252 continues untouched. Preserve original prefix7299939 bytes SHA256fe819e0b5955652c24d8ac017f2a772866f3cdad206705b4d986825a1e2b5a07 and exact offsets in PROVISIONAL-FINDINGS-252.md. Assess existing source/parameter render seam and declared paging ownership without loosening query guards. Helper second_400 delta remains worker-owned pending normal terminal merge (HELPER-CUSTODY-259.patch).
+
+Firstmate262: four source identities have actual invalid-planning acceptance after healthy controls: pagination_limit 1..100, expires_in 1..43200, rollback/rollout percentage 0..100. Preserve eight original observed cases and original raw offsets in PROVISIONAL-INPUT-BOUNDS-252.json; later contaminated snapshot comparisons are not independent defects. Locate ordinary declaration/schema loss before adding runtime behavior. Running252 remains frozen; focused causal source/consumer proof belongs to this parent. Red: original connector observations retained; new causal regression pending. Green: pending.
+
+Firstmate263 adopted: original running252 observed five sends after complete approved DELETE/connection close across direct and saved roles. Existing writeRequester intentionally permits explicitly idempotent deletes; existing TestDeclarativeWriteRetryPolicy requires that behavior. This is a policy/declaration reconciliation frontier, not automatic authority to remove idempotent retries globally. Determine selected source single_attempt mapping and preserve provider-key/read retry siblings. Query255/261 and bounds262 remain required. No new runtime regression or repair yet.
+
+## Source bounds262 scoped normalization slice
+
+Implement source-owned nullable scalar lowering for mutation schemas through the existing source projection/schema compiler, retaining exact minimum/maximum and all other constraints. This does not repair legacy authored omissions by itself. Before production edits extend the real source lock-render → admitted generation → fresh engine loader → ValidateWrite/DryRunWrite/Write fixture with nonnullable and nullable bounded integer cases, null/endpoint healthy controls and below/above/wrong-type refusals with zero sends. Nonnullable baseline success is disconfirmation of a universal compiler bounds-loss claim; nullable admission refusal is the expected new capability frontier, not the original invalid-planning symptom. Preserve raw numeric precision and refuse unsupported schema compositions; keep scalar read input scope unchanged. Red: pending fresh original capture. Green: pending.

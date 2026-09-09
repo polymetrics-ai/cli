@@ -36,6 +36,13 @@ graph. Each pinned inventory may declare `class: "primary"` or
 Inventory names never determine class, and class does not grant lane capability.
 Runtime still consumes only execution JSON.
 
+For supported mutation schemas, an explicit scalar `nullable: true` becomes a
+closed union with `null`; `nullable: false` keeps the scalar type. Numeric bounds,
+enums and defaults remain intact. Null must also satisfy any declared enum.
+Ambiguous type unions and nullable object/array dialects are refused until their
+source semantics are supported. This lowering does not repair older authored
+execution declarations automatically.
+
 ## 1. Source-lock document
 
 The file is `internal/connectors/defs/<connector>/source.lock.json`. Its root is

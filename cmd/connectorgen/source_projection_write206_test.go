@@ -22,6 +22,12 @@ func TestSourceProjection206TypedMutation(t *testing.T) {
 	}
 }
 
+func TestSourceProjectionBounds262(t *testing.T) {
+	for _, variant := range []string{"bounded_integer", "bounded_nullable_integer", "bounded_nullable_null", "bounded_nullable_false", "bounded_ttl", "bounded_zero", "bounded_bigint", "invalid_nullable_null", "invalid_nullable_string", "invalid_nullable_union", "invalid_nullable_object", "invalid_nullable_keyword"} {
+		t.Run(variant, func(t *testing.T) { sourceProjectionMutation206(t, variant) })
+	}
+}
+
 func sourceProjectionMutation206(t *testing.T, variant string) {
 	t.Helper()
 	var mu sync.Mutex
@@ -45,6 +51,42 @@ func sourceProjectionMutation206(t *testing.T, variant string) {
 	defer server.Close()
 	count := func() int { mu.Lock(); defer mu.Unlock(); return len(requests) }
 	schema := json.RawMessage(`{"type":"object","additionalProperties":false,"required":["data"],"properties":{"data":{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"string"}}}}}`)
+	bounded := strings.HasPrefix(variant, "bounded_")
+	minimum, maximum, below, above := "1", "100", "0", "101"
+	switch variant {
+	case "bounded_ttl":
+		maximum, above = "43200", "43201"
+	case "bounded_zero":
+		minimum, below = "0", "-1"
+	case "bounded_bigint":
+		minimum, maximum, below, above = "9007199254740993", "9007199254740995", "9007199254740992", "9007199254740996"
+	}
+	if bounded {
+		schema = json.RawMessage(`{"type":"object","additionalProperties":false,"required":["data"],"properties":{"data":{"type":"object","additionalProperties":false,"required":["name"],"properties":{"name":{"type":"integer","minimum":1,"maximum":100}}}}}`)
+		schema = bytes.Replace(schema, []byte(`"minimum":1,"maximum":100`), []byte(`"minimum":`+minimum+`,"maximum":`+maximum), 1)
+		if variant == "bounded_ttl" || strings.HasPrefix(variant, "bounded_nullable_") {
+			schema = bytes.Replace(schema, []byte(`"type":"integer"`), []byte(`"type":"integer","nullable":true`), 1)
+		}
+	}
+	if variant == "bounded_nullable_false" {
+		schema = bytes.Replace(schema, []byte(`"nullable":true`), []byte(`"nullable":false`), 1)
+	}
+	if strings.HasPrefix(variant, "invalid_nullable_") {
+		field := `"type":"integer","nullable":true`
+		switch variant {
+		case "invalid_nullable_null":
+			field = `"type":"integer","nullable":null`
+		case "invalid_nullable_string":
+			field = `"type":"integer","nullable":"true"`
+		case "invalid_nullable_union":
+			field = `"type":["integer","null"],"nullable":true`
+		case "invalid_nullable_object":
+			field = `"type":"object","nullable":true`
+		case "invalid_nullable_keyword":
+			field += `,"unknown_constraint":1`
+		}
+		schema = bytes.Replace(schema, []byte(`"type":"string"`), []byte(field), 1)
+	}
 	operation := map[string]any{"operationId": "create_widget", "requestBody": map[string]any{"required": true, "content": map[string]any{"application/json": map[string]any{"schema": schema}}}, "responses": map[string]any{"201": map[string]any{"description": "Created"}}}
 	if variant == "optional_body" {
 		operation["requestBody"].(map[string]any)["required"] = false
@@ -79,7 +121,7 @@ func sourceProjectionMutation206(t *testing.T, variant string) {
 	}
 	var stdout, stderr bytes.Buffer
 	code := runLockRender([]string{"lock-render", "acme", "--defs", root}, &stdout, &stderr)
-	if variant == "optional_body" {
+	if variant == "optional_body" || strings.HasPrefix(variant, "invalid_nullable_") {
 		if code == 0 {
 			t.Fatal("optional-body source arm silently restricted to required record body")
 		}
@@ -127,6 +169,38 @@ func sourceProjectionMutation206(t *testing.T, variant string) {
 		t.Fatal("missing source-required name accepted")
 	}
 	records := []connectors.Record{{"data": map[string]any{"name": "widget-a"}}}
+	expectedBody := `POST /widgets application/json {"data":{"name":"widget-a"}}`
+	if bounded {
+		records = []connectors.Record{{"data": map[string]any{"name": json.Number(minimum)}}}
+		expectedBody = `POST /widgets application/json {"data":{"name":` + minimum + `}}`
+		if variant == "bounded_nullable_null" {
+			records[0]["data"].(map[string]any)["name"] = nil
+			expectedBody = `POST /widgets application/json {"data":{"name":null}}`
+		}
+		for _, value := range []any{json.Number(minimum), json.Number(maximum)} {
+			healthy := []connectors.Record{{"data": map[string]any{"name": value}}}
+			if _, err := engine.DryRunWrite(t.Context(), bundle, req, healthy, nil); err != nil {
+				t.Fatalf("source endpoint %v refused: %v", value, err)
+			}
+		}
+		for _, value := range []any{json.Number(below), json.Number(above), json.Number("1.5"), "1"} {
+			invalid := []connectors.Record{{"data": map[string]any{"name": value}}}
+			if err := engine.ValidateWrite(t.Context(), bundle, req, invalid); err == nil {
+				t.Fatalf("source-invalid bound/type %v accepted", value)
+			}
+			if _, err := engine.DryRunWrite(t.Context(), bundle, req, invalid, nil); err == nil {
+				t.Fatalf("source-invalid bound/type %v previewed", value)
+			}
+			if count() != 0 {
+				t.Fatal("invalid source value sent provider request")
+			}
+		}
+		if variant == "bounded_integer" || variant == "bounded_nullable_false" || variant == "bounded_zero" || variant == "bounded_bigint" {
+			if err := engine.ValidateWrite(t.Context(), bundle, req, []connectors.Record{{"data": map[string]any{"name": nil}}}); err == nil {
+				t.Fatal("nonnullable source accepted null")
+			}
+		}
+	}
 	if _, err := engine.DryRunWrite(t.Context(), bundle, req, records, nil); err != nil {
 		t.Fatal(err)
 	}
@@ -151,7 +225,7 @@ func sourceProjectionMutation206(t *testing.T, variant string) {
 	}
 	mu.Lock()
 	defer mu.Unlock()
-	if len(requests) != 1 || requests[0] != `POST /widgets application/json {"data":{"name":"widget-a"}}` {
+	if len(requests) != 1 || requests[0] != expectedBody {
 		t.Fatalf("actual typed source request=%v", requests)
 	}
 }

@@ -94,3 +94,74 @@ overwrite-integration-app-259-01: 60/60 events, 23.513s, rawSHA256 73b4bec8e0554
 overwrite-integration-cli-259-01: 22/22 events, 54.786s, rawSHA256 c79894e9c41fc440331db5a66a88cbdee331c5f3e88f08da0be360e833356468. Command: ["/Users/karthiksivadas/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.6.darwin-arm64/bin/go", "test", "-json", "-count=1", "-timeout", "20m", "./internal/cli", "-run", "^TestBatch1CP18GitLabLane248ManagedETLCollections/full_overwrite"]. Complete original input/source snapshots retained.
 
 Shared helper cp18Lane248ETLCollections delta removes only the full_overwrite fault-list restriction and zero-HTTP early-return assertion. All20 source/page/error expectations now execute; original refusal evidence remains in history. No other GitLab helper, fixture or252 source/variant ownership was adopted. Local final race60, vet/lint/Atlas/build/help/docs checks retain original receipts in the preceding primary verification appendix. This passing increment does not establish full source C2, connector or programme acceptance.
+
+## Source bounds262 bounded mutation schema lowering
+
+Existing nonnullable bounds survive new source projection; legacy authored field omissions are separately confirmed and remain uncorrected. New source-owned mutation scalar nullability now lowers into closed engine type unions without erasing min/max/enum/defaults. No runtime retry or query behavior changed; structured query255, all legacy mapping261/262 and selected source replay263 remain open.
+
+Original RED: two nullable variants failed actual lock-render at unknown nullable keyword; nonnullable control passed generation, loader, preview, bounds refusals and wire. This is not a new reproduction of legacy invalid-plan acceptance. Final normal matrix26events; race plus Atlas46events; events include parents, not independent source keys. Exact endpoint/invalid bounds, bigint, null versus absence, malformed nullable and unchanged scalar readers are covered. Object/array nullability, unexpanded local refs, composition/source-variant normalization and complete current GitLab corpus reconciliation remain outside this slice.
+
+Verification uses original captures below, no input drift. Atlas57 and source-lock guide updated. GSD continues inline under248 no-new-agent instruction; existing phase plan/TDD was updated before production. Local inspection only, no independent acceptance/connector C2/full CI claim. No command/flag/help API changed; docs UI/manual parity not applicable beyond authoring guide.
+
+[
+  {
+    "run": "source-bounds-red-262-01",
+    "exit": 1,
+    "seconds": 6.49271283300186,
+    "events": 4,
+    "passes": 1,
+    "raw_sha256": "56f99a6a2514177c7c4663815656bc9e00512b155b5b6f3f14f6498107632678",
+    "receipt_sha256": "fc283483ef8df3b14b85d4a94f5de220d8d2b7bf1af0ee0a925f0dad4fc949c0",
+    "input_drift": []
+  },
+  {
+    "run": "source-bounds-green-262-01",
+    "exit": 0,
+    "seconds": 7.613067374993989,
+    "events": 8,
+    "passes": 8,
+    "raw_sha256": "f1f38083295c839faeb6b27e6cff4daed4a016565b9abd2684668c638d02222e",
+    "receipt_sha256": "291853024e8d1b202695a203529989d4d3f0253c13cbf2c7e3996964e9d2e42f",
+    "input_drift": []
+  },
+  {
+    "run": "source-bounds-matrix-262-01",
+    "exit": 0,
+    "seconds": 11.848800125000707,
+    "events": 26,
+    "passes": 26,
+    "raw_sha256": "3d530336ffa910d51683d3267495d58d92251393914f5d711da14a2f463003bd",
+    "receipt_sha256": "960738780f8dc9e0803297fc7859a50bf41c35edf248d17d3299f3ded73b70d6",
+    "input_drift": []
+  },
+  {
+    "run": "source-bounds-race-262-01",
+    "exit": 0,
+    "seconds": 25.785377542000788,
+    "events": 46,
+    "passes": 46,
+    "raw_sha256": "7d1e31f419d5af074b20fac6af1c0ec043743470d311be6cea692fa84699c990",
+    "receipt_sha256": "7cfff324adfd0629bfa6856f6cc2882b113ee06374ffd43a29aac3d18f82b764",
+    "input_drift": []
+  },
+  {
+    "run": "source-bounds-vet-262-01",
+    "exit": 0,
+    "seconds": 1.1882695419990341,
+    "events": 0,
+    "passes": 0,
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "receipt_sha256": "5cb03b8e0e98a4bf9521f2743007735a1d120be0412ff11758ad44c0b29f4c62",
+    "input_drift": []
+  },
+  {
+    "run": "source-bounds-lint-262-01",
+    "exit": 0,
+    "seconds": 3.517733667002176,
+    "events": 0,
+    "passes": 0,
+    "raw_sha256": "e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47",
+    "receipt_sha256": "6704cbba68b040443a05ec62a7fc6c4d60c5704bde9663fe894db08a6604ab7e",
+    "input_drift": []
+  }
+]

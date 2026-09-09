@@ -281,3 +281,9 @@ this existing warehouse.stage-etl.v1 extension and owner/proof selectors.
 Private help-check script SHA256 aefd8f2f41d7afbc99637d6754ccdec1d0060f236709083099a6baf1c51dce1c. Binary SHA256 2ee9cf3fe3a20a629afb9c6fa0c3d0c84ef2ea6d14ba5a27b5e056d7026892ff.
 
 GSD verify-work prompt resolved/read; local automated obligations above pass. Parent inline quality inspection is not an independent review. Firstmate259 requires passing-increment normal publication now; full independent programme judgment remains gated. Remaining234/255/243/244 obligations are unchanged.
+
+## Source bounds262 nullable lowering
+
+Red: source-bounds-red-262-01, native Go count=1, exit1, 6.493s, four events/one pass. Existing nonnullable numeric bounds survive actual generation/loader/preview/write; two nullable cases refuse during actual lock-render with unknown schema keyword nullable. This is a distinct admission frontier, not reproduction of legacy bounds omission. Original raw and source snapshots retained under receipts-cp13-141. Green: pending.
+
+Green: source-bounds-green-262-01 exit0 8/8 events7.613s, expanded source-bounds-matrix-262-01 exit0 26/26 events11.849s, source-bounds-race-262-01 exit0 46/46 events25.785s including Atlas. Vet/lint exit0. The two original admission REDs and one original healthy control retain their original meaning. Final source/capture bindings and remaining legacy mapping/query/replay obligations: SOURCE-BOUNDS-262-local.md; no source-chain acceptance.
