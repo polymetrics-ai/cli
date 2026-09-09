@@ -40,7 +40,7 @@
             "type": "array",
             "items": { "type": "string" }
           },
-          "input_codec": {"type":"string","enum":["source_scalar_v1"]},
+          "input_codec": {"type":"string","enum":["source_scalar_v1","source_structured_v1"]},
           "maps_to": { "type": "string" },
           "format": {
             "type": "string",
@@ -120,7 +120,7 @@
                   "type": "array",
                   "items": { "type": "string" }
                 },
-                "input_codec": {"type":"string","enum":["source_scalar_v1"]},
+                "input_codec": {"type":"string","enum":["source_scalar_v1","source_structured_v1"]},
           "maps_to": { "type": "string" },
                 "format": {
                   "type": "string",

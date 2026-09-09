@@ -541,3 +541,9 @@ and destination credential resolution. Runtime continues to consume execution
 JSON only; source locks, documentary evidence and the Atlas remain authoring
 inputs. These authoring additions introduce no public command or runtime help
 namespace.
+
+### Selected structured query inputs
+
+Source projection can lower explicit `form`/`explode: true` nonempty scalar arrays and `deepObject`/`explode: true` named scalar objects into a selected request-input contract. A parameter without explicit serialization can instead use a retained, cited `query_encoding` semantic entry. Its dialect is explicit; it cannot override conflicting source serialization or apply to an undeclared parameter. Unsupported shapes remain refused. These rules do not imply that every retained provider query variant has been reconciled.
+
+Execution JSON contains the closed input schema and bounded encoding. Generated direct-read JSON flags use `source_structured_v1`; saved reads consume JSON text at the selected configuration alias. Scalars keep their existing codec. Object members and array items retain types, duplicate object members fail, and repeated arrays preserve order and duplicate values. Byte, depth, member, item and pair budgets apply before sending. Continuation URLs cannot change selected structured query values. Runtime never reads the source evidence to make these decisions.

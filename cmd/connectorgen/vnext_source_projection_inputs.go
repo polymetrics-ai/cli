@@ -184,6 +184,17 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 			rawDocument = &document
 		}
 		facts := normalizeSourceFacts(row, documents[row.DocumentID], rawDocument)
+		for name := range semantic.QueryEncoding {
+			found := false
+			for _, parameter := range facts.Parameters {
+				if parameter.In == "query" && parameter.Name == name {
+					found = true
+				}
+			}
+			if !found {
+				return vNextSourceLock{}, fmt.Errorf("source query dialect names missing parameter")
+			}
+		}
 		if semantic.Write != nil {
 			descriptor, err := sourceProjectionTypedWrite(facts, semantic.Write, row.Key)
 			if err != nil {
@@ -228,12 +239,12 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 		}
 		schemaPath := "schemas/" + sourceBytesHash(recordSchema) + ".json"
 		lowered.Schemas[schemaPath] = recordSchema
-		streamPath, query, configSchema, err := sourceProjectionStreamInputs(facts, lowered.ConfigSchema)
+		streamPath, query, configSchema, err := sourceProjectionStreamInputs(facts, lowered.ConfigSchema, semantic.QueryEncoding)
 		if err != nil {
 			return vNextSourceLock{}, fmt.Errorf("source_projection source %q: %w", row.Key.ID, err)
 		}
 		lowered.ConfigSchema = configSchema
-		inputSchema, inputContract, err := sourceProjectionInputContract(facts)
+		inputSchema, inputContract, err := sourceProjectionInputContract(facts, semantic.QueryEncoding)
 		if err != nil {
 			return vNextSourceLock{}, err
 		}
@@ -248,7 +259,7 @@ func lowerVNextSourceProjection(lock vNextSourceLock, inventory retainedSourceIn
 		}
 		descriptor := vNextOperationDescriptor{ID: "stream:" + name, Source: source, Stream: stream, SchemaRefs: vNextSchemaReferences{Record: schemaPath, Input: inputContract.Schema}}
 		if lock.Lanes["direct_read"] == "implemented" {
-			operation, command, err := sourceProjectionDirectInput(facts, name)
+			operation, command, err := sourceProjectionDirectInput(facts, name, semantic.QueryEncoding)
 			if err != nil {
 				return vNextSourceLock{}, fmt.Errorf("source_projection source %q: %w", row.Key.ID, err)
 			}
@@ -381,7 +392,7 @@ func sourceProjectionTypedSchema(facts sourceFacts, raw json.RawMessage, want st
 
 // sourceProjectionStreamInputs derives saved-stream scoping from effective
 // source parameters. Direct-operation flags have their own canonical consumer.
-func sourceProjectionStreamInputs(facts sourceFacts, configSchema json.RawMessage) (string, map[string]any, json.RawMessage, error) {
+func sourceProjectionStreamInputs(facts sourceFacts, configSchema json.RawMessage, overrides map[string]engine.FormFieldEncoding) (string, map[string]any, json.RawMessage, error) {
 	var config map[string]json.RawMessage
 	if err := decodeSourceJSON(configSchema, &config); err != nil {
 		return "", nil, nil, err
@@ -407,16 +418,20 @@ func sourceProjectionStreamInputs(facts sourceFacts, configSchema json.RawMessag
 		if !ok {
 			return "", nil, nil, fmt.Errorf("parameter does not resolve")
 		}
-		schema, _, ok := sourceProjectionScalarSchema(facts, node["schema"])
-		if !ok {
-			return "", nil, nil, fmt.Errorf("parameter requires an unsupported stream schema")
+		schema, kind, _, shapeErr := sourceProjectionQueryShape(facts, node, parameter.In, parameter.Name, overrides)
+		if shapeErr != nil {
+			return "", nil, nil, shapeErr
 		}
+		structured := kind == "object" || kind == "array"
 		// Nullable values and non-default serialization require their distinct
 		// typed representation; never erase either to manufacture a string input.
 		if raw := schema["nullable"]; len(raw) != 0 && string(raw) != "false" {
 			return "", nil, nil, fmt.Errorf("nullable parameter representation is not yet lowered")
 		}
 		for _, field := range []string{"content", "style", "explode", "allowReserved", "allowEmptyValue"} {
+			if structured && (field == "style" || field == "explode") {
+				continue
+			}
 			if len(node[field]) != 0 {
 				return "", nil, nil, fmt.Errorf("parameter serialization is not yet lowered")
 			}
@@ -455,7 +470,7 @@ func sourceProjectionStreamInputs(facts sourceFacts, configSchema json.RawMessag
 	return streamPath, query, result, err
 }
 
-func sourceProjectionDirectInput(facts sourceFacts, name string) (json.RawMessage, json.RawMessage, error) {
+func sourceProjectionDirectInput(facts sourceFacts, name string, overrides map[string]engine.FormFieldEncoding) (json.RawMessage, json.RawMessage, error) {
 	parameters := make([]map[string]any, 0, len(facts.Parameters))
 	flags := make([]map[string]any, 0, len(facts.Parameters))
 	for _, p := range facts.Parameters {
@@ -463,9 +478,13 @@ func sourceProjectionDirectInput(facts sourceFacts, name string) (json.RawMessag
 		if !ok {
 			return nil, nil, fmt.Errorf("direct parameter does not resolve")
 		}
-		schema, kind, ok := sourceProjectionScalarSchema(facts, node["schema"])
-		if !ok {
-			return nil, nil, fmt.Errorf("direct parameter schema is not yet lowered")
+		schema, kind, _, shapeErr := sourceProjectionQueryShape(facts, node, p.In, p.Name, overrides)
+		if shapeErr != nil {
+			return nil, nil, shapeErr
+		}
+		if kind == "object" || kind == "array" {
+			flags = append(flags, map[string]any{"name": p.Name, "type": "json", "input_codec": "source_structured_v1", "summary": p.Name, "required": p.Required, "maps_to": "query." + p.Name})
+			continue
 		}
 		// Do not drop validation keywords while projecting a narrower parameter
 		// dialect. Broader source schemas require the matching typed consumer.

@@ -430,6 +430,16 @@ DESCRIPTION
   ETL STREAMS, REVERSE ETL ACTIONS, and sync transport without reading
   credentials.
 
+  STRUCTURED QUERY INPUTS
+  A generated direct-read flag shown as JSON accepts one JSON object or array
+  only when its operation declares that structured query input. Quote the JSON
+  as one shell argument. The connector schema validates members and item types;
+  the declared encoding controls bracket/indexed/repeated query keys. Repeated
+  values preserve their order and duplicates. Unknown members, duplicate JSON
+  object keys, invalid types and exceeded byte limits fail before sending.
+  Saved reads use JSON text at the corresponding declared configuration key.
+  This does not make arbitrary query objects valid for other commands.
+
   BUNDLE DIAGNOSTICS
   List and catalog use safe metadata without decoding unselected bundles.
   Selecting an invalid execution bundle fails before its executor is constructed

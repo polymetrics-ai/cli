@@ -34,6 +34,16 @@ func validateRequestInputCommands(surface *CLISurface, streams []StreamSpec, ope
 			if flag.InputCodec == "" && !found {
 				continue
 			}
+			if found && binding.In == "query" && selectedStructuredQuery(plan, binding.Name) {
+				if flag.Format != "" || len(flag.Values) != 0 || flag.Minimum != nil || flag.Maximum != nil || flag.MinItems != 0 || flag.MaxItems != 0 {
+					return fmt.Errorf("structured query flag constraints belong to selected input schema")
+				}
+				container := plan.schema.node.properties["query"]
+				if flag.Type != "json" || flag.InputCodec != "source_structured_v1" || flag.Repeatable || flag.AllowBareString || flag.Required != containsRequestInputName(container.required, binding.Name) {
+					return fmt.Errorf("structured query flag differs from selected input")
+				}
+				continue
+			}
 			if !found || plan == nil || flag.InputCodec != "source_scalar_v1" {
 				return fmt.Errorf("command %q flag %q lacks its selected input codec/binding", command.Path, flag.Name)
 			}

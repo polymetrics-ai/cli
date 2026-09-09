@@ -1467,6 +1467,7 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 	for k, v := range req.Query {
 		q.Set(k, v)
 	}
+	q = mergePreparedQuery(stream, q)
 	if formattedLower != "" && stream.Incremental.RequestParam != "" && incrementalRequestParamShouldApply(stream, req) {
 		q.Set(stream.Incremental.RequestParam, formattedLower)
 	}

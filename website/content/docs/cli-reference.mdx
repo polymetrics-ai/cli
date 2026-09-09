@@ -19,6 +19,10 @@ This page is the public website contract for the `pm` CLI. When a command is add
   `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
 </Callout>
 
+## Declared structured query flags
+
+A connector direct-read flag displayed as JSON accepts one quoted JSON object or array only when the selected operation declares that input. Its schema validates members and item types, while its declared encoding controls bracket, indexed, or repeated query keys. Array order and duplicates are preserved. Unknown members, duplicate object keys, invalid types, and exceeded byte limits fail before sending. Saved reads use JSON text at the corresponding declared configuration key. This does not enable arbitrary query objects on other commands.
+
 ## Configuration
 
 `pm` resolves typed invocation configuration once per run from a bounded allowlist. Precedence is:

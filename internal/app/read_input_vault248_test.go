@@ -2,12 +2,14 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"sync/atomic"
 	"testing"
 	"testing/fstest"
@@ -49,11 +51,19 @@ func (*bypassReadInputGuard248) ValidateReadInputs(context.Context, connectors.R
 }
 
 func TestRunETLRealInputVaultFrontier248(t *testing.T) {
-	for _, mode := range []string{"invalid", "healthy_overlay", "bypassed_guard_fault"} {
+	for _, mode := range []string{"invalid", "healthy_overlay", "bypassed_guard_fault", "structured_invalid", "structured_healthy_overlay", "structured_bypassed_guard_fault"} {
 		t.Run(mode, func(t *testing.T) {
+			structured := strings.HasPrefix(mode, "structured_")
+			mode = strings.TrimPrefix(mode, "structured_")
+			inputName, healthyInput, expectedURI := "page_size", "3", "/records?page_size=3"
+			if structured {
+				inputName = "filter"
+				healthyInput = `["a","b","a"]`
+				expectedURI = "/records?filter%5B%5D=a&filter%5B%5D=b&filter%5B%5D=a"
+			}
 			var sends atomic.Int32
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if r.Method != "GET" || r.URL.RequestURI() != "/records?page_size=3" {
+				if r.Method != "GET" || r.URL.RequestURI() != expectedURI {
 					t.Errorf("unexpected input wire %s %s", r.Method, r.URL.RequestURI())
 				}
 				sends.Add(1)
@@ -72,6 +82,32 @@ func TestRunETLRealInputVaultFrontier248(t *testing.T) {
 				"docs.md":                              "# Overview\n\nTest.\n\n## Auth setup\n\nNone.\n\n## Streams notes\n\nTest.\n\n## Write actions & risks\n\nNone.\n",
 			} {
 				files["inputprobe/"+name] = &fstest.MapFile{Data: []byte(raw)}
+			}
+			if structured {
+				for _, name := range []string{"streams.json", "schemas/inputs.json"} {
+					files["inputprobe/"+name].Data = []byte(strings.ReplaceAll(string(files["inputprobe/"+name].Data), "page_size", "filter"))
+				}
+				var inputs, streams map[string]any
+				if err := json.Unmarshal(files["inputprobe/schemas/inputs.json"].Data, &inputs); err != nil {
+					t.Fatal(err)
+				}
+				query := inputs["properties"].(map[string]any)["query"].(map[string]any)
+				query["properties"] = map[string]any{"filter": map[string]any{"type": "array", "minItems": 1, "maxItems": 3, "items": map[string]any{"type": "string"}}}
+				raw, err := json.Marshal(inputs)
+				if err != nil {
+					t.Fatal(err)
+				}
+				files["inputprobe/schemas/inputs.json"].Data = raw
+				if err := json.Unmarshal(files["inputprobe/streams.json"].Data, &streams); err != nil {
+					t.Fatal(err)
+				}
+				contract := streams["streams"].([]any)[0].(map[string]any)["request_inputs"].(map[string]any)
+				contract["query_encoding"] = map[string]any{"version": 1, "max_depth": 8, "max_members": 32, "max_items": 32, "max_pairs": 32, "max_bytes": 1024, "fields": map[string]any{"filter": map[string]any{"mode": "bracket_repeated", "empty_array": "omit", "null": "reject"}}}
+				raw, err = json.Marshal(streams)
+				if err != nil {
+					t.Fatal(err)
+				}
+				files["inputprobe/streams.json"].Data = raw
 			}
 			bundle, err := engine.Load(files, "inputprobe")
 			if err != nil {
@@ -100,7 +136,7 @@ func TestRunETLRealInputVaultFrontier248(t *testing.T) {
 				t.Fatal(err)
 			}
 			t.Cleanup(func() { _ = a.Close() })
-			if _, err = a.AddCredential(t.Context(), AddCredentialRequest{Name: "source", Connector: "inputprobe", Config: map[string]string{"base_url": server.URL, "page_size": "invalid"}}); err != nil {
+			if _, err = a.AddCredential(t.Context(), AddCredentialRequest{Name: "source", Connector: "inputprobe", Config: map[string]string{"base_url": server.URL, inputName: "invalid"}}); err != nil {
 				t.Fatal(err)
 			}
 			if _, err = a.AddCredential(t.Context(), AddCredentialRequest{Name: "destination", Connector: destination.Name(), Config: map[string]string{"path": filepath.Join(root, "out")}}); err != nil {
@@ -108,7 +144,7 @@ func TestRunETLRealInputVaultFrontier248(t *testing.T) {
 			}
 			overlay := map[string]string{}
 			if mode == "healthy_overlay" {
-				overlay["page_size"] = "3"
+				overlay[inputName] = healthyInput
 			}
 			if _, err = a.CreateConnection(t.Context(), CreateConnectionRequest{Name: "input_job", Source: EndpointConfig{Connector: "inputprobe", Credential: "source", Config: overlay}, Destination: EndpointConfig{Connector: destination.Name(), Credential: "destination"}, Streams: map[string]StreamConfig{"records": {SyncMode: "full_refresh_overwrite", PrimaryKey: []string{"id"}, DestinationTable: "records"}}}); err != nil {
 				t.Fatal(err)

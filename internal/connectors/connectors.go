@@ -484,10 +484,11 @@ type DirectReadRequest struct {
 }
 
 type OperationDirectReadRequest struct {
-	Operation  string
-	Config     RuntimeConfig
-	PathParams map[string]string
-	Query      map[string]string
+	Operation   string
+	Config      RuntimeConfig
+	PathParams  map[string]string
+	QueryValues map[string]any // Structured values require a selected query encoding and input schema.
+	Query       map[string]string
 	// CommandBindings seals the exact caller-controlled fields declared by the
 	// generated command descriptor. The engine revalidates this set against the
 	// loaded execution bundle before using it, so undeclared direct callers stay

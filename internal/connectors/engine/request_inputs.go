@@ -8,9 +8,10 @@ import (
 // RequestInputContract describes generated inputs for one selected consumer.
 // It carries executable coordinates only, never authoring source or proof paths.
 type RequestInputContract struct {
-	Version  int                   `json:"version"`
-	Schema   string                `json:"schema"`
-	Bindings []RequestInputBinding `json:"bindings"`
+	QueryEncoding *FormEncoding         `json:"query_encoding,omitempty"`
+	Version       int                   `json:"version"`
+	Schema        string                `json:"schema"`
+	Bindings      []RequestInputBinding `json:"bindings"`
 }
 
 // RequestInputBinding binds a saved alias to one declared wire coordinate.
@@ -22,10 +23,12 @@ type RequestInputBinding struct {
 }
 
 type compiledRequestInputPlan struct {
-	schema     *Schema
-	raw        json.RawMessage
-	bodySchema json.RawMessage
-	bindings   []RequestInputBinding
+	schema        *Schema
+	raw           json.RawMessage
+	bodySchema    json.RawMessage
+	querySchema   json.RawMessage
+	queryEncoding *FormEncoding
+	bindings      []RequestInputBinding
 }
 
 // streamRequestBodySchema supplies detached schema bytes to body placement.

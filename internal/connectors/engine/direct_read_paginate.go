@@ -56,6 +56,7 @@ type directReadWalk struct {
 	declaredPat     string
 	requestPath     string
 	query           url.Values
+	structuredQuery map[string]any
 	body            any
 	bodyContentType string
 	headers         http.Header
@@ -285,6 +286,20 @@ func readDirectPage(ctx context.Context, b Bundle, rt *Runtime, w directReadWalk
 	if nextLinks.active() && w.pageCursor != "" {
 		effective, _ := url.Parse(reqPath)
 		sizeSent = directReadRequestedSize(spec, strategy, effective.Query())
+	}
+	if w.operation != nil && w.operation.REST != nil && w.operation.REST.inputPlan != nil && w.operation.REST.inputPlan.queryEncoding != nil {
+		target, parseErr := url.Parse(reqPath)
+		if parseErr != nil {
+			return nil, connectors.DirectReadPage{}, nil, parseErr
+		}
+		effective, parseErr := url.ParseQuery(target.RawQuery)
+		if parseErr != nil {
+			return nil, connectors.DirectReadPage{}, nil, parseErr
+		}
+		effective = mergeQuery(effective, query)
+		if err := validateOperationQueryInputs(w.operation, w.query, w.structuredQuery, effective); err != nil {
+			return nil, connectors.DirectReadPage{}, nil, err
+		}
 	}
 	var resp *connsdk.Response
 	if w.bodyContentType == "text/plain" {
