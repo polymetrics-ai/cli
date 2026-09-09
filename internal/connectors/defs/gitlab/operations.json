@@ -177,7 +177,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/admin/ci/variables",
         "response": {
           "success_statuses": [
@@ -510,7 +516,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/ai/duo_workflows/flow_callbacks",
         "response": {
           "success_statuses": [
@@ -774,6 +786,11 @@
               "Group",
               "Gitlab::Audit::InstanceScope"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/audit_events",
@@ -851,7 +868,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/broadcast_messages",
         "response": {
           "success_statuses": [
@@ -918,6 +941,11 @@
               "failed",
               "canceled"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/bulk_imports",
@@ -960,6 +988,11 @@
               "failed",
               "canceled"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/bulk_imports/entities",
@@ -1025,6 +1058,11 @@
               "failed",
               "canceled"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/bulk_imports/{import_id}/entities",
@@ -1158,6 +1196,11 @@
             "in": "query",
             "name": "public",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/deploy_keys",
@@ -1183,6 +1226,11 @@
             "in": "query",
             "name": "active",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/deploy_tokens",
@@ -1274,6 +1322,11 @@
               "wiki",
               "design"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/events",
@@ -1403,7 +1456,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/geo_nodes",
         "response": {
           "success_statuses": [
@@ -1422,7 +1481,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/geo_nodes/status",
         "response": {
           "success_statuses": [
@@ -1498,7 +1563,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/geo_sites",
         "response": {
           "success_statuses": [
@@ -1517,7 +1588,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/geo_sites/status",
         "response": {
           "success_statuses": [
@@ -1593,7 +1670,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/group_repository_storage_moves",
         "response": {
           "success_statuses": [
@@ -1875,6 +1958,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/-/epics/{epic_iid}/issues",
@@ -1973,6 +2061,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/access_requests",
@@ -2111,6 +2204,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/approval_rules",
@@ -2147,6 +2245,11 @@
             "in": "query",
             "name": "created_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/audit_events",
@@ -2210,6 +2313,11 @@
             "in": "query",
             "name": "name",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/badges",
@@ -2328,6 +2436,11 @@
               "last_activity_on_asc",
               "last_activity_on_desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/billable_members",
@@ -2359,6 +2472,11 @@
             "in": "path",
             "name": "user_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -2392,6 +2510,11 @@
             "name": "user_id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/billable_members/{user_id}/memberships",
@@ -2418,6 +2541,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/boards",
@@ -2482,6 +2610,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/boards/{board_id}/lists",
@@ -2546,6 +2679,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/clusters",
@@ -2667,6 +2805,11 @@
             "in": "query",
             "name": "active",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/deploy_tokens",
@@ -2880,6 +3023,11 @@
             "in": "query",
             "name": "username",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/enterprise_users",
@@ -2938,6 +3086,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/epic_boards",
@@ -3002,6 +3155,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/epic_boards/{board_id}/lists",
@@ -3104,6 +3262,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/epics/{epic_iid}/award_emoji",
@@ -3174,6 +3337,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/epics/{epic_iid}/issues",
@@ -3211,6 +3379,11 @@
             "in": "path",
             "name": "note_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -3320,6 +3493,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/epics/{eventable_id}/resource_label_events",
@@ -3390,6 +3568,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/epics/{eventable_id}/resource_state_events",
@@ -3459,6 +3642,11 @@
             "in": "path",
             "name": "noteable_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -3640,6 +3828,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/epics/{noteable_id}/notes",
@@ -3815,6 +4008,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/hooks",
@@ -3989,6 +4187,11 @@
             "in": "query",
             "name": "query",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/invitations",
@@ -4159,6 +4362,11 @@
             "in": "query",
             "name": "with_counts",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/labels",
@@ -4278,6 +4486,11 @@
             "in": "query",
             "name": "expires_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/manage/ssh_keys",
@@ -4615,6 +4828,11 @@
             "name": "milestone_id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/milestones/{milestone_id}/issues",
@@ -4646,6 +4864,11 @@
             "in": "path",
             "name": "milestone_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -4775,6 +4998,11 @@
               "pending_destruction",
               "deprecated"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/packages",
@@ -5053,6 +5281,11 @@
             "in": "query",
             "name": "search",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/protected_branches",
@@ -5111,6 +5344,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/protected_environments",
@@ -5199,6 +5437,11 @@
             "in": "query",
             "name": "username",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/provisioned_users",
@@ -5251,6 +5494,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/registry/repositories",
@@ -5297,6 +5545,11 @@
             "in": "query",
             "name": "updated_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/related_epic_links",
@@ -5337,6 +5590,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/releases",
@@ -5363,6 +5621,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/repository_storage_moves",
@@ -5631,6 +5894,11 @@
             "in": "query",
             "name": "username",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/saml_users",
@@ -5733,6 +6001,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/service_accounts",
@@ -5819,6 +6092,11 @@
               "active",
               "inactive"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/service_accounts/{user_id}/personal_access_tokens",
@@ -5845,6 +6123,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/ssh_certificates",
@@ -5996,6 +6279,11 @@
             "in": "query",
             "name": "search",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/transfer_locations",
@@ -6022,6 +6310,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/uploads",
@@ -6048,6 +6341,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/variables",
@@ -6140,6 +6438,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/groups/{id}/wiki_pages/{noteable_id}/notes",
@@ -6271,7 +6574,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/hooks",
         "response": {
           "success_statuses": [
@@ -6341,6 +6650,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/internal/gitlab_subscriptions/namespaces/{id}/projects",
@@ -6660,6 +6974,11 @@
             "in": "query",
             "name": "top_level_only",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/namespaces",
@@ -6680,7 +6999,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/namespaces/storage/limit_exclusions",
         "response": {
           "success_statuses": [
@@ -7196,6 +7521,11 @@
             "in": "query",
             "name": "domain",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/pages/domains",
@@ -7275,6 +7605,11 @@
             "in": "query",
             "name": "user_id",
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/personal_access_tokens",
@@ -7328,6 +7663,11 @@
               "40",
               "50"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/personal_access_tokens/self/associations",
@@ -7374,7 +7714,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/project_aliases",
         "response": {
           "success_statuses": [
@@ -7419,7 +7765,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/project_repository_storage_moves",
         "response": {
           "success_statuses": [
@@ -7527,6 +7879,13 @@
             "name": "q",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "maximum": 100,
+            "minimum": 1,
+            "name": "limit",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/(-/)search/semantic",
@@ -7553,6 +7912,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/access_requests",
@@ -7722,6 +8086,11 @@
               "failed",
               "stopped"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/ai_agent/sessions",
@@ -7833,6 +8202,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/approval_rules",
@@ -7990,6 +8364,11 @@
             "in": "query",
             "name": "created_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/audit_events",
@@ -8053,6 +8432,11 @@
             "in": "query",
             "name": "name",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/badges",
@@ -8149,6 +8533,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/boards",
@@ -8213,6 +8602,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/boards/{board_id}/lists",
@@ -8333,6 +8727,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/cluster_agents",
@@ -8397,6 +8796,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/cluster_agents/{agent_id}/tokens",
@@ -8531,6 +8935,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/clusters",
@@ -8798,6 +9207,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/deploy_keys",
@@ -8861,6 +9275,11 @@
             "in": "query",
             "name": "active",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/deploy_tokens",
@@ -8979,6 +9398,11 @@
             "in": "query",
             "name": "updated_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/deployments",
@@ -9057,6 +9481,11 @@
               "stopping",
               "available"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/environments",
@@ -9207,6 +9636,11 @@
               "wiki",
               "design"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/events",
@@ -9290,6 +9724,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/external_status_checks",
@@ -9325,6 +9764,11 @@
               "enabled",
               "disabled"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/feature_flags",
@@ -9388,6 +9832,11 @@
             "in": "query",
             "name": "search",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/feature_flags_user_lists",
@@ -9654,6 +10103,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/freeze_periods",
@@ -9767,6 +10221,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/hooks",
@@ -9967,6 +10426,11 @@
             "in": "query",
             "name": "query",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/invitations",
@@ -10049,6 +10513,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/issues/{eventable_id}/resource_iteration_events",
@@ -10119,6 +10588,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/issues/{eventable_id}/resource_label_events",
@@ -10189,6 +10663,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/issues/{eventable_id}/resource_milestone_events",
@@ -10259,6 +10738,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/issues/{eventable_id}/resource_state_events",
@@ -10329,6 +10813,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/issues/{eventable_id}/resource_weight_events",
@@ -10430,6 +10919,11 @@
             "in": "path",
             "name": "issue_iid",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -10641,6 +11135,11 @@
             "name": "note_id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/issues/{issue_iid}/notes/{note_id}/award_emoji",
@@ -10845,6 +11344,11 @@
             "name": "noteable_id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/issues/{noteable_id}/discussions",
@@ -11025,6 +11529,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/issues/{noteable_id}/notes",
@@ -11179,6 +11688,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/job_token_scope/allowlist",
@@ -11205,6 +11719,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/job_token_scope/groups_allowlist",
@@ -11315,6 +11834,11 @@
             "in": "query",
             "name": "recursive",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/jobs/{job_id}/artifacts/tree",
@@ -11403,6 +11927,11 @@
             "in": "query",
             "name": "with_counts",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/labels",
@@ -11466,6 +11995,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/managed_licenses",
@@ -11706,6 +12240,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{eventable_id}/resource_label_events",
@@ -11776,6 +12315,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{eventable_id}/resource_milestone_events",
@@ -11846,6 +12390,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{eventable_id}/resource_state_events",
@@ -11962,6 +12511,11 @@
             "in": "path",
             "name": "merge_request_iid",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -12097,6 +12651,11 @@
             "name": "merge_request_iid",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{merge_request_iid}/award_emoji",
@@ -12167,6 +12726,11 @@
             "name": "merge_request_iid",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{merge_request_iid}/blockees",
@@ -12198,6 +12762,11 @@
             "in": "path",
             "name": "merge_request_iid",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -12268,6 +12837,11 @@
             "name": "merge_request_iid",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{merge_request_iid}/closes_issues",
@@ -12299,6 +12873,11 @@
             "in": "path",
             "name": "merge_request_iid",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -12369,6 +12948,11 @@
             "in": "query",
             "name": "unidiff",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{merge_request_iid}/diffs",
@@ -12476,6 +13060,11 @@
             "in": "path",
             "name": "note_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -12713,6 +13302,11 @@
             "name": "merge_request_iid",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{merge_request_iid}/versions",
@@ -12787,6 +13381,11 @@
             "in": "path",
             "name": "noteable_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -12968,6 +13567,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_requests/{noteable_id}/notes",
@@ -13050,6 +13654,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_trains",
@@ -13132,6 +13741,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/merge_trains/{target_branch}",
@@ -13262,6 +13876,11 @@
             "name": "milestone_id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/milestones/{milestone_id}/issues",
@@ -13293,6 +13912,11 @@
             "in": "path",
             "name": "milestone_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -13446,6 +14070,11 @@
             "name": "run_id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "max_results",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/metrics/get-history",
@@ -13589,6 +14218,11 @@
             "in": "query",
             "name": "order_by",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "max_results",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/ml/mlflow/api/2.0/mlflow/registered-models/search",
@@ -13748,6 +14382,11 @@
               "pending_destruction",
               "deprecated"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/packages",
@@ -14595,6 +15234,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/packages/{package_id}/package_files",
@@ -14627,6 +15271,13 @@
             "name": "package_id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "maximum": 20,
+            "minimum": 1,
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/packages/{package_id}/pipelines",
@@ -14653,6 +15304,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/pages/domains",
@@ -14720,6 +15376,11 @@
               "active",
               "inactive"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/pipeline_schedules",
@@ -14845,6 +15506,11 @@
             "in": "query",
             "name": "updated_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/pipeline_schedules/{pipeline_schedule_id}/pipelines",
@@ -15034,6 +15700,11 @@
             "in": "query",
             "name": "yaml_errors",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/pipelines",
@@ -15129,6 +15800,11 @@
             "name": "pipeline_id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/pipelines/{pipeline_id}/bridges",
@@ -15166,6 +15842,11 @@
             "in": "query",
             "name": "include_retried",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/pipelines/{pipeline_id}/jobs",
@@ -15262,6 +15943,11 @@
             "name": "pipeline_id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/pipelines/{pipeline_id}/trigger_jobs",
@@ -15325,6 +16011,11 @@
             "in": "query",
             "name": "search",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/protected_branches",
@@ -15383,6 +16074,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/protected_environments",
@@ -15441,6 +16137,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/protected_tags",
@@ -15587,6 +16288,11 @@
             "in": "query",
             "name": "tags_count",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/registry/repositories",
@@ -15618,6 +16324,11 @@
             "in": "path",
             "name": "repository_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -15742,6 +16453,11 @@
             "in": "query",
             "name": "updated_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/releases",
@@ -15811,6 +16527,11 @@
             "name": "tag_name",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/releases/{tag_name}/assets/links",
@@ -15875,6 +16596,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/remote_mirrors",
@@ -15953,6 +16679,11 @@
               "updated_asc",
               "updated_desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/branches",
@@ -16141,6 +16872,11 @@
             "in": "query",
             "name": "with_stats",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/commits",
@@ -16173,6 +16909,11 @@
             "name": "noteable_id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/commits/{noteable_id}/discussions",
@@ -16362,6 +17103,11 @@
             "name": "sha",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/commits/{sha}/comments",
@@ -16399,6 +17145,11 @@
             "in": "query",
             "name": "unidiff",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/commits/{sha}/diff",
@@ -16436,6 +17187,11 @@
             "in": "query",
             "name": "state",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/commits/{sha}/merge_requests",
@@ -16478,6 +17234,11 @@
               "tag",
               "all"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/commits/{sha}/refs",
@@ -16622,6 +17383,11 @@
             "in": "query",
             "name": "stage",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/commits/{sha}/statuses",
@@ -16725,6 +17491,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/contributors",
@@ -16849,6 +17620,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/tags",
@@ -16969,6 +17745,11 @@
             "in": "query",
             "name": "with_last_commit",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository/tree",
@@ -16995,6 +17776,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/repository_storage_moves",
@@ -17053,6 +17839,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/resource_groups",
@@ -17149,6 +17940,11 @@
             "name": "key",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/resource_groups/{key}/upcoming_jobs",
@@ -17252,6 +18048,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/secure_files",
@@ -17328,6 +18129,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/service_accounts",
@@ -17414,6 +18220,11 @@
               "active",
               "inactive"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/service_accounts/{user_id}/personal_access_tokens",
@@ -17582,6 +18393,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/snippets",
@@ -17613,6 +18429,11 @@
             "in": "path",
             "name": "noteable_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -17794,6 +18615,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/snippets/{noteable_id}/notes",
@@ -17895,6 +18721,11 @@
             "in": "path",
             "name": "snippet_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -18015,6 +18846,11 @@
             "in": "path",
             "name": "snippet_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -18155,6 +18991,11 @@
             "in": "query",
             "name": "search",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/starrers",
@@ -18247,6 +19088,11 @@
               "issues",
               "merge_requests"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/templates/{type}",
@@ -18365,6 +19211,11 @@
             "in": "query",
             "name": "search",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/transfer_locations",
@@ -18391,6 +19242,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/triggers",
@@ -18449,6 +19305,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/uploads",
@@ -18506,6 +19367,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/variables",
@@ -18532,6 +19398,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/vulnerabilities",
@@ -18592,6 +19463,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/vulnerabilities/{noteable_id}/notes",
@@ -18730,6 +19606,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/projects/{id}/wiki_pages/{noteable_id}/notes",
@@ -18902,7 +19783,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/runner_controllers",
         "response": {
           "success_statuses": [
@@ -18952,6 +19839,11 @@
             "in": "path",
             "name": "runner_controller_id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -19245,6 +20137,11 @@
             "in": "query",
             "name": "system_id",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/runners/{id}/jobs",
@@ -19296,6 +20193,11 @@
             "in": "path",
             "name": "id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -19387,6 +20289,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/service_accounts",
@@ -19407,7 +20314,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/snippet_repository_storage_moves",
         "response": {
           "success_statuses": [
@@ -19462,6 +20375,11 @@
             "in": "query",
             "name": "created_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/snippets",
@@ -19497,6 +20415,11 @@
             "in": "query",
             "name": "repository_storage",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/snippets/all",
@@ -19527,6 +20450,11 @@
             "in": "query",
             "name": "created_before",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/snippets/public",
@@ -19579,6 +20507,11 @@
             "name": "id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/snippets/{id}/repository_storage_moves",
@@ -19657,7 +20590,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/templates/dockerfiles",
         "response": {
           "success_statuses": [
@@ -19702,7 +20641,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/templates/gitignores",
         "response": {
           "success_statuses": [
@@ -19747,7 +20692,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/templates/gitlab_ci_ymls",
         "response": {
           "success_statuses": [
@@ -19797,6 +20748,11 @@
             "in": "query",
             "name": "popular",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/templates/licenses",
@@ -19926,6 +20882,11 @@
               "ComplianceManagement::Projects::ComplianceViolation",
               "Ai::DuoWorkflows::Workflow"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/todos",
@@ -19961,6 +20922,11 @@
             "in": "query",
             "name": "without_projects",
             "type": "boolean"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/topics",
@@ -20031,6 +20997,11 @@
             "in": "query",
             "name": "from",
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/user/activities",
@@ -20096,7 +21067,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/user/emails",
         "response": {
           "success_statuses": [
@@ -20141,7 +21118,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/user/gpg_keys",
         "response": {
           "success_statuses": [
@@ -20186,7 +21169,13 @@
       "rest": {
         "max_bytes": 67108864,
         "method": "GET",
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
+          }
+        ],
         "path": "/user/keys",
         "response": {
           "success_statuses": [
@@ -20428,6 +21417,11 @@
             "name": "id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/users/{id}/emails",
@@ -20494,6 +21488,11 @@
               "wiki",
               "design"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/users/{id}/events",
@@ -20519,6 +21518,11 @@
             "in": "path",
             "name": "id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -20546,6 +21550,11 @@
             "name": "id",
             "required": true,
             "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/users/{id}/following",
@@ -20571,6 +21580,11 @@
             "in": "path",
             "name": "id",
             "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
             "type": "integer"
           }
         ],
@@ -20721,6 +21735,11 @@
               "asc",
               "desc"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/users/{user_id}/contributed_projects",
@@ -20757,6 +21776,11 @@
               "active",
               "inactive"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/users/{user_id}/impersonation_tokens",
@@ -20815,6 +21839,11 @@
             "name": "user_id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/users/{user_id}/keys",
@@ -20850,6 +21879,11 @@
               "Project",
               "Namespace"
             ]
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/users/{user_id}/memberships",
@@ -20876,6 +21910,11 @@
             "name": "user_id",
             "required": true,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "per_page",
+            "type": "integer"
           }
         ],
         "path": "/users/{user_id}/project_deploy_keys",

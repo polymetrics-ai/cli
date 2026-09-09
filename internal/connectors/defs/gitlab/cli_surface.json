@@ -2680,6 +2680,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f61646d696e2f63692f7661726961626c6573",
       "output_policy": "json_redacted",
@@ -2981,6 +2988,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f61692f64756f5f776f726b666c6f77732f666c6f775f63616c6c6261636b73",
       "output_policy": "json_redacted",
@@ -3220,6 +3234,11 @@
             "Group",
             "Gitlab::Audit::InstanceScope"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -3291,6 +3310,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f62726f6164636173745f6d65737361676573",
       "output_policy": "json_redacted",
@@ -3353,6 +3379,11 @@
             "failed",
             "canceled"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -3393,6 +3424,11 @@
             "failed",
             "canceled"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -3454,6 +3490,11 @@
             "failed",
             "canceled"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -3579,6 +3620,11 @@
           "maps_to": "query.public",
           "name": "public",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -3602,6 +3648,11 @@
           "maps_to": "query.active",
           "name": "active",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -3689,6 +3740,11 @@
             "wiki",
             "design"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -3803,6 +3859,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f67656f5f6e6f646573",
       "output_policy": "json_redacted",
@@ -3819,6 +3882,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f67656f5f6e6f6465732f737461747573",
       "output_policy": "json_redacted",
@@ -3888,6 +3958,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f67656f5f7369746573",
       "output_policy": "json_redacted",
@@ -3904,6 +3981,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f67656f5f73697465732f737461747573",
       "output_policy": "json_redacted",
@@ -3973,6 +4057,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f67726f75705f7265706f7369746f72795f73746f726167655f6d6f766573",
       "output_policy": "json_redacted",
@@ -4238,6 +4329,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4330,6 +4426,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4462,6 +4563,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4496,6 +4602,11 @@
           "maps_to": "query.created_before",
           "name": "created-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4555,6 +4666,11 @@
           "maps_to": "query.name",
           "name": "name",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4667,6 +4783,11 @@
             "last_activity_on_asc",
             "last_activity_on_desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4696,6 +4817,11 @@
           "maps_to": "path.user_id",
           "name": "user-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -4727,6 +4853,11 @@
           "name": "user-id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4751,6 +4882,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4811,6 +4947,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4871,6 +5012,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -4984,6 +5130,11 @@
           "maps_to": "query.active",
           "name": "active",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -5191,6 +5342,11 @@
           "maps_to": "query.username",
           "name": "username",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -5245,6 +5401,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -5305,6 +5466,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -5401,6 +5567,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -5467,6 +5638,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -5502,6 +5678,11 @@
           "maps_to": "path.note_id",
           "name": "note-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -5605,6 +5786,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -5671,6 +5857,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -5736,6 +5927,11 @@
           "maps_to": "path.noteable_id",
           "name": "noteable-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -5909,6 +6105,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -6076,6 +6277,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -6242,6 +6448,11 @@
           "maps_to": "query.query",
           "name": "query",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -6406,6 +6617,11 @@
           "maps_to": "query.with_counts",
           "name": "with-counts",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -6519,6 +6735,11 @@
           "maps_to": "query.expires_before",
           "name": "expires-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -6838,6 +7059,11 @@
           "name": "milestone-id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -6867,6 +7093,11 @@
           "maps_to": "path.milestone_id",
           "name": "milestone-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -6992,6 +7223,11 @@
             "pending_destruction",
             "deprecated"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7264,6 +7500,11 @@
           "maps_to": "query.search",
           "name": "search",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7318,6 +7559,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7402,6 +7648,11 @@
           "maps_to": "query.username",
           "name": "username",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7450,6 +7701,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7494,6 +7750,11 @@
           "maps_to": "query.updated_before",
           "name": "updated-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7532,6 +7793,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7556,6 +7822,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7810,6 +8081,11 @@
           "maps_to": "query.username",
           "name": "username",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7906,6 +8182,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -7990,6 +8271,11 @@
             "active",
             "inactive"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -8014,6 +8300,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -8161,6 +8452,11 @@
           "maps_to": "query.search",
           "name": "search",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -8185,6 +8481,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -8209,6 +8510,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -8297,6 +8603,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -8420,6 +8731,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f686f6f6b73",
       "output_policy": "json_redacted",
@@ -8482,6 +8800,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -8769,6 +9092,11 @@
           "maps_to": "query.top_level_only",
           "name": "top-level-only",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -8787,6 +9115,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f6e616d657370616365732f73746f726167652f6c696d69745f6578636c7573696f6e73",
       "output_policy": "json_redacted",
@@ -9273,6 +9608,11 @@
           "maps_to": "query.domain",
           "name": "domain",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -9350,6 +9690,11 @@
           "maps_to": "query.user_id",
           "name": "user-id",
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -9398,6 +9743,11 @@
             "40",
             "50"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -9440,6 +9790,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f70726f6a6563745f616c6961736573",
       "output_policy": "json_redacted",
@@ -9480,6 +9837,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f70726f6a6563745f7265706f7369746f72795f73746f726167655f6d6f766573",
       "output_policy": "json_redacted",
@@ -9581,6 +9945,13 @@
           "name": "q",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.limit",
+          "maximum": 100,
+          "minimum": 1,
+          "name": "provider-limit",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -9605,6 +9976,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -9768,6 +10144,11 @@
             "failed",
             "stopped"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -9873,6 +10254,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10020,6 +10406,11 @@
           "maps_to": "query.created_before",
           "name": "created-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10079,6 +10470,11 @@
           "maps_to": "query.name",
           "name": "name",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10169,6 +10565,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10229,6 +10630,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10343,6 +10749,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10403,6 +10814,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10529,6 +10945,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10780,6 +11201,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10839,6 +11265,11 @@
           "maps_to": "query.active",
           "name": "active",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -10953,6 +11384,11 @@
           "maps_to": "query.updated_before",
           "name": "updated-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11027,6 +11463,11 @@
             "stopping",
             "available"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11169,6 +11610,11 @@
             "wiki",
             "design"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11246,6 +11692,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11279,6 +11730,11 @@
             "enabled",
             "disabled"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11338,6 +11794,11 @@
           "maps_to": "query.search",
           "name": "search",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11598,6 +12059,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11705,6 +12171,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11895,6 +12366,11 @@
           "maps_to": "query.query",
           "name": "query",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -11973,6 +12449,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -12039,6 +12520,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -12105,6 +12591,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -12171,6 +12662,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -12237,6 +12733,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -12332,6 +12833,11 @@
           "maps_to": "path.issue_iid",
           "name": "issue-iid",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -12531,6 +13037,11 @@
           "name": "note-id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -12723,6 +13234,11 @@
           "name": "noteable-id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -12895,6 +13411,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13041,6 +13562,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13065,6 +13591,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13169,6 +13700,11 @@
           "maps_to": "query.recursive",
           "name": "recursive",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13253,6 +13789,11 @@
           "maps_to": "query.with_counts",
           "name": "with-counts",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13312,6 +13853,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13538,6 +14084,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13604,6 +14155,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13670,6 +14226,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13780,6 +14341,11 @@
           "maps_to": "path.merge_request_iid",
           "name": "merge-request-iid",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -13907,6 +14473,11 @@
           "name": "merge-request-iid",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -13973,6 +14544,11 @@
           "name": "merge-request-iid",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -14002,6 +14578,11 @@
           "maps_to": "path.merge_request_iid",
           "name": "merge-request-iid",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -14068,6 +14649,11 @@
           "name": "merge-request-iid",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -14097,6 +14683,11 @@
           "maps_to": "path.merge_request_iid",
           "name": "merge-request-iid",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -14163,6 +14754,11 @@
           "maps_to": "query.unidiff",
           "name": "unidiff",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -14264,6 +14860,11 @@
           "maps_to": "path.note_id",
           "name": "note-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -14487,6 +15088,11 @@
           "name": "merge-request-iid",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -14557,6 +15163,11 @@
           "maps_to": "path.noteable_id",
           "name": "noteable-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -14730,6 +15341,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -14808,6 +15424,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -14886,6 +15507,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -15010,6 +15636,11 @@
           "name": "milestone-id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -15039,6 +15670,11 @@
           "maps_to": "path.milestone_id",
           "name": "milestone-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -15182,6 +15818,11 @@
           "name": "run-id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.max_results",
+          "name": "max-results",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -15317,6 +15958,11 @@
           "maps_to": "query.order_by",
           "name": "order-by",
           "type": "string"
+        },
+        {
+          "maps_to": "query.max_results",
+          "name": "max-results",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -15470,6 +16116,11 @@
             "pending_destruction",
             "deprecated"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16283,6 +16934,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16313,6 +16969,13 @@
           "name": "package-id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "maximum": 20,
+          "minimum": 1,
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16337,6 +17000,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16400,6 +17068,11 @@
             "active",
             "inactive"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16521,6 +17194,11 @@
           "maps_to": "query.updated_before",
           "name": "updated-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16706,6 +17384,11 @@
           "maps_to": "query.yaml_errors",
           "name": "yaml-errors",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16795,6 +17478,11 @@
           "name": "pipeline-id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16830,6 +17518,11 @@
           "maps_to": "query.include_retried",
           "name": "include-retried",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16920,6 +17613,11 @@
           "name": "pipeline-id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -16979,6 +17677,11 @@
           "maps_to": "query.search",
           "name": "search",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17033,6 +17736,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17087,6 +17795,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17223,6 +17936,11 @@
           "maps_to": "query.tags_count",
           "name": "tags-count",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17252,6 +17970,11 @@
           "maps_to": "path.repository_id",
           "name": "repository-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -17370,6 +18093,11 @@
           "maps_to": "query.updated_before",
           "name": "updated-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17435,6 +18163,11 @@
           "name": "tag-name",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17495,6 +18228,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17569,6 +18307,11 @@
             "updated_asc",
             "updated_desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17751,6 +18494,11 @@
           "maps_to": "query.with_stats",
           "name": "with-stats",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17781,6 +18529,11 @@
           "name": "noteable-id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17960,6 +18713,11 @@
           "name": "sha",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -17995,6 +18753,11 @@
           "maps_to": "query.unidiff",
           "name": "unidiff",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18030,6 +18793,11 @@
           "maps_to": "query.state",
           "name": "state",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18070,6 +18838,11 @@
             "tag",
             "all"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18208,6 +18981,11 @@
           "maps_to": "query.stage",
           "name": "stage",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18307,6 +19085,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18425,6 +19208,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18539,6 +19327,11 @@
           "maps_to": "query.with_last_commit",
           "name": "with-last-commit",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18563,6 +19356,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18617,6 +19415,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18707,6 +19510,11 @@
           "name": "key",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18806,6 +19614,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18878,6 +19691,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -18962,6 +19780,11 @@
             "active",
             "inactive"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -19122,6 +19945,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -19151,6 +19979,11 @@
           "maps_to": "path.noteable_id",
           "name": "noteable-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -19324,6 +20157,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -19419,6 +20257,11 @@
           "maps_to": "path.snippet_id",
           "name": "snippet-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -19533,6 +20376,11 @@
           "maps_to": "path.snippet_id",
           "name": "snippet-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -19665,6 +20513,11 @@
           "maps_to": "query.search",
           "name": "search",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -19751,6 +20604,11 @@
             "issues",
             "merge_requests"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -19863,6 +20721,11 @@
           "maps_to": "query.search",
           "name": "search",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -19887,6 +20750,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -19941,6 +20809,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -19994,6 +20867,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -20018,6 +20896,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -20076,6 +20959,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -20208,6 +21096,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -20370,6 +21263,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f72756e6e65725f636f6e74726f6c6c657273",
       "output_policy": "json_redacted",
@@ -20415,6 +21315,11 @@
           "maps_to": "path.runner_controller_id",
           "name": "runner-controller-id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -20695,6 +21600,11 @@
           "maps_to": "query.system_id",
           "name": "system-id",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -20742,6 +21652,11 @@
           "maps_to": "path.id",
           "name": "id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -20827,6 +21742,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -20845,6 +21765,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f736e69707065745f7265706f7369746f72795f73746f726167655f6d6f766573",
       "output_policy": "json_redacted",
@@ -20895,6 +21822,11 @@
           "maps_to": "query.created_before",
           "name": "created-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -20928,6 +21860,11 @@
           "maps_to": "query.repository_storage",
           "name": "repository-storage",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -20956,6 +21893,11 @@
           "maps_to": "query.created_before",
           "name": "created-before",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21004,6 +21946,11 @@
           "name": "id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21076,6 +22023,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f74656d706c617465732f646f636b657266696c6573",
       "output_policy": "json_redacted",
@@ -21116,6 +22070,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f74656d706c617465732f67697469676e6f726573",
       "output_policy": "json_redacted",
@@ -21156,6 +22117,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f74656d706c617465732f6769746c61625f63695f796d6c73",
       "output_policy": "json_redacted",
@@ -21201,6 +22169,11 @@
           "maps_to": "query.popular",
           "name": "popular",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21326,6 +22299,11 @@
             "ComplianceManagement::Projects::ComplianceViolation",
             "Ai::DuoWorkflows::Workflow"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21359,6 +22337,11 @@
           "maps_to": "query.without_projects",
           "name": "without-projects",
           "type": "boolean"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21422,6 +22405,11 @@
           "maps_to": "query.from",
           "name": "from",
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21480,6 +22468,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f757365722f656d61696c73",
       "output_policy": "json_redacted",
@@ -21520,6 +22515,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f757365722f6770675f6b657973",
       "output_policy": "json_redacted",
@@ -21560,6 +22562,13 @@
       ],
       "approval": "none",
       "availability": "implemented",
+      "flags": [
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
+        }
+      ],
       "intent": "direct_read",
       "operation": "source_read_474554202f757365722f6b657973",
       "output_policy": "json_redacted",
@@ -21777,6 +22786,11 @@
           "name": "id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21841,6 +22855,11 @@
             "wiki",
             "design"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21864,6 +22883,11 @@
           "maps_to": "path.id",
           "name": "id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -21889,6 +22913,11 @@
           "name": "id",
           "required": true,
           "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -21912,6 +22941,11 @@
           "maps_to": "path.id",
           "name": "id",
           "required": true,
+          "type": "integer"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
           "type": "integer"
         }
       ],
@@ -22054,6 +23088,11 @@
             "asc",
             "desc"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -22088,6 +23127,11 @@
             "active",
             "inactive"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -22142,6 +23186,11 @@
           "name": "user-id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -22175,6 +23224,11 @@
             "Project",
             "Namespace"
           ]
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",
@@ -22199,6 +23253,11 @@
           "name": "user-id",
           "required": true,
           "type": "string"
+        },
+        {
+          "maps_to": "query.per_page",
+          "name": "per-page",
+          "type": "integer"
         }
       ],
       "intent": "direct_read",

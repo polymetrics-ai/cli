@@ -1,0 +1,14 @@
+# CP18 GitLab TDD ledger — 267
+
+| ID | Requirement | Red evidence (immutable) | Green required before increment | Status |
+| --- | --- | --- | --- | --- |
+| G1 | Scoped query inputs join into runtime requests without opening arbitrary injection. | `TEST-ACCOUNTING-252-265.json`, `remaining-cli252/output.jsonl` SHA-256 `b926573612277887cab36f0582c3e04f4d45cb2e98c2d77c5c0ef1260607f379`: 1,344 retained read failures. | Fresh exact query/auth wire assertions plus undeclared-input zero-I/O refusal. | Green — source lock `00511a5a`; 203 exact scalar joins and three fake-provider wires pass; `RUN-267.md` G1 receipt. |
+| G2 | Inclusive source numeric bounds survive lock → execution → runtime. | Retained `PROVISIONAL-INPUT-BOUNDS-252.json`; 8 direct + 6 cascading snapshots. | Fresh lower/upper/interior requests in independent state, zero plan/HTTP for invalid values. | Open |
+| G3 | Completed-send ambiguity follows declared retry/approval/receipt semantics. | Retained `PROVISIONAL-AMBIGUOUS-REPLAY-252.json`; 164 outcomes. | Source decision table and direct/saved send, approval, receipt, ack controls. | Open |
+| G4 | JSON union arm selection preserves source scalar type. | Retained `PROVISIONAL-SCALAR-UNION-252.json`; 14 outcomes. | Number/string/bigint/null body-byte and plan-fingerprint controls. | Open |
+| G5 | Fixtures prove source semantics rather than accepting generic placeholders. | `FIXTURE-SEMANTICS-252.json`; invalid group role/missing selector recorded. | Negative controls for invalid type/value/count/durable stage. | Open |
+| G6 | Structured-query cohort preserves source serialization distinctions. | `QUERY-PREREQUISITES-252.json`; cohort not completed. | Matrix-driven direct/saved/continuation wire pairs. | Open |
+| G7 | Older dispatch and binary contracts remain executable. | `FINDINGS/CP18-240-*.md`; excluded from 252 batch. | HEAD/204/binary/Conan exact production-path controls. | Open |
+| G8 | Saved modes, source classes, and stopped selection are reconciled. | `PAUSED-265.md`, `INCOMPLETE-SELECTION-265.json`: 553 unstarted + 1 interrupted; MLflow and source-class packages not started. | Mode-correct MLflow, source class 1752+2, explicit membership and lane proofs. | Open |
+
+No historical RED is relabelled as a fresh post-repair RED. Every repair records command, selected tests, input/source hashes, candidate SHA, exit/result, and a fresh `-count=1` result in `RUN-267.md` before it is called Green.
