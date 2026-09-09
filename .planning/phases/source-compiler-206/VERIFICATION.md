@@ -457,3 +457,8 @@ Final terminal checks: [
 Race closure recheck: only internal/cli/testdata/golden_transcripts.json changed since race362; race-selected packages do not consume that CLI fixture. The actual fresh CLI parity109/109 covers its final bytes. No new race execution claimed after golden regeneration.
 
 Docs validation original typed-query-docs-255-01 exit0,6.541s, rawSHA256 bd93e0cd8de6b9962f4dfcc9936c53b10f83d0525bea43045089385fef059dc1, no source drift. Build artifact pm-query255 is private, not staged.
+
+Shapes255 normal original typed-query-source-shapes-255-02 passed21/21 events,8.507s, rawSHA256 45c9f40ba8470ad5f46a38f776caf5c0e3edc0e93200338c9a0b333b26d73da1, receiptSHA256 c4c595dec758305964edad70108b5f9a961d0a3c1d37df3f8d5f5698d10358d8. Actual source→publisher→loaded saved/direct consumer proof now includes indexed object arrays, typed pattern-key maps, explicit empty bracket arrays, exact bigint9007199254740993 and invalid sibling refusals. No production change was needed. Atlas59 records this added proof; all real37-source/67-variant joins and nullable-root normalization remain unproven. First attempt was parse/setup-only, not RED.
+
+Shape-only terminal checks: {"name": "typed-query-shapes-atlas-255-01", "exit_code": 0, "selected_test_events": 20, "passing_test_events": 20, "wall_seconds": 4.621311625000089, "output_sha256": "88df47356aaac393207e032f8170d291a05cf57dedba4c73d5a6601ed5fae456", "changed_inputs_after": []}
+{"name": "typed-query-shapes-lint-255-01", "exit_code": 0, "selected_test_events": 0, "passing_test_events": 0, "wall_seconds": 2.6943969999992987, "output_sha256": "e92606b0bf483111dff0a120c315ea165821348f31365020e2468a0059095c47", "changed_inputs_after": []}

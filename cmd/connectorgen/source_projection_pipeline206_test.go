@@ -65,6 +65,12 @@ func TestSourceProjectionTypedQuery255(t *testing.T) {
 	}
 }
 
+func TestSourceProjectionTypedQueryShapes255(t *testing.T) {
+	for _, variant := range []string{"typed_query_indexed255", "typed_query_dynamic255", "typed_query_empty255"} {
+		t.Run(variant, func(t *testing.T) { sourceProjectionPublishedRead206(t, "direct_"+variant, false) })
+	}
+}
+
 func TestSourceProjectionTypedQueryAuthority255(t *testing.T) {
 	for _, variant := range []string{"missing_evidence", "wrong_span", "unknown_parameter", "explicit_style", "unknown_mode"} {
 		t.Run(variant, func(t *testing.T) {
@@ -78,6 +84,18 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	direct := strings.HasPrefix(variant, "direct_")
 	variant = strings.TrimPrefix(variant, "direct_")
 	variant, selectedBad, selectBad := strings.Cut(variant, "|")
+	documentaryQuery := variant == "typed_query_bracket255" || variant == "typed_query_indexed255" || variant == "typed_query_dynamic255" || variant == "typed_query_empty255"
+	queryMode, queryEmpty := "bracket_repeated", "omit"
+	if variant == "typed_query_indexed255" {
+		queryMode = "indexed"
+	}
+	if variant == "typed_query_dynamic255" {
+		queryMode = "brackets"
+	}
+	if variant == "typed_query_empty255" {
+		queryEmpty = "empty"
+	}
+
 	var requests []string
 	var requestMu sync.Mutex
 	requestSnapshot := func() []string {
@@ -168,6 +186,29 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 					parameter["explode"] = true
 				}
 				expectedWire = "GET /widgets?filter%5B%5D=a%2Bb+c&filter%5B%5D=x%26y&filter%5B%5D=a%2Bb+c"
+			}
+			if variant == "typed_query_indexed255" {
+				parameter["schema"] = map[string]any{"type": "array", "minItems": 1, "maxItems": 2, "items": map[string]any{"type": "object", "required": []string{"key", "value"}, "additionalProperties": false, "properties": map[string]any{"key": map[string]any{"type": "string"}, "value": map[string]any{"type": "integer"}}}}
+				runtimeConfig["filter"] = `[{"key":"alpha","value":9007199254740993},{"key":"beta","value":2}]`
+				expectedWire = "GET /widgets?filter%5B0%5D%5Bkey%5D=alpha&filter%5B0%5D%5Bvalue%5D=9007199254740993&filter%5B1%5D%5Bkey%5D=beta&filter%5B1%5D%5Bvalue%5D=2"
+			}
+			if variant == "typed_query_dynamic255" {
+				parameter["schema"] = map[string]any{"type": "object", "additionalProperties": false, "patternProperties": map[string]any{"^[a-z]+$": map[string]any{"type": "integer"}}}
+				runtimeConfig["filter"] = `{"alpha":9007199254740993,"beta":2}`
+				expectedWire = "GET /widgets?filter%5Balpha%5D=9007199254740993&filter%5Bbeta%5D=2"
+			}
+			if variant == "typed_query_empty255" {
+				parameter["schema"] = map[string]any{"type": "array", "maxItems": 3, "items": map[string]any{"type": "string"}}
+				runtimeConfig["filter"] = `[]`
+				expectedWire = "GET /widgets?filter%5B%5D="
+			}
+			if documentaryQuery {
+				delete(parameter, "style")
+				delete(parameter, "explode")
+				if selectedBad == "explicit_style" {
+					parameter["style"] = "form"
+					parameter["explode"] = true
+				}
 			}
 			if variant == "typed_query_default255" {
 				parameter["required"] = false
@@ -282,8 +323,8 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	if variant == "response_status" {
 		lock.SourceProjection.Semantics[0].Collection.Records.Response.Status = "201"
 	}
-	if variant == "typed_query_bracket255" {
-		evidence := []byte("Array filters use repeated filter[] keys; nonempty arrays only.")
+	if documentaryQuery {
+		evidence := []byte("Fixture query dialect is " + queryMode + "; empty array rule is " + queryEmpty + "; null is rejected.")
 		if err := os.WriteFile(filepath.Join(connector, "sources", "query-policy.txt"), evidence, 0600); err != nil {
 			t.Fatal(err)
 		}
@@ -294,14 +335,14 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 	if err != nil {
 		t.Fatal(err)
 	}
-	if variant == "typed_query_bracket255" {
+	if documentaryQuery {
 		var document map[string]any
 		if err := json.Unmarshal(raw, &document); err != nil {
 			t.Fatal(err)
 		}
 		projection := document["source_projection"].(map[string]any)
 		semantic := projection["semantics"].([]any)[0].(map[string]any)
-		semantic["query_encoding"] = map[string]any{"filter": map[string]any{"mode": "bracket_repeated", "empty_array": "omit", "null": "reject"}}
+		semantic["query_encoding"] = map[string]any{"filter": map[string]any{"mode": queryMode, "empty_array": queryEmpty, "null": "reject"}}
 		switch selectedBad {
 		case "missing_evidence":
 			delete(semantic, "evidence")
@@ -490,6 +531,14 @@ func sourceProjectionPublishedRead206(t *testing.T, variant string, wantRefusal 
 			invalid := []string{`null`, `[]`, `{}`, `{"owner":"x","tag":7}`, `{"owner":"x","tag":"y","extra":"z"}`, `{"owner":"first","owner":"second","tag":"y"}`, `{"owner":"x","tag":"y"} {}`}
 			if variant == "typed_query_repeated255" || variant == "typed_query_bracket255" {
 				invalid = []string{`null`, `{}`, `[]`, `["a","b","c","d"]`, `["a",7]`, `["a"] []`}
+			}
+			switch variant {
+			case "typed_query_indexed255":
+				invalid = []string{`null`, `{}`, `[]`, `[{"key":"alpha","value":"2"}]`, `[{"key":"alpha","value":2,"other":true}]`}
+			case "typed_query_dynamic255":
+				invalid = []string{`null`, `[]`, `{"alpha":"2"}`, `{"bad[key]":2}`, `{"alpha":1,"alpha":2}`}
+			case "typed_query_empty255":
+				invalid = []string{`null`, `{}`, `["a",2]`, `["a","b","c","d"]`}
 			}
 			for _, bad := range invalid {
 				_, badErr := commandrunner.Run(t.Context(), consumer, commandrunner.Request{Path: []string{"api", expectedCommand}, Flags: map[string][]string{"filter": {bad}}}, nil)

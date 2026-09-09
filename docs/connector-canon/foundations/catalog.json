@@ -1,7 +1,7 @@
 {
   "$schema": "./catalog.schema.json",
   "schema_version": 1,
-  "catalog_revision": 58,
+  "catalog_revision": 59,
   "authority": {
     "authoring_only": true,
     "runtime_input": false,
@@ -462,7 +462,8 @@
         "Generated scalar request inputs use a per-consumer schema_refs.input role joined to the loaded request_inputs schema and source-to-execution provenance; operation constraints are not promoted into connection-wide configuration.",
         "Pinned source_projection inventories preserve explicit primary/supplement class; omitted legacy class remains primary. Classification never grants an executable lane.",
         "Mutation source projection translates explicit scalar nullable booleans into closed type unions while retaining exact numeric bounds, enum/default values and unknown-keyword refusal. Object/array nullable dialects and ambiguous nullable type unions remain unsupported. This does not reconcile legacy authored declarations or promote source-lane proof.",
-        "Structured query projection requires explicit source style/explode or an exact parameter-owned documentary dialect with retained evidence. Standard lowering supports nonempty scalar repeated arrays and named scalar deepObject maps; unsupported shapes remain refused. Documentary dialect selection cannot override explicit source serialization. These representative proofs do not establish all GitLab source variants or lane proof."
+        "Structured query projection requires explicit source style/explode or an exact parameter-owned documentary dialect with retained evidence. Standard lowering supports nonempty scalar repeated arrays and named scalar deepObject maps; unsupported shapes remain refused. Documentary dialect selection cannot override explicit source serialization. These representative proofs do not establish all GitLab source variants or lane proof.",
+        "Representative cited query dialect fixtures additionally prove indexed arrays of closed objects, typed patternProperties maps and explicit empty bracket-array encoding through source publication and saved/direct readers, including exact large integer values. This does not reconcile arbitrary additionalProperties schemas, nullable root alternatives or actual provider source cohorts."
       ],
       "non_goals": [
         "Executing provider or credential I/O.",
@@ -1277,6 +1278,11 @@
           "package": "./cmd/connectorgen",
           "file": "cmd/connectorgen/source_projection_pipeline206_test.go",
           "name": "TestSourceProjectionTypedQueryAuthority255"
+        },
+        {
+          "package": "./cmd/connectorgen",
+          "file": "cmd/connectorgen/source_projection_pipeline206_test.go",
+          "name": "TestSourceProjectionTypedQueryShapes255"
         }
       ],
       "publication_guarantee_proofs": [
