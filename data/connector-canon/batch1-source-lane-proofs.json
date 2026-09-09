@@ -1,4 +1,127 @@
 {
   "schema_version": 1,
-  "records": []
+  "records": [
+    {
+      "id": "gitlab-primary-delete-api-v4-admin-ci-variables-key-direct-write-g3-285",
+      "key": {"connector": "gitlab", "inventory": "primary", "id": "deleteApiV4AdminCiVariablesKey"},
+      "lane": "direct_write",
+      "targets": [
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "direct_write",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "request",
+          "field_mappings": [{"source": {"document_id": "gitlab:primary", "pointer": "/rest/operations/1/source_operation/parameters/0", "value_sha256": "56ade03346cc88d9d757e89e0e382c300f84eeb299f15655490453fddea77e41"}, "target": {"kind": "schema", "pointer": "/properties/key"}}]
+        },
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "direct_write",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "response",
+          "source_schema": {"document_id": "gitlab:primary", "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema", "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"},
+          "field_mappings": [{"source": {"document_id": "gitlab:primary", "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema", "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"}, "target": {"kind": "schema", "pointer": ""}}]
+        }
+      ],
+      "inputs": [
+        {"path": "cmd/connectorgen/source_lane_bindings.go", "sha256": "a0a7ad422a31375e5eed20dcc766d0144c818baa822f08d3e7bdcc6578c72a47", "role": "code"},
+        {"path": "cmd/connectorgen/vnext_admission.go", "sha256": "1b18a05af60e68582150f8521a9478add0afdc788ecfabf3baf30011475b43eb", "role": "code"},
+        {"path": "cmd/connectorgen/vnext_graph.go", "sha256": "9ff684329fb430c5708881822cca9e5a5f8339e41562b3026af2a0961b21dddf", "role": "code"},
+        {"path": "internal/connectors/engine/bundle.go", "sha256": "08212448e95b8c81c9d71ba8453c94bf84b21a530b6465d7281cda46c5885651", "role": "code"},
+        {"path": "internal/connectors/engine/write.go", "sha256": "ac1570f498b49ec251bf679a6ec5f2adddc4aacf5ea23eba69807f0e3dec07a0", "role": "code"},
+        {"path": "internal/cli/batch1_cp18_gitlab_remaining_oracle_252_test.go", "sha256": "f69619d90a500004324e3afe3724756e7dd9c030c6e1512f8cd80055f8e15f2b", "role": "test"},
+        {"path": "internal/cli/batch1_cp18_gitlab_remaining_writes_252_test.go", "sha256": "9a864c6d2be6b17e96613e844df6badcd4c82274b54ad40068f91b5e16c40498", "role": "test"},
+        {"path": "go.mod", "sha256": "7eb47f535f0eafd5af0a7595ed57d7917b9be30caed34a0b3423a1e4f975bfd9", "role": "dependency"},
+        {"path": "go.sum", "sha256": "8171aaddef346abe24ec0455477b98175eb74909b7656514989b84f8b8e591cf", "role": "dependency"}
+      ],
+      "test_path": "internal/cli/batch1_cp18_gitlab_remaining_writes_252_test.go",
+      "test_symbol": "TestBatch1CP18GitLabRemaining252WriteContracts",
+      "selected_test": "TestBatch1CP18GitLabRemaining252WriteContracts/deleteApiV4AdminCiVariablesKey/selected_source_request_success/direct_write/provider_response",
+      "package": "polymetrics.ai/internal/cli",
+      "execution_class": "C2",
+      "scope": "connector_hermetic",
+      "receipt_path": "data/connector-canon/proof-receipts/gitlab/g3-admission-285/delete-api-v4-admin-ci-variables-key-four-leaf.jsonl",
+      "receipt_sha256": "9a5f751d05019bf0ebb65e14d94276ee5006b02d7567b504fa8fb95767744b8e",
+      "observable_contract": "The approval-gated production CLI direct-write command sends exactly one DELETE /api/v4/admin/ci/variables/fixture-2 request with the fixture authorization and no body, accepts the declared JSON 200 response, and its post-send ambiguity control observes five physical sends, terminal failure, and no successful receipt.",
+      "limitations": [
+        "Hermetic local fake-provider C2 evidence only; no provider-live or C1 certification.",
+        "The shared receipt includes selected direct-write and reverse-ETL leaves, but this record admits only the exact direct-write provider-response selection after independent review.",
+        "The broader G3 cohort remains partial, with fifteen unstarted leaves and no connector-complete claim."
+      ]
+    },
+    {
+      "id": "gitlab-primary-delete-api-v4-admin-ci-variables-key-reverse-etl-g3-285",
+      "key": {"connector": "gitlab", "inventory": "primary", "id": "deleteApiV4AdminCiVariablesKey"},
+      "lane": "reverse_etl",
+      "targets": [
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "reverse_etl",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "request",
+          "field_mappings": [{"source": {"document_id": "gitlab:primary", "pointer": "/rest/operations/1/source_operation/parameters/0", "value_sha256": "56ade03346cc88d9d757e89e0e382c300f84eeb299f15655490453fddea77e41"}, "target": {"kind": "schema", "pointer": "/properties/key"}}]
+        },
+        {
+          "kind": "write",
+          "connector": "gitlab",
+          "id": "source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "lane": "reverse_etl",
+          "artifact": "internal/connectors/defs/gitlab/writes.json",
+          "pointer": "/actions/0",
+          "artifact_sha256": "23822f05248ec403b8ddfc29b6c86c852b08289712edea15db763fdc68d78fc4",
+          "canonical_id": "write:source_write_44454c455445202f61646d696e2f63692f7661726961626c65732f7b6b65797d",
+          "canonical_pointer": "/operations/588/write",
+          "generation": "sha256:630b07d5ff5c8a396f3e2ffba9872299446541ed21b1f87e0dd9b4cb63d93fbc",
+          "schema_role": "response",
+          "source_schema": {"document_id": "gitlab:primary", "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema", "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"},
+          "field_mappings": [{"source": {"document_id": "gitlab:primary", "pointer": "/rest/operations/1/source_operation/responses/200/content/application~1json/schema", "value_sha256": "4ca8689e2d4790a63aac2d2f9bb6d76c67f96b60631bed24e4f37f330b0915c5"}, "target": {"kind": "schema", "pointer": ""}}]
+        }
+      ],
+      "inputs": [
+        {"path": "cmd/connectorgen/source_lane_bindings.go", "sha256": "a0a7ad422a31375e5eed20dcc766d0144c818baa822f08d3e7bdcc6578c72a47", "role": "code"},
+        {"path": "cmd/connectorgen/vnext_admission.go", "sha256": "1b18a05af60e68582150f8521a9478add0afdc788ecfabf3baf30011475b43eb", "role": "code"},
+        {"path": "cmd/connectorgen/vnext_graph.go", "sha256": "9ff684329fb430c5708881822cca9e5a5f8339e41562b3026af2a0961b21dddf", "role": "code"},
+        {"path": "internal/connectors/engine/bundle.go", "sha256": "08212448e95b8c81c9d71ba8453c94bf84b21a530b6465d7281cda46c5885651", "role": "code"},
+        {"path": "internal/connectors/engine/write.go", "sha256": "ac1570f498b49ec251bf679a6ec5f2adddc4aacf5ea23eba69807f0e3dec07a0", "role": "code"},
+        {"path": "internal/cli/batch1_cp18_gitlab_remaining_oracle_252_test.go", "sha256": "f69619d90a500004324e3afe3724756e7dd9c030c6e1512f8cd80055f8e15f2b", "role": "test"},
+        {"path": "internal/cli/batch1_cp18_gitlab_remaining_writes_252_test.go", "sha256": "9a864c6d2be6b17e96613e844df6badcd4c82274b54ad40068f91b5e16c40498", "role": "test"},
+        {"path": "go.mod", "sha256": "7eb47f535f0eafd5af0a7595ed57d7917b9be30caed34a0b3423a1e4f975bfd9", "role": "dependency"},
+        {"path": "go.sum", "sha256": "8171aaddef346abe24ec0455477b98175eb74909b7656514989b84f8b8e591cf", "role": "dependency"}
+      ],
+      "test_path": "internal/cli/batch1_cp18_gitlab_remaining_writes_252_test.go",
+      "test_symbol": "TestBatch1CP18GitLabRemaining252WriteContracts",
+      "selected_test": "TestBatch1CP18GitLabRemaining252WriteContracts/deleteApiV4AdminCiVariablesKey/selected_source_request_success/reverse_etl/provider_response",
+      "package": "polymetrics.ai/internal/cli",
+      "execution_class": "C2",
+      "scope": "connector_hermetic",
+      "receipt_path": "data/connector-canon/proof-receipts/gitlab/g3-admission-285/delete-api-v4-admin-ci-variables-key-four-leaf.jsonl",
+      "receipt_sha256": "9a5f751d05019bf0ebb65e14d94276ee5006b02d7567b504fa8fb95767744b8e",
+      "observable_contract": "The reverse plan reads the two-row unattributed warehouse table, applies the declared one-record limit and key-to-key map, then the approval-gated production reverse run sends exactly one DELETE /api/v4/admin/ci/variables/fixture-2 request with the fixture authorization and no body, preserves the source table bytes, and records the declared JSON 200 response; its post-send ambiguity control observes five sends, terminal failure, and no successful receipt.",
+      "limitations": [
+        "Hermetic local fake-provider C2 evidence only; no provider-live or C1 certification.",
+        "The reverse binding proves warehouse-mediated selection of one staged row and unchanged source-table bytes, not ETL or sync support.",
+        "The broader G3 cohort remains partial, with fifteen unstarted leaves and no connector-complete claim."
+      ]
+    }
+  ]
 }

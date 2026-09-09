@@ -678,6 +678,13 @@ func assessSourceLaneProofFiles(cache *sourceLaneProofCache, r sourceLaneProofRe
 func sourceLaneProofSafePath(p string) bool { return sourceProofSafePath(p) }
 func sourceLaneProofDigest(s string) bool   { return sourceProofDigest(s) }
 
+// Source-lane target references retain the generator's canonical
+// sha256:<digest> coordinate. Older proof fixtures used the bare digest, so
+// accept both closed spellings here while leaving target equality exact.
+func sourceLaneProofGeneration(s string) bool {
+	return sourceLaneProofDigest(s) || strings.HasPrefix(s, "sha256:") && sourceLaneProofDigest(strings.TrimPrefix(s, "sha256:"))
+}
+
 func sourceLaneProofShape(r sourceLaneProofRecord) bool {
 	if !validSourceID(r.ID) || !validSourceID(r.Key.Connector) || !validSourceID(r.Key.Inventory) || !validSourceID(r.Key.ID) || !validSourceID(r.ObservableContract) || len(r.Limitations) == 0 || len(r.Targets) == 0 || len(r.Targets) > 64 || len(r.Inputs) > 4096 {
 		return false
@@ -715,7 +722,7 @@ func sourceLaneProofShape(r sourceLaneProofRecord) bool {
 			}
 			pointerValid = ref.Pointer == "" && ref.Artifact == "internal/connectors/defs/"+ref.Connector+"/"+ref.ID && ref.SchemaRole != "" && canonicalRole
 		}
-		if duplicate || sourceLaneTargetRefShape(ref) != nil || !pointerValid || ref.Connector != r.Key.Connector || ref.Lane != r.Lane || !validSourceID(ref.ID) || !sourceLaneProofSafePath(ref.Artifact) || !strings.HasPrefix(ref.Artifact, "internal/connectors/defs/"+r.Key.Connector+"/") || !strings.HasSuffix(ref.Artifact, ".json") || !sourceLaneProofDigest(ref.ArtifactSHA256) || !validSourceID(ref.CanonicalID) || !strings.HasPrefix(ref.CanonicalPointer, "/") || !sourceLaneProofDigest(ref.Generation) {
+		if duplicate || sourceLaneTargetRefShape(ref) != nil || !pointerValid || ref.Connector != r.Key.Connector || ref.Lane != r.Lane || !validSourceID(ref.ID) || !sourceLaneProofSafePath(ref.Artifact) || !strings.HasPrefix(ref.Artifact, "internal/connectors/defs/"+r.Key.Connector+"/") || !strings.HasSuffix(ref.Artifact, ".json") || !sourceLaneProofDigest(ref.ArtifactSHA256) || !validSourceID(ref.CanonicalID) || !strings.HasPrefix(ref.CanonicalPointer, "/") || !sourceLaneProofGeneration(ref.Generation) {
 			return false
 		}
 	}

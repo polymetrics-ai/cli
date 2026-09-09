@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
@@ -200,6 +201,50 @@ func TestBatch1CP18GitLabAdmission277CrossRoleWriteProjection(t *testing.T) {
 				wantReferences = 0
 			}
 			sourceBindingOutcome099F(t, key, facts, annotation, wantReferences, tc.wantCodes...)
+		})
+	}
+}
+
+// The retained GitLab source-lane projection identifies its admitted
+// generation as sha256:<digest>. Proof records must accept that exact
+// coordinate while retaining bare-digest compatibility for existing records.
+func TestBatch1CP18GitLabAdmission277ProofGenerationIdentity(t *testing.T) {
+	base := func(generation string) sourceLaneProofRecord {
+		return sourceLaneProofRecord{
+			ID:   "gitlab-proof-generation",
+			Key:  sourceOperationKey{Connector: "gitlab", Inventory: "primary", ID: "deleteApiV4AdminCiVariablesKey"},
+			Lane: "direct_write",
+			Targets: []sourceLaneTargetRef{{
+				Kind: "write", Connector: "gitlab", ID: "source_write_test", Lane: "direct_write",
+				Artifact: "internal/connectors/defs/gitlab/writes.json", Pointer: "/actions/0",
+				ArtifactSHA256: strings.Repeat("a", 64), CanonicalID: "write:source_write_test",
+				CanonicalPointer: "/operations/0/write", Generation: generation,
+			}},
+			Inputs: []sourceLaneProofInput{
+				{Path: "cmd/connectorgen/proof.go", SHA256: strings.Repeat("b", 64), Role: "code"},
+				{Path: "cmd/connectorgen/proof_test.go", SHA256: strings.Repeat("c", 64), Role: "test"},
+				{Path: "go.mod", SHA256: strings.Repeat("d", 64), Role: "dependency"},
+				{Path: "go.sum", SHA256: strings.Repeat("e", 64), Role: "dependency"},
+			},
+			TestPath: "cmd/connectorgen/proof_test.go", TestSymbol: "TestProof", SelectedTest: "TestProof/selected",
+			Package: "polymetrics.ai/cmd/connectorgen", ExecutionClass: "C2", Scope: "connector_hermetic",
+			ReceiptPath: "data/connector-canon/proof-receipts/gitlab/proof.jsonl", ReceiptSHA256: strings.Repeat("f", 64),
+			ObservableContract: "Exact retained generation identity is part of the proof target.",
+			Limitations:        []string{"Hermetic C2 shape check only."},
+		}
+	}
+	for _, tc := range []struct {
+		name, generation string
+		want             bool
+	}{
+		{name: "bare_digest", generation: strings.Repeat("a", 64), want: true},
+		{name: "canonical_sha256_digest", generation: "sha256:" + strings.Repeat("a", 64), want: true},
+		{name: "malformed_prefix", generation: "sha512:" + strings.Repeat("a", 64), want: false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := sourceLaneProofShape(base(tc.generation)); got != tc.want {
+				t.Fatalf("generation shape accepted=%t want=%t generation=%q", got, tc.want, tc.generation)
+			}
 		})
 	}
 }

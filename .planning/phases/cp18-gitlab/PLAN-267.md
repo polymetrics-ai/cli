@@ -94,3 +94,22 @@ lane to implemented.
 - No provider credentials, provider-live checks, whole-repository suite, new dependencies, source-lock runtime reader, generic HTTP/SQL/shell write surface, raw cursor, fake implemented lane, or hand-edited generated execution/index/proof output.
 - CLI help/manual/website parity is tracked for each changed command surface. Source-only/generated-surface changes will explicitly record the relevant parity result; no unrelated website work begins.
 - At or below the instructed effective 5% quota threshold, start no further development or test batch; preserve evidence, stop owned runners, publish only already verified increments, and write a pause receipt.
+
+## Firstmate285 first-admission freeze
+
+The only active closure is the `gitlab/primary/deleteApiV4AdminCiVariablesKey`
+source operation for `direct_write` and `reverse_etl`; the recovered fifteen
+unstarted G3 leaves remain untouched. Two author-owned proof records bind the
+current request and typed-response write projections, portable four-leaf C2
+receipt, selected provider-response leaf, and exact changed code/test/module
+inputs. The reverse record additionally declares the warehouse-table →
+one-record-limit → key mapping → write path and unchanged-table boundary.
+
+The original proof validator rejected the canonical source-lane
+`sha256:<digest>` generation coordinate despite emitting it itself. The focused
+GitLab test captures that RED and preserves bare-digest and malformed-prefix
+controls. Its constrained shared repair accepts either closed spelling but
+does not normalize target identity; `sourceLaneTargetRefEqual` remains exact.
+The resulting source-lane report is valid and intentionally leaves both rows
+`mapped_unproven` until an independent reviewer supplies exact matching records
+through `data/connector-canon/batch1-source-lane-proof-reviews.json`.
