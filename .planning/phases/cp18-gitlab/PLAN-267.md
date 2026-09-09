@@ -113,3 +113,45 @@ does not normalize target identity; `sourceLaneTargetRefEqual` remains exact.
 The resulting source-lane report is valid and intentionally leaves both rows
 `mapped_unproven` until an independent reviewer supplies exact matching records
 through `data/connector-canon/batch1-source-lane-proof-reviews.json`.
+
+## Firstmate288 Stage 1 — signed external C2 admission
+
+The independent Terra/xhigh reviewer completed its discovery, ledger audit, and
+fresh final review against candidate
+`21669196b35ef062b6c2c5b19e5769d244ecccb8` / tree
+`85e62534ade4c6e96f8ef4d164c0d7700c130d9a`, with coherent base
+`9dcd3430b8aee9d79c802e9575d5c3c099a7e3a1`. Its reviewer-owned
+`review-catalog.json` is copied only after this owner verifies strict
+schema-version-1 shape, exactly two `record` wrappers, absence of
+`claim_current`, and byte-for-byte equality to the two frozen candidate records.
+It is authoring-only evidence, never a runtime input or an implementation label.
+
+| Slice | Existing RED / boundary | Green acceptance | Atlas and scope disposition |
+| --- | --- | --- | --- |
+| G3-G signed catalog admission | The retained fresh source-lanes report is valid but keeps the two records `mapped_unproven` with `proof_review_unavailable`; the absent catalog must never be self-authored. | The independent catalog's exact SHA-256 is retained; canonical `source-lanes`, dependent source-demand/Atlas producer checks, and all relevant `--check` readers admit only the two exact reviewed C2 records. Report implementation states and remaining deficits separately. | Reuse `authoring.source-lock-vnext.v1` catalog/proof seam and its existing Atlas producer. No runtime, command, source-lock, manual implementation-state, or unrelated connector change. |
+
+The Stage 1 verifier runs inline under the existing GSD manual fallback because
+the single-worker contract and Firstmate's active review routing prohibit role
+spawning here. It will preserve raw reviewer artifacts outside the repository,
+commit only the complete verified catalog/generation/planning evidence, then
+validate the normal integration-tree merge and remote readback before advancing
+to the next coherent G3–G8 cohort. CLI help/manual/website parity is explicitly
+not applicable to this authoring-only admission because no CLI surface changes.
+
+## Firstmate289–291 Atlas-pin recovery
+
+The retained `source-demands` Red is
+`repair-266/admission-288/source-demands-generate.stderr`: the assessments
+document is refused because its whole-Atlas identity is stale. Before refreshing
+that identity, the selected `transport.sync-contract.v1` entry was compared
+between the old pinned catalog (`e6d548a9083f236a62ecf2ccb668f42370330db3`)
+and current catalog: entry JSON and its `/supported_contracts/sync_modes` value
+are byte-equivalent. All 26 assessments retain the same candidate, contract
+value hash, unresolved/actual-gap disposition, and next owner. This is a
+metadata-only integrity refresh to current catalog
+`d7ccadafbe13bc6385d2f53b6cc453aaa8158923580bd73a982fa1b5e4169a20` /
+213,623 bytes; it cannot create an implementation state. The matching Green is
+the canonical source-demands producer/check plus its affected Atlas checks.
+
+Firstmate291 owns the separate next-cohort survey through reviewer286. This
+owner will not duplicate that read-only planning work while completing Stage 1.
