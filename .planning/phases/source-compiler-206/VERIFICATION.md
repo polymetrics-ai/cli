@@ -83,3 +83,14 @@ this existing warehouse.stage-etl.v1 extension and owner/proof selectors.
 Private help-check script SHA256 aefd8f2f41d7afbc99637d6754ccdec1d0060f236709083099a6baf1c51dce1c. Binary SHA256 2ee9cf3fe3a20a629afb9c6fa0c3d0c84ef2ea6d14ba5a27b5e056d7026892ff.
 
 GSD verify-work prompt resolved/read; local automated obligations above pass. Parent inline quality inspection is not an independent review. Firstmate259 requires passing-increment normal publication now; full independent programme judgment remains gated. Remaining234/255/243/244 obligations are unchanged.
+
+
+## Firstmate259 canonical overwrite integration
+
+Original implementation07d5b83433e81f24d9d1b5c966c87298134f4c9e merged normally as e3ef2b8e26a0aadc7b5b4d2cc3b7e34a92ffcb4d. Both trees are b44433fcc82d17fb23734940995c42fb9a3ddd4b. Existing delivery https://github.com/polymetrics-ai/cli/pull/4294, R1→main verified through gh-axi head/base filters; no main merge or acceptance.
+
+overwrite-integration-app-259-01: 60/60 events, 23.513s, rawSHA256 73b4bec8e0554e2e9aad4e4a50a0c8b7fe2d94a5e24634e55e4cd51142c6b66b. Command: ["/Users/karthiksivadas/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.6.darwin-arm64/bin/go", "test", "-json", "-count=1", "-timeout", "20m", "./internal/app", "-run", "^Test(LocalWarehouse.*|RunETL.*(FullOverwrite|FullAppend).*|OpenLazilyRegistersDefinitionOwnedProductionTransports)$"]. Complete original input/source snapshots retained.
+
+overwrite-integration-cli-259-01: 22/22 events, 54.786s, rawSHA256 c79894e9c41fc440331db5a66a88cbdee331c5f3e88f08da0be360e833356468. Command: ["/Users/karthiksivadas/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.26.6.darwin-arm64/bin/go", "test", "-json", "-count=1", "-timeout", "20m", "./internal/cli", "-run", "^TestBatch1CP18GitLabLane248ManagedETLCollections/full_overwrite"]. Complete original input/source snapshots retained.
+
+Shared helper cp18Lane248ETLCollections delta removes only the full_overwrite fault-list restriction and zero-HTTP early-return assertion. All20 source/page/error expectations now execute; original refusal evidence remains in history. No other GitLab helper, fixture or252 source/variant ownership was adopted. Local final race60, vet/lint/Atlas/build/help/docs checks retain original receipts in the preceding primary verification appendix. This passing increment does not establish full source C2, connector or programme acceptance.
